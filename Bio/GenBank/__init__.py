@@ -540,61 +540,60 @@ class _BaseGenBankConsumer:
         return new_start, new_end
 
 
-def simplelocation_fromstring(part, strand, length=None, circular=False):
+def simplelocation_fromstring(text, length=None, circular=False):
     """Create a SimpleLocation object from a string."""
-    if part.startswith("complement("):
-        part = part[11:-1]
-        assert strand != -1, "Double complement?"
-        part_strand = -1
+    if text.startswith("complement("):
+        text = text[11:-1]
+        strand = -1
     else:
-        part_strand = strand
+        strand = None
     # Try simple cases first for speed
     try:
-        s, e = part.split("..")
+        s, e = text.split("..")
         s = int(s) - 1
         e = int(e)
     except ValueError:
         pass
     else:
         if 0 <= s <= e:
-            return SeqFeature.SimpleLocation(s, e, part_strand)
+            return SeqFeature.SimpleLocation(s, e, strand)
     # Try general case
     try:
-        ref, part = part.split(":")
+        ref, text = text.split(":")
     except ValueError:
         ref = None
-    m = _re_location_category.match(part)
+    m = _re_location_category.match(text)
     if m is None:
         return None
     for key, value in m.groupdict().items():
         if value is not None:
             break
-    assert value == part
+    assert value == text
     if key == "bond":
         # e.g. bond(196)
         warnings.warn(
             "Dropping bond qualifier in feature location",
             BiopythonParserWarning,
         )
-        part = part[5:-1]
-        start = SeqFeature.Position.fromstring(part, -1)
-        end = SeqFeature.Position.fromstring(part)
-        if start < 0:
+        text = text[5:-1]
+        s_pos = SeqFeature.Position.fromstring(text, -1)
+        e_pos = SeqFeature.Position.fromstring(text)
+        if s_pos < 0:
             raise LocationParserError(
-                f"negative starting position in feature location '{part}'"
+                f"negative starting position in feature location '{text}'"
             )
-        return SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
+        return SeqFeature.SimpleLocation(s_pos, e_pos, strand, ref=ref)
     elif key == "solo":
         # e.g. "123"
-        start = SeqFeature.Position.fromstring(part, -1)
-        end = SeqFeature.Position.fromstring(part)
-        if start < 0:
+        s_pos = SeqFeature.Position.fromstring(text, -1)
+        e_pos = SeqFeature.Position.fromstring(text)
+        if s_pos < 0:
             raise LocationParserError(
-                f"negative starting position in feature location '{part}'"
+                f"negative starting position in feature location '{text}'"
             )
-        return SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
+        return SeqFeature.SimpleLocation(s_pos, e_pos, strand, ref=ref)
     elif key in ("pair", "within", "oneof"):
-        s, e = part.split("..")
+        s, e = text.split("..")
         # Attempt to fix features that span the origin
         s_pos = SeqFeature.Position.fromstring(s, -1)
         e_pos = SeqFeature.Position.fromstring(e)
@@ -605,32 +604,30 @@ def simplelocation_fromstring(part, strand, length=None, circular=False):
             # the list of feature locations.
             if not circular:
                 raise LocationParserError(
-                    f"it appears that '{part}' is a feature that spans the origin, but the sequence topology is undefined"
+                    f"it appears that '{text}' is a feature that spans the origin, but the sequence topology is undefined"
                 )
             warnings.warn(
                 "Attempting to fix invalid location %r as "
                 "it looks like incorrect origin wrapping. "
                 "Please fix input file, this could have "
-                "unintended behavior." % part,
+                "unintended behavior." % text,
                 BiopythonParserWarning,
             )
 
-            f1 = SeqFeature.SimpleLocation(s_pos, length, part_strand)
-            f2 = SeqFeature.SimpleLocation(0, int(e_pos), part_strand)
+            f1 = SeqFeature.SimpleLocation(s_pos, length, strand)
+            f2 = SeqFeature.SimpleLocation(0, e_pos, strand)
 
-            if part_strand == -1:
+            if strand == -1:
                 # For complementary features spanning the origin
                 return f2 + f1
             else:
                 return f1 + f2
         else:
-            start = SeqFeature.Position.fromstring(s, -1)
-            end = SeqFeature.Position.fromstring(e)
-            if start < 0:
+            if s_pos < 0:
                 raise LocationParserError(
-                    f"negative starting position in feature location '{part}'"
+                    f"negative starting position in feature location '{text}'"
                 )
-            return SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
+            return SeqFeature.SimpleLocation(s_pos, e_pos, strand, ref=ref)
     elif key == "between":
         # A between location like "67^68" (one based counting) is a
         # special case (note it has zero length). In python slice
@@ -639,14 +636,14 @@ def simplelocation_fromstring(part, strand, length=None, circular=False):
         # a location N^1 meaning the junction at the origin. See Bug 3098.
         # NOTE - We can imagine between locations like "2^4", but this
         # is just "3".  Similarly, "2^5" is just "3..4"
-        s, e = part.split("^")
-        if int(s) + 1 == int(e):
-            pos = SeqFeature.Position.fromstring(s)
-        elif int(s) == length and e == "1":
-            pos = SeqFeature.Position.fromstring(s)
+        s, e = text.split("^")
+        s = int(s)
+        e = int(e)
+        if s + 1 == e or (s == length and e == 1):
+            pos = SeqFeature.ExactPosition(s)
         else:
-            raise LocationParserError(f"invalid feature location '{part}'")
-        return SeqFeature.SimpleLocation(pos, pos, part_strand, ref=ref)
+            raise LocationParserError(f"invalid feature location '{text}'")
+        return SeqFeature.SimpleLocation(pos, pos, strand, ref=ref)
 
 
 def location_fromstring(location_line, length=None, circular=False, stranded=True):
@@ -714,12 +711,21 @@ def location_fromstring(location_line, length=None, circular=False, stranded=Tru
         parts = _split(location_line[5:-1])[1::2]
         # assert parts[0] == "" and parts[-1] == ""
     else:
-        return simplelocation_fromstring(location_line, strand, length, circular)
+        loc = simplelocation_fromstring(location_line, length, circular)
+        loc.strand = strand
+        if strand == -1:
+            loc.parts.reverse()
+        return loc
     locs = []
     for part in parts:
-        loc = simplelocation_fromstring(part, strand, length, circular)
+        loc = simplelocation_fromstring(part, length, circular)
         if loc is None:
             break
+        if loc.strand == -1:
+            if strand == -1:
+                raise LocationParserError("double complement in '{location_line}'?")
+        else:
+            loc.strand = strand
         locs.extend(loc.parts)
     else:
         if len(locs) == 1:
