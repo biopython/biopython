@@ -540,47 +540,47 @@ class _BaseGenBankConsumer:
         return new_start, new_end
 
 
-def fromstring(location_line, length=None, circular=False, stranded=True):
+def location_fromstring(location_line, length=None, circular=False, stranded=True):
     """Create a Location object from a string.
 
     Simple examples:
 
-    >>> fromstring("123..456", 1000)
+    >>> location_fromstring("123..456", 1000)
     SimpleLocation(ExactPosition(122), ExactPosition(456), strand=1)
-    >>> fromstring("complement(<123..>456)", 1000)
+    >>> location_fromstring("complement(<123..>456)", 1000)
     SimpleLocation(BeforePosition(122), AfterPosition(456), strand=-1)
 
     A more complex location using within positions,
 
-    >>> fromstring("(9.10)..(20.25)", 1000)
+    >>> location_fromstring("(9.10)..(20.25)", 1000)
     SimpleLocation(WithinPosition(8, left=8, right=9), WithinPosition(25, left=20, right=25), strand=1)
 
     Notice how that will act as though it has overall start 8 and end 25.
 
     Zero length between feature,
 
-    >>> fromstring("123^124", 1000)
+    >>> location_fromstring("123^124", 1000)
     SimpleLocation(ExactPosition(123), ExactPosition(123), strand=1)
 
     The expected sequence length is needed for a special case, a between
     position at the start/end of a circular genome:
 
-    >>> fromstring("1000^1", 1000)
+    >>> location_fromstring("1000^1", 1000)
     SimpleLocation(ExactPosition(1000), ExactPosition(1000), strand=1)
 
     Apart from this special case, between positions P^Q must have P+1==Q,
 
-    >>> fromstring("123^456", 1000)
+    >>> location_fromstring("123^456", 1000)
     Traceback (most recent call last):
        ...
     Bio.GenBank.LocationParserError: invalid feature location '123^456'
 
     You can optionally provide a reference name:
 
-    >>> fromstring("AL391218.9:105173..108462", 2000000)
+    >>> location_fromstring("AL391218.9:105173..108462", 2000000)
     SimpleLocation(ExactPosition(105172), ExactPosition(108462), strand=1, ref='AL391218.9')
 
-    >>> fromstring("<2644..159", 2868, "circular")
+    >>> location_fromstring("<2644..159", 2868, "circular")
     CompoundLocation([SimpleLocation(BeforePosition(2643), ExactPosition(2868), strand=1), SimpleLocation(ExactPosition(0), ExactPosition(159), strand=1)], 'join')
     """
     if location_line.startswith("complement"):
@@ -634,7 +634,8 @@ def fromstring(location_line, length=None, circular=False, stranded=True):
         except ValueError:
             ref = None
         m = _re_location_category.match(part)
-        assert m is not None
+        if m is None:
+            break
         for key, value in m.groupdict().items():
             if value is not None:
                 break
@@ -649,7 +650,9 @@ def fromstring(location_line, length=None, circular=False, stranded=True):
             start = SeqFeature.Position.fromstring(part, -1)
             end = SeqFeature.Position.fromstring(part)
             if start < 0:
-                break
+                raise LocationParserError(
+                    f"negative starting position in feature location '{part}'"
+                )
             loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
             locs.append(loc)
         elif key == "solo":
@@ -657,7 +660,9 @@ def fromstring(location_line, length=None, circular=False, stranded=True):
             start = SeqFeature.Position.fromstring(part, -1)
             end = SeqFeature.Position.fromstring(part)
             if start < 0:
-                break
+                raise LocationParserError(
+                    f"negative starting position in feature location '{part}'"
+                )
             loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
             locs.append(loc)
         elif key in ("pair", "within", "oneof"):
@@ -698,7 +703,9 @@ def fromstring(location_line, length=None, circular=False, stranded=True):
                 start = SeqFeature.Position.fromstring(s, -1)
                 end = SeqFeature.Position.fromstring(e)
                 if start < 0:
-                    break
+                    raise LocationParserError(
+                        f"negative starting position in feature location '{part}'"
+                    )
                 loc = SeqFeature.SimpleLocation(start, end, part_strand, ref=ref)
                 locs.append(loc)
         elif key == "between":
@@ -749,7 +756,7 @@ def fromstring(location_line, length=None, circular=False, stranded=True):
             BiopythonParserWarning,
         )
         location_line = location_line.replace(",)", ")")
-        return fromstring(location_line)
+        return location_fromstring(location_line)
     raise LocationParserError(f"failed to parse feature location '{location_line}'")
 
 
@@ -1179,7 +1186,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         stranded = "PROTEIN" not in self._seq_type.upper()
 
         try:
-            location = fromstring(location_line, length, is_circular, stranded)
+            location = location_fromstring(location_line, length, is_circular, stranded)
         except LocationParserError as e:
             warnings.warn(
                 f"{e}; setting feature location to None.", BiopythonParserWarning

@@ -7470,7 +7470,7 @@ class GenBankTests(unittest.TestCase):
             with self.assertRaises(BiopythonParserWarning) as cm:
                 record = SeqIO.read(path, "genbank")
             self.assertEqual(
-                "failed to parse feature location '-2..492'; setting feature location to None.",
+                "negative starting position in feature location '-2..492'; setting feature location to None.",
                 str(cm.exception),
             )
 
