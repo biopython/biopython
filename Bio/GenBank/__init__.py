@@ -28,15 +28,13 @@ be deprecated in a future release.
 
 Classes:
  - Iterator              Iterate through a file of GenBank entries
- - ErrorFeatureParser    Catch errors caused during parsing.
  - FeatureParser         Parse GenBank data in SeqRecord and SeqFeature objects.
  - RecordParser          Parse GenBank data into a Record object.
 
 Exceptions:
  - ParserFailureError    Exception indicating a failure in the parser (ie.
    scanner or consumer)
- - LocationParserError   Exception indicating a problem with the spark based
-   location parser.
+ - LocationParserError   Exception indicating a failure to parse a feature location.
 
 """
 
@@ -575,7 +573,7 @@ def fromstring(location_line, length=None, circular=False, stranded=True):
     >>> fromstring("123^456", 1000)
     Traceback (most recent call last):
        ...
-    Bio.GenBank.LocationParserError: Invalid between location '123^456'
+    Bio.GenBank.LocationParserError: invalid feature location '123^456'
 
     You can optionally provide a reference name:
 
@@ -673,13 +671,9 @@ def fromstring(location_line, length=None, circular=False, stranded=True):
                 # consisting of two SimpleLocation objects to extend to
                 # the list of feature locations.
                 if not circular:
-                    warnings.warn(
-                        "It appears that %r is a feature that spans "
-                        "the origin, but the sequence topology is "
-                        "undefined. Setting location to None." % part,
-                        BiopythonParserWarning,
+                    raise LocationParserError(
+                        f"it appears that '{part}' is a feature that spans the origin, but the sequence topology is undefined"
                     )
-                    return
                 warnings.warn(
                     "Attempting to fix invalid location %r as "
                     "it looks like incorrect origin wrapping. "
@@ -721,7 +715,7 @@ def fromstring(location_line, length=None, circular=False, stranded=True):
             elif int(s) == length and e == "1":
                 pos = SeqFeature.Position.fromstring(s)
             else:
-                raise LocationParserError(f"Invalid between location {part!r}")
+                raise LocationParserError(f"invalid feature location '{part}'")
             loc = SeqFeature.SimpleLocation(pos, pos, part_strand, ref=ref)
             locs.append(loc)
     else:
@@ -741,14 +735,12 @@ def fromstring(location_line, length=None, circular=False, stranded=True):
             # with complement(join(...))
             locs = locs[::-1]
         return SeqFeature.CompoundLocation(locs, operator=operator)
-    # Not recognised
+    # Not recognized
     if "order" in location_line and "join" in location_line:
         # See Bug 3197
-        msg = (
-            'Combinations of "join" and "order" within the same '
-            "location (nested operators) are illegal:\n" + location_line
+        raise LocationParserError(
+            f"failed to parse feature location '{location_line}' containing a combination of 'join' and 'order' (nested operators) are illegal"
         )
-        raise LocationParserError(msg)
 
     # See issue #937. Note that NCBI has already fixed this record.
     if ",)" in location_line:
@@ -758,10 +750,7 @@ def fromstring(location_line, length=None, circular=False, stranded=True):
         )
         location_line = location_line.replace(",)", ")")
         return fromstring(location_line)
-    # This used to be an error....
-    warnings.warn(
-        BiopythonParserWarning(f"Couldn't parse feature location: {location_line!r}")
-    )
+    raise LocationParserError(f"failed to parse feature location '{location_line}'")
 
 
 class _FeatureConsumer(_BaseGenBankConsumer):
@@ -1193,7 +1182,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             location = fromstring(location_line, length, is_circular, stranded)
         except LocationParserError as e:
             warnings.warn(
-                f"{e} Setting feature location to None.", BiopythonParserWarning
+                f"{e}; setting feature location to None.", BiopythonParserWarning
             )
             location = None
         self._cur_feature.location = location
