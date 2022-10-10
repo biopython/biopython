@@ -578,26 +578,16 @@ def simplelocation_fromstring(text, length=None, circular=False):
         text = text[5:-1]
         s_pos = SeqFeature.Position.fromstring(text, -1)
         e_pos = SeqFeature.Position.fromstring(text)
-        if s_pos < 0:
-            raise LocationParserError(
-                f"negative starting position in feature location '{text}'"
-            )
-        return SeqFeature.SimpleLocation(s_pos, e_pos, strand, ref=ref)
     elif key == "solo":
         # e.g. "123"
         s_pos = SeqFeature.Position.fromstring(text, -1)
         e_pos = SeqFeature.Position.fromstring(text)
-        if s_pos < 0:
-            raise LocationParserError(
-                f"negative starting position in feature location '{text}'"
-            )
-        return SeqFeature.SimpleLocation(s_pos, e_pos, strand, ref=ref)
     elif key in ("pair", "within", "oneof"):
         s, e = text.split("..")
         # Attempt to fix features that span the origin
         s_pos = SeqFeature.Position.fromstring(s, -1)
         e_pos = SeqFeature.Position.fromstring(e)
-        if int(s_pos) > int(e_pos):
+        if s_pos > e_pos:
             # There is likely a problem with origin wrapping.
             # Create a CompoundLocation of the wrapped feature,
             # consisting of two SimpleLocation objects to extend to
@@ -622,12 +612,6 @@ def simplelocation_fromstring(text, length=None, circular=False):
                 return f2 + f1
             else:
                 return f1 + f2
-        else:
-            if s_pos < 0:
-                raise LocationParserError(
-                    f"negative starting position in feature location '{text}'"
-                )
-            return SeqFeature.SimpleLocation(s_pos, e_pos, strand, ref=ref)
     elif key == "between":
         # A between location like "67^68" (one based counting) is a
         # special case (note it has zero length). In python slice
@@ -640,10 +624,15 @@ def simplelocation_fromstring(text, length=None, circular=False):
         s = int(s)
         e = int(e)
         if s + 1 == e or (s == length and e == 1):
-            pos = SeqFeature.ExactPosition(s)
+            s_pos = SeqFeature.ExactPosition(s)
+            e_pos = s_pos
         else:
             raise LocationParserError(f"invalid feature location '{text}'")
-        return SeqFeature.SimpleLocation(pos, pos, strand, ref=ref)
+    if s_pos < 0:
+        raise LocationParserError(
+            f"negative starting position in feature location '{text}'"
+        )
+    return SeqFeature.SimpleLocation(s_pos, e_pos, strand, ref=ref)
 
 
 def location_fromstring(location_line, length=None, circular=False, stranded=True):
