@@ -34,7 +34,6 @@ Classes:
 Exceptions:
  - ParserFailureError    Exception indicating a failure in the parser (ie.
    scanner or consumer)
- - LocationParserError   Exception indicating a failure to parse a feature location.
 
 """
 

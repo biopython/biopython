@@ -39,16 +39,25 @@ This has the advantages of allowing us to handle fuzzy stuff in case anyone
 needs it, and also be compatible with BioPerl etc and BioSQL.
 
 Classes:
+ - Location - abstract base class of SimpleLocation and CompoundLocation.
  - SimpleLocation - Specify the start and end location of a feature.
  - CompoundLocation - Collection of SimpleLocation objects (for joins etc).
+ - Position - abstract base class of ExactPosition, WithinPosition,
+   BetweenPosition, AfterPosition, OneOfPosition, UncertainPosition, and
+   UnknownPosition.
  - ExactPosition - Specify the position as being exact.
  - WithinPosition - Specify a position occurring within some range.
  - BetweenPosition - Specify a position occurring between a range (OBSOLETE?).
  - BeforePosition - Specify the position as being found before some base.
  - AfterPosition - Specify the position as being found after some base.
- - OneOfPosition - Specify a position where the location can be multiple positions.
+ - OneOfPosition - Specify a position consisting of multiple alternative positions.
  - UncertainPosition - Specify a specific position which is uncertain.
  - UnknownPosition - Represents missing information like '?' in UniProt.
+
+
+Exceptions:
+ - ParserFailureError    Exception indicating a failure in the parser (ie.
+   scanner or consumer)
 
 """
 import functools
@@ -66,8 +75,6 @@ from Bio.Seq import Seq
 # Regular expressions for location parsing
 
 
-_re_compounded = re.compile(r"^(?P<operator>join|order|bond)\((?P<locations>\S+)\)$")
-
 _reference = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)"
 _oneof_position = r"one\-of\(\d+(?:,\d+)+\)"
 
@@ -78,10 +85,7 @@ _any_location = rf"({_reference}?{_oneof_location}|complement\({_oneof_location}
 _split = re.compile(_any_location).split
 
 assert _split("123..145")[1::2] == ["123..145"]
-assert _split("123..145,200..209")[1::2] == [
-    "123..145",
-    "200..209",
-]
+assert _split("123..145,200..209")[1::2] == ["123..145", "200..209"]
 assert _split("one-of(200,203)..300")[1::2] == ["one-of(200,203)..300"]
 assert _split("complement(123..145),200..209")[1::2] == [
     "complement(123..145)",
@@ -157,150 +161,6 @@ _re_location_category = re.compile(
         _solo_location,
     )
 )
-
-
-_simple_location = r"(\d+)\.\.(\d+)"
-_re_simple_location = re.compile(r"^%s$" % _simple_location)
-_re_simple_compound = re.compile(
-    r"^(?P<operator>join|order|bond)\((?P<parts>\d+\.\.\d+(?:,\d+\.\.\d+)*)\)$"
-)
-
-_complex_location = (
-    r"(?:(?P<ref>[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?)\:)?(?P<location>%s|%s|%s|%s|%s)"
-    % (
-        _pair_location,
-        _solo_location,
-        _between_location,
-        _within_location,
-        _oneof_location,
-    )
-)
-_re_complex_location = re.compile(r"^%s$" % _complex_location)
-_complex_location = (
-    r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(%s|%s|%s|%s|%s|%s)"
-    % (
-        _pair_location,
-        _between_location,
-        _within_location,
-        _oneof_location,
-        _solo_bond,
-        _solo_location,
-    )
-)
-_possibly_complemented_complex_location = r"(?:%s|complement\(%s\))" % (
-    _complex_location,
-    _complex_location,
-)
-
-_complex_compound = (
-    r"(?:(?P<operator>join|order|bond)\((?P<locations>%s(?:,%s)*)\))"
-    % (_possibly_complemented_complex_location, _possibly_complemented_complex_location)
-)
-
-_solo_location = r"[<>]?\d+"
-_pair_location = r"[<>]?\d+\.\.[<>]?\d+"
-_between_location = r"\d+\^\d+"
-_within_location = r"(?:(?:[<>]?\d+|%s)\.\.(?:[<>]?\d+|%s))" % (
-    _within_position,
-    _within_position,
-)
-_oneof_location = r"(?:[<>]?\d+|%s)\.\.(?:[<>]?\d+|%s)" % (
-    _oneof_position,
-    _oneof_position,
-)
-
-_complex_location = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(?:!,.+)|%s|%s|%s" % (
-    _within_location,
-    _solo_bond,
-    _solo_location,
-)
-_ref_oneof_location = (
-    r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?%s" % _oneof_location
-)
-
-_possibly_complemented_complex_location = (
-    r"((?:%s)|(?:complement\((?:%s)\))|(?:%s)|(?:complement\((?:%s)\)))"
-    % (
-        _ref_oneof_location,
-        _ref_oneof_location,
-        _complex_location,
-        _complex_location,
-    )
-)
-
-_complex_location = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?%s|%s|%s|%s|%s|%s" % (
-    _pair_location,
-    _between_location,
-    _within_location,
-    _oneof_location,
-    _solo_bond,
-    _solo_location,
-)
-
-
-assert _re_simple_location.match("104..160")
-assert not _re_simple_location.match("68451760..68452073^68452074")
-assert not _re_simple_location.match("<104..>160")
-assert not _re_simple_location.match("104")
-assert not _re_simple_location.match("<1")
-assert not _re_simple_location.match(">99999")
-assert not _re_simple_location.match("join(104..160,320..390,504..579)")
-assert not _re_simple_compound.match("bond(12,63)")
-assert _re_simple_compound.match("join(104..160,320..390,504..579)")
-assert _re_simple_compound.match("order(1..69,1308..1465)")
-assert not _re_simple_compound.match("order(1..69,1308..1465,1524)")
-assert not _re_simple_compound.match("join(<1..442,992..1228,1524..>1983)")
-assert not _re_simple_compound.match("join(<1..181,254..336,422..497,574..>590)")
-assert not _re_simple_compound.match(
-    "join(1475..1577,2841..2986,3074..3193,3314..3481,4126..>4215)"
-)
-assert not _re_simple_compound.match("test(1..69,1308..1465)")
-assert not _re_simple_compound.match("complement(1..69)")
-assert not _re_simple_compound.match("(1..69)")
-assert _re_complex_location.match("(3.9)..10")
-assert _re_complex_location.match("26..(30.33)")
-assert _re_complex_location.match("(13.19)..(20.28)")
-assert _re_complex_location.match("41^42")  # between
-assert _re_complex_location.match("AL121804:41^42")
-assert _re_complex_location.match("AL121804:41..610")
-assert _re_complex_location.match("AL121804.2:41..610")
-assert _re_complex_location.match(
-    "AL358792.24.1.166931:3274..3461"
-)  # lots of dots in external reference
-assert _re_complex_location.match("one-of(3,6)..101")
-# assert _re_complex_compound.match(
-# "join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)"
-# )
-assert not _re_simple_compound.match(
-    "join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)"
-)
-# assert _re_complex_compound.match(
-# "join(complement(AL354868.10.1.164018:80837..81016),complement(AL354868.10.1.164018:80539..80835))"
-# )
-
-# Trans-spliced example from NC_016406, note underscore in reference name:
-assert _re_complex_location.match("NC_016402.1:6618..6676")
-assert _re_complex_location.match("181647..181905")
-# assert _re_complex_compound.match(
-# "join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)"
-# )
-assert not _re_complex_location.match(
-    "join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)"
-)
-assert not _re_simple_compound.match(
-    "join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)"
-)
-assert not _re_complex_location.match(
-    "join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)"
-)
-assert not _re_simple_location.match(
-    "join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)"
-)
-
-_solo_bond = re.compile(r"bond\(%s\)" % _solo_location)
-assert _solo_bond.match("bond(196)")
-assert _solo_bond.search("bond(196)")
-assert _solo_bond.search("join(bond(284),bond(305),bond(309),bond(305))")
 
 
 _within_position = r"\((\d+)\.(\d+)\)"
