@@ -124,30 +124,28 @@ assert _split(
 ]
 
 
-_solo_location = r"[<>]?\d+"
-_re_solo_location = re.compile("^%s$" % _solo_location)
 _pair_location = r"[<>]?-?\d+\.\.[<>]?-?\d+"
-_re_pair_location = re.compile(r"^([<>]?\d+)\.\.([<>]?\d+)$")
+
 _between_location = r"\d+\^\d+"
-_re_between_location = re.compile(r"^(\d+)\^(\d+)$")
 
 _within_position = r"\(\d+\.\d+\)"
 _within_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" % (
     _within_position,
     _within_position,
 )
-_re_within_location = re.compile(_within_location)
-assert _re_within_location.match("(3.9)..10")
-assert _re_within_location.match("26..(30.33)")
-assert _re_within_location.match("(13.19)..(20.28)")
+_within_position = r"\((\d+)\.(\d+)\)"
+_re_within_position = re.compile(_within_position)
+assert _re_within_position.match("(3.9)")
 
-_oneof_position = r"one\-of\(\d+(?:,\d+)+\)"
 _oneof_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" % (_oneof_position, _oneof_position)
-_re_oneof_location = re.compile(_oneof_location)
-assert _re_oneof_location.match("one-of(6,9)..101")
-assert _re_oneof_location.match("one-of(6,9)..one-of(101,104)")
-assert _re_oneof_location.match("6..one-of(101,104)")
+_oneof_position = r"one\-of\((\d+[,\d+]+)\)"
+_re_oneof_position = re.compile(_oneof_position)
+assert _re_oneof_position.match("one-of(6,9)")
+assert not _re_oneof_position.match("one-of(3)")
+assert _re_oneof_position.match("one-of(3,6)")
+assert _re_oneof_position.match("one-of(3,6,9)")
 
+_solo_location = r"[<>]?\d+"
 _solo_bond = r"bond\(%s\)" % _solo_location
 
 _re_location_category = re.compile(
@@ -161,18 +159,6 @@ _re_location_category = re.compile(
         _solo_location,
     )
 )
-
-
-_within_position = r"\((\d+)\.(\d+)\)"
-_re_within_position = re.compile(_within_position)
-assert _re_within_position.match("(3.9)")
-
-_oneof_position = r"one\-of\((\d+[,\d+]+)\)"
-_re_oneof_position = re.compile(_oneof_position)
-assert _re_oneof_position.match("one-of(6,9)")
-assert not _re_oneof_position.match("one-of(3)")
-assert _re_oneof_position.match("one-of(3,6)")
-assert _re_oneof_position.match("one-of(3,6,9)")
 
 
 class LocationParserError(ValueError):
