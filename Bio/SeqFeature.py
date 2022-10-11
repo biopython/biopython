@@ -56,8 +56,8 @@ Classes:
 
 
 Exceptions:
- - ParserFailureError    Exception indicating a failure in the parser (ie.
-   scanner or consumer)
+ - LocationParserError - Exception indicating a failure to parse a location
+   string.
 
 """
 import functools
@@ -74,9 +74,8 @@ from Bio.Seq import Seq
 
 # Regular expressions for location parsing
 
-
 _reference = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)"
-_oneof_position = r"one\-of\(\d+(?:,\d+)+\)"
+_oneof_position = r"one\-of\(\d+[,\d+]+\)"
 
 _oneof_location = rf"[<>]?(?:\d+|{_oneof_position})\.\.[<>]?(?:\d+|{_oneof_position})"
 
