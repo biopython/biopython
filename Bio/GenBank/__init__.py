@@ -43,7 +43,13 @@ import warnings
 
 from Bio import BiopythonParserWarning
 from Bio.Seq import Seq
-from Bio import SeqFeature
+from Bio.SeqFeature import (
+    SimpleLocation,
+    CompoundLocation,
+    Reference,
+    SeqFeature,
+    LocationParserError,
+)
 
 # other Bio.GenBank stuff
 from .utils import FeatureValueCleaner
@@ -351,12 +357,6 @@ class ParserFailureError(ValueError):
     pass
 
 
-class LocationParserError(ValueError):
-    """Could not parse a feature location string."""
-
-    pass
-
-
 _cleaner = FeatureValueCleaner()
 
 
@@ -540,101 +540,6 @@ class _BaseGenBankConsumer:
         return new_start, new_end
 
 
-def simplelocation_fromstring(text, length=None, circular=False):
-    """Create a SimpleLocation object from a string."""
-    if text.startswith("complement("):
-        text = text[11:-1]
-        strand = -1
-    else:
-        strand = None
-    # Try simple cases first for speed
-    try:
-        s, e = text.split("..")
-        s = int(s) - 1
-        e = int(e)
-    except ValueError:
-        pass
-    else:
-        if 0 <= s <= e:
-            return SeqFeature.SimpleLocation(s, e, strand)
-    # Try general case
-    try:
-        ref, text = text.split(":")
-    except ValueError:
-        ref = None
-    m = _re_location_category.match(text)
-    if m is None:
-        return None
-    for key, value in m.groupdict().items():
-        if value is not None:
-            break
-    assert value == text
-    if key == "bond":
-        # e.g. bond(196)
-        warnings.warn(
-            "Dropping bond qualifier in feature location",
-            BiopythonParserWarning,
-        )
-        text = text[5:-1]
-        s_pos = SeqFeature.Position.fromstring(text, -1)
-        e_pos = SeqFeature.Position.fromstring(text)
-    elif key == "solo":
-        # e.g. "123"
-        s_pos = SeqFeature.Position.fromstring(text, -1)
-        e_pos = SeqFeature.Position.fromstring(text)
-    elif key in ("pair", "within", "oneof"):
-        s, e = text.split("..")
-        # Attempt to fix features that span the origin
-        s_pos = SeqFeature.Position.fromstring(s, -1)
-        e_pos = SeqFeature.Position.fromstring(e)
-        if s_pos > e_pos:
-            # There is likely a problem with origin wrapping.
-            # Create a CompoundLocation of the wrapped feature,
-            # consisting of two SimpleLocation objects to extend to
-            # the list of feature locations.
-            if not circular:
-                raise LocationParserError(
-                    f"it appears that '{text}' is a feature that spans the origin, but the sequence topology is undefined"
-                )
-            warnings.warn(
-                "Attempting to fix invalid location %r as "
-                "it looks like incorrect origin wrapping. "
-                "Please fix input file, this could have "
-                "unintended behavior." % text,
-                BiopythonParserWarning,
-            )
-
-            f1 = SeqFeature.SimpleLocation(s_pos, length, strand)
-            f2 = SeqFeature.SimpleLocation(0, e_pos, strand)
-
-            if strand == -1:
-                # For complementary features spanning the origin
-                return f2 + f1
-            else:
-                return f1 + f2
-    elif key == "between":
-        # A between location like "67^68" (one based counting) is a
-        # special case (note it has zero length). In python slice
-        # notation this is 67:67, a zero length slice.  See Bug 2622
-        # Further more, on a circular genome of length N you can have
-        # a location N^1 meaning the junction at the origin. See Bug 3098.
-        # NOTE - We can imagine between locations like "2^4", but this
-        # is just "3".  Similarly, "2^5" is just "3..4"
-        s, e = text.split("^")
-        s = int(s)
-        e = int(e)
-        if s + 1 == e or (s == length and e == 1):
-            s_pos = SeqFeature.ExactPosition(s)
-            e_pos = s_pos
-        else:
-            raise LocationParserError(f"invalid feature location '{text}'")
-    if s_pos < 0:
-        raise LocationParserError(
-            f"negative starting position in feature location '{text}'"
-        )
-    return SeqFeature.SimpleLocation(s_pos, e_pos, strand, ref=ref)
-
-
 def location_fromstring(location_line, length=None, circular=False, stranded=True):
     """Create a Location object from a string.
 
@@ -668,7 +573,7 @@ def location_fromstring(location_line, length=None, circular=False, stranded=Tru
     >>> location_fromstring("123^456", 1000)
     Traceback (most recent call last):
        ...
-    Bio.GenBank.LocationParserError: invalid feature location '123^456'
+    Bio.SeqFeature.LocationParserError: invalid feature location '123^456'
 
     You can optionally provide a reference name:
 
@@ -700,14 +605,14 @@ def location_fromstring(location_line, length=None, circular=False, stranded=Tru
         parts = _split(location_line[5:-1])[1::2]
         # assert parts[0] == "" and parts[-1] == ""
     else:
-        loc = simplelocation_fromstring(location_line, length, circular)
+        loc = SimpleLocation.fromstring(location_line, length, circular)
         loc.strand = strand
         if strand == -1:
             loc.parts.reverse()
         return loc
     locs = []
     for part in parts:
-        loc = simplelocation_fromstring(part, length, circular)
+        loc = SimpleLocation.fromstring(part, length, circular)
         if loc is None:
             break
         if loc.strand == -1:
@@ -732,7 +637,7 @@ def location_fromstring(location_line, length=None, circular=False, stranded=Tru
             # Reverse the backwards order used in GenBank files
             # with complement(join(...))
             locs = locs[::-1]
-        return SeqFeature.CompoundLocation(locs, operator=operator)
+        return CompoundLocation(locs, operator=operator)
     # Not recognized
     if "order" in location_line and "join" in location_line:
         # See Bug 3197
@@ -1021,7 +926,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         else:
             self.data.annotations["references"] = []
 
-        self._cur_reference = SeqFeature.Reference()
+        self._cur_reference = Reference()
 
     def reference_bases(self, content):
         """Attempt to determine the sequence region the reference entails.
@@ -1082,7 +987,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             new_start, new_end = self._convert_to_python_numbers(
                 int(start.strip()), int(end.strip())
             )
-            this_location = SeqFeature.SimpleLocation(new_start, new_end)
+            this_location = SimpleLocation(new_start, new_end)
             new_locations.append(this_location)
         return new_locations
 
@@ -1149,7 +1054,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
     def feature_key(self, content):
         # start a new feature
-        self._cur_feature = SeqFeature.SeqFeature()
+        self._cur_feature = SeqFeature()
         self._cur_feature.type = content
         self.data.features.append(self._cur_feature)
 

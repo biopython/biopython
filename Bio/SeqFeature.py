@@ -56,10 +56,251 @@ import re
 import warnings
 from abc import ABC, abstractmethod
 
+from Bio import BiopythonParserWarning
 from Bio import BiopythonDeprecationWarning
 from Bio.Seq import MutableSeq
 from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
+
+
+# Regular expressions for location parsing
+
+
+_re_compounded = re.compile(r"^(?P<operator>join|order|bond)\((?P<locations>\S+)\)$")
+
+_reference = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)"
+_oneof_position = r"one\-of\(\d+(?:,\d+)+\)"
+
+_oneof_location = rf"[<>]?(?:\d+|{_oneof_position})\.\.[<>]?(?:\d+|{_oneof_position})"
+
+_any_location = rf"({_reference}?{_oneof_location}|complement\({_oneof_location}\)|[^,]+|complement\([^,]+\))"
+
+_split = re.compile(_any_location).split
+
+assert _split("123..145")[1::2] == ["123..145"]
+assert _split("123..145,200..209")[1::2] == [
+    "123..145",
+    "200..209",
+]
+assert _split("one-of(200,203)..300")[1::2] == ["one-of(200,203)..300"]
+assert _split("complement(123..145),200..209")[1::2] == [
+    "complement(123..145)",
+    "200..209",
+]
+assert _split("123..145,one-of(200,203)..209")[1::2] == [
+    "123..145",
+    "one-of(200,203)..209",
+]
+assert _split("123..145,one-of(200,203)..one-of(209,211),300")[1::2] == [
+    "123..145",
+    "one-of(200,203)..one-of(209,211)",
+    "300",
+]
+assert _split("123..145,complement(one-of(200,203)..one-of(209,211)),300")[1::2] == [
+    "123..145",
+    "complement(one-of(200,203)..one-of(209,211))",
+    "300",
+]
+assert _split("123..145,200..one-of(209,211),300")[1::2] == [
+    "123..145",
+    "200..one-of(209,211)",
+    "300",
+]
+assert _split("123..145,200..one-of(209,211)")[1::2] == [
+    "123..145",
+    "200..one-of(209,211)",
+]
+assert _split(
+    "complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905"
+)[1::2] == [
+    "complement(149815..150200)",
+    "complement(293787..295573)",
+    "NC_016402.1:6618..6676",
+    "181647..181905",
+]
+
+
+_solo_location = r"[<>]?\d+"
+_re_solo_location = re.compile("^%s$" % _solo_location)
+_pair_location = r"[<>]?-?\d+\.\.[<>]?-?\d+"
+_re_pair_location = re.compile(r"^([<>]?\d+)\.\.([<>]?\d+)$")
+_between_location = r"\d+\^\d+"
+_re_between_location = re.compile(r"^(\d+)\^(\d+)$")
+
+_within_position = r"\(\d+\.\d+\)"
+_within_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" % (
+    _within_position,
+    _within_position,
+)
+_re_within_location = re.compile(_within_location)
+assert _re_within_location.match("(3.9)..10")
+assert _re_within_location.match("26..(30.33)")
+assert _re_within_location.match("(13.19)..(20.28)")
+
+_oneof_position = r"one\-of\(\d+(?:,\d+)+\)"
+_oneof_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" % (_oneof_position, _oneof_position)
+_re_oneof_location = re.compile(_oneof_location)
+assert _re_oneof_location.match("one-of(6,9)..101")
+assert _re_oneof_location.match("one-of(6,9)..one-of(101,104)")
+assert _re_oneof_location.match("6..one-of(101,104)")
+
+_solo_bond = r"bond\(%s\)" % _solo_location
+
+_re_location_category = re.compile(
+    r"^(?P<pair>%s)|(?P<between>%s)|(?P<within>%s)|(?P<oneof>%s)|(?P<bond>%s)|(?P<solo>%s)$"
+    % (
+        _pair_location,
+        _between_location,
+        _within_location,
+        _oneof_location,
+        _solo_bond,
+        _solo_location,
+    )
+)
+
+
+_simple_location = r"(\d+)\.\.(\d+)"
+_re_simple_location = re.compile(r"^%s$" % _simple_location)
+_re_simple_compound = re.compile(
+    r"^(?P<operator>join|order|bond)\((?P<parts>\d+\.\.\d+(?:,\d+\.\.\d+)*)\)$"
+)
+
+_complex_location = (
+    r"(?:(?P<ref>[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?)\:)?(?P<location>%s|%s|%s|%s|%s)"
+    % (
+        _pair_location,
+        _solo_location,
+        _between_location,
+        _within_location,
+        _oneof_location,
+    )
+)
+_re_complex_location = re.compile(r"^%s$" % _complex_location)
+_complex_location = (
+    r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(%s|%s|%s|%s|%s|%s)"
+    % (
+        _pair_location,
+        _between_location,
+        _within_location,
+        _oneof_location,
+        _solo_bond,
+        _solo_location,
+    )
+)
+_possibly_complemented_complex_location = r"(?:%s|complement\(%s\))" % (
+    _complex_location,
+    _complex_location,
+)
+
+_complex_compound = (
+    r"(?:(?P<operator>join|order|bond)\((?P<locations>%s(?:,%s)*)\))"
+    % (_possibly_complemented_complex_location, _possibly_complemented_complex_location)
+)
+
+_solo_location = r"[<>]?\d+"
+_pair_location = r"[<>]?\d+\.\.[<>]?\d+"
+_between_location = r"\d+\^\d+"
+_within_location = r"(?:(?:[<>]?\d+|%s)\.\.(?:[<>]?\d+|%s))" % (
+    _within_position,
+    _within_position,
+)
+_oneof_location = r"(?:[<>]?\d+|%s)\.\.(?:[<>]?\d+|%s)" % (
+    _oneof_position,
+    _oneof_position,
+)
+
+_complex_location = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?(?:!,.+)|%s|%s|%s" % (
+    _within_location,
+    _solo_bond,
+    _solo_location,
+)
+_ref_oneof_location = (
+    r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?%s" % _oneof_location
+)
+
+_possibly_complemented_complex_location = (
+    r"((?:%s)|(?:complement\((?:%s)\))|(?:%s)|(?:complement\((?:%s)\)))"
+    % (
+        _ref_oneof_location,
+        _ref_oneof_location,
+        _complex_location,
+        _complex_location,
+    )
+)
+
+_complex_location = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)?%s|%s|%s|%s|%s|%s" % (
+    _pair_location,
+    _between_location,
+    _within_location,
+    _oneof_location,
+    _solo_bond,
+    _solo_location,
+)
+
+
+assert _re_simple_location.match("104..160")
+assert not _re_simple_location.match("68451760..68452073^68452074")
+assert not _re_simple_location.match("<104..>160")
+assert not _re_simple_location.match("104")
+assert not _re_simple_location.match("<1")
+assert not _re_simple_location.match(">99999")
+assert not _re_simple_location.match("join(104..160,320..390,504..579)")
+assert not _re_simple_compound.match("bond(12,63)")
+assert _re_simple_compound.match("join(104..160,320..390,504..579)")
+assert _re_simple_compound.match("order(1..69,1308..1465)")
+assert not _re_simple_compound.match("order(1..69,1308..1465,1524)")
+assert not _re_simple_compound.match("join(<1..442,992..1228,1524..>1983)")
+assert not _re_simple_compound.match("join(<1..181,254..336,422..497,574..>590)")
+assert not _re_simple_compound.match(
+    "join(1475..1577,2841..2986,3074..3193,3314..3481,4126..>4215)"
+)
+assert not _re_simple_compound.match("test(1..69,1308..1465)")
+assert not _re_simple_compound.match("complement(1..69)")
+assert not _re_simple_compound.match("(1..69)")
+assert _re_complex_location.match("(3.9)..10")
+assert _re_complex_location.match("26..(30.33)")
+assert _re_complex_location.match("(13.19)..(20.28)")
+assert _re_complex_location.match("41^42")  # between
+assert _re_complex_location.match("AL121804:41^42")
+assert _re_complex_location.match("AL121804:41..610")
+assert _re_complex_location.match("AL121804.2:41..610")
+assert _re_complex_location.match(
+    "AL358792.24.1.166931:3274..3461"
+)  # lots of dots in external reference
+assert _re_complex_location.match("one-of(3,6)..101")
+# assert _re_complex_compound.match(
+# "join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)"
+# )
+assert not _re_simple_compound.match(
+    "join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)"
+)
+# assert _re_complex_compound.match(
+# "join(complement(AL354868.10.1.164018:80837..81016),complement(AL354868.10.1.164018:80539..80835))"
+# )
+
+# Trans-spliced example from NC_016406, note underscore in reference name:
+assert _re_complex_location.match("NC_016402.1:6618..6676")
+assert _re_complex_location.match("181647..181905")
+# assert _re_complex_compound.match(
+# "join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)"
+# )
+assert not _re_complex_location.match(
+    "join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)"
+)
+assert not _re_simple_compound.match(
+    "join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)"
+)
+assert not _re_complex_location.match(
+    "join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)"
+)
+assert not _re_simple_location.match(
+    "join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)"
+)
+
+_solo_bond = re.compile(r"bond\(%s\)" % _solo_location)
+assert _solo_bond.match("bond(196)")
+assert _solo_bond.search("bond(196)")
+assert _solo_bond.search("join(bond(284),bond(305),bond(309),bond(305))")
 
 
 _within_position = r"\((\d+)\.(\d+)\)"
@@ -72,6 +313,12 @@ assert _re_oneof_position.match("one-of(6,9)")
 assert not _re_oneof_position.match("one-of(3)")
 assert _re_oneof_position.match("one-of(3,6)")
 assert _re_oneof_position.match("one-of(3,6,9)")
+
+
+class LocationParserError(ValueError):
+    """Could not parse a feature location string."""
+
+    pass
 
 
 class SeqFeature:
@@ -828,6 +1075,101 @@ class SimpleLocation:
         self.strand = strand
         self.ref = ref
         self.ref_db = ref_db
+
+    @staticmethod
+    def fromstring(text, length=None, circular=False):
+        """Create a SimpleLocation object from a string."""
+        if text.startswith("complement("):
+            text = text[11:-1]
+            strand = -1
+        else:
+            strand = None
+        # Try simple cases first for speed
+        try:
+            s, e = text.split("..")
+            s = int(s) - 1
+            e = int(e)
+        except ValueError:
+            pass
+        else:
+            if 0 <= s <= e:
+                return SimpleLocation(s, e, strand)
+        # Try general case
+        try:
+            ref, text = text.split(":")
+        except ValueError:
+            ref = None
+        m = _re_location_category.match(text)
+        if m is None:
+            return None
+        for key, value in m.groupdict().items():
+            if value is not None:
+                break
+        assert value == text
+        if key == "bond":
+            # e.g. bond(196)
+            warnings.warn(
+                "Dropping bond qualifier in feature location",
+                BiopythonParserWarning,
+            )
+            text = text[5:-1]
+            s_pos = Position.fromstring(text, -1)
+            e_pos = Position.fromstring(text)
+        elif key == "solo":
+            # e.g. "123"
+            s_pos = Position.fromstring(text, -1)
+            e_pos = Position.fromstring(text)
+        elif key in ("pair", "within", "oneof"):
+            s, e = text.split("..")
+            # Attempt to fix features that span the origin
+            s_pos = Position.fromstring(s, -1)
+            e_pos = Position.fromstring(e)
+            if s_pos > e_pos:
+                # There is likely a problem with origin wrapping.
+                # Create a CompoundLocation of the wrapped feature,
+                # consisting of two SimpleLocation objects to extend to
+                # the list of feature locations.
+                if not circular:
+                    raise LocationParserError(
+                        f"it appears that '{text}' is a feature that spans the origin, but the sequence topology is undefined"
+                    )
+                warnings.warn(
+                    "Attempting to fix invalid location %r as "
+                    "it looks like incorrect origin wrapping. "
+                    "Please fix input file, this could have "
+                    "unintended behavior." % text,
+                    BiopythonParserWarning,
+                )
+
+                f1 = SimpleLocation(s_pos, length, strand)
+                f2 = SimpleLocation(0, e_pos, strand)
+
+                if strand == -1:
+                    # For complementary features spanning the origin
+                    return f2 + f1
+                else:
+                    return f1 + f2
+        elif key == "between":
+            # A between location like "67^68" (one based counting) is a
+            # special case (note it has zero length). In python slice
+            # notation this is 67:67, a zero length slice.  See Bug 2622
+            # Further more, on a circular genome of length N you can have
+            # a location N^1 meaning the junction at the origin. See Bug 3098.
+            # NOTE - We can imagine between locations like "2^4", but this
+            # is just "3".  Similarly, "2^5" is just "3..4"
+            s, e = text.split("^")
+            s = int(s)
+            e = int(e)
+            if s + 1 == e or (s == length and e == 1):
+                s_pos = ExactPosition(s)
+                e_pos = s_pos
+            else:
+                raise LocationParserError(f"invalid feature location '{text}'")
+        if s_pos < 0:
+            raise LocationParserError(
+                f"negative starting position in feature location '{text}'"
+            )
+        return SimpleLocation(s_pos, e_pos, strand, ref=ref)
 
     def _get_strand(self):
         """Get function for the strand property (PRIVATE)."""
