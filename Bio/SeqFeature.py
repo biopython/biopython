@@ -931,7 +931,132 @@ class Reference:
 # --- Handling feature locations
 
 
-class SimpleLocation:
+class Location(ABC):
+    """Abstract base class representing a location."""
+
+    @abstractmethod
+    def __repr__(self):
+        """Represent the Location object as a string for debugging."""
+        return f"{self.__class__.__name__}(...)"
+
+    def fromstring(location_line, length=None, circular=False, stranded=True):
+        """Create a Location object from a string.
+
+        Simple examples:
+
+        >>> Location.fromstring("123..456", 1000)
+        SimpleLocation(ExactPosition(122), ExactPosition(456), strand=1)
+        >>> Location.fromstring("complement(<123..>456)", 1000)
+        SimpleLocation(BeforePosition(122), AfterPosition(456), strand=-1)
+
+        A more complex location using within positions,
+
+        >>> Location.fromstring("(9.10)..(20.25)", 1000)
+        SimpleLocation(WithinPosition(8, left=8, right=9), WithinPosition(25, left=20, right=25), strand=1)
+
+        Notice how that will act as though it has overall start 8 and end 25.
+
+        Zero length between feature,
+
+        >>> Location.fromstring("123^124", 1000)
+        SimpleLocation(ExactPosition(123), ExactPosition(123), strand=1)
+
+        The expected sequence length is needed for a special case, a between
+        position at the start/end of a circular genome:
+
+        >>> Location.fromstring("1000^1", 1000)
+        SimpleLocation(ExactPosition(1000), ExactPosition(1000), strand=1)
+
+        Apart from this special case, between positions P^Q must have P+1==Q,
+
+        >>> Location.fromstring("123^456", 1000)
+        Traceback (most recent call last):
+           ...
+        Bio.SeqFeature.LocationParserError: invalid feature location '123^456'
+
+        You can optionally provide a reference name:
+
+        >>> Location.fromstring("AL391218.9:105173..108462", 2000000)
+        SimpleLocation(ExactPosition(105172), ExactPosition(108462), strand=1, ref='AL391218.9')
+
+        >>> Location.fromstring("<2644..159", 2868, "circular")
+        CompoundLocation([SimpleLocation(BeforePosition(2643), ExactPosition(2868), strand=1), SimpleLocation(ExactPosition(0), ExactPosition(159), strand=1)], 'join')
+        """
+        if location_line.startswith("complement"):
+            location_line = location_line[11:-1]
+            strand = -1
+        elif stranded:
+            strand = 1
+        else:
+            strand = None
+
+        # Determine if we have a simple location or a compound location
+        if location_line.startswith("join("):
+            operator = "join"
+            parts = _split(location_line[5:-1])[1::2]
+            # assert parts[0] == "" and parts[-1] == ""
+        elif location_line.startswith("order("):
+            operator = "order"
+            parts = _split(location_line[6:-1])[1::2]
+            # assert parts[0] == "" and parts[-1] == ""
+        elif location_line.startswith("bond("):
+            operator = "bond"
+            parts = _split(location_line[5:-1])[1::2]
+            # assert parts[0] == "" and parts[-1] == ""
+        else:
+            loc = SimpleLocation.fromstring(location_line, length, circular)
+            loc.strand = strand
+            if strand == -1:
+                loc.parts.reverse()
+            return loc
+        locs = []
+        for part in parts:
+            loc = SimpleLocation.fromstring(part, length, circular)
+            if loc is None:
+                break
+            if loc.strand == -1:
+                if strand == -1:
+                    raise LocationParserError("double complement in '{location_line}'?")
+            else:
+                loc.strand = strand
+            locs.extend(loc.parts)
+        else:
+            if len(locs) == 1:
+                return loc
+            # Historically a join on the reverse strand has been represented
+            # in Biopython with both the parent SeqFeature and its children
+            # (the exons for a CDS) all given a strand of -1.  Likewise, for
+            # a join feature on the forward strand they all have strand +1.
+            # However, we must also consider evil mixed strand examples like
+            # this, join(complement(69611..69724),139856..140087,140625..140650)
+            if strand == -1:
+                # Whole thing was wrapped in complement(...)
+                for loc in locs:
+                    assert loc.strand == -1
+                # Reverse the backwards order used in GenBank files
+                # with complement(join(...))
+                locs = locs[::-1]
+            return CompoundLocation(locs, operator=operator)
+        # Not recognized
+        if "order" in location_line and "join" in location_line:
+            # See Bug 3197
+            raise LocationParserError(
+                f"failed to parse feature location '{location_line}' containing a combination of 'join' and 'order' (nested operators) are illegal"
+            )
+
+        # See issue #937. Note that NCBI has already fixed this record.
+        if ",)" in location_line:
+            warnings.warn(
+                "Dropping trailing comma in malformed feature location",
+                BiopythonParserWarning,
+            )
+            location_line = location_line.replace(",)", ")")
+            return Location.fromstring(location_line)
+
+        raise LocationParserError(f"failed to parse feature location '{location_line}'")
+
+
+class SimpleLocation(Location):
     """Specify the location of a feature along a sequence.
 
     The SimpleLocation is used for simple continuous features, which can
@@ -1530,7 +1655,7 @@ class SimpleLocation:
 FeatureLocation = SimpleLocation  # OBSOLETE; for backward compatability only.
 
 
-class CompoundLocation:
+class CompoundLocation(Location):
     """For handling joins etc where a feature location has several parts."""
 
     def __init__(self, parts, operator="join"):
