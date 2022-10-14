@@ -71,7 +71,7 @@ gi|6273291|gb|AF191665.1|AF191      ACCAGA
 
 """  # noqa : W291
 
-cw02_clustal = """\
+clustalw_clustal = """\
 CLUSTAL X (1.81) multiple sequence alignment
 
 
@@ -178,9 +178,9 @@ class TestBasics(unittest.TestCase):
         alignment.append(SeqRecord(Seq(letters.upper()), id="upper"))
         self.assertEqual(alignment.get_alignment_length(), 26)
         self.assertEqual(len(alignment), 3)
-        self.assertEqual(str(alignment[0].seq), letters)
-        self.assertEqual(str(alignment[1].seq), letters.lower())
-        self.assertEqual(str(alignment[2].seq), letters.upper())
+        self.assertEqual(alignment[0].seq, letters)
+        self.assertEqual(alignment[1].seq, letters.lower())
+        self.assertEqual(alignment[2].seq, letters.upper())
         self.assertEqual(alignment[0].id, "mixed")
         self.assertEqual(alignment[1].id, "lower")
         self.assertEqual(alignment[2].id, "upper")
@@ -206,9 +206,9 @@ class TestReading(unittest.TestCase):
 
     def test_read_clustal2(self):
         """Parse an alignment file and get an alignment object."""
-        path = os.path.join(os.curdir, "Clustalw", "cw02.aln")
+        path = os.path.join(os.curdir, "Clustalw", "clustalw.aln")
         alignment = AlignIO.read(path, "clustal")
-        self.assertEqual(format(alignment, "clustal"), cw02_clustal)
+        self.assertEqual(format(alignment, "clustal"), clustalw_clustal)
 
     def test_read_write_clustal(self):
         """Test the base alignment stuff."""

@@ -122,3 +122,13 @@ Doc/api/*.rst
 
 #Ignore mypy cache directory
 .mypy_cache
+
+#Ignore virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Testing
+**/.coverage

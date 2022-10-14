@@ -6,6 +6,12 @@
 """Output of PDB files."""
 
 
+import warnings
+
+# Exceptions and Warnings
+from Bio import BiopythonWarning
+from Bio.PDB.PDBExceptions import PDBIOException
+
 # To allow saving of chains, residues, etc..
 from Bio.PDB.StructureBuilder import StructureBuilder
 
@@ -18,6 +24,10 @@ _ATOM_FORMAT_STRING = (
 )
 _PQR_ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f %7s  %6s      %2s\n"
+)
+
+_TER_FORMAT_STRING = (
+    "TER   %5i      %3s %c%4i%c                                                      \n"
 )
 
 
@@ -159,53 +169,63 @@ class PDBIO(StructureIO):
         else:
             record_type = "ATOM  "
 
+        # Atom properties
+
+        # Check if the atom serial number is an integer
+        # Not always the case for structures built from
+        # mmCIF files.
+        try:
+            atom_number = int(atom_number)
+        except ValueError:
+            raise ValueError(
+                f"{atom_number!r} is not a number."
+                "Atom serial numbers must be numerical"
+                " If you are converting from an mmCIF"
+                " structure, try using"
+                " preserve_atom_numbering=False"
+            )
+
+        if atom_number > 99999:
+            raise ValueError(
+                f"Atom serial number ('{atom_number}') exceeds PDB format limit."
+            )
+
+        # Check if the element is valid, unknown (X), or blank
         if atom.element:
             element = atom.element.strip().upper()
             if element.capitalize() not in atom_weights and element != "X":
-                raise ValueError("Unrecognised element %r" % atom.element)
+                raise ValueError(f"Unrecognised element {atom.element}")
             element = element.rjust(2)
         else:
             element = "  "
 
-        name = atom.get_fullname().strip()
-        # Pad atom name if:
+        # Format atom name
+        # Pad if:
         #     - smaller than 4 characters
         # AND - is not C, N, O, S, H, F, P, ..., one letter elements
         # AND - first character is NOT numeric (funky hydrogen naming rules)
+        name = atom.fullname.strip()
         if len(name) < 4 and name[:1].isalpha() and len(element.strip()) < 2:
             name = " " + name
 
-        altloc = atom.get_altloc()
-        x, y, z = atom.get_coord()
+        altloc = atom.altloc
+        x, y, z = atom.coord
 
-        # PDB Arguments
+        # Write PDB format line
         if not self.is_pqr:
-            bfactor = atom.get_bfactor()
-            occupancy = atom.get_occupancy()
-
-        # PQR Arguments
-        else:
-            radius = atom.get_radius()
-            pqr_charge = atom.get_charge()
-
-        if not self.is_pqr:
+            bfactor = atom.bfactor
             try:
-                occupancy_str = "%6.2f" % occupancy
-            except TypeError:
-                if occupancy is None:
-                    occupancy_str = " " * 6
-                    import warnings
-                    from Bio import BiopythonWarning
-
+                occupancy = f"{atom.occupancy:6.2f}"
+            except (TypeError, ValueError):
+                if atom.occupancy is None:
+                    occupancy = " " * 6
                     warnings.warn(
-                        "Missing occupancy in atom %r written as blank"
-                        % (atom.get_full_id(),),
+                        f"Missing occupancy in atom {atom.full_id!r} written as blank",
                         BiopythonWarning,
                     )
                 else:
-                    raise TypeError(
-                        "Invalid occupancy %r in atom %r"
-                        % (occupancy, atom.get_full_id())
+                    raise ValueError(
+                        f"Invalid occupancy value: {atom.occupancy!r}"
                     ) from None
 
             args = (
@@ -220,7 +240,7 @@ class PDBIO(StructureIO):
                 x,
                 y,
                 z,
-                occupancy_str,
+                occupancy,
                 bfactor,
                 segid,
                 element,
@@ -228,43 +248,33 @@ class PDBIO(StructureIO):
             )
             return _ATOM_FORMAT_STRING % args
 
+        # Write PQR format line
         else:
-            # PQR case
             try:
-                pqr_charge = "%7.4f" % pqr_charge
-            except TypeError:
-                if pqr_charge is None:
+                pqr_charge = f"{atom.pqr_charge:7.4f}"
+            except (TypeError, ValueError):
+                if atom.pqr_charge is None:
                     pqr_charge = " " * 7
-                    import warnings
-                    from Bio import BiopythonWarning
-
                     warnings.warn(
-                        "Missing charge in atom %r written as blank"
-                        % (atom.get_full_id(),),
+                        f"Missing PQR charge in atom {atom.full_id} written as blank",
                         BiopythonWarning,
                     )
                 else:
-                    raise TypeError(
-                        "Invalid charge %r in atom %r"
-                        % (pqr_charge, atom.get_full_id())
+                    raise ValueError(
+                        f"Invalid PQR charge value: {atom.pqr_charge!r}"
                     ) from None
+
             try:
-                radius = "%6.4f" % radius
-            except TypeError:
-                if radius is None:
+                radius = f"{atom.radius:6.4f}"
+            except (TypeError, ValueError):
+                if atom.radius is None:
                     radius = " " * 6
-                    import warnings
-                    from Bio import BiopythonWarning
-
                     warnings.warn(
-                        "Missing radius in atom %r written as blank"
-                        % (atom.get_full_id(),),
+                        f"Missing radius in atom {atom.full_id} written as blank",
                         BiopythonWarning,
                     )
                 else:
-                    raise TypeError(
-                        "Invalid radius %r in atom %r" % (radius, atom.get_full_id())
-                    ) from None
+                    raise ValueError(f"Invalid radius value: {atom.radius}") from None
 
             args = (
                 record_type,
@@ -286,7 +296,6 @@ class PDBIO(StructureIO):
             return _PQR_ATOM_FORMAT_STRING % args
 
     # Public methods
-
     def save(self, file, select=_select, write_end=True, preserve_atom_numbering=False):
         """Save structure to a file.
 
@@ -309,86 +318,93 @@ class PDBIO(StructureIO):
 
         Typically select is a subclass of L{Select}.
         """
-        get_atom_line = self._get_atom_line
         if isinstance(file, str):
-            fp = open(file, "w")
-            close_file = 1
+            fhandle = open(file, "w")
         else:
             # filehandle, I hope :-)
-            fp = file
-            close_file = 0
-        # multiple models?
-        if len(self.structure) > 1 or self.use_model_flag:
-            model_flag = 1
-        else:
-            model_flag = 0
-        for model in self.structure.get_list():
-            if not select.accept_model(model):
-                continue
-            # necessary for ENDMDL
-            # do not write ENDMDL if no residues were written
-            # for this model
-            model_residues_written = 0
-            if not preserve_atom_numbering:
-                atom_number = 1
-            if model_flag:
-                fp.write("MODEL      %s\n" % model.serial_num)
-            for chain in model.get_list():
-                if not select.accept_chain(chain):
+            fhandle = file
+
+        with fhandle:
+            get_atom_line = self._get_atom_line
+
+            # multiple models?
+            if len(self.structure) > 1 or self.use_model_flag:
+                model_flag = 1
+            else:
+                model_flag = 0
+
+            for model in self.structure.get_list():
+                if not select.accept_model(model):
                     continue
-                chain_id = chain.get_id()
-                # necessary for TER
-                # do not write TER if no residues were written
-                # for this chain
-                chain_residues_written = 0
-                for residue in chain.get_unpacked_list():
-                    if not select.accept_residue(residue):
+                # necessary for ENDMDL
+                # do not write ENDMDL if no residues were written
+                # for this model
+                model_residues_written = 0
+                if not preserve_atom_numbering:
+                    atom_number = 1
+                if model_flag:
+                    fhandle.write(f"MODEL      {model.serial_num}\n")
+
+                for chain in model.get_list():
+                    if not select.accept_chain(chain):
                         continue
-                    hetfield, resseq, icode = residue.get_id()
-                    resname = residue.get_resname()
-                    segid = residue.get_segid()
-                    for atom in residue.get_unpacked_list():
-                        if select.accept_atom(atom):
+                    chain_id = chain.id
+                    if len(chain_id) > 1:
+                        e = f"Chain id ('{chain_id}') exceeds PDB format limit."
+                        raise PDBIOException(e)
+
+                    # necessary for TER
+                    # do not write TER if no residues were written
+                    # for this chain
+                    chain_residues_written = 0
+
+                    for residue in chain.get_unpacked_list():
+                        if not select.accept_residue(residue):
+                            continue
+                        hetfield, resseq, icode = residue.id
+                        resname = residue.resname
+                        segid = residue.segid
+                        resid = residue.id[1]
+                        if resid > 9999:
+                            e = f"Residue number ('{resid}') exceeds PDB format limit."
+                            raise PDBIOException(e)
+
+                        for atom in residue.get_unpacked_list():
+                            if not select.accept_atom(atom):
+                                continue
                             chain_residues_written = 1
                             model_residues_written = 1
                             if preserve_atom_numbering:
-                                atom_number = atom.get_serial_number()
+                                atom_number = atom.serial_number
 
-                                # Check if the atom serial number is an integer
-                                # Not always the case for mmCIF files.
-                                try:
-                                    atom_number = int(atom_number)
-                                except ValueError:
-                                    raise ValueError(
-                                        f"{repr(atom_number)} is not a number."
-                                        "Atom serial numbers must be numerical"
-                                        " If you are converting from an mmCIF"
-                                        " structure, try using"
-                                        " preserve_atom_numbering=False"
-                                    )
-
-                            s = get_atom_line(
-                                atom,
-                                hetfield,
-                                segid,
-                                atom_number,
-                                resname,
-                                resseq,
-                                icode,
-                                chain_id,
-                            )
-                            fp.write(s)
-                            if not preserve_atom_numbering:
+                            try:
+                                s = get_atom_line(
+                                    atom,
+                                    hetfield,
+                                    segid,
+                                    atom_number,
+                                    resname,
+                                    resseq,
+                                    icode,
+                                    chain_id,
+                                )
+                            except Exception as err:
+                                # catch and re-raise with more information
+                                raise PDBIOException(
+                                    f"Error when writing atom {atom.full_id}"
+                                ) from err
+                            else:
+                                fhandle.write(s)
+                                # inconsequential if preserve_atom_numbering is True
                                 atom_number += 1
-                if chain_residues_written:
-                    fp.write(
-                        "TER   %5i      %3s %c%4i%c                                                      \n"
-                        % (atom_number, resname, chain_id, resseq, icode)
-                    )
 
-            if model_flag and model_residues_written:
-                fp.write("ENDMDL\n")
-        if write_end:
-            fp.write("END   \n")
-        if close_file:
-            fp.close()
+                    if chain_residues_written:
+                        fhandle.write(
+                            _TER_FORMAT_STRING
+                            % (atom_number, resname, chain_id, resseq, icode)
+                        )
+
+                if model_flag and model_residues_written:
+                    fhandle.write("ENDMDL\n")
+            if write_end:
+                fhandle.write("END   \n")

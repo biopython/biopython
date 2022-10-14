@@ -1,7 +1,9 @@
 # Copyright 2010 by Tiago Antao.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Large file parsing of Genepop files.
 
@@ -43,11 +45,11 @@ def read(handle):
 
     """
     record = Record(handle)
-    record.comment_line = str(handle.readline()).rstrip()
+    record.comment_line = next(handle).rstrip()
     # We can now have one loci per line or all loci in a single line
     # separated by either space or comma+space...
     # We will remove all commas on loci... that should not be a problem
-    sample_loci_line = str(handle.readline()).rstrip().replace(",", "")
+    sample_loci_line = next(handle).rstrip().replace(",", "")
     all_loci = sample_loci_line.split(" ")
     record.loci_list.extend(all_loci)
     line = handle.readline()

@@ -1,0 +1,531 @@
+<!-- ============================================================= -->
+<!--  MODULE:    BITS Question and Answer Module                   -->
+<!--  DATE:      June 2015                                         -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                        TYPICAL INVOCATION                     -->
+<!--
+"-//NLM//DTD BITS Question and Answer Module v2.0 20151225//EN"
+Delivered as file "BITS-question-answer2.ent"                      -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Book Interchange Tag Suite                        -->
+<!--                                                               -->
+<!-- PURPOSE:    Defines a model for questions, sets of questions, -->
+<!--             and answers. This is a very basic model, expected -->
+<!--             to be extended. NOTE: This is NOT a model for a   -->
+<!--             quiz, test, or exam; such a containing model      -->
+<!--             could be built using sections and the questions   -->
+<!--             answers defined in this module.                   -->
+<!--                                                               -->
+<!-- TAG SET SPONSOR                                               -->
+<!--             National Center for Biotechnology                 -->
+<!--                Information (NCBI)                             -->
+<!--             National Library of Medicine (NLM)                -->
+<!--                                                               -->
+<!-- CREATED FOR:                                                  -->
+<!--             This DTD was created as a superset customization  -->
+<!--             of the ANSI/NISO JATS Z39.96-2012 Version 1.0     -->
+<!--             Journal Article Tag Set.                          -->
+<!--                                                               -->
+<!--             Digital archives and publishers may use the       -->
+<!--             DTD as is for markup of books or book-like        -->
+<!--             material for archiving and transferring           -->
+<!--             such material between archives or they may create -->
+<!--             a custom XML DTD from the BITS Suite for          -->
+<!--             these purposes.                                   -->
+<!--                                                               -->
+<!--             This DTD is in the public domain. An organization -->
+<!--             that wishes to create its own DTD from the suite  -->
+<!--             may do so without permission from NLM.            -->
+<!--                                                               -->
+<!--             The suite has been set up to be extended using a  -->
+<!--             new DTD file and new DTD-specific customization   -->
+<!--             modules to redefine the many Parameter Entities.  -->
+<!--             Do not modify the suite directly or redistribute  -->
+<!--             modified versions of the suite.                   -->
+<!--                                                               -->
+<!--             In the interest of maintaining consistency and    -->
+<!--             clarity for potential users, NLM requests:        -->
+<!--                                                               -->
+<!--             1. If you create a DTD from the BITS DTD Suite    -->
+<!--                and intend to stay compatible with the suite,  -->
+<!--                then please include the following statement    -->
+<!--                as a comment in all of your DTD modules:       -->
+<!--                   "Created from, and fully compatible with,   -->
+<!--                    the Book Interchange Tag Suite (BITS).     -->
+<!--                                                               -->
+<!--             2. If you alter one or more modules of the suite, -->
+<!--                then please rename your version and all its    -->
+<!--                modules to avoid any confusion with the        -->
+<!--                original suite. Also, please include the       -->
+<!--                following statement as a comment in all your   -->
+<!--                DTD modules:                                   -->
+<!--                   "Based in part on, but not fully compatible -->
+<!--                    with, the Book Interchange Tag Suite       -->
+<!--                    (BITS)."                                   -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             May 2013                                          -->
+<!--                                                               -->
+<!-- CREATED BY: Mulberry Technologies, Inc. for the National      -->
+<!--             National Center for Biotechnology Information     -->
+<!--             (NCBI), a center of the US National Library of    -->
+<!--             Medicine (NLM).                                   -->
+<!--                                                               -->
+<!--             The BITS Book Interchange DTD is built from the   -->
+<!--             Journal Archiving and Interchange DTD of the      -->
+<!--             ANSI/NISO Journal Article Tag Suite (JATS)        -->
+<!--             Version 1.1d1 (Z39.96-2015).                      -->
+<!--                                                               -->
+<!--             Suggestions for refinements and enhancements to   -->
+<!--             this DTD should be sent in email to:              -->
+<!--                 bits@ncbi.nlm.nih.gov                         -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DTD VERSION/CHANGE HISTORY                 -->
+<!-- ============================================================= -->
+<!--
+Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
+     =============================================================
+     BITS Version 2.0                (DAL/BTU) v2.0  (2015-12-25)
+     JATS Version 1.1                (DAL/BTU) v1.1  (2015-12-15)
+
+     JATS is a continuing maintenance NISO Standard, which
+     requires voting by the ANSI and NISO memberships to be changed. 
+     JATS 1.1 was approved in late 2015, and BITS modified to use
+     the most recent version. No other changes to BITS were made.
+ 
+ 12. BITS remained version "2.0" but becomes "v2.0 20151225"
+     JATS became version "1.1" and "v1.1 20151215"
+
+   =============================================================
+     BITS Version 2.0                (DAL/BTU) v2.0    (2015-03-15)
+     JATS Version 1.1                (DAL/BTU) v1.1    (2015-03-01)
+
+     BITS was modified, based on user feedback collected in 2014 
+     and January/February 2015, according to the decisions
+     made by the BITS Working Group. This DTD represents current 
+     BITS and an interim version of the non-normative JATS DTD 
+     Suite (version 1.1), as an indication to JATS users of 
+     the decisions that have been made by the JATS Standing
+     Committee. 
+
+     NISO JATS is a continuing maintenance NISO Standard, which
+     requires voting by the NISO membership to be changed. This
+     Committee Draft 1.1 will be sent to the NISO voting
+     membership, to become (if approved) NISO JATS 1.1.
+
+ 11. TITLE/SUBTITLE/ALT-TIT/E ETC. - Some of the question/answer
+     components could take subtitles and alt-titles as well as titles,
+     but all could not. Regularized them to include all title
+     types if a title was possible.
+
+ 10. EXPLANATION - was given a new section-level model similar
+     to that for <answer>.
+
+  9. ANSWER-SPECIFIC PARAGRAPH-LEVEL OBJECTS
+     Created a new PE (answer-para-level) to prohibit 
+     <explanation> at the paragraph level inside
+     <answer>, because that created DTD determinism problems.
+     Rewrote <answer> model to use this PE.
+
+  8. QUESTION MODEL - changed the model for <question> to:
+      - call all the components of sec-opt-title-model
+        rather than calling the grouping PE
+      - Add new element <option>, which is used for multiple 
+        choice questions (instead of <answer>) 
+
+  7. ANSWER/QUESTION ATTRIBUTES
+      - Removed @correct (yes | no) from <answer> and from
+        <answer-set>, because, by definition, an <answer> 
+        is correct. The <option> element may now be marked 
+        with a @correct attribute ('yes' or 'no').
+      -Removed @answer-type from <answer>, since this is 
+       really about the question, not the answer.
+     - Added new attribute @question-response-type to
+       <question>, which takes the old values for @answer-type
+       (multiple choice, short answer, essay, etc.) 
+
+  6. XML:LANG ATTRIBUTE - Added @xml:lang to the attributes lists
+     of <question-wrap> and <question-wrap-group>. 
+
+  5. EXPLANATION - Added @rid to <explanation> since these can
+     now float in the text as answers can. 
+
+  4. QUESTION-PREAMBLE - Added new element to hold setup/
+     preamble information, when the setup is shared by several 
+     questions, for example, a diagram is shown and the questions
+     are similar to "What is angle a?". This preamble is part of
+     a <question-wrap-group> that contains the preamble/setup 
+     (<question-preamble>) and several questions
+     (<question-wrap>).
+
+  3. QUESTION-WRAP-GROUP - Added new element <question-wrap-group>
+     to hold a question setup/preamble (<question-preamble>)
+     and two or more <question-wrap>s based on that preamble.
+
+  2. BITS became version "2.0" and   "v2.0 20150630"
+     JATS became version "1.1" and "v1.1 20150301"
+
+     =============================================================
+     BITS Version 1.1                (DAL/BTU) v1.1    (2014-09-30)
+     JATS Version 1.1d2              (DAL/BTU) v1.1d2  (2014-09-30)
+
+     NISO JATS is a continuing maintenance NISO Standard, which
+     requires voting by the NISO membership to be changed. This
+     Committee Draft 1.1d2 will be sent to the NISO voting
+     membership, to become (if approved) NISO JATS 1.1.
+
+     This catalog represents an interim version of the
+     non-normative JATS DTD Suite, as an indication to JATS users
+     the decisions that have been made by the JATS Standing
+     Committee.
+
+  1. BITS became version "1.1" and   "v1.1 20140930//EN"
+     JATS became version "1.1d2" and "v1.1d2 20140930//EN"
+
+     =============================================================
+                                                                   -->
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITIES FOR ATTRIBUTE VALUES    -->
+<!-- ============================================================= -->
+
+
+<!--                    TYPES OF ANSWERS                           -->
+<!--                    Used to name the type of question or
+                        question set.                              -->
+<!ENTITY % answer-types "essay | fill-in-the-blank | multi-select |
+                         multiple-choice | short-answer |
+                         true-false"                                 >
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITIES FOR ATTRIBUTE LISTS     -->
+<!-- ============================================================= -->
+
+
+<!--                    QUESTION ATTRIBUTES                        -->
+<!--                    Attributes for the <question> element      -->
+<!ENTITY % question-atts
+           "%jats-common-atts;
+             question-response-type
+                        (%answer-types;)                  #IMPLIED
+             content-type
+                        CDATA                             #IMPLIED
+             specific-use
+                        CDATA                             #IMPLIED
+             xml:lang   NMTOKEN                           #IMPLIED"  >
+
+
+<!--                    QUESTION PREAMBLE ATTRIBUTES               -->
+<!--                    Attributes for the <question-preamble> 
+                                                           element -->
+<!ENTITY % question-preamble-atts
+           "%jats-common-atts;
+             content-type
+                        CDATA                             #IMPLIED
+             specific-use
+                        CDATA                             #IMPLIED
+             xml:lang   NMTOKEN                           #IMPLIED"  >
+
+
+<!--                    QUESTION WRAP ATTRIBUTES                   -->
+<!--                    Attributes for the <question-wrap> element -->
+<!ENTITY % question-wrap-atts
+           "%jats-common-atts;
+             audience   CDATA                             #IMPLIED
+             content-type
+                        CDATA                             #IMPLIED
+             specific-use
+                        CDATA                             #IMPLIED
+             xml:lang   NMTOKEN                           #IMPLIED"  >
+
+
+<!--                    QUESTION WRAP GROUP ATTRIBUTES             -->
+<!--                    Attributes for the <question-wrap-group> 
+                        element                                    -->
+<!ENTITY % question-wrap-group-atts
+           "%jats-common-atts;
+             audience   CDATA                             #IMPLIED
+             content-type
+                        CDATA                             #IMPLIED
+             specific-use
+                        CDATA                             #IMPLIED
+             xml:lang   NMTOKEN                           #IMPLIED"  >
+
+
+<!--                    ANSWER ATTRIBUTES                          -->
+<!--                    Attributes for the <answer> element        -->
+<!ENTITY % answer-atts
+           "%jats-common-atts;
+             pointer-to-question
+                        IDREFS                            #REQUIRED
+             content-type
+                        CDATA                             #IMPLIED
+             specific-use
+                        CDATA                             #IMPLIED
+             xml:lang   NMTOKEN                           #IMPLIED"  >
+
+
+<!--                    ANSWER SET ATTRIBUTES                      -->
+<!--                    Attributes for the <answer-set> element    -->
+<!ENTITY % answer-set-atts
+           "%jats-common-atts;
+             content-type
+                        CDATA                             #IMPLIED
+             specific-use
+                        CDATA                             #IMPLIED
+             xml:lang   NMTOKEN                           #IMPLIED"  >
+
+
+<!--                    EXPLANATION ATTRIBUTES                     -->
+<!--                    Attributes for the <explanation> element   -->
+<!ENTITY % explanation-atts
+           "%jats-common-atts;
+             pointer-to-explained
+                        IDREFS                            #REQUIRED
+             content-type
+                        CDATA                             #IMPLIED
+             specific-use
+                        CDATA                             #IMPLIED
+             xml:lang   NMTOKEN                           #IMPLIED"  >
+
+
+<!--                    OPTION ATTRIBUTES                          -->
+<!--                    Attributes for the <option> element        -->
+<!ENTITY % option-atts  
+           "%jats-common-atts;
+             correct    (yes | no)                        #IMPLIED
+             content-type
+                        CDATA                             #IMPLIED
+             specific-use
+                        CDATA                             #IMPLIED
+             xml:lang   NMTOKEN                           #IMPLIED"  >
+
+
+<!-- ============================================================= -->
+<!--                    QUESTION ELEMENTS                          -->
+<!-- ============================================================= -->
+
+
+<!--                    QUESTION MODEL                             -->
+<!--                    Content model for the <question> element.  -->
+<!ENTITY % question-model
+                        "((%id.class;)*, sec-meta?,
+                         label?, title?, subtitle*, alt-title*,
+                         ( (%sec-level;)+ |
+                           ( (%para-level;)+, (%sec-level;)* ) ),
+                         (%option.class;)*,
+                         (%sec-back-matter-mix;)* )"                 > 
+ 
+
+<!--                    QUESTION                                   -->
+<!--                    A question (request for an answer) used in
+                        the text or as part of a quiz, exam, etc.
+                        Details at:
+                        http://jats.nlm.nih.gov/extensions/bits/2.0/index.html?elem=question
+                                                                   -->
+<!ELEMENT  question     %question-model;                             >
+<!ATTLIST  question
+            %question-atts;                                          >
+
+
+
+<!--                    QUESTION WRAP MODEL                        -->
+<!--                    Content model for the <question-wrap>
+                        element.                                   -->
+<!ENTITY % question-wrap-model
+                        "((%id.class;)*, question,
+                          (answer | answer-set)?, explanation*)"     >
+
+
+<!--                    QUESTION WRAP                              -->
+<!--                    Used to model a Question/Answer scheme. These
+                        questions may be used, for example, for the
+                        Continuing Medical Education articles in a
+                        book of articles. The model allows for
+                        simple questions followed by their
+                        corresponding answers or for a multiple
+                        choice setup, where questions are followed
+                        by multiple alternative answers (<option>s), 
+                        along with the correct answer and an 
+                        explanation.
+                        Note: This is not the model for a full
+                        quiz, test, exam, etc., but such a model
+                        could be built using these components for
+                        the question/answers.
+                        Details at:
+                        http://jats.nlm.nih.gov/extensions/bits/2.0/index.html?elem=question-wrap
+                                                                   -->
+<!ELEMENT  question-wrap
+                        %question-wrap-model;                        >
+<!ATTLIST  question-wrap
+            %question-wrap-atts;                                     >
+
+
+<!--                    QUESTION WRAP GROUP MODEL                  -->
+<!--                    Content model for the <question-wrap-group>
+                        element.                                   -->
+<!ENTITY % question-wrap-group-model
+                        "((%id.class;)*,
+                          label?, title?, subtitle*, alt-title*,
+                          question-preamble?, 
+                          (%question-wrap.class;)+ )"                >
+
+
+<!--                    QUESTION WRAP GROUP                       -->
+<!--                    A container element used to hold a group of
+                        <question-wrap> elements, for example, when
+                        all the questions share a common preamble 
+                        (setup).
+                        Note: This is not the model for a full
+                        quiz, test, exam, etc., but such a model
+                        could be built using these components for
+                        the question/answers.
+                        Details at:
+                        http://jats.nlm.nih.gov/extensions/bits/2.0/index.html?elem=question-wrap-group
+                                                                   -->
+<!ELEMENT  question-wrap-group
+                        %question-wrap-group-model;                  >
+<!ATTLIST  question-wrap-group
+            %question-wrap-group-atts;                               >
+
+
+<!--                    QUESTION PREAMBLE MODEL                    -->
+<!--                    Content model for the <question-preamble>
+                        element.                                   -->
+<!ENTITY % question-preamble-model
+                        "((%id.class;)*,
+                          label?, title?, subtitle*, alt-title*,
+                          (%para-level;)*, (%sec.class;)*  )"        >
+
+
+<!--                    QUESTION PREAMBLE                          -->
+<!--                    A container element used setup/
+                        preamble information when the setup is shared 
+                        by several questions, for example, a diagram 
+                        is shown and the questions are similar to 
+                        "What is angle a?".
+                        Remarks: The preamble information is part of
+                        a <question-wrap-group> that contains the 
+                        preamble/setup (<question-preamble>) and 
+                        several questions (tagged as <question-wrap>s).
+                        Details at:
+                        http://jats.nlm.nih.gov/extensions/bits/2.0/index.html?elem=question-preamble
+                                                                   -->
+<!ELEMENT  question-preamble
+                        %question-preamble-model;                    >
+<!ATTLIST  question-preamble
+            %question-preamble-atts;                                 >
+
+
+
+<!-- ============================================================= -->
+<!--                    ANSWER/EXPLANATION ELEMENTS                -->
+<!-- ============================================================= -->
+
+
+<!--                    ANSWER MODEL                               -->
+<!--                    Content model for the <answer> element.    -->
+<!ENTITY % answer-model
+                        "((%id.class;)*,
+                          label?, title?, subtitle*, alt-title*,
+                          ( (%sec-level;)+ |
+                            ( (%answer-para-level;)+, 
+                              (%sec-level;)* ) ),
+                          (%sec-back-matter-mix;)*,
+                           explanation*)"                           >
+
+
+<!--                    ANSWER ELEMENTS                            -->
+<!--                    An answer to a question
+                        Details at:
+                        http://jats.nlm.nih.gov/extensions/bits/2.0/index.html?elem=answer
+                                                                   -->
+<!ELEMENT  answer       %answer-model;                               >
+<!ATTLIST  answer
+            %answer-atts;                                            >
+
+
+<!--                    ANSWER SET MODEL                           -->
+<!--                    Content model for the <answer-set> element.-->
+<!ENTITY % answer-set-model
+                        "((%id.class;)*,
+                          label?, title?, subtitle*, alt-title*,
+                          (answer | %just-para.class; |
+                           explanation)+)"                           >
+
+
+<!--                    ANSWER SET                                 -->
+<!--                    A series of answers, typically in response
+                        to a question.
+                        Details at:
+                        http://jats.nlm.nih.gov/extensions/bits/2.0/index.html?elem=answer-set
+                                                                   -->
+<!ELEMENT  answer-set   %answer-set-model;                           >
+<!ATTLIST  answer-set
+            %answer-set-atts;                                        >
+
+
+<!--                    EXPLANATION MODEL                          -->
+<!--                    Content model for the <answer-set> element.-->
+<!ENTITY % explanation-model
+                        "((%id.class;)*,
+                          label?, title?, subtitle*, alt-title*,
+                          ( (%sec-level;)+ |
+                            ( (%answer-para-level;)+, 
+                              (%sec-level;)* ) ),
+                          (%sec-back-matter-mix;)*)"                 >
+
+
+<!--                    EXPLANATION                                -->
+<!--                    A description of a question/answer or of just
+                        an answer or answer set. The explanation
+                        may describe, for example, why this
+                        particular answer is incorrect, or where in
+                        the text the material for this question
+                        can be found, et al.
+                        Details at:
+                        http://jats.nlm.nih.gov/extensions/bits/2.0/index.html?elem=explanation
+                                                                   -->
+<!ELEMENT  explanation  %explanation-model;                          >
+<!ATTLIST  explanation
+            %explanation-atts;                                       >
+
+
+<!--                    OPTION MODEL                               -->
+<!--                    Content model for the <option> element.    -->
+<!ENTITY % option-model 
+                        "((%id.class;)*,
+                          label?, title?, subtitle*, alt-title*,
+                          ( (%sec-level;)+ |
+                            ( (%answer-para-level;)+, 
+                              (%sec-level;)* ) ),
+                          (%sec-back-matter-mix;)*,
+                           explanation*)"                           >
+
+
+<!--                    OPTION ELEMENTS                            -->
+<!--                    One of the possible answer-choices for a 
+                        multiple-choice question. An attribute can be
+                        used to identify options which are correct.
+                        Details at:
+                        http://jats.nlm.nih.gov/extensions/bits/2.0/index.html?elem=option
+                                                                   -->
+<!ELEMENT  option       %option-model;                               >
+<!ATTLIST  option
+            %option-atts;                                            >
+
+
+<!-- ================== End BITS Question and Answer Module ====== -->
+

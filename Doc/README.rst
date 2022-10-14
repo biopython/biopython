@@ -8,6 +8,11 @@ On Ubuntu, you can install these with the following commands::
 
     sudo apt install hevea texlive-latex-base texlive-latex-extra python-pygments
 
+On Fedora (tested for Workstation 33)::
+
+    dnf install texlive-scheme-basic texlive-preprint \
+                texlive-comment texlive-minted hevea
+
 Formatting code examples
 ------------------------
 

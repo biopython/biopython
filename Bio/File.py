@@ -106,27 +106,6 @@ def _open_for_random_access(filename):
     return handle
 
 
-class UndoHandle:
-    """A Python handle that adds functionality for saving lines (DEPRECATED).
-
-    Saves lines in a LIFO fashion.
-
-    Added methods:
-     - saveline    Save a line to be returned next time.
-     - peekline    Peek at the next line without consuming it.
-
-    """
-
-    def __init__(self, handle):
-        """Initialize the class."""
-        raise Exception(
-            "The UndoHandle class has been deprecated, and was "
-            "moved to Bio/SearchIO/_legacy/ParserSupport.py "
-            "(which is the only module in Biopython still using "
-            "UndoHandle."
-        )
-
-
 # The rest of this file defines code used in Bio.SeqIO and Bio.SearchIO
 # for indexing
 
@@ -200,6 +179,7 @@ class _IndexedSeqFileDict(collections.abc.Mapping):
         self._key_function = key_function
         self._repr = repr
         self._obj_repr = obj_repr
+        self._cached_prev_record = (None, None)  # (key, record)
         if key_function:
             offset_iter = ((key_function(k), o, l) for (k, o, l) in random_access_proxy)
         else:
@@ -217,7 +197,7 @@ class _IndexedSeqFileDict(collections.abc.Mapping):
             #       % (key, offset, length, filename, format)
             if key in offsets:
                 self._proxy._handle.close()
-                raise ValueError("Duplicate key '%s'" % key)
+                raise ValueError(f"Duplicate key '{key}'")
             else:
                 offsets[key] = offset
         self._offsets = offsets
@@ -230,7 +210,7 @@ class _IndexedSeqFileDict(collections.abc.Mapping):
         """Create a string representation of the File object."""
         # TODO - How best to handle the __str__ for SeqIO and SearchIO?
         if self:
-            return "{%r : %s(...), ...}" % (list(self.keys())[0], self._obj_repr)
+            return f"{{{list(self.keys())[0]!r} : {self._obj_repr}(...), ...}}"
         else:
             return "{}"
 
@@ -243,7 +223,14 @@ class _IndexedSeqFileDict(collections.abc.Mapping):
         return iter(self._offsets)
 
     def __getitem__(self, key):
-        """Return record for the specified key."""
+        """Return record for the specified key.
+
+        As an optimization when repeatedly asked to look up the same record,
+        the key and record are cached so that if the *same* record is
+        requested next time, it can be returned without going to disk.
+        """
+        if key == self._cached_prev_record[0]:
+            return self._cached_prev_record[1]
         # Pass the offset to the proxy
         record = self._proxy.get(self._offsets[key])
         if self._key_function:
@@ -251,7 +238,8 @@ class _IndexedSeqFileDict(collections.abc.Mapping):
         else:
             key2 = record.id
         if key != key2:
-            raise ValueError("Key did not match (%s vs %s)" % (key, key2))
+            raise ValueError(f"Key did not match ({key} vs {key2})")
+        self._cached_prev_record = (key, record)
         return record
 
     def get_raw(self, key):
@@ -368,7 +356,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             if fmt and fmt != self._format:
                 con.close()
                 raise ValueError(
-                    "Index file says format %s, not %s" % (self._format, fmt)
+                    f"Index file says format {self._format}, not {fmt}"
                 ) from None
             try:
                 (filenames_relative_to_index,) = con.execute(
@@ -429,11 +417,11 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 # Filenames are equal (after imposing abspath)
         except sqlite3.OperationalError as err:
             con.close()
-            raise ValueError("Not a Biopython index database? %s" % err) from None
+            raise ValueError(f"Not a Biopython index database? {err}") from None
         # Now we have the format (from the DB if not given to us),
         if not proxy_factory(self._format):
             con.close()
-            raise ValueError("Unsupported format '%s'" % self._format)
+            raise ValueError(f"Unsupported format '{self._format}'")
 
     def _build_index(self):
         """Call from __init__ to create a new index (PRIVATE)."""
@@ -448,10 +436,10 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
 
         if not fmt or not filenames:
             raise ValueError(
-                "Filenames to index and format required to build %r" % index_filename
+                f"Filenames to index and format required to build {index_filename!r}"
             )
         if not proxy_factory(fmt):
-            raise ValueError("Unsupported format '%s'" % fmt)
+            raise ValueError(f"Unsupported format '{fmt}'")
         # Create the index
         con = sqlite3.dbapi2.connect(index_filename)
         self._con = con
@@ -530,7 +518,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             self._proxies = random_access_proxies
             self.close()
             con.close()
-            raise ValueError("Duplicate key? %s" % err) from None
+            raise ValueError(f"Duplicate key? {err}") from None
         con.execute("PRAGMA locking_mode=NORMAL")
         con.execute("UPDATE meta_data SET value = ? WHERE key = ?;", (count, "count"))
         con.commit()
@@ -583,7 +571,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         else:
             key2 = record.id
         if key != key2:
-            raise ValueError("Key did not match (%s vs %s)" % (key, key2))
+            raise ValueError(f"Key did not match ({key} vs {key2})")
         return record
 
     def get_raw(self, key):

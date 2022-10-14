@@ -3,10 +3,6 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
-# Nice link:
-# http://www.ebi.ac.uk/help/formats_frame.html
-
 r"""Sequence input/output as SeqRecord objects.
 
 Bio.SeqIO is also documented at SeqIO_ and by a whole chapter in our tutorial:
@@ -334,7 +330,6 @@ You can also use any file format supported by Bio.AlignIO, such as "nexus",
 "phylip" and "stockholm", which gives you access to the individual sequences
 making up each alignment as SeqRecords.
 """
-
 # TODO
 # - define policy on reading aligned sequences with more than
 #   one gap character (see also AlignIO)
@@ -376,11 +371,8 @@ making up each alignment as SeqRecords.
 # See also http://biopython.org/wiki/SeqIO_dev
 #
 # --Peter
-
-from Bio.File import as_handle
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-
+from Bio.File import as_handle
 from Bio.SeqIO import AbiIO
 from Bio.SeqIO import AceIO
 from Bio.SeqIO import FastaIO
@@ -391,14 +383,16 @@ from Bio.SeqIO import NibIO
 from Bio.SeqIO import PdbIO
 from Bio.SeqIO import PhdIO
 from Bio.SeqIO import PirIO
+from Bio.SeqIO import QualityIO  # FastQ and qual files
 from Bio.SeqIO import SeqXmlIO
 from Bio.SeqIO import SffIO
 from Bio.SeqIO import SnapGeneIO
 from Bio.SeqIO import SwissIO
 from Bio.SeqIO import TabIO
-from Bio.SeqIO import QualityIO  # FastQ and qual files
+from Bio.SeqIO import TwoBitIO
 from Bio.SeqIO import UniprotIO
 from Bio.SeqIO import XdnaIO
+from Bio.SeqRecord import SeqRecord
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl or EMBOSS where possible.
@@ -438,10 +432,10 @@ _FormatToIterator = {
     "seqxml": SeqXmlIO.SeqXmlIterator,
     "sff": SffIO.SffIterator,
     "snapgene": SnapGeneIO.SnapGeneIterator,
-    # Not sure about this in the long run:
-    "sff-trim": SffIO._SffTrimIterator,
+    "sff-trim": SffIO._SffTrimIterator,  # Not sure about this in the long run
     "swiss": SwissIO.SwissIterator,
     "tab": TabIO.TabIterator,
+    "twobit": TwoBitIO.TwoBitIterator,
     "uniprot-xml": UniprotIO.UniprotIterator,
     "xdna": XdnaIO.XdnaIterator,
 }
@@ -503,7 +497,7 @@ def write(sequences, handle, format):
     if not format:
         raise ValueError("Format required (lower case string)")
     if not format.islower():
-        raise ValueError("Format string '%s' should be lower case" % format)
+        raise ValueError(f"Format string '{format}' should be lower case")
 
     if isinstance(handle, SeqRecord):
         raise TypeError("Check arguments, handle should NOT be a SeqRecord")
@@ -549,9 +543,9 @@ def write(sequences, handle, format):
         return count
 
     if format in _FormatToIterator or format in AlignIO._FormatToIterator:
-        raise ValueError("Reading format '%s' is supported, but not writing" % format)
+        raise ValueError(f"Reading format '{format}' is supported, but not writing")
 
-    raise ValueError("Unknown format '%s'" % format)
+    raise ValueError(f"Unknown format '{format}'")
 
 
 def parse(handle, format, alphabet=None):
@@ -572,6 +566,10 @@ def parse(handle, format, alphabet=None):
     ...    print("Sequence length %i" % len(record))
     ID gi|3176602|gb|U78617.1|LOU78617
     Sequence length 309
+
+    For lazy-loading file formats such as twobit, for which the file contents
+    is read on demand only, ensure that the file remains open while extracting
+    sequence data.
 
     If you have a string 'data' containing the file contents, you must
     first turn this into a handle in order to parse it:
@@ -598,7 +596,7 @@ def parse(handle, format, alphabet=None):
     if not format:
         raise ValueError("Format required (lower case string)")
     if not format.islower():
-        raise ValueError("Format string '%s' should be lower case" % format)
+        raise ValueError(f"Format string '{format}' should be lower case")
     if alphabet is not None:
         raise ValueError("The alphabet argument is no longer supported")
 
@@ -608,7 +606,7 @@ def parse(handle, format, alphabet=None):
     if format in AlignIO._FormatToIterator:
         # Use Bio.AlignIO to read in the alignments
         return (r for alignment in AlignIO.parse(handle, format) for r in alignment)
-    raise ValueError("Unknown format '%s'" % format)
+    raise ValueError(f"Unknown format '{format}'")
 
 
 def read(handle, format, alphabet=None):
@@ -719,10 +717,7 @@ def to_dict(sequences, key_function=None):
     the SeqRecord objects are held in memory. Instead, consider using the
     Bio.SeqIO.index() function (if it supports your particular file format).
 
-    Since Python 3.6, the default dict class maintains key order, meaning
-    this dictionary will reflect the order of records given to it. As of
-    Biopython 1.72, on older versions of Python we explicitly use an
-    OrderedDict so that you can always assume the record order is preserved.
+    This dictionary will reflect the order of records given to it.
     """
     # This is to avoid a lambda function:
 
@@ -736,7 +731,7 @@ def to_dict(sequences, key_function=None):
     for record in sequences:
         key = key_function(record)
         if key in d:
-            raise ValueError("Duplicate key '%s'" % key)
+            raise ValueError(f"Duplicate key '{key}'")
         d[key] = record
     return d
 
@@ -856,7 +851,7 @@ def index(filename, format, alphabet=None, key_function=None):
     if not format:
         raise ValueError("Format required (lower case string)")
     if not format.islower():
-        raise ValueError("Format string '%s' should be lower case" % format)
+        raise ValueError(f"Format string '{format}' should be lower case")
     if alphabet is not None:
         raise ValueError("The alphabet argument is no longer supported")
 
@@ -867,7 +862,7 @@ def index(filename, format, alphabet=None, key_function=None):
     try:
         proxy_class = _FormatToRandomAccess[format]
     except KeyError:
-        raise ValueError("Unsupported format %r" % format) from None
+        raise ValueError(f"Unsupported format {format!r}") from None
     repr = "SeqIO.index(%r, %r, alphabet=%r, key_function=%r)" % (
         filename,
         format,
@@ -940,7 +935,7 @@ def index_db(
     if format is not None and not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if format and not format.islower():
-        raise ValueError("Format string '%s' should be lower case" % format)
+        raise ValueError(f"Format string '{format}' should be lower case")
     if alphabet is not None:
         raise ValueError("The alphabet argument is no longer supported")
 
@@ -1061,7 +1056,7 @@ def convert(in_file, in_format, out_file, out_format, molecule_type=None):
     """
     if molecule_type:
         if not isinstance(molecule_type, str):
-            raise TypeError("Molecule type should be a string, not %r" % molecule_type)
+            raise TypeError(f"Molecule type should be a string, not {molecule_type!r}")
         elif (
             "DNA" in molecule_type
             or "RNA" in molecule_type
@@ -1069,7 +1064,7 @@ def convert(in_file, in_format, out_file, out_format, molecule_type=None):
         ):
             pass
         else:
-            raise ValueError("Unexpected molecule type, %r" % molecule_type)
+            raise ValueError(f"Unexpected molecule type, {molecule_type!r}")
     f = _converter.get((in_format, out_format))
     if f:
         count = f(in_file, out_file)

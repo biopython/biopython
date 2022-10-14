@@ -146,7 +146,7 @@ def _calc_empirical_expects(xs, ys, classes, features):
         s = 0
         for i in range(N):
             s += feature.get((i, ys_i[i]), 0)
-        expect.append(float(s) / N)
+        expect.append(s / N)
     return expect
 
 

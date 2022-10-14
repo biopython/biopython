@@ -163,7 +163,7 @@ class PrankConversion(unittest.TestCase):
 
     def conversion(self, prank_number, prank_ext, format):
         """Get PRANK to do a conversion, and check it with SeqIO."""
-        filename = "%s.%s" % (self.output, prank_ext)
+        filename = f"{self.output}.{prank_ext}"
         if os.path.isfile(filename):
             os.remove(filename)
         cmdline = PrankCommandline(
@@ -171,22 +171,17 @@ class PrankConversion(unittest.TestCase):
             d=self.input,
             convert=True,
             f=prank_number,
-            o='"%s"' % self.output,
+            o=f'"{self.output}"',
         )
         self.assertEqual(
             str(cmdline),
             _escape_filename(prank_exe)
-            + " -d=%s" % self.input
-            + ' -o="%s"' % self.output
-            + " -f=%i" % prank_number
-            + " -convert",
+            + f' -d={self.input} -o="{self.output}" -f={prank_number} -convert',
         )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         message, error = cmdline()
         self.assertIn("PRANK", message)
-        self.assertIn(
-            ("converting '%s' to '%s'" % (self.input, filename)), message, message
-        )
+        self.assertIn((f"converting '{self.input}' to '{filename}'"), message, message)
         self.assertEqual(error, "")
         self.assertTrue(os.path.isfile(filename))
         old = AlignIO.read(self.input, "fasta")
@@ -198,7 +193,7 @@ class PrankConversion(unittest.TestCase):
         self.assertEqual(len(old), len(new))
         for old_r, new_r in zip(old, new):
             self.assertEqual(old_r.id, new_r.id)
-            self.assertEqual(str(old_r.seq), str(new_r.seq))
+            self.assertEqual(old_r.seq, new_r.seq)
         os.remove(filename)
 
     def test_convert_to_fasta(self):

@@ -11,7 +11,7 @@ as TestCases in ``test_pairwise2.py`` and ``test_pairwise2_no_C.py``
 with or without complementing C extensions.
 
 """
-
+import pickle
 import unittest
 import warnings
 
@@ -50,7 +50,7 @@ class TestPairwiseErrorConditions(unittest.TestCase):
         alignment = pairwise2.align.globalxx("A", "")
         self.assertEqual(alignment, [])
 
-        # Gap scores must be negativ
+        # Gap scores must be negative
         self.assertRaises(ValueError, pairwise2.align.globalxs, "A", "C", 5, -1)
         self.assertRaises(ValueError, pairwise2.align.globalxs, "A", "C", -5, 1)
         # Gap open penalty must be higher than gap extension penalty
@@ -288,7 +288,7 @@ zA-Bz
 
 
 class TestScoreOnly(unittest.TestCase):
-    """Test paramater ``score_only``."""
+    """Test parameter ``score_only``."""
 
     def test_score_only_global(self):
         """Test ``score_only`` in a global alignment."""
@@ -855,11 +855,14 @@ class TestOtherFunctions(unittest.TestCase):
             ("ACCGT", "AC-G-", 3.0, 0, 4),
             ("ACCGT", "A-CG-", 3.0, 0, 4),
         ]
-        expected = [
-            ("ACCGT", "AC-G-", 3.0, 0, 4),
-            ("ACCGT", "A-CG-", 3.0, 0, 4),
-        ]
+        expected = [("ACCGT", "AC-G-", 3.0, 0, 4), ("ACCGT", "A-CG-", 3.0, 0, 4)]
         result = pairwise2._clean_alignments(alns)
+        self.assertEqual(expected, result)
+
+    def test_alignments_can_be_pickled(self):
+        alns = [("ACCGT", "AC-G-", 3.0, 0, 4)]
+        expected = [("ACCGT", "AC-G-", 3.0, 0, 4)]
+        result = pickle.loads(pickle.dumps(pairwise2._clean_alignments(alns)))
         self.assertEqual(expected, result)
 
     def test_print_matrix(self):

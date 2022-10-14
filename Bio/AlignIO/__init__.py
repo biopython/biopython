@@ -4,7 +4,6 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
 """Multiple sequence alignment input/output as alignment objects.
 
 The Bio.AlignIO interface is deliberately very similar to Bio.SeqIO, and in
@@ -99,8 +98,7 @@ File Formats
 When specifying the file format, use lowercase strings.  The same format
 names are also used in Bio.SeqIO and include the following:
 
-  - clustal -   Output from Clustal W or X, see also the module Bio.Clustalw
-    which can be used to run the command line tool from Biopython.
+  - clustal -   Output from Clustal W or X.
   - emboss    - EMBOSS tools' "pairs" and "simple" alignment formats.
   - fasta     - The generic sequence file format where each record starts with
     an identifier line starting with a ">" character, followed by
@@ -126,8 +124,6 @@ You can also use any file format supported by Bio.SeqIO, such as "fasta" or
 "ig" (which are listed above), PROVIDED the sequences in your file are all the
 same length.
 """
-
-
 # TODO
 # - define policy on reading aligned sequences with gaps in
 #   (e.g. - and . characters)
@@ -141,19 +137,18 @@ same length.
 #
 # - MSF multiple alignment format, aka GCG, aka PileUp format (*.msf)
 #   http://www.bioperl.org/wiki/MSF_multiple_alignment_format
-
 from Bio.Align import MultipleSeqAlignment
 from Bio.File import as_handle
 
-from . import StockholmIO
 from . import ClustalIO
-from . import NexusIO
-from . import PhylipIO
 from . import EmbossIO
 from . import FastaIO
 from . import MafIO
 from . import MauveIO
 from . import MsfIO
+from . import NexusIO
+from . import PhylipIO
+from . import StockholmIO
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl and EMBOSS where possible.
@@ -206,7 +201,7 @@ def write(alignments, handle, format):
     if not format:
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
+        raise ValueError(f"Format string '{format}' should be lower case")
 
     if isinstance(alignments, MultipleSeqAlignment):
         # This raised an exception in older versions of Biopython
@@ -230,11 +225,9 @@ def write(alignments, handle, format):
                 SeqIO.write(alignment, fp, format)
                 count += 1
         elif format in _FormatToIterator or format in SeqIO._FormatToIterator:
-            raise ValueError(
-                "Reading format '%s' is supported, but not writing" % format
-            )
+            raise ValueError(f"Reading format '{format}' is supported, but not writing")
         else:
-            raise ValueError("Unknown format '%s'" % format)
+            raise ValueError(f"Unknown format '{format}'")
 
     if not isinstance(count, int):
         raise RuntimeError(
@@ -261,7 +254,7 @@ def _SeqIO_to_alignment_iterator(handle, format, seq_count=None):
     from Bio import SeqIO
 
     if format not in SeqIO._FormatToIterator:
-        raise ValueError("Unknown format '%s'" % format)
+        raise ValueError(f"Unknown format '{format}'")
 
     if seq_count:
         # Use the count to split the records into batches.
@@ -322,7 +315,7 @@ def parse(handle, format, seq_count=None):
     if not format:
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
+        raise ValueError(f"Format string '{format}' should be lower case")
     if seq_count is not None and not isinstance(seq_count, int):
         raise TypeError("Need integer for seq_count (sequences per alignment)")
 
@@ -336,7 +329,7 @@ def parse(handle, format, seq_count=None):
             # Exploit the existing SeqIO parser to the dirty work!
             i = _SeqIO_to_alignment_iterator(fp, format, seq_count=seq_count)
         else:
-            raise ValueError("Unknown format '%s'" % format)
+            raise ValueError(f"Unknown format '{format}'")
 
         yield from i
 
@@ -450,7 +443,7 @@ def convert(in_file, in_format, out_file, out_format, molecule_type=None):
     """
     if molecule_type:
         if not isinstance(molecule_type, str):
-            raise TypeError("Molecule type should be a string, not %r" % molecule_type)
+            raise TypeError(f"Molecule type should be a string, not {molecule_type!r}")
         elif (
             "DNA" in molecule_type
             or "RNA" in molecule_type
@@ -458,7 +451,7 @@ def convert(in_file, in_format, out_file, out_format, molecule_type=None):
         ):
             pass
         else:
-            raise ValueError("Unexpected molecule type, %r" % molecule_type)
+            raise ValueError(f"Unexpected molecule type, {molecule_type!r}")
 
     # TODO - Add optimised versions of important conversions
     # For now just off load the work to SeqIO parse/write

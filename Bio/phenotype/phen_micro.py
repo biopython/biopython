@@ -130,7 +130,7 @@ class PlateRecord:
     >>> plate == plate2
     True
 
-    Two PlateRecord object can be summed up or subracted from each other: the
+    Two PlateRecord object can be summed up or subtracted from each other: the
     the signals of each well will be summed up or subtracted. The id of the
     left operand will be kept:
 
@@ -182,7 +182,7 @@ class PlateRecord:
         # Value should be of WellRecord type
         if not isinstance(obj, WellRecord):
             raise ValueError(
-                "A WellRecord type object is needed as value (got %s)" % type(obj)
+                f"A WellRecord type object is needed as value (got {type(obj)})"
             )
 
     def __getitem__(self, index):
@@ -291,7 +291,7 @@ class PlateRecord:
             try:
                 return self._wells[index]
             except KeyError:
-                raise KeyError("Well %s not found!" % index)
+                raise KeyError(f"Well {index} not found!")
 
         # Integer index
         elif isinstance(index, int):
@@ -527,7 +527,7 @@ class PlateRecord:
                 self.__class__.__name__,
                 ", ".join(
                     [
-                        "%s['%s']" % (str(self[x].__class__.__name__), self[x].id)
+                        "%s['%s']" % (self[x].__class__.__name__, self[x].id)
                         for x in sorted(self._wells.keys())[:3]
                     ]
                 ),
@@ -542,7 +542,7 @@ class PlateRecord:
                 self.__class__.__name__,
                 ", ".join(
                     [
-                        "%s['%s']" % (str(self[x].__class__.__name__), self[x].id)
+                        "%s['%s']" % (self[x].__class__.__name__, self[x].id)
                         for x in sorted(self._wells.keys())
                     ]
                 ),
@@ -551,7 +551,7 @@ class PlateRecord:
     def __str__(self):
         """Return a human readable summary of the record (string).
 
-        The python built in function str works by calling the object's ___str__
+        The python built in function str works by calling the object's __str__
         method.  e.g.
 
         >>> from Bio import phenotype
@@ -567,7 +567,7 @@ class PlateRecord:
         """
         lines = []
         if self.id:
-            lines.append("Plate ID: %s" % self.id)
+            lines.append(f"Plate ID: {self.id}")
         lines.append("Well: %i" % len(self))
         # Here we assume that all well ID start with a char
         lines.append("Rows: %d" % len({x.id[0] for x in self}))
@@ -802,7 +802,7 @@ class WellRecord:
     def __str__(self):
         """Return a human readable summary of the record (string).
 
-        The python built-in function str works by calling the object's ___str__
+        The python built-in function str works by calling the object's __str__
         method.  e.g.
 
         >>> from Bio import phenotype
@@ -820,9 +820,9 @@ class WellRecord:
         """
         lines = []
         if self.plate and self.plate.id:
-            lines.append("Plate ID: %s" % self.plate.id)
+            lines.append(f"Plate ID: {self.plate.id}")
         if self.id:
-            lines.append("Well ID: %s" % self.id)
+            lines.append(f"Well ID: {self.id}")
         lines.append("Time points: %i" % len(self))
         lines.append("Minum signal %.2f at time %.2f" % min(self, key=lambda x: x[1]))
         lines.append("Maximum signal %.2f at time %.2f" % max(self, key=lambda x: x[1]))
@@ -876,7 +876,7 @@ class WellRecord:
             return
         for sigmoid_func in function:
             if sigmoid_func not in avail_func:
-                raise ValueError("Fitting function %r not supported" % sigmoid_func)
+                raise ValueError(f"Fitting function {sigmoid_func!r} not supported")
 
         # Parameters that depend on scipy curve_fit
         from .pm_fitting import fit, get_area
@@ -935,7 +935,7 @@ def JsonIterator(handle):
             _platesPrefixMammalian
         ):
             warnings.warn(
-                "Non-standard plate ID found (%s)" % plateID, BiopythonParserWarning
+                f"Non-standard plate ID found ({plateID})", BiopythonParserWarning
             )
         else:
             # Simplify the plates IDs, removing letters, as opm does
@@ -953,14 +953,13 @@ def JsonIterator(handle):
             # No luck
             if len(pID) == 0:
                 warnings.warn(
-                    "Non-standard plate ID found (%s)" % plateID, BiopythonParserWarning
+                    f"Non-standard plate ID found ({plateID})", BiopythonParserWarning
                 )
             elif int(pID) < 0:
                 warnings.warn(
-                    "Non-standard plate ID found (%s), using %s"
-                    % (plateID, _platesPrefix + abs(int(pID)))
+                    f"Non-standard plate ID found ({plateID}), using {_platesPrefix}{abs(int(pID))}"
                 )
-                plateID = _platesPrefix + abs(int(pID))
+                plateID = _platesPrefix + str(abs(int(pID)))
             else:
                 if plateID.startswith(_platesPrefixMammalian):
                     plateID = _platesPrefixMammalian + "%02d" % int(pID)
@@ -1037,7 +1036,7 @@ def CsvIterator(handle):
                 _platesPrefixMammalian
             ):
                 warnings.warn(
-                    "Non-standard plate ID found (%s)" % plateID, BiopythonParserWarning
+                    f"Non-standard plate ID found ({plateID})", BiopythonParserWarning
                 )
             else:
                 # Simplify the plates IDs, removing letters, as opm does
@@ -1055,15 +1054,14 @@ def CsvIterator(handle):
                 # No luck
                 if len(pID) == 0:
                     warnings.warn(
-                        "Non-standard plate ID found (%s)" % plateID,
+                        f"Non-standard plate ID found ({plateID})",
                         BiopythonParserWarning,
                     )
                 elif int(pID) < 0:
                     warnings.warn(
-                        "Non-standard plate ID found (%s), using %s"
-                        % (plateID, _platesPrefix + abs(int(pID)))
+                        f"Non-standard plate ID found ({plateID}), using {_platesPrefix}{abs(int(pID))}"
                     )
-                    plateID = _platesPrefix + abs(int(pID))
+                    plateID = _platesPrefix + str(abs(int(pID)))
                 else:
                     if plateID.startswith(_platesPrefixMammalian):
                         plateID = _platesPrefixMammalian + "%02d" % int(pID)

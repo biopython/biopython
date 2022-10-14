@@ -8,11 +8,184 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released): Biopython 1.79
--===============================================
+(In progress, not yet released): Biopython 1.80
+===============================================
 
-This release of Biopython supports Python 3.6, 3.7 and 3.8. It has also been
-tested on PyPy3.6.1 v7.1.1.
+This release of Biopython supports Python 3.7, 3.8, 3.9 and 3.10. It has also
+been tested on PyPy3.7 v7.3.5.
+
+Functions ``read``, ``parse``, and ``write`` were added to ``Bio.Align`` to
+read and write ``Alignment`` objects.
+
+Because dict retains the item order by default since Python3.6, all instances
+of ``collections.OrderedDict`` have been replaced by either standard ``dict``
+or where appropriate by ``collections.defaultsdict``.
+
+The ``Bio.motifs.jaspar.db`` now returns ``tf_family`` and ``tf_class`` as a
+string array since the JASPAR 2018 release.
+
+The Local Composition Complexity functions from ``Bio.SeqUtils`` now uses
+base 4 log instead of 2 as stated in the original reference Konopka (2005),
+Sequence Complexity and Composition. https://doi.org/10.1038/npg.els.0005260
+
+Append mode is now supported in ``Bio.bgzf`` (and a bug parsing blocked GZIP
+files with an internal empty block fixed).
+
+The experimental warning was dropped from ``Bio.phenotype`` (which was new in
+Biopython 1.67).
+
+Sequences now have a ``defined`` attribute that returns a boolean indicating
+if the underlying data is defined or not.
+
+The ``Bio.PDB`` module now includes a structural alignment module, using the
+combinatorial extension algorithm of Shindyalov and Bourne, commonly known as
+CEAlign. The module allows for two structures to be aligned based solely on
+their 3D conformation, ie. in a sequence-independent manner. The method is
+particularly powerful when the structures shared a very low degree of sequence
+similarity. The new module is available in ``Bio.PDB.CEAligner`` with an
+interface similar to other 3D superimposition modules.
+
+A new module ``Bio.PDB.qcprot`` implements the QCP superposition algorithm in
+pure Python, deprecating the existing C implementation. This leads to a slight
+performance improvement and to much better maintainability. The refactored
+``qcprot.QCPSuperimposer`` class has small changes to its API, to better mirror
+that of ``Bio.PDB.Superimposer``.
+
+The ``Bio.PDB.PDBList`` module now allows downloading biological assemblies,
+for one or more entries of the wwPDB.
+
+In the ``Bio.Restriction`` module, each restriction enzyme now includes an `id`
+property giving the numerical identifier for the REBASE database identifier
+from which the enzyme object was created, and a `uri` property with a canonical
+`identifiers.org` link to the database, for use in linked-data representations.
+
+Additionally, a number of small bugs and typos have been fixed with additions
+to the test suite.
+
+Add new ``gc_fraction`` function in ``SeqUtils`` and marks ``GC`` for future
+deprecation.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Andrius Merkys
+- Arup Ghosh (first contribution)
+- Aziz Khan
+- Alex Morehead
+- Caio Fontes
+- Chenghao Zhu
+- Christian Brueffer
+- Damien Goutte-Gattat
+- Erik  Whiting
+- Fabian Egli
+- Fredric Johansson
+- Hussein Faara (first contribution)
+- Manuel Lera Ramirez
+- Jacob Beal (first contribution)
+- João Rodrigues
+- Jarrod Millman
+- Markus Piotrowski
+- Michiel de Hoon
+- Neil P. (first contribution)
+- Peter Cock
+- Robert Sawicki (first contribution)
+- Sebastian Bassi
+- Sean Aubin
+- Sean Workman (first contribution)
+- Tim Burke
+- Valentin Vareškić (first contribution)
+
+3 June 2021: Biopython 1.79
+===========================
+
+This is intended to be our final release supporting Python 3.6. It also
+supports Python 3.7, 3.8 and 3.9, and has also been tested on PyPy3.6.1 v7.1.1.
+
+The ``Seq`` and ``MutableSeq`` classes in ``Bio.Seq`` now store their sequence
+contents as ``bytes`` and ``bytearray`` objects, respectively. Previously, for
+``Seq`` objects a string object was used, and a Unicode array object for
+``MutableSeq`` objects. This was maintained during the transition from Python2
+to Python3. However, a Python2 string object corresponds to a ``bytes`` object
+in Python3, storing the string as a series of 256-bit characters. While
+non-ASCII characters could be stored in Python2 strings, they were not treated
+as such. For example:
+
+In Python2::
+
+    >>> s = "Генетика"
+    >>> type(s)
+    <class 'str'>
+    >>> len(s)
+    16
+
+In Python3::
+
+    >>> s = "Генетика"
+    >>> type(s)
+    <class 'str'>
+    >>> len(s)
+    8
+
+In Python3, storing the sequence contents as ``bytes`` and ``bytearray``
+objects has the further advantage that both support the buffer protocol.
+
+Taking advantage of the similarity between ``bytes`` and ``bytearray``, the
+``Seq`` and ``MutableSeq`` classes now inherit from an abstract base class
+``_SeqAbstractBaseClass`` in ``Bio.Seq`` that implements most of the ``Seq``
+and ``MutableSeq`` methods, ensuring their consistency with each other. For
+methods that modify the sequence contents, an optional ``inplace`` argument to
+specify if a new sequence object should be returned with the new sequence
+contents (if ``inplace`` is ``False``, the default) or if the sequence object
+itself should be modified (if ``inplace`` is ``True``). For ``Seq`` objects,
+which are immutable, using ``inplace=True`` raises an exception. For
+``inplace=False``, the default, ``Seq`` objects and ``MutableSeq`` behave
+consistently.
+
+As before, ``Seq`` and ``MutableSeq`` objects can be initialized using a string
+object, which will be converted to a ``bytes`` or ``bytearray`` object assuming
+an ASCII encoding. Alternatively, a ``bytes`` or ``bytearray`` object can be
+used, or an instance of any class inheriting from the new
+``SequenceDataAbstractBaseClass`` abstract base class in ``Bio.Seq``. This
+requires that the class implements the ``__len__`` and ``__getitem`` methods
+that return the sequence length and sequence contents on demand. Initializing a
+``Seq`` instance using an instance of a class inheriting from
+``SequenceDataAbstractBaseClass`` allows the ``Seq`` object to be lazy, meaning
+that its sequence is provided on demand only, without requiring to initialize
+the full sequence. This feature is now used in ``BioSQL``, providing on-demand
+sequence loading from an SQL database, as well as in a new parser for twoBit
+(.2bit) sequence data added to ``Bio.SeqIO``. This is a lazy parser that allows
+fast access to genome-size DNA sequence files by not having to read the full
+genome sequence. The new ``_UndefinedSequenceData`` class in ``Bio.Seq``  also
+inherits from ``SequenceDataAbstractBaseClass`` to represent sequences of known
+length but unknown sequence contents. This provides an alternative to
+``UnknownSeq``, which is now deprecated as its definition was ambiguous. For
+example, in these examples the ``UnknownSeq`` is interpreted as a sequence with
+a well-defined sequence contents::
+
+    >>> s = UnknownSeq(3, character="A")
+    >>> s.translate()
+    UnknownSeq(1, character='K')
+    >>> s + "A"
+    Seq("AAAA")
+
+A sequence object with an undefined sequence contents can now be created by
+using ``None`` when creating the ``Seq`` object, together with the sequence
+length. Trying to access its sequence contents raises an
+``UndefinedSequenceError``::
+
+    >>> s = Seq(None, length=6)
+    >>> s
+    Seq(None, length=6)
+    >>> len(s)
+    6
+    >>> "A" in s
+    Traceback (most recent call last):
+    ...
+    Bio.Seq.UndefinedSequenceError: Sequence content is undefined
+    >>> print(s)
+    Traceback (most recent call last):
+    ....
+    Bio.Seq.UndefinedSequenceError: Sequence content is undefined
 
 Element assignment in Bio.PDB.Atom now returns "X" when the element cannot be
 unambiguously guessed from the atom name, in accordance with PDB structures.
@@ -29,13 +202,30 @@ atomic solvent accessible areas without third-party tools.
 Expected ``TypeError`` behaviour has been restored to the ``Seq`` object's
 string like methods (fixing a regression in Biopython 1.78).
 
+The KEGG ``KGML_Pathway`` KGML output was fixed to produce output that complies
+with KGML v0.7.2.
+
+Parsing motifs in ``pfm-four-rows`` format can now handle motifs with values
+in scientific notation.
+
+Parsing motifs in ``minimal`` MEME format will use ``nsites`` when making
+the count matrix from the frequency matrix, instead of multiply the frequency
+matrix by 1000000.
+
+Bio.UniProt.GOA now parses Gene Product Information (GPI) files version 1.2,
+files can be downloaded from the EBI ftp site:
+ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Damien Goutte-Gattat
+- Gert Hulselmans
 - João Rodrigues
 - Markus Piotrowski
 - Pascal Schläpfer (first contribution)
+- Leighton Pritchard
+- Sergio Valqui
 - Suyash Gupta
 - Vini Salazar (first contribution)
 
@@ -278,6 +468,7 @@ possible, especially the following contributors:
 - Mike Moritz (first contribution)
 - Mustafa Anil Tuncel
 - Nick Negretti
+- Osvaldo Zagordi (first contribution)
 - Peter Cock
 - Peter Kerpedjiev
 - Sergio Valqui
@@ -459,7 +650,7 @@ Internal changes to Bio.SeqIO have sped up the SeqRecord .format method and
 SeqIO.write (especially when used in a for loop).
 
 The MAF alignment indexing in Bio.AlignIO.MafIO has been updated to use
-inclusive end co-ordinates to better handle searches at end points. This
+inclusive end coordinates to better handle searches at end points. This
 will require you to rebuild any existing MAF index files.
 
 In this release more of our code is now explicitly available under either our
@@ -1483,7 +1674,7 @@ The installation setup.py now supports 'install_requires' when setuptools
 is installed. This avoids the manual dialog when installing Biopython via
 easy_install or pip and numpy is not installed. It also allows user libraries
 that require Biopython to include it in their install_requires and get
-automatical installation of dependencies.
+automatic installation of dependencies.
 
 Bio.Graphics.BasicChromosome has been extended to allow simple sub-features to
 be drawn on chromosome segments, suitable to show the position of genes, SNPs
@@ -2552,7 +2743,7 @@ Oct 9, 2003: Biopython 1.22
 - Does not install Bio.Cluster without Numeric.
 - Distribute EUtils DTDs.
 - Yves Bastide patched NCBIStandalone.Iterator to be Python 2.0 iterator
-- Ashleigh's string coersion fixes in Clustalw.
+- Ashleigh's string coercion fixes in Clustalw.
 - Yair Benita added precision to the protein molecular weights.
 - Bartek updated AlignAce.Parser and added Motif.sim method
 - bug fixes in Michiel De Hoon's clustering library

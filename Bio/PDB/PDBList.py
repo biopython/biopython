@@ -37,10 +37,11 @@
 
 
 import contextlib
+import ftplib
 import gzip
 import os
-import shutil
 import re
+import shutil
 import sys
 
 from urllib.request import urlopen
@@ -234,7 +235,7 @@ class PDBList:
             * "pdb" (format PDB),
             * "xml" (PDBML/XML format),
             * "mmtf" (highly compressed),
-            * "bundle" (PDB formatted archive for large structure}
+            * "bundle" (PDB formatted archive for large structure)
 
         :type file_format: string
 
@@ -302,7 +303,7 @@ class PDBList:
                 archive_fn,
             )
         else:
-            url = "http://mmtf.rcsb.org/v1.0/full/%s" % code
+            url = f"http://mmtf.rcsb.org/v1.0/full/{code}"
 
         # Where does the final PDB file get saved?
         if pdir is None:
@@ -327,17 +328,17 @@ class PDBList:
         if not overwrite:
             if os.path.exists(final_file):
                 if self._verbose:
-                    print("Structure exists: '%s' " % final_file)
+                    print(f"Structure exists: '{final_file}' ")
                 return final_file
 
-        # Retrieve the file
+        # Retrieve the file(s)
         if self._verbose:
-            print("Downloading PDB structure '%s'..." % pdb_code)
+            print(f"Downloading PDB structure '{pdb_code}'...")
         try:
             urlcleanup()
             urlretrieve(url, filename)
         except OSError:
-            print("Desired structure doesn't exists")
+            print("Desired structure doesn't exist")
         else:
             with gzip.open(filename, "rb") as gz:
                 with open(final_file, "wb") as out:
@@ -345,7 +346,7 @@ class PDBList:
             os.remove(filename)
         return final_file
 
-    def update_pdb(self, file_format=None):
+    def update_pdb(self, file_format=None, with_assemblies=False):
         """Update your local copy of the PDB files.
 
         I guess this is the 'most wanted' function from this module.
@@ -364,35 +365,50 @@ class PDBList:
         for pdb_code in new + modified:
             try:
                 self.retrieve_pdb_file(pdb_code, file_format=file_format)
-            except Exception:
-                print("error %s\n" % pdb_code)
+                if with_assemblies:
+                    assemblies = self.get_all_assemblies(file_format)
+                    for a_pdb_code, assembly_num in assemblies:
+                        if a_pdb_code == pdb_code:
+                            pl.retrieve_assembly_file(
+                                pdb_code,
+                                assembly_num,
+                                file_format=file_format,
+                                overwrite=True,
+                            )
+
+            except Exception as err:
+                print(f"error {pdb_code}: {err}\n")
                 # you can insert here some more log notes that
                 # something has gone wrong.
 
         # Move the obsolete files to a special folder
+        # NOTE: This should be updated to handle multiple file types and
+        # assemblies. As of now, it only looks for PDB-formatted files.
+        # Using pathlib will be probably the best approach here, to build
+        # and index of which files we have efficiently (or glob them).
         for pdb_code in obsolete:
             if self.flat_tree:
-                old_file = os.path.join(self.local_pdb, "pdb%s.ent" % pdb_code)
+                old_file = os.path.join(self.local_pdb, f"pdb{pdb_code}.ent")
                 new_dir = self.obsolete_pdb
             else:
                 old_file = os.path.join(
-                    self.local_pdb, pdb_code[1:3], "pdb%s.ent" % pdb_code
+                    self.local_pdb, pdb_code[1:3], f"pdb{pdb_code}.ent"
                 )
                 new_dir = os.path.join(self.obsolete_pdb, pdb_code[1:3])
-            new_file = os.path.join(new_dir, "pdb%s.ent" % pdb_code)
+            new_file = os.path.join(new_dir, f"pdb{pdb_code}.ent")
             if os.path.isfile(old_file):
                 if not os.path.isdir(new_dir):
                     os.mkdir(new_dir)
                 try:
                     shutil.move(old_file, new_file)
                 except Exception:
-                    print("Could not move %s to obsolete folder" % old_file)
+                    print(f"Could not move {old_file} to obsolete folder")
             elif os.path.isfile(new_file):
                 if self._verbose:
-                    print("Obsolete file %s already moved" % old_file)
+                    print(f"Obsolete file {old_file} already moved")
             else:
                 if self._verbose:
-                    print("Obsolete file %s is missing" % old_file)
+                    print(f"Obsolete file {old_file} is missing")
 
     def download_pdb_files(
         self, pdb_codes, obsolete=False, pdir=None, file_format=None, overwrite=False
@@ -412,7 +428,7 @@ class PDBList:
             * "pdb" (format PDB),
             * "xml" (PMDML/XML format),
             * "mmtf" (highly compressed),
-            * "bundle" (PDB formatted archive for large structure}
+            * "bundle" (PDB formatted archive for large structure)
 
         :param overwrite: if set to True, existing structure files will be overwritten. Default: False
         :type overwrite: bool
@@ -421,7 +437,7 @@ class PDBList:
             Has a meaning only for obsolete structures.
             If True, download the obsolete structure
             to 'obsolete' folder, otherwise download won't be performed.
-            This option doesn't work for mmtf format as obsoleted structures are not availbe as mmtf.
+            This option doesn't work for mmtf format as obsoleted structures are not available as mmtf.
             (default: False)
 
         :type obsolete: bool
@@ -443,6 +459,159 @@ class PDBList:
                 overwrite=overwrite,
             )
 
+    def get_all_assemblies(self, file_format="mmCif"):
+        """Retrieve the list of PDB entries with an associated bio assembly.
+
+        The requested list will be cached to avoid multiple calls to the FTP
+        server.
+
+        :type  file_format: str, optional
+        :param file_format: format in which to download the entries. Available
+            options are "mmCif" or "pdb". Defaults to mmCif.
+        """
+        if hasattr(self, "assemblies") and self.assemblies:
+            if self._verbose:
+                print("Retrieving cached list of assemblies.")
+            return self.assemblies  # cache
+
+        if self._verbose:
+            print("Retrieving list of assemblies. This might take a while.")
+
+        # FTPLib is much faster than urlopen
+        idx = self.pdb_server.find("://")
+        if idx >= 0:
+            ftp = ftplib.FTP(self.pdb_server[idx + 3 :])
+        else:
+            ftp = ftplib.FTP(self.pdb_server)
+        ftp.login()  # anonymous
+
+        if file_format.lower() == "mmcif":
+            ftp.cwd("/pub/pdb/data/assemblies/mmCIF/all/")
+            re_name = re.compile(r"(\d[0-9a-z]{3})-assembly(\d+).cif.gz")
+        elif file_format.lower() == "pdb":
+            ftp.cwd("/pub/pdb/data/biounit/PDB/all/")
+            re_name = re.compile(r"(\d[0-9a-z]{3}).pdb(\d+).gz")
+        else:
+            msg = "file_format for assemblies must be 'pdb' or 'mmCif'"
+            raise ValueError(msg)
+
+        response = []
+        ftp.retrlines("NLST", callback=response.append)
+        # PDB entries can have more than one assembly:
+        #  e.g.
+        #    104l-assembly1.cif.gz           2022-01-15 19:38   36K
+        #    104l-assembly2.cif.gz           2022-01-15 19:38   36K
+        #    ...
+        #    104l.pdb1.gz               2010-01-15 08:00   28K
+        #    104l.pdb2.gz               2010-01-15 08:00   28K
+        all_assemblies = []
+        for line in response:
+            if line.endswith(".gz"):
+                match = re_name.findall(line)
+                try:
+                    if len(match):
+                        entry, assembly = match[0]
+                except ValueError:
+                    pass
+                else:
+                    all_assemblies.append((entry, assembly))
+        self.assemblies = all_assemblies  # cache
+        return all_assemblies
+
+    def retrieve_assembly_file(
+        self, pdb_code, assembly_num, pdir=None, file_format=None, overwrite=False
+    ):
+        """Fetch one or more assembly structures associated with a PDB entry.
+
+        Unless noted below, parameters are described in ``retrieve_pdb_file``.
+
+        :type  assembly_num: int
+        :param assembly_num: assembly number to download.
+
+        :rtype : str
+        :return: file name of the downloaded assembly file.
+        """
+        archive = {
+            "pdb": "%s.pdb%s.gz",
+            "mmcif": "%s-assembly%s.cif.gz",
+        }
+
+        file_format = self._print_default_format_warning(file_format)
+        file_format = file_format.lower()  # we should standardize this.
+        if file_format not in archive:
+            raise (
+                "Specified file_format '%s' is not supported. Use one of the "
+                "following: 'mmcif' or 'pdb'." % file_format
+            )
+
+        # Get the compressed assembly structure name
+        archive_fn = archive[file_format] % (pdb_code.lower(), int(assembly_num))
+
+        if file_format == "mmcif":
+            url = self.pdb_server + "/pub/pdb/data/assemblies/mmCIF/all/%s" % archive_fn
+        elif file_format == "pdb":
+            url = self.pdb_server + "/pub/pdb/data/biounit/PDB/all/%s" % archive_fn
+        else:  # better safe than sorry
+            raise ValueError("file_format '%s' not supported: %s" % file_format)
+
+        # Where will the file be saved?
+        if pdir is None:
+            path = self.local_pdb
+            if not self.flat_tree:  # Put in PDB-style directory tree
+                path = os.path.join(path, pdb_code[1:3])
+        else:  # Put in specified directory
+            path = pdir
+        if not os.access(path, os.F_OK):
+            os.makedirs(path)
+
+        assembly_gz_file = os.path.join(path, archive_fn)
+        assembly_final_file = os.path.join(path, archive_fn[:-3])  # no .gz
+
+        # Skip download if the file already exists
+        if not overwrite:
+            if os.path.exists(assembly_final_file):
+                if self._verbose:
+                    print(f"Structure exists: '{assembly_final_file}' ")
+                return assembly_final_file
+
+        # Otherwise,retrieve the file(s)
+        if self._verbose:
+            print(
+                f"Downloading assembly ({assembly_num}) for PDB entry "
+                f"'{pdb_code}'..."
+            )
+        try:
+            urlcleanup()
+            urlretrieve(url, assembly_gz_file)
+        except OSError as err:
+            print(f"Download failed! Maybe the desired assembly does not exist: {err}")
+        else:
+            with gzip.open(assembly_gz_file, "rb") as gz:
+                with open(assembly_final_file, "wb") as out:
+                    out.writelines(gz)
+            os.remove(assembly_gz_file)
+        return assembly_final_file
+
+    def download_all_assemblies(self, listfile=None, file_format=None):
+        """Retrieve all biological assemblies not in the local PDB copy.
+
+        :type  listfile: str, optional
+        :param listfile: file name to which all assembly codes will be written
+
+        :type  file_format: str, optional
+        :param file_format: format in which to download the entries. Available
+            options are "mmCif" or "pdb". Defaults to mmCif.
+        """
+        # Deprecation warning
+        file_format = self._print_default_format_warning(file_format)
+        assemblies = self.get_all_assemblies(file_format)
+        for pdb_code, assembly_num in assemblies:
+            self.retrieve_assembly_file(pdb_code, assembly_num, file_format=file_format)
+        # Write the list
+        if listfile:
+            with open(listfile, "w") as outfile:
+                outfile.writelines(f"{pdb_code}.{assembly_num}\n" for x in assemblies)
+
     def download_entire_pdb(self, listfile=None, file_format=None):
         """Retrieve all PDB entries not present in the local PDB copy.
 
@@ -455,7 +624,7 @@ class PDBList:
             * "pdb" (format PDB),
             * "xml" (PMDML/XML format),
             * "mmtf" (highly compressed),
-            * "bundle" (PDB formatted archive for large structure}
+            * "bundle" (PDB formatted archive for large structure)
 
         NOTE. The default download format has changed from PDB to PDBx/mmCif
         """
@@ -514,6 +683,8 @@ if __name__ == "__main__":
                                                    local pdb tree.
         PDBList.py obsol  <pdb_path> [options]   - write all obsolete PDB
                                                    entries to local pdb tree.
+        PDBList.py assemb <pdb_path> [options]   - write all assemblies for each
+                                                   PDB entry to local pdb tree.
         PDBList.py <PDB-ID> <pdb_path> [options] - retrieve single structure
         PDBList.py (<PDB-ID1>,<PDB-ID2>,...) <pdb_path> [options] - retrieve a set
                                                    of structures
@@ -524,6 +695,7 @@ if __name__ == "__main__":
      -pdb     Downloads structures in PDB format
      -xml     Downloads structures in PDBML (XML) format
      -mmtf    Downloads structures in mmtf format
+     -with-assemblies    Downloads assemblies along with regular entries.
 
     Maximum one format can be specified simultaneously (if more selected, only
     the last will be considered). By default (no format specified) structures are
@@ -533,6 +705,7 @@ if __name__ == "__main__":
 
     file_format = "mmCif"
     overwrite = False
+    with_assemblies = False
 
     if len(sys.argv) > 2:
         pdb_path = sys.argv[2]
@@ -545,6 +718,10 @@ if __name__ == "__main__":
                     overwrite = True
                 elif option in ("-pdb", "-xml", "-mmtf"):
                     file_format = option[1:]
+                # Allow for download of assemblies alongside ASU
+                elif option == "-with-assemblies":
+                    with_assemblies = True
+
     else:
         pdb_path = os.getcwd()
         pl = PDBList()
@@ -554,26 +731,58 @@ if __name__ == "__main__":
         if sys.argv[1] == "update":
             # update PDB
             print("updating local PDB at " + pdb_path)
-            pl.update_pdb(file_format=file_format)
+            pl.update_pdb(file_format=file_format, with_assemblies=with_assemblies)
 
         elif sys.argv[1] == "all":
             # get the entire PDB
             pl.download_entire_pdb(file_format=file_format)
+            if with_assemblies:
+                # get all assembly structures
+                pl.download_all_assemblies(file_format=file_format)
 
         elif sys.argv[1] == "obsol":
             # get all obsolete entries
             pl.download_obsolete_entries(pdb_path, file_format=file_format)
 
+        elif sys.argv[1] == "assemb":
+            # get all assembly structures
+            pl.download_all_assemblies(file_format=file_format)
+
         elif len(sys.argv[1]) == 4 and sys.argv[1][0].isdigit():
+            pdb_code = sys.argv[1]
             # get single PDB entry
             pl.retrieve_pdb_file(
-                sys.argv[1], pdir=pdb_path, file_format=file_format, overwrite=overwrite
+                pdb_code, pdir=pdb_path, file_format=file_format, overwrite=overwrite
             )
+            if with_assemblies:
+                # PDB Code might have more than one assembly.
+                assemblies = pl.get_all_assemblies(file_format)
+                for a_pdb_code, assembly_num in assemblies:
+                    if a_pdb_code == pdb_code:
+                        pl.retrieve_assembly_file(
+                            pdb_code,
+                            assembly_num,
+                            pdir=pdb_path,
+                            file_format=file_format,
+                            overwrite=overwrite,
+                        )
 
         elif sys.argv[1][0] == "(":
             # get a set of PDB entries
-            pdb_ids = re.findall(sys.argv[1], "[0-9A-Za-z]{4}")
+            pdb_ids = re.findall("[0-9A-Za-z]{4}", sys.argv[1])
             for pdb_id in pdb_ids:
                 pl.retrieve_pdb_file(
                     pdb_id, pdir=pdb_path, file_format=file_format, overwrite=overwrite
                 )
+                if with_assemblies:
+                    # PDB Code might have more than one assembly.
+                    assemblies = pl.get_all_assemblies(file_format)
+                    for a_pdb_code, assembly_num in assemblies:
+                        if a_pdb_code == pdb_id:
+                            pl.retrieve_assembly_file(
+                                pdb_id,
+                                assembly_num,
+                                pdir=pdb_path,
+                                file_format=file_format,
+                                overwrite=overwrite,
+                            )

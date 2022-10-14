@@ -23,7 +23,7 @@ from Bio import BiopythonParserWarning
 
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq
+from Bio.Seq import Seq, UndefinedSequenceError
 
 # GenBank stuff to test:
 from Bio import GenBank
@@ -42,8 +42,8 @@ class TestBasics(unittest.TestCase):
             test_line = test_handle.readline()
             if not good_line and not test_line:
                 break
-            self.assertTrue(good_line, "Extra info in Test: %r" % test_line)
-            self.assertTrue(test_line, "Extra info in Expected: %r" % good_line)
+            self.assertTrue(good_line, f"Extra info in Test: {test_line!r}")
+            self.assertTrue(test_line, f"Extra info in Expected: {good_line!r}")
             test_normalized = " ".join(x for x in test_line.split() if x)
             good_normalized = " ".join(x for x in good_line.split() if x)
             self.assertEqual(test_normalized, good_normalized)
@@ -3337,10 +3337,14 @@ class TestFeatureParser(unittest.TestCase):
         cls.feat_parser = GenBank.FeatureParser(debug_level=0)
 
     def shorten(self, seq):
-        if len(seq) <= 60:
-            return seq
+        try:
+            s = str(seq)
+        except UndefinedSequenceError:
+            return None
+        if len(s) <= 60:
+            return s
         else:
-            return seq[:54] + "..." + seq[-3:]
+            return s[:54] + "..." + s[-3:]
 
     def perform_feature_parser_test(
         self,
@@ -5451,7 +5455,7 @@ qualifiers:
         with open(path) as handle:
             records = GenBank.Iterator(handle, self.feat_parser)
             record = next(records)
-        seq = "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNN"
+        seq = None
         id = "NT_019265.6"
         name = "NT_019265"
         description = "Homo sapiens chromosome 1 working draft sequence segment"
@@ -7372,6 +7376,39 @@ qualifiers:
             dbxrefs,
         )
 
+    def test_features_spanning_origin(self):
+        """Test that features that span the origin on circular DNA are included correctly for different ways of specifying the topology."""
+        # This first one should fail (location of the feature should be set to none), because
+        # the file says the sequence is linear, but there is a feature that spans the origin.
+        file_fails = "GenBank/addgene-plasmid-11664-sequence-180430.gbk"
+
+        # The right warning is raised
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            record = SeqIO.read(file_fails, "gb")
+            self.assertEqual(len(caught), 1)
+            self.assertEqual(caught[0].category, BiopythonParserWarning)
+            self.assertTrue("Skipping feature" in str(caught[0].message))
+
+        # The last feature location is None
+        self.assertIsNone(record.features[-1].location)
+
+        # This one is circular and should include the features that span the origin
+        file_succeeds = "GenBank/addgene-plasmid-39296-sequence-49545.gbk"
+
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            record = SeqIO.read(file_succeeds, "gb")
+            # This gives the same error for features that span the origin
+            self.assertEqual(len(caught), 2)
+            for c in caught:
+                self.assertEqual(c.category, BiopythonParserWarning)
+                self.assertTrue("unintended behavior" in str(c.message))
+
+        # The last two features should not be none
+        self.assertIsNotNone(record.features[-1].location)
+        self.assertIsNotNone(record.features[-2].location)
+
 
 class GenBankTests(unittest.TestCase):
     """GenBank tests."""
@@ -7496,20 +7533,19 @@ class GenBankTests(unittest.TestCase):
                 seq_record = SeqIO.read(handle, "genbank")
         seq_features = seq_record.features
         self.assertEqual(
-            str(seq_features[1].extract(seq_record).seq.lower()),
+            seq_features[1].extract(seq_record).seq.lower(),
             "atgccctataaaacccagggctgccttggaaaaggcgcaaccccaaccccctcgagccgcggcatataa",
         )
         self.assertEqual(
-            str(seq_features[2].extract(seq_record).seq.lower()),
+            seq_features[2].extract(seq_record).seq.lower(),
             "atgccgcggctcgagggggttggggttgcgccttttccaaggcagccctgggttttatag",
         )
         self.assertEqual(
-            str(seq_features[1].extract(seq_record).seq.translate()),
+            seq_features[1].extract(seq_record).seq.translate(),
             "MPYKTQGCLGKGATPTPSSRGI*",
         )
         self.assertEqual(
-            str(seq_features[2].extract(seq_record).seq.translate()),
-            "MPRLEGVGVAPFPRQPWVL*",
+            seq_features[2].extract(seq_record).seq.translate(), "MPRLEGVGVAPFPRQPWVL*"
         )
 
     def test_fuzzy_origin_wrap(self):
@@ -7827,7 +7863,7 @@ KEYWORDS    """,
                 self.assertEqual(1, SeqIO.write(record, handle, "gb"))
             handle.seek(0)
             line = handle.readline()
-            self.assertIn(" %s " % name, line)
+            self.assertIn(f" {name} ", line)
             self.assertIn(" %i bp " % seq_len, line)
             # Splitting based on whitespace rather than position due to
             # updated GenBank specification
@@ -8038,7 +8074,7 @@ class LineOneTests(unittest.TestCase):
     def test_topology_genbank(self):
         """Check GenBank LOCUS line parsing."""
         # This is a bit low level,
-        # but can test pasing the LOCUS line only
+        # but can test parsing the LOCUS line only
         tests = [
             ("LOCUS       U00096", None, None, None, None),
             # This example is actually fungal,
@@ -8100,17 +8136,17 @@ class LineOneTests(unittest.TestCase):
                 scanner._feed_first_line(consumer, line)
                 t = consumer.data.annotations.get("topology", None)
                 self.assertEqual(
-                    t, topo, "Wrong topology %r not %r from %r" % (t, topo, line)
+                    t, topo, f"Wrong topology {t!r} not {topo!r} from {line!r}"
                 )
                 mt = consumer.data.annotations.get("molecule_type", None)
                 self.assertEqual(
                     mt,
                     mol_type,
-                    "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
+                    f"Wrong molecule_type {mt!r} not {mol_type!r} from {line!r}",
                 )
                 d = consumer.data.annotations.get("data_file_division", None)
                 self.assertEqual(
-                    d, div, "Wrong division %r not %r from %r" % (d, div, line)
+                    d, div, f"Wrong division {d!r} not {div!r} from {line!r}"
                 )
                 if warning_list is None:
                     self.assertEqual(len(caught), 0)
@@ -8121,7 +8157,7 @@ class LineOneTests(unittest.TestCase):
 
     def test_topology_embl(self):
         """Check EMBL ID line parsing."""
-        # This is a bit low level, but can test pasing the ID line only
+        # This is a bit low level, but can test parsing the ID line only
         tests = [
             # Modern examples with sequence version
             (
@@ -8172,22 +8208,20 @@ class LineOneTests(unittest.TestCase):
             scanner._feed_first_line(consumer, line)
             t = consumer.data.annotations.get("topology", None)
             self.assertEqual(
-                t, topo, "Wrong topology %r not %r from %r" % (t, topo, line)
+                t, topo, f"Wrong topology {t!r} not {topo!r} from {line!r}"
             )
             mt = consumer.data.annotations.get("molecule_type", None)
             self.assertEqual(
                 mt,
                 mol_type,
-                "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
+                f"Wrong molecule_type {mt!r} not {mol_type!r} from {line!r}",
             )
             d = consumer.data.annotations.get("data_file_division", None)
-            self.assertEqual(
-                d, div, "Wrong division %r not %r from %r" % (d, div, line)
-            )
+            self.assertEqual(d, div, f"Wrong division {d!r} not {div!r} from {line!r}")
 
     def test_first_line_imgt(self):
         """Check IMGT ID line parsing."""
-        # This is a bit low level, but can test pasing the ID line only
+        # This is a bit low level, but can test parsing the ID line only
         tests = [
             ("ID   HLA00001   standard; DNA; HUM; 3503 BP.", None, "DNA", "HUM"),
             ("ID   HLA00001; SV 1; standard; DNA; HUM; 3503 BP.", None, "DNA", "HUM"),
@@ -8198,18 +8232,16 @@ class LineOneTests(unittest.TestCase):
             scanner._feed_first_line(consumer, line)
             t = consumer.data.annotations.get("topology", None)
             self.assertEqual(
-                t, topo, "Wrong topology %r not %r from %r" % (t, topo, line)
+                t, topo, f"Wrong topology {t!r} not {topo!r} from {line!r}"
             )
             mt = consumer.data.annotations.get("molecule_type", None)
             self.assertEqual(
                 mt,
                 mol_type,
-                "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
+                f"Wrong molecule_type {mt!r} not {mol_type!r} from {line!r}",
             )
             d = consumer.data.annotations.get("data_file_division", None)
-            self.assertEqual(
-                d, div, "Wrong division %r not %r from %r" % (d, div, line)
-            )
+            self.assertEqual(d, div, f"Wrong division {d!r} not {div!r} from {line!r}")
 
 
 class OutputTests(unittest.TestCase):

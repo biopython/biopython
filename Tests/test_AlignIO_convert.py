@@ -2,9 +2,9 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Unit tests for Bio.SeqIO.convert(...) function."""
 import unittest
+
 from io import StringIO
 
 from Bio import AlignIO
@@ -13,11 +13,7 @@ from Bio import AlignIO
 class ConvertTests(unittest.TestCase):
     def check_convert(self, in_filename, in_format, out_format, molecule_type):
         # Write it out using parse/write
-        msg = "Failed converting %s from %s to %s" % (
-            in_filename,
-            in_format,
-            out_format,
-        )
+        msg = f"Failed converting {in_filename} from {in_format} to {out_format}"
         handle = StringIO()
         aligns = list(AlignIO.parse(in_filename, in_format, None))
         if molecule_type:

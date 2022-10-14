@@ -354,9 +354,9 @@ class MMCIFIO(StructureIO):
                             atom_dict["_atom_site.label_seq_id"].append(label_seq_id)
                             atom_dict["_atom_site.pdbx_PDB_ins_code"].append(icode)
                             coord = atom.get_coord()
-                            atom_dict["_atom_site.Cartn_x"].append("%.3f" % coord[0])
-                            atom_dict["_atom_site.Cartn_y"].append("%.3f" % coord[1])
-                            atom_dict["_atom_site.Cartn_z"].append("%.3f" % coord[2])
+                            atom_dict["_atom_site.Cartn_x"].append(f"{coord[0]:.3f}")
+                            atom_dict["_atom_site.Cartn_y"].append(f"{coord[1]:.3f}")
+                            atom_dict["_atom_site.Cartn_z"].append(f"{coord[2]:.3f}")
                             atom_dict["_atom_site.occupancy"].append(
                                 str(atom.get_occupancy())
                             )

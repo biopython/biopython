@@ -118,10 +118,10 @@ correct for a ``CodonSeq`` (mainly ``rf_table``).
 
    >>> from Bio.Seq import Seq
    >>> codon_seq = CodonSeq()
-   >>> seq = Seq('AAAAAA')
+   >>> seq = Seq("AAAAAA")
    >>> codon_seq.from_seq(seq)
    CodonSeq('AAAAAA')
-   >>> seq = Seq('AAAAA')
+   >>> seq = Seq("AAAAA")
    >>> codon_seq.from_seq(seq)
    Traceback (most recent call last):
    ...
@@ -166,7 +166,7 @@ You can write out ``CodonAlignment`` object just as what you do with
 .. code:: pycon
 
    >>> from Bio import AlignIO
-   >>> AlignIO.write(codon_aln, 'example.aln', 'clustal')
+   >>> AlignIO.write(codon_aln, "example.aln", "clustal")
    1
 
 An alignment file called ``example.aln`` can then be found in your
@@ -181,7 +181,7 @@ object using ``from_msa()`` class method. For example,
 
 .. code:: pycon
 
-   >>> aln = AlignIO.read('example.aln', 'clustal')
+   >>> aln = AlignIO.read("example.aln", "clustal")
    >>> codon_aln = CodonAlignment()
    >>> print(codon_aln.from_msa(aln))
    CodonAlignment with 3 rows and 9 columns (3 codons)
@@ -217,12 +217,12 @@ sequences are in the same. For example:
    >>> from Bio.Align import MultipleSeqAlignment
    >>> from Bio.SeqRecord import SeqRecord
    >>> from Bio.Seq import Seq
-   >>> nucl1 = SeqRecord(Seq('AAATTTCCCGGG'), id='nucl1')
-   >>> nucl2 = SeqRecord(Seq('AAATTACCCGCG'), id='nucl2')
-   >>> nucl3 = SeqRecord(Seq('ATATTACCCGGG'), id='nucl3')
-   >>> prot1 = SeqRecord(nucl1.seq.translate(), id='prot1')
-   >>> prot2 = SeqRecord(nucl2.seq.translate(), id='prot2')
-   >>> prot3 = SeqRecord(nucl3.seq.translate(), id='prot3')
+   >>> nucl1 = SeqRecord(Seq("AAATTTCCCGGG"), id="nucl1")
+   >>> nucl2 = SeqRecord(Seq("AAATTACCCGCG"), id="nucl2")
+   >>> nucl3 = SeqRecord(Seq("ATATTACCCGGG"), id="nucl3")
+   >>> prot1 = SeqRecord(nucl1.seq.translate(), id="prot1")
+   >>> prot2 = SeqRecord(nucl2.seq.translate(), id="prot2")
+   >>> prot3 = SeqRecord(nucl3.seq.translate(), id="prot3")
    >>> aln = MultipleSeqAlignment([prot1, prot2, prot3])
    >>> codon_aln = codonalign.build(aln, [nucl1, nucl2, nucl3])
    >>> print(codon_aln)
@@ -241,14 +241,14 @@ case, records with same id are paired. For example:
 
 .. code:: pycon
 
-   >>> nucl1 = SeqRecord(Seq('AAATTTCCCGGG'), id='nucl1')
-   >>> nucl2 = SeqRecord(Seq('AAATTACCCGCG'), id='nucl2')
-   >>> nucl3 = SeqRecord(Seq('ATATTACCCGGG'), id='nucl3')
-   >>> prot1 = SeqRecord(nucl1.seq.translate(), id='prot1')
-   >>> prot2 = SeqRecord(nucl2.seq.translate(), id='prot2')
-   >>> prot3 = SeqRecord(nucl3.seq.translate(), id='prot3')
+   >>> nucl1 = SeqRecord(Seq("AAATTTCCCGGG"), id="nucl1")
+   >>> nucl2 = SeqRecord(Seq("AAATTACCCGCG"), id="nucl2")
+   >>> nucl3 = SeqRecord(Seq("ATATTACCCGGG"), id="nucl3")
+   >>> prot1 = SeqRecord(nucl1.seq.translate(), id="prot1")
+   >>> prot2 = SeqRecord(nucl2.seq.translate(), id="prot2")
+   >>> prot3 = SeqRecord(nucl3.seq.translate(), id="prot3")
    >>> aln = MultipleSeqAlignment([prot1, prot2, prot3])
-   >>> nucl = {'prot1': nucl1, 'prot2': nucl2, 'prot3': nucl3}
+   >>> nucl = {"prot1": nucl1, "prot2": nucl2, "prot3": nucl3}
    >>> codon_aln = codonalign.build(aln, nucl)
    >>> print(codon_aln)
    CodonAlignment with 3 rows and 12 columns (4 codons)
@@ -262,21 +262,21 @@ generated automatically.
 
 Sometimes, you are neither not able to ensure the same order or the same
 id. ``codonalign.build`` method provides you an manual approach to tell
-the program nucleotide sequence and protein sequence correspondance by
+the program nucleotide sequence and protein sequence correspondence by
 generating a ``corr_dict``. ``corr_dict`` should be a dictionary that
 uses protein record id as key and nucleotide record id as item. Let’s
 look at an example:
 
 .. code:: pycon
 
-   >>> nucl1 = SeqRecord(Seq('AAATTTCCCGGG'), id='nucl1')
-   >>> nucl2 = SeqRecord(Seq('AAATTACCCGCG'), id='nucl2')
-   >>> nucl3 = SeqRecord(Seq('ATATTACCCGGG'), id='nucl3')
-   >>> prot1 = SeqRecord(nucl1.seq.translate(), id='prot1')
-   >>> prot2 = SeqRecord(nucl2.seq.translate(), id='prot2')
-   >>> prot3 = SeqRecord(nucl3.seq.translate(), id='prot3')
+   >>> nucl1 = SeqRecord(Seq("AAATTTCCCGGG"), id="nucl1")
+   >>> nucl2 = SeqRecord(Seq("AAATTACCCGCG"), id="nucl2")
+   >>> nucl3 = SeqRecord(Seq("ATATTACCCGGG"), id="nucl3")
+   >>> prot1 = SeqRecord(nucl1.seq.translate(), id="prot1")
+   >>> prot2 = SeqRecord(nucl2.seq.translate(), id="prot2")
+   >>> prot3 = SeqRecord(nucl3.seq.translate(), id="prot3")
    >>> aln = MultipleSeqAlignment([prot1, prot2, prot3])
-   >>> corr_dict = {'prot1': 'nucl1', 'prot2': 'nucl2', 'prot3': 'nucl3'}
+   >>> corr_dict = {"prot1": "nucl1", "prot2": "nucl2", "prot3": "nucl3"}
    >>> codon_aln = codonalign.build(aln, [nucl3, nucl1, nucl2], corr_dict=corr_dict)
    >>> print(codon_aln)
    CodonAlignment with 3 rows and 12 columns (4 codons)
@@ -300,7 +300,7 @@ anchor to the nucleotide sequence to figure out where the mismatch and
 frameshift events lie. Other options available for ``codonalign.build``
 includes ``anchor_len`` (default 10) and ``max_score`` (maximum
 tolerance of unexpected events, default 10). You may want to refer the
-Biopython build-in help to get more information about these options.
+Biopython built-in help to get more information about these options.
 
 Now let’s look at a real example of building codon alignment. Here we
 will use epidermal growth factor (EGFR) gene to demonstrate how to
@@ -309,7 +309,7 @@ EGFR sequences for Homo sapiens, Bos taurus, Rattus norvegicus, Sus
 scrofa and Drosophila melanogaster. The three files used in this example
 (``egfr_nucl.fa`` with the nucleotide sequences of EGFR,
 ``egfr_pro.aln`` with the EGFR protein sequence alignment in ``clustal``
-format, and ``egfr_id`` with the id correspondance between protein
+format, and ``egfr_id`` with the id correspondence between protein
 records and nucleotide records) is available from the ‘Tests/codonalign‘
 directory in the Biopython distribution. You can then try the following
 code (make sure the files are in your current python working directory):
@@ -317,9 +317,9 @@ code (make sure the files are in your current python working directory):
 .. code:: pycon
 
    >>> from Bio import SeqIO, AlignIO
-   >>> nucl = SeqIO.parse('egfr_nucl.fa', 'fasta')
-   >>> prot = AlignIO.read('egfr_pro.aln', 'clustal')
-   >>> id_corr = {i.split()[0]: i.split()[1] for i in open('egfr_id').readlines()}
+   >>> nucl = SeqIO.parse("egfr_nucl.fa", "fasta")
+   >>> prot = AlignIO.read("egfr_pro.aln", "clustal")
+   >>> id_corr = {i.split()[0]: i.split()[1] for i in open("egfr_id").readlines()}
    >>> aln = codonalign.build(prot, nucl, corr_dict=id_corr)
    /biopython/Bio/codonalign/__init__.py:568: UserWarning: gi|47522840|ref|NP_999172.1|(L 449) does not correspond to gi|47522839|ref|NM_214007.1|(ATG)
      % (pro.id, aa, aa_num, nucl.id, this_codon))
@@ -344,7 +344,7 @@ per site (dS). ``codonalign`` currently support three counting based
 methods (NG86, LWL85, YN00) and maximum likelihood method to estimate dN
 and dS. The function to conduct dN, dS estimation is called
 ``cal_dn_ds``. When you obtained a codon alignment, it is quite easy to
-calculate dN and dS. For example (assuming you have EGFR codon alignmnet
+calculate dN and dS. For example (assuming you have EGFR codon alignment
 in the python working space):
 
 .. code:: pycon
@@ -358,16 +358,16 @@ in the python working space):
    ------------------------------ATGCGACGCTCCTGGGCGGGCGGCGCC...GCA gi|47522839|ref|NM_214007.1|
    ------------------------------ATGCGACCCTCCGGGACGGCCGGGGCA...GCA gi|41327737|ref|NM_005228.3|
    ------------------------------ATGCGACCCTCAGGGACTGCGAGAACC...GCA gi|6478867|gb|M37394.2|RATEGFR
-   >>> dN, dS = cal_dn_ds(aln[0], aln[1], method='NG86')
+   >>> dN, dS = cal_dn_ds(aln[0], aln[1], method="NG86")
    >>> print(dN, dS)
    0.0209078305058 0.0178371876389
-   >>> dN, dS = cal_dn_ds(aln[0], aln[1], method='LWL85')
+   >>> dN, dS = cal_dn_ds(aln[0], aln[1], method="LWL85")
    >>> print(dN, dS)
    0.0203061425453 0.0163935691992
-   >>> dN, dS = cal_dn_ds(aln[0], aln[1], method='YN00')
+   >>> dN, dS = cal_dn_ds(aln[0], aln[1], method="YN00")
    >>> print(dN, dS)
    0.0198195580321 0.0221560648799
-   >>> dN, dS = cal_dn_ds(aln[0], aln[1], method='ML')
+   >>> dN, dS = cal_dn_ds(aln[0], aln[1], method="ML")
    >>> print(dN, dS)
    0.0193877676103 0.0217247139962
 
@@ -421,8 +421,8 @@ distribution. A function called ``mktest`` will be used for the test.
    >>> from Bio import SeqIO, AlignIO
    >>> from Bio.codonalign import build
    >>> from Bio.codonalign.codonalignment import mktest
-   >>> pro_aln = AlignIO.read('adh.aln', 'clustal')
-   >>> p = SeqIO.index('drosophilla.fasta', 'fasta')
+   >>> pro_aln = AlignIO.read("adh.aln", "clustal")
+   >>> p = SeqIO.index("drosophilla.fasta", "fasta")
    >>> codon_aln = build(pro_aln, p)
    >>> print(codon_aln)
    CodonAlignment with 27 rows and 768 columns (256 codons)

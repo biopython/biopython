@@ -168,7 +168,7 @@ class Record:
     SEQUENCE_FORMAT = "%" + str(GB_SEQUENCE_INDENT) + "s"
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self.accession = []
         self.base_counts = ""
         self.comment = ""
@@ -287,7 +287,7 @@ class Record:
 
             acc_info = ""
             for accession in self.accession:
-                acc_info += "%s " % accession
+                acc_info += f"{accession} "
             # strip off an extra space at the end
             acc_info = acc_info.rstrip()
             output += _wrapped_genbank(acc_info, Record.GB_BASE_INDENT)
@@ -302,7 +302,7 @@ class Record:
             output = Record.BASE_FORMAT % "VERSION"
             output += self.version
             output += "  GI:"
-            output += "%s\n" % self.gi
+            output += f"{self.gi}\n"
         else:
             output = ""
         return output
@@ -311,7 +311,7 @@ class Record:
         output = ""
         if len(self.projects) > 0:
             output = Record.BASE_FORMAT % "PROJECT"
-            output += "%s\n" % "  ".join(self.projects)
+            output += f"{'  '.join(self.projects)}\n"
         return output
 
     def _dblink_line(self):
@@ -326,7 +326,7 @@ class Record:
         """Output for the NID line. Use of NID is obsolete in GenBank files (PRIVATE)."""
         if self.nid:
             output = Record.BASE_FORMAT % "NID"
-            output += "%s\n" % self.nid
+            output += f"{self.nid}\n"
         else:
             output = ""
         return output
@@ -335,7 +335,7 @@ class Record:
         """Output for PID line. Presumedly, PID usage is also obsolete (PRIVATE)."""
         if self.pid:
             output = Record.BASE_FORMAT % "PID"
-            output += "%s\n" % self.pid
+            output += f"{self.pid}\n"
         else:
             output = ""
         return output
@@ -347,7 +347,7 @@ class Record:
             output += Record.BASE_FORMAT % "KEYWORDS"
             keyword_info = ""
             for keyword in self.keywords:
-                keyword_info += "%s; " % keyword
+                keyword_info += f"{keyword}; "
             # replace the ; at the end with a period
             keyword_info = keyword_info[:-2]
             keyword_info += "."
@@ -360,7 +360,7 @@ class Record:
         """Output for DBSOURCE line (PRIVATE)."""
         if self.db_source:
             output = Record.BASE_FORMAT % "DBSOURCE"
-            output += "%s\n" % self.db_source
+            output += f"{self.db_source}\n"
         else:
             output = ""
         return output
@@ -387,7 +387,7 @@ class Record:
         output += " " * Record.GB_BASE_INDENT
         taxonomy_info = ""
         for tax in self.taxonomy:
-            taxonomy_info += "%s; " % tax
+            taxonomy_info += f"{tax}; "
         # replace the ; at the end with a period
         taxonomy_info = taxonomy_info[:-2]
         taxonomy_info += "."
@@ -427,7 +427,7 @@ class Record:
                     count_info = count_parts.pop(0)
                     count_type = count_parts.pop(0)
 
-                    output += "%7s %s" % (count_info, count_type)
+                    output += f"{count_info:>7} {count_type}"
             # deal with ugly ORIGIN lines like:
             # 1311257 a2224835 c2190093 g1309889 t
             # by just outputting the raw information
@@ -460,7 +460,7 @@ class Record:
                     start_pos = cur_seq_pos + section * 10
                     end_pos = start_pos + 10
                     seq_section = self.sequence[start_pos:end_pos]
-                    output += " %s" % seq_section.lower()
+                    output += f" {seq_section.lower()}"
 
                     # stop looping if we are out of sequence
                     if end_pos > len(self.sequence):
@@ -512,7 +512,7 @@ class Reference:
     """
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self.number = ""
         self.bases = ""
         self.authors = ""
@@ -542,9 +542,9 @@ class Reference:
         if self.number:
             if self.bases:
                 output += "%-3s" % self.number
-                output += "%s" % self.bases
+                output += f"{self.bases}"
             else:
-                output += "%s" % self.number
+                output += f"{self.number}"
 
         output += "\n"
         return output
@@ -610,21 +610,21 @@ class Feature:
     """Hold information about a Feature in the Feature Table of GenBank record.
 
     Attributes:
-     - key - The key name of the featue (ie. source)
+     - key - The key name of the feature (ie. source)
      - location - The string specifying the location of the feature.
-     - qualfiers - A list of Qualifier objects in the feature.
+     - qualifiers - A list of Qualifier objects in the feature.
 
     """
 
     def __init__(self, key="", location=""):
-        """Initialize."""
+        """Initialize the class."""
         self.key = key
         self.location = location
         self.qualifiers = []
 
     def __repr__(self):
         """Representation of the object for debugging or logging."""
-        return "Feature(key=%r, location=%r)" % (self.key, self.location)
+        return f"Feature(key={self.key!r}, location={self.location!r})"
 
     def __str__(self):
         """Return feature as a GenBank format string."""
@@ -647,13 +647,13 @@ class Qualifier:
     """
 
     def __init__(self, key="", value=""):
-        """Initialize."""
+        """Initialize the class."""
         self.key = key
         self.value = value
 
     def __repr__(self):
         """Representation of the object for debugging or logging."""
-        return "Qualifier(key=%r, value=%r)" % (self.key, self.value)
+        return f"Qualifier(key={self.key!r}, value={self.value!r})"
 
     def __str__(self):
         """Return feature qualifier as a GenBank format string."""

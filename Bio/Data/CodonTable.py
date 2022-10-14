@@ -120,14 +120,14 @@ class CodonTable:
 
         # Build the table...
         answer += "\n\n"
-        answer += "  |" + "|".join("  %s      " % c2 for c2 in letters) + "|"
+        answer += "  |" + "|".join(f"  {c2}      " for c2 in letters) + "|"
         answer += "\n--+" + "+".join("---------" for c2 in letters) + "+--"
         for c1 in letters:
             for c3 in letters:
                 line = c1 + " |"
                 for c2 in letters:
                     codon = c1 + c2 + c3
-                    line += " %s" % codon
+                    line += f" {codon}"
                     if codon in self.stop_codons:
                         line += " Stop|"
                     else:
@@ -138,9 +138,9 @@ class CodonTable:
                         except TranslationError:
                             amino = "?"
                         if codon in self.start_codons:
-                            line += " %s(s)|" % amino
+                            line += f" {amino}(s)|"
                         else:
-                            line += " %s   |" % amino
+                            line += f" {amino}   |"
                 line += " " + c3
                 answer += "\n" + line
             answer += "\n--+" + "+".join("---------" for c2 in letters) + "+--"
@@ -179,11 +179,7 @@ class NCBICodonTable(CodonTable):
 
     def __repr__(self):
         """Represent the NCBI codon table class as a string for debugging."""
-        return "%s(id=%r, names=%r, ...)" % (
-            self.__class__.__name__,
-            self.id,
-            self.names,
-        )
+        return f"{self.__class__.__name__}(id={self.id!r}, names={self.names!r}, ...)"
 
 
 class NCBICodonTableDNA(NCBICodonTable):
@@ -260,7 +256,7 @@ def list_possible_proteins(codon, forward_table, ambiguous_nucleotide_values):
     if stops:
         if possible:
             raise TranslationError(
-                "ambiguous codon %r codes for both proteins and stop codons" % codon
+                f"ambiguous codon {codon!r} codes for both proteins and stop codons"
             )
         # This is a true stop codon - tell the caller about it
         raise KeyError(codon)
@@ -268,7 +264,7 @@ def list_possible_proteins(codon, forward_table, ambiguous_nucleotide_values):
 
 
 def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
-    """Extend a codon list to include all possible ambigous codons.
+    """Extend a codon list to include all possible ambiguous codons.
 
     e.g.::
 
@@ -312,7 +308,7 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
                 if codon not in candidates and codon not in codons:
                     candidates.append(codon)
     answer = codons[:]  # copy
-    # print "Have %i new candidates" % len(candidates)
+    # print("Have %i new candidates" % len(candidates))
     for ambig_codon in candidates:
         wanted = True
         # e.g. 'TRR' -> 'TAA', 'TAG', 'TGA', 'TGG'
@@ -325,7 +321,7 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
             if codon not in codons:
                 # This ambiguous codon can code for a non-stop, exclude it!
                 wanted = False
-                # print "Rejecting %s" % ambig_codon
+                # print("Rejecting %s" % ambig_codon)
                 continue
         if wanted:
             answer.append(ambig_codon)

@@ -22,9 +22,9 @@ preferred. Furthermore, the NCBI themselves regard these command line tools as
 wrappers for these under Bio.Blast.Applications (see the tutorial).
 """
 
+from io import StringIO
 import re
 
-from io import StringIO
 from Bio.SearchIO._legacy.ParserSupport import (
     UndoHandle,
     AbstractParser,
@@ -39,8 +39,6 @@ from Bio.SearchIO._legacy.ParserSupport import (
 )
 from Bio.Blast import Record
 
-from Bio import BiopythonWarning
-import warnings
 
 _score_e_re = re.compile(r"Score +E")
 
@@ -83,15 +81,6 @@ class _Scanner:
      - feed     Feed data into the scanner.
 
     """
-
-    def __init__(self):
-        """Raise warning that this module is outdated."""
-        warnings.warn(
-            "Parsing BLAST plain text output file is not a well supported"
-            " functionality anymore. Consider generating your BLAST output for parsing"
-            " as XML or tabular format instead.",
-            BiopythonWarning,
-        )
 
     def feed(self, handle, consumer):
         """Feed in a BLAST report for scanning.
@@ -295,7 +284,7 @@ class _Scanner:
         # BLASTN 2.2.3 sometimes spews a bunch of warnings and errors here:
         # Searching[blastall] WARNING:  [000.000]  AT1G08320: SetUpBlastSearch
         # [blastall] ERROR:  [000.000]  AT1G08320: Blast:
-        # [blastall] ERROR:  [000.000]  AT1G08320: Blast: Query must be at leas
+        # [blastall] ERROR:  [000.000]  AT1G08320: Blast: Query must be at least
         # done
         # Reported by David Weisman.
         # Check for these error lines and ignore them for now.  Let
@@ -850,7 +839,7 @@ class BlastParser(AbstractParser):
     """Parses BLAST data into a Record.Blast object."""
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self._scanner = _Scanner()
         self._consumer = _BlastConsumer()
 
@@ -864,7 +853,7 @@ class PSIBlastParser(AbstractParser):
     """Parses BLAST data into a Record.PSIBlast object."""
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self._scanner = _Scanner()
         self._consumer = _PSIBlastConsumer()
 
@@ -891,7 +880,7 @@ class _HeaderConsumer:
         if line.startswith("Reference: "):
             self._header.reference = line[11:]
         else:
-            self._header.reference = self._header.reference + line
+            self._header.reference += line
 
     def query_info(self, line):
         if line.startswith("Query= "):
@@ -917,7 +906,7 @@ class _HeaderConsumer:
         elif not line.endswith("total letters"):
             if self._header.database:
                 # Need to include a space when merging multi line datase descr
-                self._header.database = self._header.database + " " + line.strip()
+                self._header.database += " " + line.strip()
             else:
                 self._header.database = line.strip()
         else:
@@ -1307,7 +1296,7 @@ class _HSPConsumer:
             seq += " " * (self._query_len - len(seq))
             if len(seq) < self._query_len:
                 raise ValueError("Match is longer than the query in line\n%s" % line)
-        self._hsp.match = self._hsp.match + seq
+        self._hsp.match += seq
 
     # To match how we do the query, cache the regular expression.
     # Note that the colon is not always present.
@@ -1778,11 +1767,11 @@ class Iterator:
 
         if query and "BLAST" not in lines[0]:
             # Cheat and re-insert the header
-            # print "-"*50
-            # print "".join(self._header)
-            # print "-"*50
-            # print "".join(lines)
-            # print "-"*50
+            # print("-"*50)
+            # print("".join(self._header))
+            # print("-"*50)
+            # print("".join(lines))
+            # print("-"*50)
             lines = self._header + lines
 
         if not lines:

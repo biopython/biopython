@@ -44,14 +44,15 @@ Suppose we have these instances of a DNA motif:
 %cont-doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> instances = [Seq("TACAA"),
-...              Seq("TACGC"),
-...              Seq("TACAC"),
-...              Seq("TACCC"),
-...              Seq("AACCC"),
-...              Seq("AATGC"),
-...              Seq("AATGC"),
-...             ]
+>>> instances = [
+...     Seq("TACAA"),
+...     Seq("TACGC"),
+...     Seq("TACAC"),
+...     Seq("TACCC"),
+...     Seq("AACCC"),
+...     Seq("AATGC"),
+...     Seq("AATGC"),
+... ]
 \end{minted}
 then we can create a Motif object as follows:
 
@@ -127,9 +128,9 @@ in the alphabet of the motif:
 \begin{minted}{pycon}
 >>> m.alphabet
 'ACGT'
->>> m.counts["A",:]
+>>> m.counts["A", :]
 (3, 7, 0, 2, 1)
->>> m.counts[0,:]
+>>> m.counts[0, :]
 (3, 7, 0, 2, 1)
 \end{minted}
 The motif has an associated consensus sequence, defined as the sequence of
@@ -366,8 +367,9 @@ T  [ 7 58  0 55 49 52 21 56  0  2 ]
 The motifs are read as follows:
 \begin{minted}{pycon}
 >>> fh = open("jaspar_motifs.txt")
->>> for m in motifs.parse(fh, "jaspar"))
+>>> for m in motifs.parse(fh, "jaspar"):
 ...     print(m)
+...
 TF name	 Arnt
 Matrix ID	MA0004.1
 Matrix:
@@ -408,20 +410,20 @@ In addition to parsing these flat file formats, we can also retrieve motifs from
 \begin{minted}{pycon}
 >>> from Bio.motifs.jaspar.db import JASPAR5
 >>>
->>> JASPAR_DB_HOST = <hostname>
->>> JASPAR_DB_NAME = <db_name>
->>> JASPAR_DB_USER = <user>
->>> JASPAR_DB_PASS = <passord>
+>>> JASPAR_DB_HOST = "yourhostname"  # fill in these values
+>>> JASPAR_DB_NAME = "yourdatabase"
+>>> JASPAR_DB_USER = "yourusername"
+>>> JASPAR_DB_PASS = "yourpassword"
 >>>
 >>> jdb = JASPAR5(
 ...     host=JASPAR_DB_HOST,
 ...     name=JASPAR_DB_NAME,
 ...     user=JASPAR_DB_USER,
-...     password=JASPAR_DB_PASS
+...     password=JASPAR_DB_PASS,
 ... )
 \end{minted}
 
-Now we can fetch a single motif by its unique JASPAR ID with the \verb+fetch_motif_by_id+ method. Note that a JASPAR ID conists of a base ID and a version number separated by a decimal point, e.g. 'MA0004.1'. The \verb+fetch_motif_by_id+ method allows you to use either the fully specified ID or just the base ID. If only the base ID is provided, the latest version of the motif is returned.
+Now we can fetch a single motif by its unique JASPAR ID with the \verb+fetch_motif_by_id+ method. Note that a JASPAR ID consists of a base ID and a version number separated by a decimal point, e.g. 'MA0004.1'. The \verb+fetch_motif_by_id+ method allows you to use either the fully specified ID or just the base ID. If only the base ID is provided, the latest version of the motif is returned.
 \begin{minted}{pycon}
 >>> arnt = jdb.fetch_motif_by_id("MA0004")
 \end{minted}
@@ -479,14 +481,15 @@ T:   0.00   0.00   0.00   0.00  20.00   0.00
 The \verb+fetch_motifs+ method allows you to fetch motifs which match a specified set of criteria. These criteria include any of the above described meta information as well as certain matrix properties such as the minimum information content (\verb+min_ic+ in the example below), the minimum length of the matrix or the minimum number of sites used to construct the matrix. Only motifs which pass ALL the specified criteria are returned. Note that selection criteria which correspond to meta information which allow for multiple values may be specified as either a single value or a list of values, e.g. \verb+tax_group+ and \verb+tf_family+ in the example below.
 \begin{minted}{pycon}
 >>> motifs = jdb.fetch_motifs(
-...     collection = "CORE",
-...     tax_group = ["vertebrates", "insects"],
-...     tf_class = "Winged Helix-Turn-Helix",
-...     tf_family = ["Forkhead", "Ets"],
-...     min_ic = 12
+...     collection="CORE",
+...     tax_group=["vertebrates", "insects"],
+...     tf_class="Winged Helix-Turn-Helix",
+...     tf_family=["Forkhead", "Ets"],
+...     min_ic=12,
 ... )
 >>> for motif in motifs:
-...     pass # do something with the motif
+...     pass  # do something with the motif
+...
 \end{minted}
 
 \subsubsection*{Compatibility with Perl TFBS modules}
@@ -503,11 +506,11 @@ By default, the Perl \verb+TFBS+ modules use a pseudocount equal to $\sqrt{N} * 
 \end{minted}
 Note that it is possible for the counts matrix to have an unequal number of sequences making up the columns. The pseudocount computation uses the average number of sequences making up the matrix. However, when \verb+normalize+ is called on the counts matrix, each count value in a column is divided by the total number of sequences making up that specific column, not by the average number of sequences. This differs from the Perl \verb+TFBS+ modules because the normalization is not done as a separate step and so the average number of sequences is used throughout the computation of the pssm. Therefore, for matrices with unequal column counts, the PSSM computed by the \verb+motifs+ module will differ somewhat from the pssm computed by the Perl \verb+TFBS+ modules.
 \item\textbf{Computation of matrix information content:} \\
-The information content (IC) or specificity of a matrix is computed using the \verb+mean+ method of the \verb+PositionSpecificScoringMatrix+ class. However of note, in the Perl \verb+TFBS+ modules the default behaviour is to compute the IC without first applying pseudocounts, even though by default the PSSMs are computed using pseudocounts as described above.
+The information content (IC) or specificity of a matrix is computed using the \verb+mean+ method of the \verb+PositionSpecificScoringMatrix+ class. However of note, in the Perl \verb+TFBS+ modules the default behavior is to compute the IC without first applying pseudocounts, even though by default the PSSMs are computed using pseudocounts as described above.
 \item\textbf{Searching for instances:} \\
 Searching for instances with the Perl \verb+TFBS+ motifs was usually performed using a relative score threshold, i.e. a score in the range 0 to 1. In order to compute the absolute PSSM score corresponding to a relative score one can use the equation:
 \begin{minted}{pycon}
->>> abs_score =  (pssm.max - pssm.min) * rel_score + pssm.min
+>>> abs_score = (pssm.max - pssm.min) * rel_score + pssm.min
 \end{minted}
 To convert the absolute score of an instance back to a relative score, one can use the equation:
 \begin{minted}{pycon}
@@ -516,17 +519,15 @@ To convert the absolute score of an instance back to a relative score, one can u
 For example, using the Arnt motif before, let's search a sequence with a relative score threshold of 0.8.
 %TODO - Check missing ... lines, make into a doctest?
 \begin{minted}{pycon}
->>> test_seq=Seq("TAAGCGTGCACGCGCAACACGTGCATTA")
+>>> test_seq = Seq("TAAGCGTGCACGCGCAACACGTGCATTA")
 >>> arnt.pseudocounts = motifs.jaspar.calculate_pseudocounts(arnt)
 >>> pssm = arnt.pssm
 >>> max_score = pssm.max
 >>> min_score = pssm.min
 >>> abs_score_threshold = (max_score - min_score) * 0.8 + min_score
->>> for position, score in pssm.search(test_seq,
-                                       threshold=abs_score_threshold):
+>>> for pos, score in pssm.search(test_seq, threshold=abs_score_threshold):
 ...     rel_score = (score - min_score) / (max_score - min_score)
-...     print("Position %d: score = %5.3f, rel. score = %5.3f" % (
-            position, score, rel_score))
+...     print(f"Position {pos}: score = {score:5.3f}, rel. score = {rel_score:5.3f}")
 ...
 Position 2: score = 5.362, rel. score = 0.801
 Position 8: score = 6.112, rel. score = 0.831
@@ -761,9 +762,9 @@ store any additional information about the motif:
 %cont-doctest
 \begin{minted}{pycon}
 >>> motif = record[0]
->>> motif.degenerate_consensus # Using the Bio.motifs.Motif property
+>>> motif.degenerate_consensus  # Using the Bio.motifs.Motif property
 Seq('SRACAGGTGKYG')
->>> motif["ID"] # Using motif as a dictionary
+>>> motif["ID"]  # Using motif as a dictionary
 'motif1'
 \end{minted}
 
@@ -872,7 +873,7 @@ Speaking of exporting, let's look at export functions in general.
 We can use the \verb+format+ built-in function to write the motif in the simple JASPAR \verb+pfm+ format:
 %the tabs in the output confuse doctest; don't test
 \begin{minted}{pycon}
->>> print(format(arnt, "pfm"))
+>>> print(arnt.format("pfm"))
   4.00  19.00   0.00   0.00   0.00   0.00
  16.00   0.00  20.00   0.00   0.00   0.00
   0.00   1.00   0.00  20.00   0.00  20.00
@@ -880,7 +881,7 @@ We can use the \verb+format+ built-in function to write the motif in the simple 
 \end{minted}
 Similarly, we can use \verb+format+ to write the motif in the JASPAR \verb+jaspar+ format:
 \begin{minted}{pycon}
->>> print(format(arnt, "jaspar"))
+>>> print(arnt.format("jaspar"))
 >MA0004.1  Arnt
 A [  4.00  19.00   0.00   0.00   0.00   0.00]
 C [ 16.00   0.00  20.00   0.00   0.00   0.00]
@@ -892,7 +893,7 @@ To write the motif in a TRANSFAC-like matrix format, use
 
 %cont-doctest
 \begin{minted}{pycon}
->>> print(format(m, "transfac"))
+>>> print(m.format("transfac"))
 P0      A      C      G      T
 01      3      0      0      4      W
 02      7      0      0      0      A
@@ -990,7 +991,7 @@ pseudocounts accordingly:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> pwm = m.counts.normalize(pseudocounts={"A":0.6, "C": 0.4, "G": 0.4, "T": 0.6})
+>>> pwm = m.counts.normalize(pseudocounts={"A": 0.6, "C": 0.4, "G": 0.4, "T": 0.6})
 >>> print(pwm)
         0      1      2      3      4
 A:   0.40   0.84   0.07   0.29   0.18
@@ -1066,7 +1067,7 @@ For example, against a background with a 40\% GC content, use
 
 %cont-doctest
 \begin{minted}{pycon}
->>> background = {"A":0.3,"C":0.2,"G":0.2,"T":0.3}
+>>> background = {"A": 0.3, "C": 0.2, "G": 0.2, "T": 0.3}
 >>> pssm = pwm.log_odds(background)
 >>> print(pssm)
         0      1      2      3      4
@@ -1116,7 +1117,7 @@ sequence. For the sake of this section, we will use an artificial sequence like 
 
 %cont-doctest
 \begin{minted}{pycon}
->>> test_seq=Seq("TACACTGCATTACAACCCAAGCATTA")
+>>> test_seq = Seq("TACACTGCATTACAACCCAAGCATTA")
 >>> len(test_seq)
 26
 \end{minted}
@@ -1448,7 +1449,7 @@ which is similar to our test motif \verb|m|:
 %cont-doctest
 \begin{minted}{pycon}
 >>> with open("REB1.pfm") as handle:
-...    m_reb1 = motifs.read(handle, "pfm")
+...     m_reb1 = motifs.read(handle, "pfm")
 ...
 >>> m_reb1.consensus
 Seq('GTTACCCGG')
@@ -1465,8 +1466,8 @@ To make the motifs comparable, we choose the same values for the pseudocounts an
 
 %cont-doctest
 \begin{minted}{pycon}
->>> m_reb1.pseudocounts = {"A":0.6, "C": 0.4, "G": 0.4, "T": 0.6}
->>> m_reb1.background = {"A":0.3,"C":0.2,"G":0.2,"T":0.3}
+>>> m_reb1.pseudocounts = {"A": 0.6, "C": 0.4, "G": 0.4, "T": 0.6}
+>>> m_reb1.background = {"A": 0.3, "C": 0.2, "G": 0.2, "T": 0.3}
 >>> pssm_reb1 = m_reb1.pssm
 >>> print(pssm_reb1)
         0      1      2      3      4      5      6      7      8

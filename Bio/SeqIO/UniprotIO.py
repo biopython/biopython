@@ -6,7 +6,6 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
 """Bio.SeqIO support for the "uniprot-xml" file format.
 
 See Also:
@@ -19,8 +18,8 @@ originally introduced by SwissProt ("swiss" format in Bio.SeqIO).
 from xml.etree import ElementTree
 from xml.parsers.expat import errors
 
-from Bio.Seq import Seq
 from Bio import SeqFeature
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
@@ -159,7 +158,7 @@ class Parser:
                         if taxon_element.tag == NS + "taxon":
                             append_to_annotations("taxonomy", taxon_element.text)
             if sci_name and com_name:
-                organism_name = "%s (%s)" % (sci_name, com_name)
+                organism_name = f"{sci_name} ({com_name})"
             elif sci_name:
                 organism_name = sci_name
             elif com_name:
@@ -244,7 +243,7 @@ class Parser:
             ]
 
             if element.attrib["type"] in simple_comments:
-                ann_key = "comment_%s" % element.attrib["type"].replace(" ", "")
+                ann_key = f"comment_{element.attrib['type'].replace(' ', '')}"
                 for text_element in element.iter(NS + "text"):
                     if text_element.text:
                         append_to_annotations(ann_key, text_element.text)
@@ -259,7 +258,7 @@ class Parser:
                             append_to_annotations(ann_key, el.text)
             elif element.attrib["type"] == "interaction":
                 for interact_element in element.iter(NS + "interactant"):
-                    ann_key = "comment_%s_intactId" % element.attrib["type"]
+                    ann_key = f"comment_{element.attrib['type']}_intactId"
                     append_to_annotations(ann_key, interact_element.attrib["intactId"])
             elif element.attrib["type"] == "alternative products":
                 for alt_element in element.iter(NS + "isoform"):
@@ -269,7 +268,7 @@ class Parser:
                     for id_element in alt_element.iter(NS + "id"):
                         append_to_annotations(ann_key, id_element.text)
             elif element.attrib["type"] == "mass spectrometry":
-                ann_key = "comment_%s" % element.attrib["type"].replace(" ", "")
+                ann_key = f"comment_{element.attrib['type'].replace(' ', '')}"
                 start = end = 0
                 for el in element.iter(NS + "location"):
                     pos_els = list(el.iter(NS + "position"))
@@ -288,26 +287,23 @@ class Parser:
                 mass = element.attrib["mass"]
                 method = element.attrib["method"]
                 if start == end == 0:
-                    append_to_annotations(ann_key, "undefined:%s|%s" % (mass, method))
+                    append_to_annotations(ann_key, f"undefined:{mass}|{method}")
                 else:
-                    append_to_annotations(
-                        ann_key, "%s..%s:%s|%s" % (start, end, mass, method)
-                    )
+                    append_to_annotations(ann_key, f"{start}..{end}:{mass}|{method}")
             elif element.attrib["type"] == "sequence caution":
                 pass  # not parsed: few information, complex structure
             elif element.attrib["type"] == "online information":
                 for link_element in element.iter(NS + "link"):
-                    ann_key = "comment_%s" % element.attrib["type"].replace(" ", "")
+                    ann_key = f"comment_{element.attrib['type'].replace(' ', '')}"
                     for id_element in link_element.iter(NS + "link"):
                         append_to_annotations(
                             ann_key,
-                            "%s@%s"
-                            % (element.attrib["name"], link_element.attrib["uri"]),
+                            f"{element.attrib['name']}@{link_element.attrib['uri']}",
                         )
 
             # return raw XML comments if needed
             if self.return_raw_comments:
-                ann_key = "comment_%s_xml" % element.attrib["type"].replace(" ", "")
+                ann_key = f"comment_{element.attrib['type'].replace(' ', '')}_xml"
                 append_to_annotations(ann_key, ElementTree.tostring(element))
 
         def _parse_dbReference(element):
@@ -349,7 +345,7 @@ class Parser:
                                         )
                                         start = int(pair[1].split("-")[0]) - 1
                                         end = int(pair[1].split("-")[1])
-                                        feature.location = SeqFeature.FeatureLocation(
+                                        feature.location = SeqFeature.SimpleLocation(
                                             start, end
                                         )
                                         # self.ParsedSeqRecord.features.append(feature)
@@ -447,7 +443,7 @@ class Parser:
             elif status == "uncertain":
                 return SeqFeature.UncertainPosition(position)
             else:
-                raise NotImplementedError("Position status %r" % status)
+                raise NotImplementedError(f"Position status {status!r}")
 
         def _parse_feature(element):
             feature = SeqFeature.SeqFeature()
@@ -468,7 +464,7 @@ class Parser:
                         start_position = _parse_position(element, -1)
                         element = feature_element.findall(NS + "end")[0]
                         end_position = _parse_position(element)
-                    feature.location = SeqFeature.FeatureLocation(
+                    feature.location = SeqFeature.SimpleLocation(
                         start_position, end_position
                     )
                 else:
@@ -491,9 +487,9 @@ class Parser:
         def _parse_sequence(element):
             for k, v in element.attrib.items():
                 if k in ("length", "mass", "version"):
-                    self.ParsedSeqRecord.annotations["sequence_%s" % k] = int(v)
+                    self.ParsedSeqRecord.annotations[f"sequence_{k}"] = int(v)
                 else:
-                    self.ParsedSeqRecord.annotations["sequence_%s" % k] = v
+                    self.ParsedSeqRecord.annotations[f"sequence_{k}"] = v
             self.ParsedSeqRecord.seq = Seq("".join(element.text.split()))
             self.ParsedSeqRecord.annotations["molecule_type"] = "protein"
 

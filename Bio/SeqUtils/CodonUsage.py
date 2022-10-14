@@ -6,8 +6,23 @@
 """Methods for codon usage calculations."""
 
 import math
+import warnings
 from .CodonUsageIndices import SharpEcoliIndex
 from Bio import SeqIO  # To parse a FASTA file
+from Bio import BiopythonDeprecationWarning
+
+
+warnings.warn(
+    "This module has been DEPRECATED. Please use the CodonAdaptationIndex "
+    "class in Bio.SeqUtils instead. Note that this class has been updated to "
+    "use modern Python, and may give slightly different results from the "
+    "CodonAdaptationIndex class in Bio.SeqUtils.CodonUsage, as the code was "
+    "changed to be consistent with the published paper by Sharp and Li. The "
+    "code in the old CodonAdaptationIndex class in Bio.SeqUtils.CodonUsage was "
+    "not changed.",
+    BiopythonDeprecationWarning,
+)
+
 
 # Turn black code style off
 # fmt: off
@@ -117,7 +132,7 @@ class CodonAdaptationIndex:
 
             # calculate the RSCU value for each of the codons
             for codon in codons:
-                denominator = float(total) / len(codons)
+                denominator = total / len(codons)
                 rcsu.append(self.codon_count[codon] / denominator)
 
             # now generate the index W=RCSUi/RCSUmax:
@@ -138,8 +153,7 @@ class CodonAdaptationIndex:
         if self.index == {}:
             self.set_cai_index(SharpEcoliIndex)
 
-        if dna_sequence.islower():
-            dna_sequence = dna_sequence.upper()
+        dna_sequence = dna_sequence.upper()
 
         for i in range(0, len(dna_sequence), 3):
             codon = dna_sequence[i : i + 3]
@@ -150,9 +164,7 @@ class CodonAdaptationIndex:
                     cai_length += 1
             # some indices may not include stop codons:
             elif codon not in ["TGA", "TAA", "TAG"]:
-                raise TypeError(
-                    "illegal codon in sequence: %s.\n%s" % (codon, self.index)
-                )
+                raise TypeError(f"illegal codon in sequence: {codon}.\n{self.index}")
 
         return math.exp(cai_value / (cai_length - 1.0))
 
@@ -163,25 +175,32 @@ class CodonAdaptationIndex:
             self.codon_count = CodonsDict.copy()
 
             # iterate over sequence and count all the codons in the FastaFile.
-            for cur_record in SeqIO.parse(handle, "fasta"):
-                # make sure the sequence is lower case
-                if str(cur_record.seq).islower():
-                    dna_sequence = str(cur_record.seq).upper()
-                else:
-                    dna_sequence = str(cur_record.seq)
-                for i in range(0, len(dna_sequence), 3):
-                    codon = dna_sequence[i : i + 3]
-                    if codon in self.codon_count:
+            for record in SeqIO.parse(handle, "fasta"):
+                sequence = record.seq.upper()
+                for i in range(0, len(sequence), 3):
+                    codon = sequence[i : i + 3]
+                    try:
                         self.codon_count[codon] += 1
-                    else:
-                        raise TypeError(
-                            "illegal codon %s in gene: %s" % (codon, cur_record.id)
-                        )
+                    except KeyError:
+                        raise ValueError(
+                            f"illegal codon '{codon}' in gene: {record.id}"
+                        ) from None
+
+    def __str__(self):
+        lines = []
+        for i in sorted(self.index):
+            line = f"{i}\t{self.index[i]:.3f}"
+            lines.append(line)
+        return "\n".join(lines) + "\n"
 
     def print_index(self):
         """Print out the index used.
 
         This just gives the index when the objects is printed.
         """
-        for i in sorted(self.index):
-            print("%s\t%.3f" % (i, self.index[i]))
+        warnings.warn(
+            "The print_index method is deprecated; instead of "
+            "self.print_index(), please use print(self).",
+            BiopythonDeprecationWarning,
+        )
+        print(self)

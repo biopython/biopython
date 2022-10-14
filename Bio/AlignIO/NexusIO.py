@@ -13,12 +13,10 @@ See also the Bio.Nexus module (which this code calls internally),
 as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
-
-
-from Bio.SeqRecord import SeqRecord
-from Bio.Nexus import Nexus
 from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO.Interfaces import AlignmentWriter
+from Bio.Nexus import Nexus
+from Bio.SeqRecord import SeqRecord
 
 
 # You can get a couple of example files here:

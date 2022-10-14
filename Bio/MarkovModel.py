@@ -92,7 +92,7 @@ def _readline_and_check_start(handle, start):
     """Read the first line and evaluate that begisn with the correct start (PRIVATE)."""
     line = handle.readline()
     if not line.startswith(start):
-        raise ValueError("I expected %r but got %r" % (start, line))
+        raise ValueError(f"I expected {start!r} but got {line!r}")
     return line
 
 
@@ -113,21 +113,21 @@ def load(handle):
     mm.p_initial = numpy.zeros(N)
     line = _readline_and_check_start(handle, "INITIAL:")
     for i in range(len(states)):
-        line = _readline_and_check_start(handle, "  %s:" % states[i])
+        line = _readline_and_check_start(handle, f"  {states[i]}:")
         mm.p_initial[i] = float(line.split()[-1])
 
     # Load the transition.
     mm.p_transition = numpy.zeros((N, N))
     line = _readline_and_check_start(handle, "TRANSITION:")
     for i in range(len(states)):
-        line = _readline_and_check_start(handle, "  %s:" % states[i])
+        line = _readline_and_check_start(handle, f"  {states[i]}:")
         mm.p_transition[i, :] = [float(v) for v in line.split()[1:]]
 
     # Load the emission.
     mm.p_emission = numpy.zeros((N, M))
     line = _readline_and_check_start(handle, "EMISSION:")
     for i in range(len(states)):
-        line = _readline_and_check_start(handle, "  %s:" % states[i])
+        line = _readline_and_check_start(handle, f"  {states[i]}:")
         mm.p_emission[i, :] = [float(v) for v in line.split()[1:]]
 
     return mm
@@ -137,17 +137,17 @@ def save(mm, handle):
     """Save MarkovModel object into handle."""
     # This will fail if there are spaces in the states or alphabet.
     w = handle.write
-    w("STATES: %s\n" % " ".join(mm.states))
-    w("ALPHABET: %s\n" % " ".join(mm.alphabet))
+    w(f"STATES: {' '.join(mm.states)}\n")
+    w(f"ALPHABET: {' '.join(mm.alphabet)}\n")
     w("INITIAL:\n")
     for i in range(len(mm.p_initial)):
-        w("  %s: %g\n" % (mm.states[i], mm.p_initial[i]))
+        w(f"  {mm.states[i]}: {mm.p_initial[i]:g}\n")
     w("TRANSITION:\n")
     for i in range(len(mm.p_transition)):
-        w("  %s: %s\n" % (mm.states[i], " ".join(str(x) for x in mm.p_transition[i])))
+        w(f"  {mm.states[i]}: {' '.join(str(x) for x in mm.p_transition[i])}\n")
     w("EMISSION:\n")
     for i in range(len(mm.p_emission)):
-        w("  %s: %s\n" % (mm.states[i], " ".join(str(x) for x in mm.p_emission[i])))
+        w(f"  {mm.states[i]}: {' '.join(str(x) for x in mm.p_emission[i])}\n")
 
 
 # XXX allow them to specify starting points
@@ -540,7 +540,7 @@ def _mle(
 
 
 def _argmaxes(vector, allowance=None):
-    """Return indeces of the maximum values aong the vector (PRIVATE)."""
+    """Return indices of the maximum values aong the vector (PRIVATE)."""
     return [numpy.argmax(vector)]
 
 
@@ -614,7 +614,7 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
 def _normalize(matrix):
     """Normalize matrix object (PRIVATE)."""
     if len(matrix.shape) == 1:
-        matrix = matrix / float(sum(matrix))
+        matrix = matrix / sum(matrix)
     elif len(matrix.shape) == 2:
         # Normalize by rows.
         for i in range(len(matrix)):

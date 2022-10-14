@@ -19,11 +19,9 @@ developed as an input format to the FASTA tools.  The Bio.AlignIO and
 Bio.SeqIO both use the Bio.SeqIO.FastaIO module to deal with these files,
 which can also be used to store a multiple sequence alignments.
 """
-
-
+from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
 
 
 def _extract_alignment_region(alignment_seq_with_flanking, annotation):
@@ -101,7 +99,7 @@ def FastaM10Iterator(handle, seq_count=None):
 
     def build_hsp():
         if not query_tags and not match_tags:
-            raise ValueError("No data for query %r, match %r" % (query_id, match_id))
+            raise ValueError(f"No data for query {query_id!r}, match {match_id!r}")
         assert query_tags, query_tags
         assert match_tags, match_tags
         evalue = align_tags.get("fa_expect")
@@ -129,18 +127,12 @@ handle.name: {handle.name}
 """
             )
 
-        alignment = MultipleSeqAlignment([])
-
-        # TODO - Introduce an annotated alignment class?
-        # See also Bio/AlignIO/MafIO.py for same requirement.
-        # For now, store the annotation a new private property:
-        alignment._annotations = {}
+        annotations = {}
+        records = []
 
         # Want to record both the query header tags, and the alignment tags.
-        for key, value in header_tags.items():
-            alignment._annotations[key] = value
-        for key, value in align_tags.items():
-            alignment._annotations[key] = value
+        annotations.update(header_tags)
+        annotations.update(align_tags)
 
         # Query
         # =====
@@ -154,7 +146,6 @@ handle.name: {handle.name}
         # TODO - handle start/end coordinates properly. Short term hack for now:
         record._al_start = int(query_tags["al_start"])
         record._al_stop = int(query_tags["al_stop"])
-        alignment.append(record)
 
         # TODO - Can FASTA output RNA?
         if "sq_type" in query_tags:
@@ -162,6 +153,8 @@ handle.name: {handle.name}
                 record.annotations["molecule_type"] = "DNA"
             elif query_tags["sq_type"] == "p":
                 record.annotations["molecule_type"] = "protein"
+
+        records.append(record)
 
         # Match
         # =====
@@ -175,7 +168,6 @@ handle.name: {handle.name}
         # TODO - handle start/end coordinates properly. Short term hack for now:
         record._al_start = int(match_tags["al_start"])
         record._al_stop = int(match_tags["al_stop"])
-        alignment.append(record)
 
         if "sq_type" in match_tags:
             if match_tags["sq_type"] == "D":
@@ -183,7 +175,9 @@ handle.name: {handle.name}
             elif match_tags["sq_type"] == "p":
                 record.annotations["molecule_type"] = "protein"
 
-        return alignment
+        records.append(record)
+
+        return MultipleSeqAlignment(records, annotations=annotations)
 
     state = state_PREAMBLE
     query_id = None
@@ -307,7 +301,7 @@ handle.name: {handle.name}
             # Next line(s) should be consensus seq...
         elif line.startswith("; "):
             if ": " in line:
-                key, value = [s.strip() for s in line[2:].split(": ", 1)]
+                key, value = (s.strip() for s in line[2:].split(": ", 1))
             else:
                 import warnings
                 from Bio import BiopythonParserWarning
@@ -315,12 +309,12 @@ handle.name: {handle.name}
                 # Seen in lalign36, specifically version 36.3.4 Apr, 2011
                 # Fixed in version 36.3.5b Oct, 2011(preload8)
                 warnings.warn(
-                    "Missing colon in line: %r" % line, BiopythonParserWarning
+                    f"Missing colon in line: {line!r}", BiopythonParserWarning
                 )
                 try:
-                    key, value = [s.strip() for s in line[2:].split(" ", 1)]
+                    key, value = (s.strip() for s in line[2:].split(" ", 1))
                 except ValueError:
-                    raise ValueError("Bad line: %r" % line) from None
+                    raise ValueError(f"Bad line: {line!r}") from None
             if state == state_QUERY_HEADER:
                 header_tags[key] = value
             elif state == state_ALIGN_HEADER:
@@ -330,7 +324,7 @@ handle.name: {handle.name}
             elif state == state_ALIGN_MATCH:
                 match_tags[key] = value
             else:
-                raise RuntimeError("Unexpected state %r, %r" % (state, line))
+                raise RuntimeError(f"Unexpected state {state!r}, {line!r}")
         elif state == state_ALIGN_QUERY:
             query_seq += line.strip()
         elif state == state_ALIGN_MATCH:

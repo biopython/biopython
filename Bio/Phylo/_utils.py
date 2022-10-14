@@ -82,144 +82,6 @@ def to_networkx(tree):
     return G
 
 
-def draw_graphviz(
-    tree, label_func=str, prog="twopi", args="", node_color="#c0deff", **kwargs
-):
-    """Display a tree or clade as a graph, using the graphviz engine.
-
-    Requires NetworkX, matplotlib, Graphviz and either PyGraphviz or pydot.
-
-    The third and fourth parameters apply to Graphviz, and the remaining
-    arbitrary keyword arguments are passed directly to networkx.draw(), which
-    in turn mostly wraps matplotlib/pylab.  See the documentation for Graphviz
-    and networkx for detailed explanations.
-
-    The NetworkX/matplotlib parameters are described in the docstrings for
-    networkx.draw() and pylab.scatter(), but the most reasonable options to try
-    are: *alpha, node_color, node_size, node_shape, edge_color, style,
-    font_size, font_color, font_weight, font_family*
-
-    :Parameters:
-
-        label_func : callable
-            A function to extract a label from a node. By default this is str(),
-            but you can use a different function to select another string
-            associated with each node. If this function returns None for a node,
-            no label will be shown for that node.
-
-            The label will also be silently skipped if the throws an exception
-            related to ordinary attribute access (LookupError, AttributeError,
-            ValueError); all other exception types will still be raised. This
-            means you can use a lambda expression that simply attempts to look
-            up the desired value without checking if the intermediate attributes
-            are available::
-
-                from Bio import Phylo, AlignIO
-                from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
-                constructor = DistanceTreeConstructor()
-                aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
-                calculator = DistanceCalculator('identity')
-                dm = calculator.get_distance(aln)
-                tree = constructor.upgma(dm)
-                Phylo.draw_graphviz(tree, lambda n: n.taxonomies[0].code)
-
-        prog : string
-            The Graphviz program to use when rendering the graph. 'twopi'
-            behaves the best for large graphs, reliably avoiding crossing edges,
-            but for moderate graphs 'neato' looks a bit nicer.  For small
-            directed graphs, 'dot' may produce a normal-looking cladogram, but
-            will cross and distort edges in larger graphs. (The programs 'circo'
-            and 'fdp' are not recommended.)
-        args : string
-            Options passed to the external graphviz program.  Normally not
-            needed, but offered here for completeness.
-
-    Examples
-    --------
-    Load a PhyloXML format tree, and draw a PNG using GraphViz::
-
-        import pylab
-        from Bio import Phylo
-        tree = Phylo.read('PhyloXML/apaf.xml', 'phyloxml')
-        Phylo.draw_graphviz(tree)
-        pylab.show()
-        pylab.savefig('apaf.png')
-
-    """
-    # Deprecated in Biopython 1.70 (#1247)
-    import warnings
-    from Bio import BiopythonDeprecationWarning
-
-    warnings.warn(
-        "draw_graphviz is deprecated; use Bio.Phylo.draw instead",
-        BiopythonDeprecationWarning,
-    )
-
-    try:
-        import networkx
-    except ImportError:
-        raise MissingPythonDependencyError(
-            "Install NetworkX if you want to use to_networkx."
-        ) from None
-
-    G = to_networkx(tree)
-    try:
-        # NetworkX version 1.8 or later (2013-01-20)
-        Gi = networkx.convert_node_labels_to_integers(G, label_attribute="label")
-        int_labels = {}
-        for integer, nodeattrs in Gi.node.items():
-            int_labels[nodeattrs["label"]] = integer
-    except TypeError:
-        # Older NetworkX versions (before 1.8)
-        Gi = networkx.convert_node_labels_to_integers(G, discard_old_labels=False)
-        int_labels = Gi.node_labels
-
-    try:
-        try:
-            # networkx versions before 1.11 (#1247)
-            graphviz_layout = networkx.graphviz_layout
-        except AttributeError:
-            # networkx version 1.11
-            graphviz_layout = networkx.drawing.nx_agraph.graphviz_layout
-        posi = graphviz_layout(Gi, prog, args=args)
-    except ImportError:
-        raise MissingPythonDependencyError(
-            "Install PyGraphviz or pydot if you want to use draw_graphviz."
-        ) from None
-
-    def get_label_mapping(G, selection):
-        """Apply the user-specified node relabeling."""
-        for node in G.nodes():
-            if (selection is None) or (node in selection):
-                try:
-                    label = label_func(node)
-                    if label not in (None, node.__class__.__name__):
-                        yield (node, label)
-                except (LookupError, AttributeError, ValueError):
-                    pass
-
-    if "nodelist" in kwargs:
-        labels = dict(get_label_mapping(G, set(kwargs["nodelist"])))
-    else:
-        labels = dict(get_label_mapping(G, None))
-    kwargs["nodelist"] = list(labels.keys())
-    if "edge_color" not in kwargs:
-        kwargs["edge_color"] = [
-            isinstance(e[2], dict) and e[2].get("color", "k") or "k"
-            for e in G.edges(data=True)
-        ]
-    if "width" not in kwargs:
-        kwargs["width"] = [
-            isinstance(e[2], dict) and e[2].get("width", 1.0) or 1.0
-            for e in G.edges(data=True)
-        ]
-
-    posn = {n: posi[int_labels[n]] for n in G}
-    networkx.draw(
-        G, posn, labels=labels, with_labels=True, node_color=node_color, **kwargs
-    )
-
-
 def draw_ascii(tree, file=None, column_width=80):
     """Draw an ascii-art phylogram of the given tree.
 
@@ -261,9 +123,7 @@ def draw_ascii(tree, file=None, column_width=80):
             depths = tree.depths(unit_branch_lengths=True)
         # Potential drawing overflow due to rounding -- 1 char per tree layer
         fudge_margin = int(math.ceil(math.log(len(taxa), 2)))
-        cols_per_branch_unit = (drawing_width - fudge_margin) / float(
-            max(depths.values())
-        )
+        cols_per_branch_unit = (drawing_width - fudge_margin) / max(depths.values())
         return {
             clade: int(blen * cols_per_branch_unit + 1.0)
             for clade, blen in depths.items()
@@ -327,7 +187,7 @@ def draw(
     branch_labels=None,
     label_colors=None,
     *args,
-    **kwargs
+    **kwargs,
 ):
     """Plot the given tree using matplotlib (or pylab).
 
@@ -501,7 +361,7 @@ def draw(
         fig = plt.figure()
         axes = fig.add_subplot(1, 1, 1)
     elif not isinstance(axes, plt.matplotlib.axes.Axes):
-        raise ValueError("Invalid argument for axes: %s" % axes)
+        raise ValueError(f"Invalid argument for axes: {axes}")
 
     def draw_clade_lines(
         use_linecollection=False,
@@ -561,7 +421,7 @@ def draw(
             axes.text(
                 x_here,
                 y_here,
-                " %s" % label,
+                f" {label}",
                 verticalalignment="center",
                 color=get_label_color(label),
             )

@@ -1,0 +1,66 @@
+# STOCKHOLM 1.0
+
+#=GF AC   RF00115
+#=GF ID   McaS
+#=GF PI   IS061;
+#=GF DE   McaS/IsrA RNA
+#=GF AU   Argasinska J; 0000-0003-2678-2824
+#=GF SE   Argasinska J
+#=GF SS   Predicted; 22289118
+#=GF GA   42.00
+#=GF TC   42.10
+#=GF NC   38.70
+#=GF TP   Gene; sRNA;
+#=GF BM   cmbuild -n -F CM SEED
+#=GF CB   cmcalibrate --mpi CM
+#=GF SM   cmsearch --cpu 4 --verbose --nohmmonly -T 30.00 -Z 604040.189692 --mxsize
+#=GF SM   128 CM SEQDB
+#=GF CL   CL00106
+#=GF DR   SO; 0001263; ncRNA_gene;
+#=GF DR   GO; 0005515; protein binding;
+#=GF DR   GO; 0006417; regulation of translation;
+#=GF RN   [1]
+#=GF RM   12069726
+#=GF RT   A bioinformatics based approach to discover small RNA genes in the
+#=GF RT   Escherichia coli genome.
+#=GF RA   Chen S, Lesnik EA, Hall TA, Sampath R, Griffey RH, Ecker DJ, Blyn LB
+#=GF RL   Biosystems 2002;65:157-177.
+#=GF RN   [2]
+#=GF RM   23666921
+#=GF RT   Dual function of the McaS small RNA in controlling biofilm formation.
+#=GF RA   Jorgensen MG, Thomason MK, Havelund J, Valentin-Hansen P, Storz G
+#=GF RL   Genes Dev. 2013;27:1132-1145.
+#=GF RN   [3]
+#=GF RM   22289118
+#=GF RT   A small RNA that regulates motility and biofilm formation in response to
+#=GF RT   changes  in nutrient availability in Escherichia coli.
+#=GF RA   Thomason MK, Fontaine F, De Lay N, Storz G
+#=GF RL   Mol Microbiol. 2012;84:17-35.
+#=GF RN   [4]
+#=GF RM   26609136
+#=GF RT   Ribonucleoprotein particles of bacterial small non-coding RNA IsrA (IS61
+#=GF RT   or McaS) and its interaction with RNA polymerase core may link
+#=GF RT   transcription to mRNA fate.
+#=GF RA   van Nues RW, Castro-Roa D, Yuzenkova Y, Zenkin N
+#=GF RL   Nucleic Acids Res. 2016;44:2577-2592.
+#=GF CC   This family consists of several bacterial RNA genes which are found
+#=GF CC   between the abgR and ydaL genes in Escherichia coli and Shigella
+#=GF CC   flexneri.[1] It was discovered using a computational screen of the E. coli
+#=GF CC   genome.[1] Subsequent characterisation of ISO61 region has revealed that
+#=GF CC   the reverse strand is actually a CsrA binding ncRNA called McaS and that
+#=GF CC   it has a role in biofilm formation control.[2] Furthermore, it has been
+#=GF CC   shown that McaS(IsrA) exists as a ribonucleoprotein particles (sRNPs),
+#=GF CC   which involve a defined set of proteins including Hfq, S1, CsrA, ProQ and
+#=GF CC   PNPase.[4]
+#=GF WK   IS061_RNA
+#=GF SQ   4
+
+
+
+CP000036.1/1703842-1703937 ACCGGCGCAGAGGAGACAAUGCCGGACUUAAGACGCGGAUGCACUGCUGUGUGUACUGUAGAGUCUGGCGGAUGUCGACAGACUCUAUUUUUUUAU
+U00096.3/1405751-1405656   ACCGGCGCAGAGGAGACAAUGCCGGAUUUAAGACGCGGAUGCACUGCUGUGUGUACUGUAGAGUCUGGCGGAUGUCGACAGACUCUAUUUUUUUAU
+CP000034.1/1309299-1309204 ACCGGUCACCAGGACCCCAGGCCGGAUUUAAGACGAGGAUGCACUGCUGUGUGUACUGUAGAGUCUGGCGGAUGUCGACAGGCUCUAUUUUUUUAU
+CP011132.1/1732716-1732810 ACCCGCCACACGGAAUAAUAACGGGAACACAUG-AAGGAUAAACUGCUGUGUGUACUGUAGAGUCUGGCGGAUGUCGACAGGCUCUAUUUUUUUAU
+#=GC SS_cons               :<<<<<<____________>>>>>>,,,,,,,<<<<<<________>>>>>>-----<<<<<<<<<<-<<_____>>->>>>>>>>>>::::::::
+#=GC RF                    ACCgGccaaaaGGAaacaaggCcGGAuuuaAgaCgcgGAUgcACUGCugcGuGUACUguaGaGuCuGGCGGAUGUCGACaGaCuCuauUUUUUUAU
+//

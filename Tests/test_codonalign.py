@@ -93,8 +93,7 @@ class TestAddition(unittest.TestCase):
         self.assertIsInstance(new_aln1, MultipleSeqAlignment)
         for x in range(len(self.codon_aln)):
             self.assertEqual(
-                str(new_aln1[x].seq),
-                str(self.codon_aln[x].seq) + str(self.multi_aln[x].seq),
+                new_aln1[x].seq, self.codon_aln[x].seq + self.multi_aln[x].seq
             )
 
         new_aln2 = self.multi_aln + self.codon_aln
@@ -102,8 +101,7 @@ class TestAddition(unittest.TestCase):
         self.assertIsInstance(new_aln2, MultipleSeqAlignment)
         for x in range(len(self.codon_aln)):
             self.assertEqual(
-                str(new_aln2[x].seq),
-                str(self.multi_aln[x].seq) + str(self.codon_aln[x].seq),
+                new_aln2[x].seq, self.multi_aln[x].seq + self.codon_aln[x].seq
             )
 
     def test_addition_CodonAlignment(self):
@@ -113,8 +111,7 @@ class TestAddition(unittest.TestCase):
         self.assertIsInstance(new_aln, codonalign.CodonAlignment)
         for x in range(len(self.codon_aln)):
             self.assertEqual(
-                str(new_aln[x].seq),
-                str(self.codon_aln[x].seq) + str(self.codon_aln[x].seq),
+                new_aln[x].seq, self.codon_aln[x].seq + self.codon_aln[x].seq
             )
 
     def test_ValueError(self):
@@ -176,7 +173,7 @@ class TestBuildAndIO(unittest.TestCase):
 
     def test_IO(self):
         self.assertEqual(len(self.alns), 6)
-        # print temp_dir
+        # print(temp_dir)
         for n, i in enumerate(self.alns):
             aln = i.toMultipleSeqAlignment()
             AlignIO.write(aln, temp_dir + "/aln" + str(n) + ".clw", "clustal")
@@ -187,14 +184,12 @@ class Test_build(unittest.TestCase):
         # Test set 1
         seq1 = SeqRecord(
             Seq(
-                "TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG",
+                "TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG"
             ),
             id="pro1",
         )
         seq2 = SeqRecord(
-            Seq(
-                "TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG",
-            ),
+            Seq("TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG"),
             id="pro2",
         )
         pro1 = SeqRecord(Seq("SGTARTKLLLLLAALCAAGGALE"), id="pro1")

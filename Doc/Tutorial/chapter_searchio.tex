@@ -229,7 +229,7 @@ using the same method.
 blastn 2.2.27+
 >>> print("%s %s" % (blat_qresult.program, blat_qresult.version))
 blat <unknown version>
->>> blast_qresult.param_evalue_threshold    # blast-xml specific
+>>> blast_qresult.param_evalue_threshold  # blast-xml specific
 10.0
 \end{minted}
 
@@ -251,6 +251,7 @@ Each iteration returns a \verb|Hit| object:
 \begin{minted}{pycon}
 >>> for hit in blast_qresult:
 ...     hit
+...
 Hit(id='gi|262205317|ref|NR_030195.1|', query_id='42291', 1 hsps)
 Hit(id='gi|301171311|ref|NR_035856.1|', query_id='42291', 1 hsps)
 Hit(id='gi|270133242|ref|NR_032573.1|', query_id='42291', 1 hsps)
@@ -275,9 +276,9 @@ the slice notation:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> blast_qresult[0]        # retrieves the top hit
+>>> blast_qresult[0]  # retrieves the top hit
 Hit(id='gi|262205317|ref|NR_030195.1|', query_id='42291', 1 hsps)
->>> blast_qresult[-1]       # retrieves the last hit
+>>> blast_qresult[-1]  # retrieves the last hit
 Hit(id='gi|397513516|ref|XM_003827011.1|', query_id='42291', 1 hsps)
 \end{minted}
 
@@ -287,7 +288,7 @@ slice notation as well. In this case, the slice will return a new
 
 %cont-doctest
 \begin{minted}{pycon}
->>> blast_slice = blast_qresult[:3]     # slices the first three hits
+>>> blast_slice = blast_qresult[:3]  # slices the first three hits
 >>> print(blast_slice)
 Program: blastn (2.2.27+)
   Query: 42291 (61)
@@ -361,7 +362,7 @@ the \verb|reverse| flag to \verb|True| so that we sort in descending order.
 
 %cont-doctest
 \begin{minted}{pycon}
->>> for hit in blast_qresult[:5]:   # id and sequence length of the first five hits
+>>> for hit in blast_qresult[:5]:  # id and sequence length of the first five hits
 ...     print("%s %i" % (hit.id, hit.seq_len))
 ...
 gi|262205317|ref|NR_030195.1| 61
@@ -419,14 +420,15 @@ that only have one HSP:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> filter_func = lambda hit: len(hit.hsps) > 1     # the callback function
->>> len(blast_qresult)      # no. of hits before filtering
+>>> filter_func = lambda hit: len(hit.hsps) > 1  # the callback function
+>>> len(blast_qresult)  # no. of hits before filtering
 100
 >>> filtered_qresult = blast_qresult.hit_filter(filter_func)
->>> len(filtered_qresult)   # no. of hits after filtering
+>>> len(filtered_qresult)  # no. of hits after filtering
 37
->>> for hit in filtered_qresult[:5]:    # quick check for the hit lengths
+>>> for hit in filtered_qresult[:5]:  # quick check for the hit lengths
 ...     print("%s %i" % (hit.id, len(hit.hsps)))
+...
 gi|301171322|ref|NR_035857.1| 2
 gi|262205330|ref|NR_030198.1| 2
 gi|301171447|ref|NR_035871.1| 2
@@ -448,12 +450,14 @@ Let's see an example where we're using \verb|hit_map| to rename the hit IDs:
 %cont-doctest
 \begin{minted}{pycon}
 >>> def map_func(hit):
-...     hit.id = hit.id.split("|")[3]   # renames "gi|301171322|ref|NR_035857.1|" to "NR_035857.1"
+...     # renames "gi|301171322|ref|NR_035857.1|" to "NR_035857.1"
+...     hit.id = hit.id.split("|")[3]
 ...     return hit
 ...
 >>> mapped_qresult = blast_qresult.hit_map(map_func)
 >>> for hit in mapped_qresult[:5]:
 ...     print(hit.id)
+...
 NR_030195.1
 NR_035856.1
 NR_032573.1
@@ -478,7 +482,7 @@ Let's see what they look like, beginning with our BLAST search:
 \begin{minted}{pycon}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read("my_blast.xml", "blast-xml")
->>> blast_hit = blast_qresult[3]    # fourth hit from the query result
+>>> blast_hit = blast_qresult[3]  # fourth hit from the query result
 >>> print(blast_hit)
 Query: 42291
        mystery_seq
@@ -513,7 +517,7 @@ had one hit with 17 HSPs.
 %cont-doctest
 \begin{minted}{pycon}
 >>> blat_qresult = SearchIO.read("my_blat.psl", "blat-psl")
->>> blat_hit = blat_qresult[0]      # the only hit
+>>> blat_hit = blat_qresult[0]  # the only hit
 >>> print(blat_hit)
 Query: mystery_seq
        <unknown description>
@@ -565,6 +569,7 @@ returns one \verb|HSP| object it contains:
 \begin{minted}{pycon}
 >>> for hsp in blast_hit:
 ...     hsp
+...
 HSP(hit_id='gi|301171322|ref|NR_035857.1|', query_id='42291', 1 fragments)
 HSP(hit_id='gi|301171322|ref|NR_035857.1|', query_id='42291', 1 fragments)
 \end{minted}
@@ -587,7 +592,7 @@ only the sliced \verb|HSP| objects:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> blat_hit[0]                 # retrieve single items
+>>> blat_hit[0]  # retrieve single items
 HSP(hit_id='chr19', query_id='mystery_seq', 1 fragments)
 >>> sliced_hit = blat_hit[4:9]  # retrieve multiple items
 >>> len(sliced_hit)
@@ -635,7 +640,7 @@ BLAST HSP first:
 \begin{minted}{pycon}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read("my_blast.xml", "blast-xml")
->>> blast_hsp = blast_qresult[0][0]    # first hit, first hsp
+>>> blast_hsp = blast_qresult[0][0]  # first hit, first hsp
 >>> print(blast_hsp)
       Query: 42291 mystery_seq
         Hit: gi|262205317|ref|NR_030195.1| Homo sapiens microRNA 520b (MIR520...
@@ -684,11 +689,11 @@ details. Here are some examples:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> blast_hsp.hit_start         # start coordinate of the hit sequence
+>>> blast_hsp.hit_start  # start coordinate of the hit sequence
 0
->>> blast_hsp.query_span        # how many residues in the query sequence
+>>> blast_hsp.query_span  # how many residues in the query sequence
 61
->>> blast_hsp.aln_span          # how long the alignment is
+>>> blast_hsp.aln_span  # how long the alignment is
 61
 \end{minted}
 
@@ -703,9 +708,9 @@ accessed like so:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> blast_hsp.gap_num       # number of gaps
+>>> blast_hsp.gap_num  # number of gaps
 0
->>> blast_hsp.ident_num     # number of identical residues
+>>> blast_hsp.ident_num  # number of identical residues
 61
 \end{minted}
 
@@ -753,7 +758,7 @@ results for a different kind of HSP. As usual, we'll begin by invoking
 %cont-doctest
 \begin{minted}{pycon}
 >>> blat_qresult = SearchIO.read("my_blat.psl", "blat-psl")
->>> blat_hsp = blat_qresult[0][0]       # first hit, first hsp
+>>> blat_hsp = blat_qresult[0][0]  # first hit, first hsp
 >>> print(blat_hsp)
       Query: mystery_seq <unknown description>
         Hit: chr19 <unknown description>
@@ -789,9 +794,9 @@ can extract them:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> blat_hsp.query_span     # length of query match
+>>> blat_hsp.query_span  # length of query match
 61
->>> blat_hsp.hit_span       # length of hit match
+>>> blat_hsp.hit_span  # length of hit match
 61
 \end{minted}
 
@@ -799,9 +804,9 @@ Other format-specific attributes are still present as well:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> blat_hsp.score          # PSL score
+>>> blat_hsp.score  # PSL score
 61
->>> blat_hsp.mismatch_num   # the mismatch column
+>>> blat_hsp.mismatch_num  # the mismatch column
 0
 \end{minted}
 
@@ -816,7 +821,7 @@ Let's take a look at a BLAT HSP that contains multiple blocks to see how
 
 %cont-doctest
 \begin{minted}{pycon}
->>> blat_hsp2 = blat_qresult[0][1]      # first hit, second hsp
+>>> blat_hsp2 = blat_qresult[0][1]  # first hit, second hsp
 >>> print(blat_hsp2)
       Query: mystery_seq <unknown description>
         Hit: chr19 <unknown description>
@@ -855,17 +860,17 @@ All these attributes are accessible from the HSP directly, by the way:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> blat_hsp2.hit_range         # hit start and end coordinates of the entire HSP
+>>> blat_hsp2.hit_range  # hit start and end coordinates of the entire HSP
 (54233104, 54264463)
->>> blat_hsp2.hit_range_all     # hit start and end coordinates of each fragment
+>>> blat_hsp2.hit_range_all  # hit start and end coordinates of each fragment
 [(54233104, 54233122), (54264420, 54264463)]
->>> blat_hsp2.hit_span          # hit span of the entire HSP
+>>> blat_hsp2.hit_span  # hit span of the entire HSP
 31359
->>> blat_hsp2.hit_span_all      # hit span of each fragment
+>>> blat_hsp2.hit_span_all  # hit span of each fragment
 [18, 43]
 >>> blat_hsp2.hit_inter_ranges  # start and end coordinates of intervening regions in the hit sequence
 [(54233122, 54264420)]
->>> blat_hsp2.hit_inter_spans   # span of intervening regions in the hit sequence
+>>> blat_hsp2.hit_inter_spans  # span of intervening regions in the hit sequence
 [31298]
 \end{minted}
 
@@ -888,9 +893,9 @@ Finally, to check whether you have multiple fragments or not, you can use the
 
 %cont-doctest
 \begin{minted}{pycon}
->>> blat_hsp2.is_fragmented     # BLAT HSP with 2 fragments
+>>> blat_hsp2.is_fragmented  # BLAT HSP with 2 fragments
 True
->>> blat_hsp.is_fragmented      # BLAT HSP from earlier, with one fragment
+>>> blat_hsp.is_fragmented  # BLAT HSP from earlier, with one fragment
 False
 \end{minted}
 
@@ -921,7 +926,7 @@ These attributes are readily shown when you invoke \verb|print| on an
 \begin{minted}{pycon}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read("my_blast.xml", "blast-xml")
->>> blast_frag = blast_qresult[0][0][0]    # first hit, first hsp, first fragment
+>>> blast_frag = blast_qresult[0][0][0]  # first hit, first hsp, first fragment
 >>> print(blast_frag)
       Query: 42291 mystery_seq
         Hit: gi|262205317|ref|NR_030195.1| Homo sapiens microRNA 520b (MIR520...
@@ -939,7 +944,7 @@ for the query and hit sequences which are not present:
 %cont-doctest
 \begin{minted}{pycon}
 >>> blat_qresult = SearchIO.read("my_blat.psl", "blat-psl")
->>> blat_frag = blat_qresult[0][0][0]    # first hit, first hsp, first fragment
+>>> blat_frag = blat_qresult[0][0][0]  # first hit, first hsp, first fragment
 >>> print(blat_frag)
       Query: mystery_seq <unknown description>
         Hit: chr19 <unknown description>
@@ -953,11 +958,11 @@ Some examples:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> blast_frag.query_start      # query start coordinate
+>>> blast_frag.query_start  # query start coordinate
 0
->>> blast_frag.hit_strand       # hit sequence strand
+>>> blast_frag.hit_strand  # hit sequence strand
 1
->>> blast_frag.hit              # hit sequence, as a SeqRecord object
+>>> blast_frag.hit  # hit sequence, as a SeqRecord object
 SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG'), id='gi|262205317|ref|NR_030195.1|', name='aligned hit sequence', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
 \end{minted}
 
@@ -1058,11 +1063,13 @@ yields a \verb|QueryResult| object in each iteration. Like
 >>> qresults = SearchIO.parse("tab_2226_tblastn_001.txt", "blast-tab")
 >>> for qresult in qresults:
 ...     print(qresult.id)
+...
 gi|16080617|ref|NP_391444.1|
 gi|11464971:4-101
 >>> qresults2 = SearchIO.parse("tab_2226_tblastn_005.txt", "blast-tab", comments=True)
 >>> for qresult in qresults2:
 ...     print(qresult.id)
+...
 random_s00
 gi|16080617|ref|NP_391444.1|
 gi|11464971:4-101
@@ -1113,7 +1120,7 @@ Or with the \verb|key_function| argument, as in \verb|Bio.SeqIO|:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> key_function = lambda id: id.upper()    # capitalizes the keys
+>>> key_function = lambda id: id.upper()  # capitalizes the keys
 >>> idx = SearchIO.index("tab_2226_tblastn_001.txt", "blast-tab", key_function=key_function)
 >>> sorted(idx.keys())
 ['GI|11464971:4-101', 'GI|16080617|REF|NP_391444.1|']
@@ -1139,8 +1146,8 @@ were written.
 
 \begin{minted}{pycon}
 >>> from Bio import SearchIO
->>> qresults = SearchIO.parse("mirna.xml", "blast-xml")     # read XML file
->>> SearchIO.write(qresults, "results.tab", "blast-tab")    # write to tabular file
+>>> qresults = SearchIO.parse("mirna.xml", "blast-xml")  # read XML file
+>>> SearchIO.write(qresults, "results.tab", "blast-tab")  # write to tabular file
 (3, 239, 277, 277)
 \end{minted}
 

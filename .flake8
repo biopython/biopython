@@ -5,6 +5,7 @@
 # pydocstyle: D1## - Missing Docstrings
 #             D2## - Whitespace Issues
 #             D4## - Docstring Content issues
+# flake8-blind-except: B###
 # flake8-bugbear: B###
 # flake8-quotes: Q###
 # flake8-black : BLK###
@@ -15,6 +16,15 @@
 
 [flake8]
 doctests = True
+rst-roles =
+    class,
+    func,
+    meth,
+    mod,
+    data,
+rst-directives =
+    seealso,
+    todo,
 # Exclude some file types and folders that shouldn't be checked:
 exclude = .svn,CVS,.bzr,.hg,.git,__pycache__,.tox,.github,build
 ignore =
@@ -34,6 +44,7 @@ ignore =
     B007, # Loop control variable not used within the loop body.
           # If this is intended, start the name with an underscore
     E741, # ambiguous variable name 'l' (lots of these)
+    B902, # blind except Exception: statement
     # =========================================
     # Optional ignores for local installations:
     # =========================================
@@ -45,12 +56,12 @@ ignore =
 # ========================
 per-file-ignores =
     Bio/*:F401,F841,D105,B009,B010,B011,C812,C815
-    Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B011,C812
+    Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B011,B015,C812
 
     # Due to a bug in flake8, we need the following lines for running the
     # pre-commit hook. If you made edits above, please change also here!
     /Bio/*:F401,F841,D105,B009,B010,B011,C812,C815
-    /Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B011,C812
+    /Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B011,B015,C812
 
 #Explanation of the codes being ignored in Bio/ and Tests/:
 #
@@ -77,6 +88,8 @@ per-file-ignores =
 #             it is not any safer than normal property access
 #        B011 do not call assert False since python -O removes these calls;
 #             instead callers should raise AssertionError()
+#        B015 Pointless comparison. This comparison does nothing ...
+#             (Intended to trigger exceptions in our tests)
 #        C812 missing trailing comma
 
 # =======================

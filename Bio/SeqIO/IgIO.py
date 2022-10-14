@@ -12,9 +12,9 @@ multiple sequence alignment format.
 
 You are expected to use this module via the Bio.SeqIO functions.
 """
-
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
 from .Interfaces import SequenceIterator
 
 
@@ -77,7 +77,7 @@ class IgIterator(SequenceIterator):
             return
 
         if line[0] != ";":
-            raise ValueError("Records should start with ';' and not:\n%r" % line)
+            raise ValueError(f"Records should start with ';' and not:\n{line!r}")
         while line:
             # Now iterate over the records
 

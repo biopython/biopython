@@ -554,7 +554,7 @@ PubMed=2203335""",
 
     def test_read_pdoc00424(self):
         """Reading Prodoc record PDOC00424."""
-        filename = os.path.join("Prosite", "Doc", "pdoc00424.txt",)
+        filename = os.path.join("Prosite", "Doc", "pdoc00424.txt")
         with open(filename) as handle:
             record = Prodoc.read(handle)
 
@@ -761,7 +761,7 @@ PubMed=1584806""",
 
     def test_read_pdoc00640(self):
         """Reading Prodoc record PDOC00640."""
-        filename = os.path.join("Prosite", "Doc", "pdoc00640.txt",)
+        filename = os.path.join("Prosite", "Doc", "pdoc00640.txt")
         with open(filename) as handle:
             record = Prodoc.read(handle)
 

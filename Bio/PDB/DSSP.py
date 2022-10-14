@@ -8,11 +8,13 @@
 r"""Use the DSSP program to calculate secondary structure and accessibility.
 
 You need to have a working version of DSSP (and a license, free for academic
-use) in order to use this. For DSSP, see http://swift.cmbi.ru.nl/gv/dssp/.
+use) in order to use this. For DSSP, see https://swift.cmbi.umcn.nl/gv/dssp/.
 
 The following Accessible surface area (ASA) values can be used, defaulting
 to the Sander and Rost values:
 
+    Ahmad
+        Ahmad et al. 2003 https://doi.org/10.1002/prot.10328
     Miller
         Miller et al. 1987 https://doi.org/10.1016/0022-2836(87)90038-6
     Sander
@@ -37,7 +39,7 @@ The DSSP codes for secondary structure used here are:
 
 Usage
 -----
-The DSSP class can be used to run DSSP on a pdb file, and provides a
+The DSSP class can be used to run DSSP on a PDB or mmCIF file, and provides a
 handle to the DSSP secondary structure and accessibility.
 
 **Note** that DSSP can only handle one model, and will only run
@@ -90,6 +92,7 @@ The dssp data returned for a single residue is a tuple in the form:
 
 
 import re
+import os
 from io import StringIO
 import subprocess
 import warnings
@@ -97,85 +100,20 @@ import warnings
 from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.PDBParser import PDBParser
-from Bio.PDB.Polypeptide import three_to_one
+from Bio.Data.PDBData import protein_letters_3to1, residue_sasa_scales
+from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
 # Match C in DSSP
 _dssp_cys = re.compile("[a-z]")
 
 # Maximal ASA of amino acids
 # Used for relative accessibility
+residue_max_acc = residue_sasa_scales
 
-residue_max_acc = {
-    # Miller max acc: Miller et al. 1987 https://doi.org/10.1016/0022-2836(87)90038-6
-    # Wilke: Tien et al. 2013 https://doi.org/10.1371/journal.pone.0080635
-    # Sander: Sander & Rost 1994 https://doi.org/10.1002/prot.340200303
-    "Miller": {
-        "ALA": 113.0,
-        "ARG": 241.0,
-        "ASN": 158.0,
-        "ASP": 151.0,
-        "CYS": 140.0,
-        "GLN": 189.0,
-        "GLU": 183.0,
-        "GLY": 85.0,
-        "HIS": 194.0,
-        "ILE": 182.0,
-        "LEU": 180.0,
-        "LYS": 211.0,
-        "MET": 204.0,
-        "PHE": 218.0,
-        "PRO": 143.0,
-        "SER": 122.0,
-        "THR": 146.0,
-        "TRP": 259.0,
-        "TYR": 229.0,
-        "VAL": 160.0,
-    },
-    "Wilke": {
-        "ALA": 129.0,
-        "ARG": 274.0,
-        "ASN": 195.0,
-        "ASP": 193.0,
-        "CYS": 167.0,
-        "GLN": 225.0,
-        "GLU": 223.0,
-        "GLY": 104.0,
-        "HIS": 224.0,
-        "ILE": 197.0,
-        "LEU": 201.0,
-        "LYS": 236.0,
-        "MET": 224.0,
-        "PHE": 240.0,
-        "PRO": 159.0,
-        "SER": 155.0,
-        "THR": 172.0,
-        "TRP": 285.0,
-        "TYR": 263.0,
-        "VAL": 174.0,
-    },
-    "Sander": {
-        "ALA": 106.0,
-        "ARG": 248.0,
-        "ASN": 157.0,
-        "ASP": 163.0,
-        "CYS": 135.0,
-        "GLN": 198.0,
-        "GLU": 194.0,
-        "GLY": 84.0,
-        "HIS": 184.0,
-        "ILE": 169.0,
-        "LEU": 164.0,
-        "LYS": 205.0,
-        "MET": 188.0,
-        "PHE": 197.0,
-        "PRO": 136.0,
-        "SER": 130.0,
-        "THR": 142.0,
-        "TRP": 227.0,
-        "TYR": 222.0,
-        "VAL": 142.0,
-    },
-}
+
+def version(version_string):
+    """Parse semantic version scheme for easy comparison."""
+    return tuple(map(int, (version_string.split("."))))
 
 
 def ss_to_index(ss):
@@ -194,7 +132,7 @@ def ss_to_index(ss):
     assert 0
 
 
-def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
+def dssp_dict_from_pdb_file(in_file, DSSP="dssp", dssp_version="3.9.9"):
     """Create a DSSP dictionary from a PDB file.
 
     Parameters
@@ -205,6 +143,9 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     DSSP : string
         DSSP executable (argument to subprocess)
 
+    dssp_version : string
+        Version of DSSP excutable
+
     Returns
     -------
     (out_dict, keys) : tuple
@@ -214,7 +155,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
 
     Examples
     --------
-    How dssp_dict_frompdb_file could be used::
+    How dssp_dict_from_pdb_file could be used::
 
         from Bio.PDB.DSSP import dssp_dict_from_pdb_file
         dssp_tuple = dssp_dict_from_pdb_file("/local-pdb/1fat.pdb")
@@ -228,8 +169,12 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     # and calling 'dssp' will hence not work in some operating systems
     # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
     try:
+        if version(dssp_version) < version("4.0.0"):
+            DSSP_cmd = [DSSP, in_file]
+        else:
+            DSSP_cmd = [DSSP, "--output-format=dssp", in_file]
         p = subprocess.Popen(
-            [DSSP, in_file],
+            DSSP_cmd,
             universal_newlines=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -237,8 +182,12 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
     except FileNotFoundError:
         if DSSP == "mkdssp":
             raise
+        if version(dssp_version) < version("4.0.0"):
+            DSSP_cmd = ["mkdssp", in_file]
+        else:
+            DSSP_cmd = ["mkdssp", "--output-format=dssp", in_file]
         p = subprocess.Popen(
-            ["mkdssp", in_file],
+            DSSP_cmd,
             universal_newlines=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -370,7 +319,7 @@ def _make_dssp_dict(handle):
 class DSSP(AbstractResiduePropertyMap):
     """Run DSSP and parse secondary structure and accessibility.
 
-    Run DSSP on a pdb file, and provide a handle to the
+    Run DSSP on a PDB/mmCIF file, and provide a handle to the
     DSSP secondary structure and accessibility.
 
     **Note** that DSSP can only handle one model.
@@ -394,9 +343,7 @@ class DSSP(AbstractResiduePropertyMap):
 
     """
 
-    def __init__(
-        self, model, in_file, dssp="dssp", acc_array="Sander", file_type="PDB"
-    ):
+    def __init__(self, model, in_file, dssp="dssp", acc_array="Sander", file_type=""):
         """Create a DSSP object.
 
         Parameters
@@ -409,24 +356,39 @@ class DSSP(AbstractResiduePropertyMap):
             The dssp executable (ie. the argument to subprocess)
         acc_array : string
             Accessible surface area (ASA) from either Miller et al. (1987),
-            Sander & Rost (1994), or Wilke: Tien et al. 2013, as string
-            Sander/Wilke/Miller. Defaults to Sander.
+            Sander & Rost (1994), Wilke: Tien et al. 2013, or Ahmad et al.
+            (2003) as string Sander/Wilke/Miller/Ahmad. Defaults to Sander.
         file_type: string
-            File type switch, either PDB or DSSP with PDB as default.
+            File type switch: either PDB, MMCIF or DSSP. Inferred from the
+            file extension by default.
 
         """
         self.residue_max_acc = residue_max_acc[acc_array]
 
         # create DSSP dictionary
+        if file_type == "":
+            file_type = os.path.splitext(in_file)[1][1:]
         file_type = file_type.upper()
-        assert file_type in ["PDB", "DSSP"]
-        # If the input file is a PDB file run DSSP and parse output:
-        if file_type == "PDB":
+        if file_type == "CIF":
+            file_type = "MMCIF"
+        assert file_type in [
+            "PDB",
+            "MMCIF",
+            "DSSP",
+        ], "File type must be PDB, mmCIF or DSSP"
+        # If the input file is a PDB or mmCIF file run DSSP and parse output:
+        if file_type == "PDB" or file_type == "MMCIF":
             # Newer versions of DSSP program call the binary 'mkdssp', so
             # calling 'dssp' will not work in some operating systems
             # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
             try:
-                dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp)
+                version_string = subprocess.check_output(
+                    [dssp, "--version"], universal_newlines=True
+                )
+                dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
+                dssp_dict, dssp_keys = dssp_dict_from_pdb_file(
+                    in_file, dssp, dssp_version
+                )
             except FileNotFoundError:
                 if dssp == "dssp":
                     dssp = "mkdssp"
@@ -434,7 +396,13 @@ class DSSP(AbstractResiduePropertyMap):
                     dssp = "dssp"
                 else:
                     raise
-            dssp_dict, dssp_keys = dssp_dict_from_pdb_file(in_file, dssp)
+                version_string = subprocess.check_output(
+                    [dssp, "--version"], universal_newlines=True
+                )
+                dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
+                dssp_dict, dssp_keys = dssp_dict_from_pdb_file(
+                    in_file, dssp, dssp_version
+                )
         # If the input file is a DSSP file just parse it directly:
         elif file_type == "DSSP":
             dssp_dict, dssp_keys = make_dssp_dict(in_file)
@@ -444,13 +412,28 @@ class DSSP(AbstractResiduePropertyMap):
 
         def resid2code(res_id):
             """Serialize a residue's resseq and icode for easy comparison."""
-            return "%s%s" % (res_id[1], res_id[2])
+            return f"{res_id[1]}{res_id[2]}"
+
+        # DSSP outputs label_asym_id from the mmCIF file as the chain ID
+        # But MMCIFParser reads in the auth_asym_id
+        # Here we create a dictionary to map label_asym_id to auth_asym_id
+        # using the mmCIF file
+        if file_type == "MMCIF" and version(dssp_version) < version("4.0.0"):
+            mmcif_dict = MMCIF2Dict(in_file)
+            mmcif_chain_dict = {}
+            for i, c in enumerate(mmcif_dict["_atom_site.label_asym_id"]):
+                if c not in mmcif_chain_dict:
+                    mmcif_chain_dict[c] = mmcif_dict["_atom_site.auth_asym_id"][i]
+            dssp_mapped_keys = []
 
         # Now create a dictionary that maps Residue objects to
         # secondary structure and accessibility, and a list of
         # (residue, (secondary structure, accessibility)) tuples
         for key in dssp_keys:
             chain_id, res_id = key
+            if file_type == "MMCIF" and version(dssp_version) < version("4.0.0"):
+                chain_id = mmcif_chain_dict[chain_id]
+                dssp_mapped_keys.append((chain_id, res_id))
             chain = model[chain_id]
             try:
                 res = chain[res_id]
@@ -558,10 +541,7 @@ class DSSP(AbstractResiduePropertyMap):
             # Verify if AA in DSSP == AA in Structure
             # Something went wrong if this is not true!
             # NB: DSSP uses X often
-            try:
-                resname = three_to_one(resname)
-            except KeyError:
-                resname = "X"
+            resname = protein_letters_3to1.get(resname, "X")
             if resname == "C":
                 # DSSP renames C in C-bridges to a,b,c,d,...
                 # - we rename it back to 'C'
@@ -569,7 +549,7 @@ class DSSP(AbstractResiduePropertyMap):
                     aa = "C"
             # Take care of HETATM again
             if (resname != aa) and (res.id[0] == " " or aa != "X"):
-                raise PDBException("Structure/DSSP mismatch at %s" % res)
+                raise PDBException(f"Structure/DSSP mismatch at {res}")
 
             dssp_vals = (
                 dssp_index,
@@ -588,7 +568,9 @@ class DSSP(AbstractResiduePropertyMap):
                 O_NH_2_energy,
             )
 
-            dssp_map[key] = dssp_vals
+            dssp_map[(chain_id, res_id)] = dssp_vals
             dssp_list.append(dssp_vals)
 
+        if file_type == "MMCIF" and version(dssp_version) < version("4.0.0"):
+            dssp_keys = dssp_mapped_keys
         AbstractResiduePropertyMap.__init__(self, dssp_map, dssp_keys, dssp_list)

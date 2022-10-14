@@ -58,7 +58,7 @@ from reportlab.graphics.renderPM import RenderPMError
 from Bio.Graphics.Comparative import ComparativeScatterPlot
 
 # We're not really using the unittest framework, because we need to
-# raise the dependency error BEFORE the invidual tests in order that
+# raise the dependency error BEFORE the individual tests in order that
 # this be skipped by run_tests.py
 
 
@@ -102,7 +102,9 @@ def real_test():
         else:
             raise
     except RenderPMError as err:
-        if str(err).startswith("Can't setFont("):
+        if str(err).startswith("Can't setFont(") or str(err).startswith(
+            "Error in setFont("
+        ):
             # TODO - can we raise the error BEFORE the unit test function
             # is run? That way it can be skipped in run_tests.py
             raise MissingExternalDependencyError(

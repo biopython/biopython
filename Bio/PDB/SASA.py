@@ -41,7 +41,7 @@ _ENTITY_HIERARCHY = {
 # References:
 # A. Bondi (1964). "van der Waals Volumes and Radii".
 # M. Mantina, A.C. et al., J. Phys. Chem. 2009, 113, 5806.
-ATOMIC_RADII = collections.defaultdict(lambda x: 2.0)
+ATOMIC_RADII = collections.defaultdict(lambda: 2.0)
 ATOMIC_RADII.update(
     {
         "H": 1.200,
@@ -89,7 +89,6 @@ class ShrakeRupley:
             default ATOMIC_RADII dictionary.
         :type radii_dict: dict
 
-        Examples:
         >>> sr = ShrakeRupley()
         >>> sr = ShrakeRupley(n_points=960)
         >>> sr = ShrakeRupley(radii_dict={"O": 3.1415})
@@ -124,7 +123,7 @@ class ShrakeRupley:
         """
         n = self.n_points
 
-        dl = np.pi * (3 - 5 ** 0.5)
+        dl = np.pi * (3 - 5**0.5)
         dz = 2.0 / n
 
         longitude = 0
@@ -158,9 +157,10 @@ class ShrakeRupley:
             values of its children. Defaults to "A".
         :type entity: Bio.PDB.Entity
 
-        Example:
         >>> from Bio.PDB import PDBParser
+        >>> from Bio.PDB.SASA import ShrakeRupley
         >>> p = PDBParser(QUIET=1)
+        >>> # This assumes you have a local copy of 1LCD.pdb in a directory called "PDB"
         >>> struct = p.get_structure("1LCD", "PDB/1LCD.pdb")
         >>> sr = ShrakeRupley()
         >>> sr.compute(struct, level="S")

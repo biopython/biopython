@@ -4,21 +4,21 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
 """Bio.SeqIO support for the SnapGene file format.
 
 The SnapGene binary format is the native format used by the SnapGene program
 from GSL Biotech LLC.
 """
-
 from datetime import datetime
 from re import sub
 from struct import unpack
 from xml.dom.minidom import parseString
 
 from Bio.Seq import Seq
-from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqFeature import SimpleLocation
+from Bio.SeqFeature import SeqFeature
 from Bio.SeqRecord import SeqRecord
+
 from .Interfaces import SequenceIterator
 
 
@@ -110,16 +110,16 @@ def _parse_cookie_packet(length, data, record):
 
 
 def _parse_location(rangespec, strand, record):
-    start, end = [int(x) for x in rangespec.split("-")]
+    start, end = (int(x) for x in rangespec.split("-"))
     # Account for SnapGene's 1-based coordinates
     start = start - 1
     if start > end:
         # Range wrapping the end of the sequence
-        l1 = FeatureLocation(start, len(record), strand=strand)
-        l2 = FeatureLocation(0, end, strand=strand)
+        l1 = SimpleLocation(start, len(record), strand=strand)
+        l2 = SimpleLocation(0, end, strand=strand)
         location = l1 + l2
     else:
-        location = FeatureLocation(start, end, strand=strand)
+        location = SimpleLocation(start, end, strand=strand)
     return location
 
 
@@ -144,12 +144,33 @@ def _parse_features_packet(length, data, record):
             strand = -1
 
         location = None
+        subparts = []
+        n_parts = 0
         for segment in feature.getElementsByTagName("Segment"):
+            if _get_attribute_value(segment, "type", "standard") == "gap":
+                continue
             rng = _get_attribute_value(segment, "range")
+            n_parts += 1
+            next_location = _parse_location(rng, strand, record)
             if not location:
-                location = _parse_location(rng, strand, record)
+                location = next_location
+            elif strand == -1:
+                # Reverse segments order for reverse-strand features
+                location = next_location + location
             else:
-                location = location + _parse_location(rng, strand, record)
+                location = location + next_location
+
+            name = _get_attribute_value(segment, "name")
+            if name:
+                subparts.append([n_parts, name])
+
+        if len(subparts) > 0:
+            # Add a "parts" qualifiers to represent "named subfeatures"
+            if strand == -1:
+                # Reverse segment indexes and order for reverse-strand features
+                subparts = reversed([[n_parts - i + 1, name] for i, name in subparts])
+            quals["parts"] = [";".join(f"{i}:{name}" for i, name in subparts)]
+
         if not location:
             raise ValueError("Missing feature location")
 
@@ -220,7 +241,6 @@ _packet_handlers = {
     0x06: _parse_notes_packet,
     0x0A: _parse_features_packet,
 }
-
 
 # Helper functions to process the XML data in
 # some of the segments

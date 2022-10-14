@@ -31,7 +31,7 @@ except ImportError:
     ) from None
 
 # local stuff
-from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqFeature import SeqFeature, SimpleLocation
 from Bio.Graphics import BasicChromosome
 from Bio.Graphics.DisplayRepresentation import ChromosomeCounts
 
@@ -248,22 +248,21 @@ class OrganismGraphicTest(unittest.TestCase):
         self.assertIn(
             expected_string,
             properties,
-            "Unexpected results from dumpProperties: \n %s" % properties,
+            f"Unexpected results from dumpProperties: \n {properties}",
         )
 
         properties = test_widget.getProperties()
         self.assertEqual(
             properties["label_size"],
             6,
-            "Unexpected results from getProperties: %s" % properties,
+            f"Unexpected results from getProperties: {properties}",
         )
 
         test_widget.setProperties({"start_x_position": 12})
         self.assertEqual(
             test_widget.start_x_position,
             12,
-            "setProperties doesn't seem to work right: %s"
-            % test_widget.start_x_position,
+            f"setProperties doesn't seem to work right: {test_widget.start_x_position}",
         )
 
 
@@ -311,7 +310,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
         for name, acc, length, features, color in entries:
             if False:
                 # How I generated the values above... and tested passing in SeqFeatures
-                filename = "/Users/pjcock/Documents/comp_genomics/seed/%s.gbk" % acc
+                filename = f"/Users/pjcock/Documents/comp_genomics/seed/{acc}.gbk"
                 import os
 
                 if not os.path.isfile(filename):
@@ -343,7 +342,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 # Features as SeqFeatures
                 features = [
                     SeqFeature(
-                        FeatureLocation(start, end, strand),
+                        SimpleLocation(start, end, strand),
                         qualifiers={"name": [label], "color": [color]},
                     )
                     for (start, end, strand, label) in features
@@ -426,46 +425,28 @@ class ChromosomeCountTest(unittest.TestCase):
         """Add counts to specific chromosome segments."""
         self.count_display.add_count(self.names[1])
         self.count_display.add_count(self.names[2], 5)
-
-        try:
-            self.count_display.add_count("Non-existent")
-            raise AssertionError("Didn't raise a KeyError on a fake key")
-        except KeyError:
-            pass
+        self.assertRaises(KeyError, self.count_display.add_count, "Non-existent")
 
     def test_add_label(self):
         """Add labels to chromosome segments."""
         self.count_display.add_label(self.names[1], "Rules")
-
-        try:
-            self.count_display.add_label("Non-existent", "Elephant")
-            raise AssertionError("Didn't raise a KeyError on a fake key")
-        except KeyError:
-            pass
+        self.assertRaises(
+            KeyError, self.count_display.add_label, "Non-existent", "elephant"
+        )
 
     def test_set_scale(self):
         """Set the scale for a chromosome segment."""
         self.count_display.set_scale(self.names[1], 1.5)
-
-        try:
-            self.count_display.set_scale("Non-existant", 5)
-            raise AssertionError("Didn't raise a KeyError on a fake key.")
-        except KeyError:
-            pass
+        self.assertRaises(KeyError, self.count_display.set_scale, "Non-existent", 5)
 
     def test_color_from_count(self):
         """Retrieve a color from a count number with the default color scheme."""
         test_color = self.count_display._color_from_count(3)
-        assert test_color == colors.blue, "Unexpected color %s" % test_color
+        self.assertEqual(test_color, colors.blue)
 
         test_color = self.count_display._color_from_count(9)
-        assert test_color == colors.red, "Unexpected color %s" % test_color
-
-        try:
-            self.count_display._color_from_count(200)
-            raise AssertionError("Didn't raise an error for bad count.")
-        except ValueError:
-            pass
+        self.assertEqual(test_color, colors.red)
+        self.assertRaises(ValueError, self.count_display._color_from_count, 200)
 
     def test_fill_chromosome(self):
         """Test filling out the information on a chromosome."""

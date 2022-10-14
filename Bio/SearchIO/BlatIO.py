@@ -82,7 +82,7 @@ BlatIO provides the following attribute-column mapping:
 +----------------+-------------------------+-----------------------------------+
 | Object         | Attribute               | Column Name, Value                |
 +================+=========================+===================================+
-| QueryResutl    | id                      | Q name, query sequence ID         |
+| QueryResult    | id                      | Q name, query sequence ID         |
 |                +-------------------------+-----------------------------------+
 |                | seq_len                 | Q size, query sequence full       |
 |                |                         | length                            |

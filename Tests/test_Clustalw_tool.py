@@ -127,11 +127,11 @@ class ClustalWTestCase(unittest.TestCase):
         # The length of the alignment will depend on the version of clustalw
         # (clustalw 2.1 and clustalw 1.83 are certainly different).
         output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
-        self.assertEqual(set(input_records.keys()), set(output_records.keys()))
+        self.assertCountEqual(input_records.keys(), output_records.keys())
         for record in align:
-            self.assertEqual(str(record.seq), str(output_records[record.id].seq))
+            self.assertEqual(record.seq, output_records[record.id].seq)
             self.assertEqual(
-                str(record.seq).replace("-", ""), str(input_records[record.id].seq)
+                str(record.seq).replace("-", ""), input_records[record.id].seq
             )
 
         # Check the DND file was created.
@@ -155,11 +155,12 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
+            message = str(err)
             self.assertTrue(
-                "Cannot open sequence file" in str(err)
-                or "Cannot open input file" in str(err)
-                or "Non-zero return code " in str(err),
-                str(err),
+                "Cannot open sequence file" in message
+                or "Cannot open input file" in message
+                or "Non-zero return code " in message,
+                message,
             )
         else:
             self.fail("expected an ApplicationError")
@@ -182,7 +183,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
             pass
 
         if os.path.isfile(input_file + ".aln"):
-            # Clustalw 2.1 made an emtpy aln file, clustalw 1.83 did not
+            # Clustalw 2.1 made an empty aln file, clustalw 1.83 did not
             self.add_file_to_clean(input_file + ".aln")
 
     def test_invalid_sequence(self):
@@ -191,23 +192,22 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         self.assertTrue(os.path.isfile(input_file))
         cline = ClustalwCommandline(clustalw_exe, infile=input_file)
 
-        try:
+        with self.assertRaises(ApplicationError) as cm:
             stdout, stderr = cline()
-        except ApplicationError as err:
-            # Ideally we'd catch the return code and raise the specific
-            # error for "invalid format", rather than just notice there
-            # is not output file.
-            # Note:
-            # Python 2.3 on Windows gave (0, 'Error')
-            # Python 2.5 on Windows gives [Errno 0] Error
-            self.assertTrue(
-                "invalid format" in str(err)
-                or "not produced" in str(err)
-                or "No sequences in file" in str(err)
-                or "Non-zero return code " in str(err)
-            )
-        else:
-            self.fail("expected an ApplicationError")
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
+        err = str(cm.exception)
+        # Ideally we'd catch the return code and raise the specific
+        # error for "invalid format", rather than just notice there
+        # is not output file.
+        # Note:
+        # Python 2.3 on Windows gave (0, 'Error')
+        # Python 2.5 on Windows gives [Errno 0] Error
+        self.assertTrue(
+            "invalid format" in err
+            or "not produced" in err
+            or "No sequences in file" in err
+            or "Non-zero return code " in err
+        )
 
 
 class ClustalWTestNormalConditions(ClustalWTestCase):

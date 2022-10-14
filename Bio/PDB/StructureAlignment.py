@@ -8,7 +8,7 @@
 """Map residues of two structures to each other based on a FASTA alignment."""
 
 
-from Bio.Data import SCOPData
+from Bio.Data import PDBData
 
 from Bio.PDB import Selection
 from Bio.PDB.Polypeptide import is_aa
@@ -27,7 +27,10 @@ class StructureAlignment:
            correspond to the structures
 
         """
-        length = fasta_align.get_alignment_length()
+        try:  # MultipleSeqAlignment object
+            ncolumns = fasta_align.get_alignment_length()
+        except AttributeError:  # Alignment object
+            nrows, ncolumns = fasta_align.shape
         # Get the residues in the models
         rl1 = Selection.unfold_entities(m1, "R")
         rl2 = Selection.unfold_entities(m2, "R")
@@ -39,7 +42,7 @@ class StructureAlignment:
         map21 = {}
         # List of residue pairs (None if -)
         duos = []
-        for i in range(length):
+        for i in range(ncolumns):
             column = fasta_align[:, i]
             aa1 = column[si]
             aa2 = column[sj]
@@ -80,7 +83,7 @@ class StructureAlignment:
     def _test_equivalence(self, r1, aa1):
         """Test if aa in sequence fits aa in structure (PRIVATE)."""
         resname = r1.get_resname()
-        resname = SCOPData.protein_letters_3to1[resname]
+        resname = PDBData.protein_letters_3to1_extended[resname]
         assert aa1 == resname
 
     def get_maps(self):

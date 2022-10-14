@@ -68,6 +68,54 @@ classdict = {}
 typedict = {}
 
 
+def parse_enzyme_records(handle):
+    """Parse ENZYME records.
+
+    This function is for parsing ENZYME files containing multiple
+    records.
+
+    Arguments:
+     - handle   - handle to the file.
+
+    """
+    while True:
+        record = read_enzyme_record(handle)
+        if not record:
+            break
+        yield record
+
+
+def read_enzyme_record(handle):
+    """Read a single Enzyme record.
+
+    Enzyme record read format is adapted from Bio.ExPASy.Enzyme, but must be
+    able to read an accession field that is not used by Bio.ExPASy.Enzyme.
+    """
+    record = None
+    for line in handle:
+        key, value = line[:2], line[5:].rstrip()
+        if key == "ID":
+            record = {"ID": value}
+        elif key == "AC":
+            record["AC"] = value
+        elif key == "//":
+            if record:
+                return record
+            else:  # This was the copyright notice
+                continue
+    if record:
+        raise ValueError("Unexpected end of stream")
+
+
+def load_enzyme_ids(file) -> dict[str, int]:
+    """Load enzyme identifiers from bairoch-format file."""
+    with open(file, "r") as in_file:
+        return {
+            record["ID"]: int(record["AC"].removeprefix("RB").removesuffix(";"))
+            for record in parse_enzyme_records(in_file)
+        }
+
+
 def double_quote_repr(value):  # TODO similar not to produce long horizontal lists
     """Return string representation of value, preferring double quotes.
 
@@ -117,32 +165,21 @@ def regex(site):
     return reg_ex
 
 
-def is_palindrom(sequence):
-    """Check whether the sequence is a palindrome or not (DEPRECATED).
-
-    Deprecated alias for is_palindrome (with e at end).
-    """
-    import warnings
-    from Bio import BiopythonDeprecationWarning
-
-    warnings.warn(
-        "is_palindrom is deprecated, please use is_palindrome instead.",
-        BiopythonDeprecationWarning,
-    )
-
-    return is_palindrome(sequence)
-
-
 def is_palindrome(sequence):
     """Check whether the sequence is a palindrome or not."""
-    return str(sequence) == str(sequence.reverse_complement())
+    return sequence == sequence.reverse_complement()
 
 
 class newenzyme:
     """Construct the attributes of the enzyme corresponding to 'name'."""
 
-    def __init__(cls, name):
+    def __init__(cls, name, id):
         """Set up the enzyme's attributes."""
+        cls.id = id
+        if id:
+            cls.uri = f"https://identifiers.org/rebase:{cls.id}"
+        else:
+            cls.uri = None
         cls.opt_temp = 37
         cls.inact_temp = 65
         cls.substrat = "DNA"
@@ -392,7 +429,7 @@ class DictionaryBuilder:
         #
         #   first parse the emboss files.
         #
-        emboss_e, emboss_r, emboss_s = self.lastrebasefile()
+        emboss_e, emboss_r, emboss_s, enzyme_id_dict = self.lastrebasefile()
         #
         #   the results will be stored into enzymedict.
         #
@@ -418,12 +455,17 @@ class DictionaryBuilder:
             #
             #   the class attributes first:
             #
-            cls = newenzyme(name)
+            try:
+                enzyme_id = enzyme_id_dict[name]
+            except KeyError:
+                print(f"Could not find REBASE enzyme ID for {name}: omitting")
+                enzyme_id = None
+            cls = newenzyme(name, enzyme_id)
             #
             #   Now select the right type for the enzyme.
             #
             bases = cls.bases
-            clsbases = tuple([eval(x) for x in bases])  # noqa: C407
+            clsbases = tuple(eval(x) for x in bases)
             typestuff = ""
             for t in tdct.values():
                 #
@@ -605,11 +647,12 @@ class DictionaryBuilder:
         #   first check if we have the last update:
         #
         emboss_now = [".".join((x, release_number)) for x in embossnames]
+        bairoch_now = f"bairoch.{release_number}"
         update_needed = False
         # dircontent = os.listdir(config.Rebase) #    local database content
         dircontent = os.listdir(os.getcwd())
         base = os.getcwd()  # added for biopython current directory
-        for name in emboss_now:
+        for name in emboss_now + [bairoch_now]:
             if name not in dircontent:
                 update_needed = True
 
@@ -617,8 +660,12 @@ class DictionaryBuilder:
             #
             #   nothing to be done
             #
-            print("\n Using the files : %s" % ", ".join(emboss_now))
-            return tuple(open(os.path.join(base, n)) for n in emboss_now)
+            print("\n Using the bairoch file : %s" % bairoch_now)
+            enzyme_id_dict = load_enzyme_ids(bairoch_now)
+            print("\n Using the emboss files : %s" % ", ".join(emboss_now))
+            return tuple(open(os.path.join(base, n)) for n in emboss_now) + (
+                enzyme_id_dict,
+            )
         else:
             #
             #   may be download the files.
@@ -970,7 +1017,7 @@ class DictionaryBuilder:
                     other = line[0].replace("-", "_").replace(".", "_")
                     dna = Seq(line[1])
                     sense1 = regex(dna)
-                    antisense1 = regex(str(dna.reverse_complement()))
+                    antisense1 = regex(dna.reverse_complement())
                     dna = Seq(enzymedict[other][0])
                     sense2 = regex(dna)
                     antisense2 = regex(dna.reverse_complement())

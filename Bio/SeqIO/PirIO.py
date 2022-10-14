@@ -86,10 +86,12 @@ Sequence codes and their meanings:
  - XX - Unknown
 
 """
-
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import SequenceIterator, SequenceWriter
+
+from .Interfaces import _get_seq_string
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 
 _pir_mol_type = {
@@ -169,7 +171,7 @@ class PirIterator(SequenceIterator):
 
             # Return the record and then continue...
             record = SeqRecord(
-                Seq(seq[:-1]), id=identifier, name=identifier, description=description,
+                Seq(seq[:-1]), id=identifier, name=identifier, description=description
             )
             record.annotations["PIR-type"] = pir_type
             if _pir_mol_type[pir_type]:
@@ -267,9 +269,9 @@ class PirWriter(SequenceWriter):
         assert "\n" not in title
         assert "\r" not in description
 
-        self.handle.write(">%s;%s\n%s\n" % (code, title, description))
+        self.handle.write(f">{code};{title}\n{description}\n")
 
-        data = self._get_seq_string(record)  # Catches sequence being None
+        data = _get_seq_string(record)  # Catches sequence being None
 
         assert "\n" not in data
         assert "\r" not in data

@@ -120,7 +120,7 @@ def build(
                 for record in nucl_seqs:
                     key = record.id
                     if key in d:
-                        raise ValueError("Duplicate key '%s'" % key)
+                        raise ValueError(f"Duplicate key '{key}'")
                     d[key] = record
                 nucl_seqs = d
             corr_method = 2
@@ -156,7 +156,7 @@ def build(
             try:
                 nucl_id = corr_dict[pro_rec.id]
             except KeyError:
-                print("Protein record (%s) is not in corr_dict!" % pro_rec.id)
+                print(f"Protein record ({pro_rec.id}) is not in corr_dict!")
                 exit(1)
             pro_nucl_pair.append((pro_rec, nucl_seqs[nucl_id]))
 
@@ -246,7 +246,7 @@ def _get_aa_regex(codon_table, stop="*", unknown="X"):
 
 
 def _check_corr(
-    pro, nucl, gap_char, codon_table, complete_protein=False, anchor_len=10,
+    pro, nucl, gap_char, codon_table, complete_protein=False, anchor_len=10
 ):
     """Check if the nucleotide can be translated into the protein (PRIVATE).
 
@@ -265,7 +265,7 @@ def _check_corr(
         if aa != gap_char:
             pro_re += aa2re[aa]
 
-    nucl_seq = str(nucl.seq.upper().ungap(gap_char))
+    nucl_seq = str(nucl.seq.upper().replace(gap_char, ""))
     match = re.search(pro_re, nucl_seq)
     if match:
         # mode = 0, direct match
@@ -571,7 +571,7 @@ def _merge_aa2re(aa1, aa2, shift_val, aa2re, reid):
 
 
 def _get_codon_rec(
-    pro, nucl, span_mode, gap_char, codon_table, complete_protein=False, max_score=10,
+    pro, nucl, span_mode, gap_char, codon_table, complete_protein=False, max_score=10
 ):
     """Generate codon alignment based on regular re match (PRIVATE).
 
@@ -588,12 +588,12 @@ def _get_codon_rec(
     import re
     from Bio.Seq import Seq
 
-    nucl_seq = nucl.seq.ungap(gap_char)
+    nucl_seq = nucl.seq.replace(gap_char, "")
     span = span_mode[0]
     mode = span_mode[1]
     aa2re = _get_aa_regex(codon_table)
     if mode in (0, 1):
-        if len(pro.seq.ungap(gap_char)) * 3 != (span[1] - span[0]):
+        if len(pro.seq.replace(gap_char, "")) * 3 != (span[1] - span[0]):
             raise ValueError(
                 f"Protein Record {pro.id} and "
                 f"Nucleotide Record {nucl.id} do not match!"
@@ -684,7 +684,7 @@ def _get_codon_rec(
                     aa_num += 1
             else:
                 if (
-                    aa_num < len(pro.seq.ungap("-")) - 1
+                    aa_num < len(pro.seq.replace("-", "")) - 1
                     and rf_table[aa_num + 1] - rf_table[aa_num] - 3 < 0
                 ):
                     max_score -= 1

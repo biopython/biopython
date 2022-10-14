@@ -11,7 +11,7 @@
 # crc64 is adapted from BioPerl
 
 
-from binascii import crc32 as _crc32
+import binascii
 
 
 def crc32(seq):
@@ -27,10 +27,11 @@ def crc32(seq):
     """
     try:
         # Assume it's a Seq object
-        return _crc32(str(seq).encode())
-    except AttributeError:
+        s = bytes(seq)
+    except TypeError:
         # Assume it's a string
-        return _crc32(seq.encode())
+        s = seq.encode()
+    return binascii.crc32(s)
 
 
 def _init_table_h():
@@ -75,7 +76,7 @@ def crc64(s):
         crch = temp1h ^ _table_h[idx]
         crcl = temp1l
 
-    return "CRC-%08X%08X" % (crch, crcl)
+    return f"CRC-{crch:08X}{crcl:08X}"
 
 
 def gcg(seq):
@@ -96,12 +97,6 @@ def gcg(seq):
     5688
 
     """
-    try:
-        # Assume it's a Seq object
-        seq = str(seq)
-    except AttributeError:
-        # Assume it's a string
-        pass
     index = checksum = 0
     for char in seq:
         index += 1
@@ -135,11 +130,11 @@ def seguid(seq):
     m = hashlib.sha1()
     try:
         # Assume it's a Seq object
-        seq = str(seq)
-    except AttributeError:
+        seq = bytes(seq)
+    except TypeError:
         # Assume it's a string
-        pass
-    m.update(seq.upper().encode())
+        seq = seq.encode()
+    m.update(seq.upper())
     tmp = base64.encodebytes(m.digest())
     return tmp.decode().replace("\n", "").rstrip("=")
 

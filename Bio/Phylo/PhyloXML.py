@@ -21,7 +21,7 @@ import warnings
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
-from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqFeature import SeqFeature, SimpleLocation
 from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonWarning
 
@@ -38,7 +38,7 @@ def _check_str(text, testfunc):
     """Check a string using testfunc, and warn if there's no match (PRIVATE)."""
     if text is not None and not testfunc(text):
         warnings.warn(
-            "String %s doesn't match the given regexp" % text,
+            f"String {text} doesn't match the given regexp",
             PhyloXMLWarning,
             stacklevel=2,
         )
@@ -85,12 +85,12 @@ class Phyloxml(PhyloElement):
         if isinstance(index, (int, slice)):
             return self.phylogenies[index]
         if not isinstance(index, str):
-            raise KeyError("can't use %s as an index" % type(index))
+            raise KeyError(f"can't use {type(index)} as an index")
         for tree in self.phylogenies:
             if tree.name == index:
                 return tree
         else:
-            raise KeyError("no phylogeny found with name %r" % index)
+            raise KeyError(f"no phylogeny found with name {index!r}")
 
     def __iter__(self):
         """Iterate through the phylogenetic trees in this object."""
@@ -254,14 +254,8 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             return False
 
         seqs = self._filter_search(is_aligned_seq, "preorder", True)
-        try:
-            first_seq = next(seqs)
-        except StopIteration:
-            # No aligned sequences were found --> empty MSA
-            return MultipleSeqAlignment([])
-        msa = MultipleSeqAlignment([first_seq.to_seqrecord()])
-        msa.extend(seq.to_seqrecord() for seq in seqs)
-        return msa
+        records = (seq.to_seqrecord() for seq in seqs)
+        return MultipleSeqAlignment(records)
 
     # Singular property for plural attribute
     def _get_confidence(self):
@@ -511,7 +505,7 @@ class Accession(PhyloElement):
 
     def __str__(self):
         """Show the class name and an identifying attribute."""
-        return "%s:%s" % (self.source, self.value)
+        return f"{self.source}:{self.value}"
 
 
 class Annotation(PhyloElement):
@@ -621,7 +615,7 @@ class CladeRelation(PhyloElement):
         self.confidence = confidence
 
 
-class Confidence(PhyloElement):
+class Confidence(float, PhyloElement):
     """A general purpose confidence element.
 
     For example, this can be used to express the bootstrap support value of a
@@ -635,146 +629,16 @@ class Confidence(PhyloElement):
 
     """
 
-    def __init__(self, value, type="unknown"):
-        """Initialize values for the Confidence object."""
-        self.value = value
-        self.type = type
+    def __new__(cls, value, type="unknown"):
+        """Create and return a Confidence object with the specified value and type."""
+        obj = super(Confidence, cls).__new__(cls, value)
+        obj.type = type
+        return obj
 
-    # Comparison operators
-
-    def __hash__(self):
-        """Return the hash value of the object.
-
-        Hash values are integers. They are used to quickly compare dictionary
-        keys during a dictionary lookup. Numeric values that compare equal have
-        the same hash value (even if they are of different types, as is the
-        case for 1 and 1.0).
-        """
-        return id(self)
-
-    def __eq__(self, other):
-        """Check for equality between Confidence objects."""
-        if isinstance(other, Confidence):
-            return self.value == other.value
-        return self.value == other
-
-    def __ne__(self, other):
-        """Check for inequality between two Confidence objects."""
-        if isinstance(other, Confidence):
-            return self.value != other.value
-        return self.value != other
-
-    # Ordering -- see functools.total_ordering in Py2.7
-
-    def __lt__(self, other):
-        """Return True if confidence is less than the other confidence."""
-        if isinstance(other, Confidence):
-            return self.value < other.value
-        return self.value < other
-
-    def __le__(self, other):
-        """Return True if confidence is less than or equal to the other confidence."""
-        return self < other or self == other
-
-    def __gt__(self, other):
-        """Return True if confidence is grater than the other confidence."""
-        return not (self <= other)
-
-    def __ge__(self, other):
-        """Return True if confidence is grater than or equal to the other confidence."""
-        return not (self.value < other)
-
-    # Arithmetic operators, including reverse
-
-    def __add__(self, other):
-        """Conduct addition between values of two Confidence objects."""
-        return self.value + other
-
-    def __radd__(self, other):
-        """Conduct reverse addition between values of two Confidence objects."""
-        return other + self.value
-
-    def __sub__(self, other):
-        """Conduct subtraction between values of two Confidence objects."""
-        return self.value - other
-
-    def __rsub__(self, other):
-        """Conduct reverse subtraction between values of two Confidence objects."""
-        return other - self.value
-
-    def __mul__(self, other):
-        """Conduct multiplication between values of two Confidence objects."""
-        return self.value * other
-
-    def __rmul__(self, other):
-        """Conduct reverse multiplication between values of two Confidence objects."""
-        return other * self.value
-
-    def __truediv__(self, other):
-        """Conduct division between values of two Confidence objects."""
-        return self.value.__truediv__(other)
-
-    def __rtruediv__(self, other):
-        """Conduct reverse division between values of two Confidence objects."""
-        return other.__rtruediv__(self.value)
-
-    def __floordiv__(self, other):
-        """C-style and old-style division."""
-        return self.value.__floordiv__(other)
-
-    def __rfloordiv__(self, other):
-        """Conduct revers C-style and old-style division."""
-        return other.__floordiv__(self.value)
-
-    def __mod__(self, other):
-        """Conduct modulus between values of two Confidence objects."""
-        return self.value % other
-
-    def __rmod__(self, other):
-        """Conduct reverse modulus between values of two Confidence objects."""
-        return other % self.value
-
-    def __divmod__(self, other):
-        """Return quotient and remainder, dividing the Confidence value by the given value."""
-        return divmod(self.value, other)
-
-    def __rdivmod__(self, other):
-        """Return quotient and remainder, dividing the given value by the Confidence value."""
-        return divmod(other, self.value)
-
-    def __pow__(self, other, modulo=None):
-        """Return the value of Confidence object raised to the given power."""
-        if modulo is not None:
-            return pow(self.value, other, modulo)
-        return pow(self.value, other)
-
-    def __rpow__(self, other):
-        """Return the given value raised to the power of the Confidence object value."""
-        return pow(other, self.value)
-
-    # Unary arithmetic operations: -, +, abs()
-
-    def __neg__(self):
-        """Conduct negation of a Confidence object."""
-        return -self.value
-
-    def __pos__(self):
-        """Return the value of a Confidence object."""
-        return self.value
-
-    def __abs__(self):
-        """Return absolute value of Confidence object."""
-        return abs(self.value)
-
-    # Explicit coercion to numeric types: float, int
-
-    def __float__(self):
-        """Return float value of Confidence object."""
-        return float(self.value)
-
-    def __int__(self):
-        """Return integer value of Confidence object."""
-        return int(self.value)
+    @property
+    def value(self):
+        """Return the float value of the Confidence object."""
+        return float(self)
 
 
 class Date(PhyloElement):
@@ -809,7 +673,7 @@ class Date(PhyloElement):
     def __str__(self):
         """Show the class name and the human-readable date."""
         if self.unit and self.value is not None:
-            return "%s %s" % (self.value, self.unit)
+            return f"{self.value} {self.unit}"
         if self.desc is not None:
             return self.desc
         return self.__class__.__name__
@@ -911,7 +775,7 @@ class Events(PhyloElement):
         except AttributeError:
             raise KeyError(key) from None
         if val is None:
-            raise KeyError("%r has not been set in this object" % key)
+            raise KeyError(f"{key!r} has not been set in this object")
         return val
 
     def __setitem__(self, key, val):
@@ -949,7 +813,7 @@ class Id(PhyloElement):
     def __str__(self):
         """Return identifier as a string."""
         if self.provider is not None:
-            return "%s:%s" % (self.provider, self.value)
+            return f"{self.provider}:{self.value}"
         return self.value
 
 
@@ -1140,14 +1004,14 @@ class ProteinDomain(PhyloElement):
         """Create ProteinDomain object from SeqFeature."""
         return ProteinDomain(
             feat.id,
-            feat.location.nofuzzy_start,
-            feat.location.nofuzzy_end,
+            feat.location.start,
+            feat.location.end,
             confidence=feat.qualifiers.get("confidence"),
         )
 
     def to_seqfeature(self):
         """Create a SeqFeature from the ProteinDomain Object."""
-        feat = SeqFeature(location=FeatureLocation(self.start, self.end), id=self.value)
+        feat = SeqFeature(location=SimpleLocation(self.start, self.end), id=self.value)
         try:
             confidence = self.confidence
         except AttributeError:
@@ -1344,7 +1208,7 @@ class Sequence(PhyloElement):
                     "description": self.name,
                     # 'dbxrefs': None,
                 }
-            )
+            ),
         )
         if self.domain_architecture:
             seqrec.features = [

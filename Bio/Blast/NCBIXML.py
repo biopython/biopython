@@ -75,7 +75,7 @@ class _XMLparser(ContentHandler):
         # but that white space doesn't belong to child tags like Hsp_midline
         if self._value.strip():
             raise ValueError(
-                "What should we do with %s before the %r tag?" % (self._value, name)
+                f"What should we do with {self._value} before the {name!r} tag?"
             )
         self._value = ""
 
@@ -105,11 +105,11 @@ class _XMLparser(ContentHandler):
         if method in self._method_map:
             self._method_map[method]()
             if self._debug > 2:
-                print("NCBIXML: Parsed:  %s %s" % (method, self._value))
+                print(f"NCBIXML: Parsed:  {method} {self._value}")
         elif self._debug > 1:
             # Doesn't exist (yet) and may want to warn about it
             if method not in self._debug_ignore_list:
-                print("NCBIXML: Ignored: %s %s" % (method, self._value))
+                print(f"NCBIXML: Ignored: {method} {self._value}")
                 self._debug_ignore_list.append(method)
 
         # Reset character buffer

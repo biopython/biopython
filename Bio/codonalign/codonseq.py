@@ -236,7 +236,7 @@ class CodonSeq(Seq):
     def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s)."""
         if len(gap) != 1 or not isinstance(gap, str):
-            raise ValueError("Unexpected gap character, %s" % repr(gap))
+            raise ValueError(f"Unexpected gap character, {repr(gap)}")
         return CodonSeq(str(self).replace(gap, ""), rf_table=self.rf_table)
 
     @classmethod
@@ -276,9 +276,7 @@ def _get_codon_list(codonseq):
     return codon_lst
 
 
-def cal_dn_ds(
-    codon_seq1, codon_seq2, method="NG86", codon_table=None, k=1, cfreq=None,
-):
+def cal_dn_ds(codon_seq1, codon_seq2, method="NG86", codon_table=None, k=1, cfreq=None):
     """Calculate dN and dS of the given two sequences.
 
     Available methods:
@@ -781,9 +779,7 @@ def _yn00(seq1, seq2, k, codon_table):
             S_sites + N_sites
         )
         w = dSdN[1] / dSdN[0]
-        if all(
-            map(lambda x: x < tolerance, (abs(i - j) for i, j in zip(dSdN, dSdN_pre)))
-        ):
+        if all(abs(i - j) < tolerance for i, j in zip(dSdN, dSdN_pre)):
             return dSdN[1], dSdN[0]  # dN, dS
         dSdN_pre = dSdN
 

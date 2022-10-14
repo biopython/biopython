@@ -79,7 +79,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[0].ct[0].date, "555456:555432")
         self.assertEqual(
             record.contigs[0].ct[0].info,
-            ["This is the forst line of comment for c1", "and this the second for c1"],
+            ["This is the first line of comment for c1", "and this the second for c1"],
         )
         self.assertIsNone(record.contigs[0].wa)
         self.assertEqual(len(record.contigs[0].reads), 2)
@@ -201,7 +201,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].ct[0].date, "123456:765432")
         self.assertEqual(
             record.contigs[1].ct[0].info,
-            ["This is the forst line of comment for c2", "and this the second for c2"],
+            ["This is the first line of comment for c2", "and this the second for c2"],
         )
         self.assertEqual(len(record.contigs[1].wa), 1)
         self.assertEqual(record.contigs[1].wa[0].tag_type, "phrap_params")
@@ -779,7 +779,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.ct[0].date, "123456:765432")
         self.assertEqual(
             contig.ct[0].info,
-            ["This is the forst line of comment for c2", "and this the second for c2"],
+            ["This is the first line of comment for c2", "and this the second for c2"],
         )
         self.assertEqual(contig.ct[1].name, "unrelated_Contig")
         self.assertEqual(contig.ct[1].tag_type, "repeat")
@@ -790,7 +790,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(
             contig.ct[1].info,
             [
-                "This is the forst line of comment for the unrelated ct tag",
+                "This is the first line of comment for the unrelated ct tag",
                 "and this the second",
             ],
         )
@@ -803,7 +803,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.ct[2].date, "555456:555432")
         self.assertEqual(
             contig.ct[2].info,
-            ["This is the forst line of comment for c1", "and this the second for c1"],
+            ["This is the first line of comment for c1", "and this the second for c1"],
         )
 
         self.assertEqual(len(contig.wa), 1)

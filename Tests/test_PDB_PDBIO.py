@@ -21,7 +21,11 @@ import warnings
 from Bio import BiopythonWarning
 from Bio.PDB import PDBParser, PDBIO, Select
 from Bio.PDB import Atom, Residue
-from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
+from Bio.PDB.PDBExceptions import (
+    PDBConstructionException,
+    PDBConstructionWarning,
+    PDBIOException,
+)
 
 
 class WriteTest(unittest.TestCase):
@@ -74,6 +78,44 @@ class WriteTest(unittest.TestCase):
             self.assertEqual(og_serials, serials)
         finally:
             os.remove(filename)
+
+    def test_pdbio_pdb_format_limits(self):
+        """Test raising error when structure cannot meet PDB format limits."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
+
+        # Modify structure and check if parser raises an error
+        # Chain id
+        structure[0]["A"].id = "AA"
+        self.io.set_structure(structure)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        with self.assertRaises(PDBIOException):
+            self.io.save(filename)
+        structure[0]["AA"].id = "A"
+        os.remove(filename)
+
+        # Residue id
+        het, ori, ins = structure[0]["A"][152].id
+        structure[0]["A"][152].id = (het, 10000, ins)
+        self.io.set_structure(structure)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        with self.assertRaises(PDBIOException):
+            self.io.save(filename)
+        structure[0]["A"][10000].id = (het, ori, ins)
+        os.remove(filename)
+
+        # Atom id
+        structure[0]["A"][152]["CA"].serial_number = 1e6
+        self.io.set_structure(structure)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        with self.assertRaises(PDBIOException):
+            # perserve_... must be True for exception to trigger
+            self.io.save(filename, preserve_atom_numbering=True)
+        os.remove(filename)
 
     def test_pdbio_write_auto_numbering(self):
         """Test writing PDB and do not preserve atom numbering."""
@@ -261,7 +303,7 @@ class WriteTest(unittest.TestCase):
                 "END\n",
                 "END   ",
             }
-            self.assertEqual(record_set, set())
+            self.assertEqual(len(record_set), 0)
         finally:
             os.remove(filename)
 
@@ -321,7 +363,7 @@ class WriteTest(unittest.TestCase):
             os.remove(filename)
 
     def test_pdbio_write_unk_element(self):
-        """PDBIO raises ValueError when writing unrecognised atomic elements."""
+        """PDBIO raises PDBIOException when writing unrecognised atomic elements."""
         struct1 = self.structure
 
         atom = next(struct1.get_atoms())
@@ -332,7 +374,7 @@ class WriteTest(unittest.TestCase):
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(PDBIOException):
             self.io.save(filename)
         os.remove(filename)
 

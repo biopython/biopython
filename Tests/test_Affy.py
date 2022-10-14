@@ -266,7 +266,7 @@ class AffyTest(unittest.TestCase):
 
     def testAffyWrongModeReadV4(self):
         with self.assertRaises(ValueError):
-            with open(self.affy4, "rt") as f:
+            with open(self.affy4) as f:
                 record = CelFile.read(f, version=4)
 
     # Writes a small example Affymetrix V4 CEL File
@@ -317,11 +317,8 @@ class AffyTest(unittest.TestCase):
         preHeadersOrder = ["magic", "version", "columns", "rows", "cellNo", "headerLen"]
         headersEncoded = struct.pack(
             "<" + "i" * len(preHeadersOrder),
-            *[preHeaders[header] for header in preHeadersOrder]
+            *(preHeaders[header] for header in preHeadersOrder),
         )
-
-        def packData(intensity, sdev, pixel):
-            return struct.pack("< f f h", intensity, sdev, pixel)
 
         f.write(headersEncoded)
         for header in headers:
@@ -334,9 +331,9 @@ class AffyTest(unittest.TestCase):
         f.write(prePadding)
         f.write(b"\x00" * 15)
         for i in range(25):
-            f.write(packData(float(i), float(-i), 9))
+            f.write(struct.pack("< f f h", i, -i, 9))  # intensity, sdev, pixel
 
 
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity=0)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

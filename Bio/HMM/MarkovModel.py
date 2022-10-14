@@ -190,7 +190,7 @@ class MarkovModelBuilder:
         for state in initial_prob:
             if state not in self._state_alphabet:
                 raise ValueError(
-                    "State %s was not found in the sequence alphabet" % state
+                    f"State {state} was not found in the sequence alphabet"
                 )
 
         # distribute the residual probability, if any
@@ -225,17 +225,17 @@ class MarkovModelBuilder:
         each set of transitions adds up to 1.
         """
         # set initial state probabilities
-        new_initial_prob = float(1) / float(len(self.transition_prob))
+        new_initial_prob = 1.0 / len(self.transition_prob)
         for state in self._state_alphabet:
             self.initial_prob[state] = new_initial_prob
 
         # set the transitions
-        new_trans_prob = float(1) / float(len(self.transition_prob))
+        new_trans_prob = 1.0 / len(self.transition_prob)
         for key in self.transition_prob:
             self.transition_prob[key] = new_trans_prob
 
         # set the emissions
-        new_emission_prob = float(1) / float(len(self.emission_prob))
+        new_emission_prob = 1.0 / len(self.emission_prob)
         for key in self.emission_prob:
             self.emission_prob[key] = new_emission_prob
 
@@ -343,7 +343,7 @@ class MarkovModelBuilder:
         for state in [from_state, to_state]:
             if state not in self._state_alphabet:
                 raise ValueError(
-                    "State %s was not found in the sequence alphabet" % state
+                    f"State {state} was not found in the sequence alphabet"
                 )
 
         # ensure that the states are not already set
@@ -362,7 +362,7 @@ class MarkovModelBuilder:
             self.transition_pseudo[(from_state, to_state)] = pseudocount
         else:
             raise KeyError(
-                "Transition from %s to %s is already allowed." % (from_state, to_state)
+                f"Transition from {from_state} to {to_state} is already allowed."
             )
 
     def destroy_transition(self, from_state, to_state):
@@ -377,8 +377,7 @@ class MarkovModelBuilder:
             del self.transition_pseudo[(from_state, to_state)]
         except KeyError:
             raise KeyError(
-                "Transition from %s to %s is already disallowed."
-                % (from_state, to_state)
+                f"Transition from {from_state} to {to_state} is already disallowed."
             )
 
     def set_transition_score(self, from_state, to_state, probability):
@@ -392,7 +391,7 @@ class MarkovModelBuilder:
             self.transition_prob[(from_state, to_state)] = probability
         else:
             raise KeyError(
-                "Transition from %s to %s is not allowed." % (from_state, to_state)
+                f"Transition from {from_state} to {to_state} is not allowed."
             )
 
     def set_transition_pseudocount(self, from_state, to_state, count):
@@ -412,7 +411,7 @@ class MarkovModelBuilder:
             self.transition_pseudo[(from_state, to_state)] = count
         else:
             raise KeyError(
-                "Transition from %s to %s is not allowed." % (from_state, to_state)
+                f"Transition from {from_state} to {to_state} is not allowed."
             )
 
     # --- functions to deal with emissions from the sequence
@@ -428,7 +427,7 @@ class MarkovModelBuilder:
             self.emission_prob[(seq_state, emission_state)] = probability
         else:
             raise KeyError(
-                "Emission of %s from %s is not allowed." % (emission_state, seq_state)
+                f"Emission of {emission_state} from {seq_state} is not allowed."
             )
 
     def set_emission_pseudocount(self, seq_state, emission_state, count):
@@ -448,7 +447,7 @@ class MarkovModelBuilder:
             self.emission_pseudo[(seq_state, emission_state)] = count
         else:
             raise KeyError(
-                "Emission of %s from %s is not allowed." % (emission_state, seq_state)
+                f"Emission of {emission_state} from {seq_state} is not allowed."
             )
 
 
@@ -577,7 +576,7 @@ class HiddenMarkovModel:
         pred_state_seq = {}
 
         # --- recursion
-        # loop over the training squence (i = 1 .. L)
+        # loop over the training sequence (i = 1 .. L)
         # NOTE: My index numbers are one less than what is given in Durbin
         # et al, since we are indexing the sequence going from 0 to
         # (Length - 1) not 1 to Length, like in Durbin et al.

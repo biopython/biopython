@@ -1,7 +1,9 @@
 # Copyright (C) 2009 by Eric Talevich (eric.talevich@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """PhyloXML reader/parser, writer, and associated functions.
 
@@ -146,7 +148,7 @@ def _split_namespace(tag):
 
 def _ns(tag, namespace=NAMESPACES["phy"]):
     """Format an XML tag with the given namespace (PRIVATE)."""
-    return "{%s}%s" % (namespace, tag)
+    return f"{{{namespace}}}{tag}"
 
 
 def _get_child_as(parent, tag, construct):
@@ -510,7 +512,7 @@ class Parser:
             confidence=_get_child_as(elem, "confidence", self.confidence),
             properties=_get_children_as(elem, "property", self.property),
             uri=_get_child_as(elem, "uri", self.uri),
-            **elem.attrib
+            **elem.attrib,
         )
 
     def binary_characters(self, elem):
@@ -703,7 +705,7 @@ def _handle_complex(tag, attribs, subnodes, has_text=False):
             elem.text = _serialize(obj.value)
         return elem
 
-    wrapped.__doc__ = "Serialize a %s and its subnodes, in order." % tag
+    wrapped.__doc__ = f"Serialize a {tag} and its subnodes, in order."
     return wrapped
 
 
@@ -716,7 +718,7 @@ def _handle_simple(tag):
         elem.text = _serialize(obj)
         return elem
 
-    wrapped.__doc__ = "Serialize a simple %s node." % tag
+    wrapped.__doc__ = f"Serialize a simple {tag} node."
     return wrapped
 
 

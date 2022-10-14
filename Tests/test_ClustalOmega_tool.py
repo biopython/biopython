@@ -72,11 +72,9 @@ class ClustalOmegaTestCase(unittest.TestCase):
         # Check the output...
         align = AlignIO.read(cline.outfile, "clustal")
         output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
-        self.assertEqual(
-            len(set(input_records.keys())), len(set(output_records.keys()))
-        )
+        self.assertEqual(len(input_records), len(output_records))
         for record in align:
-            self.assertEqual(str(record.seq), str(output_records[record.id].seq))
+            self.assertEqual(record.seq, output_records[record.id].seq)
 
         # TODO - Try and parse this with Bio.Nexus?
         if cline.guidetree_out:
@@ -99,14 +97,15 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
+            message = str(err)
             self.assertTrue(
-                "Cannot open sequence file" in str(err)
-                or "Cannot open input file" in str(err)
-                or "Non-zero return code" in str(err),
-                str(err),
+                "Cannot open sequence file" in message
+                or "Cannot open input file" in message
+                or "Non-zero return code" in message,
+                message,
             )
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
     def test_single_sequence(self):
         """Test an input file containing a single sequence."""
@@ -119,21 +118,20 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         except ApplicationError as err:
             self.assertIn("contains 1 sequence, nothing to align", str(err))
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
     def test_invalid_format(self):
         """Test an input file in an invalid format."""
         input_file = "Medline/pubmed_result1.txt"
         self.assertTrue(os.path.isfile(input_file))
         cline = ClustalOmegaCommandline(clustalo_exe, infile=input_file)
-        try:
+        with self.assertRaises(ApplicationError) as cm:
             stdout, stderr = cline()
-        except ApplicationError as err:
-            # Ideally we'd catch the return code and raise the specific
-            # error for "invalid format".
-            self.assertIn("Can't determine format of sequence file", str(err))
-        else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
+        err = str(cm.exception)
+        # Ideally we'd catch the return code and raise the specific
+        # error for "invalid format".
+        self.assertIn("Can't determine format of sequence file", err)
 
 
 #################################################################

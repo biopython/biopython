@@ -47,7 +47,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertAlmostEqual(2.2e-17, hsp.evalue)
         self.assertEqual(
             "lfVgNLppdvteedLkdlFskfGpivsikivrDiiekpketgkskGfaFVeFeseedAekAlealnG.kelggrklrv",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "lf+g+L + +t+e Lk++F+k G iv++ +++D     + t++s+Gf+F+++  ++  + A +    +++++gr+++ ",
@@ -55,7 +55,7 @@ class HmmpfamTests(unittest.TestCase):
         )
         self.assertEqual(
             "LFIGGLDYRTTDENLKAHFEKWGNIVDVVVMKD-----PRTKRSRGFGFITYSHSSMIDEAQK--SRpHKIDGRVVEP",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
 
         hsp = hit[1]
@@ -70,7 +70,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertAlmostEqual(1.1e-18, hsp.evalue)
         self.assertEqual(
             "lfVgNLppdvteedLkdlFskfGpivsikivrDiiekpketgkskGfaFVeFeseedAekAlealnGkelggrklrv",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "lfVg L  d +e+ ++d+F++fG iv+i+iv+D     ketgk +GfaFVeF++++ ++k +     ++l+g+ + v",
@@ -78,7 +78,7 @@ class HmmpfamTests(unittest.TestCase):
         )
         self.assertEqual(
             "LFVGALKDDHDEQSIRDYFQHFGNIVDINIVID-----KETGKKRGFAFVEFDDYDPVDKVVL-QKQHQLNGKMVDV",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
 
     def test_hmmpfam_22(self):
@@ -119,7 +119,7 @@ class HmmpfamTests(unittest.TestCase):
             "ededlekedfyqkkGvFilPsqlFwdfikeaeknkldedigtdldkifseledqialgypaSeedfkGlfpdld"
             "fnsnkLgskaqarnetLtelidlfselelgtPmHNG.dfeelgikDlfGDaYEYLLgkFAeneGKsGGeFYTPq"
             "eVSkLiaeiLtigqpsegdfsIYDPAcGSGSLllqaskflgehdgkrnaisyYGQEsn",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             " ++EL+++  av+   R              L+F K++ dk      +i+         p +   + +++y   "
@@ -133,7 +133,7 @@ class HmmpfamTests(unittest.TestCase):
             "KKSNVLI-NYYDAY-L----KPLFYEVLNTPEDER--KENIRT-NPYYKDIPYL---N-G-------GLFRSNN"
             "V--PNELSFTIKDNEIIGEVINFLERYKFTLSTSEGsEEVELNP-DILGYVYEKLINILAEKGQKGLGAYYTPD"
             "EITSYIAKNT-IEPIVVE----------------RFKEIIK--NWKINDINF----ST",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
 
     def test_hmmpfam_23(self):
@@ -166,11 +166,11 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual("..", hsp.query_endtype)
         self.assertAlmostEqual(1.3, hsp.bitscore)
         self.assertAlmostEqual(3, hsp.evalue)
-        self.assertEqual("lPwelgLaevhqtLvengLRdrVsLia", str(hsp.hit.seq))
+        self.assertEqual("lPwelgLaevhqtLvengLRdrVsLia", hsp.hit.seq)
         self.assertEqual(
             "+P  l++ +vh  L++ gLR + s+ +", str(hsp.aln_annotation["similarity"])
         )
-        self.assertEqual("IPPLLAVGAVHHHLINKGLRQEASILV", str(hsp.query.seq))
+        self.assertEqual("IPPLLAVGAVHHHLINKGLRQEASILV", hsp.query.seq)
 
         hsp = hit[1]
         self.assertEqual(2, hsp.domain_index)
@@ -233,7 +233,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual(len(hsp.query.seq), len(hsp.aln_annotation["similarity"]))
         self.assertEqual(
             "msEEqLKAFiAKvqaDtsLqEqLKaEGADvvaiAKAaGFtitteDLnahiqakeLsdeeLEgvaGg",
-            str(hsp.hit.seq),
+            hsp.hit.seq,
         )
         self.assertEqual(
             "        F+                           G  +t   Ln                   ",
@@ -241,7 +241,7 @@ class HmmpfamTests(unittest.TestCase):
         )
         self.assertEqual(
             "-------CFL---------------------------GCLVTNWVLNRS-----------------",
-            str(hsp.query.seq),
+            hsp.query.seq,
         )
 
     def test_hmmpfam_23_break_in_end_of_seq(self):
@@ -296,29 +296,23 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual(108, hsp.query_start)
         self.assertEqual(271, hsp.query_end)
         self.assertEqual("..", hsp.query_endtype)
-        self.assertEqual(
-            "ENHIKDALSRIVVEMIKREWPQHWPDMLIELDTLSKQG--", str(hsp.query.seq)[:40]
-        )
+        self.assertEqual("ENHIKDALSRIVVEMIKREWPQHWPDMLIELDTLSKQG--", hsp.query.seq[:40])
         self.assertEqual(
             "+++++  L+++++e++k+ewP++Wp+ + +l  l++++  ",
             str(hsp.aln_annotation["similarity"])[:40],
         )
         self.assertEqual(
-            "WVSMSHITA-ENCkLLEILCLLL----NEQELQLGAAECL", str(hsp.query.seq)[-40:]
+            "WVSMSHITA-ENCkLLEILCLLL----NEQELQLGAAECL", hsp.query.seq[-40:]
         )
         self.assertEqual(0, hsp.hit_start)
         self.assertEqual(178, hsp.hit_end)
         self.assertEqual("[]", hsp.hit_endtype)
-        self.assertEqual(
-            "pkflrnKLalalaelakqewPsnWpsffpdlvsllsssss", str(hsp.hit.seq)[:40]
-        )
+        self.assertEqual("pkflrnKLalalaelakqewPsnWpsffpdlvsllsssss", hsp.hit.seq[:40])
         self.assertEqual(
             "W+++++i + ++++ll++l+ lL    +  +l++ A+eCL",
             str(hsp.aln_annotation["similarity"])[-40:],
         )
-        self.assertEqual(
-            "Wipiglianvnpi.llnllfslLsgpesdpdlreaAveCL", str(hsp.hit.seq)[-40:]
-        )
+        self.assertEqual("Wipiglianvnpi.llnllfslLsgpesdpdlreaAveCL", hsp.hit.seq[-40:])
 
         # fourth qresult, second from last hit
         hit = res[-2]
@@ -337,11 +331,11 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual(20, hsp.query_start)
         self.assertEqual(47, hsp.query_end)
         self.assertEqual("..", hsp.query_endtype)
-        self.assertEqual("MDPNSTQRYRLEALKFCEEFKE-KCPIC", str(hsp.query.seq))
+        self.assertEqual("MDPNSTQRYRLEALKFCEEFKE-KCPIC", hsp.query.seq)
         self.assertEqual(0, hsp.hit_start)
         self.assertEqual(28, hsp.hit_end)
         self.assertEqual("[.", hsp.hit_endtype)
-        self.assertEqual("galesekaelkkaieeleeeesscCPvC", str(hsp.hit.seq))
+        self.assertEqual("galesekaelkkaieeleeeesscCPvC", hsp.hit.seq)
 
         # fourth qresult, second from last hit, last hsp
         hsp = hit[-1]
@@ -351,11 +345,11 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual(789, hsp.query_start)
         self.assertEqual(811, hsp.query_end)
         self.assertEqual("..", hsp.query_endtype)
-        self.assertEqual("EMLAKMAEPFTKALDMLDAEKS", str(hsp.query.seq))
+        self.assertEqual("EMLAKMAEPFTKALDMLDAEKS", hsp.query.seq)
         self.assertEqual(0, hsp.hit_start)
         self.assertEqual(22, hsp.hit_end)
         self.assertEqual("[.", hsp.hit_endtype)
-        self.assertEqual("galesekaelkkaieeleeees", str(hsp.hit.seq))
+        self.assertEqual("galesekaelkkaieeleeees", hsp.hit.seq)
 
 
 class HmmsearchTests(unittest.TestCase):
@@ -479,11 +473,9 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(337, hsp.query_end)
         self.assertEqual("[]", hsp.query_endtype)
+        self.assertEqual("lPesfDWReWkggaVtpVKdQGiqCGSCWAFSavgalEgr", hsp.query.seq[:40])
         self.assertEqual(
-            "lPesfDWReWkggaVtpVKdQGiqCGSCWAFSavgalEgr", str(hsp.query.seq)[:40]
-        )
-        self.assertEqual(
-            "IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi", str(hsp.query.seq)[-40:]
+            "IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi", hsp.query.seq[-40:]
         )
         self.assertEqual(337, len(hsp.query.seq))
         self.assertEqual(
@@ -497,12 +489,8 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual(113, hsp.hit_start)
         self.assertEqual(332, hsp.hit_end)
         self.assertEqual("..", hsp.hit_endtype)
-        self.assertEqual(
-            "IPKTVDWRE-KG-CVTPVKNQG-QCGSCWAFSASGCLEGQ", str(hsp.hit.seq)[:40]
-        )
-        self.assertEqual(
-            "LVKNSWGKEWGMDGYIKIAKDRN----NHCGLATAASYPI", str(hsp.hit.seq)[-40:]
-        )
+        self.assertEqual("IPKTVDWRE-KG-CVTPVKNQG-QCGSCWAFSASGCLEGQ", hsp.hit.seq[:40])
+        self.assertEqual("LVKNSWGKEWGMDGYIKIAKDRN----NHCGLATAASYPI", hsp.hit.seq[-40:])
         self.assertEqual(337, len(hsp.hit.seq))
 
         # last hit
@@ -526,11 +514,9 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(337, hsp.query_end)
         self.assertEqual("[]", hsp.query_endtype)
+        self.assertEqual("lPesfDWReWkggaVtpVKdQGiqCGSCWAFSavgalEgr", hsp.query.seq[:40])
         self.assertEqual(
-            "lPesfDWReWkggaVtpVKdQGiqCGSCWAFSavgalEgr", str(hsp.query.seq)[:40]
-        )
-        self.assertEqual(
-            "IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi", str(hsp.query.seq)[-40:]
+            "IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi", hsp.query.seq[-40:]
         )
         self.assertEqual(337, len(hsp.query.seq))
         self.assertEqual(
@@ -544,12 +530,8 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual(133, hsp.hit_start)
         self.assertEqual(343, hsp.hit_end)
         self.assertEqual("..", hsp.hit_endtype)
-        self.assertEqual(
-            "IPEYVDWRQ-KG-AVTPVKNQG-SCGSCWAFSAVVTIEGI", str(hsp.hit.seq)[:40]
-        )
-        self.assertEqual(
-            "LIKNSWGTGWGENGYIRIKRGTGNS-YGVCGLYTSSFYPV", str(hsp.hit.seq)[-40:]
-        )
+        self.assertEqual("IPEYVDWRQ-KG-AVTPVKNQG-SCGSCWAFSAVVTIEGI", hsp.hit.seq[:40])
+        self.assertEqual("LIKNSWGTGWGENGYIRIKRGTGNS-YGVCGLYTSSFYPV", hsp.hit.seq[-40:])
         self.assertEqual(337, len(hsp.hit.seq))
 
 

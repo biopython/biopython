@@ -40,39 +40,6 @@ dice_roll_alphabet = ("1", "2", "3", "4", "5", "6")
 dice_type_alphabet = ("F", "L")
 
 
-# -- useful functions
-def _loaded_dice_roll(chance_num, cur_state):
-    """Generate a loaded dice roll based on the state and a random number."""
-    if cur_state == "F":
-        if chance_num <= (float(1) / float(6)):
-            return "1"
-        elif chance_num <= (float(2) / float(6)):
-            return "2"
-        elif chance_num <= (float(3) / float(6)):
-            return "3"
-        elif chance_num <= (float(4) / float(6)):
-            return "4"
-        elif chance_num <= (float(5) / float(6)):
-            return "5"
-        else:
-            return "6"
-    elif cur_state == "L":
-        if chance_num <= (float(1) / float(10)):
-            return "1"
-        elif chance_num <= (float(2) / float(10)):
-            return "2"
-        elif chance_num <= (float(3) / float(10)):
-            return "3"
-        elif chance_num <= (float(4) / float(10)):
-            return "4"
-        elif chance_num <= (float(5) / float(10)):
-            return "5"
-        else:
-            return "6"
-    else:
-        raise ValueError("Unexpected cur_state %s" % cur_state)
-
-
 def generate_rolls(num_rolls):
     """Generate a bunch of rolls corresponding to the casino probabilities.
 
@@ -85,13 +52,17 @@ def generate_rolls(num_rolls):
     cur_state = "F"
     roll_seq = []
     state_seq = []
+    loaded_weights = [0.1, 0.1, 0.1, 0.1, 0.1, 0.5]
     # generate the sequence
     for roll in range(num_rolls):
         state_seq.append(cur_state)
-        # generate a random number
-        chance_num = random.random()
         # add on a new roll to the sequence
-        new_roll = _loaded_dice_roll(chance_num, cur_state)
+        if cur_state == "F":
+            new_rolls = random.choices(dice_roll_alphabet)
+        elif cur_state == "L":
+            new_rolls = random.choices(dice_roll_alphabet, weights=loaded_weights)
+        new_roll = new_rolls[0]
+
         roll_seq.append(new_roll)
         # now give us a chance to switch to a new state
         chance_num = random.random()
@@ -127,7 +98,7 @@ class TestHMMCasino(unittest.TestCase):
         test_rolls, test_states = generate_rolls(300)
         predicted_states, prob = trained_mm.viterbi(test_rolls, dice_type_alphabet)
         if VERBOSE:
-            print("Prediction probability: %f" % prob)
+            print(f"Prediction probability: {prob:f}")
             Utilities.pretty_print_prediction(test_rolls, test_states, predicted_states)
 
     def test_baum_welch_training_without(self):
@@ -137,7 +108,7 @@ class TestHMMCasino(unittest.TestCase):
         def stop_training(log_likelihood_change, num_iterations):
             """Tell the training model when to stop."""
             if VERBOSE:
-                print("ll change: %f" % log_likelihood_change)
+                print(f"ll change: {log_likelihood_change:f}")
             if log_likelihood_change < 0.01:
                 return 1
             elif num_iterations >= 10:
@@ -154,7 +125,7 @@ class TestHMMCasino(unittest.TestCase):
         test_rolls, test_states = generate_rolls(300)
         predicted_states, prob = trained_mm.viterbi(test_rolls, dice_type_alphabet)
         if VERBOSE:
-            print("Prediction probability: %f" % prob)
+            print(f"Prediction probability: {prob:f}")
             Utilities.pretty_print_prediction(
                 self.test_rolls, test_states, predicted_states
             )

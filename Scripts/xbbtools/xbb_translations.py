@@ -15,14 +15,14 @@
 import time
 
 from Bio.Seq import Seq, reverse_complement, translate
-from Bio.SeqUtils import GC
+from Bio.SeqUtils import gc_fraction
 
 
 class xbb_translations:
     """A class for doing translations."""
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         pass
 
     def frame1(self, seq, translation_table=1):
@@ -93,10 +93,10 @@ class xbb_translations:
 
     def gc(self, seq):
         """Calculate GC content in percent (0-100)."""
-        return GC(seq)
+        return 100 * gc_fraction(seq)
 
     def gcframe(self, seq, translation_table=1, direction="both"):
-        """Print a pretty print tranlation in several frames."""
+        """Print a pretty print translation in several frames."""
         # always use uppercase nt-sequence !!
         comp = self.complement(seq)
         anti = self.reverse(comp)

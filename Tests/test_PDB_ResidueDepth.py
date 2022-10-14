@@ -29,7 +29,7 @@ class MSMS_tests(unittest.TestCase):
         # Check if MSMS is installed
         try:
             v = subprocess.check_output(
-                ["msms", "-h"], universal_newlines=True, stderr=subprocess.STDOUT
+                ["msms", "-h"], text=True, stderr=subprocess.STDOUT
             )
         except OSError:
             raise unittest.SkipTest(
@@ -111,7 +111,7 @@ class ResidueDepth_tests(unittest.TestCase):
         biopy_radii = []
         for atom in model.get_atoms():
             biopy_radii.append(_get_atom_radius(atom, rtype="united"))
-        self.assertListEqual(msms_radii, biopy_radii)
+        self.assertEqual(msms_radii, biopy_radii)
 
 
 if __name__ == "__main__":

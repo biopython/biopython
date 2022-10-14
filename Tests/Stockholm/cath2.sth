@@ -1,0 +1,19 @@
+# STOCKHOLM 1.0
+#=GF ID 2.105.10.10/FF/000002
+#=GF DE Adsorption protein P2
+#=GF AC 2.105.10.10/FF/000002
+#=GF TP FunFam
+#=GF DR CATH: v4.3
+#=GF DR DOPS: 0.000
+#=GS P27378/2-64  AC P27378
+#=GS P27378/2-64  OS 
+#=GS P27378/2-64  DE Adsorption protein P2
+#=GS P27378/2-64  DR ORG; 
+#=GS P27378/2-64  DR GO; GO:0019012; 
+#=GF SQ 1
+P27378/2-64          ANFNVPKLGVFPVAAVFDIDNVPEDSSATGSRWLPSIYQGGNYWGGGPQALHAQVSNFDSSNR
+#=GC scorecons       000000000000000000000000000000000000000000000000000000000000000
+#=GC scorecons_70    _______________________________________________________________
+#=GC scorecons_80    _______________________________________________________________
+#=GC scorecons_90    _______________________________________________________________
+//

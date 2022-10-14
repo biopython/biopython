@@ -2,19 +2,17 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Tests for SeqIO Insdc module."""
-
 import unittest
+
 from io import StringIO
 
 from Bio import SeqIO
 from Bio.Seq import Seq
-from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqFeature import SimpleLocation
+from Bio.SeqFeature import SeqFeature
 from Bio.SeqRecord import SeqRecord
-
-
-from seq_tests_common import compare_record
+from seq_tests_common import SeqRecordTestBaseClass
 from test_SeqIO import SeqIOConverterTestBaseClass
 
 
@@ -61,7 +59,7 @@ class TestEmbl(unittest.TestCase):
 
     def test_writing_empty_qualifiers(self):
         f = SeqFeature(
-            FeatureLocation(5, 20, strand=+1),
+            SimpleLocation(5, 20, strand=+1),
             type="region",
             qualifiers={"empty": None, "zero": 0, "one": 1, "text": "blah"},
         )
@@ -74,7 +72,7 @@ class TestEmbl(unittest.TestCase):
         self.assertIn(' /text="blah"\n', gbk)
 
 
-class TestEmblRewrite(unittest.TestCase):
+class TestEmblRewrite(SeqRecordTestBaseClass):
     def check_rewrite(self, filename):
         old = SeqIO.read(filename, "embl")
 
@@ -88,7 +86,7 @@ class TestEmblRewrite(unittest.TestCase):
         buffer.seek(0)
         new = SeqIO.read(buffer, "embl")
 
-        self.assertTrue(compare_record(old, new))
+        self.compare_record(old, new)
 
     def test_annotation1(self):
         """Check writing-and-parsing EMBL file (1)."""

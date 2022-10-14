@@ -19,8 +19,7 @@ from Bio import __version__, Application
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
-# needs_sphinx = '1.0'
-needs_sphinx = "1.8"
+needs_sphinx = "4.3.2"
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -110,10 +109,12 @@ autodoc_default_options = {
     "exclude-members": "__dict__,__weakref__,__module__",
 }
 
+# Experimental feature to preserve the default argument values of
+# functions in source code and keep them not evaluated for readability:
+autodoc_preserve_defaults = True
+
 # To avoid import errors.
-autodoc_mock_imports = ["MySQLdb", "Bio.Restriction.Restriction"]
-if version > "1.77":
-    autodoc_mock_imports.append("Bio.Alphabet")
+autodoc_mock_imports = ["MySQLdb"]
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -302,7 +303,19 @@ def run_apidoc(_):
     # $ sphinx-apidoc -e -F -o /tmp/api/Bio Bio
     tmp_path = tempfile.mkdtemp()
     apidoc_main(["-e", "-F", "-o", tmp_path, "../../BioSQL"])
-    apidoc_main(["-e", "-F", "-o", tmp_path, "../../Bio"])
+    apidoc_main(
+        [
+            "-e",
+            "-F",
+            "-o",
+            tmp_path,
+            # The input path:
+            "../../Bio",
+            # These are patterns to exclude:
+            "../../Bio/Alphabet/",
+            "../../Bio/Restriction/Restriction.py",
+        ]
+    )
     os.remove(os.path.join(tmp_path, "index.rst"))  # Using our own
     for filename in os.listdir(tmp_path):
         if filename.endswith(".rst"):

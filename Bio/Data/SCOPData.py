@@ -11,6 +11,17 @@
 See Bio.SCOP for more information about SCOP and Biopython's SCOP module.
 """
 
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.Data.SCOPData' module will be deprecated in a future release "
+    "of Biopython in favor of 'Bio.Data.PDBData.",
+    BiopythonDeprecationWarning,
+)
+
+
 # This file was automatically generated from PDB data.
 # Black would reformat this to one entry per line, so tell it not to:
 # fmt: off

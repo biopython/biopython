@@ -1,0 +1,35 @@
+# STOCKHOLM 1.0
+#=GF ID   HAT
+#=GF AC   PF02184.18
+#=GF DE   HAT (Half-A-TPR) repeat
+#=GF AU   SMART;
+#=GF SE   Alignment kindly provided by SMART
+#=GF GA   21.00 21.00;
+#=GF TC   21.00 21.00;
+#=GF NC   20.90 20.90;
+#=GF BM   hmmbuild HMM.ann SEED.ann
+#=GF SM   hmmsearch -Z 57096847 -E 1000 --cpu 4 HMM pfamseq
+#=GF TP   Repeat
+#=GF CL   CL0020
+#=GF RN   [1]
+#=GF RM   9478129
+#=GF RT   The HAT helix, a repetitive motif implicated in RNA processing. 
+#=GF RA   Preker PJ, Keller W; 
+#=GF RL   Trends Biochem Sci 1998;23:15-16.
+#=GF DR   INTERPRO; IPR003107;
+#=GF DR   SMART; HAT;
+#=GF DR   SO; 0001068; polypeptide_repeat;
+#=GF CC   The HAT (Half A TPR) repeat is found in several RNA processing
+#=GF CC   proteins [1].
+#=GF SQ   3
+#=GS CRN_DROME/191-222     AC P17886.2
+#=GS CLF1_SCHPO/185-216    AC P87312.1
+#=GS CLF1_SCHPO/185-216    DR PDB; 3JB9 R; 185-216;
+#=GS O16376_CAEEL/201-233  AC O16376.2
+CRN_DROME/191-222                KEIDRAREIYERFVYVH.PDVKNWIKFARFEES
+CLF1_SCHPO/185-216               HENERARGIYERFVVVH.PEVTNWLRWARFEEE
+#=GR CLF1_SCHPO/185-216    SS    --HHHHHHHHHHHHHHS.--HHHHHHHHHHHHH
+O16376_CAEEL/201-233             KEIDRARSVYQRFLHVHGINVQNWIKYAKFEER
+#=GC SS_cons                     --HHHHHHHHHHHHHHS.--HHHHHHHHHHHHH
+#=GC seq_cons                    KEIDRARuIYERFVaVH.P-VpNWIKaARFEEc
+//

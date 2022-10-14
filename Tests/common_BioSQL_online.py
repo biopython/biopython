@@ -29,8 +29,6 @@ from Bio import Entrez
 
 from common_BioSQL import create_database, destroy_database, check_config
 
-from seq_tests_common import compare_record, compare_records
-
 import requires_internet
 
 if __name__ == "__main__":
@@ -101,10 +99,8 @@ class TaxonomyTest(unittest.TestCase):
 
         rows = self.db.adaptor.execute_and_fetchall(sql)
         self.assertEqual(4, len(rows))
-        values = set()
-        for row in rows:
-            values.add(row[0])
-        self.assertEqual({3704, 3711, 3708, 3702}, set(values))
+        values = [row[0] for row in rows]
+        self.assertCountEqual([3704, 3711, 3708, 3702], values)
 
     def test_load_database_with_tax_lookup(self):
         """Load SeqRecord objects and fetch the taxonomy information from NCBI."""
@@ -126,7 +122,7 @@ class TaxonomyTest(unittest.TestCase):
 
         test_record = self.db.lookup(accession="X55053")
 
-        # make sure that the ncbi taxonomy id is corrent
+        # make sure that the ncbi taxonomy id is correct
         self.assertEqual(test_record.annotations["ncbi_taxid"], 3702)
         # make sure that the taxonomic lineage is the same as reported
         # using the Entrez module

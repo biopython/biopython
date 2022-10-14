@@ -51,10 +51,7 @@ class SVDSuperimposerTest(unittest.TestCase):
         y = array([[1.91, 1.82, 1.73], [1.64, 1.55, 1.46], [1.37, 1.28, 1.19]])
         self.sup.set(x, y)
         self.assertIsNone(self.sup.init_rms)
-        init_rms = 0.8049844719
-        self.assertTrue(
-            float("%.3f" % self.sup.get_init_rms()), float("%.3f" % init_rms)
-        )
+        self.assertAlmostEqual(self.sup.get_init_rms(), 0.8049844719)
 
     def test_oldTest(self):
         self.assertTrue(
@@ -98,8 +95,7 @@ class SVDSuperimposerTest(unittest.TestCase):
         self.assertIsNone(self.sup.rms)
         self.assertIsNone(self.sup.init_rms)
 
-        rms = 0.00304266526014
-        self.assertEqual(float("%.3f" % self.sup.get_rms()), float("%.3f" % rms))
+        self.assertAlmostEqual(self.sup.get_rms(), 0.00304266526014)
 
         rot_get, tran_get = self.sup.get_rotran()
         self.assertTrue(

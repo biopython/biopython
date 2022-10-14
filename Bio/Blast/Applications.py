@@ -6,7 +6,7 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Definitions for interacting with BLAST related applications.
+"""Definitions for interacting with BLAST related applications (OBSOLETE).
 
 Wrappers for the new NCBI BLAST+ tools (written in C++):
 
@@ -27,6 +27,9 @@ For further details, see:
 Camacho et al. BLAST+: architecture and applications
 BMC Bioinformatics 2009, 10:421
 https://doi.org/10.1186/1471-2105-10-421
+
+We have decided to remove this module in future, and instead recommend
+building your command and invoking it via the subprocess module directly.
 """
 
 from Bio.Application import _Option, AbstractCommandline, _Switch
@@ -123,7 +126,7 @@ class _NcbibaseblastCommandline(AbstractCommandline):
             if self._get_parameter(a):
                 for b in incompatibles[a]:
                     if self._get_parameter(b):
-                        raise ValueError("Options %s and %s are incompatible." % (a, b))
+                        raise ValueError(f"Options {a} and {b} are incompatible.")
 
 
 class _NcbiblastCommandline(_NcbibaseblastCommandline):
@@ -1570,7 +1573,7 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
             if self._get_parameter(a):
                 for b in incompatibles[a]:
                     if self._get_parameter(b):
-                        raise ValueError("Options %s and %s are incompatible." % (a, b))
+                        raise ValueError(f"Options {a} and {b} are incompatible.")
 
         if self.mask_id and not self.mask_data:
             raise ValueError("Option mask_id requires mask_data to be set.")

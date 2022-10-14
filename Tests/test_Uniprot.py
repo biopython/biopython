@@ -11,10 +11,10 @@ import unittest
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
-from seq_tests_common import compare_reference, compare_record
+from seq_tests_common import SeqRecordTestBaseClass
 
 
-class TestUniprot(unittest.TestCase):
+class TestUniprot(SeqRecordTestBaseClass):
     """Tests Uniprot XML parser."""
 
     def test_uni001(self):
@@ -45,7 +45,23 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(len(seq_record.features), 1)
         self.assertEqual(
             repr(seq_record.features[0]),
-            "SeqFeature(FeatureLocation(ExactPosition(0), ExactPosition(116)), type='chain', id='PRO_0000377969')",
+            "SeqFeature(SimpleLocation(ExactPosition(0), ExactPosition(116)), type='chain', id='PRO_0000377969', qualifiers=...)",
+        )
+
+        self.assertEqual(
+            str(seq_record.features[0]),
+            "\n".join(
+                [
+                    "type: chain",
+                    "location: [0:116]",
+                    "id: PRO_0000377969",
+                    "qualifiers:",
+                    "    Key: description, Value: Uncharacterized protein 043L",
+                    "    Key: id, Value: PRO_0000377969",
+                    "    Key: type, Value: chain",
+                    "",
+                ]
+            ),
         )
 
         self.assertEqual(len(seq_record.annotations["references"]), 2)
@@ -416,6 +432,28 @@ class TestUniprot(unittest.TestCase):
             ],
         )
 
+        self.assertEqual(
+            repr(seq_record.features[1]),
+            "SeqFeature(SimpleLocation(ExactPosition(17), ExactPosition(43)), type='propeptide', id='PRO_0000009556', qualifiers=...)",
+        )
+
+        self.assertEqual(
+            str(seq_record.features[1]),
+            "\n".join(
+                [
+                    "type: propeptide",
+                    "location: [17:43]",
+                    "id: PRO_0000009556",
+                    "qualifiers:",
+                    "    Key: evidence, Value: 7",
+                    "    Key: id, Value: PRO_0000009556",
+                    "    Key: status, Value: potential",
+                    "    Key: type, Value: propeptide",
+                    "",
+                ]
+            ),
+        )
+
     def test_sp016(self):
         """Parsing SwissProt file sp016."""
         filename = "sp016"
@@ -457,8 +495,14 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(old.id, new.id)
         self.assertEqual(old.name, new.name)
         self.assertEqual(len(old), len(new))
-        self.assertEqual(str(old.seq), str(new.seq))
+        self.assertEqual(old.seq, new.seq)
         for key in set(old.annotations).intersection(new.annotations):
+            if key in ["date"]:
+                # TODO - Why is this a list vs str?
+                continue
+            self.assertIsInstance(
+                old.annotations[key], type(new.annotations[key]), msg=f"key={key}"
+            )
             if key == "references":
                 self.assertEqual(len(old.annotations[key]), len(new.annotations[key]))
                 for r1, r2 in zip(old.annotations[key], new.annotations[key]):
@@ -472,32 +516,19 @@ class TestUniprot(unittest.TestCase):
                     r2.comment = ""
                     if not r2.journal:
                         r1.journal = ""
-                    compare_reference(r1, r2)
-            elif old.annotations[key] == new.annotations[key]:
-                pass
-            elif key in ["date"]:
-                # TODO - Why is this a list vs str?
-                pass
-            elif not isinstance(old.annotations[key], type(new.annotations[key])):
-                raise TypeError(
-                    "%s gives %s vs %s"
-                    % (key, old.annotations[key], new.annotations[key])
-                )
+                    self.compare_reference(r1, r2)
             elif key in ["organism"]:
-                if old.annotations[key] == new.annotations[key]:
-                    pass
-                elif old.annotations[key].startswith(new.annotations[key] + " "):
-                    pass
-                else:
-                    raise ValueError(key)
-            elif isinstance(old.annotations[key], list) and sorted(
-                old.annotations[key]
-            ) == sorted(new.annotations[key]):
-                pass
+                self.assertTrue(
+                    old.annotations[key] == new.annotations[key]
+                    or old.annotations[key].startswith(new.annotations[key] + " ")
+                )
+            elif isinstance(old.annotations[key], list):
+                self.assertEqual(
+                    sorted(old.annotations[key]), sorted(new.annotations[key])
+                )
             else:
-                raise ValueError(
-                    "%s gives %s vs %s"
-                    % (key, old.annotations[key], new.annotations[key])
+                self.assertEqual(
+                    old.annotations[key], new.annotations[key], msg=f"key={key}"
                 )
         self.assertEqual(
             len(old.features),
@@ -505,18 +536,10 @@ class TestUniprot(unittest.TestCase):
             "Features in %s, %i vs %i" % (old.id, len(old.features), len(new.features)),
         )
         for f1, f2 in zip(old.features, new.features):
-            """
-            self.assertEqual(f1.location.nofuzzy_start, f2.location.nofuzzy_start,
-                             "%s %s vs %s %s" %
-                             (f1.location, f1.type, f2.location, f2.type))
-            self.assertEqual(f1.location.nofuzzy_end, f2.location.nofuzzy_end,
-                             "%s %s vs %s %s" %
-                             (f1.location, f1.type, f2.location, f2.type))
-            """
             self.assertEqual(
                 repr(f1.location),
                 repr(f2.location),
-                "%s %s vs %s %s" % (f1.location, f1.type, f2.location, f2.type),
+                f"{f1.location} {f1.type} vs {f2.location} {f2.type}",
             )
 
     def test_Q13639(self):
@@ -571,7 +594,7 @@ class TestUniprot(unittest.TestCase):
         for txt, xml, fas, id in zip(txt_list, xml_list, fas_list, ids):
             self.assertEqual(txt.id, id)
             self.assertIn(txt.id, fas.id.split("|"))
-            self.assertEqual(str(txt.seq), str(fas.seq))
+            self.assertEqual(txt.seq, fas.seq)
             self.compare_txt_xml(txt, xml)
 
     def test_multi_ex_index(self):
@@ -587,11 +610,11 @@ class TestUniprot(unittest.TestCase):
         # Check SeqIO.parse() versus SeqIO.index() for plain text "swiss"
         for old in txt_list:
             new = txt_index[old.id]
-            compare_record(old, new)
+            self.compare_record(old, new)
         # Check SeqIO.parse() versus SeqIO.index() for XML "uniprot-xml"
         for old in xml_list:
             new = xml_index[old.id]
-            compare_record(old, new)
+            self.compare_record(old, new)
         txt_index.close()
         xml_index.close()
 

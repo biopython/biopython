@@ -43,6 +43,10 @@ class AppTests(unittest.TestCase):
 
     def test_phyml(self):
         """Run PhyML using the wrapper."""
+        # Stabilize phyml tests by running in single threaded mode by default.
+        # Note: PHYMLCPUS environment is specific to Debian and derivatives.
+        if not os.getenv("PHYMLCPUS"):
+            os.putenv("PHYMLCPUS", "1")
         cmd = PhymlCommandline(phyml_exe, input=EX_PHYLIP, datatype="aa")
         # Smoke test
         try:
@@ -57,7 +61,7 @@ class AppTests(unittest.TestCase):
             tree = Phylo.read(outfname, "newick")
             self.assertEqual(tree.count_terminals(), 4)
         except Exception as exc:
-            self.fail("PhyML wrapper error: %s" % exc)
+            self.fail(f"PhyML wrapper error: {exc}")
         finally:
             # Clean up generated files
             for suffix in [

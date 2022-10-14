@@ -18,7 +18,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionException
 
 
 class Entity:
-    """Basic container object for PDB heirachy.
+    """Basic container object for PDB hierarchy.
 
     Structure, Model, Chain and Residue are subclasses of Entity.
     It deals with storage and lookup.
@@ -303,7 +303,7 @@ class Entity:
         # Recursively iterate through children until we get all atom coordinates
 
         if not len(self):
-            raise ValueError("{} does not have children".format(self))
+            raise ValueError(f"{self} does not have children")
 
         maybe_disordered = {"R", "C"}  # to know when to use get_unpacked_list
         only_atom_level = {"A"}

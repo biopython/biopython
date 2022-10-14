@@ -128,7 +128,7 @@ def cmp_sccs(sccs1, sccs2):
 _domain_re = re.compile(r">?([\w_\.]*)\s+([\w\.]*)\s+\(([^)]*)\) (.*)")
 
 
-def parse_domain(str):
+def parse_domain(term):
     """Convert an ASTRAL header string into a Scop domain.
 
     An ASTRAL (http://astral.stanford.edu/) header contains a concise
@@ -141,9 +141,9 @@ def parse_domain(str):
     A typical ASTRAL header looks like --
     >d1tpt_1 a.46.2.1 (1-70) Thymidine phosphorylase {Escherichia coli}
     """
-    m = _domain_re.match(str)
+    m = _domain_re.match(term)
     if not m:
-        raise ValueError("Domain: " + str)
+        raise ValueError("Domain: " + term)
 
     dom = Domain()
     dom.sid = m.group(1)
@@ -157,7 +157,7 @@ def parse_domain(str):
 
 
 def _open_scop_file(scop_dir_path, version, filetype):
-    filename = "dir.%s.scop.txt_%s" % (filetype, version)
+    filename = f"dir.{filetype}.scop.txt_{version}"
     handle = open(os.path.join(scop_dir_path, filename))
     return handle
 
@@ -330,20 +330,20 @@ class Scop:
     def write_hie(self, handle):
         """Build an HIE SCOP parsable file from this object."""
         # We order nodes to ease comparison with original file
-        for n in sorted(self._sunidDict.values(), key=lambda n: n.sunid):
+        for n in sorted(self._sunidDict.values(), key=lambda x: x.sunid):
             handle.write(str(n.toHieRecord()))
 
     def write_des(self, handle):
         """Build a DES SCOP parsable file from this object."""
         # Original SCOP file is not ordered?
-        for n in sorted(self._sunidDict.values(), key=lambda n: n.sunid):
+        for n in sorted(self._sunidDict.values(), key=lambda x: x.sunid):
             if n != self.root:
                 handle.write(str(n.toDesRecord()))
 
     def write_cla(self, handle):
         """Build a CLA SCOP parsable file from this object."""
         # We order nodes to ease comparison with original file
-        for n in sorted(self._sidDict.values(), key=lambda n: n.sunid):
+        for n in sorted(self._sidDict.values(), key=lambda x: x.sunid):
             handle.write(str(n.toClaRecord()))
 
     def getDomainFromSQL(self, sunid=None, sid=None):
@@ -499,7 +499,7 @@ class Scop:
 
         for p in self._sunidDict.values():
             for c in p.children:
-                cur.execute("INSERT INTO hie VALUES (%s,%s)" % (p.sunid, c.sunid))
+                cur.execute(f"INSERT INTO hie VALUES ({p.sunid},{c.sunid})")
 
     def write_cla_sql(self, handle):
         """Write CLA data to SQL database."""
@@ -770,8 +770,8 @@ class Astral:
                 raise RuntimeError("must provide dir_path and version")
 
             self.version = version
-            self.path = os.path.join(dir_path, "scopseq-%s" % version)
-            astral_file = "astral-scopdom-seqres-all-%s.fa" % self.version
+            self.path = os.path.join(dir_path, f"scopseq-{version}")
+            astral_file = f"astral-scopdom-seqres-all-{self.version}.fa"
             astral_file = os.path.join(self.path, astral_file)
 
         if astral_file:
@@ -814,7 +814,7 @@ class Astral:
                     raise RuntimeError("No scopseq directory specified")
 
                 file_prefix = "astral-scopdom-seqres-sel-gs"
-                filename = "%s-bib-%s-%s.id" % (file_prefix, id, self.version)
+                filename = f"{file_prefix}-bib-{id}-{self.version}.id"
                 filename = os.path.join(self.path, filename)
                 self.IdDatasets[id] = self.getAstralDomainsFromFile(filename)
         return self.IdDatasets[id]
@@ -899,7 +899,7 @@ class Astral:
         for dom in self.fasta_dict:
             cur.execute(
                 "INSERT INTO astral (sid,seq) values (%s,%s)",
-                (dom, self.fasta_dict[dom].seq.data),
+                (dom, self.fasta_dict[dom].seq),
             )
 
         for i in astralBibIds:
@@ -926,7 +926,7 @@ def search(
     dir=None,
     loc=None,
     cgi="http://scop.mrc-lmb.cam.ac.uk/legacy/search.cgi",
-    **keywds
+    **keywds,
 ):
     """Access SCOP search and return a handle to the results.
 

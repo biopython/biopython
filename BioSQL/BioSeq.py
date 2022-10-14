@@ -11,175 +11,80 @@
 # available and licensed separately.  Please consult www.biosql.org
 """Implementations of Biopython-like Seq objects on top of BioSQL.
 
-This allows retrival of items stored in a BioSQL database using
+This allows retrieval of items stored in a BioSQL database using
 a biopython-like SeqRecord and Seq interface.
 
 Note: Currently we do not support recording per-letter-annotations
 (like quality scores) in BioSQL.
 """
 
-from Bio.Seq import Seq, UnknownSeq
+from Bio.Seq import Seq, SequenceDataAbstractBaseClass
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import SeqFeature
 
 
-class DBSeq(Seq):
-    """BioSQL equivalent of the Biopython Seq object."""
+class _BioSQLSequenceData(SequenceDataAbstractBaseClass):
+    """Retrieves sequence data from a BioSQL database (PRIVATE)."""
 
-    def __init__(self, primary_id, adaptor, alphabet=None, start=0, length=0):
-        """Create a new DBSeq object referring to a BioSQL entry.
+    __slots__ = ("primary_id", "adaptor", "_length", "start")
 
-        You wouldn't normally create a DBSeq object yourself, this is done
-        for you when retrieving a DBSeqRecord object from the database.
+    def __init__(self, primary_id, adaptor, start=0, length=0):
+        """Create a new _BioSQLSequenceData object referring to a BioSQL entry.
+
+        You wouldn't normally create a _BioSQLSequenceData object yourself,
+        this is done for you when retrieving a DBSeqRecord object from the
+        database, which creates a Seq object using a _BioSQLSequenceData
+        instance as the data provider.
         """
-        if alphabet is not None:
-            raise ValueError("The alphabet argument is no longer supported")
         self.primary_id = primary_id
         self.adaptor = adaptor
         self._length = length
         self.start = start
+        super().__init__()
 
     def __len__(self):
         """Return the length of the sequence."""
         return self._length
 
-    def __getitem__(self, index):  # Seq API requirement
-        """Return a subsequence or single letter."""
-        if isinstance(index, int):
-            # Return a single letter as a string
-            i = index
+    def __getitem__(self, key):
+        """Return a subsequence as a bytes or a _BioSQLSequenceData object."""
+        if isinstance(key, slice):
+            start, end, step = key.indices(self._length)
+            size = len(range(start, end, step))
+            if size == 0:
+                return b""
+        else:
+            # Return a single letter as an integer (consistent with bytes)
+            i = key
             if i < 0:
-                if -i > self._length:
-                    raise IndexError(i)
-                i = i + self._length
+                i += self._length
+                if i < 0:
+                    raise IndexError(key)
             elif i >= self._length:
-                raise IndexError(i)
-            return self.adaptor.get_subseq_as_string(
+                raise IndexError(key)
+            c = self.adaptor.get_subseq_as_string(
                 self.primary_id, self.start + i, self.start + i + 1
             )
-        if not isinstance(index, slice):
-            raise TypeError("Unexpected index type")
+            return ord(c)
 
-        # Return the (sub)sequence as another DBSeq or Seq object
-        # (see the Seq obect's __getitem__ method)
-        if index.start is None:
-            i = 0
+        if step == 1:
+            if start == 0 and size == self._length:
+                # Return the full sequence as bytes
+                sequence = self.adaptor.get_subseq_as_string(
+                    self.primary_id, self.start, self.start + self._length
+                )
+                return sequence.encode("ASCII")
+            else:
+                # Return a _BioSQLSequenceData with the start and end adjusted
+                return _BioSQLSequenceData(
+                    self.primary_id, self.adaptor, self.start + start, size
+                )
         else:
-            i = index.start
-        if i < 0:
-            # Map to equavilent positive index
-            if -i > self._length:
-                raise IndexError(i)
-            i = i + self._length
-        elif i >= self._length:
-            # Trivial case, should return empty string!
-            i = self._length
-
-        if index.stop is None:
-            j = self._length
-        else:
-            j = index.stop
-        if j < 0:
-            # Map to equavilent positive index
-            if -j > self._length:
-                raise IndexError(j)
-            j = j + self._length
-        elif j >= self._length:
-            j = self._length
-
-        if i >= j:
-            # Trivial case, empty string.
-            return Seq("")
-        elif index.step is None or index.step == 1:
-            # Easy case - can return a DBSeq with the start and end adjusted
-            return self.__class__(
-                self.primary_id, self.adaptor, None, self.start + i, j - i
-            )
-        else:
-            # Tricky.  Will have to create a Seq object because of the stride
+            # Will have to extract the sequence because of the stride
             full = self.adaptor.get_subseq_as_string(
-                self.primary_id, self.start + i, self.start + j
+                self.primary_id, self.start + start, self.start + end
             )
-            return Seq(full[:: index.step])
-
-    def tostring(self):
-        """Return the full sequence as a python string (DEPRECATED).
-
-        You are now encouraged to use str(my_seq) instead of
-        my_seq.tostring().
-        """
-        import warnings
-        from Bio import BiopythonDeprecationWarning
-
-        warnings.warn(
-            "This method is obsolete; please use str(my_seq) "
-            "instead of my_seq.tostring().",
-            BiopythonDeprecationWarning,
-        )
-        return self.adaptor.get_subseq_as_string(
-            self.primary_id, self.start, self.start + self._length
-        )
-
-    def __str__(self):
-        """Return the full sequence as a python string."""
-        return self.adaptor.get_subseq_as_string(
-            self.primary_id, self.start, self.start + self._length
-        )
-
-    data = property(tostring, doc="Sequence as string (DEPRECATED)")
-
-    def toseq(self):
-        """Return the full sequence as a Seq object."""
-        import warnings
-        from Bio import BiopythonDeprecationWarning
-
-        warnings.warn(
-            "This method is obsolete; please use Seq(my_seq) "
-            "instead of my_seq.toseq().",
-            BiopythonDeprecationWarning,
-        )
-        # Note - the method name copies that of the MutableSeq object
-        return Seq(self)
-
-    def __add__(self, other):
-        """Add another sequence or string to this sequence.
-
-        The sequence is first converted to a Seq object before the addition.
-        The returned object is a Seq object, not a DBSeq object.
-        """
-        return Seq(self) + other
-
-    def __radd__(self, other):
-        """Add another sequence or string to the left.
-
-        The sequence is first converted to a Seq object before the addition.
-        The returned object is a Seq object, not a DBSeq object.
-        """
-        return other + Seq(self)
-
-    def __mul__(self, other):
-        """Multiply sequence by an integer.
-
-        The sequence is first converted to a Seq object before multiplication.
-        The returned object is a Seq object, not a DBSeq object.
-        """
-        return Seq(self) * other
-
-    def __rmul__(self, other):
-        """Multiply integer by a sequence.
-
-        The sequence is first converted to a Seq object before multiplication.
-        The returned object is a Seq object, not a DBSeq object.
-        """
-        return other * Seq(self)
-
-    def __imul__(self, other):
-        """Multiply sequence by integer in-place.
-
-        The sequence is first converted to a Seq object before multiplication.
-        The returned object is a Seq object, not a DBSeq object.
-        """
-        return Seq(self) * other
+            return full[::step].encode("ASCII")
 
 
 def _retrieve_seq_len(adaptor, primary_id):
@@ -189,7 +94,8 @@ def _retrieve_seq_len(adaptor, primary_id):
     )
     if not seqs:
         return None
-    assert len(seqs) == 1
+    if len(seqs) != 1:
+        raise ValueError(f"Expected 1 response, got {len(seqs)}.")
     (given_length,) = seqs[0]
     return int(given_length)
 
@@ -198,7 +104,7 @@ def _retrieve_seq(adaptor, primary_id):
     # The database schema ensures there will be only one matching
     # row in the table.
 
-    # If an UnknownSeq was recorded, seq will be NULL,
+    # If an undefined sequence was recorded, seq will be NULL,
     # but length will be populated.  This means length(seq)
     # will return None.
     seqs = adaptor.execute_and_fetchall(
@@ -207,38 +113,40 @@ def _retrieve_seq(adaptor, primary_id):
     )
     if not seqs:
         return
-    assert len(seqs) == 1
+    if len(seqs) != 1:
+        raise ValueError(f"Expected 1 response, got {len(seqs)}.")
     moltype, given_length, length = seqs[0]
 
     try:
         length = int(length)
-        given_length = int(length)
-        assert length == given_length
+        given_length = int(given_length)
+        if length != given_length:
+            raise ValueError(
+                f"'length' differs from sequence length, {given_length}, {length}"
+            )
         have_seq = True
     except TypeError:
-        assert length is None
+        if length is not None:
+            raise ValueError(f"Expected 'length' to be 'None', got {length}.")
         seqs = adaptor.execute_and_fetchall(
             "SELECT alphabet, length, seq FROM biosequence WHERE bioentry_id = %s",
             (primary_id,),
         )
-        assert len(seqs) == 1
+        if len(seqs) != 1:
+            raise ValueError(f"Expected 1 response, got {len(seqs)}.")
         moltype, given_length, seq = seqs[0]
-        assert seq is None or seq == ""
+        if seq:
+            raise ValueError(f"Expected 'seq' to have a falsy value, got {seq}.")
         length = int(given_length)
         have_seq = False
         del seq
     del given_length
 
     if have_seq:
-        return DBSeq(primary_id, adaptor, alphabet=None, start=0, length=int(length))
+        data = _BioSQLSequenceData(primary_id, adaptor, start=0, length=length)
+        return Seq(data)
     else:
-        if moltype in ("dna", "rna"):
-            character = "N"
-        elif moltype == "protein":
-            character = "X"
-        else:
-            character = "?"
-        return UnknownSeq(length, character=character)
+        return Seq(None, length=length)
 
 
 def _retrieve_dbxrefs(adaptor, primary_id):
@@ -253,10 +161,10 @@ def _retrieve_dbxrefs(adaptor, primary_id):
     )
     for dbname, accession, version in dbxrefs:
         if version and version != "0":
-            v = "%s.%s" % (accession, version)
+            v = f"{accession}.{version}"
         else:
             v = accession
-        _dbxrefs.append("%s:%s" % (dbname, v))
+        _dbxrefs.append(f"{dbname}:{v}")
     return _dbxrefs
 
 
@@ -290,7 +198,7 @@ def _retrieve_features(adaptor, primary_id):
             (seqfeature_id,),
         )
         for qv_name, qv_value in qvs:
-            value = "%s:%s" % (qv_name, qv_value)
+            value = f"{qv_name}:{qv_value}"
             qualifiers.setdefault("db_xref", []).append(value)
         # Get locations
         results = adaptor.execute_and_fetchall(
@@ -344,7 +252,7 @@ def _retrieve_features(adaptor, primary_id):
         lookup = {}
         for location_id, dbname, accession, version in remote_results:
             if version and version != "0":
-                v = "%s.%s" % (accession, version)
+                v = f"{accession}.{version}"
             else:
                 v = accession
             # subfeature remote location db_ref are stored as a empty string
@@ -367,7 +275,7 @@ def _retrieve_features(adaptor, primary_id):
                 adaptor, location_id
             )
             dbname, version = lookup.get(location_id, (None, None))
-            feature.location = SeqFeature.FeatureLocation(start, end)
+            feature.location = SeqFeature.SimpleLocation(start, end)
             feature.strand = strand
             feature.ref_db = dbname
             feature.ref = version
@@ -377,7 +285,7 @@ def _retrieve_features(adaptor, primary_id):
                 location_id, start, end, strand = location
                 dbname, version = lookup.get(location_id, (None, None))
                 locs.append(
-                    SeqFeature.FeatureLocation(
+                    SeqFeature.SimpleLocation(
                         start, end, strand=strand, ref=version, ref_db=dbname
                     )
                 )
@@ -421,11 +329,13 @@ def _retrieve_annotations(adaptor, primary_id, taxon_id):
 
 def _retrieve_alphabet(adaptor, primary_id):
     results = adaptor.execute_and_fetchall(
-        "SELECT alphabet FROM biosequence WHERE bioentry_id = %s", (primary_id,),
+        "SELECT alphabet FROM biosequence WHERE bioentry_id = %s", (primary_id,)
     )
-    assert len(results) == 1
+    if len(results) != 1:
+        raise ValueError(f"Expected 1 response, got {len(results)}.")
     alphabets = results[0]
-    assert len(alphabets) == 1
+    if len(alphabets) != 1:
+        raise ValueError(f"Expected 1 alphabet in response, got {len(alphabets)}.")
     alphabet = alphabets[0]
     if alphabet == "dna":
         molecule_type = "DNA"
@@ -483,7 +393,7 @@ def _retrieve_reference(adaptor, primary_id):
         if (start is not None) or (end is not None):
             if start is not None:
                 start -= 1  # python counting
-            reference.location = [SeqFeature.FeatureLocation(start, end)]
+            reference.location = [SeqFeature.SimpleLocation(start, end)]
         # Don't replace the default "" with None.
         if authors:
             reference.authors = authors
@@ -602,7 +512,7 @@ class DBSeqRecord(SeqRecord):
             (self._primary_id,),
         )
         if version and version != "0":
-            self.id = "%s.%s" % (accession, version)
+            self.id = f"{accession}.{version}"
         else:
             self.id = accession
         # We don't yet record any per-letter-annotations in the

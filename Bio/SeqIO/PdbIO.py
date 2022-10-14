@@ -4,23 +4,22 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
 """Bio.SeqIO support for accessing sequences in PDB and mmCIF files."""
-
 import collections
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio.Data.SCOPData import protein_letters_3to1 as scop_3to1
-from Bio.Data.IUPACData import protein_letters_3to1_extended as iupac_3to1_ext
+from Bio.Data.PDBData import protein_letters_3to1
+from Bio.Data.PDBData import protein_letters_3to1_extended
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
 from .Interfaces import SequenceIterator
 
 
 _aa3to1_dict = {}
-_aa3to1_dict.update(iupac_3to1_ext)
-_aa3to1_dict.update(scop_3to1)
+_aa3to1_dict.update(protein_letters_3to1)
+_aa3to1_dict.update(protein_letters_3to1_extended)
 
 
 def _res2aacode(residue, undef_code="X"):
@@ -45,7 +44,7 @@ def AtomIterator(pdb_id, structure):
     module may be used by SeqIO modules wishing to parse sequences from lists
     of residues.
 
-    Calling funtions must pass a Bio.PDB.Structure.Structure object.
+    Calling functions must pass a Bio.PDB.Structure.Structure object.
 
 
     See Bio.SeqIO.PdbIO.PdbAtomIterator and Bio.SeqIO.PdbIO.CifAtomIterator for
@@ -93,7 +92,7 @@ def AtomIterator(pdb_id, structure):
         else:
             # No gaps
             res_out = [_res2aacode(x) for x in residues]
-        record_id = "%s:%s" % (pdb_id, chn_id)
+        record_id = f"{pdb_id}:{chn_id}"
         # ENH - model number in SeqRecord id if multiple models?
         # id = "Chain%s" % str(chain.id)
         # if len(structure) > 1 :
@@ -123,7 +122,7 @@ class PdbSeqresIterator(SequenceIterator):
         The sequences are derived from the SEQRES lines in the
         PDB file header, not the atoms of the 3D structure.
 
-        Specifically, these PDB records are handled: DBREF, SEQADV, SEQRES, MODRES
+        Specifically, these PDB records are handled: DBREF, DBREF1, DBREF2, SEQADV, SEQRES, MODRES
 
         See: http://www.wwpdb.org/documentation/format23/sect3.html
 
@@ -217,6 +216,29 @@ class PdbSeqresIterator(SequenceIterator):
                         "db_id_code": db_id_code,
                     }
                 )
+            elif rec_name == "DBREF1":
+                # ID code of this entry (PDB ID)
+                pdb_id = line[7:11]
+                # Chain identifier.
+                chn_id = line[12]
+                # Sequence database name.
+                database = line[26:32].strip()
+                # Sequence database identification code.
+                db_id_code = line[47:67].strip()
+            elif rec_name == "DBREF2":
+                # Ensure ID code and chain are consistent:
+                if pdb_id != line[7:11] or chn_id != line[12]:
+                    raise ValueError("DBREF2 identifiers do not match")
+                # Sequence database accession code.
+                db_acc = line[18:40].strip()
+                metadata[chn_id].append(
+                    {
+                        "pdb_id": pdb_id,
+                        "database": database,
+                        "db_acc": db_acc,
+                        "db_id_code": db_id_code,
+                    }
+                )
             # ENH: 'SEQADV' 'MODRES'
 
         if rec_name is None:
@@ -229,17 +251,13 @@ class PdbSeqresIterator(SequenceIterator):
             record.annotations["molecule_type"] = "protein"
             if chn_id in metadata:
                 m = metadata[chn_id][0]
-                record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
-                record.description = "%s:%s %s" % (
-                    m["database"],
-                    m["db_acc"],
-                    m["db_id_code"],
-                )
+                record.id = record.name = f"{m['pdb_id']}:{chn_id}"
+                record.description = f"{m['database']}:{m['db_acc']} {m['db_id_code']}"
                 for melem in metadata[chn_id]:
                     record.dbxrefs.extend(
                         [
-                            "%s:%s" % (melem["database"], melem["db_acc"]),
-                            "%s:%s" % (melem["database"], melem["db_id_code"]),
+                            f"{melem['database']}:{melem['db_acc']}",
+                            f"{melem['database']}:{melem['db_id_code']}",
                         ]
                     )
             else:
@@ -433,17 +451,13 @@ def CifSeqresIterator(source):
         record.annotations["molecule_type"] = "protein"
         if chn_id in metadata:
             m = metadata[chn_id][0]
-            record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
-            record.description = "%s:%s %s" % (
-                m["database"],
-                m["db_acc"],
-                m["db_id_code"],
-            )
+            record.id = record.name = f"{m['pdb_id']}:{chn_id}"
+            record.description = f"{m['database']}:{m['db_acc']} {m['db_id_code']}"
             for melem in metadata[chn_id]:
                 record.dbxrefs.extend(
                     [
-                        "%s:%s" % (melem["database"], melem["db_acc"]),
-                        "%s:%s" % (melem["database"], melem["db_id_code"]),
+                        f"{melem['database']}:{melem['db_acc']}",
+                        f"{melem['database']}:{melem['db_id_code']}",
                     ]
                 )
         else:
