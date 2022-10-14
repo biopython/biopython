@@ -76,6 +76,7 @@ possible, especially the following contributors:
 - Chenghao Zhu
 - Christian Brueffer
 - Damien Goutte-Gattat
+- Erik Weßels (first contribution)
 - Erik  Whiting
 - Fabian Egli
 - Fredric Johansson

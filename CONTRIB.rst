@@ -110,6 +110,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Eric Talevich <https://github.com/etal>
 - Erick Matsen <surname at fhcrc dot org>
 - Erik Cederstrand <https://github.com/ecederstrand>
+- Erik Weßels <https://github.com/BioNij>
 - Erik Whiting <https://github.com/erik-whiting>
 - Fabian Egli <https://github.com/fabianegli>
 - Fei Qi <https://github.com/qifei9>
