@@ -223,10 +223,12 @@ possible, especially the following contributors:
 - Gert Hulselmans
 - João Rodrigues
 - Markus Piotrowski
+- Pascal Schläpfer (first contribution)
 - Leighton Pritchard
 - Sergio Valqui
 - Suyash Gupta
 - Vini Salazar (first contribution)
+
 
 4 September 2020: Biopython 1.78
 ================================

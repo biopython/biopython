@@ -245,6 +245,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Osvaldo Zagordi <https://github.com/ozagordi>
 - Owen Solberg <https://github.com/odoublewen>
 - Pamela Russell <https://github.com/pamelarussell>
+- Pascal Schläpfer <https://github.com/pascalschlaepferprivate>
 - Patrick Kunzmann <https://github.com/padix-key>
 - Paul T. Bathen
 - Peter Bienstman <Peter.Bienstman at domain rug.ac.be>
