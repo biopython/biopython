@@ -105,8 +105,6 @@ class CodonAdaptationIndex:
         Takes a location of a Fasta file containing CDS sequences
         (which must all have a whole number of codons) and generates a codon
         usage index.
-
-        RCSU values
         """
         # first make sure we're not overwriting an existing index:
         if self.index != {} or self.codon_count != {}:
@@ -121,24 +119,16 @@ class CodonAdaptationIndex:
         # now to calculate the index we first need to sum the number of times
         # synonymous codons were used all together.
         for aa in SynonymousCodons:
-            total = 0.0
-            # RCSU values are CodonCount/((1/num of synonymous codons) * sum of
-            # all synonymous codons)
-            rcsu = []
             codons = SynonymousCodons[aa]
-
-            for codon in codons:
-                total += self.codon_count[codon]
-
-            # calculate the RSCU value for each of the codons
-            for codon in codons:
-                denominator = total / len(codons)
-                rcsu.append(self.codon_count[codon] / denominator)
-
-            # now generate the index W=RCSUi/RCSUmax:
-            rcsu_max = max(rcsu)
-            for codon_index, codon in enumerate(codons):
-                self.index[codon] = rcsu[codon_index] / rcsu_max
+            count_max = max(self.codon_count[codon] for codon in codons)
+            if count_max == 0:  # the residue does not occur at all
+                for codon in codons:
+                    self.index[codon] = None
+            else:
+                # now generate the index W=RCSUi/RCSUmax = COUNTi/COUNTmax:
+                # see equation 2 in Sharp & Li 1987 NAR
+                for codon in codons:
+                    self.index[codon] = self.codon_count[codon] / count_max
 
     def cai_for_gene(self, dna_sequence):
         """Calculate the CAI (float) for the provided DNA sequence (string).

@@ -635,19 +635,10 @@ class CodonAdaptationIndex(dict):
             if count == 0:
                 counts[codon] = 0.5
 
-        # now to calculate the index we first need to sum the number of times
-        # synonymous codons were used all together.
         for codons in synonymous_codons:
-            total = sum(counts[codon] for codon in codons)
-            # calculate the RSCU value for each of the codons
-            denominator = total / len(codons)
-            rcsu = [counts[codon] / denominator for codon in codons]
-
-            # now calculate the relative adaptiveness of each codon
-            # w_ij = RCSU_ij / RCSU_i,max
-            rcsu_max = max(rcsu)
-            for codon, rcsu_value in zip(codons, rcsu):
-                self[codon] = rcsu_value / rcsu_max
+            denominator = max(counts[codon] for codon in codons)
+            for codon in codons:
+                self[codon] = counts[codon] / denominator
 
     def calculate(self, sequence):
         """Calculate and return the CAI (float) for the provided DNA sequence."""
