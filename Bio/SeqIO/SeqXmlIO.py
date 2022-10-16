@@ -13,18 +13,17 @@ SeqXML is a lightweight XML format which is supposed be an alternative for
 FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 (2011), https://doi.org/10.1093/bib/bbr025
 """
-
+from xml import sax
+from xml.sax import handler
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
-from xml.sax import handler
-from xml import sax
 
-
-from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import SequenceIterator, SequenceWriter
+
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 
 class ContentHandler(handler.ContentHandler):
@@ -77,11 +76,11 @@ class ContentHandler(handler.ContentHandler):
                     raise ValueError("Unexpected attribute for XML Schema in namespace")
             else:
                 raise ValueError(
-                    "Unexpected namespace '%s' for seqXML attribute" % namespace
+                    f"Unexpected namespace '{namespace}' for seqXML attribute"
                 )
         if self.seqXMLversion is None:
             raise ValueError("Failed to find seqXMLversion")
-        url = "http://www.seqxml.org/%s/seqxml.xsd" % self.seqXMLversion
+        url = f"http://www.seqxml.org/{self.seqXMLversion}/seqxml.xsd"
         if schema != url:
             raise ValueError(
                 "XML Schema '%s' found not consistent with reported seqXML version %s"
@@ -94,9 +93,9 @@ class ContentHandler(handler.ContentHandler):
         """Handle end of the seqXML element."""
         namespace, localname = name
         if namespace is not None:
-            raise RuntimeError("Unexpected namespace '%s' for seqXML end" % namespace)
+            raise RuntimeError(f"Unexpected namespace '{namespace}' for seqXML end")
         if qname is not None:
-            raise RuntimeError("Unexpected qname '%s' for seqXML end" % qname)
+            raise RuntimeError(f"Unexpected qname '{qname}' for seqXML end")
         if localname != "seqXML":
             raise RuntimeError("Failed to find end of seqXML element")
         self.startElementNS = None
@@ -123,11 +122,11 @@ class ContentHandler(handler.ContentHandler):
                     record.annotations["source"] = value
                 else:
                     raise ValueError(
-                        "Unexpected attribute %s in entry element" % localname
+                        f"Unexpected attribute {localname} in entry element"
                     )
             else:
                 raise ValueError(
-                    "Unexpected namespace '%s' for entry attribute" % namespace
+                    f"Unexpected namespace '{namespace}' for entry attribute"
                 )
         if record.id is None:
             raise ValueError("Failed to find entry ID")
@@ -149,12 +148,10 @@ class ContentHandler(handler.ContentHandler):
         namespace, localname = name
         if namespace is not None:
             raise ValueError(
-                "Unexpected namespace '%s' for %s element" % (namespace, localname)
+                f"Unexpected namespace '{namespace}' for {localname} element"
             )
         if qname is not None:
-            raise RuntimeError(
-                "Unexpected qname '%s' for %s element" % (qname, localname)
-            )
+            raise RuntimeError(f"Unexpected qname '{qname}' for {localname} element")
         if localname == "species":
             return self.startSpeciesElement(attrs)
         if localname == "description":
@@ -165,7 +162,7 @@ class ContentHandler(handler.ContentHandler):
             return self.startDBRefElement(attrs)
         if localname == "property":
             return self.startPropertyElement(attrs)
-        raise ValueError("Unexpected field %s in entry" % localname)
+        raise ValueError(f"Unexpected field {localname} in entry")
 
     def startSpeciesElement(self, attrs):
         """Parse the species information."""
@@ -182,11 +179,11 @@ class ContentHandler(handler.ContentHandler):
                     ncbiTaxID = value
                 else:
                     raise ValueError(
-                        "Unexpected attribute '%s' found in species tag" % key
+                        f"Unexpected attribute '{key}' found in species tag"
                     )
             else:
                 raise ValueError(
-                    "Unexpected namespace '%s' for species attribute" % namespace
+                    f"Unexpected namespace '{namespace}' for species attribute"
                 )
         # The attributes "name" and "ncbiTaxID" are required:
         if name is None:
@@ -204,9 +201,9 @@ class ContentHandler(handler.ContentHandler):
         """Handle end of a species element."""
         namespace, localname = name
         if namespace is not None:
-            raise RuntimeError("Unexpected namespace '%s' for species end" % namespace)
+            raise RuntimeError(f"Unexpected namespace '{namespace}' for species end")
         if qname is not None:
-            raise RuntimeError("Unexpected qname '%s' for species end" % qname)
+            raise RuntimeError(f"Unexpected qname '{qname}' for species end")
         if localname != "species":
             raise RuntimeError("Failed to find end of species element")
         self.endElementNS = self.endEntryElement
@@ -216,7 +213,7 @@ class ContentHandler(handler.ContentHandler):
         if attrs:
             raise ValueError("Unexpected attributes found in description element")
         if self.data is not None:
-            raise RuntimeError("Unexpected data found: '%s'" % self.data)
+            raise RuntimeError(f"Unexpected data found: '{self.data}'")
         self.data = ""
         self.endElementNS = self.endDescriptionElement
 
@@ -225,10 +222,10 @@ class ContentHandler(handler.ContentHandler):
         namespace, localname = name
         if namespace is not None:
             raise RuntimeError(
-                "Unexpected namespace '%s' for description end" % namespace
+                f"Unexpected namespace '{namespace}' for description end"
             )
         if qname is not None:
-            raise RuntimeError("Unexpected qname '%s' for description end" % qname)
+            raise RuntimeError(f"Unexpected qname '{qname}' for description end")
         if localname != "description":
             raise RuntimeError("Failed to find end of description element")
         record = self.records[-1]
@@ -243,7 +240,7 @@ class ContentHandler(handler.ContentHandler):
         if attrs:
             raise ValueError("Unexpected attributes found in sequence element")
         if self.data is not None:
-            raise RuntimeError("Unexpected data found: '%s'" % self.data)
+            raise RuntimeError(f"Unexpected data found: '{self.data}'")
         self.data = ""
         self.endElementNS = self.endSequenceElement
 
@@ -251,24 +248,21 @@ class ContentHandler(handler.ContentHandler):
         """Handle the end of a sequence element."""
         namespace, localname = name
         if namespace is not None:
-            raise RuntimeError("Unexpected namespace '%s' for sequence end" % namespace)
+            raise RuntimeError(f"Unexpected namespace '{namespace}' for sequence end")
         if qname is not None:
-            raise RuntimeError("Unexpected qname '%s' for sequence end" % qname)
+            raise RuntimeError(f"Unexpected qname '{qname}' for sequence end")
         record = self.records[-1]
         if localname == "DNAseq":
-            alphabet = Alphabet.generic_dna
             record.annotations["molecule_type"] = "DNA"
         elif localname == "RNAseq":
-            alphabet = Alphabet.generic_rna
             record.annotations["molecule_type"] = "RNA"
         elif localname == "AAseq":
-            alphabet = Alphabet.generic_protein
             record.annotations["molecule_type"] = "protein"
         else:
             raise RuntimeError(
-                "Failed to find end of sequence (localname = %s)" % localname
+                f"Failed to find end of sequence (localname = {localname})"
             )
-        record.seq = Seq(self.data, alphabet)
+        record.seq = Seq(self.data)
         self.data = None
         self.endElementNS = self.endEntryElement
 
@@ -285,11 +279,11 @@ class ContentHandler(handler.ContentHandler):
                     ID = value
                 else:
                     raise ValueError(
-                        "Unexpected attribute '%s' found for DBRef element" % key
+                        f"Unexpected attribute '{key}' found for DBRef element"
                     )
             else:
                 raise ValueError(
-                    "Unexpected namespace '%s' for DBRef attribute" % namespace
+                    f"Unexpected namespace '{namespace}' for DBRef attribute"
                 )
         # The attributes "source" and "id" are required:
         if source is None:
@@ -297,10 +291,10 @@ class ContentHandler(handler.ContentHandler):
         if ID is None:
             raise ValueError("Failed to find id for DBRef element")
         if self.data is not None:
-            raise RuntimeError("Unexpected data found: '%s'" % self.data)
+            raise RuntimeError(f"Unexpected data found: '{self.data}'")
         self.data = ""
         record = self.records[-1]
-        dbxref = "%s:%s" % (source, ID)
+        dbxref = f"{source}:{ID}"
         if dbxref not in record.dbxrefs:
             record.dbxrefs.append(dbxref)
         self.endElementNS = self.endDBRefElement
@@ -309,18 +303,14 @@ class ContentHandler(handler.ContentHandler):
         """Handle the end of a DBRef element."""
         namespace, localname = name
         if namespace is not None:
-            raise RuntimeError(
-                "Unexpected namespace '%s' for DBRef element" % namespace
-            )
+            raise RuntimeError(f"Unexpected namespace '{namespace}' for DBRef element")
         if qname is not None:
-            raise RuntimeError("Unexpected qname '%s' for DBRef element" % qname)
+            raise RuntimeError(f"Unexpected qname '{qname}' for DBRef element")
         if localname != "DBRef":
-            raise RuntimeError(
-                "Unexpected localname '%s' for DBRef element" % localname
-            )
+            raise RuntimeError(f"Unexpected localname '{localname}' for DBRef element")
         if self.data:
             raise RuntimeError(
-                "Unexpected data received for DBRef element: '%s'" % self.data
+                f"Unexpected data received for DBRef element: '{self.data}'"
             )
         self.data = None
         self.endElementNS = self.endEntryElement
@@ -342,7 +332,7 @@ class ContentHandler(handler.ContentHandler):
                     )
             else:
                 raise ValueError(
-                    "Unexpected namespace '%s' for property attribute" % namespace
+                    f"Unexpected namespace '{namespace}' for property attribute"
                 )
         # The attribute "name" is required:
         if property_name is None:
@@ -365,13 +355,13 @@ class ContentHandler(handler.ContentHandler):
         namespace, localname = name
         if namespace is not None:
             raise RuntimeError(
-                "Unexpected namespace '%s' for property element" % namespace
+                f"Unexpected namespace '{namespace}' for property element"
             )
         if qname is not None:
-            raise RuntimeError("Unexpected qname '%s' for property element" % qname)
+            raise RuntimeError(f"Unexpected qname '{qname}' for property element")
         if localname != "property":
             raise RuntimeError(
-                "Unexpected localname '%s' for property element" % localname
+                f"Unexpected localname '{localname}' for property element"
             )
         self.endElementNS = self.endEntryElement
 
@@ -461,9 +451,9 @@ class SeqXmlIterator(SequenceIterator):
 class SeqXmlWriter(SequenceWriter):
     """Writes SeqRecords into seqXML file.
 
-    SeqXML requires the sequence alphabet be explicitly RNA, DNA or protein,
-    i.e. an instance or subclass of Bio.Alphabet.RNAAlphabet,
-    Bio.Alphabet.DNAAlphabet or Bio.Alphabet.ProteinAlphabet.
+    SeqXML requires the SeqRecord annotations to specify the molecule_type;
+    the molecule type is required to contain the term "DNA", "RNA", or
+    "protein".
     """
 
     def __init__(
@@ -557,7 +547,7 @@ class SeqXmlWriter(SequenceWriter):
                 elif len(local_ncbi_taxid) == 0:
                     local_ncbi_taxid = None
                 else:
-                    ValueError(
+                    raise ValueError(
                         "Multiple entries for record.annotations['ncbi_taxid'], %r"
                         % local_ncbi_taxid
                     )
@@ -596,12 +586,13 @@ class SeqXmlWriter(SequenceWriter):
     def _write_seq(self, record):
         """Write the sequence (PRIVATE).
 
-        Note that SeqXML requires a DNA, RNA or protein alphabet.
+        Note that SeqXML requires the molecule type to contain the term
+        "DNA", "RNA", or "protein".
         """
         if isinstance(record.seq, UnknownSeq):
             raise TypeError("Sequence type is UnknownSeq but SeqXML requires sequence")
 
-        seq = str(record.seq)
+        seq = bytes(record.seq)
 
         if not len(seq) > 0:
             raise ValueError("The sequence length should be greater than 0")
@@ -616,7 +607,7 @@ class SeqXmlWriter(SequenceWriter):
         elif "protein" in molecule_type:
             seqElem = "AAseq"
         else:
-            raise ValueError("unknown molecule_type '%s'" % molecule_type)
+            raise ValueError(f"unknown molecule_type '{molecule_type}'")
 
         self.xml_generator.startElement(seqElem, AttributesImpl({}))
         self.xml_generator.characters(seq)
@@ -656,12 +647,14 @@ class SeqXmlWriter(SequenceWriter):
                 elif isinstance(value, list):
 
                     for v in value:
-                        if isinstance(value, (int, float, str)):
-                            attr = {"name": key, "value": v}
-                            self.xml_generator.startElement(
-                                "property", AttributesImpl(attr)
-                            )
-                            self.xml_generator.endElement("property")
+                        if v is None:
+                            attr = {"name": key}
+                        else:
+                            attr = {"name": key, "value": str(v)}
+                        self.xml_generator.startElement(
+                            "property", AttributesImpl(attr)
+                        )
+                        self.xml_generator.endElement("property")
 
                 elif isinstance(value, (int, float, str)):
 

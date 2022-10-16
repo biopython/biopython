@@ -49,21 +49,21 @@ class Yn00(Paml):
         # Make sure all paths are relative to the working directory
         self._set_rel_paths()
         with open(self.ctl_file, "w") as ctl_handle:
-            ctl_handle.write("seqfile = %s\n" % self._rel_alignment)
-            ctl_handle.write("outfile = %s\n" % self._rel_out_file)
+            ctl_handle.write(f"seqfile = {self._rel_alignment}\n")
+            ctl_handle.write(f"outfile = {self._rel_out_file}\n")
             for option in self._options.items():
                 if option[1] is None:
                     # If an option has a value of None, there's no need
                     # to write it in the control file; it's normally just
                     # commented out.
                     continue
-                ctl_handle.write("%s = %s\n" % (option[0], option[1]))
+                ctl_handle.write(f"{option[0]} = {option[1]}\n")
 
     def read_ctl_file(self, ctl_file):
         """Parse a control file and load the options into the yn00 instance."""
         temp_options = {}
         if not os.path.isfile(ctl_file):
-            raise FileNotFoundError("File not found: %r" % ctl_file)
+            raise FileNotFoundError(f"File not found: {ctl_file!r}")
         else:
             with open(ctl_file) as ctl_handle:
                 for line in ctl_handle:
@@ -72,7 +72,7 @@ class Yn00(Paml):
                     if uncommented != "":
                         if "=" not in uncommented:
                             raise AttributeError(
-                                "Malformed line in control file:\n%r" % line
+                                f"Malformed line in control file:\n{line!r}"
                             )
                         (option, value) = uncommented.split("=")
                         option = option.strip()
@@ -82,7 +82,7 @@ class Yn00(Paml):
                         elif option == "outfile":
                             self.out_file = value
                         elif option not in self._options:
-                            raise KeyError("Invalid option: %s" % option)
+                            raise KeyError(f"Invalid option: {option}")
                         else:
                             if "." in value or "e-" in value:
                                 try:

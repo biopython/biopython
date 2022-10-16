@@ -10,11 +10,8 @@ You are expected to use this module via the Bio.SeqIO functions.
 See also the Bio.Sequencing.Ace module which offers more than just accessing
 the contig consensus sequences in an ACE file as SeqRecord objects.
 """
-
-
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_nucleotide, generic_dna, generic_rna
 from Bio.Sequencing import Ace
 
 
@@ -62,25 +59,13 @@ def AceIterator(source):
     for ace_contig in Ace.parse(source):
         # Convert the ACE contig record into a SeqRecord...
         consensus_seq_str = ace_contig.sequence
-        # Assume its DNA unless there is a U in it,
-        molecule_type = "DNA"
-        if "U" in consensus_seq_str:
-            if "T" in consensus_seq_str:
-                # Very odd! Error?
-                alpha = generic_nucleotide
-            else:
-                alpha = generic_rna
-                molecule_type = "RNA"
-        else:
-            alpha = generic_dna
-
         if "*" in consensus_seq_str:
             # For consistency with most other file formats, map
             # any * gaps into - gaps.
             assert "-" not in consensus_seq_str
-            consensus_seq = Seq(consensus_seq_str.replace("*", "-"), alpha)
+            consensus_seq = Seq(consensus_seq_str.replace("*", "-"))
         else:
-            consensus_seq = Seq(consensus_seq_str, alpha)
+            consensus_seq = Seq(consensus_seq_str)
 
         # TODO? - Base segments (BS lines) which indicates which read
         # phrap has chosen to be the consensus at a particular position.
@@ -90,7 +75,6 @@ def AceIterator(source):
         # Perhaps as SeqFeature objects?
 
         seq_record = SeqRecord(consensus_seq, id=ace_contig.name, name=ace_contig.name)
-        seq_record.annotations["molecule_type"] = molecule_type
 
         # Consensus base quality (BQ lines).  Note that any gaps (originally
         # as * characters) in the consensus do not get a quality entry, so

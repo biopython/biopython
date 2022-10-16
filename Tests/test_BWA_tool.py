@@ -11,6 +11,7 @@ from Bio import MissingExternalDependencyError
 import sys
 import os
 import unittest
+
 # TODO from Bio.Sequencing.Applications import BwaBwaswCommandline
 from Bio.Sequencing.Applications import BwaIndexCommandline
 from Bio.Sequencing.Applications import BwaAlignCommandline
@@ -44,6 +45,7 @@ if sys.platform == "win32":
                 break
 else:
     from subprocess import getoutput
+
     output = getoutput("bwa")
 
     # Since "not found" may be in another language, try and be sure this is
@@ -59,9 +61,11 @@ else:
         print("'bwa aln' is unrecognized, skipping aln/samse/sampe tests")
 
 if not bwa_exe:
-    raise MissingExternalDependencyError("Install bwa and correctly set"
-                                         " the file path to the program if"
-                                         " you want to use it from Biopython")
+    raise MissingExternalDependencyError(
+        "Install bwa and correctly set"
+        " the file path to the program if"
+        " you want to use it from Biopython"
+    )
 
 
 class BwaTestCase(unittest.TestCase):
@@ -77,9 +81,13 @@ class BwaTestCase(unittest.TestCase):
         self.samfile1 = "BWA/1.sam"
         self.samfile2 = "BWA/2.sam"
         self.samfile = "BWA/out.sam"
-        self.files_to_clean = [self.saifile1, self.saifile2,
-                               self.samfile1, self.samfile2,
-                               self.samfile]
+        self.files_to_clean = [
+            self.saifile1,
+            self.saifile2,
+            self.samfile1,
+            self.samfile2,
+            self.samfile,
+        ]
 
     def tearDown(self):
         for filename in self.files_to_clean:
@@ -98,12 +106,14 @@ class BwaTestCase(unittest.TestCase):
         stdout, stderr = cmdline()
         for extension in self.reference_extensions:
             index_file = self.reference_file + "." + extension
-            self.assertTrue(os.path.exists(index_file),
-                            "Index File %s not found"
-                            % (index_file))
-        self.assertIn("Finished constructing BWT", str(stdout) + str(stderr),
-                      "FASTA indexing failed:\n%s\nStdout:%s\nStderr:%s\n"
-                      % (cmdline, stdout, stderr))
+            self.assertTrue(
+                os.path.exists(index_file), f"Index File {index_file} not found"
+            )
+        self.assertIn(
+            "Finished constructing BWT",
+            str(stdout) + str(stderr),
+            f"FASTA indexing failed:\n{cmdline}\nStdout:{stdout}\nStderr:{stderr}\n",
+        )
 
     def do_aln(self, in_file, out_file):
         """Test for generating sai files given the reference and read file."""
@@ -112,9 +122,12 @@ class BwaTestCase(unittest.TestCase):
         cmdline.read_file = in_file
         self.assertTrue(os.path.isfile(in_file))
         stdout, stderr = cmdline(stdout=out_file)
-        self.assertNotIn("fail to locate the index", str(stderr) + str(stdout),
-                         "Error aligning sequence to reference:\n%s\nStdout:%s\nStderr:%s\n"
-                         % (cmdline, stdout, stderr))
+        self.assertNotIn(
+            "fail to locate the index",
+            str(stderr) + str(stdout),
+            "Error aligning sequence to reference:\n%s\nStdout:%s\nStderr:%s\n"
+            % (cmdline, stdout, stderr),
+        )
 
     def create_fasta_index(self):
         """Test for generating index for fasta file.
@@ -142,9 +155,10 @@ class BwaTestCase(unittest.TestCase):
 
             with open(self.samfile1) as handle:
                 headline = handle.readline()
-            self.assertTrue(headline.startswith("@SQ"),
-                            "Error generating sam files:\n%s\nOutput starts:%s"
-                            % (cmdline, headline))
+            self.assertTrue(
+                headline.startswith("@SQ"),
+                f"Error generating sam files:\n{cmdline}\nOutput starts:{headline}",
+            )
 
         def test_sampe(self):
             """Test for generating samfile by paired end sequencing."""
@@ -164,9 +178,10 @@ class BwaTestCase(unittest.TestCase):
 
             with open(self.samfile) as handle:
                 headline = handle.readline()
-            self.assertTrue(headline.startswith("@SQ"),
-                            "Error generating sam files:\n%s\nOutput starts:%s"
-                            % (cmdline, headline))
+            self.assertTrue(
+                headline.startswith("@SQ"),
+                f"Error generating sam files:\n{cmdline}\nOutput starts:{headline}",
+            )
 
         def test_mem(self):
             """Test for generating samfile by paired end sequencing using BWA-MEM."""
@@ -180,9 +195,10 @@ class BwaTestCase(unittest.TestCase):
 
             with open(self.samfile) as handle:
                 headline = handle.readline()
-            self.assertTrue(headline.startswith("@SQ"),
-                            "Error generating sam files:\n%s\nOutput starts:%s"
-                            % (cmdline, headline))
+            self.assertTrue(
+                headline.startswith("@SQ"),
+                f"Error generating sam files:\n{cmdline}\nOutput starts:{headline}",
+            )
 
 
 if __name__ == "__main__":

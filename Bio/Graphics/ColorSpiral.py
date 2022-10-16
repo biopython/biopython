@@ -87,7 +87,7 @@ class ColorSpiral:
         """
         # We use the offset to skip a number of similar colours near to HSV axis
         assert offset > 0 and offset < 1, "offset must be in (0,1)"
-        v_rate = (self._v_final - self._v_init) / float(k)
+        v_rate = (self._v_final - self._v_init) / k
         # Generator for colours: we have divided the arc length into sections
         # of equal length, and step along them
         for n in range(1, k + 1):
@@ -97,7 +97,7 @@ class ColorSpiral:
                 log(n + (k * offset)) - log((1 + offset) * k * self._a)
             )
             # Put 0 <= h <= 2*pi, where h is the angular part of the polar
-            # co-ordinates for this point on the spiral
+            # coordinates for this point on the spiral
             h = t
             while h < 0:
                 h += 2 * pi

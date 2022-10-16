@@ -87,7 +87,7 @@ class Description:
 
     def __str__(self):
         """Return the description as a string."""
-        return "%-66s %5s  %s" % (self.title, self.score, self.e)
+        return f"{self.title:<66} {self.score:>5}  {self.e}"
 
 
 class DescriptionExt(Description):
@@ -128,7 +128,7 @@ class DescriptionExtItem:
 
     def __str__(self):
         """Return the description identifier and title as a string."""
-        return "%s %s" % (self.id, self.title)
+        return f"{self.id} {self.title}"
 
 
 class Alignment:
@@ -154,7 +154,7 @@ class Alignment:
     def __str__(self):
         """Return the BLAST alignment as a formatted string."""
         lines = self.title.split("\n")
-        lines.append("Length = %s\n" % self.length)
+        lines.append(f"Length = {self.length}\n")
         return "\n           ".join(lines)
 
 
@@ -243,35 +243,21 @@ class HSP:
             return "\n".join(lines)
         if self.align_length < 50:
             lines.append(
-                "Query:%s %s %s"
-                % (str(self.query_start).rjust(8), str(self.query), str(self.query_end))
+                "Query:%8s %s %s" % (self.query_start, self.query, self.query_end)
             )
-            lines.append("               %s" % (str(self.match)))
+            lines.append(f"               {self.match}")
             lines.append(
-                "Sbjct:%s %s %s"
-                % (str(self.sbjct_start).rjust(8), str(self.sbjct), str(self.sbjct_end))
+                "Sbjct:%8s %s %s" % (self.sbjct_start, self.sbjct, self.sbjct_end)
             )
         else:
             lines.append(
-                "Query:%s %s...%s %s"
-                % (
-                    str(self.query_start).rjust(8),
-                    str(self.query)[:45],
-                    str(self.query)[-3:],
-                    str(self.query_end),
-                )
+                "Query:%8s %s...%s %s"
+                % (self.query_start, self.query[:45], self.query[-3:], self.query_end)
             )
+            lines.append(f"               {self.match[:45]}...{self.match[-3:]}")
             lines.append(
-                "               %s...%s" % (str(self.match)[:45], str(self.match)[-3:])
-            )
-            lines.append(
-                "Sbjct:%s %s...%s %s"
-                % (
-                    str(self.sbjct_start).rjust(8),
-                    str(self.sbjct)[:45],
-                    str(self.sbjct)[-3:],
-                    str(self.sbjct_end),
-                )
+                "Sbjct:%8s %s...%s %s"
+                % (self.sbjct_start, self.sbjct[:45], self.sbjct[-3:], self.sbjct_end)
             )
         return "\n".join(lines)
 
@@ -300,7 +286,6 @@ class MultipleAlignment:
 
         Thanks to James Casbon for the code.
         """
-        # TODO - Switch to new Bio.Align.MultipleSeqAlignment class?
         seq_parts = []
         seq_names = []
         parse_number = 0
@@ -317,11 +302,10 @@ class MultipleAlignment:
                 seq_parts[n] += seq
                 n += 1
 
-        generic = MultipleSeqAlignment([])
-        for (name, seq) in zip(seq_names, seq_parts):
-            generic.append(SeqRecord(Seq(seq), name))
-
-        return generic
+        records = (
+            SeqRecord(Seq(seq), name) for (name, seq) in zip(seq_names, seq_parts)
+        )
+        return MultipleSeqAlignment(records)
 
 
 class Round:

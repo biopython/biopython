@@ -5,13 +5,16 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Tests for the SeqIO Xdna module."""
-
 import unittest
+
 from io import BytesIO
 
-from Bio import SeqIO, BiopythonWarning
+from Bio import BiopythonWarning
+from Bio import SeqIO
 from Bio.Seq import Seq
-from Bio.SeqFeature import SeqFeature, FeatureLocation, BeforePosition
+from Bio.SeqFeature import BeforePosition
+from Bio.SeqFeature import SimpleLocation
+from Bio.SeqFeature import SeqFeature
 from Bio.SeqRecord import SeqRecord
 
 
@@ -103,7 +106,9 @@ class TestXdna(unittest.TestCase):
             self.assertEqual(sample["id"], record.id)
             self.assertEqual(sample["description"], record.description)
             self.assertEqual(sample["length"], len(record))
-            self.assertEqual(sample["molecule_type"], record.annotations["molecule_type"])
+            self.assertEqual(
+                sample["molecule_type"], record.annotations["molecule_type"]
+            )
             self.assertEqual(sample["topology"], record.annotations["topology"])
 
             self.assertEqual(len(sample["features"]), len(record.features))
@@ -198,13 +203,13 @@ class TestXdnaWriter(unittest.TestCase):
         # Fabricate a record with > 255 features
         record = SeqRecord(Seq("ACGT"))
         for i in range(260):
-            feature = SeqFeature(FeatureLocation(1, 2), type="misc_feature")
+            feature = SeqFeature(SimpleLocation(1, 2), type="misc_feature")
             record.features.append(feature)
         with self.assertWarnsRegex(BiopythonWarning, "Too many features"):
             SeqIO.write([record], h, "xdna")
 
         # Now a record with a fuzzy-located feature
-        feature = SeqFeature(FeatureLocation(BeforePosition(2), 3), type="misc_feature")
+        feature = SeqFeature(SimpleLocation(BeforePosition(2), 3), type="misc_feature")
         record.features = [feature]
         with self.assertWarnsRegex(
             BiopythonWarning, r"Dropping \d+ features with fuzzy locations"
@@ -214,7 +219,7 @@ class TestXdnaWriter(unittest.TestCase):
         # Now a record with a feature with a qualifier too long
         qualifiers = {"note": ["x" * 260]}
         feature = SeqFeature(
-            FeatureLocation(2, 3), type="misc_feature", qualifiers=qualifiers
+            SimpleLocation(2, 3), type="misc_feature", qualifiers=qualifiers
         )
         record.features = [feature]
         with self.assertWarnsRegex(

@@ -63,31 +63,31 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(feature.location.start, 19)
         self.assertEqual(feature.location.end, 40)
         self.assertEqual(feature.qualifiers["description"], "POTENTIAL.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[1]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 196)
         self.assertEqual(feature.location.end, 217)
         self.assertEqual(feature.qualifiers["description"], "POTENTIAL.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[2]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 221)
         self.assertEqual(feature.location.end, 242)
         self.assertEqual(feature.qualifiers["description"], "POTENTIAL.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[3]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 276)
         self.assertEqual(feature.location.end, 297)
         self.assertEqual(feature.qualifiers["description"], "POTENTIAL.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[4]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 312)
         self.assertEqual(feature.location.end, 333)
         self.assertEqual(feature.qualifiers["description"], "POTENTIAL.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[5]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 343)
@@ -95,7 +95,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "DLDFE -> FLIK (IN FORM 2)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
 
         self.assertEqual(len(record.references), 1)
         self.assertEqual(
@@ -110,7 +110,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[0].references[0], ("MEDLINE", "96299740"))
 
         # Check that the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -126,7 +126,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -195,13 +195,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(feature.location.start, 12)
         self.assertEqual(feature.location.end, 82)
         self.assertEqual(feature.qualifiers["description"], "DNAJ-LIKE.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[1]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 117)
         self.assertEqual(feature.location.end, 128)
         self.assertEqual(feature.qualifiers["description"], "POLY-CYS.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
 
         self.assertEqual(len(record.references), 3)
         self.assertEqual(record.references[0].authors, "QIN N., LIN T., BIRNBAUMER L.")
@@ -225,7 +225,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[2].references[0], ("MEDLINE", "96188189"))
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -241,7 +241,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -311,31 +311,31 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(feature.location.start, 0)
         self.assertEqual(feature.location.end, 1)
         self.assertEqual(feature.qualifiers["description"], "ACETYLATION.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[1]
         self.assertEqual(feature.type, "CONFLICT")
         self.assertEqual(feature.location.start, 72)
         self.assertEqual(feature.location.end, 73)
         self.assertEqual(feature.qualifiers["description"], "K -> T (IN REF. 8).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[2]
         self.assertEqual(feature.type, "CONFLICT")
         self.assertEqual(feature.location.start, 119)
         self.assertEqual(feature.location.end, 120)
         self.assertEqual(feature.qualifiers["description"], "F -> S (IN REF. 8).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[3]
         self.assertEqual(feature.type, "CONFLICT")
         self.assertEqual(feature.location.start, 122)
         self.assertEqual(feature.location.end, 123)
         self.assertEqual(feature.qualifiers["description"], "K -> Y (IN REF. 8).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[4]
         self.assertEqual(feature.type, "CONFLICT")
         self.assertEqual(feature.location.start, 128)
         self.assertEqual(feature.location.end, 129)
         self.assertEqual(feature.qualifiers["description"], "H -> Y (IN REF. 13).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
 
         self.assertEqual(len(record.references), 13)
         self.assertEqual(
@@ -448,7 +448,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[12].references[0], ("MEDLINE", "90345949"))
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -464,7 +464,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -547,7 +547,7 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["evidence"],
             "ECO:0000250|UniProtKB:P0A185,ECO:0000255|PROSITE-ProRule:PRU00628",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[4]
         self.assertEqual(feature.type, "METAL")
         self.assertEqual(feature.location.start, 46)
@@ -559,7 +559,7 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["evidence"],
             "ECO:0000250|UniProtKB:P0A185,ECO:0000255|PROSITE-ProRule:PRU00628",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[5]
         self.assertEqual(feature.type, "METAL")
         self.assertEqual(feature.location.start, 63)
@@ -569,7 +569,7 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["evidence"],
             "ECO:0000250|UniProtKB:P0A185,ECO:0000255|PROSITE-ProRule:PRU00628",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[6]
         self.assertEqual(feature.type, "METAL")
         self.assertEqual(feature.location.start, 66)
@@ -577,7 +577,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["note"], "Iron-sulfur (2Fe-2S); via pros nitrogen"
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
 
         self.assertEqual(len(record.references), 1)
         self.assertEqual(
@@ -596,7 +596,7 @@ class TestSwissProt(unittest.TestCase):
         )
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -612,7 +612,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -699,7 +699,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[1].references[0], ("MEDLINE", "94141932"))
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -715,7 +715,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -792,7 +792,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[0].references[0], ("MEDLINE", "92193265"))
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -808,7 +808,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -879,37 +879,37 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(feature.location.start, 7)
         self.assertEqual(feature.location.end, 28)
         self.assertEqual(feature.qualifiers["description"], "POTENTIAL.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[1]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 81)
         self.assertEqual(feature.location.end, 102)
         self.assertEqual(feature.qualifiers["description"], "POTENTIAL.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[2]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 115)
         self.assertEqual(feature.location.end, 136)
         self.assertEqual(feature.qualifiers["description"], "POTENTIAL.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[3]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 163)
         self.assertEqual(feature.location.end, 184)
         self.assertEqual(feature.qualifiers["description"], "POTENTIAL.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[4]
         self.assertEqual(feature.type, "CONFLICT")
         self.assertEqual(feature.location.start, 61)
         self.assertEqual(feature.location.end, 62)
         self.assertEqual(feature.qualifiers["description"], "I -> V (IN REF. 2).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[5]
         self.assertEqual(feature.type, "CONFLICT")
         self.assertEqual(feature.location.start, 134)
         self.assertEqual(feature.location.end, 135)
         self.assertEqual(feature.qualifiers["description"], "V -> A (IN REF. 2).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
 
         self.assertEqual(len(record.references), 2)
         self.assertEqual(
@@ -929,7 +929,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[1].references), 0)
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -945,7 +945,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -1031,7 +1031,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(feature.location.start, 0)
         self.assertEqual(feature.location.end, 24)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[1]
         self.assertEqual(feature.type, "CHAIN")
         self.assertEqual(feature.location.start, 24)
@@ -1040,319 +1040,319 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["description"],
             "HLA CLASS I HISTOCOMPATIBILITY ANTIGEN, A-2 ALPHA CHAIN.",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[2]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 24)
         self.assertEqual(feature.location.end, 114)
         self.assertEqual(feature.qualifiers["description"], "EXTRACELLULAR ALPHA-1.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[3]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 114)
         self.assertEqual(feature.location.end, 206)
         self.assertEqual(feature.qualifiers["description"], "EXTRACELLULAR ALPHA-2.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[4]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 206)
         self.assertEqual(feature.location.end, 298)
         self.assertEqual(feature.qualifiers["description"], "EXTRACELLULAR ALPHA-3.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[5]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 298)
         self.assertEqual(feature.location.end, 308)
         self.assertEqual(feature.qualifiers["description"], "CONNECTING PEPTIDE.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[6]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 308)
         self.assertEqual(feature.location.end, 332)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[7]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 332)
         self.assertEqual(feature.location.end, 365)
         self.assertEqual(feature.qualifiers["description"], "CYTOPLASMIC TAIL.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[8]
         self.assertEqual(feature.type, "CARBOHYD")
         self.assertEqual(feature.location.start, 109)
         self.assertEqual(feature.location.end, 110)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[9]
         self.assertEqual(feature.type, "DISULFID")
         self.assertEqual(feature.location.start, 124)
         self.assertEqual(feature.location.end, 188)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[10]
         self.assertEqual(feature.type, "DISULFID")
         self.assertEqual(feature.location.start, 226)
         self.assertEqual(feature.location.end, 283)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[11]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 26)
         self.assertEqual(feature.location.end, 36)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[12]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 44)
         self.assertEqual(feature.location.end, 52)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[13]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 52)
         self.assertEqual(feature.location.end, 54)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[14]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 54)
         self.assertEqual(feature.location.end, 61)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[15]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 61)
         self.assertEqual(feature.location.end, 63)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[16]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 69)
         self.assertEqual(feature.location.end, 71)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[17]
         self.assertEqual(feature.type, "HELIX")
         self.assertEqual(feature.location.start, 73)
         self.assertEqual(feature.location.end, 76)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[18]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 76)
         self.assertEqual(feature.location.end, 78)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[19]
         self.assertEqual(feature.type, "HELIX")
         self.assertEqual(feature.location.start, 80)
         self.assertEqual(feature.location.end, 108)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[20]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 108)
         self.assertEqual(feature.location.end, 110)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[21]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 112)
         self.assertEqual(feature.location.end, 114)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[22]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 117)
         self.assertEqual(feature.location.end, 127)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[23]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 128)
         self.assertEqual(feature.location.end, 130)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[24]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 132)
         self.assertEqual(feature.location.end, 142)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[25]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 142)
         self.assertEqual(feature.location.end, 144)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[26]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 144)
         self.assertEqual(feature.location.end, 150)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[27]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 151)
         self.assertEqual(feature.location.end, 153)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[28]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 156)
         self.assertEqual(feature.location.end, 159)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[29]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 162)
         self.assertEqual(feature.location.end, 163)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[30]
         self.assertEqual(feature.type, "HELIX")
         self.assertEqual(feature.location.start, 163)
         self.assertEqual(feature.location.end, 173)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[31]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 173)
         self.assertEqual(feature.location.end, 175)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[32]
         self.assertEqual(feature.type, "HELIX")
         self.assertEqual(feature.location.start, 175)
         self.assertEqual(feature.location.end, 185)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[33]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 185)
         self.assertEqual(feature.location.end, 186)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[34]
         self.assertEqual(feature.type, "HELIX")
         self.assertEqual(feature.location.start, 186)
         self.assertEqual(feature.location.end, 198)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[35]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 198)
         self.assertEqual(feature.location.end, 199)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[36]
         self.assertEqual(feature.type, "HELIX")
         self.assertEqual(feature.location.start, 199)
         self.assertEqual(feature.location.end, 203)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[37]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 203)
         self.assertEqual(feature.location.end, 204)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[38]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 206)
         self.assertEqual(feature.location.end, 207)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[39]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 209)
         self.assertEqual(feature.location.end, 219)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[40]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 219)
         self.assertEqual(feature.location.end, 221)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[41]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 221)
         self.assertEqual(feature.location.end, 233)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[42]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 237)
         self.assertEqual(feature.location.end, 243)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[43]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 243)
         self.assertEqual(feature.location.end, 245)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[44]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 245)
         self.assertEqual(feature.location.end, 247)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[45]
         self.assertEqual(feature.type, "HELIX")
         self.assertEqual(feature.location.start, 248)
         self.assertEqual(feature.location.end, 251)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[46]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 252)
         self.assertEqual(feature.location.end, 254)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[47]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 257)
         self.assertEqual(feature.location.end, 259)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[48]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 264)
         self.assertEqual(feature.location.end, 274)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[49]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 274)
         self.assertEqual(feature.location.end, 276)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[50]
         self.assertEqual(feature.type, "HELIX")
         self.assertEqual(feature.location.start, 277)
         self.assertEqual(feature.location.end, 280)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[51]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 280)
         self.assertEqual(feature.location.end, 286)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[52]
         self.assertEqual(feature.type, "TURN")
         self.assertEqual(feature.location.start, 287)
         self.assertEqual(feature.location.end, 289)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[53]
         self.assertEqual(feature.type, "STRAND")
         self.assertEqual(feature.location.start, 293)
         self.assertEqual(feature.location.end, 297)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[54]
         self.assertEqual(feature.type, "VARIANT")
         self.assertEqual(feature.location.start, 32)
@@ -1728,7 +1728,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[26].references[0], ("MEDLINE", "91245570"))
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -1744,7 +1744,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -1814,7 +1814,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(feature.location.start, 164)
         self.assertEqual(feature.location.end, 165)
         self.assertEqual(feature.qualifiers["description"], "BY SIMILARITY.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
 
         self.assertEqual(len(record.references), 1)
         self.assertEqual(
@@ -1827,7 +1827,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[0].references), 0)
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -1843,7 +1843,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -1920,25 +1920,25 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "EXTRACELLULAR (POTENTIAL)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[1]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 19)
         self.assertEqual(feature.location.end, 40)
         self.assertEqual(feature.qualifiers["description"], "1 (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[2]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 40)
         self.assertEqual(feature.location.end, 58)
         self.assertEqual(feature.qualifiers["description"], "CYTOPLASMIC (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[3]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 58)
         self.assertEqual(feature.location.end, 79)
         self.assertEqual(feature.qualifiers["description"], "2 (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[4]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 79)
@@ -1946,25 +1946,25 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "EXTRACELLULAR (POTENTIAL)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[5]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 93)
         self.assertEqual(feature.location.end, 116)
         self.assertEqual(feature.qualifiers["description"], "3 (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[6]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 116)
         self.assertEqual(feature.location.end, 137)
         self.assertEqual(feature.qualifiers["description"], "CYTOPLASMIC (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[7]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 137)
         self.assertEqual(feature.location.end, 158)
         self.assertEqual(feature.qualifiers["description"], "4 (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[8]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 158)
@@ -1972,25 +1972,25 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "EXTRACELLULAR (POTENTIAL)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[9]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 192)
         self.assertEqual(feature.location.end, 213)
         self.assertEqual(feature.qualifiers["description"], "5 (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[10]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 213)
         self.assertEqual(feature.location.end, 260)
         self.assertEqual(feature.qualifiers["description"], "CYTOPLASMIC (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[11]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 260)
         self.assertEqual(feature.location.end, 281)
         self.assertEqual(feature.qualifiers["description"], "6 (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[12]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 281)
@@ -1998,19 +1998,19 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "EXTRACELLULAR (POTENTIAL)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[13]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 294)
         self.assertEqual(feature.location.end, 315)
         self.assertEqual(feature.qualifiers["description"], "7 (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[14]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 315)
         self.assertEqual(feature.location.end, 388)
         self.assertEqual(feature.qualifiers["description"], "CYTOPLASMIC (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[15]
         self.assertEqual(feature.type, "CARBOHYD")
         self.assertEqual(feature.location.start, 6)
@@ -2018,13 +2018,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "N-LINKED (GLCNAC...) (POTENTIAL)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[16]
         self.assertEqual(feature.type, "DISULFID")
         self.assertEqual(feature.location.start, 92)
         self.assertEqual(feature.location.end, 184)
         self.assertEqual(feature.qualifiers["description"], "BY SIMILARITY.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[17]
         self.assertEqual(feature.type, "LIPID")
         self.assertEqual(feature.location.start, 328)
@@ -2032,7 +2032,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "PALMITATE (BY SIMILARITY)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[18]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 168)
@@ -2041,7 +2041,7 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["description"],
             "L -> LERSLNQGLGQDFHA (IN ISOFORM 5-HT4(F)).",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[19]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 358)
@@ -2050,7 +2050,7 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["description"],
             "RDAVECGGQWESQCHPPATSPLVAAQPSDT -> SGCSPVSSFLLLFCNRPVPV (IN ISOFORM 5-HT4(E)).",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[20]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 358)
@@ -2059,7 +2059,7 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["description"],
             "RDAVECGGQWESQCHPPATSPLVAAQPSDT -> SSGTETDRRNFGIRKRRLTKPS (IN ISOFORM 5-HT4(D)).",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[21]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 359)
@@ -2068,7 +2068,7 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["description"],
             "DAVECGGQWESQCHPPATSPLVAAQPSDT -> F (IN ISOFORM 5-HT4(C)).",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[22]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 359)
@@ -2077,7 +2077,7 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["description"],
             "DAVECGGQWESQCHPPATSPLVAAQPSDT -> YTVLHRGHHQELEKLPIHNDPESLESCF (IN ISOFORM 5-HT4(A)).",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         self.assertEqual(len(record.references), 6)
 
         self.assertEqual(
@@ -2141,7 +2141,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[5].references[1], ("PubMed", "7656980"))
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -2156,7 +2156,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -2254,13 +2254,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "Extracellular (By similarity)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[2]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 19)
         self.assertEqual(feature.location.end, 40)
         self.assertEqual(feature.qualifiers["description"], "1 (By similarity).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[3]
         self.assertEqual(feature.type, "TOPO_DOM")
         self.assertEqual(feature.location.start, 40)
@@ -2268,13 +2268,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "Cytoplasmic (By similarity)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[4]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 58)
         self.assertEqual(feature.location.end, 79)
         self.assertEqual(feature.qualifiers["description"], "2 (By similarity).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[5]
         self.assertEqual(feature.type, "TOPO_DOM")
         self.assertEqual(feature.location.start, 79)
@@ -2282,13 +2282,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "Extracellular (By similarity)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[6]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 93)
         self.assertEqual(feature.location.end, 116)
         self.assertEqual(feature.qualifiers["description"], "3 (By similarity).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[7]
         self.assertEqual(feature.type, "TOPO_DOM")
         self.assertEqual(feature.location.start, 116)
@@ -2296,13 +2296,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "Cytoplasmic (By similarity)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[8]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 137)
         self.assertEqual(feature.location.end, 158)
         self.assertEqual(feature.qualifiers["description"], "4 (By similarity).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[9]
         self.assertEqual(feature.type, "TOPO_DOM")
         self.assertEqual(feature.location.start, 158)
@@ -2310,13 +2310,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "Extracellular (By similarity)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[10]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 192)
         self.assertEqual(feature.location.end, 213)
         self.assertEqual(feature.qualifiers["description"], "5 (By similarity).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[11]
         self.assertEqual(feature.type, "TOPO_DOM")
         self.assertEqual(feature.location.start, 213)
@@ -2324,13 +2324,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "Cytoplasmic (By similarity)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[12]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 260)
         self.assertEqual(feature.location.end, 281)
         self.assertEqual(feature.qualifiers["description"], "6 (By similarity).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[13]
         self.assertEqual(feature.type, "TOPO_DOM")
         self.assertEqual(feature.location.start, 281)
@@ -2338,13 +2338,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "Extracellular (By similarity)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[14]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 294)
         self.assertEqual(feature.location.end, 315)
         self.assertEqual(feature.qualifiers["description"], "7 (By similarity).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[15]
         self.assertEqual(feature.type, "TOPO_DOM")
         self.assertEqual(feature.location.start, 315)
@@ -2352,7 +2352,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "Cytoplasmic (By similarity)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[16]
         self.assertEqual(feature.type, "LIPID")
         self.assertEqual(feature.location.start, 328)
@@ -2360,7 +2360,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "S-palmitoyl cysteine (By similarity)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[17]
         self.assertEqual(feature.type, "CARBOHYD")
         self.assertEqual(feature.location.start, 6)
@@ -2368,13 +2368,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "N-linked (GlcNAc...) (Potential)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[18]
         self.assertEqual(feature.type, "DISULFID")
         self.assertEqual(feature.location.start, 92)
         self.assertEqual(feature.location.end, 184)
         self.assertEqual(feature.qualifiers["description"], "By similarity.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[19]
         self.assertEqual(feature.type, "VAR_SEQ")
         self.assertEqual(feature.location.start, 168)
@@ -2549,7 +2549,7 @@ class TestSwissProt(unittest.TestCase):
         )
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -2564,7 +2564,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -2637,7 +2637,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(feature.location.start, 0)
         self.assertEqual(feature.location.end, 26)
         self.assertEqual(feature.qualifiers["description"], "")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[1]
         self.assertEqual(feature.type, "CHAIN")
         self.assertEqual(feature.location.start, 26)
@@ -2646,7 +2646,7 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["description"],
             "LUTROPIN-CHORIOGONADOTROPIC HORMONE RECEPTOR.",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[2]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 26)
@@ -2654,25 +2654,25 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "EXTRACELLULAR (POTENTIAL)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[3]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 362)
         self.assertEqual(feature.location.end, 390)
         self.assertEqual(feature.qualifiers["description"], "1 (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[4]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 390)
         self.assertEqual(feature.location.end, 399)
         self.assertEqual(feature.qualifiers["description"], "CYTOPLASMIC (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[5]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 399)
         self.assertEqual(feature.location.end, 422)
         self.assertEqual(feature.qualifiers["description"], "2 (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[6]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 422)
@@ -2680,25 +2680,25 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "EXTRACELLULAR (POTENTIAL)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[7]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 443)
         self.assertEqual(feature.location.end, 466)
         self.assertEqual(feature.qualifiers["description"], "3 (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[8]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 466)
         self.assertEqual(feature.location.end, 486)
         self.assertEqual(feature.qualifiers["description"], "CYTOPLASMIC (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[9]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 486)
         self.assertEqual(feature.location.end, 509)
         self.assertEqual(feature.qualifiers["description"], "4 (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[10]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 509)
@@ -2706,25 +2706,25 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "EXTRACELLULAR (POTENTIAL)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[11]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 529)
         self.assertEqual(feature.location.end, 551)
         self.assertEqual(feature.qualifiers["description"], "5 (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[12]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 551)
         self.assertEqual(feature.location.end, 574)
         self.assertEqual(feature.qualifiers["description"], "CYTOPLASMIC (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[13]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 574)
         self.assertEqual(feature.location.end, 598)
         self.assertEqual(feature.qualifiers["description"], "6 (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[14]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 598)
@@ -2732,67 +2732,67 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "EXTRACELLULAR (POTENTIAL)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[15]
         self.assertEqual(feature.type, "TRANSMEM")
         self.assertEqual(feature.location.start, 609)
         self.assertEqual(feature.location.end, 631)
         self.assertEqual(feature.qualifiers["description"], "7 (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[16]
         self.assertEqual(feature.type, "DOMAIN")
         self.assertEqual(feature.location.start, 631)
         self.assertEqual(feature.location.end, 700)
         self.assertEqual(feature.qualifiers["description"], "CYTOPLASMIC (POTENTIAL).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[17]
         self.assertEqual(feature.type, "REPEAT")
         self.assertEqual(feature.location.start, 51)
         self.assertEqual(feature.location.end, 75)
         self.assertEqual(feature.qualifiers["description"], "LRR 1.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[18]
         self.assertEqual(feature.type, "REPEAT")
         self.assertEqual(feature.location.start, 125)
         self.assertEqual(feature.location.end, 150)
         self.assertEqual(feature.qualifiers["description"], "LRR 2.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[19]
         self.assertEqual(feature.type, "REPEAT")
         self.assertEqual(feature.location.start, 151)
         self.assertEqual(feature.location.end, 175)
         self.assertEqual(feature.qualifiers["description"], "LRR 3.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[20]
         self.assertEqual(feature.type, "REPEAT")
         self.assertEqual(feature.location.start, 175)
         self.assertEqual(feature.location.end, 200)
         self.assertEqual(feature.qualifiers["description"], "LRR 4.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[21]
         self.assertEqual(feature.type, "REPEAT")
         self.assertEqual(feature.location.start, 201)
         self.assertEqual(feature.location.end, 224)
         self.assertEqual(feature.qualifiers["description"], "LRR 5.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[22]
         self.assertEqual(feature.type, "REPEAT")
         self.assertEqual(feature.location.start, 224)
         self.assertEqual(feature.location.end, 248)
         self.assertEqual(feature.qualifiers["description"], "LRR 6.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[23]
         self.assertEqual(feature.type, "REPEAT")
         self.assertEqual(feature.location.start, 249)
         self.assertEqual(feature.location.end, 271)
         self.assertEqual(feature.qualifiers["description"], "LRR 7.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[24]
         self.assertEqual(feature.type, "DISULFID")
         self.assertEqual(feature.location.start, 442)
         self.assertEqual(feature.location.end, 518)
         self.assertEqual(feature.qualifiers["description"], "BY SIMILARITY.")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[25]
         self.assertEqual(feature.type, "CARBOHYD")
         self.assertEqual(feature.location.start, 102)
@@ -2800,7 +2800,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "N-LINKED (GLCNAC...) (POTENTIAL)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[26]
         self.assertEqual(feature.type, "CARBOHYD")
         self.assertEqual(feature.location.start, 177)
@@ -2808,7 +2808,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "N-LINKED (GLCNAC...) (POTENTIAL)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[27]
         self.assertEqual(feature.type, "CARBOHYD")
         self.assertEqual(feature.location.start, 198)
@@ -2816,7 +2816,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "N-LINKED (GLCNAC...) (POTENTIAL)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[28]
         self.assertEqual(feature.type, "CARBOHYD")
         self.assertEqual(feature.location.start, 294)
@@ -2824,7 +2824,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "N-LINKED (GLCNAC...) (POTENTIAL)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[29]
         self.assertEqual(feature.type, "CARBOHYD")
         self.assertEqual(feature.location.start, 302)
@@ -2832,7 +2832,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "N-LINKED (GLCNAC...) (POTENTIAL)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[30]
         self.assertEqual(feature.type, "CARBOHYD")
         self.assertEqual(feature.location.start, 316)
@@ -2840,7 +2840,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "N-LINKED (GLCNAC...) (POTENTIAL)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[31]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 82)
@@ -2848,7 +2848,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "MISSING (IN ISOFORM 1950)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[32]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 132)
@@ -2856,13 +2856,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "MISSING (IN ISOFORM 1759)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[33]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 183)
         self.assertEqual(feature.location.end, 700)
         self.assertEqual(feature.qualifiers["description"], "MISSING (IN ISOFORM C2).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[34]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 231)
@@ -2871,7 +2871,7 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["description"],
             "DISSTKLQALPSHGLESIQT -> PCRATGWSPFRRSSPCLPTH (IN ISOFORM 2075).",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[35]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 231)
@@ -2880,7 +2880,7 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["description"],
             "MISSING (IN ISOFORM E/A2, ISOFORM EB AND ISOFORM B1).",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[36]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 251)
@@ -2888,7 +2888,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "MISSING (IN ISOFORM 2075)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[37]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 293)
@@ -2897,19 +2897,19 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["description"],
             "QNFSFSIFENFSKQCESTVRKADNETLYSAIFEENELSGWDYDYGFCSPKTLQCAPEPDAFNPCEDIMGYAFLR -> IFHFPFLKTSPNNAKAQLEKQITRRFIPPSLRRMNSVAGIMIMASVHPRHSNVLQNQMLSTPVKILWAMPSLGS (IN ISOFORM B1 AND ISOFORM B3).",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[38]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 293)
         self.assertEqual(feature.location.end, 294)
         self.assertEqual(feature.qualifiers["description"], "Q -> P (IN ISOFORM C1).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[39]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 294)
         self.assertEqual(feature.location.end, 700)
         self.assertEqual(feature.qualifiers["description"], "MISSING (IN ISOFORM C1).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[40]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 320)
@@ -2918,7 +2918,7 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["description"],
             "YSAIFEENELSGWDYDYGFCSP -> LHGALPAAHCLRGLPNKRPVL (IN ISOFORM 1834, ISOFORM 1759 AND ISOFORM EB).",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[41]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 342)
@@ -2927,7 +2927,7 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["description"],
             "MISSING (IN ISOFORMS 1834, ISOFORM 1759 AND ISOFORM EB).",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[42]
         self.assertEqual(feature.type, "VARSPLIC")
         self.assertEqual(feature.location.start, 367)
@@ -2935,31 +2935,31 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "MISSING (IN ISOFORM B1 AND ISOFORM B3)."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[43]
         self.assertEqual(feature.type, "VARIANT")
         self.assertEqual(feature.location.start, 81)
         self.assertEqual(feature.location.end, 82)
         self.assertEqual(feature.qualifiers["description"], "I -> M (IN ISOFORM 1950).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[44]
         self.assertEqual(feature.type, "VARIANT")
         self.assertEqual(feature.location.start, 178)
         self.assertEqual(feature.location.end, 179)
         self.assertEqual(feature.qualifiers["description"], "E -> G (IN ISOFORM 1759).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[45]
         self.assertEqual(feature.type, "VARIANT")
         self.assertEqual(feature.location.start, 232)
         self.assertEqual(feature.location.end, 233)
         self.assertEqual(feature.qualifiers["description"], "I -> T (IN ISOFORM 1950).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[46]
         self.assertEqual(feature.type, "VARIANT")
         self.assertEqual(feature.location.start, 645)
         self.assertEqual(feature.location.end, 646)
         self.assertEqual(feature.qualifiers["description"], "G -> S (IN ISOFORM 1950).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[47]
         self.assertEqual(feature.type, "MUTAGEN")
         self.assertEqual(feature.location.start, 408)
@@ -2967,7 +2967,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             feature.qualifiers["description"], "D->N: SIGNIFICANT REDUCTION OF BINDING."
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[48]
         self.assertEqual(feature.type, "MUTAGEN")
         self.assertEqual(feature.location.start, 435)
@@ -2976,7 +2976,7 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["description"],
             "D->N: NO CHANGE IN BINDING OR CAMP PROD.",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[49]
         self.assertEqual(feature.type, "MUTAGEN")
         self.assertEqual(feature.location.start, 454)
@@ -2985,7 +2985,7 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["description"],
             "E->Q: NO CHANGE IN BINDING OR CAMP PROD.",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[50]
         self.assertEqual(feature.type, "MUTAGEN")
         self.assertEqual(feature.location.start, 581)
@@ -2994,13 +2994,13 @@ class TestSwissProt(unittest.TestCase):
             feature.qualifiers["description"],
             "D->N: NO CHANGE IN BINDING OR CAMP PROD.",
         )
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
         feature = record.features[51]
         self.assertEqual(feature.type, "CONFLICT")
         self.assertEqual(feature.location.start, 32)
         self.assertEqual(feature.location.end, 33)
         self.assertEqual(feature.qualifiers["description"], "R -> L (IN REF. 7).")
-        self.assertEqual(feature.id, None)
+        self.assertIsNone(feature.id)
 
         self.assertEqual(len(record.references), 8)
         self.assertEqual(
@@ -3085,7 +3085,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[7].references[1], ("PubMed", "1714448"))
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -3100,7 +3100,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -3178,7 +3178,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[1].references), 0)
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -3193,7 +3193,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -3273,7 +3273,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references[1].references), 0)
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -3288,7 +3288,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -3323,8 +3323,7 @@ class TestSwissProt(unittest.TestCase):
             "RecName: Full=Photosystem II reaction center protein L {ECO:0000255|HAMAP-Rule:MF_01317}; Short=PSII-L {ECO:0000255|HAMAP-Rule:MF_01317};",
         )
         self.assertEqual(
-            repr(seq_record.seq),
-            "Seq('MTQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN')",
+            repr(seq_record.seq), "Seq('MTQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN')"
         )
 
         with open(datafile) as test_handle:
@@ -3404,7 +3403,7 @@ class TestSwissProt(unittest.TestCase):
         )
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -3419,7 +3418,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -3486,7 +3485,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(len(record.references), 0)
 
         # Check the two parsers agree on the essentials
-        self.assertEqual(str(seq_record.seq), record.sequence)
+        self.assertEqual(seq_record.seq, record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
         self.assertIn(seq_record.id, record.accessions)
@@ -3502,7 +3501,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertIsInstance(records[0], SeqRecord)
 
         # Check matches what we got earlier without the iterator:
-        self.assertEqual(str(records[0].seq), str(seq_record.seq))
+        self.assertEqual(records[0].seq, seq_record.seq)
         self.assertEqual(records[0].description, seq_record.description)
         self.assertEqual(records[0].name, seq_record.name)
         self.assertEqual(records[0].id, seq_record.id)
@@ -3535,6 +3534,25 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(
             record.features[6].qualifiers["note"],
             "DGTPLPEFYSE -> EGELPKFFSD (in strain: O15:H- / 83/39 / ETEC)",
+        )
+
+    def test_Q7Z739(self):
+        """Parsing SwissProt file Q7Z739.txt, which has new qualifiers for ligands from Uniprot version 2022_03."""
+        filename = "Q7Z739.txt"
+        datafile = os.path.join("SwissProt", filename)
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
+        # Check the new ligand feature
+        self.assertEqual(record.features[10].qualifiers["ligand"], "RNA")
+        self.assertEqual(
+            record.features[10].qualifiers["ligand_id"], "ChEBI:CHEBI:33697"
+        )
+        self.assertEqual(
+            record.features[10].qualifiers["ligand_part"],
+            "N(6)-methyladenosine 5'-phosphate residue",
+        )
+        self.assertEqual(
+            record.features[10].qualifiers["ligand_part_id"], "ChEBI:CHEBI:74449"
         )
 
     def test_ft_line(self):

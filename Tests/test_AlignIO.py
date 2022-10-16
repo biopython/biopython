@@ -2,18 +2,17 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Tests for AlignIO module."""
-
-
 import unittest
 import warnings
 
-
 from io import StringIO
-from Bio import SeqIO
+
 from Bio import AlignIO
-from Bio.Align import AlignInfo, MultipleSeqAlignment
+from Bio import SeqIO
+from Bio.Align import AlignInfo
+from Bio.Align import MultipleSeqAlignment
+from Bio.Data import IUPACData
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -77,7 +76,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 # Check the bare minimum (ID and sequence) as
                 # many formats can't store more than that.
                 # Check the sequence:
-                self.assertEqual(str(r1.seq), str(r2.seq))
+                self.assertEqual(r1.seq, r2.seq)
                 # Beware of different quirks and limitations in the
                 # valid character sets and the identifier lengths!
                 if fmt in ["phylip", "phylip-sequential"]:
@@ -223,7 +222,7 @@ class TestAlignIO_reading(unittest.TestCase):
         items = []
         for record in alignment:
             name = record.id
-            sequence = str(record.seq)
+            sequence = record.seq
             if len(sequence) > max_len:
                 sequence = sequence[: max_len - 6] + "..." + sequence[-3:]
             item = (name, sequence)
@@ -247,30 +246,45 @@ class TestAlignIO_reading(unittest.TestCase):
         dumb_consensus = summary.dumb_consensus()
         # gap_consensus = summary.gap_consensus()
 
-    def check_summary(self, alignment):
+    def check_summary(self, alignment, molecule_type):
         # Check AlignInfo.SummaryInfo likes the alignment; smoke test only
+        if molecule_type == "DNA":
+            letters = IUPACData.unambiguous_dna_letters
+            all_letters = IUPACData.ambiguous_dna_letters
+        elif molecule_type == "RNA":
+            letters = IUPACData.unambiguous_rna_letters
+            all_letters = IUPACData.ambiguous_rna_letters
+        elif molecule_type == "protein":
+            letters = IUPACData.protein_letters
+            all_letters = IUPACData.protein_letters
+        else:
+            raise ValueError(f"Unknown molecule type '{molecule_type}'")
         summary = AlignInfo.SummaryInfo(alignment)
         dumb_consensus = summary.dumb_consensus()
         # gap_consensus = summary.gap_consensus()
         pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual(
-            "Error in alphabet: not Nucleotide or Protein, supply expected frequencies",
-            str(cm.exception),
+        rep_dict = summary.replacement_dictionary(skip_chars=None, letters=letters)
+        e_freq = 1.0 / len(letters)
+        all_letters = all_letters.upper() + all_letters.lower()
+        e_freq_table = dict.fromkeys(all_letters, e_freq)
+        info_content = summary.information_content(
+            e_freq_table=e_freq_table, chars_to_ignore=["N", "X"]
         )
 
     def check_summary_pir(self, alignment):
+        letters = IUPACData.unambiguous_dna_letters
         summary = AlignInfo.SummaryInfo(alignment)
         dumb_consensus = summary.dumb_consensus()
         # gap_consensus = summary.gap_consensus()
         pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        info_content = summary.information_content()
+        rep_dict = summary.replacement_dictionary(skip_chars=None, letters=letters)
+        e_freq = 1.0 / len(letters)
+        all_letters = letters.upper() + letters.lower()
+        e_freq_table = dict.fromkeys(all_letters, e_freq)
+        info_content = summary.information_content(e_freq_table=e_freq_table)
 
     def test_reading_alignments_clustal1(self):
-        path = "Clustalw/cw02.aln"
+        path = "Clustalw/clustalw.aln"
         self.check_iterator_for_loop_handle(path, "clustal", 1, 2)
         self.check_iterator_for_loop_filename(path, "clustal", 1)
         self.check_iterator_next(path, "clustal", 1)
@@ -294,7 +308,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 "clustal_consensus": "          * *: ::    :.   :*  :  :. : . :*  ::   .:   **                  **:...   *.*** ..          .:*   * *: .* :*        : :* .*                   *::.  .    .:: :*..*  :* .*   .. .  :    .  :    *. .:: : .      .* .  :  *.:     ..::   * .  ::  :  .*.    :.    :. .  .  .* **.*..  :..  *.. .    . ::*                         :.: .*:    :     * ::   ***  . * :. .  .  :  *: .:: :::   ..   . : :   ::  *    *  : .. :.* . ::.  :: * :  :   * *   :..  * ..  * :**                             .  .:. ..   :*.  ..: :. .  .:* * :   : * .             ..*:.  .**   *.*... :  ::   :* .*  ::* : :.  :.    :   "
             },
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "protein")
 
     def test_reading_alignments_clustal2(self):
         path = "Clustalw/opuntia.aln"
@@ -309,7 +323,7 @@ class TestAlignIO_reading(unittest.TestCase):
             alignment,
             ["TTTTTTT", "AAAAAAA", "TTTTTTT", "AAAAAAA", "CCCCCCC", "AAAAAAA"],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "DNA")
 
     def test_reading_alignments_clustal3(self):
         path = "Clustalw/hedgehog.aln"
@@ -323,7 +337,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_columns(
             alignment, ["M----", "F----", "N----", "L----", "V----", "---SS"]
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "protein")
 
     def test_reading_alignments_clustal4(self):
         path = "Clustalw/odd_consensus.aln"
@@ -344,7 +358,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 "clustal_consensus": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            *       *  *** ***** *   *  **      *******************************************************************************************************************************************************************************"
             },
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "DNA")
 
     def test_reading_alignments_clustal5(self):
         path = "Clustalw/protein.aln"
@@ -366,7 +380,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 "-------------------T",
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "protein")
 
     def test_reading_alignments_clustal6(self):
         path = "Clustalw/promals3d.aln"
@@ -388,7 +402,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 "-T------------------",
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "protein")
 
     def test_reading_alignments_fasta(self):
         path = "GFF/multi.fna"  # Trivial nucleotide alignment
@@ -403,7 +417,7 @@ class TestAlignIO_reading(unittest.TestCase):
             alignment,
             [("test1", "ACGTCGCG"), ("test2", "GGGGCCCC"), ("test3", "AAACACAC")],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "DNA")
 
     def test_reading_alignments_nexus1(self):
         path = "Nexus/test_Nexus_input.nex"
@@ -437,7 +451,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(
             alignment,
             [
-                ("Aegotheles", "AAAAAGGCATTGTGGTGGGAAT",),
+                ("Aegotheles", "AAAAAGGCATTGTGGTGGGAAT"),
                 ("Aerodramus", "?????????TTGTGGTGGGAAT"),
             ],
         )
@@ -499,7 +513,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 "secondary_structure": ".................<<<<<<<<...<<<<<<<........>>>>>>>........<<<<<<<.......>>>>>>>..>>>>>>>>..............."
             },
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "RNA")
 
     def test_reading_alignments_stockholm2(self):
         path = "Stockholm/funny.sth"
@@ -513,7 +527,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_columns(
             alignment, ["MMMEEE", "TQIVVV", "CHEMMM", "RVALLL", "ASDTTT", "SYSEEE"]
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "protein")
 
     def test_reading_alignments_phylip1(self):
         path = "Phylip/reference_dna.phy"
@@ -527,7 +541,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_columns(
             alignment, ["CCTTCG", "GGAAAG", "ATAAAC", "TTTTAA", "GAGGAG", "CTTTTC"]
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "DNA")
 
     def test_reading_alignments_phylip2(self):
         path = "Phylip/reference_dna2.phy"
@@ -541,7 +555,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_columns(
             alignment, ["CCTTCG", "GGAAAG", "ATAAAC", "TTTTAA", "GAGGAG", "CTTTTC"]
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "DNA")
 
     def test_reading_alignments_phylip3(self):
         path = "Phylip/hennigian.phy"
@@ -563,7 +577,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 "AAAAAAAAAA",
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "DNA")
 
     def test_reading_alignments_phylip4(self):
         path = "Phylip/horses.phy"
@@ -585,7 +599,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 "AAAAAAAAAA",
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "DNA")
 
     def test_reading_alignments_phylip5(self):
         path = "Phylip/random.phy"
@@ -607,7 +621,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 "AAAAAAAAAA",
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "DNA")
 
     def test_reading_alignments_phylip6(self):
         path = "Phylip/interlaced.phy"
@@ -626,7 +640,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ("CYS1_DICDI", "-----MKVILLFVLAVFTVFVSS-----------...I--"),
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "protein")
 
     def test_reading_alignments_phylip7(self):
         path = "Phylip/interlaced2.phy"
@@ -646,7 +660,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ("IXI_237", "TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRP...SHE"),
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "protein")
 
     def test_reading_alignments_phylip8(self):
         path = "ExtendedPhylip/primates.phyx"
@@ -668,7 +682,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 "TTTTTTTTTTTT",
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "DNA")
 
     def test_reading_alignments_phylip9(self):
         path = "Phylip/sequential.phy"
@@ -687,7 +701,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ("CYS1_DICDI", "-----MKVILLFVLAVFTVFVSS-----------...I--"),
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "protein")
 
     def test_reading_alignments_phylip10(self):
         path = "Phylip/sequential2.phy"
@@ -707,7 +721,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ("IXI_237", "TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRP...SHE"),
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "protein")
 
     def test_reading_alignments_emboss1(self):
         path = "Emboss/alignret.txt"
@@ -726,7 +740,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ("IXI_237", "TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRP...SHE"),
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "protein")
 
     def test_reading_alignments_emboss2(self):
         path = "Emboss/needle.txt"
@@ -777,7 +791,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ("ref_rec", "KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQ...---"),
             ],
         )
-        self.check_summary(alignments[0])
+        self.check_summary(alignments[0], "protein")
         self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_emboss3(self):
@@ -795,7 +809,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ("asis", "TATTTTTTGGATTTTTTTCTAGATTTTCTAGGTT...GAA"),
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "DNA")
 
     def test_reading_alignments_emboss4(self):
         path = "Emboss/water.txt"
@@ -812,7 +826,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ("IXI_235", "TSPASIRPPAGPSSR---------RPSPPGPRRP...SHE"),
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "protein")
 
     def test_reading_alignments_emboss5(self):
         path = "Emboss/water2.txt"
@@ -825,7 +839,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(
             alignment, [("asis", "CGTTTGAGT-CTGGGATG"), ("asis", "CGTTTGAGTACTGGGATG")]
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "DNA")
 
     def test_reading_alignments_emboss6(self):
         path = "Emboss/matcher_simple.txt"
@@ -839,7 +853,7 @@ class TestAlignIO_reading(unittest.TestCase):
             alignment,
             [("AF069992_1", "GPPPQSPDENRAGESS"), ("CAA85685.1", "GVPPEEAGAAVAAESS")],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "protein")
 
     def test_reading_alignments_emboss7(self):
         path = "Emboss/matcher_pair.txt"
@@ -875,7 +889,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(
             alignments[4], [("HBA_HUMAN", "VKAAWGKVGA"), ("HBB_HUMAN", "VQAAYQKVVA")]
         )
-        self.check_summary(alignments[0])
+        self.check_summary(alignments[0], "protein")
         self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_emboss8(self):
@@ -899,7 +913,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ),
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "DNA")
 
     def test_reading_alignments_fasta_m10_1(self):
         path = "Fasta/output001.m10"
@@ -965,7 +979,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ),
             ],
         )
-        self.check_summary(alignments[0])
+        self.check_summary(alignments[0], "protein")
         self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_fasta_m10_2(self):
@@ -1032,7 +1046,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ),
             ],
         )
-        self.check_summary(alignments[0])
+        self.check_summary(alignments[0], "protein")
         self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_fasta_m10_3(self):
@@ -1079,7 +1093,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ),
             ],
         )
-        self.check_summary(alignments[0])
+        self.check_summary(alignments[0], "protein")
         self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_fasta_m10_4(self):
@@ -1103,7 +1117,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ),
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "DNA")
 
     def test_reading_alignments_fasta_m10_5(self):
         path = "Fasta/output005.m10"
@@ -1126,7 +1140,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ),
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "protein")
 
     def test_reading_alignments_fasta_m10_6(self):
         path = "Fasta/output006.m10"
@@ -1146,7 +1160,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ("query", "GCAACGCTTCAAGAACTGGAATTAGGAACCGTGA...CAT"),
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "DNA")
 
     def test_reading_alignments_fasta_m10_7(self):
         path = "Fasta/output007.m10"
@@ -1212,7 +1226,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ),
             ],
         )
-        self.check_summary(alignments[0])
+        self.check_summary(alignments[0], "protein")
         self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_fasta_m10_8(self):
@@ -1264,7 +1278,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ("sp|P08100|OPSD_HUMAN", "AQQQESATTQKAEKEVTRMVIIMVIAFLICW"),
             ],
         )
-        self.check_summary(alignments[0])
+        self.check_summary(alignments[0], "protein")
         self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_ig(self):
@@ -1287,7 +1301,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 "HHHHHHH-AAAAL-R-",
             ],
         )
-        self.check_summary(alignment)
+        self.check_summary(alignment, "protein")
 
     def test_reading_alignments_pir(self):
         path = "NBRF/clustalw.pir"
@@ -1339,7 +1353,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ("rn3", "tttgtccatgttggtcaggctggtctcgaactcc...GGT"),
             ],
         )
-        self.check_summary(alignments[1])
+        self.check_summary(alignments[1], "DNA")
         self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_maf2(self):
@@ -1371,7 +1385,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 ("panTro1.chr6", "gcagctgaaaaca"),
             ],
         )
-        self.check_summary(alignments[1])
+        self.check_summary(alignments[1], "DNA")
         self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_maf3(self):
@@ -1397,7 +1411,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_columns(
             alignments[2], ["gggA", "cccC", "aaaA", "gggG", "cccC", "aaaA"]
         )
-        self.check_summary(alignments[2])
+        self.check_summary(alignments[2], "DNA")
         self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_maf4(self):
@@ -1438,7 +1452,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_columns(
             alignments[47], ["TTTTTT", "GGGGGG", "TTTTTT", "TTTTTT", "TGGGAT", "tTTTT-"]
         )
-        self.check_summary(alignments[47])
+        self.check_summary(alignments[47], "DNA")
         self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_mauve(self):
@@ -1481,7 +1495,7 @@ class TestAlignIO_reading(unittest.TestCase):
             alignments[4],
             [("2/11410-12880", "ATTCGCACATAAGAATGTACCTTGCTGTAATTTA...ATA")],
         )
-        self.check_summary(alignments[4])
+        self.check_summary(alignments[4], "DNA")
         self.check_reverse_write_read(alignments)
 
 

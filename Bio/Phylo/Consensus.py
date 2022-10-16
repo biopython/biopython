@@ -208,7 +208,7 @@ class _BitString(str):
         """Check if current bitstr1 is compatible with another bitstr2.
 
         Two conditions are considered as compatible:
-         1. bitstr1.contain(bitstr2) or vise versa;
+         1. bitstr1.contain(bitstr2) or vice versa;
          2. bitstr1.independent(bitstr2).
 
         """
@@ -320,7 +320,7 @@ def majority_consensus(trees, cutoff=0):
         bsckeys = sorted(bitstr_clades, key=lambda bs: bs.count("1"), reverse=True)
 
         # check if current clade is compatible with previous clades and
-        # record it's possible parent and child clades.
+        # record its possible parent and child clades.
         compatible = True
         parent_bitstr = None
         child_bitstrs = []  # multiple independent childs

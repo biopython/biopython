@@ -234,7 +234,10 @@ class MMCIF2dictTests(unittest.TestCase):
         self.assertRaises(ValueError, list, mmcif._splitline("foo 'bar"))
         self.assertRaises(ValueError, list, mmcif._splitline("foo 'ba'r  "))
         self.assertRaises(ValueError, list, mmcif._splitline("foo \"bar'"))
-        self.assertRaises(ValueError, list, mmcif._splitline("foo b'ar'"))
+
+        # quotes are allowed if not followed by whitespace
+        self.assertEqual(list(mmcif._splitline("foo b'ar'")), ["foo", "b'ar'"])
+        self.assertEqual(list(mmcif._splitline("foo 'b'ar'")), ["foo", "b'ar"])
 
     def test_verbatim_block(self):
         """Verbatim blocks parsed correctly.
@@ -256,6 +259,23 @@ class MMCIF2dictTests(unittest.TestCase):
         self.assertEqual(
             mmcif_dict["_test_value"], ["First line\n    Second line\nThird line"]
         )
+
+    def test_token_after_multiline(self):
+        """Multi-line string followed by token on the same line."""
+        stream = io.StringIO("data_test _key1\n;foo bar\n; _key2 'value 2'\n")
+        mmcif_dict = MMCIF2Dict(stream)
+        self.assertEqual(
+            mmcif_dict, {"data_": "test", "_key1": ["foo bar"], "_key2": ["value 2"]}
+        )
+
+        stream = io.StringIO("data_test _key1\n;foo bar\n;# missing space here")
+        with self.assertRaisesRegex(ValueError, "Missing whitespace"):
+            mmcif_dict = MMCIF2Dict(stream)
+
+    def test_truncated_multiline(self):
+        stream = io.StringIO("data_test\n_key1\n;foo bar\n")
+        with self.assertRaisesRegex(ValueError, "Missing closing semicolon"):
+            mmcif_dict = MMCIF2Dict(stream)
 
     def test_inline_comments(self):
         """Comments may begin outside of column 1 if preceded by whitespace."""
@@ -291,12 +311,12 @@ class MMCIF2dictTests(unittest.TestCase):
         mmcif_dict2 = MMCIF2Dict(
             io.StringIO(textwrap.dedent(test_data.replace("loop_", "LOOP_")))
         )
-        self.assertDictEqual(mmcif_dict, mmcif_dict2)
+        self.assertEqual(mmcif_dict, mmcif_dict2)
 
         mmcif_dict2 = MMCIF2Dict(
             io.StringIO(textwrap.dedent(test_data.replace("loop_", "looP_")))
         )
-        self.assertDictEqual(mmcif_dict, mmcif_dict2)
+        self.assertEqual(mmcif_dict, mmcif_dict2)
 
         mmcif_dict2 = MMCIF2Dict(
             io.StringIO(textwrap.dedent(test_data.replace("_loop", "_LOOP")))

@@ -129,7 +129,7 @@ class Chain(Entity):
 
     def __repr__(self):
         """Return the chain identifier."""
-        return "<Chain id=%s>" % self.get_id()
+        return f"<Chain id={self.get_id()}>"
 
     # Public methods
 
@@ -197,10 +197,11 @@ class Chain(Entity):
 
         :param verbose bool: default False
             describe runtime problems
-        :param: start, fin lists
-            sequence position, insert code for begin, end of subregion to
-            process
-        :raises Exception: if any chain does not have .pic attribute
+        :param: start, fin integers
+            optional sequence positions for begin, end of subregion to process.
+            N.B. this activates serial residue assembly, <start> residue CA will
+            be at origin
+        :raises Exception: if any chain does not have .internal_coord attribute
         """
         if self.internal_coord:
             self.internal_coord.internal_to_atom_coordinates(

@@ -86,29 +86,24 @@ Sequence codes and their meanings:
  - XX - Unknown
 
 """
-
-
-from Bio.Alphabet import (
-    single_letter_alphabet,
-    generic_protein,
-    generic_dna,
-    generic_rna,
-)
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import SequenceIterator, SequenceWriter
+
+from .Interfaces import _get_seq_string
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 
-_pir_alphabets = {
-    "P1": generic_protein,
-    "F1": generic_protein,
-    "D1": generic_dna,
-    "DL": generic_dna,
-    "DC": generic_dna,
-    "RL": generic_rna,
-    "RC": generic_rna,
-    "N3": generic_rna,
-    "XX": single_letter_alphabet,
+_pir_mol_type = {
+    "P1": "protein",
+    "F1": "protein",
+    "D1": "DNA",
+    "DL": "DNA",
+    "DC": "DNA",
+    "RL": "RNA",
+    "RC": "RNA",
+    "N3": "RNA",
+    "XX": None,
 }
 
 
@@ -151,7 +146,7 @@ class PirIterator(SequenceIterator):
 
         while True:
             pir_type = line[1:3]
-            if pir_type not in _pir_alphabets or line[3] != ";":
+            if pir_type not in _pir_mol_type or line[3] != ";":
                 raise ValueError(
                     "Records should start with '>XX;' where XX is a valid sequence type"
                 )
@@ -176,18 +171,11 @@ class PirIterator(SequenceIterator):
 
             # Return the record and then continue...
             record = SeqRecord(
-                Seq(seq[:-1], _pir_alphabets[pir_type]),
-                id=identifier,
-                name=identifier,
-                description=description,
+                Seq(seq[:-1]), id=identifier, name=identifier, description=description
             )
             record.annotations["PIR-type"] = pir_type
-            if pir_type in ("P1", "F1"):
-                record.annotations["molecule_type"] = "protein"
-            elif pir_type in ("D1", "DL", "DC"):
-                record.annotations["molecule_type"] = "DNA"
-            elif pir_type in ("RL", "RC", "N3"):
-                record.annotations["molecule_type"] = "RNA"
+            if _pir_mol_type[pir_type]:
+                record.annotations["molecule_type"] = _pir_mol_type[pir_type]
             yield record
 
             if line is None:
@@ -214,7 +202,8 @@ class PirWriter(SequenceWriter):
            record.description is used.
          - code - Optional sequence code must be one of P1, F1,
            D1, DL, DC, RL, RC, N3 and XX. By default None is used,
-           which means auto detection based on record alphabet.
+           which means auto detection based on the molecule type
+           in the record annotation.
 
         You can either use::
 
@@ -273,16 +262,16 @@ class PirWriter(SequenceWriter):
             else:
                 code = "XX"
 
-        if code not in _pir_alphabets:
+        if code not in _pir_mol_type:
             raise TypeError(
-                "Sequence code must be one of " + _pir_alphabets.keys() + "."
+                "Sequence code must be one of " + _pir_mol_type.keys() + "."
             )
         assert "\n" not in title
         assert "\r" not in description
 
-        self.handle.write(">%s;%s\n%s\n" % (code, title, description))
+        self.handle.write(f">{code};{title}\n{description}\n")
 
-        data = self._get_seq_string(record)  # Catches sequence being None
+        data = _get_seq_string(record)  # Catches sequence being None
 
         assert "\n" not in data
         assert "\r" not in data

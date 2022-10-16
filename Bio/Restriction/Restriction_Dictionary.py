@@ -12,7 +12,7 @@
 
 """Restriction Analysis Libraries.
 
-Used REBASE emboss files version 001 (2020).
+Used REBASE emboss files version 205 (2022).
 """
 
 rest_dict = {}
@@ -24,6 +24,7 @@ rest_dict["AanI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 15358,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -35,6 +36,7 @@ rest_dict["AanI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:15358",
 }
 
 rest_dict["AarI"] = {
@@ -44,6 +46,7 @@ rest_dict["AarI"] = {
     "freq": 16384.0,
     "fst3": 8,
     "fst5": 11,
+    "id": 2892,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -55,6 +58,7 @@ rest_dict["AarI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2892",
 }
 
 rest_dict["AasI"] = {
@@ -64,6 +68,7 @@ rest_dict["AasI"] = {
     "freq": 4096.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 5465,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -75,6 +80,7 @@ rest_dict["AasI"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:5465",
 }
 
 rest_dict["AatII"] = {
@@ -84,6 +90,7 @@ rest_dict["AatII"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 7,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -95,6 +102,29 @@ rest_dict["AatII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "I", "K", "M", "N", "V"),
+    "uri": "https://identifiers.org/rebase:7",
+}
+
+rest_dict["Aba13301I"] = {
+    "charac": (None, None, None, None, "GCAAAC"),
+    "compsite": "(?=(?P<Aba13301I>GCAAAC))|(?=(?P<Aba13301I_as>GTTTGC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 375383,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCAAAC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:375383",
 }
 
 rest_dict["Aba6411II"] = {
@@ -104,6 +134,7 @@ rest_dict["Aba6411II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 101759,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -115,6 +146,7 @@ rest_dict["Aba6411II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:101759",
 }
 
 rest_dict["AbaB8342IV"] = {
@@ -124,6 +156,7 @@ rest_dict["AbaB8342IV"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 126502,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -135,6 +168,7 @@ rest_dict["AbaB8342IV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:126502",
 }
 
 rest_dict["AbaCIII"] = {
@@ -144,6 +178,7 @@ rest_dict["AbaCIII"] = {
     "freq": 5461.333333333333,
     "fst3": None,
     "fst5": None,
+    "id": 23309,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -155,6 +190,29 @@ rest_dict["AbaCIII"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:23309",
+}
+
+rest_dict["AbaPBA3II"] = {
+    "charac": (None, None, None, None, "CAYGAC"),
+    "compsite": "(?=(?P<AbaPBA3II>CA[CT]GAC))|(?=(?P<AbaPBA3II_as>GTC[AG]TG))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 443064,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CAYGAC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:443064",
 }
 
 rest_dict["AbaSI"] = {
@@ -164,6 +222,7 @@ rest_dict["AbaSI"] = {
     "freq": 4.0,
     "fst3": 9,
     "fst5": 12,
+    "id": 23265,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -175,6 +234,7 @@ rest_dict["AbaSI"] = {
     "size": 1,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:23265",
 }
 
 rest_dict["AbaUMB2I"] = {
@@ -184,6 +244,7 @@ rest_dict["AbaUMB2I"] = {
     "freq": 512.0,
     "fst3": None,
     "fst5": None,
+    "id": 30399,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -195,6 +256,7 @@ rest_dict["AbaUMB2I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:30399",
 }
 
 rest_dict["Abr4036II"] = {
@@ -204,6 +266,7 @@ rest_dict["Abr4036II"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 312254,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -215,6 +278,7 @@ rest_dict["Abr4036II"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:312254",
 }
 
 rest_dict["AbsI"] = {
@@ -224,6 +288,7 @@ rest_dict["AbsI"] = {
     "freq": 65536.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 14594,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -235,6 +300,7 @@ rest_dict["AbsI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:14594",
 }
 
 rest_dict["Acc16I"] = {
@@ -244,6 +310,7 @@ rest_dict["Acc16I"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2638,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -255,6 +322,7 @@ rest_dict["Acc16I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2638",
 }
 
 rest_dict["Acc36I"] = {
@@ -264,6 +332,7 @@ rest_dict["Acc36I"] = {
     "freq": 4096.0,
     "fst3": 8,
     "fst5": 10,
+    "id": 4162,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -275,6 +344,7 @@ rest_dict["Acc36I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:4162",
 }
 
 rest_dict["Acc65I"] = {
@@ -284,6 +354,7 @@ rest_dict["Acc65I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 14,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -295,6 +366,7 @@ rest_dict["Acc65I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "I", "N", "V"),
+    "uri": "https://identifiers.org/rebase:14",
 }
 
 rest_dict["Acc65V"] = {
@@ -304,6 +376,7 @@ rest_dict["Acc65V"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 152525,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -315,6 +388,7 @@ rest_dict["Acc65V"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:152525",
 }
 
 rest_dict["AccB1I"] = {
@@ -324,6 +398,7 @@ rest_dict["AccB1I"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 15,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -335,6 +410,7 @@ rest_dict["AccB1I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:15",
 }
 
 rest_dict["AccB7I"] = {
@@ -344,6 +420,7 @@ rest_dict["AccB7I"] = {
     "freq": 4096.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 16,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -355,6 +432,7 @@ rest_dict["AccB7I"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:16",
 }
 
 rest_dict["AccBSI"] = {
@@ -364,6 +442,7 @@ rest_dict["AccBSI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2733,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -375,6 +454,7 @@ rest_dict["AccBSI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2733",
 }
 
 rest_dict["AccI"] = {
@@ -384,6 +464,7 @@ rest_dict["AccI"] = {
     "freq": 1024.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 18,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -394,7 +475,8 @@ rest_dict["AccI"] = {
     "site": "GTMKAC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "J", "K", "M", "N", "Q", "R", "X"),
+    "suppl": ("B", "J", "K", "M", "N", "Q", "X"),
+    "uri": "https://identifiers.org/rebase:18",
 }
 
 rest_dict["AccII"] = {
@@ -404,6 +486,7 @@ rest_dict["AccII"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 19,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -415,6 +498,7 @@ rest_dict["AccII"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("J", "K"),
+    "uri": "https://identifiers.org/rebase:19",
 }
 
 rest_dict["AccIII"] = {
@@ -424,6 +508,7 @@ rest_dict["AccIII"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 20,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -434,7 +519,52 @@ rest_dict["AccIII"] = {
     "site": "TCCGGA",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("J", "K", "R"),
+    "suppl": ("J", "K"),
+    "uri": "https://identifiers.org/rebase:20",
+}
+
+rest_dict["AccIX"] = {
+    "charac": (None, None, None, None, "GACRAC"),
+    "compsite": "(?=(?P<AccIX>GAC[AG]AC))|(?=(?P<AccIX_as>GT[CT]GTC))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 278986,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GACRAC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:278986",
+}
+
+rest_dict["AccX"] = {
+    "charac": (None, None, None, None, "GGARCA"),
+    "compsite": "(?=(?P<AccX>GGA[AG]CA))|(?=(?P<AccX_as>TG[CT]TCC))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 278990,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GGARCA",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:278990",
 }
 
 rest_dict["AceIII"] = {
@@ -444,6 +574,7 @@ rest_dict["AceIII"] = {
     "freq": 4096.0,
     "fst3": 11,
     "fst5": 13,
+    "id": 2569,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -455,6 +586,7 @@ rest_dict["AceIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2569",
 }
 
 rest_dict["AchA6III"] = {
@@ -464,6 +596,7 @@ rest_dict["AchA6III"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 19867,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -475,6 +608,7 @@ rest_dict["AchA6III"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:19867",
 }
 
 rest_dict["AciI"] = {
@@ -484,6 +618,7 @@ rest_dict["AciI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 21,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -495,6 +630,7 @@ rest_dict["AciI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:21",
 }
 
 rest_dict["AclI"] = {
@@ -504,6 +640,7 @@ rest_dict["AclI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2181,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -515,6 +652,7 @@ rest_dict["AclI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "N", "V"),
+    "uri": "https://identifiers.org/rebase:2181",
 }
 
 rest_dict["AclWI"] = {
@@ -524,6 +662,7 @@ rest_dict["AclWI"] = {
     "freq": 1024.0,
     "fst3": 5,
     "fst5": 9,
+    "id": 2668,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -535,6 +674,7 @@ rest_dict["AclWI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:2668",
 }
 
 rest_dict["Aco12261II"] = {
@@ -544,6 +684,7 @@ rest_dict["Aco12261II"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 25209,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -555,6 +696,7 @@ rest_dict["Aco12261II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:25209",
 }
 
 rest_dict["AcoI"] = {
@@ -564,6 +706,7 @@ rest_dict["AcoI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 11822,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -575,6 +718,7 @@ rest_dict["AcoI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:11822",
 }
 
 rest_dict["AcoY31II"] = {
@@ -584,6 +728,7 @@ rest_dict["AcoY31II"] = {
     "freq": 2730.6666666666665,
     "fst3": None,
     "fst5": None,
+    "id": 250928,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -595,6 +740,7 @@ rest_dict["AcoY31II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:250928",
 }
 
 rest_dict["AcsI"] = {
@@ -604,6 +750,7 @@ rest_dict["AcsI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2184,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -615,6 +762,7 @@ rest_dict["AcsI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2184",
 }
 
 rest_dict["AcuI"] = {
@@ -624,6 +772,7 @@ rest_dict["AcuI"] = {
     "freq": 4096.0,
     "fst3": 14,
     "fst5": 22,
+    "id": 5534,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -635,6 +784,7 @@ rest_dict["AcuI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "N"),
+    "uri": "https://identifiers.org/rebase:5534",
 }
 
 rest_dict["AcvI"] = {
@@ -644,6 +794,7 @@ rest_dict["AcvI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 5359,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -655,6 +806,7 @@ rest_dict["AcvI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("Q", "X"),
+    "uri": "https://identifiers.org/rebase:5359",
 }
 
 rest_dict["AcyI"] = {
@@ -664,6 +816,7 @@ rest_dict["AcyI"] = {
     "freq": 1024.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 31,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -675,6 +828,7 @@ rest_dict["AcyI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("J",),
+    "uri": "https://identifiers.org/rebase:31",
 }
 
 rest_dict["AdeI"] = {
@@ -684,6 +838,7 @@ rest_dict["AdeI"] = {
     "freq": 4096.0,
     "fst3": -6,
     "fst5": 6,
+    "id": 2991,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -695,6 +850,7 @@ rest_dict["AdeI"] = {
     "size": 9,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2991",
 }
 
 rest_dict["Adh6U21I"] = {
@@ -704,6 +860,7 @@ rest_dict["Adh6U21I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 214041,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -715,6 +872,7 @@ rest_dict["Adh6U21I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:214041",
 }
 
 rest_dict["AfaI"] = {
@@ -724,6 +882,7 @@ rest_dict["AfaI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 37,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -735,6 +894,7 @@ rest_dict["AfaI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+    "uri": "https://identifiers.org/rebase:37",
 }
 
 rest_dict["AfeI"] = {
@@ -744,6 +904,7 @@ rest_dict["AfeI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2669,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -755,6 +916,7 @@ rest_dict["AfeI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "N"),
+    "uri": "https://identifiers.org/rebase:2669",
 }
 
 rest_dict["AfiI"] = {
@@ -764,6 +926,7 @@ rest_dict["AfiI"] = {
     "freq": 256.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 10489,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -775,6 +938,7 @@ rest_dict["AfiI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("V",),
+    "uri": "https://identifiers.org/rebase:10489",
 }
 
 rest_dict["AflII"] = {
@@ -784,6 +948,7 @@ rest_dict["AflII"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 39,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -795,6 +960,7 @@ rest_dict["AflII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("J", "K", "N"),
+    "uri": "https://identifiers.org/rebase:39",
 }
 
 rest_dict["AflIII"] = {
@@ -804,6 +970,7 @@ rest_dict["AflIII"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 40,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -815,6 +982,7 @@ rest_dict["AflIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("M", "N", "S"),
+    "uri": "https://identifiers.org/rebase:40",
 }
 
 rest_dict["AgeI"] = {
@@ -824,6 +992,7 @@ rest_dict["AgeI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 42,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -835,6 +1004,7 @@ rest_dict["AgeI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("J", "N", "R"),
+    "uri": "https://identifiers.org/rebase:42",
 }
 
 rest_dict["AgsI"] = {
@@ -844,6 +1014,7 @@ rest_dict["AgsI"] = {
     "freq": 512.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 19404,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -855,6 +1026,7 @@ rest_dict["AgsI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:19404",
 }
 
 rest_dict["AhaIII"] = {
@@ -864,6 +1036,7 @@ rest_dict["AhaIII"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 47,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -875,6 +1048,7 @@ rest_dict["AhaIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:47",
 }
 
 rest_dict["AhdI"] = {
@@ -884,6 +1058,7 @@ rest_dict["AhdI"] = {
     "freq": 4096.0,
     "fst3": -6,
     "fst5": 6,
+    "id": 48,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -895,6 +1070,7 @@ rest_dict["AhdI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:48",
 }
 
 rest_dict["AhlI"] = {
@@ -904,6 +1080,7 @@ rest_dict["AhlI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 4838,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -915,6 +1092,7 @@ rest_dict["AhlI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:4838",
 }
 
 rest_dict["AhyRBAHI"] = {
@@ -924,6 +1102,7 @@ rest_dict["AhyRBAHI"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 89839,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -935,6 +1114,7 @@ rest_dict["AhyRBAHI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:89839",
 }
 
 rest_dict["AhyYL17I"] = {
@@ -944,6 +1124,7 @@ rest_dict["AhyYL17I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 82738,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -955,6 +1136,7 @@ rest_dict["AhyYL17I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:82738",
 }
 
 rest_dict["AjiI"] = {
@@ -964,6 +1146,7 @@ rest_dict["AjiI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 10919,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -975,6 +1158,7 @@ rest_dict["AjiI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:10919",
 }
 
 rest_dict["AjnI"] = {
@@ -984,6 +1168,7 @@ rest_dict["AjnI"] = {
     "freq": 512.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 7185,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -995,6 +1180,7 @@ rest_dict["AjnI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:7185",
 }
 
 rest_dict["AjuI"] = {
@@ -1004,6 +1190,7 @@ rest_dict["AjuI"] = {
     "freq": 16384.0,
     "fst3": -26,
     "fst5": -7,
+    "id": 7740,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 5,
@@ -1015,6 +1202,7 @@ rest_dict["AjuI"] = {
     "size": 14,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:7740",
 }
 
 rest_dict["AleI"] = {
@@ -1024,6 +1212,7 @@ rest_dict["AleI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 5791,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -1035,6 +1224,7 @@ rest_dict["AleI"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:5791",
 }
 
 rest_dict["AlfI"] = {
@@ -1044,6 +1234,7 @@ rest_dict["AlfI"] = {
     "freq": 4096.0,
     "fst3": -24,
     "fst5": -10,
+    "id": 6110,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -1055,6 +1246,7 @@ rest_dict["AlfI"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:6110",
 }
 
 rest_dict["AloI"] = {
@@ -1064,6 +1256,7 @@ rest_dict["AloI"] = {
     "freq": 16384.0,
     "fst3": -25,
     "fst5": -7,
+    "id": 2812,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 5,
@@ -1075,6 +1268,7 @@ rest_dict["AloI"] = {
     "size": 13,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2812",
 }
 
 rest_dict["AluBI"] = {
@@ -1084,6 +1278,7 @@ rest_dict["AluBI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 16189,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -1095,6 +1290,7 @@ rest_dict["AluBI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:16189",
 }
 
 rest_dict["AluI"] = {
@@ -1104,6 +1300,7 @@ rest_dict["AluI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 61,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -1115,6 +1312,7 @@ rest_dict["AluI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X", "Y"),
+    "uri": "https://identifiers.org/rebase:61",
 }
 
 rest_dict["Alw21I"] = {
@@ -1124,6 +1322,7 @@ rest_dict["Alw21I"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 62,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -1135,6 +1334,7 @@ rest_dict["Alw21I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:62",
 }
 
 rest_dict["Alw26I"] = {
@@ -1144,6 +1344,7 @@ rest_dict["Alw26I"] = {
     "freq": 1024.0,
     "fst3": 5,
     "fst5": 6,
+    "id": 63,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -1155,6 +1356,7 @@ rest_dict["Alw26I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:63",
 }
 
 rest_dict["Alw44I"] = {
@@ -1164,6 +1366,7 @@ rest_dict["Alw44I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 64,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -1175,6 +1378,7 @@ rest_dict["Alw44I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "J"),
+    "uri": "https://identifiers.org/rebase:64",
 }
 
 rest_dict["AlwFI"] = {
@@ -1184,6 +1388,7 @@ rest_dict["AlwFI"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 7655,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -1195,6 +1400,7 @@ rest_dict["AlwFI"] = {
     "size": 13,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:7655",
 }
 
 rest_dict["AlwI"] = {
@@ -1204,6 +1410,7 @@ rest_dict["AlwI"] = {
     "freq": 1024.0,
     "fst3": 5,
     "fst5": 9,
+    "id": 65,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -1215,6 +1422,7 @@ rest_dict["AlwI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:65",
 }
 
 rest_dict["AlwNI"] = {
@@ -1224,6 +1432,7 @@ rest_dict["AlwNI"] = {
     "freq": 4096.0,
     "fst3": -6,
     "fst5": 6,
+    "id": 66,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -1235,6 +1444,7 @@ rest_dict["AlwNI"] = {
     "size": 9,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:66",
 }
 
 rest_dict["Ama87I"] = {
@@ -1244,6 +1454,7 @@ rest_dict["Ama87I"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 68,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -1255,6 +1466,7 @@ rest_dict["Ama87I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:68",
 }
 
 rest_dict["AmaCSI"] = {
@@ -1264,6 +1476,7 @@ rest_dict["AmaCSI"] = {
     "freq": 4096.0,
     "fst3": 9,
     "fst5": 17,
+    "id": 26714,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -1275,6 +1488,7 @@ rest_dict["AmaCSI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:26714",
 }
 
 rest_dict["Aod1I"] = {
@@ -1284,6 +1498,7 @@ rest_dict["Aod1I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 270415,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -1295,6 +1510,7 @@ rest_dict["Aod1I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:270415",
 }
 
 rest_dict["Aor13HI"] = {
@@ -1304,6 +1520,7 @@ rest_dict["Aor13HI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2453,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -1315,6 +1532,7 @@ rest_dict["Aor13HI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:2453",
 }
 
 rest_dict["Aor51HI"] = {
@@ -1324,6 +1542,7 @@ rest_dict["Aor51HI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 76,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -1335,6 +1554,7 @@ rest_dict["Aor51HI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:76",
 }
 
 rest_dict["AoxI"] = {
@@ -1344,6 +1564,7 @@ rest_dict["AoxI"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 29052,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -1355,6 +1576,7 @@ rest_dict["AoxI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:29052",
 }
 
 rest_dict["ApaBI"] = {
@@ -1364,6 +1586,7 @@ rest_dict["ApaBI"] = {
     "freq": 4096.0,
     "fst3": -8,
     "fst5": 8,
+    "id": 81,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 5,
@@ -1375,6 +1598,7 @@ rest_dict["ApaBI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:81",
 }
 
 rest_dict["ApaI"] = {
@@ -1384,6 +1608,7 @@ rest_dict["ApaI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 84,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -1394,7 +1619,8 @@ rest_dict["ApaI"] = {
     "site": "GGGCCC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "I", "J", "K", "M", "N", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "I", "J", "K", "M", "N", "Q", "R", "V", "X"),
+    "uri": "https://identifiers.org/rebase:84",
 }
 
 rest_dict["ApaLI"] = {
@@ -1404,6 +1630,7 @@ rest_dict["ApaLI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 85,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -1415,6 +1642,7 @@ rest_dict["ApaLI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("C", "K", "N"),
+    "uri": "https://identifiers.org/rebase:85",
 }
 
 rest_dict["ApeKI"] = {
@@ -1424,6 +1652,7 @@ rest_dict["ApeKI"] = {
     "freq": 512.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 6397,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -1435,6 +1664,7 @@ rest_dict["ApeKI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:6397",
 }
 
 rest_dict["ApoI"] = {
@@ -1444,6 +1674,7 @@ rest_dict["ApoI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 89,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -1455,6 +1686,7 @@ rest_dict["ApoI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:89",
 }
 
 rest_dict["ApyPI"] = {
@@ -1464,6 +1696,7 @@ rest_dict["ApyPI"] = {
     "freq": 4096.0,
     "fst3": 18,
     "fst5": 26,
+    "id": 14756,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -1475,6 +1708,7 @@ rest_dict["ApyPI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:14756",
 }
 
 rest_dict["AquII"] = {
@@ -1484,6 +1718,7 @@ rest_dict["AquII"] = {
     "freq": 4096.0,
     "fst3": 18,
     "fst5": 27,
+    "id": 20238,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -1495,6 +1730,7 @@ rest_dict["AquII"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:20238",
 }
 
 rest_dict["AquIII"] = {
@@ -1504,6 +1740,7 @@ rest_dict["AquIII"] = {
     "freq": 4096.0,
     "fst3": 18,
     "fst5": 26,
+    "id": 20239,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -1515,6 +1752,7 @@ rest_dict["AquIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:20239",
 }
 
 rest_dict["AquIV"] = {
@@ -1524,6 +1762,7 @@ rest_dict["AquIV"] = {
     "freq": 8192.0,
     "fst3": 17,
     "fst5": 26,
+    "id": 20240,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -1535,6 +1774,7 @@ rest_dict["AquIV"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:20240",
 }
 
 rest_dict["ArsI"] = {
@@ -1544,6 +1784,7 @@ rest_dict["ArsI"] = {
     "freq": 8192.0,
     "fst3": -26,
     "fst5": -8,
+    "id": 19405,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 5,
@@ -1555,6 +1796,7 @@ rest_dict["ArsI"] = {
     "size": 13,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:19405",
 }
 
 rest_dict["AscI"] = {
@@ -1564,6 +1806,7 @@ rest_dict["AscI"] = {
     "freq": 65536.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 95,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -1575,6 +1818,7 @@ rest_dict["AscI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:95",
 }
 
 rest_dict["AseI"] = {
@@ -1584,6 +1828,7 @@ rest_dict["AseI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 96,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -1595,6 +1840,7 @@ rest_dict["AseI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("J", "N"),
+    "uri": "https://identifiers.org/rebase:96",
 }
 
 rest_dict["Asi256I"] = {
@@ -1604,6 +1850,7 @@ rest_dict["Asi256I"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 18472,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -1615,6 +1862,7 @@ rest_dict["Asi256I"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:18472",
 }
 
 rest_dict["AsiGI"] = {
@@ -1624,6 +1872,7 @@ rest_dict["AsiGI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 10828,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -1635,6 +1884,7 @@ rest_dict["AsiGI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:10828",
 }
 
 rest_dict["AsiSI"] = {
@@ -1644,6 +1894,7 @@ rest_dict["AsiSI"] = {
     "freq": 65536.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 4628,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -1655,6 +1906,29 @@ rest_dict["AsiSI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("I", "N"),
+    "uri": "https://identifiers.org/rebase:4628",
+}
+
+rest_dict["Asl11923II"] = {
+    "charac": (None, None, None, None, "GGGABCC"),
+    "compsite": "(?=(?P<Asl11923II>GGGA[CGT]CC))|(?=(?P<Asl11923II_as>GG[ACG]TCCC))",
+    "dna": None,
+    "freq": 5461.333333333333,
+    "fst3": None,
+    "fst5": None,
+    "id": 288754,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GGGABCC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:288754",
 }
 
 rest_dict["Asp103I"] = {
@@ -1664,6 +1938,7 @@ rest_dict["Asp103I"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 226699,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -1675,6 +1950,7 @@ rest_dict["Asp103I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:226699",
 }
 
 rest_dict["Asp114pII"] = {
@@ -1684,6 +1960,7 @@ rest_dict["Asp114pII"] = {
     "freq": 5461.333333333333,
     "fst3": None,
     "fst5": None,
+    "id": 183955,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -1695,6 +1972,7 @@ rest_dict["Asp114pII"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:183955",
 }
 
 rest_dict["Asp337I"] = {
@@ -1704,6 +1982,7 @@ rest_dict["Asp337I"] = {
     "freq": 2730.6666666666665,
     "fst3": None,
     "fst5": None,
+    "id": 313892,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -1715,6 +1994,7 @@ rest_dict["Asp337I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:313892",
 }
 
 rest_dict["Asp700I"] = {
@@ -1724,6 +2004,7 @@ rest_dict["Asp700I"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 127,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -1735,6 +2016,7 @@ rest_dict["Asp700I"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": ("M",),
+    "uri": "https://identifiers.org/rebase:127",
 }
 
 rest_dict["Asp718I"] = {
@@ -1744,6 +2026,7 @@ rest_dict["Asp718I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 132,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -1755,6 +2038,7 @@ rest_dict["Asp718I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("M", "S"),
+    "uri": "https://identifiers.org/rebase:132",
 }
 
 rest_dict["AspA2I"] = {
@@ -1764,6 +2048,7 @@ rest_dict["AspA2I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 6959,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -1775,6 +2060,7 @@ rest_dict["AspA2I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:6959",
 }
 
 rest_dict["AspAMDIV"] = {
@@ -1784,6 +2070,7 @@ rest_dict["AspAMDIV"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 333117,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -1795,6 +2082,7 @@ rest_dict["AspAMDIV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:333117",
 }
 
 rest_dict["AspBHI"] = {
@@ -1804,6 +2092,7 @@ rest_dict["AspBHI"] = {
     "freq": 32.0,
     "fst3": 12,
     "fst5": 13,
+    "id": 21321,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -1815,6 +2104,7 @@ rest_dict["AspBHI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:21321",
 }
 
 rest_dict["AspDUT2V"] = {
@@ -1824,6 +2114,7 @@ rest_dict["AspDUT2V"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 142406,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -1835,6 +2126,7 @@ rest_dict["AspDUT2V"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:142406",
 }
 
 rest_dict["AspJHL3II"] = {
@@ -1844,6 +2136,7 @@ rest_dict["AspJHL3II"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 67384,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -1855,6 +2148,7 @@ rest_dict["AspJHL3II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:67384",
 }
 
 rest_dict["AspLEI"] = {
@@ -1864,6 +2158,7 @@ rest_dict["AspLEI"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2670,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -1875,6 +2170,7 @@ rest_dict["AspLEI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2670",
 }
 
 rest_dict["AspNIH4III"] = {
@@ -1884,6 +2180,7 @@ rest_dict["AspNIH4III"] = {
     "freq": 5461.333333333333,
     "fst3": None,
     "fst5": None,
+    "id": 231703,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -1895,6 +2192,7 @@ rest_dict["AspNIH4III"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:231703",
 }
 
 rest_dict["AspS9I"] = {
@@ -1904,6 +2202,7 @@ rest_dict["AspS9I"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2737,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -1915,6 +2214,7 @@ rest_dict["AspS9I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2737",
 }
 
 rest_dict["AspSLV7III"] = {
@@ -1924,6 +2224,7 @@ rest_dict["AspSLV7III"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 144656,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -1935,6 +2236,7 @@ rest_dict["AspSLV7III"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:144656",
 }
 
 rest_dict["Asu14238IV"] = {
@@ -1944,6 +2246,7 @@ rest_dict["Asu14238IV"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 48969,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -1955,6 +2258,7 @@ rest_dict["Asu14238IV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:48969",
 }
 
 rest_dict["AsuC2I"] = {
@@ -1964,6 +2268,7 @@ rest_dict["AsuC2I"] = {
     "freq": 512.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2901,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -1975,6 +2280,7 @@ rest_dict["AsuC2I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:2901",
 }
 
 rest_dict["AsuHPI"] = {
@@ -1984,6 +2290,7 @@ rest_dict["AsuHPI"] = {
     "freq": 1024.0,
     "fst3": 7,
     "fst5": 13,
+    "id": 2811,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -1995,6 +2302,7 @@ rest_dict["AsuHPI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2811",
 }
 
 rest_dict["AsuI"] = {
@@ -2004,6 +2312,7 @@ rest_dict["AsuI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 153,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -2015,6 +2324,7 @@ rest_dict["AsuI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:153",
 }
 
 rest_dict["AsuII"] = {
@@ -2024,6 +2334,7 @@ rest_dict["AsuII"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 154,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -2035,6 +2346,7 @@ rest_dict["AsuII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("C",),
+    "uri": "https://identifiers.org/rebase:154",
 }
 
 rest_dict["AsuNHI"] = {
@@ -2044,6 +2356,7 @@ rest_dict["AsuNHI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2854,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -2055,6 +2368,7 @@ rest_dict["AsuNHI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2854",
 }
 
 rest_dict["AteTI"] = {
@@ -2064,6 +2378,7 @@ rest_dict["AteTI"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 21623,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -2075,6 +2390,7 @@ rest_dict["AteTI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:21623",
 }
 
 rest_dict["AvaI"] = {
@@ -2084,6 +2400,7 @@ rest_dict["AvaI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 165,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -2095,6 +2412,7 @@ rest_dict["AvaI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("J", "N", "Q", "X"),
+    "uri": "https://identifiers.org/rebase:165",
 }
 
 rest_dict["AvaII"] = {
@@ -2104,6 +2422,7 @@ rest_dict["AvaII"] = {
     "freq": 512.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 166,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -2114,7 +2433,8 @@ rest_dict["AvaII"] = {
     "site": "GGWCC",
     "size": 5,
     "substrat": "DNA",
-    "suppl": ("J", "N", "R", "X"),
+    "suppl": ("J", "N", "X"),
+    "uri": "https://identifiers.org/rebase:166",
 }
 
 rest_dict["AvaIII"] = {
@@ -2124,6 +2444,7 @@ rest_dict["AvaIII"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 167,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -2135,6 +2456,7 @@ rest_dict["AvaIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:167",
 }
 
 rest_dict["AvrII"] = {
@@ -2144,6 +2466,7 @@ rest_dict["AvrII"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 173,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -2155,6 +2478,7 @@ rest_dict["AvrII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:173",
 }
 
 rest_dict["Awo1030IV"] = {
@@ -2164,6 +2488,7 @@ rest_dict["Awo1030IV"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 45794,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -2175,6 +2500,7 @@ rest_dict["Awo1030IV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:45794",
 }
 
 rest_dict["AxyI"] = {
@@ -2184,6 +2510,7 @@ rest_dict["AxyI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 174,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -2195,6 +2522,7 @@ rest_dict["AxyI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("J",),
+    "uri": "https://identifiers.org/rebase:174",
 }
 
 rest_dict["BaeGI"] = {
@@ -2204,6 +2532,7 @@ rest_dict["BaeGI"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 16983,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -2215,6 +2544,7 @@ rest_dict["BaeGI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:16983",
 }
 
 rest_dict["BaeI"] = {
@@ -2224,6 +2554,7 @@ rest_dict["BaeI"] = {
     "freq": 8192.0,
     "fst3": -26,
     "fst5": -10,
+    "id": 179,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 5,
@@ -2235,6 +2566,7 @@ rest_dict["BaeI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:179",
 }
 
 rest_dict["Bag18758I"] = {
@@ -2244,6 +2576,7 @@ rest_dict["Bag18758I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 77520,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -2255,6 +2588,7 @@ rest_dict["Bag18758I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:77520",
 }
 
 rest_dict["BalI"] = {
@@ -2264,6 +2598,7 @@ rest_dict["BalI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 183,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -2274,7 +2609,8 @@ rest_dict["BalI"] = {
     "site": "TGGCCA",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "J", "K", "Q", "R", "X"),
+    "suppl": ("B", "J", "K", "Q", "X"),
+    "uri": "https://identifiers.org/rebase:183",
 }
 
 rest_dict["BamHI"] = {
@@ -2284,6 +2620,7 @@ rest_dict["BamHI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 185,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -2295,6 +2632,7 @@ rest_dict["BamHI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X", "Y"),
+    "uri": "https://identifiers.org/rebase:185",
 }
 
 rest_dict["BanI"] = {
@@ -2304,6 +2642,7 @@ rest_dict["BanI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 190,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -2314,7 +2653,8 @@ rest_dict["BanI"] = {
     "site": "GGYRCC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("N", "R"),
+    "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:190",
 }
 
 rest_dict["BanII"] = {
@@ -2324,6 +2664,7 @@ rest_dict["BanII"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 191,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -2335,6 +2676,7 @@ rest_dict["BanII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("K", "N", "X"),
+    "uri": "https://identifiers.org/rebase:191",
 }
 
 rest_dict["BanLI"] = {
@@ -2344,6 +2686,7 @@ rest_dict["BanLI"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 73422,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -2355,6 +2698,7 @@ rest_dict["BanLI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:73422",
 }
 
 rest_dict["BarI"] = {
@@ -2364,6 +2708,7 @@ rest_dict["BarI"] = {
     "freq": 16384.0,
     "fst3": -25,
     "fst5": -7,
+    "id": 16190,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 5,
@@ -2375,6 +2720,7 @@ rest_dict["BarI"] = {
     "size": 13,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:16190",
 }
 
 rest_dict["Bau1417V"] = {
@@ -2384,6 +2730,7 @@ rest_dict["Bau1417V"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 292899,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -2395,6 +2742,7 @@ rest_dict["Bau1417V"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:292899",
 }
 
 rest_dict["BauI"] = {
@@ -2404,6 +2752,7 @@ rest_dict["BauI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 7455,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -2415,6 +2764,7 @@ rest_dict["BauI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:7455",
 }
 
 rest_dict["Bbr52II"] = {
@@ -2424,6 +2774,7 @@ rest_dict["Bbr52II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 163590,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -2435,6 +2786,7 @@ rest_dict["Bbr52II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:163590",
 }
 
 rest_dict["Bbr57III"] = {
@@ -2444,6 +2796,7 @@ rest_dict["Bbr57III"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 184356,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -2455,6 +2808,7 @@ rest_dict["Bbr57III"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:184356",
 }
 
 rest_dict["Bbr7017II"] = {
@@ -2464,6 +2818,7 @@ rest_dict["Bbr7017II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 63078,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -2475,6 +2830,7 @@ rest_dict["Bbr7017II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:63078",
 }
 
 rest_dict["Bbr7017III"] = {
@@ -2484,6 +2840,7 @@ rest_dict["Bbr7017III"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 62650,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -2495,6 +2852,7 @@ rest_dict["Bbr7017III"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:62650",
 }
 
 rest_dict["BbrPI"] = {
@@ -2504,6 +2862,7 @@ rest_dict["BbrPI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 211,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -2515,6 +2874,7 @@ rest_dict["BbrPI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("M",),
+    "uri": "https://identifiers.org/rebase:211",
 }
 
 rest_dict["BbsI"] = {
@@ -2524,6 +2884,7 @@ rest_dict["BbsI"] = {
     "freq": 4096.0,
     "fst3": 6,
     "fst5": 8,
+    "id": 212,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -2535,6 +2896,7 @@ rest_dict["BbsI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:212",
 }
 
 rest_dict["BbuB31I"] = {
@@ -2544,6 +2906,7 @@ rest_dict["BbuB31I"] = {
     "freq": 512.0,
     "fst3": None,
     "fst5": None,
+    "id": 4697,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -2555,6 +2918,7 @@ rest_dict["BbuB31I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:4697",
 }
 
 rest_dict["BbuB31II"] = {
@@ -2564,6 +2928,7 @@ rest_dict["BbuB31II"] = {
     "freq": 256.0,
     "fst3": None,
     "fst5": None,
+    "id": 4248,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -2575,6 +2940,7 @@ rest_dict["BbuB31II"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:4248",
 }
 
 rest_dict["Bbv12I"] = {
@@ -2584,6 +2950,7 @@ rest_dict["Bbv12I"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 214,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -2595,6 +2962,7 @@ rest_dict["Bbv12I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:214",
 }
 
 rest_dict["BbvCI"] = {
@@ -2604,6 +2972,7 @@ rest_dict["BbvCI"] = {
     "freq": 16384.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 3098,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -2615,6 +2984,7 @@ rest_dict["BbvCI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:3098",
 }
 
 rest_dict["BbvI"] = {
@@ -2624,6 +2994,7 @@ rest_dict["BbvI"] = {
     "freq": 1024.0,
     "fst3": 12,
     "fst5": 13,
+    "id": 220,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -2635,6 +3006,7 @@ rest_dict["BbvI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:220",
 }
 
 rest_dict["BbvII"] = {
@@ -2644,6 +3016,7 @@ rest_dict["BbvII"] = {
     "freq": 4096.0,
     "fst3": 6,
     "fst5": 8,
+    "id": 221,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -2655,6 +3028,7 @@ rest_dict["BbvII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:221",
 }
 
 rest_dict["BccI"] = {
@@ -2664,6 +3038,7 @@ rest_dict["BccI"] = {
     "freq": 1024.0,
     "fst3": 5,
     "fst5": 9,
+    "id": 226,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -2675,6 +3050,29 @@ rest_dict["BccI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:226",
+}
+
+rest_dict["Bce10661III"] = {
+    "charac": (None, None, None, None, "TATCNAG"),
+    "compsite": "(?=(?P<Bce10661III>TATC.AG))|(?=(?P<Bce10661III_as>CT.GATA))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 420286,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TATCNAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:420286",
 }
 
 rest_dict["Bce3081I"] = {
@@ -2684,6 +3082,7 @@ rest_dict["Bce3081I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 34295,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -2695,6 +3094,7 @@ rest_dict["Bce3081I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:34295",
 }
 
 rest_dict["Bce83I"] = {
@@ -2704,6 +3104,7 @@ rest_dict["Bce83I"] = {
     "freq": 4096.0,
     "fst3": 14,
     "fst5": 22,
+    "id": 2162,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -2715,6 +3116,7 @@ rest_dict["Bce83I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2162",
 }
 
 rest_dict["BceAI"] = {
@@ -2724,6 +3126,7 @@ rest_dict["BceAI"] = {
     "freq": 1024.0,
     "fst3": 14,
     "fst5": 17,
+    "id": 4686,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -2735,6 +3138,7 @@ rest_dict["BceAI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:4686",
 }
 
 rest_dict["BceSIV"] = {
@@ -2744,6 +3148,7 @@ rest_dict["BceSIV"] = {
     "freq": 1024.0,
     "fst3": -10,
     "fst5": -7,
+    "id": 24953,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -2755,6 +3160,7 @@ rest_dict["BceSIV"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:24953",
 }
 
 rest_dict["BcefI"] = {
@@ -2764,6 +3170,7 @@ rest_dict["BcefI"] = {
     "freq": 1024.0,
     "fst3": 13,
     "fst5": 17,
+    "id": 237,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -2775,6 +3182,7 @@ rest_dict["BcefI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:237",
 }
 
 rest_dict["BcgI"] = {
@@ -2784,6 +3192,7 @@ rest_dict["BcgI"] = {
     "freq": 4096.0,
     "fst3": -24,
     "fst5": -10,
+    "id": 238,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -2795,6 +3204,7 @@ rest_dict["BcgI"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:238",
 }
 
 rest_dict["BciT130I"] = {
@@ -2804,6 +3214,7 @@ rest_dict["BciT130I"] = {
     "freq": 512.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 37575,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -2815,6 +3226,7 @@ rest_dict["BciT130I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:37575",
 }
 
 rest_dict["BciVI"] = {
@@ -2824,6 +3236,7 @@ rest_dict["BciVI"] = {
     "freq": 4096.0,
     "fst3": 5,
     "fst5": 12,
+    "id": 2885,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -2835,6 +3248,7 @@ rest_dict["BciVI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2885",
 }
 
 rest_dict["BclI"] = {
@@ -2844,6 +3258,7 @@ rest_dict["BclI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 242,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -2855,6 +3270,7 @@ rest_dict["BclI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "C", "J", "M", "N", "O", "R", "S"),
+    "uri": "https://identifiers.org/rebase:242",
 }
 
 rest_dict["BcnI"] = {
@@ -2864,6 +3280,7 @@ rest_dict["BcnI"] = {
     "freq": 512.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 244,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -2875,6 +3292,29 @@ rest_dict["BcnI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+    "uri": "https://identifiers.org/rebase:244",
+}
+
+rest_dict["Bco11035III"] = {
+    "charac": (None, None, None, None, "GAAGCY"),
+    "compsite": "(?=(?P<Bco11035III>GAAGC[CT]))|(?=(?P<Bco11035III_as>[AG]GCTTC))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 380172,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GAAGCY",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:380172",
 }
 
 rest_dict["BcoDI"] = {
@@ -2884,6 +3324,7 @@ rest_dict["BcoDI"] = {
     "freq": 1024.0,
     "fst3": 5,
     "fst5": 6,
+    "id": 20174,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -2895,6 +3336,7 @@ rest_dict["BcoDI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:20174",
 }
 
 rest_dict["BcuI"] = {
@@ -2904,6 +3346,7 @@ rest_dict["BcuI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2990,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -2915,6 +3358,7 @@ rest_dict["BcuI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2990",
 }
 
 rest_dict["BdaI"] = {
@@ -2924,6 +3368,7 @@ rest_dict["BdaI"] = {
     "freq": 4096.0,
     "fst3": -24,
     "fst5": -10,
+    "id": 7508,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -2935,6 +3380,7 @@ rest_dict["BdaI"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:7508",
 }
 
 rest_dict["BetI"] = {
@@ -2944,6 +3390,7 @@ rest_dict["BetI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 255,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -2955,6 +3402,7 @@ rest_dict["BetI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:255",
 }
 
 rest_dict["BfaI"] = {
@@ -2964,6 +3412,7 @@ rest_dict["BfaI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 256,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -2975,6 +3424,7 @@ rest_dict["BfaI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:256",
 }
 
 rest_dict["BfaSII"] = {
@@ -2984,6 +3434,7 @@ rest_dict["BfaSII"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 11042,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -2995,6 +3446,7 @@ rest_dict["BfaSII"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:11042",
 }
 
 rest_dict["BfiI"] = {
@@ -3004,6 +3456,7 @@ rest_dict["BfiI"] = {
     "freq": 4096.0,
     "fst3": 4,
     "fst5": 11,
+    "id": 2697,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -3015,6 +3468,7 @@ rest_dict["BfiI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2697",
 }
 
 rest_dict["BfmI"] = {
@@ -3024,6 +3478,7 @@ rest_dict["BfmI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2747,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -3035,6 +3490,7 @@ rest_dict["BfmI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2747",
 }
 
 rest_dict["BfoI"] = {
@@ -3044,6 +3500,7 @@ rest_dict["BfoI"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 17995,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -3055,6 +3512,7 @@ rest_dict["BfoI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:17995",
 }
 
 rest_dict["BfrI"] = {
@@ -3064,6 +3522,7 @@ rest_dict["BfrI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 259,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -3075,6 +3534,7 @@ rest_dict["BfrI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("M", "S"),
+    "uri": "https://identifiers.org/rebase:259",
 }
 
 rest_dict["BfuAI"] = {
@@ -3084,6 +3544,7 @@ rest_dict["BfuAI"] = {
     "freq": 4096.0,
     "fst3": 8,
     "fst5": 10,
+    "id": 4687,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -3095,6 +3556,7 @@ rest_dict["BfuAI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:4687",
 }
 
 rest_dict["BfuI"] = {
@@ -3104,6 +3566,7 @@ rest_dict["BfuI"] = {
     "freq": 4096.0,
     "fst3": 5,
     "fst5": 12,
+    "id": 4107,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -3115,6 +3578,7 @@ rest_dict["BfuI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:4107",
 }
 
 rest_dict["Bga514I"] = {
@@ -3124,6 +3588,7 @@ rest_dict["Bga514I"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 297545,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -3135,6 +3600,7 @@ rest_dict["Bga514I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:297545",
 }
 
 rest_dict["BglI"] = {
@@ -3144,6 +3610,7 @@ rest_dict["BglI"] = {
     "freq": 4096.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 260,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -3155,6 +3622,7 @@ rest_dict["BglI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("B", "C", "I", "J", "K", "N", "O", "Q", "R", "V", "X"),
+    "uri": "https://identifiers.org/rebase:260",
 }
 
 rest_dict["BglII"] = {
@@ -3164,6 +3632,7 @@ rest_dict["BglII"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 261,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -3175,6 +3644,7 @@ rest_dict["BglII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X"),
+    "uri": "https://identifiers.org/rebase:261",
 }
 
 rest_dict["BinI"] = {
@@ -3184,6 +3654,7 @@ rest_dict["BinI"] = {
     "freq": 1024.0,
     "fst3": 5,
     "fst5": 9,
+    "id": 265,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -3195,6 +3666,7 @@ rest_dict["BinI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:265",
 }
 
 rest_dict["BisI"] = {
@@ -3204,6 +3676,7 @@ rest_dict["BisI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 10871,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -3215,6 +3688,7 @@ rest_dict["BisI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:10871",
 }
 
 rest_dict["BkrAM31DI"] = {
@@ -3224,6 +3698,7 @@ rest_dict["BkrAM31DI"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 198858,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -3235,6 +3710,7 @@ rest_dict["BkrAM31DI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:198858",
 }
 
 rest_dict["Ble402II"] = {
@@ -3244,6 +3720,7 @@ rest_dict["Ble402II"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 69395,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -3255,6 +3732,7 @@ rest_dict["Ble402II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:69395",
 }
 
 rest_dict["BlnI"] = {
@@ -3264,6 +3742,7 @@ rest_dict["BlnI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 275,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -3275,6 +3754,7 @@ rest_dict["BlnI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("K", "M", "S"),
+    "uri": "https://identifiers.org/rebase:275",
 }
 
 rest_dict["BloAII"] = {
@@ -3284,6 +3764,7 @@ rest_dict["BloAII"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 57734,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -3295,6 +3776,7 @@ rest_dict["BloAII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:57734",
 }
 
 rest_dict["BlpI"] = {
@@ -3304,6 +3786,7 @@ rest_dict["BlpI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2535,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -3315,6 +3798,7 @@ rest_dict["BlpI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2535",
 }
 
 rest_dict["BlsI"] = {
@@ -3324,6 +3808,7 @@ rest_dict["BlsI"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 15186,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -3335,6 +3820,7 @@ rest_dict["BlsI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:15186",
 }
 
 rest_dict["BmcAI"] = {
@@ -3344,6 +3830,7 @@ rest_dict["BmcAI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 10484,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -3355,6 +3842,7 @@ rest_dict["BmcAI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("V",),
+    "uri": "https://identifiers.org/rebase:10484",
 }
 
 rest_dict["Bme1390I"] = {
@@ -3364,6 +3852,7 @@ rest_dict["Bme1390I"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2216,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -3375,6 +3864,7 @@ rest_dict["Bme1390I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2216",
 }
 
 rest_dict["Bme18I"] = {
@@ -3384,6 +3874,7 @@ rest_dict["Bme18I"] = {
     "freq": 512.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 286,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -3395,6 +3886,7 @@ rest_dict["Bme18I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:286",
 }
 
 rest_dict["BmeDI"] = {
@@ -3404,6 +3896,7 @@ rest_dict["BmeDI"] = {
     "freq": 4.0,
     "fst3": 0,
     "fst5": 3,
+    "id": 25281,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -3415,6 +3908,7 @@ rest_dict["BmeDI"] = {
     "size": 1,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:25281",
 }
 
 rest_dict["BmeRI"] = {
@@ -3424,6 +3918,7 @@ rest_dict["BmeRI"] = {
     "freq": 4096.0,
     "fst3": -6,
     "fst5": 6,
+    "id": 10486,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -3435,6 +3930,7 @@ rest_dict["BmeRI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("V",),
+    "uri": "https://identifiers.org/rebase:10486",
 }
 
 rest_dict["BmeT110I"] = {
@@ -3444,6 +3940,7 @@ rest_dict["BmeT110I"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 11105,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -3455,6 +3952,7 @@ rest_dict["BmeT110I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+    "uri": "https://identifiers.org/rebase:11105",
 }
 
 rest_dict["BmgBI"] = {
@@ -3464,6 +3962,7 @@ rest_dict["BmgBI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 5041,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -3475,6 +3974,7 @@ rest_dict["BmgBI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:5041",
 }
 
 rest_dict["BmgI"] = {
@@ -3484,6 +3984,7 @@ rest_dict["BmgI"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 2578,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -3495,6 +3996,7 @@ rest_dict["BmgI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2578",
 }
 
 rest_dict["BmgT120I"] = {
@@ -3504,6 +4006,7 @@ rest_dict["BmgT120I"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 11106,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -3515,6 +4018,7 @@ rest_dict["BmgT120I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:11106",
 }
 
 rest_dict["BmiI"] = {
@@ -3524,6 +4028,7 @@ rest_dict["BmiI"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 10481,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -3535,6 +4040,7 @@ rest_dict["BmiI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("V",),
+    "uri": "https://identifiers.org/rebase:10481",
 }
 
 rest_dict["BmrFI"] = {
@@ -3544,6 +4050,7 @@ rest_dict["BmrFI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 10485,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -3555,6 +4062,7 @@ rest_dict["BmrFI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("V",),
+    "uri": "https://identifiers.org/rebase:10485",
 }
 
 rest_dict["BmrI"] = {
@@ -3564,6 +4072,7 @@ rest_dict["BmrI"] = {
     "freq": 4096.0,
     "fst3": 4,
     "fst5": 11,
+    "id": 2993,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -3575,6 +4084,7 @@ rest_dict["BmrI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2993",
 }
 
 rest_dict["BmsI"] = {
@@ -3584,6 +4094,7 @@ rest_dict["BmsI"] = {
     "freq": 1024.0,
     "fst3": 9,
     "fst5": 10,
+    "id": 17981,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -3595,6 +4106,7 @@ rest_dict["BmsI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:17981",
 }
 
 rest_dict["BmtI"] = {
@@ -3604,6 +4116,7 @@ rest_dict["BmtI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 6222,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -3615,6 +4128,7 @@ rest_dict["BmtI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "N", "V"),
+    "uri": "https://identifiers.org/rebase:6222",
 }
 
 rest_dict["BmuI"] = {
@@ -3624,6 +4138,7 @@ rest_dict["BmuI"] = {
     "freq": 4096.0,
     "fst3": 4,
     "fst5": 11,
+    "id": 10875,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -3635,6 +4150,7 @@ rest_dict["BmuI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:10875",
 }
 
 rest_dict["BoxI"] = {
@@ -3644,6 +4160,7 @@ rest_dict["BoxI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 3094,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -3655,6 +4172,7 @@ rest_dict["BoxI"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:3094",
 }
 
 rest_dict["BpiI"] = {
@@ -3664,6 +4182,7 @@ rest_dict["BpiI"] = {
     "freq": 4096.0,
     "fst3": 6,
     "fst5": 8,
+    "id": 2447,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -3675,6 +4194,7 @@ rest_dict["BpiI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2447",
 }
 
 rest_dict["BplI"] = {
@@ -3684,6 +4204,7 @@ rest_dict["BplI"] = {
     "freq": 4096.0,
     "fst3": -24,
     "fst5": -8,
+    "id": 2732,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 5,
@@ -3695,6 +4216,7 @@ rest_dict["BplI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2732",
 }
 
 rest_dict["BpmI"] = {
@@ -3704,6 +4226,7 @@ rest_dict["BpmI"] = {
     "freq": 4096.0,
     "fst3": 14,
     "fst5": 22,
+    "id": 295,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -3715,6 +4238,29 @@ rest_dict["BpmI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "N"),
+    "uri": "https://identifiers.org/rebase:295",
+}
+
+rest_dict["Bps6700III"] = {
+    "charac": (None, None, None, None, "TACCNAG"),
+    "compsite": "(?=(?P<Bps6700III>TACC.AG))|(?=(?P<Bps6700III_as>CT.GGTA))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 421501,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TACCNAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:421501",
 }
 
 rest_dict["Bpu10I"] = {
@@ -3724,6 +4270,7 @@ rest_dict["Bpu10I"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 298,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -3735,6 +4282,7 @@ rest_dict["Bpu10I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("B", "I", "N", "V"),
+    "uri": "https://identifiers.org/rebase:298",
 }
 
 rest_dict["Bpu1102I"] = {
@@ -3744,6 +4292,7 @@ rest_dict["Bpu1102I"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 299,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -3755,6 +4304,7 @@ rest_dict["Bpu1102I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+    "uri": "https://identifiers.org/rebase:299",
 }
 
 rest_dict["Bpu14I"] = {
@@ -3764,6 +4314,7 @@ rest_dict["Bpu14I"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 301,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -3775,6 +4326,7 @@ rest_dict["Bpu14I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:301",
 }
 
 rest_dict["BpuEI"] = {
@@ -3784,6 +4336,7 @@ rest_dict["BpuEI"] = {
     "freq": 4096.0,
     "fst3": 14,
     "fst5": 22,
+    "id": 5222,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -3795,6 +4348,7 @@ rest_dict["BpuEI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:5222",
 }
 
 rest_dict["BpuMI"] = {
@@ -3804,6 +4358,7 @@ rest_dict["BpuMI"] = {
     "freq": 512.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 10493,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -3815,6 +4370,7 @@ rest_dict["BpuMI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("V",),
+    "uri": "https://identifiers.org/rebase:10493",
 }
 
 rest_dict["Bsa29I"] = {
@@ -3824,6 +4380,7 @@ rest_dict["Bsa29I"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2671,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -3835,6 +4392,7 @@ rest_dict["Bsa29I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:2671",
 }
 
 rest_dict["BsaAI"] = {
@@ -3844,6 +4402,7 @@ rest_dict["BsaAI"] = {
     "freq": 1024.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 305,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -3855,6 +4414,7 @@ rest_dict["BsaAI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:305",
 }
 
 rest_dict["BsaBI"] = {
@@ -3864,6 +4424,7 @@ rest_dict["BsaBI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 306,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -3875,6 +4436,7 @@ rest_dict["BsaBI"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:306",
 }
 
 rest_dict["BsaHI"] = {
@@ -3884,6 +4446,7 @@ rest_dict["BsaHI"] = {
     "freq": 1024.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 312,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -3895,6 +4458,7 @@ rest_dict["BsaHI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:312",
 }
 
 rest_dict["BsaI"] = {
@@ -3904,6 +4468,7 @@ rest_dict["BsaI"] = {
     "freq": 4096.0,
     "fst3": 5,
     "fst5": 7,
+    "id": 313,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -3915,6 +4480,7 @@ rest_dict["BsaI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:313",
 }
 
 rest_dict["BsaJI"] = {
@@ -3924,6 +4490,7 @@ rest_dict["BsaJI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 314,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -3935,6 +4502,7 @@ rest_dict["BsaJI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:314",
 }
 
 rest_dict["BsaWI"] = {
@@ -3944,6 +4512,7 @@ rest_dict["BsaWI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 328,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -3955,6 +4524,7 @@ rest_dict["BsaWI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:328",
 }
 
 rest_dict["BsaXI"] = {
@@ -3964,6 +4534,7 @@ rest_dict["BsaXI"] = {
     "freq": 4096.0,
     "fst3": -23,
     "fst5": -9,
+    "id": 2194,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -3975,6 +4546,7 @@ rest_dict["BsaXI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2194",
 }
 
 rest_dict["BsbI"] = {
@@ -3984,6 +4556,7 @@ rest_dict["BsbI"] = {
     "freq": 4096.0,
     "fst3": 19,
     "fst5": 27,
+    "id": 329,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -3995,6 +4568,7 @@ rest_dict["BsbI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:329",
 }
 
 rest_dict["Bsc4I"] = {
@@ -4004,6 +4578,7 @@ rest_dict["Bsc4I"] = {
     "freq": 256.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 2357,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -4015,6 +4590,7 @@ rest_dict["Bsc4I"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:2357",
 }
 
 rest_dict["BscAI"] = {
@@ -4024,6 +4600,7 @@ rest_dict["BscAI"] = {
     "freq": 1024.0,
     "fst3": 6,
     "fst5": 9,
+    "id": 330,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -4035,6 +4612,7 @@ rest_dict["BscAI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:330",
 }
 
 rest_dict["BscGI"] = {
@@ -4044,6 +4622,7 @@ rest_dict["BscGI"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 2163,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -4055,6 +4634,29 @@ rest_dict["BscGI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2163",
+}
+
+rest_dict["BscXI"] = {
+    "charac": (5, -5, None, None, "GCAGGC"),
+    "compsite": "(?=(?P<BscXI>GCAGGC))|(?=(?P<BscXI_as>GCCTGC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": -5,
+    "fst5": 5,
+    "id": 11108,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": 4,
+    "ovhgseq": "CAGG",
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCAGGC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:11108",
 }
 
 rest_dict["Bse118I"] = {
@@ -4064,6 +4666,7 @@ rest_dict["Bse118I"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 337,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4075,6 +4678,7 @@ rest_dict["Bse118I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:337",
 }
 
 rest_dict["Bse1I"] = {
@@ -4084,6 +4688,7 @@ rest_dict["Bse1I"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 6,
+    "id": 2672,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -4095,6 +4700,7 @@ rest_dict["Bse1I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2672",
 }
 
 rest_dict["Bse21I"] = {
@@ -4104,6 +4710,7 @@ rest_dict["Bse21I"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 338,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -4115,6 +4722,7 @@ rest_dict["Bse21I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:338",
 }
 
 rest_dict["Bse3DI"] = {
@@ -4124,6 +4732,7 @@ rest_dict["Bse3DI"] = {
     "freq": 4096.0,
     "fst3": 0,
     "fst5": 8,
+    "id": 2879,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -4135,6 +4744,7 @@ rest_dict["Bse3DI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2879",
 }
 
 rest_dict["Bse8I"] = {
@@ -4144,6 +4754,7 @@ rest_dict["Bse8I"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 2366,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -4155,6 +4766,7 @@ rest_dict["Bse8I"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2366",
 }
 
 rest_dict["BseAI"] = {
@@ -4164,6 +4776,7 @@ rest_dict["BseAI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 339,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4175,6 +4788,7 @@ rest_dict["BseAI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("C",),
+    "uri": "https://identifiers.org/rebase:339",
 }
 
 rest_dict["BseBI"] = {
@@ -4184,6 +4798,7 @@ rest_dict["BseBI"] = {
     "freq": 512.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 340,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -4195,6 +4810,7 @@ rest_dict["BseBI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("C",),
+    "uri": "https://identifiers.org/rebase:340",
 }
 
 rest_dict["BseCI"] = {
@@ -4204,6 +4820,7 @@ rest_dict["BseCI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2160,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -4215,6 +4832,7 @@ rest_dict["BseCI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("C",),
+    "uri": "https://identifiers.org/rebase:2160",
 }
 
 rest_dict["BseDI"] = {
@@ -4224,6 +4842,7 @@ rest_dict["BseDI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2289,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4235,6 +4854,7 @@ rest_dict["BseDI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2289",
 }
 
 rest_dict["BseGI"] = {
@@ -4244,6 +4864,7 @@ rest_dict["BseGI"] = {
     "freq": 1024.0,
     "fst3": 0,
     "fst5": 7,
+    "id": 2988,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -4255,6 +4876,7 @@ rest_dict["BseGI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2988",
 }
 
 rest_dict["BseJI"] = {
@@ -4264,6 +4886,7 @@ rest_dict["BseJI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 5464,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -4275,6 +4898,7 @@ rest_dict["BseJI"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:5464",
 }
 
 rest_dict["BseLI"] = {
@@ -4284,6 +4908,7 @@ rest_dict["BseLI"] = {
     "freq": 256.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 2982,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -4295,6 +4920,7 @@ rest_dict["BseLI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2982",
 }
 
 rest_dict["BseMI"] = {
@@ -4304,6 +4930,7 @@ rest_dict["BseMI"] = {
     "freq": 4096.0,
     "fst3": 0,
     "fst5": 8,
+    "id": 2984,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -4315,6 +4942,7 @@ rest_dict["BseMI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2984",
 }
 
 rest_dict["BseMII"] = {
@@ -4324,6 +4952,7 @@ rest_dict["BseMII"] = {
     "freq": 1024.0,
     "fst3": 8,
     "fst5": 15,
+    "id": 3025,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -4335,6 +4964,7 @@ rest_dict["BseMII"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:3025",
 }
 
 rest_dict["BseNI"] = {
@@ -4344,6 +4974,7 @@ rest_dict["BseNI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 6,
+    "id": 2179,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -4355,6 +4986,7 @@ rest_dict["BseNI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2179",
 }
 
 rest_dict["BsePI"] = {
@@ -4364,6 +4996,7 @@ rest_dict["BsePI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 344,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4375,6 +5008,7 @@ rest_dict["BsePI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:344",
 }
 
 rest_dict["BseRI"] = {
@@ -4384,6 +5018,7 @@ rest_dict["BseRI"] = {
     "freq": 4096.0,
     "fst3": 8,
     "fst5": 16,
+    "id": 2316,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -4395,6 +5030,7 @@ rest_dict["BseRI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2316",
 }
 
 rest_dict["BseSI"] = {
@@ -4404,6 +5040,7 @@ rest_dict["BseSI"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 3105,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -4415,6 +5052,7 @@ rest_dict["BseSI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:3105",
 }
 
 rest_dict["BseX3I"] = {
@@ -4424,6 +5062,7 @@ rest_dict["BseX3I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2960,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4435,6 +5074,7 @@ rest_dict["BseX3I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2960",
 }
 
 rest_dict["BseXI"] = {
@@ -4444,6 +5084,7 @@ rest_dict["BseXI"] = {
     "freq": 1024.0,
     "fst3": 12,
     "fst5": 13,
+    "id": 3830,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4455,6 +5096,7 @@ rest_dict["BseXI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:3830",
 }
 
 rest_dict["BseYI"] = {
@@ -4464,6 +5106,7 @@ rest_dict["BseYI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 5309,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4475,6 +5118,7 @@ rest_dict["BseYI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:5309",
 }
 
 rest_dict["BsgI"] = {
@@ -4484,6 +5128,7 @@ rest_dict["BsgI"] = {
     "freq": 4096.0,
     "fst3": 14,
     "fst5": 22,
+    "id": 345,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -4495,6 +5140,7 @@ rest_dict["BsgI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:345",
 }
 
 rest_dict["Bsh1236I"] = {
@@ -4504,6 +5150,7 @@ rest_dict["Bsh1236I"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2177,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -4515,6 +5162,7 @@ rest_dict["Bsh1236I"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2177",
 }
 
 rest_dict["Bsh1285I"] = {
@@ -4524,6 +5172,7 @@ rest_dict["Bsh1285I"] = {
     "freq": 1024.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 2178,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -4535,6 +5184,7 @@ rest_dict["Bsh1285I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2178",
 }
 
 rest_dict["BshFI"] = {
@@ -4544,6 +5194,7 @@ rest_dict["BshFI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 352,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -4555,6 +5206,7 @@ rest_dict["BshFI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("C",),
+    "uri": "https://identifiers.org/rebase:352",
 }
 
 rest_dict["BshNI"] = {
@@ -4564,6 +5216,7 @@ rest_dict["BshNI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2428,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4575,6 +5228,7 @@ rest_dict["BshNI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2428",
 }
 
 rest_dict["BshTI"] = {
@@ -4584,6 +5238,7 @@ rest_dict["BshTI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 3829,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4595,6 +5250,7 @@ rest_dict["BshTI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:3829",
 }
 
 rest_dict["BshVI"] = {
@@ -4604,6 +5260,7 @@ rest_dict["BshVI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 8568,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -4615,6 +5272,7 @@ rest_dict["BshVI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("V",),
+    "uri": "https://identifiers.org/rebase:8568",
 }
 
 rest_dict["BsiEI"] = {
@@ -4624,6 +5282,7 @@ rest_dict["BsiEI"] = {
     "freq": 1024.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 363,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -4635,6 +5294,7 @@ rest_dict["BsiEI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:363",
 }
 
 rest_dict["BsiHKAI"] = {
@@ -4644,6 +5304,7 @@ rest_dict["BsiHKAI"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 367,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -4655,6 +5316,7 @@ rest_dict["BsiHKAI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:367",
 }
 
 rest_dict["BsiHKCI"] = {
@@ -4664,6 +5326,7 @@ rest_dict["BsiHKCI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 5362,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4675,6 +5338,7 @@ rest_dict["BsiHKCI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("Q", "X"),
+    "uri": "https://identifiers.org/rebase:5362",
 }
 
 rest_dict["BsiI"] = {
@@ -4684,6 +5348,7 @@ rest_dict["BsiI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 368,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4695,6 +5360,7 @@ rest_dict["BsiI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:368",
 }
 
 rest_dict["BsiSI"] = {
@@ -4704,6 +5370,7 @@ rest_dict["BsiSI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 378,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -4715,6 +5382,7 @@ rest_dict["BsiSI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("C", "Y"),
+    "uri": "https://identifiers.org/rebase:378",
 }
 
 rest_dict["BsiWI"] = {
@@ -4724,6 +5392,7 @@ rest_dict["BsiWI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 382,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4735,6 +5404,7 @@ rest_dict["BsiWI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:382",
 }
 
 rest_dict["BsiYI"] = {
@@ -4744,6 +5414,7 @@ rest_dict["BsiYI"] = {
     "freq": 256.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 384,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -4755,6 +5426,7 @@ rest_dict["BsiYI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:384",
 }
 
 rest_dict["BslFI"] = {
@@ -4764,6 +5436,7 @@ rest_dict["BslFI"] = {
     "freq": 1024.0,
     "fst3": 14,
     "fst5": 15,
+    "id": 7532,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4775,6 +5448,7 @@ rest_dict["BslFI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:7532",
 }
 
 rest_dict["BslI"] = {
@@ -4784,6 +5458,7 @@ rest_dict["BslI"] = {
     "freq": 256.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 386,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -4795,6 +5470,7 @@ rest_dict["BslI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:386",
 }
 
 rest_dict["BsmAI"] = {
@@ -4804,6 +5480,7 @@ rest_dict["BsmAI"] = {
     "freq": 1024.0,
     "fst3": 5,
     "fst5": 6,
+    "id": 387,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4815,6 +5492,7 @@ rest_dict["BsmAI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:387",
 }
 
 rest_dict["BsmBI"] = {
@@ -4824,6 +5502,7 @@ rest_dict["BsmBI"] = {
     "freq": 4096.0,
     "fst3": 5,
     "fst5": 7,
+    "id": 2415,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4835,6 +5514,7 @@ rest_dict["BsmBI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2415",
 }
 
 rest_dict["BsmFI"] = {
@@ -4844,6 +5524,7 @@ rest_dict["BsmFI"] = {
     "freq": 1024.0,
     "fst3": 14,
     "fst5": 15,
+    "id": 2212,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4855,6 +5536,7 @@ rest_dict["BsmFI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2212",
 }
 
 rest_dict["BsmI"] = {
@@ -4864,6 +5546,7 @@ rest_dict["BsmI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 7,
+    "id": 389,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -4875,6 +5558,7 @@ rest_dict["BsmI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("J", "M", "N", "S"),
+    "uri": "https://identifiers.org/rebase:389",
 }
 
 rest_dict["BsnI"] = {
@@ -4884,6 +5568,7 @@ rest_dict["BsnI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 10491,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -4895,6 +5580,7 @@ rest_dict["BsnI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("V",),
+    "uri": "https://identifiers.org/rebase:10491",
 }
 
 rest_dict["Bso31I"] = {
@@ -4904,6 +5590,7 @@ rest_dict["Bso31I"] = {
     "freq": 4096.0,
     "fst3": 5,
     "fst5": 7,
+    "id": 4069,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4915,6 +5602,7 @@ rest_dict["Bso31I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:4069",
 }
 
 rest_dict["BsoBI"] = {
@@ -4924,6 +5612,7 @@ rest_dict["BsoBI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 392,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4935,6 +5624,7 @@ rest_dict["BsoBI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:392",
 }
 
 rest_dict["Bsp119I"] = {
@@ -4944,6 +5634,7 @@ rest_dict["Bsp119I"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 406,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -4955,6 +5646,7 @@ rest_dict["Bsp119I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:406",
 }
 
 rest_dict["Bsp120I"] = {
@@ -4964,6 +5656,7 @@ rest_dict["Bsp120I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 407,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -4975,6 +5668,7 @@ rest_dict["Bsp120I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:407",
 }
 
 rest_dict["Bsp1286I"] = {
@@ -4984,6 +5678,7 @@ rest_dict["Bsp1286I"] = {
     "freq": 455.1111111111111,
     "fst3": -5,
     "fst5": 5,
+    "id": 416,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -4995,6 +5690,7 @@ rest_dict["Bsp1286I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("J", "K", "N"),
+    "uri": "https://identifiers.org/rebase:416",
 }
 
 rest_dict["Bsp13I"] = {
@@ -5004,6 +5700,7 @@ rest_dict["Bsp13I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 430,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5015,6 +5712,7 @@ rest_dict["Bsp13I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:430",
 }
 
 rest_dict["Bsp1407I"] = {
@@ -5024,6 +5722,7 @@ rest_dict["Bsp1407I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2175,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5035,6 +5734,7 @@ rest_dict["Bsp1407I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+    "uri": "https://identifiers.org/rebase:2175",
 }
 
 rest_dict["Bsp143I"] = {
@@ -5044,6 +5744,7 @@ rest_dict["Bsp143I"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 434,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5055,6 +5756,7 @@ rest_dict["Bsp143I"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:434",
 }
 
 rest_dict["Bsp1720I"] = {
@@ -5064,6 +5766,7 @@ rest_dict["Bsp1720I"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 442,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -5075,6 +5778,7 @@ rest_dict["Bsp1720I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:442",
 }
 
 rest_dict["Bsp19I"] = {
@@ -5084,6 +5788,7 @@ rest_dict["Bsp19I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 446,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5095,6 +5800,7 @@ rest_dict["Bsp19I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:446",
 }
 
 rest_dict["Bsp24I"] = {
@@ -5104,6 +5810,7 @@ rest_dict["Bsp24I"] = {
     "freq": 4096.0,
     "fst3": -25,
     "fst5": -8,
+    "id": 2437,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 5,
@@ -5115,6 +5822,7 @@ rest_dict["Bsp24I"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2437",
 }
 
 rest_dict["Bsp3004IV"] = {
@@ -5124,6 +5832,7 @@ rest_dict["Bsp3004IV"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 67611,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -5135,6 +5844,7 @@ rest_dict["Bsp3004IV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:67611",
 }
 
 rest_dict["Bsp460III"] = {
@@ -5144,6 +5854,7 @@ rest_dict["Bsp460III"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 145234,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -5155,6 +5866,7 @@ rest_dict["Bsp460III"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:145234",
 }
 
 rest_dict["Bsp68I"] = {
@@ -5164,6 +5876,7 @@ rest_dict["Bsp68I"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 484,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -5175,6 +5888,7 @@ rest_dict["Bsp68I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:484",
 }
 
 rest_dict["BspACI"] = {
@@ -5184,6 +5898,7 @@ rest_dict["BspACI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 11884,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -5195,6 +5910,7 @@ rest_dict["BspACI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:11884",
 }
 
 rest_dict["BspANI"] = {
@@ -5204,6 +5920,7 @@ rest_dict["BspANI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 7453,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -5215,6 +5932,7 @@ rest_dict["BspANI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("X",),
+    "uri": "https://identifiers.org/rebase:7453",
 }
 
 rest_dict["BspCNI"] = {
@@ -5224,6 +5942,7 @@ rest_dict["BspCNI"] = {
     "freq": 1024.0,
     "fst3": 7,
     "fst5": 14,
+    "id": 4663,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -5235,6 +5954,7 @@ rest_dict["BspCNI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:4663",
 }
 
 rest_dict["BspD6I"] = {
@@ -5244,6 +5964,7 @@ rest_dict["BspD6I"] = {
     "freq": 1024.0,
     "fst3": 6,
     "fst5": 9,
+    "id": 14733,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -5255,6 +5976,7 @@ rest_dict["BspD6I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:14733",
 }
 
 rest_dict["BspDI"] = {
@@ -5264,6 +5986,7 @@ rest_dict["BspDI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 511,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -5275,6 +5998,7 @@ rest_dict["BspDI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:511",
 }
 
 rest_dict["BspEI"] = {
@@ -5284,6 +6008,7 @@ rest_dict["BspEI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 512,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5295,6 +6020,7 @@ rest_dict["BspEI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:512",
 }
 
 rest_dict["BspFNI"] = {
@@ -5304,6 +6030,7 @@ rest_dict["BspFNI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 16207,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -5315,6 +6042,7 @@ rest_dict["BspFNI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:16207",
 }
 
 rest_dict["BspGI"] = {
@@ -5324,6 +6052,7 @@ rest_dict["BspGI"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 516,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -5335,6 +6064,7 @@ rest_dict["BspGI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:516",
 }
 
 rest_dict["BspHI"] = {
@@ -5344,6 +6074,7 @@ rest_dict["BspHI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 517,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5355,6 +6086,7 @@ rest_dict["BspHI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:517",
 }
 
 rest_dict["BspLI"] = {
@@ -5364,6 +6096,7 @@ rest_dict["BspLI"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2831,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -5375,6 +6108,7 @@ rest_dict["BspLI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2831",
 }
 
 rest_dict["BspLU11I"] = {
@@ -5384,6 +6118,7 @@ rest_dict["BspLU11I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2324,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5395,6 +6130,7 @@ rest_dict["BspLU11I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2324",
 }
 
 rest_dict["BspMAI"] = {
@@ -5404,6 +6140,7 @@ rest_dict["BspMAI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 5358,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -5415,6 +6152,7 @@ rest_dict["BspMAI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("X",),
+    "uri": "https://identifiers.org/rebase:5358",
 }
 
 rest_dict["BspMI"] = {
@@ -5424,6 +6162,7 @@ rest_dict["BspMI"] = {
     "freq": 4096.0,
     "fst3": 8,
     "fst5": 10,
+    "id": 527,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5435,6 +6174,7 @@ rest_dict["BspMI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:527",
 }
 
 rest_dict["BspMII"] = {
@@ -5444,6 +6184,7 @@ rest_dict["BspMII"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 528,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5455,6 +6196,7 @@ rest_dict["BspMII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:528",
 }
 
 rest_dict["BspNCI"] = {
@@ -5464,6 +6206,7 @@ rest_dict["BspNCI"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 4691,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -5475,6 +6218,7 @@ rest_dict["BspNCI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:4691",
 }
 
 rest_dict["BspOI"] = {
@@ -5484,6 +6228,7 @@ rest_dict["BspOI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 15356,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -5495,6 +6240,7 @@ rest_dict["BspOI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:15356",
 }
 
 rest_dict["BspPI"] = {
@@ -5504,6 +6250,7 @@ rest_dict["BspPI"] = {
     "freq": 1024.0,
     "fst3": 5,
     "fst5": 9,
+    "id": 2448,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -5515,6 +6262,7 @@ rest_dict["BspPI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2448",
 }
 
 rest_dict["BspQI"] = {
@@ -5524,6 +6272,7 @@ rest_dict["BspQI"] = {
     "freq": 16384.0,
     "fst3": 4,
     "fst5": 8,
+    "id": 4157,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -5535,6 +6284,7 @@ rest_dict["BspQI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:4157",
 }
 
 rest_dict["BspT104I"] = {
@@ -5544,6 +6294,7 @@ rest_dict["BspT104I"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 4947,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -5555,6 +6306,7 @@ rest_dict["BspT104I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:4947",
 }
 
 rest_dict["BspT107I"] = {
@@ -5564,6 +6316,7 @@ rest_dict["BspT107I"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 4948,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5575,6 +6328,7 @@ rest_dict["BspT107I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:4948",
 }
 
 rest_dict["BspTI"] = {
@@ -5584,6 +6338,7 @@ rest_dict["BspTI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1989,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5595,6 +6350,7 @@ rest_dict["BspTI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:1989",
 }
 
 rest_dict["BspTNI"] = {
@@ -5604,6 +6360,7 @@ rest_dict["BspTNI"] = {
     "freq": 4096.0,
     "fst3": 5,
     "fst5": 7,
+    "id": 5361,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5615,6 +6372,7 @@ rest_dict["BspTNI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("X",),
+    "uri": "https://identifiers.org/rebase:5361",
 }
 
 rest_dict["BsrBI"] = {
@@ -5624,6 +6382,7 @@ rest_dict["BsrBI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 535,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -5635,6 +6394,7 @@ rest_dict["BsrBI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:535",
 }
 
 rest_dict["BsrDI"] = {
@@ -5644,6 +6404,7 @@ rest_dict["BsrDI"] = {
     "freq": 4096.0,
     "fst3": 0,
     "fst5": 8,
+    "id": 2195,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -5655,6 +6416,7 @@ rest_dict["BsrDI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2195",
 }
 
 rest_dict["BsrFI"] = {
@@ -5664,6 +6426,7 @@ rest_dict["BsrFI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 538,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5675,6 +6438,7 @@ rest_dict["BsrFI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:538",
 }
 
 rest_dict["BsrGI"] = {
@@ -5684,6 +6448,7 @@ rest_dict["BsrGI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2196,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5695,6 +6460,7 @@ rest_dict["BsrGI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2196",
 }
 
 rest_dict["BsrI"] = {
@@ -5704,6 +6470,7 @@ rest_dict["BsrI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 6,
+    "id": 540,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -5715,6 +6482,7 @@ rest_dict["BsrI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:540",
 }
 
 rest_dict["BssAI"] = {
@@ -5724,6 +6492,7 @@ rest_dict["BssAI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 545,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5735,6 +6504,7 @@ rest_dict["BssAI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("C",),
+    "uri": "https://identifiers.org/rebase:545",
 }
 
 rest_dict["BssECI"] = {
@@ -5744,6 +6514,7 @@ rest_dict["BssECI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 3200,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5755,6 +6526,7 @@ rest_dict["BssECI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:3200",
 }
 
 rest_dict["BssHII"] = {
@@ -5764,6 +6536,7 @@ rest_dict["BssHII"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 550,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5774,7 +6547,8 @@ rest_dict["BssHII"] = {
     "site": "GCGCGC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("J", "K", "M", "N", "Q", "R", "X"),
+    "suppl": ("J", "K", "M", "N", "Q", "X"),
+    "uri": "https://identifiers.org/rebase:550",
 }
 
 rest_dict["BssMI"] = {
@@ -5784,6 +6558,7 @@ rest_dict["BssMI"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 11124,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5795,6 +6570,7 @@ rest_dict["BssMI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("V",),
+    "uri": "https://identifiers.org/rebase:11124",
 }
 
 rest_dict["BssNAI"] = {
@@ -5804,6 +6580,7 @@ rest_dict["BssNAI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2959,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -5815,6 +6592,7 @@ rest_dict["BssNAI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2959",
 }
 
 rest_dict["BssNI"] = {
@@ -5824,6 +6602,7 @@ rest_dict["BssNI"] = {
     "freq": 1024.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 10487,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -5835,6 +6614,7 @@ rest_dict["BssNI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("V",),
+    "uri": "https://identifiers.org/rebase:10487",
 }
 
 rest_dict["BssSI"] = {
@@ -5844,6 +6624,7 @@ rest_dict["BssSI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2566,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5855,6 +6636,7 @@ rest_dict["BssSI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2566",
 }
 
 rest_dict["BssT1I"] = {
@@ -5864,6 +6646,7 @@ rest_dict["BssT1I"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 554,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5875,6 +6658,7 @@ rest_dict["BssT1I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:554",
 }
 
 rest_dict["Bst1107I"] = {
@@ -5884,6 +6668,7 @@ rest_dict["Bst1107I"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 556,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -5895,6 +6680,7 @@ rest_dict["Bst1107I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+    "uri": "https://identifiers.org/rebase:556",
 }
 
 rest_dict["Bst2BI"] = {
@@ -5904,6 +6690,7 @@ rest_dict["Bst2BI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2810,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -5915,6 +6702,7 @@ rest_dict["Bst2BI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:2810",
 }
 
 rest_dict["Bst2UI"] = {
@@ -5924,6 +6712,7 @@ rest_dict["Bst2UI"] = {
     "freq": 512.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2745,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -5935,6 +6724,7 @@ rest_dict["Bst2UI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2745",
 }
 
 rest_dict["Bst4CI"] = {
@@ -5944,6 +6734,7 @@ rest_dict["Bst4CI"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 3009,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -5955,6 +6746,7 @@ rest_dict["Bst4CI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:3009",
 }
 
 rest_dict["Bst6I"] = {
@@ -5964,6 +6756,7 @@ rest_dict["Bst6I"] = {
     "freq": 4096.0,
     "fst3": 4,
     "fst5": 7,
+    "id": 5552,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -5975,6 +6768,7 @@ rest_dict["Bst6I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:5552",
 }
 
 rest_dict["BstACI"] = {
@@ -5984,6 +6778,7 @@ rest_dict["BstACI"] = {
     "freq": 1024.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2948,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -5995,6 +6790,7 @@ rest_dict["BstACI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:2948",
 }
 
 rest_dict["BstAFI"] = {
@@ -6004,6 +6800,7 @@ rest_dict["BstAFI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 17119,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -6015,6 +6812,7 @@ rest_dict["BstAFI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:17119",
 }
 
 rest_dict["BstAPI"] = {
@@ -6024,6 +6822,7 @@ rest_dict["BstAPI"] = {
     "freq": 4096.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 2958,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -6035,6 +6834,7 @@ rest_dict["BstAPI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("I", "N"),
+    "uri": "https://identifiers.org/rebase:2958",
 }
 
 rest_dict["BstAUI"] = {
@@ -6044,6 +6844,7 @@ rest_dict["BstAUI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 6960,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -6055,6 +6856,7 @@ rest_dict["BstAUI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:6960",
 }
 
 rest_dict["BstBAI"] = {
@@ -6064,6 +6866,7 @@ rest_dict["BstBAI"] = {
     "freq": 1024.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2856,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -6075,6 +6878,7 @@ rest_dict["BstBAI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2856",
 }
 
 rest_dict["BstBI"] = {
@@ -6084,6 +6888,7 @@ rest_dict["BstBI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 570,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -6095,6 +6900,7 @@ rest_dict["BstBI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:570",
 }
 
 rest_dict["BstC8I"] = {
@@ -6104,6 +6910,7 @@ rest_dict["BstC8I"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 5509,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -6115,6 +6922,7 @@ rest_dict["BstC8I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:5509",
 }
 
 rest_dict["BstDEI"] = {
@@ -6124,6 +6932,7 @@ rest_dict["BstDEI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2767,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -6135,6 +6944,7 @@ rest_dict["BstDEI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2767",
 }
 
 rest_dict["BstDSI"] = {
@@ -6144,6 +6954,7 @@ rest_dict["BstDSI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2739,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -6155,6 +6966,7 @@ rest_dict["BstDSI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2739",
 }
 
 rest_dict["BstEII"] = {
@@ -6164,6 +6976,7 @@ rest_dict["BstEII"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 575,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -6174,7 +6987,8 @@ rest_dict["BstEII"] = {
     "site": "GGTNACC",
     "size": 7,
     "substrat": "DNA",
-    "suppl": ("C", "J", "N", "R"),
+    "suppl": ("C", "J", "N"),
+    "uri": "https://identifiers.org/rebase:575",
 }
 
 rest_dict["BstENI"] = {
@@ -6184,6 +6998,7 @@ rest_dict["BstENI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 4841,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -6195,6 +7010,7 @@ rest_dict["BstENI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:4841",
 }
 
 rest_dict["BstF5I"] = {
@@ -6204,6 +7020,7 @@ rest_dict["BstF5I"] = {
     "freq": 1024.0,
     "fst3": 0,
     "fst5": 7,
+    "id": 2744,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -6215,6 +7032,7 @@ rest_dict["BstF5I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2744",
 }
 
 rest_dict["BstFNI"] = {
@@ -6224,6 +7042,7 @@ rest_dict["BstFNI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 4070,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -6235,6 +7054,7 @@ rest_dict["BstFNI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:4070",
 }
 
 rest_dict["BstH2I"] = {
@@ -6244,6 +7064,7 @@ rest_dict["BstH2I"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 2743,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -6255,6 +7076,7 @@ rest_dict["BstH2I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2743",
 }
 
 rest_dict["BstHHI"] = {
@@ -6264,6 +7086,7 @@ rest_dict["BstHHI"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 4914,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -6275,6 +7098,7 @@ rest_dict["BstHHI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:4914",
 }
 
 rest_dict["BstKTI"] = {
@@ -6284,6 +7108,7 @@ rest_dict["BstKTI"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 5533,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -6295,6 +7120,7 @@ rest_dict["BstKTI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:5533",
 }
 
 rest_dict["BstMAI"] = {
@@ -6304,6 +7130,7 @@ rest_dict["BstMAI"] = {
     "freq": 1024.0,
     "fst3": 5,
     "fst5": 6,
+    "id": 10830,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -6315,6 +7142,7 @@ rest_dict["BstMAI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:10830",
 }
 
 rest_dict["BstMBI"] = {
@@ -6324,6 +7152,7 @@ rest_dict["BstMBI"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 7530,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -6335,6 +7164,7 @@ rest_dict["BstMBI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:7530",
 }
 
 rest_dict["BstMCI"] = {
@@ -6344,6 +7174,7 @@ rest_dict["BstMCI"] = {
     "freq": 1024.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 2740,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -6355,6 +7186,7 @@ rest_dict["BstMCI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2740",
 }
 
 rest_dict["BstMWI"] = {
@@ -6364,6 +7196,7 @@ rest_dict["BstMWI"] = {
     "freq": 256.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 6223,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -6375,6 +7208,7 @@ rest_dict["BstMWI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:6223",
 }
 
 rest_dict["BstNI"] = {
@@ -6384,6 +7218,7 @@ rest_dict["BstNI"] = {
     "freq": 512.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 586,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -6395,6 +7230,7 @@ rest_dict["BstNI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:586",
 }
 
 rest_dict["BstNSI"] = {
@@ -6404,6 +7240,7 @@ rest_dict["BstNSI"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 2864,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -6415,6 +7252,7 @@ rest_dict["BstNSI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2864",
 }
 
 rest_dict["BstPAI"] = {
@@ -6424,6 +7262,7 @@ rest_dict["BstPAI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 4619,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -6435,6 +7274,7 @@ rest_dict["BstPAI"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:4619",
 }
 
 rest_dict["BstPI"] = {
@@ -6444,6 +7284,7 @@ rest_dict["BstPI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 588,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -6455,6 +7296,7 @@ rest_dict["BstPI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:588",
 }
 
 rest_dict["BstSCI"] = {
@@ -6464,6 +7306,7 @@ rest_dict["BstSCI"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 5510,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -6475,6 +7318,7 @@ rest_dict["BstSCI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:5510",
 }
 
 rest_dict["BstSFI"] = {
@@ -6484,6 +7328,7 @@ rest_dict["BstSFI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2765,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -6495,6 +7340,7 @@ rest_dict["BstSFI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:2765",
 }
 
 rest_dict["BstSLI"] = {
@@ -6504,6 +7350,7 @@ rest_dict["BstSLI"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 16191,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -6515,6 +7362,7 @@ rest_dict["BstSLI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:16191",
 }
 
 rest_dict["BstSNI"] = {
@@ -6524,6 +7372,7 @@ rest_dict["BstSNI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2734,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -6535,6 +7384,7 @@ rest_dict["BstSNI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2734",
 }
 
 rest_dict["BstUI"] = {
@@ -6544,6 +7394,7 @@ rest_dict["BstUI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 593,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -6555,6 +7406,7 @@ rest_dict["BstUI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:593",
 }
 
 rest_dict["BstV1I"] = {
@@ -6564,6 +7416,7 @@ rest_dict["BstV1I"] = {
     "freq": 1024.0,
     "fst3": 12,
     "fst5": 13,
+    "id": 5508,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -6575,6 +7428,7 @@ rest_dict["BstV1I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:5508",
 }
 
 rest_dict["BstV2I"] = {
@@ -6584,6 +7438,7 @@ rest_dict["BstV2I"] = {
     "freq": 4096.0,
     "fst3": 6,
     "fst5": 8,
+    "id": 4860,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -6595,6 +7450,7 @@ rest_dict["BstV2I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:4860",
 }
 
 rest_dict["BstX2I"] = {
@@ -6604,6 +7460,7 @@ rest_dict["BstX2I"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2766,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -6615,6 +7472,7 @@ rest_dict["BstX2I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2766",
 }
 
 rest_dict["BstXI"] = {
@@ -6624,6 +7482,7 @@ rest_dict["BstXI"] = {
     "freq": 4096.0,
     "fst3": -8,
     "fst5": 8,
+    "id": 596,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -6634,7 +7493,8 @@ rest_dict["BstXI"] = {
     "site": "CCANNNNNNTGG",
     "size": 12,
     "substrat": "DNA",
-    "suppl": ("B", "I", "J", "K", "M", "N", "Q", "R", "V", "X", "Y"),
+    "suppl": ("B", "I", "J", "K", "M", "N", "Q", "V", "X", "Y"),
+    "uri": "https://identifiers.org/rebase:596",
 }
 
 rest_dict["BstYI"] = {
@@ -6644,6 +7504,7 @@ rest_dict["BstYI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 598,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -6655,6 +7516,7 @@ rest_dict["BstYI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:598",
 }
 
 rest_dict["BstZ17I"] = {
@@ -6664,6 +7526,7 @@ rest_dict["BstZ17I"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2662,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -6675,6 +7538,7 @@ rest_dict["BstZ17I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2662",
 }
 
 rest_dict["BstZI"] = {
@@ -6684,6 +7548,7 @@ rest_dict["BstZI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 599,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -6695,6 +7560,7 @@ rest_dict["BstZI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("R",),
+    "uri": "https://identifiers.org/rebase:599",
 }
 
 rest_dict["Bsu15I"] = {
@@ -6704,6 +7570,7 @@ rest_dict["Bsu15I"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 608,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -6715,6 +7582,7 @@ rest_dict["Bsu15I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:608",
 }
 
 rest_dict["Bsu36I"] = {
@@ -6724,6 +7592,7 @@ rest_dict["Bsu36I"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 611,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -6735,6 +7604,7 @@ rest_dict["Bsu36I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:611",
 }
 
 rest_dict["BsuI"] = {
@@ -6744,6 +7614,7 @@ rest_dict["BsuI"] = {
     "freq": 4096.0,
     "fst3": 5,
     "fst5": 12,
+    "id": 26995,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -6755,6 +7626,7 @@ rest_dict["BsuI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:26995",
 }
 
 rest_dict["BsuRI"] = {
@@ -6764,6 +7636,7 @@ rest_dict["BsuRI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 620,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -6775,6 +7648,7 @@ rest_dict["BsuRI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B", "I"),
+    "uri": "https://identifiers.org/rebase:620",
 }
 
 rest_dict["BsuTUI"] = {
@@ -6784,6 +7658,7 @@ rest_dict["BsuTUI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 5360,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -6795,6 +7670,7 @@ rest_dict["BsuTUI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("X",),
+    "uri": "https://identifiers.org/rebase:5360",
 }
 
 rest_dict["BtgI"] = {
@@ -6804,6 +7680,7 @@ rest_dict["BtgI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 3790,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -6815,6 +7692,7 @@ rest_dict["BtgI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:3790",
 }
 
 rest_dict["BtgZI"] = {
@@ -6824,6 +7702,7 @@ rest_dict["BtgZI"] = {
     "freq": 4096.0,
     "fst3": 14,
     "fst5": 16,
+    "id": 5640,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -6835,6 +7714,7 @@ rest_dict["BtgZI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:5640",
 }
 
 rest_dict["BthCI"] = {
@@ -6844,6 +7724,7 @@ rest_dict["BthCI"] = {
     "freq": 256.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 5795,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -6855,6 +7736,7 @@ rest_dict["BthCI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:5795",
 }
 
 rest_dict["BtrI"] = {
@@ -6864,6 +7746,7 @@ rest_dict["BtrI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 3774,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -6875,6 +7758,7 @@ rest_dict["BtrI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:3774",
 }
 
 rest_dict["BtsCI"] = {
@@ -6884,6 +7768,7 @@ rest_dict["BtsCI"] = {
     "freq": 1024.0,
     "fst3": 0,
     "fst5": 7,
+    "id": 10541,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -6895,6 +7780,7 @@ rest_dict["BtsCI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:10541",
 }
 
 rest_dict["BtsI"] = {
@@ -6904,6 +7790,7 @@ rest_dict["BtsI"] = {
     "freq": 4096.0,
     "fst3": 0,
     "fst5": 8,
+    "id": 3096,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -6915,6 +7802,7 @@ rest_dict["BtsI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:3096",
 }
 
 rest_dict["BtsIMutI"] = {
@@ -6924,6 +7812,7 @@ rest_dict["BtsIMutI"] = {
     "freq": 1024.0,
     "fst3": 0,
     "fst5": 7,
+    "id": 28973,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -6935,6 +7824,7 @@ rest_dict["BtsIMutI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:28973",
 }
 
 rest_dict["BtuMI"] = {
@@ -6944,6 +7834,7 @@ rest_dict["BtuMI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 11166,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -6955,6 +7846,7 @@ rest_dict["BtuMI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("V",),
+    "uri": "https://identifiers.org/rebase:11166",
 }
 
 rest_dict["Bve1B23I"] = {
@@ -6964,6 +7856,7 @@ rest_dict["Bve1B23I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 283053,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -6975,6 +7868,7 @@ rest_dict["Bve1B23I"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:283053",
 }
 
 rest_dict["BveI"] = {
@@ -6984,6 +7878,7 @@ rest_dict["BveI"] = {
     "freq": 4096.0,
     "fst3": 8,
     "fst5": 10,
+    "id": 6224,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -6995,6 +7890,7 @@ rest_dict["BveI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:6224",
 }
 
 rest_dict["Cac8I"] = {
@@ -7004,6 +7900,7 @@ rest_dict["Cac8I"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 638,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -7015,6 +7912,7 @@ rest_dict["Cac8I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:638",
 }
 
 rest_dict["CaiI"] = {
@@ -7024,6 +7922,7 @@ rest_dict["CaiI"] = {
     "freq": 4096.0,
     "fst3": -6,
     "fst5": 6,
+    "id": 3194,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -7035,6 +7934,7 @@ rest_dict["CaiI"] = {
     "size": 9,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:3194",
 }
 
 rest_dict["Cal14237I"] = {
@@ -7044,6 +7944,7 @@ rest_dict["Cal14237I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 31763,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7055,6 +7956,7 @@ rest_dict["Cal14237I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:31763",
 }
 
 rest_dict["CalB3II"] = {
@@ -7064,6 +7966,7 @@ rest_dict["CalB3II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 67589,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7075,6 +7978,7 @@ rest_dict["CalB3II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:67589",
 }
 
 rest_dict["Cau10061II"] = {
@@ -7084,6 +7988,7 @@ rest_dict["Cau10061II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 70009,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7095,6 +8000,7 @@ rest_dict["Cau10061II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:70009",
 }
 
 rest_dict["CauII"] = {
@@ -7104,6 +8010,7 @@ rest_dict["CauII"] = {
     "freq": 512.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 644,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -7115,6 +8022,7 @@ rest_dict["CauII"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:644",
 }
 
 rest_dict["Cba13II"] = {
@@ -7124,6 +8032,7 @@ rest_dict["Cba13II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 102165,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7135,6 +8044,7 @@ rest_dict["Cba13II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:102165",
 }
 
 rest_dict["Cba16038I"] = {
@@ -7144,6 +8054,7 @@ rest_dict["Cba16038I"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 97723,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7155,6 +8066,7 @@ rest_dict["Cba16038I"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:97723",
 }
 
 rest_dict["Cbo67071IV"] = {
@@ -7164,6 +8076,7 @@ rest_dict["Cbo67071IV"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 165809,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7175,6 +8088,7 @@ rest_dict["Cbo67071IV"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:165809",
 }
 
 rest_dict["Cch467III"] = {
@@ -7184,6 +8098,7 @@ rest_dict["Cch467III"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 216685,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7195,6 +8110,7 @@ rest_dict["Cch467III"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:216685",
 }
 
 rest_dict["CchII"] = {
@@ -7204,6 +8120,7 @@ rest_dict["CchII"] = {
     "freq": 2048.0,
     "fst3": 9,
     "fst5": 17,
+    "id": 24818,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -7215,6 +8132,7 @@ rest_dict["CchII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:24818",
 }
 
 rest_dict["CchIII"] = {
@@ -7224,6 +8142,7 @@ rest_dict["CchIII"] = {
     "freq": 4096.0,
     "fst3": 18,
     "fst5": 26,
+    "id": 24815,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -7235,6 +8154,7 @@ rest_dict["CchIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:24815",
 }
 
 rest_dict["CciI"] = {
@@ -7244,6 +8164,7 @@ rest_dict["CciI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 17117,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -7255,6 +8176,7 @@ rest_dict["CciI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:17117",
 }
 
 rest_dict["CciNI"] = {
@@ -7264,6 +8186,7 @@ rest_dict["CciNI"] = {
     "freq": 65536.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2673,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -7275,6 +8198,51 @@ rest_dict["CciNI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2673",
+}
+
+rest_dict["Cco11366VI"] = {
+    "charac": (None, None, None, None, "GAAGAA"),
+    "compsite": "(?=(?P<Cco11366VI>GAAGAA))|(?=(?P<Cco11366VI_as>TTCTTC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 421822,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GAAGAA",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:421822",
+}
+
+rest_dict["Cco11437V"] = {
+    "charac": (None, None, None, None, "CAYNNNNNRTAG"),
+    "compsite": "(?=(?P<Cco11437V>CA[CT].....[AG]TAG))|(?=(?P<Cco11437V_as>CTA[CT].....[AG]TG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 423414,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CAYNNNNNRTAG",
+    "size": 12,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:423414",
 }
 
 rest_dict["Cco14983V"] = {
@@ -7284,6 +8252,7 @@ rest_dict["Cco14983V"] = {
     "freq": 1365.3333333333333,
     "fst3": None,
     "fst5": None,
+    "id": 156213,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7295,6 +8264,7 @@ rest_dict["Cco14983V"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:156213",
 }
 
 rest_dict["Cco14983VI"] = {
@@ -7304,6 +8274,7 @@ rest_dict["Cco14983VI"] = {
     "freq": 512.0,
     "fst3": None,
     "fst5": None,
+    "id": 156209,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7315,6 +8286,7 @@ rest_dict["Cco14983VI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:156209",
 }
 
 rest_dict["CcrNAIII"] = {
@@ -7324,6 +8296,7 @@ rest_dict["CcrNAIII"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 19984,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7335,6 +8308,7 @@ rest_dict["CcrNAIII"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:19984",
 }
 
 rest_dict["Cdi11397I"] = {
@@ -7344,6 +8318,7 @@ rest_dict["Cdi11397I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 93952,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7355,6 +8330,51 @@ rest_dict["Cdi11397I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:93952",
+}
+
+rest_dict["Cdi13746V"] = {
+    "charac": (None, None, None, None, "RGAAAGR"),
+    "compsite": "(?=(?P<Cdi13746V>[AG]GAAAG[AG]))|(?=(?P<Cdi13746V_as>[CT]CTTTC[CT]))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 422788,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "RGAAAGR",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:422788",
+}
+
+rest_dict["Cdi13750III"] = {
+    "charac": (None, None, None, None, "CCGATCC"),
+    "compsite": "(?=(?P<Cdi13750III>CCGATCC))|(?=(?P<Cdi13750III_as>GGATCGG))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 422822,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CCGATCC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:422822",
 }
 
 rest_dict["CdiI"] = {
@@ -7364,6 +8384,7 @@ rest_dict["CdiI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 4,
+    "id": 5297,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -7375,6 +8396,7 @@ rest_dict["CdiI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:5297",
 }
 
 rest_dict["CdpI"] = {
@@ -7384,6 +8406,7 @@ rest_dict["CdpI"] = {
     "freq": 4096.0,
     "fst3": 18,
     "fst5": 26,
+    "id": 14868,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -7395,6 +8418,7 @@ rest_dict["CdpI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:14868",
 }
 
 rest_dict["Cdu23823II"] = {
@@ -7404,6 +8428,7 @@ rest_dict["Cdu23823II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 125956,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7415,6 +8440,29 @@ rest_dict["Cdu23823II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:125956",
+}
+
+rest_dict["Cfa8380I"] = {
+    "charac": (None, None, None, None, "GRGGAY"),
+    "compsite": "(?=(?P<Cfa8380I>G[AG]GGA[CT]))|(?=(?P<Cfa8380I_as>[AG]TCC[CT]C))",
+    "dna": None,
+    "freq": 1024.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 421896,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GRGGAY",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:421896",
 }
 
 rest_dict["CfoI"] = {
@@ -7424,6 +8472,7 @@ rest_dict["CfoI"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 654,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -7435,6 +8484,7 @@ rest_dict["CfoI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("M", "R", "S"),
+    "uri": "https://identifiers.org/rebase:654",
 }
 
 rest_dict["Cfr10I"] = {
@@ -7444,6 +8494,7 @@ rest_dict["Cfr10I"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 655,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -7455,6 +8506,7 @@ rest_dict["Cfr10I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+    "uri": "https://identifiers.org/rebase:655",
 }
 
 rest_dict["Cfr13I"] = {
@@ -7464,6 +8516,7 @@ rest_dict["Cfr13I"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 657,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -7475,6 +8528,7 @@ rest_dict["Cfr13I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:657",
 }
 
 rest_dict["Cfr42I"] = {
@@ -7484,6 +8538,7 @@ rest_dict["Cfr42I"] = {
     "freq": 4096.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 678,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -7495,6 +8550,7 @@ rest_dict["Cfr42I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:678",
 }
 
 rest_dict["Cfr9I"] = {
@@ -7504,6 +8560,7 @@ rest_dict["Cfr9I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 699,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -7515,6 +8572,7 @@ rest_dict["Cfr9I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:699",
 }
 
 rest_dict["CfrI"] = {
@@ -7524,6 +8582,7 @@ rest_dict["CfrI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 702,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -7535,6 +8594,7 @@ rest_dict["CfrI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:702",
 }
 
 rest_dict["CfrMH13II"] = {
@@ -7544,6 +8604,7 @@ rest_dict["CfrMH13II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 274395,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7555,6 +8616,7 @@ rest_dict["CfrMH13II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:274395",
 }
 
 rest_dict["CfrMH16VI"] = {
@@ -7564,6 +8626,7 @@ rest_dict["CfrMH16VI"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 274143,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7575,6 +8638,7 @@ rest_dict["CfrMH16VI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:274143",
 }
 
 rest_dict["Cfupf3II"] = {
@@ -7584,6 +8648,7 @@ rest_dict["Cfupf3II"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 85269,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7595,6 +8660,7 @@ rest_dict["Cfupf3II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:85269",
 }
 
 rest_dict["Cgl13032I"] = {
@@ -7604,6 +8670,7 @@ rest_dict["Cgl13032I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 47793,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7615,6 +8682,7 @@ rest_dict["Cgl13032I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:47793",
 }
 
 rest_dict["Cgl13032II"] = {
@@ -7624,6 +8692,7 @@ rest_dict["Cgl13032II"] = {
     "freq": 5461.333333333333,
     "fst3": None,
     "fst5": None,
+    "id": 47799,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7635,6 +8704,7 @@ rest_dict["Cgl13032II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:47799",
 }
 
 rest_dict["ChaI"] = {
@@ -7644,6 +8714,7 @@ rest_dict["ChaI"] = {
     "freq": 256.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 2688,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -7655,6 +8726,29 @@ rest_dict["ChaI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2688",
+}
+
+rest_dict["Cin11811I"] = {
+    "charac": (None, None, None, None, "TGKMCA"),
+    "compsite": "(?=(?P<Cin11811I>TG[GT][AC]CA))",
+    "dna": None,
+    "freq": 1024.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 380986,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TGKMCA",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:380986",
 }
 
 rest_dict["Cje265V"] = {
@@ -7664,6 +8758,7 @@ rest_dict["Cje265V"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 208512,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7675,6 +8770,7 @@ rest_dict["Cje265V"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:208512",
 }
 
 rest_dict["Cje54107III"] = {
@@ -7684,6 +8780,7 @@ rest_dict["Cje54107III"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 244034,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7695,6 +8792,7 @@ rest_dict["Cje54107III"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:244034",
 }
 
 rest_dict["CjeFIII"] = {
@@ -7704,6 +8802,7 @@ rest_dict["CjeFIII"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 12350,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7715,6 +8814,7 @@ rest_dict["CjeFIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:12350",
 }
 
 rest_dict["CjeFV"] = {
@@ -7724,6 +8824,7 @@ rest_dict["CjeFV"] = {
     "freq": 512.0,
     "fst3": None,
     "fst5": None,
+    "id": 12351,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7735,6 +8836,7 @@ rest_dict["CjeFV"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:12351",
 }
 
 rest_dict["CjeI"] = {
@@ -7744,6 +8846,7 @@ rest_dict["CjeI"] = {
     "freq": 1024.0,
     "fst3": -25,
     "fst5": -8,
+    "id": 2466,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 6,
@@ -7755,6 +8858,7 @@ rest_dict["CjeI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2466",
 }
 
 rest_dict["CjeNII"] = {
@@ -7764,6 +8868,7 @@ rest_dict["CjeNII"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 4509,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7775,6 +8880,7 @@ rest_dict["CjeNII"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:4509",
 }
 
 rest_dict["CjeNIII"] = {
@@ -7784,6 +8890,7 @@ rest_dict["CjeNIII"] = {
     "freq": 1024.0,
     "fst3": 17,
     "fst5": 25,
+    "id": 4511,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -7795,6 +8902,7 @@ rest_dict["CjeNIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:4511",
 }
 
 rest_dict["CjeNV"] = {
@@ -7804,6 +8912,7 @@ rest_dict["CjeNV"] = {
     "freq": 512.0,
     "fst3": None,
     "fst5": None,
+    "id": 151041,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7815,6 +8924,7 @@ rest_dict["CjeNV"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:151041",
 }
 
 rest_dict["CjeP659IV"] = {
@@ -7824,6 +8934,7 @@ rest_dict["CjeP659IV"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 28974,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7835,6 +8946,7 @@ rest_dict["CjeP659IV"] = {
     "size": 13,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:28974",
 }
 
 rest_dict["CjePI"] = {
@@ -7844,6 +8956,7 @@ rest_dict["CjePI"] = {
     "freq": 1024.0,
     "fst3": -25,
     "fst5": -7,
+    "id": 2467,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 6,
@@ -7855,6 +8968,7 @@ rest_dict["CjePI"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2467",
 }
 
 rest_dict["CjuI"] = {
@@ -7864,6 +8978,7 @@ rest_dict["CjuI"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 10921,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7875,6 +8990,7 @@ rest_dict["CjuI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:10921",
 }
 
 rest_dict["CjuII"] = {
@@ -7884,6 +9000,7 @@ rest_dict["CjuII"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 11659,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7895,6 +9012,29 @@ rest_dict["CjuII"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:11659",
+}
+
+rest_dict["Cko11077IV"] = {
+    "charac": (None, None, None, None, "TGACAG"),
+    "compsite": "(?=(?P<Cko11077IV>TGACAG))|(?=(?P<Cko11077IV_as>CTGTCA))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 422663,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TGACAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:422663",
 }
 
 rest_dict["Cla11845III"] = {
@@ -7904,6 +9044,7 @@ rest_dict["Cla11845III"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 101409,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7915,6 +9056,7 @@ rest_dict["Cla11845III"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:101409",
 }
 
 rest_dict["ClaI"] = {
@@ -7924,6 +9066,7 @@ rest_dict["ClaI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 716,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -7935,6 +9078,7 @@ rest_dict["ClaI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "K", "M", "N", "Q", "R", "S", "X"),
+    "uri": "https://identifiers.org/rebase:716",
 }
 
 rest_dict["Cly7489II"] = {
@@ -7944,6 +9088,7 @@ rest_dict["Cly7489II"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 33132,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7955,15 +9100,17 @@ rest_dict["Cly7489II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:33132",
 }
 
-rest_dict["Cma23826I"] = {
-    "charac": (None, None, None, None, "CGGAAG"),
-    "compsite": "(?=(?P<Cma23826I>CGGAAG))|(?=(?P<Cma23826I_as>CTTCCG))",
+rest_dict["Cpe10578V"] = {
+    "charac": (None, None, None, None, "GANGAGY"),
+    "compsite": "(?=(?P<Cpe10578V>GA.GAG[CT]))|(?=(?P<Cpe10578V_as>[AG]CTC.TC))",
     "dna": None,
-    "freq": 4096.0,
+    "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 422833,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -7971,10 +9118,55 @@ rest_dict["Cma23826I"] = {
     "results": None,
     "scd3": None,
     "scd5": None,
-    "site": "CGGAAG",
-    "size": 6,
+    "site": "GANGAGY",
+    "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:422833",
+}
+
+rest_dict["Cpe13170II"] = {
+    "charac": (None, None, None, None, "GTTGNAG"),
+    "compsite": "(?=(?P<Cpe13170II>GTTG.AG))|(?=(?P<Cpe13170II_as>CT.CAAC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 253771,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GTTGNAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:253771",
+}
+
+rest_dict["Cpe2837III"] = {
+    "charac": (None, None, None, None, "GRNACAYT"),
+    "compsite": "(?=(?P<Cpe2837III>G[AG].ACA[CT]T))|(?=(?P<Cpe2837III_as>A[AG]TGT.[CT]C))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 253794,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GRNACAYT",
+    "size": 8,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:253794",
 }
 
 rest_dict["CpoI"] = {
@@ -7984,6 +9176,7 @@ rest_dict["CpoI"] = {
     "freq": 8192.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 731,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -7995,6 +9188,51 @@ rest_dict["CpoI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+    "uri": "https://identifiers.org/rebase:731",
+}
+
+rest_dict["Cre7908I"] = {
+    "charac": (None, None, None, None, "GCGGGA"),
+    "compsite": "(?=(?P<Cre7908I>GCGGGA))|(?=(?P<Cre7908I_as>TCCCGC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 253772,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCGGGA",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:253772",
+}
+
+rest_dict["Csa9238II"] = {
+    "charac": (None, None, None, None, "CAAANTC"),
+    "compsite": "(?=(?P<Csa9238II>CAAA.TC))|(?=(?P<Csa9238II_as>GA.TTTG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 429683,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CAAANTC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:429683",
 }
 
 rest_dict["CseI"] = {
@@ -8004,6 +9242,7 @@ rest_dict["CseI"] = {
     "freq": 1024.0,
     "fst3": 10,
     "fst5": 10,
+    "id": 10691,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -8015,6 +9254,7 @@ rest_dict["CseI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:10691",
 }
 
 rest_dict["CsiI"] = {
@@ -8024,6 +9264,7 @@ rest_dict["CsiI"] = {
     "freq": 8192.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 17997,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -8035,6 +9276,7 @@ rest_dict["CsiI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:17997",
 }
 
 rest_dict["Csp2014I"] = {
@@ -8044,6 +9286,7 @@ rest_dict["Csp2014I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 96077,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -8055,6 +9298,7 @@ rest_dict["Csp2014I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:96077",
 }
 
 rest_dict["Csp6I"] = {
@@ -8064,6 +9308,7 @@ rest_dict["Csp6I"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 738,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -8075,6 +9320,7 @@ rest_dict["Csp6I"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:738",
 }
 
 rest_dict["CspAI"] = {
@@ -8084,6 +9330,7 @@ rest_dict["CspAI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2770,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -8095,6 +9342,7 @@ rest_dict["CspAI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("C",),
+    "uri": "https://identifiers.org/rebase:2770",
 }
 
 rest_dict["CspCI"] = {
@@ -8104,6 +9352,7 @@ rest_dict["CspCI"] = {
     "freq": 16384.0,
     "fst3": -25,
     "fst5": -11,
+    "id": 5047,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -8115,6 +9364,7 @@ rest_dict["CspCI"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:5047",
 }
 
 rest_dict["CspI"] = {
@@ -8124,6 +9374,7 @@ rest_dict["CspI"] = {
     "freq": 8192.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 739,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -8135,6 +9386,7 @@ rest_dict["CspI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("R",),
+    "uri": "https://identifiers.org/rebase:739",
 }
 
 rest_dict["CstMI"] = {
@@ -8144,6 +9396,7 @@ rest_dict["CstMI"] = {
     "freq": 4096.0,
     "fst3": 18,
     "fst5": 26,
+    "id": 7165,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -8155,6 +9408,7 @@ rest_dict["CstMI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:7165",
 }
 
 rest_dict["CviAII"] = {
@@ -8164,6 +9418,7 @@ rest_dict["CviAII"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2211,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -8175,6 +9430,7 @@ rest_dict["CviAII"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2211",
 }
 
 rest_dict["CviJI"] = {
@@ -8184,6 +9440,7 @@ rest_dict["CviJI"] = {
     "freq": 64.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 760,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -8195,6 +9452,7 @@ rest_dict["CviJI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("Q", "X"),
+    "uri": "https://identifiers.org/rebase:760",
 }
 
 rest_dict["CviKI_1"] = {
@@ -8204,6 +9462,7 @@ rest_dict["CviKI_1"] = {
     "freq": 64.0,
     "fst3": -2,
     "fst5": 2,
+    "id": None,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -8215,6 +9474,7 @@ rest_dict["CviKI_1"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": None,
 }
 
 rest_dict["CviQI"] = {
@@ -8224,6 +9484,7 @@ rest_dict["CviQI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 766,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -8235,6 +9496,7 @@ rest_dict["CviQI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:766",
 }
 
 rest_dict["CviRI"] = {
@@ -8244,6 +9506,7 @@ rest_dict["CviRI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 767,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -8255,6 +9518,7 @@ rest_dict["CviRI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:767",
 }
 
 rest_dict["Dde51507I"] = {
@@ -8264,6 +9528,7 @@ rest_dict["Dde51507I"] = {
     "freq": 512.0,
     "fst3": None,
     "fst5": None,
+    "id": 43352,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -8275,6 +9540,7 @@ rest_dict["Dde51507I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:43352",
 }
 
 rest_dict["DdeI"] = {
@@ -8284,6 +9550,7 @@ rest_dict["DdeI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 770,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -8295,6 +9562,7 @@ rest_dict["DdeI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("K", "M", "N", "O", "Q", "R", "S", "X"),
+    "uri": "https://identifiers.org/rebase:770",
 }
 
 rest_dict["DinI"] = {
@@ -8304,6 +9572,7 @@ rest_dict["DinI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 11070,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -8315,6 +9584,73 @@ rest_dict["DinI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("V",),
+    "uri": "https://identifiers.org/rebase:11070",
+}
+
+rest_dict["Dpi3069I"] = {
+    "charac": (None, None, None, None, "GACAG"),
+    "compsite": "(?=(?P<Dpi3069I>GACAG))|(?=(?P<Dpi3069I_as>CTGTC))",
+    "dna": None,
+    "freq": 1024.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 317442,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GACAG",
+    "size": 5,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:317442",
+}
+
+rest_dict["Dpi3084I"] = {
+    "charac": (None, None, None, None, "CGRAG"),
+    "compsite": "(?=(?P<Dpi3084I>CG[AG]AG))|(?=(?P<Dpi3084I_as>CT[CT]CG))",
+    "dna": None,
+    "freq": 512.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 271821,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CGRAG",
+    "size": 5,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:271821",
+}
+
+rest_dict["Dpi3090II"] = {
+    "charac": (None, None, None, None, "AAGRAG"),
+    "compsite": "(?=(?P<Dpi3090II>AAG[AG]AG))|(?=(?P<Dpi3090II_as>CT[CT]CTT))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 271629,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "AAGRAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:271629",
 }
 
 rest_dict["DpnI"] = {
@@ -8324,6 +9660,7 @@ rest_dict["DpnI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 776,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -8335,6 +9672,7 @@ rest_dict["DpnI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B", "E", "K", "M", "N", "O", "Q", "R", "S", "X"),
+    "uri": "https://identifiers.org/rebase:776",
 }
 
 rest_dict["DpnII"] = {
@@ -8344,6 +9682,7 @@ rest_dict["DpnII"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 777,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -8355,6 +9694,7 @@ rest_dict["DpnII"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:777",
 }
 
 rest_dict["DraI"] = {
@@ -8364,6 +9704,7 @@ rest_dict["DraI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 778,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -8374,7 +9715,8 @@ rest_dict["DraI"] = {
     "site": "TTTAAA",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "I", "J", "K", "M", "N", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "I", "J", "K", "M", "N", "Q", "S", "V", "X"),
+    "uri": "https://identifiers.org/rebase:778",
 }
 
 rest_dict["DraII"] = {
@@ -8384,6 +9726,7 @@ rest_dict["DraII"] = {
     "freq": 1024.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 779,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -8395,6 +9738,7 @@ rest_dict["DraII"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:779",
 }
 
 rest_dict["DraIII"] = {
@@ -8404,6 +9748,7 @@ rest_dict["DraIII"] = {
     "freq": 4096.0,
     "fst3": -6,
     "fst5": 6,
+    "id": 780,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -8415,6 +9760,7 @@ rest_dict["DraIII"] = {
     "size": 9,
     "substrat": "DNA",
     "suppl": ("I", "M", "N", "V"),
+    "uri": "https://identifiers.org/rebase:780",
 }
 
 rest_dict["DraRI"] = {
@@ -8424,6 +9770,7 @@ rest_dict["DraRI"] = {
     "freq": 4096.0,
     "fst3": 18,
     "fst5": 27,
+    "id": 13702,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -8435,6 +9782,7 @@ rest_dict["DraRI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:13702",
 }
 
 rest_dict["DrdI"] = {
@@ -8444,6 +9792,7 @@ rest_dict["DrdI"] = {
     "freq": 4096.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 787,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -8455,6 +9804,7 @@ rest_dict["DrdI"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:787",
 }
 
 rest_dict["DrdII"] = {
@@ -8464,6 +9814,7 @@ rest_dict["DrdII"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 788,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -8475,6 +9826,7 @@ rest_dict["DrdII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:788",
 }
 
 rest_dict["DrdIV"] = {
@@ -8484,6 +9836,7 @@ rest_dict["DrdIV"] = {
     "freq": 4096.0,
     "fst3": 18,
     "fst5": 26,
+    "id": 15492,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -8495,6 +9848,73 @@ rest_dict["DrdIV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:15492",
+}
+
+rest_dict["DrdV"] = {
+    "charac": (17, 8, None, None, "CATGNAC"),
+    "compsite": "(?=(?P<DrdV>CATG.AC))|(?=(?P<DrdV_as>GT.CATG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": 8,
+    "fst5": 17,
+    "id": 21570,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": 2,
+    "ovhgseq": "NN",
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CATGNAC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:21570",
+}
+
+rest_dict["DrdVI"] = {
+    "charac": (None, None, None, None, "GCAGCC"),
+    "compsite": "(?=(?P<DrdVI>GCAGCC))|(?=(?P<DrdVI_as>GGCTGC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 33637,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCAGCC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:33637",
+}
+
+rest_dict["DrdVIII"] = {
+    "charac": (None, None, None, None, "ARGAGC"),
+    "compsite": "(?=(?P<DrdVIII>A[AG]GAGC))|(?=(?P<DrdVIII_as>GCTC[CT]T))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 60181,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "ARGAGC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:60181",
 }
 
 rest_dict["DriI"] = {
@@ -8504,6 +9924,7 @@ rest_dict["DriI"] = {
     "freq": 4096.0,
     "fst3": -6,
     "fst5": 6,
+    "id": 7493,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -8515,6 +9936,7 @@ rest_dict["DriI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:7493",
 }
 
 rest_dict["DsaI"] = {
@@ -8524,6 +9946,7 @@ rest_dict["DsaI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 790,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -8535,6 +9958,7 @@ rest_dict["DsaI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:790",
 }
 
 rest_dict["DseDI"] = {
@@ -8544,6 +9968,7 @@ rest_dict["DseDI"] = {
     "freq": 4096.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 2859,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -8555,6 +9980,29 @@ rest_dict["DseDI"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2859",
+}
+
+rest_dict["DspS02II"] = {
+    "charac": (None, None, None, None, "TGCCGAC"),
+    "compsite": "(?=(?P<DspS02II>TGCCGAC))|(?=(?P<DspS02II_as>GTCGGCA))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 451105,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TGCCGAC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:451105",
 }
 
 rest_dict["DvuIII"] = {
@@ -8564,6 +10012,7 @@ rest_dict["DvuIII"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 7926,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -8575,6 +10024,7 @@ rest_dict["DvuIII"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:7926",
 }
 
 rest_dict["EaeI"] = {
@@ -8584,6 +10034,7 @@ rest_dict["EaeI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 800,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -8595,6 +10046,7 @@ rest_dict["EaeI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("K", "N"),
+    "uri": "https://identifiers.org/rebase:800",
 }
 
 rest_dict["EagI"] = {
@@ -8604,6 +10056,7 @@ rest_dict["EagI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 802,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -8615,6 +10068,7 @@ rest_dict["EagI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:802",
 }
 
 rest_dict["Eam1104I"] = {
@@ -8624,6 +10078,7 @@ rest_dict["Eam1104I"] = {
     "freq": 4096.0,
     "fst3": 4,
     "fst5": 7,
+    "id": 805,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -8635,6 +10090,7 @@ rest_dict["Eam1104I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:805",
 }
 
 rest_dict["Eam1105I"] = {
@@ -8644,6 +10100,7 @@ rest_dict["Eam1105I"] = {
     "freq": 4096.0,
     "fst3": -6,
     "fst5": 6,
+    "id": 806,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -8655,6 +10112,7 @@ rest_dict["Eam1105I"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:806",
 }
 
 rest_dict["EarI"] = {
@@ -8664,6 +10122,7 @@ rest_dict["EarI"] = {
     "freq": 4096.0,
     "fst3": 4,
     "fst5": 7,
+    "id": 807,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -8675,6 +10134,7 @@ rest_dict["EarI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:807",
 }
 
 rest_dict["EciI"] = {
@@ -8684,6 +10144,7 @@ rest_dict["EciI"] = {
     "freq": 4096.0,
     "fst3": 9,
     "fst5": 17,
+    "id": 817,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -8695,6 +10156,7 @@ rest_dict["EciI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:817",
 }
 
 rest_dict["Ecl136II"] = {
@@ -8704,6 +10166,7 @@ rest_dict["Ecl136II"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 820,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -8715,6 +10178,7 @@ rest_dict["Ecl136II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:820",
 }
 
 rest_dict["Ecl234I"] = {
@@ -8724,6 +10188,7 @@ rest_dict["Ecl234I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 251717,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -8735,6 +10200,7 @@ rest_dict["Ecl234I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:251717",
 }
 
 rest_dict["Ecl35734I"] = {
@@ -8744,6 +10210,7 @@ rest_dict["Ecl35734I"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 102089,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -8755,6 +10222,7 @@ rest_dict["Ecl35734I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:102089",
 }
 
 rest_dict["EclXI"] = {
@@ -8764,6 +10232,7 @@ rest_dict["EclXI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 834,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -8775,6 +10244,7 @@ rest_dict["EclXI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("S",),
+    "uri": "https://identifiers.org/rebase:834",
 }
 
 rest_dict["Eco105I"] = {
@@ -8784,6 +10254,7 @@ rest_dict["Eco105I"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 838,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -8795,6 +10266,7 @@ rest_dict["Eco105I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:838",
 }
 
 rest_dict["Eco130I"] = {
@@ -8804,6 +10276,7 @@ rest_dict["Eco130I"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 849,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -8815,6 +10288,7 @@ rest_dict["Eco130I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:849",
 }
 
 rest_dict["Eco147I"] = {
@@ -8824,6 +10298,7 @@ rest_dict["Eco147I"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 853,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -8835,6 +10310,7 @@ rest_dict["Eco147I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:853",
 }
 
 rest_dict["Eco24I"] = {
@@ -8844,6 +10320,7 @@ rest_dict["Eco24I"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 910,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -8855,6 +10332,7 @@ rest_dict["Eco24I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:910",
 }
 
 rest_dict["Eco31I"] = {
@@ -8864,6 +10342,7 @@ rest_dict["Eco31I"] = {
     "freq": 4096.0,
     "fst3": 5,
     "fst5": 7,
+    "id": 921,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -8875,6 +10354,7 @@ rest_dict["Eco31I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:921",
 }
 
 rest_dict["Eco32I"] = {
@@ -8884,6 +10364,7 @@ rest_dict["Eco32I"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 922,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -8895,6 +10376,29 @@ rest_dict["Eco32I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:922",
+}
+
+rest_dict["Eco4174I"] = {
+    "charac": (None, None, None, None, "GCACAG"),
+    "compsite": "(?=(?P<Eco4174I>GCACAG))|(?=(?P<Eco4174I_as>CTGTGC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 433432,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCACAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:433432",
 }
 
 rest_dict["Eco43896II"] = {
@@ -8904,6 +10408,7 @@ rest_dict["Eco43896II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 219464,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -8915,6 +10420,7 @@ rest_dict["Eco43896II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:219464",
 }
 
 rest_dict["Eco4465II"] = {
@@ -8924,6 +10430,7 @@ rest_dict["Eco4465II"] = {
     "freq": 5461.333333333333,
     "fst3": None,
     "fst5": None,
+    "id": 148173,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -8935,6 +10442,7 @@ rest_dict["Eco4465II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:148173",
 }
 
 rest_dict["Eco47I"] = {
@@ -8944,6 +10452,7 @@ rest_dict["Eco47I"] = {
     "freq": 512.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 930,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -8955,6 +10464,7 @@ rest_dict["Eco47I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:930",
 }
 
 rest_dict["Eco47III"] = {
@@ -8964,6 +10474,7 @@ rest_dict["Eco47III"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 932,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -8974,7 +10485,8 @@ rest_dict["Eco47III"] = {
     "site": "AGCGCT",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "M", "R", "S"),
+    "suppl": ("B", "M", "S"),
+    "uri": "https://identifiers.org/rebase:932",
 }
 
 rest_dict["Eco52I"] = {
@@ -8984,6 +10496,7 @@ rest_dict["Eco52I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 938,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -8995,6 +10508,7 @@ rest_dict["Eco52I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+    "uri": "https://identifiers.org/rebase:938",
 }
 
 rest_dict["Eco53kI"] = {
@@ -9004,6 +10518,7 @@ rest_dict["Eco53kI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 3177,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -9015,6 +10530,7 @@ rest_dict["Eco53kI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:3177",
 }
 
 rest_dict["Eco57I"] = {
@@ -9024,6 +10540,7 @@ rest_dict["Eco57I"] = {
     "freq": 4096.0,
     "fst3": 14,
     "fst5": 22,
+    "id": 941,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -9035,6 +10552,7 @@ rest_dict["Eco57I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:941",
 }
 
 rest_dict["Eco57MI"] = {
@@ -9044,6 +10562,7 @@ rest_dict["Eco57MI"] = {
     "freq": 2048.0,
     "fst3": 14,
     "fst5": 22,
+    "id": 5034,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -9055,6 +10574,7 @@ rest_dict["Eco57MI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:5034",
 }
 
 rest_dict["Eco72I"] = {
@@ -9064,6 +10584,7 @@ rest_dict["Eco72I"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 950,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -9075,6 +10596,29 @@ rest_dict["Eco72I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:950",
+}
+
+rest_dict["Eco8164I"] = {
+    "charac": (None, None, None, None, "GCCKAG"),
+    "compsite": "(?=(?P<Eco8164I>GCC[GT]AG))|(?=(?P<Eco8164I_as>CT[AC]GGC))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 433405,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCCKAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:433405",
 }
 
 rest_dict["Eco81I"] = {
@@ -9084,6 +10628,7 @@ rest_dict["Eco81I"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 954,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -9095,6 +10640,7 @@ rest_dict["Eco81I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+    "uri": "https://identifiers.org/rebase:954",
 }
 
 rest_dict["Eco88I"] = {
@@ -9104,6 +10650,7 @@ rest_dict["Eco88I"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 958,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -9115,6 +10662,73 @@ rest_dict["Eco88I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:958",
+}
+
+rest_dict["Eco9009II"] = {
+    "charac": (None, None, None, None, "GAAANTC"),
+    "compsite": "(?=(?P<Eco9009II>GAAA.TC))|(?=(?P<Eco9009II_as>GA.TTTC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 434595,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GAAANTC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:434595",
+}
+
+rest_dict["Eco9020I"] = {
+    "charac": (None, None, None, None, "CGAABTT"),
+    "compsite": "(?=(?P<Eco9020I>CGAA[CGT]TT))|(?=(?P<Eco9020I_as>AA[ACG]TTCG))",
+    "dna": None,
+    "freq": 5461.333333333333,
+    "fst3": None,
+    "fst5": None,
+    "id": 434674,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CGAABTT",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:434674",
+}
+
+rest_dict["Eco9035I"] = {
+    "charac": (None, None, None, None, "GGGANTT"),
+    "compsite": "(?=(?P<Eco9035I>GGGA.TT))|(?=(?P<Eco9035I_as>AA.TCCC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 434664,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GGGANTT",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:434664",
 }
 
 rest_dict["Eco91I"] = {
@@ -9124,6 +10738,7 @@ rest_dict["Eco91I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 960,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -9135,6 +10750,29 @@ rest_dict["Eco91I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:960",
+}
+
+rest_dict["Eco9699II"] = {
+    "charac": (None, None, None, None, "TAGARC"),
+    "compsite": "(?=(?P<Eco9699II>TAGA[AG]C))|(?=(?P<Eco9699II_as>G[CT]TCTA))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 286445,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TAGARC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:286445",
 }
 
 rest_dict["EcoBLMcrX"] = {
@@ -9144,6 +10782,7 @@ rest_dict["EcoBLMcrX"] = {
     "freq": 128.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 134473,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -9155,6 +10794,7 @@ rest_dict["EcoBLMcrX"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:134473",
 }
 
 rest_dict["EcoE1140I"] = {
@@ -9164,6 +10804,7 @@ rest_dict["EcoE1140I"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 96234,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -9175,6 +10816,7 @@ rest_dict["EcoE1140I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:96234",
 }
 
 rest_dict["EcoHI"] = {
@@ -9184,6 +10826,7 @@ rest_dict["EcoHI"] = {
     "freq": 512.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 978,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -9195,6 +10838,7 @@ rest_dict["EcoHI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:978",
 }
 
 rest_dict["EcoHSI"] = {
@@ -9204,6 +10848,7 @@ rest_dict["EcoHSI"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 16127,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -9215,6 +10860,7 @@ rest_dict["EcoHSI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:16127",
 }
 
 rest_dict["EcoICRI"] = {
@@ -9224,6 +10870,7 @@ rest_dict["EcoICRI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 979,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -9234,7 +10881,8 @@ rest_dict["EcoICRI"] = {
     "site": "GAGCTC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("I", "R", "V"),
+    "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:979",
 }
 
 rest_dict["EcoMVII"] = {
@@ -9244,6 +10892,7 @@ rest_dict["EcoMVII"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 87918,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -9255,6 +10904,7 @@ rest_dict["EcoMVII"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:87918",
 }
 
 rest_dict["EcoNI"] = {
@@ -9264,6 +10914,7 @@ rest_dict["EcoNI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 981,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -9275,6 +10926,7 @@ rest_dict["EcoNI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:981",
 }
 
 rest_dict["EcoNIH6II"] = {
@@ -9284,6 +10936,7 @@ rest_dict["EcoNIH6II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 231661,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -9295,6 +10948,7 @@ rest_dict["EcoNIH6II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:231661",
 }
 
 rest_dict["EcoO109I"] = {
@@ -9304,6 +10958,7 @@ rest_dict["EcoO109I"] = {
     "freq": 1024.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 982,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -9315,6 +10970,7 @@ rest_dict["EcoO109I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("B", "J", "K", "N"),
+    "uri": "https://identifiers.org/rebase:982",
 }
 
 rest_dict["EcoO65I"] = {
@@ -9324,6 +10980,7 @@ rest_dict["EcoO65I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 986,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -9335,6 +10992,7 @@ rest_dict["EcoO65I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:986",
 }
 
 rest_dict["EcoRI"] = {
@@ -9344,6 +11002,7 @@ rest_dict["EcoRI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 993,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -9355,6 +11014,7 @@ rest_dict["EcoRI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X", "Y"),
+    "uri": "https://identifiers.org/rebase:993",
 }
 
 rest_dict["EcoRII"] = {
@@ -9364,6 +11024,7 @@ rest_dict["EcoRII"] = {
     "freq": 512.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 994,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -9375,6 +11036,7 @@ rest_dict["EcoRII"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B", "J"),
+    "uri": "https://identifiers.org/rebase:994",
 }
 
 rest_dict["EcoRV"] = {
@@ -9384,6 +11046,7 @@ rest_dict["EcoRV"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 995,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -9395,6 +11058,7 @@ rest_dict["EcoRV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X"),
+    "uri": "https://identifiers.org/rebase:995",
 }
 
 rest_dict["EcoT14I"] = {
@@ -9404,6 +11068,7 @@ rest_dict["EcoT14I"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 997,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -9415,6 +11080,7 @@ rest_dict["EcoT14I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:997",
 }
 
 rest_dict["EcoT22I"] = {
@@ -9424,6 +11090,7 @@ rest_dict["EcoT22I"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 998,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -9435,6 +11102,7 @@ rest_dict["EcoT22I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+    "uri": "https://identifiers.org/rebase:998",
 }
 
 rest_dict["EcoT38I"] = {
@@ -9444,6 +11112,7 @@ rest_dict["EcoT38I"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 999,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -9455,6 +11124,7 @@ rest_dict["EcoT38I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("J",),
+    "uri": "https://identifiers.org/rebase:999",
 }
 
 rest_dict["EgeI"] = {
@@ -9464,6 +11134,7 @@ rest_dict["EgeI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2858,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -9475,6 +11146,7 @@ rest_dict["EgeI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:2858",
 }
 
 rest_dict["EheI"] = {
@@ -9484,6 +11156,7 @@ rest_dict["EheI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1004,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -9495,6 +11168,29 @@ rest_dict["EheI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:1004",
+}
+
+rest_dict["Ehi46392I"] = {
+    "charac": (None, None, None, None, "CCCNNAG"),
+    "compsite": "(?=(?P<Ehi46392I>CCC..AG))|(?=(?P<Ehi46392I_as>CT..GGG))",
+    "dna": None,
+    "freq": 1024.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 430001,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CCCNNAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:430001",
 }
 
 rest_dict["Eli8509II"] = {
@@ -9504,6 +11200,7 @@ rest_dict["Eli8509II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 156312,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -9515,6 +11212,29 @@ rest_dict["Eli8509II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:156312",
+}
+
+rest_dict["ErhG4T10I"] = {
+    "charac": (None, None, None, None, "CGANNNNNNTC"),
+    "compsite": "(?=(?P<ErhG4T10I>CGA......TC))|(?=(?P<ErhG4T10I_as>GA......TCG))",
+    "dna": None,
+    "freq": 1024.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 314610,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CGANNNNNNTC",
+    "size": 11,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:314610",
 }
 
 rest_dict["ErhI"] = {
@@ -9524,6 +11244,7 @@ rest_dict["ErhI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2674,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -9535,6 +11256,7 @@ rest_dict["ErhI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:2674",
 }
 
 rest_dict["EsaBC3I"] = {
@@ -9544,6 +11266,7 @@ rest_dict["EsaBC3I"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 4634,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -9555,6 +11278,7 @@ rest_dict["EsaBC3I"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:4634",
 }
 
 rest_dict["EsaSSI"] = {
@@ -9564,6 +11288,7 @@ rest_dict["EsaSSI"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 14757,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -9575,6 +11300,7 @@ rest_dict["EsaSSI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:14757",
 }
 
 rest_dict["Esp3007I"] = {
@@ -9584,6 +11310,7 @@ rest_dict["Esp3007I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 77587,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -9595,6 +11322,7 @@ rest_dict["Esp3007I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:77587",
 }
 
 rest_dict["Esp3I"] = {
@@ -9604,6 +11332,7 @@ rest_dict["Esp3I"] = {
     "freq": 4096.0,
     "fst3": 5,
     "fst5": 7,
+    "id": 1028,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -9615,6 +11344,7 @@ rest_dict["Esp3I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "N"),
+    "uri": "https://identifiers.org/rebase:1028",
 }
 
 rest_dict["EspI"] = {
@@ -9624,6 +11354,7 @@ rest_dict["EspI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1036,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -9635,6 +11366,7 @@ rest_dict["EspI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1036",
 }
 
 rest_dict["FaeI"] = {
@@ -9644,6 +11376,7 @@ rest_dict["FaeI"] = {
     "freq": 256.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 11885,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -9655,6 +11388,7 @@ rest_dict["FaeI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:11885",
 }
 
 rest_dict["FaiI"] = {
@@ -9664,6 +11398,7 @@ rest_dict["FaiI"] = {
     "freq": 64.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 18718,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -9675,6 +11410,7 @@ rest_dict["FaiI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:18718",
 }
 
 rest_dict["FalI"] = {
@@ -9684,6 +11420,7 @@ rest_dict["FalI"] = {
     "freq": 4096.0,
     "fst3": -24,
     "fst5": -8,
+    "id": 5531,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 5,
@@ -9695,6 +11432,7 @@ rest_dict["FalI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:5531",
 }
 
 rest_dict["FaqI"] = {
@@ -9704,6 +11442,7 @@ rest_dict["FaqI"] = {
     "freq": 1024.0,
     "fst3": 14,
     "fst5": 15,
+    "id": 7454,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -9715,6 +11454,7 @@ rest_dict["FaqI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:7454",
 }
 
 rest_dict["FatI"] = {
@@ -9724,6 +11464,7 @@ rest_dict["FatI"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 5536,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -9735,6 +11476,7 @@ rest_dict["FatI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I", "N"),
+    "uri": "https://identifiers.org/rebase:5536",
 }
 
 rest_dict["FauI"] = {
@@ -9744,6 +11486,7 @@ rest_dict["FauI"] = {
     "freq": 1024.0,
     "fst3": 6,
     "fst5": 9,
+    "id": 1038,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -9755,6 +11498,7 @@ rest_dict["FauI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I", "N"),
+    "uri": "https://identifiers.org/rebase:1038",
 }
 
 rest_dict["FauNDI"] = {
@@ -9764,6 +11508,7 @@ rest_dict["FauNDI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2736,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -9775,6 +11520,7 @@ rest_dict["FauNDI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2736",
 }
 
 rest_dict["Fba202Z8II"] = {
@@ -9784,6 +11530,7 @@ rest_dict["Fba202Z8II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 314863,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -9795,6 +11542,7 @@ rest_dict["Fba202Z8II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:314863",
 }
 
 rest_dict["FbaI"] = {
@@ -9804,6 +11552,7 @@ rest_dict["FbaI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1039,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -9815,6 +11564,7 @@ rest_dict["FbaI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:1039",
 }
 
 rest_dict["FblI"] = {
@@ -9824,6 +11574,7 @@ rest_dict["FblI"] = {
     "freq": 1024.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1040,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -9835,6 +11586,7 @@ rest_dict["FblI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:1040",
 }
 
 rest_dict["Fco1691IV"] = {
@@ -9844,6 +11596,7 @@ rest_dict["Fco1691IV"] = {
     "freq": 1365.3333333333333,
     "fst3": None,
     "fst5": None,
+    "id": 177611,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -9855,6 +11608,7 @@ rest_dict["Fco1691IV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:177611",
 }
 
 rest_dict["FinI"] = {
@@ -9864,6 +11618,7 @@ rest_dict["FinI"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 1044,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -9875,6 +11630,7 @@ rest_dict["FinI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1044",
 }
 
 rest_dict["FmuI"] = {
@@ -9884,6 +11640,7 @@ rest_dict["FmuI"] = {
     "freq": 256.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 2696,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -9895,6 +11652,73 @@ rest_dict["FmuI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2696",
+}
+
+rest_dict["Fna13121I"] = {
+    "charac": (None, None, None, None, "TTGAYC"),
+    "compsite": "(?=(?P<Fna13121I>TTGA[CT]C))|(?=(?P<Fna13121I_as>G[AG]TCAA))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 430829,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TTGAYC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:430829",
+}
+
+rest_dict["Fnu11326II"] = {
+    "charac": (None, None, None, None, "GAGNNNNRTAY"),
+    "compsite": "(?=(?P<Fnu11326II>GAG....[AG]TA[CT]))|(?=(?P<Fnu11326II_as>[AG]TA[CT]....CTC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 429953,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GAGNNNNRTAY",
+    "size": 11,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:429953",
+}
+
+rest_dict["Fnu11326IV"] = {
+    "charac": (None, None, None, None, "CTTAATT"),
+    "compsite": "(?=(?P<Fnu11326IV>CTTAATT))|(?=(?P<Fnu11326IV_as>AATTAAG))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 430836,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CTTAATT",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:430836",
 }
 
 rest_dict["Fnu4HI"] = {
@@ -9904,6 +11728,7 @@ rest_dict["Fnu4HI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1048,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -9915,6 +11740,7 @@ rest_dict["Fnu4HI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1048",
 }
 
 rest_dict["FnuDII"] = {
@@ -9924,6 +11750,7 @@ rest_dict["FnuDII"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1053,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -9935,6 +11762,7 @@ rest_dict["FnuDII"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1053",
 }
 
 rest_dict["FokI"] = {
@@ -9944,6 +11772,7 @@ rest_dict["FokI"] = {
     "freq": 1024.0,
     "fst3": 13,
     "fst5": 14,
+    "id": 1056,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -9955,6 +11784,7 @@ rest_dict["FokI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B", "I", "J", "K", "M", "N", "V", "X", "Y"),
+    "uri": "https://identifiers.org/rebase:1056",
 }
 
 rest_dict["FriOI"] = {
@@ -9964,6 +11794,7 @@ rest_dict["FriOI"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 2682,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -9975,6 +11806,7 @@ rest_dict["FriOI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2682",
 }
 
 rest_dict["FseI"] = {
@@ -9984,6 +11816,7 @@ rest_dict["FseI"] = {
     "freq": 65536.0,
     "fst3": -6,
     "fst5": 6,
+    "id": 1059,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -9995,6 +11828,7 @@ rest_dict["FseI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1059",
 }
 
 rest_dict["Fsp4HI"] = {
@@ -10004,6 +11838,7 @@ rest_dict["Fsp4HI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2738,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -10015,6 +11850,7 @@ rest_dict["Fsp4HI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:2738",
 }
 
 rest_dict["FspAI"] = {
@@ -10024,6 +11860,7 @@ rest_dict["FspAI"] = {
     "freq": 16384.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 4756,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -10035,6 +11872,7 @@ rest_dict["FspAI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:4756",
 }
 
 rest_dict["FspBI"] = {
@@ -10044,6 +11882,7 @@ rest_dict["FspBI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 6971,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -10055,6 +11894,7 @@ rest_dict["FspBI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:6971",
 }
 
 rest_dict["FspEI"] = {
@@ -10064,6 +11904,7 @@ rest_dict["FspEI"] = {
     "freq": 16.0,
     "fst3": 16,
     "fst5": 14,
+    "id": 23359,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -10075,6 +11916,7 @@ rest_dict["FspEI"] = {
     "size": 2,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:23359",
 }
 
 rest_dict["FspI"] = {
@@ -10084,6 +11926,7 @@ rest_dict["FspI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1063,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -10095,6 +11938,7 @@ rest_dict["FspI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("J", "N"),
+    "uri": "https://identifiers.org/rebase:1063",
 }
 
 rest_dict["FspPK15I"] = {
@@ -10104,6 +11948,7 @@ rest_dict["FspPK15I"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 166439,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -10115,6 +11960,7 @@ rest_dict["FspPK15I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:166439",
 }
 
 rest_dict["FtnUV"] = {
@@ -10124,6 +11970,7 @@ rest_dict["FtnUV"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 13984,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -10135,6 +11982,7 @@ rest_dict["FtnUV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:13984",
 }
 
 rest_dict["GauT27I"] = {
@@ -10144,6 +11992,7 @@ rest_dict["GauT27I"] = {
     "freq": 65536.0,
     "fst3": None,
     "fst5": None,
+    "id": 21640,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -10155,6 +12004,7 @@ rest_dict["GauT27I"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:21640",
 }
 
 rest_dict["Gba708II"] = {
@@ -10164,6 +12014,7 @@ rest_dict["Gba708II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 78116,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -10175,6 +12026,7 @@ rest_dict["Gba708II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:78116",
 }
 
 rest_dict["GdiII"] = {
@@ -10184,6 +12036,7 @@ rest_dict["GdiII"] = {
     "freq": 2048.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1072,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -10195,6 +12048,7 @@ rest_dict["GdiII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1072",
 }
 
 rest_dict["GlaI"] = {
@@ -10204,6 +12058,7 @@ rest_dict["GlaI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 14597,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -10215,6 +12070,7 @@ rest_dict["GlaI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:14597",
 }
 
 rest_dict["GluI"] = {
@@ -10224,6 +12080,7 @@ rest_dict["GluI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 15187,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -10235,6 +12092,29 @@ rest_dict["GluI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:15187",
+}
+
+rest_dict["Gru56503II"] = {
+    "charac": (None, None, None, None, "CARABGC"),
+    "compsite": "(?=(?P<Gru56503II>CA[AG]A[CGT]GC))|(?=(?P<Gru56503II_as>GC[ACG]T[CT]TG))",
+    "dna": None,
+    "freq": 2730.6666666666665,
+    "fst3": None,
+    "fst5": None,
+    "id": 421745,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CARABGC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:421745",
 }
 
 rest_dict["GsaI"] = {
@@ -10244,6 +12124,7 @@ rest_dict["GsaI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 17118,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -10255,6 +12136,7 @@ rest_dict["GsaI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:17118",
 }
 
 rest_dict["GsuI"] = {
@@ -10264,6 +12146,7 @@ rest_dict["GsuI"] = {
     "freq": 4096.0,
     "fst3": 14,
     "fst5": 22,
+    "id": 1085,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -10275,6 +12158,7 @@ rest_dict["GsuI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:1085",
 }
 
 rest_dict["HaeI"] = {
@@ -10284,6 +12168,7 @@ rest_dict["HaeI"] = {
     "freq": 1024.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1087,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -10295,6 +12180,7 @@ rest_dict["HaeI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1087",
 }
 
 rest_dict["HaeII"] = {
@@ -10304,6 +12190,7 @@ rest_dict["HaeII"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1088,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -10314,7 +12201,8 @@ rest_dict["HaeII"] = {
     "site": "RGCGCY",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("J", "K", "N", "R"),
+    "suppl": ("J", "K", "N"),
+    "uri": "https://identifiers.org/rebase:1088",
 }
 
 rest_dict["HaeIII"] = {
@@ -10324,6 +12212,7 @@ rest_dict["HaeIII"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1089,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -10335,6 +12224,7 @@ rest_dict["HaeIII"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "X"),
+    "uri": "https://identifiers.org/rebase:1089",
 }
 
 rest_dict["HapII"] = {
@@ -10344,6 +12234,7 @@ rest_dict["HapII"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1094,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -10355,6 +12246,7 @@ rest_dict["HapII"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+    "uri": "https://identifiers.org/rebase:1094",
 }
 
 rest_dict["HauII"] = {
@@ -10364,6 +12256,7 @@ rest_dict["HauII"] = {
     "freq": 4096.0,
     "fst3": 9,
     "fst5": 17,
+    "id": 20893,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -10375,6 +12268,7 @@ rest_dict["HauII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:20893",
 }
 
 rest_dict["HbaII"] = {
@@ -10384,6 +12278,7 @@ rest_dict["HbaII"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 21444,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -10395,6 +12290,29 @@ rest_dict["HbaII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:21444",
+}
+
+rest_dict["Hca13221V"] = {
+    "charac": (None, None, None, None, "CACNNNNNRTAY"),
+    "compsite": "(?=(?P<Hca13221V>CAC.....[AG]TA[CT]))|(?=(?P<Hca13221V_as>[AG]TA[CT].....GTG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 431204,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CACNNNNNRTAY",
+    "size": 12,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:431204",
 }
 
 rest_dict["HdeNY26I"] = {
@@ -10404,6 +12322,7 @@ rest_dict["HdeNY26I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 224970,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -10415,6 +12334,7 @@ rest_dict["HdeNY26I"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:224970",
 }
 
 rest_dict["HdeZA17I"] = {
@@ -10424,6 +12344,7 @@ rest_dict["HdeZA17I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 224977,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -10435,6 +12356,7 @@ rest_dict["HdeZA17I"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:224977",
 }
 
 rest_dict["HgaI"] = {
@@ -10444,6 +12366,7 @@ rest_dict["HgaI"] = {
     "freq": 1024.0,
     "fst3": 10,
     "fst5": 10,
+    "id": 1096,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -10455,6 +12378,7 @@ rest_dict["HgaI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I", "N"),
+    "uri": "https://identifiers.org/rebase:1096",
 }
 
 rest_dict["HgiAI"] = {
@@ -10464,6 +12388,7 @@ rest_dict["HgiAI"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1097,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -10475,6 +12400,7 @@ rest_dict["HgiAI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1097",
 }
 
 rest_dict["HgiCI"] = {
@@ -10484,6 +12410,7 @@ rest_dict["HgiCI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1099,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -10495,6 +12422,7 @@ rest_dict["HgiCI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1099",
 }
 
 rest_dict["HgiEII"] = {
@@ -10504,6 +12432,7 @@ rest_dict["HgiEII"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 1105,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -10515,6 +12444,7 @@ rest_dict["HgiEII"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1105",
 }
 
 rest_dict["HgiJII"] = {
@@ -10524,6 +12454,7 @@ rest_dict["HgiJII"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1113,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -10535,6 +12466,7 @@ rest_dict["HgiJII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1113",
 }
 
 rest_dict["HhaI"] = {
@@ -10544,6 +12476,7 @@ rest_dict["HhaI"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1117,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -10555,6 +12488,7 @@ rest_dict["HhaI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B", "J", "K", "N", "Q", "R", "X"),
+    "uri": "https://identifiers.org/rebase:1117",
 }
 
 rest_dict["Hin1I"] = {
@@ -10564,6 +12498,7 @@ rest_dict["Hin1I"] = {
     "freq": 1024.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1128,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -10575,6 +12510,7 @@ rest_dict["Hin1I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+    "uri": "https://identifiers.org/rebase:1128",
 }
 
 rest_dict["Hin1II"] = {
@@ -10584,6 +12520,7 @@ rest_dict["Hin1II"] = {
     "freq": 256.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 1129,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -10595,6 +12532,7 @@ rest_dict["Hin1II"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:1129",
 }
 
 rest_dict["Hin4I"] = {
@@ -10604,6 +12542,7 @@ rest_dict["Hin4I"] = {
     "freq": 682.6666666666666,
     "fst3": -24,
     "fst5": -8,
+    "id": 2577,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 5,
@@ -10615,6 +12554,7 @@ rest_dict["Hin4I"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2577",
 }
 
 rest_dict["Hin4II"] = {
@@ -10624,6 +12564,7 @@ rest_dict["Hin4II"] = {
     "freq": 1024.0,
     "fst3": 5,
     "fst5": 11,
+    "id": 5045,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -10635,6 +12576,7 @@ rest_dict["Hin4II"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:5045",
 }
 
 rest_dict["Hin6I"] = {
@@ -10644,6 +12586,7 @@ rest_dict["Hin6I"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1135,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -10655,6 +12598,7 @@ rest_dict["Hin6I"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:1135",
 }
 
 rest_dict["HinP1I"] = {
@@ -10664,6 +12608,7 @@ rest_dict["HinP1I"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1144,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -10675,6 +12620,7 @@ rest_dict["HinP1I"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1144",
 }
 
 rest_dict["HincII"] = {
@@ -10684,6 +12630,7 @@ rest_dict["HincII"] = {
     "freq": 1024.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1148,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -10694,7 +12641,8 @@ rest_dict["HincII"] = {
     "site": "GTYRAC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "J", "K", "N", "O", "Q", "R", "X"),
+    "suppl": ("B", "J", "K", "N", "O", "Q", "X"),
+    "uri": "https://identifiers.org/rebase:1148",
 }
 
 rest_dict["HindII"] = {
@@ -10704,6 +12652,7 @@ rest_dict["HindII"] = {
     "freq": 1024.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1150,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -10715,6 +12664,7 @@ rest_dict["HindII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "M", "S", "V"),
+    "uri": "https://identifiers.org/rebase:1150",
 }
 
 rest_dict["HindIII"] = {
@@ -10724,6 +12674,7 @@ rest_dict["HindIII"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1151,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -10735,6 +12686,7 @@ rest_dict["HindIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X", "Y"),
+    "uri": "https://identifiers.org/rebase:1151",
 }
 
 rest_dict["HinfI"] = {
@@ -10744,6 +12696,7 @@ rest_dict["HinfI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1154,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -10755,6 +12708,7 @@ rest_dict["HinfI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "V", "X", "Y"),
+    "uri": "https://identifiers.org/rebase:1154",
 }
 
 rest_dict["HpaI"] = {
@@ -10764,6 +12718,7 @@ rest_dict["HpaI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1158,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -10774,7 +12729,8 @@ rest_dict["HpaI"] = {
     "site": "GTTAAC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "M", "N", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "M", "N", "Q", "S", "V", "X"),
+    "uri": "https://identifiers.org/rebase:1158",
 }
 
 rest_dict["HpaII"] = {
@@ -10784,6 +12740,7 @@ rest_dict["HpaII"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1159,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -10795,6 +12752,7 @@ rest_dict["HpaII"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B", "I", "N", "Q", "R", "V", "X"),
+    "uri": "https://identifiers.org/rebase:1159",
 }
 
 rest_dict["HphI"] = {
@@ -10804,6 +12762,7 @@ rest_dict["HphI"] = {
     "freq": 1024.0,
     "fst3": 7,
     "fst5": 13,
+    "id": 1160,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -10815,6 +12774,7 @@ rest_dict["HphI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B", "N"),
+    "uri": "https://identifiers.org/rebase:1160",
 }
 
 rest_dict["Hpy166II"] = {
@@ -10824,6 +12784,7 @@ rest_dict["Hpy166II"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 4197,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -10835,6 +12796,7 @@ rest_dict["Hpy166II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:4197",
 }
 
 rest_dict["Hpy178III"] = {
@@ -10844,6 +12806,7 @@ rest_dict["Hpy178III"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 3249,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -10855,6 +12818,7 @@ rest_dict["Hpy178III"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:3249",
 }
 
 rest_dict["Hpy188I"] = {
@@ -10864,6 +12828,7 @@ rest_dict["Hpy188I"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 3252,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -10875,6 +12840,7 @@ rest_dict["Hpy188I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:3252",
 }
 
 rest_dict["Hpy188III"] = {
@@ -10884,6 +12850,7 @@ rest_dict["Hpy188III"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 4152,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -10895,6 +12862,7 @@ rest_dict["Hpy188III"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:4152",
 }
 
 rest_dict["Hpy300XI"] = {
@@ -10904,6 +12872,7 @@ rest_dict["Hpy300XI"] = {
     "freq": 512.0,
     "fst3": None,
     "fst5": None,
+    "id": 211704,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -10915,6 +12884,7 @@ rest_dict["Hpy300XI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:211704",
 }
 
 rest_dict["Hpy8I"] = {
@@ -10924,6 +12894,7 @@ rest_dict["Hpy8I"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 4002,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -10935,6 +12906,7 @@ rest_dict["Hpy8I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:4002",
 }
 
 rest_dict["Hpy99I"] = {
@@ -10944,6 +12916,7 @@ rest_dict["Hpy99I"] = {
     "freq": 512.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 4194,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 5,
@@ -10955,6 +12928,7 @@ rest_dict["Hpy99I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:4194",
 }
 
 rest_dict["Hpy99XIII"] = {
@@ -10964,6 +12938,7 @@ rest_dict["Hpy99XIII"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 4062,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -10975,6 +12950,7 @@ rest_dict["Hpy99XIII"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:4062",
 }
 
 rest_dict["Hpy99XIV"] = {
@@ -10984,6 +12960,7 @@ rest_dict["Hpy99XIV"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 67181,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -10995,6 +12972,7 @@ rest_dict["Hpy99XIV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:67181",
 }
 
 rest_dict["Hpy99XIV_mut1"] = {
@@ -11004,6 +12982,7 @@ rest_dict["Hpy99XIV_mut1"] = {
     "freq": 512.0,
     "fst3": None,
     "fst5": None,
+    "id": None,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11015,15 +12994,17 @@ rest_dict["Hpy99XIV_mut1"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": None,
 }
 
 rest_dict["Hpy99XXII"] = {
-    "charac": (None, None, None, None, "TCANNNNNNTRG"),
-    "compsite": "(?=(?P<Hpy99XXII>TCA......T[AG]G))|(?=(?P<Hpy99XXII_as>C[CT]A......TGA))",
+    "charac": (None, None, None, None, "CYANNNNNNTGA"),
+    "compsite": "(?=(?P<Hpy99XXII>C[CT]A......TGA))|(?=(?P<Hpy99XXII_as>TCA......T[AG]G))",
     "dna": None,
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 4061,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11031,10 +13012,33 @@ rest_dict["Hpy99XXII"] = {
     "results": None,
     "scd3": None,
     "scd5": None,
-    "site": "TCANNNNNNTRG",
+    "site": "CYANNNNNNTGA",
     "size": 12,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:4061",
+}
+
+rest_dict["HpyAS001VI"] = {
+    "charac": (None, None, None, None, "CYANNNNNNTTC"),
+    "compsite": "(?=(?P<HpyAS001VI>C[CT]A......TTC))|(?=(?P<HpyAS001VI_as>GAA......T[AG]G))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 468441,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CYANNNNNNTTC",
+    "size": 12,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:468441",
 }
 
 rest_dict["HpyAV"] = {
@@ -11044,6 +13048,7 @@ rest_dict["HpyAV"] = {
     "freq": 1024.0,
     "fst3": 5,
     "fst5": 11,
+    "id": 4211,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -11055,6 +13060,7 @@ rest_dict["HpyAV"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:4211",
 }
 
 rest_dict["HpyAXIV"] = {
@@ -11064,6 +13070,7 @@ rest_dict["HpyAXIV"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 3071,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11075,6 +13082,7 @@ rest_dict["HpyAXIV"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:3071",
 }
 
 rest_dict["HpyAXVIII"] = {
@@ -11084,6 +13092,7 @@ rest_dict["HpyAXVIII"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 6149,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11095,6 +13104,7 @@ rest_dict["HpyAXVIII"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:6149",
 }
 
 rest_dict["HpyAXVI_mut1"] = {
@@ -11104,6 +13114,7 @@ rest_dict["HpyAXVI_mut1"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": None,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11115,6 +13126,7 @@ rest_dict["HpyAXVI_mut1"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": None,
 }
 
 rest_dict["HpyAXVI_mut2"] = {
@@ -11124,6 +13136,7 @@ rest_dict["HpyAXVI_mut2"] = {
     "freq": 512.0,
     "fst3": None,
     "fst5": None,
+    "id": None,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11135,6 +13148,7 @@ rest_dict["HpyAXVI_mut2"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": None,
 }
 
 rest_dict["HpyCH4III"] = {
@@ -11144,6 +13158,7 @@ rest_dict["HpyCH4III"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 4148,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -11155,6 +13170,7 @@ rest_dict["HpyCH4III"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:4148",
 }
 
 rest_dict["HpyCH4IV"] = {
@@ -11164,6 +13180,7 @@ rest_dict["HpyCH4IV"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 4149,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -11175,6 +13192,7 @@ rest_dict["HpyCH4IV"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:4149",
 }
 
 rest_dict["HpyCH4V"] = {
@@ -11184,6 +13202,7 @@ rest_dict["HpyCH4V"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 4150,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -11195,6 +13214,7 @@ rest_dict["HpyCH4V"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:4150",
 }
 
 rest_dict["HpyF10VI"] = {
@@ -11204,6 +13224,7 @@ rest_dict["HpyF10VI"] = {
     "freq": 256.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 4304,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -11215,6 +13236,7 @@ rest_dict["HpyF10VI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:4304",
 }
 
 rest_dict["HpyF3I"] = {
@@ -11224,6 +13246,7 @@ rest_dict["HpyF3I"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 4285,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -11235,6 +13258,51 @@ rest_dict["HpyF3I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:4285",
+}
+
+rest_dict["HpyLIM6XII"] = {
+    "charac": (None, None, None, None, "CYANNNNNNTCC"),
+    "compsite": "(?=(?P<HpyLIM6XII>C[CT]A......TCC))|(?=(?P<HpyLIM6XII_as>GGA......T[AG]G))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 475965,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CYANNNNNNTCC",
+    "size": 12,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:475965",
+}
+
+rest_dict["HpyPU007XIX"] = {
+    "charac": (None, None, None, None, "CYANNNNNNTGY"),
+    "compsite": "(?=(?P<HpyPU007XIX>C[CT]A......TG[CT]))|(?=(?P<HpyPU007XIX_as>[AG]CA......T[AG]G))",
+    "dna": None,
+    "freq": 1024.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 476105,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CYANNNNNNTGY",
+    "size": 12,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:476105",
 }
 
 rest_dict["HpySE526I"] = {
@@ -11244,6 +13312,7 @@ rest_dict["HpySE526I"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 41799,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -11255,6 +13324,7 @@ rest_dict["HpySE526I"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:41799",
 }
 
 rest_dict["HpyUM032XIII"] = {
@@ -11264,6 +13334,7 @@ rest_dict["HpyUM032XIII"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 65004,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11275,6 +13346,7 @@ rest_dict["HpyUM032XIII"] = {
     "size": 13,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:65004",
 }
 
 rest_dict["HpyUM032XIII_mut1"] = {
@@ -11284,6 +13356,7 @@ rest_dict["HpyUM032XIII_mut1"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": None,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11295,6 +13368,7 @@ rest_dict["HpyUM032XIII_mut1"] = {
     "size": 13,
     "substrat": "DNA",
     "suppl": (),
+    "uri": None,
 }
 
 rest_dict["HpyUM032XIV"] = {
@@ -11304,6 +13378,7 @@ rest_dict["HpyUM032XIV"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 65011,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11315,6 +13390,7 @@ rest_dict["HpyUM032XIV"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:65011",
 }
 
 rest_dict["HpyUM037X"] = {
@@ -11324,6 +13400,7 @@ rest_dict["HpyUM037X"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 65113,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11335,6 +13412,7 @@ rest_dict["HpyUM037X"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:65113",
 }
 
 rest_dict["Hso63250IV"] = {
@@ -11344,6 +13422,7 @@ rest_dict["Hso63250IV"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 186849,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11355,6 +13434,7 @@ rest_dict["Hso63250IV"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:186849",
 }
 
 rest_dict["Hso63373III"] = {
@@ -11364,6 +13444,7 @@ rest_dict["Hso63373III"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 202592,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11375,6 +13456,7 @@ rest_dict["Hso63373III"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:202592",
 }
 
 rest_dict["Hsp92I"] = {
@@ -11384,6 +13466,7 @@ rest_dict["Hsp92I"] = {
     "freq": 1024.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2580,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -11395,6 +13478,7 @@ rest_dict["Hsp92I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("R",),
+    "uri": "https://identifiers.org/rebase:2580",
 }
 
 rest_dict["Hsp92II"] = {
@@ -11404,6 +13488,7 @@ rest_dict["Hsp92II"] = {
     "freq": 256.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 2581,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -11415,6 +13500,7 @@ rest_dict["Hsp92II"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("R",),
+    "uri": "https://identifiers.org/rebase:2581",
 }
 
 rest_dict["HspAI"] = {
@@ -11424,6 +13510,7 @@ rest_dict["HspAI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2675,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -11435,6 +13522,7 @@ rest_dict["HspAI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2675",
 }
 
 rest_dict["HspMHR1II"] = {
@@ -11444,6 +13532,7 @@ rest_dict["HspMHR1II"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 309943,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11455,6 +13544,7 @@ rest_dict["HspMHR1II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:309943",
 }
 
 rest_dict["Jma19592I"] = {
@@ -11464,6 +13554,7 @@ rest_dict["Jma19592I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 61170,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11475,6 +13566,7 @@ rest_dict["Jma19592I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:61170",
 }
 
 rest_dict["Jma19592II"] = {
@@ -11484,6 +13576,7 @@ rest_dict["Jma19592II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 61171,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11495,6 +13588,7 @@ rest_dict["Jma19592II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:61171",
 }
 
 rest_dict["Jsp2502II"] = {
@@ -11504,6 +13598,7 @@ rest_dict["Jsp2502II"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 179014,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11515,6 +13610,29 @@ rest_dict["Jsp2502II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:179014",
+}
+
+rest_dict["Kas9737III"] = {
+    "charac": (None, None, None, None, "CCCRAG"),
+    "compsite": "(?=(?P<Kas9737III>CCC[AG]AG))|(?=(?P<Kas9737III_as>CT[CT]GGG))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 381943,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CCCRAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:381943",
 }
 
 rest_dict["KasI"] = {
@@ -11524,6 +13642,7 @@ rest_dict["KasI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1165,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -11535,6 +13654,7 @@ rest_dict["KasI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1165",
 }
 
 rest_dict["KflI"] = {
@@ -11544,6 +13664,7 @@ rest_dict["KflI"] = {
     "freq": 8192.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 17985,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -11555,6 +13676,7 @@ rest_dict["KflI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:17985",
 }
 
 rest_dict["Kor51II"] = {
@@ -11564,6 +13686,7 @@ rest_dict["Kor51II"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 152829,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11575,6 +13698,7 @@ rest_dict["Kor51II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:152829",
 }
 
 rest_dict["Kpn156V"] = {
@@ -11584,6 +13708,7 @@ rest_dict["Kpn156V"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 235890,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11595,6 +13720,7 @@ rest_dict["Kpn156V"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:235890",
 }
 
 rest_dict["Kpn2I"] = {
@@ -11604,6 +13730,7 @@ rest_dict["Kpn2I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1177,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -11615,6 +13742,7 @@ rest_dict["Kpn2I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:1177",
 }
 
 rest_dict["Kpn327I"] = {
@@ -11624,6 +13752,7 @@ rest_dict["Kpn327I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 271895,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11635,6 +13764,51 @@ rest_dict["Kpn327I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:271895",
+}
+
+rest_dict["Kpn9178I"] = {
+    "charac": (None, None, None, None, "GNGCGAG"),
+    "compsite": "(?=(?P<Kpn9178I>G.GCGAG))|(?=(?P<Kpn9178I_as>CTCGC.C))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 312455,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GNGCGAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:312455",
+}
+
+rest_dict["Kpn9644II"] = {
+    "charac": (None, None, None, None, "GRACRAC"),
+    "compsite": "(?=(?P<Kpn9644II>G[AG]AC[AG]AC))|(?=(?P<Kpn9644II_as>GT[CT]GT[CT]C))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 286855,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GRACRAC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:286855",
 }
 
 rest_dict["KpnI"] = {
@@ -11644,6 +13818,7 @@ rest_dict["KpnI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1180,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -11655,6 +13830,7 @@ rest_dict["KpnI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X", "Y"),
+    "uri": "https://identifiers.org/rebase:1180",
 }
 
 rest_dict["KpnNH25III"] = {
@@ -11664,6 +13840,7 @@ rest_dict["KpnNH25III"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 243384,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11675,6 +13852,7 @@ rest_dict["KpnNH25III"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:243384",
 }
 
 rest_dict["KpnNIH30III"] = {
@@ -11684,6 +13862,7 @@ rest_dict["KpnNIH30III"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 97462,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11695,6 +13874,7 @@ rest_dict["KpnNIH30III"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:97462",
 }
 
 rest_dict["KpnNIH50I"] = {
@@ -11704,6 +13884,7 @@ rest_dict["KpnNIH50I"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 231662,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11715,6 +13896,29 @@ rest_dict["KpnNIH50I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:231662",
+}
+
+rest_dict["Kro7512II"] = {
+    "charac": (None, None, None, None, "ARCAGKC"),
+    "compsite": "(?=(?P<Kro7512II>A[AG]CAG[GT]C))|(?=(?P<Kro7512II_as>G[AC]CTG[CT]T))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 289903,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "ARCAGKC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:289903",
 }
 
 rest_dict["KroI"] = {
@@ -11724,6 +13928,7 @@ rest_dict["KroI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 38425,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -11735,6 +13940,29 @@ rest_dict["KroI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:38425",
+}
+
+rest_dict["KroNI"] = {
+    "charac": (3, -3, None, None, "GCCGGC"),
+    "compsite": "(?=(?P<KroNI>GCCGGC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": -3,
+    "fst5": 3,
+    "id": 491208,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": 0,
+    "ovhgseq": "",
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCCGGC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:491208",
 }
 
 rest_dict["Ksp22I"] = {
@@ -11744,6 +13972,7 @@ rest_dict["Ksp22I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1182,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -11755,6 +13984,7 @@ rest_dict["Ksp22I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:1182",
 }
 
 rest_dict["Ksp632I"] = {
@@ -11764,6 +13994,7 @@ rest_dict["Ksp632I"] = {
     "freq": 4096.0,
     "fst3": 4,
     "fst5": 7,
+    "id": 1183,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -11775,6 +14006,7 @@ rest_dict["Ksp632I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1183",
 }
 
 rest_dict["KspAI"] = {
@@ -11784,6 +14016,7 @@ rest_dict["KspAI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2449,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -11795,6 +14028,7 @@ rest_dict["KspAI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2449",
 }
 
 rest_dict["KspI"] = {
@@ -11804,6 +14038,7 @@ rest_dict["KspI"] = {
     "freq": 4096.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 1184,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -11815,6 +14050,7 @@ rest_dict["KspI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("M", "S"),
+    "uri": "https://identifiers.org/rebase:1184",
 }
 
 rest_dict["Kzo9I"] = {
@@ -11824,6 +14060,7 @@ rest_dict["Kzo9I"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 1186,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -11835,6 +14072,7 @@ rest_dict["Kzo9I"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:1186",
 }
 
 rest_dict["Lba2029III"] = {
@@ -11844,6 +14082,7 @@ rest_dict["Lba2029III"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 67764,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11855,6 +14094,7 @@ rest_dict["Lba2029III"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:67764",
 }
 
 rest_dict["Lbr124II"] = {
@@ -11864,6 +14104,7 @@ rest_dict["Lbr124II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 251221,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11875,6 +14116,7 @@ rest_dict["Lbr124II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:251221",
 }
 
 rest_dict["Lde4408II"] = {
@@ -11884,6 +14126,7 @@ rest_dict["Lde4408II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 202403,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11895,6 +14138,7 @@ rest_dict["Lde4408II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:202403",
 }
 
 rest_dict["LguI"] = {
@@ -11904,6 +14148,7 @@ rest_dict["LguI"] = {
     "freq": 16384.0,
     "fst3": 4,
     "fst5": 8,
+    "id": 10920,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -11915,6 +14160,7 @@ rest_dict["LguI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:10920",
 }
 
 rest_dict["LlaG50I"] = {
@@ -11924,6 +14170,7 @@ rest_dict["LlaG50I"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 230489,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11935,6 +14182,7 @@ rest_dict["LlaG50I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:230489",
 }
 
 rest_dict["LmnI"] = {
@@ -11944,6 +14192,7 @@ rest_dict["LmnI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 6,
+    "id": 111909,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -11955,6 +14204,7 @@ rest_dict["LmnI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:111909",
 }
 
 rest_dict["Lmo370I"] = {
@@ -11964,6 +14214,7 @@ rest_dict["Lmo370I"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 120713,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11975,6 +14226,7 @@ rest_dict["Lmo370I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:120713",
 }
 
 rest_dict["Lmo911II"] = {
@@ -11984,6 +14236,7 @@ rest_dict["Lmo911II"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 70499,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -11995,6 +14248,7 @@ rest_dict["Lmo911II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:70499",
 }
 
 rest_dict["Lpl1004II"] = {
@@ -12004,6 +14258,7 @@ rest_dict["Lpl1004II"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 230500,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -12015,6 +14270,51 @@ rest_dict["Lpl1004II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:230500",
+}
+
+rest_dict["Lpn11417II"] = {
+    "charac": (None, None, None, None, "ACGAAT"),
+    "compsite": "(?=(?P<Lpn11417II>ACGAAT))|(?=(?P<Lpn11417II_as>ATTCGT))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 384822,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "ACGAAT",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:384822",
+}
+
+rest_dict["Lpn12272I"] = {
+    "charac": (None, None, None, None, "GCNCAAC"),
+    "compsite": "(?=(?P<Lpn12272I>GC.CAAC))|(?=(?P<Lpn12272I_as>GTTG.GC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 255200,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCNCAAC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:255200",
 }
 
 rest_dict["LpnI"] = {
@@ -12024,6 +14324,7 @@ rest_dict["LpnI"] = {
     "freq": 1024.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1191,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -12035,6 +14336,7 @@ rest_dict["LpnI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1191",
 }
 
 rest_dict["LpnPI"] = {
@@ -12044,6 +14346,7 @@ rest_dict["LpnPI"] = {
     "freq": 85.33333333333333,
     "fst3": 14,
     "fst5": 14,
+    "id": 23358,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -12055,6 +14358,7 @@ rest_dict["LpnPI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:23358",
 }
 
 rest_dict["Lra68I"] = {
@@ -12064,6 +14368,7 @@ rest_dict["Lra68I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 216189,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -12075,6 +14380,7 @@ rest_dict["Lra68I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:216189",
 }
 
 rest_dict["LsaDS4I"] = {
@@ -12084,6 +14390,7 @@ rest_dict["LsaDS4I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 231367,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -12095,6 +14402,7 @@ rest_dict["LsaDS4I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:231367",
 }
 
 rest_dict["Lsp1109I"] = {
@@ -12104,6 +14412,7 @@ rest_dict["Lsp1109I"] = {
     "freq": 1024.0,
     "fst3": 12,
     "fst5": 13,
+    "id": 1193,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -12115,6 +14424,7 @@ rest_dict["Lsp1109I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:1193",
 }
 
 rest_dict["Lsp48III"] = {
@@ -12124,6 +14434,7 @@ rest_dict["Lsp48III"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 77633,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -12135,6 +14446,7 @@ rest_dict["Lsp48III"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:77633",
 }
 
 rest_dict["Lsp6406VI"] = {
@@ -12144,6 +14456,7 @@ rest_dict["Lsp6406VI"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 53027,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -12155,6 +14468,7 @@ rest_dict["Lsp6406VI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:53027",
 }
 
 rest_dict["LweI"] = {
@@ -12164,6 +14478,7 @@ rest_dict["LweI"] = {
     "freq": 1024.0,
     "fst3": 9,
     "fst5": 10,
+    "id": 4808,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -12175,6 +14490,7 @@ rest_dict["LweI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:4808",
 }
 
 rest_dict["MabI"] = {
@@ -12184,6 +14500,7 @@ rest_dict["MabI"] = {
     "freq": 8192.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 4915,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -12195,6 +14512,7 @@ rest_dict["MabI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:4915",
 }
 
 rest_dict["MaeI"] = {
@@ -12204,6 +14522,7 @@ rest_dict["MaeI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1197,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -12215,6 +14534,7 @@ rest_dict["MaeI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("M",),
+    "uri": "https://identifiers.org/rebase:1197",
 }
 
 rest_dict["MaeII"] = {
@@ -12224,6 +14544,7 @@ rest_dict["MaeII"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1198,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -12235,6 +14556,7 @@ rest_dict["MaeII"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("M",),
+    "uri": "https://identifiers.org/rebase:1198",
 }
 
 rest_dict["MaeIII"] = {
@@ -12244,6 +14566,7 @@ rest_dict["MaeIII"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 1199,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -12255,6 +14578,7 @@ rest_dict["MaeIII"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("M", "S"),
+    "uri": "https://identifiers.org/rebase:1199",
 }
 
 rest_dict["MalI"] = {
@@ -12264,6 +14588,7 @@ rest_dict["MalI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 10872,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -12275,6 +14600,7 @@ rest_dict["MalI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:10872",
 }
 
 rest_dict["MaqI"] = {
@@ -12284,6 +14610,7 @@ rest_dict["MaqI"] = {
     "freq": 8192.0,
     "fst3": 19,
     "fst5": 28,
+    "id": 16957,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -12295,6 +14622,7 @@ rest_dict["MaqI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:16957",
 }
 
 rest_dict["MauBI"] = {
@@ -12304,6 +14632,7 @@ rest_dict["MauBI"] = {
     "freq": 65536.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 14905,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -12315,6 +14644,7 @@ rest_dict["MauBI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:14905",
 }
 
 rest_dict["Mba11I"] = {
@@ -12324,6 +14654,7 @@ rest_dict["Mba11I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 52943,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -12335,6 +14666,7 @@ rest_dict["Mba11I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:52943",
 }
 
 rest_dict["MbiI"] = {
@@ -12344,6 +14676,7 @@ rest_dict["MbiI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2983,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -12355,6 +14688,7 @@ rest_dict["MbiI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2983",
 }
 
 rest_dict["MboI"] = {
@@ -12364,6 +14698,7 @@ rest_dict["MboI"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 1204,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -12375,6 +14710,7 @@ rest_dict["MboI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B", "C", "K", "N", "Q", "R", "X", "Y"),
+    "uri": "https://identifiers.org/rebase:1204",
 }
 
 rest_dict["MboII"] = {
@@ -12384,6 +14720,7 @@ rest_dict["MboII"] = {
     "freq": 1024.0,
     "fst3": 7,
     "fst5": 13,
+    "id": 1205,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -12394,7 +14731,8 @@ rest_dict["MboII"] = {
     "site": "GAAGA",
     "size": 5,
     "substrat": "DNA",
-    "suppl": ("B", "I", "J", "K", "N", "Q", "R", "V", "X"),
+    "suppl": ("B", "I", "J", "K", "N", "Q", "V", "X"),
+    "uri": "https://identifiers.org/rebase:1205",
 }
 
 rest_dict["McaTI"] = {
@@ -12404,6 +14742,7 @@ rest_dict["McaTI"] = {
     "freq": 4096.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 11763,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -12415,15 +14754,17 @@ rest_dict["McaTI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:11763",
 }
 
-rest_dict["Mcr10I"] = {
-    "charac": (None, None, None, None, "GAAGNNNNNCTC"),
-    "compsite": "(?=(?P<Mcr10I>GAAG.....CTC))|(?=(?P<Mcr10I_as>GAG.....CTTC))",
+rest_dict["Mch10819I"] = {
+    "charac": (None, None, None, None, "CYCAGCG"),
+    "compsite": "(?=(?P<Mch10819I>C[CT]CAGCG))|(?=(?P<Mch10819I_as>CGCTG[AG]G))",
     "dna": None,
-    "freq": 16384.0,
+    "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 405173,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -12431,10 +14772,33 @@ rest_dict["Mcr10I"] = {
     "results": None,
     "scd3": None,
     "scd5": None,
-    "site": "GAAGNNNNNCTC",
-    "size": 12,
+    "site": "CYCAGCG",
+    "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:405173",
+}
+
+rest_dict["Mch946II"] = {
+    "charac": (None, None, None, None, "WCGATCT"),
+    "compsite": "(?=(?P<Mch946II>[AT]CGATCT))|(?=(?P<Mch946II_as>AGATCG[AT]))",
+    "dna": None,
+    "freq": 8192.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 287585,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "WCGATCT",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:287585",
 }
 
 rest_dict["McrI"] = {
@@ -12444,6 +14808,7 @@ rest_dict["McrI"] = {
     "freq": 1024.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 1210,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -12455,6 +14820,7 @@ rest_dict["McrI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1210",
 }
 
 rest_dict["MfeI"] = {
@@ -12464,6 +14830,7 @@ rest_dict["MfeI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1213,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -12475,6 +14842,7 @@ rest_dict["MfeI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "N"),
+    "uri": "https://identifiers.org/rebase:1213",
 }
 
 rest_dict["MflI"] = {
@@ -12484,6 +14852,7 @@ rest_dict["MflI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1214,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -12495,6 +14864,7 @@ rest_dict["MflI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:1214",
 }
 
 rest_dict["MhlI"] = {
@@ -12504,6 +14874,7 @@ rest_dict["MhlI"] = {
     "freq": 455.1111111111111,
     "fst3": -5,
     "fst5": 5,
+    "id": 4839,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -12515,6 +14886,7 @@ rest_dict["MhlI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:4839",
 }
 
 rest_dict["MjaIV"] = {
@@ -12524,6 +14896,7 @@ rest_dict["MjaIV"] = {
     "freq": 256.0,
     "fst3": None,
     "fst5": None,
+    "id": 3894,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -12535,6 +14908,7 @@ rest_dict["MjaIV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:3894",
 }
 
 rest_dict["MkaDII"] = {
@@ -12544,6 +14918,7 @@ rest_dict["MkaDII"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 71719,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -12555,6 +14930,29 @@ rest_dict["MkaDII"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:71719",
+}
+
+rest_dict["Mla10359I"] = {
+    "charac": (None, None, None, None, "CGANNNNNNTCA"),
+    "compsite": "(?=(?P<Mla10359I>CGA......TCA))|(?=(?P<Mla10359I_as>TGA......TCG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 405174,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CGANNNNNNTCA",
+    "size": 12,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:405174",
 }
 
 rest_dict["MlsI"] = {
@@ -12564,6 +14962,7 @@ rest_dict["MlsI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2985,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -12575,6 +14974,7 @@ rest_dict["MlsI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2985",
 }
 
 rest_dict["Mlu211III"] = {
@@ -12584,6 +14984,7 @@ rest_dict["Mlu211III"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 275236,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -12595,6 +14996,7 @@ rest_dict["Mlu211III"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:275236",
 }
 
 rest_dict["MluCI"] = {
@@ -12604,6 +15006,7 @@ rest_dict["MluCI"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 4630,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -12615,6 +15018,7 @@ rest_dict["MluCI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:4630",
 }
 
 rest_dict["MluI"] = {
@@ -12624,6 +15028,7 @@ rest_dict["MluI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1236,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -12634,7 +15039,8 @@ rest_dict["MluI"] = {
     "site": "ACGCGT",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V"),
+    "uri": "https://identifiers.org/rebase:1236",
 }
 
 rest_dict["MluNI"] = {
@@ -12644,6 +15050,7 @@ rest_dict["MluNI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1266,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -12655,6 +15062,7 @@ rest_dict["MluNI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("M",),
+    "uri": "https://identifiers.org/rebase:1266",
 }
 
 rest_dict["Mly113I"] = {
@@ -12664,6 +15072,7 @@ rest_dict["Mly113I"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1237,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -12675,6 +15084,7 @@ rest_dict["Mly113I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:1237",
 }
 
 rest_dict["MlyI"] = {
@@ -12684,6 +15094,7 @@ rest_dict["MlyI"] = {
     "freq": 1024.0,
     "fst3": 5,
     "fst5": 10,
+    "id": 1238,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -12695,6 +15106,7 @@ rest_dict["MlyI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1238",
 }
 
 rest_dict["MmeI"] = {
@@ -12704,6 +15116,7 @@ rest_dict["MmeI"] = {
     "freq": 2048.0,
     "fst3": 18,
     "fst5": 26,
+    "id": 1239,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -12715,6 +15128,7 @@ rest_dict["MmeI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N", "X"),
+    "uri": "https://identifiers.org/rebase:1239",
 }
 
 rest_dict["MnlI"] = {
@@ -12724,6 +15138,7 @@ rest_dict["MnlI"] = {
     "freq": 256.0,
     "fst3": 6,
     "fst5": 11,
+    "id": 1243,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -12735,6 +15150,7 @@ rest_dict["MnlI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B", "I", "N", "Q", "V", "X"),
+    "uri": "https://identifiers.org/rebase:1243",
 }
 
 rest_dict["Mox20I"] = {
@@ -12744,6 +15160,7 @@ rest_dict["Mox20I"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 85920,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -12755,6 +15172,7 @@ rest_dict["Mox20I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:85920",
 }
 
 rest_dict["Mph1103I"] = {
@@ -12764,6 +15182,7 @@ rest_dict["Mph1103I"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1252,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -12775,6 +15194,7 @@ rest_dict["Mph1103I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:1252",
 }
 
 rest_dict["MreI"] = {
@@ -12784,6 +15204,7 @@ rest_dict["MreI"] = {
     "freq": 65536.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 10918,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -12795,6 +15216,7 @@ rest_dict["MreI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:10918",
 }
 
 rest_dict["MroI"] = {
@@ -12804,6 +15226,7 @@ rest_dict["MroI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1258,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -12815,6 +15238,7 @@ rest_dict["MroI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("M", "O"),
+    "uri": "https://identifiers.org/rebase:1258",
 }
 
 rest_dict["MroNI"] = {
@@ -12824,6 +15248,7 @@ rest_dict["MroNI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2676,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -12835,6 +15260,7 @@ rest_dict["MroNI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2676",
 }
 
 rest_dict["MroXI"] = {
@@ -12844,6 +15270,7 @@ rest_dict["MroXI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 2857,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -12855,6 +15282,7 @@ rest_dict["MroXI"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2857",
 }
 
 rest_dict["MscI"] = {
@@ -12864,6 +15292,7 @@ rest_dict["MscI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1261,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -12875,6 +15304,7 @@ rest_dict["MscI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N", "O"),
+    "uri": "https://identifiers.org/rebase:1261",
 }
 
 rest_dict["MseI"] = {
@@ -12884,6 +15314,7 @@ rest_dict["MseI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1262,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -12895,6 +15326,7 @@ rest_dict["MseI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1262",
 }
 
 rest_dict["MslI"] = {
@@ -12904,6 +15336,7 @@ rest_dict["MslI"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1265,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -12915,6 +15348,7 @@ rest_dict["MslI"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1265",
 }
 
 rest_dict["Msp20I"] = {
@@ -12924,6 +15358,7 @@ rest_dict["Msp20I"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2597,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -12935,6 +15370,7 @@ rest_dict["Msp20I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("V",),
+    "uri": "https://identifiers.org/rebase:2597",
 }
 
 rest_dict["MspA1I"] = {
@@ -12944,6 +15380,7 @@ rest_dict["MspA1I"] = {
     "freq": 1024.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1272,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -12954,7 +15391,8 @@ rest_dict["MspA1I"] = {
     "site": "CMGCKG",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("I", "N", "R", "V"),
+    "suppl": ("I", "N", "V"),
+    "uri": "https://identifiers.org/rebase:1272",
 }
 
 rest_dict["MspCI"] = {
@@ -12964,6 +15402,7 @@ rest_dict["MspCI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2161,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -12975,6 +15414,29 @@ rest_dict["MspCI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("C",),
+    "uri": "https://identifiers.org/rebase:2161",
+}
+
+rest_dict["MspF392I"] = {
+    "charac": (None, None, None, None, "CCCAATV"),
+    "compsite": "(?=(?P<MspF392I>CCCAAT[ACG]))|(?=(?P<MspF392I_as>[CGT]ATTGGG))",
+    "dna": None,
+    "freq": 5461.333333333333,
+    "fst3": None,
+    "fst5": None,
+    "id": 385375,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CCCAATV",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:385375",
 }
 
 rest_dict["MspGI"] = {
@@ -12984,6 +15446,7 @@ rest_dict["MspGI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 218866,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -12995,6 +15458,7 @@ rest_dict["MspGI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:218866",
 }
 
 rest_dict["MspI"] = {
@@ -13004,6 +15468,7 @@ rest_dict["MspI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1277,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -13015,6 +15480,7 @@ rest_dict["MspI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B", "I", "J", "K", "N", "Q", "R", "V", "X"),
+    "uri": "https://identifiers.org/rebase:1277",
 }
 
 rest_dict["MspI7II"] = {
@@ -13024,6 +15490,7 @@ rest_dict["MspI7II"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 77641,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -13035,6 +15502,7 @@ rest_dict["MspI7II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:77641",
 }
 
 rest_dict["MspI7IV"] = {
@@ -13044,6 +15512,7 @@ rest_dict["MspI7IV"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 77665,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -13055,6 +15524,7 @@ rest_dict["MspI7IV"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:77665",
 }
 
 rest_dict["MspJI"] = {
@@ -13064,6 +15534,7 @@ rest_dict["MspJI"] = {
     "freq": 8.0,
     "fst3": 13,
     "fst5": 13,
+    "id": 18979,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -13075,6 +15546,7 @@ rest_dict["MspJI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:18979",
 }
 
 rest_dict["MspR9I"] = {
@@ -13084,6 +15556,7 @@ rest_dict["MspR9I"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2678,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -13095,6 +15568,7 @@ rest_dict["MspR9I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:2678",
 }
 
 rest_dict["MspSC27II"] = {
@@ -13104,6 +15578,7 @@ rest_dict["MspSC27II"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 243902,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -13115,6 +15590,7 @@ rest_dict["MspSC27II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:243902",
 }
 
 rest_dict["MssI"] = {
@@ -13124,6 +15600,7 @@ rest_dict["MssI"] = {
     "freq": 65536.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 3091,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -13135,6 +15612,7 @@ rest_dict["MssI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:3091",
 }
 
 rest_dict["MstI"] = {
@@ -13144,6 +15622,7 @@ rest_dict["MstI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1279,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -13155,6 +15634,7 @@ rest_dict["MstI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1279",
 }
 
 rest_dict["MteI"] = {
@@ -13164,6 +15644,7 @@ rest_dict["MteI"] = {
     "freq": 65536.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 140117,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -13175,6 +15656,7 @@ rest_dict["MteI"] = {
     "size": 9,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:140117",
 }
 
 rest_dict["MtuHN878II"] = {
@@ -13184,6 +15666,7 @@ rest_dict["MtuHN878II"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 74924,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -13195,6 +15678,7 @@ rest_dict["MtuHN878II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:74924",
 }
 
 rest_dict["MunI"] = {
@@ -13204,6 +15688,7 @@ rest_dict["MunI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1285,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -13215,6 +15700,7 @@ rest_dict["MunI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "K", "M", "S"),
+    "uri": "https://identifiers.org/rebase:1285",
 }
 
 rest_dict["Mva1269I"] = {
@@ -13224,6 +15710,7 @@ rest_dict["Mva1269I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 7,
+    "id": 1992,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -13235,6 +15722,7 @@ rest_dict["Mva1269I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:1992",
 }
 
 rest_dict["MvaI"] = {
@@ -13244,6 +15732,7 @@ rest_dict["MvaI"] = {
     "freq": 512.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1287,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -13255,6 +15744,7 @@ rest_dict["MvaI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B", "M"),
+    "uri": "https://identifiers.org/rebase:1287",
 }
 
 rest_dict["MvnI"] = {
@@ -13264,6 +15754,7 @@ rest_dict["MvnI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1290,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -13275,6 +15766,7 @@ rest_dict["MvnI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("M",),
+    "uri": "https://identifiers.org/rebase:1290",
 }
 
 rest_dict["MwoI"] = {
@@ -13284,6 +15776,7 @@ rest_dict["MwoI"] = {
     "freq": 256.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 1291,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -13295,6 +15788,7 @@ rest_dict["MwoI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1291",
 }
 
 rest_dict["NaeI"] = {
@@ -13304,6 +15798,7 @@ rest_dict["NaeI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1294,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -13315,6 +15810,7 @@ rest_dict["NaeI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("C", "K", "N"),
+    "uri": "https://identifiers.org/rebase:1294",
 }
 
 rest_dict["Nal45188II"] = {
@@ -13324,6 +15820,7 @@ rest_dict["Nal45188II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 53140,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -13335,6 +15832,7 @@ rest_dict["Nal45188II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:53140",
 }
 
 rest_dict["NarI"] = {
@@ -13344,6 +15842,7 @@ rest_dict["NarI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1298,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -13354,7 +15853,8 @@ rest_dict["NarI"] = {
     "site": "GGCGCC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("J", "M", "N", "Q", "R", "X"),
+    "suppl": ("J", "M", "N", "Q", "X"),
+    "uri": "https://identifiers.org/rebase:1298",
 }
 
 rest_dict["Nbr128II"] = {
@@ -13364,6 +15864,7 @@ rest_dict["Nbr128II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 124782,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -13375,6 +15876,7 @@ rest_dict["Nbr128II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:124782",
 }
 
 rest_dict["NciI"] = {
@@ -13384,6 +15886,7 @@ rest_dict["NciI"] = {
     "freq": 512.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1307,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -13394,7 +15897,8 @@ rest_dict["NciI"] = {
     "site": "CCSGG",
     "size": 5,
     "substrat": "DNA",
-    "suppl": ("J", "N", "R"),
+    "suppl": ("J", "N"),
+    "uri": "https://identifiers.org/rebase:1307",
 }
 
 rest_dict["NcoI"] = {
@@ -13404,6 +15908,7 @@ rest_dict["NcoI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1308,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -13415,6 +15920,7 @@ rest_dict["NcoI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "C", "J", "K", "M", "N", "O", "Q", "R", "S", "X", "Y"),
+    "uri": "https://identifiers.org/rebase:1308",
 }
 
 rest_dict["NdeI"] = {
@@ -13424,6 +15930,7 @@ rest_dict["NdeI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1312,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -13435,6 +15942,7 @@ rest_dict["NdeI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "J", "K", "M", "N", "Q", "R", "S", "X"),
+    "uri": "https://identifiers.org/rebase:1312",
 }
 
 rest_dict["NdeII"] = {
@@ -13444,6 +15952,7 @@ rest_dict["NdeII"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 1313,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -13455,6 +15964,7 @@ rest_dict["NdeII"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("J", "M"),
+    "uri": "https://identifiers.org/rebase:1313",
 }
 
 rest_dict["NgoAVII"] = {
@@ -13464,6 +15974,7 @@ rest_dict["NgoAVII"] = {
     "freq": 1024.0,
     "fst3": 7,
     "fst5": 12,
+    "id": 5857,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -13475,6 +15986,7 @@ rest_dict["NgoAVII"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:5857",
 }
 
 rest_dict["NgoAVIII"] = {
@@ -13484,6 +15996,7 @@ rest_dict["NgoAVIII"] = {
     "freq": 4096.0,
     "fst3": -25,
     "fst5": -12,
+    "id": 12957,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -13495,6 +16008,7 @@ rest_dict["NgoAVIII"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:12957",
 }
 
 rest_dict["NgoMIV"] = {
@@ -13504,6 +16018,7 @@ rest_dict["NgoMIV"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1330,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -13515,6 +16030,7 @@ rest_dict["NgoMIV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1330",
 }
 
 rest_dict["NhaXI"] = {
@@ -13524,6 +16040,7 @@ rest_dict["NhaXI"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 17300,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -13535,6 +16052,7 @@ rest_dict["NhaXI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:17300",
 }
 
 rest_dict["NheI"] = {
@@ -13544,6 +16062,7 @@ rest_dict["NheI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1335,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -13555,6 +16074,7 @@ rest_dict["NheI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "C", "J", "K", "M", "N", "O", "Q", "R", "S", "X"),
+    "uri": "https://identifiers.org/rebase:1335",
 }
 
 rest_dict["NhoI"] = {
@@ -13564,6 +16084,7 @@ rest_dict["NhoI"] = {
     "freq": 512.0,
     "fst3": None,
     "fst5": None,
+    "id": 127135,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -13575,6 +16096,7 @@ rest_dict["NhoI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:127135",
 }
 
 rest_dict["NlaCI"] = {
@@ -13584,6 +16106,7 @@ rest_dict["NlaCI"] = {
     "freq": 4096.0,
     "fst3": 17,
     "fst5": 25,
+    "id": 14145,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -13595,6 +16118,7 @@ rest_dict["NlaCI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:14145",
 }
 
 rest_dict["NlaIII"] = {
@@ -13604,6 +16128,7 @@ rest_dict["NlaIII"] = {
     "freq": 256.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 1341,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -13615,6 +16140,7 @@ rest_dict["NlaIII"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1341",
 }
 
 rest_dict["NlaIV"] = {
@@ -13624,6 +16150,7 @@ rest_dict["NlaIV"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1342,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -13635,6 +16162,7 @@ rest_dict["NlaIV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1342",
 }
 
 rest_dict["Nli3877I"] = {
@@ -13644,6 +16172,7 @@ rest_dict["Nli3877I"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1345,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -13655,6 +16184,7 @@ rest_dict["Nli3877I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1345",
 }
 
 rest_dict["NmeA6CIII"] = {
@@ -13664,6 +16194,7 @@ rest_dict["NmeA6CIII"] = {
     "freq": 4096.0,
     "fst3": 19,
     "fst5": 27,
+    "id": 17628,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -13675,6 +16206,7 @@ rest_dict["NmeA6CIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:17628",
 }
 
 rest_dict["NmeAIII"] = {
@@ -13684,6 +16216,7 @@ rest_dict["NmeAIII"] = {
     "freq": 4096.0,
     "fst3": 19,
     "fst5": 27,
+    "id": 13448,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -13695,6 +16228,7 @@ rest_dict["NmeAIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:13448",
 }
 
 rest_dict["NmeDI"] = {
@@ -13704,6 +16238,7 @@ rest_dict["NmeDI"] = {
     "freq": 1024.0,
     "fst3": -13,
     "fst5": -12,
+    "id": 4187,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -13715,6 +16250,7 @@ rest_dict["NmeDI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:4187",
 }
 
 rest_dict["NmuCI"] = {
@@ -13724,6 +16260,7 @@ rest_dict["NmuCI"] = {
     "freq": 512.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 4108,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -13735,6 +16272,7 @@ rest_dict["NmuCI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:4108",
 }
 
 rest_dict["NotI"] = {
@@ -13744,6 +16282,7 @@ rest_dict["NotI"] = {
     "freq": 65536.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1367,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -13755,6 +16294,7 @@ rest_dict["NotI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("B", "C", "J", "K", "M", "N", "O", "Q", "R", "S", "X"),
+    "uri": "https://identifiers.org/rebase:1367",
 }
 
 rest_dict["NpeUS61II"] = {
@@ -13764,6 +16304,7 @@ rest_dict["NpeUS61II"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 42152,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -13775,6 +16316,7 @@ rest_dict["NpeUS61II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:42152",
 }
 
 rest_dict["NruI"] = {
@@ -13784,6 +16326,7 @@ rest_dict["NruI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1371,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -13794,7 +16337,8 @@ rest_dict["NruI"] = {
     "site": "TCGCGA",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "M", "N", "Q", "R", "S", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "M", "N", "Q", "S", "X"),
+    "uri": "https://identifiers.org/rebase:1371",
 }
 
 rest_dict["NsbI"] = {
@@ -13804,6 +16348,7 @@ rest_dict["NsbI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2986,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -13815,6 +16360,7 @@ rest_dict["NsbI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2986",
 }
 
 rest_dict["NsiI"] = {
@@ -13824,6 +16370,7 @@ rest_dict["NsiI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1375,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -13834,7 +16381,8 @@ rest_dict["NsiI"] = {
     "site": "ATGCAT",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("J", "M", "N", "Q", "R", "S", "X"),
+    "suppl": ("J", "M", "N", "Q", "S", "X"),
+    "uri": "https://identifiers.org/rebase:1375",
 }
 
 rest_dict["NspBII"] = {
@@ -13844,6 +16392,7 @@ rest_dict["NspBII"] = {
     "freq": 1024.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1381,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -13855,6 +16404,29 @@ rest_dict["NspBII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1381",
+}
+
+rest_dict["NspES21II"] = {
+    "charac": (None, None, None, None, "CRTTCAG"),
+    "compsite": "(?=(?P<NspES21II>C[AG]TTCAG))|(?=(?P<NspES21II_as>CTGAA[CT]G))",
+    "dna": None,
+    "freq": 8192.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 457016,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CRTTCAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:457016",
 }
 
 rest_dict["NspI"] = {
@@ -13864,6 +16436,7 @@ rest_dict["NspI"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1391,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -13875,6 +16448,7 @@ rest_dict["NspI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1391",
 }
 
 rest_dict["NspV"] = {
@@ -13884,6 +16458,7 @@ rest_dict["NspV"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1407,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -13895,6 +16470,7 @@ rest_dict["NspV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("J",),
+    "uri": "https://identifiers.org/rebase:1407",
 }
 
 rest_dict["ObaBS10I"] = {
@@ -13904,6 +16480,7 @@ rest_dict["ObaBS10I"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 268727,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -13915,6 +16492,7 @@ rest_dict["ObaBS10I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:268727",
 }
 
 rest_dict["OgrI"] = {
@@ -13924,6 +16502,7 @@ rest_dict["OgrI"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 26679,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -13935,6 +16514,7 @@ rest_dict["OgrI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:26679",
 }
 
 rest_dict["OliI"] = {
@@ -13944,6 +16524,7 @@ rest_dict["OliI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 4547,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -13955,6 +16536,7 @@ rest_dict["OliI"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:4547",
 }
 
 rest_dict["OspHL35III"] = {
@@ -13964,6 +16546,7 @@ rest_dict["OspHL35III"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 67650,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -13975,6 +16558,7 @@ rest_dict["OspHL35III"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:67650",
 }
 
 rest_dict["PabI"] = {
@@ -13984,6 +16568,7 @@ rest_dict["PabI"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 11107,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -13995,6 +16580,7 @@ rest_dict["PabI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:11107",
 }
 
 rest_dict["Pac19842II"] = {
@@ -14004,6 +16590,7 @@ rest_dict["Pac19842II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 64405,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14015,6 +16602,7 @@ rest_dict["Pac19842II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:64405",
 }
 
 rest_dict["PacI"] = {
@@ -14024,6 +16612,7 @@ rest_dict["PacI"] = {
     "freq": 65536.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1424,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -14035,6 +16624,7 @@ rest_dict["PacI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("B", "N", "O"),
+    "uri": "https://identifiers.org/rebase:1424",
 }
 
 rest_dict["PacIII"] = {
@@ -14044,6 +16634,7 @@ rest_dict["PacIII"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 144691,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14055,6 +16646,51 @@ rest_dict["PacIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:144691",
+}
+
+rest_dict["Pae10662III"] = {
+    "charac": (None, None, None, None, "TGACGAG"),
+    "compsite": "(?=(?P<Pae10662III>TGACGAG))|(?=(?P<Pae10662III_as>CTCGTCA))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 415783,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TGACGAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:415783",
+}
+
+rest_dict["Pae8506I"] = {
+    "charac": (None, None, None, None, "CATCGAR"),
+    "compsite": "(?=(?P<Pae8506I>CATCGA[AG]))|(?=(?P<Pae8506I_as>[CT]TCGATG))",
+    "dna": None,
+    "freq": 8192.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 414138,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CATCGAR",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:414138",
 }
 
 rest_dict["PaeI"] = {
@@ -14064,6 +16700,7 @@ rest_dict["PaeI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1448,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -14075,6 +16712,7 @@ rest_dict["PaeI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:1448",
 }
 
 rest_dict["PaePA99III"] = {
@@ -14084,6 +16722,7 @@ rest_dict["PaePA99III"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 334217,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14095,6 +16734,7 @@ rest_dict["PaePA99III"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:334217",
 }
 
 rest_dict["PaeR7I"] = {
@@ -14104,6 +16744,7 @@ rest_dict["PaeR7I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1451,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -14115,6 +16756,7 @@ rest_dict["PaeR7I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1451",
 }
 
 rest_dict["PagI"] = {
@@ -14124,6 +16766,7 @@ rest_dict["PagI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2989,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -14135,6 +16778,7 @@ rest_dict["PagI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2989",
 }
 
 rest_dict["Pal408I"] = {
@@ -14144,6 +16788,7 @@ rest_dict["Pal408I"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 77800,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14155,6 +16800,7 @@ rest_dict["Pal408I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:77800",
 }
 
 rest_dict["PalAI"] = {
@@ -14164,6 +16810,7 @@ rest_dict["PalAI"] = {
     "freq": 65536.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 10829,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -14175,6 +16822,29 @@ rest_dict["PalAI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:10829",
+}
+
+rest_dict["PaqCI"] = {
+    "charac": (11, 8, None, None, "CACCTGC"),
+    "compsite": "(?=(?P<PaqCI>CACCTGC))|(?=(?P<PaqCI_as>GCAGGTG))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": 8,
+    "fst5": 11,
+    "id": 266039,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": -4,
+    "ovhgseq": "NNNN",
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CACCTGC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:266039",
 }
 
 rest_dict["PasI"] = {
@@ -14184,6 +16854,7 @@ rest_dict["PasI"] = {
     "freq": 8192.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 7401,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -14195,6 +16866,7 @@ rest_dict["PasI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:7401",
 }
 
 rest_dict["PauI"] = {
@@ -14204,6 +16876,7 @@ rest_dict["PauI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2574,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -14215,6 +16888,7 @@ rest_dict["PauI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2574",
 }
 
 rest_dict["Pba2294I"] = {
@@ -14224,6 +16898,7 @@ rest_dict["Pba2294I"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 246929,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14235,6 +16910,29 @@ rest_dict["Pba2294I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:246929",
+}
+
+rest_dict["Pbu13063II"] = {
+    "charac": (None, None, None, None, "GTATYC"),
+    "compsite": "(?=(?P<Pbu13063II>GTAT[CT]C))|(?=(?P<Pbu13063II_as>G[AG]ATAC))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 409629,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GTATYC",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:409629",
 }
 
 rest_dict["PcaII"] = {
@@ -14244,6 +16942,7 @@ rest_dict["PcaII"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 33508,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14255,6 +16954,7 @@ rest_dict["PcaII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:33508",
 }
 
 rest_dict["PceI"] = {
@@ -14264,6 +16964,7 @@ rest_dict["PceI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 5318,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -14275,6 +16976,7 @@ rest_dict["PceI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:5318",
 }
 
 rest_dict["PciI"] = {
@@ -14284,6 +16986,7 @@ rest_dict["PciI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 3773,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -14295,6 +16998,7 @@ rest_dict["PciI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "N"),
+    "uri": "https://identifiers.org/rebase:3773",
 }
 
 rest_dict["PciSI"] = {
@@ -14304,6 +17008,7 @@ rest_dict["PciSI"] = {
     "freq": 16384.0,
     "fst3": 4,
     "fst5": 8,
+    "id": 11886,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -14315,6 +17020,7 @@ rest_dict["PciSI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:11886",
 }
 
 rest_dict["Pcr308II"] = {
@@ -14324,6 +17030,7 @@ rest_dict["Pcr308II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 208811,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14335,6 +17042,7 @@ rest_dict["Pcr308II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:208811",
 }
 
 rest_dict["PcsI"] = {
@@ -14344,6 +17052,7 @@ rest_dict["PcsI"] = {
     "freq": 1024.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 23597,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -14355,6 +17064,7 @@ rest_dict["PcsI"] = {
     "size": 13,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:23597",
 }
 
 rest_dict["PctI"] = {
@@ -14364,6 +17074,7 @@ rest_dict["PctI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 7,
+    "id": 4840,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -14375,6 +17086,7 @@ rest_dict["PctI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:4840",
 }
 
 rest_dict["Pdi8503III"] = {
@@ -14384,6 +17096,7 @@ rest_dict["Pdi8503III"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 15666,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14395,6 +17108,7 @@ rest_dict["Pdi8503III"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:15666",
 }
 
 rest_dict["PdiI"] = {
@@ -14404,6 +17118,7 @@ rest_dict["PdiI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 4109,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -14415,6 +17130,7 @@ rest_dict["PdiI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:4109",
 }
 
 rest_dict["PdmI"] = {
@@ -14424,6 +17140,7 @@ rest_dict["PdmI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 4110,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -14435,6 +17152,7 @@ rest_dict["PdmI"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:4110",
 }
 
 rest_dict["Pdu1735I"] = {
@@ -14444,6 +17162,7 @@ rest_dict["Pdu1735I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 93532,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14455,6 +17174,7 @@ rest_dict["Pdu1735I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:93532",
 }
 
 rest_dict["PenI"] = {
@@ -14464,6 +17184,7 @@ rest_dict["PenI"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 38313,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14475,6 +17196,7 @@ rest_dict["PenI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:38313",
 }
 
 rest_dict["PfeI"] = {
@@ -14484,6 +17206,7 @@ rest_dict["PfeI"] = {
     "freq": 512.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 6972,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -14495,6 +17218,29 @@ rest_dict["PfeI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:6972",
+}
+
+rest_dict["Pfl10783II"] = {
+    "charac": (None, None, None, None, "GCGTCAG"),
+    "compsite": "(?=(?P<Pfl10783II>GCGTCAG))|(?=(?P<Pfl10783II_as>CTGACGC))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 287240,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCGTCAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:287240",
 }
 
 rest_dict["Pfl1108I"] = {
@@ -14504,6 +17250,7 @@ rest_dict["Pfl1108I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 1462,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14515,6 +17262,7 @@ rest_dict["Pfl1108I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1462",
 }
 
 rest_dict["Pfl23II"] = {
@@ -14524,6 +17272,7 @@ rest_dict["Pfl23II"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1468,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -14535,6 +17284,29 @@ rest_dict["Pfl23II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:1468",
+}
+
+rest_dict["Pfl3756II"] = {
+    "charac": (None, None, None, None, "CCCTNAG"),
+    "compsite": "(?=(?P<Pfl3756II>CCCT.AG))|(?=(?P<Pfl3756II_as>CT.AGGG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 414129,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CCCTNAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:414129",
 }
 
 rest_dict["Pfl8569I"] = {
@@ -14544,6 +17316,7 @@ rest_dict["Pfl8569I"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 161004,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -14555,6 +17328,7 @@ rest_dict["Pfl8569I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:161004",
 }
 
 rest_dict["PflFI"] = {
@@ -14564,6 +17338,7 @@ rest_dict["PflFI"] = {
     "freq": 4096.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 2886,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -14575,6 +17350,7 @@ rest_dict["PflFI"] = {
     "size": 9,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2886",
 }
 
 rest_dict["PflMI"] = {
@@ -14584,6 +17360,7 @@ rest_dict["PflMI"] = {
     "freq": 4096.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 1475,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -14595,6 +17372,7 @@ rest_dict["PflMI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1475",
 }
 
 rest_dict["PflPt14I"] = {
@@ -14604,6 +17382,7 @@ rest_dict["PflPt14I"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 161996,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14615,6 +17394,7 @@ rest_dict["PflPt14I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:161996",
 }
 
 rest_dict["PfoI"] = {
@@ -14624,6 +17404,7 @@ rest_dict["PfoI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 5507,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -14635,6 +17416,7 @@ rest_dict["PfoI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:5507",
 }
 
 rest_dict["PfrJS12IV"] = {
@@ -14644,6 +17426,7 @@ rest_dict["PfrJS12IV"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 178754,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14655,6 +17438,7 @@ rest_dict["PfrJS12IV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:178754",
 }
 
 rest_dict["PfrJS12V"] = {
@@ -14664,6 +17448,7 @@ rest_dict["PfrJS12V"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 178755,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14675,6 +17460,7 @@ rest_dict["PfrJS12V"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:178755",
 }
 
 rest_dict["PfrJS15III"] = {
@@ -14684,6 +17470,7 @@ rest_dict["PfrJS15III"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 160634,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14695,6 +17482,7 @@ rest_dict["PfrJS15III"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:160634",
 }
 
 rest_dict["Pin17FIII"] = {
@@ -14704,6 +17492,7 @@ rest_dict["Pin17FIII"] = {
     "freq": 682.6666666666666,
     "fst3": None,
     "fst5": None,
+    "id": 167970,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14715,6 +17504,7 @@ rest_dict["Pin17FIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:167970",
 }
 
 rest_dict["PinAI"] = {
@@ -14724,6 +17514,7 @@ rest_dict["PinAI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1485,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -14735,6 +17526,7 @@ rest_dict["PinAI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("Q", "X"),
+    "uri": "https://identifiers.org/rebase:1485",
 }
 
 rest_dict["PinP23II"] = {
@@ -14744,6 +17536,7 @@ rest_dict["PinP23II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 229189,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14755,6 +17548,7 @@ rest_dict["PinP23II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:229189",
 }
 
 rest_dict["PinP59III"] = {
@@ -14764,6 +17558,7 @@ rest_dict["PinP59III"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 229242,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14775,6 +17570,7 @@ rest_dict["PinP59III"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:229242",
 }
 
 rest_dict["PkrI"] = {
@@ -14784,6 +17580,7 @@ rest_dict["PkrI"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 140102,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -14795,6 +17592,7 @@ rest_dict["PkrI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:140102",
 }
 
 rest_dict["PlaDI"] = {
@@ -14804,6 +17602,7 @@ rest_dict["PlaDI"] = {
     "freq": 4096.0,
     "fst3": 19,
     "fst5": 27,
+    "id": 16956,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -14815,6 +17614,7 @@ rest_dict["PlaDI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:16956",
 }
 
 rest_dict["Ple19I"] = {
@@ -14824,6 +17624,7 @@ rest_dict["Ple19I"] = {
     "freq": 4096.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 1489,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -14835,6 +17636,7 @@ rest_dict["Ple19I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:1489",
 }
 
 rest_dict["PleI"] = {
@@ -14844,6 +17646,7 @@ rest_dict["PleI"] = {
     "freq": 1024.0,
     "fst3": 5,
     "fst5": 9,
+    "id": 1490,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -14855,6 +17658,7 @@ rest_dict["PleI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1490",
 }
 
 rest_dict["PliMI"] = {
@@ -14864,6 +17668,7 @@ rest_dict["PliMI"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 21604,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14875,6 +17680,7 @@ rest_dict["PliMI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:21604",
 }
 
 rest_dict["PluTI"] = {
@@ -14884,6 +17690,7 @@ rest_dict["PluTI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 23545,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -14895,6 +17702,7 @@ rest_dict["PluTI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:23545",
 }
 
 rest_dict["PmaCI"] = {
@@ -14904,6 +17712,7 @@ rest_dict["PmaCI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1493,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -14915,6 +17724,29 @@ rest_dict["PmaCI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:1493",
+}
+
+rest_dict["Pme10899I"] = {
+    "charac": (None, None, None, None, "GACAGG"),
+    "compsite": "(?=(?P<Pme10899I>GACAGG))|(?=(?P<Pme10899I_as>CCTGTC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 415935,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GACAGG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:415935",
 }
 
 rest_dict["PmeI"] = {
@@ -14924,6 +17756,7 @@ rest_dict["PmeI"] = {
     "freq": 65536.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 1497,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -14935,6 +17768,7 @@ rest_dict["PmeI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1497",
 }
 
 rest_dict["PmlI"] = {
@@ -14944,6 +17778,7 @@ rest_dict["PmlI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1499,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -14955,6 +17790,7 @@ rest_dict["PmlI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1499",
 }
 
 rest_dict["PpiI"] = {
@@ -14964,6 +17800,7 @@ rest_dict["PpiI"] = {
     "freq": 16384.0,
     "fst3": -24,
     "fst5": -7,
+    "id": 3104,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 5,
@@ -14975,6 +17812,7 @@ rest_dict["PpiI"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:3104",
 }
 
 rest_dict["PpiP13II"] = {
@@ -14984,6 +17822,7 @@ rest_dict["PpiP13II"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 221251,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -14995,6 +17834,7 @@ rest_dict["PpiP13II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:221251",
 }
 
 rest_dict["PpsI"] = {
@@ -15004,6 +17844,7 @@ rest_dict["PpsI"] = {
     "freq": 1024.0,
     "fst3": 5,
     "fst5": 9,
+    "id": 3199,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -15015,6 +17856,7 @@ rest_dict["PpsI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:3199",
 }
 
 rest_dict["Ppu10I"] = {
@@ -15024,6 +17866,7 @@ rest_dict["Ppu10I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1504,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -15035,6 +17878,7 @@ rest_dict["Ppu10I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1504",
 }
 
 rest_dict["Ppu21I"] = {
@@ -15044,6 +17888,7 @@ rest_dict["Ppu21I"] = {
     "freq": 1024.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1509,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -15055,6 +17900,7 @@ rest_dict["Ppu21I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:1509",
 }
 
 rest_dict["PpuMI"] = {
@@ -15064,6 +17910,7 @@ rest_dict["PpuMI"] = {
     "freq": 2048.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1513,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -15075,6 +17922,29 @@ rest_dict["PpuMI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1513",
+}
+
+rest_dict["Pru8113I"] = {
+    "charac": (None, None, None, None, "CAGANGC"),
+    "compsite": "(?=(?P<Pru8113I>CAGA.GC))|(?=(?P<Pru8113I_as>GC.TCTG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 289328,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CAGANGC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:289328",
 }
 
 rest_dict["PscI"] = {
@@ -15084,6 +17954,7 @@ rest_dict["PscI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 10690,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -15095,6 +17966,7 @@ rest_dict["PscI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:10690",
 }
 
 rest_dict["Pse18267I"] = {
@@ -15104,6 +17976,7 @@ rest_dict["Pse18267I"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 77783,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -15115,6 +17988,7 @@ rest_dict["Pse18267I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:77783",
 }
 
 rest_dict["PshAI"] = {
@@ -15124,6 +17998,7 @@ rest_dict["PshAI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1515,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -15135,6 +18010,7 @@ rest_dict["PshAI"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": ("K", "N"),
+    "uri": "https://identifiers.org/rebase:1515",
 }
 
 rest_dict["PshBI"] = {
@@ -15144,6 +18020,7 @@ rest_dict["PshBI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2487,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -15155,6 +18032,7 @@ rest_dict["PshBI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:2487",
 }
 
 rest_dict["PsiI"] = {
@@ -15164,6 +18042,7 @@ rest_dict["PsiI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 3775,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -15175,6 +18054,7 @@ rest_dict["PsiI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "N"),
+    "uri": "https://identifiers.org/rebase:3775",
 }
 
 rest_dict["Psp0357II"] = {
@@ -15184,6 +18064,7 @@ rest_dict["Psp0357II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 93738,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -15195,6 +18076,7 @@ rest_dict["Psp0357II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:93738",
 }
 
 rest_dict["Psp03I"] = {
@@ -15204,6 +18086,7 @@ rest_dict["Psp03I"] = {
     "freq": 512.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 5087,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -15215,6 +18098,7 @@ rest_dict["Psp03I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:5087",
 }
 
 rest_dict["Psp124BI"] = {
@@ -15224,6 +18108,7 @@ rest_dict["Psp124BI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 2679,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -15235,6 +18120,7 @@ rest_dict["Psp124BI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2679",
 }
 
 rest_dict["Psp1406I"] = {
@@ -15244,6 +18130,7 @@ rest_dict["Psp1406I"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2176,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -15255,6 +18142,7 @@ rest_dict["Psp1406I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+    "uri": "https://identifiers.org/rebase:2176",
 }
 
 rest_dict["Psp5II"] = {
@@ -15264,6 +18152,7 @@ rest_dict["Psp5II"] = {
     "freq": 2048.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1528,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -15275,6 +18164,7 @@ rest_dict["Psp5II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:1528",
 }
 
 rest_dict["Psp6I"] = {
@@ -15284,6 +18174,7 @@ rest_dict["Psp6I"] = {
     "freq": 512.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 6218,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -15295,6 +18186,7 @@ rest_dict["Psp6I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:6218",
 }
 
 rest_dict["PspCI"] = {
@@ -15304,6 +18196,7 @@ rest_dict["PspCI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 7495,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -15315,6 +18208,29 @@ rest_dict["PspCI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:7495",
+}
+
+rest_dict["PspD7DII"] = {
+    "charac": (None, None, None, None, "CCGCGAG"),
+    "compsite": "(?=(?P<PspD7DII>CCGCGAG))|(?=(?P<PspD7DII_as>CTCGCGG))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 440972,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CCGCGAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:440972",
 }
 
 rest_dict["PspEI"] = {
@@ -15324,6 +18240,7 @@ rest_dict["PspEI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2681,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -15335,6 +18252,7 @@ rest_dict["PspEI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2681",
 }
 
 rest_dict["PspFI"] = {
@@ -15344,6 +18262,7 @@ rest_dict["PspFI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 17988,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -15355,6 +18274,7 @@ rest_dict["PspFI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:17988",
 }
 
 rest_dict["PspGI"] = {
@@ -15364,6 +18284,7 @@ rest_dict["PspGI"] = {
     "freq": 512.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 2568,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -15375,6 +18296,7 @@ rest_dict["PspGI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2568",
 }
 
 rest_dict["PspLI"] = {
@@ -15384,6 +18306,7 @@ rest_dict["PspLI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2748,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -15395,6 +18318,7 @@ rest_dict["PspLI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:2748",
 }
 
 rest_dict["PspN4I"] = {
@@ -15404,6 +18328,7 @@ rest_dict["PspN4I"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2749,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -15415,6 +18340,7 @@ rest_dict["PspN4I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:2749",
 }
 
 rest_dict["PspOMI"] = {
@@ -15424,6 +18350,7 @@ rest_dict["PspOMI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2683,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -15435,6 +18362,7 @@ rest_dict["PspOMI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "N", "V"),
+    "uri": "https://identifiers.org/rebase:2683",
 }
 
 rest_dict["PspOMII"] = {
@@ -15444,6 +18372,7 @@ rest_dict["PspOMII"] = {
     "freq": 8192.0,
     "fst3": 18,
     "fst5": 27,
+    "id": 13065,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -15455,6 +18384,7 @@ rest_dict["PspOMII"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:13065",
 }
 
 rest_dict["PspPI"] = {
@@ -15464,6 +18394,7 @@ rest_dict["PspPI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2771,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -15475,6 +18406,7 @@ rest_dict["PspPI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("C",),
+    "uri": "https://identifiers.org/rebase:2771",
 }
 
 rest_dict["PspPPI"] = {
@@ -15484,6 +18416,7 @@ rest_dict["PspPPI"] = {
     "freq": 2048.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2881,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -15495,6 +18428,7 @@ rest_dict["PspPPI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:2881",
 }
 
 rest_dict["PspPRI"] = {
@@ -15504,6 +18438,7 @@ rest_dict["PspPRI"] = {
     "freq": 2048.0,
     "fst3": 13,
     "fst5": 21,
+    "id": 14886,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -15515,6 +18450,29 @@ rest_dict["PspPRI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:14886",
+}
+
+rest_dict["PspR84I"] = {
+    "charac": (None, None, None, None, "TACYCAC"),
+    "compsite": "(?=(?P<PspR84I>TAC[CT]CAC))|(?=(?P<PspR84I_as>GTG[AG]GTA))",
+    "dna": None,
+    "freq": 8192.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 356267,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TACYCAC",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:356267",
 }
 
 rest_dict["PspXI"] = {
@@ -15524,6 +18482,7 @@ rest_dict["PspXI"] = {
     "freq": 7281.777777777777,
     "fst3": -2,
     "fst5": 2,
+    "id": 7531,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -15535,6 +18494,7 @@ rest_dict["PspXI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("I", "N"),
+    "uri": "https://identifiers.org/rebase:7531",
 }
 
 rest_dict["PsrI"] = {
@@ -15544,6 +18504,7 @@ rest_dict["PsrI"] = {
     "freq": 16384.0,
     "fst3": -25,
     "fst5": -7,
+    "id": 4916,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 5,
@@ -15555,6 +18516,7 @@ rest_dict["PsrI"] = {
     "size": 13,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:4916",
 }
 
 rest_dict["PssI"] = {
@@ -15564,6 +18526,7 @@ rest_dict["PssI"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1534,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -15575,6 +18538,7 @@ rest_dict["PssI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1534",
 }
 
 rest_dict["Pst14472I"] = {
@@ -15584,6 +18548,7 @@ rest_dict["Pst14472I"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 93519,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -15595,6 +18560,7 @@ rest_dict["Pst14472I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:93519",
 }
 
 rest_dict["Pst145I"] = {
@@ -15604,6 +18570,7 @@ rest_dict["Pst145I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 138626,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -15615,6 +18582,7 @@ rest_dict["Pst145I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:138626",
 }
 
 rest_dict["Pst273I"] = {
@@ -15624,6 +18592,7 @@ rest_dict["Pst273I"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 153468,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -15635,6 +18604,7 @@ rest_dict["Pst273I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:153468",
 }
 
 rest_dict["PstI"] = {
@@ -15644,6 +18614,7 @@ rest_dict["PstI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1536,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -15655,6 +18626,7 @@ rest_dict["PstI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X"),
+    "uri": "https://identifiers.org/rebase:1536",
 }
 
 rest_dict["PstNI"] = {
@@ -15664,6 +18636,7 @@ rest_dict["PstNI"] = {
     "freq": 4096.0,
     "fst3": -6,
     "fst5": 6,
+    "id": 26996,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -15675,6 +18648,7 @@ rest_dict["PstNI"] = {
     "size": 9,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:26996",
 }
 
 rest_dict["PsuGI"] = {
@@ -15684,6 +18658,7 @@ rest_dict["PsuGI"] = {
     "freq": 37.925925925925924,
     "fst3": None,
     "fst5": None,
+    "id": 35017,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -15695,6 +18670,7 @@ rest_dict["PsuGI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:35017",
 }
 
 rest_dict["PsuI"] = {
@@ -15704,6 +18680,7 @@ rest_dict["PsuI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 4111,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -15715,6 +18692,7 @@ rest_dict["PsuI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:4111",
 }
 
 rest_dict["PsyI"] = {
@@ -15724,6 +18702,7 @@ rest_dict["PsyI"] = {
     "freq": 4096.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 3093,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -15735,6 +18714,7 @@ rest_dict["PsyI"] = {
     "size": 9,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:3093",
 }
 
 rest_dict["PteI"] = {
@@ -15744,6 +18724,7 @@ rest_dict["PteI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 17982,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -15755,6 +18736,7 @@ rest_dict["PteI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:17982",
 }
 
 rest_dict["PvuI"] = {
@@ -15764,6 +18746,7 @@ rest_dict["PvuI"] = {
     "freq": 4096.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 1541,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -15775,6 +18758,7 @@ rest_dict["PvuI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "K", "M", "N", "O", "Q", "R", "S", "X"),
+    "uri": "https://identifiers.org/rebase:1541",
 }
 
 rest_dict["PvuII"] = {
@@ -15784,6 +18768,7 @@ rest_dict["PvuII"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1542,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -15794,7 +18779,30 @@ rest_dict["PvuII"] = {
     "site": "CAGCTG",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "S", "V", "X"),
+    "uri": "https://identifiers.org/rebase:1542",
+}
+
+rest_dict["Ran11014IV"] = {
+    "charac": (None, None, None, None, "GAAAGAG"),
+    "compsite": "(?=(?P<Ran11014IV>GAAAGAG))|(?=(?P<Ran11014IV_as>CTCTTTC))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 216253,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GAAAGAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:216253",
 }
 
 rest_dict["Rba2021I"] = {
@@ -15804,6 +18812,7 @@ rest_dict["Rba2021I"] = {
     "freq": 5461.333333333333,
     "fst3": None,
     "fst5": None,
+    "id": 77917,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -15815,6 +18824,7 @@ rest_dict["Rba2021I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:77917",
 }
 
 rest_dict["RceI"] = {
@@ -15824,6 +18834,7 @@ rest_dict["RceI"] = {
     "freq": 16384.0,
     "fst3": 18,
     "fst5": 27,
+    "id": 20241,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -15835,6 +18846,7 @@ rest_dict["RceI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:20241",
 }
 
 rest_dict["RdeGBI"] = {
@@ -15844,6 +18856,7 @@ rest_dict["RdeGBI"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 28550,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -15855,6 +18868,7 @@ rest_dict["RdeGBI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:28550",
 }
 
 rest_dict["RdeGBII"] = {
@@ -15864,6 +18878,7 @@ rest_dict["RdeGBII"] = {
     "freq": 4096.0,
     "fst3": 18,
     "fst5": 26,
+    "id": 28551,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -15875,6 +18890,7 @@ rest_dict["RdeGBII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:28551",
 }
 
 rest_dict["RdeGBIII"] = {
@@ -15884,6 +18900,7 @@ rest_dict["RdeGBIII"] = {
     "freq": 1024.0,
     "fst3": -17,
     "fst5": -9,
+    "id": 28544,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -15895,6 +18912,29 @@ rest_dict["RdeGBIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:28544",
+}
+
+rest_dict["Rer8036II"] = {
+    "charac": (None, None, None, None, "CCGAKGG"),
+    "compsite": "(?=(?P<Rer8036II>CCGA[GT]GG))|(?=(?P<Rer8036II_as>CC[AC]TCGG))",
+    "dna": None,
+    "freq": 8192.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 416878,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CCGAKGG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:416878",
 }
 
 rest_dict["RflFIII"] = {
@@ -15904,6 +18944,7 @@ rest_dict["RflFIII"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 32269,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -15915,6 +18956,7 @@ rest_dict["RflFIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:32269",
 }
 
 rest_dict["RgaI"] = {
@@ -15924,6 +18966,7 @@ rest_dict["RgaI"] = {
     "freq": 65536.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 10873,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -15935,6 +18978,51 @@ rest_dict["RgaI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:10873",
+}
+
+rest_dict["Rgo13296IV"] = {
+    "charac": (None, None, None, None, "GRAAGCG"),
+    "compsite": "(?=(?P<Rgo13296IV>G[AG]AAGCG))|(?=(?P<Rgo13296IV_as>CGCTT[CT]C))",
+    "dna": None,
+    "freq": 8192.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 416879,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GRAAGCG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:416879",
+}
+
+rest_dict["Rho5650I"] = {
+    "charac": (None, None, None, None, "AACGAG"),
+    "compsite": "(?=(?P<Rho5650I>AACGAG))|(?=(?P<Rho5650I_as>CTCGTT))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 414024,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "AACGAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:414024",
 }
 
 rest_dict["RigI"] = {
@@ -15944,6 +19032,7 @@ rest_dict["RigI"] = {
     "freq": 65536.0,
     "fst3": -6,
     "fst5": 6,
+    "id": 14596,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -15955,6 +19044,29 @@ rest_dict["RigI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:14596",
+}
+
+rest_dict["Rkr11038I"] = {
+    "charac": (None, None, None, None, "GGANNNNNRTGA"),
+    "compsite": "(?=(?P<Rkr11038I>GGA.....[AG]TGA))|(?=(?P<Rkr11038I_as>TCA[CT].....TCC))",
+    "dna": None,
+    "freq": 8192.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 413999,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GGANNNNNRTGA",
+    "size": 12,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:413999",
 }
 
 rest_dict["RlaI"] = {
@@ -15964,6 +19076,7 @@ rest_dict["RlaI"] = {
     "freq": 10.666666666666666,
     "fst3": None,
     "fst5": None,
+    "id": 21323,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -15975,6 +19088,7 @@ rest_dict["RlaI"] = {
     "size": 3,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:21323",
 }
 
 rest_dict["RlaII"] = {
@@ -15984,6 +19098,7 @@ rest_dict["RlaII"] = {
     "freq": 4096.0,
     "fst3": 18,
     "fst5": 26,
+    "id": 24516,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -15995,6 +19110,7 @@ rest_dict["RlaII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:24516",
 }
 
 rest_dict["RleAI"] = {
@@ -16004,6 +19120,7 @@ rest_dict["RleAI"] = {
     "freq": 4096.0,
     "fst3": 9,
     "fst5": 18,
+    "id": 1552,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -16015,6 +19132,7 @@ rest_dict["RleAI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1552",
 }
 
 rest_dict["Rmu369III"] = {
@@ -16024,6 +19142,7 @@ rest_dict["Rmu369III"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 222072,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16035,6 +19154,7 @@ rest_dict["Rmu369III"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:222072",
 }
 
 rest_dict["RpaB5I"] = {
@@ -16044,6 +19164,7 @@ rest_dict["RpaB5I"] = {
     "freq": 8192.0,
     "fst3": 18,
     "fst5": 27,
+    "id": 17116,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -16055,6 +19176,7 @@ rest_dict["RpaB5I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:17116",
 }
 
 rest_dict["RpaBI"] = {
@@ -16064,6 +19186,7 @@ rest_dict["RpaBI"] = {
     "freq": 16384.0,
     "fst3": 18,
     "fst5": 27,
+    "id": 24819,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -16075,6 +19198,7 @@ rest_dict["RpaBI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:24819",
 }
 
 rest_dict["RpaI"] = {
@@ -16084,6 +19208,7 @@ rest_dict["RpaI"] = {
     "freq": 8192.0,
     "fst3": 9,
     "fst5": 18,
+    "id": 7538,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -16095,6 +19220,7 @@ rest_dict["RpaI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:7538",
 }
 
 rest_dict["RpaTI"] = {
@@ -16104,6 +19230,7 @@ rest_dict["RpaTI"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 26580,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16115,6 +19242,7 @@ rest_dict["RpaTI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:26580",
 }
 
 rest_dict["RruI"] = {
@@ -16124,6 +19252,7 @@ rest_dict["RruI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 17996,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -16135,6 +19264,7 @@ rest_dict["RruI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:17996",
 }
 
 rest_dict["RsaI"] = {
@@ -16144,6 +19274,7 @@ rest_dict["RsaI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1567,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -16154,7 +19285,8 @@ rest_dict["RsaI"] = {
     "site": "GTAC",
     "size": 4,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "M", "N", "Q", "R", "S", "V", "X", "Y"),
+    "suppl": ("B", "C", "I", "J", "M", "N", "Q", "R", "V", "X", "Y"),
+    "uri": "https://identifiers.org/rebase:1567",
 }
 
 rest_dict["RsaNI"] = {
@@ -16164,6 +19296,7 @@ rest_dict["RsaNI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 16208,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -16175,6 +19308,7 @@ rest_dict["RsaNI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:16208",
 }
 
 rest_dict["RseI"] = {
@@ -16184,6 +19318,7 @@ rest_dict["RseI"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 14762,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -16195,6 +19330,7 @@ rest_dict["RseI"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:14762",
 }
 
 rest_dict["Rsp008IV"] = {
@@ -16204,6 +19340,7 @@ rest_dict["Rsp008IV"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 153107,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16215,6 +19352,7 @@ rest_dict["Rsp008IV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:153107",
 }
 
 rest_dict["Rsp008V"] = {
@@ -16224,6 +19362,7 @@ rest_dict["Rsp008V"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 152603,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16235,6 +19374,7 @@ rest_dict["Rsp008V"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:152603",
 }
 
 rest_dict["Rsp531II"] = {
@@ -16244,6 +19384,7 @@ rest_dict["Rsp531II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 274776,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16255,6 +19396,7 @@ rest_dict["Rsp531II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:274776",
 }
 
 rest_dict["RspPBTS2III"] = {
@@ -16264,6 +19406,7 @@ rest_dict["RspPBTS2III"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 152164,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16275,6 +19418,7 @@ rest_dict["RspPBTS2III"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:152164",
 }
 
 rest_dict["Rsr2I"] = {
@@ -16284,6 +19428,7 @@ rest_dict["Rsr2I"] = {
     "freq": 8192.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 3886,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -16295,6 +19440,7 @@ rest_dict["Rsr2I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:3886",
 }
 
 rest_dict["RsrII"] = {
@@ -16304,6 +19450,7 @@ rest_dict["RsrII"] = {
     "freq": 8192.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1573,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -16315,6 +19462,7 @@ rest_dict["RsrII"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("N", "Q", "X"),
+    "uri": "https://identifiers.org/rebase:1573",
 }
 
 rest_dict["Rtr1953I"] = {
@@ -16324,6 +19472,7 @@ rest_dict["Rtr1953I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 145447,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16335,6 +19484,7 @@ rest_dict["Rtr1953I"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:145447",
 }
 
 rest_dict["SacI"] = {
@@ -16344,6 +19494,7 @@ rest_dict["SacI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1578,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -16355,6 +19506,7 @@ rest_dict["SacI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "J", "K", "M", "N", "O", "Q", "R", "S", "X"),
+    "uri": "https://identifiers.org/rebase:1578",
 }
 
 rest_dict["SacII"] = {
@@ -16364,6 +19516,7 @@ rest_dict["SacII"] = {
     "freq": 4096.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 1579,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -16375,6 +19528,7 @@ rest_dict["SacII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "J", "K", "N", "O", "Q", "R", "X"),
+    "uri": "https://identifiers.org/rebase:1579",
 }
 
 rest_dict["Saf8902III"] = {
@@ -16384,6 +19538,7 @@ rest_dict["Saf8902III"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 46424,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16395,6 +19550,7 @@ rest_dict["Saf8902III"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:46424",
 }
 
 rest_dict["Sag901I"] = {
@@ -16404,6 +19560,7 @@ rest_dict["Sag901I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 283227,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16415,6 +19572,7 @@ rest_dict["Sag901I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:283227",
 }
 
 rest_dict["SalI"] = {
@@ -16424,6 +19582,7 @@ rest_dict["SalI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1588,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -16434,7 +19593,8 @@ rest_dict["SalI"] = {
     "site": "GTCGAC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "V", "X"),
+    "uri": "https://identifiers.org/rebase:1588",
 }
 
 rest_dict["SanDI"] = {
@@ -16444,6 +19604,7 @@ rest_dict["SanDI"] = {
     "freq": 8192.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2610,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -16455,6 +19616,7 @@ rest_dict["SanDI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2610",
 }
 
 rest_dict["SapI"] = {
@@ -16464,6 +19626,7 @@ rest_dict["SapI"] = {
     "freq": 16384.0,
     "fst3": 4,
     "fst5": 8,
+    "id": 1593,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -16475,6 +19638,7 @@ rest_dict["SapI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1593",
 }
 
 rest_dict["SaqAI"] = {
@@ -16484,6 +19648,7 @@ rest_dict["SaqAI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 17984,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -16495,6 +19660,7 @@ rest_dict["SaqAI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:17984",
 }
 
 rest_dict["SatI"] = {
@@ -16504,6 +19670,7 @@ rest_dict["SatI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 4809,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -16515,6 +19682,29 @@ rest_dict["SatI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:4809",
+}
+
+rest_dict["Sau1803III"] = {
+    "charac": (None, None, None, None, "CGANNNNNNTAC"),
+    "compsite": "(?=(?P<Sau1803III>CGA......TAC))|(?=(?P<Sau1803III_as>GTA......TCG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 288557,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CGANNNNNNTAC",
+    "size": 12,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:288557",
 }
 
 rest_dict["Sau3AI"] = {
@@ -16524,6 +19714,7 @@ rest_dict["Sau3AI"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 1604,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -16534,7 +19725,30 @@ rest_dict["Sau3AI"] = {
     "site": "GATC",
     "size": 4,
     "substrat": "DNA",
-    "suppl": ("C", "J", "K", "M", "N", "R", "X"),
+    "suppl": ("C", "J", "K", "M", "N", "X"),
+    "uri": "https://identifiers.org/rebase:1604",
+}
+
+rest_dict["Sau5656II"] = {
+    "charac": (None, None, None, None, "GTTGCA"),
+    "compsite": "(?=(?P<Sau5656II>GTTGCA))|(?=(?P<Sau5656II_as>TGCAAC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 415194,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GTTGCA",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:415194",
 }
 
 rest_dict["Sau64037IV"] = {
@@ -16544,6 +19758,7 @@ rest_dict["Sau64037IV"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 248173,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16555,6 +19770,7 @@ rest_dict["Sau64037IV"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:248173",
 }
 
 rest_dict["Sau96I"] = {
@@ -16564,6 +19780,7 @@ rest_dict["Sau96I"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1607,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -16575,6 +19792,7 @@ rest_dict["Sau96I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("J", "N"),
+    "uri": "https://identifiers.org/rebase:1607",
 }
 
 rest_dict["SauI"] = {
@@ -16584,6 +19802,7 @@ rest_dict["SauI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1617,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -16595,6 +19814,29 @@ rest_dict["SauI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1617",
+}
+
+rest_dict["SauMJ015III"] = {
+    "charac": (None, None, None, None, "GARCNAG"),
+    "compsite": "(?=(?P<SauMJ015III>GA[AG]C.AG))|(?=(?P<SauMJ015III_as>CT.G[CT]TC))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 386673,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GARCNAG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:386673",
 }
 
 rest_dict["Sba460II"] = {
@@ -16604,6 +19846,7 @@ rest_dict["Sba460II"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 202647,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16615,6 +19858,7 @@ rest_dict["Sba460II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:202647",
 }
 
 rest_dict["SbfI"] = {
@@ -16624,6 +19868,7 @@ rest_dict["SbfI"] = {
     "freq": 65536.0,
     "fst3": -6,
     "fst5": 6,
+    "id": 2742,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -16635,6 +19880,7 @@ rest_dict["SbfI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("I", "N", "V"),
+    "uri": "https://identifiers.org/rebase:2742",
 }
 
 rest_dict["Sbo46I"] = {
@@ -16644,6 +19890,7 @@ rest_dict["Sbo46I"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 70558,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16655,6 +19902,7 @@ rest_dict["Sbo46I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:70558",
 }
 
 rest_dict["ScaI"] = {
@@ -16664,6 +19912,7 @@ rest_dict["ScaI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1628,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -16674,7 +19923,8 @@ rest_dict["ScaI"] = {
     "site": "AGTACT",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "C", "J", "K", "M", "N", "O", "Q", "R", "S", "X"),
+    "suppl": ("B", "C", "J", "K", "M", "N", "O", "Q", "R", "X"),
+    "uri": "https://identifiers.org/rebase:1628",
 }
 
 rest_dict["SchI"] = {
@@ -16684,6 +19934,7 @@ rest_dict["SchI"] = {
     "freq": 1024.0,
     "fst3": 5,
     "fst5": 10,
+    "id": 3090,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -16695,6 +19946,7 @@ rest_dict["SchI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:3090",
 }
 
 rest_dict["SciI"] = {
@@ -16704,6 +19956,7 @@ rest_dict["SciI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1635,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -16715,6 +19968,7 @@ rest_dict["SciI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1635",
 }
 
 rest_dict["ScoDS2II"] = {
@@ -16724,6 +19978,7 @@ rest_dict["ScoDS2II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 187777,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16735,6 +19990,7 @@ rest_dict["ScoDS2II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:187777",
 }
 
 rest_dict["ScrFI"] = {
@@ -16744,6 +20000,7 @@ rest_dict["ScrFI"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1639,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -16755,6 +20012,7 @@ rest_dict["ScrFI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("J", "N"),
+    "uri": "https://identifiers.org/rebase:1639",
 }
 
 rest_dict["SdaI"] = {
@@ -16764,6 +20022,7 @@ rest_dict["SdaI"] = {
     "freq": 65536.0,
     "fst3": -6,
     "fst5": 6,
+    "id": 2946,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -16775,6 +20034,7 @@ rest_dict["SdaI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2946",
 }
 
 rest_dict["SdeAI"] = {
@@ -16784,6 +20044,7 @@ rest_dict["SdeAI"] = {
     "freq": 2048.0,
     "fst3": 19,
     "fst5": 27,
+    "id": 13902,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -16795,6 +20056,7 @@ rest_dict["SdeAI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:13902",
 }
 
 rest_dict["SdeOSI"] = {
@@ -16804,6 +20066,7 @@ rest_dict["SdeOSI"] = {
     "freq": 8192.0,
     "fst3": -24,
     "fst5": -11,
+    "id": 16253,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -16815,6 +20078,7 @@ rest_dict["SdeOSI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:16253",
 }
 
 rest_dict["SduI"] = {
@@ -16824,6 +20088,7 @@ rest_dict["SduI"] = {
     "freq": 455.1111111111111,
     "fst3": -5,
     "fst5": 5,
+    "id": 1641,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -16835,6 +20100,73 @@ rest_dict["SduI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:1641",
+}
+
+rest_dict["Sdy5370I"] = {
+    "charac": (None, None, None, None, "CACNNNNNTCY"),
+    "compsite": "(?=(?P<Sdy5370I>CAC.....TC[CT]))|(?=(?P<Sdy5370I_as>[AG]GA.....GTG))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 256274,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CACNNNNNTCY",
+    "size": 11,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:256274",
+}
+
+rest_dict["Sdy7136I"] = {
+    "charac": (None, None, None, None, "GAGNNNNNTAA"),
+    "compsite": "(?=(?P<Sdy7136I>GAG.....TAA))|(?=(?P<Sdy7136I_as>TTA.....CTC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 255658,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GAGNNNNNTAA",
+    "size": 11,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:255658",
+}
+
+rest_dict["Sdy9603I"] = {
+    "charac": (None, None, None, None, "GCANNNNNNNTGA"),
+    "compsite": "(?=(?P<Sdy9603I>GCA.......TGA))|(?=(?P<Sdy9603I_as>TCA.......TGC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 417791,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCANNNNNNNTGA",
+    "size": 13,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:417791",
 }
 
 rest_dict["SecI"] = {
@@ -16844,6 +20176,7 @@ rest_dict["SecI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1643,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -16855,6 +20188,7 @@ rest_dict["SecI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1643",
 }
 
 rest_dict["SelI"] = {
@@ -16864,6 +20198,7 @@ rest_dict["SelI"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 1646,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -16875,6 +20210,7 @@ rest_dict["SelI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1646",
 }
 
 rest_dict["Sen17963III"] = {
@@ -16884,6 +20220,7 @@ rest_dict["Sen17963III"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 204955,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16895,6 +20232,51 @@ rest_dict["Sen17963III"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:204955",
+}
+
+rest_dict["Sen5794III"] = {
+    "charac": (None, None, None, None, "ACGAACB"),
+    "compsite": "(?=(?P<Sen5794III>ACGAAC[CGT]))|(?=(?P<Sen5794III_as>[ACG]GTTCGT))",
+    "dna": None,
+    "freq": 5461.333333333333,
+    "fst3": None,
+    "fst5": None,
+    "id": 413892,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "ACGAACB",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:413892",
+}
+
+rest_dict["Sen6480IV"] = {
+    "charac": (None, None, None, None, "GTTCAT"),
+    "compsite": "(?=(?P<Sen6480IV>GTTCAT))|(?=(?P<Sen6480IV_as>ATGAAC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 255831,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GTTCAT",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:255831",
 }
 
 rest_dict["SenA1673III"] = {
@@ -16904,6 +20286,7 @@ rest_dict["SenA1673III"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 227671,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16915,6 +20298,7 @@ rest_dict["SenA1673III"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:227671",
 }
 
 rest_dict["SenSARA26III"] = {
@@ -16924,6 +20308,7 @@ rest_dict["SenSARA26III"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 161925,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16935,6 +20320,7 @@ rest_dict["SenSARA26III"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:161925",
 }
 
 rest_dict["SenTFIV"] = {
@@ -16944,6 +20330,7 @@ rest_dict["SenTFIV"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 66999,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -16955,6 +20342,29 @@ rest_dict["SenTFIV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:66999",
+}
+
+rest_dict["Sep11964I"] = {
+    "charac": (None, None, None, None, "CGYCAT"),
+    "compsite": "(?=(?P<Sep11964I>CG[CT]CAT))|(?=(?P<Sep11964I_as>ATG[AG]CG))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 415268,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CGYCAT",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:415268",
 }
 
 rest_dict["SetI"] = {
@@ -16964,6 +20374,7 @@ rest_dict["SetI"] = {
     "freq": 64.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 14595,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -16975,6 +20386,7 @@ rest_dict["SetI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:14595",
 }
 
 rest_dict["SexAI"] = {
@@ -16984,6 +20396,7 @@ rest_dict["SexAI"] = {
     "freq": 8192.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2314,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -16995,6 +20408,7 @@ rest_dict["SexAI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": ("M", "N"),
+    "uri": "https://identifiers.org/rebase:2314",
 }
 
 rest_dict["SfaAI"] = {
@@ -17004,6 +20418,7 @@ rest_dict["SfaAI"] = {
     "freq": 65536.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 10922,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -17015,6 +20430,7 @@ rest_dict["SfaAI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:10922",
 }
 
 rest_dict["SfaNI"] = {
@@ -17024,6 +20440,7 @@ rest_dict["SfaNI"] = {
     "freq": 1024.0,
     "fst3": 9,
     "fst5": 10,
+    "id": 1652,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17035,6 +20452,7 @@ rest_dict["SfaNI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I", "N", "V"),
+    "uri": "https://identifiers.org/rebase:1652",
 }
 
 rest_dict["SfcI"] = {
@@ -17044,6 +20462,7 @@ rest_dict["SfcI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1653,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17055,6 +20474,7 @@ rest_dict["SfcI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1653",
 }
 
 rest_dict["SfeI"] = {
@@ -17064,6 +20484,7 @@ rest_dict["SfeI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1654,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17075,6 +20496,7 @@ rest_dict["SfeI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1654",
 }
 
 rest_dict["SfiI"] = {
@@ -17084,6 +20506,7 @@ rest_dict["SfiI"] = {
     "freq": 65536.0,
     "fst3": -8,
     "fst5": 8,
+    "id": 1655,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -17094,7 +20517,30 @@ rest_dict["SfiI"] = {
     "site": "GGCCNNNNNGGCC",
     "size": 13,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "V", "X"),
+    "uri": "https://identifiers.org/rebase:1655",
+}
+
+rest_dict["Sfl13829III"] = {
+    "charac": (None, None, None, None, "GNYCAG"),
+    "compsite": "(?=(?P<Sfl13829III>G.[CT]CAG))|(?=(?P<Sfl13829III_as>CTG[AG].C))",
+    "dna": None,
+    "freq": 512.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 416071,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GNYCAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:416071",
 }
 
 rest_dict["SfoI"] = {
@@ -17104,6 +20550,7 @@ rest_dict["SfoI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1660,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -17115,6 +20562,7 @@ rest_dict["SfoI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1660",
 }
 
 rest_dict["Sfr274I"] = {
@@ -17124,6 +20572,7 @@ rest_dict["Sfr274I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1661,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17135,6 +20584,7 @@ rest_dict["Sfr274I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:1661",
 }
 
 rest_dict["Sfr303I"] = {
@@ -17144,6 +20594,7 @@ rest_dict["Sfr303I"] = {
     "freq": 4096.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 1662,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -17155,6 +20606,7 @@ rest_dict["Sfr303I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:1662",
 }
 
 rest_dict["SfuI"] = {
@@ -17164,6 +20616,7 @@ rest_dict["SfuI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1666,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -17175,6 +20628,7 @@ rest_dict["SfuI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("M", "S"),
+    "uri": "https://identifiers.org/rebase:1666",
 }
 
 rest_dict["SgeI"] = {
@@ -17184,6 +20638,7 @@ rest_dict["SgeI"] = {
     "freq": 16.0,
     "fst3": 13,
     "fst5": 13,
+    "id": 21264,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17195,6 +20650,7 @@ rest_dict["SgeI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:21264",
 }
 
 rest_dict["SgfI"] = {
@@ -17204,6 +20660,7 @@ rest_dict["SgfI"] = {
     "freq": 65536.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 2426,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -17215,6 +20672,29 @@ rest_dict["SgfI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("R",),
+    "uri": "https://identifiers.org/rebase:2426",
+}
+
+rest_dict["Sgr7807I"] = {
+    "charac": (None, None, None, None, "GCCGAGG"),
+    "compsite": "(?=(?P<Sgr7807I>GCCGAGG))|(?=(?P<Sgr7807I_as>CCTCGGC))",
+    "dna": None,
+    "freq": 16384.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 419639,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GCCGAGG",
+    "size": 7,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:419639",
 }
 
 rest_dict["SgrAI"] = {
@@ -17224,6 +20704,7 @@ rest_dict["SgrAI"] = {
     "freq": 16384.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 1673,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17235,6 +20716,7 @@ rest_dict["SgrAI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1673",
 }
 
 rest_dict["SgrAII"] = {
@@ -17244,6 +20726,7 @@ rest_dict["SgrAII"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 334113,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -17255,6 +20738,7 @@ rest_dict["SgrAII"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:334113",
 }
 
 rest_dict["SgrBI"] = {
@@ -17264,6 +20748,7 @@ rest_dict["SgrBI"] = {
     "freq": 4096.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 1674,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -17275,6 +20760,7 @@ rest_dict["SgrBI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("C",),
+    "uri": "https://identifiers.org/rebase:1674",
 }
 
 rest_dict["SgrDI"] = {
@@ -17284,6 +20770,7 @@ rest_dict["SgrDI"] = {
     "freq": 65536.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 10539,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17295,6 +20782,7 @@ rest_dict["SgrDI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:10539",
 }
 
 rest_dict["SgrTI"] = {
@@ -17304,6 +20792,7 @@ rest_dict["SgrTI"] = {
     "freq": 42.666666666666664,
     "fst3": 14,
     "fst5": 14,
+    "id": 29707,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17315,6 +20804,7 @@ rest_dict["SgrTI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:29707",
 }
 
 rest_dict["SgsI"] = {
@@ -17324,6 +20814,7 @@ rest_dict["SgsI"] = {
     "freq": 65536.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 10689,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17335,6 +20826,7 @@ rest_dict["SgsI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:10689",
 }
 
 rest_dict["SimI"] = {
@@ -17344,6 +20836,7 @@ rest_dict["SimI"] = {
     "freq": 1024.0,
     "fst3": 0,
     "fst5": 2,
+    "id": 2782,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -17355,6 +20848,7 @@ rest_dict["SimI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2782",
 }
 
 rest_dict["SinI"] = {
@@ -17364,6 +20858,7 @@ rest_dict["SinI"] = {
     "freq": 512.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1687,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -17375,6 +20870,7 @@ rest_dict["SinI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("X",),
+    "uri": "https://identifiers.org/rebase:1687",
 }
 
 rest_dict["SlaI"] = {
@@ -17384,6 +20880,7 @@ rest_dict["SlaI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1694,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17395,6 +20892,51 @@ rest_dict["SlaI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("C", "Y"),
+    "uri": "https://identifiers.org/rebase:1694",
+}
+
+rest_dict["Sma10259II"] = {
+    "charac": (None, None, None, None, "CAAAGA"),
+    "compsite": "(?=(?P<Sma10259II>CAAAGA))|(?=(?P<Sma10259II_as>TCTTTG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 288314,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CAAAGA",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:288314",
+}
+
+rest_dict["Sma325I"] = {
+    "charac": (None, None, None, None, "ARCCCT"),
+    "compsite": "(?=(?P<Sma325I>A[AG]CCCT))|(?=(?P<Sma325I_as>AGGG[CT]T))",
+    "dna": None,
+    "freq": 2048.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 208853,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "ARCCCT",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:208853",
 }
 
 rest_dict["SmaI"] = {
@@ -17404,6 +20946,7 @@ rest_dict["SmaI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1704,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -17415,6 +20958,7 @@ rest_dict["SmaI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X", "Y"),
+    "uri": "https://identifiers.org/rebase:1704",
 }
 
 rest_dict["SmaUMH5I"] = {
@@ -17424,6 +20968,7 @@ rest_dict["SmaUMH5I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 212811,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -17435,6 +20980,7 @@ rest_dict["SmaUMH5I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:212811",
 }
 
 rest_dict["SmaUMH8I"] = {
@@ -17444,6 +20990,7 @@ rest_dict["SmaUMH8I"] = {
     "freq": 5461.333333333333,
     "fst3": None,
     "fst5": None,
+    "id": 212281,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -17455,6 +21002,7 @@ rest_dict["SmaUMH8I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:212281",
 }
 
 rest_dict["SmiI"] = {
@@ -17464,6 +21012,7 @@ rest_dict["SmiI"] = {
     "freq": 65536.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 2750,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -17475,6 +21024,7 @@ rest_dict["SmiI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("B", "I", "K", "V"),
+    "uri": "https://identifiers.org/rebase:2750",
 }
 
 rest_dict["SmiMI"] = {
@@ -17484,6 +21034,7 @@ rest_dict["SmiMI"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 4190,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -17495,6 +21046,7 @@ rest_dict["SmiMI"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:4190",
 }
 
 rest_dict["SmlI"] = {
@@ -17504,6 +21056,7 @@ rest_dict["SmlI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2884,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17515,6 +21068,7 @@ rest_dict["SmlI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2884",
 }
 
 rest_dict["SmoI"] = {
@@ -17524,6 +21078,7 @@ rest_dict["SmoI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 10923,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17535,6 +21090,7 @@ rest_dict["SmoI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:10923",
 }
 
 rest_dict["Sna507VIII"] = {
@@ -17544,6 +21100,7 @@ rest_dict["Sna507VIII"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 297923,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -17555,6 +21112,7 @@ rest_dict["Sna507VIII"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:297923",
 }
 
 rest_dict["SnaBI"] = {
@@ -17564,6 +21122,7 @@ rest_dict["SnaBI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1707,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -17574,7 +21133,8 @@ rest_dict["SnaBI"] = {
     "site": "TACGTA",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("C", "K", "M", "N", "R"),
+    "suppl": ("C", "K", "M", "N"),
+    "uri": "https://identifiers.org/rebase:1707",
 }
 
 rest_dict["SnaI"] = {
@@ -17584,6 +21144,7 @@ rest_dict["SnaI"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 1708,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -17595,6 +21156,7 @@ rest_dict["SnaI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1708",
 }
 
 rest_dict["Sno506I"] = {
@@ -17604,6 +21166,7 @@ rest_dict["Sno506I"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 26389,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -17615,6 +21178,7 @@ rest_dict["Sno506I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:26389",
 }
 
 rest_dict["Spe19205IV"] = {
@@ -17624,6 +21188,7 @@ rest_dict["Spe19205IV"] = {
     "freq": 512.0,
     "fst3": None,
     "fst5": None,
+    "id": 297945,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -17635,6 +21200,7 @@ rest_dict["Spe19205IV"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:297945",
 }
 
 rest_dict["SpeI"] = {
@@ -17644,6 +21210,7 @@ rest_dict["SpeI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1717,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17655,6 +21222,7 @@ rest_dict["SpeI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "J", "K", "M", "N", "O", "Q", "R", "S", "X"),
+    "uri": "https://identifiers.org/rebase:1717",
 }
 
 rest_dict["SphI"] = {
@@ -17664,6 +21232,7 @@ rest_dict["SphI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1719,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -17674,7 +21243,8 @@ rest_dict["SphI"] = {
     "site": "GCATGC",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "M", "N", "O", "Q", "R", "V", "X"),
+    "uri": "https://identifiers.org/rebase:1719",
 }
 
 rest_dict["SplI"] = {
@@ -17684,6 +21254,7 @@ rest_dict["SplI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1724,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17695,6 +21266,7 @@ rest_dict["SplI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1724",
 }
 
 rest_dict["SpnRII"] = {
@@ -17704,6 +21276,7 @@ rest_dict["SpnRII"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 5624,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -17715,6 +21288,7 @@ rest_dict["SpnRII"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:5624",
 }
 
 rest_dict["SpoDI"] = {
@@ -17724,6 +21298,7 @@ rest_dict["SpoDI"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 13737,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -17735,6 +21310,7 @@ rest_dict["SpoDI"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:13737",
 }
 
 rest_dict["SrfI"] = {
@@ -17744,6 +21320,7 @@ rest_dict["SrfI"] = {
     "freq": 65536.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 1728,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -17755,6 +21332,7 @@ rest_dict["SrfI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1728",
 }
 
 rest_dict["Sse232I"] = {
@@ -17764,6 +21342,7 @@ rest_dict["Sse232I"] = {
     "freq": 65536.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 3831,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17775,6 +21354,7 @@ rest_dict["Sse232I"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:3831",
 }
 
 rest_dict["Sse8387I"] = {
@@ -17784,6 +21364,7 @@ rest_dict["Sse8387I"] = {
     "freq": 65536.0,
     "fst3": -6,
     "fst5": 6,
+    "id": 1732,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -17795,6 +21376,7 @@ rest_dict["Sse8387I"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:1732",
 }
 
 rest_dict["Sse8647I"] = {
@@ -17804,6 +21386,7 @@ rest_dict["Sse8647I"] = {
     "freq": 8192.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2637,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -17815,6 +21398,7 @@ rest_dict["Sse8647I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2637",
 }
 
 rest_dict["Sse9I"] = {
@@ -17824,6 +21408,7 @@ rest_dict["Sse9I"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 2639,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17835,6 +21420,7 @@ rest_dict["Sse9I"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2639",
 }
 
 rest_dict["SseBI"] = {
@@ -17844,6 +21430,7 @@ rest_dict["SseBI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2159,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -17855,6 +21442,7 @@ rest_dict["SseBI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("C",),
+    "uri": "https://identifiers.org/rebase:2159",
 }
 
 rest_dict["SsiI"] = {
@@ -17864,6 +21452,7 @@ rest_dict["SsiI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 7452,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -17875,6 +21464,7 @@ rest_dict["SsiI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:7452",
 }
 
 rest_dict["Ssp6803IV"] = {
@@ -17884,6 +21474,7 @@ rest_dict["Ssp6803IV"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 7489,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -17895,6 +21486,7 @@ rest_dict["Ssp6803IV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:7489",
 }
 
 rest_dict["Ssp714II"] = {
@@ -17904,6 +21496,7 @@ rest_dict["Ssp714II"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 70572,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -17915,6 +21508,7 @@ rest_dict["Ssp714II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:70572",
 }
 
 rest_dict["SspD5I"] = {
@@ -17924,6 +21518,7 @@ rest_dict["SspD5I"] = {
     "freq": 1024.0,
     "fst3": 8,
     "fst5": 13,
+    "id": 4114,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -17935,6 +21530,7 @@ rest_dict["SspD5I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:4114",
 }
 
 rest_dict["SspDI"] = {
@@ -17944,6 +21540,7 @@ rest_dict["SspDI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 20303,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -17955,6 +21552,7 @@ rest_dict["SspDI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:20303",
 }
 
 rest_dict["SspI"] = {
@@ -17964,6 +21562,7 @@ rest_dict["SspI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1746,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -17974,7 +21573,8 @@ rest_dict["SspI"] = {
     "site": "AATATT",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "N", "Q", "R", "V", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "N", "Q", "V", "X"),
+    "uri": "https://identifiers.org/rebase:1746",
 }
 
 rest_dict["SspJOR1II"] = {
@@ -17984,6 +21584,7 @@ rest_dict["SspJOR1II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 317476,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -17995,6 +21596,7 @@ rest_dict["SspJOR1II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:317476",
 }
 
 rest_dict["SspMI"] = {
@@ -18004,6 +21606,7 @@ rest_dict["SspMI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 102129,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -18015,6 +21618,7 @@ rest_dict["SspMI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:102129",
 }
 
 rest_dict["SstE37I"] = {
@@ -18024,6 +21628,7 @@ rest_dict["SstE37I"] = {
     "freq": 16384.0,
     "fst3": 18,
     "fst5": 27,
+    "id": 26747,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -18035,6 +21640,7 @@ rest_dict["SstE37I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:26747",
 }
 
 rest_dict["SstI"] = {
@@ -18044,6 +21650,7 @@ rest_dict["SstI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 1759,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -18055,6 +21662,7 @@ rest_dict["SstI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("C",),
+    "uri": "https://identifiers.org/rebase:1759",
 }
 
 rest_dict["Sth132I"] = {
@@ -18064,6 +21672,7 @@ rest_dict["Sth132I"] = {
     "freq": 256.0,
     "fst3": 8,
     "fst5": 8,
+    "id": 2567,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -18075,6 +21684,7 @@ rest_dict["Sth132I"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2567",
 }
 
 rest_dict["Sth20745III"] = {
@@ -18084,6 +21694,7 @@ rest_dict["Sth20745III"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 22988,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -18095,6 +21706,7 @@ rest_dict["Sth20745III"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:22988",
 }
 
 rest_dict["Sth302II"] = {
@@ -18104,6 +21716,7 @@ rest_dict["Sth302II"] = {
     "freq": 256.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 10809,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -18115,6 +21728,7 @@ rest_dict["Sth302II"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:10809",
 }
 
 rest_dict["SthSt3II"] = {
@@ -18124,6 +21738,7 @@ rest_dict["SthSt3II"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 214127,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -18135,6 +21750,7 @@ rest_dict["SthSt3II"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:214127",
 }
 
 rest_dict["StsI"] = {
@@ -18144,6 +21760,7 @@ rest_dict["StsI"] = {
     "freq": 1024.0,
     "fst3": 14,
     "fst5": 15,
+    "id": 1784,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -18155,6 +21772,7 @@ rest_dict["StsI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1784",
 }
 
 rest_dict["StuI"] = {
@@ -18164,6 +21782,7 @@ rest_dict["StuI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 1785,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -18174,7 +21793,8 @@ rest_dict["StuI"] = {
     "site": "AGGCCT",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "J", "K", "M", "N", "Q", "R", "S", "X"),
+    "suppl": ("B", "J", "K", "M", "N", "Q", "X"),
+    "uri": "https://identifiers.org/rebase:1785",
 }
 
 rest_dict["StyD4I"] = {
@@ -18184,6 +21804,7 @@ rest_dict["StyD4I"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 1786,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -18195,6 +21816,7 @@ rest_dict["StyD4I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1786",
 }
 
 rest_dict["StyI"] = {
@@ -18204,6 +21826,7 @@ rest_dict["StyI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1787,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -18215,6 +21838,7 @@ rest_dict["StyI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("C", "J", "N"),
+    "uri": "https://identifiers.org/rebase:1787",
 }
 
 rest_dict["SurP32aII"] = {
@@ -18224,6 +21848,7 @@ rest_dict["SurP32aII"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 198625,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -18235,6 +21860,7 @@ rest_dict["SurP32aII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:198625",
 }
 
 rest_dict["SwaI"] = {
@@ -18244,6 +21870,7 @@ rest_dict["SwaI"] = {
     "freq": 65536.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 1798,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -18255,6 +21882,7 @@ rest_dict["SwaI"] = {
     "size": 8,
     "substrat": "DNA",
     "suppl": ("J", "M", "N", "S"),
+    "uri": "https://identifiers.org/rebase:1798",
 }
 
 rest_dict["TaaI"] = {
@@ -18264,6 +21892,7 @@ rest_dict["TaaI"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 3088,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -18275,6 +21904,29 @@ rest_dict["TaaI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:3088",
+}
+
+rest_dict["TagI"] = {
+    "charac": (2, -2, None, None, "ACGT"),
+    "compsite": "(?=(?P<TagI>ACGT))",
+    "dna": None,
+    "freq": 256.0,
+    "fst3": -2,
+    "fst5": 2,
+    "id": 220784,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": 0,
+    "ovhgseq": "",
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "ACGT",
+    "size": 4,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:220784",
 }
 
 rest_dict["TaiI"] = {
@@ -18284,6 +21936,7 @@ rest_dict["TaiI"] = {
     "freq": 256.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 2823,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -18295,6 +21948,7 @@ rest_dict["TaiI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2823",
 }
 
 rest_dict["TaqI"] = {
@@ -18304,6 +21958,7 @@ rest_dict["TaqI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1801,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -18314,7 +21969,8 @@ rest_dict["TaqI"] = {
     "site": "TCGA",
     "size": 4,
     "substrat": "DNA",
-    "suppl": ("B", "C", "I", "J", "K", "M", "N", "Q", "R", "S", "V", "X"),
+    "suppl": ("B", "C", "I", "J", "K", "M", "N", "Q", "R", "V", "X"),
+    "uri": "https://identifiers.org/rebase:1801",
 }
 
 rest_dict["TaqII"] = {
@@ -18324,6 +21980,7 @@ rest_dict["TaqII"] = {
     "freq": 4096.0,
     "fst3": 9,
     "fst5": 17,
+    "id": 1802,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -18335,6 +21992,7 @@ rest_dict["TaqII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("Q", "X"),
+    "uri": "https://identifiers.org/rebase:1802",
 }
 
 rest_dict["TaqIII"] = {
@@ -18344,6 +22002,7 @@ rest_dict["TaqIII"] = {
     "freq": 4096.0,
     "fst3": 9,
     "fst5": 17,
+    "id": 126474,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -18355,6 +22014,7 @@ rest_dict["TaqIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:126474",
 }
 
 rest_dict["TasI"] = {
@@ -18364,6 +22024,7 @@ rest_dict["TasI"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 3089,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -18375,6 +22036,7 @@ rest_dict["TasI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:3089",
 }
 
 rest_dict["TatI"] = {
@@ -18384,6 +22046,7 @@ rest_dict["TatI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2746,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -18395,6 +22058,7 @@ rest_dict["TatI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2746",
 }
 
 rest_dict["TauI"] = {
@@ -18404,6 +22068,7 @@ rest_dict["TauI"] = {
     "freq": 512.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 2579,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -18415,6 +22080,7 @@ rest_dict["TauI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2579",
 }
 
 rest_dict["TfiI"] = {
@@ -18424,6 +22090,7 @@ rest_dict["TfiI"] = {
     "freq": 512.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1807,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -18435,6 +22102,51 @@ rest_dict["TfiI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1807",
+}
+
+rest_dict["TkoI"] = {
+    "charac": (26, 18, None, None, "GTGAAG"),
+    "compsite": "(?=(?P<TkoI>GTGAAG))|(?=(?P<TkoI_as>CTTCAC))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": 18,
+    "fst5": 26,
+    "id": 10788,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": 2,
+    "ovhgseq": "NN",
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "GTGAAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:10788",
+}
+
+rest_dict["TkoII"] = {
+    "charac": (16, 8, None, None, "TTCAAG"),
+    "compsite": "(?=(?P<TkoII>TTCAAG))|(?=(?P<TkoII_as>CTTGAA))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": 8,
+    "fst5": 16,
+    "id": 10787,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": 2,
+    "ovhgseq": "NN",
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "TTCAAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:10787",
 }
 
 rest_dict["TpyTP2I"] = {
@@ -18444,6 +22156,7 @@ rest_dict["TpyTP2I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 290573,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -18455,6 +22168,7 @@ rest_dict["TpyTP2I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:290573",
 }
 
 rest_dict["Tru1I"] = {
@@ -18464,6 +22178,7 @@ rest_dict["Tru1I"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2218,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -18475,6 +22190,7 @@ rest_dict["Tru1I"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2218",
 }
 
 rest_dict["Tru9I"] = {
@@ -18484,6 +22200,7 @@ rest_dict["Tru9I"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 1817,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -18494,7 +22211,8 @@ rest_dict["Tru9I"] = {
     "site": "TTAA",
     "size": 4,
     "substrat": "DNA",
-    "suppl": ("I", "M", "R", "V"),
+    "suppl": ("I", "M", "V"),
+    "uri": "https://identifiers.org/rebase:1817",
 }
 
 rest_dict["TscAI"] = {
@@ -18504,6 +22222,7 @@ rest_dict["TscAI"] = {
     "freq": 512.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 15359,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 10,
@@ -18515,6 +22234,7 @@ rest_dict["TscAI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:15359",
 }
 
 rest_dict["TseFI"] = {
@@ -18524,6 +22244,7 @@ rest_dict["TseFI"] = {
     "freq": 512.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 55431,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -18535,6 +22256,7 @@ rest_dict["TseFI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:55431",
 }
 
 rest_dict["TseI"] = {
@@ -18544,6 +22266,7 @@ rest_dict["TseI"] = {
     "freq": 512.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2537,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -18555,6 +22278,7 @@ rest_dict["TseI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2537",
 }
 
 rest_dict["TsoI"] = {
@@ -18564,6 +22288,7 @@ rest_dict["TsoI"] = {
     "freq": 2048.0,
     "fst3": 9,
     "fst5": 17,
+    "id": 7540,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -18575,6 +22300,7 @@ rest_dict["TsoI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:7540",
 }
 
 rest_dict["Tsp45I"] = {
@@ -18584,6 +22310,7 @@ rest_dict["Tsp45I"] = {
     "freq": 512.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 1822,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -18595,6 +22322,7 @@ rest_dict["Tsp45I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:1822",
 }
 
 rest_dict["Tsp4CI"] = {
@@ -18604,6 +22332,7 @@ rest_dict["Tsp4CI"] = {
     "freq": 256.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 2795,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -18615,6 +22344,7 @@ rest_dict["Tsp4CI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2795",
 }
 
 rest_dict["TspARh3I"] = {
@@ -18624,6 +22354,7 @@ rest_dict["TspARh3I"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 58600,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -18635,6 +22366,7 @@ rest_dict["TspARh3I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:58600",
 }
 
 rest_dict["TspDTI"] = {
@@ -18644,6 +22376,7 @@ rest_dict["TspDTI"] = {
     "freq": 1024.0,
     "fst3": 9,
     "fst5": 16,
+    "id": 5798,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -18655,6 +22388,7 @@ rest_dict["TspDTI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("Q", "X"),
+    "uri": "https://identifiers.org/rebase:5798",
 }
 
 rest_dict["TspEI"] = {
@@ -18664,6 +22398,7 @@ rest_dict["TspEI"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 1824,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -18675,6 +22410,7 @@ rest_dict["TspEI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1824",
 }
 
 rest_dict["TspGWI"] = {
@@ -18684,6 +22420,7 @@ rest_dict["TspGWI"] = {
     "freq": 1024.0,
     "fst3": 9,
     "fst5": 16,
+    "id": 5332,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -18695,6 +22432,7 @@ rest_dict["TspGWI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("Q", "X"),
+    "uri": "https://identifiers.org/rebase:5332",
 }
 
 rest_dict["TspMI"] = {
@@ -18704,6 +22442,7 @@ rest_dict["TspMI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 7191,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -18715,6 +22454,7 @@ rest_dict["TspMI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:7191",
 }
 
 rest_dict["TspRI"] = {
@@ -18724,6 +22464,7 @@ rest_dict["TspRI"] = {
     "freq": 512.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 2463,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 10,
@@ -18735,6 +22476,7 @@ rest_dict["TspRI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2463",
 }
 
 rest_dict["TssI"] = {
@@ -18744,6 +22486,7 @@ rest_dict["TssI"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 10540,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -18755,6 +22498,7 @@ rest_dict["TssI"] = {
     "size": 9,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:10540",
 }
 
 rest_dict["TstI"] = {
@@ -18764,6 +22508,7 @@ rest_dict["TstI"] = {
     "freq": 4096.0,
     "fst3": -25,
     "fst5": -8,
+    "id": 7739,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 5,
@@ -18775,6 +22520,7 @@ rest_dict["TstI"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:7739",
 }
 
 rest_dict["TsuI"] = {
@@ -18784,6 +22530,7 @@ rest_dict["TsuI"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 8158,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -18795,6 +22542,7 @@ rest_dict["TsuI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:8158",
 }
 
 rest_dict["Tth111I"] = {
@@ -18804,6 +22552,7 @@ rest_dict["Tth111I"] = {
     "freq": 4096.0,
     "fst3": -4,
     "fst5": 4,
+    "id": 1829,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -18815,6 +22564,7 @@ rest_dict["Tth111I"] = {
     "size": 9,
     "substrat": "DNA",
     "suppl": ("I", "K", "N", "Q", "V", "X"),
+    "uri": "https://identifiers.org/rebase:1829",
 }
 
 rest_dict["Tth111II"] = {
@@ -18824,6 +22574,7 @@ rest_dict["Tth111II"] = {
     "freq": 2048.0,
     "fst3": 9,
     "fst5": 17,
+    "id": 1830,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -18835,6 +22586,7 @@ rest_dict["Tth111II"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:1830",
 }
 
 rest_dict["UbaF11I"] = {
@@ -18844,6 +22596,7 @@ rest_dict["UbaF11I"] = {
     "freq": 1024.0,
     "fst3": None,
     "fst5": None,
+    "id": 11658,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -18855,6 +22608,7 @@ rest_dict["UbaF11I"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:11658",
 }
 
 rest_dict["UbaF12I"] = {
@@ -18864,6 +22618,7 @@ rest_dict["UbaF12I"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 13011,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -18875,6 +22630,7 @@ rest_dict["UbaF12I"] = {
     "size": 10,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:13011",
 }
 
 rest_dict["UbaF13I"] = {
@@ -18884,6 +22640,7 @@ rest_dict["UbaF13I"] = {
     "freq": 16384.0,
     "fst3": None,
     "fst5": None,
+    "id": 13892,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -18895,6 +22652,7 @@ rest_dict["UbaF13I"] = {
     "size": 13,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:13892",
 }
 
 rest_dict["UbaF14I"] = {
@@ -18904,6 +22662,7 @@ rest_dict["UbaF14I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 13967,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -18915,6 +22674,7 @@ rest_dict["UbaF14I"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:13967",
 }
 
 rest_dict["UbaF9I"] = {
@@ -18924,6 +22684,7 @@ rest_dict["UbaF9I"] = {
     "freq": 8192.0,
     "fst3": None,
     "fst5": None,
+    "id": 10733,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -18935,6 +22696,7 @@ rest_dict["UbaF9I"] = {
     "size": 12,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:10733",
 }
 
 rest_dict["UbaPI"] = {
@@ -18944,6 +22706,7 @@ rest_dict["UbaPI"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 4118,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -18955,6 +22718,7 @@ rest_dict["UbaPI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:4118",
 }
 
 rest_dict["UcoMSI"] = {
@@ -18964,6 +22728,7 @@ rest_dict["UcoMSI"] = {
     "freq": 4096.0,
     "fst3": -11,
     "fst5": -7,
+    "id": 38634,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -18975,6 +22740,7 @@ rest_dict["UcoMSI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:38634",
 }
 
 rest_dict["UnbI"] = {
@@ -18984,6 +22750,7 @@ rest_dict["UnbI"] = {
     "freq": 256.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 3815,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -18995,6 +22762,7 @@ rest_dict["UnbI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:3815",
 }
 
 rest_dict["Van9116I"] = {
@@ -19004,6 +22772,7 @@ rest_dict["Van9116I"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 208144,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -19015,6 +22784,7 @@ rest_dict["Van9116I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:208144",
 }
 
 rest_dict["Van91I"] = {
@@ -19024,6 +22794,7 @@ rest_dict["Van91I"] = {
     "freq": 4096.0,
     "fst3": -7,
     "fst5": 7,
+    "id": 2108,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 3,
@@ -19035,6 +22806,7 @@ rest_dict["Van91I"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("B", "K"),
+    "uri": "https://identifiers.org/rebase:2108",
 }
 
 rest_dict["VchE4II"] = {
@@ -19044,6 +22816,7 @@ rest_dict["VchE4II"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 278400,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -19055,6 +22828,7 @@ rest_dict["VchE4II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:278400",
 }
 
 rest_dict["Vdi96II"] = {
@@ -19064,6 +22838,7 @@ rest_dict["Vdi96II"] = {
     "freq": 2048.0,
     "fst3": None,
     "fst5": None,
+    "id": 235889,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -19075,6 +22850,7 @@ rest_dict["Vdi96II"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:235889",
 }
 
 rest_dict["Vha464I"] = {
@@ -19084,6 +22860,7 @@ rest_dict["Vha464I"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2113,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -19095,6 +22872,7 @@ rest_dict["Vha464I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("V",),
+    "uri": "https://identifiers.org/rebase:2113",
 }
 
 rest_dict["VneI"] = {
@@ -19104,6 +22882,7 @@ rest_dict["VneI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2116,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -19115,6 +22894,7 @@ rest_dict["VneI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2116",
 }
 
 rest_dict["VpaK11AI"] = {
@@ -19124,6 +22904,7 @@ rest_dict["VpaK11AI"] = {
     "freq": 512.0,
     "fst3": 0,
     "fst5": 0,
+    "id": 2659,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -5,
@@ -19135,6 +22916,7 @@ rest_dict["VpaK11AI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2659",
 }
 
 rest_dict["VpaK11BI"] = {
@@ -19144,6 +22926,7 @@ rest_dict["VpaK11BI"] = {
     "freq": 512.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2660,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -3,
@@ -19155,6 +22938,7 @@ rest_dict["VpaK11BI"] = {
     "size": 5,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:2660",
 }
 
 rest_dict["VspI"] = {
@@ -19164,6 +22948,7 @@ rest_dict["VspI"] = {
     "freq": 4096.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 2124,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -19174,7 +22959,8 @@ rest_dict["VspI"] = {
     "site": "ATTAAT",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "I", "R", "V"),
+    "suppl": ("B", "I", "V"),
+    "uri": "https://identifiers.org/rebase:2124",
 }
 
 rest_dict["Vtu19109I"] = {
@@ -19184,6 +22970,7 @@ rest_dict["Vtu19109I"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 97533,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -19195,6 +22982,7 @@ rest_dict["Vtu19109I"] = {
     "size": 7,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:97533",
 }
 
 rest_dict["WviI"] = {
@@ -19204,6 +22992,7 @@ rest_dict["WviI"] = {
     "freq": 2048.0,
     "fst3": 19,
     "fst5": 27,
+    "id": 33033,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 2,
@@ -19215,6 +23004,7 @@ rest_dict["WviI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:33033",
 }
 
 rest_dict["XagI"] = {
@@ -19224,6 +23014,7 @@ rest_dict["XagI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 2987,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -1,
@@ -19235,6 +23026,7 @@ rest_dict["XagI"] = {
     "size": 11,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:2987",
 }
 
 rest_dict["XapI"] = {
@@ -19244,6 +23036,7 @@ rest_dict["XapI"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 3195,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -19255,6 +23048,7 @@ rest_dict["XapI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:3195",
 }
 
 rest_dict["XbaI"] = {
@@ -19264,6 +23058,7 @@ rest_dict["XbaI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2126,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -19275,6 +23070,7 @@ rest_dict["XbaI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B", "C", "I", "J", "K", "M", "N", "Q", "R", "S", "V", "X"),
+    "uri": "https://identifiers.org/rebase:2126",
 }
 
 rest_dict["Xca85IV"] = {
@@ -19284,6 +23080,7 @@ rest_dict["Xca85IV"] = {
     "freq": 4096.0,
     "fst3": None,
     "fst5": None,
+    "id": 162608,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": None,
@@ -19295,6 +23092,7 @@ rest_dict["Xca85IV"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:162608",
 }
 
 rest_dict["XceI"] = {
@@ -19304,6 +23102,7 @@ rest_dict["XceI"] = {
     "freq": 1024.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 3092,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -19315,6 +23114,7 @@ rest_dict["XceI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:3092",
 }
 
 rest_dict["XcmI"] = {
@@ -19324,6 +23124,7 @@ rest_dict["XcmI"] = {
     "freq": 4096.0,
     "fst3": -8,
     "fst5": 8,
+    "id": 2129,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -19335,6 +23136,7 @@ rest_dict["XcmI"] = {
     "size": 15,
     "substrat": "DNA",
     "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2129",
 }
 
 rest_dict["XhoI"] = {
@@ -19344,6 +23146,7 @@ rest_dict["XhoI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2136,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -19354,7 +23157,8 @@ rest_dict["XhoI"] = {
     "site": "CTCGAG",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("B", "J", "K", "M", "N", "O", "Q", "R", "S", "X"),
+    "suppl": ("B", "J", "K", "M", "N", "O", "Q", "R", "X"),
+    "uri": "https://identifiers.org/rebase:2136",
 }
 
 rest_dict["XhoII"] = {
@@ -19364,6 +23168,7 @@ rest_dict["XhoII"] = {
     "freq": 1024.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2137,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -19375,6 +23180,7 @@ rest_dict["XhoII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2137",
 }
 
 rest_dict["XmaI"] = {
@@ -19384,6 +23190,7 @@ rest_dict["XmaI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2138,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -19394,7 +23201,8 @@ rest_dict["XmaI"] = {
     "site": "CCCGGG",
     "size": 6,
     "substrat": "DNA",
-    "suppl": ("I", "N", "R", "V"),
+    "suppl": ("I", "N", "V"),
+    "uri": "https://identifiers.org/rebase:2138",
 }
 
 rest_dict["XmaIII"] = {
@@ -19404,6 +23212,7 @@ rest_dict["XmaIII"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 2140,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -19415,6 +23224,7 @@ rest_dict["XmaIII"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:2140",
 }
 
 rest_dict["XmaJI"] = {
@@ -19424,6 +23234,7 @@ rest_dict["XmaJI"] = {
     "freq": 4096.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 4112,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -4,
@@ -19435,6 +23246,7 @@ rest_dict["XmaJI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:4112",
 }
 
 rest_dict["XmiI"] = {
@@ -19444,6 +23256,7 @@ rest_dict["XmiI"] = {
     "freq": 1024.0,
     "fst3": -2,
     "fst5": 2,
+    "id": 3828,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -19455,6 +23268,7 @@ rest_dict["XmiI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("B",),
+    "uri": "https://identifiers.org/rebase:3828",
 }
 
 rest_dict["XmnI"] = {
@@ -19464,6 +23278,7 @@ rest_dict["XmnI"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 2143,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -19474,7 +23289,8 @@ rest_dict["XmnI"] = {
     "site": "GAANNNNTTC",
     "size": 10,
     "substrat": "DNA",
-    "suppl": ("N", "R"),
+    "suppl": ("N",),
+    "uri": "https://identifiers.org/rebase:2143",
 }
 
 rest_dict["XspI"] = {
@@ -19484,6 +23300,7 @@ rest_dict["XspI"] = {
     "freq": 256.0,
     "fst3": -1,
     "fst5": 1,
+    "id": 3825,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": -2,
@@ -19495,6 +23312,7 @@ rest_dict["XspI"] = {
     "size": 4,
     "substrat": "DNA",
     "suppl": ("K",),
+    "uri": "https://identifiers.org/rebase:3825",
 }
 
 rest_dict["YkrI"] = {
@@ -19504,6 +23322,7 @@ rest_dict["YkrI"] = {
     "freq": 4.0,
     "fst3": 9,
     "fst5": 11,
+    "id": 23238,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 1,
@@ -19515,6 +23334,51 @@ rest_dict["YkrI"] = {
     "size": 1,
     "substrat": "DNA",
     "suppl": (),
+    "uri": "https://identifiers.org/rebase:23238",
+}
+
+rest_dict["Yps3606I"] = {
+    "charac": (None, None, None, None, "CGGAAG"),
+    "compsite": "(?=(?P<Yps3606I>CGGAAG))|(?=(?P<Yps3606I_as>CTTCCG))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 102781,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "CGGAAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:102781",
+}
+
+rest_dict["Yru12986I"] = {
+    "charac": (None, None, None, None, "AGGAAG"),
+    "compsite": "(?=(?P<Yru12986I>AGGAAG))|(?=(?P<Yru12986I_as>CTTCCT))",
+    "dna": None,
+    "freq": 4096.0,
+    "fst3": None,
+    "fst5": None,
+    "id": 420275,
+    "inact_temp": 65,
+    "opt_temp": 37,
+    "ovhg": None,
+    "ovhgseq": None,
+    "results": None,
+    "scd3": None,
+    "scd5": None,
+    "site": "AGGAAG",
+    "size": 6,
+    "substrat": "DNA",
+    "suppl": (),
+    "uri": "https://identifiers.org/rebase:420275",
 }
 
 rest_dict["ZraI"] = {
@@ -19524,6 +23388,7 @@ rest_dict["ZraI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 5363,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -19535,6 +23400,7 @@ rest_dict["ZraI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "N", "V"),
+    "uri": "https://identifiers.org/rebase:5363",
 }
 
 rest_dict["ZrmI"] = {
@@ -19544,6 +23410,7 @@ rest_dict["ZrmI"] = {
     "freq": 4096.0,
     "fst3": -3,
     "fst5": 3,
+    "id": 7494,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 0,
@@ -19555,6 +23422,7 @@ rest_dict["ZrmI"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I",),
+    "uri": "https://identifiers.org/rebase:7494",
 }
 
 rest_dict["Zsp2I"] = {
@@ -19564,6 +23432,7 @@ rest_dict["Zsp2I"] = {
     "freq": 4096.0,
     "fst3": -5,
     "fst5": 5,
+    "id": 2156,
     "inact_temp": 65,
     "opt_temp": 37,
     "ovhg": 4,
@@ -19575,6 +23444,7 @@ rest_dict["Zsp2I"] = {
     "size": 6,
     "substrat": "DNA",
     "suppl": ("I", "V"),
+    "uri": "https://identifiers.org/rebase:2156",
 }
 
 
@@ -19584,7 +23454,7 @@ rest_dict["Zsp2I"] = {
 suppliers = {}
 
 suppliers["B"] = (
-    "Life Technologies",
+    "Thermo Fisher Scientific",
     ["AanI", "AarI", "AasI", "AatII", "AccI", "Acc65I", "AdeI", "AfaI", "AjiI", "AjuI", "AloI", "AluI", "Alw21I", "Alw26I", "Alw44I", "ApaI", "BalI", "BamHI", "BauI", "BclI", "BcnI", "BcuI", "BfmI", "BfoI", "BfuI", "BglI", "BglII", "Bme1390I", "BmeT110I", "BmsI", "BoxI", "BpiI", "BplI", "Bpu10I", "Bpu1102I", "BseDI", "BseGI", "BseJI", "BseLI", "BseMI", "BseMII", "BseNI", "BseSI", "BseXI", "Bsh1236I", "Bsh1285I", "BshNI", "BshTI", "Bsp68I", "Bsp119I", "Bsp120I", "Bsp143I", "Bsp1407I", "BspLI", "BspOI", "BspPI", "BspTI", "Bst1107I", "BstXI", "Bsu15I", "BsuRI", "BveI", "CaiI", "Cfr9I", "Cfr10I", "Cfr13I", "Cfr42I", "ClaI", "CpoI", "CseI", "CsiI", "Csp6I", "DpnI", "DraI", "Eam1104I", "Eam1105I", "Ecl136II", "Eco24I", "Eco31I", "Eco32I", "Eco47I", "Eco47III", "Eco52I", "Eco57I", "Eco72I", "Eco81I", "Eco88I", "Eco91I", "Eco105I", "Eco130I", "Eco147I", "EcoO109I", "EcoRI", "EcoRII", "EcoRV", "EcoT22I", "EheI", "Esp3I", "FaqI", "FokI", "FspAI", "FspBI", "GsuI", "HaeIII", "HapII", "HhaI", "Hin1I", "Hin1II", "Hin6I", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "HphI", "Hpy8I", "HpyF3I", "HpyF10VI", "KflI", "KpnI", "Kpn2I", "KspAI", "LguI", "Lsp1109I", "LweI", "MauBI", "MbiI", "MboI", "MboII", "MlsI", "MluI", "MnlI", "Mph1103I", "MreI", "MspI", "MssI", "MunI", "MvaI", "Mva1269I", "NcoI", "NdeI", "NheI", "NmuCI", "NotI", "NruI", "NsbI", "OliI", "PacI", "PaeI", "PagI", "PasI", "PauI", "PdiI", "PdmI", "PfeI", "Pfl23II", "PfoI", "Ppu21I", "PscI", "Psp5II", "Psp1406I", "PspFI", "PstI", "PsuI", "PsyI", "PteI", "PvuI", "PvuII", "RruI", "RsaI", "RseI", "SacI", "SacII", "SalI", "SaqAI", "SatI", "ScaI", "SchI", "SdaI", "SduI", "SfaAI", "SfiI", "SgeI", "SgrDI", "SgsI", "SmaI", "SmiI", "SmoI", "SpeI", "SphI", "SsiI", "SspI", "SspDI", "StuI", "TaaI", "TaiI", "TaqI", "TasI", "TatI", "TauI", "Tru1I", "TscAI", "Van91I", "VspI", "XagI", "XapI", "XbaI", "XceI", "XhoI", "XmaJI", "XmiI"],
 )
 
@@ -19600,7 +23470,7 @@ suppliers["E"] = (
 
 suppliers["I"] = (
     "SibEnzyme Ltd.",
-    ["AatII", "AbsI", "Acc16I", "Acc36I", "Acc65I", "AccB1I", "AccB7I", "AccBSI", "AclI", "AclWI", "AcoI", "AcsI", "AcuI", "AfeI", "AgsI", "AhlI", "AjnI", "AluI", "AluBI", "Ama87I", "AoxI", "ApaI", "ArsI", "AsiGI", "AsiSI", "AspA2I", "AspLEI", "AspS9I", "AsuC2I", "AsuHPI", "AsuNHI", "BamHI", "BarI", "Bbv12I", "BglI", "BglII", "BisI", "BlsI", "Bme18I", "BmtI", "BmuI", "BpmI", "Bpu10I", "Bpu14I", "Bsa29I", "Bsc4I", "Bse1I", "Bse8I", "Bse21I", "Bse118I", "Bse3DI", "BsePI", "BseX3I", "BslFI", "Bso31I", "Bsp13I", "Bsp19I", "Bsp1720I", "BspACI", "BspFNI", "BssECI", "BssNAI", "BssT1I", "Bst6I", "BstACI", "BstAFI", "BstAPI", "BstAUI", "Bst2BI", "BstBAI", "Bst4CI", "BstC8I", "BstDEI", "BstDSI", "BstENI", "BstF5I", "BstFNI", "BstH2I", "BstHHI", "BstKTI", "BstMAI", "BstMBI", "BstMCI", "BstMWI", "BstNSI", "BstPAI", "BstSCI", "BstSFI", "BstSLI", "BstSNI", "Bst2UI", "BstV1I", "BstV2I", "BstXI", "BstX2I", "BsuI", "BsuRI", "BtrI", "CciI", "CciNI", "DraI", "DraIII", "DriI", "DseDI", "EcoICRI", "EcoRI", "EcoRV", "EgeI", "ErhI", "FaeI", "FaiI", "FalI", "FatI", "FauI", "FauNDI", "FblI", "FokI", "FriOI", "Fsp4HI", "GlaI", "GluI", "GsaI", "HaeIII", "HgaI", "HindII", "HindIII", "HinfI", "HpaI", "HpaII", "HpySE526I", "HspAI", "KpnI", "KroI", "Ksp22I", "Kzo9I", "LmnI", "MabI", "MalI", "MboII", "MfeI", "MhlI", "MluI", "Mly113I", "MnlI", "Mox20I", "MroNI", "MroXI", "MspI", "MspA1I", "MspR9I", "MteI", "NruI", "PalAI", "PceI", "PciI", "PciSI", "PcsI", "PctI", "PkrI", "Ple19I", "PpsI", "PsiI", "Psp6I", "Psp124BI", "PspCI", "PspEI", "PspLI", "PspN4I", "PspOMI", "PspPPI", "PspXI", "PsrI", "PstI", "PstNI", "PvuII", "RgaI", "RigI", "RsaI", "RsaNI", "Rsr2I", "SalI", "SbfI", "SetI", "SfaNI", "SfiI", "Sfr274I", "Sfr303I", "SmaI", "SmiI", "SmiMI", "SphI", "Sse9I", "SspI", "SspMI", "TaqI", "Tru9I", "TseFI", "Tth111I", "VneI", "VspI", "XbaI", "XmaI", "ZraI", "ZrmI", "Zsp2I"],
+    ["AatII", "AbsI", "Acc16I", "Acc36I", "Acc65I", "AccB1I", "AccB7I", "AccBSI", "AclI", "AclWI", "AcoI", "AcsI", "AcuI", "AfeI", "AgsI", "AhlI", "AjnI", "AluI", "AluBI", "Ama87I", "AoxI", "ApaI", "ArsI", "AsiGI", "AsiSI", "AspA2I", "AspLEI", "AspS9I", "AsuC2I", "AsuHPI", "AsuNHI", "BamHI", "BarI", "Bbv12I", "BglI", "BglII", "BisI", "BlsI", "Bme18I", "BmtI", "BmuI", "BpmI", "Bpu10I", "Bpu14I", "Bsa29I", "Bsc4I", "Bse1I", "Bse8I", "Bse21I", "Bse118I", "Bse3DI", "BsePI", "BseX3I", "BslFI", "Bso31I", "Bsp13I", "Bsp19I", "Bsp1720I", "BspACI", "BspFNI", "BssECI", "BssNAI", "BssT1I", "Bst6I", "BstACI", "BstAFI", "BstAPI", "BstAUI", "Bst2BI", "BstBAI", "Bst4CI", "BstC8I", "BstDEI", "BstDSI", "BstENI", "BstF5I", "BstFNI", "BstH2I", "BstHHI", "BstKTI", "BstMAI", "BstMBI", "BstMCI", "BstMWI", "BstNSI", "BstPAI", "BstSCI", "BstSFI", "BstSLI", "BstSNI", "Bst2UI", "BstV1I", "BstV2I", "BstXI", "BstX2I", "BsuI", "BsuRI", "BtrI", "CciI", "CciNI", "DraI", "DraIII", "DriI", "DseDI", "EcoICRI", "EcoRI", "EcoRV", "EgeI", "ErhI", "FaeI", "FaiI", "FalI", "FatI", "FauI", "FauNDI", "FblI", "FokI", "FriOI", "Fsp4HI", "GlaI", "GluI", "GsaI", "HaeIII", "HgaI", "HindII", "HindIII", "HinfI", "HpaI", "HpaII", "HpySE526I", "HspAI", "KpnI", "KroI", "KroNI", "Ksp22I", "Kzo9I", "LmnI", "MabI", "MalI", "MboII", "MfeI", "MhlI", "MluI", "Mly113I", "MnlI", "Mox20I", "MroNI", "MroXI", "MspI", "MspA1I", "MspR9I", "MteI", "NruI", "PalAI", "PceI", "PciI", "PciSI", "PcsI", "PctI", "PkrI", "Ple19I", "PpsI", "PsiI", "Psp6I", "Psp124BI", "PspCI", "PspEI", "PspLI", "PspN4I", "PspOMI", "PspPPI", "PspXI", "PsrI", "PstI", "PstNI", "PvuII", "RgaI", "RigI", "RsaI", "RsaNI", "Rsr2I", "SalI", "SbfI", "SetI", "SfaNI", "SfiI", "Sfr274I", "Sfr303I", "SmaI", "SmiI", "SmiMI", "SphI", "Sse9I", "SspI", "SspMI", "TaqI", "Tru9I", "TseFI", "Tth111I", "VneI", "VspI", "XbaI", "XmaI", "ZraI", "ZrmI", "Zsp2I"],
 )
 
 suppliers["J"] = (
@@ -19620,7 +23490,7 @@ suppliers["M"] = (
 
 suppliers["N"] = (
     "New England Biolabs",
-    ["AatII", "AbaSI", "AccI", "Acc65I", "AciI", "AclI", "AcuI", "AfeI", "AflII", "AflIII", "AgeI", "AhdI", "AleI", "AluI", "AlwI", "AlwNI", "ApaI", "ApaLI", "ApeKI", "ApoI", "AscI", "AseI", "AsiSI", "AvaI", "AvaII", "AvrII", "BaeI", "BaeGI", "BamHI", "BanI", "BanII", "BbsI", "BbvI", "BbvCI", "BccI", "BceAI", "BcgI", "BciVI", "BclI", "BcoDI", "BfaI", "BfuAI", "BglI", "BglII", "BlpI", "BmgBI", "BmrI", "BmtI", "BpmI", "Bpu10I", "BpuEI", "BsaI", "BsaAI", "BsaBI", "BsaHI", "BsaJI", "BsaWI", "BsaXI", "BseRI", "BseYI", "BsgI", "BsiEI", "BsiHKAI", "BsiWI", "BslI", "BsmI", "BsmAI", "BsmBI", "BsmFI", "BsoBI", "Bsp1286I", "BspCNI", "BspDI", "BspEI", "BspHI", "BspMI", "BspQI", "BsrI", "BsrBI", "BsrDI", "BsrFI", "BsrGI", "BssHII", "BssSI", "BstAPI", "BstBI", "BstEII", "BstNI", "BstUI", "BstXI", "BstYI", "BstZ17I", "Bsu36I", "BtgI", "BtgZI", "BtsI", "BtsIMutI", "BtsCI", "Cac8I", "ClaI", "CspCI", "CviAII", "CviKI_1", "CviQI", "DdeI", "DpnI", "DpnII", "DraI", "DraIII", "DrdI", "EaeI", "EagI", "EarI", "EciI", "EcoNI", "EcoO109I", "EcoRI", "EcoRV", "Eco53kI", "Esp3I", "FatI", "FauI", "Fnu4HI", "FokI", "FseI", "FspI", "FspEI", "HaeII", "HaeIII", "HgaI", "HhaI", "HinP1I", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "HphI", "Hpy99I", "Hpy166II", "Hpy188I", "Hpy188III", "HpyAV", "HpyCH4III", "HpyCH4IV", "HpyCH4V", "KasI", "KpnI", "LpnPI", "MboI", "MboII", "MfeI", "MluI", "MluCI", "MlyI", "MmeI", "MnlI", "MscI", "MseI", "MslI", "MspI", "MspA1I", "MspJI", "MwoI", "NaeI", "NarI", "NciI", "NcoI", "NdeI", "NgoMIV", "NheI", "NlaIII", "NlaIV", "NmeAIII", "NotI", "NruI", "NsiI", "NspI", "PacI", "PaeR7I", "PciI", "PflFI", "PflMI", "PleI", "PluTI", "PmeI", "PmlI", "PpuMI", "PshAI", "PsiI", "PspGI", "PspOMI", "PspXI", "PstI", "PvuI", "PvuII", "RsaI", "RsrII", "SacI", "SacII", "SalI", "SapI", "Sau96I", "Sau3AI", "SbfI", "ScaI", "ScrFI", "SexAI", "SfaNI", "SfcI", "SfiI", "SfoI", "SgrAI", "SmaI", "SmlI", "SnaBI", "SpeI", "SphI", "SrfI", "SspI", "StuI", "StyI", "StyD4I", "SwaI", "TaqI", "TfiI", "TseI", "Tsp45I", "TspMI", "TspRI", "Tth111I", "XbaI", "XcmI", "XhoI", "XmaI", "XmnI", "ZraI"],
+    ["AatII", "AbaSI", "AccI", "Acc65I", "AciI", "AclI", "AcuI", "AfeI", "AflII", "AflIII", "AgeI", "AhdI", "AleI", "AluI", "AlwI", "AlwNI", "ApaI", "ApaLI", "ApeKI", "ApoI", "AscI", "AseI", "AsiSI", "AvaI", "AvaII", "AvrII", "BaeI", "BaeGI", "BamHI", "BanI", "BanII", "BbsI", "BbvI", "BbvCI", "BccI", "BceAI", "BcgI", "BciVI", "BclI", "BcoDI", "BfaI", "BfuAI", "BglI", "BglII", "BlpI", "BmgBI", "BmrI", "BmtI", "BpmI", "Bpu10I", "BpuEI", "BsaI", "BsaAI", "BsaBI", "BsaHI", "BsaJI", "BsaWI", "BsaXI", "BseRI", "BseYI", "BsgI", "BsiEI", "BsiHKAI", "BsiWI", "BslI", "BsmI", "BsmAI", "BsmBI", "BsmFI", "BsoBI", "Bsp1286I", "BspCNI", "BspDI", "BspEI", "BspHI", "BspMI", "BspQI", "BsrI", "BsrBI", "BsrDI", "BsrFI", "BsrGI", "BssHII", "BssSI", "BstAPI", "BstBI", "BstEII", "BstNI", "BstUI", "BstXI", "BstYI", "BstZ17I", "Bsu36I", "BtgI", "BtgZI", "BtsI", "BtsIMutI", "BtsCI", "Cac8I", "ClaI", "CspCI", "CviAII", "CviKI_1", "CviQI", "DdeI", "DpnI", "DpnII", "DraI", "DraIII", "DrdI", "EaeI", "EagI", "EarI", "EciI", "EcoNI", "EcoO109I", "EcoRI", "EcoRV", "Eco53kI", "Esp3I", "FatI", "FauI", "Fnu4HI", "FokI", "FseI", "FspI", "FspEI", "HaeII", "HaeIII", "HgaI", "HhaI", "HinP1I", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "HphI", "Hpy99I", "Hpy166II", "Hpy188I", "Hpy188III", "HpyAV", "HpyCH4III", "HpyCH4IV", "HpyCH4V", "KasI", "KpnI", "LpnPI", "MboI", "MboII", "MfeI", "MluI", "MluCI", "MlyI", "MmeI", "MnlI", "MscI", "MseI", "MslI", "MspI", "MspA1I", "MspJI", "MwoI", "NaeI", "NarI", "NciI", "NcoI", "NdeI", "NgoMIV", "NheI", "NlaIII", "NlaIV", "NmeAIII", "NotI", "NruI", "NsiI", "NspI", "PacI", "PaeR7I", "PaqCI", "PciI", "PflFI", "PflMI", "PleI", "PluTI", "PmeI", "PmlI", "PpuMI", "PshAI", "PsiI", "PspGI", "PspOMI", "PspXI", "PstI", "PvuI", "PvuII", "RsaI", "RsrII", "SacI", "SacII", "SalI", "SapI", "Sau96I", "Sau3AI", "SbfI", "ScaI", "ScrFI", "SexAI", "SfaNI", "SfcI", "SfiI", "SfoI", "SgrAI", "SmaI", "SmlI", "SnaBI", "SpeI", "SphI", "SrfI", "SspI", "StuI", "StyI", "StyD4I", "SwaI", "TaqI", "TfiI", "TseI", "Tsp45I", "TspMI", "TspRI", "Tth111I", "XbaI", "XcmI", "XhoI", "XmaI", "XmnI", "ZraI"],
 )
 
 suppliers["O"] = (
@@ -19635,12 +23505,12 @@ suppliers["Q"] = (
 
 suppliers["R"] = (
     "Promega Corporation",
-    ["AccI", "AccIII", "AgeI", "AluI", "ApaI", "AvaII", "BalI", "BamHI", "BanI", "BclI", "BglI", "BglII", "BssHII", "BstEII", "BstXI", "BstZI", "CfoI", "ClaI", "CspI", "DdeI", "DpnI", "DraI", "Eco47III", "EcoICRI", "EcoRI", "EcoRV", "HaeII", "HaeIII", "HhaI", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "Hsp92I", "Hsp92II", "KpnI", "MboI", "MboII", "MluI", "MspI", "MspA1I", "NarI", "NciI", "NcoI", "NdeI", "NheI", "NotI", "NruI", "NsiI", "PstI", "PvuI", "PvuII", "RsaI", "SacI", "SacII", "SalI", "Sau3AI", "ScaI", "SfiI", "SgfI", "SmaI", "SnaBI", "SpeI", "SphI", "SspI", "StuI", "TaqI", "Tru9I", "VspI", "XbaI", "XhoI", "XmaI", "XmnI"],
+    ["AgeI", "AluI", "ApaI", "BamHI", "BclI", "BglI", "BglII", "BstZI", "CfoI", "ClaI", "CspI", "DdeI", "DpnI", "EcoRI", "EcoRV", "HaeIII", "HhaI", "HindIII", "HinfI", "HpaII", "Hsp92I", "Hsp92II", "KpnI", "MboI", "MluI", "MspI", "NcoI", "NdeI", "NheI", "NotI", "PstI", "PvuI", "RsaI", "SacI", "SacII", "SalI", "ScaI", "SgfI", "SmaI", "SpeI", "SphI", "TaqI", "XbaI", "XhoI"],
 )
 
 suppliers["S"] = (
     "Sigma Chemical Corporation",
-    ["AflIII", "AluI", "ApaI", "Asp718I", "BamHI", "BclI", "BfrI", "BglII", "BlnI", "BsmI", "CfoI", "ClaI", "DdeI", "DpnI", "DraI", "EclXI", "Eco47III", "EcoRI", "EcoRV", "HaeIII", "HindII", "HindIII", "HpaI", "KpnI", "KspI", "MaeIII", "MluI", "MunI", "NcoI", "NdeI", "NheI", "NotI", "NruI", "NsiI", "PstI", "PvuI", "PvuII", "RsaI", "SacI", "SalI", "ScaI", "SfiI", "SfuI", "SmaI", "SpeI", "SphI", "StuI", "SwaI", "TaqI", "XbaI", "XhoI"],
+    ["AflIII", "AluI", "Asp718I", "BamHI", "BclI", "BfrI", "BglII", "BlnI", "BsmI", "CfoI", "ClaI", "DdeI", "DpnI", "DraI", "EclXI", "Eco47III", "EcoRI", "EcoRV", "HaeIII", "HindII", "HindIII", "HpaI", "KpnI", "KspI", "MaeIII", "MluI", "MunI", "NcoI", "NdeI", "NheI", "NotI", "NruI", "NsiI", "PstI", "PvuI", "PvuII", "SacI", "SfuI", "SmaI", "SpeI", "SwaI", "XbaI"],
 )
 
 suppliers["V"] = (
@@ -19650,7 +23520,7 @@ suppliers["V"] = (
 
 suppliers["X"] = (
     "EURx Ltd.",
-    ["AccI", "AcvI", "AluI", "ApaI", "AvaI", "AvaII", "BalI", "BamHI", "BanII", "BglI", "BglII", "BsiHKCI", "BspANI", "BspMAI", "BspTNI", "BssHII", "BstXI", "BsuTUI", "ClaI", "CviJI", "DdeI", "DpnI", "DraI", "EcoRI", "EcoRV", "FokI", "HaeIII", "HhaI", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "KpnI", "MboI", "MboII", "MluI", "MmeI", "MnlI", "MspI", "NarI", "NcoI", "NdeI", "NheI", "NotI", "NruI", "NsiI", "PinAI", "PstI", "PvuI", "PvuII", "RsaI", "RsrII", "SacI", "SacII", "SalI", "Sau3AI", "ScaI", "SfiI", "SinI", "SmaI", "SpeI", "SphI", "SspI", "StuI", "TaqI", "TaqII", "TspDTI", "TspGWI", "Tth111I", "XbaI", "XhoI"],
+    ["AccI", "AcvI", "AluI", "ApaI", "AvaI", "AvaII", "BalI", "BamHI", "BanII", "BglI", "BglII", "BsiHKCI", "BspANI", "BspMAI", "BspTNI", "BssHII", "BstXI", "BsuTUI", "ClaI", "CviJI", "DdeI", "DpnI", "DraI", "EcoRI", "EcoRV", "FokI", "HaeIII", "HhaI", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "KpnI", "MboI", "MboII", "MmeI", "MnlI", "MspI", "NarI", "NcoI", "NdeI", "NheI", "NotI", "NruI", "NsiI", "PinAI", "PstI", "PvuI", "PvuII", "RsaI", "RsrII", "SacI", "SacII", "SalI", "Sau3AI", "ScaI", "SfiI", "SinI", "SmaI", "SpeI", "SphI", "SspI", "StuI", "TaqI", "TaqII", "TspDTI", "TspGWI", "Tth111I", "XbaI", "XhoI"],
 )
 
 suppliers["Y"] = (
@@ -19688,7 +23558,7 @@ typedict["type144"] = (
 
 typedict["type146"] = (
     ("NonPalindromic", "NoCut", "Unknown", "NotDefined", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-    ["Aba6411II", "AbaB8342IV", "AbaCIII", "Abr4036II", "Acc65V", "AchA6III", "Aco12261II", "AcoY31II", "Adh6U21I", "AhyRBAHI", "AhyYL17I", "Aod1I", "Asp103I", "Asp337I", "AspAMDIV", "AspDUT2V", "AspJHL3II", "AspNIH4III", "AspSLV7III", "Asp114pII", "Asu14238IV", "AteTI", "Awo1030IV", "Bag18758I", "BanLI", "Bau1417V", "Bbr52II", "Bbr57III", "Bbr7017II", "Bbr7017III", "BbuB31I", "BbuB31II", "Bce3081I", "BfaSII", "Bga514I", "BkrAM31DI", "Ble402II", "BloAII", "BscGI", "Bsp460III", "Bsp3004IV", "BspNCI", "Bve1B23I", "Cal14237I", "CalB3II", "Cau10061II", "Cba13II", "Cba16038I", "Cbo67071IV", "Cch467III", "Cco14983V", "Cco14983VI", "CcrNAIII", "Cdi11397I", "Cdu23823II", "CfrMH13II", "CfrMH16VI", "Cfupf3II", "Cgl13032I", "Cgl13032II", "Cje265V", "Cje54107III", "CjeFIII", "CjeFV", "CjeNII", "CjeNV", "Cla11845III", "Cly7489II", "Cma23826I", "Csp2014I", "DrdII", "DvuIII", "Ecl234I", "Ecl35734I", "Eco4465II", "Eco43896II", "EcoE1140I", "EcoHSI", "EcoMVII", "EcoNIH6II", "Eli8509II", "EsaSSI", "Esp3007I", "Fba202Z8II", "Fco1691IV", "FspPK15I", "FtnUV", "GauT27I", "Gba708II", "HbaII", "HdeNY26I", "HdeZA17I", "Hpy99XIII", "Hpy99XIV", "Hpy99XIV_mut1", "Hpy99XXII", "Hpy300XI", "HpyAXIV", "HpyAXVI_mut1", "HpyAXVI_mut2", "HpyAXVIII", "HpyUM032XIII_mut1", "HpyUM032XIV", "HpyUM037X", "Hso63373III", "HspMHR1II", "Jma19592I", "Jma19592II", "Jsp2502II", "Kor51II", "Kpn156V", "Kpn327I", "KpnNH25III", "KpnNIH30III", "KpnNIH50I", "Lba2029III", "Lbr124II", "Lde4408II", "LlaG50I", "Lmo370I", "Lmo911II", "Lpl1004II", "Lra68I", "LsaDS4I", "Lsp48III", "Lsp6406VI", "Mba11I", "Mcr10I", "MkaDII", "Mlu211III", "MspI7II", "MspI7IV", "MspSC27II", "MtuHN878II", "Nal45188II", "Nbr128II", "NhaXI", "NpeUS61II", "ObaBS10I", "OgrI", "OspHL35III", "PacIII", "Pac19842II", "PaePA99III", "Pal408I", "Pba2294I", "PcaII", "Pcr308II", "Pdi8503III", "Pdu1735I", "PflPt14I", "PfrJS12IV", "PfrJS12V", "PfrJS15III", "Pin17FIII", "PinP23II", "PinP59III", "PliMI", "PpiP13II", "Pse18267I", "Psp0357II", "Pst145I", "Pst273I", "Pst14472I", "Rba2021I", "RdeGBI", "RflFIII", "Rmu369III", "RpaTI", "Rsp008IV", "Rsp008V", "Rsp531II", "RspPBTS2III", "Rtr1953I", "Saf8902III", "Sag901I", "Sau64037IV", "Sba460II", "Sbo46I", "ScoDS2II", "Sen17963III", "SenA1673III", "SenSARA26III", "SenTFIV", "SgrAII", "SmaUMH5I", "SmaUMH8I", "Sna507VIII", "Sno506I", "Spe19205IV", "SpnRII", "SpoDI", "Ssp714II", "Ssp6803IV", "SspJOR1II", "Sth20745III", "SthSt3II", "SurP32aII", "TpyTP2I", "TspARh3I", "Van9116I", "VchE4II", "Vdi96II", "Vtu19109I", "Xca85IV"],
+    ["Aba6411II", "Aba13301I", "AbaB8342IV", "AbaCIII", "AbaPBA3II", "Abr4036II", "AccIX", "AccX", "Acc65V", "AchA6III", "Aco12261II", "AcoY31II", "Adh6U21I", "AhyRBAHI", "AhyYL17I", "Aod1I", "Asl11923II", "Asp103I", "Asp337I", "AspAMDIV", "AspDUT2V", "AspJHL3II", "AspNIH4III", "AspSLV7III", "Asp114pII", "Asu14238IV", "AteTI", "Awo1030IV", "Bag18758I", "BanLI", "Bau1417V", "Bbr52II", "Bbr57III", "Bbr7017II", "Bbr7017III", "BbuB31I", "BbuB31II", "Bce3081I", "Bce10661III", "Bco11035III", "BfaSII", "Bga514I", "BkrAM31DI", "Ble402II", "BloAII", "Bps6700III", "BscGI", "Bsp460III", "Bsp3004IV", "BspNCI", "Bve1B23I", "Cal14237I", "CalB3II", "Cau10061II", "Cba13II", "Cba16038I", "Cbo67071IV", "Cch467III", "Cco11366VI", "Cco11437V", "Cco14983V", "Cco14983VI", "CcrNAIII", "Cdi11397I", "Cdi13746V", "Cdi13750III", "Cdu23823II", "Cfa8380I", "CfrMH13II", "CfrMH16VI", "Cfupf3II", "Cgl13032I", "Cgl13032II", "Cje265V", "Cje54107III", "CjeFIII", "CjeFV", "CjeNII", "CjeNV", "Cko11077IV", "Cla11845III", "Cly7489II", "Cpe2837III", "Cpe10578V", "Cpe13170II", "Cre7908I", "Csa9238II", "Csp2014I", "Dpi3069I", "Dpi3084I", "Dpi3090II", "DrdII", "DrdVI", "DrdVIII", "DspS02II", "DvuIII", "Ecl234I", "Ecl35734I", "Eco4174I", "Eco4465II", "Eco8164I", "Eco9009II", "Eco9020I", "Eco9035I", "Eco9699II", "Eco43896II", "EcoE1140I", "EcoHSI", "EcoMVII", "EcoNIH6II", "Ehi46392I", "Eli8509II", "ErhG4T10I", "EsaSSI", "Esp3007I", "Fba202Z8II", "Fco1691IV", "Fna13121I", "Fnu11326II", "Fnu11326IV", "FspPK15I", "FtnUV", "GauT27I", "Gba708II", "Gru56503II", "HbaII", "Hca13221V", "HdeNY26I", "HdeZA17I", "Hpy99XIII", "Hpy99XIV", "Hpy99XIV_mut1", "Hpy99XXII", "Hpy300XI", "HpyAXIV", "HpyAXVI_mut1", "HpyAXVI_mut2", "HpyAXVIII", "HpyAS001VI", "HpyLIM6XII", "HpyPU007XIX", "HpyUM032XIII_mut1", "HpyUM032XIV", "HpyUM037X", "Hso63373III", "HspMHR1II", "Jma19592I", "Jma19592II", "Jsp2502II", "Kas9737III", "Kor51II", "Kpn156V", "Kpn327I", "Kpn9178I", "Kpn9644II", "KpnNH25III", "KpnNIH30III", "KpnNIH50I", "Kro7512II", "Lba2029III", "Lbr124II", "Lde4408II", "LlaG50I", "Lmo370I", "Lmo911II", "Lpl1004II", "Lpn11417II", "Lpn12272I", "Lra68I", "LsaDS4I", "Lsp48III", "Lsp6406VI", "Mba11I", "Mch946II", "Mch10819I", "MkaDII", "Mla10359I", "Mlu211III", "MspF392I", "MspI7II", "MspI7IV", "MspSC27II", "MtuHN878II", "Nal45188II", "Nbr128II", "NhaXI", "NpeUS61II", "NspES21II", "ObaBS10I", "OgrI", "OspHL35III", "PacIII", "Pac19842II", "Pae8506I", "Pae10662III", "PaePA99III", "Pal408I", "Pba2294I", "Pbu13063II", "PcaII", "Pcr308II", "Pdi8503III", "Pdu1735I", "Pfl3756II", "Pfl10783II", "PflPt14I", "PfrJS12IV", "PfrJS12V", "PfrJS15III", "Pin17FIII", "PinP23II", "PinP59III", "PliMI", "Pme10899I", "PpiP13II", "Pru8113I", "Pse18267I", "Psp0357II", "PspD7DII", "PspR84I", "Pst145I", "Pst273I", "Pst14472I", "Ran11014IV", "Rba2021I", "RdeGBI", "Rer8036II", "RflFIII", "Rgo13296IV", "Rho5650I", "Rkr11038I", "Rmu369III", "RpaTI", "Rsp008IV", "Rsp008V", "Rsp531II", "RspPBTS2III", "Rtr1953I", "Saf8902III", "Sag901I", "Sau1803III", "Sau5656II", "Sau64037IV", "SauMJ015III", "Sba460II", "Sbo46I", "ScoDS2II", "Sdy5370I", "Sdy7136I", "Sdy9603I", "Sen5794III", "Sen6480IV", "Sen17963III", "SenA1673III", "SenSARA26III", "SenTFIV", "Sep11964I", "Sfl13829III", "Sgr7807I", "SgrAII", "Sma325I", "Sma10259II", "SmaUMH5I", "SmaUMH8I", "Sna507VIII", "Sno506I", "Spe19205IV", "SpnRII", "SpoDI", "Ssp714II", "Ssp6803IV", "SspJOR1II", "Sth20745III", "SthSt3II", "SurP32aII", "TpyTP2I", "TspARh3I", "Van9116I", "VchE4II", "Vdi96II", "Vtu19109I", "Xca85IV", "Yps3606I", "Yru12986I"],
 )
 
 typedict["type148"] = (
@@ -19698,7 +23568,7 @@ typedict["type148"] = (
 
 typedict["type2"] = (
     ("Palindromic", "NoCut", "Unknown", "NotDefined", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-    ["AvaIII", "HpyUM032XIII", "Hso63250IV", "MjaIV"],
+    ["AvaIII", "Cin11811I", "HpyUM032XIII", "Hso63250IV", "MjaIV"],
 )
 
 typedict["type209"] = (
@@ -19748,12 +23618,17 @@ typedict["type226"] = (
 
 typedict["type227"] = (
     ("NonPalindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AarI", "Acc36I", "AclWI", "BbsI", "BmsI", "BpiI", "BseXI", "BslFI", "Bso31I", "BspPI", "BspQI", "BspTNI", "Bst6I", "BstMAI", "BstV1I", "BstV2I", "BveI", "CseI", "Eam1104I", "FaqI", "FauI", "FspEI", "LguI", "LpnPI", "LweI", "MspJI", "PciSI", "PpsI", "SfaNI"],
+    ["AarI", "Acc36I", "AclWI", "BbsI", "BmsI", "BpiI", "BseXI", "BslFI", "Bso31I", "BspPI", "BspQI", "BspTNI", "Bst6I", "BstMAI", "BstV1I", "BstV2I", "BveI", "CseI", "Eam1104I", "FaqI", "FauI", "FspEI", "LguI", "LpnPI", "LweI", "MspJI", "PaqCI", "PciSI", "PpsI", "SfaNI"],
 )
 
 typedict["type228"] = (
     ("NonPalindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
     ["AceIII", "AspBHI", "BbvII", "BcefI", "BinI", "BspD6I", "EcoBLMcrX", "Ksp632I", "SgrTI", "Sth132I"],
+)
+
+typedict["type234"] = (
+    ("NonPalindromic", "OneCut", "Ov3", "Defined", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
+    ["BscXI"],
 )
 
 typedict["type235"] = (
@@ -19768,7 +23643,7 @@ typedict["type237"] = (
 
 typedict["type238"] = (
     ("NonPalindromic", "OneCut", "Ov3", "Ambiguous", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-    ["AmaCSI", "ApyPI", "AquII", "AquIII", "AquIV", "BfiI", "BsbI", "CchII", "CchIII", "CdpI", "CjeNIII", "CstMI", "DraRI", "DrdIV", "MaqI", "NlaCI", "NmeA6CIII", "PlaDI", "PspOMII", "PspPRI", "RceI", "RdeGBII", "RlaII", "RpaI", "RpaBI", "RpaB5I", "SdeAI", "SstE37I", "TaqIII", "TsoI", "Tth111II", "WviI"],
+    ["AmaCSI", "ApyPI", "AquII", "AquIII", "AquIV", "BfiI", "BsbI", "CchII", "CchIII", "CdpI", "CjeNIII", "CstMI", "DraRI", "DrdIV", "DrdV", "MaqI", "NlaCI", "NmeA6CIII", "PlaDI", "PspOMII", "PspPRI", "RceI", "RdeGBII", "RlaII", "RpaI", "RpaBI", "RpaB5I", "SdeAI", "SstE37I", "TaqIII", "TkoI", "TkoII", "TsoI", "Tth111II", "WviI"],
 )
 
 typedict["type239"] = (
@@ -19788,7 +23663,7 @@ typedict["type274"] = (
 
 typedict["type285"] = (
     ("NonPalindromic", "TwoCuts", "Ov3", "Ambiguous", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AloI", "BcgI", "CspCI"],
+    ["AloI", "BaeI", "BcgI", "CspCI"],
 )
 
 typedict["type286"] = (
@@ -19798,7 +23673,7 @@ typedict["type286"] = (
 
 typedict["type287"] = (
     ("NonPalindromic", "TwoCuts", "Ov3", "Ambiguous", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AjuI", "ArsI", "BaeI", "BarI", "BsaXI", "PsrI"],
+    ["AjuI", "ArsI", "BarI", "BsaXI", "PsrI"],
 )
 
 typedict["type288"] = (
@@ -19813,7 +23688,7 @@ typedict["type4"] = (
 
 typedict["type65"] = (
     ("Palindromic", "OneCut", "Blunt", "Defined", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AleI", "AluI", "AluBI", "BalI", "BsaAI", "BstC8I", "BstUI", "BsuRI", "Cac8I", "CviJI", "DraI", "EcoRV", "FspI", "HaeIII", "HincII", "HindII", "HpaI", "Hpy8I", "MspA1I", "NaeI", "NlaIV", "NruI", "PmlI", "PshAI", "PsiI", "PvuII", "RsaI", "ScaI", "SfoI", "SmaI", "SnaBI", "SspI", "SwaI", "XmnI"],
+    ["AccII", "AleI", "AluI", "AluBI", "BalI", "BsaAI", "BstC8I", "BstUI", "BsuRI", "Cac8I", "CviJI", "DraI", "EcoRV", "FspI", "HaeIII", "HincII", "HindII", "HpaI", "Hpy8I", "MspA1I", "NaeI", "NlaIV", "NruI", "PmlI", "PshAI", "PsiI", "PvuII", "RsaI", "ScaI", "SfoI", "SmaI", "SnaBI", "SspI", "SwaI", "XmnI"],
 )
 
 typedict["type66"] = (
@@ -19823,17 +23698,17 @@ typedict["type66"] = (
 
 typedict["type67"] = (
     ("Palindromic", "OneCut", "Blunt", "Defined", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AanI", "AccII", "Acc16I", "AcvI", "AfaI", "AfeI", "Aor51HI", "Asp700I", "BbrPI", "BmcAI", "BmiI", "BoxI", "BsaBI", "Bse8I", "BseJI", "Bsh1236I", "BshFI", "BsnI", "Bsp68I", "BspANI", "BspFNI", "BspLI", "BssNAI", "Bst1107I", "BstBAI", "BstFNI", "BstPAI", "BstSNI", "BstZ17I", "BtuMI", "CviKI_1", "DinI", "DpnI", "Ecl136II", "Eco32I", "Eco47III", "Eco72I", "Eco105I", "Eco147I", "EcoICRI", "Eco53kI", "EgeI", "EheI", "FaiI", "FspAI", "GlaI", "Hpy166II", "HpyCH4V", "KspAI", "MalI", "MlsI", "MluNI", "Mox20I", "MroXI", "MscI", "MslI", "Msp20I", "MssI", "MvnI", "NsbI", "OliI", "PceI", "PdiI", "PdmI", "PmaCI", "PmeI", "Ppu21I", "PspCI", "PspN4I", "RruI", "RseI", "SmiI", "SmiMI", "SrfI", "SseBI", "StuI", "ZraI", "ZrmI"],
+    ["AanI", "Acc16I", "AcvI", "AfaI", "AfeI", "Aor51HI", "Asp700I", "BbrPI", "BmcAI", "BmiI", "BoxI", "BsaBI", "Bse8I", "BseJI", "Bsh1236I", "BshFI", "BsnI", "Bsp68I", "BspANI", "BspFNI", "BspLI", "BssNAI", "Bst1107I", "BstBAI", "BstFNI", "BstPAI", "BstSNI", "BstZ17I", "BtuMI", "CviKI_1", "DinI", "DpnI", "Ecl136II", "Eco32I", "Eco47III", "Eco72I", "Eco105I", "Eco147I", "EcoICRI", "Eco53kI", "EgeI", "EheI", "FaiI", "FspAI", "GlaI", "Hpy166II", "HpyCH4V", "KroNI", "KspAI", "MalI", "MlsI", "MluNI", "Mox20I", "MroXI", "MscI", "MslI", "Msp20I", "MssI", "MvnI", "NsbI", "OliI", "PceI", "PdiI", "PdmI", "PmaCI", "PmeI", "Ppu21I", "PspCI", "PspN4I", "RruI", "RseI", "SmiI", "SmiMI", "SrfI", "SseBI", "StuI", "ZraI", "ZrmI"],
 )
 
 typedict["type68"] = (
     ("Palindromic", "OneCut", "Blunt", "Defined", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
-    ["AhaIII", "HaeI", "LpnI", "MstI", "NspBII", "Pfl8569I", "SciI", "Sth302II"],
+    ["AhaIII", "HaeI", "LpnI", "MstI", "NspBII", "Pfl8569I", "SciI", "Sth302II", "TagI"],
 )
 
 typedict["type77"] = (
     ("Palindromic", "OneCut", "Ov5", "Defined", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AccIII", "Acc65I", "AclI", "AflII", "AgeI", "ApaLI", "ApoI", "AscI", "AseI", "BamHI", "BclI", "BglII", "BsaHI", "BsaWI", "BseCI", "BsiWI", "BspHI", "BsrFI", "BssHII", "BstYI", "Bsu15I", "Cfr9I", "Cfr10I", "ClaI", "CviAII", "CviQI", "DpnII", "EaeI", "EagI", "EcoRI", "FatI", "HapII", "HinP1I", "HindIII", "HpaII", "HpyCH4IV", "HspAI", "KasI", "Kpn2I", "MboI", "MfeI", "MluI", "MseI", "MspI", "MunI", "NcoI", "NdeI", "NgoMIV", "NheI", "NotI", "PaeR7I", "SalI", "Sau3AI", "SgrAI", "Sse9I", "TaqI", "TspMI", "VspI", "XbaI", "XhoI", "XmaI"],
+    ["AccIII", "Acc65I", "AclI", "AflII", "AgeI", "ApaLI", "ApoI", "AscI", "AseI", "BamHI", "BclI", "BglII", "BsaHI", "BsaWI", "BseCI", "BsiWI", "BspHI", "BsrFI", "BssHII", "BstYI", "Bsu15I", "Cfr9I", "Cfr10I", "ClaI", "CviAII", "CviQI", "DpnII", "EaeI", "EagI", "EcoRI", "FatI", "HapII", "HinP1I", "HindIII", "HpaII", "HpyCH4IV", "HspAI", "KasI", "Kpn2I", "MboI", "MfeI", "MluI", "MseI", "MspI", "MunI", "NcoI", "NdeI", "NgoMIV", "NheI", "NotI", "PaeR7I", "PspOMI", "SalI", "Sau3AI", "SgrAI", "SpeI", "Sse9I", "TaqI", "TspMI", "VspI", "XbaI", "XhoI", "XmaI"],
 )
 
 typedict["type78"] = (
@@ -19843,7 +23718,7 @@ typedict["type78"] = (
 
 typedict["type79"] = (
     ("Palindromic", "OneCut", "Ov5", "Defined", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AbsI", "AcoI", "AcsI", "AcyI", "AhlI", "Alw44I", "Aor13HI", "AoxI", "AsiGI", "Asp718I", "AspA2I", "AsuII", "AsuNHI", "AvrII", "BcuI", "BfaI", "BfrI", "BlnI", "Bpu14I", "Bsa29I", "Bse118I", "BseAI", "BsePI", "BseX3I", "BshTI", "BshVI", "BsiSI", "Bsp13I", "Bsp19I", "Bsp119I", "Bsp120I", "Bsp143I", "Bsp1407I", "BspDI", "BspEI", "BspTI", "BspT104I", "BsrGI", "BssAI", "BssMI", "BssNI", "BstACI", "BstAFI", "BstAUI", "BstBI", "BstMBI", "BstX2I", "BstZI", "BsuTUI", "CciI", "CciNI", "Csp6I", "CspAI", "EclXI", "Eco52I", "FauNDI", "FbaI", "FspBI", "Hin1I", "Hin6I", "HpySE526I", "Hsp92I", "KroI", "Ksp22I", "Kzo9I", "MaeI", "MaeII", "MauBI", "MflI", "MluCI", "Mly113I", "MreI", "MroI", "MroNI", "MspCI", "NarI", "NdeII", "NspV", "PagI", "PalAI", "PauI", "PciI", "Pfl23II", "PinAI", "PscI", "PshBI", "Psp1406I", "PspLI", "PspOMI", "PspXI", "PsuI", "PteI", "RsaNI", "SaqAI", "Sfr274I", "SfuI", "SgrDI", "SgsI", "SlaI", "SpeI", "SspDI", "SspMI", "TasI", "TatI", "Tru1I", "Tru9I", "Vha464I", "VneI", "XapI", "XmaJI", "XspI"],
+    ["AbsI", "AcoI", "AcsI", "AcyI", "AhlI", "Alw44I", "Aor13HI", "AoxI", "AsiGI", "Asp718I", "AspA2I", "AsuII", "AsuNHI", "AvrII", "BcuI", "BfaI", "BfrI", "BlnI", "Bpu14I", "Bsa29I", "Bse118I", "BseAI", "BsePI", "BseX3I", "BshTI", "BshVI", "BsiSI", "Bsp13I", "Bsp19I", "Bsp119I", "Bsp120I", "Bsp143I", "Bsp1407I", "BspDI", "BspEI", "BspTI", "BspT104I", "BsrGI", "BssAI", "BssMI", "BssNI", "BstACI", "BstAFI", "BstAUI", "BstBI", "BstMBI", "BstX2I", "BstZI", "BsuTUI", "CciI", "CciNI", "Csp6I", "CspAI", "EclXI", "Eco52I", "FauNDI", "FbaI", "FspBI", "Hin1I", "Hin6I", "HpySE526I", "Hsp92I", "KroI", "Ksp22I", "Kzo9I", "MaeI", "MaeII", "MauBI", "MflI", "MluCI", "Mly113I", "MreI", "MroI", "MroNI", "MspCI", "NarI", "NdeII", "NspV", "PagI", "PalAI", "PauI", "PciI", "Pfl23II", "PinAI", "PscI", "PshBI", "Psp1406I", "PspLI", "PspXI", "PsuI", "PteI", "RsaNI", "SaqAI", "Sfr274I", "SfuI", "SgrDI", "SgsI", "SlaI", "SspDI", "SspMI", "TasI", "TatI", "Tru1I", "Tru9I", "Vha464I", "VneI", "XapI", "XmaJI", "XspI"],
 )
 
 typedict["type80"] = (
@@ -19853,7 +23728,7 @@ typedict["type80"] = (
 
 typedict["type81"] = (
     ("Palindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AccI", "AflIII", "AjnI", "ApeKI", "AspS9I", "AvaI", "AvaII", "BanI", "BcnI", "BlpI", "BsaJI", "BsoBI", "BssECI", "BstNI", "Bsu36I", "Cfr13I", "DdeI", "EcoNI", "EcoO109I", "EcoRII", "Fnu4HI", "Fsp4HI", "HinfI", "MvaI", "NciI", "PpuMI", "PspGI", "PspPI", "RsrII", "Sau96I", "ScrFI", "SexAI", "SinI", "SmlI", "StyI", "StyD4I", "TfiI", "TseI", "Tsp45I", "Tth111I"],
+    ["AccI", "AflIII", "AjnI", "ApeKI", "AspS9I", "AvaI", "AvaII", "BanI", "BcnI", "BlpI", "BsaJI", "BsoBI", "BssECI", "BstEII", "BstNI", "Bsu36I", "Cfr13I", "DdeI", "EcoNI", "EcoO109I", "EcoRII", "Fnu4HI", "Fsp4HI", "HinfI", "MvaI", "NciI", "PpuMI", "PspGI", "PspPI", "RsrII", "Sau96I", "ScrFI", "SexAI", "SinI", "SmlI", "StyI", "StyD4I", "TfiI", "TseI", "Tsp45I", "Tth111I"],
 )
 
 typedict["type82"] = (
@@ -19863,7 +23738,7 @@ typedict["type82"] = (
 
 typedict["type83"] = (
     ("Palindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AccB1I", "Ama87I", "AsuC2I", "AxyI", "BciT130I", "BfmI", "BisI", "Bme18I", "Bme1390I", "BmeT110I", "BmgT120I", "BmrFI", "Bpu1102I", "BpuMI", "Bse21I", "BseBI", "BseDI", "BshNI", "BsiHKCI", "Bsp1720I", "BspT107I", "BssT1I", "BstDEI", "BstDSI", "BstEII", "BstENI", "BstPI", "BstSCI", "BstSFI", "Bst2UI", "BtgI", "CpoI", "CsiI", "CspI", "Eco47I", "Eco81I", "Eco88I", "Eco91I", "Eco130I", "EcoO65I", "EcoT14I", "ErhI", "FblI", "GluI", "Hpy188III", "HpyF3I", "KflI", "MabI", "MaeIII", "MspR9I", "MteI", "NmuCI", "PasI", "PfeI", "PflFI", "PfoI", "Psp5II", "Psp6I", "PspEI", "PspPPI", "PsyI", "Rsr2I", "SatI", "SfcI", "SgeI", "SmoI", "TseFI", "VpaK11BI", "XagI", "XmiI"],
+    ["AccB1I", "Ama87I", "AsuC2I", "AxyI", "BciT130I", "BfmI", "BisI", "Bme18I", "Bme1390I", "BmeT110I", "BmgT120I", "BmrFI", "Bpu1102I", "BpuMI", "Bse21I", "BseBI", "BseDI", "BshNI", "BsiHKCI", "Bsp1720I", "BspT107I", "BssT1I", "BstDEI", "BstDSI", "BstENI", "BstPI", "BstSCI", "BstSFI", "Bst2UI", "BtgI", "CpoI", "CsiI", "CspI", "Eco47I", "Eco81I", "Eco88I", "Eco91I", "Eco130I", "EcoO65I", "EcoT14I", "ErhI", "FblI", "GluI", "Hpy188III", "HpyF3I", "KflI", "MabI", "MaeIII", "MspR9I", "MteI", "NmuCI", "PasI", "PfeI", "PflFI", "PfoI", "Psp5II", "Psp6I", "PspEI", "PspPPI", "PsyI", "Rsr2I", "SatI", "SfcI", "SgeI", "SmoI", "TseFI", "VpaK11BI", "XagI", "XmiI"],
 )
 
 typedict["type84"] = (
@@ -19873,7 +23748,7 @@ typedict["type84"] = (
 
 typedict["type89"] = (
     ("Palindromic", "OneCut", "Ov3", "Defined", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AatII", "ApaI", "AsiSI", "Cfr42I", "FseI", "HaeII", "HhaI", "KpnI", "NlaIII", "NsiI", "NspI", "PluTI", "PstI", "SacI", "SacII"],
+    ["AatII", "ApaI", "AsiSI", "BmtI", "Cfr42I", "FseI", "HaeII", "HhaI", "KpnI", "NlaIII", "NsiI", "NspI", "PluTI", "PstI", "SacI", "SacII"],
 )
 
 typedict["type90"] = (
@@ -19883,7 +23758,7 @@ typedict["type90"] = (
 
 typedict["type91"] = (
     ("Palindromic", "OneCut", "Ov3", "Defined", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AspLEI", "BfoI", "BmtI", "BspMAI", "BspOI", "BstH2I", "BstHHI", "BstKTI", "BstNSI", "CfoI", "EcoT22I", "FaeI", "Hin1II", "Hsp92II", "KspI", "Mph1103I", "PacI", "PaeI", "Ple19I", "Psp124BI", "PvuI", "RgaI", "RigI", "SbfI", "SdaI", "SfaAI", "Sfr303I", "SgfI", "SgrBI", "SphI", "Sse8387I", "SstI", "TaiI", "XceI", "Zsp2I"],
+    ["AspLEI", "BfoI", "BspMAI", "BspOI", "BstH2I", "BstHHI", "BstKTI", "BstNSI", "CfoI", "EcoT22I", "FaeI", "Hin1II", "Hsp92II", "KspI", "Mph1103I", "PacI", "PaeI", "Ple19I", "Psp124BI", "PvuI", "RgaI", "RigI", "SbfI", "SdaI", "SfaAI", "Sfr303I", "SgfI", "SgrBI", "SphI", "Sse8387I", "SstI", "TaiI", "XceI", "Zsp2I"],
 )
 
 typedict["type92"] = (
@@ -19893,7 +23768,7 @@ typedict["type92"] = (
 
 typedict["type93"] = (
     ("Palindromic", "OneCut", "Ov3", "Ambiguous", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AgsI", "AhdI", "BaeGI", "BanII", "BglI", "Bsc4I", "BslI", "Bsp1286I", "BstAPI", "BstXI", "DraIII", "EcoT38I", "Hpy99I", "Hpy188I", "MwoI", "SfiI", "TspRI", "XcmI"],
+    ["AgsI", "AhdI", "BaeGI", "BanII", "BglI", "Bsc4I", "BslI", "Bsp1286I", "BstAPI", "BstXI", "DraIII", "DrdI", "EcoT38I", "Hpy99I", "Hpy188I", "MwoI", "SfiI", "TspRI", "XcmI"],
 )
 
 typedict["type94"] = (
@@ -19903,7 +23778,7 @@ typedict["type94"] = (
 
 typedict["type95"] = (
     ("Palindromic", "OneCut", "Ov3", "Ambiguous", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-    ["AasI", "AccB7I", "AdeI", "AfiI", "Alw21I", "AlwNI", "Bbv12I", "BlsI", "BmeRI", "BseLI", "BseSI", "Bsh1285I", "BsiEI", "BsiHKAI", "Bst4CI", "BstMCI", "BstMWI", "BstSLI", "CaiI", "DrdI", "DriI", "DseDI", "Eam1105I", "Eco24I", "FriOI", "HpyCH4III", "HpyF10VI", "MhlI", "PcsI", "PflMI", "PkrI", "PstNI", "SduI", "SetI", "TaaI", "TauI", "TscAI", "Van91I"],
+    ["AasI", "AccB7I", "AdeI", "AfiI", "Alw21I", "AlwNI", "Bbv12I", "BlsI", "BmeRI", "BseLI", "BseSI", "Bsh1285I", "BsiEI", "BsiHKAI", "Bst4CI", "BstMCI", "BstMWI", "BstSLI", "CaiI", "DriI", "DseDI", "Eam1105I", "Eco24I", "FriOI", "HpyCH4III", "HpyF10VI", "MhlI", "PcsI", "PflMI", "PkrI", "PstNI", "SduI", "SetI", "TaaI", "TauI", "TscAI", "Van91I"],
 )
 
 typedict["type96"] = (

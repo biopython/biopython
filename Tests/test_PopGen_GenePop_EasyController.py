@@ -59,7 +59,7 @@ class AppTest(unittest.TestCase):
     def test_get_alleles(self):
         """Test get alleles."""
         # Returns keys of a dict, so order is Python implementation dependent
-        self.assertEqual(set(self.ctrl.get_alleles(0, "Locus3")), {3, 20})
+        self.assertCountEqual(self.ctrl.get_alleles(0, "Locus3"), [3, 20])
 
     def test_get_alleles_all_pops(self):
         """Test get alleles for all populations."""
@@ -75,7 +75,7 @@ class AppTest(unittest.TestCase):
         """Test allele frequency."""
         tot_genes, alleles = self.ctrl.get_allele_frequency(0, "Locus2")
         self.assertEqual(tot_genes, 62)
-        self.assertTrue(abs(alleles[20] - 0.113) < 0.05)
+        self.assertLess(abs(alleles[20] - 0.113), 0.05)
 
     def test_get_genotype_count(self):
         """Test genotype count."""
@@ -109,13 +109,13 @@ class AppTest(unittest.TestCase):
         """Test multilocus F stats."""
         mf = self.ctrl.get_multilocus_f_stats()
         self.assertEqual(len(mf), 3)
-        self.assertTrue(mf[0] < 0.1)
+        self.assertLess(mf[0], 0.1)
 
     def test_get_f_stats(self):
         """Test F stats."""
         fs = self.ctrl.get_f_stats("Locus2")
         self.assertEqual(len(fs), 5)
-        self.assertTrue(fs[0] < 0)
+        self.assertLess(fs[0], 0)
 
 
 if __name__ == "__main__":

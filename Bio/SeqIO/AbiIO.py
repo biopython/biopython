@@ -14,8 +14,6 @@ For more details on the format specification, visit:
 http://www6.appliedbiosystems.com/support/software_community/ABIF_File_Format.pdf
 
 """
-
-
 import datetime
 import struct
 import sys
@@ -24,6 +22,7 @@ from os.path import basename
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
 from .Interfaces import SequenceIterator
 
 
@@ -283,7 +282,7 @@ _INSTRUMENT_SPECIFIC_TAGS["abi_3530/3530xl"] = {
     "ScPa1": "The parameter string of size caller",
     "ScSt1": "Raw data start point. Set to 0 for 3500 data collection.",
     "SpeN1": "Active spectral calibration name",
-    "TrPa1": "Timming parameters",
+    "TrPa1": "Trimming parameters",
     "TrSc1": "Trace score.",
     "TrSc2": 'One of "Pass", "Fail", or "Check"',
     "phAR1": "Trace peak aria ratio",
@@ -362,7 +361,7 @@ class AbiIterator(SequenceIterator):
             raise ValueError("Empty file.")
 
         if marker != b"ABIF":
-            raise OSError("File should start ABIF, not %r" % marker)
+            raise OSError(f"File should start ABIF, not {marker!r}")
         records = self.iterate(handle)
         return records
 
@@ -382,6 +381,7 @@ class AbiIterator(SequenceIterator):
         sample_id = "<unknown id>"
 
         raw = {}
+        seq = qual = None
         for tag_name, tag_number, tag_data in _abi_parse_header(header, handle):
             key = tag_name + str(tag_number)
 
@@ -404,8 +404,8 @@ class AbiIterator(SequenceIterator):
                     annot[_EXTRACT[key]] = tag_data
 
         # set time annotations
-        annot["run_start"] = "%s %s" % (times["RUND1"], times["RUNT1"])
-        annot["run_finish"] = "%s %s" % (times["RUND2"], times["RUNT2"])
+        annot["run_start"] = f"{times['RUND1']} {times['RUNT1']}"
+        annot["run_finish"] = f"{times['RUND2']} {times['RUNT2']}"
 
         # raw data (for advanced end users benefit)
         annot["abif_raw"] = raw
@@ -441,7 +441,14 @@ class AbiIterator(SequenceIterator):
                 name=file_name,
                 description="",
                 annotations=annot,
-                letter_annotations={"phred_quality": qual},
+            )
+        if qual:
+            # Expect this to be missing for FSA files.
+            record.letter_annotations["phred_quality"] = qual
+        elif not is_fsa_file and not qual and self.trim:
+            raise ValueError(
+                "The 'abi-trim' format can not be used for files without"
+                " quality values."
             )
 
         if self.trim and not is_fsa_file:

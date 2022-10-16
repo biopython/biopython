@@ -34,13 +34,14 @@ because it sometimes is used in different senses in other programs"
 Biopython 1.58 or later treats dots/periods in the sequence as invalid, both
 for reading and writing. Older versions did nothing special with a dot/period.
 """
-
 import string
 
+from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
-from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
+
+from .Interfaces import AlignmentIterator
+from .Interfaces import SequentialAlignmentWriter
 
 
 _PHYLIP_ID_WIDTH = 10
@@ -128,10 +129,9 @@ class PhylipWriter(SequentialAlignmentWriter):
                 for chunk in range(0, 5):
                     i = block * 50 + chunk * 10
                     seq_segment = sequence[i : i + 10]
-                    # TODO - Force any gaps to be '-' character?  Look at the
-                    # alphabet...
+                    # TODO - Force any gaps to be '-' character?
                     # TODO - How to cope with '?' or '.' in the sequence?
-                    handle.write(" %s" % seq_segment)
+                    handle.write(f" {seq_segment}")
                     if i + 10 > length_of_seqs:
                         break
                 handle.write("\n")
@@ -247,7 +247,7 @@ class PhylipIterator(AlignmentIterator):
                 self._header = line
                 break
 
-            # print "New block..."
+            # print("New block...")
             for i in range(number_of_seqs):
                 s = line.strip().replace(" ", "")
                 if "." in s:
@@ -260,10 +260,10 @@ class PhylipIterator(AlignmentIterator):
                 break  # end of file
 
         records = (
-            SeqRecord(Seq("".join(s), self.alphabet), id=i, name=i, description=i)
+            SeqRecord(Seq("".join(s)), id=i, name=i, description=i)
             for (i, s) in zip(ids, seqs)
         )
-        return MultipleSeqAlignment(records, self.alphabet)
+        return MultipleSeqAlignment(records)
 
 
 # Relaxed Phylip
@@ -275,7 +275,7 @@ class RelaxedPhylipWriter(PhylipWriter):
         # Check inputs
         for name in (s.id.strip() for s in alignment):
             if any(c in name for c in string.whitespace):
-                raise ValueError("Whitespace not allowed in identifier: %s" % name)
+                raise ValueError(f"Whitespace not allowed in identifier: {name}")
 
         # Calculate a truncation length - maximum length of sequence ID plus a
         # single character for padding
@@ -433,10 +433,9 @@ class SequentialPhylipIterator(PhylipIterator):
                 break
 
         records = (
-            SeqRecord(Seq(s, self.alphabet), id=i, name=i, description=i)
-            for (i, s) in zip(ids, seqs)
+            SeqRecord(Seq(s), id=i, name=i, description=i) for (i, s) in zip(ids, seqs)
         )
-        return MultipleSeqAlignment(records, self.alphabet)
+        return MultipleSeqAlignment(records)
 
 
 def sanitize_name(name, width=None):

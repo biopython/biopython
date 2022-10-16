@@ -1,0 +1,70 @@
+<?xml version="1.0" ?>
+<!DOCTYPE pmc-articleset PUBLIC "-//NLM//DTD ARTICLE SET 2.0//EN" "https://dtd.nlm.nih.gov/ncbi/pmc/articleset/nlm-articleset-2.0.dtd">
+<pmc-articleset><article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" article-type="correction" dtd-version="1.3">
+  <?properties open_access?>
+  <processing-meta base-tagset="archiving" mathml-version="3.0" table-model="xhtml" tagset-family="jats">
+    <restricted-by>pmc</restricted-by>
+  </processing-meta>
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="nlm-ta">ERJ Open Res</journal-id>
+      <journal-id journal-id-type="iso-abbrev">ERJ Open Res</journal-id>
+      <journal-id journal-id-type="publisher-id">ERJOR</journal-id>
+      <journal-id journal-id-type="hwp">erjor</journal-id>
+      <journal-title-group>
+        <journal-title>ERJ Open Research</journal-title>
+      </journal-title-group>
+      <issn pub-type="epub">2312-0541</issn>
+      <publisher>
+        <publisher-name>European Respiratory Society</publisher-name>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <article-id pub-id-type="pmid">34527728</article-id>
+      <article-id pub-id-type="pmc">8435807</article-id>
+      <article-id pub-id-type="doi">10.1183/23120541.50193-2021</article-id>
+      <article-id pub-id-type="publisher-id">50193-2021</article-id>
+      <article-version vocab="JAV" vocab-identifier="http://www.niso.org/publications/rp/RP-8-2008.pdf" article-version-type="VoR">Version of Record</article-version>
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Author Correction</subject>
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>&#x201C;Lung diffusing capacity for nitric oxide measured by two commercial devices: a randomised crossover comparison in healthy adults&#x201D;. Thomas Radtke, Quintin de Groot, Sarah R. Haile, Marion Maggi, Connie C.W. Hsia and Holger Dressel. <italic>ERJ Open Res</italic> 2021; 7: 00193-2021.</article-title>
+      </title-group>
+      <pub-date pub-type="collection">
+        <month>7</month>
+        <year>2021</year>
+      </pub-date>
+      <pub-date pub-type="epub">
+        <day>13</day>
+        <month>9</month>
+        <year>2021</year>
+      </pub-date>
+      <pub-date pub-type="pmc-release">
+        <day>13</day>
+        <month>9</month>
+        <year>2021</year>
+      </pub-date>
+      <!-- PMC Release delay is 0 months and 0 days and was based on the <pub-date pub-type="epub"/>. -->
+      <volume>7</volume>
+      <issue>3</issue>
+      <elocation-id>50193-2021</elocation-id>
+      <permissions>
+        <copyright-statement>Copyright &#xA9;The authors 2021</copyright-statement>
+        <copyright-year>2021</copyright-year>
+        <license>
+          <ali:license_ref xmlns:ali="http://www.niso.org/schemas/ali/1.0/" specific-use="textmining" content-type="ccbynclicense">https://creativecommons.org/licenses/by-nc/4.0/</ali:license_ref>
+          <license-p>This version is distributed under the terms of the Creative Commons Attribution Non-Commercial Licence 4.0. For commercial reproduction rights and permissions contact <ext-link ext-link-type="uri" xlink:href="mailto:permissions@ersnet.org">permissions@ersnet.org</ext-link></license-p>
+        </license>
+      </permissions>
+      <related-article related-article-type="corrected-article" id="d31e52" ext-link-type="doi" xlink:href="10.1183/23120541.00193-2021"/>
+    </article-meta>
+  </front>
+  <body>
+    <p>This article was originally published with an error in table 2. The upper 95% confidence limit of the per cent difference in the primary end-point (diffusing capacity of the lung for nitric oxide) was incorrectly given as 15.1% and has now been corrected to &#x2212;15.1% in the published article.
+</p>
+  </body>
+</article>
+</pmc-articleset>

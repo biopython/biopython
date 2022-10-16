@@ -15,12 +15,8 @@ It also includes functionality for parsing output from the AlignACE, MEME,
 and MAST programs, as well as files in the TRANSFAC format.
 """
 
-import warnings
-
 from urllib.parse import urlencode
 from urllib.request import urlopen, Request
-
-from Bio import BiopythonDeprecationWarning
 
 
 def create(instances, alphabet="ACGT"):
@@ -181,25 +177,33 @@ class Instances(list):
 
     def __init__(self, instances=None, alphabet="ACGT"):
         """Initialize the class."""
-        from Bio.Seq import Seq
+        from Bio.Seq import Seq, MutableSeq
 
-        if instances is None:
-            instances = []
-        self.length = None
-        for instance in instances:
-            if self.length is None:
-                self.length = len(instance)
-            elif self.length != len(instance):
-                message = (
-                    "All instances should have the same length (%d found, %d expected)"
-                    % (len(instance), self.length)
-                )
-                raise ValueError(message)
-        for instance in instances:
-            if not isinstance(instance, Seq):
-                sequence = str(instance)
-                instance = Seq(sequence)
-            self.append(instance)
+        if isinstance(instances, (Seq, MutableSeq, str)):
+            raise TypeError(
+                "instances should be iterator of Seq objects or strings. "
+                "If a single sequence is given, will treat each character "
+                "as a separate sequence."
+            )
+
+        length = None
+        if instances is not None:
+            sequences = []
+            for instance in instances:
+                if length is None:
+                    length = len(instance)
+                elif length != len(instance):
+                    message = (
+                        "All instances should have the same length (%d found, %d expected)"
+                        % (len(instance), length)
+                    )
+                    raise ValueError(message)
+                if not isinstance(instance, Seq):
+                    instance = Seq(str(instance))
+                sequences.append(instance)
+            # no errors were raised; store the instances:
+            self.extend(sequences)
+        self.length = length
         self.alphabet = alphabet
 
     def __str__(self):
@@ -227,16 +231,25 @@ class Instances(list):
         """
         for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
-                if str(instance) == str(sequence[pos : pos + self.length]):
+                if instance == sequence[pos : pos + self.length]:
                     yield (pos, instance)
                     break  # no other instance will fit (we don't want to return multiple hits)
 
     def reverse_complement(self):
         """Compute reverse complement of sequences."""
+        from Bio.Seq import Seq, MutableSeq
+        from Bio.SeqRecord import SeqRecord
+
         instances = Instances(alphabet=self.alphabet)
         instances.length = self.length
         for instance in self:
-            instance = instance.reverse_complement()
+            # TODO: remove inplace=False
+            if isinstance(instance, (Seq, MutableSeq)):
+                instance = instance.reverse_complement(inplace=False)
+            elif isinstance(instance, (str, SeqRecord)):
+                instance = instance.reverse_complement()
+            else:
+                raise RuntimeError("instance has unexpected type %s" % type(instance))
             instances.append(instance)
         return instances
 
@@ -490,7 +503,7 @@ class Motif:
             alpha = "auto"
 
         frequencies = format(self, "transfac")
-        url = "http://weblogo.threeplusone.com/create.cgi"
+        url = "https://weblogo.threeplusone.com/create.cgi"
         values = {
             "sequences": frequencies,
             "format": fmt.lower(),
@@ -547,6 +560,18 @@ class Motif:
          - transfac : TRANSFAC like files
 
         """
+        return self.format(format_spec)
+
+    def format(self, format_spec):
+        """Return a string representation of the Motif in the given format.
+
+        Currently supported formats:
+         - clusterbuster: Cluster Buster position frequency matrix format
+         - pfm : JASPAR single Position Frequency Matrix
+         - jaspar : JASPAR multiple Position Frequency Matrix
+         - transfac : TRANSFAC like files
+
+        """
         if format_spec in ("pfm", "jaspar"):
             from Bio.motifs import jaspar
 
@@ -564,20 +589,6 @@ class Motif:
             return clusterbuster.write(motifs)
         else:
             raise ValueError("Unknown format type %s" % format_spec)
-
-    def format(self, format_spec):
-        """Return a string representation of the Motif in the given format [DEPRECATED].
-
-        This method is deprecated; instead of motif.format(format_spec),
-        please use format(motif, format_spec).
-        """
-        warnings.warn(
-            "Motif.format has been deprecated, and we intend to remove it in a "
-            "future release of Biopython. Instead of motif.format(format_spec), "
-            "please use format(motif, format_spec).",
-            BiopythonDeprecationWarning,
-        )
-        return self.__format__(format_spec)
 
 
 def write(motifs, fmt):

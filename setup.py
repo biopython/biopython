@@ -33,7 +33,7 @@ try:
 except ImportError:
     sys.exit(
         "We need the Python library setuptools to be installed. "
-        "Try runnning: python -m ensurepip"
+        "Try running: python -m ensurepip"
     )
 
 if "bdist_wheel" in sys.argv:
@@ -47,10 +47,10 @@ if "bdist_wheel" in sys.argv:
 
 
 # Make sure we have the right Python version.
-MIN_PY_VER = (3, 6)
+MIN_PY_VER = (3, 7)
 if sys.version_info[:2] < MIN_PY_VER:
     sys.stderr.write(
-        ("Biopython requires Python %i.%i or later. " % MIN_PY_VER)
+        ("ERROR: Biopython requires Python %i.%i or later. " % MIN_PY_VER)
         + ("Python %d.%d detected.\n" % sys.version_info[:2])
     )
     sys.exit(1)
@@ -127,12 +127,10 @@ PACKAGES = [
     "Bio.Cluster",
     "Bio.codonalign",
     "Bio.Compass",
-    "Bio.Crystal",
     "Bio.Data",
     "Bio.Emboss",
     "Bio.Entrez",
     "Bio.ExPASy",
-    "Bio.FSSP",
     "Bio.GenBank",
     "Bio.Geo",
     "Bio.Graphics",
@@ -171,8 +169,6 @@ PACKAGES = [
     "Bio.SeqUtils",
     "Bio.Sequencing",
     "Bio.Sequencing.Applications",
-    "Bio.Statistics",
-    "Bio.SubsMat",
     "Bio.SVDSuperimposer",
     "Bio.PDB.QCPSuperimposer",
     "Bio.SwissProt",
@@ -200,6 +196,8 @@ EXTENSIONS = [
         "Bio.Cluster._cluster", ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"]
     ),
     Extension("Bio.PDB.kdtrees", ["Bio/PDB/kdtrees.c"]),
+    Extension("Bio.PDB.ccealign", ["Bio/PDB/ccealignmodule.c"]),
+    Extension("Bio.SeqIO._twoBitIO", ["Bio/SeqIO/_twoBitIO.c"]),
 ]
 
 # We now define the Biopython version number in Bio/__init__.py
@@ -245,9 +243,10 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
         "Topic :: Software Development :: Libraries :: Python Modules",

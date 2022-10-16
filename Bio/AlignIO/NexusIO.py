@@ -13,13 +13,10 @@ See also the Bio.Nexus module (which this code calls internally),
 as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
-
-
-from Bio.SeqRecord import SeqRecord
-from Bio.Nexus import Nexus
 from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO.Interfaces import AlignmentWriter
-from Bio import Alphabet
+from Bio.Nexus import Nexus
+from Bio.SeqRecord import SeqRecord
 
 
 # You can get a couple of example files here:
@@ -73,7 +70,7 @@ def NexusIterator(handle, seq_count=None):
         for old_name, new_name in zip(n.unaltered_taxlabels, n.taxlabels)
     )
     # All done
-    yield MultipleSeqAlignment(records, n.alphabet)
+    yield MultipleSeqAlignment(records)
 
 
 class NexusWriter(AlignmentWriter):
@@ -131,7 +128,6 @@ class NexusWriter(AlignmentWriter):
             % datatype
         )
         n = Nexus.Nexus(minimal_record)
-        n.alphabet = alignment._alphabet
         for record in alignment:
             # Sanity test sequences (should this be even stricter?)
             if datatype == "dna" and "U" in record.seq:

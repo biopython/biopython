@@ -4,20 +4,21 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Bio.SeqIO.FastaIO module."""
-
-
 import unittest
+
 from io import StringIO
 
+from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator
-from Bio.SeqIO.FastaIO import SimpleFastaParser, FastaTwoLineParser
+from Bio.SeqIO.FastaIO import FastaTwoLineParser
+from Bio.SeqIO.FastaIO import SimpleFastaParser
 
 
 def title_to_ids(title):
     """Convert a FASTA title line into the id, name, and description.
 
-    This is just a quick-n-dirty implementation, and is definetely not meant
+    This is just a quick-n-dirty implementation, and is definitely not meant
     to handle every FASTA title line case.
     """
     # first split the id information from the description
@@ -84,31 +85,35 @@ class TitleFunctions(unittest.TestCase):
 
     def simple_check(self, filename):
         """Test parsing single record FASTA files."""
-        msg = "Test failure parsing file %s" % filename
+        msg = f"Test failure parsing file {filename}"
         title, seq = read_title_and_seq(filename)  # crude parser
         idn, name, descr = title_to_ids(title)
-        # First check using Bio.SeqIO.FastaIO directly with title function.
-        records = FastaIterator(filename, title2ids=title_to_ids)
+        # First check using Bio.SeqIO.FastaIO directly with title2ids function.
+        # (DEPRECATED)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            records = FastaIterator(filename, title2ids=title_to_ids)
         record = next(records)
         with self.assertRaises(StopIteration):
             next(records)
         self.assertEqual(record.id, idn, msg=msg)
         self.assertEqual(record.name, name, msg=msg)
         self.assertEqual(record.description, descr, msg=msg)
-        self.assertEqual(str(record.seq), seq, msg=msg)
+        self.assertEqual(record.seq, seq, msg=msg)
         # Now check using Bio.SeqIO (default settings)
         record = SeqIO.read(filename, "fasta")
         self.assertEqual(record.id, title.split()[0], msg=msg)
         self.assertEqual(record.name, title.split()[0], msg=msg)
         self.assertEqual(record.description, title, msg=msg)
-        self.assertEqual(str(record.seq), seq, msg=msg)
+        self.assertEqual(record.seq, seq, msg=msg)
         # Uncomment this for testing the methods are calling the right files:
         # print("{%s done}" % filename)
 
     def multi_check(self, filename):
         """Test parsing multi-record FASTA files."""
-        msg = "Test failure parsing file %s" % filename
-        re_titled = list(FastaIterator(filename, title2ids=title_to_ids))
+        msg = f"Test failure parsing file {filename}"
+        # title2ids is deprecated
+        with self.assertWarns(BiopythonDeprecationWarning):
+            re_titled = list(FastaIterator(filename, title2ids=title_to_ids))
         default = list(SeqIO.parse(filename, "fasta"))
         self.assertEqual(len(re_titled), len(default), msg=msg)
         for old, new in zip(default, re_titled):
@@ -116,7 +121,7 @@ class TitleFunctions(unittest.TestCase):
             self.assertEqual(new.id, idn, msg=msg)
             self.assertEqual(new.name, name, msg=msg)
             self.assertEqual(new.description, descr, msg=msg)
-            self.assertEqual(str(new.seq), str(old.seq), msg=msg)
+            self.assertEqual(new.seq, old.seq, msg=msg)
         # Uncomment this for testing the methods are calling the right files:
         # print("{%s done}" % filename)
 
@@ -125,7 +130,7 @@ class TitleFunctions(unittest.TestCase):
         handle = StringIO(">\nACGT")
         record = SeqIO.read(handle, "fasta")
         handle.close()
-        self.assertEqual(str(record.seq), "ACGT")
+        self.assertEqual(record.seq, "ACGT")
         self.assertEqual("", record.id)
         self.assertEqual("", record.name)
         self.assertEqual("", record.description)

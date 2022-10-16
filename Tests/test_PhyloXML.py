@@ -6,6 +6,8 @@
 """Unit tests for the PhyloXML and PhyloXMLIO modules."""
 
 import os
+import platform  # for Windows hack, see issue #3944
+import sys  # for Windows hack
 import tempfile
 import unittest
 from itertools import chain
@@ -23,7 +25,7 @@ EX_PHYLO = "PhyloXML/phyloxml_examples.xml"
 EX_DOLLO = "PhyloXML/o_tol_332_d_dollo.xml"
 
 # Temporary file name for Writer tests below
-DUMMY = tempfile.mktemp()
+DUMMY = tempfile.NamedTemporaryFile(delete=False).name
 
 
 # ---------------------------------------------------------
@@ -45,7 +47,7 @@ def _test_read_factory(source, count):
         self.assertEqual(len(phx), count[0])
         self.assertEqual(len(phx.other), count[1])
 
-    test_read.__doc__ = "Read %s to produce a phyloXML object." % fname
+    test_read.__doc__ = f"Read {fname} to produce a phyloXML object."
     return test_read
 
 
@@ -61,7 +63,7 @@ def _test_parse_factory(source, count):
         trees = PhyloXMLIO.parse(source)
         self.assertEqual(len(list(trees)), count)
 
-    test_parse.__doc__ = "Parse the phylogenies in %s." % fname
+    test_parse.__doc__ = f"Parse the phylogenies in {fname}."
     return test_parse
 
 
@@ -82,7 +84,7 @@ def _test_shape_factory(source, shapes):
                 for subclade, len_expect in zip(clade, sub_expect[1]):
                     self.assertEqual(len(subclade), len_expect)
 
-    test_shape.__doc__ = "Check the branching structure of %s." % fname
+    test_shape.__doc__ = f"Check the branching structure of {fname}."
     return test_shape
 
 
@@ -102,27 +104,27 @@ class ParseTests(unittest.TestCase):
     test_parse_dollo = _test_parse_factory(EX_DOLLO, 1)
 
     # lvl-2 clades, sub-clade counts, lvl-3 clades
-    test_shape_apaf = _test_shape_factory(EX_APAF, (((2, (2, 2)), (2, (2, 2)),),),)
-    test_shape_bcl2 = _test_shape_factory(EX_BCL2, (((2, (2, 2)), (2, (2, 2)),),),)
+    test_shape_apaf = _test_shape_factory(EX_APAF, (((2, (2, 2)), (2, (2, 2))),))
+    test_shape_bcl2 = _test_shape_factory(EX_BCL2, (((2, (2, 2)), (2, (2, 2))),))
     test_shape_phylo = _test_shape_factory(
         EX_PHYLO,
         (
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((0, ()), (2, (0, 0)),),
-            ((3, (0, 0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
-            ((2, (0, 0)), (0, ()),),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((0, ()), (2, (0, 0))),
+            ((3, (0, 0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
+            ((2, (0, 0)), (0, ())),
         ),
     )
-    test_shape_dollo = _test_shape_factory(EX_DOLLO, (((2, (2, 2)), (2, (2, 2)),),),)
+    test_shape_dollo = _test_shape_factory(EX_DOLLO, (((2, (2, 2)), (2, (2, 2))),))
 
 
 class TreeTests(unittest.TestCase):
@@ -166,12 +168,12 @@ class TreeTests(unittest.TestCase):
         # Monitor lizards
         self.assertEqual(trees[9].name, "monitor lizards")
         self.assertEqual(trees[9].description, "a pylogeny of some monitor lizards")
-        self.assertEqual(trees[9].rooted, True)
+        self.assertTrue(trees[9].rooted)
         # Network (unrooted)
         self.assertEqual(
             trees[6].name, "network, node B is connected to TWO nodes: AB and C"
         )
-        self.assertEqual(trees[6].rooted, False)
+        self.assertFalse(trees[6].rooted)
 
     def test_Clade(self):
         """Instantiation of Clade objects."""
@@ -509,6 +511,12 @@ class WriterTests(unittest.TestCase):
         for cls, tests in test_cases:
             inst = cls("setUp")
             for test in tests:
+                if (
+                    test == "test_Distribution"
+                    and platform.system() == "Windows"
+                    and sys.version_info.minor > 8
+                ):
+                    continue  # Skip, see issue #3944
                 getattr(inst, test)()
 
     def test_apaf(self):
@@ -718,8 +726,8 @@ class MethodTests(unittest.TestCase):
         evts = self.phyloxml.phylogenies[4].clade.events
         # Container behavior: __len__, __contains__
         self.assertEqual(len(evts), 1)
-        self.assertEqual("speciations" in evts, True)
-        self.assertEqual("duplications" in evts, False)
+        self.assertIn("speciations", evts)
+        self.assertNotIn("duplications", evts)
         # Attribute access: __get/set/delitem__
         self.assertEqual(evts["speciations"], 1)
         self.assertRaises(KeyError, lambda k: evts[k], "duplications")  # noqa: E731

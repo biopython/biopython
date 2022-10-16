@@ -52,7 +52,7 @@ with open(sys.argv[1]) as handle:
             else:
                 print("References*")
                 for reference in cur_record.annotations[annotation_key]:
-                    print(str(reference))
-        print("Feaures")
+                    print(reference)
+        print("Features")
         for feature in cur_record.features:
             print(feature)

@@ -2,9 +2,11 @@
 # Based on Bio.Nexus, copyright 2005-2008 by Frank Kauff & Cymon J. Cox
 # and Bio.Phylo.Newick, copyright 2009 by Eric Talevich.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """I/O function wrappers for the NeXML file format.
 
@@ -57,7 +59,7 @@ def qUri(s):
 
 def cdao_to_obo(s):
     """Optionally converts a CDAO-prefixed URI into an OBO-prefixed URI."""
-    return "obo:%s" % cdao_elements[s[len("cdao:") :]]
+    return f"obo:{cdao_elements[s[len('cdao:'):]]}"
 
 
 def matches(s):
@@ -232,9 +234,9 @@ class Writer:
 
     def new_label(self, obj_type):
         """Create new labels for the NeXML writer."""
-        counter = "%s_counter" % obj_type
+        counter = f"{obj_type}_counter"
         setattr(self, counter, getattr(self, counter) + 1)
-        return "%s%s" % (obj_type, getattr(self, counter))
+        return f"{obj_type}{getattr(self, counter)}"
 
     def write(self, handle, cdao_to_obo=True, **kwargs):
         """Write this instance's trees to a file handle."""
@@ -247,7 +249,7 @@ class Writer:
         root_node.set("xsi:schemaLocation", SCHEMA)
 
         for prefix, uri in NAMESPACES.items():
-            root_node.set("xmlns:%s" % prefix, uri)
+            root_node.set(f"xmlns:{prefix}", uri)
 
         otus = ElementTree.SubElement(
             root_node, "otus", **{"id": "tax", "label": "RootTaxaBlock"}
@@ -257,7 +259,7 @@ class Writer:
         trees = ElementTree.SubElement(
             root_node,
             "trees",
-            **{"id": "Trees", "label": "TreesBlockFromXML", "otus": "tax"}
+            **{"id": "Trees", "label": "TreesBlockFromXML", "otus": "tax"},
         )
         count = 0
         tus = set()
@@ -284,7 +286,12 @@ class Writer:
         # use xml.dom.minodom for pretty printing
         rough_string = ElementTree.tostring(root_node, "utf-8")
         reparsed = minidom.parseString(rough_string)
-        handle.write(reparsed.toprettyxml(indent="  ").encode("utf8"))
+        try:
+            # XML handles ought to be in binary mode
+            handle.write(reparsed.toprettyxml(indent="  ").encode("utf8"))
+        except TypeError:
+            # Fall back for text mode
+            handle.write(reparsed.toprettyxml(indent="  "))
 
         return count
 
@@ -327,7 +334,7 @@ class Writer:
                         {
                             "property": convert_uri("cdao:has_Support_Value"),
                             "datatype": "xsd:float",
-                            "content": "%1.2f" % confidence,
+                            "content": f"{confidence:1.2f}",
                         }
                     )
             node = ElementTree.SubElement(tree, "edge", **attrib)

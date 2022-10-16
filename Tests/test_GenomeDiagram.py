@@ -36,7 +36,7 @@ except ImportError:
     renderPM = None
 
 from Bio import SeqIO
-from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqFeature import SeqFeature, SimpleLocation
 
 from Bio.Graphics.GenomeDiagram import FeatureSet, GraphSet, Track, Diagram
 from Bio.Graphics.GenomeDiagram import CrossLink
@@ -130,8 +130,7 @@ def calc_gc_content(sequence):
 
     if gc == 0:
         return 0
-    # print(gc*100.0/(d['A'] +d['T'] + gc))
-    return gc * 1.0 / (d["A"] + d["T"] + gc)
+    return gc / (d["A"] + d["T"] + gc)
 
 
 def calc_at_content(sequence):
@@ -150,7 +149,7 @@ def calc_at_content(sequence):
 
     if at == 0:
         return 0
-    return at * 1.0 / (d["G"] + d["G"] + at)
+    return at / (d["G"] + d["G"] + at)
 
 
 def calc_gc_skew(sequence):
@@ -167,7 +166,7 @@ def calc_gc_skew(sequence):
     if g + c == 0:
         return 0.0  # TODO - return NaN or None here?
     else:
-        return (g - c) / float(g + c)
+        return (g - c) / (g + c)
 
 
 def calc_at_skew(sequence):
@@ -184,7 +183,7 @@ def calc_at_skew(sequence):
     if a + t == 0:
         return 0.0  # TODO - return NaN or None here?
     else:
-        return (a - t) / float(a + t)
+        return (a - t) / (a + t)
 
 
 def calc_dinucleotide_counts(sequence):
@@ -303,7 +302,7 @@ class GraphTest(unittest.TestCase):
 
         self.assertEqual(
             gd[4:16],
-            [(5, 15), (10, 20),],  # noqa 231
+            [(5, 15), (10, 20)],  # noqa 231
             "Unable to insert and retrieve points correctly",
         )
 
@@ -389,7 +388,7 @@ class LabelTest(unittest.TestCase):
                 strand = -1
                 name = "Reverse"
                 color = colors.blue
-            feature = SeqFeature(FeatureLocation(start, end), strand=strand)
+            feature = SeqFeature(SimpleLocation(start, end, strand=strand))
             self.gds_features.add_feature(
                 feature, name=name, color=color, label=True, **kwargs
             )
@@ -427,11 +426,11 @@ class SigilsTest(unittest.TestCase):
         # We'll just use one feature set for these features,
         self.gds_features = self.gdt_features.new_set()
         # Add three features to show the strand options,
-        feature = SeqFeature(FeatureLocation(25, 125), strand=+1)
+        feature = SeqFeature(SimpleLocation(25, 125, strand=+1))
         self.gds_features.add_feature(feature, name="Forward", **kwargs)
-        feature = SeqFeature(FeatureLocation(150, 250), strand=None)
-        self.gds_features.add_feature(feature, name="Strandless", **kwargs)
-        feature = SeqFeature(FeatureLocation(275, 375), strand=-1)
+        feature = SeqFeature(SimpleLocation(150, 250, strand=None))
+        self.gds_features.add_feature(feature, name="strandless", **kwargs)
+        feature = SeqFeature(SimpleLocation(275, 375, strand=-1))
         self.gds_features.add_feature(feature, name="Reverse", **kwargs)
 
     def finish(self, name, circular=True):
@@ -476,9 +475,7 @@ class SigilsTest(unittest.TestCase):
     def test_all_sigils(self):
         """All sigils."""
         for glyph in ["BOX", "OCTO", "JAGGY", "ARROW", "BIGARROW"]:
-            self.add_track_with_sigils(
-                track_caption='  sigil="%s"' % glyph, sigil=glyph
-            )
+            self.add_track_with_sigils(track_caption=f'  sigil="{glyph}"', sigil=glyph)
         self.finish("GD_sigils")
 
     def test_labels(self):
@@ -565,75 +562,75 @@ class SigilsTest(unittest.TestCase):
         # - Red arrows should be small triangles (so short no shaft shown)
 
         # Forward strand:
-        feature = SeqFeature(FeatureLocation(15, 30), strand=-1)
+        feature = SeqFeature(SimpleLocation(15, 30, strand=-1))
         self.gds_features.add_feature(feature, color="blue")
-        feature = SeqFeature(FeatureLocation(15, 30), strand=+1)
+        feature = SeqFeature(SimpleLocation(15, 30, strand=+1))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Forward", sigil=glyph, arrowhead_length=0.05
         )
 
-        feature = SeqFeature(FeatureLocation(55, 60), strand=-1)
+        feature = SeqFeature(SimpleLocation(55, 60, strand=-1))
         self.gds_features.add_feature(feature, color="blue")
-        feature = SeqFeature(FeatureLocation(55, 60), strand=+1)
+        feature = SeqFeature(SimpleLocation(55, 60, strand=+1))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Forward", sigil=glyph, arrowhead_length=1000, color="red"
         )
 
-        feature = SeqFeature(FeatureLocation(75, 125), strand=-1)
+        feature = SeqFeature(SimpleLocation(75, 125, strand=-1))
         self.gds_features.add_feature(feature, color="blue")
-        feature = SeqFeature(FeatureLocation(75, 125), strand=+1)
+        feature = SeqFeature(SimpleLocation(75, 125, strand=+1))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Forward", sigil=glyph, arrowhead_length=0.05
         )
 
         # Strandless:
-        feature = SeqFeature(FeatureLocation(140, 155), strand=None)
+        feature = SeqFeature(SimpleLocation(140, 155, strand=None))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Strandless", sigil=glyph, arrowhead_length=0.05
         )
 
-        feature = SeqFeature(FeatureLocation(180, 185), strand=None)
+        feature = SeqFeature(SimpleLocation(180, 185, strand=None))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Strandless", sigil=glyph, arrowhead_length=1000, color="red"
         )
 
-        feature = SeqFeature(FeatureLocation(200, 250), strand=None)
+        feature = SeqFeature(SimpleLocation(200, 250, strand=None))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Strandless", sigil=glyph, arrowhead_length=0.05
         )
 
         # Reverse strand:
-        feature = SeqFeature(FeatureLocation(265, 280), strand=+1)
+        feature = SeqFeature(SimpleLocation(265, 280, strand=+1))
         self.gds_features.add_feature(feature, color="blue")
-        feature = SeqFeature(FeatureLocation(265, 280), strand=-1)
+        feature = SeqFeature(SimpleLocation(265, 280, strand=-1))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Reverse", sigil=glyph, arrowhead_length=0.05
         )
 
-        feature = SeqFeature(FeatureLocation(305, 310), strand=+1)
+        feature = SeqFeature(SimpleLocation(305, 310, strand=+1))
         self.gds_features.add_feature(feature, color="blue")
-        feature = SeqFeature(FeatureLocation(305, 310), strand=-1)
+        feature = SeqFeature(SimpleLocation(305, 310, strand=-1))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Reverse", sigil=glyph, arrowhead_length=1000, color="red"
         )
 
-        feature = SeqFeature(FeatureLocation(325, 375), strand=+1)
+        feature = SeqFeature(SimpleLocation(325, 375, strand=+1))
         self.gds_features.add_feature(feature, color="blue")
-        feature = SeqFeature(FeatureLocation(325, 375), strand=-1)
+        feature = SeqFeature(SimpleLocation(325, 375, strand=-1))
         self.gds_features.add_feature(feature, color="grey")
         self.gds_features.add_feature(
             feature, name="Reverse", sigil=glyph, arrowhead_length=0.05
         )
 
-        self.finish("GD_sigil_short_%s" % glyph)
+        self.finish(f"GD_sigil_short_{glyph}")
 
     def test_short_arrow(self):
         """Feature arrow sigil heads within bounding box."""
@@ -659,11 +656,11 @@ class SigilsTest(unittest.TestCase):
         self.gds_features = self.gdt_features.new_set()
         if glyph in ["BIGARROW"]:
             # These straddle the axis, so don't want to draw them on top of each other
-            feature = SeqFeature(FeatureLocation(25, 375), strand=None)
+            feature = SeqFeature(SimpleLocation(25, 375, strand=None))
             self.gds_features.add_feature(feature, color="lightblue")
-            feature = SeqFeature(FeatureLocation(25, 375), strand=+1)
+            feature = SeqFeature(SimpleLocation(25, 375, strand=+1))
         else:
-            feature = SeqFeature(FeatureLocation(25, 375), strand=+1)
+            feature = SeqFeature(SimpleLocation(25, 375, strand=+1))
             self.gds_features.add_feature(feature, color="lightblue")
         self.gds_features.add_feature(
             feature, name="Forward", sigil=glyph, color="blue", arrowhead_length=2.0
@@ -673,11 +670,11 @@ class SigilsTest(unittest.TestCase):
             # These straddle the axis, so don't want to draw them on top of each other
             self.gdt_features = self.gdd.new_track(1, greytrack=True, height=3)
             self.gds_features = self.gdt_features.new_set()
-            feature = SeqFeature(FeatureLocation(25, 375), strand=None)
+            feature = SeqFeature(SimpleLocation(25, 375, strand=None))
             self.gds_features.add_feature(feature, color="pink")
-            feature = SeqFeature(FeatureLocation(25, 375), strand=-1)
+            feature = SeqFeature(SimpleLocation(25, 375, strand=-1))
         else:
-            feature = SeqFeature(FeatureLocation(25, 375), strand=-1)
+            feature = SeqFeature(SimpleLocation(25, 375, strand=-1))
             self.gds_features.add_feature(feature, color="pink")
         self.gds_features.add_feature(
             feature, name="Reverse", sigil=glyph, color="red", arrowhead_length=2.0
@@ -686,12 +683,12 @@ class SigilsTest(unittest.TestCase):
         self.gdt_features = self.gdd.new_track(1, greytrack=True, height=3)
         # We'll just use one feature set for these features,
         self.gds_features = self.gdt_features.new_set()
-        feature = SeqFeature(FeatureLocation(25, 375), strand=None)
+        feature = SeqFeature(SimpleLocation(25, 375, strand=None))
         self.gds_features.add_feature(feature, color="lightgreen")
         self.gds_features.add_feature(
             feature, name="Standless", sigil=glyph, color="green", arrowhead_length=2.0
         )
-        self.finish("GD_sigil_long_%s" % glyph)
+        self.finish(f"GD_sigil_long_{glyph}")
 
     def test_long_arrow_heads(self):
         """Feature ARROW sigil heads within bounding box."""
@@ -811,7 +808,7 @@ class DiagramTest(unittest.TestCase):
 
         gdd = Diagram(
             "Test Diagram",
-            # For the circular diagram we don't want a closed cirle:
+            # For the circular diagram we don't want a closed circle:
             circular=False,
         )
         # Add a track of features,
@@ -831,10 +828,11 @@ class DiagramTest(unittest.TestCase):
             if feature.type != "CDS":
                 # We're going to ignore these.
                 continue
-            if feature.location.end.position < start:
+            # These may miss fuzzy locations where the integer sorting is a simplification
+            if feature.location.end < start:
                 # Out of frame (too far left)
                 continue
-            if feature.location.start.position > end:
+            if feature.location.start > end:
                 # Out of frame (too far right)
                 continue
 
@@ -842,8 +840,8 @@ class DiagramTest(unittest.TestCase):
             # of ReportLab.  You need ReportLab 2.4 or later
             try:
                 url = (
-                    "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi"
-                    + "?db=protein&id=%s" % feature.qualifiers["protein_id"][0]
+                    "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&id="
+                    + str(feature.qualifiers["protein_id"][0])
                 )
             except KeyError:
                 url = None
@@ -943,14 +941,14 @@ class DiagramTest(unittest.TestCase):
                 index = genbank_entry.seq.find(site, start=index)
                 if index == -1:
                     break
-                feature = SeqFeature(FeatureLocation(index, index + 6), strand=None)
+                feature = SeqFeature(SimpleLocation(index, index + 6, strand=None))
 
                 # This URL should work in SVG output from recent versions
                 # of ReportLab.  You need ReportLab 2.4 or later
                 try:
                     url = (
-                        "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi"
-                        + "?db=protein&id=%s" % feature.qualifiers["protein_id"][0]
+                        "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&id="
+                        + str(feature.qualifiers["protein_id"][0])
                     )
                 except KeyError:
                     url = None
@@ -1051,7 +1049,7 @@ class DiagramTest(unittest.TestCase):
                     # Background for CDS,
                     a = gdfsA.add_feature(
                         SeqFeature(
-                            FeatureLocation(
+                            SimpleLocation(
                                 feature.location.start, feature.location.end, strand=0
                             )
                         ),
@@ -1060,7 +1058,7 @@ class DiagramTest(unittest.TestCase):
                     # Background for gene,
                     b = gdfsB.add_feature(
                         SeqFeature(
-                            FeatureLocation(
+                            SimpleLocation(
                                 prev_gene.location.start,
                                 prev_gene.location.end,
                                 strand=0,
@@ -1076,83 +1074,47 @@ class DiagramTest(unittest.TestCase):
 
         # Some cross links on the same linear diagram fragment,
         f, c = fill_and_border(colors.red)
-        a = gdfsA.add_feature(
-            SeqFeature(FeatureLocation(2220, 2230)), color=f, border=c
-        )
-        b = gdfsB.add_feature(
-            SeqFeature(FeatureLocation(2200, 2210)), color=f, border=c
-        )
+        a = gdfsA.add_feature(SeqFeature(SimpleLocation(2220, 2230)), color=f, border=c)
+        b = gdfsB.add_feature(SeqFeature(SimpleLocation(2200, 2210)), color=f, border=c)
         gdd.cross_track_links.append(CrossLink(a, b, f, c))
 
         f, c = fill_and_border(colors.blue)
-        a = gdfsA.add_feature(
-            SeqFeature(FeatureLocation(2150, 2200)), color=f, border=c
-        )
-        b = gdfsB.add_feature(
-            SeqFeature(FeatureLocation(2220, 2290)), color=f, border=c
-        )
+        a = gdfsA.add_feature(SeqFeature(SimpleLocation(2150, 2200)), color=f, border=c)
+        b = gdfsB.add_feature(SeqFeature(SimpleLocation(2220, 2290)), color=f, border=c)
         gdd.cross_track_links.append(CrossLink(a, b, f, c, flip=True))
 
         f, c = fill_and_border(colors.green)
-        a = gdfsA.add_feature(
-            SeqFeature(FeatureLocation(2250, 2560)), color=f, border=c
-        )
-        b = gdfsB.add_feature(
-            SeqFeature(FeatureLocation(2300, 2860)), color=f, border=c
-        )
+        a = gdfsA.add_feature(SeqFeature(SimpleLocation(2250, 2560)), color=f, border=c)
+        b = gdfsB.add_feature(SeqFeature(SimpleLocation(2300, 2860)), color=f, border=c)
         gdd.cross_track_links.append(CrossLink(a, b, f, c))
 
         # Some cross links where both parts are saddling the linear diagram fragment boundary,
         f, c = fill_and_border(colors.red)
-        a = gdfsA.add_feature(
-            SeqFeature(FeatureLocation(3155, 3250)), color=f, border=c
-        )
-        b = gdfsB.add_feature(
-            SeqFeature(FeatureLocation(3130, 3300)), color=f, border=c
-        )
+        a = gdfsA.add_feature(SeqFeature(SimpleLocation(3155, 3250)), color=f, border=c)
+        b = gdfsB.add_feature(SeqFeature(SimpleLocation(3130, 3300)), color=f, border=c)
         gdd.cross_track_links.append(CrossLink(a, b, f, c))
         # Nestled within that (drawn on top),
         f, c = fill_and_border(colors.blue)
-        a = gdfsA.add_feature(
-            SeqFeature(FeatureLocation(3160, 3275)), color=f, border=c
-        )
-        b = gdfsB.add_feature(
-            SeqFeature(FeatureLocation(3180, 3225)), color=f, border=c
-        )
+        a = gdfsA.add_feature(SeqFeature(SimpleLocation(3160, 3275)), color=f, border=c)
+        b = gdfsB.add_feature(SeqFeature(SimpleLocation(3180, 3225)), color=f, border=c)
         gdd.cross_track_links.append(CrossLink(a, b, f, c, flip=True))
 
         # Some cross links where two features are on either side of the linear diagram fragment boundary,
         f, c = fill_and_border(colors.green)
-        a = gdfsA.add_feature(
-            SeqFeature(FeatureLocation(6450, 6550)), color=f, border=c
-        )
-        b = gdfsB.add_feature(
-            SeqFeature(FeatureLocation(6265, 6365)), color=f, border=c
-        )
+        a = gdfsA.add_feature(SeqFeature(SimpleLocation(6450, 6550)), color=f, border=c)
+        b = gdfsB.add_feature(SeqFeature(SimpleLocation(6265, 6365)), color=f, border=c)
         gdd.cross_track_links.append(CrossLink(a, b, color=f, border=c))
         f, c = fill_and_border(colors.gold)
-        a = gdfsA.add_feature(
-            SeqFeature(FeatureLocation(6265, 6365)), color=f, border=c
-        )
-        b = gdfsB.add_feature(
-            SeqFeature(FeatureLocation(6450, 6550)), color=f, border=c
-        )
+        a = gdfsA.add_feature(SeqFeature(SimpleLocation(6265, 6365)), color=f, border=c)
+        b = gdfsB.add_feature(SeqFeature(SimpleLocation(6450, 6550)), color=f, border=c)
         gdd.cross_track_links.append(CrossLink(a, b, color=f, border=c))
         f, c = fill_and_border(colors.red)
-        a = gdfsA.add_feature(
-            SeqFeature(FeatureLocation(6275, 6375)), color=f, border=c
-        )
-        b = gdfsB.add_feature(
-            SeqFeature(FeatureLocation(6430, 6530)), color=f, border=c
-        )
+        a = gdfsA.add_feature(SeqFeature(SimpleLocation(6275, 6375)), color=f, border=c)
+        b = gdfsB.add_feature(SeqFeature(SimpleLocation(6430, 6530)), color=f, border=c)
         gdd.cross_track_links.append(CrossLink(a, b, color=f, border=c, flip=True))
         f, c = fill_and_border(colors.blue)
-        a = gdfsA.add_feature(
-            SeqFeature(FeatureLocation(6430, 6530)), color=f, border=c
-        )
-        b = gdfsB.add_feature(
-            SeqFeature(FeatureLocation(6275, 6375)), color=f, border=c
-        )
+        a = gdfsA.add_feature(SeqFeature(SimpleLocation(6430, 6530)), color=f, border=c)
+        b = gdfsB.add_feature(SeqFeature(SimpleLocation(6275, 6375)), color=f, border=c)
         gdd.cross_track_links.append(CrossLink(a, b, color=f, border=c, flip=True))
 
         cds_count = 0

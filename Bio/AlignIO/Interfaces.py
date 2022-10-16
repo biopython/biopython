@@ -10,8 +10,6 @@ Unless you are writing a new parser or writer for Bio.AlignIO, you should not
 use this module.  It provides base classes to try and simplify things.
 """
 
-from Bio.Alphabet import single_letter_alphabet
-
 
 class AlignmentIterator:
     """Base class for building MultipleSeqAlignment iterators.
@@ -21,25 +19,22 @@ class AlignmentIterator:
     method as well.
     """
 
-    def __init__(self, handle, seq_count=None, alphabet=single_letter_alphabet):
+    def __init__(self, handle, seq_count=None):
         """Create an AlignmentIterator object.
 
         Arguments:
          - handle   - input file
          - count    - optional, expected number of records per alignment
            Recommend for fasta file format.
-         - alphabet - optional, e.g. Bio.Alphabet.generic_protein
 
         Note when subclassing:
          - there should be a single non-optional argument, the handle,
-           and optional count and alphabet IN THAT ORDER.
-         - you do not have to require an alphabet (?).
+           and optional count IN THAT ORDER.
          - you can add additional optional arguments.
 
         """
         self.handle = handle
         self.records_per_alignment = seq_count
-        self.alphabet = alphabet
         #####################################################
         # You may want to subclass this, for example        #
         # to read through the file to find the first record,#
@@ -66,10 +61,10 @@ class AlignmentIterator:
 
             with open("many.phy","r") as myFile:
                 for alignment in PhylipIterator(myFile):
-                    print "New alignment:"
+                    print("New alignment:")
                     for record in alignment:
-                        print record.id
-                        print record.seq
+                        print(record.id)
+                        print(record.seq)
 
         """
         return iter(self.__next__, None)

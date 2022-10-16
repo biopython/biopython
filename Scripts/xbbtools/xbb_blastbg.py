@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Copyright 2000 by Thomas Sicheritz-Ponten.
-# Copyrigth 2016 by Markus Piotrowski.
+# Copyright 2016 by Markus Piotrowski.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -103,7 +103,7 @@ class BlastDisplayer:
                 self.tid.insert("end", txt)
                 self.tid.update()
             except Exception:
-                # text widget is detroyed, we assume the search
+                # text widget is destroyed, we assume the search
                 # has been cancelled
                 pass
         self.Exit()

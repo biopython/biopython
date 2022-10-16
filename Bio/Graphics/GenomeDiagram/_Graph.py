@@ -130,16 +130,13 @@ class GraphData:
         """
         positions = sorted(self.data)  # i.e. dict keys
         # Return first and last positions in graph
-        # print len(self.data)
+        # print(len(self.data))
         return (positions[0], positions[-1])
 
     def mean(self):
         """Return the mean value for the data points (float)."""
         data = list(self.data.values())
-        sum = 0.0
-        for item in data:
-            sum += float(item)
-        return sum / len(data)
+        return sum(data) / len(data)
 
     def stdev(self):
         """Return the sample standard deviation for the data (float)."""
@@ -147,7 +144,7 @@ class GraphData:
         m = self.mean()
         runtotal = 0.0
         for entry in data:
-            runtotal += float((entry - m) ** 2)
+            runtotal += (entry - m) ** 2
         # This is sample standard deviation; population stdev would involve
         # division by len(data), rather than len(data)-1
         return sqrt(runtotal / (len(data) - 1))
@@ -184,10 +181,10 @@ class GraphData:
 
     def __str__(self):
         """Return a string describing the graph data."""
-        outstr = ["\nGraphData: %s, ID: %s" % (self.name, self.id)]
+        outstr = [f"\nGraphData: {self.name}, ID: {self.id}"]
         outstr.append("Number of points: %d" % len(self.data))
-        outstr.append("Mean data value: %s" % self.mean())
-        outstr.append("Sample SD: %.3f" % self.stdev())
+        outstr.append(f"Mean data value: {self.mean()}")
+        outstr.append(f"Sample SD: {self.stdev():.3f}")
         outstr.append(
             "Minimum: %s\n1Q: %s\n2Q: %s\n3Q: %s\nMaximum: %s" % self.quartiles()
         )

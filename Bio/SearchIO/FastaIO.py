@@ -468,7 +468,7 @@ class FastaM10Parser:
                 if state == _STATE_NONE:
                     # make sure it's the correct query
                     if not query_id.startswith(line[1:].split(" ")[0]):
-                        raise ValueError("%r vs %r" % (query_id, line))
+                        raise ValueError(f"{query_id!r} vs {line!r}")
                     state = _STATE_QUERY_BLOCK
                     parsed_hsp["query"]["seq"] = ""
                 elif state == _STATE_QUERY_BLOCK:
@@ -532,7 +532,6 @@ class FastaM10Indexer(SearchIndexer):
     def __init__(self, filename):
         """Initialize the class."""
         SearchIndexer.__init__(self, filename)
-        self._handle = self._handle
 
     def __iter__(self):
         """Iterate over FastaM10Indexer; yields query results' keys, start offsets, offset lengths."""

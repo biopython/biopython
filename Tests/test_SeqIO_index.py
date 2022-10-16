@@ -2,14 +2,12 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Unit tests for Bio.SeqIO.index(...) and index_db() functions."""
 
 try:
     import sqlite3
 except ImportError:
-    # Try to run what tests we can on Jython
-    # where we don't expect this to be installed.
+    # Try to run what tests we can in case sqlite3 was not installed
     sqlite3 = None
 
 import os
@@ -28,7 +26,7 @@ from Bio.SeqIO._index import _FormatToRandomAccess
 from Bio import BiopythonParserWarning
 from Bio import MissingPythonDependencyError
 
-from seq_tests_common import compare_record
+from seq_tests_common import SeqRecordTestBaseClass
 from test_SeqIO import SeqIOTestBaseClass
 
 
@@ -110,13 +108,13 @@ if sqlite3:
         def test_old_contents(self):
             """Check actual filenames in existing indexes."""
             filenames, flag = raw_filenames("Roche/triple_sff.idx")
-            self.assertEqual(flag, None)
+            self.assertIsNone(flag)
             self.assertEqual(
                 filenames, ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"]
             )
 
             filenames, flag = raw_filenames("Roche/triple_sff_rel_paths.idx")
-            self.assertEqual(flag, True)
+            self.assertTrue(flag)
             self.assertEqual(
                 filenames, ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"]
             )
@@ -210,7 +208,7 @@ if sqlite3:
 
             # Now directly check the filenames inside the SQLite index:
             filenames, flag = raw_filenames(index_file)
-            self.assertEqual(flag, True)
+            self.assertTrue(flag)
             self.assertEqual(filenames, expt_sff_files)
 
             # Load index...
@@ -224,7 +222,7 @@ if sqlite3:
 
         def test_child_folder_rel(self):
             """Check relative links to child folder."""
-            # Note we expect relative paths recorded with Unix slashs!
+            # Note we expect relative paths recorded with Unix slashes!
             expt_sff_files = [
                 "Roche/E3MFGYR02_no_manifest.sff",
                 "Roche/greek.sff",
@@ -332,7 +330,7 @@ if sqlite3:
             )
 
 
-class IndexDictTests(SeqIOTestBaseClass):
+class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
 
     tests = [
         ("Ace/contig1.ace", "ace"),
@@ -406,7 +404,7 @@ class IndexDictTests(SeqIOTestBaseClass):
             os.remove(self.index_tmp)
 
     def check_dict_methods(self, rec_dict, keys, ids, msg):
-        self.assertEqual(set(keys), set(rec_dict), msg=msg)
+        self.assertCountEqual(keys, rec_dict.keys(), msg=msg)
         # This is redundant, I just want to make sure len works:
         self.assertEqual(len(keys), len(rec_dict), msg=msg)
         # Make sure boolean evaluation works
@@ -415,11 +413,11 @@ class IndexDictTests(SeqIOTestBaseClass):
             self.assertIn(key, rec_dict, msg=msg)
             self.assertEqual(id, rec_dict[key].id, msg=msg)
             self.assertEqual(id, rec_dict.get(key).id, msg=msg)
-        # Check non-existant keys,
+        # Check non-existent keys,
         assert chr(0) not in keys, "Bad example in test"
         with self.assertRaises(KeyError, msg=msg):
             rec = rec_dict[chr(0)]
-        self.assertEqual(rec_dict.get(chr(0)), None, msg=msg)
+        self.assertIsNone(rec_dict.get(chr(0)), msg=msg)
         self.assertEqual(rec_dict.get(chr(0), chr(1)), chr(1), msg=msg)
         with self.assertRaises(AttributeError, msg=msg):
             rec_dict.iteritems
@@ -434,7 +432,7 @@ class IndexDictTests(SeqIOTestBaseClass):
 
     def simple_check(self, filename, fmt, comp):
         """Check indexing (without a key function)."""
-        msg = "Test failure parsing file %s with format %s" % (filename, fmt)
+        msg = f"Test failure parsing file {filename} with format {fmt}"
         if comp:
             mode = "r" + self.get_mode(fmt)
             with gzip.open(filename, mode) as handle:
@@ -507,7 +505,7 @@ class IndexDictTests(SeqIOTestBaseClass):
 
     def key_check(self, filename, fmt, comp):
         """Check indexing with a key function."""
-        msg = "Test failure parsing file %s with format %s" % (filename, fmt)
+        msg = f"Test failure parsing file {filename} with format {fmt}"
         if comp:
             mode = "r" + self.get_mode(fmt)
             with gzip.open(filename, mode) as handle:
@@ -565,9 +563,7 @@ class IndexDictTests(SeqIOTestBaseClass):
             rec_dict._con.close()  # hack for PyPy
 
             # Now reload without passing filenames and format
-            rec_dict = SeqIO.index_db(
-                index_tmp, key_function=self.add_prefix
-            )
+            rec_dict = SeqIO.index_db(index_tmp, key_function=self.add_prefix)
             self.check_dict_methods(rec_dict, key_list, id_list, msg=msg)
             rec_dict.close()
             rec_dict._con.close()  # hack for PyPy
@@ -576,7 +572,7 @@ class IndexDictTests(SeqIOTestBaseClass):
 
     def get_raw_check(self, filename, fmt, comp):
         # Also checking the key_function here
-        msg = "Test failure parsing file %s with format %s" % (filename, fmt)
+        msg = f"Test failure parsing file {filename} with format {fmt}"
         if comp:
             with gzip.open(filename, "rb") as handle:
                 raw_file = handle.read()
@@ -594,19 +590,18 @@ class IndexDictTests(SeqIOTestBaseClass):
                 rec_dict = SeqIO.index(filename, fmt, key_function=str.lower)
                 if sqlite3:
                     rec_dict_db = SeqIO.index_db(
-                        ":memory:", filename, fmt, key_function=str.lower,
+                        ":memory:", filename, fmt, key_function=str.lower
                     )
         else:
             rec_dict = SeqIO.index(filename, fmt, key_function=str.lower)
             if sqlite3:
                 rec_dict_db = SeqIO.index_db(
-                    ":memory:", filename, fmt, key_function=str.lower,
+                    ":memory:", filename, fmt, key_function=str.lower
                 )
 
-        self.assertEqual(set(id_list), set(rec_dict), msg=msg)
+        self.assertCountEqual(id_list, rec_dict.keys(), msg=msg)
         if sqlite3:
-            self.assertEqual(set(id_list), set(rec_dict_db), msg=msg)
-        self.assertEqual(len(id_list), len(rec_dict), msg=msg)
+            self.assertCountEqual(id_list, rec_dict_db.keys(), msg=msg)
         for key in id_list:
             self.assertIn(key, rec_dict, msg=msg)
             self.assertEqual(key, rec_dict[key].id.lower(), msg=msg)
@@ -631,14 +626,13 @@ class IndexDictTests(SeqIOTestBaseClass):
             elif mode == "t":
                 handle = StringIO(raw.decode())
             else:
-                raise RuntimeError("Unexpected mode %s" % mode)
+                raise RuntimeError(f"Unexpected mode {mode}")
             if fmt == "sff":
                 rec2 = SeqIO.SffIO._sff_read_seq_record(
                     handle,
                     rec_dict._proxy._flows_per_read,
                     rec_dict._proxy._flow_chars,
                     rec_dict._proxy._key_sequence,
-                    alphabet=None,
                     trim=False,
                 )
             elif fmt == "sff-trim":
@@ -647,7 +641,6 @@ class IndexDictTests(SeqIOTestBaseClass):
                     rec_dict._proxy._flows_per_read,
                     rec_dict._proxy._flow_chars,
                     rec_dict._proxy._key_sequence,
-                    alphabet=None,
                     trim=True,
                 )
             elif fmt == "uniprot-xml":
@@ -670,9 +663,30 @@ class IndexDictTests(SeqIOTestBaseClass):
                 rec2 = SeqIO.read(handle, fmt)
             else:
                 rec2 = SeqIO.read(handle, fmt)
-            self.assertEqual(True, compare_record(rec1, rec2))
+            self.compare_record(rec1, rec2)
         rec_dict.close()
         del rec_dict
+
+    if sqlite3:
+
+        def test_alpha_fails_db(self):
+            """Reject alphabet argument in Bio.SeqIO.index_db()."""
+            # In historic usage, alphabet=... would be a Bio.Alphabet object.
+            self.assertRaises(
+                ValueError,
+                SeqIO.index_db,
+                ":memory:",
+                ["Fasta/dups.fasta"],
+                "fasta",
+                alphabet="XXX",
+            )
+
+    def test_alpha_fails(self):
+        """Reject alphabet argument in Bio.SeqIO.index()."""
+        # In historic usage, alphabet=... would be a Bio.Alphabet object.
+        self.assertRaises(
+            ValueError, SeqIO.index, "Fasta/dups.fasta", "fasta", alphabet="XXX"
+        )
 
     if sqlite3:
 

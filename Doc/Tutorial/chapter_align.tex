@@ -34,8 +34,6 @@ Both functions expect two mandatory arguments:
 
 \noindent There is also an optional \verb|seq_count| argument which is discussed in Section~\ref{sec:AlignIO-count-argument} below for dealing with ambiguous file formats which may contain more than one alignment.
 
-A further optional \verb|alphabet| argument allowing you to specify the expected alphabet. This can be useful as many alignment file formats do not explicitly label the sequences as RNA, DNA or protein -- which means \verb|Bio.AlignIO| will default to using a generic alphabet.
-
 \subsection{Single Alignments}
 As an example, consider the following annotation rich protein alignment in the PFAM or Stockholm file format:
 
@@ -168,7 +166,7 @@ However, as you should expect, if you check each \verb|SeqRecord| there is no an
 
 Note that rather than using the Sanger website, you could have used \verb|Bio.AlignIO| to convert the original Stockholm format file into a FASTA file yourself (see below).
 
-With any supported file format, you can load an alignment in exactly the same way just by changing the format string.  For example, use ``phylip'' for PHYLIP files, ``nexus'' for NEXUS files or ``emboss'' for the alignments output by the EMBOSS tools.  There is a full listing on the wiki page (\url{http://biopython.org/wiki/AlignIO}) and in the built in documentation (also \href{http://biopython.org/docs/1.77/api/Bio.AlignIO.html}{online}):
+With any supported file format, you can load an alignment in exactly the same way just by changing the format string.  For example, use ``phylip'' for PHYLIP files, ``nexus'' for NEXUS files or ``emboss'' for the alignments output by the EMBOSS tools.  There is a full listing on the wiki page (\url{http://biopython.org/wiki/AlignIO}) and in the built in documentation (also \href{http://biopython.org/docs/\bpversion/api/Bio.AlignIO.html}{online}):
 
 \begin{minted}{pycon}
 >>> from Bio import AlignIO
@@ -380,29 +378,28 @@ Note we create some \verb|SeqRecord| objects to construct the alignment from.
 
 %doctest
 \begin{minted}{pycon}
->>> from Bio.Alphabet import generic_dna
 >>> from Bio.Seq import Seq
 >>> from Bio.SeqRecord import SeqRecord
 >>> from Bio.Align import MultipleSeqAlignment
 >>> align1 = MultipleSeqAlignment(
 ...     [
-...         SeqRecord(Seq("ACTGCTAGCTAG", generic_dna), id="Alpha"),
-...         SeqRecord(Seq("ACT-CTAGCTAG", generic_dna), id="Beta"),
-...         SeqRecord(Seq("ACTGCTAGDTAG", generic_dna), id="Gamma"),
+...         SeqRecord(Seq("ACTGCTAGCTAG"), id="Alpha"),
+...         SeqRecord(Seq("ACT-CTAGCTAG"), id="Beta"),
+...         SeqRecord(Seq("ACTGCTAGDTAG"), id="Gamma"),
 ...     ]
 ... )
 >>> align2 = MultipleSeqAlignment(
 ...     [
-...         SeqRecord(Seq("GTCAGC-AG", generic_dna), id="Delta"),
-...         SeqRecord(Seq("GACAGCTAG", generic_dna), id="Epsilon"),
-...         SeqRecord(Seq("GTCAGCTAG", generic_dna), id="Zeta"),
+...         SeqRecord(Seq("GTCAGC-AG"), id="Delta"),
+...         SeqRecord(Seq("GACAGCTAG"), id="Epsilon"),
+...         SeqRecord(Seq("GTCAGCTAG"), id="Zeta"),
 ...     ]
 ... )
 >>> align3 = MultipleSeqAlignment(
 ...     [
-...         SeqRecord(Seq("ACTAGTACAGCTG", generic_dna), id="Eta"),
-...         SeqRecord(Seq("ACTAGTACAGCT-", generic_dna), id="Theta"),
-...         SeqRecord(Seq("-CTACTACAGGTG", generic_dna), id="Iota"),
+...         SeqRecord(Seq("ACTAGTACAGCTG"), id="Eta"),
+...         SeqRecord(Seq("ACTAGTACAGCT-"), id="Theta"),
+...         SeqRecord(Seq("-CTACTACAGGTG"), id="Iota"),
 ...     ]
 ... )
 >>> my_alignments = [align1, align2, align3]
@@ -415,7 +412,7 @@ Note we create some \verb|SeqRecord| objects to construct the alignment from.
 >>> AlignIO.write(my_alignments, "my_example.phy", "phylip")
 \end{minted}
 
-\noindent And if you open this file in your favourite text editor it should look like this:
+\noindent And if you open this file in your favorite text editor it should look like this:
 
 \begin{minted}{text}
  3 12
@@ -843,16 +840,17 @@ object into an array of letters -- and you can do this with NumPy:
 >>> import numpy as np
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
->>> align_array = np.array([list(rec) for rec in alignment], np.character)
+>>> align_array = np.array(alignment)
 >>> print("Array shape %i by %i" % align_array.shape)
 Array shape 7 by 52
-\end{minted}
-
-If you will be working heavily with the columns, you can tell NumPy to store
-the array by column (as in Fortran) rather than its default of by row (as in C):
-
-\begin{minted}{pycon}
->>> align_array = np.array([list(rec) for rec in alignment], np.character, order="F")
+>>> align_array[:, :10]  # doctest:+ELLIPSIS
+array([['A', 'E', 'P', 'N', 'A', 'A', 'T', 'N', 'Y', 'A'],
+       ['A', 'E', 'P', 'N', 'A', 'A', 'T', 'N', 'Y', 'A'],
+       ['D', 'G', 'T', 'S', 'T', 'A', 'T', 'S', 'Y', 'A'],
+       ['A', 'E', 'G', 'D', 'D', 'P', '-', '-', '-', 'A'],
+       ['A', 'E', 'G', 'D', 'D', 'P', '-', '-', '-', 'A'],
+       ['A', 'E', 'G', 'D', 'D', 'P', '-', '-', '-', 'A'],
+       ['F', 'A', 'A', 'D', 'D', 'A', 'T', 'S', 'Q', 'A']],...
 \end{minted}
 
 Note that this leaves the original Biopython alignment object and the NumPy array
@@ -871,13 +869,12 @@ The \verb+substitutions+ property of an alignment reports how often letters in t
 >>> from Bio.Align import MultipleSeqAlignment
 >>> alignment = MultipleSeqAlignment(
 ...     [
-...         SeqRecord(Seq("ACTCCTA"), id='seq1'),
-...         SeqRecord(Seq("AAT-CTA"), id='seq2'),
-...         SeqRecord(Seq("CCTACT-"), id='seq3'),
-...         SeqRecord(Seq("TCTCCTC"), id='seq4'),
+...         SeqRecord(Seq("ACTCCTA"), id="seq1"),
+...         SeqRecord(Seq("AAT-CTA"), id="seq2"),
+...         SeqRecord(Seq("CCTACT-"), id="seq3"),
+...         SeqRecord(Seq("TCTCCTC"), id="seq4"),
 ...     ]
 ... )
-...
 >>> print(alignment)
 Alignment with 4 rows and 7 columns
 ACTCCTA seq1
@@ -913,9 +910,7 @@ This also allows you to change the order of letters in the alphabet.
 
 There are \emph{lots} of algorithms out there for aligning sequences, both pairwise alignments
 and multiple sequence alignments. These calculations are relatively slow, and you generally
-wouldn't want to write such an algorithm in Python. For pairwise alignments Biopython contains
-the \verb|Bio.pairwise2| module , which is supplemented by functions written in C for speed
-enhancements and the new \verb|PairwiseAligner| (see Section~\ref{sec:pairwise}). In addition,
+wouldn't want to write such an algorithm in Python. For pairwise alignments Biopython contains \verb|PairwiseAligner| (see Section~\ref{sec:pairwise}). In addition,
 you can use Biopython to invoke a command line tool on your behalf. Normally you would:
 \begin{enumerate}
 \item Prepare an input file of your unaligned sequences, typically this will be a FASTA file
@@ -931,12 +926,16 @@ You create a command line object specifying the options (e.g. the input filename
 output filename), then invoke this command line via a Python operating system call (e.g.
 using the \texttt{subprocess} module).
 
+\emph{WARNING:} We have decided to drop these command line wrappers in a future Biopython
+release. We will be updating this documentation to instead build the command line
+directly, and invoke it with the \texttt{subprocess} module.
+
 Most of these wrappers are defined in the \verb|Bio.Align.Applications| module:
 
 %doctest
 \begin{minted}{pycon}
 >>> import Bio.Align.Applications
->>> dir(Bio.Align.Applications) # doctest:+ELLIPSIS
+>>> dir(Bio.Align.Applications)  # doctest:+ELLIPSIS
 ['ClustalOmegaCommandline', 'ClustalwCommandline', 'DialignCommandline', 'MSAProbsCommandline', 'MafftCommandline', 'MuscleCommandline', 'PrankCommandline', 'ProbconsCommandline', 'TCoffeeCommandline', ...]
 \end{minted}
 
@@ -960,7 +959,7 @@ ClustalW is a popular command line tool for multiple sequence alignment
 (and several others).
 
 Before trying to use ClustalW from within Python, you should first try running
-the ClustalW tool yourself by hand at the command line, to familiarise
+the ClustalW tool yourself by hand at the command line, to familiarize
 yourself the other options. You'll find the Biopython wrapper is very
 faithful to the actual command line API:
 
@@ -1209,12 +1208,13 @@ with handles instead:
 >>> import subprocess
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> muscle_cline = MuscleCommandline(input="opuntia.fasta")
->>> child = subprocess.Popen(str(muscle_cline),
-...                          stdout=subprocess.PIPE,
-...                          stderr=subprocess.PIPE,
-...                          universal_newlines=True,
-...                          shell=(sys.platform!="win32"))
-...
+>>> child = subprocess.Popen(
+...     str(muscle_cline),
+...     stdout=subprocess.PIPE,
+...     stderr=subprocess.PIPE,
+...     text=True,
+...     shell=(sys.platform != "win32"),
+... )
 >>> from Bio import AlignIO
 >>> align = AlignIO.read(child.stdout, "fasta")
 >>> print(align)
@@ -1262,12 +1262,14 @@ Now for the fiddly bits using the \verb|subprocess| module, stdin and stdout:
 \begin{minted}{pycon}
 >>> import subprocess
 >>> import sys
->>> child = subprocess.Popen(str(cline),
-...                          stdin=subprocess.PIPE,
-...                          stdout=subprocess.PIPE,
-...                          stderr=subprocess.PIPE,
-...                          universal_newlines=True,
-...                          shell=(sys.platform!="win32"))
+>>> child = subprocess.Popen(
+...     str(cline),
+...     stdin=subprocess.PIPE,
+...     stdout=subprocess.PIPE,
+...     stderr=subprocess.PIPE,
+...     text=True,
+...     shell=(sys.platform != "win32"),
+... )
 \end{minted}
 
 That should start MUSCLE, but it will be sitting waiting for its FASTA input
@@ -1379,8 +1381,13 @@ Let's start by creating a complete \texttt{needle} command line object in one go
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Emboss.Applications import NeedleCommandline
->>> needle_cline = NeedleCommandline(asequence="alpha.faa", bsequence="beta.faa",
-...                                  gapopen=10, gapextend=0.5, outfile="needle.txt")
+>>> needle_cline = NeedleCommandline(
+...     asequence="alpha.faa",
+...     bsequence="beta.faa",
+...     gapopen=10,
+...     gapextend=0.5,
+...     outfile="needle.txt",
+... )
 >>> print(needle_cline)
 needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5
 \end{minted}
@@ -1398,16 +1405,21 @@ the full path to the tool, for example:
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Emboss.Applications import NeedleCommandline
->>> needle_cline = NeedleCommandline(r"C:\EMBOSS\needle.exe",
-...                                  asequence="alpha.faa", bsequence="beta.faa",
-...                                  gapopen=10, gapextend=0.5, outfile="needle.txt")
+>>> needle_cline = NeedleCommandline(
+...     r"C:\EMBOSS\needle.exe",
+...     asequence="alpha.faa",
+...     bsequence="beta.faa",
+...     gapopen=10,
+...     gapextend=0.5,
+...     outfile="needle.txt",
+... )
 \end{minted}
 
 \noindent Remember in Python that for a default string \verb|\n| or \verb|\t| means a
 new line or a tab -- which is why we're put a letter ``r'' at the start for a raw string.
 
 At this point it might help to try running the EMBOSS tools yourself by hand at the
-command line, to familiarise yourself the other options and compare them to the
+command line, to familiarize yourself the other options and compare them to the
 Biopython help text:
 
 \begin{minted}{pycon}
@@ -1421,11 +1433,11 @@ Note that you can also specify (or change or look at) the settings like this:
 \begin{minted}{pycon}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline()
->>> needle_cline.asequence="alpha.faa"
->>> needle_cline.bsequence="beta.faa"
->>> needle_cline.gapopen=10
->>> needle_cline.gapextend=0.5
->>> needle_cline.outfile="needle.txt"
+>>> needle_cline.asequence = "alpha.faa"
+>>> needle_cline.bsequence = "beta.faa"
+>>> needle_cline.gapopen = 10
+>>> needle_cline.gapextend = 0.5
+>>> needle_cline.outfile = "needle.txt"
 >>> print(needle_cline)
 needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5
 >>> print(needle_cline.outfile)
@@ -1472,221 +1484,14 @@ alignments.
 \label{sec:pairwise}
 
 Pairwise sequence alignment is the process of aligning two sequences to each
-other by optimizing the similarity score between them. Biopython includes two
-built-in pairwise aligners: the 'old' \verb|Bio.pairwise2| module and the new
-\verb|PairwiseAligner| class within the \verb|Bio.Align| module (since Biopython
-version 1.72). Both can perform global and local alignments and offer numerous
-options to change the alignment parameters. Although \verb|pairwise2| has gained
-some speed and memory enhancements recently, the new \verb|PairwiseAligner| is
-much faster; so if you need to make many alignments with larger sequences, the
-latter would be the tool to choose. \verb|pairwise2|, on the contrary, is also
-able to align lists, which can be useful if your sequences do not consist of
-single characters only. 
-
-Given that the parameters and sequences are the same, both aligners will return
-the same alignments and alignment score (if the number of alignments is too high
-they may return different subsets of all valid alignments).
-
-\subsection{pairwise2}
-\label{sec:pairwise2}
-
-\verb|Bio.pairwise2| contains essentially the same algorithms as
-\texttt{water} (local) and \texttt{needle} (global) from the
-\href{http://emboss.sourceforge.net/}{EMBOSS} suite (see above) and should
-return the same results. The \verb|pairwise2| module has undergone some
-optimization regarding speed and memory consumption recently (Biopython versions
-\textgreater 1.67) so that for short sequences (global alignments:
-\textasciitilde 2000 residues, local alignments \textasciitilde 600 residues)
-it's faster (or equally fast) to use \verb|pairwise2| than calling EMBOSS' 
-\texttt{water} or \texttt{needle} via the command line tools.
-
-Suppose you want to do a global pairwise alignment between the same two
-hemoglobin sequences from above (\texttt{HBA\_HUMAN}, \texttt{HBB\_HUMAN})
-stored in \texttt{alpha.faa} and \texttt{beta.faa}:
-
-%doctest examples
-\begin{minted}{pycon}
->>> from Bio import pairwise2
->>> from Bio import SeqIO
->>> seq1 = SeqIO.read("alpha.faa", "fasta")
->>> seq2 = SeqIO.read("beta.faa", "fasta")
->>> alignments = pairwise2.align.globalxx(seq1.seq, seq2.seq)
-\end{minted}
-
-As you see, we call the alignment function with \verb|align.globalxx|. The tricky
-part are the last two letters of the function name (here: \texttt{xx}), which are
-used for  decoding the scores and penalties for matches (and mismatches) and gaps.
-The first letter decodes the match score, e.g. \texttt{x} means that a match counts
-1 while mismatches have no costs. With \texttt{m} general values for either matches
-or mismatches can be defined
-(for more options see \href{http://biopython.org/docs/1.77/api/Bio.pairwise2.html}{Biopython's API}).
-The second letter decodes the cost for gaps; \texttt{x} means no gap costs at all,
-with \texttt{s} different penalties for opening and extending a gap can be assigned.
-So, \verb|globalxx| means that only matches between both sequences are counted.
-
-Our variable \texttt{alignments} now contains a list of alignments (at least one) which
-have the same optimal score for the given conditions. In our example this are 80
-different alignments with the score 72 (\verb|Bio.pairwise2| will return up to 1000
-alignments). Have a look at one of these alignments:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> len(alignments)
-80
->>> print(alignments[0]) # doctest:+ELLIPSIS
-Alignment(seqA='MV-LSPADKTNV---K-A--A-WGKVGAHAG...YR-', seqB='MVHL-----T--PEEKSAVTALWGKV----...Y-H', score=72.0, start=0, end=217)
-\end{minted}
-
-Each alignment is a named tuple consisting of the two aligned sequences, the score, the
-start and the end positions of the alignment (in global alignments the start is
-always 0 and the end the length of the alignment). \verb|Bio.pairwise2| has a
-function \verb|format_alignment| for a nicer printout:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> print(pairwise2.format_alignment(*alignments[0])) # doctest:+ELLIPSIS
-MV-LSPADKTNV---K-A--A-WGKVGAHAG---EY-GA-EALE-RMFLSF----PTTK-TY--F...YR-
-|| |     |     | |  | ||||        |  |  |||  |  |      |    |   |...|  
-MVHL-----T--PEEKSAVTALWGKV-----NVDE-VG-GEAL-GR--L--LVVYP---WT-QRF...Y-H
-  Score=72
-<BLANKLINE>
-\end{minted}
-
-Since Biopython 1.77 the required parameters can be supplied with keywords. The
-last example can now also be written as:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> alignments = pairwise2.align.globalxx(sequenceA=seq1.seq, sequenceB=seq2.seq)
-\end{minted}
-
-Better alignments are usually obtained by penalizing gaps: higher costs
-for opening a gap and lower costs for extending an existing gap. For amino
-acid sequences match scores are usually encoded in matrices like \texttt{PAM}
-or \texttt{BLOSUM}. Thus, a more meaningful alignment for our example can be
-obtained by using the BLOSUM62 matrix, together with a gap open penalty of 10
-and a gap extension penalty of 0.5 (using \verb|globalds|):
-
-\begin{minted}{pycon}
->>> from Bio import pairwise2
->>> from Bio import SeqIO
->>> from Bio.Align import substitution_matrices
->>> blosum62 = substitution_matrices.load("BLOSUM62")
->>> seq1 = SeqIO.read("alpha.faa", "fasta")
->>> seq2 = SeqIO.read("beta.faa", "fasta")
->>> alignments = pairwise2.align.globalds(seq1.seq, seq2.seq, blosum62, -10, -0.5)
->>> len(alignments)
-2
->>> print(pairwise2.format_alignment(*alignments[0]))
-MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR
-|| |.|..|..|.|.|||| ......|............|.......||.
-MVHLTPEEKSAVTALWGKV-NVDEVGGEALGRLLVVYPWTQRFF...KYH
-  Score=292.5
-
-\end{minted}
-
-This alignment has the same score that we obtained earlier with EMBOSS needle
-using the same sequences and the same parameters.
-
-Local alignments are called similarly with the function \verb|align.localXX|,
-where again XX stands for a two letter code for the match and gap functions:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio import pairwise2
->>> from Bio.Align import substitution_matrices
->>> blosum62 = substitution_matrices.load("BLOSUM62")
->>> alignments = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
->>> print(pairwise2.format_alignment(*alignments[0]))
-3 PADKTNV
-  |..|..|
-1 PEEKSAV
-  Score=16
-<BLANKLINE>
-\end{minted}
-
-In recent Biopython versions, \verb|format_alignment| will only print the 
-aligned part of a local alignment (together with the start positions in 1-based
-notation, as shown in the above example). If you are also interested in the non-
-aligned parts of the sequences, use the keyword-parameter \verb|full_sequences=True|:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio import pairwise2
->>> from Bio.Align import substitution_matrices
->>> blosum62 = substitution_matrices.load("BLOSUM62")
->>> alignments = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
->>> print(pairwise2.format_alignment(*alignments[0], full_sequences=True))
-LSPADKTNVKAA
-  |..|..|   
---PEEKSAV---
-  Score=16
-<BLANKLINE>
-\end{minted}
-
-Note that local alignments must, as defined by Smith \& Waterman, have a 
-positive score (\textgreater 0). Thus, \verb|pairwise2| may return no
-alignments if no score \textgreater 0 has been obtained. Also, \verb|pairwise2|
-will not report alignments which are the result of the addition of zero-scoring
-extensions on either site. In the next example, the pairs serin/aspartate (S/D)
-and lysin/asparagin (K/N) both have a match score of 0. As you see, the aligned
-part has not been extended:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio import pairwise2
->>> from Bio.Align import substitution_matrices
->>> blosum62 = substitution_matrices.load("BLOSUM62")
->>> alignments = pairwise2.align.localds("LSSPADKTNVKKAA", "DDPEEKSAVNN", blosum62, -10, -1)
->>> print(pairwise2.format_alignment(*alignments[0]))
-4 PADKTNV
-  |..|..|
-3 PEEKSAV
-  Score=16
-<BLANKLINE>
-\end{minted}
-
-Instead of supplying a complete match/mismatch matrix, the match code
-\texttt{m} allows for easy defining general match/mismatch values. The next
-example uses match/mismatch scores of 5/-4 and gap penalties (open/extend)
-of 2/0.5 using \verb|localms|:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> alignments = pairwise2.align.localms("AGAACT", "GAC", 5, -4, -2, -0.5)
->>> print(pairwise2.format_alignment(*alignments[0]))
-2 GAAC
-  | ||
-1 G-AC
-  Score=13
-<BLANKLINE>
-\end{minted}
-
-One useful keyword argument of the \verb|Bio.pairwise2.align| functions is
-\texttt{score\_only}. When set to \texttt{True} it will only return the score
-of the best alignment(s), but in a significantly shorter time. It will also
-allow the alignment of longer sequences before a memory error is raised.
-Another useful keyword argument is \texttt{one\_alignment\_only=True} which
-will also result in some speed gain.
-
-Unfortunately, \verb|Bio.pairwise2| does not work with Biopython's multiple
-sequence alignment objects (yet).
-However, the module has some interesting advanced features: you can
-define your own match and gap functions (interested in testing affine
-logarithmic gap costs?), gap penalties and end gaps penalties can be different
-for both sequences, sequences can be supplied as lists (useful if you have
-residues that are encoded by more than one character), etc. These features
-are hard (if at all) to realize with other alignment tools. For more details
-see the modules documentation in
-\href{http://biopython.org/docs/1.77/api/Bio.pairwise2.html}{Biopython's API}.
-
-\subsection{PairwiseAligner}
-\label{sec:pairwisealigner}
-The new \verb|Bio.Align.PairwiseAligner| implements the Needleman-Wunsch, Smith-Waterman,
-Gotoh (three-state), and Waterman-Smith-Beyer global and local pairwise alignment algorithms.
+other by optimizing the similarity score between them.  The \verb|Bio.Align|
+module contains the \verb|PairwiseAligner| class for global and local
+alignments using the Needleman-Wunsch, Smith-Waterman, Gotoh (three-state), and
+Waterman-Smith-Beyer global and local pairwise alignment algorithms, with
+numerous options to change the alignment parameters.
 We refer to Durbin {\textit et al.} \cite{durbin1998} for in-depth information on sequence alignment algorithms.
 
-\subsubsection{Basic usage}
+\subsection{Basic usage}
 \label{sec:pairwise-basic}
 
 To generate pairwise alignments, first create a \verb+PairwiseAligner+ object:
@@ -1720,21 +1525,21 @@ two sequences:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> seq1 = "GAACT"
->>> seq2 = "GAT"
->>> score = aligner.score(seq1, seq2)
+>>> target = "GAACT"
+>>> query = "GAT"
+>>> score = aligner.score(target, query)
 >>> score
 3.0
 \end{minted}
 
-To see the actual alignments, use the \verb+aligner.align+ method and iterate over the \verb+PairwiseAlignment+ objects returned:
+To see the actual alignments, use the \verb+aligner.align+ method and iterate over the \verb+Alignment+ objects returned:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> alignments = aligner.align(seq1, seq2)
+>>> alignments = aligner.align(target, query)
 >>> for alignment in alignments:
 ...     print(alignment)
-... 
+...
 GAACT
 ||--|
 GA--T
@@ -1746,33 +1551,33 @@ G-A-T
 \end{minted}
 
 By default, a global pairwise alignment is performed, which finds the optimal
-alignment over the whole length of \verb+seq1+ and \verb+seq2+.
+alignment over the whole length of \verb+target+ and \verb+query+.
 Instead, a local alignment will find the subsequence of
-\verb+seq1+ and \verb+seq2+ with the highest alignment score.
+\verb+target+ and \verb+query+ with the highest alignment score.
 Local alignments can be generated by setting \verb+aligner.mode+ to
 \verb+"local"+:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> aligner.mode = 'local'
->>> seq1 = "AGAACTC"
->>> seq2 = "GAACT"
->>> score = aligner.score(seq1, seq2)
+>>> aligner.mode = "local"
+>>> target = "AGAACTC"
+>>> query = "GAACT"
+>>> score = aligner.score(target, query)
 >>> score
 5.0
->>> alignments = aligner.align(seq1, seq2)
+>>> alignments = aligner.align(target, query)
 >>> for alignment in alignments:
 ...     print(alignment)
 ...
 AGAACTC
- ||||| 
- GAACT 
+ |||||
+ GAACT
 <BLANKLINE>
 \end{minted}
 
 Note that there is some ambiguity in the definition of the best local alignments if segments with a score 0 can be added to the alignment. We follow the suggestion by Waterman \& Eggert \cite{waterman1987} and disallow such extensions.
 
-\subsubsection{The pairwise aligner object}
+\subsection{The pairwise aligner object}
 \label{sec:pairwise-aligner}
 
 The \verb+PairwiseAligner+ object stores all alignment parameters to be used
@@ -1782,6 +1587,7 @@ for the pairwise alignments. To see an overview of the values for all parameters
 \begin{minted}{pycon}
 >>> print(aligner)
 Pairwise sequence aligner with parameters
+  wildcard: None
   match_score: 1.000000
   mismatch_score: 0.000000
   target_internal_open_gap_score: 0.000000
@@ -1824,7 +1630,7 @@ A \verb+PairwiseAligner+ object also stores the precision $\epsilon$ to be used 
 \end{minted}
 Two scores will be considered equal to each other for the purpose of the alignment if the absolute difference between them is less than $\epsilon$.
 
-\subsubsection{Substitution scores}
+\subsection{Substitution scores}
 \label{sec:pairwise-substitution-scores}
 
 Substitution scores define the value to be added to the total score when two letters (nucleotides or amino acids) are aligned to each other. The substitution scores to be used by the \verb+PairwiseAligner+ can be specified in two ways:
@@ -1840,20 +1646,21 @@ Substitution scores define the value to be added to the total score when two let
 1.0
 >>> aligner.mismatch_score
 0.0
->>> score = aligner.score("ACGT","ACAT")
+>>> score = aligner.score("ACGT", "ACAT")
 >>> print(score)
 3.0
 >>> aligner.match_score = 1.0
 >>> aligner.mismatch_score = -2.0
 >>> aligner.gap_score = -2.5
->>> score = aligner.score("ACGT","ACAT")
+>>> score = aligner.score("ACGT", "ACAT")
 >>> print(score)
 1.0
 \end{minted}
-When using match and mismatch scores, the character \verb+X+ is interpreted as an unknown character and gets a zero score in alignments, irrespective of the value of the match or mismatch score:
+When using match and mismatch scores, you can specify a wildcard character (+None+ by default) for unknown letters. These will get a zero score in alignments, irrespective of the value of the match or mismatch score:
 %cont-doctest
 \begin{minted}{pycon}
->>> score = aligner.score("ACGT","ACXT")
+>>> aligner.wildcard = "?"
+>>> score = aligner.score("ACGT", "AC?T")
 >>> print(score)
 3.0
 \end{minted}
@@ -1863,10 +1670,10 @@ Alternatively, you can use the \verb+substitution_matrix+ attribute of the \verb
 %cont-doctest
 \begin{minted}{pycon}
 >>> from Bio.Align import substitution_matrices
->>> substitution_matrices.load()  #doctest: +ELLIPSIS
-['BENNER22', 'BENNER6', 'BENNER74', 'BLOSUM45', 'BLOSUM50', 'BLOSUM62', ..., 'TRANS']
+>>> substitution_matrices.load()  # doctest: +ELLIPSIS
+['BENNER22', 'BENNER6', 'BENNER74', 'BLASTN', 'BLASTP', 'BLOSUM45', 'BLOSUM50', 'BLOSUM62', ..., 'TRANS']
 >>> matrix = substitution_matrices.load("BLOSUM62")
->>> print(matrix)  #doctest: +ELLIPSIS
+>>> print(matrix)  # doctest: +ELLIPSIS
 #  Matrix made by matblas from blosum62.iij
 ...
      A    R    N    D    C    Q ...
@@ -1885,11 +1692,11 @@ Q -1.0  1.0  0.0  0.0 -3.0  5.0 ...
 >>> score
 19.0
 \end{minted}
-When using a substitution matrix, \verb+X+ is {\em not} interpreted as an unknown character. Instead, the score provided by the substutition matrix will be used:
+When using a substitution matrix, \verb+X+ is {\em not} interpreted as an unknown character. Instead, the score provided by the substitution matrix will be used:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> matrix['D','X']
+>>> matrix["D", "X"]
 -1.0
 >>> score = aligner.score("ACDQ", "ACXQ")
 >>> score
@@ -1901,8 +1708,8 @@ By default, \verb+aligner.substitution_matrix+ is \verb+None+.
 The attributes \verb+aligner.match_score+ and \verb+aligner.mismatch_score+ are
 ignored if \verb+aligner.substitution_matrix+ is not \verb+None+.
 Setting \verb+aligner.match_score+ or \verb+aligner.mismatch_score+ to valid values will reset \verb+aligner.substitution_matrix+ to \verb+None+.
- 
-\subsubsection{Affine gap scores}
+
+\subsection{Affine gap scores}
 \label{sec:pairwise-affine-gapscores}
 
 Affine gap scores are defined by a score to open a gap, and a score to extend
@@ -2012,7 +1819,7 @@ For convenience, \verb+PairwiseAligner+ objects have additional attributes that 
 \label{table:align-meta-attributes}
 \end{table}
 
-\subsubsection{General gap scores}
+\subsection{General gap scores}
 \label{sec:pairwise-general-gapscores}
 
 For even more fine-grained control over the gap scores, you can specify a gap scoring function. For example, the gap scoring function below disallows a gap after two nucleotides in the query sequence:
@@ -2022,7 +1829,7 @@ For even more fine-grained control over the gap scores, you can specify a gap sc
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
 >>> def my_gap_score_function(start, length):
-...     if start==2:
+...     if start == 2:
 ...         return -1000
 ...     else:
 ...         return -1 * length
@@ -2031,7 +1838,7 @@ For even more fine-grained control over the gap scores, you can specify a gap sc
 >>> alignments = aligner.align("AACTT", "AATT")
 >>> for alignment in alignments:
 ...     print(alignment)
-... 
+...
 AACTT
 -|.||
 -AATT
@@ -2050,9 +1857,55 @@ AATT-
 <BLANKLINE>
 \end{minted}
 
-\subsubsection{Iterating over alignments}
+\subsection{Using a pre-defined substitution matrix and gap scores}
+\label{sec:pairwise-predefined-scoring}
 
-The \verb+alignments+ returned by \verb+aligner.align+ are a kind of immutable iterable objects (similar to \verb+range+). While they appear similarto a \verb+tuple+ or \verb+list+ of \verb+PairwiseAlignment+ objects, they are different in the sense that each \verb+PairwiseAlignment+ object is created dynamically when it is needed. This approach was chosen because the number of alignments can be extremely large, in particular for poor alignments (see Section~\ref{sec:pairwise-examples} for an example).
+By default, a \verb+PairwiseAligner+ object is initialized with a match score of +1.0, a mismatch score of 0.0, and all gap scores equal to 0.0, While this has the benefit of being a simple scoring scheme, in general it does not give the best performance. Instead, you can use the argument \verb+scoring+ to select a predefined scoring scheme when initializing a \verb+PairwiseAligner+ object. Currently, the provided scoring schemes are \verb+blastn+ and \verb+megablast+, which are suitable for nucleotide alignments, and \verb+blastp+, which is suitable for protein alignments. Selecting these scoring schemes will initialize the \verb+PairwiseAligner+ object to the default scoring parameters used by BLASTN, MegaBLAST, and BLASTP, respectively.
+
+%doctest
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> aligner = Align.PairwiseAligner(scoring="blastn")
+>>> print(aligner)  # doctest:+ELLIPSIS
+Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at ...>
+  target_internal_open_gap_score: -7.000000
+  target_internal_extend_gap_score: -2.000000
+  target_left_open_gap_score: -7.000000
+  target_left_extend_gap_score: -2.000000
+  target_right_open_gap_score: -7.000000
+  target_right_extend_gap_score: -2.000000
+  query_internal_open_gap_score: -7.000000
+  query_internal_extend_gap_score: -2.000000
+  query_left_open_gap_score: -7.000000
+  query_left_extend_gap_score: -2.000000
+  query_right_open_gap_score: -7.000000
+  query_right_extend_gap_score: -2.000000
+  mode: global
+<BLANKLINE>
+>>> print(aligner.substitution_matrix[:, :])
+     A    T    G    C    S    W    R    Y    K    M    B    V    H    D    N
+A  2.0 -3.0 -3.0 -3.0 -3.0 -1.0 -1.0 -3.0 -3.0 -1.0 -3.0 -1.0 -1.0 -1.0 -2.0
+T -3.0  2.0 -3.0 -3.0 -3.0 -1.0 -3.0 -1.0 -1.0 -3.0 -1.0 -3.0 -1.0 -1.0 -2.0
+G -3.0 -3.0  2.0 -3.0 -1.0 -3.0 -1.0 -3.0 -1.0 -3.0 -1.0 -1.0 -3.0 -1.0 -2.0
+C -3.0 -3.0 -3.0  2.0 -1.0 -3.0 -3.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -3.0 -2.0
+S -3.0 -3.0 -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+W -1.0 -1.0 -3.0 -3.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+R -1.0 -3.0 -1.0 -3.0 -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+Y -3.0 -1.0 -3.0 -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+K -3.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -2.0
+M -1.0 -3.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+B -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+V -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+H -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+D -1.0 -1.0 -1.0 -3.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -2.0
+N -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0 -2.0
+<BLANKLINE>
+\end{minted}
+
+\subsection{Iterating over alignments}
+
+The \verb+alignments+ returned by \verb+aligner.align+ are a kind of immutable iterable objects (similar to \verb+range+). While they appear similar to a \verb+tuple+ or \verb+list+ of \verb+Alignment+ objects, they are different in the sense that each \verb+Alignment+ object is created dynamically when it is needed. This approach was chosen because the number of alignments can be extremely large, in particular for poor alignments (see Section~\ref{sec:pairwise-examples} for an example).
 
 You can perform the following operations on \verb+alignments+:
 \begin{itemize}
@@ -2142,19 +1995,19 @@ It is wise to check the number of alignments by calling \verb+len(alignments)+ b
 \end{minted}
 \end{itemize}
 
-\subsubsection{Alignment objects}
-The \verb+aligner.align+ method returns \verb+PairwiseAlignment+ objects, each representing one alignment between the two sequences.
+\subsection{Alignment objects}
+The \verb+aligner.align+ method returns \verb+Alignment+ objects, each representing one alignment between the two sequences.
 
 %doctest
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
->>> seq1 = "GAACT"
->>> seq2 = "GAT"
->>> alignments = aligner.align(seq1, seq2)
+>>> target = "GAACT"
+>>> query = "GAT"
+>>> alignments = aligner.align(target, query)
 >>> alignment = alignments[0]
->>> alignment # doctest: +SKIP
-<Bio.Align.PairwiseAlignment object at 0x10204d250>
+>>> alignment  # doctest: +ELLIPSIS
+<Alignment object (2 rows x 5 columns) at ...>
 \end{minted}
 
 Each alignment stores the alignment score:
@@ -2174,7 +2027,7 @@ as well as pointers to the sequences that were aligned:
 'GAT'
 \end{minted}
 
-Print the \verb+PairwiseAlignment+ object to show the alignment explicitly:
+Print the \verb+Alignment+ object to show the alignment explicitly:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -2185,17 +2038,59 @@ GA--T
 <BLANKLINE>
 \end{minted}
 
-You can also represent the alignment as a string in PSL (Pattern Space Layout, as generated by BLAT \cite{kent2002}) format:
+Internally, the alignment is stored in terms of the sequence coordinates:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> format(alignment, 'psl')
-'3\t0\t0\t0\t0\t0\t1\t2\t+\tquery\t3\t0\t3\ttarget\t5\t0\t5\t2\t2,1,\t0,2,\t0,4,\n'
+>>> alignment.coordinates
+array([[0, 2, 4, 5],
+       [0, 2, 2, 3]])
+\end{minted}
+
+Here, the two rows refer to the target and query sequence. These coordinates show that the alignment consists of the following three blocks:
+
+\begin{itemize}
+\item \verb+target[0:2]+ aligned to \verb+query[0:2]+;
+\item \verb+target[2:4]+ aligned to a gap, since \verb+query[2:2]+ is an empty string;
+\item \verb+target[4:5]+ aligned to \verb+query[2:3]+.
+\end{itemize}
+
+The length of the alignment is defined as the number of aligned sequences,
+which is always 2 for a pairwise alignment:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> len(alignment)
+2
+\end{minted}
+
+The \verb+shape+ property returns a tuple consisting of the length of the
+alignment and the number of columns in the alignment as printed:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.shape
+(2, 5)
+\end{minted}
+
+For local alignments, sections that are not aligned are not included in the number of columns:
+%cont-doctest
+\begin{minted}{pycon}
+>>> aligner.mode = "local"
+>>> local_alignments = aligner.align("TGAACT", "GAC")
+>>> local_alignment = local_alignments[0]
+>>> print(local_alignment)
+TGAACT
+ ||-|
+ GA-C
+<BLANKLINE>
+>>> local_alignment.shape
+(2, 4)
 \end{minted}
 
 Use the \verb+aligned+ property to find the start and end indices of subsequences in the target and query sequence that were aligned to each other.
 Generally, if the alignment between target (t) and query (q) consists of $N$
-chunks, you get two tuples of length $N$:
+chunks, you get a numpy array with dimensions $2 \times N \times 2$:
 
 \begin{minted}{python}
 (
@@ -2204,12 +2099,16 @@ chunks, you get two tuples of length $N$:
 )
 \end{minted}
 
-In the current example, `alignment.aligned` returns two tuples of length 2:
+In the current example, \verb+alignment.aligned+ returns two tuples of length 2:
 
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.aligned
-(((0, 2), (4, 5)), ((0, 2), (2, 3)))
+array([[[0, 2],
+        [4, 5]],
+<BLANKLINE>
+       [[0, 2],
+        [2, 3]]])
 \end{minted}
 while for the alternative alignment, two tuples of length 3 are returned:
 
@@ -2222,12 +2121,19 @@ GAACT
 G-A-T
 <BLANKLINE>
 >>> alignment.aligned
-(((0, 1), (2, 3), (4, 5)), ((0, 1), (1, 2), (2, 3)))
+array([[[0, 1],
+        [2, 3],
+        [4, 5]],
+<BLANKLINE>
+       [[0, 1],
+        [1, 2],
+        [2, 3]]])
 \end{minted}
 Note that different alignments may have the same subsequences aligned to each other. In particular, this may occur if alignments differ from each other in terms of their gap placement only:
 
 %cont-doctest
 \begin{minted}{pycon}
+>>> aligner.mode = "global"
 >>> aligner.mismatch_score = -10
 >>> alignments = aligner.align("AAACAAA", "AAAGAAA")
 >>> len(alignments)
@@ -2238,18 +2144,446 @@ AAAC-AAA
 AAA-GAAA
 <BLANKLINE>
 >>> alignments[0].aligned
-(((0, 3), (4, 7)), ((0, 3), (4, 7)))
+array([[[0, 3],
+        [4, 7]],
+<BLANKLINE>
+       [[0, 3],
+        [4, 7]]])
 >>> print(alignments[1])
 AAA-CAAA
 |||--|||
 AAAG-AAA
 <BLANKLINE>
 >>> alignments[1].aligned
-(((0, 3), (4, 7)), ((0, 3), (4, 7)))
+array([[[0, 3],
+        [4, 7]],
+<BLANKLINE>
+       [[0, 3],
+        [4, 7]]])
 \end{minted}
 The \verb+aligned+ property can be used to identify alignments that are identical to each other in terms of their aligned sequences.
 
-\subsubsection{Examples}
+The \verb+sort+ method sorts the alignment sequences. By default, sorting is done based on the \verb+id+ attribute of each sequence if available, or the sequence contents otherwise.
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(local_alignment)
+TGAACT
+ ||-|
+ GA-C
+<BLANKLINE>
+>>> local_alignment.sort()
+>>> print(local_alignment)
+ GA-C
+ ||-|
+TGAACT
+<BLANKLINE>
+\end{minted}
+Alternatively, you can supply a \verb+key+ function to determine the sort order. For example, you can sort the sequences by increasing GC content:
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.SeqUtils import GC
+>>> local_alignment.sort(key=GC)
+>>> print(local_alignment)
+TGAACT
+ ||-|
+ GA-C
+<BLANKLINE>
+\end{minted}
+The \verb+reverse+ argument lets you reverse the sort order to obtain the sequences in decreasing GC content:
+\begin{minted}{pycon}
+>>> local_alignment.sort(key=GC, reverse=True)
+>>> print(local_alignment)
+ GA-C
+ ||-|
+TGAACT
+<BLANKLINE>
+\end{minted}
+
+Use the \verb+substitutions+ method to find the number of substitutions between each pair of nucleotides:
+%cont-doctest
+\begin{minted}{pycon}
+>>> target = "AAAAAAAACCCCCCCCGGGGGGGGTTTTTTTT"
+>>> query = "AAAAAAACCCTCCCCGGCCGGGGTTTAGTTT"
+>>> alignments = aligner.align(target, query)
+>>> aligner.mismatch_score = -1
+>>> aligner.gap_score = -1
+>>> alignments = aligner.align(target, query)
+>>> len(alignments)
+8
+>>> print(alignments[0])
+AAAAAAAACCCCCCCCGGGGGGGGTTTTTTTT
+|||||||-|||.||||||..|||||||..|||
+AAAAAAA-CCCTCCCCGGCCGGGGTTTAGTTT
+<BLANKLINE>
+>>> m = alignments[0].substitutions
+>>> print(m)
+    A   C   G   T
+A 7.0 0.0 0.0 0.0
+C 0.0 7.0 0.0 1.0
+G 0.0 2.0 6.0 0.0
+T 1.0 0.0 1.0 6.0
+<BLANKLINE>
+\end{minted}
+
+Note that the matrix is not symmetric: rows correspond to the target sequence, and columns to the query sequence.  For example, the number of G's in the target sequence that are aligned to a C in the query sequence is
+%cont-doctest
+\begin{minted}{pycon}
+>>> m["G", "C"]
+2.0
+\end{minted}
+and the number of C's in the query sequence tat are aligned to a T in the query sequence is
+%cont-doctest
+\begin{minted}{pycon}
+>>> m["C", "G"]
+0.0
+\end{minted}
+To get a symmetric matrix, use
+%cont-doctest
+\begin{minted}{pycon}
+>>> m += m.transpose()
+>>> m /= 2.0
+>>> print(m)
+    A   C   G   T
+A 7.0 0.0 0.0 0.5
+C 0.0 7.0 1.0 0.5
+G 0.0 1.0 6.0 0.5
+T 0.5 0.5 0.5 6.0
+<BLANKLINE>
+>>> m["G", "C"]
+1.0
+>>> m["C", "G"]
+1.0
+\end{minted}
+The total number of substitutions between C's and G's in the alignment is 1.0 + 1.0 = 2.
+
+The \verb+map+ method can be applied on a pairwise alignment \verb+alignment1+ to find the pairwise alignment of the query of \verb+alignment2+ to the target of \verb+alignment1+, where the target of \verb+alignment2+ and the query of \verb+alignment1+ are identical. A typical example is where \verb+alignment1+ is the pairwise alignment between a chromosome and a transcript, \verb+alignment2+ is the pairwise alignment between the transcript and a sequence (e.g., an RNA-seq read), and we want to find the alignment of the sequence to the chromosome:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> aligner.mode = "local"
+>>> aligner.open_gap_score = -1
+>>> aligner.extend_gap_score = 0
+>>> chromosome = "AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA"
+>>> transcript = "CCCCCCCGGGGGG"
+>>> alignments1 = aligner.align(chromosome, transcript)
+>>> len(alignments1)
+1
+>>> alignment1 = alignments1[0]
+>>> print(alignment1)
+AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA
+        |||||||-----------||||||
+        CCCCCCC-----------GGGGGG
+<BLANKLINE>
+>>> sequence = "CCCCGGGG"
+>>> alignments2 = aligner.align(transcript, sequence)
+>>> len(alignments2)
+1
+>>> alignment2 = alignments2[0]
+>>> print(alignment2)
+CCCCCCCGGGGGG
+   ||||||||
+   CCCCGGGG
+<BLANKLINE>
+>>> mapped_alignment = alignment1.map(alignment2)
+>>> print(mapped_alignment)
+AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA
+           ||||-----------||||
+           CCCC-----------GGGG
+<BLANKLINE>
+>>> format(mapped_alignment, "psl")
+'8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
+\end{minted}
+
+Mapping the alignment does not depend on the sequence contents. If we delete
+the sequence contents, the same alignment is found in PSL format (though we
+obviously lose the ability to print the sequence alignment):
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.Seq import Seq
+>>> alignment1.target = Seq(None, len(alignment1.target))
+>>> alignment1.query = Seq(None, len(alignment1.query))
+>>> alignment2.target = Seq(None, len(alignment2.target))
+>>> alignment2.query = Seq(None, len(alignment2.query))
+>>> mapped_alignment = alignment1.map(alignment2)
+>>> format(mapped_alignment, "psl")
+'8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
+\end{minted}
+
+\paragraph*{Slicing and indexing a pairwise alignment}
+
+Slices of the form \verb+alignment[k, i:j]+, where \verb+k+ is an integer and \verb+i+ and \verb+j+ are integers or are absent, return a string showing the aligned sequence (including gaps) for the target (if \verb+k=0+) or the query (if \verb+k=1+) that includes only the columns \verb+i+ through \verb+j+ in the printed alignment.
+
+To illustrate this, in the following example the printed alignment has 5 columns:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment)
+GAACT
+|-|-|
+G-A-T
+<BLANKLINE>
+\end{minted}
+
+To get the aligned sequence strings individually, use
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[0]
+'GAACT'
+>>> alignment[1]
+'G-A-T'
+>>> alignment[0, :]
+'GAACT'
+>>> alignment[1, :]
+'G-A-T'
+>>> alignment[0, 1:-1]
+'AAC'
+>>> alignment[1, 1:-1]
+'-A-'
+\end{minted}
+
+Columns to be included can also be selected using an iterable over integers:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[0, (1, 3, 4)]
+'ACT'
+>>> alignment[1, range(0, 5, 2)]
+'GAT'
+\end{minted}
+
+To get specific columns in the alignment, use
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[:, 0]
+'GG'
+>>> alignment[:, 1]
+'A-'
+>>> alignment[:, 2]
+'AA'
+\end{minted}
+
+Slices of the form \verb+alignment[:, i:j]+, where \verb+i+ and \verb+j+ are integers or are absent, return a new \verb+Alignment+ object that includes only the columns \verb+i+ through \verb+j+ in the printed alignment.
+
+Extracting the first 4 columns for the example alignment above gives:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[:, :4]  # doctest:+ELLIPSIS
+<Alignment object (2 rows x 4 columns) at ...>
+>>> print(alignment[:, :4])
+GAACT
+|-|-
+G-A-T
+<BLANKLINE>
+\end{minted}
+Here, the final \verb+T+ nucleotides are still shown, but they are not aligned to each other. Note that \verb+alignment+ is a global alignment, but \verb+alignment[:, :4]+ is a local alignment.
+
+Similarly, extracting the last 3 columns gives:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[:, -3:]  # doctest:+ELLIPSIS
+<Alignment object (2 rows x 3 columns) at ...>
+>>> print(alignment[:, -3:])
+GAACT
+  |-|
+ GA-T
+<BLANKLINE>
+\end{minted}
+This is also now a local alignment, with the initial \verb+GA+ nucleotides in the target and \verb+G+ nucleotide in the query not aligned to each other.
+
+The column index can also be an iterable of integers:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[:, -3:]  # doctest:+ELLIPSIS
+<Alignment object (2 rows x 3 columns) at ...>
+>>> print(alignment[:, (1, 3, 0)])
+ACG
+--|
+--G
+<BLANKLINE>
+\end{minted}
+
+\paragraph*{Exporting alignments}
+
+Use the \verb+format+ method to create a string representation of the alignment in various file formats. This method takes an argument \verb+fmt+ specifying the file format, and may take additional keyword arguments depending on file type. The following values for \verb+fmt+ are supported:
+
+\begin{itemize}
+\item \verb+""+ (empty string; default): Create a human-readable representation of the alignment (same as when you \verb+print+ the alignment).
+\item \verb+"SAM"+: Create a line representing the alignment in the Sequence Alignment/Map (SAM) format:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.format("sam")
+'query\t0\ttarget\t1\t255\t1M1D1M1D1M\t*\t0\t0\tGAT\t*\tAS:i:3\n'
+\end{minted}
+\item \verb+"BED"+: Create a line representing the alignment in the Browser Extensible Data (BED) file format:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.format("bed")
+'target\t0\t5\tquery\t3.0\t+\t0\t5\t0\t3\t1,1,1,\t0,2,4,\n'
+\end{minted}
+\item \verb+"PSL"+: Create a line representing the alignment in the Pattern Space Layout (PSL) file format as generated by BLAT \cite{kent2002}).
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.format("psl")
+'3\t0\t0\t0\t0\t0\t2\t2\t+\tquery\t3\t0\t3\ttarget\t5\t0\t5\t3\t1,1,1,\t0,1,2,\t0,2,4,\n'
+\end{minted}
+The first four columns in the PSL output contain the number of matched and mismatched characters, the number of matches to repeat regions, and the number of matches to unknown nucleotides.
+Repeat regions in the target sequence are indicated by masking the sequence as lower-case or upper-case characters, as defined by the following values for the \verb+mask+ keyword argument:
+\begin{itemize}
+\item \verb+False+ (default): Do not count matches to masked sequences separately;
+\item \verb+"lower"+: Count and report matches to lower-case characters as matches to repeat regions;
+\item \verb+"upper"+: Count and report matches to upper-case characters as matches to repeat regions;
+\end{itemize}
+The character used for unknown nucleotides is defined by the \verb+wildcard+ argument. For consistency with BLAT, the wildcard character is \verb+"N"+ by default. Use \verb+wildcard=None+ if you don't want to count matches to any unknown nucleotides separately.
+%doctest
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> aligner = Align.PairwiseAligner()
+>>> aligner.mismatch_score = -1
+>>> aligner.internal_gap_score = -5
+>>> aligner.wildcard = "N"
+>>> target = "AAAAAAAggggGGNGAAAAA"
+>>> query = "GGTGGGGG"
+>>> alignments = aligner.align(target.upper(), query)
+>>> print(len(alignments))
+1
+>>> alignment = alignments[0]
+>>> print(alignment)
+AAAAAAAGGGGGGNGAAAAA
+-------||.|||.|-----
+-------GGTGGGGG-----
+<BLANKLINE>
+>>> alignment.score
+5.0
+>>> alignment.target
+'AAAAAAAGGGGGGNGAAAAA'
+>>> alignment.target = target
+>>> alignment.target
+'AAAAAAAggggGGNGAAAAA'
+>>> print(alignment)
+AAAAAAAggggGGNGAAAAA
+-------....||.|-----
+-------GGTGGGGG-----
+<BLANKLINE>
+>>> print(alignment.format("psl"))  # doctest: +NORMALIZE_WHITESPACE
+6   1   0   1   0   0   0   0   +   query   8   0   8   target   20   7   15   1   8,   0,   7,
+>>> print(alignment.format("psl", mask="lower"))  # doctest: +NORMALIZE_WHITESPACE
+3   1   3   1   0   0   0   0   +   query   8   0   8   target   20   7   15   1   8,   0,   7,
+>>> print(
+...     alignment.format("psl", mask="lower", wildcard=None)
+... )  # doctest: +NORMALIZE_WHITESPACE
+3   2   3   0   0   0   0   0   +   query   8   0   8   target   20   7   15   1   8,   0,   7,
+\end{minted}
+\end{itemize}
+
+In addition to the \verb+format+ method, you can use Python's built-in \verb+format+ function:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "psl"))  # doctest: +NORMALIZE_WHITESPACE
+6   1   0   1   0   0   0   0   +   query   8   0   8   target   20   7   15   1   8,   0,   7,
+\end{minted}
+allowing \verb+Alignment+ objects to be used in formatted (f-) strings in Python:
+\begin{minted}{pycon}
+>>> print(
+...     f"The alignment in PSL format is '{alignment:psl}'."
+... )  # doctest: +NORMALIZE_WHITESPACE
+The alignment in PSL format is '6   1   0   1   0   0   0   0   +   query   8   0   8   target   20   7   15   1   8,   0,   7,
+'
+\end{minted}
+Note that optional keyword arguments cannot be used with the \verb+format+ function or with formatted strings.
+
+\subsection{Aligning to the reverse strand}
+\label{sec:pairwise-general-gapscores}
+
+By default, the pairwise aligner aligns the forward strand of the query to the forward strand of the target. To calculate the alignment score for \verb+query+ to the reverse strand of \verb+target+, use \verb+strand="-"+:
+%doctest
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> from Bio.Seq import reverse_complement
+>>> target = "AAAACCC"
+>>> query = "AACC"
+>>> aligner = Align.PairwiseAligner()
+>>> aligner.mismatch_score = -1
+>>> aligner.internal_gap_score = -1
+>>> aligner.score(target, query)  # strand is "+" by default
+4.0
+>>> aligner.score(target, reverse_complement(query), strand="-")
+4.0
+>>> aligner.score(target, query, strand="-")
+0.0
+>>> aligner.score(target, reverse_complement(query))
+0.0
+
+\end{minted}
+
+The alignments against the reverse strand can be obtained by specifying \verb+strand="-"+ when calling \verb+aligner.align+:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments = aligner.align(target, query)
+>>> len(alignments)
+1
+>>> print(alignments[0])
+AAAACCC
+--||||-
+--AACC-
+<BLANKLINE>
+>>> print(alignments[0].format("bed"))  # doctest: +NORMALIZE_WHITESPACE
+target   2   6   query   4.0   +   2   6   0   1   4,   0,
+<BLANKLINE>
+>>> alignments = aligner.align(target, reverse_complement(query), strand="-")
+>>> len(alignments)
+1
+>>> print(alignments[0])
+AAAACCC
+--||||-
+--AACC-
+<BLANKLINE>
+>>> print(alignments[0].format("bed"))  # doctest: +NORMALIZE_WHITESPACE
+target   2   6   query   4.0   -   2   6   0   1   4,   0,
+<BLANKLINE>
+>>> alignments = aligner.align(target, query, strand="-")
+>>> len(alignments)
+2
+>>> print(alignments[0])
+AAAACCC----
+-----------
+-------GGTT
+<BLANKLINE>
+>>> print(alignments[1])
+----AAAACCC
+-----------
+GGTT-------
+<BLANKLINE>
+\end{minted}
+
+Note that the score for aligning \verb+query+ to the reverse strand of \verb+target+ may be different from the score for aligning the reverse complement of \verb+query+ to the forward strand of \verb+target+ if the left and right gap scores are different:
+%cont-doctest
+\begin{minted}{pycon}
+>>> aligner.left_gap_score = -0.5
+>>> aligner.right_gap_score = -0.2
+>>> aligner.score(target, query)
+2.8
+>>> alignments = aligner.align(target, query)
+>>> len(alignments)
+1
+>>> print(alignments[0])
+AAAACCC
+--||||-
+--AACC-
+<BLANKLINE>
+>>> aligner.score(target, reverse_complement(query), strand="-")
+3.1
+>>> alignments = aligner.align(target, reverse_complement(query), strand="-")
+>>> len(alignments)
+1
+>>> print(alignments[0])
+AAAACCC
+--||||-
+--AACC-
+<BLANKLINE>
+\end{minted}
+
+
+\subsection{Examples}
 \label{sec:pairwise-examples}
 
 Suppose you want to do a global pairwise alignment between the same two
@@ -2297,7 +2631,7 @@ itself:
 \begin{minted}{pycon}
 >>> print(alignment.score)
 72.0
->>> print(alignment)  #doctest: +ELLIPSIS
+>>> print(alignment)  # doctest: +ELLIPSIS
 MV-LS-PAD--KTN--VK-AA-WGKV-----GAHAGEYGAEALE-RMFLSF----P-TTKTY--FPHF--...
 ||-|--|----|----|--|--||||-----|---||--|--|--|--|------|-|------|--|--...
 MVHL-TP--EEK--SAV-TA-LWGKVNVDEVG---GE--A--L-GR--L--LVVYPWT----QRF--FES...
@@ -2329,7 +2663,7 @@ and a gap extension penalty of 0.5:
 2
 >>> print(alignments[0].score)
 292.5
->>> print(alignments[0])  #doctest: +ELLIPSIS
+>>> print(alignments[0])  # doctest: +ELLIPSIS
 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLS-----HGSAQVKGHGKKV...
 ||-|.|..|..|.|.||||--...|.|.|||.|.....|.|...|..|-|||-----.|...||.|||||...
 MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKV...
@@ -2343,7 +2677,7 @@ To perform a local alignment, set \verb+aligner.mode+ to \verb+'local'+:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> aligner.mode = 'local'
+>>> aligner.mode = "local"
 >>> aligner.open_gap_score = -10
 >>> aligner.extend_gap_score = -1
 >>> alignments = aligner.align("LSPADKTNVKAA", "PEEKSAV")
@@ -2352,14 +2686,14 @@ To perform a local alignment, set \verb+aligner.mode+ to \verb+'local'+:
 >>> alignment = alignments[0]
 >>> print(alignment)
 LSPADKTNVKAA
-  |..|..|   
-  PEEKSAV   
+  |..|..|
+  PEEKSAV
 <BLANKLINE>
 >>> print(alignment.score)
 16.0
 \end{minted}
 
-\subsubsection{Generalized pairwise alignments}
+\subsection{Generalized pairwise alignments}
 \label{sec:generalized-pairwise}
 
 In most cases, \verb+PairwiseAligner+ is used to perform alignments of sequences (strings or \verb+Seq+ objects) consisting of single-letter nucleotides or amino acids. More generally, \verb+PairwiseAligner+ can also be applied to lists or tuples of arbitrary objects. This section will describe some examples of such generalized pairwise alignments.
@@ -2372,7 +2706,7 @@ Schneider \textit{et al.} \cite{schneider2005} created a substitution matrix for
 \begin{minted}{pycon}
 >>> from Bio.Align import substitution_matrices
 >>> m = substitution_matrices.load("SCHNEIDER")
->>> m.alphabet  #doctest: +ELLIPSIS
+>>> m.alphabet  # doctest: +ELLIPSIS
 ('AAA', 'AAC', 'AAG', 'AAT', 'ACA', 'ACC', 'ACG', 'ACT', ..., 'TTG', 'TTT')
 \end{minted}
 We can use this matrix to align codon sequences to each other:
@@ -2383,8 +2717,8 @@ We can use this matrix to align codon sequences to each other:
 >>> aligner = Align.PairwiseAligner()
 >>> aligner.substitution_matrix = m
 >>> aligner.gap_score = -1.0
->>> s1 = ('AAT', 'CTG', 'TTT', 'TTT')
->>> s2 = ('AAT', 'TTA', 'TTT')
+>>> s1 = ("AAT", "CTG", "TTT", "TTT")
+>>> s2 = ("AAT", "TTA", "TTT")
 >>> alignments = aligner.align(s1, s2)
 >>> len(alignments)
 2
@@ -2409,17 +2743,17 @@ would get a much lower score:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> print(m['CTG', 'TTA'])
+>>> print(m["CTG", "TTA"])
 7.6
->>> print(m['TTT', 'TTA'])
+>>> print(m["TTT", "TTA"])
 -0.3
 \end{minted}
 presumably because \verb+CTG+ and \verb+TTA+ both code for leucine, while \verb+TTT+ codes for phenylalanine. The three-letter codon substitution matrix also reveals a preference among codons representing the same amino acid. For example, \verb+TTA+ has a preference for \verb+CTG+ preferred compared to \verb+CTC+, though all three code for leucine:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> s1 = ('AAT', 'CTG', 'CTC', 'TTT')
->>> s2 = ('AAT', 'TTA', 'TTT')
+>>> s1 = ("AAT", "CTG", "CTC", "TTT")
+>>> s2 = ("AAT", "TTA", "TTT")
 >>> alignments = aligner.align(s1, s2)
 >>> len(alignments)
 1
@@ -2428,7 +2762,7 @@ AAT CTG CTC TTT
 ||| ... --- |||
 AAT TTA --- TTT
 <BLANKLINE>
->>> print(m['CTC', 'TTA'])
+>>> print(m["CTC", "TTA"])
 6.5
 \end{minted}
 
@@ -2438,8 +2772,8 @@ Using the three-letter amino acid symbols, the sequences above translate to
 
 %doctest
 \begin{minted}{pycon}
->>> s1 = ('Asn', 'Leu', 'Leu', 'Phe')
->>> s2 = ('Asn', 'Leu', 'Phe')
+>>> s1 = ("Asn", "Leu", "Leu", "Phe")
+>>> s2 = ("Asn", "Leu", "Phe")
 \end{minted}
 We can align these sequences directly to each other by using a three-letter amino acid alphabet:
 
@@ -2450,7 +2784,8 @@ We can align these sequences directly to each other by using a three-letter amin
 >>> aligner.alphabet = ['Ala', 'Arg', 'Asn', 'Asp', 'Cys',
 ...                     'Gln', 'Glu', 'Gly', 'His', 'Ile',
 ...                     'Leu', 'Lys', 'Met', 'Phe', 'Pro',
-...                     'Ser', 'Thr', 'Trp', 'Tyr', 'Val']
+...                     'Ser', 'Thr', 'Trp', 'Tyr', 'Val']  # fmt: skip
+...
 \end{minted}
 We use +6/-1 match and mismatch scores as an approximation of the BLOSUM62 matrix, and align these sequences to each other:
 
@@ -2506,11 +2841,14 @@ Internally, the first step when performing an alignment is to replace the two se
 \end{minted}
 Note that the indices should consist of 32-bit integers, as specified in this example by \verb+numpy.int32+.
 
-Negative indices are interpreted as unknown letters, and receive a zero score:
+Unknown letters can again be included by defining a wildcard character, and using the corresponding Unicode code point number as the index:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> s2 = numpy.array([2, -5, 13], numpy.int32)
+>>> aligner.wildcard = "?"
+>>> ord(aligner.wildcard)
+63
+>>> s2 = numpy.array([2, 63, 13], numpy.int32)
 >>> aligner.gap_score = -3
 >>> alignments = aligner.align(s1, s2)
 >>> print(len(alignments))
@@ -2518,12 +2856,12 @@ Negative indices are interpreted as unknown letters, and receive a zero score:
 >>> print(alignments[0])
 2 10 10 13
 | .. -- ||
-2 -5 -- 13
+2 63 -- 13
 <BLANKLINE>
 >>> print(alignments[1])
 2 10 10 13
 | -- .. ||
-2 -- -5 13
+2 -- 63 13
 <BLANKLINE>
 >>> print(alignments.score)
 9.0
@@ -2540,7 +2878,7 @@ Integer sequences can also be aligned using a substitution matrix, in this case 
 >>> aligner = Align.PairwiseAligner()
 >>> m = numpy.eye(5)
 >>> m[0, 1:] = m[1:, 0] = -2
->>> m[2,2] = 3
+>>> m[2, 2] = 3
 >>> print(m)
 [[ 1. -2. -2. -2. -2.]
  [-2.  1.  0.  0.  0.]
@@ -2573,7 +2911,7 @@ Integer sequences can also be aligned using a substitution matrix, in this case 
 
 The \verb+Array+ class in \verb+Bio.Align.substitution_matrices+ is a subclass of numpy arrays that supports indexing both by integers and by specific strings. An \verb+Array+ instance can either be a one-dimensional array or a square two-dimensional arrays. A one-dimensional \verb+Array+ object can for example be used to store the nucleotide frequency of a DNA sequence, while a two-dimensional \verb+Array+ object can be used to represent a scoring matrix for sequence alignments.
 
-\subsection*{Creating an Array object}
+\subsection{Creating an Array object}
 
 To create a one-dimensional \verb+Array+, only the alphabet of allowed letters needs to be specified:
 
@@ -2600,7 +2938,7 @@ Elements can be accessed both by letter and by integer index:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> counts['C'] = -3
+>>> counts["C"] = -3
 >>> counts[2] = 7
 >>> print(counts)
 A  0.0
@@ -2616,11 +2954,11 @@ Using a letter that is not in the alphabet, or an index that is out of bounds, w
 
 %cont-doctest
 \begin{minted}{pycon}
->>> counts['U']
+>>> counts["U"]
 Traceback (most recent call last):
     ...
 IndexError: 'U'
->>> counts['X'] = 6
+>>> counts["X"] = 6
 Traceback (most recent call last):
     ...
 IndexError: 'X'
@@ -2648,9 +2986,9 @@ Again, both letters and integers can be used for indexing, and specifying a lett
 
 %cont-doctest
 \begin{minted}{pycon}
->>> counts['A', 'C'] = 12.0
+>>> counts["A", "C"] = 12.0
 >>> counts[2, 1] = 5.0
->>> counts[3, 'T'] = -2
+>>> counts[3, "T"] = -2
 >>> print(counts)
     A    C   G    T
 A 0.0 12.0 0.0  0.0
@@ -2658,11 +2996,11 @@ C 0.0  0.0 0.0  0.0
 G 0.0  5.0 0.0  0.0
 T 0.0  0.0 0.0 -2.0
 <BLANKLINE>
->>> counts['X', 1]
+>>> counts["X", 1]
 Traceback (most recent call last):
     ...
 IndexError: 'X'
->>> counts['A', 5]
+>>> counts["A", 5]
 Traceback (most recent call last):
     ...
 IndexError: index 5 is out of bounds for axis 1 with size 4
@@ -2672,16 +3010,16 @@ Selecting a row or column from the two-dimensional array will return a one-dimen
 %cont-doctest
 \begin{minted}{pycon}
 >>> counts = Array("ACGT", dims=2)
->>> counts['A', 'C'] = 12.0
+>>> counts["A", "C"] = 12.0
 >>> counts[2, 1] = 5.0
->>> counts[3, 'T'] = -2
+>>> counts[3, "T"] = -2
 \end{minted}
 % don't include this in the doctest, as the exact output is platform-dependent
 \begin{minted}{pycon}
->>> counts['G']
+>>> counts["G"]
 Array([0., 5., 0., 0.],
       alphabet='ACGT')
->>> counts[:, 'C']
+>>> counts[:, "C"]
 Array([12.,  0.,  5.,  0.],
       alphabet='ACGT')
 \end{minted}
@@ -2692,7 +3030,7 @@ Array([12.,  0.,  5.,  0.],
 \begin{minted}{pycon}
 >>> import numpy
 >>> x = Array("ACGT")
->>> x['C'] = 5
+>>> x["C"] = 5
 \end{minted}
 % don't include this in the doctest, as the exact output is platform-dependent
 \begin{minted}{pycon}
@@ -2712,7 +3050,7 @@ While the alphabet of an \verb+Array+ is usually a string, you may also use a tu
 While the \verb+alphabet+ property of an \verb+Array+ is immutable, you can create a new \verb+Array+ object by selecting the letters you are interested in from the alphabet. For example,
 %cont-doctest
 \begin{minted}{pycon}
->>> a = Array("ABCD", dims=2, data=numpy.arange(16).reshape(4,4))
+>>> a = Array("ABCD", dims=2, data=numpy.arange(16).reshape(4, 4))
 >>> print(a)
      A    B    C    D
 A  0.0  1.0  2.0  3.0
@@ -2742,7 +3080,7 @@ C 11.0 0.0 10.0
 <BLANKLINE>
 \end{minted}
 
-\subsection*{Calculating a substitution matrix from a pairwise sequence alignment}
+\subsection{Calculating a substitution matrix from a pairwise sequence alignment}
 
 As \verb+Array+ is a subclass of a numpy array, you can apply mathematical operations on an \verb+Array+ object in much the same way. Here, we illustrate this by calculating a scoring matrix from the alignment of the 16S ribosomal RNA gene sequences of {\it Escherichia coli} and {\it Bacillus subtilis}. First, we create a \verb+PairwiseAligner+ and initialize it with the default scores used by \verb+blastn+:
 
@@ -2750,7 +3088,7 @@ As \verb+Array+ is a subclass of a numpy array, you can apply mathematical opera
 \begin{minted}{pycon}
 >>> from Bio.Align import PairwiseAligner
 >>> aligner = PairwiseAligner()
->>> aligner.mode = 'local'
+>>> aligner.mode = "local"
 >>> aligner.match_score = 2
 >>> aligner.mismatch_score = -3
 >>> aligner.open_gap_score = -7
@@ -2761,8 +3099,8 @@ Next, we read in the 16S ribosomal RNA gene sequence of {\it Escherichia coli} a
 %cont-doctest
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
->>> sequence1 = SeqIO.read('ecoli.fa', 'fasta')
->>> sequence2 = SeqIO.read('bsubtilis.fa', 'fasta')
+>>> sequence1 = SeqIO.read("ecoli.fa", "fasta")
+>>> sequence2 = SeqIO.read("bsubtilis.fa", "fasta")
 >>> alignments = aligner.align(sequence1.seq, sequence2.seq)
 \end{minted}
 The number of alignments generated is very large:
@@ -2800,7 +3138,7 @@ We normalize against the total number to find the probability of each substituti
 >>> import numpy
 >>> probabilities = frequency / numpy.sum(frequency)
 >>> probabilities = (probabilities + probabilities.transpose()) / 2.0
->>> print(format(probabilities, "%.4f"))
+>>> print(probabilities.format("%.4f"))
        A      C      G      T
 A 0.2026 0.0112 0.0224 0.0142
 C 0.0112 0.1848 0.0162 0.0215
@@ -2813,7 +3151,7 @@ The background probability is the probability of finding an A, C, G, or T nucleo
 %cont-doctest
 \begin{minted}{pycon}
 >>> background = numpy.sum(probabilities, 0)
->>> print(format(background, "%.4f"))
+>>> print(background.format("%.4f"))
 A 0.2505
 C 0.2337
 G 0.3165
@@ -2824,8 +3162,8 @@ The number of substitutions expected at random is simply the product of the back
 
 %cont-doctest
 \begin{minted}{pycon}
->>> expected = numpy.dot(background[:,None], background[None, :])
->>> print(format(expected, "%.4f"))
+>>> expected = numpy.dot(background[:, None], background[None, :])
+>>> print(expected.format("%.4f"))
        A      C      G      T
 A 0.0627 0.0585 0.0793 0.0499
 C 0.0585 0.0546 0.0740 0.0466
@@ -2867,7 +3205,7 @@ Traceback (most recent call last):
 ValueError: alphabets are inconsistent
 \end{minted}
 
-\subsection*{Reading \texttt{Array} object from file}
+\subsection{Reading \texttt{Array} objects from file}
 
 \verb+Bio.Align.substitution_matrices+ includes a parser to read one- and two-dimensional \verb+Array+ objects from file. One-dimensional arrays are represented by a simple two-column format, with the first column containing the key and the second column the corresponding value. For example, the file \verb+hg38.chrom.sizes+ (obtained from UCSC), available in the \verb+Tests/Align+ subdirectory of the Biopython distribution, contains the size in nucleotides of each chromosome in human genome assembly hg38:
 \begin{minted}{text}
@@ -2887,9 +3225,9 @@ To parse this file, use
 \begin{minted}{pycon}
 >>> from Bio.Align import substitution_matrices
 >>> with open("hg38.chrom.sizes") as handle:
-...    table = substitution_matrices.read(handle)
+...     table = substitution_matrices.read(handle)
 ...
->>> print(table)  #doctest: +ELLIPSIS
+>>> print(table)  # doctest: +ELLIPSIS
 chr1 248956422.0
 chr2 242193529.0
 chr3 198295559.0
@@ -2905,9 +3243,9 @@ Use \verb+dtype=int+ to read the values as integers:
 %cont-doctest
 \begin{minted}{pycon}
 >>> with open("hg38.chrom.sizes") as handle:
-...    table = substitution_matrices.read(handle, int)
+...     table = substitution_matrices.read(handle, int)
 ...
->>> print(table)  #doctest: +ELLIPSIS
+>>> print(table)  # doctest: +ELLIPSIS
 chr1 248956422
 chr2 242193529
 chr3 198295559
@@ -2928,15 +3266,15 @@ For two-dimensional arrays, we follow the file format of substitution matrices p
 #  Cluster Percentage: >= 62
 #  Entropy =   0.6979, Expected =  -0.5209
    A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V  B  Z  X  *
-A  4 -1 -2 -2  0 -1 -1  0 -2 -1 -1 -1 -1 -2 -1  1  0 -3 -2  0 -2 -1  0 -4 
-R -1  5  0 -2 -3  1  0 -2  0 -3 -2  2 -1 -3 -2 -1 -1 -3 -2 -3 -1  0 -1 -4 
-N -2  0  6  1 -3  0  0  0  1 -3 -3  0 -2 -3 -2  1  0 -4 -2 -3  3  0 -1 -4 
-D -2 -2  1  6 -3  0  2 -1 -1 -3 -4 -1 -3 -3 -1  0 -1 -4 -3 -3  4  1 -1 -4 
-C  0 -3 -3 -3  9 -3 -4 -3 -3 -1 -1 -3 -1 -2 -3 -1 -1 -2 -2 -1 -3 -3 -2 -4 
-Q -1  1  0  0 -3  5  2 -2  0 -3 -2  1  0 -3 -1  0 -1 -2 -1 -2  0  3 -1 -4 
-E -1  0  0  2 -4  2  5 -2  0 -3 -3  1 -2 -3 -1  0 -1 -3 -2 -2  1  4 -1 -4 
-G  0 -2  0 -1 -3 -2 -2  6 -2 -4 -4 -2 -3 -3 -2  0 -2 -2 -3 -3 -1 -2 -1 -4 
-H -2  0  1 -1 -3  0  0 -2  8 -3 -3 -1 -2 -1 -2 -1 -2 -2  2 -3  0  0 -1 -4 
+A  4 -1 -2 -2  0 -1 -1  0 -2 -1 -1 -1 -1 -2 -1  1  0 -3 -2  0 -2 -1  0 -4
+R -1  5  0 -2 -3  1  0 -2  0 -3 -2  2 -1 -3 -2 -1 -1 -3 -2 -3 -1  0 -1 -4
+N -2  0  6  1 -3  0  0  0  1 -3 -3  0 -2 -3 -2  1  0 -4 -2 -3  3  0 -1 -4
+D -2 -2  1  6 -3  0  2 -1 -1 -3 -4 -1 -3 -3 -1  0 -1 -4 -3 -3  4  1 -1 -4
+C  0 -3 -3 -3  9 -3 -4 -3 -3 -1 -1 -3 -1 -2 -3 -1 -1 -2 -2 -1 -3 -3 -2 -4
+Q -1  1  0  0 -3  5  2 -2  0 -3 -2  1  0 -3 -1  0 -1 -2 -1 -2  0  3 -1 -4
+E -1  0  0  2 -4  2  5 -2  0 -3 -3  1 -2 -3 -1  0 -1 -3 -2 -2  1  4 -1 -4
+G  0 -2  0 -1 -3 -2 -2  6 -2 -4 -4 -2 -3 -3 -2  0 -2 -2 -3 -3 -1 -2 -1 -4
+H -2  0  1 -1 -3  0  0 -2  8 -3 -3 -1 -2 -1 -2 -1 -2 -2  2 -3  0  0 -1 -4
 ...
 \end{minted}
 This file is included in the Biopython distribution under \verb+Bio/Align/substitution_matrices/data+. To parse this file, use
@@ -2945,11 +3283,11 @@ This file is included in the Biopython distribution under \verb+Bio/Align/substi
 \begin{minted}{pycon}
 >>> from Bio.Align import substitution_matrices
 >>> with open("BLOSUM62") as handle:
-...    matrix = substitution_matrices.read(handle)
+...     matrix = substitution_matrices.read(handle)
 ...
 >>> print(matrix.alphabet)
 ARNDCQEGHILKMFPSTWYVBZX*
->>> print(matrix['A','D'])
+>>> print(matrix["A", "D"])
 -2.0
 \end{minted}
 The header lines starting with \verb+#+ are stored in the attribute \verb+header+:
@@ -2971,8 +3309,8 @@ To save an Array object, create a string first:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> text = format(matrix)
->>> print(text)  #doctest: +ELLIPSIS
+>>> text = str(matrix)
+>>> print(text)  # doctest: +ELLIPSIS
 #  Matrix made by matblas from blosum62.iij
 #  * column uses minimum score
 #  BLOSUM Clustered Scoring Matrix in 1/2 Bit Units
@@ -2989,7 +3327,7 @@ C  0.0 -3.0 -3.0 -3.0  9.0 -3.0 -4.0 -3.0 -3.0 -1.0 -1.0 -3.0 -1.0 -2.0 -3.0 -1.
 \end{minted}
 and write the \verb+text+ to a file.
 
-\subsection*{Loading predefined substitution matrices}
+\subsection{Loading predefined substitution matrices}
 
 Biopython contains a large set of substitution matrices defined in the literature, including BLOSUM (Blocks Substitution Matrix) \cite{henikoff1992} and PAM (Point Accepted Mutation) matrices \cite{dayhoff1978}. These matrices are available as flat files in the \verb+Bio/Align/scoring_matrices/data+ directory, and can be loaded into Python using the \verb+load+ function in the \verb+scoring_matrices+ submodule. For example, the BLOSUM62 matrix can be loaded by running
 
@@ -3010,16 +3348,213 @@ To get a full list of available substitution matrices, use \verb+load+ without a
 
 %cont-doctest
 \begin{minted}{pycon}
->>> substitution_matrices.load()  #doctest: +ELLIPSIS
-['BENNER22', 'BENNER6', 'BENNER74', 'BLOSUM45', 'BLOSUM50', ..., 'TRANS']
+>>> substitution_matrices.load()  # doctest: +ELLIPSIS
+['BENNER22', 'BENNER6', 'BENNER74', 'BLASTN', 'BLASTP', 'BLOSUM45', 'BLOSUM50', ..., 'TRANS']
 \end{minted}
 
-\hypertarget{codonmatrix}
+\hypertarget{codonmatrix}{
 Note that the substitution matrix provided by Schneider \textit{et al.} \cite{schneider2005} uses an alphabet consisting of three-nucleotide codons:
+}
 
 %cont-doctest
 \begin{minted}{pycon}
 >>> m = substitution_matrices.load("SCHNEIDER")
->>> m.alphabet  #doctest: +ELLIPSIS
+>>> m.alphabet  # doctest: +ELLIPSIS
 ('AAA', 'AAC', 'AAG', 'AAT', 'ACA', 'ACC', 'ACG', 'ACT', ..., 'TTG', 'TTT')
 \end{minted}
+
+\section{Pairwise alignments using pairwise2}
+\label{sec:pairwise2}
+
+\textbf{Please note that Bio.pairwise2 was deprecated in Release 1.80.} As an alternative, please consider using \verb|Bio.Align.PairwiseAligner| (described in section~\ref{sec:pairwise}).
+
+\verb|Bio.pairwise2| contains essentially the same algorithms as
+\texttt{water} (local) and \texttt{needle} (global) from the
+\href{http://emboss.sourceforge.net/}{EMBOSS} suite (see above) and should
+return the same results. The \verb|pairwise2| module has undergone some
+optimization regarding speed and memory consumption recently (Biopython versions
+\textgreater 1.67) so that for short sequences (global alignments:
+\textasciitilde 2000 residues, local alignments \textasciitilde 600 residues)
+it's faster (or equally fast) to use \verb|pairwise2| than calling EMBOSS'
+\texttt{water} or \texttt{needle} via the command line tools.
+
+Suppose you want to do a global pairwise alignment between the same two
+hemoglobin sequences from above (\texttt{HBA\_HUMAN}, \texttt{HBB\_HUMAN})
+stored in \texttt{alpha.faa} and \texttt{beta.faa}:
+
+%doctest examples
+\begin{minted}{pycon}
+>>> from Bio import pairwise2
+>>> from Bio import SeqIO
+>>> seq1 = SeqIO.read("alpha.faa", "fasta")
+>>> seq2 = SeqIO.read("beta.faa", "fasta")
+>>> alignments = pairwise2.align.globalxx(seq1.seq, seq2.seq)
+\end{minted}
+
+As you see, we call the alignment function with \verb|align.globalxx|. The tricky
+part are the last two letters of the function name (here: \texttt{xx}), which are
+used for  decoding the scores and penalties for matches (and mismatches) and gaps.
+The first letter decodes the match score, e.g. \texttt{x} means that a match counts
+1 while mismatches have no costs. With \texttt{m} general values for either matches
+or mismatches can be defined
+(for more options see \href{http://biopython.org/docs/1.77/api/Bio.pairwise2.html}{Biopython's API}).
+The second letter decodes the cost for gaps; \texttt{x} means no gap costs at all,
+with \texttt{s} different penalties for opening and extending a gap can be assigned.
+So, \verb|globalxx| means that only matches between both sequences are counted.
+
+Our variable \texttt{alignments} now contains a list of alignments (at least one) which
+have the same optimal score for the given conditions. In our example this are 80
+different alignments with the score 72 (\verb|Bio.pairwise2| will return up to 1000
+alignments). Have a look at one of these alignments:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> len(alignments)
+80
+>>> print(alignments[0])  # doctest:+ELLIPSIS
+Alignment(seqA='MV-LSPADKTNV---K-A--A-WGKVGAHAG...YR-', seqB='MVHL-----T--PEEKSAVTALWGKV----...Y-H', score=72.0, start=0, end=217)
+\end{minted}
+
+Each alignment is a named tuple consisting of the two aligned sequences, the score, the
+start and the end positions of the alignment (in global alignments the start is
+always 0 and the end the length of the alignment). \verb|Bio.pairwise2| has a
+function \verb|format_alignment| for a nicer printout:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(pairwise2.format_alignment(*alignments[0]))  # doctest:+ELLIPSIS
+MV-LSPADKTNV---K-A--A-WGKVGAHAG---EY-GA-EALE-RMFLSF----PTTK-TY--F...YR-
+|| |     |     | |  | ||||        |  |  |||  |  |      |    |   |...|  
+MVHL-----T--PEEKSAVTALWGKV-----NVDE-VG-GEAL-GR--L--LVVYP---WT-QRF...Y-H
+  Score=72
+<BLANKLINE>
+\end{minted}
+
+Since Biopython 1.77 the required parameters can be supplied with keywords. The
+last example can now also be written as:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments = pairwise2.align.globalxx(sequenceA=seq1.seq, sequenceB=seq2.seq)
+\end{minted}
+
+Better alignments are usually obtained by penalizing gaps: higher costs
+for opening a gap and lower costs for extending an existing gap. For amino
+acid sequences match scores are usually encoded in matrices like \texttt{PAM}
+or \texttt{BLOSUM}. Thus, a more meaningful alignment for our example can be
+obtained by using the BLOSUM62 matrix, together with a gap open penalty of 10
+and a gap extension penalty of 0.5 (using \verb|globalds|):
+
+\begin{minted}{pycon}
+>>> from Bio import pairwise2
+>>> from Bio import SeqIO
+>>> from Bio.Align import substitution_matrices
+>>> blosum62 = substitution_matrices.load("BLOSUM62")
+>>> seq1 = SeqIO.read("alpha.faa", "fasta")
+>>> seq2 = SeqIO.read("beta.faa", "fasta")
+>>> alignments = pairwise2.align.globalds(seq1.seq, seq2.seq, blosum62, -10, -0.5)
+>>> len(alignments)
+2
+>>> print(pairwise2.format_alignment(*alignments[0]))
+MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR
+|| |.|..|..|.|.|||| ......|............|.......||.
+MVHLTPEEKSAVTALWGKV-NVDEVGGEALGRLLVVYPWTQRFF...KYH
+  Score=292.5
+
+\end{minted}
+
+This alignment has the same score that we obtained earlier with EMBOSS needle
+using the same sequences and the same parameters.
+
+Local alignments are called similarly with the function \verb|align.localXX|,
+where again XX stands for a two letter code for the match and gap functions:
+
+%doctest
+\begin{minted}{pycon}
+>>> from Bio import pairwise2
+>>> from Bio.Align import substitution_matrices
+>>> blosum62 = substitution_matrices.load("BLOSUM62")
+>>> alignments = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
+>>> print(pairwise2.format_alignment(*alignments[0]))
+3 PADKTNV
+  |..|..|
+1 PEEKSAV
+  Score=16
+<BLANKLINE>
+\end{minted}
+
+In recent Biopython versions, \verb|format_alignment| will only print the
+aligned part of a local alignment (together with the start positions in 1-based
+notation, as shown in the above example). If you are also interested in the non-
+aligned parts of the sequences, use the keyword-parameter \verb|full_sequences=True|:
+
+%doctest
+\begin{minted}{pycon}
+>>> from Bio import pairwise2
+>>> from Bio.Align import substitution_matrices
+>>> blosum62 = substitution_matrices.load("BLOSUM62")
+>>> alignments = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
+>>> print(pairwise2.format_alignment(*alignments[0], full_sequences=True))
+LSPADKTNVKAA
+  |..|..|   
+--PEEKSAV---
+  Score=16
+<BLANKLINE>
+\end{minted}
+
+Note that local alignments must, as defined by Smith \& Waterman, have a
+positive score (\textgreater 0). Thus, \verb|pairwise2| may return no
+alignments if no score \textgreater 0 has been obtained. Also, \verb|pairwise2|
+will not report alignments which are the result of the addition of zero-scoring
+extensions on either site. In the next example, the pairs serine/aspartic acid (S/D)
+and lysine/asparagine (K/N) both have a match score of 0. As you see, the aligned
+part has not been extended:
+
+%doctest
+\begin{minted}{pycon}
+>>> from Bio import pairwise2
+>>> from Bio.Align import substitution_matrices
+>>> blosum62 = substitution_matrices.load("BLOSUM62")
+>>> alignments = pairwise2.align.localds("LSSPADKTNVKKAA", "DDPEEKSAVNN", blosum62, -10, -1)
+>>> print(pairwise2.format_alignment(*alignments[0]))
+4 PADKTNV
+  |..|..|
+3 PEEKSAV
+  Score=16
+<BLANKLINE>
+\end{minted}
+
+Instead of supplying a complete match/mismatch matrix, the match code
+\texttt{m} allows for easy defining general match/mismatch values. The next
+example uses match/mismatch scores of 5/-4 and gap penalties (open/extend)
+of 2/0.5 using \verb|localms|:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments = pairwise2.align.localms("AGAACT", "GAC", 5, -4, -2, -0.5)
+>>> print(pairwise2.format_alignment(*alignments[0]))
+2 GAAC
+  | ||
+1 G-AC
+  Score=13
+<BLANKLINE>
+\end{minted}
+
+One useful keyword argument of the \verb|Bio.pairwise2.align| functions is
+\texttt{score\_only}. When set to \texttt{True} it will only return the score
+of the best alignment(s), but in a significantly shorter time. It will also
+allow the alignment of longer sequences before a memory error is raised.
+Another useful keyword argument is \texttt{one\_alignment\_only=True} which
+will also result in some speed gain.
+
+Unfortunately, \verb|Bio.pairwise2| does not work with Biopython's multiple
+sequence alignment objects (yet).
+However, the module has some interesting advanced features: you can
+define your own match and gap functions (interested in testing affine
+logarithmic gap costs?), gap penalties and end gaps penalties can be different
+for both sequences, sequences can be supplied as lists (useful if you have
+residues that are encoded by more than one character), etc. These features
+are hard (if at all) to realize with other alignment tools. For more details
+see the modules documentation in
+\href{http://biopython.org/docs/\bpversion/api/Bio.pairwise2.html}{Biopython's API}.
+

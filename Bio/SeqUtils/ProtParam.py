@@ -58,9 +58,7 @@ class ProteinAnalysis:
     """Class containing methods for protein analysis.
 
     The constructor takes two arguments.
-    The first is the protein sequence as a string, which is then converted to a
-    sequence object using the Bio.Seq module. This is done just to make sure
-    the sequence is a protein sequence and not anything else.
+    The first is the protein sequence as a string or a Seq object.
 
     The second argument is optional. If set to True, the weight of the amino
     acids will be calculated using their monoisotopic mass (the weight of the
@@ -73,10 +71,7 @@ class ProteinAnalysis:
 
     def __init__(self, prot_sequence, monoisotopic=False):
         """Initialize the class."""
-        if prot_sequence.islower():
-            self.sequence = Seq(prot_sequence.upper())
-        else:
-            self.sequence = Seq(prot_sequence)
+        self.sequence = prot_sequence.upper()
         self.amino_acids_content = None
         self.amino_acids_percent = None
         self.length = len(self.sequence)
@@ -114,9 +109,7 @@ class ProteinAnalysis:
         if self.amino_acids_percent is None:
             aa_counts = self.count_amino_acids()
 
-            percentages = {}
-            for aa in aa_counts:
-                percentages[aa] = aa_counts[aa] / float(self.length)
+            percentages = {aa: count / self.length for aa, count in aa_counts.items()}
 
             self.amino_acids_percent = percentages
 
@@ -189,9 +182,24 @@ class ProteinAnalysis:
 
         return scores
 
-    def gravy(self):
-        """Calculate the gravy according to Kyte and Doolittle."""
-        total_gravy = sum(ProtParamData.kd[aa] for aa in self.sequence)
+    def gravy(self, scale="KyteDoolitle"):
+        """Calculate the GRAVY (Grand Average of Hydropathy) according to Kyte and Doolitle, 1982.
+
+        Utilizes the given Hydrophobicity scale, by default uses the original
+        proposed by Kyte and Doolittle (KyteDoolitle). Other options are:
+        Aboderin, AbrahamLeo, Argos, BlackMould, BullBreese, Casari, Cid,
+        Cowan3.4, Cowan7.5, Eisenberg, Engelman, Fasman, Fauchere, GoldSack,
+        Guy, Jones, Juretic, Kidera, Miyazawa, Parker,Ponnuswamy, Rose,
+        Roseman, Sweet, Tanford, Wilson and Zimmerman.
+
+        New scales can be added in ProtParamData.
+        """
+        selected_scale = ProtParamData.gravy_scales.get(scale, -1)
+
+        if selected_scale == -1:
+            raise ValueError(f"scale: {scale} not known")
+
+        total_gravy = sum(selected_scale[aa] for aa in self.sequence)
 
         return total_gravy / self.length
 
@@ -279,9 +287,7 @@ class ProteinAnalysis:
             if middle in param_dict:
                 score += param_dict[middle]
             else:
-                sys.stderr.write(
-                    "warning: %s  is not a standard amino acid.\n" % middle
-                )
+                sys.stderr.write(f"warning: {middle} is not a standard amino acid.\n")
 
             scores.append(score / sum_of_weights)
 

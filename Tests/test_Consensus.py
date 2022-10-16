@@ -116,11 +116,17 @@ class ConsensusTest(unittest.TestCase):
 
     def test_get_support(self):
         support_tree = Consensus.get_support(self.trees[0], self.trees)
-        clade = support_tree.common_ancestor([support_tree.find_any(name="Beta"), support_tree.find_any(name="Gamma")])
+        clade = support_tree.common_ancestor(
+            [support_tree.find_any(name="Beta"), support_tree.find_any(name="Gamma")]
+        )
         self.assertEqual(clade.confidence, 2 * 100.0 / 3)
-        clade = support_tree.common_ancestor([support_tree.find_any(name="Alpha"), support_tree.find_any(name="Beta")])
+        clade = support_tree.common_ancestor(
+            [support_tree.find_any(name="Alpha"), support_tree.find_any(name="Beta")]
+        )
         self.assertEqual(clade.confidence, 3 * 100.0 / 3)
-        clade = support_tree.common_ancestor([support_tree.find_any(name="Delta"), support_tree.find_any(name="Epsilon")])
+        clade = support_tree.common_ancestor(
+            [support_tree.find_any(name="Delta"), support_tree.find_any(name="Epsilon")]
+        )
         self.assertEqual(clade.confidence, 2 * 100.0 / 3)
 
 
@@ -146,7 +152,9 @@ class BootstrapTest(unittest.TestCase):
     def test_bootstrap_consensus(self):
         calculator = DistanceCalculator("blosum62")
         constructor = DistanceTreeConstructor(calculator, "nj")
-        tree = Consensus.bootstrap_consensus(self.msa, 100, constructor, Consensus.majority_consensus)
+        tree = Consensus.bootstrap_consensus(
+            self.msa, 100, constructor, Consensus.majority_consensus
+        )
         self.assertIsInstance(tree, BaseTree.Tree)
         Phylo.write(tree, os.path.join(temp_dir, "bootstrap_consensus.tre"), "newick")
 

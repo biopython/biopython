@@ -4,7 +4,6 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
 """Multiple sequence alignment input/output as alignment objects.
 
 The Bio.AlignIO interface is deliberately very similar to Bio.SeqIO, and in
@@ -99,8 +98,7 @@ File Formats
 When specifying the file format, use lowercase strings.  The same format
 names are also used in Bio.SeqIO and include the following:
 
-  - clustal -   Output from Clustal W or X, see also the module Bio.Clustalw
-    which can be used to run the command line tool from Biopython.
+  - clustal -   Output from Clustal W or X.
   - emboss    - EMBOSS tools' "pairs" and "simple" alignment formats.
   - fasta     - The generic sequence file format where each record starts with
     an identifier line starting with a ">" character, followed by
@@ -126,11 +124,9 @@ You can also use any file format supported by Bio.SeqIO, such as "fasta" or
 "ig" (which are listed above), PROVIDED the sequences in your file are all the
 same length.
 """
-
-
 # TODO
 # - define policy on reading aligned sequences with gaps in
-#   (e.g. - and . characters) including how the alphabet interacts
+#   (e.g. - and . characters)
 #
 # - Can we build the to_alignment(...) functionality
 #   into the generic Alignment class instead?
@@ -141,20 +137,18 @@ same length.
 #
 # - MSF multiple alignment format, aka GCG, aka PileUp format (*.msf)
 #   http://www.bioperl.org/wiki/MSF_multiple_alignment_format
-
 from Bio.Align import MultipleSeqAlignment
-from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 from Bio.File import as_handle
 
-from . import StockholmIO
 from . import ClustalIO
-from . import NexusIO
-from . import PhylipIO
 from . import EmbossIO
 from . import FastaIO
 from . import MafIO
 from . import MauveIO
 from . import MsfIO
+from . import NexusIO
+from . import PhylipIO
+from . import StockholmIO
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl and EMBOSS where possible.
@@ -207,7 +201,7 @@ def write(alignments, handle, format):
     if not format:
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
+        raise ValueError(f"Format string '{format}' should be lower case")
 
     if isinstance(alignments, MultipleSeqAlignment):
         # This raised an exception in older versions of Biopython
@@ -231,11 +225,9 @@ def write(alignments, handle, format):
                 SeqIO.write(alignment, fp, format)
                 count += 1
         elif format in _FormatToIterator or format in SeqIO._FormatToIterator:
-            raise ValueError(
-                "Reading format '%s' is supported, but not writing" % format
-            )
+            raise ValueError(f"Reading format '{format}' is supported, but not writing")
         else:
-            raise ValueError("Unknown format '%s'" % format)
+            raise ValueError(f"Unknown format '{format}'")
 
     if not isinstance(count, int):
         raise RuntimeError(
@@ -247,15 +239,12 @@ def write(alignments, handle, format):
 
 
 # This is a generator function!
-def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
+def _SeqIO_to_alignment_iterator(handle, format, seq_count=None):
     """Use Bio.SeqIO to create an MultipleSeqAlignment iterator (PRIVATE).
 
     Arguments:
      - handle    - handle to the file.
      - format    - string describing the file format.
-     - alphabet  - optional Alphabet object, useful when the sequence type
-       cannot be automatically inferred from the file itself
-       (e.g. fasta, phylip, clustal)
      - seq_count - Optional integer, number of sequences expected in each
        alignment.  Recommended for fasta format files.
 
@@ -265,63 +254,35 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
     from Bio import SeqIO
 
     if format not in SeqIO._FormatToIterator:
-        raise ValueError("Unknown format '%s'" % format)
+        raise ValueError(f"Unknown format '{format}'")
 
     if seq_count:
         # Use the count to split the records into batches.
-        seq_record_iterator = SeqIO.parse(handle, format, alphabet)
+        seq_record_iterator = SeqIO.parse(handle, format)
 
         records = []
         for record in seq_record_iterator:
             records.append(record)
             if len(records) == seq_count:
-                yield MultipleSeqAlignment(records, alphabet)
+                yield MultipleSeqAlignment(records)
                 records = []
         if records:
             raise ValueError("Check seq_count argument, not enough sequences?")
     else:
         # Must assume that there is a single alignment using all
         # the SeqRecord objects:
-        records = list(SeqIO.parse(handle, format, alphabet))
+        records = list(SeqIO.parse(handle, format))
         if records:
-            yield MultipleSeqAlignment(records, alphabet)
+            yield MultipleSeqAlignment(records)
 
 
-def _force_alphabet(alignment_iterator, alphabet):
-    """Iterate over alignments, over-riding the alphabet (PRIVATE)."""
-    # Assume the alphabet argument has been pre-validated
-    given_base_class = _get_base_alphabet(alphabet).__class__
-    for align in alignment_iterator:
-        if not isinstance(_get_base_alphabet(align._alphabet), given_base_class):
-            raise ValueError(
-                "Specified alphabet %s clashes with "
-                "that determined from the file, %s"
-                % (repr(alphabet), repr(align._alphabet))
-            )
-        for record in align:
-            if not isinstance(
-                _get_base_alphabet(record.seq.alphabet), given_base_class
-            ):
-                raise ValueError(
-                    "Specified alphabet %s clashes with "
-                    "that determined from the file, %s"
-                    % (repr(alphabet), repr(record.seq.alphabet))
-                )
-            record.seq.alphabet = alphabet
-        align._alphabet = alphabet
-        yield align
-
-
-def parse(handle, format, seq_count=None, alphabet=None):
+def parse(handle, format, seq_count=None):
     """Iterate over an alignment file as MultipleSeqAlignment objects.
 
     Arguments:
      - handle    - handle to the file, or the filename as a string
        (note older versions of Biopython only took a handle).
      - format    - string describing the file format.
-     - alphabet  - optional Alphabet object, useful when the sequence type
-       cannot be automatically inferred from the file itself
-       (e.g. fasta, phylip, clustal)
      - seq_count - Optional integer, number of sequences expected in each
        alignment.  Recommended for fasta format files.
 
@@ -354,11 +315,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
     if not format:
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not (
-        isinstance(alphabet, Alphabet) or isinstance(alphabet, AlphabetEncoder)
-    ):
-        raise ValueError("Invalid alphabet, %s" % repr(alphabet))
+        raise ValueError(f"Format string '{format}' should be lower case")
     if seq_count is not None and not isinstance(seq_count, int):
         raise TypeError("Need integer for seq_count (sequences per alignment)")
 
@@ -366,37 +323,24 @@ def parse(handle, format, seq_count=None, alphabet=None):
         # Map the file format to a sequence iterator:
         if format in _FormatToIterator:
             iterator_generator = _FormatToIterator[format]
-            if alphabet is None:
-                i = iterator_generator(fp, seq_count)
-            else:
-                try:
-                    # Initially assume the optional alphabet argument is supported
-                    i = iterator_generator(fp, seq_count, alphabet=alphabet)
-                except TypeError:
-                    # It isn't supported.
-                    i = _force_alphabet(iterator_generator(fp, seq_count), alphabet)
+            i = iterator_generator(fp, seq_count)
 
         elif format in SeqIO._FormatToIterator:
             # Exploit the existing SeqIO parser to the dirty work!
-            i = _SeqIO_to_alignment_iterator(
-                fp, format, alphabet=alphabet, seq_count=seq_count
-            )
+            i = _SeqIO_to_alignment_iterator(fp, format, seq_count=seq_count)
         else:
-            raise ValueError("Unknown format '%s'" % format)
+            raise ValueError(f"Unknown format '{format}'")
 
         yield from i
 
 
-def read(handle, format, seq_count=None, alphabet=None):
+def read(handle, format, seq_count=None):
     """Turn an alignment file into a single MultipleSeqAlignment object.
 
     Arguments:
      - handle    - handle to the file, or the filename as a string
        (note older versions of Biopython only took a handle).
      - format    - string describing the file format.
-     - alphabet  - optional Alphabet object, useful when the sequence type
-       cannot be automatically inferred from the file itself
-       (e.g. fasta, phylip, clustal)
      - seq_count - Optional integer, number of sequences expected in each
        alignment.  Recommended for fasta format files.
 
@@ -434,7 +378,7 @@ def read(handle, format, seq_count=None, alphabet=None):
     You must use the Bio.AlignIO.parse() function if you want to read multiple
     records from the handle.
     """
-    iterator = parse(handle, format, seq_count, alphabet)
+    iterator = parse(handle, format, seq_count)
     try:
         alignment = next(iterator)
     except StopIteration:
@@ -453,7 +397,7 @@ def read(handle, format, seq_count=None, alphabet=None):
     return alignment
 
 
-def convert(in_file, in_format, out_file, out_format, alphabet=None):
+def convert(in_file, in_format, out_file, out_format, molecule_type=None):
     """Convert between two alignment files, returns number of alignments.
 
     Arguments:
@@ -461,16 +405,69 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
      - in_format - input file format, lower case string
      - output - an output handle or filename
      - out_file - output file format, lower case string
-     - alphabet - optional alphabet to assume
+     - molecule_type - optional molecule type to apply, string containing
+       "DNA", "RNA" or "protein".
 
     **NOTE** - If you provide an output filename, it will be opened which will
     overwrite any existing file without warning. This may happen if even the
     conversion is aborted (e.g. an invalid out_format name is given).
+
+    Some output formats require the molecule type be specified where this
+    cannot be determined by the parser. For example, converting to FASTA,
+    Clustal, or PHYLIP format to NEXUS:
+
+    >>> from io import StringIO
+    >>> from Bio import AlignIO
+    >>> handle = StringIO()
+    >>> AlignIO.convert("Phylip/horses.phy", "phylip", handle, "nexus", "DNA")
+    1
+    >>> print(handle.getvalue())
+    #NEXUS
+    begin data;
+    dimensions ntax=10 nchar=40;
+    format datatype=dna missing=? gap=-;
+    matrix
+    Mesohippus   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    Hypohippus   AAACCCCCCCAAAAAAAAACAAAAAAAAAAAAAAAAAAAA
+    Archaeohip   CAAAAAAAAAAAAAAAACACAAAAAAAAAAAAAAAAAAAA
+    Parahippus   CAAACAACAACAAAAAAAACAAAAAAAAAAAAAAAAAAAA
+    Merychippu   CCAACCACCACCCCACACCCAAAAAAAAAAAAAAAAAAAA
+    'M. secundu' CCAACCACCACCCACACCCCAAAAAAAAAAAAAAAAAAAA
+    Nannipus     CCAACCACAACCCCACACCCAAAAAAAAAAAAAAAAAAAA
+    Neohippari   CCAACCCCCCCCCCACACCCAAAAAAAAAAAAAAAAAAAA
+    Calippus     CCAACCACAACCCACACCCCAAAAAAAAAAAAAAAAAAAA
+    Pliohippus   CCCACCCCCCCCCACACCCCAAAAAAAAAAAAAAAAAAAA
+    ;
+    end;
+    <BLANKLINE>
     """
+    if molecule_type:
+        if not isinstance(molecule_type, str):
+            raise TypeError(f"Molecule type should be a string, not {molecule_type!r}")
+        elif (
+            "DNA" in molecule_type
+            or "RNA" in molecule_type
+            or "protein" in molecule_type
+        ):
+            pass
+        else:
+            raise ValueError(f"Unexpected molecule type, {molecule_type!r}")
+
     # TODO - Add optimised versions of important conversions
     # For now just off load the work to SeqIO parse/write
     # Don't open the output file until we've checked the input is OK:
-    alignments = parse(in_file, in_format, None, alphabet)
+    alignments = parse(in_file, in_format, None)
+
+    if molecule_type:
+        # Edit the records on the fly to set molecule type
+
+        def over_ride(alignment):
+            """Over-ride molecule in-place."""
+            for record in alignment:
+                record.annotations["molecule_type"] = molecule_type
+            return alignment
+
+        alignments = (over_ride(_) for _ in alignments)
     return write(alignments, out_file, out_format)
 
 

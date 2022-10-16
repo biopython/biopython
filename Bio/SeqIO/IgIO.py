@@ -12,22 +12,19 @@ multiple sequence alignment format.
 
 You are expected to use this module via the Bio.SeqIO functions.
 """
-
-
-from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
 from .Interfaces import SequenceIterator
 
 
 class IgIterator(SequenceIterator):
     """Parser for IntelliGenetics files."""
 
-    def __init__(self, source, alphabet=single_letter_alphabet):
+    def __init__(self, source):
         """Iterate over IntelliGenetics records (as SeqRecord objects).
 
         source - file-like object opened in text mode, or a path to a file
-        alphabet - optional alphabet
 
         The optional free format file header lines (which start with two
         semi-colons) are ignored.
@@ -62,7 +59,7 @@ class IgIterator(SequenceIterator):
         SYK_SYK length 330
 
         """
-        super().__init__(source, alphabet=alphabet, mode="t", fmt="IntelliGenetics")
+        super().__init__(source, mode="t", fmt="IntelliGenetics")
 
     def parse(self, handle):
         """Start parsing the file, and return a SeqRecord generator."""
@@ -80,7 +77,7 @@ class IgIterator(SequenceIterator):
             return
 
         if line[0] != ";":
-            raise ValueError("Records should start with ';' and not:\n%r" % line)
+            raise ValueError(f"Records should start with ';' and not:\n{line!r}")
         while line:
             # Now iterate over the records
 
@@ -114,10 +111,12 @@ class IgIterator(SequenceIterator):
                 )
 
             # Return the record and then continue...
-            alphabet = self.alphabet
-            record = SeqRecord(Seq(seq_str, alphabet), id=title, name=title)
-            record.annotations["comment"] = "\n".join(comment_lines)
-            yield record
+            yield SeqRecord(
+                Seq(seq_str),
+                id=title,
+                name=title,
+                annotations={"comment": "\n".join(comment_lines)},
+            )
 
         # We should be at the end of the file now
         assert not line

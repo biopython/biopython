@@ -132,7 +132,7 @@ def optionalcascade(cont_attr, item_attr, doc=""):
     def getter(self):
         if self._items:
             # don't use self._items here, so QueryResult can use this property
-            # as well (the underlying OrderedDict is not integer-indexable)
+            # as well (the underlying dict is not integer-indexable)
             return getattr(self[0], item_attr)
         else:
             return getattr(self, cont_attr)
@@ -153,7 +153,7 @@ def fragcascade(attr, seq_type, doc=""):
 
     """
     assert seq_type in ("hit", "query")
-    attr_name = "_%s_%s" % (seq_type, attr)
+    attr_name = f"_{seq_type}_{attr}"
 
     def getter(self):
         return getattr(self, attr_name)

@@ -37,7 +37,7 @@ class DistributionPage:
     """
 
     def __init__(self, output_format="pdf"):
-        """Initialize."""
+        """Initialize the class."""
         self.distributions = []
 
         # customizable attributes
@@ -66,10 +66,8 @@ class DistributionPage:
         end_x_pos = width - inch * 0.5
         cur_y_pos = height - 1.5 * inch
         end_y_pos = 0.5 * inch
-        x_pos_change = (end_x_pos - cur_x_pos) / float(self.number_of_columns)
-        num_y_rows = math.ceil(
-            float(len(self.distributions)) / float(self.number_of_columns)
-        )
+        x_pos_change = (end_x_pos - cur_x_pos) / self.number_of_columns
+        num_y_rows = math.ceil(len(self.distributions) / self.number_of_columns)
         y_pos_change = (cur_y_pos - end_y_pos) / num_y_rows
 
         self._draw_distributions(
@@ -250,7 +248,7 @@ class LineDistribution:
     """
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         pass
 
     def draw(self, cur_drawing, start_x, start_y, end_x, end_y):

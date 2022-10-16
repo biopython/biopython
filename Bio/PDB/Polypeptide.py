@@ -52,38 +52,20 @@ last residues) have been shown as M (methionine) by the get_sequence method.
 
 import warnings
 
-from Bio.Data import SCOPData
-from Bio.Seq import Seq
+from Bio import BiopythonDeprecationWarning
+
+from Bio.Data.PDBData import nucleic_letters_3to1
+from Bio.Data.PDBData import nucleic_letters_3to1_extended
+from Bio.Data.PDBData import protein_letters_3to1
+from Bio.Data.PDBData import protein_letters_3to1_extended
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.vectors import calc_dihedral, calc_angle
+from Bio.Seq import Seq
 
 
-standard_aa_names = [
-    "ALA",
-    "CYS",
-    "ASP",
-    "GLU",
-    "PHE",
-    "GLY",
-    "HIS",
-    "ILE",
-    "LYS",
-    "LEU",
-    "MET",
-    "ASN",
-    "PRO",
-    "GLN",
-    "ARG",
-    "SER",
-    "THR",
-    "VAL",
-    "TRP",
-    "TYR",
-]
-
-
-aa1 = "ACDEFGHIKLMNPQRSTVWY"
-aa3 = standard_aa_names
+# Sorted by 1-letter code
+aa3, aa1 = zip(*sorted(protein_letters_3to1.items(), key=lambda x: x[1]))
+standard_aa_names = aa3
 
 d1_to_index = {}
 dindex_to_1 = {}
@@ -159,6 +141,11 @@ def three_to_one(s):
        ...
     KeyError: 'MSE'
     """
+    warnings.warn(
+        "'three_to_one' will be deprecated in a future release of Biopython "
+        "in favor of 'Bio.PDB.Polypeptide.protein_letters_3to1'.",
+        BiopythonDeprecationWarning,
+    )
     i = d3_to_index[s]
     return dindex_to_1[i]
 
@@ -171,6 +158,11 @@ def one_to_three(s):
     >>> one_to_three('Y')
     'TYR'
     """
+    warnings.warn(
+        "'one_to_three' will be deprecated in a future release of Biopython "
+        "in favor of 'Bio.PDB.Polypeptide.protein_letters_1to3'.",
+        BiopythonDeprecationWarning,
+    )
     i = d1_to_index[s]
     return dindex_to_3[i]
 
@@ -194,14 +186,45 @@ def is_aa(residue, standard=False):
     >>> is_aa('FME', standard=True)
     False
     """
-    # TODO - What about special cases like XXX, can they appear in PDB files?
     if not isinstance(residue, str):
-        residue = residue.get_resname()
+        residue = f"{residue.get_resname():<3s}"
     residue = residue.upper()
     if standard:
-        return residue in d3_to_index
+        return residue in protein_letters_3to1
     else:
-        return residue in SCOPData.protein_letters_3to1
+        return residue in protein_letters_3to1_extended
+
+
+def is_nucleic(residue, standard=False):
+    """Return True if residue object/string is a nucleic acid.
+
+    :param residue: a L{Residue} object OR a three letter code
+    :type residue: L{Residue} or string
+
+    :param standard: flag to check for the 8 (DNA + RNA) canonical bases.
+        Default is False.
+    :type standard: boolean
+
+    >>> is_nucleic('DA ')
+    True
+
+    >>> is_nucleic('A  ')
+    True
+
+    Known three letter codes for modified nucleotides are supported,
+
+    >>> is_nucleic('A2L')
+    True
+    >>> is_nucleic('A2L', standard=True)
+    False
+    """
+    if not isinstance(residue, str):
+        residue = f"{residue.get_resname():<3s}"
+    residue = residue.upper()
+    if standard:
+        return residue in nucleic_letters_3to1
+    else:
+        return residue in nucleic_letters_3to1_extended
 
 
 class Polypeptide(list):
@@ -270,7 +293,7 @@ class Polypeptide(list):
         tau_list = []
         for i in range(0, len(ca_list) - 3):
             atom_list = (ca_list[i], ca_list[i + 1], ca_list[i + 2], ca_list[i + 3])
-            v1, v2, v3, v4 = [a.get_vector() for a in atom_list]
+            v1, v2, v3, v4 = (a.get_vector() for a in atom_list)
             tau = calc_dihedral(v1, v2, v3, v4)
             tau_list.append(tau)
             # Put tau in xtra dict of residue
@@ -284,7 +307,7 @@ class Polypeptide(list):
         ca_list = self.get_ca_list()
         for i in range(0, len(ca_list) - 2):
             atom_list = (ca_list[i], ca_list[i + 1], ca_list[i + 2])
-            v1, v2, v3 = [a.get_vector() for a in atom_list]
+            v1, v2, v3 = (a.get_vector() for a in atom_list)
             theta = calc_angle(v1, v2, v3)
             theta_list.append(theta)
             # Put tau in xtra dict of residue
@@ -299,7 +322,7 @@ class Polypeptide(list):
         :rtype: L{Seq}
         """
         s = "".join(
-            SCOPData.protein_letters_3to1.get(res.get_resname(), "X") for res in self
+            protein_letters_3to1_extended.get(res.get_resname(), "X") for res in self
         )
         return Seq(s)
 
@@ -311,7 +334,7 @@ class Polypeptide(list):
         """
         start = self[0].get_id()[1]
         end = self[-1].get_id()[1]
-        return "<Polypeptide start=%s end=%s>" % (start, end)
+        return f"<Polypeptide start={start} end={end}>"
 
 
 class _PPBuilder:

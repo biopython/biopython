@@ -5,7 +5,6 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
 """Bio.AlignIO support for "stockholm" format (used in the PFAM database).
 
 You are expected to use this module via the Bio.AlignIO functions (or the
@@ -41,20 +40,6 @@ using the Bio.AlignIO.read() function:
     AP001509.1 104
     AE007476.1 104
 
-This example file is clearly using RNA, so you might want the alignment object
-(and the SeqRecord objects it holds) to reflect this, rather than simple using
-the default single letter alphabet as shown above.  You can do this with an
-optional argument to the Bio.AlignIO.read() function:
-
-    >>> from Bio import AlignIO
-    >>> from Bio.Alphabet import generic_rna
-    >>> align = AlignIO.read("Stockholm/simple.sth", "stockholm",
-    ...                      alphabet=generic_rna)
-    >>> print(align)
-    Alignment with 2 rows and 104 columns
-    UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
-    AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1
-
 In addition to the sequences themselves, this example alignment also includes
 some GR lines for the secondary structure of the sequences.  These are
 strings, with one character for each letter in the associated sequence:
@@ -83,7 +68,7 @@ consensus in this example:
 You can output this alignment in many different file formats
 using Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
 
-    >>> print(align.format("fasta"))
+    >>> print(format(align, "fasta"))
     >AP001509.1
     UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-A
     GGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
@@ -95,7 +80,7 @@ using Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
 Most output formats won't be able to hold the annotation possible in a
 Stockholm file:
 
-    >>> print(align.format("stockholm"))
+    >>> print(format(align, "stockholm"))
     # STOCKHOLM 1.0
     #=GF SQ 2
     AP001509.1 UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
@@ -117,12 +102,10 @@ tools.
 
 Finally, as an aside, it can sometimes be useful to use Bio.SeqIO.parse() to
 iterate over the alignment rows as SeqRecord objects - rather than working
-with Alignnment objects. Again, if you want to you can specify this is RNA:
+with Alignnment objects.
 
     >>> from Bio import SeqIO
-    >>> from Bio.Alphabet import generic_rna
-    >>> for record in SeqIO.parse("Stockholm/simple.sth", "stockholm",
-    ...                           alphabet=generic_rna):
+    >>> for record in SeqIO.parse("Stockholm/simple.sth", "stockholm"):
     ...     print(record.id)
     ...     print(record.seq)
     ...     print(record.letter_annotations['secondary_structure'])
@@ -153,7 +136,7 @@ slicing specific columns of an alignment will slice any per-column-annotations:
 
 You can also see this in the Stockholm output of this partial-alignment:
 
-    >>> print(part_align.format("stockholm"))
+    >>> print(format(part_align, "stockholm"))
     # STOCKHOLM 1.0
     #=GF SQ 2
     AP001509.1 UCAACACUCU
@@ -169,13 +152,12 @@ You can also see this in the Stockholm output of this partial-alignment:
     <BLANKLINE>
 
 """
-
-from collections import OrderedDict
-
+from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
-from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
+
+from .Interfaces import AlignmentIterator
+from .Interfaces import SequentialAlignmentWriter
 
 
 class StockholmWriter(SequentialAlignmentWriter):
@@ -222,11 +204,9 @@ class StockholmWriter(SequentialAlignmentWriter):
         if alignment.column_annotations:
             for k, v in sorted(alignment.column_annotations.items()):
                 if k in self.pfam_gc_mapping:
-                    self.handle.write("#=GC %s %s\n" % (self.pfam_gc_mapping[k], v))
+                    self.handle.write(f"#=GC {self.pfam_gc_mapping[k]} {v}\n")
                 elif k in self.pfam_gr_mapping:
-                    self.handle.write(
-                        "#=GC %s %s\n" % (self.pfam_gr_mapping[k] + "_cons", v)
-                    )
+                    self.handle.write(f"#=GC {self.pfam_gr_mapping[k]}_cons {v}\n")
                 else:
                     # It doesn't follow the PFAM standards, but should we record
                     # this data anyway?
@@ -249,21 +229,18 @@ class StockholmWriter(SequentialAlignmentWriter):
         seq_name = seq_name.replace(" ", "_")
 
         if "start" in record.annotations and "end" in record.annotations:
-            suffix = "/%s-%s" % (
-                str(record.annotations["start"]),
-                str(record.annotations["end"]),
-            )
+            suffix = f"/{record.annotations['start']}-{record.annotations['end']}"
             if seq_name[-len(suffix) :] != suffix:
                 seq_name = "%s/%s-%s" % (
                     seq_name,
-                    str(record.annotations["start"]),
-                    str(record.annotations["end"]),
+                    record.annotations["start"],
+                    record.annotations["end"],
                 )
 
         if seq_name in self._ids_written:
-            raise ValueError("Duplicate record identifier: %s" % seq_name)
+            raise ValueError(f"Duplicate record identifier: {seq_name}")
         self._ids_written.append(seq_name)
-        self.handle.write("%s %s\n" % (seq_name, str(record.seq)))
+        self.handle.write(f"{seq_name} {record.seq}\n")
 
         # The recommended placement for GS lines (per sequence annotation)
         # is above the alignment (as a header block) or just below the
@@ -279,21 +256,18 @@ class StockholmWriter(SequentialAlignmentWriter):
         # AC = Accession
         if "accession" in record.annotations:
             self.handle.write(
-                "#=GS %s AC %s\n"
-                % (seq_name, self.clean(record.annotations["accession"]))
+                f"#=GS {seq_name} AC {self.clean(record.annotations['accession'])}\n"
             )
         elif record.id:
-            self.handle.write("#=GS %s AC %s\n" % (seq_name, self.clean(record.id)))
+            self.handle.write(f"#=GS {seq_name} AC {self.clean(record.id)}\n")
 
         # DE = description
         if record.description:
-            self.handle.write(
-                "#=GS %s DE %s\n" % (seq_name, self.clean(record.description))
-            )
+            self.handle.write(f"#=GS {seq_name} DE {self.clean(record.description)}\n")
 
         # DE = database links
         for xref in record.dbxrefs:
-            self.handle.write("#=GS %s DR %s\n" % (seq_name, self.clean(xref)))
+            self.handle.write(f"#=GS {seq_name} DR {self.clean(xref)}\n")
 
         # GS = other per sequence annotation
         for key, value in record.annotations.items():
@@ -397,7 +371,7 @@ class StockholmIterator(AlignmentIterator):
         # if present it agrees with our parsing.
 
         seqs = {}
-        ids = OrderedDict()  # Really only need an OrderedSet, but python lacks this
+        ids = {}  # Really only need an OrderedSet, but python lacks this
         gs = {}
         gr = {}
         gf = {}
@@ -456,7 +430,13 @@ class StockholmIterator(AlignmentIterator):
                 elif line[:5] == "#=GS ":
                     # Generic per-Sequence annotation, free text
                     # Format: "#=GS <seqname> <feature> <free text>"
-                    seq_id, feature, text = line[5:].strip().split(None, 2)
+                    try:
+                        seq_id, feature, text = line[5:].strip().split(None, 2)
+                    except ValueError:
+                        # Free text can sometimes be empty, which a one line split throws an error for.
+                        # See https://github.com/biopython/biopython/issues/2982 for more details
+                        seq_id, feature = line[5:].strip().split(None, 1)
+                        text = ""
                     # if seq_id not in ids:
                     #    ids.append(seq_id)
                     if seq_id not in gs:
@@ -509,7 +489,7 @@ class StockholmIterator(AlignmentIterator):
                     )
                 name, start, end = self._identifier_split(seq_id)
                 record = SeqRecord(
-                    Seq(seq, self.alphabet),
+                    Seq(seq),
                     id=seq_id,
                     name=name,
                     description=seq_id,
@@ -531,7 +511,7 @@ class StockholmIterator(AlignmentIterator):
                     raise ValueError(
                         "%s length %i, expected %i" % (k, len(v), alignment_length)
                     )
-            alignment = MultipleSeqAlignment(records, self.alphabet)
+            alignment = MultipleSeqAlignment(records)
 
             for k, v in sorted(gc.items()):
                 if k in self.pfam_gc_mapping:
@@ -564,7 +544,7 @@ class StockholmIterator(AlignmentIterator):
         return identifier, None, None
 
     def _get_meta_data(self, identifier, meta_dict):
-        """Take an itentifier and returns dict of all meta-data matching it (PRIVATE).
+        """Take an identifier and returns dict of all meta-data matching it (PRIVATE).
 
         For example, given "Q9PN73_CAMJE/149-220" will return all matches to
         this or "Q9PN73_CAMJE" which the identifier without its /start-end

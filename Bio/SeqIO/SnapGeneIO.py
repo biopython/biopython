@@ -4,22 +4,21 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
 """Bio.SeqIO support for the SnapGene file format.
 
 The SnapGene binary format is the native format used by the SnapGene program
 from GSL Biotech LLC.
 """
-
 from datetime import datetime
 from re import sub
 from struct import unpack
 from xml.dom.minidom import parseString
 
-from Bio import Alphabet
 from Bio.Seq import Seq
-from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqFeature import SimpleLocation
+from Bio.SeqFeature import SeqFeature
 from Bio.SeqRecord import SeqRecord
+
 from .Interfaces import SequenceIterator
 
 
@@ -62,7 +61,7 @@ def _parse_dna_packet(length, data, record):
         raise ValueError("The file contains more than one DNA packet")
 
     flags, sequence = unpack(">B%ds" % (length - 1), data)
-    record.seq = Seq(sequence.decode("ASCII"), alphabet=Alphabet.generic_dna)
+    record.seq = Seq(sequence.decode("ASCII"))
     record.annotations["molecule_type"] = "DNA"
     if flags & 0x01:
         record.annotations["topology"] = "circular"
@@ -76,7 +75,7 @@ def _parse_notes_packet(length, data, record):
     This type of packet contains some metadata about the sequence. They
     are stored as a XML string with a 'Notes' root node.
     """
-    xml = parseString(data.decode("ASCII"))
+    xml = parseString(data.decode("UTF-8"))
     type = _get_child_value(xml, "Type")
     if type == "Synthetic":
         record.annotations["data_file_division"] = "SYN"
@@ -110,6 +109,20 @@ def _parse_cookie_packet(length, data, record):
         raise ValueError("The file is not a valid SnapGene file")
 
 
+def _parse_location(rangespec, strand, record):
+    start, end = (int(x) for x in rangespec.split("-"))
+    # Account for SnapGene's 1-based coordinates
+    start = start - 1
+    if start > end:
+        # Range wrapping the end of the sequence
+        l1 = SimpleLocation(start, len(record), strand=strand)
+        l2 = SimpleLocation(0, end, strand=strand)
+        location = l1 + l2
+    else:
+        location = SimpleLocation(start, end, strand=strand)
+    return location
+
+
 def _parse_features_packet(length, data, record):
     """Parse a sequence features packet.
 
@@ -117,14 +130,11 @@ def _parse_features_packet(length, data, record):
     which are in a dedicated Primers packet). The data is a XML string
     starting with a 'Features' root node.
     """
-    xml = parseString(data.decode("ASCII"))
+    xml = parseString(data.decode("UTF-8"))
     for feature in xml.getElementsByTagName("Feature"):
         quals = {}
 
         type = _get_attribute_value(feature, "type", default="misc_feature")
-        label = _get_attribute_value(feature, "name")
-        if label:
-            quals["label"] = [label]
 
         strand = +1
         directionality = int(
@@ -134,15 +144,33 @@ def _parse_features_packet(length, data, record):
             strand = -1
 
         location = None
+        subparts = []
+        n_parts = 0
         for segment in feature.getElementsByTagName("Segment"):
+            if _get_attribute_value(segment, "type", "standard") == "gap":
+                continue
             rng = _get_attribute_value(segment, "range")
-            start, end = [int(x) for x in rng.split("-")]
-            # Account for SnapGene's 1-based coordinates
-            start = start - 1
+            n_parts += 1
+            next_location = _parse_location(rng, strand, record)
             if not location:
-                location = FeatureLocation(start, end, strand=strand)
+                location = next_location
+            elif strand == -1:
+                # Reverse segments order for reverse-strand features
+                location = next_location + location
             else:
-                location = location + FeatureLocation(start, end, strand=strand)
+                location = location + next_location
+
+            name = _get_attribute_value(segment, "name")
+            if name:
+                subparts.append([n_parts, name])
+
+        if len(subparts) > 0:
+            # Add a "parts" qualifiers to represent "named subfeatures"
+            if strand == -1:
+                # Reverse segment indexes and order for reverse-strand features
+                subparts = reversed([[n_parts - i + 1, name] for i, name in subparts])
+            quals["parts"] = [";".join(f"{i}:{name}" for i, name in subparts)]
+
         if not location:
             raise ValueError("Missing feature location")
 
@@ -160,6 +188,16 @@ def _parse_features_packet(length, data, record):
                     qvalues.append(int(value.attributes["int"].value))
             quals[qname] = qvalues
 
+        name = _get_attribute_value(feature, "name")
+        if name:
+            if "label" not in quals:
+                # No explicit label attribute, use the SnapGene name
+                quals["label"] = [name]
+            elif name not in quals["label"]:
+                # The SnapGene name is different from the label,
+                # add a specific attribute to represent it
+                quals["name"] = [name]
+
         feature = SeqFeature(location, type=type, qualifiers=quals)
         record.features.append(feature)
 
@@ -171,7 +209,7 @@ def _parse_primers_packet(length, data, record):
     stores primer binding features. The data is a XML string starting
     with a 'Primers' root node.
     """
-    xml = parseString(data.decode("ASCII"))
+    xml = parseString(data.decode("UTF-8"))
     for primer in xml.getElementsByTagName("Primer"):
         quals = {}
 
@@ -183,8 +221,6 @@ def _parse_primers_packet(length, data, record):
             rng = _get_attribute_value(
                 site, "location", error="Missing binding site location"
             )
-            start, end = [int(x) for x in rng.split("-")]
-
             strand = int(_get_attribute_value(site, "boundStrand", default="0"))
             if strand == 1:
                 strand = -1
@@ -192,7 +228,7 @@ def _parse_primers_packet(length, data, record):
                 strand = +1
 
             feature = SeqFeature(
-                FeatureLocation(start, end, strand=strand),
+                _parse_location(rng, strand, record),
                 type="primer_bind",
                 qualifiers=quals,
             )
@@ -205,7 +241,6 @@ _packet_handlers = {
     0x06: _parse_notes_packet,
     0x0A: _parse_features_packet,
 }
-
 
 # Helper functions to process the XML data in
 # some of the segments

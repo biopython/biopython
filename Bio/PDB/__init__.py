@@ -10,7 +10,16 @@
 Includes: PDB and mmCIF parsers, a Structure class, a module to keep a local
 copy of the PDB up-to-date, selective IO of PDB files, etc.
 
-Author: Thomas Hamelryck.  Additional code by Kristian Rother.
+Original Author: Thomas Hamelryck.
+Contributions by:
+- Peter Cock
+- Joe Greener
+- Rob Miller
+- Lenna X. Peterson
+- Joao Rodrigues
+- Kristian Rother
+- Eric Talevich
+- and many others.
 """
 
 # Get a Structure object from a PDB file
@@ -26,10 +35,8 @@ from .PDBList import PDBList
 from .parse_pdb_header import parse_pdb_header
 
 # Find connected polypeptides in a Structure
-from .Polypeptide import PPBuilder, CaPPBuilder, is_aa, standard_aa_names
-
-# This is also useful :-)
-from Bio.Data.SCOPData import protein_letters_3to1
+from .Polypeptide import PPBuilder, CaPPBuilder
+from .Polypeptide import is_aa, standard_aa_names, is_nucleic
 
 # IO of PDB files (including flexible selective output)
 from .PDBIO import PDBIO, Select
@@ -41,6 +48,9 @@ from . import Selection
 
 # Superimpose atom sets
 from .Superimposer import Superimposer
+
+# CEAlign structural alignment
+from .cealign import CEAligner
 
 # 3D vector class
 from .vectors import Vector, calc_angle, calc_dihedral, refmat, rotmat, rotaxis
@@ -70,5 +80,12 @@ from .Dice import extract
 # Depends on kdtrees C module
 try:
     from .NeighborSearch import NeighborSearch
+except ImportError:
+    pass
+
+# Native Shrake-Rupley algorithm for SASA calculations.
+# Depends on kdtrees C module
+try:
+    from .SASA import ShrakeRupley
 except ImportError:
     pass

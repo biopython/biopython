@@ -98,7 +98,7 @@ class SimpleEnzyme(unittest.TestCase):
         self.assertFalse(EcoRI.is_unknown())
         self.assertTrue(EcoRI.is_palindromic())
         self.assertTrue(EcoRI.is_comm())
-        self.assertIn("Life Technologies", EcoRI.supplier_list())
+        self.assertIn("Thermo Fisher Scientific", EcoRI.supplier_list())
         self.assertEqual(EcoRI.elucidate(), "G^AATT_C")
         self.assertEqual(EcoRI.search(self.ecosite_seq), [6])
         self.assertEqual(EcoRI.characteristic(), (1, -1, None, None, "GAATTC"))
@@ -148,7 +148,7 @@ class SimpleEnzyme(unittest.TestCase):
         self.assertFalse(SnaI.is_ambiguous())
         self.assertTrue(SnaI.is_unknown())
         self.assertFalse(SnaI.is_comm())
-        self.assertEqual(SnaI.suppliers(), None)
+        self.assertIsNone(SnaI.suppliers())
         self.assertEqual(SnaI.supplier_list(), [])
         with self.assertRaises(TypeError):
             SnaI.buffers("no company")
@@ -229,27 +229,27 @@ class EnzymeComparison(unittest.TestCase):
         # Comparison of iso- and neoschizomers
         self.assertEqual(Acc65I, Acc65I)
         self.assertNotEqual(Acc65I, KpnI)
-        self.assertFalse(Acc65I == Asp718I)
+        self.assertFalse(Acc65I == Asp718I)  # noqa: A500
         # self.assertNotEqual(Acc65I, Asp718I) it doesn't work as expected
-        self.assertFalse(Acc65I != Asp718I)
+        self.assertFalse(Acc65I != Asp718I)  # noqa: A500
         self.assertNotEqual(Acc65I, EcoRI)
         self.assertTrue(Acc65I >> KpnI)
         self.assertFalse(Acc65I >> Asp718I)
 
         # Compare length of recognition sites
         self.assertFalse(EcoRI >= EcoRV)
-        self.assertTrue(EcoRV >= EcoRI)
+        self.assertGreaterEqual(EcoRV, EcoRI)
         with self.assertRaises(NotImplementedError):
             EcoRV >= 3
         self.assertFalse(EcoRI > EcoRV)
-        self.assertTrue(EcoRV > EcoRI)
+        self.assertGreater(EcoRV, EcoRI)
         with self.assertRaises(NotImplementedError):
             EcoRV > 3
-        self.assertTrue(EcoRI <= EcoRV)
+        self.assertLessEqual(EcoRI, EcoRV)
         self.assertFalse(EcoRV <= EcoRI)
         with self.assertRaises(NotImplementedError):
             EcoRV <= 3
-        self.assertTrue(EcoRI < EcoRV)
+        self.assertLess(EcoRI, EcoRV)
         self.assertFalse(EcoRV < EcoRI)
         with self.assertRaises(NotImplementedError):
             EcoRV < 3
@@ -469,7 +469,7 @@ class RestrictionBatches(unittest.TestCase):
         self.assertEqual(batch.current_suppliers(), ["Sigma Chemical Corporation"])
         self.assertIn(EcoRI, batch)
         self.assertNotIn(AanI, batch)
-        batch.add_supplier("B")  # Life Technologies
+        batch.add_supplier("B")  # Thermo Fisher Scientific
         self.assertIn(AanI, batch)
 
     def test_batch_analysis(self):
@@ -564,8 +564,8 @@ class TestPrintOutputs(unittest.TestCase):
         out = self.StringIO()
         self.sys.stdout = out
         EcoRI.suppliers()
-        self.assertIn("Life Technologies", out.getvalue())
-        self.assertEqual(SnaI.suppliers(), None)
+        self.assertIn("Thermo Fisher Scientific", out.getvalue())
+        self.assertIsNone(SnaI.suppliers())
         EcoRI.all_suppliers()  # Independent of enzyme, list of all suppliers
         self.assertIn("Agilent Technologies", out.getvalue())
         batch = EcoRI + SnaI

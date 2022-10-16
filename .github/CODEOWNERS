@@ -18,13 +18,16 @@
 
 Bio/Alphabet @peterjc
 
-Bio/Align/* @peterjc
-Bio/Align/_aligners.c @mdehoon
+Bio/Align/* @mdehoon
+Tests/test_Align_* @mdehoon
 Bio/AlignIO/* @peterjc
 Tests/test_AlignIO* @peterjc
 
 Bio/bgzf.py @peterjc
 Tests/test_bgzf*.py @peterjc
+
+Bio/phenotype/* @mgalardini
+Tests/test_phenotype*.py @mgalardini
 
 Bio/Cluster/* @mdehoon
 Tests/test_Cluster*.py @mdehoon
@@ -57,7 +60,7 @@ Tests/test_PopGen*.py @tiagoantao
 Bio/SearchIO/* @bow
 Tests/test_SearchIO*.py @bow
 
-Bio/Seq*.py @peterjc
+Bio/Seq*.py @peterjc @mdehoon
 Bio/SeqIO/* @peterjc
 Tests/test_Seq* @peterjc
 Tests/test_seq* @peterjc

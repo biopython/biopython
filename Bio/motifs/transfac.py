@@ -81,7 +81,7 @@ class Record(list):
     """
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self.version = None
 
     def __str__(self):
@@ -272,7 +272,7 @@ XX
                     lines.append(line)
                     for i in range(length):
                         line = (
-                            " ".join(["%02.d"] + ["%6.20g" for l in letters])
+                            " ".join(["%02.d"] + ["%6.20g" for _ in letters])
                             + "      %s"
                         )
                         line = line % tuple(
@@ -290,10 +290,10 @@ XX
                     if value is not None:
                         if key in multiple_value_keys:
                             for v in value:
-                                line = "%s  %s" % (key, v)
+                                line = f"{key}  {v}"
                                 lines.append(line)
                         else:
-                            line = "%s  %s" % (key, value)
+                            line = f"{key}  {value}"
                             lines.append(line)
                         blank = True
                 if key == "PV":
@@ -309,7 +309,7 @@ XX
                                 value = reference.get(key)
                                 if value is None:
                                     continue
-                                line = "%s  %s" % (key, value)
+                                line = f"{key}  {value}"
                                 lines.append(line)
                                 blank = True
             if blank:

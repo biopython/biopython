@@ -31,9 +31,9 @@ class RandomAccess(unittest.TestCase):
 
     def test_gzip(self):
         """Test gzip compressed file."""
-        self.assertRaises(ValueError,
-                          File._open_for_random_access,
-                          "Quality/example.fastq.gz")
+        self.assertRaises(
+            ValueError, File._open_for_random_access, "Quality/example.fastq.gz"
+        )
 
 
 class AsHandleTestCase(unittest.TestCase):
@@ -56,14 +56,20 @@ class AsHandleTestCase(unittest.TestCase):
         p = self._path("test_file.fasta")
         with open(p, "wb") as fp:
             with File.as_handle(fp) as handle:
-                self.assertEqual(fp, handle, "as_handle should "
-                                 "return argument when given a "
-                                 "file-like object")
+                self.assertEqual(
+                    fp,
+                    handle,
+                    "as_handle should "
+                    "return argument when given a "
+                    "file-like object",
+                )
                 self.assertFalse(handle.closed)
 
-            self.assertFalse(handle.closed,
-                             "Exiting as_handle given a file-like object "
-                             "should not close the file")
+            self.assertFalse(
+                handle.closed,
+                "Exiting as_handle given a file-like object "
+                "should not close the file",
+            )
 
     def test_string_path(self):
         """Test as_handle with a string path argument."""
@@ -78,6 +84,7 @@ class AsHandleTestCase(unittest.TestCase):
     def test_path_object(self):
         """Test as_handle with a pathlib.Path object."""
         from pathlib import Path
+
         p = Path(self._path("test_file.fasta"))
         mode = "wb"
         with File.as_handle(p, mode=mode) as handle:
@@ -88,6 +95,7 @@ class AsHandleTestCase(unittest.TestCase):
 
     def test_custom_path_like_object(self):
         """Test as_handle with a custom path-like object."""
+
         class CustomPathLike:
             def __init__(self, path):
                 self.path = path
@@ -108,6 +116,13 @@ class AsHandleTestCase(unittest.TestCase):
         s = StringIO()
         with File.as_handle(s) as handle:
             self.assertIs(s, handle)
+
+
+class BaseClassTests(unittest.TestCase):
+    """Tests for _IndexedSeqFileProxy base class."""
+
+    def test_instance_exception(self):
+        self.assertRaises(TypeError, File._IndexedSeqFileProxy)
 
 
 if __name__ == "__main__":

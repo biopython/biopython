@@ -19,16 +19,7 @@ import getopt
 
 from Bio import SeqIO
 from Bio.Seq import Seq
-from Bio import Alphabet
-from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData, CodonTable
-
-
-class ProteinX(Alphabet.ProteinAlphabet):
-    letters = IUPACData.extended_protein_letters + "X"
-
-
-proteinX = ProteinX()
 
 
 class MissingTable:
@@ -44,10 +35,10 @@ class MissingTable:
 
 # Make the codon table given an existing table
 def makeTableX(table):
-    assert table.protein_alphabet == IUPAC.extended_protein
+    assert table.protein_alphabet == IUPACData.extended_protein_letters
     return CodonTable.CodonTable(
         table.nucleotide_alphabet,
-        proteinX,
+        IUPACData.extended_protein_letters + "X",
         MissingTable(table.forward_table),
         table.back_table,
         table.start_codons,
@@ -56,28 +47,28 @@ def makeTableX(table):
 
 
 class NextOrf:
-    def __init__(self, file, options):
+    def __init__(self, filename, options):
         self.options = options
-        self.file = file
+        self.filename = filename
         self.genetic_code = int(self.options["table"])
         self.table = makeTableX(CodonTable.ambiguous_dna_by_id[self.genetic_code])
         self.counter = 0
         self.ReadFile()
 
     def ReadFile(self):
-        handle = open(self.file)
+        handle = open(self.filename)
         for record in SeqIO.parse(handle, "fasta"):
             self.header = record.id
-            dir = self.options["strand"]
-            plus = dir in ["both", "plus"]
-            minus = dir in ["both", "minus"]
+            direction = self.options["strand"]
+            plus = direction in ["both", "plus"]
+            minus = direction in ["both", "minus"]
             start, stop = int(self.options["start"]), int(self.options["stop"])
-            s = str(record.seq).upper()
+            s = record.seq.upper()
             if stop > 0:
                 s = s[start:stop]
             else:
                 s = s[start:]
-            self.seq = Seq(s, IUPAC.ambiguous_dna)
+            self.seq = Seq(s)
             self.length = len(self.seq)
             self.rseq = None
             CDS = []
@@ -138,7 +129,6 @@ class NextOrf:
         return res
 
     def GetOrfCoordinates(self, seq):
-        s = str(seq)
         n = len(seq)
         start_codons = self.table.start_codons
         stop_codons = self.table.stop_codons
@@ -148,7 +138,7 @@ class NextOrf:
         for frame in range(0, 3):
             coordinates = []
             for i in range(0 + frame, n - n % 3, 3):
-                codon = s[i : i + 3]
+                codon = seq[i : i + 3]
                 if codon in start_codons:
                     coordinates.append((i + 1, 1, codon))
                 elif codon in stop_codons:
@@ -231,7 +221,7 @@ def help():
     print("")
     print("Options:                                                       default")
     print("--start       Start position in sequence                             0")
-    print("--stop        Stop position in sequence            (end of seqence)")
+    print("--stop        Stop position in sequence            (end of sequence)")
     print("--minlength   Minimum length of orf in bp                          100")
     print("--maxlength   Maximum length of orf in bp, default           100000000")
     print("--strand      Strand to analyse [both, plus, minus]               both")
@@ -248,7 +238,7 @@ def help():
     for key, table in CodonTable.ambiguous_dna_by_id.items():
         print(f"\t{key} {table._codon_table.names[0]}")
     print("\ne.g.")
-    print("./nextorf.py --minlength 5 --strand plus --output nt --gc 1 testjan.fas")
+    print("./nextorf.py --minlength 5 --strand plus --output nt --gc 1 test.fas")
     sys.exit(0)
 
 
@@ -292,5 +282,5 @@ if __name__ == "__main__":
         if arg[0] == "-v":
             print(f"OPTIONS {options}")
 
-    file = args[0]
-    nextorf = NextOrf(file, options)
+    filename = args[0]
+    nextorf = NextOrf(filename, options)

@@ -1,7 +1,7 @@
 \chapter{Quick Start -- What can you do with Biopython?}
 \label{chapter:quick_start}
 
-This section is designed to get you started quickly with Biopython, and to give a general overview of what is available and how to use it. All of the examples in this section assume that you have some general working knowledge of Python, and that you have successfully installed Biopython on your system. If you think you need to brush up on your Python, the main Python web site provides quite a bit of free documentation to get started with (\url{https://docs.python.org/2/}).
+This section is designed to get you started quickly with Biopython, and to give a general overview of what is available and how to use it. All of the examples in this section assume that you have some general working knowledge of Python, and that you have successfully installed Biopython on your system. If you think you need to brush up on your Python, the main Python web site provides quite a bit of free documentation to get started with (\url{https://docs.python.org/3/}).
 
 Since much biological work on the computer involves connecting with databases on the internet, some of the examples will also require a working internet connection in order to run.
 
@@ -11,7 +11,7 @@ Now that that is all out of the way, let's get into what we can do with Biopytho
 
 As mentioned in the introduction, Biopython is a set of libraries to provide the ability to deal with ``things'' of interest to biologists working on the computer. In general this means that you will need to have at least some programming experience (in Python, of course!) or at least an interest in learning to program. Biopython's job is to make your job easier as a programmer by supplying reusable libraries so that you can focus on answering your specific question of interest, instead of focusing on the internals of parsing a particular file format (of course, if you want to help by writing a parser that doesn't exist and contributing it to Biopython, please go ahead!). So Biopython's job is to make you happy!
 
-One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' Things have improved in recent releases, but this can still be frustrating as in Python there should ideally be one right way to do something. However, this can also be a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look in the Cookbook (Chapter~\ref{chapter:cookbook}, this has some cools tricks and tips), the Advanced section (Chapter~\ref{chapter:advanced}), the built in ``docstrings'' (via the Python help command, or the \href{http://biopython.org/docs/1.77/api/}{API documentation}) or ultimately the code itself.
+One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' Things have improved in recent releases, but this can still be frustrating as in Python there should ideally be one right way to do something. However, this can also be a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look in the Cookbook (Chapter~\ref{chapter:cookbook}, this has some cools tricks and tips), the Advanced section (Chapter~\ref{chapter:advanced}), the built in ``docstrings'' (via the Python help command, or the \href{http://biopython.org/docs/\bpversion/api/}{API documentation}) or ultimately the code itself.
 
 \section{Working with sequences}
 \label{sec:sequences}
@@ -69,9 +69,9 @@ That gives us enough to get started delving for more information. So, let's look
 
 A large part of much bioinformatics work involves dealing with the many types of file formats designed to hold biological data. These files are loaded with interesting biological data, and a special challenge is parsing these files into a format so that you can manipulate them with some kind of programming language. However the task of parsing these files can be frustrated by the fact that the formats can change quite regularly, and that formats may contain small subtleties which can break even the most well designed parsers.
 
-We are now going to briefly introduce the \verb|Bio.SeqIO| module -- you can find out more in Chapter~\ref{chapter:seqio}.  We'll start with an online search for our friends, the lady slipper orchids. To keep this introduction simple, we're just using the NCBI website by hand.  Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\url{https://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids).
+We are now going to briefly introduce the \verb|Bio.SeqIO| module -- you can find out more in Chapter~\ref{chapter:seqio}.  We'll start with an online search for our friends, the lady slipper orchids. To keep this introduction simple, we're just using the NCBI website by hand.  Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\url{https://www.ncbi.nlm.nih.gov/nuccore/?term=Cypripedioideae}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids).
 
-When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file and as a GenBank formatted text file (files \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{ls\_orchid.fasta} and \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}{ls\_orchid.gbk}, also included with the Biopython source code under \texttt{docs/tutorial/examples/}).
+When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file and as a GenBank formatted text file (files \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{ls\_orchid.fasta} and \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}{ls\_orchid.gbk}, also included with the Biopython source code under \texttt{Doc/examples/}).
 
 % The GenBank version is actually new - it was created by filtering out the original 94 hits from the
 % latest search of over 400 hits.
@@ -81,7 +81,7 @@ If you run the search today, you'll get hundreds of results!  When following the
 \subsection{Simple FASTA parsing example}
 \label{sec:fasta-parsing}
 
-If you open the lady slipper orchids FASTA file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{ls\_orchid.fasta} in your favourite text editor, you'll see that the file starts like this:
+If you open the lady slipper orchids FASTA file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{ls\_orchid.fasta} in your favorite text editor, you'll see that the file starts like this:
 
 \begin{minted}{text}
 >gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA

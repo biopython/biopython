@@ -10,7 +10,11 @@
 """
 
 import unittest
+from unittest import mock
 import warnings
+from http.client import HTTPMessage
+from urllib.parse import urlparse, parse_qs
+from urllib.request import Request
 
 from Bio import Entrez
 from Bio.Entrez import Parser
@@ -20,20 +24,111 @@ from Bio.Entrez import Parser
 Entrez.email = "biopython@biopython.org"
 Entrez.api_key = "5cfd4026f9df285d6cfc723c662d74bcbe09"
 
-URL_HEAD = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
-URL_TOOL = "tool=biopython"
-URL_EMAIL = "email=biopython%40biopython.org"
-URL_API_KEY = "api_key=5cfd4026f9df285d6cfc723c662d74bcbe09"
+URL_HEAD = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
+
+# Default values of URL query string (or POST data) when parsed with urllib.parse.parse_qs
+QUERY_DEFAULTS = {
+    "tool": [Entrez.tool],
+    "email": [Entrez.email],
+    "api_key": [Entrez.api_key],
+}
+
+
+def get_base_url(parsed):
+    """Convert a parsed URL back to string but only include scheme, netloc, and path, omitting query."""
+    return parsed.scheme + "://" + parsed.netloc + parsed.path
+
+
+def mock_httpresponse(code=200, content_type="/xml"):
+    """Create a mocked version of a response object returned by urlopen().
+
+    :param int code: Value of "code" attribute.
+    :param str content_type: Used to set the "Content-Type" header in the "headers" attribute. This
+        is checked in Entrez._open() to determine if the response data is plain text.
+    """
+    resp = mock.NonCallableMock()
+    resp.code = code
+
+    resp.headers = HTTPMessage()
+    resp.headers.add_header("Content-Type", content_type + "; charset=UTF-8")
+
+    return resp
+
+
+def patch_urlopen(**kwargs):
+    """Create a context manager which replaces Bio.Entrez.urlopen with a mocked version.
+
+    Within the decorated function, Bio.Entrez.urlopen will be replaced with a unittest.mock.Mock
+    object which when called simply records the arguments passed to it and returns a mocked response
+    object. The actual urlopen function will not be called so no request will actually be made.
+    """
+    response = mock_httpresponse(**kwargs)
+    return unittest.mock.patch("Bio.Entrez.urlopen", return_value=response)
+
+
+def get_patched_request(patched_urlopen, testcase=None):
+    """Get the Request object passed to the patched urlopen() function.
+
+    Expects that the patched function should have been called a single time with a Request instance
+    as the only positional argument and no keyword arguments.
+
+    :param patched_urlopen: value returned when entering the context manager created by patch_urlopen.
+    :type patched_urlopen: unittest.mock.Mock
+    :param testcase: Test case currently being run, which is used to make asserts.
+    :type testcase: unittest.TestCase
+    :rtype: urllib.urlopen.Request
+    """
+    args, kwargs = patched_urlopen.call_args
+
+    if testcase is not None:
+        testcase.assertEqual(patched_urlopen.call_count, 1)
+        testcase.assertEqual(len(args), 1)
+        testcase.assertEqual(len(kwargs), 0)
+        testcase.assertIsInstance(args[0], Request)
+
+    return args[0]
+
+
+def deconstruct_request(request, testcase=None):
+    """Get the base URL and parsed parameters of a Request object.
+
+    Method may be either GET or POST, POST data should be encoded query params.
+
+    :param request: Request object passed to urlopen().
+    :type request: urllib.request.Request
+    :param testcase: Test case currently being run, which is used to make asserts.
+    :type testcase: unittest.TestCase
+    :returns: (base_url, params) tuple.
+    """
+    parsed = urlparse(request.full_url)
+
+    if request.method == "GET":
+        params = parse_qs(parsed.query)
+
+    elif request.method == "POST":
+        data = request.data.decode("utf8")
+        params = parse_qs(data)
+
+    else:
+        raise ValueError(
+            "Expected method to be either GET or POST, got %r" % request.method
+        )
+
+    return get_base_url(parsed), params
 
 
 class TestURLConstruction(unittest.TestCase):
     def test_email_warning(self):
         """Test issuing warning when user does not specify email address."""
+        email = Entrez.email
         Entrez.email = None
 
-        with warnings.catch_warnings(record=True) as w:
-            Entrez._construct_params(params=None)
-            self.assertEqual(len(w), 1)
+        try:
+            with warnings.catch_warnings(record=True) as w:
+                Entrez._construct_params(params=None)
+                self.assertEqual(len(w), 1)
+        finally:
+            Entrez.email = email
 
     def test_construct_cgi_ecitmatch(self):
         citation = {
@@ -44,50 +139,66 @@ class TestURLConstruction(unittest.TestCase):
             "author_name": "mann bj",
             "key": "citation_1",
         }
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi"
         variables = Entrez._update_ecitmatch_variables(
             {"db": "pubmed", "bdata": [citation]}
         )
-        post = False
 
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=True, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertIn("retmode=xml", result_url)
-        self.assertIn(URL_API_KEY, result_url)
+        with patch_urlopen() as patched:
+            Entrez.ecitmatch(**variables)
+
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "GET")
+        base_url, query = deconstruct_request(request, self)
+
+        self.assertEqual(base_url, URL_HEAD + "ecitmatch.cgi")
+        query.pop("bdata")  # TODO
+        self.assertDictEqual(
+            query, {"retmode": ["xml"], "db": [variables["db"]], **QUERY_DEFAULTS}
+        )
 
     def test_construct_cgi_einfo(self):
         """Test constructed url for request to Entrez."""
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi"
-        params = Entrez._construct_params(params=None)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=False, options=options)
-        self.assertTrue(result_url.startswith(URL_HEAD + "einfo.fcgi?"), result_url)
-        self.assertIn(URL_TOOL, result_url)
-        self.assertIn(URL_EMAIL, result_url)
+        with patch_urlopen() as patched:
+            Entrez.einfo()
+
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "GET")
+        base_url, query = deconstruct_request(request, self)
+
+        self.assertEqual(base_url, URL_HEAD + "einfo.fcgi")
+        self.assertDictEqual(query, QUERY_DEFAULTS)
 
     def test_construct_cgi_epost1(self):
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi"
         variables = {"db": "nuccore", "id": "186972394,160418"}
-        post = True
 
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertEqual(URL_HEAD + "epost.fcgi", result_url)
+        with patch_urlopen() as patched:
+            Entrez.epost(**variables)
+
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "POST")
+        base_url, query = deconstruct_request(request, self)
+
+        self.assertEqual(base_url, URL_HEAD + "epost.fcgi")  # Params in POST data
+        self.assertDictEqual(
+            query, {"db": [variables["db"]], "id": [variables["id"]], **QUERY_DEFAULTS}
+        )
 
     def test_construct_cgi_epost2(self):
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi"
         variables = {"db": "nuccore", "id": ["160418", "160351"]}
-        post = True
 
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertEqual(URL_HEAD + "epost.fcgi", result_url)
+        with patch_urlopen() as patched:
+            Entrez.epost(**variables)
+
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "POST")
+        base_url, query = deconstruct_request(request, self)
+
+        self.assertEqual(base_url, URL_HEAD + "epost.fcgi")  # Params in POST data
+        # Compare IDs up to reordering:
+        self.assertCountEqual(query.pop("id"), variables["id"])
+        self.assertDictEqual(query, {"db": [variables["db"]], **QUERY_DEFAULTS})
 
     def test_construct_cgi_elink1(self):
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi"
         variables = {
             "cmd": "neighbor_history",
             "db": "nucleotide",
@@ -96,74 +207,168 @@ class TestURLConstruction(unittest.TestCase):
             "query_key": None,
             "webenv": None,
         }
-        post = False
 
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi?"), result_url)
-        self.assertIn(URL_TOOL, result_url)
-        self.assertIn(URL_EMAIL, result_url)
-        self.assertIn("id=22347800%2C48526535", result_url)
-        self.assertIn(URL_API_KEY, result_url)
+        with patch_urlopen() as patched:
+            Entrez.elink(**variables)
+
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "GET")
+        base_url, query = deconstruct_request(request, self)
+
+        self.assertEqual(base_url, URL_HEAD + "elink.fcgi")
+        self.assertDictEqual(
+            query,
+            {
+                "cmd": [variables["cmd"]],
+                "db": [variables["db"]],
+                "dbfrom": [variables["dbfrom"]],
+                "id": [variables["id"]],
+                **QUERY_DEFAULTS,
+            },
+        )
 
     def test_construct_cgi_elink2(self):
         """Commas: Link from protein to gene."""
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi"
         variables = {
             "db": "gene",
             "dbfrom": "protein",
             "id": "15718680,157427902,119703751",
         }
-        post = False
 
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi"), result_url)
-        self.assertIn(URL_TOOL, result_url)
-        self.assertIn(URL_EMAIL, result_url)
-        self.assertIn("id=15718680%2C157427902%2C119703751", result_url, result_url)
-        self.assertIn(URL_API_KEY, result_url)
+        with patch_urlopen() as patched:
+            Entrez.elink(**variables)
+
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "GET")
+        base_url, query = deconstruct_request(request, self)
+
+        self.assertEqual(base_url, URL_HEAD + "elink.fcgi")
+        self.assertDictEqual(
+            query,
+            {
+                "db": [variables["db"]],
+                "dbfrom": [variables["dbfrom"]],
+                "id": [variables["id"]],
+                **QUERY_DEFAULTS,
+            },
+        )
 
     def test_construct_cgi_elink3(self):
         """Multiple ID entries: Find one-to-one links from protein to gene."""
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi"
         variables = {
             "db": "gene",
             "dbfrom": "protein",
             "id": ["15718680", "157427902", "119703751"],
         }
-        post = False
 
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi"), result_url)
-        self.assertIn(URL_TOOL, result_url)
-        self.assertIn(URL_EMAIL, result_url)
-        self.assertIn("id=15718680", result_url)
-        self.assertIn("id=157427902", result_url)
-        self.assertIn("id=119703751", result_url)
-        self.assertIn(URL_API_KEY, result_url)
+        with patch_urlopen() as patched:
+            Entrez.elink(**variables)
+
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "GET")
+        base_url, query = deconstruct_request(request, self)
+
+        self.assertEqual(base_url, URL_HEAD + "elink.fcgi")
+        # Compare IDs up to reordering:
+        self.assertCountEqual(query.pop("id"), variables["id"])
+        self.assertDictEqual(
+            query,
+            {
+                "db": [variables["db"]],
+                "dbfrom": [variables["dbfrom"]],
+                **QUERY_DEFAULTS,
+            },
+        )
 
     def test_construct_cgi_efetch(self):
-        cgi = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
         variables = {
             "db": "protein",
             "id": "15718680,157427902,119703751",
             "retmode": "xml",
         }
-        post = False
 
-        params = Entrez._construct_params(variables)
-        options = Entrez._encode_options(ecitmatch=False, params=params)
-        result_url = Entrez._construct_cgi(cgi, post=post, options=options)
-        self.assertTrue(result_url.startswith(URL_HEAD + "efetch.fcgi?"), result_url)
-        self.assertIn(URL_TOOL, result_url)
-        self.assertIn(URL_EMAIL, result_url)
-        self.assertIn("id=15718680%2C157427902%2C119703751", result_url, result_url)
-        self.assertIn(URL_API_KEY, result_url)
+        with patch_urlopen() as patched:
+            Entrez.efetch(**variables)
+
+        request = get_patched_request(patched, self)
+        self.assertEqual(request.method, "GET")
+        base_url, query = deconstruct_request(request, self)
+
+        self.assertEqual(base_url, URL_HEAD + "efetch.fcgi")
+        self.assertDictEqual(
+            query,
+            {
+                "db": [variables["db"]],
+                "id": [variables["id"]],
+                "retmode": [variables["retmode"]],
+                **QUERY_DEFAULTS,
+            },
+        )
+
+    def test_default_params(self):
+        """Test overriding default values for the "email", "api_key", and "tool" parameters."""
+        vars_base = {
+            "db": "protein",
+            "id": "15718680",
+        }
+        alt_values = {
+            "tool": "mytool",
+            "email": "example@example.com",
+            "api_key": "test",
+        }
+
+        for param in alt_values.keys():
+            # Try both an alternate value and None
+            for alt_value in [alt_values[param], None]:
+                # Try both altering global variable and also passing parameter directly
+                for set_global in [False, True]:
+
+                    variables = dict(vars_base)
+
+                    with patch_urlopen() as patched:
+                        if set_global:
+                            with mock.patch("Bio.Entrez." + param, alt_value):
+                                Entrez.efetch(**variables)
+                        else:
+                            variables[param] = alt_value
+                            Entrez.efetch(**variables)
+
+                    request = get_patched_request(patched, self)
+                    base_url, query = deconstruct_request(request, self)
+
+                    expected = {k: [v] for k, v in vars_base.items()}
+                    expected.update(QUERY_DEFAULTS)
+                    if alt_value is None:
+                        del expected[param]
+                    else:
+                        expected[param] = [alt_value]
+
+                    self.assertDictEqual(query, expected)
+
+    def test_has_api_key(self):
+        """Test checking whether a Request object specifies an API key.
+
+        The _has_api_key() private function is used to set the delay in _open().
+        """
+        variables = {
+            "db": "protein",
+            "id": "15718680",
+        }
+
+        for etool in [Entrez.efetch, Entrez.epost]:  # Make both GET and POST requests
+
+            with patch_urlopen() as patched:
+                etool(**variables)
+            assert Entrez._has_api_key(get_patched_request(patched, self))
+
+            with patch_urlopen() as patched:
+                etool(**variables, api_key=None)
+            assert not Entrez._has_api_key(get_patched_request(patched, self))
+
+            with patch_urlopen() as patched:
+                with mock.patch("Bio.Entrez.api_key", None):
+                    etool(**variables)
+            assert not Entrez._has_api_key(get_patched_request(patched, self))
 
 
 class CustomDirectoryTest(unittest.TestCase):
@@ -185,16 +390,14 @@ class CustomDirectoryTest(unittest.TestCase):
         # Set the custom directory to the temporary directory.
         # This assignment statement will also initialize the local DTD and XSD
         # directories.
-        handler.directory = tmpdir
+        Parser.DataHandler.directory = tmpdir
 
         # Confirm that the two temp directories are named what we want.
         self.assertEqual(
-            handler.local_dtd_dir,
-            os.path.join(handler.directory, "Bio", "Entrez", "DTDs"),
+            handler.local_dtd_dir, os.path.join(tmpdir, "Bio", "Entrez", "DTDs")
         )
         self.assertEqual(
-            handler.local_xsd_dir,
-            os.path.join(handler.directory, "Bio", "Entrez", "XSDs"),
+            handler.local_xsd_dir, os.path.join(tmpdir, "Bio", "Entrez", "XSDs")
         )
 
         # And that they were created.

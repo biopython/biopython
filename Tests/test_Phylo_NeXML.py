@@ -7,8 +7,10 @@
 """Unit tests for the NeXML and NeXMLIO modules."""
 
 import os
-from io import BytesIO
+import tempfile
 import unittest
+
+from io import BytesIO
 
 from Bio import Phylo
 
@@ -49,7 +51,7 @@ class ParseTests(unittest.TestCase):
         for filename in nexml_files:
             count = tree_counts.get(filename, 1)
             path = os.path.join("NeXML", filename)
-            msg = "Failed parser test for %s" % path
+            msg = f"Failed parser test for {path}"
             trees = list(Phylo.parse(path, "nexml"))
             self.assertEqual(len(trees), count, msg=msg)
 
@@ -59,14 +61,28 @@ class WriterTests(unittest.TestCase):
 
     def check(self, path):
         """Parse, rewrite and retest an example phylogeny file."""
-        msg = "Failed writer test for %s" % path
+        msg = f"Failed NeXMLIO writer test for {path}"
+
+        # Using Phylo.NeXMLIO directly, binary mode handles
         with open(path, "rb") as stream:
             t1 = next(Phylo.NeXMLIO.Parser(stream).parse())
         stream = BytesIO()
         Phylo.NeXMLIO.write([t1], stream)
         stream.seek(0)
         t2 = next(Phylo.NeXMLIO.Parser(stream).parse())
+        self.compare(t1, t2, msg)
 
+        # Using Phylo.parse/write, using filenames
+        msg = f"Failed Phylo API writer test for {path}"
+        t1 = next(Phylo.parse(path, "nexml"))
+        tmp = tempfile.NamedTemporaryFile().name
+        Phylo.write([t1], tmp, "nexml")
+        t2 = next(Phylo.parse(tmp, "nexml"))
+        self.compare(t1, t2, msg)
+        os.remove(tmp)
+
+    def compare(self, t1, t2, msg=None):
+        """Compare two trees."""
         for prop_name in ("name", "branch_length", "confidence"):
             p1 = sorted(
                 getattr(n, prop_name)

@@ -185,7 +185,7 @@ class HSP(_BaseHSP):
     +----------------------+---------------------+-----------------------------+
 
     For all types of HSP objects, the property will return the values in a list.
-    Shorcuts are only applicable for HSPs with one fragment. Except the ones
+    Shortcuts are only applicable for HSPs with one fragment. Except the ones
     noted, if they are used on an HSP with more than one fragments, an exception
     will be raised.
 
@@ -839,11 +839,11 @@ class HSPFragment(_BaseHSP):
         # sequences
         if self.query is not None and self.hit is not None:
             try:
-                qseq = str(self.query.seq)
+                qseq = self.query.seq
             except AttributeError:  # query is None
                 qseq = "?"
             try:
-                hseq = str(self.hit.seq)
+                hseq = self.hit.seq
             except AttributeError:  # hit is None
                 hseq = "?"
 

@@ -11,7 +11,7 @@ as TestCases in ``test_pairwise2.py`` and ``test_pairwise2_no_C.py``
 with or without complementing C extensions.
 
 """
-
+import pickle
 import unittest
 import warnings
 
@@ -50,7 +50,7 @@ class TestPairwiseErrorConditions(unittest.TestCase):
         alignment = pairwise2.align.globalxx("A", "")
         self.assertEqual(alignment, [])
 
-        # Gap scores must be negativ
+        # Gap scores must be negative
         self.assertRaises(ValueError, pairwise2.align.globalxs, "A", "C", 5, -1)
         self.assertRaises(ValueError, pairwise2.align.globalxs, "A", "C", -5, 1)
         # Gap open penalty must be higher than gap extension penalty
@@ -215,8 +215,12 @@ zA-Bz
 
     def test_localds_zero_score_segments_symmetric(self):
         """Test if alignment is independent on direction of sequence."""
-        aligns1 = pairwise2.align.localds("CWHISLKM", "CWHGISGLKM", self.blosum62, -11, -1)
-        aligns2 = pairwise2.align.localds("MKLSIHWC", "MKLGSIGHWC", self.blosum62, -11, -1)
+        aligns1 = pairwise2.align.localds(
+            "CWHISLKM", "CWHGISGLKM", self.blosum62, -11, -1
+        )
+        aligns2 = pairwise2.align.localds(
+            "MKLSIHWC", "MKLGSIGHWC", self.blosum62, -11, -1
+        )
         self.assertEqual(len(aligns1), len(aligns2))
 
     def test_localxs_generic(self):
@@ -270,7 +274,9 @@ zA-Bz
         self.assertEqual(1, self.blosum62[("K", "Q")])
         self.assertEqual(4, self.blosum62[("A", "A")])
         self.assertEqual(8, self.blosum62[("H", "H")])
-        alignments = pairwise2.align.localds("VKAHGKKV", "FQAHCAGV", self.blosum62, -4, -4)
+        alignments = pairwise2.align.localds(
+            "VKAHGKKV", "FQAHCAGV", self.blosum62, -4, -4
+        )
         for a in alignments:
             self.assertEqual(
                 pairwise2.format_alignment(*a), "2 KAH\n  .||\n2 QAH\n  Score=13\n"
@@ -282,7 +288,7 @@ zA-Bz
 
 
 class TestScoreOnly(unittest.TestCase):
-    """Test paramater ``score_only``."""
+    """Test parameter ``score_only``."""
 
     def test_score_only_global(self):
         """Test ``score_only`` in a global alignment."""
@@ -849,11 +855,14 @@ class TestOtherFunctions(unittest.TestCase):
             ("ACCGT", "AC-G-", 3.0, 0, 4),
             ("ACCGT", "A-CG-", 3.0, 0, 4),
         ]
-        expected = [
-            ("ACCGT", "AC-G-", 3.0, 0, 4),
-            ("ACCGT", "A-CG-", 3.0, 0, 4),
-        ]
+        expected = [("ACCGT", "AC-G-", 3.0, 0, 4), ("ACCGT", "A-CG-", 3.0, 0, 4)]
         result = pairwise2._clean_alignments(alns)
+        self.assertEqual(expected, result)
+
+    def test_alignments_can_be_pickled(self):
+        alns = [("ACCGT", "AC-G-", 3.0, 0, 4)]
+        expected = [("ACCGT", "AC-G-", 3.0, 0, 4)]
+        result = pickle.loads(pickle.dumps(pairwise2._clean_alignments(alns)))
         self.assertEqual(expected, result)
 
     def test_print_matrix(self):

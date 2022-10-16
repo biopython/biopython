@@ -29,12 +29,16 @@ class Record(list):
         self.warning = None
 
 
-def scan(seq="", mirror="https://www.expasy.org", output="xml", **keywords):
+# October 28th 2020 it was recognised that between October 10th 2020 and October
+# 28th the main url of prosite changed from https://www.expasy.org to
+# https://prosite.expasy.org. Thus a change in the mirror was issued from
+# https://www.expasy.org to https://prosite.expasy.org.
+def scan(seq="", mirror="https://prosite.expasy.org", output="xml", **keywords):
     """Execute a ScanProsite search.
 
     Arguments:
      - mirror:   The ScanProsite mirror to be used
-                 (default: https://www.expasy.org).
+                 (default: https://prosite.expasy.org).
      - seq:      The query sequence, or UniProtKB (Swiss-Prot,
                  TrEMBL) accession
      - output:   Format of the search results
@@ -42,7 +46,7 @@ def scan(seq="", mirror="https://www.expasy.org", output="xml", **keywords):
 
     Further search parameters can be passed as keywords; see the
     documentation for programmatic access to ScanProsite at
-    https://www.expasy.org/tools/scanprosite/ScanPrositeREST.html
+    https://prosite.expasy.org/scanprosite/scanprosite_doc.html
     for a description of such parameters.
 
     This function returns a handle to the search results returned by
@@ -55,7 +59,7 @@ def scan(seq="", mirror="https://www.expasy.org", output="xml", **keywords):
         if value is not None:
             parameters[key] = value
     command = urlencode(parameters)
-    url = "%s/cgi-bin/prosite/PSScan.cgi?%s" % (mirror, command)
+    url = f"{mirror}/cgi-bin/prosite/PSScan.cgi?{command}"
     handle = urlopen(url)
     return handle
 
@@ -130,7 +134,6 @@ class ContentHandler(handler.ContentHandler):
     def endElement(self, name):
         """Define the end of the search record."""
         assert name == self.element.pop()
-        name = str(name)
         if self.element == ["matchset", "match"]:
             match = self.record[-1]
             if name in ContentHandler.integers:

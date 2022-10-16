@@ -322,13 +322,13 @@ class xbb_widget:
         pos = int(pos[1]) + 1
         self.position_ids["id"].configure(text=str(pos))
 
-    def open(self, file=None):
+    def open(self, filename=None):
         """Open a file."""
-        if not file:
-            file = filedialog.askopenfilename()
-        if not file:
+        if not filename:
+            filename = filedialog.askopenfilename()
+        if not filename:
             return
-        with open(file) as handle:
+        with open(filename) as handle:
             self.insert_sequence(next(SimpleFastaParser(handle)))
 
     def insert_sequence(self, name_sequence):

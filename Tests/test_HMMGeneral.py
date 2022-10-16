@@ -1,4 +1,3 @@
-
 # Copyright 2001 Brad Chapman.  All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
@@ -49,7 +48,7 @@ class TrainingSequenceTest(unittest.TestCase):
 
     def test_invalid_training_sequence(self):
         emission_seq = Seq("AB")
-        state_seq = ("1", )
+        state_seq = ("1",)
         with self.assertRaises(ValueError):
             Trainer.TrainingSequence(emission_seq, state_seq)
 
@@ -123,16 +122,23 @@ class MarkovModelBuilderTest(unittest.TestCase):
         self.mm_builder.allow_transition("2", "1", 0.95)
         self.mm_builder.set_equal_probabilities()
 
-        self.assertEqual(self.mm_builder.initial_prob, {"1": 0.5, "2": 0.5},)
-        self.assertEqual(self.mm_builder.transition_prob, {("1", "2"): 0.5, ("2", "1"): 0.5})
-        self.assertEqual(self.mm_builder.emission_prob, {("2", "A"): 0.25, ("1", "B"): 0.25, ("1", "A"): 0.25, ("2", "B"): 0.25})
+        self.assertEqual(self.mm_builder.initial_prob, {"1": 0.5, "2": 0.5})
+        self.assertEqual(
+            self.mm_builder.transition_prob, {("1", "2"): 0.5, ("2", "1"): 0.5}
+        )
+        self.assertEqual(
+            self.mm_builder.emission_prob,
+            {("2", "A"): 0.25, ("1", "B"): 0.25, ("1", "A"): 0.25, ("2", "B"): 0.25},
+        )
 
     def test_set_random_probabilities(self):
         self.mm_builder.allow_transition("1", "2", 0.05)
         self.mm_builder.allow_transition("2", "1", 0.95)
         self.mm_builder.set_random_probabilities()
 
-        self.assertEqual(len(self.mm_builder.initial_prob), len(self.mm_builder._state_alphabet))
+        self.assertEqual(
+            len(self.mm_builder.initial_prob), len(self.mm_builder._state_alphabet)
+        )
         # To test this more thoroughly, perhaps mock random.random() and
         # verify that it's being called as expected?
 
@@ -290,8 +296,8 @@ class HiddenMarkovModelTest(unittest.TestCase):
         max_prob = math.log(max_prob)
         seq = viterbi[0]
         prob = viterbi[1]
-        self.assertEqual(str(seq), seq_first_state + seq_second_state)
-        self.assertEqual(round(prob, 11), round(max_prob, 11))
+        self.assertEqual(seq, seq_first_state + seq_second_state)
+        self.assertAlmostEqual(prob, max_prob, 11)
 
     def test_non_ergodic(self):
         """Non-ergodic model (meaning that some transitions are not allowed)."""
@@ -331,7 +337,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
         prob = viterbi[1]
 
         # the most probable path must be from state 1 to state 2
-        self.assertEqual(str(seq), "12")
+        self.assertEqual(seq, "12")
 
         # The probability of that path is the probability of starting in
         # state 1, then emitting an A, then transitioning 1 -> 2, then
@@ -391,12 +397,12 @@ class AbstractTrainerTest(unittest.TestCase):
 
         # now make sure we are getting back the right thing
         result_tests = []
-        result_tests.append([("A", "A"), float(10) / float(45)])
-        result_tests.append([("A", "B"), float(20) / float(45)])
-        result_tests.append([("A", "C"), float(15) / float(45)])
-        result_tests.append([("B", "B"), float(5) / float(5)])
-        result_tests.append([("C", "A"), float(15) / float(25)])
-        result_tests.append([("C", "C"), float(10) / float(25)])
+        result_tests.append([("A", "A"), 10 / 45])
+        result_tests.append([("A", "B"), 20 / 45])
+        result_tests.append([("A", "C"), 15 / 45])
+        result_tests.append([("B", "B"), 5 / 5])
+        result_tests.append([("C", "A"), 15 / 25])
+        result_tests.append([("C", "C"), 10 / 25])
 
         for test_result in result_tests:
             self.assertEqual(results[test_result[0]], test_result[1])

@@ -14,7 +14,7 @@ class TestHsp(unittest.TestCase):
         # Test empty instance
         self.assertEqual(
             str(HSP()),
-            "Score <unknown> (<unknown> bits), expectation <unknown>, alignment length <unknown>"
+            "Score <unknown> (<unknown> bits), expectation <unknown>, alignment length <unknown>",
         )
 
         # Test instance with non-default attributes
@@ -29,7 +29,7 @@ class TestHsp(unittest.TestCase):
             """Score 1 (2 bits), expectation 3.0e+00, alignment length 4
 Query:    None  None
 
-Sbjct:    None  None"""
+Sbjct:    None  None""",
         )
 
 

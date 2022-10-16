@@ -1,8 +1,9 @@
 # Copyright 2012 by Eric Talevich.  All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Command-line wrapper for the tree inference program RAxML.
 
 Derived from the help page for RAxML version 7.3 by Alexandros Stamatakis, but
@@ -100,7 +101,7 @@ class RaxmlCommandline(AbstractCommandline):
 
                         b: Draw bipartition information on a tree provided with '-t'
                         based on multiple trees (e.g. form a bootstrap) in a file
-                        specifed by '-z'.
+                        specified by '-z'.
 
                         c: Check if the alignment can be properly read by RAxML.
 
@@ -120,7 +121,7 @@ class RaxmlCommandline(AbstractCommandline):
                         bootstrap tree under GAMMA and a more exhaustive algorithm.
 
                         j: Generate a bunch of bootstrapped alignment files from an
-                        original alignemnt file.
+                        original alignment file.
 
                         m: Compare bipartitions between two bunches of trees passed
                         via '-t' and '-z' respectively. This will return the

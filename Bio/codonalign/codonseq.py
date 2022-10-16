@@ -70,15 +70,15 @@ class CodonSeq(Seq):
 
         # check the length of the alignment to be a triple
         if rf_table is None:
-            seq_ungapped = self._data.replace(gap_char, "")
-            if len(self) % 3 != 0:
+            length = len(self)
+            if length % 3 != 0:
                 raise ValueError(
                     "Sequence length is not a multiple of "
                     "three (i.e. a whole number of codons)"
                 )
-            self.rf_table = list(filter(lambda x: x % 3 == 0, range(len(seq_ungapped))))
+            self.rf_table = list(range(0, length - self.count(gap_char), 3))
         else:
-            # if gap_char in self._data:
+            # if gap_char in self:
             #    assert  len(self) % 3 == 0, \
             #            "Gapped sequence length is not a triple number"
             if not isinstance(rf_table, (tuple, list)):
@@ -91,9 +91,6 @@ class CodonSeq(Seq):
                 )
             self.rf_table = rf_table
 
-    def __getitem__(self, index):
-        return Seq(self._data[index])
-
     def get_codon(self, index):
         """Get the index codon from the sequence."""
         if len({i % 3 for i in self.rf_table}) != 1:
@@ -103,9 +100,9 @@ class CodonSeq(Seq):
             )
         if isinstance(index, int):
             if index != -1:
-                return self._data[index * 3 : (index + 1) * 3]
+                return str(self[index * 3 : (index + 1) * 3])
             else:
-                return self._data[index * 3 :]
+                return str(self[index * 3 :])
         else:
             # This slice ensures that codon will always be the unit
             # in slicing (it won't change to other codon if you are
@@ -119,8 +116,8 @@ class CodonSeq(Seq):
                 aa_slice = aa_index[p]
                 codon_slice = ""
                 for i in aa_slice:
-                    codon_slice += self._data[i * 3 : i * 3 + 3]
-                return codon_slice
+                    codon_slice += self[i * 3 : i * 3 + 3]
+                return str(codon_slice)
 
             codon_slice = cslice(index)
             return CodonSeq(codon_slice)
@@ -144,9 +141,9 @@ class CodonSeq(Seq):
             codon_table = CodonTable.generic_by_id[1]
         amino_acids = []
         if ungap_seq:
-            tr_seq = self._data.replace(self.gap_char, "")
+            tr_seq = str(self).replace(self.gap_char, "")
         else:
-            tr_seq = self._data
+            tr_seq = str(self)
         if rf_table is None:
             rf_table = self.rf_table
         p = -1  # initiation
@@ -183,7 +180,7 @@ class CodonSeq(Seq):
 
     def toSeq(self):
         """Convert DNA to seq object."""
-        return Seq(self._data)
+        return Seq(str(self))
 
     def get_full_rf_table(self):
         """Return full rf_table of the CodonSeq records.
@@ -192,21 +189,21 @@ class CodonSeq(Seq):
         it translate gaps in CodonSeq. It is helpful to construct
         alignment containing frameshift.
         """
-        ungap_seq = self._data.replace("-", "")
+        ungap_seq = str(self).replace("-", "")
         relative_pos = [self.rf_table[0]]
         for i in range(1, len(self.rf_table[1:]) + 1):
             relative_pos.append(self.rf_table[i] - self.rf_table[i - 1])
         full_rf_table = []
         codon_num = 0
-        for i in filter(lambda x: x % 3 == 0, range(len(self._data))):
-            if self._data[i : i + 3] == self.gap_char * 3:
+        for i in range(0, len(self), 3):
+            if self[i : i + 3] == self.gap_char * 3:
                 full_rf_table.append(i + 0.0)
             elif relative_pos[codon_num] == 0:
                 full_rf_table.append(i)
                 codon_num += 1
             elif relative_pos[codon_num] in (-1, -2):
                 # check the gap status of previous codon
-                gap_stat = len(self._data[i - 3 : i].replace("-", ""))
+                gap_stat = 3 - self.count("-", i - 3, i)
                 if gap_stat == 3:
                     full_rf_table.append(i + relative_pos[codon_num])
                 elif gap_stat == 2:
@@ -217,7 +214,7 @@ class CodonSeq(Seq):
             elif relative_pos[codon_num] > 0:
                 full_rf_table.append(i + 0.0)
             try:
-                this_len = len(self._data[i : i + 3].replace("-", ""))
+                this_len = 3 - self.count("-", i, i + 3)
                 relative_pos[codon_num] -= this_len
             except Exception:  # TODO: IndexError?
                 # we probably reached the last codon
@@ -239,16 +236,16 @@ class CodonSeq(Seq):
     def ungap(self, gap="-"):
         """Return a copy of the sequence without the gap character(s)."""
         if len(gap) != 1 or not isinstance(gap, str):
-            raise ValueError("Unexpected gap character, %s" % repr(gap))
-        return CodonSeq(str(self._data).replace(gap, ""), rf_table=self.rf_table)
+            raise ValueError(f"Unexpected gap character, {repr(gap)}")
+        return CodonSeq(str(self).replace(gap, ""), rf_table=self.rf_table)
 
     @classmethod
     def from_seq(cls, seq, rf_table=None):
         """Get codon sequence from sequence data."""
         if rf_table is None:
-            return cls(seq._data)
+            return cls(str(seq))
         else:
-            return cls(seq._data, rf_table=rf_table)
+            return cls(str(seq), rf_table=rf_table)
 
 
 def _get_codon_list(codonseq):
@@ -279,9 +276,7 @@ def _get_codon_list(codonseq):
     return codon_lst
 
 
-def cal_dn_ds(
-    codon_seq1, codon_seq2, method="NG86", codon_table=None, k=1, cfreq=None,
-):
+def cal_dn_ds(codon_seq1, codon_seq2, method="NG86", codon_table=None, k=1, cfreq=None):
     """Calculate dN and dS of the given two sequences.
 
     Available methods:
@@ -784,9 +779,7 @@ def _yn00(seq1, seq2, k, codon_table):
             S_sites + N_sites
         )
         w = dSdN[1] / dSdN[0]
-        if all(
-            map(lambda x: x < tolerance, (abs(i - j) for i, j in zip(dSdN, dSdN_pre)))
-        ):
+        if all(abs(i - j) < tolerance for i, j in zip(dSdN, dSdN_pre)):
             return dSdN[1], dSdN[0]  # dN, dS
         dSdN_pre = dSdN
 

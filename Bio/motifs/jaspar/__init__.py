@@ -233,7 +233,7 @@ def _read_sites(handle):
         line = next(handle)
         instance = ""
         for c in line.strip():
-            if c == c.upper():
+            if c.isupper():
                 instance += c
         instance = Seq(instance)
         instances.append(instance)
@@ -333,7 +333,7 @@ def calculate_pseudocounts(motif):
     # number of instances.
     total = 0
     for i in range(motif.length):
-        total += sum(float(motif.counts[letter][i]) for letter in alphabet)
+        total += sum(motif.counts[letter][i] for letter in alphabet)
 
     avg_nb_instances = total / motif.length
     sq_nb_instances = math.sqrt(avg_nb_instances)

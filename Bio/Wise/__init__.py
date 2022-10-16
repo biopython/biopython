@@ -19,8 +19,17 @@ Bio.Wise.dnal is for Smith-Waterman DNA alignments
 import os
 import sys
 import tempfile
+import warnings
 
 from Bio import SeqIO
+from Bio import BiopythonDeprecationWarning
+
+
+warnings.warn(
+    "The 'Bio.Wise' module is deprecated and will be removed in a future "
+    "release of Biopython.",
+    BiopythonDeprecationWarning,
+)
 
 
 def _build_align_cmdline(
@@ -72,7 +81,7 @@ def align(
 ):
     """Run an alignment. Returns a filehandle."""
     if not pair or len(pair) != 2:
-        raise ValueError("Expected pair of filename, not %r" % pair)
+        raise ValueError(f"Expected pair of filename, not {pair!r}")
 
     output_file = tempfile.NamedTemporaryFile(mode="r")
     input_files = (
@@ -103,7 +112,7 @@ def align(
     )
 
     if debug:
-        sys.stderr.write("%s\n" % cmdline_str)
+        sys.stderr.write(f"{cmdline_str}\n")
 
     status = os.system(cmdline_str) >> 8
 
@@ -113,7 +122,7 @@ def align(
             sys.stderr.write("INFO trying again with the linear model\n")
             return align(cmdline, pair, 0, force_type, dry_run, quiet, debug)
         else:
-            raise OSError("%s returned %s" % (" ".join(cmdline), status))
+            raise OSError(f"{' '.join(cmdline)} returned {status}")
 
     return output_file
 

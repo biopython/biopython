@@ -151,7 +151,7 @@ def extract_doctests(latex_filename):
             elif line.startswith("%doctest"):
                 if lines:
                     if not lines[0].startswith(">>> "):
-                        raise ValueError("Should start '>>> ' not %r" % lines[0])
+                        raise ValueError(f"Should start '>>> ' not {lines[0]!r}")
                     yield name, "".join(lines), folder, deps
                     lines = []
                 deps = [x.strip() for x in line.split()[1:]]
@@ -166,7 +166,7 @@ def extract_doctests(latex_filename):
                 line_number += len(x) + 2
     if lines:
         if not lines[0].startswith(">>> "):
-            raise ValueError("Should start '>>> ' not %r" % lines[0])
+            raise ValueError(f"Should start '>>> ' not {lines[0]!r}")
         yield name, "".join(lines), folder, deps
     # yield "dummy", ">>> 2 + 2\n5\n"
 
@@ -212,13 +212,13 @@ for latex in files:
                 p = os.path.join(tutorial_base, f)
                 method.__doc__ = f"{n}\n\n>>> import os\n>>> os.chdir({p!r})\n{d}\n"
             else:
-                method.__doc__ = "%s\n\n%s\n" % (n, d)
+                method.__doc__ = f"{n}\n\n{d}\n"
             method._folder = f
             return method
 
         setattr(
             TutorialDocTestHolder,
-            "doctest_%s" % name.replace(" ", "_"),
+            f"doctest_{name.replace(' ', '_')}",
             funct(name, example, folder),
         )
         del funct
@@ -250,7 +250,7 @@ class TutorialTestCase(unittest.TestCase):
         os.chdir(original_path)
         # files currently don't get created during test with python3.5 and pypy
         # remove files created from chapter_phylo.tex
-        delete_phylo_tutorial = ["examples/tree1.nwk", "examples/other_trees.nwk"]
+        delete_phylo_tutorial = ["examples/tree1.nwk", "examples/other_trees.xml"]
         for file in delete_phylo_tutorial:
             if os.path.exists(os.path.join(tutorial_base, file)):
                 os.remove(os.path.join(tutorial_base, file))
@@ -274,7 +274,7 @@ if __name__ == "__main__":
     if missing_deps:
         print("Skipping tests needing the following:")
         for dep in sorted(missing_deps):
-            print(" - %s" % dep)
+            print(f" - {dep}")
     print("Running Tutorial doctests...")
     tests = doctest.testmod()
     if tests.failed:

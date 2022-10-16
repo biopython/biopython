@@ -7,9 +7,11 @@
 
 """Atom class, used in Structure objects."""
 
-import numpy
-import warnings
 import copy
+import sys
+import warnings
+
+import numpy as np
 
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
@@ -186,13 +188,25 @@ class Atom:
         return hash(self.get_full_id())
 
     def _assign_element(self, element):
-        """Guess element from atom name if not recognised (PRIVATE)."""
-        if not element or element.capitalize() not in IUPACData.atom_weights:
-            # Inorganic elements have their name shifted left by one position
-            #  (is a convention in PDB, but not part of the standard).
-            # isdigit() check on last two characters to avoid mis-assignment of
-            # hydrogens atoms (GLN HE21 for example)
+        """Guess element from atom name if not recognised (PRIVATE).
 
+        There is little documentation about extracting/encoding element
+        information in atom names, but some conventions seem to prevail:
+
+            - C, N, O, S, H, P, F atom names start with a blank space (e.g. " CA ")
+              unless the name is 4 characters long (e.g. HE21 in glutamine). In both
+              these cases, the element is the first character.
+
+            - Inorganic elements do not have a blank space (e.g. "CA  " for calcium)
+              but one must check the full name to differentiate between e.g. helium
+              ("HE  ") and long-name hydrogens (e.g. "HE21").
+
+            - Atoms with unknown or ambiguous elements are marked with 'X', e.g.
+              PDB 4cpa. If we fail to identify an element, we should mark it as
+              such.
+
+        """
+        if not element or element.capitalize() not in IUPACData.atom_weights:
             if self.fullname[0].isalpha() and not self.fullname[2:].isdigit():
                 putative_element = self.name.strip()
             else:
@@ -214,24 +228,23 @@ class Atom:
                     "Could not assign element %r for Atom (name=%s) with given element %r"
                     % (putative_element, self.name, element)
                 )
-                element = ""
+                element = "X"  # mark as unknown/ambiguous
             warnings.warn(msg, PDBConstructionWarning)
 
         return element
 
     def _assign_atom_mass(self):
         """Return atom weight (PRIVATE)."""
-        # Needed for Bio/Struct/Geometry.py C.O.M. function
-        if self.element:
+        try:
             return IUPACData.atom_weights[self.element.capitalize()]
-        else:
+        except (AttributeError, KeyError):
             return float("NaN")
 
     # Special methods
 
     def __repr__(self):
         """Print Atom object as <Atom atom_name>."""
-        return "<Atom %s>" % self.get_id()
+        return f"<Atom {self.get_id()}>"
 
     def __sub__(self, other):
         """Calculate distance between two atoms.
@@ -247,7 +260,7 @@ class Atom:
 
         """
         diff = self.coord - other.coord
-        return numpy.sqrt(numpy.dot(diff, diff))
+        return np.sqrt(np.dot(diff, diff))
 
     # set methods
 
@@ -369,7 +382,10 @@ class Atom:
         the atom and consists of the following elements:
         (structure id, model id, chain id, residue id, atom name, altloc)
         """
-        return self.parent.get_full_id() + ((self.name, self.altloc),)
+        try:
+            return self.parent.get_full_id() + ((self.name, self.altloc),)
+        except AttributeError:
+            return (None, None, None, None, self.name, self.altloc)
 
     def get_coord(self):
         """Return atomic coordinates."""
@@ -423,7 +439,7 @@ class Atom:
             atom.transform(rotation, translation)
 
         """
-        self.coord = numpy.dot(self.coord, rot) + tran
+        self.coord = np.dot(self.coord, rot) + tran
 
     def get_vector(self):
         """Return coordinates as Vector.
@@ -466,7 +482,7 @@ class DisorderedAtom(DisorderedEntityWrapper):
 
         """
         # TODO - make this a private attribute?
-        self.last_occupancy = -999999
+        self.last_occupancy = -sys.maxsize
         DisorderedEntityWrapper.__init__(self, id)
 
     # Special methods
@@ -477,7 +493,33 @@ class DisorderedAtom(DisorderedEntityWrapper):
 
     def __repr__(self):
         """Return disordered atom identifier."""
-        return "<Disordered Atom %s>" % self.get_id()
+        if self.child_dict:
+            return f"<DisorderedAtom {self.get_id()}>"
+        else:
+            return f"<Empty DisorderedAtom {self.get_id()}>"
+
+    # This is a separate method from Entity.center_of_mass since DisorderedAtoms
+    # will be unpacked by Residue.get_unpacked_list(). Here we allow for a very
+    # specific use case that is much simpler than the general implementation.
+    def center_of_mass(self):
+        """Return the center of mass of the DisorderedAtom as a numpy array.
+
+        Assumes all child atoms have the same mass (same element).
+        """
+        children = self.disordered_get_list()
+
+        if not children:
+            raise ValueError(f"{self} does not have children")
+
+        coords = np.asarray([a.coord for a in children], dtype=np.float32)
+        return np.average(coords, axis=0, weights=None)
+
+    def disordered_get_list(self):
+        """Return list of atom instances.
+
+        Sorts children by altloc (empty, then alphabetical).
+        """
+        return sorted(self.child_dict.values(), key=lambda a: ord(a.altloc))
 
     def disordered_add(self, atom):
         """Add a disordered atom."""
@@ -492,3 +534,33 @@ class DisorderedAtom(DisorderedEntityWrapper):
         if occupancy > self.last_occupancy:
             self.last_occupancy = occupancy
             self.disordered_select(altloc)
+
+    def disordered_remove(self, altloc):
+        """Remove a child atom altloc from the DisorderedAtom.
+
+        Arguments:
+         - altloc - name of the altloc to remove, as a string.
+
+        """
+        # Get child altloc
+        atom = self.child_dict[altloc]
+        is_selected = self.selected_child is atom
+
+        # Detach
+        del self.child_dict[altloc]
+        atom.detach_parent()
+
+        if is_selected and self.child_dict:  # pick next highest occupancy
+            child = sorted(self.child_dict.values(), key=lambda a: a.occupancy)[-1]
+            self.disordered_select(child.altloc)
+        elif not self.child_dict:
+            self.selected_child = None
+            self.last_occupancy = -sys.maxsize
+
+    def transform(self, rot, tran):
+        """Apply rotation and translation to all children.
+
+        See the documentation of Atom.transform for details.
+        """
+        for child in self:
+            child.coord = np.dot(child.coord, rot) + tran

@@ -44,8 +44,7 @@ import re
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio.Alphabet import generic_dna, generic_rna, generic_protein, generic_alphabet
-from Bio.Seq import Seq, UnknownSeq
+from Bio.Seq import Seq
 from Bio import SeqFeature
 
 # other Bio.GenBank stuff
@@ -270,8 +269,8 @@ def _pos(pos_str, offset=0):
         return SeqFeature.ExactPosition(int(pos_str) + offset)
 
 
-def _loc(loc_str, expected_seq_length, strand, seq_type=None):
-    """Make FeatureLocation from non-compound non-complement location (PRIVATE).
+def _loc(loc_str, expected_seq_length, strand, is_circular=False):
+    """Make SimpleLocation from non-compound non-complement location (PRIVATE).
 
     This is also invoked to 'automatically' fix ambiguous formatting of features
     that span the origin of a circular sequence.
@@ -279,27 +278,27 @@ def _loc(loc_str, expected_seq_length, strand, seq_type=None):
     Simple examples,
 
     >>> _loc("123..456", 1000, +1)
-    FeatureLocation(ExactPosition(122), ExactPosition(456), strand=1)
+    SimpleLocation(ExactPosition(122), ExactPosition(456), strand=1)
     >>> _loc("<123..>456", 1000, strand = -1)
-    FeatureLocation(BeforePosition(122), AfterPosition(456), strand=-1)
+    SimpleLocation(BeforePosition(122), AfterPosition(456), strand=-1)
 
     A more complex location using within positions,
 
     >>> _loc("(9.10)..(20.25)", 1000, 1)
-    FeatureLocation(WithinPosition(8, left=8, right=9), WithinPosition(25, left=20, right=25), strand=1)
+    SimpleLocation(WithinPosition(8, left=8, right=9), WithinPosition(25, left=20, right=25), strand=1)
 
     Notice how that will act as though it has overall start 8 and end 25.
 
     Zero length between feature,
 
     >>> _loc("123^124", 1000, 0)
-    FeatureLocation(ExactPosition(123), ExactPosition(123), strand=0)
+    SimpleLocation(ExactPosition(123), ExactPosition(123), strand=0)
 
     The expected sequence length is needed for a special case, a between
     position at the start/end of a circular genome:
 
     >>> _loc("1000^1", 1000, 1)
-    FeatureLocation(ExactPosition(1000), ExactPosition(1000), strand=1)
+    SimpleLocation(ExactPosition(1000), ExactPosition(1000), strand=1)
 
     Apart from this special case, between positions P^Q must have P+1==Q,
 
@@ -311,10 +310,10 @@ def _loc(loc_str, expected_seq_length, strand, seq_type=None):
     You can optionally provide a reference name:
 
     >>> _loc("AL391218.9:105173..108462", 2000000, 1)
-    FeatureLocation(ExactPosition(105172), ExactPosition(108462), strand=1, ref='AL391218.9')
+    SimpleLocation(ExactPosition(105172), ExactPosition(108462), strand=1, ref='AL391218.9')
 
     >>> _loc("<2644..159", 2868, 1, "circular")
-    CompoundLocation([FeatureLocation(BeforePosition(2643), ExactPosition(2868), strand=1), FeatureLocation(ExactPosition(0), ExactPosition(159), strand=1)], 'join')
+    CompoundLocation([SimpleLocation(BeforePosition(2643), ExactPosition(2868), strand=1), SimpleLocation(ExactPosition(0), ExactPosition(159), strand=1)], 'join')
     """
     if ":" in loc_str:
         ref, loc_str = loc_str.split(":")
@@ -338,8 +337,8 @@ def _loc(loc_str, expected_seq_length, strand, seq_type=None):
             elif int(s) == expected_seq_length and e == "1":
                 pos = _pos(s)
             else:
-                raise ValueError("Invalid between location %r" % loc_str) from None
-            return SeqFeature.FeatureLocation(pos, pos, strand, ref=ref)
+                raise ValueError(f"Invalid between location {loc_str!r}") from None
+            return SeqFeature.SimpleLocation(pos, pos, strand, ref=ref)
         else:
             # e.g. "123"
             s = loc_str
@@ -349,7 +348,7 @@ def _loc(loc_str, expected_seq_length, strand, seq_type=None):
     s_pos = _pos(s, -1)
     e_pos = _pos(e)
     if int(s_pos) > int(e_pos):
-        if seq_type is None or "circular" not in seq_type.lower():
+        if not is_circular:
             warnings.warn(
                 "It appears that %r is a feature that spans "
                 "the origin, but the sequence topology is "
@@ -365,8 +364,8 @@ def _loc(loc_str, expected_seq_length, strand, seq_type=None):
             BiopythonParserWarning,
         )
 
-        f1 = SeqFeature.FeatureLocation(s_pos, expected_seq_length, strand)
-        f2 = SeqFeature.FeatureLocation(0, int(e_pos), strand)
+        f1 = SeqFeature.SimpleLocation(s_pos, expected_seq_length, strand)
+        f2 = SeqFeature.SimpleLocation(0, int(e_pos), strand)
 
         if strand == -1:
             # For complementary features spanning the origin
@@ -374,7 +373,7 @@ def _loc(loc_str, expected_seq_length, strand, seq_type=None):
         else:
             return f1 + f2
 
-    return SeqFeature.FeatureLocation(_pos(s, -1), _pos(e), strand, ref=ref)
+    return SeqFeature.SimpleLocation(_pos(s, -1), _pos(e), strand, ref=ref)
 
 
 def _split_compound_loc(compound_loc):
@@ -723,12 +722,15 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """
         self._seq_type = type.strip()
 
-    def topology(self, topology):  # noqa: D402
-        """Validate and record sequence topology (linear or circular as strings)."""
+    def topology(self, topology):
+        """Validate and record sequence topology.
+
+        The topology argument should be "linear" or "circular" (string).
+        """
         if topology:
             if topology not in ["linear", "circular"]:
                 raise ParserFailureError(
-                    "Unexpected topology %r should be linear or circular" % topology
+                    f"Unexpected topology {topology!r} should be linear or circular"
                 )
             self.data.annotations["topology"] = topology
 
@@ -737,7 +739,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if mol_type:
             if "circular" in mol_type or "linear" in mol_type:
                 raise ParserFailureError(
-                    "Molecule type %r should not include topology" % mol_type
+                    f"Molecule type {mol_type!r} should not include topology"
                 )
 
             # Writing out records will fail if we have a lower case DNA
@@ -747,7 +749,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # so we need to index from the back
             if mol_type[-3:].upper() in ("DNA", "RNA") and not mol_type[-3:].isupper():
                 warnings.warn(
-                    "Non-upper case molecule type in LOCUS line: %s" % mol_type,
+                    f"Non-upper case molecule type in LOCUS line: {mol_type}",
                     BiopythonParserWarning,
                 )
 
@@ -981,8 +983,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # otherwise raise an error
         else:
             raise ValueError(
-                "Could not parse base info %s in record %s"
-                % (ref_base_info, self.data.id)
+                f"Could not parse base info {ref_base_info} in record {self.data.id}"
             )
 
         self._cur_reference.location = all_locations
@@ -1006,7 +1007,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             new_start, new_end = self._convert_to_python_numbers(
                 int(start.strip()), int(end.strip())
             )
-            this_location = SeqFeature.FeatureLocation(new_start, new_end)
+            this_location = SeqFeature.SimpleLocation(new_start, new_end)
             new_locations.append(this_location)
         return new_locations
 
@@ -1098,6 +1099,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         cur_feature = self._cur_feature
 
+        # Check if the sequence is circular for features that span the origin
+        is_circular = "circular" in self.data.annotations.get("topology", "").lower()
+
         # Handle top level complement here for speed
         if location_line.startswith("complement("):
             assert location_line.endswith(")")
@@ -1115,7 +1119,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # e.g. "123..456"
             s, e = location_line.split("..")
             try:
-                cur_feature.location = SeqFeature.FeatureLocation(
+                cur_feature.location = SeqFeature.SimpleLocation(
                     int(s) - 1, int(e), strand
                 )
             except ValueError:
@@ -1124,7 +1128,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                     location_line,
                     self._expected_size,
                     strand,
-                    seq_type=self._seq_type.lower(),
+                    is_circular=is_circular,
                 )
             return
 
@@ -1156,13 +1160,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 s, e = part.split("..")
 
                 try:
-                    locs.append(SeqFeature.FeatureLocation(int(s) - 1, int(e), strand))
+                    locs.append(SeqFeature.SimpleLocation(int(s) - 1, int(e), strand))
                 except ValueError:
                     # Could be non-integers, more likely bad origin wrapping
 
                     # In the case of bad origin wrapping, _loc will return
                     # a CompoundLocation. CompoundLocation.parts returns a
-                    # list of the FeatureLocation objects inside the
+                    # list of the SimpleLocation objects inside the
                     # CompoundLocation.
                     locs.extend(
                         _loc(
@@ -1195,7 +1199,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 location_line,
                 self._expected_size,
                 strand,
-                seq_type=self._seq_type.lower(),
+                is_circular=is_circular,
             )
             return
 
@@ -1215,20 +1219,20 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 try:
                     # There is likely a problem with origin wrapping.
                     # Using _loc to return a CompoundLocation of the
-                    # wrapped feature and returning the two FeatureLocation
+                    # wrapped feature and returning the two SimpleLocation
                     # objects to extend to the list of feature locations.
                     loc = _loc(
                         part,
                         self._expected_size,
                         part_strand,
-                        seq_type=self._seq_type.lower(),
+                        is_circular=is_circular,
                     ).parts
 
                 except ValueError:
                     print(location_line)
                     print(part)
                     raise
-                # loc will be a list of one or two FeatureLocation items.
+                # loc will be a list of one or two SimpleLocation items.
                 locs.extend(loc)
             # Historically a join on the reverse strand has been represented
             # in Biopython with both the parent SeqFeature and its children
@@ -1262,7 +1266,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         cur_feature.location = None
         warnings.warn(
             BiopythonParserWarning(
-                "Couldn't parse feature location: %r" % location_line
+                f"Couldn't parse feature location: {location_line!r}"
             )
         )
 
@@ -1367,12 +1371,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 pass
 
         # add the sequence information
-        # first, determine the alphabet
-        # we default to an generic alphabet if we don't have a
-        # seq type or have strange sequence information.
-        seq_alphabet = generic_alphabet
 
-        # now set the sequence
         sequence = "".join(self._seq_data)
 
         if (
@@ -1390,21 +1389,15 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if self._seq_type:
             # mRNA is really also DNA, since it is actually cDNA
             if "DNA" in self._seq_type.upper() or "MRNA" in self._seq_type.upper():
-                seq_alphabet = generic_dna
                 molecule_type = "DNA"
             # are there ever really RNA sequences in GenBank?
             elif "RNA" in self._seq_type.upper():
                 # Even for data which was from RNA, the sequence string
-                # is usually given as DNA (T not U).  Bug 2408
-                if "T" in sequence and "U" not in sequence:
-                    seq_alphabet = generic_dna
-                else:
-                    seq_alphabet = generic_rna
+                # is usually given as DNA (T not U).  Bug 3010
                 molecule_type = "RNA"
             elif (
                 "PROTEIN" in self._seq_type.upper() or self._seq_type == "PRT"
             ):  # PRT is used in EMBL-bank for patents
-                seq_alphabet = generic_protein
                 molecule_type = "protein"
             # work around ugly GenBank records which have circular or
             # linear but no indication of sequence type
@@ -1413,7 +1406,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # we have a bug if we get here
             else:
                 raise ValueError(
-                    "Could not determine alphabet for seq_type %s" % self._seq_type
+                    f"Could not determine molecule_type for seq_type {self._seq_type}"
                 )
         # Don't overwrite molecule_type
         if molecule_type is not None:
@@ -1421,13 +1414,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 "molecule_type", molecule_type
             )
         if not sequence and self._expected_size:
-            self.data.seq = UnknownSeq(
-                self._expected_size,
-                seq_alphabet,
-                character="X" if molecule_type == "protein" else "N",
-            )
+            self.data.seq = Seq(None, length=self._expected_size)
         else:
-            self.data.seq = Seq(sequence, seq_alphabet)
+            self.data.seq = Seq(sequence)
 
 
 class _RecordConsumer(_BaseGenBankConsumer):
@@ -1466,7 +1455,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         # Be lenient about parsing, but technically lowercase residue types are malformed.
         if "dna" in content or "rna" in content:
             warnings.warn(
-                "Invalid seq_type (%s): DNA/RNA should be uppercase." % content,
+                f"Invalid seq_type ({content}): DNA/RNA should be uppercase.",
                 BiopythonParserWarning,
             )
         self.data.residue_type = content
@@ -1490,7 +1479,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         if mol_type:
             if "circular" in mol_type or "linear" in mol_type:
                 raise ParserFailureError(
-                    "Molecule type %r should not include topology" % mol_type
+                    f"Molecule type {mol_type!r} should not include topology"
                 )
 
             # Writing out records will fail if we have a lower case DNA
@@ -1500,20 +1489,21 @@ class _RecordConsumer(_BaseGenBankConsumer):
             # so we need to index from the back
             if mol_type[-3:].upper() in ("DNA", "RNA") and not mol_type[-3:].isupper():
                 warnings.warn(
-                    "Non-upper case molecule type in LOCUS line: %s" % mol_type,
+                    f"Non-upper case molecule type in LOCUS line: {mol_type}",
                     BiopythonParserWarning,
                 )
 
             self.data.molecule_type = mol_type
 
-    def topology(
-        self, topology
-    ):  # noqa: D402  # flake8 thinks this line is a function signature. It ain't
-        """Validate and record sequence topology (linear or circular as strings)."""
+    def topology(self, topology):
+        """Validate and record sequence topology.
+
+        The topology argument should be "linear" or "circular" (string).
+        """
         if topology:
             if topology not in ["linear", "circular"]:
                 raise ParserFailureError(
-                    "Unexpected topology %r should be linear or circular" % topology
+                    f"Unexpected topology {topology!r} should be linear or circular"
                 )
             self.data.topology = topology
 
@@ -1662,7 +1652,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         for content in content_list:
             # the record parser keeps the /s -- add them if we don't have 'em
             if not content.startswith("/"):
-                content = "/%s" % content
+                content = f"/{content}"
             # add on a qualifier if we've got one
             if self._cur_qualifier is not None:
                 self._cur_feature.qualifiers.append(self._cur_qualifier)
@@ -1673,7 +1663,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def feature_qualifier_description(self, content):
         # if we have info then the qualifier key should have a ='s
         if "=" not in self._cur_qualifier.key:
-            self._cur_qualifier.key = "%s=" % self._cur_qualifier.key
+            self._cur_qualifier.key = f"{self._cur_qualifier.key}="
         cur_content = self._remove_newlines(content)
         # remove all spaces from the value if it is a type where spaces
         # are not important
