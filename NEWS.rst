@@ -80,6 +80,7 @@ possible, especially the following contributors:
 - Erik  Whiting
 - Fabian Egli
 - Fredric Johansson
+- Hongbo Zhu
 - Hussein Faara (first contribution)
 - Manuel Lera Ramirez
 - Jacob Beal (first contribution)
