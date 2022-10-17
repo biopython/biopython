@@ -70,6 +70,7 @@ possible, especially the following contributors:
 
 - Andrius Merkys
 - Arup Ghosh (first contribution)
+- Alessio Quercia
 - Aziz Khan
 - Alex Morehead
 - Caio Fontes

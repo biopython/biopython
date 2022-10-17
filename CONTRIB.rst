@@ -20,6 +20,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Adrian Altenhoff <https://github.com/alpae>
 - Alan Medlar <https://github.com/ajm>
 - Alessio Papini <first dot last at unifi dot it>
+- Alessio Quercia <https://github.com/AlessioQuercia>
 - Alex Morehead <https://github.com/amorehead>
 - Alexander Decurnou <https://github.com/adcrn>
 - Allis Tauri <https://github.com/allista>
