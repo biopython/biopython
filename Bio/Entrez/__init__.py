@@ -36,6 +36,16 @@ which has a ``.name`` attribute giving the filename, the handles from
 ``Bio.Entrez`` all have a ``.url`` attribute instead giving the URL
 used to connect to the NCBI Entrez API.
 
+The ``epost``, ``efetch``, and ``esummary`` tools take an "id" parameter
+which corresponds to one or more database UIDs (or accession.version
+identifiers in the case of sequence databases such as "nuccore" or
+"protein"). The Python value of the "id" keyword passed to these functions
+may be either a single ID as a string or integer or multiple IDs as an
+iterable of strings/integers. You may also pass a single string containing
+multiple IDs delimited by commas. The ``elink`` tool also accepts multiple
+IDs but the argument is handled differently than the other three. See that
+function's docstring for more information.
+
 All the functions that send requests to the NCBI Entrez API will
 automatically respect the NCBI rate limit (of 3 requests per second
 without an API key, or 10 requests per second with an API key) and
@@ -182,28 +192,7 @@ def efetch(db, **keywords):
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
     variables = {"db": db}
     variables.update(keywords)
-    post = False
-    try:
-        ids = variables["id"]
-    except KeyError:
-        pass
-    else:
-        try:
-            # ids is a single integer or a string representing a single integer
-            ids = str(int(ids))
-        except TypeError:
-            # ids was not a string; try an iterable:
-            ids = ",".join(map(str, ids))
-        except ValueError:
-            # string with commas or string not representing an integer
-            ids = ",".join(map(str, (id.strip() for id in ids.split(","))))
-
-        variables["id"] = ids
-        if ids.count(",") >= 200:
-            # NCBI prefers an HTTP POST instead of an HTTP GET if there are
-            # more than about 200 IDs
-            post = True
-    request = _build_request(cgi, variables, post=post)
+    request = _build_request(cgi, variables)
     return _open(request)
 
 
@@ -253,6 +242,13 @@ def elink(**keywds):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ELink
 
+    Note that ELink treats the "id" parameter differently than the other
+    tools when multiple values are given. You should generally pass multiple
+    UIDs as a list of strings or integers. This will provide a "one-to-one"
+    mapping from source database UIDs to destination database UIDs in the
+    result. If multiple source UIDs are passed as a single comma-delimited
+    string all destination UIDs will be mixed together in the result.
+
     This example finds articles related to the Biopython application
     note's entry in the PubMed database:
 
@@ -276,7 +272,7 @@ def elink(**keywds):
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi"
     variables = {}
     variables.update(keywds)
-    request = _build_request(cgi, variables)
+    request = _build_request(cgi, variables, join_ids=False)
     return _open(request)
 
 
@@ -622,7 +618,7 @@ def _open(request):
 _open.previous = 0
 
 
-def _build_request(cgi, params=None, post=None, ecitmatch=False):
+def _build_request(cgi, params=None, post=None, ecitmatch=False, join_ids=True):
     """Build a Request object for an E-utility.
 
     :param str cgi: base URL for the CGI script to access.
@@ -633,10 +629,11 @@ def _build_request(cgi, params=None, post=None, ecitmatch=False):
         suggested in the E-Utilities documentation.
     :param bool ecitmatch: Don't URL-encode pipe ("|") characters, this is expected by the ecitmatch
         tool.
+    :param bool join_ids: Passed to ``_construct_params``.
     :returns: A request object ready to be passed to ``_open``.
     :rtype: urllib.request.Request
     """
-    params = _construct_params(params)
+    params = _construct_params(params, join_ids=join_ids)
 
     params_str = urlencode(params, doseq=True)
     if ecitmatch:
@@ -646,17 +643,25 @@ def _build_request(cgi, params=None, post=None, ecitmatch=False):
     if post is None and len(params_str) > 1000:
         post = True
 
+    # NCBI prefers an HTTP POST instead of an HTTP GET if there are more than about 200 IDs
+    if post is None and "id" in params:
+        idcount = params["id"].count(",") + 1
+        if idcount >= 200:
+            post = True
+
     if post:
         return Request(cgi, data=params_str.encode("utf8"), method="POST")
     else:
         return Request(cgi + "?" + params_str, method="GET")
 
 
-def _construct_params(params):
+def _construct_params(params, join_ids=True):
     """Construct/format parameter dict for an Entrez request.
 
     :param params: User-supplied parameters.
     :type params: dict or None
+    :param bool join_ids: If True and the "id" key of ``params`` is a list
+        containing multiple UIDs, join them into a single comma-delimited string.
     :returns: Parameters with defaults added and keys with None values removed.
     :rtype: dict
     """
@@ -693,7 +698,30 @@ def _construct_params(params):
             UserWarning,
         )
 
+    # Format "id" parameter properly
+    if join_ids and "id" in params:
+        params["id"] = _format_ids(params["id"])
+
     return params
+
+
+def _format_ids(ids):
+    """Convert one or more UIDs to a single comma-delimited string.
+
+    Input may be a single ID as an integer or string, an iterable of strings/ints,
+    or a string of IDs already separated by commas.
+    """
+    if isinstance(ids, int):
+        # Single integer, just convert to str
+        return str(ids)
+
+    if isinstance(ids, str):
+        # String which represents one or more IDs joined by commas
+        # Remove any whitespace around commas if they are present
+        return ",".join(id.strip() for id in ids.split(","))
+
+    # Not a string or integer, assume iterable
+    return ",".join(map(str, ids))
 
 
 def _has_api_key(request):
