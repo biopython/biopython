@@ -1221,23 +1221,23 @@ class GenBankScanner(InsdcScanner):
                 line = "//"
                 break
             line = line.rstrip()
-            # if not line:
-            #     warnings.warn("Blank line in sequence data", BiopythonParserWarning)
-            #     line = self.handle.readline()
-            #     continue
+            if not line:
+                warnings.warn("Blank line in sequence data", BiopythonParserWarning)
+                line = self.handle.readline()
+                continue
             if line == "//":
                 break
-            # if line.startswith("CONTIG"):
-            #     break
-            # if len(line) > 9 and line[9:10] != " ":
-            #     # Some broken programs indent the sequence by one space too many
-            #     # so try to get rid of that and test again.
-            #     warnings.warn(
-            #         "Invalid indentation for sequence line", BiopythonParserWarning
-            #     )
-            #     line = line[1:]
-            #     if len(line) > 9 and line[9:10] != " ":
-            #         raise ValueError(f"Sequence line mal-formed, '{line}'")
+            if line.startswith("CONTIG"):
+                break
+            if len(line) > 9 and line[9:10] != " ":
+                # Some broken programs indent the sequence by one space too many
+                # so try to get rid of that and test again.
+                warnings.warn(
+                    "Invalid indentation for sequence line", BiopythonParserWarning
+                )
+                line = line[1:]
+                if len(line) > 9 and line[9:10] != " ":
+                    raise ValueError(f"Sequence line mal-formed, '{line}'")
             seq_lines.append(line[10:])  # remove spaces later
             line = self.handle.readline()
 
