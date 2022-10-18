@@ -1285,7 +1285,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             return
 
         # Remove enclosing quotation marks
-        if (value[0] == '"') and (value[-1] == '"'):
+        if len(value) > 1 and value[0] == '"' and value[-1] == '"':
             value = value[1:-1]
 
         # Handle NCBI escaping
