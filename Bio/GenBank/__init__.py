@@ -42,13 +42,11 @@ import warnings
 
 from Bio import BiopythonParserWarning
 from Bio.Seq import Seq
-from Bio.SeqFeature import (
-    SimpleLocation,
-    Location,
-    Reference,
-    SeqFeature,
-    LocationParserError,
-)
+from Bio.SeqFeature import Location
+from Bio.SeqFeature import Reference
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
+from Bio.SeqFeature import LocationParserError
 
 # other Bio.GenBank stuff
 from .utils import FeatureValueCleaner

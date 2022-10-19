@@ -784,8 +784,12 @@ class Location(ABC):
         """Represent the Location object as a string for debugging."""
         return f"{self.__class__.__name__}(...)"
 
-    def fromstring(location_line, length=None, circular=False, stranded=True):
+    def fromstring(text, length=None, circular=False, stranded=True):
         """Create a Location object from a string.
+
+        This should accept any valid location string in the INSDC Feature Table
+        format (https://www.insdc.org/submitting-standards/feature-table/) as
+        used in GenBank, DDBJ and EMBL files.
 
         Simple examples:
 
@@ -827,8 +831,10 @@ class Location(ABC):
         >>> Location.fromstring("<2644..159", 2868, "circular")
         CompoundLocation([SimpleLocation(BeforePosition(2643), ExactPosition(2868), strand=1), SimpleLocation(ExactPosition(0), ExactPosition(159), strand=1)], 'join')
         """
-        if location_line.startswith("complement"):
-            location_line = location_line[11:-1]
+        if text.startswith("complement("):
+            if text[-1] != ")":
+                raise ValueError(f"closing bracket missing in '{text}'")
+            text = text[11:-1]
             strand = -1
         elif stranded:
             strand = 1
@@ -836,20 +842,20 @@ class Location(ABC):
             strand = None
 
         # Determine if we have a simple location or a compound location
-        if location_line.startswith("join("):
+        if text.startswith("join("):
             operator = "join"
-            parts = _split(location_line[5:-1])[1::2]
+            parts = _split(text[5:-1])[1::2]
             # assert parts[0] == "" and parts[-1] == ""
-        elif location_line.startswith("order("):
+        elif text.startswith("order("):
             operator = "order"
-            parts = _split(location_line[6:-1])[1::2]
+            parts = _split(text[6:-1])[1::2]
             # assert parts[0] == "" and parts[-1] == ""
-        elif location_line.startswith("bond("):
+        elif text.startswith("bond("):
             operator = "bond"
-            parts = _split(location_line[5:-1])[1::2]
+            parts = _split(text[5:-1])[1::2]
             # assert parts[0] == "" and parts[-1] == ""
         else:
-            loc = SimpleLocation.fromstring(location_line, length, circular)
+            loc = SimpleLocation.fromstring(text, length, circular)
             loc.strand = strand
             if strand == -1:
                 loc.parts.reverse()
@@ -861,7 +867,7 @@ class Location(ABC):
                 break
             if loc.strand == -1:
                 if strand == -1:
-                    raise LocationParserError("double complement in '{location_line}'?")
+                    raise LocationParserError("double complement in '{text}'?")
             else:
                 loc.strand = strand
             locs.extend(loc.parts)
@@ -883,22 +889,22 @@ class Location(ABC):
                 locs = locs[::-1]
             return CompoundLocation(locs, operator=operator)
         # Not recognized
-        if "order" in location_line and "join" in location_line:
+        if "order" in text and "join" in text:
             # See Bug 3197
             raise LocationParserError(
-                f"failed to parse feature location '{location_line}' containing a combination of 'join' and 'order' (nested operators) are illegal"
+                f"failed to parse feature location '{text}' containing a combination of 'join' and 'order' (nested operators) are illegal"
             )
 
         # See issue #937. Note that NCBI has already fixed this record.
-        if ",)" in location_line:
+        if ",)" in text:
             warnings.warn(
                 "Dropping trailing comma in malformed feature location",
                 BiopythonParserWarning,
             )
-            location_line = location_line.replace(",)", ")")
-            return Location.fromstring(location_line)
+            text = text.replace(",)", ")")
+            return Location.fromstring(text)
 
-        raise LocationParserError(f"failed to parse feature location '{location_line}'")
+        raise LocationParserError(f"failed to parse feature location '{text}'")
 
 
 class SimpleLocation(Location):
