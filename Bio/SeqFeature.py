@@ -39,16 +39,25 @@ This has the advantages of allowing us to handle fuzzy stuff in case anyone
 needs it, and also be compatible with BioPerl etc and BioSQL.
 
 Classes:
+ - Location - abstract base class of SimpleLocation and CompoundLocation.
  - SimpleLocation - Specify the start and end location of a feature.
  - CompoundLocation - Collection of SimpleLocation objects (for joins etc).
+ - Position - abstract base class of ExactPosition, WithinPosition,
+   BetweenPosition, AfterPosition, OneOfPosition, UncertainPosition, and
+   UnknownPosition.
  - ExactPosition - Specify the position as being exact.
  - WithinPosition - Specify a position occurring within some range.
  - BetweenPosition - Specify a position occurring between a range (OBSOLETE?).
  - BeforePosition - Specify the position as being found before some base.
  - AfterPosition - Specify the position as being found after some base.
- - OneOfPosition - Specify a position where the location can be multiple positions.
+ - OneOfPosition - Specify a position consisting of multiple alternative positions.
  - UncertainPosition - Specify a specific position which is uncertain.
  - UnknownPosition - Represents missing information like '?' in UniProt.
+
+
+Exceptions:
+ - LocationParserError - Exception indicating a failure to parse a location
+   string.
 
 """
 import functools
@@ -56,22 +65,105 @@ import re
 import warnings
 from abc import ABC, abstractmethod
 
+from Bio import BiopythonParserWarning
 from Bio import BiopythonDeprecationWarning
 from Bio.Seq import MutableSeq
 from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
 
 
+# Regular expressions for location parsing
+
+_reference = r"(?:[a-zA-Z][a-zA-Z0-9_\.\|]*[a-zA-Z0-9]?\:)"
+_oneof_position = r"one\-of\(\d+[,\d+]+\)"
+
+_oneof_location = rf"[<>]?(?:\d+|{_oneof_position})\.\.[<>]?(?:\d+|{_oneof_position})"
+
+_any_location = rf"({_reference}?{_oneof_location}|complement\({_oneof_location}\)|[^,]+|complement\([^,]+\))"
+
+_split = re.compile(_any_location).split
+
+assert _split("123..145")[1::2] == ["123..145"]
+assert _split("123..145,200..209")[1::2] == ["123..145", "200..209"]
+assert _split("one-of(200,203)..300")[1::2] == ["one-of(200,203)..300"]
+assert _split("complement(123..145),200..209")[1::2] == [
+    "complement(123..145)",
+    "200..209",
+]
+assert _split("123..145,one-of(200,203)..209")[1::2] == [
+    "123..145",
+    "one-of(200,203)..209",
+]
+assert _split("123..145,one-of(200,203)..one-of(209,211),300")[1::2] == [
+    "123..145",
+    "one-of(200,203)..one-of(209,211)",
+    "300",
+]
+assert _split("123..145,complement(one-of(200,203)..one-of(209,211)),300")[1::2] == [
+    "123..145",
+    "complement(one-of(200,203)..one-of(209,211))",
+    "300",
+]
+assert _split("123..145,200..one-of(209,211),300")[1::2] == [
+    "123..145",
+    "200..one-of(209,211)",
+    "300",
+]
+assert _split("123..145,200..one-of(209,211)")[1::2] == [
+    "123..145",
+    "200..one-of(209,211)",
+]
+assert _split(
+    "complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905"
+)[1::2] == [
+    "complement(149815..150200)",
+    "complement(293787..295573)",
+    "NC_016402.1:6618..6676",
+    "181647..181905",
+]
+
+
+_pair_location = r"[<>]?-?\d+\.\.[<>]?-?\d+"
+
+_between_location = r"\d+\^\d+"
+
+_within_position = r"\(\d+\.\d+\)"
+_within_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" % (
+    _within_position,
+    _within_position,
+)
 _within_position = r"\((\d+)\.(\d+)\)"
 _re_within_position = re.compile(_within_position)
 assert _re_within_position.match("(3.9)")
 
+_oneof_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" % (_oneof_position, _oneof_position)
 _oneof_position = r"one\-of\((\d+[,\d+]+)\)"
 _re_oneof_position = re.compile(_oneof_position)
 assert _re_oneof_position.match("one-of(6,9)")
 assert not _re_oneof_position.match("one-of(3)")
 assert _re_oneof_position.match("one-of(3,6)")
 assert _re_oneof_position.match("one-of(3,6,9)")
+
+_solo_location = r"[<>]?\d+"
+_solo_bond = r"bond\(%s\)" % _solo_location
+
+_re_location_category = re.compile(
+    r"^(?P<pair>%s)|(?P<between>%s)|(?P<within>%s)|(?P<oneof>%s)|(?P<bond>%s)|(?P<solo>%s)$"
+    % (
+        _pair_location,
+        _between_location,
+        _within_location,
+        _oneof_location,
+        _solo_bond,
+        _solo_location,
+    )
+)
+
+
+class LocationParserError(ValueError):
+    """Could not parse a feature location string."""
+
+    pass
 
 
 class SeqFeature:
@@ -684,7 +776,138 @@ class Reference:
 # --- Handling feature locations
 
 
-class SimpleLocation:
+class Location(ABC):
+    """Abstract base class representing a location."""
+
+    @abstractmethod
+    def __repr__(self):
+        """Represent the Location object as a string for debugging."""
+        return f"{self.__class__.__name__}(...)"
+
+    def fromstring(text, length=None, circular=False, stranded=True):
+        """Create a Location object from a string.
+
+        This should accept any valid location string in the INSDC Feature Table
+        format (https://www.insdc.org/submitting-standards/feature-table/) as
+        used in GenBank, DDBJ and EMBL files.
+
+        Simple examples:
+
+        >>> Location.fromstring("123..456", 1000)
+        SimpleLocation(ExactPosition(122), ExactPosition(456), strand=1)
+        >>> Location.fromstring("complement(<123..>456)", 1000)
+        SimpleLocation(BeforePosition(122), AfterPosition(456), strand=-1)
+
+        A more complex location using within positions,
+
+        >>> Location.fromstring("(9.10)..(20.25)", 1000)
+        SimpleLocation(WithinPosition(8, left=8, right=9), WithinPosition(25, left=20, right=25), strand=1)
+
+        Notice how that will act as though it has overall start 8 and end 25.
+
+        Zero length between feature,
+
+        >>> Location.fromstring("123^124", 1000)
+        SimpleLocation(ExactPosition(123), ExactPosition(123), strand=1)
+
+        The expected sequence length is needed for a special case, a between
+        position at the start/end of a circular genome:
+
+        >>> Location.fromstring("1000^1", 1000)
+        SimpleLocation(ExactPosition(1000), ExactPosition(1000), strand=1)
+
+        Apart from this special case, between positions P^Q must have P+1==Q,
+
+        >>> Location.fromstring("123^456", 1000)
+        Traceback (most recent call last):
+           ...
+        Bio.SeqFeature.LocationParserError: invalid feature location '123^456'
+
+        You can optionally provide a reference name:
+
+        >>> Location.fromstring("AL391218.9:105173..108462", 2000000)
+        SimpleLocation(ExactPosition(105172), ExactPosition(108462), strand=1, ref='AL391218.9')
+
+        >>> Location.fromstring("<2644..159", 2868, "circular")
+        CompoundLocation([SimpleLocation(BeforePosition(2643), ExactPosition(2868), strand=1), SimpleLocation(ExactPosition(0), ExactPosition(159), strand=1)], 'join')
+        """
+        if text.startswith("complement("):
+            if text[-1] != ")":
+                raise ValueError(f"closing bracket missing in '{text}'")
+            text = text[11:-1]
+            strand = -1
+        elif stranded:
+            strand = 1
+        else:
+            strand = None
+
+        # Determine if we have a simple location or a compound location
+        if text.startswith("join("):
+            operator = "join"
+            parts = _split(text[5:-1])[1::2]
+            # assert parts[0] == "" and parts[-1] == ""
+        elif text.startswith("order("):
+            operator = "order"
+            parts = _split(text[6:-1])[1::2]
+            # assert parts[0] == "" and parts[-1] == ""
+        elif text.startswith("bond("):
+            operator = "bond"
+            parts = _split(text[5:-1])[1::2]
+            # assert parts[0] == "" and parts[-1] == ""
+        else:
+            loc = SimpleLocation.fromstring(text, length, circular)
+            loc.strand = strand
+            if strand == -1:
+                loc.parts.reverse()
+            return loc
+        locs = []
+        for part in parts:
+            loc = SimpleLocation.fromstring(part, length, circular)
+            if loc is None:
+                break
+            if loc.strand == -1:
+                if strand == -1:
+                    raise LocationParserError("double complement in '{text}'?")
+            else:
+                loc.strand = strand
+            locs.extend(loc.parts)
+        else:
+            if len(locs) == 1:
+                return loc
+            # Historically a join on the reverse strand has been represented
+            # in Biopython with both the parent SeqFeature and its children
+            # (the exons for a CDS) all given a strand of -1.  Likewise, for
+            # a join feature on the forward strand they all have strand +1.
+            # However, we must also consider evil mixed strand examples like
+            # this, join(complement(69611..69724),139856..140087,140625..140650)
+            if strand == -1:
+                # Whole thing was wrapped in complement(...)
+                for loc in locs:
+                    assert loc.strand == -1
+                # Reverse the backwards order used in GenBank files
+                # with complement(join(...))
+                locs = locs[::-1]
+            return CompoundLocation(locs, operator=operator)
+        # Not recognized
+        if "order" in text and "join" in text:
+            # See Bug 3197
+            raise LocationParserError(
+                f"failed to parse feature location '{text}' containing a combination of 'join' and 'order' (nested operators) are illegal"
+            )
+
+        # See issue #937. Note that NCBI has already fixed this record.
+        if ",)" in text:
+            warnings.warn(
+                "Dropping trailing comma in malformed feature location",
+                BiopythonParserWarning,
+            )
+            text = text.replace(",)", ")")
+            return Location.fromstring(text)
+
+        raise LocationParserError(f"failed to parse feature location '{text}'")
+
+
+class SimpleLocation(Location):
     """Specify the location of a feature along a sequence.
 
     The SimpleLocation is used for simple continuous features, which can
@@ -828,6 +1051,101 @@ class SimpleLocation:
         self.strand = strand
         self.ref = ref
         self.ref_db = ref_db
+
+    @staticmethod
+    def fromstring(text, length=None, circular=False):
+        """Create a SimpleLocation object from a string."""
+        if text.startswith("complement("):
+            text = text[11:-1]
+            strand = -1
+        else:
+            strand = None
+        # Try simple cases first for speed
+        try:
+            s, e = text.split("..")
+            s = int(s) - 1
+            e = int(e)
+        except ValueError:
+            pass
+        else:
+            if 0 <= s <= e:
+                return SimpleLocation(s, e, strand)
+        # Try general case
+        try:
+            ref, text = text.split(":")
+        except ValueError:
+            ref = None
+        m = _re_location_category.match(text)
+        if m is None:
+            return None
+        for key, value in m.groupdict().items():
+            if value is not None:
+                break
+        assert value == text
+        if key == "bond":
+            # e.g. bond(196)
+            warnings.warn(
+                "Dropping bond qualifier in feature location",
+                BiopythonParserWarning,
+            )
+            text = text[5:-1]
+            s_pos = Position.fromstring(text, -1)
+            e_pos = Position.fromstring(text)
+        elif key == "solo":
+            # e.g. "123"
+            s_pos = Position.fromstring(text, -1)
+            e_pos = Position.fromstring(text)
+        elif key in ("pair", "within", "oneof"):
+            s, e = text.split("..")
+            # Attempt to fix features that span the origin
+            s_pos = Position.fromstring(s, -1)
+            e_pos = Position.fromstring(e)
+            if s_pos > e_pos:
+                # There is likely a problem with origin wrapping.
+                # Create a CompoundLocation of the wrapped feature,
+                # consisting of two SimpleLocation objects to extend to
+                # the list of feature locations.
+                if not circular:
+                    raise LocationParserError(
+                        f"it appears that '{text}' is a feature that spans the origin, but the sequence topology is undefined"
+                    )
+                warnings.warn(
+                    "Attempting to fix invalid location %r as "
+                    "it looks like incorrect origin wrapping. "
+                    "Please fix input file, this could have "
+                    "unintended behavior." % text,
+                    BiopythonParserWarning,
+                )
+
+                f1 = SimpleLocation(s_pos, length, strand)
+                f2 = SimpleLocation(0, e_pos, strand)
+
+                if strand == -1:
+                    # For complementary features spanning the origin
+                    return f2 + f1
+                else:
+                    return f1 + f2
+        elif key == "between":
+            # A between location like "67^68" (one based counting) is a
+            # special case (note it has zero length). In python slice
+            # notation this is 67:67, a zero length slice.  See Bug 2622
+            # Further more, on a circular genome of length N you can have
+            # a location N^1 meaning the junction at the origin. See Bug 3098.
+            # NOTE - We can imagine between locations like "2^4", but this
+            # is just "3".  Similarly, "2^5" is just "3..4"
+            s, e = text.split("^")
+            s = int(s)
+            e = int(e)
+            if s + 1 == e or (s == length and e == 1):
+                s_pos = ExactPosition(s)
+                e_pos = s_pos
+            else:
+                raise LocationParserError(f"invalid feature location '{text}'")
+        if s_pos < 0:
+            raise LocationParserError(
+                f"negative starting position in feature location '{text}'"
+            )
+        return SimpleLocation(s_pos, e_pos, strand, ref=ref)
 
     def _get_strand(self):
         """Get function for the strand property (PRIVATE)."""
@@ -1188,7 +1506,7 @@ class SimpleLocation:
 FeatureLocation = SimpleLocation  # OBSOLETE; for backward compatability only.
 
 
-class CompoundLocation:
+class CompoundLocation(Location):
     """For handling joins etc where a feature location has several parts."""
 
     def __init__(self, parts, operator="join"):

@@ -7388,7 +7388,10 @@ qualifiers:
             record = SeqIO.read(file_fails, "gb")
             self.assertEqual(len(caught), 1)
             self.assertEqual(caught[0].category, BiopythonParserWarning)
-            self.assertTrue("Skipping feature" in str(caught[0].message))
+            self.assertEqual(
+                str(caught[0].message),
+                "it appears that '8569..276' is a feature that spans the origin, but the sequence topology is undefined; setting feature location to None.",
+            )
 
         # The last feature location is None
         self.assertIsNone(record.features[-1].location)
@@ -7467,7 +7470,8 @@ class GenBankTests(unittest.TestCase):
             with self.assertRaises(BiopythonParserWarning) as cm:
                 record = SeqIO.read(path, "genbank")
             self.assertEqual(
-                "Couldn't parse feature location: '-2..492'", str(cm.exception)
+                "negative starting position in feature location '-2..492'; setting feature location to None.",
+                str(cm.exception),
             )
 
     def test_001_genbank_bad_origin_wrapping_location(self):
@@ -7477,8 +7481,8 @@ class GenBankTests(unittest.TestCase):
             warnings.simplefilter("error", BiopythonParserWarning)
             with self.assertRaises(BiopythonParserWarning) as cm:
                 record = SeqIO.read(path, "genbank")
-            self.assertIn(
-                "It appears that '6801..100' is a feature that spans the origin",
+            self.assertEqual(
+                "it appears that '6801..100' is a feature that spans the origin, but the sequence topology is undefined; setting feature location to None.",
                 str(cm.exception),
             )
 
