@@ -25,6 +25,7 @@ from Bio.Align import Alignment
 from Bio.Align import bigbed
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.SeqFeature import SeqFeature, Location
 
 
 class AlignmentIterator(bigbed.AlignmentIterator):
@@ -121,7 +122,9 @@ class AlignmentIterator(bigbed.AlignmentIterator):
         query_record = SeqRecord(query_sequence, id=qName)
         cds = words[15]
         if cds and cds != "n/a":
-            query_record.annotations["CDS"] = cds
+            location = Location.fromstring(cds)
+            feature = SeqFeature(location, type="CDS")
+            query_record.features.append(feature)
         seqType = words[21]
         if seqType == "0":
             qBlockSizes = tBlockSizes

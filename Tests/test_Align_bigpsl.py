@@ -9,6 +9,9 @@ import unittest
 from Bio import Align
 from Bio.Seq import Seq
 from Bio import SeqIO
+from Bio.SeqFeature import ExactPosition, BeforePosition
+from Bio.SeqFeature import SimpleLocation, CompoundLocation
+from Bio.SeqFeature import SeqFeature
 
 
 try:
@@ -3059,7 +3062,14 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992881")
-        self.assertEqual(alignment.query.annotations["CDS"], "383..718")
+        self.assertEqual(len(alignment.query.features), 1)
+        self.assertEqual(
+            alignment.query.features[0],
+            SeqFeature(
+                SimpleLocation(ExactPosition(382), ExactPosition(718), strand=1),
+                type="CDS",
+            ),
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3072,7 +3082,14 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992878")
-        self.assertEqual(alignment.query.annotations["CDS"], "734..1003")
+        self.assertEqual(len(alignment.query.features), 1)
+        self.assertEqual(
+            alignment.query.features[0],
+            SeqFeature(
+                SimpleLocation(ExactPosition(733), ExactPosition(1003), strand=1),
+                type="CDS",
+            ),
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3085,7 +3102,14 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992879")
-        self.assertEqual(alignment.query.annotations["CDS"], "365..502")
+        self.assertEqual(len(alignment.query.features), 1)
+        self.assertEqual(
+            alignment.query.features[0],
+            SeqFeature(
+                SimpleLocation(ExactPosition(364), ExactPosition(502), strand=1),
+                type="CDS",
+            ),
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3098,7 +3122,14 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992871")
-        self.assertEqual(alignment.query.annotations["CDS"], "1402..1632")
+        self.assertEqual(len(alignment.query.features), 1)
+        self.assertEqual(
+            alignment.query.features[0],
+            SeqFeature(
+                SimpleLocation(ExactPosition(1401), ExactPosition(1632), strand=1),
+                type="CDS",
+            ),
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3111,7 +3142,14 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992872")
-        self.assertEqual(alignment.query.annotations["CDS"], "1402..1632")
+        self.assertEqual(len(alignment.query.features), 1)
+        self.assertEqual(
+            alignment.query.features[0],
+            SeqFeature(
+                SimpleLocation(ExactPosition(1401), ExactPosition(1632), strand=1),
+                type="CDS",
+            ),
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3124,7 +3162,14 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992875")
-        self.assertEqual(alignment.query.annotations["CDS"], "1402..1632")
+        self.assertEqual(len(alignment.query.features), 1)
+        self.assertEqual(
+            alignment.query.features[0],
+            SeqFeature(
+                SimpleLocation(ExactPosition(1401), ExactPosition(1632), strand=1),
+                type="CDS",
+            ),
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3137,7 +3182,14 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992880")
-        self.assertEqual(alignment.query.annotations["CDS"], "317..718")
+        self.assertEqual(len(alignment.query.features), 1)
+        self.assertEqual(
+            alignment.query.features[0],
+            SeqFeature(
+                SimpleLocation(ExactPosition(316), ExactPosition(718), strand=1),
+                type="CDS",
+            ),
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3150,7 +3202,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC032353")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3163,7 +3215,14 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAM992873")
-        self.assertEqual(alignment.query.annotations["CDS"], "<437..706")
+        self.assertEqual(len(alignment.query.features), 1)
+        self.assertEqual(
+            alignment.query.features[0],
+            SeqFeature(
+                SimpleLocation(BeforePosition(436), ExactPosition(706), strand=1),
+                type="CDS",
+            ),
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3176,7 +3235,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD190877")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[12993, 13016], [0, 23]])
@@ -3184,7 +3243,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD167845")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[13001, 13024], [0, 23]])
@@ -3192,7 +3251,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD469098")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[13003, 13024], [2, 23]])
@@ -3200,7 +3259,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD485136")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[13087, 13107], [0, 20]])
@@ -3208,7 +3267,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC070227")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3221,7 +3280,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD282506")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[13721, 13745], [0, 24]])
@@ -3229,7 +3288,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD192765")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[13877, 13909], [0, 32]])
@@ -3237,7 +3296,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD191631")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[13932, 13964], [0, 32]])
@@ -3245,7 +3304,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD135207")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[13939, 13971], [0, 32]])
@@ -3253,7 +3312,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD157229")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14002, 14023], [0, 21]])
@@ -3261,7 +3320,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD199172")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14241, 14265], [0, 24]])
@@ -3269,7 +3328,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD422311")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14246, 14278], [0, 32]])
@@ -3277,7 +3336,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD108953")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14322, 14354], [0, 32]])
@@ -3285,7 +3344,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD227419")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14378, 14407], [1, 30]])
@@ -3293,7 +3352,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC063555")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3312,7 +3371,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC063893")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3331,7 +3390,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC053987")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3350,9 +3409,29 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAL137714")
+        self.assertEqual(len(alignment.query.features), 1)
         self.assertEqual(
-            alignment.query.annotations["CDS"],
-            "join(169..318,312..704,941..1273,3006..3209)",
+            alignment.query.features[0],
+            SeqFeature(
+                CompoundLocation(
+                    [
+                        SimpleLocation(
+                            ExactPosition(168), ExactPosition(318), strand=1
+                        ),
+                        SimpleLocation(
+                            ExactPosition(311), ExactPosition(704), strand=1
+                        ),
+                        SimpleLocation(
+                            ExactPosition(940), ExactPosition(1273), strand=1
+                        ),
+                        SimpleLocation(
+                            ExactPosition(3005), ExactPosition(3209), strand=1
+                        ),
+                    ],
+                    "join",
+                ),
+                type="CDS",
+            ),
         )
         self.assertTrue(
             numpy.array_equal(
@@ -3372,7 +3451,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC048328")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3391,7 +3470,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC063470")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3408,8 +3487,26 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBX537637")
+        self.assertEqual(len(alignment.query.features), 1)
         self.assertEqual(
-            alignment.query.annotations["CDS"], "join(241..432,432..1166,1166..1591)"
+            alignment.query.features[0],
+            SeqFeature(
+                CompoundLocation(
+                    [
+                        SimpleLocation(
+                            ExactPosition(240), ExactPosition(432), strand=1
+                        ),
+                        SimpleLocation(
+                            ExactPosition(431), ExactPosition(1166), strand=1
+                        ),
+                        SimpleLocation(
+                            ExactPosition(1165), ExactPosition(1591), strand=1
+                        ),
+                    ],
+                    "join",
+                ),
+                type="CDS",
+            ),
         )
         self.assertTrue(
             numpy.array_equal(
@@ -3429,7 +3526,14 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAK024481")
-        self.assertEqual(alignment.query.annotations["CDS"], "<1346..1897")
+        self.assertEqual(len(alignment.query.features), 1)
+        self.assertEqual(
+            alignment.query.features[0],
+            SeqFeature(
+                SimpleLocation(BeforePosition(1345), ExactPosition(1897), strand=1),
+                type="CDS",
+            ),
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3442,7 +3546,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAK057951")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3463,7 +3567,14 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAK092583")
-        self.assertEqual(alignment.query.annotations["CDS"], "73..555")
+        self.assertEqual(len(alignment.query.features), 1)
+        self.assertEqual(
+            alignment.query.features[0],
+            SeqFeature(
+                SimpleLocation(ExactPosition(72), ExactPosition(555), strand=1),
+                type="CDS",
+            ),
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3480,7 +3591,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAX747611")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3497,7 +3608,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAK056232")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3518,7 +3629,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC094698")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3535,7 +3646,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mBC041177")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3556,7 +3667,14 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAY217347")
-        self.assertEqual(alignment.query.annotations["CDS"], "1304..2089")
+        self.assertEqual(len(alignment.query.features), 1)
+        self.assertEqual(
+            alignment.query.features[0],
+            SeqFeature(
+                SimpleLocation(ExactPosition(1303), ExactPosition(2089), strand=1),
+                type="CDS",
+            ),
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3575,7 +3693,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD043865")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14423, 14455], [32, 0]])
@@ -3583,7 +3701,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD464022")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14453, 14485], [32, 0]])
@@ -3591,7 +3709,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD464023")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14455, 14485], [30, 0]])
@@ -3599,7 +3717,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD426250")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14496, 14528], [32, 0]])
@@ -3607,7 +3725,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD319762")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14537, 14569], [32, 0]])
@@ -3615,7 +3733,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD439184")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14538, 14570], [32, 0]])
@@ -3623,7 +3741,14 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAK289708")
-        self.assertEqual(alignment.query.annotations["CDS"], "147..1553")
+        self.assertEqual(len(alignment.query.features), 1)
+        self.assertEqual(
+            alignment.query.features[0],
+            SeqFeature(
+                SimpleLocation(ExactPosition(146), ExactPosition(1553), strand=1),
+                type="CDS",
+            ),
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3642,7 +3767,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mDQ588205")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14629, 14657], [0, 28]])
@@ -3650,7 +3775,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD033185")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14643, 14667], [0, 24]])
@@ -3658,7 +3783,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD386972")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14643, 14667], [24, 0]])
@@ -3666,7 +3791,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD469492")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14673, 14705], [32, 0]])
@@ -3674,7 +3799,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD371043")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3683,7 +3808,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD186991")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3692,7 +3817,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD178321")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14704, 14725], [21, 0]])
@@ -3700,7 +3825,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD371044")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14705, 14737], [32, 0]])
@@ -3708,7 +3833,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD492409")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14739, 14771], [32, 0]])
@@ -3716,7 +3841,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD248147")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14746, 14770], [24, 0]])
@@ -3724,7 +3849,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD044295")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14785, 14817], [32, 0]])
@@ -3732,7 +3857,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD433165")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14810, 14842], [32, 0]])
@@ -3740,7 +3865,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD055458")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14823, 14855], [32, 0]])
@@ -3748,7 +3873,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD131561")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14828, 14853], [25, 0]])
@@ -3756,7 +3881,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD129847")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14936, 14956], [20, 0]])
@@ -3764,7 +3889,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD219312")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[14950, 14971], [21, 0]])
@@ -3772,7 +3897,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD546847")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15086, 15118], [32, 0]])
@@ -3780,7 +3905,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD218460")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15097, 15129], [32, 0]])
@@ -3788,7 +3913,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mKJ806766")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3797,7 +3922,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD131237")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15187, 15219], [32, 0]])
@@ -3805,7 +3930,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD128091")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15209, 15241], [32, 0]])
@@ -3813,7 +3938,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD422546")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15274, 15305], [31, 0]])
@@ -3821,7 +3946,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD153435")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15292, 15324], [32, 0]])
@@ -3829,7 +3954,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD367640")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15461, 15493], [32, 0]])
@@ -3837,7 +3962,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD487131")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15468, 15500], [32, 0]])
@@ -3845,7 +3970,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD493181")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15480, 15512], [32, 0]])
@@ -3853,7 +3978,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD205712")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15558, 15590], [32, 0]])
@@ -3861,7 +3986,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD425846")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15584, 15616], [32, 0]])
@@ -3869,7 +3994,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD219639")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15603, 15634], [32, 1]])
@@ -3877,7 +4002,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD078677")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15603, 15635], [32, 0]])
@@ -3885,7 +4010,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD078676")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15614, 15635], [21, 0]])
@@ -3893,7 +4018,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD253503")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15643, 15675], [32, 0]])
@@ -3901,7 +4026,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD253504")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15644, 15675], [31, 0]])
@@ -3909,7 +4034,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD159284")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15664, 15687], [23, 0]])
@@ -3917,7 +4042,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD115871")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15675, 15707], [32, 0]])
@@ -3925,7 +4050,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD456634")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15677, 15709], [32, 0]])
@@ -3933,7 +4058,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD487879")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15741, 15772], [32, 1]])
@@ -3941,7 +4066,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD080014")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15741, 15773], [32, 0]])
@@ -3949,7 +4074,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD336830")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15760, 15792], [32, 0]])
@@ -3957,7 +4082,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD444008")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15761, 15793], [32, 0]])
@@ -3965,7 +4090,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD460507")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15812, 15836], [24, 0]])
@@ -3973,7 +4098,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mAK308574")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3990,7 +4115,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD389037")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15906, 15936], [30, 0]])
@@ -3998,7 +4123,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD521711")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15947, 15979], [32, 0]])
@@ -4006,7 +4131,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD383617")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15972, 16004], [32, 0]])
@@ -4014,7 +4139,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD491045")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15982, 16014], [32, 0]])
@@ -4022,7 +4147,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD318660")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[15985, 16017], [32, 0]])
@@ -4030,7 +4155,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD341280")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[16118, 16150], [32, 0]])
@@ -4038,7 +4163,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD220623")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[16157, 16189], [32, 0]])
@@ -4046,7 +4171,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD465423")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[16165, 16197], [32, 0]])
@@ -4054,7 +4179,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD515432")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[16176, 16208], [32, 0]])
@@ -4062,7 +4187,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD542452")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[16184, 16216], [32, 0]])
@@ -4070,7 +4195,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD507246")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[16201, 16230], [30, 1]])
@@ -4078,7 +4203,7 @@ table bigPsl
         )
         alignment = next(alignments)
         self.assertEqual(alignment.query.id, "mJD102852")
-        self.assertNotIn("CDS", alignment.query.annotations)
+        self.assertEqual(len(alignment.query.features), 0)
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates, numpy.array([[16253, 16274], [21, 0]])
