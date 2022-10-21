@@ -798,7 +798,7 @@ class GenBankWriter(_InsdcWriter):
                 )
 
             if not (
-                splitline[4].strip() == ""
+                splitline[3].strip() == "aa"
                 or "DNA" in splitline[4].strip().upper()
                 or "RNA" in splitline[4].strip().upper()
             ):

@@ -272,6 +272,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Saket Choudhary <https://github.com/saketkc>
 - Sean Aubin <https://github.com/seanny123>
 - Sean Davis <https://github.com/seandavi>
+- Sean Johnson <https://github.com/seanrjohnson>
 - Sean Workman <https://github.com/sean-workman>
 - Sebastian Bassi <https://about.me/bassi>
 - Sergei Lebedev <https://github.com/superbobry>
