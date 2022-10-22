@@ -1,0 +1,39 @@
+########################################
+# Program: needle
+# Rundate: Sat 22 Oct 2022 10:27:05
+# Commandline: needle
+#    -asequence seqA.fa
+#    -bsequence seqB.fa
+#    -gapopen 10
+#    -gapextend 0.5
+#    -sreverse1
+#    -outfile needle_reverse1.txt
+# Align_format: srspair
+# Report_file: needle_reverse1.txt
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: seqA
+# 2: seqB
+# Matrix: EDNAFULL
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 21
+# Identity:       9/21 (42.9%)
+# Similarity:     9/21 (42.9%)
+# Gaps:          12/21 (57.1%)
+# Score: 23.0
+# 
+#
+#=======================================
+
+seqA              15 ---AAA---GGGAAACCCAAA      1
+                        |||   |||   |||   
+seqB               1 TTTAAACCCGGG---CCC---     15
+
+
+#---------------------------------------
+#---------------------------------------

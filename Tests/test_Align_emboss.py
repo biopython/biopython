@@ -1214,6 +1214,96 @@ numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
         with self.assertRaises(StopIteration):
             next(alignments)
 
+    def test_needle_reverse1(self):
+        # needle -asequence seqA.fa -bsequence seqB.fa -gapopen 10 -gapextend 0.5 -sreverse1 -outfile needle_reverse1.txt
+        path = "Emboss/needle_reverse1.txt"
+        alignments = Align.parse(path, "emboss")
+
+        """\
+
+########################################
+# Program: needle
+# Rundate: Sat 22 Oct 2022 10:27:05
+# Commandline: needle
+#    -asequence seqA.fa
+#    -bsequence seqB.fa
+#    -gapopen 10
+#    -gapextend 0.5
+#    -sreverse1
+#    -outfile needle_reverse1.txt
+# Align_format: srspair
+# Report_file: needle_reverse1.txt
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: seqA
+# 2: seqB
+# Matrix: EDNAFULL
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 21
+# Identity:       9/21 (42.9%)
+# Similarity:     9/21 (42.9%)
+# Gaps:          12/21 (57.1%)
+# Score: 23.0
+# 
+#
+#=======================================
+
+seqA              15 ---AAA---GGGAAACCCAAA      1
+                        |||   |||   |||   
+seqB               1 TTTAAACCCGGG---CCC---     15
+"""
+
+    def test_needle_reverse2(self):
+        # needle -asequence seqA.fa -bsequence seqB.fa -gapopen 10 -gapextend 0.5 -sreverse2 -outfile needle_reverse2.txt
+        path = "Emboss/needle_reverse2.txt"
+        alignments = Align.parse(path, "emboss")
+        """\
+########################################
+# Program: needle
+# Rundate: Sat 22 Oct 2022 10:26:59
+# Commandline: needle
+#    -asequence seqA.fa
+#    -bsequence seqB.fa
+#    -gapopen 10
+#    -gapextend 0.5
+#    -sreverse2
+#    -outfile needle_reverse2.txt
+# Align_format: srspair
+# Report_file: needle_reverse2.txt
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: seqA
+# 2: seqB
+# Matrix: EDNAFULL
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 21
+# Identity:       9/21 (42.9%)
+# Similarity:     9/21 (42.9%)
+# Gaps:          12/21 (57.1%)
+# Score: 23.0
+# 
+#
+#=======================================
+
+seqA               1 TTTGGGTTTCCC---TTT---     15
+                        |||   |||   |||   
+seqB              15 ---GGG---CCCGGGTTTAAA      1
+
+
+#---------------------------------------
+#---------------------------------------
+"""
+
     def test_pair_aln_full_blank_line(self):
         path = "Emboss/emboss_pair_aln_full_blank_line.txt"
         alignments = Align.parse(path, "emboss")
