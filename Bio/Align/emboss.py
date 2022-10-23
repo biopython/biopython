@@ -225,18 +225,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                                 and len(sequence) == 0
                             ):
                                 assert start == ends[index]
+                                assert end == start
                             else:
                                 start -= 1
-                            assert end == start + len(sequence)
+                                assert end == start + len(sequence)
                         else:
                             if (
                                 self.metadata["Align_format"] == "srspair"
                                 and len(sequence) == 0
                             ):
                                 assert start - 1 == ends[index]
+                                assert end == start
                             else:
                                 end -= 1
-                            assert end == start - len(sequence)
+                                assert end == start - len(sequence)
                     # Record the end
                     ends[index] = end
                     sequences[index] += sequence
