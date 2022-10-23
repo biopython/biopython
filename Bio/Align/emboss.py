@@ -11,7 +11,7 @@ for example from the needle, water, and stretcher tools.
 """
 from Bio.Align import Alignment
 from Bio.Align import interfaces
-from Bio.Seq import Seq
+from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
 
 
@@ -99,6 +99,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     aligned_sequences = [""] * number_of_sequences
                     consensus = ""
                     starts = [0] * number_of_sequences
+                    ends = [0] * number_of_sequences
                     column = 0
                     index = 0
                     continue
@@ -171,14 +172,19 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                             n = len(sequences)
                             for i in range(n):
                                 start = starts[i]
-                                if start == 0:
-                                    sequence = Seq(sequences[i])
-                                else:
+                                end = ends[i]
+                                if start < end:
                                     coordinates[i, :] += start
+                                    data = sequences[i]
+                                else:
+                                    start, end = end, start
+                                    coordinates[i, :] = end - coordinates[i, :]
+                                    data = reverse_complement(sequences[i])
+                                if start == 0:
+                                    sequence = Seq(data)
+                                else:
                                     # create a partially defined sequence
-                                    length = start + len(sequences[i])
-                                    data = {start: sequences[i]}
-                                    sequence = Seq(data, length=length)
+                                    sequence = Seq({start: data}, length=end)
                                 record = SeqRecord(sequence, identifiers[i])
                                 records.append(record)
                             alignment = Alignment(records, coordinates)
@@ -198,21 +204,43 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     identifier, start = prefix.split(None, 1)
                     assert identifiers[index].startswith(identifier)
                     aligned_sequence, end = line[21:].split(None, 1)
-                    start = int(start) - 1  # Python counting
+                    start = int(start)
                     end = int(end)
                     length = len(sequences[index])
                     sequence = aligned_sequence.replace("-", "")
                     if length == 0 and len(sequence) > 0:
+                        if start < end:
+                            start -= 1  # Python counting
+                            assert end == start + len(sequence)
+                        else:
+                            end -= 1  # Python counting
+                            assert end == start - len(sequence)
                         # Record the start
                         starts[index] = start
                     else:
-                        if (
-                            self.metadata["Align_format"] == "srspair"
-                            and len(sequence) == 0
-                        ):
-                            start += 1
-                        assert start == starts[index] + length
-                    assert end == start + len(sequence)
+                        if starts[index] <= ends[index]:
+                            # forward strand
+                            if (
+                                self.metadata["Align_format"] == "srspair"
+                                and len(sequence) == 0
+                            ):
+                                assert start == ends[index]
+                                assert end == start
+                            else:
+                                start -= 1
+                                assert end == start + len(sequence)
+                        else:
+                            if (
+                                self.metadata["Align_format"] == "srspair"
+                                and len(sequence) == 0
+                            ):
+                                assert start - 1 == ends[index]
+                                assert end == start
+                            else:
+                                end -= 1
+                                assert end == start - len(sequence)
+                    # Record the end
+                    ends[index] = end
                     sequences[index] += sequence
                     aligned_sequences[index] += aligned_sequence
                     if index == 0:

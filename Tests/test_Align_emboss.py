@@ -1214,6 +1214,223 @@ numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
         with self.assertRaises(StopIteration):
             next(alignments)
 
+    def test_water_reverse1(self):
+        # water -asequence seqA.fa -bsequence seqB.fa -gapopen 10 -gapextend 0.5 -sreverse1 -outfile water_reverse1.txt
+        path = "Emboss/water_reverse1.txt"
+        alignments = Align.parse(path, "emboss")
+        self.assertEqual(alignments.metadata["Program"], "water")
+        self.assertEqual(alignments.metadata["Rundate"], "Sat 22 Oct 2022 23:47:41")
+        self.assertEqual(
+            alignments.metadata["Command line"],
+            "water -asequence seqA.fa -bsequence seqB.fa -gapopen 0.001 -gapextend 0.001 -sreverse1 -outfile water_reverse1.txt",
+        )
+        self.assertEqual(alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(alignments.metadata["Report_file"], "water_reverse1.txt")
+
+        alignment = next(alignments)
+        self.assertEqual(alignment.annotations["Matrix"], "EDNAFULL")
+        self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 0.001)
+        self.assertAlmostEqual(alignment.annotations["Extend_penalty"], 0.001)
+        self.assertEqual(alignment.annotations["Identity"], 32)
+        self.assertEqual(alignment.annotations["Similarity"], 32)
+        self.assertEqual(alignment.annotations["Gaps"], 89)
+        self.assertAlmostEqual(alignment.annotations["Score"], 159.911)
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.shape, (2, 121))
+        self.assertEqual(alignment.sequences[0].id, "seqA")
+        self.assertEqual(alignment.sequences[1].id, "seqB")
+        self.assertEqual(
+            alignment.sequences[0].seq,
+            "GGGGGGGGGGGGGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCCCCCCCCCCCCCCCCCC",
+        )
+        self.assertEqual(
+            alignment.sequences[1].seq,
+            "GGGGGGGGGGGGGGGGGGGCCCCCCCCCCCCC",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[121, 102, 13,  0],
+                             [  0,  19, 19, 32]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(
+            alignment[0],
+            "GGGGGGGGGGGGGGGGGGGTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTCCCCCCCCCCCCC",
+        )
+        self.assertEqual(
+            alignment[1],
+            "GGGGGGGGGGGGGGGGGGG-----------------------------------------------------------------------------------------CCCCCCCCCCCCC",
+        )
+        self.assertEqual(
+            alignment.column_annotations["emboss_consensus"],
+            "|||||||||||||||||||                                                                                         |||||||||||||",
+        )
+        with self.assertRaises(StopIteration):
+            next(alignments)
+
+    def test_water_reverse2(self):
+        # water -asequence seqA.fa -bsequence seqB.fa -gapopen 10 -gapextend 0.5 -sreverse2 -outfile water_reverse2.txt
+        path = "Emboss/water_reverse2.txt"
+        alignments = Align.parse(path, "emboss")
+        self.assertEqual(alignments.metadata["Program"], "water")
+        self.assertEqual(alignments.metadata["Rundate"], "Sun 23 Oct 2022 00:06:18")
+        self.assertEqual(
+            alignments.metadata["Command line"],
+            "water -asequence seqA.fa -bsequence seqB.fa -gapopen 0.001 -gapextend 0.001 -sreverse2 -outfile water_reverse2.txt",
+        )
+        self.assertEqual(alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(alignments.metadata["Report_file"], "water_reverse2.txt")
+        alignment = next(alignments)
+        self.assertEqual(alignment.annotations["Matrix"], "EDNAFULL")
+        self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 0.001)
+        self.assertAlmostEqual(alignment.annotations["Extend_penalty"], 0.001)
+        self.assertEqual(alignment.annotations["Identity"], 32)
+        self.assertEqual(alignment.annotations["Similarity"], 32)
+        self.assertEqual(alignment.annotations["Gaps"], 89)
+        self.assertAlmostEqual(alignment.annotations["Score"], 159.911)
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.shape, (2, 121))
+        self.assertEqual(alignment.sequences[0].id, "seqA")
+        self.assertEqual(alignment.sequences[1].id, "seqB")
+        self.assertEqual(
+            alignment.sequences[0].seq,
+            "GGGGGGGGGGGGGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCCCCCCCCCCCCCCCCCC",
+        )
+        self.assertEqual(
+            alignment.sequences[1].seq,
+            "GGGGGGGGGGGGGGGGGGGCCCCCCCCCCCCC",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+                numpy.array([[ 0, 13, 102, 121],
+                             [32, 19,  19,   0]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(
+            alignment[0],
+            "GGGGGGGGGGGGGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCCCCCCCCCCCCCCCCCC",
+        )
+        self.assertEqual(
+            alignment[1],
+            "GGGGGGGGGGGGG-----------------------------------------------------------------------------------------CCCCCCCCCCCCCCCCCCC",
+        )
+        self.assertEqual(
+            alignment.column_annotations["emboss_consensus"],
+            "|||||||||||||                                                                                         |||||||||||||||||||",
+        )
+        with self.assertRaises(StopIteration):
+            next(alignments)
+
+    def test_water_reverse3(self):
+        # water -asequence seqA.fa -bsequence seqB.fa -gapopen 10 -gapextend 0.5 -sreverse1 -outfile water_reverse3.txt
+        path = "Emboss/water_reverse3.txt"
+        alignments = Align.parse(path, "emboss")
+        self.assertEqual(alignments.metadata["Program"], "water")
+        self.assertEqual(alignments.metadata["Rundate"], "Sat 22 Oct 2022 22:56:03")
+        self.assertEqual(
+            alignments.metadata["Command line"],
+            "water -asequence seqA.fa -bsequence seqB.fa -gapopen 1 -gapextend 0.5 -sreverse1 -outfile water_reverse3.txt",
+        )
+        self.assertEqual(alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(alignments.metadata["Report_file"], "water_reverse3.txt")
+
+        alignment = next(alignments)
+        self.assertEqual(alignment.annotations["Matrix"], "EDNAFULL")
+        self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 1.0)
+        self.assertAlmostEqual(alignment.annotations["Extend_penalty"], 0.5)
+        self.assertEqual(alignment.annotations["Identity"], 16)
+        self.assertEqual(alignment.annotations["Similarity"], 16)
+        self.assertEqual(alignment.annotations["Gaps"], 3)
+        self.assertAlmostEqual(alignment.annotations["Score"], 77.5)
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.shape, (2, 19))
+        self.assertEqual(alignment.sequences[0].id, "seqA")
+        self.assertEqual(alignment.sequences[1].id, "seqB")
+        self.assertEqual(
+            repr(alignment.sequences[0].seq),
+            "Seq({2: 'GGGCCCGGTTTAAAAAAA'}, length=20)",
+        )
+        self.assertEqual(
+            repr(alignment.sequences[1].seq),
+            "Seq({2: 'TTTTTTTACCCGGGCCC'}, length=19)",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[20, 13, 11, 10, 10,  2],
+                             [ 2,  9,  9, 10, 11, 19]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(alignment[0], "TTTTTTTAAA-CCGGGCCC")
+        self.assertEqual(alignment[1], "TTTTTTT--ACCCGGGCCC")
+        self.assertEqual(
+            alignment.column_annotations["emboss_consensus"],
+            "|||||||  | ||||||||",
+        )
+        with self.assertRaises(StopIteration):
+            next(alignments)
+
+    def test_water_reverse4(self):
+        # water -asequence seqA.fa -bsequence seqB.fa -gapopen 10 -gapextend 0.5 -sreverse2 -outfile water_reverse4.txt
+        path = "Emboss/water_reverse4.txt"
+        alignments = Align.parse(path, "emboss")
+        self.assertEqual(alignments.metadata["Program"], "water")
+        self.assertEqual(alignments.metadata["Rundate"], "Sat 22 Oct 2022 22:56:15")
+        self.assertEqual(
+            alignments.metadata["Command line"],
+            "water -asequence seqA.fa -bsequence seqB.fa -gapopen 1 -gapextend 0.5 -sreverse2 -outfile water_reverse4.txt",
+        )
+        self.assertEqual(alignments.metadata["Align_format"], "srspair")
+        self.assertEqual(alignments.metadata["Report_file"], "water_reverse4.txt")
+        alignment = next(alignments)
+        self.assertEqual(alignment.annotations["Matrix"], "EDNAFULL")
+        self.assertAlmostEqual(alignment.annotations["Gap_penalty"], 1.0)
+        self.assertAlmostEqual(alignment.annotations["Extend_penalty"], 0.5)
+        self.assertEqual(alignment.annotations["Identity"], 16)
+        self.assertEqual(alignment.annotations["Similarity"], 16)
+        self.assertEqual(alignment.annotations["Gaps"], 3)
+        self.assertAlmostEqual(alignment.annotations["Score"], 77.5)
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.shape, (2, 19))
+        self.assertEqual(alignment.sequences[0].id, "seqA")
+        self.assertEqual(alignment.sequences[1].id, "seqB")
+        self.assertEqual(
+            repr(alignment.sequences[0].seq),
+            "Seq({2: 'GGGCCCGGTTTAAAAAAA'}, length=20)",
+        )
+        self.assertEqual(
+            repr(alignment.sequences[1].seq),
+            "Seq({2: 'TTTTTTTACCCGGGCCC'}, length=19)",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 2, 10, 12, 12, 20],
+                             [19, 11, 11, 10,  2]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(alignment[0], "GGGCCCGGTT-TAAAAAAA")
+        self.assertEqual(alignment[1], "GGGCCCGG--GTAAAAAAA")
+        self.assertEqual(
+            alignment.column_annotations["emboss_consensus"],
+            "||||||||   ||||||||",
+        )
+        with self.assertRaises(StopIteration):
+            next(alignments)
+
     def test_pair_aln_full_blank_line(self):
         path = "Emboss/emboss_pair_aln_full_blank_line.txt"
         alignments = Align.parse(path, "emboss")
