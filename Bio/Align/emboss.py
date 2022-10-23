@@ -211,36 +211,32 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     if length == 0 and len(sequence) > 0:
                         if start < end:
                             start -= 1  # Python counting
-                            reverse_complemented = False
+                            assert end == start + len(sequence)
                         else:
                             end -= 1  # Python counting
-                            reverse_complemented = True
+                            assert end == start - len(sequence)
                         # Record the start
                         starts[index] = start
                     else:
                         if starts[index] <= ends[index]:
                             # forward strand
-                            start -= 1
-                            reverse_complemented = False
-                        else:
-                            end -= 1
-                            reverse_complemented = True
-                        if (
-                            self.metadata["Align_format"] == "srspair"
-                            and len(sequence) == 0
-                        ):
-                            if reverse_complemented:
-                                end += 1
-                            else:
-                                start += 1
-                            if reverse_complemented:
-                                assert start == ends[index] + 1
-                            else:
+                            if (
+                                self.metadata["Align_format"] == "srspair"
+                                and len(sequence) == 0
+                            ):
                                 assert start == ends[index]
-                    if reverse_complemented:
-                        assert end == start - len(sequence)
-                    else:
-                        assert end == start + len(sequence)
+                            else:
+                                start -= 1
+                            assert end == start + len(sequence)
+                        else:
+                            if (
+                                self.metadata["Align_format"] == "srspair"
+                                and len(sequence) == 0
+                            ):
+                                assert start - 1 == ends[index]
+                            else:
+                                end -= 1
+                            assert end == start - len(sequence)
                     # Record the end
                     ends[index] = end
                     sequences[index] += sequence
