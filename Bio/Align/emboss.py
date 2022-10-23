@@ -233,9 +233,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                                 end += 1
                             else:
                                 start += 1
-                            assert start == ends[index]
                             if reverse_complemented:
-                                end -= 1
+                                assert start == ends[index] + 1
+                            else:
+                                assert start == ends[index]
                     if reverse_complemented:
                         assert end == start - len(sequence)
                     else:
