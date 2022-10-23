@@ -218,11 +218,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         # Record the start
                         starts[index] = start
                     else:
-                        if starts[index] < ends[index]:
+                        if starts[index] <= ends[index]:
                             # forward strand
                             start -= 1
                             reverse_complemented = False
                         else:
+                            end -= 1
                             reverse_complemented = True
                         if (
                             self.metadata["Align_format"] == "srspair"
