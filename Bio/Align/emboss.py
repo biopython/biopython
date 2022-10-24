@@ -87,77 +87,75 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 raise ValueError("Unexpected line: %s" % line)
         for line in stream:
             line = line.rstrip("\r\n")
-            if sequences is None:
-                # parsing the alignment metadata
-                if line == "#=======================================":
-                    # reached the end of alignment metadata
-                    if len(identifiers) == 0:
-                        raise ValueError("Number of sequences missing!")
-                    if ncols is None:
-                        raise ValueError("Length of alignment missing!")
-                    sequences = [""] * number_of_sequences
-                    aligned_sequences = [""] * number_of_sequences
-                    consensus = ""
-                    starts = [0] * number_of_sequences
-                    ends = [0] * number_of_sequences
-                    column = 0
-                    index = 0
-                    break
-                if line.strip() == "#":
-                    continue
-                if not line.startswith("# "):
-                    raise ValueError("Unexpected line: %s") % line
-                try:
-                    key, value = line[2:].split(":", 1)
-                except ValueError:
-                    # An equal sign is used for Longest_Identity,
-                    # Longest_Similarity, Shortest_Identity, and
-                    # Shortest_Similarity, which are included if command line
-                    # argument -nobrief was used.
-                    key, value = line[2:].split(" = ", 1)
-                if key == "Aligned_sequences":
-                    number_of_sequences = int(value.strip())
-                    assert len(identifiers) == 0
-                    # Should now expect the record identifiers...
-                    for i, line in enumerate(stream):
-                        if not line.startswith("# "):
-                            raise ValueError("Unexpected line: %s") % line
-                        number, identifier = line[2:].split(":")
-                        assert i + 1 == int(number)
-                        identifiers.append(identifier.strip())
-                        if len(identifiers) == number_of_sequences:
-                            break
-                elif key == "Matrix":
-                    annotations[key] = value.strip()
-                elif key == "Gap_penalty":
-                    annotations[key] = float(value.strip())
-                elif key == "Extend_penalty":
-                    annotations[key] = float(value.strip())
-                elif key == "Length":
-                    ncols = int(value.strip())
-                elif key == "Identity":
-                    annotations[key] = int(value.strip().split("/")[0])
-                elif key == "Similarity":
-                    annotations[key] = int(value.strip().split("/")[0])
-                elif key == "Gaps":
-                    annotations[key] = int(value.strip().split("/")[0])
-                elif key == "Score":
-                    annotations[key] = float(value.strip())
-                # TODO:
-                # The following are generated if the -nobrief command line
-                # argument used. We could simply calculate them from the
-                # alignment, but then we have to define what we mean by
-                # "similar". For now, simply store them as an annotation.
-                elif key == "Longest_Identity":
-                    annotations[key] = value.strip()
-                elif key == "Longest_Similarity":
-                    annotations[key] = value.strip()
-                elif key == "Shortest_Identity":
-                    annotations[key] = value.strip()
-                elif key == "Shortest_Similarity":
-                    annotations[key] = value.strip()
-                else:
-                    raise ValueError("Failed to parse line '%s'" % line)
+            if line == "#=======================================":
+                # reached the end of alignment metadata
+                if len(identifiers) == 0:
+                    raise ValueError("Number of sequences missing!")
+                if ncols is None:
+                    raise ValueError("Length of alignment missing!")
+                sequences = [""] * number_of_sequences
+                aligned_sequences = [""] * number_of_sequences
+                consensus = ""
+                starts = [0] * number_of_sequences
+                ends = [0] * number_of_sequences
+                column = 0
+                index = 0
+                break
+            if line.strip() == "#":
+                continue
+            if not line.startswith("# "):
+                raise ValueError("Unexpected line: %s") % line
+            try:
+                key, value = line[2:].split(":", 1)
+            except ValueError:
+                # An equal sign is used for Longest_Identity,
+                # Longest_Similarity, Shortest_Identity, and
+                # Shortest_Similarity, which are included if command line
+                # argument -nobrief was used.
+                key, value = line[2:].split(" = ", 1)
+            if key == "Aligned_sequences":
+                number_of_sequences = int(value.strip())
+                assert len(identifiers) == 0
+                # Should now expect the record identifiers...
+                for i, line in enumerate(stream):
+                    if not line.startswith("# "):
+                        raise ValueError("Unexpected line: %s") % line
+                    number, identifier = line[2:].split(":")
+                    assert i + 1 == int(number)
+                    identifiers.append(identifier.strip())
+                    if len(identifiers) == number_of_sequences:
+                        break
+            elif key == "Matrix":
+                annotations[key] = value.strip()
+            elif key == "Gap_penalty":
+                annotations[key] = float(value.strip())
+            elif key == "Extend_penalty":
+                annotations[key] = float(value.strip())
+            elif key == "Length":
+                ncols = int(value.strip())
+            elif key == "Identity":
+                annotations[key] = int(value.strip().split("/")[0])
+            elif key == "Similarity":
+                annotations[key] = int(value.strip().split("/")[0])
+            elif key == "Gaps":
+                annotations[key] = int(value.strip().split("/")[0])
+            elif key == "Score":
+                annotations[key] = float(value.strip())
+            # TODO:
+            # The following are generated if the -nobrief command line
+            # argument used. We could simply calculate them from the
+            # alignment, but then we have to define what we mean by
+            # "similar". For now, simply store them as an annotation.
+            elif key == "Longest_Identity":
+                annotations[key] = value.strip()
+            elif key == "Longest_Similarity":
+                annotations[key] = value.strip()
+            elif key == "Shortest_Identity":
+                annotations[key] = value.strip()
+            elif key == "Shortest_Similarity":
+                annotations[key] = value.strip()
+            else:
+                raise ValueError("Failed to parse line '%s'" % line)
         for line in stream:
             line = line.rstrip("\r\n")
             # parse the sequences
