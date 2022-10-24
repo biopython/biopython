@@ -165,37 +165,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 # empty line
                 if index == number_of_sequences:
                     # reached the end of an alignment block
-                    index = 0
                     if column == ncols:
                         # reached the end of the sequences
-                        coordinates = Alignment.infer_coordinates(aligned_sequences)
-                        records = []
-                        n = len(sequences)
-                        for i in range(n):
-                            start = starts[i]
-                            end = ends[i]
-                            if start < end:
-                                coordinates[i, :] += start
-                                data = sequences[i]
-                            else:
-                                start, end = end, start
-                                coordinates[i, :] = end - coordinates[i, :]
-                                data = reverse_complement(sequences[i])
-                            if start == 0:
-                                sequence = Seq(data)
-                            else:
-                                # create a partially defined sequence
-                                sequence = Seq({start: data}, length=end)
-                            record = SeqRecord(sequence, identifiers[i])
-                            records.append(record)
-                        alignment = Alignment(records, coordinates)
-                        if annotations:
-                            alignment.annotations = annotations
-                        if consensus:
-                            alignment.column_annotations = {
-                                "emboss_consensus": consensus
-                            }
-                        return alignment
+                        break
+                    index = 0
                 continue
             prefix = line[:21].strip()
             if prefix == "":
@@ -249,3 +222,29 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 else:
                     assert column == len(aligned_sequences[index])
                 index += 1
+        coordinates = Alignment.infer_coordinates(aligned_sequences)
+        records = []
+        n = len(sequences)
+        for i in range(n):
+            start = starts[i]
+            end = ends[i]
+            if start < end:
+                coordinates[i, :] += start
+                data = sequences[i]
+            else:
+                start, end = end, start
+                coordinates[i, :] = end - coordinates[i, :]
+                data = reverse_complement(sequences[i])
+            if start == 0:
+                sequence = Seq(data)
+            else:
+                # create a partially defined sequence
+                sequence = Seq({start: data}, length=end)
+            record = SeqRecord(sequence, identifiers[i])
+            records.append(record)
+        alignment = Alignment(records, coordinates)
+        if annotations:
+            alignment.annotations = annotations
+        if consensus:
+            alignment.column_annotations = {"emboss_consensus": consensus}
+        return alignment
