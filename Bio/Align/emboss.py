@@ -89,21 +89,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             line = line.rstrip("\r\n")
             if line == "#=======================================":
                 # reached the end of alignment metadata
-                if len(identifiers) == 0:
-                    raise ValueError("Number of sequences missing!")
-                if ncols is None:
-                    raise ValueError("Length of alignment missing!")
-                sequences = [""] * number_of_sequences
-                aligned_sequences = [""] * number_of_sequences
-                consensus = ""
-                starts = [0] * number_of_sequences
-                ends = [0] * number_of_sequences
-                column = 0
-                index = 0
                 break
-            if line.strip() == "#":
+            elif line.strip() == "#":
                 continue
-            if not line.startswith("# "):
+            elif not line.startswith("# "):
                 raise ValueError("Unexpected line: %s") % line
             try:
                 key, value = line[2:].split(":", 1)
@@ -156,6 +145,19 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 annotations[key] = value.strip()
             else:
                 raise ValueError("Failed to parse line '%s'" % line)
+        else:
+            return
+        if len(identifiers) == 0:
+            raise ValueError("Number of sequences missing!")
+        if ncols is None:
+            raise ValueError("Length of alignment missing!")
+        sequences = [""] * number_of_sequences
+        aligned_sequences = [""] * number_of_sequences
+        consensus = ""
+        starts = [0] * number_of_sequences
+        ends = [0] * number_of_sequences
+        column = 0
+        index = 0
         for line in stream:
             line = line.rstrip("\r\n")
             # parse the sequences
