@@ -68,26 +68,26 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 commandline = value.strip()
 
     def _read_next_alignment(self, stream):
-        identifiers = None
         number_of_sequences = None
         annotations = {}
         for line in stream:
             line = line.rstrip("\r\n")
-            if identifiers is None:
-                # searching for alignment metadata start
-                if not line:
-                    continue
-                elif line.startswith("#---------------------------------------"):
-                    # may appear between alignments
-                    continue
-                elif line.startswith("#======================================="):
-                    # found the alignment metadata start
-                    identifiers = []
-                    ncols = None
-                    sequences = None
-                else:
-                    raise ValueError("Unexpected line: %s" % line)
-            elif sequences is None:
+            if not line:
+                continue
+            elif line.startswith("#---------------------------------------"):
+                # may appear between alignments
+                continue
+            elif line.startswith("#======================================="):
+                # found the alignment metadata start
+                identifiers = []
+                ncols = None
+                sequences = None
+                break
+            else:
+                raise ValueError("Unexpected line: %s" % line)
+        for line in stream:
+            line = line.rstrip("\r\n")
+            if sequences is None:
                 # parsing the alignment metadata
                 if line == "#=======================================":
                     # reached the end of alignment metadata
