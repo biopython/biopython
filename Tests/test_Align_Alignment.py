@@ -220,9 +220,9 @@ A-C-GG-AAC--
         self.assertEqual(
             str(subalignment),
             """\
-AACCGGGA-CCG
- -|-||-|-|--
-A-C-GG-AAC--
+ACCGGGA-CCG
+-|-||-|-|--
+-C-GG-AAC--
 """,
             msg=msg,
         )
@@ -232,9 +232,9 @@ A-C-GG-AAC--
         self.assertEqual(
             str(subalignment),
             """\
-AACCGGGA-CCG
-  |-||-|-|--
- AC-GG-AAC--
+CCGGGA-CCG
+|-||-|-|--
+C-GG-AAC--
 """,
             msg=msg,
         )
@@ -244,9 +244,9 @@ AACCGGGA-CCG
         self.assertEqual(
             str(subalignment),
             """\
-AACCGGGA-CCG
-   -||-|-|--
- AC-GG-AAC--
+CGGGA-CCG
+-||-|-|--
+-GG-AAC--
 """,
             msg=msg,
         )
@@ -256,9 +256,9 @@ AACCGGGA-CCG
         self.assertEqual(
             str(subalignment),
             """\
-AACCGGGA-CCG
-    ||-|-|--
-  ACGG-AAC--
+GGGA-CCG
+||-|-|--
+GG-AAC--
 """,
             msg=msg,
         )
@@ -268,7 +268,7 @@ AACCGGGA-CCG
         self.assertEqual(
             str(subalignment),
             """\
-AACCGGGA-CCG
+AACCGGGA-CC
 |-|-||-|-|-
 A-C-GG-AAC-
 """,
@@ -280,7 +280,7 @@ A-C-GG-AAC-
         self.assertEqual(
             str(subalignment),
             """\
-AACCGGGA-CCG
+AACCGGGA-C
 |-|-||-|-|
 A-C-GG-AAC
 """,
@@ -292,9 +292,9 @@ A-C-GG-AAC
         self.assertEqual(
             str(subalignment),
             """\
-AACCGGGA-CCG
+AACCGGGA-
 |-|-||-|-
-A-C-GG-AAC
+A-C-GG-AA
 """,
             msg=msg,
         )
@@ -304,9 +304,9 @@ A-C-GG-AAC
         self.assertEqual(
             str(subalignment),
             """\
-AACCGGGA-CCG
- -|-||-|-|-
-A-C-GG-AAC-
+ACCGGGA-CC
+-|-||-|-|-
+-C-GG-AAC-
 """,
             msg=msg,
         )
@@ -316,9 +316,9 @@ A-C-GG-AAC-
         self.assertEqual(
             str(subalignment),
             """\
-AACCGGGA-CCG
- -|-||-|-|
-A-C-GG-AAC
+ACCGGGA-C
+-|-||-|-|
+-C-GG-AAC
 """,
             msg=msg,
         )
@@ -328,9 +328,9 @@ A-C-GG-AAC
         self.assertEqual(
             str(subalignment),
             """\
-AACCGGGA-CCG
-  |-||-|-|-
- AC-GG-AAC-
+CCGGGA-CC
+|-||-|-|-
+C-GG-AAC-
 """,
             msg=msg,
         )
@@ -340,9 +340,9 @@ AACCGGGA-CCG
         self.assertEqual(
             str(subalignment),
             """\
-AACCGGGA-CCG
-  |-||-|-|
- AC-GG-AAC
+CCGGGA-C
+|-||-|-|
+C-GG-AAC
 """,
             msg=msg,
         )
@@ -517,9 +517,9 @@ A-C-GG-AAC--
         self.assertEqual(
             str(alignment),
             """\
-AACCGGGA-CCG
- -|-||-|-|--
-A-C-GG-AAC--
+ACCGGGA-CCG
+-|-||-|-|--
+-C-GG-AAC--
 """,
         )
         self.assertTrue(
@@ -577,7 +577,7 @@ A-C-GG-AAC--
         self.assertEqual(
             str(alignment),
             """\
-AACCGGGA-CCG
+AACCGGGA-C
 |-|-||-|-|
 A-C-GG-AAC
 """,
@@ -639,9 +639,9 @@ A-C-GG-AAC
         self.assertEqual(
             str(alignment),
             """\
-AACCGGGA-CCG
- -|-||-|-|
-A-C-GG-AAC
+ACCGGGA-C
+-|-||-|-|
+-C-GG-AAC
 """,
         )
         self.assertTrue(
@@ -779,9 +779,9 @@ A-C-GG-AAC--
         self.assertEqual(
             str(alignment),
             """\
-AACCGGGA-CCG
- -|-||-|-|--
-A-C-GG-AAC--
+ACCGGGA-CCG
+-|-||-|-|--
+-C-GG-AAC--
 """,
         )
         self.assertTrue(
@@ -841,7 +841,7 @@ A-C-GG-AAC--
         self.assertEqual(
             str(alignment),
             """\
-AACCGGGA-CCG
+AACCGGGA-C
 |-|-||-|-|
 A-C-GG-AAC
 """,
@@ -901,9 +901,9 @@ A-C-GG-AAC
         self.assertEqual(
             str(alignment),
             """\
-AACCGGGA-CCG
- -|-||-|-|
-A-C-GG-AAC
+ACCGGGA-C
+-|-||-|-|
+-C-GG-AAC
 """,
         )
         self.assertTrue(
@@ -1227,7 +1227,7 @@ class TestMultipleAlignment(unittest.TestCase):
         )
         self.assertEqual(alignment[0, (1, 4, 9)], "ACA", msg=msg)
         self.assertEqual(alignment[1, (1, 57, 58)], "AA-", msg=msg)
-        # self.assertEqual(str(alignment[:, :]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, :]), ..., msg=msg)  # FIXME
         self.assertEqual(
             alignment[0, 0:156],
             "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA",
@@ -1248,7 +1248,7 @@ class TestMultipleAlignment(unittest.TestCase):
             "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
             msg=msg,
         )
-        # self.assertEqual(str(alignment[:, 0:]), ..., msg=msg)
+        # self.assertEqual(str(alignment[:, 0:]), ..., msg=msg)  # FIXME
         self.assertEqual(
             alignment[0, :156],
             "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA",
@@ -1379,7 +1379,7 @@ class TestMultipleAlignment(unittest.TestCase):
         )
         subalignment = alignment[:, 60:]
         self.assertEqual(
-            "\n".join(row for row in subalignment),  # str(subalignment),
+            "\n".join(row for row in subalignment),  # str(subalignment),  # FIXME
             """\
 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA
 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
@@ -1398,7 +1398,7 @@ TATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATT
         )
         subalignment = alignment[:, :-60]
         self.assertEqual(
-            "\n".join(row for row in subalignment),  # str(subalignment),
+            "\n".join(row for row in subalignment),  # str(subalignment),  # FIXME
             """\
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAA
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAA
@@ -1417,7 +1417,7 @@ TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATT
         )
         subalignment = alignment[:, 20:-60]
         self.assertEqual(
-            "\n".join(row for row in subalignment),  # str(subalignment),
+            "\n".join(row for row in subalignment),  # str(subalignment),  # FIXME
             """\
 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAA
 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAA
@@ -1436,7 +1436,7 @@ TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAA""",
         )
         subalignment = alignment[:, ::2]
         self.assertEqual(
-            "\n".join(row for row in subalignment),  # str(subalignment),
+            "\n".join(row for row in subalignment),  # str(subalignment),  # FIXME
             """\
 TTCTAAAGGGTCGTATGAGCAAAAATTT-----AAATCATTCTTTCCATTAATTTAAATGTATTAAATCTGTTGGACG
 TTCTAAAGGGTCGTATGAGCAAAAATTTT----AAATCATTCTTTCCATTAATTTAAATGTATTAAATTTGTTGGACG
@@ -1498,7 +1498,7 @@ TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATAATATATTTCAAATTCCCTTA
     def test_sort(self):
         alignment = self.alignment[:, 40:100]
         self.assertEqual(
-            "\n".join(row for row in alignment),  # str(alignment),
+            "\n".join(row for row in alignment),  # str(alignment),  # FIXME
             """\
 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
@@ -1522,7 +1522,7 @@ AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA""",
         )
         alignment.sort()
         self.assertEqual(
-            "\n".join(row for row in alignment),  # str(alignment),
+            "\n".join(row for row in alignment),  # str(alignment),  # FIXME
             """\
 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
@@ -1546,7 +1546,7 @@ AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA""",
         )
         alignment.sort(reverse=True)
         self.assertEqual(
-            "\n".join(row for row in alignment),  # str(alignment),
+            "\n".join(row for row in alignment),  # str(alignment),  # FIXME
             """\
 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
@@ -1576,7 +1576,7 @@ AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA""",
         )
         alignment.sort()
         self.assertEqual(
-            "\n".join(row for row in alignment),  # str(alignment),
+            "\n".join(row for row in alignment),  # str(alignment),  # FIXME
             """\
 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
@@ -1592,7 +1592,7 @@ AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA""",
         )
         alignment.sort(reverse=True)
         self.assertEqual(
-            "\n".join(row for row in alignment),  # str(alignment),
+            "\n".join(row for row in alignment),  # str(alignment),  # FIXME
             """\
 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
@@ -1608,7 +1608,7 @@ AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA""",
         )
         alignment.sort(key=lambda record: gc_fraction(record.seq))
         self.assertEqual(
-            "\n".join(row for row in alignment),  # str(alignment),
+            "\n".join(row for row in alignment),  # str(alignment),  # FIXME
             """\
 AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
@@ -1624,7 +1624,7 @@ AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA""",
         )
         alignment.sort(key=lambda record: gc_fraction(record.seq), reverse=True)
         self.assertEqual(
-            "\n".join(row for row in alignment),  # str(alignment),
+            "\n".join(row for row in alignment),  # str(alignment),  # FIXME
             """\
 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA

@@ -3007,9 +3007,9 @@ class TestAlign_clippping(unittest.TestCase):
         self.assertEqual(
             str(alignment),
             """\
-AAAAAAAACCCCCC
-        ||||||
-        CCCCCC
+CCCCCC
+||||||
+CCCCCC
 """,
         )
         line = alignment.format("sam")
@@ -3089,9 +3089,9 @@ numpy.array([['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
         self.assertEqual(
             str(alignment),
             """\
-GGGGAAAAAAAACCCCCC
-    --------||||||
-    --------CCCCCC
+AAAAAAAACCCCCC
+--------||||||
+--------CCCCCC
 """,
         )
         line = alignment.format("sam")
@@ -3175,9 +3175,9 @@ numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
         self.assertEqual(
             str(alignment),
             """\
-GGGG--------CCCCCC
-    --------||||||
-    AAAAAAAACCCCCC
+--------CCCCCC
+--------||||||
+AAAAAAAACCCCCC
 """,
         )
         line = alignment.format("sam")
@@ -3219,9 +3219,9 @@ numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
         self.assertEqual(
             str(alignment),
             """\
-        CCCCCC
-        ||||||
-AAAAAAAACCCCCC
+CCCCCC
+||||||
+CCCCCC
 """,
         )
         line = alignment.format("sam")
@@ -3261,9 +3261,9 @@ numpy.array([['C', 'C', 'C', 'C', 'C', 'C'],
         self.assertEqual(
             str(alignment),
             """\
-    AAAAAAAACCCCCC
-    --------||||||
-GGGG--------CCCCCC
+AAAAAAAACCCCCC
+--------||||||
+--------CCCCCC
 """,
         )
         line = alignment.format("sam")
@@ -3349,9 +3349,9 @@ numpy.array([['-', '-', '-', '-', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C',
         self.assertEqual(
             str(alignment),
             """\
-AAAAAAAACCCCCC
-        ||||||
-    GGGGCCCCCC
+CCCCCC
+||||||
+CCCCCC
 """,
         )
         line = alignment.format("sam")
@@ -3435,9 +3435,9 @@ numpy.array([['G', 'G', 'G', 'G', '-', '-', '-', '-', '-', '-', '-', '-', 'C',
         self.assertEqual(
             str(alignment),
             """\
-    --------CCCCCC
-    --------||||||
-GGGGAAAAAAAACCCCCC
+--------CCCCCC
+--------||||||
+AAAAAAAACCCCCC
 """,
         )
         line = alignment.format("sam")

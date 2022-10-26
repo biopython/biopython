@@ -1649,24 +1649,24 @@ class Alignment:
         >>> alignment[:, 1:]  # doctest:+ELLIPSIS
         <Alignment object (2 rows x 8 columns) at 0x...>
         >>> print(alignment[:, 1:])
-        ACCGG-TTT
-         |-||-||-
-        AC-GGGTT-
+        CCGG-TTT
+        |-||-||-
+        C-GGGTT-
         <BLANKLINE>
         >>> print(alignment[:, 2:])
-        ACCGG-TTT
-          -||-||-
-        AC-GGGTT-
+        CGG-TTT
+        -||-||-
+        -GGGTT-
         <BLANKLINE>
         >>> print(alignment[:, 3:])
-        ACCGG-TTT
-           ||-||-
-         ACGGGTT-
+        GG-TTT
+        ||-||-
+        GGGTT-
         <BLANKLINE>
         >>> print(alignment[:, 3:-1])
-        ACCGG-TTT
-           ||-||
-         ACGGGTT
+        GG-TT
+        ||-||
+        GGGTT
         <BLANKLINE>
         >>> print(alignment[:, ::2])
         ACGTT
@@ -1853,11 +1853,6 @@ class Alignment:
             seq2 = reverse_complement(seq2, inplace=False)
         coordinates = coordinates.transpose()
         end1, end2 = coordinates[0, :]
-        if end1 > 0 or end2 > 0:
-            end = max(end1, end2)
-            aligned_seq1 += " " * (end - end1) + seq1[:end1]
-            aligned_seq2 += " " * (end - end2) + seq2[:end2]
-            pattern += " " * end
         start1 = end1
         start2 = end2
         for end1, end2 in coordinates[1:]:
@@ -1885,8 +1880,6 @@ class Alignment:
                         pattern += "."
             start1 = end1
             start2 = end2
-        aligned_seq1 += seq1[end1:]
-        aligned_seq2 += seq2[end2:]
         return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
 
     def _format_generalized(self):
@@ -2053,9 +2046,9 @@ class Alignment:
         >>> alignments = aligner.align("GACCTG", "CGATCG")
         >>> alignment = alignments[0]
         >>> print(alignment)
-         GACCT-G
-         ||--|-|
-        CGA--TCG
+        GACCT-G
+        ||--|-|
+        GA--TCG
         <BLANKLINE>
         >>> len(alignment)
         2
@@ -2193,18 +2186,18 @@ class Alignment:
         >>> alignments = aligner.align("GAACTGG", "AATG")
         >>> alignment = alignments[0]
         >>> print(alignment)
-        GAACTGG
-         ||-||
-         AA-TG
+        AACTG
+        ||-||
+        AA-TG
         <BLANKLINE>
         >>> alignment.indices
         array([[ 1,  2,  3,  4,  5],
                [ 0,  1, -1,  2,  3]])
         >>> alignment = alignments[1]
         >>> print(alignment)
-        GAACTGG
-         ||-|-|
-         AA-T-G
+        AACTGG
+        ||-|-|
+        AA-T-G
         <BLANKLINE>
         >>> alignment.indices
         array([[ 1,  2,  3,  4,  5,  6],
@@ -2213,18 +2206,18 @@ class Alignment:
         >>> alignments = aligner.align("GAACTGG", "CATT", strand="-")
         >>> alignment = alignments[0]
         >>> print(alignment)
-        GAACTGG
-         ||-||
-         AA-TG
+        AACTG
+        ||-||
+        AA-TG
         <BLANKLINE>
         >>> alignment.indices
         array([[ 1,  2,  3,  4,  5],
                [ 3,  2, -1,  1,  0]])
         >>> alignment = alignments[1]
         >>> print(alignment)
-        GAACTGG
-         ||-|-|
-         AA-T-G
+        AACTGG
+        ||-|-|
+        AA-T-G
         <BLANKLINE>
         >>> alignment.indices
         array([[ 1,  2,  3,  4,  5,  6],
@@ -2268,34 +2261,34 @@ class Alignment:
         >>> alignments = aligner.align("GAACTGG", "AATG")
         >>> alignment = alignments[0]
         >>> print(alignment)
-        GAACTGG
-         ||-||
-         AA-TG
+        AACTG
+        ||-||
+        AA-TG
         <BLANKLINE>
         >>> alignment.inverse_indices
         [array([-1,  0,  1,  2,  3,  4, -1]), array([0, 1, 3, 4])]
         >>> alignment = alignments[1]
         >>> print(alignment)
-        GAACTGG
-         ||-|-|
-         AA-T-G
+        AACTGG
+        ||-|-|
+        AA-T-G
         <BLANKLINE>
         >>> alignment.inverse_indices
         [array([-1,  0,  1,  2,  3,  4,  5]), array([0, 1, 3, 5])]
         >>> alignments = aligner.align("GAACTGG", "CATT", strand="-")
         >>> alignment = alignments[0]
         >>> print(alignment)
-        GAACTGG
-         ||-||
-         AA-TG
+        AACTG
+        ||-||
+        AA-TG
         <BLANKLINE>
         >>> alignment.inverse_indices
         [array([-1,  0,  1,  2,  3,  4, -1]), array([4, 3, 1, 0])]
         >>> alignment = alignments[1]
         >>> print(alignment)
-        GAACTGG
-         ||-|-|
-         AA-T-G
+        AACTGG
+        ||-|-|
+        AA-T-G
         <BLANKLINE>
         >>> alignment.inverse_indices
         [array([-1,  0,  1,  2,  3,  4,  5]), array([5, 3, 1, 0])]
@@ -2404,9 +2397,9 @@ class Alignment:
         1
         >>> alignment1 = alignments1[0]
         >>> print(alignment1)
-        AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA
-                |||||||-----------||||||
-                CCCCCCC-----------GGGGGG
+        CCCCCCCAAAAAAAAAAAGGGGGG
+        |||||||-----------||||||
+        CCCCCCC-----------GGGGGG
         <BLANKLINE>
         >>> sequence = "CCCCGGGG"
         >>> alignments2 = aligner.align(transcript, sequence)
@@ -2414,15 +2407,15 @@ class Alignment:
         1
         >>> alignment2 = alignments2[0]
         >>> print(alignment2)
-        CCCCCCCGGGGGG
-           ||||||||
-           CCCCGGGG
+        CCCCGGGG
+        ||||||||
+        CCCCGGGG
         <BLANKLINE>
         >>> alignment = alignment1.map(alignment2)
         >>> print(alignment)
-        AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA
-                   ||||-----------||||
-                   CCCC-----------GGGG
+        CCCCAAAAAAAAAAAGGGG
+        ||||-----------||||
+        CCCC-----------GGGG
         <BLANKLINE>
         >>> format(alignment, "psl")
         '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
@@ -2765,14 +2758,14 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     ...     print(alignment)
     ...
     Score = 3.0:
-    TACCG
-     |-||
-     A-CG
+    ACCG
+    |-||
+    A-CG
     <BLANKLINE>
     Score = 3.0:
-    TACCG
-     ||-|
-     AC-G
+    ACCG
+    ||-|
+    AC-G
     <BLANKLINE>
 
     Do a global alignment.  Identical characters are given 2 points,

@@ -380,9 +380,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
- AwBw
- |-|
-zA-Bz
+AwB
+|-|
+A-B
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -429,9 +429,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
- AwBw
- |-|
-zA-Bz
+AwB
+|-|
+A-B
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1571,7 +1571,7 @@ Pairwise sequence aligner with parameters
             """\
 GAT
 |-|
-G-TCT
+G-T
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1589,7 +1589,7 @@ G-TCT
             """\
 GAT
 |-|
-G-TCT
+G-T
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1792,7 +1792,7 @@ $""",
         self.assertEqual(
             str(alignment),
             """\
-ATAT
+ATA
 ||.
 ATT
 """,
@@ -1824,7 +1824,7 @@ AT-T
         self.assertEqual(
             str(alignment),
             """\
-ATAT
+ATA
 ||.
 ATT
 """,
@@ -1894,7 +1894,7 @@ $""",
         self.assertEqual(
             str(alignment),
             """\
-ATAT
+ATA
 ||.
 ATT
 """,
@@ -1910,7 +1910,7 @@ ATT
         self.assertEqual(
             str(alignment),
             """\
-ATAT
+ATA
 ||.
 ATT
 """,
@@ -1966,7 +1966,7 @@ $""",
             """\
 ATT
 ||.
-ATAT
+ATA
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1982,7 +1982,7 @@ ATAT
             """\
 ATT
 ||.
-ATAT
+ATA
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -2037,7 +2037,7 @@ $""",
         self.assertEqual(
             str(alignment),
             """\
-ATAT
+ATA
 ||.
 ATT
 """,
@@ -2069,7 +2069,7 @@ AT-T
         self.assertEqual(
             str(alignment),
             """\
-ATAT
+ATA
 ||.
 ATT
 """,
@@ -2141,7 +2141,7 @@ $""",
         self.assertEqual(
             str(alignment),
             """\
-ATAT
+ATA
 ||.
 ATT
 """,
@@ -2157,7 +2157,7 @@ ATT
         self.assertEqual(
             str(alignment),
             """\
-ATAT
+ATA
 ||.
 ATT
 """,
@@ -2215,7 +2215,7 @@ $""",
             """\
 ATT
 ||.
-ATAT
+ATA
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -2231,7 +2231,7 @@ ATAT
             """\
 ATT
 ||.
-ATAT
+ATA
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -2278,9 +2278,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-abcde
-  |
-  c
+c
+|
+c
 """,
         )
         self.assertEqual(alignment.shape, (2, 1))
@@ -2325,9 +2325,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-abcce
-  |
-  c
+c
+|
+c
 """,
         )
         self.assertEqual(alignment.shape, (2, 1))
@@ -2339,9 +2339,9 @@ abcce
         self.assertEqual(
             str(alignment),
             """\
-abcce
-   |
-   c
+c
+|
+c
 """,
         )
         self.assertEqual(alignment.shape, (2, 1))
@@ -2906,9 +2906,9 @@ TTG--GAA
         self.assertEqual(
             str(alignment),
             """\
-AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-  |||||||||||||
-  AABBBAAAACCCCAAAABBBAA
+AABBBAAAACCCC
+|||||||||||||
+AABBBAAAACCCC
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -2920,9 +2920,9 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         self.assertEqual(
             str(alignment),
             """\
-AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-                     |||||||||||||
-            AABBBAAAACCCCAAAABBBAA
+CCCCAAAABBBAA
+|||||||||||||
+CCCCAAAABBBAA
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -2936,9 +2936,9 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         self.assertEqual(
             str(alignment),
             """\
-AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-  |||||||||||||
-  AABBBAAAACCCCAAAABBBAA
+AABBBAAAACCCC
+|||||||||||||
+AABBBAAAACCCC
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -2950,9 +2950,9 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         self.assertEqual(
             str(alignment),
             """\
-AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-                     |||||||||||||
-            AABBBAAAACCCCAAAABBBAA
+CCCCAAAABBBAA
+|||||||||||||
+CCCCAAAABBBAA
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -3012,9 +3012,9 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         self.assertEqual(
             str(alignment),
             """\
-AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-  |||||||||||||
-  AABBBAAAACCCCAAAABBBAA
+AABBBAAAACCCC
+|||||||||||||
+AABBBAAAACCCC
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -3026,9 +3026,9 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         self.assertEqual(
             str(alignment),
             """\
-AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-                     |||||||||||||
-            AABBBAAAACCCCAAAABBBAA
+CCCCAAAABBBAA
+|||||||||||||
+CCCCAAAABBBAA
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -3042,9 +3042,9 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         self.assertEqual(
             str(alignment),
             """\
-AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-  |||||||||||||
-  AABBBAAAACCCCAAAABBBAA
+AABBBAAAACCCC
+|||||||||||||
+AABBBAAAACCCC
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -3056,9 +3056,9 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         self.assertEqual(
             str(alignment),
             """\
-AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-                     |||||||||||||
-            AABBBAAAACCCCAAAABBBAA
+CCCCAAAABBBAA
+|||||||||||||
+CCCCAAAABBBAA
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -3113,9 +3113,9 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         self.assertEqual(
             str(alignment),
             """\
-TTCCAA
+TT
 ||
-TTGGAA
+TT
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3127,9 +3127,9 @@ TTGGAA
         self.assertEqual(
             str(alignment),
             """\
-TTCCAA
-    ||
-TTGGAA
+AA
+||
+AA
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3143,9 +3143,9 @@ TTGGAA
         self.assertEqual(
             str(alignment),
             """\
-TTCCAA
+TT
 ||
-TTGGAA
+TT
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3157,9 +3157,9 @@ TTGGAA
         self.assertEqual(
             str(alignment),
             """\
-TTCCAA
-    ||
-TTGGAA
+AA
+||
+AA
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3189,9 +3189,9 @@ TTGGAA
         self.assertEqual(
             str(alignment),
             """\
-TTCCAA
+TT
 ||
-TTGGAA
+TT
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3203,9 +3203,9 @@ TTGGAA
         self.assertEqual(
             str(alignment),
             """\
-TTCCAA
-    ||
-TTGGAA
+AA
+||
+AA
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3219,9 +3219,9 @@ TTGGAA
         self.assertEqual(
             str(alignment),
             """\
-TTCCAA
+TT
 ||
-TTGGAA
+TT
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3233,9 +3233,9 @@ TTGGAA
         self.assertEqual(
             str(alignment),
             """\
-TTCCAA
-    ||
-TTGGAA
+AA
+||
+AA
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3802,9 +3802,9 @@ class TestUnicodeStrings(unittest.TestCase):
         self.assertEqual(
             str(alignment),
             """\
- ℵℷℶℷ
- |-|
-ℸℵ-ℶℸ
+ℵℷℶ
+|-|
+ℵ-ℶ
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -3830,9 +3830,9 @@ class TestUnicodeStrings(unittest.TestCase):
         self.assertEqual(
             str(alignment),
             """\
- 生物科物
- |-|
-学生-科学
+生物科
+|-|
+生-科
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -4355,9 +4355,9 @@ query	16	target	1	255	13M4D	*	0	0	ACGTAGCATCAGC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-TTTTTNACGCTCGAGCAGCTACG
-      |||.||||||.||||||
-      ACGATCGAGCNGCTACGCCCNC
+ACGCTCGAGCAGCTACG
+|||.||||||.||||||
+ACGATCGAGCNGCTACG
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
@@ -4385,9 +4385,9 @@ query	0	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-TTTTTNACGCTCGAGCAGCTACG
-      |||.||||||.||||||
-      ACGATCGAGCNGCTACGCCCNC
+ACGCTCGAGCAGCTACG
+|||.||||||.||||||
+ACGATCGAGCNGCTACG
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
@@ -4416,9 +4416,9 @@ query	16	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-TTTTTNACGCTCGAGCAGCTACG
-      |||.||||||.||||||
-      ACGATCGAGCNGCTACGCCCNC
+ACGCTCGAGCAGCTACG
+|||.||||||.||||||
+ACGATCGAGCNGCTACG
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
@@ -4448,9 +4448,9 @@ query	0	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-TTTTTNACGCTCGAGCAGCTACG
-      |||.||||||.||||||
-      ACGATCGAGCNGCTACGCCCNC
+ACGCTCGAGCAGCTACG
+|||.||||||.||||||
+ACGATCGAGCNGCTACG
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
