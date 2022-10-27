@@ -1780,7 +1780,7 @@ class Alignment:
     def __format__(self, format_spec):
         """Return the alignment as a string in the specified file format.
 
-        Wrapper for self.format() .
+        Wrapper for self.format().
         """
         return self.format(format_spec)
 
@@ -1828,29 +1828,38 @@ class Alignment:
     def _format_pretty(self):
         """Return default string representation (PRIVATE).
 
-        Helper for self.format() .
+        Helper for self.format().
         """
-        target, query = self.sequences
-        seq1 = self._convert_sequence_string(target)
-        if seq1 is None:
-            return self._format_generalized()
-        seq2 = self._convert_sequence_string(query)
-        if seq2 is None:
-            return self._format_generalized()
-        n1 = len(seq1)
-        n2 = len(seq2)
-        aligned_seq1 = ""
-        aligned_seq2 = ""
+        seqs = []
+        aligned_seqs = []
+        names = []
+        coordinates = self.coordinates.copy()
+        for seq, row in zip(self.sequences, coordinates):
+            seq = self._convert_sequence_string(seq)
+            if seq is None:
+                return self._format_generalized()
+            if row[0] > row[-1]:  # mapped to reverse strand
+                row[:] = len(seq) - row[:]
+                seq = reverse_complement(seq, inplace=False)
+            seqs.append(seq)
+            aligned_seqs.append("")
+            try:
+                name = seq.id
+            except AttributeError:
+                if len(self.sequences) == 2:
+                    if len(names) == 0:
+                        name = "target"
+                    else:
+                        name = "query"
+                else:
+                    name = ""
+            else:
+                name = name[:9]
+            name = name.ljust(10)
+            names.append(name)
+        seq1, seq2 = seqs
+        aligned_seq1, aligned_seq2 = aligned_seqs
         pattern = ""
-        coordinates = self.coordinates
-        if coordinates[0, 0] > coordinates[0, -1]:  # mapped to reverse strand
-            coordinates = coordinates.copy()
-            coordinates[0, :] = n1 - coordinates[0, :]
-            seq1 = reverse_complement(seq1, inplace=False)
-        if coordinates[1, 0] > coordinates[1, -1]:  # mapped to reverse strand
-            coordinates = coordinates.copy()
-            coordinates[1, :] = n2 - coordinates[1, :]
-            seq2 = reverse_complement(seq2, inplace=False)
         coordinates = coordinates.transpose()
         end1, end2 = coordinates[0, :]
         start1 = end1
@@ -1885,7 +1894,7 @@ class Alignment:
     def _format_generalized(self):
         """Return generalized string representation (PRIVATE).
 
-        Helper for self._format_pretty() .
+        Helper for self._format_pretty().
         """
         seq1, seq2 = self.sequences
         aligned_seq1 = []
