@@ -123,8 +123,18 @@ class IOTests(unittest.TestCase):
             self.assertEqual(distances[entry], 0)
 
     def test_newick_whitespace_after_continuation_line(self):
-        self.assertRaises(Phylo.NewickIO.NewickError, Phylo.read, StringIO("((:\n1\n,\n B:-2):-5,(C:3,D:4):-2);"), "newick")
-        self.assertRaises(Phylo.NewickIO.NewickError, Phylo.read, StringIO("((:\n1\n ,\nB:-2):-5,(C:3,D:4):-2);"), "newick")
+        self.assertRaises(
+            Phylo.NewickIO.NewickError,
+            Phylo.read,
+            StringIO("((:\n1\n,\n B:-2):-5,(C:3,D:4):-2);"),
+            "newick",
+        )
+        self.assertRaises(
+            Phylo.NewickIO.NewickError,
+            Phylo.read,
+            StringIO("((:\n1\n ,\nB:-2):-5,(C:3,D:4):-2);"),
+            "newick",
+        )
 
     def test_format_branch_length(self):
         """Custom format string for Newick branch length serialization."""
