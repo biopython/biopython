@@ -1835,6 +1835,71 @@ class Alignment:
         names = []
         coordinates = self.coordinates.copy()
         for seq, row in zip(self.sequences, coordinates):
+            try:
+                ok = seq.isascii()
+            except AttributeError:  # Seq or SeqRecord
+                pass
+            else:
+                if not ok:
+                    return self._format_unicode()
+            seq = self._convert_sequence_string(seq)
+            if seq is None:
+                return self._format_generalized()
+            if row[0] > row[-1]:  # mapped to reverse strand
+                row[:] = len(seq) - row[:]
+                seq = reverse_complement(seq, inplace=False)
+            seqs.append(seq)
+            aligned_seqs.append("")
+            try:
+                name = seq.id
+            except AttributeError:
+                if len(self.sequences) == 2:
+                    if len(names) == 0:
+                        name = "target"
+                    else:
+                        name = "query"
+                else:
+                    name = ""
+            else:
+                name = name[:9]
+            name = name.ljust(10)
+            names.append(name)
+        steps = numpy.diff(coordinates, 1).max(0)
+        aligned_seqs = []
+        for row, seq in zip(coordinates, seqs):
+            aligned_seq = ""
+            start = row[0]
+            for step, end in zip(steps, row[1:]):
+                if end == start:
+                    aligned_seq += "-" * step
+                else:
+                    aligned_seq += seq[start:end]
+                start = end
+            aligned_seqs.append(aligned_seq)
+        if len(seqs) > 2:
+            return "\n".join(aligned_seqs) + "\n"
+        aligned_seq1, aligned_seq2 = aligned_seqs
+        pattern = ""
+        for c1, c2 in zip(aligned_seq1, aligned_seq2):
+            if c1 == c2:
+                c = "|"
+            elif c1 == "-" or c2 == "-":
+                c = "-"
+            else:
+                c = "."
+            pattern += c
+        return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
+
+    def _format_unicode(self):
+        """Return default string representation (PRIVATE).
+
+        Helper for self.format().
+        """
+        seqs = []
+        aligned_seqs = []
+        names = []
+        coordinates = self.coordinates.copy()
+        for seq, row in zip(self.sequences, coordinates):
             seq = self._convert_sequence_string(seq)
             if seq is None:
                 return self._format_generalized()
