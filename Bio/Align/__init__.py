@@ -1857,38 +1857,30 @@ class Alignment:
                 name = name[:9]
             name = name.ljust(10)
             names.append(name)
-        seq1, seq2 = seqs
+        steps = numpy.diff(coordinates, 1).max(0)
+        aligned_seqs = []
+        for row, seq in zip(coordinates, seqs):
+            aligned_seq = ""
+            start = row[0]
+            for step, end in zip(steps, row[1:]):
+                if end == start:
+                    aligned_seq += "-" * step
+                else:
+                    aligned_seq += seq[start:end]
+                start = end
+            aligned_seqs.append(aligned_seq)
+        if len(seqs) > 2:
+            return "\n".join(aligned_seqs) + "\n"
         aligned_seq1, aligned_seq2 = aligned_seqs
         pattern = ""
-        coordinates = coordinates.transpose()
-        end1, end2 = coordinates[0, :]
-        start1 = end1
-        start2 = end2
-        for end1, end2 in coordinates[1:]:
-            if end1 == start1:
-                gap = end2 - start2
-                aligned_seq1 += "-" * gap
-                aligned_seq2 += seq2[start2:end2]
-                pattern += "-" * gap
-            elif end2 == start2:
-                gap = end1 - start1
-                aligned_seq1 += seq1[start1:end1]
-                aligned_seq2 += "-" * gap
-                pattern += "-" * gap
+        for c1, c2 in zip(aligned_seq1, aligned_seq2):
+            if c1 == c2:
+                c = "|"
+            elif c1 == "-" or c2 == "-":
+                c = "-"
             else:
-                s1 = seq1[start1:end1]
-                s2 = seq2[start2:end2]
-                if len(s1) != len(s2):
-                    raise ValueError("Unequal step sizes in alignment")
-                aligned_seq1 += s1
-                aligned_seq2 += s2
-                for c1, c2 in zip(s1, s2):
-                    if c1 == c2:
-                        pattern += "|"
-                    else:
-                        pattern += "."
-            start1 = end1
-            start2 = end2
+                c = "."
+            pattern += c
         return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
 
     def _format_generalized(self):
