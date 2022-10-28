@@ -1836,18 +1836,21 @@ class Alignment:
         coordinates = self.coordinates.copy()
         for seq, row in zip(self.sequences, coordinates):
             try:
-                ok = seq.isascii()
-            except AttributeError:  # Seq or SeqRecord
+                seq = seq.seq  # SeqRecord confusion
+            except AttributeError:
                 pass
-            else:
-                if not ok:
-                    return self._format_unicode()
-            seq = self._convert_sequence_string(seq)
-            if seq is None:
-                return self._format_generalized()
             if row[0] > row[-1]:  # mapped to reverse strand
                 row[:] = len(seq) - row[:]
                 seq = reverse_complement(seq, inplace=False)
+            if isinstance(seq, str):
+                try:
+                    seq = bytes(seq, "ASCII")
+                except UnicodeEncodeError:
+                    return self._format_unicode()
+            elif isinstance(seq, (Seq, MutableSeq)):
+                seq = bytes(seq)
+            else:
+                return self._format_generalized()
             seqs.append(seq)
             aligned_seqs.append("")
             try:
@@ -1865,30 +1868,32 @@ class Alignment:
             name = name.ljust(10)
             names.append(name)
         steps = numpy.diff(coordinates, 1).max(0)
-        aligned_seqs = []
-        for row, seq in zip(coordinates, seqs):
-            aligned_seq = ""
+        width = sum(steps)
+        lines = [bytearray(width) for i in range(len(seqs))]
+        for row, seq, line in zip(coordinates, seqs, lines):
             start = row[0]
+            position = 0
             for step, end in zip(steps, row[1:]):
                 if end == start:
-                    aligned_seq += "-" * step
+                    line[position : position + step] = b"-" * step
                 else:
-                    aligned_seq += seq[start:end]
+                    line[position : position + step] = seq[start:end]
                 start = end
-            aligned_seqs.append(aligned_seq)
+                position += step
         if len(seqs) > 2:
-            return "\n".join(aligned_seqs) + "\n"
-        aligned_seq1, aligned_seq2 = aligned_seqs
+            return b"\n".join(lines).decode() + "\n"
+        aligned_seq1, aligned_seq2 = lines
         pattern = ""
+        dash = ord("-")
         for c1, c2 in zip(aligned_seq1, aligned_seq2):
             if c1 == c2:
                 c = "|"
-            elif c1 == "-" or c2 == "-":
+            elif c1 == dash or c2 == dash:
                 c = "-"
             else:
                 c = "."
             pattern += c
-        return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
+        return f"{aligned_seq1.decode()}\n{pattern}\n{aligned_seq2.decode()}\n"
 
     def _format_unicode(self):
         """Return default string representation (PRIVATE).
