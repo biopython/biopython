@@ -1811,10 +1811,6 @@ class Alignment:
                        (default), do not include the MD tag in the output.
         """
         if fmt == "":
-            if len(self.sequences) > 2:
-                raise NotImplementedError(
-                    "printing an alignment is currently implemented for pairwise alignments only"
-                )
             return self._format_pretty()
         module = _load(fmt)
         try:
@@ -1833,6 +1829,7 @@ class Alignment:
         seqs = []
         names = []
         coordinates = self.coordinates.copy()
+        n = len(self.sequences)
         for seq, row in zip(self.sequences, coordinates):
             try:
                 seq = seq.seq  # SeqRecord confusion
@@ -1854,7 +1851,7 @@ class Alignment:
             try:
                 name = seq.id
             except AttributeError:
-                if len(self.sequences) == 2:
+                if n == 2:
                     if len(names) == 0:
                         name = "target"
                     else:
@@ -1869,8 +1866,8 @@ class Alignment:
         length = sum(steps)
         width = 60
         div, mod = divmod(length, width)
-        aligned_seqs = [bytearray(width) for i in range(div * len(seqs))] + [
-            bytearray(mod) for i in range(len(seqs))
+        aligned_seqs = [bytearray(width) for i in range(div * n)] + [
+            bytearray(mod) for i in range(n)
         ]
         for index, (row, seq) in enumerate(zip(coordinates, seqs)):
             start = row[0]
@@ -1883,7 +1880,7 @@ class Alignment:
                     s = seq[start:end]
                 while column + step > width:
                     aligned_seq[column:width] = s[: width - column]
-                    index += len(seqs)
+                    index += n
                     aligned_seq = aligned_seqs[index]
                     s = s[width - column :]
                     step -= width - column
@@ -1893,32 +1890,30 @@ class Alignment:
                     column += step
                 start = end
         lines = []
-        if len(seqs) == 2:
+        if n == 2:
             dash = ord("-")
             for aligned_seq1, aligned_seq2 in zip(
                 aligned_seqs[::2], aligned_seqs[1::2]
             ):
-                pattern = ""
+                pattern = b""
                 for c1, c2 in zip(aligned_seq1, aligned_seq2):
                     if c1 == c2:
-                        c = "|"
+                        c = b"|"
                     elif c1 == dash or c2 == dash:
-                        c = "-"
+                        c = b"-"
                     else:
-                        c = "."
+                        c = b"."
                     pattern += c
-                lines.append(aligned_seq1.decode())
+                lines.append(aligned_seq1)
                 lines.append(pattern)
-                lines.append(aligned_seq2.decode())
-                lines.append("")
+                lines.append(aligned_seq2)
+                lines.append(b"")
         else:
-            for aligned_seq1, aligned_seq2 in zip(
-                aligned_seqs[::2], aligned_seqs[1::2]
-            ):
-                lines.append(aligned_seq1.decode())
-                lines.append(aligned_seq2.decode())
-                lines.append("")
-        return "\n".join(lines)
+            for i in range(div):
+                for j in range(n):
+                    lines.append(aligned_seqs[i * n + j])
+                lines.append(b"")
+        return b"\n".join(lines).decode()
 
     def _format_unicode(self):
         """Return default string representation (PRIVATE).
@@ -2058,10 +2053,6 @@ class Alignment:
 
         Wrapper for self.format().
         """
-        if len(self.sequences) > 2:
-            raise NotImplementedError(
-                "__str__ is currently implemented for pairwise alignments only"
-            )
         return self.format()
 
     def __repr__(self):
