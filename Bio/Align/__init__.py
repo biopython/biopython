@@ -1620,9 +1620,9 @@ class Alignment:
         >>> alignments = aligner.align("ACCGGTTT", "ACGGGTT")
         >>> alignment = alignments[0]
         >>> print(alignment)
-        ACCGG-TTT
-        ||-||-||-
-        AC-GGGTT-
+        target    ACCGG-TTT
+                  ||-||-||-
+        query     AC-GGGTT-
         <BLANKLINE>
         >>> alignment[0, :]
         'ACCGG-TTT'
@@ -1649,39 +1649,39 @@ class Alignment:
         >>> alignment[:, 1:]  # doctest:+ELLIPSIS
         <Alignment object (2 rows x 8 columns) at 0x...>
         >>> print(alignment[:, 1:])
-        CCGG-TTT
-        |-||-||-
-        C-GGGTT-
+        target    CCGG-TTT
+                  |-||-||-
+        query     C-GGGTT-
         <BLANKLINE>
         >>> print(alignment[:, 2:])
-        CGG-TTT
-        -||-||-
-        -GGGTT-
+        target    CGG-TTT
+                  -||-||-
+        query     -GGGTT-
         <BLANKLINE>
         >>> print(alignment[:, 3:])
-        GG-TTT
-        ||-||-
-        GGGTT-
+        target    GG-TTT
+                  ||-||-
+        query     GGGTT-
         <BLANKLINE>
         >>> print(alignment[:, 3:-1])
-        GG-TT
-        ||-||
-        GGGTT
+        target    GG-TT
+                  ||-||
+        query     GGGTT
         <BLANKLINE>
         >>> print(alignment[:, ::2])
-        ACGTT
-        |-||-
-        A-GT-
+        target    ACGTT
+                  |-||-
+        query     A-GT-
         <BLANKLINE>
         >>> print(alignment[:, range(1, 9, 2)])
-        CG-T
-        ||-|
-        CGGT
+        target    CG-T
+                  ||-|
+        query     CGGT
         <BLANKLINE>
         >>> print(alignment[:, (2, 7, 3)])
-        CTG
-        -||
-        -TG
+        target    CTG
+                  -||
+        query     -TG
         <BLANKLINE>
         """
         if isinstance(key, numbers.Integral):
@@ -1693,8 +1693,11 @@ class Alignment:
         for i, sequence in enumerate(sequences):
             if coordinates[i, 0] > coordinates[i, -1]:  # reverse strand
                 coordinates[i, :] = len(sequence) - coordinates[i, :]
-                sequence = reverse_complement(sequence, inplace=False)
-            sequences[i] = sequence
+                sequences[i] = reverse_complement(sequence, inplace=False)
+                try:
+                    sequences[i].id = sequence.id
+                except AttributeError:
+                    pass
         steps = numpy.diff(coordinates, 1)
         gaps = steps.max(0)
         if not ((steps == gaps) | (steps == 0)).all():
@@ -1832,6 +1835,22 @@ class Alignment:
         n = len(self.sequences)
         for seq, row in zip(self.sequences, coordinates):
             try:
+                name = seq.id
+                if name is None:
+                    raise AttributeError
+            except AttributeError:
+                if n == 2:
+                    if len(names) == 0:
+                        name = "target"
+                    else:
+                        name = "query"
+                else:
+                    name = ""
+            else:
+                name = name[:9]
+            name = name.ljust(10)
+            names.append(name)
+            try:
                 seq = seq.seq  # SeqRecord confusion
             except AttributeError:
                 pass
@@ -1848,20 +1867,6 @@ class Alignment:
             else:
                 return self._format_generalized()
             seqs.append(seq)
-            try:
-                name = seq.id
-            except AttributeError:
-                if n == 2:
-                    if len(names) == 0:
-                        name = "target"
-                    else:
-                        name = "query"
-                else:
-                    name = ""
-            else:
-                name = name[:9]
-            name = name.ljust(10)
-            names.append(name)
         steps = numpy.diff(coordinates, 1).max(0)
         length = sum(steps)
         width = 60
@@ -1892,30 +1897,33 @@ class Alignment:
         lines = []
         if n == 2:
             dash = ord("-")
+            name1, name2 = names
             for aligned_seq1, aligned_seq2 in zip(
                 aligned_seqs[::2], aligned_seqs[1::2]
             ):
-                pattern = b""
+                pattern = ""
                 for c1, c2 in zip(aligned_seq1, aligned_seq2):
                     if c1 == c2:
-                        c = b"|"
+                        c = "|"
                     elif c1 == dash or c2 == dash:
-                        c = b"-"
+                        c = "-"
                     else:
-                        c = b"."
+                        c = "."
                     pattern += c
-                lines.append(aligned_seq1)
-                lines.append(pattern)
-                lines.append(aligned_seq2)
-                lines.append(b"")
+                lines.append(name1 + aligned_seq1.decode())
+                lines.append("          " + pattern)
+                lines.append(name2 + aligned_seq2.decode())
+                lines.append("")
         else:
             for i in range(div):
-                lines.extend(aligned_seqs[i * n : (i + 1) * n])
-                lines.append(b"")
+                for j, name in enumerate(names):
+                    lines.append(name + aligned_seqs[i * n + j].decode())
+                lines.append("")
             if mod > 0:
-                lines.extend(aligned_seqs[div * n :])
-                lines.append(b"")
-        return b"\n".join(lines).decode()
+                for j, name in enumerate(names):
+                    lines.append(name + aligned_seqs[div * n + j].decode())
+                lines.append("")
+        return "\n".join(lines)
 
     def _format_unicode(self):
         """Return default string representation (PRIVATE).
@@ -2076,9 +2084,9 @@ class Alignment:
         ...                                                  [0, 2, 2, 4],
         ...                                                 ]))
         >>> print(alignment)
-        ACCGT
-        ||-||
-        AC-GT
+        target    ACCGT
+                  ||-||
+        query     AC-GT
         <BLANKLINE>
         >>> alignment  # doctest:+ELLIPSIS
         <Alignment object (2 rows x 5 columns) at 0x...>
@@ -2121,9 +2129,9 @@ class Alignment:
         >>> alignments = aligner.align("GACCTG", "CGATCG")
         >>> alignment = alignments[0]
         >>> print(alignment)
-        -GACCT-G
-        -||--|-|
-        CGA--TCG
+        target    -GACCT-G
+                  -||--|-|
+        query     CGA--TCG
         <BLANKLINE>
         >>> len(alignment)
         2
@@ -2133,9 +2141,9 @@ class Alignment:
         >>> alignments = aligner.align("GACCTG", "CGATCG")
         >>> alignment = alignments[0]
         >>> print(alignment)
-        GACCT-G
-        ||--|-|
-        GA--TCG
+        target    GACCT-G
+                  ||--|-|
+        query     GA--TCG
         <BLANKLINE>
         >>> len(alignment)
         2
@@ -2174,9 +2182,9 @@ class Alignment:
         >>> alignments = aligner.align("GAACT", "GAT")
         >>> alignment = alignments[0]
         >>> print(alignment)
-        GAACT
-        ||--|
-        GA--T
+        target    GAACT
+                  ||--|
+        query     GA--T
         <BLANKLINE>
         >>> alignment.aligned
         array([[[0, 2],
@@ -2186,9 +2194,9 @@ class Alignment:
                 [2, 3]]])
         >>> alignment = alignments[1]
         >>> print(alignment)
-        GAACT
-        |-|-|
-        G-A-T
+        target    GAACT
+                  |-|-|
+        query     G-A-T
         <BLANKLINE>
         >>> alignment.aligned
         array([[[0, 1],
@@ -2208,9 +2216,9 @@ class Alignment:
         >>> len(alignments)
         2
         >>> print(alignments[0])
-        AAAC-AAA
-        |||--|||
-        AAA-GAAA
+        target    AAAC-AAA
+                  |||--|||
+        query     AAA-GAAA
         <BLANKLINE>
         >>> alignments[0].aligned
         array([[[0, 3],
@@ -2219,9 +2227,9 @@ class Alignment:
                [[0, 3],
                 [4, 7]]])
         >>> print(alignments[1])
-        AAA-CAAA
-        |||--|||
-        AAAG-AAA
+        target    AAA-CAAA
+                  |||--|||
+        query     AAAG-AAA
         <BLANKLINE>
         >>> alignments[1].aligned
         array([[[0, 3],
@@ -2273,18 +2281,18 @@ class Alignment:
         >>> alignments = aligner.align("GAACTGG", "AATG")
         >>> alignment = alignments[0]
         >>> print(alignment)
-        AACTG
-        ||-||
-        AA-TG
+        target    AACTG
+                  ||-||
+        query     AA-TG
         <BLANKLINE>
         >>> alignment.indices
         array([[ 1,  2,  3,  4,  5],
                [ 0,  1, -1,  2,  3]])
         >>> alignment = alignments[1]
         >>> print(alignment)
-        AACTGG
-        ||-|-|
-        AA-T-G
+        target    AACTGG
+                  ||-|-|
+        query     AA-T-G
         <BLANKLINE>
         >>> alignment.indices
         array([[ 1,  2,  3,  4,  5,  6],
@@ -2293,18 +2301,18 @@ class Alignment:
         >>> alignments = aligner.align("GAACTGG", "CATT", strand="-")
         >>> alignment = alignments[0]
         >>> print(alignment)
-        AACTG
-        ||-||
-        AA-TG
+        target    AACTG
+                  ||-||
+        query     AA-TG
         <BLANKLINE>
         >>> alignment.indices
         array([[ 1,  2,  3,  4,  5],
                [ 3,  2, -1,  1,  0]])
         >>> alignment = alignments[1]
         >>> print(alignment)
-        AACTGG
-        ||-|-|
-        AA-T-G
+        target    AACTGG
+                  ||-|-|
+        query     AA-T-G
         <BLANKLINE>
         >>> alignment.indices
         array([[ 1,  2,  3,  4,  5,  6],
@@ -2348,34 +2356,34 @@ class Alignment:
         >>> alignments = aligner.align("GAACTGG", "AATG")
         >>> alignment = alignments[0]
         >>> print(alignment)
-        AACTG
-        ||-||
-        AA-TG
+        target    AACTG
+                  ||-||
+        query     AA-TG
         <BLANKLINE>
         >>> alignment.inverse_indices
         [array([-1,  0,  1,  2,  3,  4, -1]), array([0, 1, 3, 4])]
         >>> alignment = alignments[1]
         >>> print(alignment)
-        AACTGG
-        ||-|-|
-        AA-T-G
+        target    AACTGG
+                  ||-|-|
+        query     AA-T-G
         <BLANKLINE>
         >>> alignment.inverse_indices
         [array([-1,  0,  1,  2,  3,  4,  5]), array([0, 1, 3, 5])]
         >>> alignments = aligner.align("GAACTGG", "CATT", strand="-")
         >>> alignment = alignments[0]
         >>> print(alignment)
-        AACTG
-        ||-||
-        AA-TG
+        target    AACTG
+                  ||-||
+        query     AA-TG
         <BLANKLINE>
         >>> alignment.inverse_indices
         [array([-1,  0,  1,  2,  3,  4, -1]), array([4, 3, 1, 0])]
         >>> alignment = alignments[1]
         >>> print(alignment)
-        AACTGG
-        ||-|-|
-        AA-T-G
+        target    AACTGG
+                  ||-|-|
+        query     AA-T-G
         <BLANKLINE>
         >>> alignment.inverse_indices
         [array([-1,  0,  1,  2,  3,  4,  5]), array([5, 3, 1, 0])]
@@ -2416,15 +2424,15 @@ class Alignment:
         1
         >>> alignment = alignments[0]
         >>> print(alignment)
-        AATAA
-        ||.||
-        AAGAA
+        target    AATAA
+                  ||.||
+        query     AAGAA
         <BLANKLINE>
         >>> alignment.sort()
         >>> print(alignment)
-        AAGAA
-        ||.||
-        AATAA
+        target    AAGAA
+                  ||.||
+        query     AATAA
         <BLANKLINE>
 
         Alternatively, a key function can be supplied that maps each sequence
@@ -2434,18 +2442,18 @@ class Alignment:
         >>> from Bio.SeqUtils import GC
         >>> alignment.sort(key=GC)
         >>> print(alignment)
-        AATAA
-        ||.||
-        AAGAA
+        target    AATAA
+                  ||.||
+        query     AAGAA
         <BLANKLINE>
 
         You can reverse the sort order by passing `reverse=True`:
 
         >>> alignment.sort(key=GC, reverse=True)
         >>> print(alignment)
-        AAGAA
-        ||.||
-        AATAA
+        target    AAGAA
+                  ||.||
+        query     AATAA
         <BLANKLINE>
 
         The sequences are now sorted by decreasing GC content value.
@@ -2484,9 +2492,9 @@ class Alignment:
         1
         >>> alignment1 = alignments1[0]
         >>> print(alignment1)
-        CCCCCCCAAAAAAAAAAAGGGGGG
-        |||||||-----------||||||
-        CCCCCCC-----------GGGGGG
+        target    CCCCCCCAAAAAAAAAAAGGGGGG
+                  |||||||-----------||||||
+        query     CCCCCCC-----------GGGGGG
         <BLANKLINE>
         >>> sequence = "CCCCGGGG"
         >>> alignments2 = aligner.align(transcript, sequence)
@@ -2494,15 +2502,15 @@ class Alignment:
         1
         >>> alignment2 = alignments2[0]
         >>> print(alignment2)
-        CCCCGGGG
-        ||||||||
-        CCCCGGGG
+        target    CCCCGGGG
+                  ||||||||
+        query     CCCCGGGG
         <BLANKLINE>
         >>> alignment = alignment1.map(alignment2)
         >>> print(alignment)
-        CCCCAAAAAAAAAAAGGGG
-        ||||-----------||||
-        CCCC-----------GGGG
+        target    CCCCAAAAAAAAAAAGGGG
+                  ||||-----------||||
+        query     CCCC-----------GGGG
         <BLANKLINE>
         >>> format(alignment, "psl")
         '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
@@ -2629,17 +2637,17 @@ class Alignment:
         1
         >>> alignment = alignments[0]
         >>> print(alignment)
-        ATACTTACCTGGCAGGGGAGATACCATGATCACGAAGGTGGTTTTCCCAGGGCGAGGCTT
-        |||||||||||.||||||||..|||||||||||..|||||||..|||||||||||||||.
-        ATACTTACCTGACAGGGGAGGCACCATGATCACACAGGTGGTCCTCCCAGGGCGAGGCTC
+        target    ATACTTACCTGGCAGGGGAGATACCATGATCACGAAGGTGGTTTTCCCAGGGCGAGGCTT
+                  |||||||||||.||||||||..|||||||||||..|||||||..|||||||||||||||.
+        query     ATACTTACCTGACAGGGGAGGCACCATGATCACACAGGTGGTCCTCCCAGGGCGAGGCTC
         <BLANKLINE>
-        ATCCATTGCACTCCGGATGTGCTGACCCCTGCGATTTCCCCAAATGTGGGAAACTCGACT
-        .|||||||||||.|||..|.|.||||||||||||||||||||||||||||||||||||||
-        TTCCATTGCACTGCGGGAGGGTTGACCCCTGCGATTTCCCCAAATGTGGGAAACTCGACT
+        target    ATCCATTGCACTCCGGATGTGCTGACCCCTGCGATTTCCCCAAATGTGGGAAACTCGACT
+                  .|||||||||||.|||..|.|.||||||||||||||||||||||||||||||||||||||
+        query     TTCCATTGCACTGCGGGAGGGTTGACCCCTGCGATTTCCCCAAATGTGGGAAACTCGACT
         <BLANKLINE>
-        GCATAATTTGTGGTAGTGGGGGACTGCGTTCGCGCTTTCCCCTG
-        |.||||||||||||||||||||||||||||||||||.|||||.|
-        GTATAATTTGTGGTAGTGGGGGACTGCGTTCGCGCTATCCCCCG
+        target    GCATAATTTGTGGTAGTGGGGGACTGCGTTCGCGCTTTCCCCTG
+                  |.||||||||||||||||||||||||||||||||||.|||||.|
+        query     GTATAATTTGTGGTAGTGGGGGACTGCGTTCGCGCTATCCCCCG
         <BLANKLINE>
         >>> m = alignment.substitutions
         >>> print(m)
@@ -2834,14 +2842,14 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     ...     print(alignment)
     ...
     Score = 3.0:
-    TACCG
-    -|-||
-    -A-CG
+    target    TACCG
+              -|-||
+    query     -A-CG
     <BLANKLINE>
     Score = 3.0:
-    TACCG
-    -||-|
-    -AC-G
+    target    TACCG
+              -||-|
+    query     -AC-G
     <BLANKLINE>
 
     Specify the aligner mode as local to generate local alignments:
@@ -2853,14 +2861,14 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     ...     print(alignment)
     ...
     Score = 3.0:
-    ACCG
-    |-||
-    A-CG
+    target    ACCG
+              |-||
+    query     A-CG
     <BLANKLINE>
     Score = 3.0:
-    ACCG
-    ||-|
-    AC-G
+    target    ACCG
+              ||-|
+    query     AC-G
     <BLANKLINE>
 
     Do a global alignment.  Identical characters are given 2 points,
@@ -2874,14 +2882,14 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     ...     print(alignment)
     ...
     Score = 6.0:
-    TACCG
-    -||-|
-    -AC-G
+    target    TACCG
+              -||-|
+    query     -AC-G
     <BLANKLINE>
     Score = 6.0:
-    TACCG
-    -|-||
-    -A-CG
+    target    TACCG
+              -|-||
+    query     -A-CG
     <BLANKLINE>
 
     Same as above, except now 0.5 points are deducted when opening a
@@ -2896,14 +2904,14 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     ...     print(alignment)
     ...
     Score = 5.5:
-    TACCG
-    -|-||
-    -A-CG
+    target    TACCG
+              -|-||
+    query     -A-CG
     <BLANKLINE>
     Score = 5.5:
-    TACCG
-    -||-|
-    -AC-G
+    target    TACCG
+              -||-|
+    query     -AC-G
     <BLANKLINE>
 
     The alignment function can also use known matrices already included in
@@ -2920,9 +2928,9 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     >>> print("Score = %.1f" % alignment.score)
     Score = 13.0
     >>> print(alignment)
-    KEVLA
-    -|||-
-    -EVL-
+    target    KEVLA
+              -|||-
+    query     -EVL-
     <BLANKLINE>
 
     You can also set the value of attributes directly during construction
@@ -2934,14 +2942,14 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     ...     print(alignment)
     ...
     Score = 6.0:
-    TACCG
-    -||-|
-    -AC-G
+    target    TACCG
+              -||-|
+    query     -AC-G
     <BLANKLINE>
     Score = 6.0:
-    TACCG
-    -|-||
-    -A-CG
+    target    TACCG
+              -|-||
+    query     -A-CG
     <BLANKLINE>
 
     """

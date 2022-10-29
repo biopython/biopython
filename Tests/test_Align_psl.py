@@ -4346,76 +4346,76 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 self.assertEqual(
                     str(protein_alignment),
                     """\
-YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF
-||||||||||||||||||||||||||||||||||||||||||||||||||||
-YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF
+chr13     YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF
+          ||||||||||||||||||||||||||||||||||||||||||||||||||||
+CAG33136. YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF
 """,
                 )
             elif i == 1:
                 self.assertEqual(
                     str(protein_alignment),
                     """\
-QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK
-||||||||||||||||||||||||||||||||||||||||||||
-QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK
+chr13     QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK
+          ||||||||||||||||||||||||||||||||||||||||||||
+CAG33136. QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK
 """,
                 )
             elif i == 2:
                 self.assertEqual(
                     str(protein_alignment),
                     """\
-MEGQRWLPLEANPEVESGSTLKKFLEESVSMSPEERARYLENYD
-||||||||||||||||||||||||||||||||||||||||||||
-MEGQRWLPLEANPEVESGSTLKKFLEESVSMSPEERARYLENYD
+chr13     MEGQRWLPLEANPEVESGSTLKKFLEESVSMSPEERARYLENYD
+          ||||||||||||||||||||||||||||||||||||||||||||
+CAG33136. MEGQRWLPLEANPEVESGSTLKKFLEESVSMSPEERARYLENYD
 """,
                 )
             elif i == 3:
                 self.assertEqual(
                     str(protein_alignment),
                     """\
-DGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA
-|||||||||||||||||||||||||||||||||||||||||||||||
-DGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA
+chr13     DGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA
+          |||||||||||||||||||||||||||||||||||||||||||||||
+CAG33136. DGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA
 """,
                 )
             elif i == 4:
                 self.assertEqual(
                     str(protein_alignment),
                     """\
-APSIDEKVDLHFIALVHVDGHLYEL
-|||||||||||||||||||||||||
-APSIDEKVDLHFIALVHVDGHLYEL
+chr13     APSIDEKVDLHFIALVHVDGHLYEL
+          |||||||||||||||||||||||||
+CAG33136. APSIDEKVDLHFIALVHVDGHLYEL
 """,
                 )
             elif i == 5:
                 self.assertEqual(
                     str(protein_alignment),
                     """\
-AIRVTHETSAHEGQTE
-||||||||||||||||
-AIRVTHETSAHEGQTE
+chr13     AIRVTHETSAHEGQTE
+          ||||||||||||||||
+CAG33136. AIRVTHETSAHEGQTE
 """,
                 )
             elif i == 6:
                 self.assertEqual(
                     str(protein_alignment),
                     """\
-GQEVSPKVYFMKQTIGNSCGTIGLIHAVANNQDK
-||.|...||||||||.|.|||||||||.|||.||
-GQDVTSSVYFMKQTISNACGTIGLIHAIANNKDK
+chr4      GQEVSPKVYFMKQTIGNSCGTIGLIHAVANNQDK
+          ||.|...||||||||.|.|||||||||.|||.||
+CAG33136. GQDVTSSVYFMKQTISNACGTIGLIHAIANNKDK
 """,
                 )
             elif i == 7:
                 self.assertEqual(
                     str(protein_alignment),
                     """\
-QVLSRLGVAGQWRFVDVLGLEEESLGSVPAPACALLLLFPLTDDKVNFHFILFNNVDGHL
-|.|..||....|.||||.|...|.|..||.|.||.|||||.||.||..|||....|||||
-QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHL
+chr4      QVLSRLGVAGQWRFVDVLGLEEESLGSVPAPACALLLLFPLTDDKVNFHFILFNNVDGHL
+          |.|..||....|.||||.|...|.|..||.|.||.|||||.||.||..|||....|||||
+CAG33136. QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHL
 
-YEL
-|||
-YEL
+chr4      YEL
+          |||
+CAG33136. YEL
 """,
                 )
         # Write the protein alignments to a PSL file:
@@ -4756,63 +4756,63 @@ YEL
                 self.assertEqual(
                     str(protein_alignment),
                     """\
-QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEIFRTEEEEKIKSQG
-||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||
-QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQG
+KI537979  QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEIFRTEEEEKIKSQG
+          ||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||
+CAG33136. QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQG
 
-QDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASMSPEERARY
-|||||||||||||||||||||||||||||||||||||||||||||||||.||||||||||
-QDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARY
+KI537979  QDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASMSPEERARY
+          |||||||||||||||||||||||||||||||||||||||||||||||||.||||||||||
+CAG33136. QDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESVSMSPEERARY
 
-LENYDAIRVTHETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETS
-|||||||||||||||||||||||.||||||||||||||||||||||||||||||||||||
-LENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETS
+KI537979  LENYDAIRVTHETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETS
+          |||||||||||||||||||||||.||||||||||||||||||||||||||||||||||||
+CAG33136. LENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETS
 
-DETLLEDAIEVCKKFMERDPDELRFNAIALSAA
-|||||||||||||||||||||||||||||||||
-DETLLEDAIEVCKKFMERDPDELRFNAIALSAA
+KI537979  DETLLEDAIEVCKKFMERDPDELRFNAIALSAA
+          |||||||||||||||||||||||||||||||||
+CAG33136. DETLLEDAIEVCKKFMERDPDELRFNAIALSAA
 """,
                 )
             elif i == 1:
                 self.assertEqual(
                     str(protein_alignment),
                     """\
-MEGQCWLPLEANPEVTNQLLQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK
-||||.|||||||||||||.|||||||||||||||||||||||||||||||||||||||||
-MEGQRWLPLEANPEVTNQFLQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK
+KI538594  MEGQCWLPLEANPEVTNQLLQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK
+          ||||.|||||||||||||.|||||||||||||||||||||||||||||||||||||||||
+CAG33136. MEGQRWLPLEANPEVTNQFLQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK
 
-YEVFRTEEEEKIKSQGQNITSSGYFMRQTISSACGTIGLIHAIANNKDKMHFESGSTLKK
-|||||||||||||||||..|||.|||.||||.||||||||||||||||||||||||||||
-YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKK
+KI538594  YEVFRTEEEEKIKSQGQNITSSGYFMRQTISSACGTIGLIHAIANNKDKMHFESGSTLKK
+          |||||||||||||||||..|||.|||.||||.||||||||||||||||||||||||||||
+CAG33136. YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKK
 
-FLEESASLSPEERAIYLENYDSIRVTHKTSDHEGQTEAQNIDEKVDLHFIALVHVDGHLY
-|||||.|.||||||.||||||.|||||.||.|||||||..||||||||||||||||||||
-FLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLY
+KI538594  FLEESASLSPEERAIYLENYDSIRVTHKTSDHEGQTEAQNIDEKVDLHFIALVHVDGHLY
+          |||||.|.||||||.||||||.|||||.||.|||||||..||||||||||||||||||||
+CAG33136. FLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHLY
 
-ELDGWKPFPINHGETSDATLLRDAIEVFKKFRERDPDERRFNVIALSAA
-||||.||||||||||||.|||.|||||.|||.||||||.|||.||||||
-ELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA
+KI538594  ELDGWKPFPINHGETSDATLLRDAIEVFKKFRERDPDERRFNVIALSAA
+          ||||.||||||||||||.|||.|||||.|||.||||||.|||.||||||
+CAG33136. ELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA
 """,
                 )
             elif i == 2:
                 self.assertEqual(
                     str(protein_alignment),
                     """\
-MESQRWLPLEANPEVTNQFLKQLGLHPNWQCVDVYGMDPELLSMVPRPVCAVLLLFPITE
-||.|||||||||||||||||||||||||||.|||||||||||||||||||||||||||||
-MEGQRWLPLEANPEVTNQFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITE
+KI537194  MESQRWLPLEANPEVTNQFLKQLGLHPNWQCVDVYGMDPELLSMVPRPVCAVLLLFPITE
+          ||.|||||||||||||||||||||||||||.|||||||||||||||||||||||||||||
+CAG33136. MEGQRWLPLEANPEVTNQFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITE
 
-KYEIFRTEEEEKTKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLK
-|||.||||||||.|||||||||||||||||||||||||||||||||||||||||||||||
-KYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLK
+KI537194  KYEIFRTEEEEKTKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLK
+          |||.||||||||.|||||||||||||||||||||||||||||||||||||||||||||||
+CAG33136. KYEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLK
 
-KFLEESASMSPEERARYLENYDAIRVTHETSAHEGQTEAPNIDEKVDLHFIALVHVDGHL
-||||||.|||||||||||||||||||||||||||||||||.|||||||||||||||||||
-KFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHL
+KI537194  KFLEESASMSPEERARYLENYDAIRVTHETSAHEGQTEAPNIDEKVDLHFIALVHVDGHL
+          ||||||.|||||||||||||||||||||||||||||||||.|||||||||||||||||||
+CAG33136. KFLEESVSMSPEERARYLENYDAIRVTHETSAHEGQTEAPSIDEKVDLHFIALVHVDGHL
 
-YELDAIEVCKKFMERDPDELRFNAIALSAA
-||||||||||||||||||||||||||||||
-YELDAIEVCKKFMERDPDELRFNAIALSAA
+KI537194  YELDAIEVCKKFMERDPDELRFNAIALSAA
+          ||||||||||||||||||||||||||||||
+CAG33136. YELDAIEVCKKFMERDPDELRFNAIALSAA
 """,
                 )
         # Write the protein alignments to a PSL file:
