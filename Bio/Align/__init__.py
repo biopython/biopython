@@ -1831,7 +1831,6 @@ class Alignment:
         Helper for self.format().
         """
         seqs = []
-        aligned_seqs = []
         names = []
         coordinates = self.coordinates.copy()
         for seq, row in zip(self.sequences, coordinates):
@@ -1852,7 +1851,6 @@ class Alignment:
             else:
                 return self._format_generalized()
             seqs.append(seq)
-            aligned_seqs.append("")
             try:
                 name = seq.id
             except AttributeError:
@@ -1868,32 +1866,59 @@ class Alignment:
             name = name.ljust(10)
             names.append(name)
         steps = numpy.diff(coordinates, 1).max(0)
-        width = sum(steps)
-        lines = [bytearray(width) for i in range(len(seqs))]
-        for row, seq, line in zip(coordinates, seqs, lines):
+        length = sum(steps)
+        width = 60
+        div, mod = divmod(length, width)
+        aligned_seqs = [bytearray(width) for i in range(div * len(seqs))] + [
+            bytearray(mod) for i in range(len(seqs))
+        ]
+        for index, (row, seq) in enumerate(zip(coordinates, seqs)):
             start = row[0]
-            position = 0
+            column = 0
+            aligned_seq = aligned_seqs[index]
             for step, end in zip(steps, row[1:]):
                 if end == start:
-                    line[position : position + step] = b"-" * step
+                    s = b"-" * step
                 else:
-                    line[position : position + step] = seq[start:end]
+                    s = seq[start:end]
+                while column + step > width:
+                    aligned_seq[column:width] = s[: width - column]
+                    index += len(seqs)
+                    aligned_seq = aligned_seqs[index]
+                    s = s[width - column :]
+                    step -= width - column
+                    column = 0
+                if s:
+                    aligned_seq[column : column + step] = s
+                    column += step
                 start = end
-                position += step
-        if len(seqs) > 2:
-            return b"\n".join(lines).decode() + "\n"
-        aligned_seq1, aligned_seq2 = lines
-        pattern = ""
-        dash = ord("-")
-        for c1, c2 in zip(aligned_seq1, aligned_seq2):
-            if c1 == c2:
-                c = "|"
-            elif c1 == dash or c2 == dash:
-                c = "-"
-            else:
-                c = "."
-            pattern += c
-        return f"{aligned_seq1.decode()}\n{pattern}\n{aligned_seq2.decode()}\n"
+        lines = []
+        if len(seqs) == 2:
+            dash = ord("-")
+            for aligned_seq1, aligned_seq2 in zip(
+                aligned_seqs[::2], aligned_seqs[1::2]
+            ):
+                pattern = ""
+                for c1, c2 in zip(aligned_seq1, aligned_seq2):
+                    if c1 == c2:
+                        c = "|"
+                    elif c1 == dash or c2 == dash:
+                        c = "-"
+                    else:
+                        c = "."
+                    pattern += c
+                lines.append(aligned_seq1.decode())
+                lines.append(pattern)
+                lines.append(aligned_seq2.decode())
+                lines.append("")
+        else:
+            for aligned_seq1, aligned_seq2 in zip(
+                aligned_seqs[::2], aligned_seqs[1::2]
+            ):
+                lines.append(aligned_seq1.decode())
+                lines.append(aligned_seq2.decode())
+                lines.append("")
+        return "\n".join(lines)
 
     def _format_unicode(self):
         """Return default string representation (PRIVATE).
@@ -1901,7 +1926,6 @@ class Alignment:
         Helper for self.format().
         """
         seqs = []
-        aligned_seqs = []
         names = []
         coordinates = self.coordinates.copy()
         for seq, row in zip(self.sequences, coordinates):
@@ -1912,7 +1936,6 @@ class Alignment:
                 row[:] = len(seq) - row[:]
                 seq = reverse_complement(seq, inplace=False)
             seqs.append(seq)
-            aligned_seqs.append("")
             try:
                 name = seq.id
             except AttributeError:
@@ -2613,9 +2636,17 @@ class Alignment:
         1
         >>> alignment = alignments[0]
         >>> print(alignment)
-        ATACTTACCTGGCAGGGGAGATACCATGATCACGAAGGTGGTTTTCCCAGGGCGAGGCTTATCCATTGCACTCCGGATGTGCTGACCCCTGCGATTTCCCCAAATGTGGGAAACTCGACTGCATAATTTGTGGTAGTGGGGGACTGCGTTCGCGCTTTCCCCTG
-        |||||||||||.||||||||..|||||||||||..|||||||..|||||||||||||||..|||||||||||.|||..|.|.|||||||||||||||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||||.|||||.|
-        ATACTTACCTGACAGGGGAGGCACCATGATCACACAGGTGGTCCTCCCAGGGCGAGGCTCTTCCATTGCACTGCGGGAGGGTTGACCCCTGCGATTTCCCCAAATGTGGGAAACTCGACTGTATAATTTGTGGTAGTGGGGGACTGCGTTCGCGCTATCCCCCG
+        ATACTTACCTGGCAGGGGAGATACCATGATCACGAAGGTGGTTTTCCCAGGGCGAGGCTT
+        |||||||||||.||||||||..|||||||||||..|||||||..|||||||||||||||.
+        ATACTTACCTGACAGGGGAGGCACCATGATCACACAGGTGGTCCTCCCAGGGCGAGGCTC
+        <BLANKLINE>
+        ATCCATTGCACTCCGGATGTGCTGACCCCTGCGATTTCCCCAAATGTGGGAAACTCGACT
+        .|||||||||||.|||..|.|.||||||||||||||||||||||||||||||||||||||
+        TTCCATTGCACTGCGGGAGGGTTGACCCCTGCGATTTCCCCAAATGTGGGAAACTCGACT
+        <BLANKLINE>
+        GCATAATTTGTGGTAGTGGGGGACTGCGTTCGCGCTTTCCCCTG
+        |.||||||||||||||||||||||||||||||||||.|||||.|
+        GTATAATTTGTGGTAGTGGGGGACTGCGTTCGCGCTATCCCCCG
         <BLANKLINE>
         >>> m = alignment.substitutions
         >>> print(m)

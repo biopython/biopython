@@ -2631,10 +2631,23 @@ itself:
 \begin{minted}{pycon}
 >>> print(alignment.score)
 72.0
->>> print(alignment)  # doctest: +ELLIPSIS
-MV-LS-PAD--KTN--VK-AA-WGKV-----GAHAGEYGAEALE-RMFLSF----P-TTKTY--FPHF--...
-||-|--|----|----|--|--||||-----|---||--|--|--|--|------|-|------|--|--...
-MVHL-TP--EEK--SAV-TA-LWGKVNVDEVG---GE--A--L-GR--L--LVVYPWT----QRF--FES...
+>>> print(alignment)
+MV-LS-PAD--KTN--VK-AA-WGKV-----GAHAGEYGAEALE-RMFLSF----P-TTK
+||-|--|----|----|--|--||||-----|---||--|--|--|--|------|-|--
+MVHL-TP--EEK--SAV-TA-LWGKVNVDEVG---GE--A--L-GR--L--LVVYPWT--
+<BLANKLINE>
+TY--FPHF----DLSHGS---AQVK-G------HGKKV--A--DA-LTNAVAHV-DDMPN
+----|--|----|||------|-|--|------|||||--|--|--|--|--|--|---|
+--QRF--FESFGDLS---TPDA-V-MGNPKVKAHGKKVLGAFSD-GL--A--H-LD---N
+<BLANKLINE>
+ALS----A-LSD-LHAH--KLR-VDPV-NFK-LLSHC---LLVT--LAAHLPA----EFT
+-|-----|-||--||----||--|||--||--||------|-|---||-|-------|||
+-L-KGTFATLS-ELH--CDKL-HVDP-ENF-RLL---GNVL-V-CVLA-H---HFGKEFT
+<BLANKLINE>
+PA-VH-ASLDKFLAS---VSTV------LTS--KYR-
+|--|--|------|----|--|------|----||--
+P-PV-QA------A-YQKV--VAGVANAL--AHKY-H
+<BLANKLINE>
 \end{minted}
 
 Better alignments are usually obtained by penalizing gaps: higher costs
@@ -2663,10 +2676,18 @@ and a gap extension penalty of 0.5:
 2
 >>> print(alignments[0].score)
 292.5
->>> print(alignments[0])  # doctest: +ELLIPSIS
-MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLS-----HGSAQVKGHGKKV...
-||-|.|..|..|.|.||||--...|.|.|||.|.....|.|...|..|-|||-----.|...||.|||||...
-MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKV...
+>>> print(alignments[0])
+MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLS-----HGS
+||-|.|..|..|.|.||||--...|.|.|||.|.....|.|...|..|-|||-----.|.
+MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGN
+<BLANKLINE>
+AQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAH
+..||.|||||..|.....||.|........||.||..||.|||.||.||...|...||.|
+PKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHH
+<BLANKLINE>
+LPAEFTPAVHASLDKFLASVSTVLTSKYR
+...||||.|.|...|..|.|...|..||.
+FGKEFTPPVQAAYQKVVAGVANALAHKYH
 <BLANKLINE>
 \end{minted}
 
