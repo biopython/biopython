@@ -1910,8 +1910,10 @@ class Alignment:
                 lines.append(b"")
         else:
             for i in range(div):
-                for j in range(n):
-                    lines.append(aligned_seqs[i * n + j])
+                lines.extend(aligned_seqs[i * n : (i + 1) * n])
+                lines.append(b"")
+            if mod > 0:
+                lines.extend(aligned_seqs[div * n :])
                 lines.append(b"")
         return b"\n".join(lines).decode()
 
