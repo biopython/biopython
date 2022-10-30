@@ -2181,8 +2181,8 @@ query             1 GAAC 5
 Alternatively, you can supply a \verb+key+ function to determine the sort order. For example, you can sort the sequences by increasing GC content:
 %cont-doctest
 \begin{minted}{pycon}
->>> from Bio.SeqUtils import GC
->>> local_alignment.sort(key=GC)
+>>> from Bio.SeqUtils import gc_fraction
+>>> local_alignment.sort(key=gc_fraction)
 >>> print(local_alignment)
 target            1 GAAC 5
                   0 ||-| 4
@@ -2190,12 +2190,13 @@ query             0 GA-C 3
 <BLANKLINE>
 \end{minted}
 The \verb+reverse+ argument lets you reverse the sort order to obtain the sequences in decreasing GC content:
+%cont-doctest
 \begin{minted}{pycon}
->>> local_alignment.sort(key=GC, reverse=True)
+>>> local_alignment.sort(key=gc_fraction, reverse=True)
 >>> print(local_alignment)
-target    GA-C
-          ||-|
-query     GAAC
+target            0 GA-C 3
+                  0 ||-| 4
+query             1 GAAC 5
 <BLANKLINE>
 \end{minted}
 
