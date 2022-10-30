@@ -241,9 +241,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    GAACT
-          ||--|
-query     GA--T
+target            0 GAACT 5
+                  0 ||--| 5
+query             0 GA--T 3
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -257,9 +257,9 @@ query     GA--T
         self.assertEqual(
             str(alignment),
             """\
-target    GAACT
-          |-|-|
-query     G-A-T
+target            0 GAACT 5
+                  0 |-|-| 5
+query             0 G-A-T 3
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -276,9 +276,9 @@ query     G-A-T
         self.assertEqual(
             str(alignment),
             """\
-target    GAACT
-          ||--|
-query     GA--T
+target            0 GAACT 5
+                  0 ||--| 5
+query             3 GA--T 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -292,9 +292,9 @@ query     GA--T
         self.assertEqual(
             str(alignment),
             """\
-target    GAACT
-          |-|-|
-query     G-A-T
+target            0 GAACT 5
+                  0 |-|-| 5
+query             3 G-A-T 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -380,9 +380,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    AwB
-          |-|
-query     A-B
+target            0 AwB 3
+                  0 |-| 3
+query             1 A-B 3
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -429,9 +429,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    AwB
-          |-|
-query     A-B
+target            0 AwB 3
+                  0 |-| 3
+query             1 A-B 3
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -462,9 +462,9 @@ class TestUnknownCharacter(unittest.TestCase):
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          ||.|
-query     GA?T
+target            0 GACT 4
+                  0 ||.| 4
+query             0 GA?T 4
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -478,9 +478,9 @@ query     GA?T
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          ||.|
-query     GA?T
+target            0 GACT 4
+                  0 ||.| 4
+query             4 GA?T 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -500,9 +500,9 @@ query     GA?T
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          ||.|
-query     GAXT
+target            0 GACT 4
+                  0 ||.| 4
+query             0 GAXT 4
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -516,9 +516,9 @@ query     GAXT
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          ||.|
-query     GAXT
+target            0 GACT 4
+                  0 ||.| 4
+query             4 GAXT 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -537,9 +537,9 @@ query     GAXT
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          ||.|
-query     GAXT
+target            0 GACT 4
+                  0 ||.| 4
+query             0 GAXT 4
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -553,9 +553,9 @@ query     GAXT
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          ||.|
-query     GAXT
+target            0 GACT 4
+                  0 ||.| 4
+query             4 GAXT 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -580,9 +580,9 @@ query     GAXT
         self.assertEqual(
             str(alignment),
             """\
-target    GA?A-T
-          ||-|-|
-query     GA-A?T
+target            0 GA?A-T 5
+                  0 ||-|-| 6
+query             0 GA-A?T 5
 """,
         )
         self.assertEqual(alignment.shape, (2, 6))
@@ -599,9 +599,9 @@ query     GA-A?T
         self.assertEqual(
             str(alignment),
             """\
-target    GA?A-T
-          ||-|-|
-query     GA-A?T
+target            0 GA?A-T 5
+                  0 ||-|-| 6
+query             5 GA-A?T 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 6))
@@ -625,9 +625,9 @@ query     GA-A?T
         self.assertEqual(
             str(alignment),
             """\
-target    GAXA-T
-          ||-|-|
-query     GA-AXT
+target            0 GAXA-T 5
+                  0 ||-|-| 6
+query             0 GA-AXT 5
 """,
         )
         self.assertEqual(alignment.shape, (2, 6))
@@ -644,9 +644,9 @@ query     GA-AXT
         self.assertEqual(
             str(alignment),
             """\
-target    GAXA-T
-          ||-|-|
-query     GA-AXT
+target            0 GAXA-T 5
+                  0 ||-|-| 6
+query             5 GA-AXT 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 6))
@@ -702,9 +702,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    AA
-          -|
-query     -A
+target            0 AA 2
+                  0 -| 2
+query             0 -A 1
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -716,9 +716,9 @@ query     -A
         self.assertEqual(
             str(alignment),
             """\
-target    AA
-          |-
-query     A-
+target            0 AA 2
+                  0 |- 2
+query             0 A- 1
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -732,9 +732,9 @@ query     A-
         self.assertEqual(
             str(alignment),
             """\
-target    AA
-          -|
-query     -A
+target            0 AA 2
+                  0 -| 2
+query             1 -A 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -746,9 +746,9 @@ query     -A
         self.assertEqual(
             str(alignment),
             """\
-target    AA
-          |-
-query     A-
+target            0 AA 2
+                  0 |- 2
+query             1 A- 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -799,9 +799,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    GAA
-          |-|
-query     G-A
+target            0 GAA 3
+                  0 |-| 3
+query             0 G-A 2
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -815,9 +815,9 @@ query     G-A
         self.assertEqual(
             str(alignment),
             """\
-target    GAA
-          ||-
-query     GA-
+target            0 GAA 3
+                  0 ||- 3
+query             0 GA- 2
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -831,9 +831,9 @@ query     GA-
         self.assertEqual(
             str(alignment),
             """\
-target    GAA
-          |-|
-query     G-A
+target            0 GAA 3
+                  0 |-| 3
+query             2 G-A 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -847,9 +847,9 @@ query     G-A
         self.assertEqual(
             str(alignment),
             """\
-target    GAA
-          ||-
-query     GA-
+target            0 GAA 3
+                  0 ||- 3
+query             2 GA- 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -898,9 +898,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    GAACT
-          ||--|
-query     GA--T
+target            0 GAACT 5
+                  0 ||--| 5
+query             0 GA--T 3
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -916,9 +916,9 @@ query     GA--T
         self.assertEqual(
             str(alignment),
             """\
-target    GAACT
-          ||--|
-query     GA--T
+target            0 GAACT 5
+                  0 ||--| 5
+query             3 GA--T 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -970,9 +970,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    G-CT-
-          |--|-
-query     GA-TA
+target            0 G-CT- 3
+                  0 |--|- 5
+query             0 GA-TA 4
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -986,9 +986,9 @@ query     GA-TA
         self.assertEqual(
             str(alignment),
             """\
-target    GC-T-
-          |--|-
-query     G-ATA
+target            0 GC-T- 3
+                  0 |--|- 5
+query             0 G-ATA 4
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -1004,9 +1004,9 @@ query     G-ATA
         self.assertEqual(
             str(alignment),
             """\
-target    G-CT-
-          |--|-
-query     GA-TA
+target            0 G-CT- 3
+                  0 |--|- 5
+query             4 GA-TA 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -1020,9 +1020,9 @@ query     GA-TA
         self.assertEqual(
             str(alignment),
             """\
-target    GC-T-
-          |--|-
-query     G-ATA
+target            0 GC-T- 3
+                  0 |--|- 5
+query             4 G-ATA 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -1075,9 +1075,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          |--|
-query     G--T
+target            0 GACT 4
+                  0 |--| 4
+query             0 G--T 2
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1093,9 +1093,9 @@ query     G--T
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          |--|
-query     G--T
+target            0 GACT 4
+                  0 |--| 4
+query             2 G--T 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1146,9 +1146,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          -.-|
-query     -G-T
+target            0 GACT 4
+                  0 -.-| 4
+query             0 -G-T 2
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1162,9 +1162,9 @@ query     -G-T
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          |-.-
-query     G-T-
+target            0 GACT 4
+                  0 |-.- 4
+query             0 G-T- 2
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1180,9 +1180,9 @@ query     G-T-
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          -.-|
-query     -G-T
+target            0 GACT 4
+                  0 -.-| 4
+query             2 -G-T 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1196,9 +1196,9 @@ query     -G-T
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          |-.-
-query     G-T-
+target            0 GACT 4
+                  0 |-.- 4
+query             2 G-T- 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1251,9 +1251,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          |--|
-query     G--T
+target            0 GACT 4
+                  0 |--| 4
+query             0 G--T 2
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1269,9 +1269,9 @@ query     G--T
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          |--|
-query     G--T
+target            0 GACT 4
+                  0 |--| 4
+query             2 G--T 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1327,9 +1327,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          --.|
-query     --GT
+target            0 GACT 4
+                  0 --.| 4
+query             0 --GT 2
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1341,9 +1341,9 @@ query     --GT
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          |--|
-query     G--T
+target            0 GACT 4
+                  0 |--| 4
+query             0 G--T 2
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1357,9 +1357,9 @@ query     G--T
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          |.--
-query     GT--
+target            0 GACT 4
+                  0 |.-- 4
+query             0 GT-- 2
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1373,9 +1373,9 @@ query     GT--
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          --.|
-query     --GT
+target            0 GACT 4
+                  0 --.| 4
+query             2 --GT 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1387,9 +1387,9 @@ query     --GT
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          |--|
-query     G--T
+target            0 GACT 4
+                  0 |--| 4
+query             2 G--T 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1403,9 +1403,9 @@ query     G--T
         self.assertEqual(
             str(alignment),
             """\
-target    GACT
-          |.--
-query     GT--
+target            0 GACT 4
+                  0 |.-- 4
+query             2 GT-- 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1464,9 +1464,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    G-AT
-          |-.|
-query     GTCT
+target            0 G-AT 3
+                  0 |-.| 4
+query             0 GTCT 4
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1480,9 +1480,9 @@ query     GTCT
         self.assertEqual(
             str(alignment),
             """\
-target    GA-T
-          |.-|
-query     GTCT
+target            0 GA-T 3
+                  0 |.-| 4
+query             0 GTCT 4
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1498,9 +1498,9 @@ query     GTCT
         self.assertEqual(
             str(alignment),
             """\
-target    G-AT
-          |-.|
-query     GTCT
+target            0 G-AT 3
+                  0 |-.| 4
+query             4 GTCT 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1514,9 +1514,9 @@ query     GTCT
         self.assertEqual(
             str(alignment),
             """\
-target    GA-T
-          |.-|
-query     GTCT
+target            0 GA-T 3
+                  0 |.-| 4
+query             4 GTCT 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1569,9 +1569,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    GAT
-          |-|
-query     G-T
+target            0 GAT 3
+                  0 |-| 3
+query             0 G-T 2
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1587,9 +1587,9 @@ query     G-T
         self.assertEqual(
             str(alignment),
             """\
-target    GAT
-          |-|
-query     G-T
+target            0 GAT 3
+                  0 |-| 3
+query             4 G-T 2
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1648,9 +1648,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    G-AAT
-          |-..|
-query     GTCCT
+target            0 G-AAT 4
+                  0 |-..| 5
+query             0 GTCCT 5
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -1664,9 +1664,9 @@ query     GTCCT
         self.assertEqual(
             str(alignment),
             """\
-target    GA-AT
-          |.-.|
-query     GTCCT
+target            0 GA-AT 4
+                  0 |.-.| 5
+query             0 GTCCT 5
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -1680,9 +1680,9 @@ query     GTCCT
         self.assertEqual(
             str(alignment),
             """\
-target    GAA-T
-          |..-|
-query     GTCCT
+target            0 GAA-T 4
+                  0 |..-| 5
+query             0 GTCCT 5
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -1698,9 +1698,9 @@ query     GTCCT
         self.assertEqual(
             str(alignment),
             """\
-target    G-AAT
-          |-..|
-query     GTCCT
+target            0 G-AAT 4
+                  0 |-..| 5
+query             5 GTCCT 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -1714,9 +1714,9 @@ query     GTCCT
         self.assertEqual(
             str(alignment),
             """\
-target    GA-AT
-          |.-.|
-query     GTCCT
+target            0 GA-AT 4
+                  0 |.-.| 5
+query             5 GTCCT 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -1730,9 +1730,9 @@ query     GTCCT
         self.assertEqual(
             str(alignment),
             """\
-target    GAA-T
-          |..-|
-query     GTCCT
+target            0 GAA-T 4
+                  0 |..-| 5
+query             5 GTCCT 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -1792,9 +1792,9 @@ $""",
         self.assertEqual(
             str(alignment),
             """\
-target    ATA
-          ||.
-query     ATT
+target            0 ATA 3
+                  0 ||. 3
+query             0 ATT 3
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1806,9 +1806,9 @@ query     ATT
         self.assertEqual(
             str(alignment),
             """\
-target    ATAT
-          ||-|
-query     AT-T
+target            0 ATAT 4
+                  0 ||-| 4
+query             0 AT-T 3
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1824,9 +1824,9 @@ query     AT-T
         self.assertEqual(
             str(alignment),
             """\
-target    ATA
-          ||.
-query     ATT
+target            0 ATA 3
+                  0 ||. 3
+query             3 ATT 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1838,9 +1838,9 @@ query     ATT
         self.assertEqual(
             str(alignment),
             """\
-target    ATAT
-          ||-|
-query     AT-T
+target            0 ATAT 4
+                  0 ||-| 4
+query             3 AT-T 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -1894,9 +1894,9 @@ $""",
         self.assertEqual(
             str(alignment),
             """\
-target    ATA
-          ||.
-query     ATT
+target            0 ATA 3
+                  0 ||. 3
+query             0 ATT 3
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1910,9 +1910,9 @@ query     ATT
         self.assertEqual(
             str(alignment),
             """\
-target    ATA
-          ||.
-query     ATT
+target            0 ATA 3
+                  0 ||. 3
+query             3 ATT 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1964,9 +1964,9 @@ $""",
         self.assertEqual(
             str(alignment),
             """\
-target    ATT
-          ||.
-query     ATA
+target            0 ATT 3
+                  0 ||. 3
+query             0 ATA 3
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -1980,9 +1980,9 @@ query     ATA
         self.assertEqual(
             str(alignment),
             """\
-target    ATT
-          ||.
-query     ATA
+target            0 ATT 3
+                  0 ||. 3
+query             4 ATA 1
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -2037,9 +2037,9 @@ $""",
         self.assertEqual(
             str(alignment),
             """\
-target    ATA
-          ||.
-query     ATT
+target            0 ATA 3
+                  0 ||. 3
+query             0 ATT 3
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -2051,9 +2051,9 @@ query     ATT
         self.assertEqual(
             str(alignment),
             """\
-target    ATAT
-          ||-|
-query     AT-T
+target            0 ATAT 4
+                  0 ||-| 4
+query             0 AT-T 3
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -2069,9 +2069,9 @@ query     AT-T
         self.assertEqual(
             str(alignment),
             """\
-target    ATA
-          ||.
-query     ATT
+target            0 ATA 3
+                  0 ||. 3
+query             3 ATT 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -2083,9 +2083,9 @@ query     ATT
         self.assertEqual(
             str(alignment),
             """\
-target    ATAT
-          ||-|
-query     AT-T
+target            0 ATAT 4
+                  0 ||-| 4
+query             3 AT-T 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 4))
@@ -2141,9 +2141,9 @@ $""",
         self.assertEqual(
             str(alignment),
             """\
-target    ATA
-          ||.
-query     ATT
+target            0 ATA 3
+                  0 ||. 3
+query             0 ATT 3
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -2157,9 +2157,9 @@ query     ATT
         self.assertEqual(
             str(alignment),
             """\
-target    ATA
-          ||.
-query     ATT
+target            0 ATA 3
+                  0 ||. 3
+query             3 ATT 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -2213,9 +2213,9 @@ $""",
         self.assertEqual(
             str(alignment),
             """\
-target    ATT
-          ||.
-query     ATA
+target            0 ATT 3
+                  0 ||. 3
+query             0 ATA 3
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -2229,9 +2229,9 @@ query     ATA
         self.assertEqual(
             str(alignment),
             """\
-target    ATT
-          ||.
-query     ATA
+target            0 ATT 3
+                  0 ||. 3
+query             4 ATA 1
 """,
         )
         self.assertEqual(alignment.shape, (2, 3))
@@ -2278,9 +2278,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    c
-          |
-query     c
+target            2 c 3
+                  0 | 1
+query             0 c 1
 """,
         )
         self.assertEqual(alignment.shape, (2, 1))
@@ -2325,9 +2325,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    c
-          |
-query     c
+target            2 c 3
+                  0 | 1
+query             0 c 1
 """,
         )
         self.assertEqual(alignment.shape, (2, 1))
@@ -2339,9 +2339,9 @@ query     c
         self.assertEqual(
             str(alignment),
             """\
-target    c
-          |
-query     c
+target            3 c 4
+                  0 | 1
+query             0 c 1
 """,
         )
         self.assertEqual(alignment.shape, (2, 1))
@@ -2388,9 +2388,9 @@ Pairwise sequence aligner with parameters
         self.assertEqual(
             str(alignment),
             """\
-target    abcde
-          --|--
-query     --c--
+target            0 abcde 5
+                  0 --|-- 5
+query             0 --c-- 1
 """,
         )
         self.assertEqual(alignment.shape, (2, 5))
@@ -2484,9 +2484,9 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         self.assertEqual(
             str(alignment),
             """\
-target    AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-          --|||||||||||----------|||||||||||--
-query     --AABBBAAAACC----------CCAAAABBBAA--
+target            0 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA 36
+                  0 --|||||||||||----------|||||||||||-- 36
+query             0 --AABBBAAAACC----------CCAAAABBBAA-- 22
 """,
         )
         self.assertEqual(alignment.shape, (2, 36))
@@ -2503,9 +2503,9 @@ query     --AABBBAAAACC----------CCAAAABBBAA--
         self.assertEqual(
             str(alignment),
             """\
-target    AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-          --|||||||||||----------|||||||||||--
-query     --AABBBAAAACC----------CCAAAABBBAA--
+target            0 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA 36
+                  0 --|||||||||||----------|||||||||||-- 36
+query            22 --AABBBAAAACC----------CCAAAABBBAA--  0
 """,
         )
         self.assertEqual(alignment.shape, (2, 36))
@@ -2568,9 +2568,9 @@ query     --AABBBAAAACC----------CCAAAABBBAA--
         self.assertEqual(
             str(alignment),
             """\
-target    AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-          --|||----------......|||||||||||||--
-query     --AAB----------BBAAAACCCCAAAABBBAA--
+target            0 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA 36
+                  0 --|||----------......|||||||||||||-- 36
+query             0 --AAB----------BBAAAACCCCAAAABBBAA-- 22
 """,
         )
         self.assertEqual(alignment.shape, (2, 36))
@@ -2584,9 +2584,9 @@ query     --AAB----------BBAAAACCCCAAAABBBAA--
         self.assertEqual(
             str(alignment),
             """\
-target    AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-          ||.------------......|||||||||||||--
-query     AAB------------BBAAAACCCCAAAABBBAA--
+target            0 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA 36
+                  0 ||.------------......|||||||||||||-- 36
+query             0 AAB------------BBAAAACCCCAAAABBBAA-- 22
 """,
         )
         self.assertEqual(alignment.shape, (2, 36))
@@ -2602,9 +2602,9 @@ query     AAB------------BBAAAACCCCAAAABBBAA--
         self.assertEqual(
             str(alignment),
             """\
-target    AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-          --|||||||||||||......------------.||
-query     --AABBBAAAACCCCAAAABB------------BAA
+target            0 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA 36
+                  0 --|||||||||||||......------------.|| 36
+query            22 --AABBBAAAACCCCAAAABB------------BAA  0
 """,
         )
         self.assertEqual(alignment.shape, (2, 36))
@@ -2618,9 +2618,9 @@ query     --AABBBAAAACCCCAAAABB------------BAA
         self.assertEqual(
             str(alignment),
             """\
-target    AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-          --|||||||||||||......----------|||--
-query     --AABBBAAAACCCCAAAABB----------BAA--
+target            0 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA 36
+                  0 --|||||||||||||......----------|||-- 36
+query            22 --AABBBAAAACCCCAAAABB----------BAA--  0
 """,
         )
         self.assertEqual(alignment.shape, (2, 36))
@@ -2677,9 +2677,9 @@ query     --AABBBAAAACCCCAAAABB----------BAA--
         self.assertEqual(
             str(alignment),
             """\
-target    TT-CC-AA
-          ||----||
-query     TTG--GAA
+target            0 TT-CC-AA 6
+                  0 ||----|| 8
+query             0 TTG--GAA 6
 """,
         )
         self.assertEqual(alignment.shape, (2, 8))
@@ -2695,9 +2695,9 @@ query     TTG--GAA
         self.assertEqual(
             str(alignment),
             """\
-target    TT-CC-AA
-          ||----||
-query     TTG--GAA
+target            0 TT-CC-AA 6
+                  0 ||----|| 8
+query             6 TTG--GAA 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 8))
@@ -2729,9 +2729,9 @@ query     TTG--GAA
         self.assertEqual(
             str(alignment),
             """\
-target    TT-CCAA
-          ||-.-||
-query     TTGG-AA
+target            0 TT-CCAA 6
+                  0 ||-.-|| 7
+query             0 TTGG-AA 6
 """,
         )
         self.assertEqual(alignment.shape, (2, 7))
@@ -2746,9 +2746,9 @@ query     TTGG-AA
         self.assertEqual(
             str(alignment),
             """\
-target    TTC--CAA
-          ||----||
-query     TT-GG-AA
+target            0 TTC--CAA 6
+                  0 ||----|| 8
+query             0 TT-GG-AA 6
 """,
         )
         self.assertEqual(alignment.shape, (2, 8))
@@ -2762,9 +2762,9 @@ query     TT-GG-AA
         self.assertEqual(
             str(alignment),
             """\
-target    TTCC-AA
-          ||-.-||
-query     TT-GGAA
+target            0 TTCC-AA 6
+                  0 ||-.-|| 7
+query             0 TT-GGAA 6
 """,
         )
         self.assertEqual(alignment.shape, (2, 7))
@@ -2779,9 +2779,9 @@ query     TT-GGAA
         self.assertEqual(
             str(alignment),
             """\
-target    TT-CC-AA
-          ||----||
-query     TTG--GAA
+target            0 TT-CC-AA 6
+                  0 ||----|| 8
+query             0 TTG--GAA 6
 """,
         )
         self.assertEqual(alignment.shape, (2, 8))
@@ -2797,9 +2797,9 @@ query     TTG--GAA
         self.assertEqual(
             str(alignment),
             """\
-target    TT-CCAA
-          ||-.-||
-query     TTGG-AA
+target            0 TT-CCAA 6
+                  0 ||-.-|| 7
+query             6 TTGG-AA 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 7))
@@ -2814,9 +2814,9 @@ query     TTGG-AA
         self.assertEqual(
             str(alignment),
             """\
-target    TTC--CAA
-          ||----||
-query     TT-GG-AA
+target            0 TTC--CAA 6
+                  0 ||----|| 8
+query             6 TT-GG-AA 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 8))
@@ -2830,9 +2830,9 @@ query     TT-GG-AA
         self.assertEqual(
             str(alignment),
             """\
-target    TTCC-AA
-          ||-.-||
-query     TT-GGAA
+target            0 TTCC-AA 6
+                  0 ||-.-|| 7
+query             6 TT-GGAA 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 7))
@@ -2847,9 +2847,9 @@ query     TT-GGAA
         self.assertEqual(
             str(alignment),
             """\
-target    TT-CC-AA
-          ||----||
-query     TTG--GAA
+target            0 TT-CC-AA 6
+                  0 ||----|| 8
+query             6 TTG--GAA 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 8))
@@ -2906,9 +2906,9 @@ query     TTG--GAA
         self.assertEqual(
             str(alignment),
             """\
-target    AABBBAAAACCCC
-          |||||||||||||
-query     AABBBAAAACCCC
+target            2 AABBBAAAACCCC 15
+                  0 ||||||||||||| 13
+query             0 AABBBAAAACCCC 13
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -2920,9 +2920,9 @@ query     AABBBAAAACCCC
         self.assertEqual(
             str(alignment),
             """\
-target    CCCCAAAABBBAA
-          |||||||||||||
-query     CCCCAAAABBBAA
+target           21 CCCCAAAABBBAA 34
+                  0 ||||||||||||| 13
+query             9 CCCCAAAABBBAA 22
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -2936,9 +2936,9 @@ query     CCCCAAAABBBAA
         self.assertEqual(
             str(alignment),
             """\
-target    AABBBAAAACCCC
-          |||||||||||||
-query     AABBBAAAACCCC
+target            2 AABBBAAAACCCC 15
+                  0 ||||||||||||| 13
+query            22 AABBBAAAACCCC  9
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -2950,9 +2950,9 @@ query     AABBBAAAACCCC
         self.assertEqual(
             str(alignment),
             """\
-target    CCCCAAAABBBAA
-          |||||||||||||
-query     CCCCAAAABBBAA
+target           21 CCCCAAAABBBAA 34
+                  0 ||||||||||||| 13
+query            13 CCCCAAAABBBAA  0
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -3012,9 +3012,9 @@ query     CCCCAAAABBBAA
         self.assertEqual(
             str(alignment),
             """\
-target    AABBBAAAACCCC
-          |||||||||||||
-query     AABBBAAAACCCC
+target            2 AABBBAAAACCCC 15
+                  0 ||||||||||||| 13
+query             0 AABBBAAAACCCC 13
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -3026,9 +3026,9 @@ query     AABBBAAAACCCC
         self.assertEqual(
             str(alignment),
             """\
-target    CCCCAAAABBBAA
-          |||||||||||||
-query     CCCCAAAABBBAA
+target           21 CCCCAAAABBBAA 34
+                  0 ||||||||||||| 13
+query             9 CCCCAAAABBBAA 22
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -3042,9 +3042,9 @@ query     CCCCAAAABBBAA
         self.assertEqual(
             str(alignment),
             """\
-target    AABBBAAAACCCC
-          |||||||||||||
-query     AABBBAAAACCCC
+target            2 AABBBAAAACCCC 15
+                  0 ||||||||||||| 13
+query            22 AABBBAAAACCCC  9
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -3056,9 +3056,9 @@ query     AABBBAAAACCCC
         self.assertEqual(
             str(alignment),
             """\
-target    CCCCAAAABBBAA
-          |||||||||||||
-query     CCCCAAAABBBAA
+target           21 CCCCAAAABBBAA 34
+                  0 ||||||||||||| 13
+query            13 CCCCAAAABBBAA  0
 """,
         )
         self.assertEqual(alignment.shape, (2, 13))
@@ -3113,9 +3113,9 @@ query     CCCCAAAABBBAA
         self.assertEqual(
             str(alignment),
             """\
-target    TT
-          ||
-query     TT
+target            0 TT 2
+                  0 || 2
+query             0 TT 2
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3127,9 +3127,9 @@ query     TT
         self.assertEqual(
             str(alignment),
             """\
-target    AA
-          ||
-query     AA
+target            4 AA 6
+                  0 || 2
+query             4 AA 6
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3143,9 +3143,9 @@ query     AA
         self.assertEqual(
             str(alignment),
             """\
-target    TT
-          ||
-query     TT
+target            0 TT 2
+                  0 || 2
+query             6 TT 4
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3157,9 +3157,9 @@ query     TT
         self.assertEqual(
             str(alignment),
             """\
-target    AA
-          ||
-query     AA
+target            4 AA 6
+                  0 || 2
+query             2 AA 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3189,9 +3189,9 @@ query     AA
         self.assertEqual(
             str(alignment),
             """\
-target    TT
-          ||
-query     TT
+target            0 TT 2
+                  0 || 2
+query             0 TT 2
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3203,9 +3203,9 @@ query     TT
         self.assertEqual(
             str(alignment),
             """\
-target    AA
-          ||
-query     AA
+target            4 AA 6
+                  0 || 2
+query             4 AA 6
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3219,9 +3219,9 @@ query     AA
         self.assertEqual(
             str(alignment),
             """\
-target    TT
-          ||
-query     TT
+target            0 TT 2
+                  0 || 2
+query             6 TT 4
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3233,9 +3233,9 @@ query     TT
         self.assertEqual(
             str(alignment),
             """\
-target    AA
-          ||
-query     AA
+target            4 AA 6
+                  0 || 2
+query             2 AA 0
 """,
         )
         self.assertEqual(alignment.shape, (2, 2))
@@ -3522,129 +3522,129 @@ class TestOverflowError(unittest.TestCase):
         self.assertEqual(
             str(alignment),
             """\
-target    ATTTA-TC-GGA-GAGTTTGATCC-TGGCTCAGGAC--GAACGCTGGCGGC-GTGCCTAA
-          |---|-|--|-|-||||||||||--||||||||-|---|||||||||||||-|-||||||
-query     A---AAT-TG-AAGAGTTTGATC-ATGGCTCAG-A-TTGAACGCTGGCGGCAG-GCCTAA
+target            0 ATTTA-TC-GGA-GAGTTTGATCC-TGGCTCAGGAC--GAACGCTGGCGGC-GTGCCTAA
+                  0 |---|-|--|-|-||||||||||--||||||||-|---|||||||||||||-|-||||||
+query             0 A---AAT-TG-AAGAGTTTGATC-ATGGCTCAG-A-TTGAACGCTGGCGGCAG-GCCTAA
 
-target    T-ACATGCAAGTCGAG-CGG-A-CAG-AT-GGGA-GCTTGCT-C----CCTGAT-GTTAG
-          --|||||||||||||--|||-|-|||-|--|--|-|||||||-|----|-|||--|--||
-query     -CACATGCAAGTCGA-ACGGTAACAGGA-AG--AAGCTTGCTTCTTTGC-TGA-CG--AG
+target           53 T-ACATGCAAGTCGAG-CGG-A-CAG-AT-GGGA-GCTTGCT-C----CCTGAT-GTTAG
+                 60 --|||||||||||||--|||-|-|||-|--|--|-|||||||-|----|-|||--|--||
+query            51 -CACATGCAAGTCGA-ACGGTAACAGGA-AG--AAGCTTGCTTCTTTGC-TGA-CG--AG
 
-target    C-GGCGGACGGGTGAGTAACAC-GT--GGGTAA-CCTGCCTGTAA-G-ACTGGG--ATAA
-          --|||||||||||||||||----||--|||-||-|-||||||-|--|-|--|||--||||
-query     -TGGCGGACGGGTGAGTAA---TGTCTGGG-AAAC-TGCCTG-A-TGGA--GGGGGATAA
+target          100 C-GGCGGACGGGTGAGTAACAC-GT--GGGTAA-CCTGCCTGTAA-G-ACTGGG--ATAA
+                120 --|||||||||||||||||----||--|||-||-|-||||||-|--|-|--|||--||||
+query           102 -TGGCGGACGGGTGAGTAA---TGTCTGGG-AAAC-TGCCTG-A-TGGA--GGGGGATAA
 
-target    CT-CC-GGGAAACCGG--GGCTAATACCGG-ATGGTTGTTTGAACCGCAT-GGTTCAA-A
-          ||-|--||-||||-||--|-|||||||||--||---------|||-|--|-|---|||-|
-query     CTAC-TGG-AAAC-GGTAG-CTAATACCG-CAT---------AAC-G--TCG---CAAGA
+target          151 CT-CC-GGGAAACCGG--GGCTAATACCGG-ATGGTTGTTTGAACCGCAT-GGTTCAA-A
+                180 ||-|--||-||||-||--|-|||||||||--||---------|||-|--|-|---|||-|
+query           152 CTAC-TGG-AAAC-GGTAG-CTAATACCG-CAT---------AAC-G--TCG---CAAGA
 
-target    C-ATAA-AAGGTGG--C-TTCGG-C-TACCACTTA-C-A--G-ATG-GACCC-GC--GGC
-          |-|-||-|-||-||--|-|||||-|-|-|---||--|-|--|-|||-|-|||-|---||-
-query     CCA-AAGA-GG-GGGACCTTCGGGCCT-C---TT-GCCATCGGATGTG-CCCAG-ATGG-
+target          204 C-ATAA-AAGGTGG--C-TTCGG-C-TACCACTTA-C-A--G-ATG-GACCC-GC--GGC
+                240 |-|-||-|-||-||--|-|||||-|-|-|---||--|-|--|-|||-|-|||-|---||-
+query           192 CCA-AAGA-GG-GGGACCTTCGGGCCT-C---TT-GCCATCGGATGTG-CCCAG-ATGG-
 
-target    GCATTAGCTAGTT-GGTGAGG-TAACGGCTCACC-AAGGCGACGATGCG--TAGCC-GA-
-          |-||||||||||--||||-||-||||||||||||-|-|||||||||-|---||||--|--
-query     G-ATTAGCTAGT-AGGTG-GGGTAACGGCTCACCTA-GGCGACGAT-C-CCTAGC-TG-G
+target          248 GCATTAGCTAGTT-GGTGAGG-TAACGGCTCACC-AAGGCGACGATGCG--TAGCC-GA-
+                300 |-||||||||||--||||-||-||||||||||||-|-|||||||||-|---||||--|--
+query           241 G-ATTAGCTAGT-AGGTG-GGGTAACGGCTCACCTA-GGCGACGAT-C-CCTAGC-TG-G
 
-target    -CCTGAGAGGG-TGATC--GGCCACACTGGGA-CTGAGACACGG-CCCAGACTCCTACGG
-          -|-|||||||--|||-|--|-|||||||||-|-|||||||||||-||-||||||||||||
-query     TC-TGAGAGG-ATGA-CCAG-CCACACTGG-AACTGAGACACGGTCC-AGACTCCTACGG
+target          301 -CCTGAGAGGG-TGATC--GGCCACACTGGGA-CTGAGACACGG-CCCAGACTCCTACGG
+                360 -|-|||||||--|||-|--|-|||||||||-|-|||||||||||-||-||||||||||||
+query           293 TC-TGAGAGG-ATGA-CCAG-CCACACTGG-AACTGAGACACGGTCC-AGACTCCTACGG
 
-target    GAGGCAGCAGTAGGG-AATC-TTCCGCA-A-TGGA-CG-AAAGTC-TGAC-GG-AGCAAC
-          |||||||||||-|||-|||--||--|||-|-|||--||-||-|-|-|||--|--|||--|
-query     GAGGCAGCAGT-GGGGAAT-ATT--GCACAATGG-GCGCAA-G-CCTGA-TG-CAGC--C
+target          355 GAGGCAGCAGTAGGG-AATC-TTCCGCA-A-TGGA-CG-AAAGTC-TGAC-GG-AGCAAC
+                420 |||||||||||-|||-|||--||--|||-|-|||--||-||-|-|-|||--|--|||--|
+query           347 GAGGCAGCAGT-GGGGAAT-ATT--GCACAATGG-GCGCAA-G-CCTGA-TG-CAGC--C
 
-target    --GCCGCGTG-AGTGAT-GAAGG--TTTTCGGA-TC-GTAAAGCT-CTGTTGTT-AG-GG
-          --||||||||-|-|||--|||||--||--|||--|--||||||-|-||-||----||-||
-query     ATGCCGCGTGTA-TGA-AGAAGGCCTT--CGG-GT-TGTAAAG-TACT-TT---CAGCGG
+target          406 --GCCGCGTG-AGTGAT-GAAGG--TTTTCGGA-TC-GTAAAGCT-CTGTTGTT-AG-GG
+                480 --||||||||-|-|||--|||||--||--|||--|--||||||-|-||-||----||-||
+query           396 ATGCCGCGTGTA-TGA-AGAAGGCCTT--CGG-GT-TGTAAAG-TACT-TT---CAGCGG
 
-target    --A--A-G--A--ACAAGTGCCGTTCGAATAGGGC----GG-TACC-TTGACGGT-ACCT
-          --|--|-|--|--|-||||----|---||||---|----|--|-|--||||||-|-|||-
-query     GGAGGAAGGGAGTA-AAGT----T---AATA---CCTTTG-CT-C-ATTGACG-TTACC-
+target          455 --A--A-G--A--ACAAGTGCCGTTCGAATAGGGC----GG-TACC-TTGACGGT-ACCT
+                540 --|--|-|--|--|-||||----|---||||---|----|--|-|--||||||-|-|||-
+query           445 GGAGGAAGGGAGTA-AAGT----T---AATA---CCTTTG-CT-C-ATTGACG-TTACC-
 
-target    AAC-CAGAA-A-GCCAC-GGCTAACTAC-GTGCCAGCAGCCGCGGTAATACGT-AGG-TG
-          --|-|||||-|-||-||-||||||||-|-|||||||||||||||||||||||--|||-||
-query     --CGCAGAAGAAGC-ACCGGCTAACT-CCGTGCCAGCAGCCGCGGTAATACG-GAGGGTG
+target          499 AAC-CAGAA-A-GCCAC-GGCTAACTAC-GTGCCAGCAGCCGCGGTAATACGT-AGG-TG
+                600 --|-|||||-|-||-||-||||||||-|-|||||||||||||||||||||||--|||-||
+query           489 --CGCAGAAGAAGC-ACCGGCTAACT-CCGTGCCAGCAGCCGCGGTAATACG-GAGGGTG
 
-target    GCAAGCGTTG--TCCGGAATTA-TTGGGCGTAAAG-GGCT-CGCAGGCGGTTTC-TTAAG
-          -||||||||---||-|||||||-|-||||||||||-|-|--||||||||||||--|||||
-query     -CAAGCGTT-AATC-GGAATTACT-GGGCGTAAAGCG-C-ACGCAGGCGGTTT-GTTAAG
+target          552 GCAAGCGTTG--TCCGGAATTA-TTGGGCGTAAAG-GGCT-CGCAGGCGGTTTC-TTAAG
+                660 -||||||||---||-|||||||-|-||||||||||-|-|--||||||||||||--|||||
+query           544 -CAAGCGTT-AATC-GGAATTACT-GGGCGTAAAGCG-C-ACGCAGGCGGTTT-GTTAAG
 
-target    TCT-GATGTGAAAG-CCCCCGG-CTCAACC-GGGGAGGG--T-CAT-TGGA-AACTGGGG
-          ||--|||||||||--||||-||-|||||||-|||-|-----|-|||-||-|-|-||||--
-query     TC-AGATGTGAAA-TCCCC-GGGCTCAACCTGGG-A---ACTGCATCTG-ATA-CTGG--
+target          606 TCT-GATGTGAAAG-CCCCCGG-CTCAACC-GGGGAGGG--T-CAT-TGGA-AACTGGGG
+                720 ||--|||||||||--||||-||-|||||||-|||-|-----|-|||-||-|-|-||||--
+query           597 TC-AGATGTGAAA-TCCCC-GGGCTCAACCTGGG-A---ACTGCATCTG-ATA-CTGG--
 
-target    -AA-CTTGAGTGCA--G-AAGAGGAGAGTGG-A-A-TTCCACG-TGTAGCGGTGAAATGC
-          -||-|||||||-|---|-|-||||-|-|-||-|-|-|||||-|-||||||||||||||||
-query     CAAGCTTGAGT-C-TCGTA-GAGG-G-G-GGTAGAATTCCA-GGTGTAGCGGTGAAATGC
+target          657 -AA-CTTGAGTGCA--G-AAGAGGAGAGTGG-A-A-TTCCACG-TGTAGCGGTGAAATGC
+                780 -||-|||||||-|---|-|-||||-|-|-||-|-|-|||||-|-||||||||||||||||
+query           646 CAAGCTTGAGT-C-TCGTA-GAGG-G-G-GGTAGAATTCCA-GGTGTAGCGGTGAAATGC
 
-target    GTAGAGATG-TGGAGGAAC-ACCAG-TGGCGAAGGCGA-CTCTC--TGGT-CTGTAA--C
-          ||||||||--||||||||--|||-|-|||||||||||--|-|-|--|||--|-|-||--|
-query     GTAGAGAT-CTGGAGGAA-TACC-GGTGGCGAAGGCG-GC-C-CCCTGG-AC-G-AAGAC
+target          708 GTAGAGATG-TGGAGGAAC-ACCAG-TGGCGAAGGCGA-CTCTC--TGGT-CTGTAA--C
+                840 ||||||||--||||||||--|||-|-|||||||||||--|-|-|--|||--|-|-||--|
+query           699 GTAGAGAT-CTGGAGGAA-TACC-GGTGGCGAAGGCG-GC-C-CCCTGG-AC-G-AAGAC
 
-target    TGACGCTG-AGGA-GCGAAAGCGTGGGGAGCGAA-CAGGATTAGATACCCTGGTAGTCCA
-          |||||||--|||--|||||||||||||||||-||-|||||||||||||||||||||||||
-query     TGACGCT-CAGG-TGCGAAAGCGTGGGGAGC-AAACAGGATTAGATACCCTGGTAGTCCA
+target          759 TGACGCTG-AGGA-GCGAAAGCGTGGGGAGCGAA-CAGGATTAGATACCCTGGTAGTCCA
+                900 |||||||--|||--|||||||||||||||||-||-|||||||||||||||||||||||||
+query           750 TGACGCT-CAGG-TGCGAAAGCGTGGGGAGC-AAACAGGATTAGATACCCTGGTAGTCCA
 
-target    CGCCGTAAACGATGAGT-G-CTAAGTGTT-AGGGGGTT-TCCGCCCCTT-AGTGC-TG-C
-          ||||||||||||||--|-|-||---||---|||---||-|--||||-||-||-||-||-|
-query     CGCCGTAAACGATG--TCGACT---TG--GAGG---TTGT--GCCC-TTGAG-GCGTGGC
+target          816 CGCCGTAAACGATGAGT-G-CTAAGTGTT-AGGGGGTT-TCCGCCCCTT-AGTGC-TG-C
+                960 ||||||||||||||--|-|-||---||---|||---||-|--||||-||-||-||-||-|
+query           807 CGCCGTAAACGATG--TCGACT---TG--GAGG---TTGT--GCCC-TTGAG-GCGTGGC
 
-target    ------AGCTAACGCA-TTAAG-C-ACTCCGCCTGGGGAGTACGGTC-GCAAGACTG--A
-          ------|||||||||--|||||-|-||-|-|||||||||||||||-|-|||||---|--|
-query     TTCCGGAGCTAACGC-GTTAAGTCGAC-C-GCCTGGGGAGTACGG-CCGCAAG---GTTA
+target          869 ------AGCTAACGCA-TTAAG-C-ACTCCGCCTGGGGAGTACGGTC-GCAAGACTG--A
+               1020 ------|||||||||--|||||-|-||-|-|||||||||||||||-|-|||||---|--|
+query           853 TTCCGGAGCTAACGC-GTTAAGTCGAC-C-GCCTGGGGAGTACGG-CCGCAAG---GTTA
 
-target    AA-CTCAAA-GGAATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGAA
-          ||-||||||-|-|||||||||||||||||||||||||||||||||||||||||||||||-
-query     AAACTCAAATG-AATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGA-
+target          917 AA-CTCAAA-GGAATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGAA
+               1080 ||-||||||-|-|||||||||||||||||||||||||||||||||||||||||||||||-
+query           906 AAACTCAAATG-AATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGA-
 
-target    -GCAACGCGAAGAACCTTACCA-GGTCTTGACATCCTCTGACA-A--T--CCTAGAGATA
-          -||||||||||||||||||||--|||||||||||||----|||-|--|--||-||||||-
-query     TGCAACGCGAAGAACCTTACC-TGGTCTTGACATCC----ACAGAACTTTCC-AGAGAT-
+target          975 -GCAACGCGAAGAACCTTACCA-GGTCTTGACATCCTCTGACA-A--T--CCTAGAGATA
+               1140 -||||||||||||||||||||--|||||||||||||----|||-|--|--||-||||||-
+query           964 TGCAACGCGAAGAACCTTACC-TGGTCTTGACATCC----ACAGAACTTTCC-AGAGAT-
 
-target    GGAC--G-T-CCCCTTCGGGGGCAGA--GTGA--CAGGTGG-TGCATGG-TTGTCGTCAG
-          |||---|-|-||--||||||---|-|--||||--||||||--|||||||-|-||||||||
-query     GGA-TTGGTGCC--TTCGGG---A-ACTGTGAGACAGGTG-CTGCATGGCT-GTCGTCAG
+target         1028 GGAC--G-T-CCCCTTCGGGGGCAGA--GTGA--CAGGTGG-TGCATGG-TTGTCGTCAG
+               1200 |||---|-|-||--||||||---|-|--||||--||||||--|||||||-|-||||||||
+query          1017 GGA-TTGGTGCC--TTCGGG---A-ACTGTGAGACAGGTG-CTGCATGGCT-GTCGTCAG
 
-target    CTCGTGTC-GTGAGA-TGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTTGATCTTA--G
-          |||||||--||||-|-||||||||||||||||||||||||||||||||||-|||||---|
-query     CTCGTGT-TGTGA-AATGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTT-ATCTT-TTG
+target         1078 CTCGTGTC-GTGAGA-TGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTTGATCTTA--G
+               1260 |||||||--||||-|-||||||||||||||||||||||||||||||||||-|||||---|
+query          1068 CTCGTGT-TGTGA-AATGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTT-ATCTT-TTG
 
-target    TTGCCAGCA--TTCA-GTTG--GGC-A-CTCTAA-GGT-GACTGCC-GGTGAC-AAACC-
-          ||||||||---|-|--|--|--||--|-|||-||-||--|||||||-|-|||--||||--
-query     TTGCCAGC-GGT-C-CG--GCCGG-GAACTC-AAAGG-AGACTGCCAG-TGA-TAAAC-T
+target         1134 TTGCCAGCA--TTCA-GTTG--GGC-A-CTCTAA-GGT-GACTGCC-GGTGAC-AAACC-
+               1320 ||||||||---|-|--|--|--||--|-|||-||-||--|||||||-|-|||--||||--
+query          1124 TTGCCAGC-GGT-C-CG--GCCGG-GAACTC-AAAGG-AGACTGCCAG-TGA-TAAAC-T
 
-target    GGAGGAAGGTGGGGATGACGTCAAA-TCATCATG-CCCCTTAT-GACCT-GGGCTACACA
-          ||||||||||||||||||||||||--||||||||-|||-|||--||||--||||||||||
-query     GGAGGAAGGTGGGGATGACGTCAA-GTCATCATGGCCC-TTA-CGACC-AGGGCTACACA
+target         1182 GGAGGAAGGTGGGGATGACGTCAAA-TCATCATG-CCCCTTAT-GACCT-GGGCTACACA
+               1380 ||||||||||||||||||||||||--||||||||-|||-|||--||||--||||||||||
+query          1173 GGAGGAAGGTGGGGATGACGTCAA-GTCATCATGGCCC-TTA-CGACC-AGGGCTACACA
 
-target    CGTGCTACAATGGACAG-A-ACAAAG-GGCA-GCGAAACC--GCGAG-GTT-AAGCC--A
-          |||||||||||||-|-|-|-||||||-|--|-||||--||--|||||-|---||||---|
-query     CGTGCTACAATGG-C-GCATACAAAGAG--AAGCGA--CCTCGCGAGAG--CAAGC-GGA
+target         1238 CGTGCTACAATGGACAG-A-ACAAAG-GGCA-GCGAAACC--GCGAG-GTT-AAGCC--A
+               1440 |||||||||||||-|-|-|-||||||-|--|-||||--||--|||||-|---||||---|
+query          1229 CGTGCTACAATGG-C-GCATACAAAGAG--AAGCGA--CCTCGCGAGAG--CAAGC-GGA
 
-target    ATCC-CAC-AAA-T-CTGTTC-TCAGTTC-GGATC-GC-AGTCTGCAACTCGACTGCG--
-          --||-||--|||-|-|-||-|-|-|||-|-||||--|--||||||||||||||||-|---
-query     --CCTCA-TAAAGTGC-GT-CGT-AGT-CCGGAT-TG-GAGTCTGCAACTCGACT-C-CA
+target         1288 ATCC-CAC-AAA-T-CTGTTC-TCAGTTC-GGATC-GC-AGTCTGCAACTCGACTGCG--
+               1500 --||-||--|||-|-|-||-|-|-|||-|-||||--|--||||||||||||||||-|---
+query          1280 --CCTCA-TAAAGTGC-GT-CGT-AGT-CCGGAT-TG-GAGTCTGCAACTCGACT-C-CA
 
-target    TGAAGCT-GGAATCGCTAGTAATCGC-GGATCAGCA-TGCCG-CGGTGAATACGTTCCCG
-          |||||-|-|||||||||||||||||--|||||||-|-||||--|||||||||||||||||
-query     TGAAG-TCGGAATCGCTAGTAATCG-TGGATCAG-AATGCC-ACGGTGAATACGTTCCCG
+target         1338 TGAAGCT-GGAATCGCTAGTAATCGC-GGATCAGCA-TGCCG-CGGTGAATACGTTCCCG
+               1560 |||||-|-|||||||||||||||||--|||||||-|-||||--|||||||||||||||||
+query          1329 TGAAG-TCGGAATCGCTAGTAATCG-TGGATCAG-AATGCC-ACGGTGAATACGTTCCCG
 
-target    GGCCTTGTACACACCGCCCGTCACACCAC-GAG-AGT---TTGT-AACACCC-GAAGTC-
-          ||||||||||||||||||||||||||||--|-|-|||---|||--||-|----|||||--
-query     GGCCTTGTACACACCGCCCGTCACACCA-TG-GGAGTGGGTTG-CAA-A---AGAAGT-A
+target         1394 GGCCTTGTACACACCGCCCGTCACACCAC-GAG-AGT---TTGT-AACACCC-GAAGTC-
+               1620 ||||||||||||||||||||||||||||--|-|-|||---|||--||-|----|||||--
+query          1385 GGCCTTGTACACACCGCCCGTCACACCA-TG-GGAGTGGGTTG-CAA-A---AGAAGT-A
 
-target    GGTGAGG-T-AACCTTTTA-GG-AG--C-C--AGCCG-CC---GAAGGTGGGA--CAGAT
-          |||-||--|-||||||----||-||--|-|--|-||--|----|----||--|--||--|
-query     GGT-AG-CTTAACCTT---CGGGAGGGCGCTTA-CC-AC-TTTG----TG--ATTCA--T
+target         1446 GGTGAGG-T-AACCTTTTA-GG-AG--C-C--AGCCG-CC---GAAGGTGGGA--CAGAT
+               1680 |||-||--|-||||||----||-||--|-|--|-||--|----|----||--|--||--|
+query          1437 GGT-AG-CTTAACCTT---CGGGAGGGCGCTTA-CC-AC-TTTG----TG--ATTCA--T
 
-target    GA-TTGGGGTGAAGTCGTAACAAGGTAG-CCGTATCGGAAGG----TGCGGCT-GGATCA
-          ||-|-||||||||||||||||||||||--|||||--||--||----|||||-|-||||||
-query     GACT-GGGGTGAAGTCGTAACAAGGTA-ACCGTA--GG--GGAACCTGCGG-TTGGATCA
+target         1491 GA-TTGGGGTGAAGTCGTAACAAGGTAG-CCGTATCGGAAGG----TGCGGCT-GGATCA
+               1740 ||-|-||||||||||||||||||||||--|||||--||--||----|||||-|-||||||
+query          1481 GACT-GGGGTGAAGTCGTAACAAGGTA-ACCGTA--GG--GGAACCTGCGG-TTGGATCA
 
-target    CCTCCTTTCTA
-          |||||||---|
-query     CCTCCTT---A
+target         1544 CCTCCTTTCTA 1555
+               1800 |||||||---| 1811
+query          1534 CCTCCTT---A 1542
 """,
         )
         self.assertEqual(alignment.shape, (2, 1811))
@@ -3662,129 +3662,129 @@ query     CCTCCTT---A
         self.assertEqual(
             str(alignment),
             """\
-target    ATTTA-TC-GGA-GAGTTTGATCC-TGGCTCAGGAC--GAACGCTGGCGGC-GTGCCTAA
-          |---|-|--|-|-||||||||||--||||||||-|---|||||||||||||-|-||||||
-query     A---AAT-TG-AAGAGTTTGATC-ATGGCTCAG-A-TTGAACGCTGGCGGCAG-GCCTAA
+target            0 ATTTA-TC-GGA-GAGTTTGATCC-TGGCTCAGGAC--GAACGCTGGCGGC-GTGCCTAA
+                  0 |---|-|--|-|-||||||||||--||||||||-|---|||||||||||||-|-||||||
+query          1542 A---AAT-TG-AAGAGTTTGATC-ATGGCTCAG-A-TTGAACGCTGGCGGCAG-GCCTAA
 
-target    T-ACATGCAAGTCGAG-CGG-A-CAG-AT-GGGA-GCTTGCT-C----CCTGAT-GTTAG
-          --|||||||||||||--|||-|-|||-|--|--|-|||||||-|----|-|||--|--||
-query     -CACATGCAAGTCGA-ACGGTAACAGGA-AG--AAGCTTGCTTCTTTGC-TGA-CG--AG
+target           53 T-ACATGCAAGTCGAG-CGG-A-CAG-AT-GGGA-GCTTGCT-C----CCTGAT-GTTAG
+                 60 --|||||||||||||--|||-|-|||-|--|--|-|||||||-|----|-|||--|--||
+query          1491 -CACATGCAAGTCGA-ACGGTAACAGGA-AG--AAGCTTGCTTCTTTGC-TGA-CG--AG
 
-target    C-GGCGGACGGGTGAGTAACAC-GT--GGGTAA-CCTGCCTGTAA-G-ACTGGG--ATAA
-          --|||||||||||||||||----||--|||-||-|-||||||-|--|-|--|||--||||
-query     -TGGCGGACGGGTGAGTAA---TGTCTGGG-AAAC-TGCCTG-A-TGGA--GGGGGATAA
+target          100 C-GGCGGACGGGTGAGTAACAC-GT--GGGTAA-CCTGCCTGTAA-G-ACTGGG--ATAA
+                120 --|||||||||||||||||----||--|||-||-|-||||||-|--|-|--|||--||||
+query          1440 -TGGCGGACGGGTGAGTAA---TGTCTGGG-AAAC-TGCCTG-A-TGGA--GGGGGATAA
 
-target    CT-CC-GGGAAACCGG--GGCTAATACCGG-ATGGTTGTTTGAACCGCAT-GGTTCAA-A
-          ||-|--||-||||-||--|-|||||||||--||---------|||-|--|-|---|||-|
-query     CTAC-TGG-AAAC-GGTAG-CTAATACCG-CAT---------AAC-G--TCG---CAAGA
+target          151 CT-CC-GGGAAACCGG--GGCTAATACCGG-ATGGTTGTTTGAACCGCAT-GGTTCAA-A
+                180 ||-|--||-||||-||--|-|||||||||--||---------|||-|--|-|---|||-|
+query          1390 CTAC-TGG-AAAC-GGTAG-CTAATACCG-CAT---------AAC-G--TCG---CAAGA
 
-target    C-ATAA-AAGGTGG--C-TTCGG-C-TACCACTTA-C-A--G-ATG-GACCC-GC--GGC
-          |-|-||-|-||-||--|-|||||-|-|-|---||--|-|--|-|||-|-|||-|---||-
-query     CCA-AAGA-GG-GGGACCTTCGGGCCT-C---TT-GCCATCGGATGTG-CCCAG-ATGG-
+target          204 C-ATAA-AAGGTGG--C-TTCGG-C-TACCACTTA-C-A--G-ATG-GACCC-GC--GGC
+                240 |-|-||-|-||-||--|-|||||-|-|-|---||--|-|--|-|||-|-|||-|---||-
+query          1350 CCA-AAGA-GG-GGGACCTTCGGGCCT-C---TT-GCCATCGGATGTG-CCCAG-ATGG-
 
-target    GCATTAGCTAGTT-GGTGAGG-TAACGGCTCACC-AAGGCGACGATGCG--TAGCC-GA-
-          |-||||||||||--||||-||-||||||||||||-|-|||||||||-|---||||--|--
-query     G-ATTAGCTAGT-AGGTG-GGGTAACGGCTCACCTA-GGCGACGAT-C-CCTAGC-TG-G
+target          248 GCATTAGCTAGTT-GGTGAGG-TAACGGCTCACC-AAGGCGACGATGCG--TAGCC-GA-
+                300 |-||||||||||--||||-||-||||||||||||-|-|||||||||-|---||||--|--
+query          1301 G-ATTAGCTAGT-AGGTG-GGGTAACGGCTCACCTA-GGCGACGAT-C-CCTAGC-TG-G
 
-target    -CCTGAGAGGG-TGATC--GGCCACACTGGGA-CTGAGACACGG-CCCAGACTCCTACGG
-          -|-|||||||--|||-|--|-|||||||||-|-|||||||||||-||-||||||||||||
-query     TC-TGAGAGG-ATGA-CCAG-CCACACTGG-AACTGAGACACGGTCC-AGACTCCTACGG
+target          301 -CCTGAGAGGG-TGATC--GGCCACACTGGGA-CTGAGACACGG-CCCAGACTCCTACGG
+                360 -|-|||||||--|||-|--|-|||||||||-|-|||||||||||-||-||||||||||||
+query          1249 TC-TGAGAGG-ATGA-CCAG-CCACACTGG-AACTGAGACACGGTCC-AGACTCCTACGG
 
-target    GAGGCAGCAGTAGGG-AATC-TTCCGCA-A-TGGA-CG-AAAGTC-TGAC-GG-AGCAAC
-          |||||||||||-|||-|||--||--|||-|-|||--||-||-|-|-|||--|--|||--|
-query     GAGGCAGCAGT-GGGGAAT-ATT--GCACAATGG-GCGCAA-G-CCTGA-TG-CAGC--C
+target          355 GAGGCAGCAGTAGGG-AATC-TTCCGCA-A-TGGA-CG-AAAGTC-TGAC-GG-AGCAAC
+                420 |||||||||||-|||-|||--||--|||-|-|||--||-||-|-|-|||--|--|||--|
+query          1195 GAGGCAGCAGT-GGGGAAT-ATT--GCACAATGG-GCGCAA-G-CCTGA-TG-CAGC--C
 
-target    --GCCGCGTG-AGTGAT-GAAGG--TTTTCGGA-TC-GTAAAGCT-CTGTTGTT-AG-GG
-          --||||||||-|-|||--|||||--||--|||--|--||||||-|-||-||----||-||
-query     ATGCCGCGTGTA-TGA-AGAAGGCCTT--CGG-GT-TGTAAAG-TACT-TT---CAGCGG
+target          406 --GCCGCGTG-AGTGAT-GAAGG--TTTTCGGA-TC-GTAAAGCT-CTGTTGTT-AG-GG
+                480 --||||||||-|-|||--|||||--||--|||--|--||||||-|-||-||----||-||
+query          1146 ATGCCGCGTGTA-TGA-AGAAGGCCTT--CGG-GT-TGTAAAG-TACT-TT---CAGCGG
 
-target    --A--A-G--A--ACAAGTGCCGTTCGAATAGGGC----GG-TACC-TTGACGGT-ACCT
-          --|--|-|--|--|-||||----|---||||---|----|--|-|--||||||-|-|||-
-query     GGAGGAAGGGAGTA-AAGT----T---AATA---CCTTTG-CT-C-ATTGACG-TTACC-
+target          455 --A--A-G--A--ACAAGTGCCGTTCGAATAGGGC----GG-TACC-TTGACGGT-ACCT
+                540 --|--|-|--|--|-||||----|---||||---|----|--|-|--||||||-|-|||-
+query          1097 GGAGGAAGGGAGTA-AAGT----T---AATA---CCTTTG-CT-C-ATTGACG-TTACC-
 
-target    AAC-CAGAA-A-GCCAC-GGCTAACTAC-GTGCCAGCAGCCGCGGTAATACGT-AGG-TG
-          --|-|||||-|-||-||-||||||||-|-|||||||||||||||||||||||--|||-||
-query     --CGCAGAAGAAGC-ACCGGCTAACT-CCGTGCCAGCAGCCGCGGTAATACG-GAGGGTG
+target          499 AAC-CAGAA-A-GCCAC-GGCTAACTAC-GTGCCAGCAGCCGCGGTAATACGT-AGG-TG
+                600 --|-|||||-|-||-||-||||||||-|-|||||||||||||||||||||||--|||-||
+query          1053 --CGCAGAAGAAGC-ACCGGCTAACT-CCGTGCCAGCAGCCGCGGTAATACG-GAGGGTG
 
-target    GCAAGCGTTG--TCCGGAATTA-TTGGGCGTAAAG-GGCT-CGCAGGCGGTTTC-TTAAG
-          -||||||||---||-|||||||-|-||||||||||-|-|--||||||||||||--|||||
-query     -CAAGCGTT-AATC-GGAATTACT-GGGCGTAAAGCG-C-ACGCAGGCGGTTT-GTTAAG
+target          552 GCAAGCGTTG--TCCGGAATTA-TTGGGCGTAAAG-GGCT-CGCAGGCGGTTTC-TTAAG
+                660 -||||||||---||-|||||||-|-||||||||||-|-|--||||||||||||--|||||
+query           998 -CAAGCGTT-AATC-GGAATTACT-GGGCGTAAAGCG-C-ACGCAGGCGGTTT-GTTAAG
 
-target    TCT-GATGTGAAAG-CCCCCGG-CTCAACC-GGGGAGGG--T-CAT-TGGA-AACTGGGG
-          ||--|||||||||--||||-||-|||||||-|||-|-----|-|||-||-|-|-||||--
-query     TC-AGATGTGAAA-TCCCC-GGGCTCAACCTGGG-A---ACTGCATCTG-ATA-CTGG--
+target          606 TCT-GATGTGAAAG-CCCCCGG-CTCAACC-GGGGAGGG--T-CAT-TGGA-AACTGGGG
+                720 ||--|||||||||--||||-||-|||||||-|||-|-----|-|||-||-|-|-||||--
+query           945 TC-AGATGTGAAA-TCCCC-GGGCTCAACCTGGG-A---ACTGCATCTG-ATA-CTGG--
 
-target    -AA-CTTGAGTGCA--G-AAGAGGAGAGTGG-A-A-TTCCACG-TGTAGCGGTGAAATGC
-          -||-|||||||-|---|-|-||||-|-|-||-|-|-|||||-|-||||||||||||||||
-query     CAAGCTTGAGT-C-TCGTA-GAGG-G-G-GGTAGAATTCCA-GGTGTAGCGGTGAAATGC
+target          657 -AA-CTTGAGTGCA--G-AAGAGGAGAGTGG-A-A-TTCCACG-TGTAGCGGTGAAATGC
+                780 -||-|||||||-|---|-|-||||-|-|-||-|-|-|||||-|-||||||||||||||||
+query           896 CAAGCTTGAGT-C-TCGTA-GAGG-G-G-GGTAGAATTCCA-GGTGTAGCGGTGAAATGC
 
-target    GTAGAGATG-TGGAGGAAC-ACCAG-TGGCGAAGGCGA-CTCTC--TGGT-CTGTAA--C
-          ||||||||--||||||||--|||-|-|||||||||||--|-|-|--|||--|-|-||--|
-query     GTAGAGAT-CTGGAGGAA-TACC-GGTGGCGAAGGCG-GC-C-CCCTGG-AC-G-AAGAC
+target          708 GTAGAGATG-TGGAGGAAC-ACCAG-TGGCGAAGGCGA-CTCTC--TGGT-CTGTAA--C
+                840 ||||||||--||||||||--|||-|-|||||||||||--|-|-|--|||--|-|-||--|
+query           843 GTAGAGAT-CTGGAGGAA-TACC-GGTGGCGAAGGCG-GC-C-CCCTGG-AC-G-AAGAC
 
-target    TGACGCTG-AGGA-GCGAAAGCGTGGGGAGCGAA-CAGGATTAGATACCCTGGTAGTCCA
-          |||||||--|||--|||||||||||||||||-||-|||||||||||||||||||||||||
-query     TGACGCT-CAGG-TGCGAAAGCGTGGGGAGC-AAACAGGATTAGATACCCTGGTAGTCCA
+target          759 TGACGCTG-AGGA-GCGAAAGCGTGGGGAGCGAA-CAGGATTAGATACCCTGGTAGTCCA
+                900 |||||||--|||--|||||||||||||||||-||-|||||||||||||||||||||||||
+query           792 TGACGCT-CAGG-TGCGAAAGCGTGGGGAGC-AAACAGGATTAGATACCCTGGTAGTCCA
 
-target    CGCCGTAAACGATGAGT-G-CTAAGTGTT-AGGGGGTT-TCCGCCCCTT-AGTGC-TG-C
-          ||||||||||||||--|-|-||---||---|||---||-|--||||-||-||-||-||-|
-query     CGCCGTAAACGATG--TCGACT---TG--GAGG---TTGT--GCCC-TTGAG-GCGTGGC
+target          816 CGCCGTAAACGATGAGT-G-CTAAGTGTT-AGGGGGTT-TCCGCCCCTT-AGTGC-TG-C
+                960 ||||||||||||||--|-|-||---||---|||---||-|--||||-||-||-||-||-|
+query           735 CGCCGTAAACGATG--TCGACT---TG--GAGG---TTGT--GCCC-TTGAG-GCGTGGC
 
-target    ------AGCTAACGCA-TTAAG-C-ACTCCGCCTGGGGAGTACGGTC-GCAAGACTG--A
-          ------|||||||||--|||||-|-||-|-|||||||||||||||-|-|||||---|--|
-query     TTCCGGAGCTAACGC-GTTAAGTCGAC-C-GCCTGGGGAGTACGG-CCGCAAG---GTTA
+target          869 ------AGCTAACGCA-TTAAG-C-ACTCCGCCTGGGGAGTACGGTC-GCAAGACTG--A
+               1020 ------|||||||||--|||||-|-||-|-|||||||||||||||-|-|||||---|--|
+query           689 TTCCGGAGCTAACGC-GTTAAGTCGAC-C-GCCTGGGGAGTACGG-CCGCAAG---GTTA
 
-target    AA-CTCAAA-GGAATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGAA
-          ||-||||||-|-|||||||||||||||||||||||||||||||||||||||||||||||-
-query     AAACTCAAATG-AATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGA-
+target          917 AA-CTCAAA-GGAATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGAA
+               1080 ||-||||||-|-|||||||||||||||||||||||||||||||||||||||||||||||-
+query           636 AAACTCAAATG-AATTGACGGGGGCCCGCACAAGCGGTGGAGCATGTGGTTTAATTCGA-
 
-target    -GCAACGCGAAGAACCTTACCA-GGTCTTGACATCCTCTGACA-A--T--CCTAGAGATA
-          -||||||||||||||||||||--|||||||||||||----|||-|--|--||-||||||-
-query     TGCAACGCGAAGAACCTTACC-TGGTCTTGACATCC----ACAGAACTTTCC-AGAGAT-
+target          975 -GCAACGCGAAGAACCTTACCA-GGTCTTGACATCCTCTGACA-A--T--CCTAGAGATA
+               1140 -||||||||||||||||||||--|||||||||||||----|||-|--|--||-||||||-
+query           578 TGCAACGCGAAGAACCTTACC-TGGTCTTGACATCC----ACAGAACTTTCC-AGAGAT-
 
-target    GGAC--G-T-CCCCTTCGGGGGCAGA--GTGA--CAGGTGG-TGCATGG-TTGTCGTCAG
-          |||---|-|-||--||||||---|-|--||||--||||||--|||||||-|-||||||||
-query     GGA-TTGGTGCC--TTCGGG---A-ACTGTGAGACAGGTG-CTGCATGGCT-GTCGTCAG
+target         1028 GGAC--G-T-CCCCTTCGGGGGCAGA--GTGA--CAGGTGG-TGCATGG-TTGTCGTCAG
+               1200 |||---|-|-||--||||||---|-|--||||--||||||--|||||||-|-||||||||
+query           525 GGA-TTGGTGCC--TTCGGG---A-ACTGTGAGACAGGTG-CTGCATGGCT-GTCGTCAG
 
-target    CTCGTGTC-GTGAGA-TGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTTGATCTTA--G
-          |||||||--||||-|-||||||||||||||||||||||||||||||||||-|||||---|
-query     CTCGTGT-TGTGA-AATGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTT-ATCTT-TTG
+target         1078 CTCGTGTC-GTGAGA-TGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTTGATCTTA--G
+               1260 |||||||--||||-|-||||||||||||||||||||||||||||||||||-|||||---|
+query           474 CTCGTGT-TGTGA-AATGTTGGGTTAAGTCCCGCAACGAGCGCAACCCTT-ATCTT-TTG
 
-target    TTGCCAGCA--TTCA-GTTG--GGC-A-CTCTAA-GGT-GACTGCC-GGTGAC-AAACC-
-          ||||||||---|-|--|--|--||--|-|||-||-||--|||||||-|-|||--||||--
-query     TTGCCAGC-GGT-C-CG--GCCGG-GAACTC-AAAGG-AGACTGCCAG-TGA-TAAAC-T
+target         1134 TTGCCAGCA--TTCA-GTTG--GGC-A-CTCTAA-GGT-GACTGCC-GGTGAC-AAACC-
+               1320 ||||||||---|-|--|--|--||--|-|||-||-||--|||||||-|-|||--||||--
+query           418 TTGCCAGC-GGT-C-CG--GCCGG-GAACTC-AAAGG-AGACTGCCAG-TGA-TAAAC-T
 
-target    GGAGGAAGGTGGGGATGACGTCAAA-TCATCATG-CCCCTTAT-GACCT-GGGCTACACA
-          ||||||||||||||||||||||||--||||||||-|||-|||--||||--||||||||||
-query     GGAGGAAGGTGGGGATGACGTCAA-GTCATCATGGCCC-TTA-CGACC-AGGGCTACACA
+target         1182 GGAGGAAGGTGGGGATGACGTCAAA-TCATCATG-CCCCTTAT-GACCT-GGGCTACACA
+               1380 ||||||||||||||||||||||||--||||||||-|||-|||--||||--||||||||||
+query           369 GGAGGAAGGTGGGGATGACGTCAA-GTCATCATGGCCC-TTA-CGACC-AGGGCTACACA
 
-target    CGTGCTACAATGGACAG-A-ACAAAG-GGCA-GCGAAACC--GCGAG-GTT-AAGCC--A
-          |||||||||||||-|-|-|-||||||-|--|-||||--||--|||||-|---||||---|
-query     CGTGCTACAATGG-C-GCATACAAAGAG--AAGCGA--CCTCGCGAGAG--CAAGC-GGA
+target         1238 CGTGCTACAATGGACAG-A-ACAAAG-GGCA-GCGAAACC--GCGAG-GTT-AAGCC--A
+               1440 |||||||||||||-|-|-|-||||||-|--|-||||--||--|||||-|---||||---|
+query           313 CGTGCTACAATGG-C-GCATACAAAGAG--AAGCGA--CCTCGCGAGAG--CAAGC-GGA
 
-target    ATCC-CAC-AAA-T-CTGTTC-TCAGTTC-GGATC-GC-AGTCTGCAACTCGACTGCG--
-          --||-||--|||-|-|-||-|-|-|||-|-||||--|--||||||||||||||||-|---
-query     --CCTCA-TAAAGTGC-GT-CGT-AGT-CCGGAT-TG-GAGTCTGCAACTCGACT-C-CA
+target         1288 ATCC-CAC-AAA-T-CTGTTC-TCAGTTC-GGATC-GC-AGTCTGCAACTCGACTGCG--
+               1500 --||-||--|||-|-|-||-|-|-|||-|-||||--|--||||||||||||||||-|---
+query           262 --CCTCA-TAAAGTGC-GT-CGT-AGT-CCGGAT-TG-GAGTCTGCAACTCGACT-C-CA
 
-target    TGAAGCT-GGAATCGCTAGTAATCGC-GGATCAGCA-TGCCG-CGGTGAATACGTTCCCG
-          |||||-|-|||||||||||||||||--|||||||-|-||||--|||||||||||||||||
-query     TGAAG-TCGGAATCGCTAGTAATCG-TGGATCAG-AATGCC-ACGGTGAATACGTTCCCG
+target         1338 TGAAGCT-GGAATCGCTAGTAATCGC-GGATCAGCA-TGCCG-CGGTGAATACGTTCCCG
+               1560 |||||-|-|||||||||||||||||--|||||||-|-||||--|||||||||||||||||
+query           213 TGAAG-TCGGAATCGCTAGTAATCG-TGGATCAG-AATGCC-ACGGTGAATACGTTCCCG
 
-target    GGCCTTGTACACACCGCCCGTCACACCAC-GAG-AGT---TTGT-AACACCC-GAAGTC-
-          ||||||||||||||||||||||||||||--|-|-|||---|||--||-|----|||||--
-query     GGCCTTGTACACACCGCCCGTCACACCA-TG-GGAGTGGGTTG-CAA-A---AGAAGT-A
+target         1394 GGCCTTGTACACACCGCCCGTCACACCAC-GAG-AGT---TTGT-AACACCC-GAAGTC-
+               1620 ||||||||||||||||||||||||||||--|-|-|||---|||--||-|----|||||--
+query           157 GGCCTTGTACACACCGCCCGTCACACCA-TG-GGAGTGGGTTG-CAA-A---AGAAGT-A
 
-target    GGTGAGG-T-AACCTTTTA-GG-AG--C-C--AGCCG-CC---GAAGGTGGGA--CAGAT
-          |||-||--|-||||||----||-||--|-|--|-||--|----|----||--|--||--|
-query     GGT-AG-CTTAACCTT---CGGGAGGGCGCTTA-CC-AC-TTTG----TG--ATTCA--T
+target         1446 GGTGAGG-T-AACCTTTTA-GG-AG--C-C--AGCCG-CC---GAAGGTGGGA--CAGAT
+               1680 |||-||--|-||||||----||-||--|-|--|-||--|----|----||--|--||--|
+query           105 GGT-AG-CTTAACCTT---CGGGAGGGCGCTTA-CC-AC-TTTG----TG--ATTCA--T
 
-target    GA-TTGGGGTGAAGTCGTAACAAGGTAG-CCGTATCGGAAGG----TGCGGCT-GGATCA
-          ||-|-||||||||||||||||||||||--|||||--||--||----|||||-|-||||||
-query     GACT-GGGGTGAAGTCGTAACAAGGTA-ACCGTA--GG--GGAACCTGCGG-TTGGATCA
+target         1491 GA-TTGGGGTGAAGTCGTAACAAGGTAG-CCGTATCGGAAGG----TGCGGCT-GGATCA
+               1740 ||-|-||||||||||||||||||||||--|||||--||--||----|||||-|-||||||
+query            61 GACT-GGGGTGAAGTCGTAACAAGGTA-ACCGTA--GG--GGAACCTGCGG-TTGGATCA
 
-target    CCTCCTTTCTA
-          |||||||---|
-query     CCTCCTT---A
+target         1544 CCTCCTTTCTA 1555
+               1800 |||||||---| 1811
+query             8 CCTCCTT---A    0
 """,
         )
         self.assertAlmostEqual(alignment.score, 1286.0)
@@ -4261,13 +4261,13 @@ class TestAlignmentFormat(unittest.TestCase):
         self.assertEqual(
             str(alignment),
             """\
-target    ACGATCAGCGAGCATNGAGC-ACTACGACAGCGAGTGACCACTATTCGCGATCAGGAGCA
-          ----------|||||.||||-|||-----------|||..|||||||-------------
-query     ----------AGCATCGAGCGACT-----------TGAGTACTATTC-------------
+target            0 ACGATCAGCGAGCATNGAGC-ACTACGACAGCGAGTGACCACTATTCGCGATCAGGAGCA
+                  0 ----------|||||.||||-|||-----------|||..|||||||-------------
+query             0 ----------AGCATCGAGCGACT-----------TGAGTACTATTC-------------
 
-target    GATACTTTACGAGCATCGGC
-          -|||||||-|||||------
-query     -ATACTTT-CGAGC------
+target           59 GATACTTTACGAGCATCGGC 79
+                 60 -|||||||-|||||------ 80
+query            26 -ATACTTT-CGAGC------ 38
 """,
         )
         self.assertEqual(alignment.shape, (2, 80))
@@ -4298,13 +4298,13 @@ query	0	target	1	255	10D10M1I3M11D12M14D7M1D5M6D	*	0	0	AGCATCGAGCGACTTGAGTACTATT
         self.assertEqual(
             str(alignment),
             """\
-target    ACGATCAGCGAGCATNGAGC-ACTACGACAGCGAGTGACCACTATTCGCGATCAGGAGCA
-          ----------|||||.||||-|||-----------|||..|||||||-------------
-query     ----------AGCATCGAGCGACT-----------TGAGTACTATTC-------------
+target            0 ACGATCAGCGAGCATNGAGC-ACTACGACAGCGAGTGACCACTATTCGCGATCAGGAGCA
+                  0 ----------|||||.||||-|||-----------|||..|||||||-------------
+query            38 ----------AGCATCGAGCGACT-----------TGAGTACTATTC-------------
 
-target    GATACTTTACGAGCATCGGC
-          -|||||||-|||||------
-query     -ATACTTT-CGAGC------
+target           59 GATACTTTACGAGCATCGGC 79
+                 60 -|||||||-|||||------ 80
+query            12 -ATACTTT-CGAGC------  0
 """,
         )
         self.assertEqual(alignment.shape, (2, 80))
@@ -4339,9 +4339,9 @@ query	16	target	1	255	10D10M1I3M11D12M14D7M1D5M6D	*	0	0	AGCATCGAGCGACTTGAGTACTAT
         self.assertEqual(
             str(alignment),
             """\
-target    ----ACGTAGCATCAGC
-          ----|||||||||||||
-query     CCCCACGTAGCATCAGC
+target            0 ----ACGTAGCATCAGC 13
+                  0 ----||||||||||||| 17
+query             0 CCCCACGTAGCATCAGC 17
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
@@ -4372,9 +4372,9 @@ query	0	target	1	255	4I13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-target    ----ACGTAGCATCAGC
-          ----|||||||||||||
-query     CCCCACGTAGCATCAGC
+target            0 ----ACGTAGCATCAGC 13
+                  0 ----||||||||||||| 17
+query            17 CCCCACGTAGCATCAGC  0
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
@@ -4403,9 +4403,9 @@ query	16	target	1	255	4I13M	*	0	0	CCCCACGTAGCATCAGC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-target    CCCCACGTAGCATCAGC
-          ----|||||||||||||
-query     ----ACGTAGCATCAGC
+target            0 CCCCACGTAGCATCAGC 17
+                  0 ----||||||||||||| 17
+query             0 ----ACGTAGCATCAGC 13
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
@@ -4436,9 +4436,9 @@ query	0	target	1	255	4D13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-target    CCCCACGTAGCATCAGC
-          ----|||||||||||||
-query     ----ACGTAGCATCAGC
+target            0 CCCCACGTAGCATCAGC 17
+                  0 ----||||||||||||| 17
+query            13 ----ACGTAGCATCAGC  0
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
@@ -4466,9 +4466,9 @@ query	16	target	1	255	4D13M	*	0	0	ACGTAGCATCAGC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-target    ACGTAGCATCAGC----
-          |||||||||||||----
-query     ACGTAGCATCAGCGGGG
+target            0 ACGTAGCATCAGC---- 13
+                  0 |||||||||||||---- 17
+query             0 ACGTAGCATCAGCGGGG 17
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
@@ -4498,9 +4498,9 @@ query	0	target	1	255	13M4I	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-target    ACGTAGCATCAGC----
-          |||||||||||||----
-query     ACGTAGCATCAGCGGGG
+target            0 ACGTAGCATCAGC---- 13
+                  0 |||||||||||||---- 17
+query            17 ACGTAGCATCAGCGGGG  0
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
@@ -4529,9 +4529,9 @@ query	16	target	1	255	13M4I	*	0	0	ACGTAGCATCAGCGGGG	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-target    ACGTAGCATCAGCGGGG
-          |||||||||||||----
-query     ACGTAGCATCAGC----
+target            0 ACGTAGCATCAGCGGGG 17
+                  0 |||||||||||||---- 17
+query             0 ACGTAGCATCAGC---- 13
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
@@ -4562,9 +4562,9 @@ query	0	target	1	255	13M4D	*	0	0	ACGTAGCATCAGC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-target    ACGTAGCATCAGCGGGG
-          |||||||||||||----
-query     ACGTAGCATCAGC----
+target            0 ACGTAGCATCAGCGGGG 17
+                  0 |||||||||||||---- 17
+query            13 ACGTAGCATCAGC----  0
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
@@ -4603,9 +4603,9 @@ query	16	target	1	255	13M4D	*	0	0	ACGTAGCATCAGC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-target    ACGCTCGAGCAGCTACG
-          |||.||||||.||||||
-query     ACGATCGAGCNGCTACG
+target            6 ACGCTCGAGCAGCTACG 23
+                  0 |||.||||||.|||||| 17
+query             0 ACGATCGAGCNGCTACG 17
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
@@ -4633,9 +4633,9 @@ query	0	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-target    ACGCTCGAGCAGCTACG
-          |||.||||||.||||||
-query     ACGATCGAGCNGCTACG
+target            6 ACGCTCGAGCAGCTACG 23
+                  0 |||.||||||.|||||| 17
+query            22 ACGATCGAGCNGCTACG  5
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
@@ -4664,9 +4664,9 @@ query	16	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-target    ACGCTCGAGCAGCTACG
-          |||.||||||.||||||
-query     ACGATCGAGCNGCTACG
+target            6 ACGCTCGAGCAGCTACG 23
+                  0 |||.||||||.|||||| 17
+query             0 ACGATCGAGCNGCTACG 17
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
@@ -4696,9 +4696,9 @@ query	0	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-target    ACGCTCGAGCAGCTACG
-          |||.||||||.||||||
-query     ACGATCGAGCNGCTACG
+target            6 ACGCTCGAGCAGCTACG 23
+                  0 |||.||||||.|||||| 17
+query            22 ACGATCGAGCNGCTACG  5
 """,
         )
         self.assertEqual(alignment.shape, (2, 17))
@@ -4730,9 +4730,9 @@ query	16	target	7	255	17M5S	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-target    TTTTTNACGCTCGAGCAGCTACG-----
-          ------|||.||||||.||||||-----
-query     ------ACGATCGAGCNGCTACGCCCNC
+target            0 TTTTTNACGCTCGAGCAGCTACG----- 23
+                  0 ------|||.||||||.||||||----- 28
+query             0 ------ACGATCGAGCNGCTACGCCCNC 22
 """,
         )
         self.assertEqual(alignment.shape, (2, 28))
@@ -4760,9 +4760,9 @@ query	0	target	1	255	6D17M5I	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-target    TTTTTNACGCTCGAGCAGCTACG-----
-          ------|||.||||||.||||||-----
-query     ------ACGATCGAGCNGCTACGCCCNC
+target            0 TTTTTNACGCTCGAGCAGCTACG----- 23
+                  0 ------|||.||||||.||||||----- 28
+query            22 ------ACGATCGAGCNGCTACGCCCNC  0
 """,
         )
         self.assertEqual(alignment.shape, (2, 28))
@@ -4791,9 +4791,9 @@ query	16	target	1	255	6D17M5I	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-target    TTTTTNACGCTCGAGCAGCTACG-----
-          ------|||.||||||.||||||-----
-query     ------ACGATCGAGCNGCTACGCCCNC
+target            0 TTTTTNACGCTCGAGCAGCTACG----- 23
+                  0 ------|||.||||||.||||||----- 28
+query             0 ------ACGATCGAGCNGCTACGCCCNC 22
 """,
         )
         self.assertEqual(alignment.shape, (2, 28))
@@ -4823,9 +4823,9 @@ query	0	target	1	255	6D17M5I	*	0	0	ACGATCGAGCNGCTACGCCCNC	*	AS:i:13
         self.assertEqual(
             str(alignment),
             """\
-target    TTTTTNACGCTCGAGCAGCTACG-----
-          ------|||.||||||.||||||-----
-query     ------ACGATCGAGCNGCTACGCCCNC
+target            0 TTTTTNACGCTCGAGCAGCTACG----- 23
+                  0 ------|||.||||||.||||||----- 28
+query            22 ------ACGATCGAGCNGCTACGCCCNC  0
 """,
         )
         self.assertEqual(alignment.shape, (2, 28))

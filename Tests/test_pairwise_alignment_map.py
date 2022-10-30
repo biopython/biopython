@@ -49,9 +49,9 @@ class TestSimple(unittest.TestCase):
         self.assertEqual(
             str(alignment1),
             """\
-chromosom GGGGGGGCCCCCGGGGGGA
-          |||||||||||||||||||
-transcrip GGGGGGGCCCCCGGGGGGA
+chromosom        12 GGGGGGGCCCCCGGGGGGA 31
+                  0 ||||||||||||||||||| 19
+transcrip         0 GGGGGGGCCCCCGGGGGGA 19
 """,
         )
         alignments2 = aligner.align(transcript, sequence)
@@ -63,9 +63,9 @@ transcrip GGGGGGGCCCCCGGGGGGA
         self.assertEqual(
             str(alignment2),
             """\
-transcrip GGCCCCCGGG
-          ||||||||||
-sequence  GGCCCCCGGG
+transcrip         5 GGCCCCCGGG 15
+                  0 |||||||||| 10
+sequence          0 GGCCCCCGGG 10
 """,
         )
         alignment = alignment1.map(alignment2)
@@ -75,9 +75,9 @@ sequence  GGCCCCCGGG
         self.assertEqual(
             str(alignment),
             """\
-chromosom GGCCCCCGGG
-          ||||||||||
-sequence  GGCCCCCGGG
+chromosom        17 GGCCCCCGGG 27
+                  0 |||||||||| 10
+sequence          0 GGCCCCCGGG 10
 """,
         )
         line = format(alignment, "psl")
@@ -102,9 +102,9 @@ sequence  GGCCCCCGGG
         self.assertEqual(
             str(alignment1),
             """\
-chromosom GGGCCCCCGGGGGGA
-          |||||||||||||||
-transcrip GGGCCCCCGGGGGGA
+chromosom         0 GGGCCCCCGGGGGGA 15
+                  0 ||||||||||||||| 15
+transcrip         3 GGGCCCCCGGGGGGA 18
 """,
         )
         alignments2 = aligner.align(transcript, sequence)
@@ -113,9 +113,9 @@ transcrip GGGCCCCCGGGGGGA
         self.assertEqual(
             str(alignment2),
             """\
-transcrip GGGGGCCCCCGGG
-          |||||||||||||
-sequence  GGGGGCCCCCGGG
+transcrip         1 GGGGGCCCCCGGG 14
+                  0 ||||||||||||| 13
+sequence          0 GGGGGCCCCCGGG 13
 """,
         )
         alignment = alignment1.map(alignment2)
@@ -125,9 +125,9 @@ sequence  GGGGGCCCCCGGG
         self.assertEqual(
             str(alignment),
             """\
-chromosom GGGCCCCCGGG
-          |||||||||||
-sequence  GGGCCCCCGGG
+chromosom         0 GGGCCCCCGGG 11
+                  0 ||||||||||| 11
+sequence          2 GGGCCCCCGGG 13
 """,
         )
         line = format(alignment, "psl")
@@ -152,9 +152,9 @@ sequence  GGGCCCCCGGG
         self.assertEqual(
             str(alignment1),
             """\
-chromosom GGGGGGGCCCCCGGG
-          |||||||||||||||
-transcrip GGGGGGGCCCCCGGG
+chromosom        12 GGGGGGGCCCCCGGG 27
+                  0 ||||||||||||||| 15
+transcrip         0 GGGGGGGCCCCCGGG 15
 """,
         )
         alignments2 = aligner.align(transcript, sequence)
@@ -163,9 +163,9 @@ transcrip GGGGGGGCCCCCGGG
         self.assertEqual(
             str(alignment2),
             """\
-transcrip GGCCCCCGGGGG
-          ||||||||||||
-sequence  GGCCCCCGGGGG
+transcrip         5 GGCCCCCGGGGG 17
+                  0 |||||||||||| 12
+sequence          0 GGCCCCCGGGGG 12
 """,
         )
         alignment = alignment1.map(alignment2)
@@ -175,9 +175,9 @@ sequence  GGCCCCCGGGGG
         self.assertEqual(
             str(alignment),
             """\
-chromosom GGCCCCCGGG
-          ||||||||||
-sequence  GGCCCCCGGG
+chromosom        17 GGCCCCCGGG 27
+                  0 |||||||||| 10
+sequence          0 GGCCCCCGGG 10
 """,
         )
         line = format(alignment, "psl")
@@ -205,9 +205,9 @@ sequence  GGCCCCCGGG
         self.assertEqual(
             str(alignment1),
             """\
-chromosom GGGGGGGCCCCCGGGGGGA
-          |||||||||||||||||||
-transcrip GGGGGGGCCCCCGGGGGGA
+chromosom        12 GGGGGGGCCCCCGGGGGGA 31
+                  0 ||||||||||||||||||| 19
+transcrip        19 GGGGGGGCCCCCGGGGGGA  0
 """,
         )
         alignments2 = aligner.align(transcript, sequence, strand="-")
@@ -219,9 +219,9 @@ transcrip GGGGGGGCCCCCGGGGGGA
         self.assertEqual(
             str(alignment2),
             """\
-transcrip CCCGGGGGCC
-          ||||||||||
-sequence  CCCGGGGGCC
+transcrip         4 CCCGGGGGCC 14
+                  0 |||||||||| 10
+sequence         10 CCCGGGGGCC  0
 """,
         )
         alignment = alignment1.map(alignment2)
@@ -231,9 +231,9 @@ sequence  CCCGGGGGCC
         self.assertEqual(
             str(alignment),
             """\
-chromosom GGCCCCCGGG
-          ||||||||||
-sequence  GGCCCCCGGG
+chromosom        17 GGCCCCCGGG 27
+                  0 |||||||||| 10
+sequence          0 GGCCCCCGGG 10
 """,
         )
         line = format(alignment, "psl")
@@ -261,9 +261,9 @@ sequence  GGCCCCCGGG
         self.assertEqual(
             str(alignment1),
             """\
-chromosom GGGGGGGCCCCCGGGGGGA
-          |||||||||||||||||||
-transcrip GGGGGGGCCCCCGGGGGGA
+chromosom        12 GGGGGGGCCCCCGGGGGGA 31
+                  0 ||||||||||||||||||| 19
+transcrip         0 GGGGGGGCCCCCGGGGGGA 19
 """,
         )
         alignments2 = aligner.align(transcript, sequence, "-")
@@ -275,9 +275,9 @@ transcrip GGGGGGGCCCCCGGGGGGA
         self.assertEqual(
             str(alignment2),
             """\
-transcrip GGCCCCCGGG
-          ||||||||||
-sequence  GGCCCCCGGG
+transcrip         5 GGCCCCCGGG 15
+                  0 |||||||||| 10
+sequence         10 GGCCCCCGGG  0
 """,
         )
         alignment = alignment1.map(alignment2)
@@ -287,9 +287,9 @@ sequence  GGCCCCCGGG
         self.assertEqual(
             str(alignment),
             """\
-chromosom GGCCCCCGGG
-          ||||||||||
-sequence  GGCCCCCGGG
+chromosom        17 GGCCCCCGGG 27
+                  0 |||||||||| 10
+sequence         10 GGCCCCCGGG  0
 """,
         )
         line = format(alignment, "psl")
@@ -317,9 +317,9 @@ sequence  GGCCCCCGGG
         self.assertEqual(
             str(alignment1),
             """\
-chromosom GGGGGGGCCCCCGGGGGGA
-          |||||||||||||||||||
-transcrip GGGGGGGCCCCCGGGGGGA
+chromosom        12 GGGGGGGCCCCCGGGGGGA 31
+                  0 ||||||||||||||||||| 19
+transcrip        19 GGGGGGGCCCCCGGGGGGA  0
 """,
         )
         alignments2 = aligner.align(transcript, sequence)
@@ -331,9 +331,9 @@ transcrip GGGGGGGCCCCCGGGGGGA
         self.assertEqual(
             str(alignment2),
             """\
-transcrip CCCGGGGGCC
-          ||||||||||
-sequence  CCCGGGGGCC
+transcrip         4 CCCGGGGGCC 14
+                  0 |||||||||| 10
+sequence          0 CCCGGGGGCC 10
 """,
         )
         alignment = alignment1.map(alignment2)
@@ -343,9 +343,9 @@ sequence  CCCGGGGGCC
         self.assertEqual(
             str(alignment),
             """\
-chromosom GGCCCCCGGG
-          ||||||||||
-sequence  GGCCCCCGGG
+chromosom        17 GGCCCCCGGG 27
+                  0 |||||||||| 10
+sequence         10 GGCCCCCGGG  0
 """,
         )
         line = format(alignment, "psl")
@@ -387,41 +387,41 @@ class TestComplex(unittest.TestCase):
         self.assertEqual(
             str(alignment1),
             """\
-chromosom AATGGTTATA------ATACAAGG-CGG----TCATAATTAAAGGGAGTG---CAGCAAC
-          |||--||-||------|---||||-|||----||------.|||||---|---|||||--
-transcrip AAT--TT-TAGCAGCCA---AAGGACGGATCCTC------CAAGGG---GCCCCAGCA--
+chromosom        14 AATGGTTATA------ATACAAGG-CGG----TCATAATTAAAGGGAGTG---CAGCAAC
+                  0 |||--||-||------|---||||-|||----||------.|||||---|---|||||--
+transcrip         2 AAT--TT-TAGCAGCCA---AAGGACGGATCCTC------CAAGGG---GCCCCAGCA--
 
-chromosom GGCCTGCTCTCCAAAAAAACAGGTTTTATGAAAAGAAAGTGCATTAACTGTTAAAGC---
-          ---|.||-----------|||--||||-|------||.|.|----||||----||||---
-transcrip ---CAGC-----------ACA--TTTT-T------AACGCG----AACT----AAGCGGG
+chromosom        60 GGCCTGCTCTCCAAAAAAACAGGTTTTATGAAAAGAAAGTGCATTAACTGTTAAAGC---
+                 60 ---|.||-----------|||--||||-|------||.|.|----||||----||||---
+transcrip        45 ---CAGC-----------ACA--TTTT-T------AACGCG----AACT----AAGCGGG
 
-chromosom --CGTCATATCGGTGG----GTTCTGCCAGTCACCGGCATACGTCCTGGGACAAAGACTT
-          --||-|||----||||----||--||--|-|--||--|||.||-|||----||||-|---
-transcrip AGCG-CAT----GTGGGACAGT--TG--A-T--CC--CATCCG-CCT----CAAA-A---
+chromosom       117 --CGTCATATCGGTGG----GTTCTGCCAGTCACCGGCATACGTCCTGGGACAAAGACTT
+                120 --||-|||----||||----||--||--|-|--||--|||.||-|||----||||-|---
+transcrip        74 AGCG-CAT----GTGGGACAGT--TG--A-T--CC--CATCCG-CCT----CAAA-A---
 
-chromosom TTTACT-ACAATGCCAGGCGGGAGAGTCACCCGCCGCGGTGTCGACCCAGGGG-ACAGCG
-          |||-||-.||||------------|-|---------||||-|-------||||-||||--
-transcrip TTT-CTCGCAAT------------A-T---------CGGT-T-------GGGGCACAG--
+chromosom       171 TTTACT-ACAATGCCAGGCGGGAGAGTCACCCGCCGCGGTGTCGACCCAGGGG-ACAGCG
+                180 |||-||-.||||------------|-|---------||||-|-------||||-||||--
+transcrip       111 TTT-CTCGCAAT------------A-T---------CGGT-T-------GGGGCACAG--
 
-chromosom GGAAGATGTCGTGGTTTC-CTT---G---TCATTAACC-------A-ACTCCATCTTA--
-          -------|||-------|-|||---|---||||--|||-------|-|--||-|-|||--
-transcrip -------GTC-------CACTTTACGAATTCAT--ACCGTGGTAGAGA--CC-T-TTATT
+chromosom       229 GGAAGATGTCGTGGTTTC-CTT---G---TCATTAACC-------A-ACTCCATCTTA--
+                240 -------|||-------|-|||---|---||||--|||-------|-|--||-|-|||--
+transcrip       138 -------GTC-------CACTTTACGAATTCAT--ACCGTGGTAGAGA--CC-T-TTATT
 
-chromosom AAAGCTCCTCTAGCCATGGCATG---GT---ACGTTGCGCGCACCCTTTTA-T----CG-
-          |.|-------|||--||---|||---||---|--|||||-|||------||-|----||-
-transcrip AGA-------TAG--AT---ATGACTGTTTGA--TTGCG-GCA------TAGTACGACGA
+chromosom       272 AAAGCTCCTCTAGCCATGGCATG---GT---ACGTTGCGCGCACCCTTTTA-T----CG-
+                300 |.|-------|||--||---|||---||---|--|||||-|||------||-|----||-
+transcrip       178 AGA-------TAG--AT---ATGACTGTTTGA--TTGCG-GCA------TAGTACGACGA
 
-chromosom -GTAAGG-------CG---CGGT-------GACTCTC--------TCCCAAAACAGTGCC
-          -|.||||-------||---||||-------|||---|--------||..||||||-----
-transcrip AGCAAGGGGATGGACGTTTCGGTTGCATTCGAC---CGGGTTGGGTCGAAAAACA-----
+chromosom       320 -GTAAGG-------CG---CGGT-------GACTCTC--------TCCCAAAACAGTGCC
+                360 -|.||||-------||---||||-------|||---|--------||..||||||-----
+transcrip       217 AGCAAGGGGATGGACGTTTCGGTTGCATTCGAC---CGGGTTGGGTCGAAAAACA-----
 
-chromosom ATAATGGTTCGCTTCCTACCT-------AAG-GCACTT-ACGGCCAATTAATGCGCAAGC
-          -----|||----||--||--|-------|||-|||-||-||.|----|||------||||
-transcrip -----GGT----TT--TA--TGAAAAGAAAGTGCA-TTAACTG----TTA------AAGC
+chromosom       354 ATAATGGTTCGCTTCCTACCT-------AAG-GCACTT-ACGGCCAATTAATGCGCAAGC
+                420 -----|||----||--||--|-------|||-|||-||-||.|----|||------||||
+transcrip       269 -----GGT----TT--TA--TGAAAAGAAAGTGCA-TTAACTG----TTA------AAGC
 
-chromosom GAGCGGAAGGTC-TAACAG-GGCACCGAATTC
-          ---|-----|||-||.|.|-||----|--|||
-transcrip ---C-----GTCATATCGGTGG----G--TTC
+chromosom       405 GAGCGGAAGGTC-TAACAG-GGCACCGAATTC 435
+                480 ---|-----|||-||.|.|-||----|--||| 512
+transcrip       305 ---C-----GTCATATCGGTGG----G--TTC 323
 """,
         )
         alignments2 = aligner.align(transcript, sequence)
@@ -430,25 +430,25 @@ transcrip ---C-----GTCATATCGGTGG----G--TTC
         self.assertEqual(
             str(alignment2),
             """\
-transcrip TCCAAGGGGCCCCAGCACAGCACATTTTTAACGCGAACTAAGCGGGAGCGCATGTGGGAC
-          |||||||||||||||||||||||||||||||||||--------------------|||||
-sequence  TCCAAGGGGCCCCAGCACAGCACATTTTTAACGCG--------------------GGGAC
+transcrip        28 TCCAAGGGGCCCCAGCACAGCACATTTTTAACGCGAACTAAGCGGGAGCGCATGTGGGAC
+                  0 |||||||||||||||||||||||||||||||||||--------------------|||||
+sequence          0 TCCAAGGGGCCCCAGCACAGCACATTTTTAACGCG--------------------GGGAC
 
-transcrip AGTTGATCCCATCCGCCTCAAAATTTCTCGCAATATCGGTTGGGGCACAGGTCCACTTTA
-          ||||||||||||||||||--------------------------------------||||
-sequence  AGTTGATCCCATCCGCCT--------------------------------------TTTA
+transcrip        88 AGTTGATCCCATCCGCCTCAAAATTTCTCGCAATATCGGTTGGGGCACAGGTCCACTTTA
+                 60 ||||||||||||||||||--------------------------------------||||
+sequence         40 AGTTGATCCCATCCGCCT--------------------------------------TTTA
 
-transcrip CGAATTCATACCGTGGTAGAGACCTTTATTAGATAGATATGACTGTTTGATTGCGGCATA
-          |||||||||||||||||||---------------------------------||||||||
-sequence  CGAATTCATACCGTGGTAG---------------------------------GCGGCATA
+transcrip       148 CGAATTCATACCGTGGTAGAGACCTTTATTAGATAGATATGACTGTTTGATTGCGGCATA
+                120 |||||||||||||||||||---------------------------------||||||||
+sequence         62 CGAATTCATACCGTGGTAG---------------------------------GCGGCATA
 
-transcrip GTACGACGAAGCAAGGGGATGGACGTTTCGGTTGCATTCGACCGGGTTGGGTCGAAAAAC
-          ||||||||||||--------------------------------||||||||||||||||
-sequence  GTACGACGAAGC--------------------------------GGTTGGGTCGAAAAAC
+transcrip       208 GTACGACGAAGCAAGGGGATGGACGTTTCGGTTGCATTCGACCGGGTTGGGTCGAAAAAC
+                180 ||||||||||||--------------------------------||||||||||||||||
+sequence         89 GTACGACGAAGC--------------------------------GGTTGGGTCGAAAAAC
 
-transcrip AGGTTTTATGAAAAGAAAGTGCATTAACTGTTAAAGCCGTCATATCGGTGGGTTC
-          |||||------------------------------||||||||||||||||||||
-sequence  AGGTT------------------------------GCCGTCATATCGGTGGGTTC
+transcrip       268 AGGTTTTATGAAAAGAAAGTGCATTAACTGTTAAAGCCGTCATATCGGTGGGTTC 323
+                240 |||||------------------------------|||||||||||||||||||| 295
+sequence        117 AGGTT------------------------------GCCGTCATATCGGTGGGTTC 142
 """,
         )
         alignment = alignment1.map(alignment2)
@@ -456,37 +456,37 @@ sequence  AGGTT------------------------------GCCGTCATATCGGTGGGTTC
         self.assertEqual(
             str(alignment),
             """\
-chromosom TCATAATTAAAGGGAGTG---CAGCAACGGCCTGCTCTCCAAAAAAACAGGTTTTATGAA
-          ||------.|||||---|---|||||-----|.||-----------|||--||||-|---
-sequence  TC------CAAGGG---GCCCCAGCA-----CAGC-----------ACA--TTTT-T---
+chromosom        35 TCATAATTAAAGGGAGTG---CAGCAACGGCCTGCTCTCCAAAAAAACAGGTTTTATGAA
+                  0 ||------.|||||---|---|||||-----|.||-----------|||--||||-|---
+sequence          0 TC------CAAGGG---GCCCCAGCA-----CAGC-----------ACA--TTTT-T---
 
-chromosom AAGAAAGTGCATTAACTGTTAAAGCCGTCATATCGGTGG----GTTCTGCCAGTCACCGG
-          ---||.|.|----------------------------||----||--||--|-|--||--
-sequence  ---AACGCG----------------------------GGGACAGT--TG--A-T--CC--
+chromosom        92 AAGAAAGTGCATTAACTGTTAAAGCCGTCATATCGGTGG----GTTCTGCCAGTCACCGG
+                 60 ---||.|.|----------------------------||----||--||--|-|--||--
+sequence         29 ---AACGCG----------------------------GGGACAGT--TG--A-T--CC--
 
-chromosom CATACGTCCTGGGACAAAGACTTTTTACTACAATGCCAGGCGGGAGAGTCACCCGCCGCG
-          |||.||-|||--------------------------------------------------
-sequence  CATCCG-CCT--------------------------------------------------
+chromosom       148 CATACGTCCTGGGACAAAGACTTTTTACTACAATGCCAGGCGGGAGAGTCACCCGCCGCG
+                120 |||.||-|||--------------------------------------------------
+sequence         49 CATCCG-CCT--------------------------------------------------
 
-chromosom GTGTCGACCCAGGGGACAGCGGGAAGATGTCGTGGTTTCCTT---G---TCATTAACCAA
-          ----------------------------------------||---|---||||--|||--
-sequence  ----------------------------------------TTTACGAATTCAT--ACC--
+chromosom       208 GTGTCGACCCAGGGGACAGCGGGAAGATGTCGTGGTTTCCTT---G---TCATTAACCAA
+                180 ----------------------------------------||---|---||||--|||--
+sequence         58 ----------------------------------------TTTACGAATTCAT--ACC--
 
-chromosom CTCCATCTTAAAAGCTCCTCTAGCCATGGCATGGTACGTT-------GCGCGCACCCTTT
-          -----------------------------------------------|||-|||------
-sequence  ----------------------------------------GTGGTAGGCG-GCA------
+chromosom       262 CTCCATCTTAAAAGCTCCTCTAGCCATGGCATGGTACGTT-------GCGCGCACCCTTT
+                240 -----------------------------------------------|||-|||------
+sequence         74 ----------------------------------------GTGGTAGGCG-GCA------
 
-chromosom TA-T----CG--GTAAGGCGCGGTGACTCTC-------TCCCAAAACAGTGCCATAATGG
-          ||-|----||--|.------------------------||..||||||----------||
-sequence  TAGTACGACGAAGC-----------------GGTTGGGTCGAAAAACA----------GG
+chromosom       315 TA-T----CG--GTAAGGCGCGGTGACTCTC-------TCCCAAAACAGTGCCATAATGG
+                300 ||-|----||--|.------------------------||..||||||----------||
+sequence         87 TAGTACGACGAAGC-----------------GGTTGGGTCGAAAAACA----------GG
 
-chromosom TTCGCTTCCTACCTAAGGCACTTACGGCCAATTAATGCGCAAGCGAGCGGAAGGTC-TAA
-          |----|------------------------------------||---|-----|||-||.
-sequence  T----T------------------------------------GC---C-----GTCATAT
+chromosom       361 TTCGCTTCCTACCTAAGGCACTTACGGCCAATTAATGCGCAAGCGAGCGGAAGGTC-TAA
+                360 |----|------------------------------------||---|-----|||-||.
+sequence        120 T----T------------------------------------GC---C-----GTCATAT
 
-chromosom CAG-GGCACCGAATTC
-          |.|-||----|--|||
-sequence  CGGTGG----G--TTC
+chromosom       420 CAG-GGCACCGAATTC 435
+                420 |.|-||----|--||| 436
+sequence        132 CGGTGG----G--TTC 142
 """,
         )
         line = format(alignment, "psl")
@@ -517,41 +517,41 @@ sequence  CGGTGG----G--TTC
         self.assertEqual(
             str(alignment1),
             """\
-chromosom GCGCCTTGGTTTTGGCTTAACTAGA-------AGCAACC-TGTAAGATTGCCAATTCTTC
-          |||--|.|||---------||.|||-------||-.|||-||||------------||--
-transcrip GCG--TCGGT---------ACCAGAGGGCGTGAG-TACCTTGTA------------CT--
+chromosom         5 GCGCCTTGGTTTTGGCTTAACTAGA-------AGCAACC-TGTAAGATTGCCAATTCTTC
+                  0 |||--|.|||---------||.|||-------||-.|||-||||------------||--
+transcrip         5 GCG--TCGGT---------ACCAGAGGGCGTGAG-TACCTTGTA------------CT--
 
-chromosom AGTCGAAGTAAATCTTCAATGTTTTGGA------CTCTTAG----CGGATATGCGGCTGA
-          ------||||---|-|||-----|||||------|||||||----|----||----||-|
-transcrip ------AGTA---C-TCA-----TTGGAATAATGCTCTTAGAAGTC----AT----CT-A
+chromosom        57 AGTCGAAGTAAATCTTCAATGTTTTGGA------CTCTTAG----CGGATATGCGGCTGA
+                 60 ------||||---|-|||-----|||||------|||||||----|----||----||-|
+transcrip        39 ------AGTA---C-TCA-----TTGGAATAATGCTCTTAGAAGTC----AT----CT-A
 
-chromosom GAAGTACGACA-----TGT---GT----ACATTCATAC--CTGCGT-------GACGGTC
-          .||||--||||-----|||---||----||.|||--||--|-||||-------|||--|-
-transcrip AAAGT--GACAACGCCTGTTTGGTTATGACGTTC--ACGAC-GCGTCTTAACAGAC--T-
+chromosom       107 GAAGTACGACA-----TGT---GT----ACATTCATAC--CTGCGT-------GACGGTC
+                120 .||||--||||-----|||---||----||.|||--||--|-||||-------|||--|-
+transcrip        75 AAAGT--GACAACGCCTGTTTGGTTATGACGTTC--ACGAC-GCGTCTTAACAGAC--T-
 
-chromosom AGCCT----CCCCCGGGACCTCATTG-GGCGAATCTAGGTGTGATA-A-----TTGACA-
-          |||.|----||..||||------|||-||||--|||.|||-|||||-|-----|||-||-
-transcrip AGCATTAGACCGACGGG------TTGAGGCG--TCTGGGT-TGATACAGCCGTTTG-CAT
+chromosom       146 AGCCT----CCCCCGGGACCTCATTG-GGCGAATCTAGGTGTGATA-A-----TTGACA-
+                180 |||.|----||..||||------|||-||||--|||.|||-|||||-|-----|||-||-
+transcrip       127 AGCATTAGACCGACGGG------TTGAGGCG--TCTGGGT-TGATACAGCCGTTTG-CAT
 
-chromosom CA----CTCTTGGTAAGAAGCACTCT---------TTACCCGATCTCCAAGTACCGACGC
-          ||----.|||-------||-||||||---------||----|||------|.||||----
-transcrip CAGTGTATCT-------AA-CACTCTGAGGGATAATT----GAT------GAACCG----
+chromosom       194 CA----CTCTTGGTAAGAAGCACTCT---------TTACCCGATCTCCAAGTACCGACGC
+                240 ||----.|||-------||-||||||---------||----|||------|.||||----
+transcrip       177 CAGTGTATCT-------AA-CACTCTGAGGGATAATT----GAT------GAACCG----
 
-chromosom CAAGGCCAAGCTCTG-----CGATCTAAAGCTGCCGATCGTAGATCCAAGTCCTCAGCAA
-          -------------||-----||||----||.|----||-|||----|-|||.|-||.||-
-transcrip -------------TGTTTTCCGAT----AGGT----AT-GTA----C-AGTAC-CACCA-
+chromosom       241 CAAGGCCAAGCTCTG-----CGATCTAAAGCTGCCGATCGTAGATCCAAGTCCTCAGCAA
+                300 -------------||-----||||----||.|----||-|||----|-|||.|-||.||-
+transcrip       215 -------------TGTTTTCCGAT----AGGT----AT-GTA----C-AGTAC-CACCA-
 
-chromosom GCTCGCACGAATACGCAG-------TTCGAAGGCTGGGTGTTGTACGACGGTACGGTTGC
-          ---|||||||.||---||-------||------|||.|||-----|||||||--------
-transcrip ---CGCACGACTA---AGGACCATTTT------CTGCGTG-----CGACGGT--------
+chromosom       296 GCTCGCACGAATACGCAG-------TTCGAAGGCTGGGTGTTGTACGACGGTACGGTTGC
+                360 ---|||||||.||---||-------||------|||.|||-----|||||||--------
+transcrip       246 ---CGCACGACTA---AGGACCATTTT------CTGCGTG-----CGACGGT--------
 
-chromosom TATAGCACTTTCGCGGTCTCGCTATTTTCAGTTTGACTCACCAGTCAGTATTGTCATCGA
-          ||-|--|----------------||----------|---|||--|||--------|||--
-transcrip TA-A--A----------------AT----------A---ACC--TCA--------ATC--
+chromosom       349 TATAGCACTTTCGCGGTCTCGCTATTTTCAGTTTGACTCACCAGTCAGTATTGTCATCGA
+                420 ||-|--|----------------||----------|---|||--|||--------|||--
+transcrip       281 TA-A--A----------------AT----------A---ACC--TCA--------ATC--
 
-chromosom CCAACT
-          ---|||
-transcrip ---ACT
+chromosom       409 CCAACT 415
+                480 ---||| 486
+transcrip       297 ---ACT 300
 """,
         )
         alignments2 = aligner.align(transcript, sequence)
@@ -560,25 +560,25 @@ transcrip ---ACT
         self.assertEqual(
             str(alignment2),
             """\
-transcrip TCGGTACCAGAGGGCGTGAGTACCTTGTACTAGTACTCATTGGAATAATGCTCTTAGAAG
-          ||------------|-------||||---|||------|-||||||--------------
-sequence  TC------------C-------CCTT---CTA------A-TGGAAT--------------
+transcrip         8 TCGGTACCAGAGGGCGTGAGTACCTTGTACTAGTACTCATTGGAATAATGCTCTTAGAAG
+                  0 ||------------|-------||||---|||------|-||||||--------------
+sequence          0 TC------------C-------CCTT---CTA------A-TGGAAT--------------
 
-transcrip TCATCTAAAAGTGACAACGCCTGTTTGGTTATGACGTTCACGACGCGTCTTAACAGACTA
-          -----------------|.||-------------|--||-|||.|-|||---.||||--|
-sequence  -----------------CCCC-------------C--TC-CGAAG-GTC---GCAGA--A
+transcrip        68 TCATCTAAAAGTGACAACGCCTGTTTGGTTATGACGTTCACGACGCGTCTTAACAGACTA
+                 60 -----------------|.||-------------|--||-|||.|-|||---.||||--|
+sequence         17 -----------------CCCC-------------C--TC-CGAAG-GTC---GCAGA--A
 
-transcrip GCATTAGACCGACG--GGTTGAGGCGTCTGGGTTGATACAGCCGTTTGCATCAGTGTATC
-          ||----|.||-|||--|---||------------|||||------------||||---||
-sequence  GC----GGCC-ACGCCG---GA------------GATAC------------CAGT---TC
+transcrip       128 GCATTAGACCGACG--GGTTGAGGCGTCTGGGTTGATACAGCCGTTTGCATCAGTGTATC
+                120 ||----|.||-|||--|---||------------|||||------------||||---||
+sequence         38 GC----GGCC-ACGCCG---GA------------GATAC------------CAGT---TC
 
-transcrip TAACA---CTCTGAGGGATAATTGATGAACCGTGTTTTCCGATAGGTATGTACAGTACCA
-          ---||---|||--|||-----|||--||--|-----||----------------||----
-sequence  ---CACGCCTC--AGG-----TTG--GA--C-----TT----------------GT----
+transcrip       186 TAACA---CTCTGAGGGATAATTGATGAACCGTGTTTTCCGATAGGTATGTACAGTACCA
+                180 ---||---|||--|||-----|||--||--|-----||----------------||----
+sequence         63 ---CACGCCTC--AGG-----TTG--GA--C-----TT----------------GT----
 
-transcrip CCACGCACGACTAAGGACCATTTTCTG--CGTGCGA
-          -----|||-|||-------------||--|--||||
-sequence  -----CAC-ACT-------------TGTAC--GCGA
+transcrip       243 CCACGCACGACTAAGGACCATTTTCTG--CGTGCGA 277
+                240 -----|||-|||-------------||--|--|||| 276
+sequence         84 -----CAC-ACT-------------TGTAC--GCGA  99
 """,
         )
         alignment = alignment1.map(alignment2)
@@ -586,29 +586,33 @@ sequence  -----CAC-ACT-------------TGTAC--GCGA
         self.assertEqual(
             str(alignment),
             """\
-chromosom TTGGTTTTGGCTTAACTAGAAGCAA-CC-TGTAAGATTGCCAATTCTTCAGTCGAAGTAA
-          |.------------------------||-|---------------||--------|----
-sequence  TC-----------------------CCCTT---------------CT--------A----
+chromosom        10 TTGGTTTTGGCTTAACTAGAAGCAA-CC-TGTAAGATTGCCAATTCTTCAGTCGAAGTAA
+                  0 |.------------------------||-|---------------||--------|----
+sequence          0 TC-----------------------CCCTT---------------CT--------A----
 
-chromosom ATCTTCAATGTTTTGGACTCTTAGCGGATATGCGGCTGAGAAGTACGACATGTGTA----
-          ------|------||||-------------------------------------------
-sequence  ------A------TGGA---------------------------------------ATCC
+chromosom        68 ATCTTCAATGTTTTGGACTCTTAGCGGATATGCGGCTGAGAAGTACGACATGTGTA----
+                 60 ------|------||||-------------------------------------------
+sequence         10 ------A------TGGA---------------------------------------ATCC
 
-chromosom --CATTCATAC--CTGCGT----GACGGTCAGCCT--CCCCCG--GGACCTCATTGGGCG
-          --|--||---|--.-|-||----||-----|||----||-.||--|---------|----
-sequence  CCC--TC---CGAA-G-GTCGCAGA-----AGC--GGCC-ACGCCG---------G----
+chromosom       124 --CATTCATAC--CTGCGT----GACGGTCAGCCT--CCCCCG--GGACCTCATTGGGCG
+                120 --|--||---|--.-|-||----||-----|||----||-.||--|---------|----
+sequence         19 CCC--TC---CGAA-G-GTCGCAGA-----AGC--GGCC-ACGCCG---------G----
 
-chromosom AATCTAGGTGT-GATAATTGACA-CAC--TCTTGGTAAGAAGCA---CTCT---TTACCC
-          ------------||||--------||---||-----------||---|||----||----
-sequence  -----------AGATA-------CCA-GTTC-----------CACGCCTC-AGGTT----
+chromosom       172 AATCTAGGTGT-GATAATTGACA-CAC--TCTTGGTAAGAAGCA---CTCT---TTACCC
+                180 ------------||||--------||---||-----------||---|||----||----
+sequence         51 -----------AGATA-------CCA-GTTC-----------CACGCCTC-AGGTT----
 
-chromosom GATCTCCAAGTACCGACGCCAAGGCCAAGCTCTGCGATCTAAAGCTGCCGATCGTAGATC
-          |--------|.--|----------------------------------------------
-sequence  G--------GA--C----------------------------------------------
+chromosom       222 GATCTCCAAGTACCGACGCCAAGGCCAAGCTCTGCGATCTAAAGCTGCCGATCGTAGATC
+                240 |--------|.--|----------------------------------------------
+sequence         76 G--------GA--C----------------------------------------------
 
-chromosom CAA--GTCCTCAGCAAGCTCGCACGAATACGCAGTTCGAAGGCTG--GGTGTTGTACGA
-          -----||--------------|||-|.|---------------||--.--|-----|||
-sequence  ---TTGT--------------CAC-ACT---------------TGTAC--G-----CGA
+chromosom       282 CAA--GTCCTCAGCAAGCTCGCACGAATACGCAGTTCGAAGGCTG--GGTGTTGTACGA
+                300 -----||--------------|||-|.|---------------||--.--|-----|||
+sequence         80 ---TTGT--------------CAC-ACT---------------TGTAC--G-----CGA
+
+chromosom       337
+                359
+sequence         99
 """,
         )
         line = format(alignment, "psl")
