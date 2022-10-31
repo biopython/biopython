@@ -2118,9 +2118,58 @@ class Alignment:
         return f"{aligned_seq1}\n{pattern}\n{aligned_seq2}\n"
 
     def __str__(self):
-        """Return a string representation of the Alignment object.
+        """Return a human-readable string representation of the alignment.
 
-        Wrapper for self.format().
+        For sequence alignments, each line has at most 80 columns.
+        The first 10 columns show the (possibly truncated) sequence name,
+        which may be the id attribute of a SeqRecord, or otherwise 'target'
+        or 'query' for pairwise alignments.
+        The next 10 columns show the sequence coordinate, using zero-based
+        counting as usual in Python.
+        The remaining 60 columns shown the sequence, using dashes to represent
+        gaps.
+        At the end of the alignment, the end coordinates are shown on the right
+        of the sequence, again in zero-based coordinates.
+
+        Pairwise alignments have an additional line between the two sequences
+        showing whether the sequences match ('|') or mismatch ('.'), or if
+        there is a gap ('-').
+        The coordinates shown for this line are the column indices, which can
+        be useful when extracting a subalignment.
+
+        For example,
+
+        >>> from Bio.Align import PairwiseAligner
+        >>> aligner = PairwiseAligner()
+
+        >>> seqA = "TTAACCCCATTTG"
+        >>> seqB = "AAGCCCCTTT"
+        >>> seqC = "AAAGGGGCTT"
+
+        >>> alignments = aligner.align(seqA, seqB)
+        >>> len(alignments)
+        1
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        target            0 TTAA-CCCCATTTG 13
+                          0 --||-||||-|||- 14
+        query             0 --AAGCCCC-TTT- 10
+        <BLANKLINE>
+
+        Note that seqC is the reverse complement of seqB. Aligning it to the
+        reverse strand gives the same alignment, but the query coordinates are
+        switched:
+
+        >>> alignments = aligner.align(seqA, seqC, strand="-")
+        >>> len(alignments)
+        1
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        target            0 TTAA-CCCCATTTG 13
+                          0 --||-||||-|||- 14
+        query            10 --AAGCCCC-TTT-  0
+        <BLANKLINE>
+
         """
         return self.format()
 
