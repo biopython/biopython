@@ -95,6 +95,7 @@ possible, especially the following contributors:
 - Sebastian Bassi
 - Sean Aubin
 - Sean Workman (first contribution)
+- Soroush Saffari (first contribution)
 - Tim Burke
 - Valentin Vareškić (first contribution)
 

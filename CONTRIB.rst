@@ -283,6 +283,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Shyam Saladi <https://github.com/smsaladi>
 - Siong Kong <https://github.com/siongkong>
 - Sjoerd de Vries <https://github.com/sjdv1982>
+- Soroush Saffari <https://github.com/sorsaffari>
 - Sourav Singh <https://github.com/souravsingh>
 - Spencer Bliven <https://github.com/sbliven>
 - Stefans Mezulis <https://github.com/StefansM>

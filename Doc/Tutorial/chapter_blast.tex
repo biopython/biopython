@@ -42,7 +42,22 @@ can either be the sequence itself, the sequence in fasta format,
 or an identifier like a GI number.
 \end{itemize}
 
-The \verb|qblast| function also take a number of other option arguments
+NCBI guidelines, from \url{https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=DeveloperInfo} state:
+\begin{enumerate}
+\item Do not contact the server more often than once every 10 seconds.
+\item Do not poll for any single RID more often than once a minute.
+\item Use the URL parameter email and tool, so that the NCBI can contact you if there is a problem.
+\item Run scripts weekends or between 9 pm and 5 am Eastern time on weekdays if more than 50 searches will be submitted.
+\end{enumerate}
+
+To fulfill the third point, one can set the \verb|NCBIWWW.email| variable.
+%doctest
+\begin{minted}{pycon}
+>>> from Bio.Blast import NCBIWWW
+>>> NCBIWWW.email = "A.N.Other@example.com"
+\end{minted}
+
+The \verb|qblast| function also takes a number of other option arguments,
 which are basically analogous to the different parameters you can set
 on the BLAST web page.  We'll just highlight a few of them here:
 
@@ -62,6 +77,7 @@ described in section~\ref{sec:parsing-blast} below.
 For more about the optional BLAST arguments, we refer you to the NCBI's own
 documentation, or that built into Biopython:
 
+%doctest
 \begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> help(NCBIWWW.qblast)

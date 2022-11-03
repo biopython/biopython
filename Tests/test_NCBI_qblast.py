@@ -41,6 +41,9 @@ from Bio.Blast import NCBIXML
 import requires_internet
 
 
+NCBIWWW.email = "biopython@biopython.org"
+
+
 try:
     requires_internet.check()
     # this will set 'require_internet.check.available' (if not already done before)
