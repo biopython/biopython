@@ -45,7 +45,8 @@ class Record:
      - sequence_update   A tuple of (date, release).
      - annotation_update A tuple of (date, release).
      - description       Free-format description.
-     - gene_name         Gene name.  See userman.txt for description.
+     - gene_name         A list of dictionaries with keys 'Name', 'Synonyms',
+                         'OrderedLocusNames' and 'ORFNames'.
      - organism          The source of the sequence.
      - organelle         The origin of the sequence.
      - organism_classification  The taxonomy classification.  List of strings.
@@ -98,7 +99,7 @@ class Record:
         self.annotation_update = None
 
         self.description = []
-        self.gene_name = ""
+        self.gene_name = []
         self.organism = []
         self.organelle = ""
         self.organism_classification = []
@@ -304,9 +305,7 @@ def _read(handle):
         elif key == "DE":
             record.description.append(value.strip())
         elif key == "GN":
-            if record.gene_name:
-                record.gene_name += " "
-            record.gene_name += value
+            _read_gn(record, value)
         elif key == "OS":
             record.organism.append(value)
         elif key == "OG":
@@ -404,6 +403,35 @@ def _read(handle):
             raise SwissProtParserError(f"Unknown keyword '{key}' found", line=line)
     if record:
         raise ValueError("Unexpected end of stream.")
+
+
+def _read_gn(record, value):
+    tokens = value.rstrip(";").split("; ")
+    try:
+        gene_name = record.gene_name[-1]
+    except IndexError:
+        pass
+    for token in tokens:
+        if token.startswith("Name="):
+            name = token[5:]
+            gene_name = {"Name": name}
+            record.gene_name.append(gene_name)
+        else:
+            for keyword in ("Synonyms", "OrderedLocusNames", "ORFNames"):
+                if token.startswith(keyword + "="):
+                    gene_name[keyword] = _split_gn_token(token, len(keyword) + 1)
+                    break
+            else:
+                keyword = list(record.gene_name[-1].keys())[-1]
+                if keyword == "Name":
+                    gene_name[keyword] += " " + token
+                else:
+                    straggler = _split_gn_token(token, 0)
+                    gene_name[keyword] += straggler
+
+
+def _split_gn_token(token, split_loc):
+    return token[split_loc:].rstrip(",").split(", ")
 
 
 def _read_id(record, line):

@@ -227,7 +227,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         )
         missing_keys = set(old.annotations).difference(new.annotations)
         missing_keys = missing_keys.difference(
-            ["ncbi_taxid", "structured_comment"]  # Can't store chimeras
+            ["gene_name", "ncbi_taxid", "structured_comment"]  # Can't store chimeras
         )
         self.assertEqual(
             len(missing_keys),
