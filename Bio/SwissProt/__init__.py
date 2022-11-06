@@ -68,21 +68,21 @@ class Record:
     Examples
     --------
     >>> from Bio import SwissProt
-    >>> example_filename = "SwissProt/sp008"
+    >>> example_filename = "SwissProt/P68308.txt"
     >>> with open(example_filename) as handle:
     ...     records = SwissProt.parse(handle)
     ...     for record in records:
     ...         print(record.entry_name)
-    ...         print(",".join(record.accessions))
+    ...         print(record.accessions)
     ...         print(record.keywords)
-    ...         print(repr(record.organism))
+    ...         print(record.organism)
     ...         print(record.sequence[:20] + "...")
     ...
-    1A02_HUMAN
-    P01892,P06338,P30514,P30444,P30445,P30446,Q29680,Q29899,Q95352,Q29837,Q95380
-    ['MHC I', 'Transmembrane', 'Glycoprotein', 'Signal', 'Polymorphism', '3D-structure']
-    'Homo sapiens (Human).'
-    MAVMAPRTLVLLLSGALALT...
+    NU3M_BALPH
+    ['P68308', 'P24973']
+    ['Electron transport', 'Membrane', 'Mitochondrion', 'Mitochondrion inner membrane', 'NAD', 'Respiratory chain', 'Translocase', 'Transmembrane', 'Transmembrane helix', 'Transport', 'Ubiquinone']
+    Balaenoptera physalus (Fin whale) (Balaena physalus).
+    MNLLLTLLTNTTLALLLVFI...
 
     """
 
@@ -419,19 +419,15 @@ def _read_gn(record, value):
         else:
             for keyword in ("Synonyms", "OrderedLocusNames", "ORFNames"):
                 if token.startswith(keyword + "="):
-                    gene_name[keyword] = _split_gn_token(token, len(keyword) + 1)
+                    token = token[len(keyword) + 1 :]
+                    gene_name[keyword] = token.rstrip(",").split(", ")
                     break
             else:
                 keyword = list(record.gene_name[-1].keys())[-1]
                 if keyword == "Name":
                     gene_name[keyword] += " " + token
                 else:
-                    straggler = _split_gn_token(token, 0)
-                    gene_name[keyword] += straggler
-
-
-def _split_gn_token(token, split_loc):
-    return token[split_loc:].rstrip(",").split(", ")
+                    gene_name[keyword] += token.rstrip(",").split(", ")
 
 
 def _read_id(record, line):
