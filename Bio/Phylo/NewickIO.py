@@ -198,8 +198,10 @@ class Parser:
                 # unquoted node label
                 current_clade.name = token
 
-        if not lp_count == rp_count:
-            raise NewickError("Number of open/close parentheses do not match.")
+    	if lp_count != rp_count:
+            raise NewickError(
+                f"Mismatch, {lp_count} open vs {rp_count} close parentheses."
+            )
 
         # if ; token broke out of for loop, there should be no remaining tokens
         try:
