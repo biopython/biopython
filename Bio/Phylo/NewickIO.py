@@ -198,7 +198,7 @@ class Parser:
                 # unquoted node label
                 current_clade.name = token
 
-    	if lp_count != rp_count:
+        if lp_count != rp_count:
             raise NewickError(
                 f"Mismatch, {lp_count} open vs {rp_count} close parentheses."
             )
