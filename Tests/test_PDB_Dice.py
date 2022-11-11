@@ -44,17 +44,17 @@ class DiceTests(unittest.TestCase):
 
             # Atom checks
             self.assertEqual(len(l_diced_ato), 29)
-            self.assertEqual(l_diced_ato[0].name, 'N')
-            self.assertEqual(l_diced_ato[0].parent.resname, 'VAL')
-            self.assertEqual(l_diced_ato[0].parent.parent.id, 'B')
-            self.assertEqual(l_diced_ato[28].name, 'CZ')
-            self.assertEqual(l_diced_ato[28].parent.resname, 'PHE')
-            self.assertEqual(l_diced_ato[28].parent.parent.id, 'B')
+            self.assertEqual(l_diced_ato[0].name, "N")
+            self.assertEqual(l_diced_ato[0].parent.resname, "VAL")
+            self.assertEqual(l_diced_ato[0].parent.parent.id, "B")
+            self.assertEqual(l_diced_ato[28].name, "CZ")
+            self.assertEqual(l_diced_ato[28].parent.resname, "PHE")
+            self.assertEqual(l_diced_ato[28].parent.parent.id, "B")
 
         finally:
             os.remove(file_pdb_diced)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -60,10 +60,10 @@ open alongside you.
 #### <a name="1.1"></a> 1.1  Importing the enzymes
 To import the enzymes, open a Python shell and type:
 
-``` python
+``` pycon
 >>> from Bio import Restriction
 >>> dir()
-['Restriction', '__builtins__', '__doc__', '__name__', '__package__']
+['Restriction', '__annotations__', '__builtins__', '__doc__', '__loader__', '__name__', '__package__', '__spec__']
 >>> Restriction.EcoRI
 EcoRI
 >>> Restriction.EcoRI.site
@@ -78,7 +78,7 @@ affect the speed of Python after the initial import.
 I don't know for you but I find it quite cumbersome to have to prefix each
 operation with `Restriction.`, so here is another way to import the package.
 
-``` python
+``` pycon
 >>> from Bio.Restriction import *
 >>> EcoRI
 EcoRI
@@ -97,21 +97,19 @@ tutorial.
 
 #### <a name="1.2"></a>1.2  Naming convention
 
-To access an enzyme simply enter it's name. You must respect the usual naming
+To access an enzyme simply enter its name. You must respect the usual naming
 convention with the upper case letters and Latin numbering (in upper case as
 well):
 
-``` python
+``` pycon
 >>> EcoRI
 EcoRI
 >>> ecori
-
 Traceback (most recent call last):
   File "<pyshell#25>", line 1, in -toplevel-
     ecori
 NameError: name 'ecori' is not defined
 >>> EcoR1
-
 Traceback (most recent call last):
   File "<pyshell#26>", line 1, in -toplevel-
     EcoR1
@@ -127,22 +125,19 @@ KpnI
 
 So what can we do with these restriction enzymes? To see that we will need a
 DNA sequence. Restriction enzymes support both `Bio.Seq.MutableSeq`and
-`Bio.Seq.Seq` objects. You can use any DNA alphabet which complies with the
-IUPAC alphabet.
+`Bio.Seq.Seq` objects. Your sequence must comply with the IUPAC alphabet.
+That means using A, C, G and T or U, plus N for any base, and various
+other standard codes like S for C or G, and V for A, C or G.
 
-``` python
+``` pycon
 >>> from Bio.Seq import Seq
->>> from Bio.Alphabet.IUPAC import IUPACAmbiguousDNA
->>> amb = IUPACAmbiguousDNA()
->>> my_seq = Seq('AAAAAAAAAAAAAA', amb)
->>> my_seq
-Seq('AAAAAAAAAAAAAA', IUPACAmbiguousDNA())
+>>> my_seq = Seq('AAAAAAAAAAAAAA')
 ```
 
 Searching a sequence for the presence of restriction site for your preferred
 enzyme is as simple as:
 
-``` python
+``` pycon
 >>> EcoRI.search(my_seq)
 []
 ```
@@ -150,10 +145,10 @@ enzyme is as simple as:
 The results is a list. Here the list is empty since there is obviously no EcoRI
 site in *my_seq*.  Let's try to get a sequence with an EcoRI site.
 
-``` python
->>> ecoseq = my_seq + Seq(EcoRI.site, amb) + my_seq
+``` pycon
+>>> ecoseq = my_seq + Seq(EcoRI.site) + my_seq
 >>> ecoseq
-Seq('AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA', IUPACAmbiguousDNA())
+Seq('AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA')
 >>> EcoRI.search(ecoseq)
 [16]
 ```
@@ -172,10 +167,9 @@ in this package.
 base of a sequence is base 0. Therefore to get the sequences produced by an
 EcoRI digestion of *ecoseq*, one should do the following:
 
-``` python
+``` pycon
 >>> ecoseq[:15], ecoseq[15:]
-(Seq('AAAAAAAAAAAAAAG', IUPACAmbiguousDNA()), Seq('AATTCAAAAAAAAAAAAAA', IUPACAm
-biguousDNA()))
+(Seq('AAAAAAAAAAAAAAG'), Seq('AATTCAAAAAAAAAAAAAA'))
 ```
 
 I hear you thinking "this is a cumbersome and error prone method to get these
@@ -184,18 +178,16 @@ these sequences without hassle: `catalyse`. This method will return a tuple
 containing all the fragments produced by a complete digestion of the sequence.
 Using it is as simple as before:
 
-``` python
+``` pycon
 >>> EcoRI.catalyse(ecoseq)
-(Seq('AAAAAAAAAAAAAAG', IUPACAmbiguousDNA()), Seq('AATTCAAAAAAAAAAAAAA', IUPACAm
-biguousDNA()))
+(Seq('AAAAAAAAAAAAAAG'), Seq('AATTCAAAAAAAAAAAAAA'))
 ```
 
 BTW, you can also use spell it the American way `catalyze`:
 
-``` python
+``` pycon
 >>> EcoRI.catalyze(ecoseq)
-(Seq('AAAAAAAAAAAAAAG', IUPACAmbiguousDNA()), Seq('AATTCAAAAAAAAAAAAAA', IUPACAm
-biguousDNA()))
+(Seq('AAAAAAAAAAAAAAG'), Seq('AATTCAAAAAAAAAAAAAA'))
 ```
 
 #### <a name="1.5"></a>1.5 Analysing circular sequences
@@ -207,21 +199,21 @@ such as plasmids. Setting `linear` to `False` informs the enzyme to make the
 search over a circular sequence and to search for potential sites spanning over
 the boundaries of the sequence.
 
-``` python
+``` pycon
 >>> EcoRI.search(ecoseq, linear=False)
 [16]
 >>> EcoRI.catalyse(ecoseq, linear=False)
-(Seq('AATTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAG', IUPACAmbiguousDNA()),)
+(Seq('AATTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAG'),)
 >>> ecoseq  # for memory
-Seq('AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA', IUPACAmbiguousDNA())
+Seq('AAAAAAAAAAAAAAGAATTCAAAAAAAAAAAAAA')
 ```
 
 OK, this is quite a difference, we only get one fragment, which correspond to
 the linearised sequence. The beginning sequence has been shifted to take this
 fact into account. Moreover we can see another difference:
 
-``` python
->>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA', IUPACAmbiguousDNA())
+``` pycon
+>>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA')
 >>> EcoRI.search(new_seq)
 []
 >>> EcoRI.search(new_seq, linear=False)
@@ -255,14 +247,14 @@ being the same enzymes, are not different since they are interchangeable).
 : `True` if the enzymes recognise the same site, but cut it in a different way
 (i.e. the enzymes are neoschizomers).
 
-`%` (test compatibilty)
+`%` (test compatibility)
 : Test the compatibility of the ending produced by the enzymes (will be `True`
 if the fragments produced with one of the enzyme can directly be ligated to
 fragments produced by the other).
 
 Let's use `Acc65I` and its isoschizomers as example:
 
-``` python
+``` pycon
 >>> Acc65I.isoschizomers()
 [Asp718I, KpnI]
 >>> Acc65I.elucidate()
@@ -339,7 +331,7 @@ use the three following methods. They are fairly straightforward to understand
 and refer to the ends that the enzyme produces: blunt, 5' overhanging (also
 called 3' recessed) sticky end and 3' overhanging (or 5' recessed) sticky end.
 
-``` python
+``` pycon
 >>> EcoRI.is_blunt()
 False
 >>> EcoRI.is_5overhang()
@@ -348,12 +340,12 @@ True
 False
 ```
 
-A more detailled view of the restriction site can be produced using the
+A more detailed view of the restriction site can be produced using the
  `elucidate()` method. The `^` refers to the position of the cut in the sense
 strand of the sequence, `_` to the cut on the antisense or complementary strand.
 `^_` means blunt.
 
-``` python
+``` pycon
 >>> EcoRI.elucidate()
 'G^AATT_C'
 >>> KpnI.elucidate()
@@ -365,7 +357,7 @@ strand of the sequence, `_` to the cut on the antisense or complementary strand.
 The method `frequency()` will give you the statistical frequency of the enzyme
 site.
 
-``` python
+``` pycon
 >>> EcoRI.frequency()
 4096
 >>> XhoII.elucidate()
@@ -377,7 +369,7 @@ site.
 To get the length of a the recognition sequence of an enzyme use the built-in
 function `len()`:
 
-``` python
+``` pycon
 >>> len(EcoRI)
 6
 >>> BstXI.elucidate()
@@ -401,7 +393,7 @@ positions. *Equischizomer* is an arbitrary choice to design
 Another set of method `one_enzyme.is_*schizomers(one_other_enzyme)`, allow to
 test 2 enzymes against each other.
 
-``` python
+``` pycon
 >>> Acc65I.isoschizomers()
 [Asp718I, KpnI]
 >>> Acc65I.neoschizomers()
@@ -445,7 +437,7 @@ converted sequence, reducing the overhead.
 You can initiate a restriction batch by passing it a list of enzymes or enzyme
 names as argument.
 
-``` python
+``` pycon
 >>> rb = RestrictionBatch([EcoRI])
 >>> rb
 RestrictionBatch(['EcoRI'])
@@ -458,7 +450,7 @@ True
 
 Adding a new enzyme to a restriction batch is easy:
 
-``` python
+``` pycon
 >>> rb.add(KpnI)
 >>> rb
 RestrictionBatch(['EcoRI', 'KpnI'])
@@ -470,7 +462,7 @@ RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI'])])
 Another way to create a RestrictionBatch is by simply adding restriction enzymes
 together, this is particularly useful for small batches:
 
-``` python
+``` pycon
 >>> rb3 = EcoRI + KpnI + EcoRV
 >>> rb3
 RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI'])
@@ -483,13 +475,13 @@ gives a list of suppliers for each enzyme. It would be a shame not to make use
 of this facility. You can produce a `RestrictionBatch` containing only enzymes
 from one or a few supplier(s). Here is how to do it:
 
-``` python
+``` pycon
 >>> rb_supp = RestrictionBatch(first=[], suppliers=['C','B','E','I','K','J','M',
 'O','N','Q','S','R','V','Y','X'])
 >>> # This will create a RestrictionBatch with the all enzymes which possess a s
 upplier.
->>> len(rb_supp)  # May 2016
-622
+>>> len(rb_supp)  # May 2020
+621
 ```
 
 The argument `suppliers` take a list of one or several single letter codes
@@ -497,7 +489,7 @@ corresponding to the supplier(s). The codes are the same as defined in REBASE.
 As it would be a pain to have to remember each supplier code, `RestrictionBatch`
 provides a method which show the pair code <=> supplier:
 
-``` python
+``` pycon
 >>> RestrictionBatch.show_codes()  # as of May 2016 REBASE release.
 C = Minotech Biotechnology
 B = Life Technologies
@@ -530,7 +522,7 @@ exception, but will have no effects. Sometimes you want to get an enzyme from a
 `RestrictionBatch` or add it to the batch if it is not present.
 You will use the `get` method setting the second argument `add` to `True`.
 
-``` python
+``` pycon
 >>> rb3
 RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI'])
 >>> rb3.add(EcoRI)
@@ -558,7 +550,7 @@ Removing enzymes from a batch is done using the `remove()` method. If the enzyme
 is not present in the batch this will raise a `KeyError`. If the value you want
 to remove is not an enzyme this will raise a `ValueError`.
 
-``` python
+``` pycon
 >>> rb3.remove(EcoRI)
 >>> rb3
 RestrictionBatch(['EcoRV', 'KpnI', 'SmaI'])
@@ -597,7 +589,7 @@ use the pipe operator `|` instead. You can find the intersection between 2
 batches using `&` (see the Python documentation about `sets` for more
 information.
 
-``` python
+``` pycon
 >>> rb3 = EcoRI + KpnI + EcoRV
 >>> rb3
 RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI'])
@@ -636,8 +628,8 @@ enzymes and the value a list of position site. `RestrictionBatch` does not
 implement a `catalyse` method, as it would not have a real meaning when used
 with large batch.
 
-``` python
->>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA', IUPACAmbiguousDNA())
+``` pycon
+>>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA')
 >>> rb.search(new_seq)
 {'KpnI': [], 'EcoRV': [], 'EcoRI': []}
 >>> rb.search(new_seq, linear=False)
@@ -650,7 +642,7 @@ Amongst the other methods provided by `RestrictionBatch`, `elements()` which
 return a list of all the element names alphabetically sorted, is certainly the
 most useful.
 
-``` python
+``` pycon
 >>> rb = EcoRI + KpnI + EcoRV
 >>> rb.elements()
 ['EcoRI', 'EcoRV', 'KpnI']
@@ -660,7 +652,7 @@ If you don't care about the alphabetical order use the method `as_string()`, to
 get the same thing a bit faster. The list is not sorted. The order is random as
 Python sets are dictionary.
 
-``` python
+``` pycon
 >>> rb = EcoRI + KpnI + EcoRV
 >>> rb.as_string()
 ['EcoRI', 'KpnI', 'EcoRV']
@@ -681,7 +673,7 @@ commercial supplier. They are rather big, but that's what make them useful. With
 these batch you can produce a full description of a sequence with a single
 command. You can use these two batch as any other batch.
 
-``` python
+``` pycon
 >>> len(AllEnzymes)
 778
 >>> len(CommOnly)
@@ -698,9 +690,9 @@ are really normal batches, and you can use them as any other batch.
 in a batch. However, it is sometime nice to get something a bit easier to read
 than a Python dictionary. Complex restriction analysis are not easy with
 `RestrictionBatch`. Some refinements in the way to search a sequence for
-restriction sites will help. `Analysis` provides a serie of command to customise
-the results obtained from a pair restriction batch/sequence and some facilities
-to make the output sligthly more human readable.
+restriction sites will help. `Analysis` provides a series of command to
+customise the results obtained from a pair restriction batch/sequence and some
+facilities to make the output slightly more human readable.
 
 #### <a name="4.1"></a>4.1 Setting up an Analysis
 
@@ -710,13 +702,13 @@ argument `Analysis` takes is the restriction batch, the second is the sequence.
 If the third argument is not provided, `Analysis` will assume the sequence is
 linear.
 
-``` python
->>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA', IUPACAmbiguousDNA())
+``` pycon
+>>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA')
 >>> rb = RestrictionBatch([EcoRI, KpnI, EcoRV])
 >>> Ana = Analysis(rb, new_seq, linear=False)
 >>> Ana
 Analysis(RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI']),Seq('TTCAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAGAA', IUPACAmbiguousDNA()),False)
+AAAAAAAAAAGAA'),False)
 ```
 
 #### <a name="4.2"></a>4.2 Full restriction analysis
@@ -725,7 +717,7 @@ Once you have created your new `Analysis`, you can use it to get a restriction
 analysis of your sequence. The way to make a full restriction analysis of the
 sequence is:
 
-``` python
+``` pycon
 >>> Ana.full()
 {'KpnI': [], 'EcoRV': [], 'EcoRI': [33]}
 ```
@@ -733,7 +725,7 @@ sequence is:
 This is much the same as the output of a `RestrictionBatch.search` method. You
 will get a more easy to read output with `print_that` used without argument:
 
-``` python
+``` pycon
 >>> # let's create a something a bit more complex to analyse.
 >>>
 >>> rb = RestrictionBatch([], ['C'])  # we will explain the meaning of the
@@ -741,7 +733,7 @@ will get a more easy to read output with `print_that` used without argument:
 >>>
 >>> multi_site = Seq.Seq('AAA' + EcoRI.site + 'G' + KpnI.site + EcoRV.site +
                      'CT' + SmaI.site + 'GT' + FokI.site + 'GAAAGGGC' +
-                      EcoRI.site + 'ACGT', IUPACAmbiguousDNA())
+                      EcoRI.site + 'ACGT')
 >>> Analong = Analysis(rb, multi_site)
 >>> Analong.full()
 {BglI: [], BstEII: [], AsuII: [], HinfI: [], SfiI: [], PspPI: [], BsiSI: [27], S
@@ -773,7 +765,7 @@ SseBI     SspI      SstI      StyI      XbaI      BstEII    NotI      BglI
 SfiI
 ```
 
-Much clearer, is'nt ? The output is optimised for a shell 80 columns wide. If
+Much clearer, isn't ? The output is optimised for a shell 80 columns wide. If
 the output seems odd, check that the width of your shell is at least 80 columns.
 
 #### <a name="4.3"></a>4.3 Changing the title
@@ -783,7 +775,7 @@ do not cut the sequence', by setting the two optional arguments of `print_that`,
 `title` and `s1`. No formatting will be done on these strings so if you have to
 include the newline (`\n`) as you see fit:
 
-``` python
+``` pycon
 >>> Analong.print_that(None, title='sequence = multi_site\n\n')
 
 sequence = multi_site
@@ -836,7 +828,7 @@ of site) and map-like type. To change the output, use the method `print_as()` of
 are strings: `'map'`, `'number'` or `'alpha'`. As you have seen previously the
 default behaviour is an alphabetical list (`'alpha'`).
 
-``` python
+``` pycon
 >>> Analong.print_as('map')
 >>> Analong.print_that()
 
@@ -901,7 +893,7 @@ SfiI
 
 To come back to the previous behaviour:
 
-``` python
+``` pycon
 >>> Analong.print_as('alpha')
 >>> Analong.print_that()
 
@@ -919,11 +911,11 @@ that are available. Most are perfectly self explanatory and the others are
 fairly well documented (use `help('Analysis.command_name')`). The methods are:
 
 ``` python
-full(self,linear=True)
-blunt(self,dct = None)
+full(self, linear=True)
+blunt(self, dct=None)
 overhang5(self, dct=None)
 overhang3(self, dct=None)
-defined(self,dct=None)
+defined(self, dct=None)
 with_sites(self, dct=None)
 without_site(self, dct=None)
 with_N_sites(self, N, dct=None)
@@ -931,22 +923,22 @@ with_number_list(self, list, dct=None)
 with_name(self, names, dct=None)
 with_site_size(self, site_size, dct=None)
 only_between(self, start, end, dct=None)
-between(self,start, end, dct=None)
+between(self, start, end, dct=None)
 show_only_between(self, start, end, dct=None)
-only_outside(self, start, end, dct =None)
+only_outside(self, start, end, dct=None)
 outside(self, start, end, dct=None)
-do_not_cut(self, start, end, dct =None)
+do_not_cut(self, start, end, dct=None)
 ```
 
 Using these methods is simple:
 
-``` python
->>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA', IUPACAmbiguousDNA())
+``` pycon
+>>> new_seq = Seq('TTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAA')
 >>> rb = RestrictionBatch([EcoRI, KpnI, EcoRV])
 >>> Ana = Analysis(rb, new_seq, linear=False)
 >>> Ana
 Analysis(RestrictionBatch(['EcoRI', 'EcoRV', 'KpnI']),Seq('TTCAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAGAA', IUPACAmbiguousDNA()),False)
+AAAAAAAAAAGAA'),False)
 >>> Ana.blunt()  # output only the result for enzymes which cut blunt
 {'EcoRV': []}
 >>> Ana.full()  # all the enzymes in the RestrictionBatch
@@ -969,7 +961,7 @@ AAAAAAAAAAGAA', IUPACAmbiguousDNA()),False)
 To get a nice output, you still use `print_that` but this time with the command
 you want executed as argument.
 
-``` python
+``` pycon
 >>> Ana.print_that(Ana.blunt())
 
    Enzymes which do not cut the sequence.
@@ -1009,7 +1001,7 @@ The hard way consist to build a restriction batch containing only 5' overhang
 enzymes and use this batch to create a new `Analysis` instance and then use the
 method `with_N_sites()` as follow:
 
-``` python
+``` pycon
 >>> rbov5 = RestrictionBatch([x for x in rb if x.is_5overhang()])
 >>> Anaov5 = Analysis(rbov5, new_seq, linear=False)
 >>> Anaov5.with_N_sites(1)
@@ -1020,7 +1012,7 @@ The easy solution is to chain several `Analysis` methods. This is possible since
 each method return a dictionary as results and is able to take a dictionary as
 input:
 
-``` python
+``` pycon
 >>> Ana.with_N_sites(1, Ana.overhang5())
 {'EcoRI': [33]}
 ```
@@ -1058,7 +1050,7 @@ of `FormattedSeq` is the sequence you wish to convert. You can specify a shape
 with the second argument `linear`, if you don't the `FormattedSeq` will be
 linear:
 
-``` python
+``` pycon
 >>> from Bio.Restriction import *
 >>> from Bio.Seq import Seq
 >>> seq = Seq('TTCAAAAAAAAAAGAATTCAAAAGAA')
@@ -1066,7 +1058,7 @@ linear:
 >>> default_fseq = FormattedSeq(seq)
 >>> circular_fseq = FormattedSeq(seq, linear=False)
 >>> linear_fseq
-FormattedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=True)
+FormattedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA'), linear=True)
 >>> linear_fseq.is_linear()
 True
 >>> default_fseq.is_linear()
@@ -1074,7 +1066,7 @@ True
 >>> circular_fseq.is_linear()
 False
 >>> circular_fseq
-FormattedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=False)
+FormattedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA'), linear=False)
 ```
 
 #### <a name="5.2"></a>5.2 Unlike Bio.Seq, FormattedSeq retains information about their shape
@@ -1083,7 +1075,7 @@ FormattedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=False)
 unlike with `Seq` and `MutableSeq` you don't need to specify the shape of the
 sequence when using `search()` or `catalyse()`:
 
-``` python
+``` pycon
 >>> EcoRI.search(linear_fseq)
 [15]
 >>> EcoRI.search(circular_fseq)  # no need to specify the shape
@@ -1093,7 +1085,7 @@ sequence when using `search()` or `catalyse()`:
 In fact, the shape of a FormattedSeq is not altered by the second argument of
 the commands `search()` and `catalyse()`:
 
-``` python
+``` pycon
 >>> # In fact the shape is blocked.
 >>> # The 3 following commands give the same results
 >>> # which correspond to a circular sequence
@@ -1110,27 +1102,27 @@ the commands `search()` and `catalyse()`:
 You can however change the shape of the `FormattedSeq`. The command to use are:
 
 ``` python
-FormattedSeq.to_circular() => new FormattedSeq, shape will be circular.
-FormattedSeq.to_linear()   => new FormattedSeq, shape will be linear
-FormattedSeq.circularise() => change the shape of FormattedShape to circular
-FormattedSeq.linearise()   => change the shape of FormattedShape to linear
+FormattedSeq.to_circular()  # new FormattedSeq, shape will be circular.
+FormattedSeq.to_linear()  # new FormattedSeq, shape will be linear
+FormattedSeq.circularise()  # change the shape of FormattedShape to circular
+FormattedSeq.linearise()  # change the shape of FormattedShape to linear
 ```
 
-``` python
+``` pycon
 >>> circular_fseq
-FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=False)
+FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA'), linear=False)
 >>> circular_fseq.is_linear()
 False
 >>> circular_fseq == linear_fseq
 False
 >>> newseq = circular_fseq.to_linear()
 >>> circular_fseq
-FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=False)
+FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA'), linear=False)
 >>> newseq
-FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=True)
+FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA'), linear=True)
 >>> circular_fseq.linearise()
 >>> circular_fseq
-FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA', Alphabet()), linear=True)
+FormatedSeq(Seq('TTCAAAAAAAAAAGAATTCAAAAGAA'), linear=True)
 >>> circular_fseq.is_linear()
 True
 >>> circular_fseq == linear_fseq
@@ -1144,13 +1136,13 @@ True
 Not having to specify the shape of the sequence to analyse gives you the
 opportunity to use the shorthand '/' and '//' with restriction enzymes:
 
-``` python
+``` pycon
 >>> EcoRI/linear_fseq  # <=> EcoRI.search(linear_fseq)
 [15]
 >>> linear_fseq/EcoRI  # <=> EcoRI.search(linear_fseq)
 [15]
 >>> EcoRI//linear_fseq # <=> linear_fseq//EcoRI <=> EcoRI.catalyse(linear_fseq)
-(Seq('TTCAAAAAAAAAAG', Alphabet()), Seq('AATTCAAAAGAA', Alphabet()))
+(Seq('TTCAAAAAAAAAAG'), Seq('AATTCAAAAGAA'))
 ```
 
 Another way to avoid the overhead due to a repetitive conversion from a `Seq`
@@ -1273,7 +1265,7 @@ The new database contains 867 enzymes.
 Writing the dictionary containing the new Restriction classes...
 OK.
 
-Writing the dictionary containing the suppliers datas...
+Writing the dictionary containing the suppliers data...
 OK.
 
 Writing the dictionary containing the Restriction types....
@@ -1305,7 +1297,7 @@ compilation. You can safely ignore the warnings as long as the
 `compilation of the new dictionary : OK.` is present in the last part of the
 output. They are here for debugging purpose. The number of enzymes in the new
 module is indicated as well as a list of the dictionary which have been
-compiled. The last part indicate that the module has been succesfully created
+compiled. The last part indicate that the module has been successfully created
 but not installed. To finish the update you must copy the file
 `Restriction_Dictionary.py` into the folder
 `/your_python_path/site-packages/Bio/Restriction/` as indicated by the script.
@@ -1317,9 +1309,9 @@ enough the new dictionary is good, but if there is a problem it is always nice
 to know you can revert to the previous setting without having to reinstall the
 whole thing.
 
-If you whish, the script may install the folder for you as well, but you will
+If you wish, the script may install the folder for you as well, but you will
 have to run it as root if your normal user has no write access to your Python
-installation (and it should'nt). Use the command `ranacompiler.py -i` or
+installation (and it shouldn't). Use the command `ranacompiler.py -i` or
 `ranacompiler.py --install` for this.
 
 If anything goes wrong (you have no write access to the destination folder for
@@ -1340,7 +1332,7 @@ Depending on what you want to do you may get away with simply changing the
 methods. Rather than get into a long explanation, here is the implementation of
 a rather useless `Analysis` class:
 
-``` python
+``` pycon
 >>> class UselessAnalysis(Analysis):
 
     def __init__(self, rb=RestrictionBatch(), seq=Seq(''), lin=True):
@@ -1423,7 +1415,7 @@ a rather useless `Analysis` class:
 >>> # You initiate and use it as before
 >>> rb = RestrictionBatch([], ['A'])
 >>> multi_site = Seq('AAA' + EcoRI.site +'G' + KpnI.site + EcoRV.site + 'CT' +\
-SmaI.site + 'GT' + FokI.site + 'GAAAGGGC' + EcoRI.site + 'ACGT', IUPACAmbiguousDNA())
+SmaI.site + 'GT' + FokI.site + 'GAAAGGGC' + EcoRI.site + 'ACGT')
 >>>
 >>> b = UselessAnalysis(rb, multi_site)
 >>> b.print_that() # Well, I let you discover if you haven't already guessed
@@ -1465,13 +1457,11 @@ not be recognised as a potential EcoRI site for example, in fact it will not be
 recognised at all. Degenerated sequences will not be analysed. If your sequence
 is not fully sequenced, you will certainly miss restriction sites:
 
-``` python
->>> a = Seq('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAATTCrrrrrrrrrrr', IUPACAmbiguou
-sDNA())
+``` pycon
+>>> a = Seq('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAATTCrrrrrrrrrrr')
 >>> EcoRI.search(a)
 [36]
->>> b = Seq('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAAnTCrrrrrrrrrrr', IUPACAmbiguou
-sDNA())
+>>> b = Seq('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnGAAnTCrrrrrrrrrrr')
 >>> EcoRI.search(b)
 []
 ```
@@ -1487,44 +1477,38 @@ original case of the sequence (i.e lower case sequences will generate lower case
 fragments, upper case sequences upper case fragments), but mixed case will
 return upper case fragments:
 
-``` python
->>> c = Seq('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxGAANTCrrrrrrrrrrr', IUPACAmbiguou
-sDNA())
+``` pycon
+>>> c = Seq('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxGAANTCrrrrrrrrrrr')
 >>> EcoRI.search(c)
 
 Traceback (most recent call last):
-  File "<pyshell#110>", line 1, in -toplevel-
-    EcoRI.search(b)
-  File "/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py", line 3
-  96, in search
-    cls.dna = FormatedSeq(dna, linear)
-  File "/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py", line 1
-  37, in __init__
-    self.format()
-  File "/usr/lib/Python2.3/site-packages/Bio/Restriction/Restriction.py", line 1
-  53, in format
-    raise AlphabetError, " '%s' is not in the IUPAC alphabet" % s
-AlphabetError: 'X' is not in the IUPAC alphabet
+  File "<stdin>", line 1, in <module>
+  File "/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py", line 553, in search
+    cls.dna = FormattedSeq(dna, linear)
+  File "/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py", line 171, in __init__
+    self.data = _check_bases(stringy)
+  File "/usr/lib/python3.6/site-packages/Bio/Restriction/Restriction.py", line 122, in _check_bases
+    raise TypeError("Invalid character found in %s" % repr(seq_string))
+TypeError: Invalid character found in 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXGAANTCRRRRRRRRRRR'
 >>> d = Seq('1 nnnnn nnnnn nnnnn nnnnn nnnnn \n\
 26 nnnnn nnnnG AATTC rrrrr rrrrr \n\
-51 r', IUPACAmbiguousDNA())
+51 r')
 >>> d
-Seq('1 nnnnn nnnnn nnnnn nnnnn nnnnn \n26 nnnnn nnnnG AATTC rrrrr rrrrr \n51 r',
- IUPACAmbiguousDNA())
+Seq('1 nnnnn nnnnn nnnnn nnnnn nnnnn \n26 nnnnn nnnnG AATTC rrrrr rrrrr \n51 r')
 >>> EcoRI.search(d)
 [36]
 >>> EcoRI.catalyse(d)
-(Seq('AATTCRRRRRRRRRRR', IUPACAmbiguousDNA()), Seq('NNNNNNNNNNNNNNNNNNNNNNNNNNNN
-NNNNNNG', IUPACAmbiguousDNA()))
->>> e = Seq('nnnnGAATTCrr', IUPACAmbiguousDNA())
->>> f = Seq('NNNNGAATTCRR', IUPACAmbiguousDNA())
->>> g = Seq('nnnngaattcrr', IUPACAmbiguousDNA())
+(Seq('AATTCRRRRRRRRRRR'), Seq('NNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNG'))
+>>> e = Seq('nnnnGAATTCrr')
+>>> f = Seq('NNNNGAATTCRR')
+>>> g = Seq('nnnngaattcrr')
 >>> EcoRI.catalyse(e)
-(Seq('NNNNG', IUPACAmbiguousDNA()), Seq('AATTCRR', IUPACAmbiguousDNA()))
+(Seq('NNNNG'), Seq('AATTCRR'))
 >>> EcoRI.catalyse(f)
-(Seq('NNNNG', IUPACAmbiguousDNA()), Seq('AATTCRR', IUPACAmbiguousDNA()))
+(Seq('NNNNG'), Seq('AATTCRR'))
 >>> EcoRI.catalyse(g)
-(Seq('nnnng', IUPACAmbiguousDNA()), Seq('aattcrr', IUPACAmbiguousDNA()))
+(Seq('nnnng'), Seq('aattcrr'))
 ```
 
 Not allowing other letters than IUPAC might seems drastic but this is really to
@@ -1536,8 +1520,8 @@ While sites clearly outsides a sequence will not be reported, nothing has been
 done to try to determine if a restriction site at the end of a linear sequence
 is valid:
 
-``` python
->>> d = Seq('GAATTCAAAAAAAAAAAAAAAAAAAAAAAAAAGGATG', IUPACAmbiguousDNA())
+``` pycon
+>>> d = Seq('GAATTCAAAAAAAAAAAAAAAAAAAAAAAAAAGGATG')
 >>> FokI.site           # site present
 'GGATG'
 >>> FokI.elucidate()        # but cut outside the sequence
@@ -1563,7 +1547,7 @@ reports restriction sites. Therefore the output given for some enzymes might
 seems to be the double when compared with the results of these software. It is
 not a bug.
 
-``` python
+``` pycon
 >>> AloI.cut_twice()
 True
 >>> AloI.fst5              # first cut
@@ -1574,7 +1558,7 @@ True
 'GAACNNNNNNTCC'
 >>> b = Seq('AAAAAAAAAAA'+ AloI.site + 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 >>> b
-Seq('AAAAAAAAAAAGAACNNNNNNTCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', Alphabet())
+Seq('AAAAAAAAAAAGAACNNNNNNTCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 >>> AloI.search(b)  # one site, two cuts -> two positions
 [5, 37]
 ```
@@ -1585,7 +1569,7 @@ Having all the enzymes imported directly in the shell is useful when working in
 an interactive shell (even if it is not recommended by the purists). Here is a
 little hack to get some sanity back when using dir() in those conditions:
 
-``` python
+``` pycon
 >>> # we will change the builtin dir() function to get ride of the enzyme names.
 >>> import sys
 >>> def dir(object=None):

@@ -10,10 +10,8 @@
 # crc32, crc64, gcg, and seguid
 # crc64 is adapted from BioPerl
 
-from __future__ import print_function
 
-from binascii import crc32 as _crc32
-from Bio._py3k import _as_bytes
+import binascii
 
 
 def crc32(seq):
@@ -27,15 +25,13 @@ def crc32(seq):
     1688586483
 
     """
-    # NOTE - On Python 2 returns a signed int, on Python 3 it is unsigned
-    # Docs suggest should use crc32(x) & 0xffffffff for consistency.
-    # TODO - Should we return crc32(x) & 0xffffffff here?
     try:
-        # Assume its a Seq object
-        return _crc32(_as_bytes(str(seq)))
-    except AttributeError:
-        # Assume its a string/unicode
-        return _crc32(_as_bytes(seq))
+        # Assume it's a Seq object
+        s = bytes(seq)
+    except TypeError:
+        # Assume it's a string
+        s = seq.encode()
+    return binascii.crc32(s)
 
 
 def _init_table_h():
@@ -47,10 +43,10 @@ def _init_table_h():
             rflag = part_l & 1
             part_l >>= 1
             if part_h & 1:
-                part_l |= (1 << 31)
+                part_l |= 1 << 31
             part_h >>= 1
             if rflag:
-                part_h ^= 0xd8000000
+                part_h ^= 0xD8000000
         _table_h.append(part_h)
     return _table_h
 
@@ -80,13 +76,13 @@ def crc64(s):
         crch = temp1h ^ _table_h[idx]
         crcl = temp1l
 
-    return "CRC-%08X%08X" % (crch, crcl)
+    return f"CRC-{crch:08X}{crcl:08X}"
 
 
 def gcg(seq):
     """Return the GCG checksum (int) for a sequence (string or Seq object).
 
-    Given a nucleotide or amino-acid secuence (or any string),
+    Given a nucleotide or amino-acid sequence (or any string),
     returns the GCG checksum (int). Checksum used by GCG program.
     seq type = str.
 
@@ -101,12 +97,6 @@ def gcg(seq):
     5688
 
     """
-    try:
-        # Assume its a Seq object
-        seq = str(seq)
-    except AttributeError:
-        # Assume its a string
-        pass
     index = checksum = 0
     for char in seq:
         index += 1
@@ -119,7 +109,7 @@ def gcg(seq):
 def seguid(seq):
     """Return the SEGUID (string) for a sequence (string or Seq object).
 
-    Given a nucleotide or amino-acid secuence (or any string),
+    Given a nucleotide or amino-acid sequence (or any string),
     returns the SEGUID string (A SEquence Globally Unique IDentifier).
     seq type = str.
 
@@ -136,24 +126,20 @@ def seguid(seq):
     """
     import hashlib
     import base64
+
     m = hashlib.sha1()
     try:
         # Assume it's a Seq object
-        seq = str(seq)
-    except AttributeError:
+        seq = bytes(seq)
+    except TypeError:
         # Assume it's a string
-        pass
-    m.update(_as_bytes(seq.upper()))
-    try:
-        # For Python 3+
-        tmp = base64.encodebytes(m.digest())
-        return tmp.decode().replace("\n", "").rstrip("=")
-    except AttributeError:
-        pass
-    # For all other Pythons
-    return base64.b64encode(m.digest()).rstrip("=")
+        seq = seq.encode()
+    m.update(seq.upper())
+    tmp = base64.encodebytes(m.digest())
+    return tmp.decode().replace("\n", "").rstrip("=")
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

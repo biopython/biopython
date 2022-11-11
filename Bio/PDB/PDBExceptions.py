@@ -1,7 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Some Bio.PDB-specific exceptions."""
 
@@ -25,5 +27,12 @@ class PDBConstructionException(Exception):
 
 class PDBConstructionWarning(BiopythonWarning):
     """Define class PDBConstructionWarning."""
+
+    pass
+
+
+# The SMCRA structure could not be written to file
+class PDBIOException(Exception):
+    """Define class PDBIOException."""
 
     pass

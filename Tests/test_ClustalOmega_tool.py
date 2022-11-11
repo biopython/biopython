@@ -5,11 +5,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import MissingExternalDependencyError
+"""Tests for ClustalOmega tool."""
 
 import sys
 import os
 import unittest
+
+from subprocess import getoutput
+
+from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Align.Applications import ClustalOmegaCommandline
@@ -18,25 +22,23 @@ from Bio.Application import ApplicationError
 #################################################################
 
 # Try to avoid problems when the OS is in another language
-os.environ['LANG'] = 'C'
+os.environ["LANG"] = "C"
 
 clustalo_exe = None
-from Bio._py3k import getoutput
 try:
     output = getoutput("clustalo --help")
     if output.startswith("Clustal Omega"):
         clustalo_exe = "clustalo"
-except OSError:
-    # TODO: Use FileNotFoundError once we drop Python 2
+except FileNotFoundError:
     pass
 
 if not clustalo_exe:
     raise MissingExternalDependencyError(
-        "Install clustalo if you want to use Clustal Omega from Biopython.")
+        "Install clustalo if you want to use Clustal Omega from Biopython."
+    )
 
 
 class ClustalOmegaTestCase(unittest.TestCase):
-
     def setUp(self):
         self.files_to_clean = set()
 
@@ -46,8 +48,7 @@ class ClustalOmegaTestCase(unittest.TestCase):
                 os.remove(filename)
 
     def standard_test_procedure(self, cline):
-        """Standard testing procedure used by all tests."""
-
+        """Shared test procedure used by all tests."""
         # Overwrite existing files.
         cline.force = True
 
@@ -62,30 +63,32 @@ class ClustalOmegaTestCase(unittest.TestCase):
         self.assertTrue(not output or output.strip().startswith("CLUSTAL"))
 
         # Test if ClustalOmega executed successfully.
-        self.assertTrue(error.strip() == "" or
-                        error.startswith("WARNING: Sequence type is DNA.") or
-                        error.startswith("WARNING: DNA alignment is still experimental."))
+        self.assertTrue(
+            error.strip() == ""
+            or error.startswith("WARNING: Sequence type is DNA.")
+            or error.startswith("WARNING: DNA alignment is still experimental.")
+        )
 
         # Check the output...
         align = AlignIO.read(cline.outfile, "clustal")
         output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
-        self.assertEqual(len(set(input_records.keys())), len(set(output_records.keys())))
+        self.assertEqual(len(input_records), len(output_records))
         for record in align:
-            self.assertEqual(str(record.seq), str(output_records[record.id].seq))
+            self.assertEqual(record.seq, output_records[record.id].seq)
 
         # TODO - Try and parse this with Bio.Nexus?
         if cline.guidetree_out:
             self.assertTrue(os.path.isfile(cline.guidetree_out))
 
     def add_file_to_clean(self, filename):
-        """Adds a file for deferred removal by the tearDown routine."""
+        """Add a file for deferred removal by the tearDown routine."""
         self.files_to_clean.add(filename)
+
 
 #################################################################
 
 
 class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
-
     def test_empty_file(self):
         """Test an empty file."""
         input_file = "does_not_exist.fasta"
@@ -94,11 +97,15 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
-            self.assertTrue("Cannot open sequence file" in str(err) or
-                            "Cannot open input file" in str(err) or
-                            "Non-zero return code" in str(err), str(err))
+            message = str(err)
+            self.assertTrue(
+                "Cannot open sequence file" in message
+                or "Cannot open input file" in message
+                or "Non-zero return code" in message,
+                message,
+            )
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
     def test_single_sequence(self):
         """Test an input file containing a single sequence."""
@@ -111,36 +118,34 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         except ApplicationError as err:
             self.assertIn("contains 1 sequence, nothing to align", str(err))
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
     def test_invalid_format(self):
         """Test an input file in an invalid format."""
         input_file = "Medline/pubmed_result1.txt"
         self.assertTrue(os.path.isfile(input_file))
         cline = ClustalOmegaCommandline(clustalo_exe, infile=input_file)
-        try:
+        with self.assertRaises(ApplicationError) as cm:
             stdout, stderr = cline()
-        except ApplicationError as err:
-            # Ideally we'd catch the return code and raise the specific
-            # error for "invalid format".
-            self.assertIn("Can't determine format of sequence file", str(err))
-        else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
+        err = str(cm.exception)
+        # Ideally we'd catch the return code and raise the specific
+        # error for "invalid format".
+        self.assertIn("Can't determine format of sequence file", err)
+
 
 #################################################################
 
 
 class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
-
     def test_simple_fasta(self):
         """Test a simple fasta file."""
         input_file = "Registry/seqs.fasta"
         output_file = "temp_test.aln"
 
-        cline = ClustalOmegaCommandline(clustalo_exe,
-                                        infile=input_file,
-                                        outfile=output_file,
-                                        outfmt="clustal")
+        cline = ClustalOmegaCommandline(
+            clustalo_exe, infile=input_file, outfile=output_file, outfmt="clustal"
+        )
 
         self.standard_test_procedure(cline)
 
@@ -159,15 +164,13 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
     def test_input_filename_with_space(self):
         """Test an input filename containing a space."""
         input_file = "Clustalw/temp horses.fasta"
-        handle = open(input_file, "w")
-        SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
-        handle.close()
+        with open(input_file, "w") as handle:
+            SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
         output_file = "temp_test.aln"
 
-        cline = ClustalOmegaCommandline(clustalo_exe,
-                                        infile=input_file,
-                                        outfile=output_file,
-                                        outfmt="clustal")
+        cline = ClustalOmegaCommandline(
+            clustalo_exe, infile=input_file, outfile=output_file, outfmt="clustal"
+        )
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
@@ -177,10 +180,9 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
         input_file = "Registry/seqs.fasta"
         output_file = "temp with spaces.aln"
 
-        cline = ClustalOmegaCommandline(clustalo_exe,
-                                        infile=input_file,
-                                        outfile=output_file,
-                                        outfmt="clustal")
+        cline = ClustalOmegaCommandline(
+            clustalo_exe, infile=input_file, outfile=output_file, outfmt="clustal"
+        )
 
         self.standard_test_procedure(cline)
 
@@ -192,17 +194,15 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
         # records should show the deadlock but is very slow - just thirty
         # seems to lockup on Mac OS X, even 20 on Linux (without the fix).
         input_file = "temp_cw_prot.fasta"
-        handle = open(input_file, "w")
         records = list(SeqIO.parse("NBRF/Cw_prot.pir", "pir"))[:40]
-        SeqIO.write(records, handle, "fasta")
-        handle.close()
+        with open(input_file, "w") as handle:
+            SeqIO.write(records, handle, "fasta")
         del handle, records
         output_file = "temp_cw_prot.aln"
 
-        cline = ClustalOmegaCommandline(clustalo_exe,
-                                        infile=input_file,
-                                        outfile=output_file,
-                                        outfmt="clustal")
+        cline = ClustalOmegaCommandline(
+            clustalo_exe, infile=input_file, outfile=output_file, outfmt="clustal"
+        )
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
@@ -213,11 +213,13 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
         output_file = "temp_test.aln"
         newtree_file = "temp_test.dnd"
 
-        cline = ClustalOmegaCommandline(clustalo_exe,
-                                        infile=input_file,
-                                        outfile=output_file,
-                                        guidetree_out=newtree_file,
-                                        outfmt="clustal")
+        cline = ClustalOmegaCommandline(
+            clustalo_exe,
+            infile=input_file,
+            outfile=output_file,
+            guidetree_out=newtree_file,
+            outfmt="clustal",
+        )
 
         self.standard_test_procedure(cline)
         cline.guidetree_out = "temp with space.dnd"

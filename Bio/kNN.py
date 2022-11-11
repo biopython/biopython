@@ -31,10 +31,10 @@ Weighting Functions:
 import numpy
 
 
-class kNN(object):
+class kNN:
     """Holds information necessary to do nearest neighbors classification.
 
-    Attribues:
+    Attributes:
      - classes  Set of the possible classes.
      - xs       List of the neighbors.
      - ys       List of the classes that the neighbors belong to.
@@ -42,7 +42,7 @@ class kNN(object):
     """
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self.classes = set()
         self.xs = []
         self.ys = []
@@ -71,7 +71,7 @@ def train(xs, ys, k, typecode=None):
     return knn
 
 
-def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
+def calculate(knn, x, weight_fn=None, distance_fn=None):
     """Calculate the probability for each class.
 
     Arguments:
@@ -84,6 +84,9 @@ def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
 
     Returns a dictionary of the class to the weight given to the class.
     """
+    if weight_fn is None:
+        weight_fn = equal_weight
+
     x = numpy.asarray(x)
 
     order = []  # list of (distance, index)
@@ -106,14 +109,14 @@ def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
     weights = {}  # class -> number of votes
     for k in knn.classes:
         weights[k] = 0.0
-    for dist, i in order[:knn.k]:
+    for dist, i in order[: knn.k]:
         klass = knn.ys[i]
         weights[klass] = weights[klass] + weight_fn(x, knn.xs[i])
 
     return weights
 
 
-def classify(knn, x, weight_fn=equal_weight, distance_fn=None):
+def classify(knn, x, weight_fn=None, distance_fn=None):
     """Classify an observation into a class.
 
     If not specified, weight_fn will give all neighbors equal weight.
@@ -121,8 +124,10 @@ def classify(knn, x, weight_fn=equal_weight, distance_fn=None):
     the distance between them.  If distance_fn is None (the default),
     the Euclidean distance is used.
     """
-    weights = calculate(
-        knn, x, weight_fn=weight_fn, distance_fn=distance_fn)
+    if weight_fn is None:
+        weight_fn = equal_weight
+
+    weights = calculate(knn, x, weight_fn=weight_fn, distance_fn=distance_fn)
 
     most_class = None
     most_weight = None

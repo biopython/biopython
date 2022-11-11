@@ -46,49 +46,59 @@ This is a multiple sequence alignment with multiple aligned sections, so you
 would probably load this using the Bio.AlignIO.parse() function:
 
     >>> from Bio import AlignIO
-    >>> align = AlignIO.parse("Mauve/simple.xmfa", "mauve")
+    >>> align = AlignIO.parse("Mauve/simple_short.xmfa", "mauve")
     >>> alignments = list(align)
     >>> for aln in alignments:
-    ...     print(align)
-    SingleLetterAlphabet() alignment with 3 rows and 240 columns
-    --------------------------------------------...--- 1
-    TTTAAACATCCCTCGGCCCGTCGCCCTTTTATAATAGCAGTACG...CTG 2
-    TTTAAACACCTTTTTGGATG--GCCCAGTTCGTTCAGTTGTG-G...CTT 3
-    SingleLetterAlphabet() alignment with 3 rows and 46 columns
-    ---------------------------------------------- 1
-    -----------------------GGGCGAACGTATAAACCATTCTG 2
-    TTCGGTACCCTCCATGACCCACGAAATGAGGGCCCAGGGTATGCTT 3
+    ...     print(aln)
+    ...
+    Alignment with 3 rows and 240 columns
+    --------------------------------------------...--- a.fa
+    TTTAAACATCCCTCGGCCCGTCGCCCTTTTATAATAGCAGTACG...CTG b.fa/5416-5968
+    TTTAAACACCTTTTTGGATG--GCCCAGTTCGTTCAGTTGTG-G...CTT c.fa/9475-10076
+    Alignment with 2 rows and 46 columns
+    -----------------------GGGCGAACGTATAAACCATTCTG b.fa/5968-6015
+    TTCGGTACCCTCCATGACCCACGAAATGAGGGCCCAGGGTATGCTT c.fa/9428-9476
 
 Additional information is extracted from the XMFA file and available through
 the annotation attribute of each record::
 
     >>> for record in alignments[0]:
-    ...   print record.id, len(record), record.annotations
-    1 240 {'start': 0, 'end': 0, 'strand': 1}
-    2 240 {'start': 5417, 'end': 5968, 'strand': 1}
-    3 240 {'start': 9476, 'end': 10076, 'strand': -1}
+    ...     print(record.id, len(record))
+    ...     print("  start: %d, end: %d, strand: %d" %(
+    ...         record.annotations['start'], record.annotations['end'],
+    ...         record.annotations['strand']))
+    ...
+    a.fa 240
+      start: 0, end: 0, strand: 1
+    b.fa/5416-5968 240
+      start: 5416, end: 5968, strand: 1
+    c.fa/9475-10076 240
+      start: 9475, end: 10076, strand: -1
 
 """
-
-from __future__ import print_function
-
 import re
+
+from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
+
 from .Interfaces import AlignmentIterator
 from .Interfaces import SequentialAlignmentWriter
 
 
-XMFA_HEADER_REGEX = re.compile(r"> (?P<id>\d+):(?P<start>\d+)-(?P<end>\d+) (?P<strand>[+-]) (?P<name>.*)")
-XMFA_HEADER_REGEX_BIOPYTHON = re.compile(r"> (?P<id>\d+):(?P<start>\d+)-(?P<end>\d+) (?P<strand>[+-]) (?P<name>[^#]*) # (?P<realname>.*)")
-ID_LINE_FMT = "> {seq_name}:{start}-{end} {strand} {file} # {ugly_hack}\n"
+XMFA_HEADER_REGEX = re.compile(
+    r"> (?P<id>\d+):(?P<start>\d+)-(?P<end>\d+) (?P<strand>[+-]) (?P<name>.*)"
+)
+XMFA_HEADER_REGEX_BIOPYTHON = re.compile(
+    r"> (?P<id>\d+):(?P<start>\d+)-(?P<end>\d+) (?P<strand>[+-]) (?P<name>[^#]*) # (?P<realname>.*)"
+)
+ID_LINE_FMT = "> {seq_name}:{start}-{end} {strand} {filename} # {ugly_hack}"
 
 
 def _identifier_split(identifier):
     """Return (name, start, end) string tuple from an identifier (PRIVATE)."""
-    id, loc, strand = identifier.split(':')
-    start, end = map(int, loc.split('-'))
+    id, loc, strand = identifier.split(":")
+    start, end = map(int, loc.split("-"))
     start -= 1
     return id, start, end, strand
 
@@ -97,8 +107,8 @@ class MauveWriter(SequentialAlignmentWriter):
     """Mauve/XMFA alignment writer."""
 
     def __init__(self, *args, **kwargs):
-        """Initialize."""
-        super(MauveWriter, self).__init__(*args, **kwargs)
+        """Initialize the class."""
+        super().__init__(*args, **kwargs)
         self._wrote_header = False
         self._wrote_first = False
 
@@ -129,11 +139,11 @@ class MauveWriter(SequentialAlignmentWriter):
             # Sequence1Entry	1
             # Sequence1Format	FastA
             for i in range(1, count + 1):
-                self.handle.write('#Sequence%sEntry\t%s\n' % (i, i))
+                self.handle.write(f"#Sequence{i}Entry\t{i}\n")
 
         for idx, record in enumerate(alignment):
             self._write_record(record, record_idx=idx)
-        self.handle.write('=\n')
+        self.handle.write("=\n")
 
     def _write_record(self, record, record_idx=0):
         """Write a single SeqRecord to the file (PRIVATE)."""
@@ -149,33 +159,40 @@ class MauveWriter(SequentialAlignmentWriter):
         # We remove the "/{start}-{end}" before writing, as it cannot be part
         # of the produced XMFA file.
         if "start" in record.annotations and "end" in record.annotations:
-            suffix0 = "/%s-%s" % (str(record.annotations["start"]),
-                                  str(record.annotations["end"]))
-            suffix1 = "/%s-%s" % (str(record.annotations["start"] + 1),
-                                  str(record.annotations["end"]))
-            if seq_name[-len(suffix0):] == suffix0:
-                seq_name = seq_name[:-len(suffix0)]
-            if seq_name[-len(suffix1):] == suffix1:
-                seq_name = seq_name[:-len(suffix1)]
+            suffix0 = f"/{record.annotations['start']}-{record.annotations['end']}"
+            suffix1 = f"/{record.annotations['start'] + 1}-{record.annotations['end']}"
+            if seq_name[-len(suffix0) :] == suffix0:
+                seq_name = seq_name[: -len(suffix0)]
+            if seq_name[-len(suffix1) :] == suffix1:
+                seq_name = seq_name[: -len(suffix1)]
 
-        if "start" in record.annotations \
-                and "end" in record.annotations \
-                and "strand" in record.annotations:
+        if (
+            "start" in record.annotations
+            and "end" in record.annotations
+            and "strand" in record.annotations
+        ):
             id_line = ID_LINE_FMT.format(
-                seq_name=seq_name, start=record.annotations["start"] + 1, end=record.annotations["end"],
-                strand=("+" if record.annotations["strand"] == 1 else "-"), file=record.name + '.fa',
-                ugly_hack=record.id
+                seq_name=seq_name,
+                start=record.annotations["start"] + 1,
+                end=record.annotations["end"],
+                strand=("+" if record.annotations["strand"] == 1 else "-"),
+                filename=record.name + ".fa",
+                ugly_hack=record.id,
             )
             lacking_annotations = False
         else:
             id_line = ID_LINE_FMT.format(
-                seq_name=seq_name, start=0, end=0, strand='+',
-                file=record.name + '.fa', ugly_hack=record.id
+                seq_name=seq_name,
+                start=0,
+                end=0,
+                strand="+",
+                filename=record.name + ".fa",
+                ugly_hack=record.id,
             )
             lacking_annotations = True
 
         # If the sequence is an empty one, skip writing it out
-        if (':0-0 ' in id_line or ':1-0 ' in id_line) and not lacking_annotations:
+        if (":0-0 " in id_line or ":1-0 " in id_line) and not lacking_annotations:
             # Except in the first LCB
             if not self._wrote_first:
                 self._wrote_first = True
@@ -183,19 +200,24 @@ class MauveWriter(SequentialAlignmentWriter):
                 # sequences, for the Mauve GUI
                 # http://darlinglab.org/mauve/user-guide/files.html#non-standard-xmfa-formatting-used-by-the-mauve-gui
                 id_line = ID_LINE_FMT.format(
-                    seq_name=seq_name, start=0, end=0, strand='+',
-                    file=record.name + '.fa', ugly_hack=record.id
+                    seq_name=seq_name,
+                    start=0,
+                    end=0,
+                    strand="+",
+                    filename=record.name + ".fa",
+                    ugly_hack=record.id,
                 )
-
-                self.handle.write(id_line + '\n')
+                id_line = id_line.replace("\n", " ").replace("\r", " ")
+                self.handle.write(id_line + "\n\n")
             # Alignments lacking a start/stop/strand were generated by
-            # BioPython on load, and shouldn't exist according to XMFA
+            # Biopython on load, and shouldn't exist according to XMFA
         else:
             # In other blocks, we only write sequences if they exist in a given
             # alignment.
-            self.handle.write(id_line)
+            id_line = id_line.replace("\n", " ").replace("\r", " ")
+            self.handle.write(id_line + "\n")
             for i in range(0, len(record.seq), 80):
-                self.handle.write("%s\n" % str(record.seq[i:i + 80]))
+                self.handle.write(f"{record.seq[i:i + 80]}\n")
 
 
 class MauveIterator(AlignmentIterator):
@@ -212,7 +234,7 @@ class MauveIterator(AlignmentIterator):
             raise StopIteration
 
         # Strip out header comments
-        while line and line.strip().startswith('#'):
+        while line and line.strip().startswith("#"):
             line = handle.readline()
 
         seqs = {}
@@ -225,29 +247,29 @@ class MauveIterator(AlignmentIterator):
                 break  # end of file
             line = line.strip()
 
-            if line.startswith('='):
+            if line.startswith("="):
                 # There may be more data, but we've reached the end of this
                 # alignment
                 break
-            elif line.startswith('>'):
+            elif line.startswith(">"):
                 m = XMFA_HEADER_REGEX_BIOPYTHON.match(line)
                 if not m:
                     m = XMFA_HEADER_REGEX.match(line)
                     if not m:
                         raise ValueError("Malformed header line: %s", line)
 
-                parsed_id = m.group('id')
+                parsed_id = m.group("id")
                 parsed_data = {}
-                for key in ('start', 'end', 'id', 'strand', 'name', 'realname'):
+                for key in ("start", "end", "id", "strand", "name", "realname"):
                     try:
                         value = m.group(key)
-                        if key == 'start':
+                        if key == "start":
                             value = int(value)
                             # Convert to zero based counting
                             if value > 0:
                                 value -= 1
 
-                        if key == 'end':
+                        if key == "end":
                             value = int(value)
                         parsed_data[key] = value
                     except IndexError:
@@ -259,7 +281,7 @@ class MauveIterator(AlignmentIterator):
                 if parsed_id not in self._ids:
                     self._ids.append(parsed_id)
 
-                seqs.setdefault(parsed_id, '')
+                seqs.setdefault(parsed_id, "")
                 latest_id = parsed_id
             else:
                 assert not passed_end_alignment
@@ -277,14 +299,15 @@ class MauveIterator(AlignmentIterator):
             alignment_length = max(map(len, list(seqs.values())))
             records = []
             for id in self._ids:
-                if id not in seqs or len(seqs[id]) == 0 \
-                        or len(seqs[id]) == 0:
-                    seq = '-' * alignment_length
+                if id not in seqs or len(seqs[id]) == 0 or len(seqs[id]) == 0:
+                    seq = "-" * alignment_length
                 else:
                     seq = seqs[id]
 
                 if alignment_length != len(seq):
-                    raise ValueError("Sequences have different lengths, or repeated identifier")
+                    raise ValueError(
+                        "Sequences have different lengths, or repeated identifier"
+                    )
 
                 # Sometimes we don't see a particular sequence in the
                 # alignment, so we skip that record since it isn't present in
@@ -292,31 +315,29 @@ class MauveIterator(AlignmentIterator):
                 if id not in seq_regions:
                     continue
 
-                if (seq_regions[id]['start'] != 0 or seq_regions[id]['end'] != 0):
-                    suffix = '/{start}-{end}'.format(**seq_regions[id])
-                    if 'realname' in seq_regions[id]:
-                        corrected_id = seq_regions[id]['realname']
+                if seq_regions[id]["start"] != 0 or seq_regions[id]["end"] != 0:
+                    suffix = "/{start}-{end}".format(**seq_regions[id])
+                    if "realname" in seq_regions[id]:
+                        corrected_id = seq_regions[id]["realname"]
                     else:
-                        corrected_id = seq_regions[id]['name']
+                        corrected_id = seq_regions[id]["name"]
                     if corrected_id.count(suffix) == 0:
                         corrected_id += suffix
                 else:
-                    if 'realname' in seq_regions[id]:
-                        corrected_id = seq_regions[id]['realname']
+                    if "realname" in seq_regions[id]:
+                        corrected_id = seq_regions[id]["realname"]
                     else:
-                        corrected_id = seq_regions[id]['name']
+                        corrected_id = seq_regions[id]["name"]
 
-                record = SeqRecord(
-                    Seq(seq, self.alphabet),
-                    id=corrected_id,
-                    name=id
+                record = SeqRecord(Seq(seq), id=corrected_id, name=id)
+
+                record.annotations["start"] = seq_regions[id]["start"]
+                record.annotations["end"] = seq_regions[id]["end"]
+                record.annotations["strand"] = (
+                    1 if seq_regions[id]["strand"] == "+" else -1
                 )
 
-                record.annotations["start"] = seq_regions[id]['start']
-                record.annotations["end"] = seq_regions[id]['end']
-                record.annotations["strand"] = 1 if seq_regions[id]['strand'] == '+' else -1
-
                 records.append(record)
-            return MultipleSeqAlignment(records, self.alphabet)
+            return MultipleSeqAlignment(records)
         else:
             raise StopIteration

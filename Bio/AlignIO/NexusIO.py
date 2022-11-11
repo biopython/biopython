@@ -13,14 +13,10 @@ See also the Bio.Nexus module (which this code calls internally),
 as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
-
-from __future__ import print_function
-
-from Bio.SeqRecord import SeqRecord
-from Bio.Nexus import Nexus
 from Bio.Align import MultipleSeqAlignment
-from .Interfaces import AlignmentWriter
-from Bio import Alphabet
+from Bio.AlignIO.Interfaces import AlignmentWriter
+from Bio.Nexus import Nexus
+from Bio.SeqRecord import SeqRecord
 
 
 # You can get a couple of example files here:
@@ -49,16 +45,32 @@ def NexusIterator(handle, seq_count=None):
     assert len(n.unaltered_taxlabels) == len(n.taxlabels)
 
     if seq_count and seq_count != len(n.unaltered_taxlabels):
-        raise ValueError("Found %i sequences, but seq_count=%i"
-                         % (len(n.unaltered_taxlabels), seq_count))
+        raise ValueError(
+            "Found %i sequences, but seq_count=%i"
+            % (len(n.unaltered_taxlabels), seq_count)
+        )
 
     # TODO - Can we extract any annotation too?
-    records = (SeqRecord(n.matrix[new_name], id=new_name,
-                         name=old_name, description="")
-               for old_name, new_name
-               in zip(n.unaltered_taxlabels, n.taxlabels))
+    if n.datatype in ("dna", "nucleotide"):
+        annotations = {"molecule_type": "DNA"}
+    elif n.datatype == "rna":
+        annotations = {"molecule_type": "RNA"}
+    elif n.datatype == "protein":
+        annotations = {"molecule_type": "protein"}
+    else:
+        annotations = None
+    records = (
+        SeqRecord(
+            n.matrix[new_name],
+            id=new_name,
+            name=old_name,
+            description="",
+            annotations=annotations,
+        )
+        for old_name, new_name in zip(n.unaltered_taxlabels, n.taxlabels)
+    )
     # All done
-    yield MultipleSeqAlignment(records, n.alphabet)
+    yield MultipleSeqAlignment(records)
 
 
 class NexusWriter(AlignmentWriter):
@@ -81,23 +93,20 @@ class NexusWriter(AlignmentWriter):
         """
         align_iter = iter(alignments)  # Could have been a list
         try:
-            first_alignment = next(align_iter)
+            alignment = next(align_iter)
         except StopIteration:
-            first_alignment = None
-        if first_alignment is None:
             # Nothing to write!
             return 0
 
         # Check there is only one alignment...
         try:
-            second_alignment = next(align_iter)
-        except StopIteration:
-            second_alignment = None
-        if second_alignment is not None:
+            next(align_iter)
             raise ValueError("We can only write one Alignment to a Nexus file.")
+        except StopIteration:
+            pass
 
         # Good.  Actually write the single alignment,
-        self.write_alignment(first_alignment)
+        self.write_alignment(alignment)
         return 1  # we only support writing one alignment!
 
     def write_alignment(self, alignment, interleave=None):
@@ -113,41 +122,45 @@ class NexusWriter(AlignmentWriter):
         columns = alignment.get_alignment_length()
         if columns == 0:
             raise ValueError("Non-empty sequences are required")
-        minimal_record = "#NEXUS\nbegin data; dimensions ntax=0 nchar=0; " \
-                         + "format datatype=%s; end;"  \
-                         % self._classify_alphabet_for_nexus(alignment._alphabet)
+        datatype = self._classify_mol_type_for_nexus(alignment)
+        minimal_record = (
+            "#NEXUS\nbegin data; dimensions ntax=0 nchar=0; format datatype=%s; end;"
+            % datatype
+        )
         n = Nexus.Nexus(minimal_record)
-        n.alphabet = alignment._alphabet
         for record in alignment:
+            # Sanity test sequences (should this be even stricter?)
+            if datatype == "dna" and "U" in record.seq:
+                raise ValueError(f"{record.id} contains U, but DNA alignment")
+            elif datatype == "rna" and "T" in record.seq:
+                raise ValueError(f"{record.id} contains T, but RNA alignment")
             n.add_sequence(record.id, str(record.seq))
 
         # Note: MrBayes may choke on large alignments if not interleaved
         if interleave is None:
-            interleave = (columns > 1000)
+            interleave = columns > 1000
         n.write_nexus_data(self.handle, interleave=interleave)
 
-    def _classify_alphabet_for_nexus(self, alphabet):
-        """Return 'protein', 'dna', or 'rna' based on the alphabet (PRIVATE).
+    def _classify_mol_type_for_nexus(self, alignment):
+        """Return 'protein', 'dna', or 'rna' based on records' molecule type (PRIVATE).
+
+        All the records must have a molecule_type annotation, and they must
+        agree.
 
         Raises an exception if this is not possible.
         """
-        # Get the base alphabet (underneath any Gapped or StopCodon encoding)
-        a = Alphabet._get_base_alphabet(alphabet)
-
-        if not isinstance(a, Alphabet.Alphabet):
-            raise TypeError("Invalid alphabet")
-        elif isinstance(a, Alphabet.ProteinAlphabet):
+        values = {_.annotations.get("molecule_type", None) for _ in alignment}
+        if all(_ and "DNA" in _ for _ in values):
+            return "dna"  # could have been a mix of "DNA" and "gDNA"
+        elif all(_ and "RNA" in _ for _ in values):
+            return "rna"  # could have been a mix of "RNA" and "mRNA"
+        elif all(_ and "protein" in _ for _ in values):
             return "protein"
-        elif isinstance(a, Alphabet.DNAAlphabet):
-            return "dna"
-        elif isinstance(a, Alphabet.RNAAlphabet):
-            return "rna"
         else:
-            # Must be something like NucleotideAlphabet or
-            # just the generic Alphabet (default for fasta files)
-            raise ValueError("Need a DNA, RNA or Protein alphabet")
+            raise ValueError("Need the molecule type to be defined")
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

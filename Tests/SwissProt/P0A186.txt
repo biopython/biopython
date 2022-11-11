@@ -1,0 +1,95 @@
+ID   NDOA_PSEU8              Reviewed;         104 AA.
+AC   P0A186; O07829; P23082; Q52123;
+DT   01-MAR-2005, integrated into UniProtKB/Swiss-Prot.
+DT   23-JAN-2007, sequence version 2.
+DT   11-DEC-2019, entry version 48.
+DE   RecName: Full=Naphthalene 1,2-dioxygenase system, ferredoxin component {ECO:0000303|PubMed:8226631};
+GN   Name=doxA {ECO:0000303|PubMed:8226631};
+OS   Pseudomonas sp. (strain C18).
+OG   Plasmid unnamed.
+OC   Bacteria; Proteobacteria.
+OX   NCBI_TaxID=69011;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], FUNCTION, PATHWAY, AND SUBUNIT.
+RC   STRAIN=C18; PLASMID=unnamed;
+RX   PubMed=8226631; DOI=10.1128/jb.175.21.6890-6901.1993;
+RA   Denome S.A., Stanley D.C., Olson E.S., Young K.D.;
+RT   "Metabolism of dibenzothiophene and naphthalene in Pseudomonas strains:
+RT   complete DNA sequence of an upper naphthalene catabolic pathway.";
+RL   J. Bacteriol. 175:6890-6901(1993).
+CC   -!- FUNCTION: Component of the naphthalene dioxygenase (NDO) multicomponent
+CC       enzyme system which catalyzes the incorporation of both atoms of
+CC       molecular oxygen into naphthalene to form cis-(1R,2S)-dihydroxy-1,2-
+CC       dihydronaphthalene. Functions as an intermediate electron transfer
+CC       protein via a specific interaction with iron sulfur protein components
+CC       (ISP) (DoxB and DoxD). {ECO:0000305|PubMed:8226631}.
+CC   -!- COFACTOR:
+CC       Name=[2Fe-2S] cluster; Xref=ChEBI:CHEBI:49601;
+CC         Evidence={ECO:0000250|UniProtKB:P0A185,
+CC         ECO:0000255|PROSITE-ProRule:PRU00628};
+CC       Note=Binds 1 [2Fe-2S] cluster per subunit.
+CC       {ECO:0000250|UniProtKB:P0A185, ECO:0000255|PROSITE-ProRule:PRU00628};
+CC   -!- PATHWAY: Aromatic compound metabolism; naphthalene degradation.
+CC       {ECO:0000305|PubMed:8226631}.
+CC   -!- SUBUNIT: The naphthalene dioxygenase (NDO) multicomponent enzyme system
+CC       is composed of an electron transfer component and a dioxygenase
+CC       component (iron sulfur protein (ISP)). The electron transfer component
+CC       is composed of a ferredoxin reductase and a ferredoxin (DoxA), and the
+CC       dioxygenase component is formed of a heterohexamer (trimer of
+CC       heterodimers) of three large alpha subunits (DoxB) and three small beta
+CC       subunits (DoxD). {ECO:0000305|PubMed:8226631}.
+CC   -!- MISCELLANEOUS: Encoded on an unnamed 75 kb plasmid.
+CC       {ECO:0000305|PubMed:8226631}.
+CC   -!- SIMILARITY: Belongs to the bacterial ring-hydroxylating dioxygenase
+CC       ferredoxin component family. {ECO:0000305}.
+CC   ---------------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see https://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution (CC BY 4.0) License
+CC   ---------------------------------------------------------------------------
+DR   EMBL; M60405; AAA16124.1; -; Genomic_DNA.
+DR   PIR; S27631; S27631.
+DR   SMR; P0A186; -.
+DR   UniPathway; UPA00082; -.
+DR   GO; GO:0051537; F:2 iron, 2 sulfur cluster binding; ISS:UniProtKB.
+DR   GO; GO:0046872; F:metal ion binding; IEA:UniProtKB-KW.
+DR   GO; GO:0016491; F:oxidoreductase activity; IEA:InterPro.
+DR   GO; GO:0019439; P:aromatic compound catabolic process; ISS:UniProtKB.
+DR   Gene3D; 2.102.10.10; -; 1.
+DR   InterPro; IPR017941; Rieske_2Fe-2S.
+DR   InterPro; IPR036922; Rieske_2Fe-2S_sf.
+DR   Pfam; PF00355; Rieske; 1.
+DR   SUPFAM; SSF50022; SSF50022; 1.
+DR   PROSITE; PS51296; RIESKE; 1.
+PE   1: Evidence at protein level;
+KW   2Fe-2S; Aromatic hydrocarbons catabolism; Electron transport; Iron;
+KW   Iron-sulfur; Metal-binding; Plasmid; Transport.
+FT   INIT_MET        1
+FT                   /note="Removed"
+FT                   /evidence="ECO:0000250|UniProtKB:P0A185"
+FT   CHAIN           2..104
+FT                   /note="Naphthalene 1,2-dioxygenase system, ferredoxin
+FT                   component"
+FT                   /id="PRO_0000201694"
+FT   DOMAIN          6..101
+FT                   /note="Rieske"
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU00628"
+FT   METAL           45
+FT                   /note="Iron-sulfur (2Fe-2S)"
+FT                   /evidence="ECO:0000250|UniProtKB:P0A185,
+FT                   ECO:0000255|PROSITE-ProRule:PRU00628"
+FT   METAL           47
+FT                   /note="Iron-sulfur (2Fe-2S); via pros nitrogen"
+FT                   /evidence="ECO:0000250|UniProtKB:P0A185,
+FT                   ECO:0000255|PROSITE-ProRule:PRU00628"
+FT   METAL           64
+FT                   /note="Iron-sulfur (2Fe-2S)"
+FT                   /evidence="ECO:0000250|UniProtKB:P0A185,
+FT                   ECO:0000255|PROSITE-ProRule:PRU00628"
+FT   METAL           67
+FT                   /note="Iron-sulfur (2Fe-2S); via pros nitrogen"
+FT                   /evidence="ECO:0000250|UniProtKB:P0A185,
+FT                   ECO:0000255|PROSITE-ProRule:PRU00628"
+SQ   SEQUENCE   104 AA;  11446 MW;  475625DCC3EDCD41 CRC64;
+     MTVKWIEAVA LSDILEGDVL GVTVEGKELA LYEVEGEIYA TDNLCTHGSA RMSDGYLEGR
+     EIECPLHQGR FDVCTGKALC APVTQNIKTY PVKIENLRVM IDLS
+//

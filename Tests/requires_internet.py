@@ -9,6 +9,8 @@
 # import statement succeeds.  If it is not, then the statement will
 # result in a MissingExternalDependencyError exception.
 
+"""Common code to check if the internet is available."""
+
 from Bio import MissingExternalDependencyError
 
 
@@ -19,11 +21,11 @@ def check():
         # I'm going to check for internet availability
         RELIABLE_DOMAIN = "biopython.org"
         import socket
+
         try:
-            socket.getaddrinfo(RELIABLE_DOMAIN,
-                               80,
-                               socket.AF_UNSPEC,
-                               socket.SOCK_STREAM)
+            socket.getaddrinfo(
+                RELIABLE_DOMAIN, 80, socket.AF_UNSPEC, socket.SOCK_STREAM
+            )
         except socket.gaierror as x:
             check.available = False
         else:

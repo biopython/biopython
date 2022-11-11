@@ -12,7 +12,7 @@ class _BaseHmmerTextIndexer(SearchIndexer):
     """Base indexer class for HMMER plain text output."""
 
     def __init__(self, *args, **kwargs):
-        super(_BaseHmmerTextIndexer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._preamble = b""
 
     def get_raw(self, offset):

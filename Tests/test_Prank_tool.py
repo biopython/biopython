@@ -14,7 +14,7 @@ from Bio.Align.Applications import PrankCommandline
 from Bio.Nexus.Nexus import NexusError
 
 # Try to avoid problems when the OS is in another language
-os.environ['LANG'] = 'C'
+os.environ["LANG"] = "C"
 
 prank_exe = None
 if sys.platform == "win32":
@@ -26,9 +26,11 @@ if sys.platform == "win32":
     # For Windows, PRANK just comes as a zip file which contains the
     # prank.exe file which the user could put anywhere.  We'll try a few
     # sensible locations under Program Files... and then the full path.
-    likely_dirs = ["",  # Current dir
-                   prog_files,
-                   os.path.join(prog_files, "Prank")] + sys.path
+    likely_dirs = [
+        "",  # Current dir
+        prog_files,
+        os.path.join(prog_files, "Prank"),
+    ] + sys.path
     for folder in likely_dirs:
         if os.path.isdir(folder):
             if os.path.isfile(os.path.join(folder, "prank.exe")):
@@ -37,17 +39,19 @@ if sys.platform == "win32":
         if prank_exe:
             break
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
+
     output = getoutput("prank")
-    if "not found" not in output and "prank" in output.lower():
-        prank_exe = "prank"
+    if "not found" not in output and "not recognized" not in output:
+        if "prank" in output.lower():
+            prank_exe = "prank"
 if not prank_exe:
     raise MissingExternalDependencyError(
-        "Install PRANK if you want to use the Bio.Align.Applications wrapper.")
+        "Install PRANK if you want to use the Bio.Align.Applications wrapper."
+    )
 
 
 class PrankApplication(unittest.TestCase):
-
     def setUp(self):
         self.infile1 = "Fasta/fa01"
 
@@ -80,8 +84,7 @@ class PrankApplication(unittest.TestCase):
         """
         cmdline = PrankCommandline(prank_exe)
         cmdline.set_parameter("d", self.infile1)
-        self.assertEqual(str(cmdline),
-                         _escape_filename(prank_exe) + " -d=Fasta/fa01")
+        self.assertEqual(str(cmdline), _escape_filename(prank_exe) + " -d=Fasta/fa01")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(error, "")
@@ -99,8 +102,9 @@ class PrankApplication(unittest.TestCase):
         cmdline.d = self.infile1
         cmdline.f = 17  # NEXUS format
         cmdline.set_parameter("dots", True)
-        self.assertEqual(str(cmdline), _escape_filename(prank_exe) +
-                         " -d=Fasta/fa01 -f=17 -dots")
+        self.assertEqual(
+            str(cmdline), _escape_filename(prank_exe) + " -d=Fasta/fa01 -f=17 -dots"
+        )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdout, stderr = cmdline()
         self.assertIn("Total time", stdout)
@@ -119,8 +123,9 @@ class PrankApplication(unittest.TestCase):
                 # Old versions of Prank reduced name to 9 chars
                 self.assertTrue(old.id == new.id or old.id[:9] == new.id)
                 # infile1 has alignment gaps in it
-                self.assertEqual(str(new.seq).replace("-", ""),
-                                 str(old.seq).replace("-", ""))
+                self.assertEqual(
+                    str(new.seq).replace("-", ""), str(old.seq).replace("-", "")
+                )
         except NexusError:
             # See bug 3119,
             # Bio.Nexus can't parse output from prank v100701 (1 July 2010)
@@ -138,10 +143,13 @@ class PrankApplication(unittest.TestCase):
         cmdline.skipins = True
         cmdline.set_parameter("-once", True)
         cmdline.realbranches = True
-        self.assertEqual(str(cmdline), _escape_filename(prank_exe) +
-                         " -d=Fasta/fa01" +
-                         " -dots -gaprate=0.321 -gapext=0.6 -kappa=3" +
-                         " -once -skipins -realbranches")
+        self.assertEqual(
+            str(cmdline),
+            _escape_filename(prank_exe)
+            + " -d=Fasta/fa01"
+            + " -dots -gaprate=0.321 -gapext=0.6 -kappa=3"
+            + " -once -skipins -realbranches",
+        )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdout, stderr = cmdline()
         self.assertIn("Total time", stdout)
@@ -151,26 +159,29 @@ class PrankConversion(unittest.TestCase):
     def setUp(self):
         # As these reads are all 36, it can be seen as pre-aligned:
         self.input = "Quality/example.fasta"
-        self.output = 'temp with space'  # prefix, PRANK will pick extensions
+        self.output = "temp with space"  # prefix, PRANK will pick extensions
 
     def conversion(self, prank_number, prank_ext, format):
         """Get PRANK to do a conversion, and check it with SeqIO."""
-        filename = "%s.%s" % (self.output, prank_ext)
+        filename = f"{self.output}.{prank_ext}"
         if os.path.isfile(filename):
             os.remove(filename)
-        cmdline = PrankCommandline(prank_exe, d=self.input,
-                                   convert=True, f=prank_number,
-                                   o='"%s"' % self.output)
-        self.assertEqual(str(cmdline), _escape_filename(prank_exe) +
-                         ' -d=%s' % self.input +
-                         ' -o="%s"' % self.output +
-                         ' -f=%i' % prank_number +
-                         ' -convert')
+        cmdline = PrankCommandline(
+            prank_exe,
+            d=self.input,
+            convert=True,
+            f=prank_number,
+            o=f'"{self.output}"',
+        )
+        self.assertEqual(
+            str(cmdline),
+            _escape_filename(prank_exe)
+            + f' -d={self.input} -o="{self.output}" -f={prank_number} -convert',
+        )
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         message, error = cmdline()
         self.assertIn("PRANK", message)
-        self.assertTrue(("converting '%s' to '%s'" % (self.input, filename))
-                        in message, message)
+        self.assertIn((f"converting '{self.input}' to '{filename}'"), message, message)
         self.assertEqual(error, "")
         self.assertTrue(os.path.isfile(filename))
         old = AlignIO.read(self.input, "fasta")
@@ -182,7 +193,7 @@ class PrankConversion(unittest.TestCase):
         self.assertEqual(len(old), len(new))
         for old_r, new_r in zip(old, new):
             self.assertEqual(old_r.id, new_r.id)
-            self.assertEqual(str(old_r.seq), str(new_r.seq))
+            self.assertEqual(old_r.seq, new_r.seq)
         os.remove(filename)
 
     def test_convert_to_fasta(self):

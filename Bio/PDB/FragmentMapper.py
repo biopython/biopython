@@ -1,7 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Classify protein backbone structure with Kolodny et al's fragment libraries.
 
@@ -24,13 +26,22 @@ You need these files to use this module.
 The following example uses the library with 10 fragments of length 5.
 The library files can be found in directory 'fragment_data'.
 
+    >>> from Bio.PDB.PDBParser import PDBParser
+    >>> from Bio.PDB.FragmentMapper import FragmentMapper
+    >>> parser = PDBParser()
+    >>> structure = parser.get_structure("1a8o", "PDB/1A8O.pdb")
     >>> model = structure[0]
-    >>> fm = FragmentMapper(model, lsize=10, flength=5, dir="fragment_data")
-    >>> fragment = fm[residue]
+    >>> fm = FragmentMapper(model, lsize=10, flength=5, fdir="PDB")
+    >>> chain = model['A']
+    >>> res152 = chain[152]
+    >>> res157 = chain[157]
+    >>> res152 in fm # is res152 mapped? (fragment of a C-alpha polypeptide)
+    False
+    >>> res157 in fm # is res157 mapped? (fragment of a C-alpha polypeptide)
+    True
 
 """
 
-from __future__ import print_function
 
 import numpy
 
@@ -63,11 +74,11 @@ def _read_fragments(size, length, dir="."):
     :type dir: string
     """
     filename = (dir + "/" + _FRAGMENT_FILE) % (size, length)
-    with open(filename, "r") as fp:
+    with open(filename) as fp:
         flist = []
         # ID of fragment=rank in spec file
         fid = 0
-        for l in fp.readlines():
+        for l in fp:
             # skip comment and blank lines
             if l[0] == "*" or l[0] == "\n":
                 continue
@@ -86,7 +97,7 @@ def _read_fragments(size, length, dir="."):
     return flist
 
 
-class Fragment(object):
+class Fragment:
     """Represent a polypeptide C-alpha fragment."""
 
     def __init__(self, length, fid):
@@ -137,7 +148,7 @@ class Fragment(object):
         :param resname: residue name (eg. GLY).
         :type resname: string
 
-        :param ca_coord: the c-alpha coorinates of the residues
+        :param ca_coord: the c-alpha coordinates of the residues
         :type ca_coord: Numeric array with length 3
         """
         if self.counter >= self.length:
@@ -147,7 +158,7 @@ class Fragment(object):
         self.counter = self.counter + 1
 
     def __len__(self):
-        """Return lengt of the fragment."""
+        """Return length of the fragment."""
         return self.length
 
     def __sub__(self, other):
@@ -230,7 +241,7 @@ def _map_fragment_list(flist, reflist):
     return mapped
 
 
-class FragmentMapper(object):
+class FragmentMapper:
     """Map polypeptides in a model to lists of representative fragments."""
 
     def __init__(self, model, lsize=20, flength=5, fdir="."):
@@ -287,14 +298,14 @@ class FragmentMapper(object):
                     else:
                         # fragment
                         index = i - self.edge
-                        assert(index >= 0)
+                        assert index >= 0
                         fd[res] = mflist[index]
             except PDBException as why:
-                if why == 'CHAINBREAK':
+                if why == "CHAINBREAK":
                     # Funny polypeptide - skip
                     pass
                 else:
-                    raise PDBException(why)
+                    raise PDBException(why) from None
         return fd
 
     def __contains__(self, res):

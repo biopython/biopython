@@ -1,0 +1,434 @@
+      7    468
+
+patient1.1000.326               GCT CCA GCT GGT TAT GCG ATT CTA AGG TAT AAT AGT AAG ACA TTC AAT GGG ACA GGA CCA TGC AAC AAT GTC AGC ACA GTA CAA TGT ACA CAT GGA ATT AAG CCA GTG GTA CCA ACT CAA CCA CTG TTA AAT GGT AGC CTA GCA AAA GAG AAG ATA ATA ATT AGA TCT GAA AAT CTG ACA AGC AAT CAC AAA ACA ATA ATA GTA CAG CTT AAT GGA TCC ATA GAA ATT GTG TGC ATA AGA CCC GGC AAT AAC ACA AGA AAA AGT GTA AGG ATA GGA ACA GGA CAA ACA TTC TAT GCA ACA GGT GAC ATA ATA GGA GAC ATA AGA AAA GCA TAT TGT AAC ATT AGT GCA GAA AGA TGG AAT GAG ACT TTA GAA TGG GTA AAG AAA AAA TTG GTA GAA CAC TTT CCT AAT AAG ACA ATA AGA TAT CAA CCA TCT TCG GGA AGA GAC CTA GAA GTT ACA ATG CAT AGC TTT 
+patient1.1000.16                GCT CCA GCT GGT TAT GCG ATT CTA AGG TAT AAT AGT AAG ACA TTC AAT GGG ACA GGA CCA TGC AAC AAT GTC AGC ACA GTA CAA TGT ACA CAT GGA ATT AAG CCA GTG GTA CCA ACT CAA CCA CTG TTA AAT GGT AGC CTA GCA AAA GAG AAG ATA ATA ATT AGA TCT GAA AAT CTG ACA AGC AAT CAC AAA ACA ATA ATA GTA CAG CTT AAT GGA TCC ATA GAA ATT GTG TGC ATA AGA CCC GGC AAT AAC ACA AGA AAA AGT GTA AGG ATA GGA ACA GGA CAA ACA TTC TAT GCA ACA GGT GAC ATA ATA GGA GAC ATA AGA AAA GCA TAT TGT AAC ATT AGT GCA GAA AGA TGG AAT GAG ACT TTA GAA TGG GTA AAG AAA AAA TTG GTA GAA CAC TTT CCT AAT AAG ACA ATA AGA TAT CAA CCA TCT TCG GGA AGA GAC CTA GAA ATT ACA ATG CAT AGC TTT 
+patient1.1000.325               GCT CCA GCT GGT TAT GCG ATT CTA AGG TAT AAT AGT AAG ACA TTC AAT GGG ACA GGA CCA TGC AAC AAT GTC AGC ACA GTA CAA TAT ACA CAT GGA ATT AAG CCA GTG GTA CCA ACT CAA CCA CTG TTA AAT GGT AGC CTA GCA AAA GAG AAG ATA ATA ATT AGA TCT GAA AAT CTG ACA AGC AAT CAC AAA ACA ATA ATA GTA CAG CTT AAT GGA TCC ATA GAA ATT GTG TGC ATA AGA CCC GGC AAT AAC ACA AGA AAA AGT GTA AGG ATA GGA ACA GGA CAA ACA TTC TAT GCA ACA GGT GAC ATA ATA GGA GAC ATA AGA AAA GCA TAT TGT AAC ATT AGT GCA GAA AGA TGG AAT GAG ACT TTA GAA TGG GTA AAG AAA AAA TTG GTA GAA CAC TTT CCT AAT AAG ACA ATA AGA TAT CAA CCA TCT TCG GGA AGA GAC CTA GAA GTT ACA ATG CAT AGC TTT 
+patient1.1000.105               GCT CCA GCT GGT TAT GCG ATT CTA AGG TAT AAT AGT AAG ACA TTC AAT GGG ACA GGA CCA TGC AAC AAT GTC AGC ACA GTA CAA TGT ACA TAT GGA ATT AAG CCA GTA GTA TCA ACT CAA CCA CTG TTA AGT GGT AGC CTA GCA GAA GAG GAG ATA ATA ATT AGA TCT GAA AAT CTG ACA AGC AAT CAC AAA ACA ATA ATA GTA CAG CTT AAT GGA TCC ATA GAA ATT GTG TGC ATA AGA CCC GGC AAT AAC ACA AGA AAA AGT GTA AGG ATA GGA ACA GGA CAA ACA TTC TAT GCA ACA GGT GAC ATA ATA GGA GAC ATA AGA AAA GCA TAT TGT AAC ATT AGT GCA GAA AGA TGG AAT GAG ACT TTA GAA TGG GTA GAG AAA AAA TTG GTA GAA CAC TTT CCT AAT AAG ACA ATA AGA TAT CAA CCA TCT TCG GGA AGA GAC CTA GAA GTT ACA ATG CAT AGC TTT 
+patient1.1000.20                GCT CCA GCT GGT TAT GCG ATT CTA AGG GAT AAT AGT AAG ACA TTC AAT GGG ACA GGA CCA TGC AAC AAT GTC AGC ACA GTA CAA TGT ACA CAT GGA ATT AAG CCA GTG GTA TCA ACT CAA CCA CTG TTA AAT GGT AGC CTA GCA GAA GAG GAG ATA ATA ATT AGA TCT GAA AAT CTG ACA AGC AAT CAC AAA ACA ATA ATA GTA CAG CTT AAT GGA TCC ATA GAA ATT GTG TGC ATA AGA CCC GGC AAT AAC ACA AGA AAA AGT GTA AGG ATA GGA ACA GGA CAA ACA TTC TAT GCA ACA GGT GAC ATA ATA GGA GAC ATA AGA AAA GCA TAT TGT AAC ATT AGT GCA GAA AGA TGG AAT GAG ATT TTA GAA TGG GTA AAG AAA AAA TTG GTA GAA CAC TTT CCT AAT AAG ACA ATA AGA TAT CAA CCA TCT TCG GGA AGA GAC CTA GAA GTT ACA ATG CAT AAC TTT 
+patient1.1500.22                GCT CCA GCT GGT TAT GCG ACT CTA AGG TAT AAT AGT AAG ACA TTC AAT GGG ACA GGA CCA TGC AAC AAT GTC AGC ACA GTA CAA TGT ACA TAT GGA ATT AAG CCA GTA GTA TCA ACT CAA CCA CTG TTA AAT GGT AGC CTA GTA GAA GAG GAA ATA ATA ATT AGA TTT GAA AAT CTG ACA AGC AAT CAC AAA ACA ATA ATA GTA CAG CTT AAT GGA TCC ATA GAA ATT GTG TGC ATA AGA CCC GGC AAT AAC ACA AGA AAA AGT GTA AGG ATA GGA ACA GGA CAA ACA TTC TAT GCA ACA GGT GAC ATA ATA GGA GAC ATA AGA AAA GCA CAT TGT AAC ATT AGT GCA GAA AGA TGG AAT GAG ACT TTA GAA TGG GTA GAG AAA AAA TTG GTA GAA CAC TTT CCT AAT AAG ACA ATA AGA TAT CAA CCA TCT TCG GGA AGA GAC CTA GAA GTT ACA ATG CAT AGC TTT 
+patient1.1500.321               GCT CCA GCT GGT TAT GCG ACT CTA AGG TAT AAT AGT AAG ACA TTC AAT GGG ACA GGA CCA TGC AAC AAT GTC AGC ACA GTA CAA TGT ACA TAT GGA ATT AAG CCA GTA GTA TCA ACT CAA CCA CTG TTA AAT GGT AGC CTA GCA GAA GAG GAG ATA ATA ATT AGA TTT GAA AAT CTG ACA AGC AAT CAC AAA GCA ATA ATA GTA CAA CTT AAT GGA TCC ATA GAA ATT GTG TGC ATA AGA CCC GGC AAT AAC ACA AGA AAA AGT GTA AGG AGA GGA ACA GGA CAA ACA TTC TAT GCA ACA GGT GAC ATA ATA GGA GAC ATA AGA AAA GCA TAT TGT AAC ATT AGT GCA GAA AGA TGG AAT GAG ACT TTA GAA TGG GTA GAG AAA AAA TTG GTA GAA CAC TTT CCT AAT AAG ACA ATA AGA TAT CAA CCA TCT TCG GGA AGA GAC CTA GAA GTT ACA ATG CAT AGC TTT 
+
+
+
+Printing out site pattern counts
+
+
+         7        195  P
+
+patient1.1000.326               AAA AAA AAC AAG AAG AAG AAT AAT ACA ACA ACT ACT AGA AGC AGC AGG AGT ATA ATA ATG ATT ATT CAA CAC CAG CAT CAT CCA CCA CCC CCT CTA CTG CTT GAA GAC GAG GCA GCA GCG GCT GGA GGC GGG GGT GTA GTC GTG GTG GTT TAT TAT TAT TCC TCG TCT TCT TGC TGG TGT TGT TTA TTC TTG TTT 
+patient1.1000.16                ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... A.. ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... 
+patient1.1000.325               ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... .A. ... ... ... ... ... 
+patient1.1000.105               ... G.. ... ... G.. G.. ... .G. ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... T.. ... T.. ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ..A ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... 
+patient1.1000.20                ... G.. ... ... ... G.. ... ... ... ... ... .T. ... .A. ... ... ... ... ... ... ... ... ... ... ... ... ... ... T.. ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... G.. ... ... ... ... ... ... ... ... ... ... ... ... ... ... 
+patient1.1500.22                ... G.. ... ... G.. G.A ... ... ... ... ... ... ... ... ... ... ... ... ... ... .C. ... ... ... ... ... T.. ... T.. ... ... ... ... ... ... ... ... ... .T. ... ... ... ... ... ... ... ... ..A ... ... ... C.. ... ... ... ... .T. ... ... ... ... ... ... ... ... 
+patient1.1500.321               ... G.. ... ... G.. G.. ... ... ... G.. ... ... ... ... ... ... ... .G. ... ... .C. ... ... ... ..A ... T.. ... T.. ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ..A ... ... ... ... ... ... ... ... .T. ... ... ... ... ... ... ... ... 
+
+    5    1    3    3    1    1    9    1   11    1    1    1    7    1    3
+    2    3    1   10    1    1    4    4    2    1    1    1    5    1    1
+    1    3    2    1    6    3    2    3    1    1    2    7    1    1    3
+    6    1    1    1    1    1    1    3    1    1    1    1    2    2    1
+    1    2    2    1    2
+
+YN00 Alignments/dottednum.fasta
+
+ns =   7	ls = 156
+
+Codon position x base (3x4) table for each sequence.
+
+patient1.1000.326   
+position  1:    T:0.14103    C:0.14744    A:0.45513    G:0.25641
+position  2:    T:0.25641    C:0.21154    A:0.31410    G:0.21795
+position  3:    T:0.26282    C:0.12821    A:0.47436    G:0.13462
+
+patient1.1000.16    
+position  1:    T:0.14103    C:0.14744    A:0.46154    G:0.25000
+position  2:    T:0.25641    C:0.21154    A:0.31410    G:0.21795
+position  3:    T:0.26282    C:0.12821    A:0.47436    G:0.13462
+
+patient1.1000.325   
+position  1:    T:0.14103    C:0.14744    A:0.45513    G:0.25641
+position  2:    T:0.25641    C:0.21154    A:0.32051    G:0.21154
+position  3:    T:0.26282    C:0.12821    A:0.47436    G:0.13462
+
+patient1.1000.105   
+position  1:    T:0.15385    C:0.13462    A:0.43590    G:0.27564
+position  2:    T:0.25641    C:0.21154    A:0.30769    G:0.22436
+position  3:    T:0.26282    C:0.12821    A:0.48077    G:0.12821
+
+patient1.1000.20    
+position  1:    T:0.14103    C:0.14103    A:0.44231    G:0.27564
+position  2:    T:0.26282    C:0.20513    A:0.32051    G:0.21154
+position  3:    T:0.26282    C:0.12821    A:0.47436    G:0.13462
+
+patient1.1500.22    
+position  1:    T:0.14744    C:0.14103    A:0.43590    G:0.27564
+position  2:    T:0.26282    C:0.20513    A:0.31410    G:0.21795
+position  3:    T:0.26282    C:0.12821    A:0.48718    G:0.12179
+
+patient1.1500.321   
+position  1:    T:0.15385    C:0.13462    A:0.42949    G:0.28205
+position  2:    T:0.25000    C:0.21154    A:0.31410    G:0.22436
+position  3:    T:0.26282    C:0.12821    A:0.48718    G:0.12179
+
+Average
+position  1:    T:0.14560    C:0.14194    A:0.44505    G:0.26740
+position  2:    T:0.25733    C:0.20971    A:0.31502    G:0.21795
+position  3:    T:0.26282    C:0.12821    A:0.47894    G:0.13004
+
+Codon usage for each species
+--------------------------------------------------------------------------------------------------------------------------------------
+Phe TTT   2   2   2   2   2   3 | Ser TCT   2   2   2   2   2   1 | Tyr TAT   5   5   6   6   4   5 | Cys TGT   2   2   1   2   2   2
+    TTC   2   2   2   2   2   2 |     TCC   1   1   1   1   1   1 |     TAC   0   0   0   0   0   0 |     TGC   2   2   2   2   2   2
+Leu TTA   2   2   2   2   2   2 |     TCA   0   0   0   1   1   1 | *** TAA   0   0   0   0   0   0 | *** TGA   0   0   0   0   0   0
+    TTG   1   1   1   1   1   1 |     TCG   1   1   1   1   1   1 |     TAG   0   0   0   0   0   0 | Trp TGG   2   2   2   2   2   2
+--------------------------------------------------------------------------------------------------------------------------------------
+Leu CTT   1   1   1   1   1   1 | Pro CCT   1   1   1   1   1   1 | His CAT   2   2   2   1   2   2 | Arg CGT   0   0   0   0   0   0
+    CTC   0   0   0   0   0   0 |     CCC   1   1   1   1   1   1 |     CAC   2   2   2   2   2   2 |     CGC   0   0   0   0   0   0
+    CTA   3   3   3   3   3   3 |     CCA   6   6   6   5   5   5 | Gln CAA   4   4   4   4   4   4 |     CGA   0   0   0   0   0   0
+    CTG   2   2   2   2   2   2 |     CCG   0   0   0   0   0   0 |     CAG   1   1   1   1   1   1 |     CGG   0   0   0   0   0   0
+--------------------------------------------------------------------------------------------------------------------------------------
+Ile ATT   5   6   5   5   6   4 | Thr ACT   2   2   2   2   1   3 | Asn AAT  10  10  10   9  10  10 | Ser AGT   3   3   3   4   3   3
+    ATC   0   0   0   0   0   0 |     ACC   0   0   0   0   0   0 |     AAC   3   3   3   3   4   3 |     AGC   4   4   4   4   3   4
+    ATA  11  11  11  11  11  11 |     ACA  12  12  12  12  12  12 | Lys AAA   6   6   6   5   5   5 | Arg AGA   7   7   7   7   7   7
+Met ATG   1   1   1   1   1   1 |     ACG   0   0   0   0   0   0 |     AAG   5   5   5   3   4   3 |     AGG   2   2   2   2   2   2
+--------------------------------------------------------------------------------------------------------------------------------------
+Val GTT   1   0   1   1   1   1 | Ala GCT   2   2   2   2   2   2 | Asp GAT   0   0   0   0   1   0 | Gly GGT   3   3   3   3   3   3
+    GTC   1   1   1   1   1   1 |     GCC   0   0   0   0   0   0 |     GAC   3   3   3   3   3   3 |     GGC   1   1   1   1   1   1
+    GTA   6   6   6   7   6   8 |     GCA   4   4   4   4   4   3 | Glu GAA   6   6   6   7   7   8 |     GGA   7   7   7   7   7   7
+    GTG   2   2   2   1   2   1 |     GCG   1   1   1   1   1   1 |     GAG   2   2   2   4   3   3 |     GGG   1   1   1   1   1   1
+--------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------
+Phe TTT   3 | Ser TCT   1 | Tyr TAT   6 | Cys TGT   2
+    TTC   2 |     TCC   1 |     TAC   0 |     TGC   2
+Leu TTA   2 |     TCA   1 | *** TAA   0 | *** TGA   0
+    TTG   1 |     TCG   1 |     TAG   0 | Trp TGG   2
+------------------------------------------------------
+Leu CTT   1 | Pro CCT   1 | His CAT   1 | Arg CGT   0
+    CTC   0 |     CCC   1 |     CAC   2 |     CGC   0
+    CTA   3 |     CCA   5 | Gln CAA   5 |     CGA   0
+    CTG   2 |     CCG   0 |     CAG   0 |     CGG   0
+------------------------------------------------------
+Ile ATT   4 | Thr ACT   3 | Asn AAT  10 | Ser AGT   3
+    ATC   0 |     ACC   0 |     AAC   3 |     AGC   4
+    ATA  10 |     ACA  11 | Lys AAA   5 | Arg AGA   8
+Met ATG   1 |     ACG   0 |     AAG   3 |     AGG   2
+------------------------------------------------------
+Val GTT   1 | Ala GCT   2 | Asp GAT   0 | Gly GGT   3
+    GTC   1 |     GCC   0 |     GAC   3 |     GGC   1
+    GTA   7 |     GCA   5 | Glu GAA   7 |     GGA   7
+    GTG   1 |     GCG   1 |     GAG   4 |     GGG   1
+------------------------------------------------------
+
+
+Sums
+------------------------------------------------------
+Phe TTT  16 | Ser TCT  12 | Tyr TAT  37 | Cys TGT  13
+    TTC  14 |     TCC   7 |     TAC   0 |     TGC  14
+Leu TTA  14 |     TCA   4 | *** TAA   0 | *** TGA   0
+    TTG   7 |     TCG   7 |     TAG   0 | Trp TGG  14
+------------------------------------------------------
+Leu CTT   7 | Pro CCT   7 | His CAT  12 | Arg CGT   0
+    CTC   0 |     CCC   7 |     CAC  14 |     CGC   0
+    CTA  21 |     CCA  38 | Gln CAA  29 |     CGA   0
+    CTG  14 |     CCG   0 |     CAG   6 |     CGG   0
+------------------------------------------------------
+Ile ATT  35 | Thr ACT  15 | Asn AAT  69 | Ser AGT  22
+    ATC   0 |     ACC   0 |     AAC  22 |     AGC  27
+    ATA  76 |     ACA  83 | Lys AAA  38 | Arg AGA  50
+Met ATG   7 |     ACG   0 |     AAG  28 |     AGG  14
+------------------------------------------------------
+Val GTT   6 | Ala GCT  14 | Asp GAT   1 | Gly GGT  21
+    GTC   7 |     GCC   0 |     GAC  21 |     GGC   7
+    GTA  46 |     GCA  28 | Glu GAA  47 |     GGA  49
+    GTG  11 |     GCG   7 |     GAG  20 |     GGG   7
+------------------------------------------------------
+
+
+
+(A) Nei-Gojobori (1986) method
+
+
+
+Nei & Gojobori 1986. dN/dS (dN, dS)
+(Note: This matrix is not used in later ML. analysis.
+Use runmode = -2 for ML pairwise comparison.)
+
+patient1.1000.326   
+patient1.1000.16    -1.0000 (0.0028 0.0000)
+patient1.1000.325   -1.0000 (0.0028 0.0000)-1.0000 (0.0056 0.0000)
+patient1.1000.105    1.7996 (0.0168 0.0094) 2.0991 (0.0197 0.0094) 2.1046 (0.0197 0.0094)
+patient1.1000.20    -1.0000 (0.0168 0.0000)-1.0000 (0.0196 0.0000)-1.0000 (0.0197 0.0000) 1.7958 (0.0168 0.0094)
+patient1.1500.22     1.3447 (0.0254 0.0189) 1.4937 (0.0282 0.0189) 1.4977 (0.0283 0.0189) 1.4951 (0.0140 0.0094) 1.3418 (0.0254 0.0189)
+patient1.1500.321    1.3467 (0.0254 0.0189) 1.4959 (0.0282 0.0189) 1.4999 (0.0283 0.0188) 1.4973 (0.0140 0.0094) 1.3438 (0.0254 0.0189) 0.5922 (0.0112 0.0189)
+
+
+(B) Yang & Nielsen (2000) method
+
+Yang Z, Nielsen R (2000) Estimating synonymous and nonsynonymous substitution rates under realistic evolutionary models. Mol. Biol. Evol. 17:32-43
+
+(equal weighting of pathways)
+
+seq. seq.     S       N        t   kappa   omega     dN +- SE    dS +- SE
+
+   2    1    98.4   369.6   0.0064  7.9532 99.0000 0.0027 +- 0.0027 -0.0000 +- 0.0000
+   3    1    98.4   369.6   0.0064  7.9532 99.0000 0.0027 +- 0.0027 -0.0000 +- 0.0000
+   3    2    98.6   369.4   0.0129  7.9532 99.0000 0.0054 +- 0.0038 -0.0000 +- 0.0000
+   4    1    96.0   372.0   0.0453  7.9532  1.5543 0.0163 +- 0.0067  0.0105 +- 0.0105
+   4    2    96.1   371.9   0.0519  7.9532  1.8196 0.0191 +- 0.0072  0.0105 +- 0.0105
+   4    3    96.1   371.9   0.0519  7.9532  1.8189 0.0191 +- 0.0072  0.0105 +- 0.0105
+   5    1    97.8   370.2   0.0390  7.9532 99.0000 0.0164 +- 0.0068 -0.0000 +- 0.0000
+   5    2    98.0   370.0   0.0456  7.9532 99.0000 0.0192 +- 0.0073 -0.0000 +- 0.0000
+   5    3    97.9   370.1   0.0456  7.9532 99.0000 0.0192 +- 0.0073 -0.0000 +- 0.0000
+   5    4    95.6   372.4   0.0455  7.9532  1.5520 0.0163 +- 0.0067  0.0105 +- 0.0105
+   6    1    94.8   373.2   0.0716  7.9532  1.1455 0.0245 +- 0.0082  0.0214 +- 0.0152
+   6    2    94.9   373.1   0.0783  7.9532  1.2773 0.0273 +- 0.0087  0.0214 +- 0.0152
+   6    3    94.9   373.1   0.0783  7.9532  1.2768 0.0273 +- 0.0087  0.0214 +- 0.0152
+   6    4    92.6   375.4   0.0388  7.9532  1.2362 0.0134 +- 0.0060  0.0109 +- 0.0109
+   6    5    94.5   373.5   0.0720  7.9532  1.1467 0.0246 +- 0.0083  0.0215 +- 0.0152
+   7    1    95.3   372.7   0.0720  7.9532  1.1601 0.0247 +- 0.0083  0.0213 +- 0.0151
+   7    2    95.4   372.6   0.0787  7.9532  1.2946 0.0275 +- 0.0088  0.0213 +- 0.0151
+   7    3    95.4   372.6   0.0787  7.9532  1.2942 0.0275 +- 0.0088  0.0213 +- 0.0151
+   7    4    93.2   374.8   0.0389  7.9532  1.2490 0.0135 +- 0.0061  0.0108 +- 0.0108
+   7    5    95.0   373.0   0.0719  7.9532  1.1527 0.0246 +- 0.0083  0.0214 +- 0.0152
+   7    6    91.9   376.1   0.0389  7.9532  0.4860 0.0107 +- 0.0054  0.0221 +- 0.0157
+
+
+(C) LWL85, LPB93 & LWLm methods
+
+Li W.-H., C.-I. Wu, Luo (1985) A new method for estimating synonymous and nonsynonymous rates of nucleotide substitutions considering the relative likelihood of nucleotide and codon changes. Mol. Biol. Evol. 2: 150-174.
+Li W-H (1993) Unbiased estimation of the rates of synonymous and nonsynonymous substitution. J. Mol. Evol. 36:96-99
+Pamilo P, Bianchi NO (1993) Evolution of the Zfx and Zfy genes - rates and interdependence between the genes. Mol. Biol. Evol. 10:271-281
+Yang Z (2006) Computational Molecular Evolution. Oxford University Press, Oxford. Eqs. 2.12 & 2.13
+
+2 (patient1.1000.16) vs. 1 (patient1.1000.326)
+
+L(i):      298.0     109.5      60.5  sum=    468.0
+Ns(i):    1.0000    0.0000    0.0000  sum=   1.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0034    0.0000    0.0000
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0000 dN =  0.0027 w =    inf S =   97.0 N =  371.0
+LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
+LPB93:  dS =  0.0000 dN =  0.0034 w =    inf
+
+3 (patient1.1000.325) vs. 1 (patient1.1000.326)
+
+L(i):      298.0     109.0      61.0  sum=    468.0
+Ns(i):    1.0000    0.0000    0.0000  sum=   1.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0034    0.0000    0.0000
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0000 dN =  0.0027 w =    inf S =   97.3 N =  370.7
+LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
+LPB93:  dS =  0.0000 dN =  0.0034 w =    inf
+
+3 (patient1.1000.325) vs. 2 (patient1.1000.16)
+
+L(i):      298.0     109.5      60.5  sum=    468.0
+Ns(i):    2.0000    0.0000    0.0000  sum=   2.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0068    0.0000    0.0000
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0000 dN =  0.0054 w =    inf S =   97.0 N =  371.0
+LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
+LPB93:  dS =  0.0000 dN =  0.0068 w =    inf
+
+4 (patient1.1000.105) vs. 1 (patient1.1000.326)
+
+L(i):      298.0     109.0      61.0  sum=    468.0
+Ns(i):    6.0000    0.0000    1.0000  sum=   7.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0206    0.0000    0.0167
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0104 dN =  0.0165 w = 1.5816 S =   97.3 N =  370.7
+LWL85m: dS =  0.0060 dN =  0.0206 w = 3.4361 S =  170.0 N =  298.0 (rho = 1.000)
+LPB93:  dS =  0.0060 dN =  0.0206 w = 3.4361
+
+4 (patient1.1000.105) vs. 2 (patient1.1000.16)
+
+L(i):      298.0     109.5      60.5  sum=    468.0
+Ns(i):    7.0000    0.0000    1.0000  sum=   8.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0241    0.0000    0.0168
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0105 dN =  0.0193 w = 1.8434 S =   97.0 N =  371.0
+LWL85m: dS =  0.0060 dN =  0.0241 w = 4.0222 S =  170.0 N =  298.0 (rho = 1.000)
+LPB93:  dS =  0.0060 dN =  0.0241 w = 4.0222
+
+4 (patient1.1000.105) vs. 3 (patient1.1000.325)
+
+L(i):      298.0     109.0      61.0  sum=    468.0
+Ns(i):    7.0000    0.0000    1.0000  sum=   8.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0241    0.0000    0.0167
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0104 dN =  0.0193 w = 1.8517 S =   97.3 N =  370.7
+LWL85m: dS =  0.0060 dN =  0.0241 w = 4.0227 S =  170.0 N =  298.0 (rho = 1.000)
+LPB93:  dS =  0.0060 dN =  0.0241 w = 4.0227
+
+5 (patient1.1000.20) vs. 1 (patient1.1000.326)
+
+L(i):      298.0     109.5      60.5  sum=    468.0
+Ns(i):    5.0000    0.0000    0.0000  sum=   5.0000
+Nv(i):    1.0000    0.0000    0.0000  sum=   1.0000
+A(i):     0.0171    0.0000    0.0000
+B(i):     0.0034   -0.0000   -0.0000
+LWL85:  dS =  0.0000 dN =  0.0165 w =    inf S =   97.0 N =  371.0
+LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
+LPB93:  dS =  0.0000 dN =  0.0196 w =    inf
+
+5 (patient1.1000.20) vs. 2 (patient1.1000.16)
+
+L(i):      298.0     110.0      60.0  sum=    468.0
+Ns(i):    6.0000    0.0000    0.0000  sum=   6.0000
+Nv(i):    1.0000    0.0000    0.0000  sum=   1.0000
+A(i):     0.0206    0.0000    0.0000
+B(i):     0.0034   -0.0000   -0.0000
+LWL85:  dS =  0.0000 dN =  0.0192 w =    inf S =   96.7 N =  371.3
+LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
+LPB93:  dS =  0.0000 dN =  0.0231 w =    inf
+
+5 (patient1.1000.20) vs. 3 (patient1.1000.325)
+
+L(i):      298.0     109.5      60.5  sum=    468.0
+Ns(i):    6.0000    0.0000    0.0000  sum=   6.0000
+Nv(i):    1.0000    0.0000    0.0000  sum=   1.0000
+A(i):     0.0206    0.0000    0.0000
+B(i):     0.0034   -0.0000   -0.0000
+LWL85:  dS =  0.0000 dN =  0.0193 w =    inf S =   97.0 N =  371.0
+LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
+LPB93:  dS =  0.0000 dN =  0.0231 w =    inf
+
+5 (patient1.1000.20) vs. 4 (patient1.1000.105)
+
+L(i):      298.0     109.5      60.5  sum=    468.0
+Ns(i):    5.0000    0.0000    1.0000  sum=   6.0000
+Nv(i):    1.0000    0.0000    0.0000  sum=   1.0000
+A(i):     0.0171    0.0000    0.0168
+B(i):     0.0034   -0.0000   -0.0000
+LWL85:  dS =  0.0105 dN =  0.0165 w = 1.5699 S =   97.0 N =  371.0
+LWL85m: dS =  0.0060 dN =  0.0205 w = 3.4253 S =  170.0 N =  298.0 (rho = 1.000)
+LPB93:  dS =  0.0060 dN =  0.0196 w = 3.2740
+
+6 (patient1.1500.22) vs. 1 (patient1.1000.326)
+
+L(i):      298.0     109.0      61.0  sum=    468.0
+Ns(i):    9.0000    1.0000    1.0000  sum=  11.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0312    0.0093    0.0167
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0208 dN =  0.0250 w = 1.2032 S =   97.3 N =  370.7
+LWL85m: dS =  0.0119 dN =  0.0312 w = 2.6139 S =  170.0 N =  298.0 (rho = 1.000)
+LPB93:  dS =  0.0119 dN =  0.0312 w = 2.6139
+
+6 (patient1.1500.22) vs. 2 (patient1.1000.16)
+
+L(i):      298.0     109.5      60.5  sum=    468.0
+Ns(i):   10.0000    1.0000    1.0000  sum=  12.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0347    0.0092    0.0168
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0209 dN =  0.0279 w = 1.3357 S =   97.0 N =  371.0
+LWL85m: dS =  0.0119 dN =  0.0347 w = 2.9145 S =  170.0 N =  298.0 (rho = 1.000)
+LPB93:  dS =  0.0119 dN =  0.0347 w = 2.9145
+
+6 (patient1.1500.22) vs. 3 (patient1.1000.325)
+
+L(i):      298.0     109.0      61.0  sum=    468.0
+Ns(i):   10.0000    1.0000    1.0000  sum=  12.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0347    0.0093    0.0167
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0208 dN =  0.0279 w = 1.3416 S =   97.3 N =  370.7
+LWL85m: dS =  0.0119 dN =  0.0347 w = 2.9146 S =  170.0 N =  298.0 (rho = 1.000)
+LPB93:  dS =  0.0119 dN =  0.0347 w = 2.9146
+
+6 (patient1.1500.22) vs. 4 (patient1.1000.105)
+
+L(i):      298.0     109.0      61.0  sum=    468.0
+Ns(i):    5.0000    1.0000    0.0000  sum=   6.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0171    0.0093    0.0000
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0104 dN =  0.0137 w = 1.3232 S =   97.3 N =  370.7
+LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
+LPB93:  dS =  0.0059 dN =  0.0171 w = 2.8746
+
+6 (patient1.1500.22) vs. 5 (patient1.1000.20)
+
+L(i):      298.0     109.5      60.5  sum=    468.0
+Ns(i):    8.0000    1.0000    1.0000  sum=  10.0000
+Nv(i):    1.0000    0.0000    0.0000  sum=   1.0000
+A(i):     0.0277    0.0092    0.0168
+B(i):     0.0034   -0.0000   -0.0000
+LWL85:  dS =  0.0209 dN =  0.0249 w = 1.1941 S =   97.0 N =  371.0
+LWL85m: dS =  0.0119 dN =  0.0311 w = 2.6054 S =  170.0 N =  298.0 (rho = 1.000)
+LPB93:  dS =  0.0119 dN =  0.0301 w = 2.5295
+
+7 (patient1.1500.321) vs. 1 (patient1.1000.326)
+
+L(i):      297.5     109.5      61.0  sum=    468.0
+Ns(i):    8.0000    1.0000    1.0000  sum=  10.0000
+Nv(i):    1.0000    0.0000    0.0000  sum=   1.0000
+A(i):     0.0277    0.0092    0.0167
+B(i):     0.0034   -0.0000   -0.0000
+LWL85:  dS =  0.0208 dN =  0.0250 w = 1.2020 S =   97.5 N =  370.5
+LWL85m: dS =  0.0119 dN =  0.0311 w = 2.6178 S =  170.5 N =  297.5 (rho = 1.000)
+LPB93:  dS =  0.0119 dN =  0.0302 w = 2.5414
+
+7 (patient1.1500.321) vs. 2 (patient1.1000.16)
+
+L(i):      297.5     110.0      60.5  sum=    468.0
+Ns(i):    9.0000    1.0000    1.0000  sum=  11.0000
+Nv(i):    1.0000    0.0000    0.0000  sum=   1.0000
+A(i):     0.0313    0.0092    0.0168
+B(i):     0.0034   -0.0000   -0.0000
+LWL85:  dS =  0.0209 dN =  0.0278 w = 1.3344 S =   97.2 N =  370.8
+LWL85m: dS =  0.0119 dN =  0.0347 w = 2.9188 S =  170.5 N =  297.5 (rho = 1.000)
+LPB93:  dS =  0.0119 dN =  0.0338 w = 2.8421
+
+7 (patient1.1500.321) vs. 3 (patient1.1000.325)
+
+L(i):      297.5     109.5      61.0  sum=    468.0
+Ns(i):    9.0000    1.0000    1.0000  sum=  11.0000
+Nv(i):    1.0000    0.0000    0.0000  sum=   1.0000
+A(i):     0.0313    0.0092    0.0167
+B(i):     0.0034   -0.0000   -0.0000
+LWL85:  dS =  0.0208 dN =  0.0279 w = 1.3403 S =   97.5 N =  370.5
+LWL85m: dS =  0.0119 dN =  0.0347 w = 2.9189 S =  170.5 N =  297.5 (rho = 1.000)
+LPB93:  dS =  0.0119 dN =  0.0338 w = 2.8425
+
+7 (patient1.1500.321) vs. 4 (patient1.1000.105)
+
+L(i):      297.5     109.5      61.0  sum=    468.0
+Ns(i):    4.0000    1.0000    0.0000  sum=   5.0000
+Nv(i):    1.0000    0.0000    0.0000  sum=   1.0000
+A(i):     0.0137    0.0092    0.0000
+B(i):     0.0034   -0.0000   -0.0000
+LWL85:  dS =  0.0104 dN =  0.0137 w = 1.3223 S =   97.5 N =  370.5
+LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
+LPB93:  dS =  0.0059 dN =  0.0161 w = 2.7264
+
+7 (patient1.1500.321) vs. 5 (patient1.1000.20)
+
+L(i):      297.5     110.0      60.5  sum=    468.0
+Ns(i):    7.0000    1.0000    1.0000  sum=   9.0000
+Nv(i):    2.0000    0.0000    0.0000  sum=   2.0000
+A(i):     0.0243    0.0092    0.0168
+B(i):     0.0068   -0.0000   -0.0000
+LWL85:  dS =  0.0209 dN =  0.0249 w = 1.1936 S =   97.2 N =  370.8
+LWL85m: dS =  0.0119 dN =  0.0310 w = 2.6108 S =  170.5 N =  297.5 (rho = 1.000)
+LPB93:  dS =  0.0119 dN =  0.0292 w = 2.4571
+
+7 (patient1.1500.321) vs. 6 (patient1.1500.22)
+
+L(i):      297.5     109.5      61.0  sum=    468.0
+Ns(i):    3.0000    2.0000    0.0000  sum=   5.0000
+Nv(i):    1.0000    0.0000    0.0000  sum=   1.0000
+A(i):     0.0102    0.0186    0.0000
+B(i):     0.0034   -0.0000   -0.0000
+LWL85:  dS =  0.0209 dN =  0.0109 w = 0.5223 S =   97.5 N =  370.5
+LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
+LPB93:  dS =  0.0119 dN =  0.0127 w = 1.0615
+

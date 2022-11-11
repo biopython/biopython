@@ -1,7 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Polypeptide-related classes (construction and representation).
 
@@ -48,25 +50,22 @@ In this case the selenomethionines (the first and also seventh and sixth from
 last residues) have been shown as M (methionine) by the get_sequence method.
 """
 
-from __future__ import print_function
-from Bio._py3k import basestring
-
 import warnings
 
-from Bio.Alphabet import generic_protein
-from Bio.Data import SCOPData
-from Bio.Seq import Seq
+from Bio import BiopythonDeprecationWarning
+
+from Bio.Data.PDBData import nucleic_letters_3to1
+from Bio.Data.PDBData import nucleic_letters_3to1_extended
+from Bio.Data.PDBData import protein_letters_3to1
+from Bio.Data.PDBData import protein_letters_3to1_extended
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.vectors import calc_dihedral, calc_angle
+from Bio.Seq import Seq
 
 
-standard_aa_names = ["ALA", "CYS", "ASP", "GLU", "PHE", "GLY", "HIS", "ILE", "LYS",
-                     "LEU", "MET", "ASN", "PRO", "GLN", "ARG", "SER", "THR", "VAL",
-                     "TRP", "TYR"]
-
-
-aa1 = "ACDEFGHIKLMNPQRSTVWY"
-aa3 = standard_aa_names
+# Sorted by 1-letter code
+aa3, aa1 = zip(*sorted(protein_letters_3to1.items(), key=lambda x: x[1]))
+standard_aa_names = aa3
 
 d1_to_index = {}
 dindex_to_1 = {}
@@ -142,6 +141,11 @@ def three_to_one(s):
        ...
     KeyError: 'MSE'
     """
+    warnings.warn(
+        "'three_to_one' will be deprecated in a future release of Biopython "
+        "in favor of 'Bio.PDB.Polypeptide.protein_letters_3to1'.",
+        BiopythonDeprecationWarning,
+    )
     i = d3_to_index[s]
     return dindex_to_1[i]
 
@@ -154,6 +158,11 @@ def one_to_three(s):
     >>> one_to_three('Y')
     'TYR'
     """
+    warnings.warn(
+        "'one_to_three' will be deprecated in a future release of Biopython "
+        "in favor of 'Bio.PDB.Polypeptide.protein_letters_1to3'.",
+        BiopythonDeprecationWarning,
+    )
     i = d1_to_index[s]
     return dindex_to_3[i]
 
@@ -177,14 +186,45 @@ def is_aa(residue, standard=False):
     >>> is_aa('FME', standard=True)
     False
     """
-    # TODO - What about special cases like XXX, can they appear in PDB files?
-    if not isinstance(residue, basestring):
-        residue = residue.get_resname()
+    if not isinstance(residue, str):
+        residue = f"{residue.get_resname():<3s}"
     residue = residue.upper()
     if standard:
-        return residue in d3_to_index
+        return residue in protein_letters_3to1
     else:
-        return residue in SCOPData.protein_letters_3to1
+        return residue in protein_letters_3to1_extended
+
+
+def is_nucleic(residue, standard=False):
+    """Return True if residue object/string is a nucleic acid.
+
+    :param residue: a L{Residue} object OR a three letter code
+    :type residue: L{Residue} or string
+
+    :param standard: flag to check for the 8 (DNA + RNA) canonical bases.
+        Default is False.
+    :type standard: boolean
+
+    >>> is_nucleic('DA ')
+    True
+
+    >>> is_nucleic('A  ')
+    True
+
+    Known three letter codes for modified nucleotides are supported,
+
+    >>> is_nucleic('A2L')
+    True
+    >>> is_nucleic('A2L', standard=True)
+    False
+    """
+    if not isinstance(residue, str):
+        residue = f"{residue.get_resname():<3s}"
+    residue = residue.upper()
+    if standard:
+        return residue in nucleic_letters_3to1
+    else:
+        return residue in nucleic_letters_3to1_extended
 
 
 class Polypeptide(list):
@@ -209,9 +249,9 @@ class Polypeptide(list):
         for i in range(0, lng):
             res = self[i]
             try:
-                n = res['N'].get_vector()
-                ca = res['CA'].get_vector()
-                c = res['C'].get_vector()
+                n = res["N"].get_vector()
+                ca = res["CA"].get_vector()
+                c = res["C"].get_vector()
             except Exception:
                 # Some atoms are missing
                 # Phi/Psi cannot be calculated for this residue
@@ -223,7 +263,7 @@ class Polypeptide(list):
             if i > 0:
                 rp = self[i - 1]
                 try:
-                    cp = rp['C'].get_vector()
+                    cp = rp["C"].get_vector()
                     phi = calc_dihedral(cp, n, ca, c)
                 except Exception:
                     phi = None
@@ -234,7 +274,7 @@ class Polypeptide(list):
             if i < (lng - 1):
                 rn = self[i + 1]
                 try:
-                    nn = rn['N'].get_vector()
+                    nn = rn["N"].get_vector()
                     psi = calc_dihedral(n, ca, c, nn)
                 except Exception:
                     psi = None
@@ -253,7 +293,7 @@ class Polypeptide(list):
         tau_list = []
         for i in range(0, len(ca_list) - 3):
             atom_list = (ca_list[i], ca_list[i + 1], ca_list[i + 2], ca_list[i + 3])
-            v1, v2, v3, v4 = [a.get_vector() for a in atom_list]
+            v1, v2, v3, v4 = (a.get_vector() for a in atom_list)
             tau = calc_dihedral(v1, v2, v3, v4)
             tau_list.append(tau)
             # Put tau in xtra dict of residue
@@ -267,7 +307,7 @@ class Polypeptide(list):
         ca_list = self.get_ca_list()
         for i in range(0, len(ca_list) - 2):
             atom_list = (ca_list[i], ca_list[i + 1], ca_list[i + 2])
-            v1, v2, v3 = [a.get_vector() for a in atom_list]
+            v1, v2, v3 = (a.get_vector() for a in atom_list)
             theta = calc_angle(v1, v2, v3)
             theta_list.append(theta)
             # Put tau in xtra dict of residue
@@ -281,11 +321,10 @@ class Polypeptide(list):
         :return: polypeptide sequence
         :rtype: L{Seq}
         """
-        s = ""
-        for res in self:
-            s += SCOPData.protein_letters_3to1.get(res.get_resname(), 'X')
-        seq = Seq(s, generic_protein)
-        return seq
+        s = "".join(
+            protein_letters_3to1_extended.get(res.get_resname(), "X") for res in self
+        )
+        return Seq(s)
 
     def __repr__(self):
         """Return string representation of the polypeptide.
@@ -295,11 +334,10 @@ class Polypeptide(list):
         """
         start = self[0].get_id()[1]
         end = self[-1].get_id()[1]
-        s = "<Polypeptide start=%s end=%s>" % (start, end)
-        return s
+        return f"<Polypeptide start={start} end={end}>"
 
 
-class _PPBuilder(object):
+class _PPBuilder:
     """Base class to extract polypeptides.
 
     It checks if two consecutive residues in a chain are connected.
@@ -324,8 +362,10 @@ class _PPBuilder(object):
             # It has an alpha carbon...
             # We probably need to update the hard coded list of
             # non-standard residues, see function is_aa for details.
-            warnings.warn("Assuming residue %s is an unknown modified "
-                          "amino acid" % residue.get_resname())
+            warnings.warn(
+                "Assuming residue %s is an unknown modified amino acid"
+                % residue.get_resname()
+            )
             return True
         else:
             # not a standard AA so skip
@@ -365,9 +405,11 @@ class _PPBuilder(object):
                 continue
             pp = None
             for next_res in chain_it:
-                if accept(prev_res, aa_only) \
-                        and accept(next_res, aa_only) \
-                        and is_connected(prev_res, next_res):
+                if (
+                    accept(prev_res, aa_only)
+                    and accept(next_res, aa_only)
+                    and is_connected(prev_res, next_res)
+                ):
                     if pp is None:
                         pp = Polypeptide()
                         pp.append(prev_res)

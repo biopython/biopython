@@ -5,14 +5,10 @@
 # package.
 """Bio.SearchIO object to model a single database hit."""
 
-from __future__ import print_function
 
 from itertools import chain
 
-from Bio._py3k import filter
-
-from Bio._utils import getattr_str, trim_str
-from Bio.SearchIO._utils import allitems, optionalcascade
+from Bio.SearchIO._utils import allitems, optionalcascade, getattr_str
 
 from ._base import _BaseSearchObject
 from .hsp import HSP
@@ -101,7 +97,7 @@ class Hit(_BaseSearchObject):
 
     # attributes we don't want to transfer when creating a new Hit class
     # from this one
-    _NON_STICKY_ATTRS = ('_items', )
+    _NON_STICKY_ATTRS = ("_items",)
 
     def __init__(self, hsps=(), id=None, query_id=None):
         """Initialize a Hit object.
@@ -129,15 +125,15 @@ class Hit(_BaseSearchObject):
 
         # TODO - Move this into the for look below in case
         # hsps is a single use iterator?
-        for attr in ('query_id', 'query_description', 'hit_id',
-                     'hit_description'):
+        for attr in ("query_id", "query_description", "hit_id", "hit_description"):
             # HACK: setting the if clause to '> 1' allows for empty hit objects.
             # This makes it easier to work with file formats with unpredictable
             # hit-hsp ordering. The empty hit object itself is nonfunctional,
             # however, since all its cascading properties are empty.
-            if len(set(getattr(hsp, attr) for hsp in hsps)) > 1:
-                raise ValueError("Hit object can not contain HSPs with "
-                                 "more than one %s." % attr)
+            if len({getattr(hsp, attr) for hsp in hsps}) > 1:
+                raise ValueError(
+                    "Hit object can not contain HSPs with more than one %s." % attr
+                )
 
         self._items = []
         for hsp in hsps:
@@ -148,8 +144,7 @@ class Hit(_BaseSearchObject):
 
     def __repr__(self):
         """Return string representation of Hit object."""
-        return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id,
-                                                     len(self))
+        return f"Hit(id={self.id!r}, query_id={self.query_id!r}, {len(self)!r} hsps)"
 
     def __iter__(self):
         """Iterate over hsps."""
@@ -159,13 +154,9 @@ class Hit(_BaseSearchObject):
         """Return number of hsps."""
         return len(self.hsps)
 
-    # Python 3:
     def __bool__(self):
         """Return True if there are hsps."""
         return bool(self.hsps)
-
-    # Python 2:
-    __nonzero__ = __bool__
 
     def __contains__(self, hsp):
         """Return True if hsp in items."""
@@ -176,64 +167,77 @@ class Hit(_BaseSearchObject):
         lines = []
 
         # set query id line
-        qid_line = 'Query: %s' % self.query_id
-        if self.query_description:
-            qid_line += trim_str('\n       %s' %
-                                 self.query_description, 80, '...')
+        qid_line = "Query: %s" % self.query_id
         lines.append(qid_line)
+        if self.query_description:
+            line = "       %s" % self.query_description
+            line = line[:77] + "..." if len(line) > 80 else line
+            lines.append(line)
 
         # set hit id line
-        hid_line = '  Hit: %s' % self.id
-        if hasattr(self, 'seq_len'):
-            hid_line += ' (%i)' % self.seq_len
-        if self.description:
-            hid_line += trim_str('\n       %s' % self.description,
-                                 80, '...')
+        hid_line = "  Hit: %s" % self.id
+        try:
+            seq_len = self.seq_len
+        except AttributeError:
+            pass
+        else:
+            hid_line += " (%i)" % seq_len
         lines.append(hid_line)
+        if self.description:
+            line = "       %s" % self.description
+            line = line[:77] + "..." if len(line) > 80 else line
+            lines.append(line)
 
         # set attributes lines
         for key, value in sorted(self.attributes.items()):
-            lines.append(' %s: %s' % (key, value))
+            lines.append(f" {key}: {value}")
 
         # set dbxrefs line
         if self.dbxrefs:
-            lines.append("Database cross-references: " +
-                         ", ".join(self.dbxrefs))
+            lines.append("Database cross-references: " + ", ".join(self.dbxrefs))
 
         # set hsp line and table
         if not self.hsps:
-            lines.append(' HSPs: ?')
+            lines.append(" HSPs: ?")
         else:
-            lines.append(' HSPs: %s  %s  %s  %s  %s  %s' %
-                         ('-' * 4, '-' * 8, '-' * 9, '-' * 6, '-' * 15,
-                          '-' * 21))
-            pattern = '%11s  %8s  %9s  %6s  %15s  %21s'
-            lines.append(pattern % ('#', 'E-value', 'Bit score', 'Span',
-                                    'Query range', 'Hit range'))
-            lines.append(pattern % ('-' * 4, '-' * 8, '-' * 9, '-' * 6, '-' * 15, '-' * 21))
+            lines.append(
+                " HSPs: %s  %s  %s  %s  %s  %s"
+                % ("-" * 4, "-" * 8, "-" * 9, "-" * 6, "-" * 15, "-" * 21)
+            )
+            pattern = "%11s  %8s  %9s  %6s  %15s  %21s"
+            lines.append(
+                pattern
+                % ("#", "E-value", "Bit score", "Span", "Query range", "Hit range")
+            )
+            lines.append(
+                pattern % ("-" * 4, "-" * 8, "-" * 9, "-" * 6, "-" * 15, "-" * 21)
+            )
             for idx, hsp in enumerate(self.hsps):
                 # evalue
-                evalue = getattr_str(hsp, 'evalue', fmt='%.2g')
+                evalue = getattr_str(hsp, "evalue", fmt="%.2g")
                 # bitscore
-                bitscore = getattr_str(hsp, 'bitscore', fmt='%.2f')
+                bitscore = getattr_str(hsp, "bitscore", fmt="%.2f")
                 # alignment length
-                aln_span = getattr_str(hsp, 'aln_span')
+                aln_span = getattr_str(hsp, "aln_span")
                 # query region
-                query_start = getattr_str(hsp, 'query_start')
-                query_end = getattr_str(hsp, 'query_end')
-                query_range = '[%s:%s]' % (query_start, query_end)
+                query_start = getattr_str(hsp, "query_start")
+                query_end = getattr_str(hsp, "query_end")
+                query_range = f"[{query_start}:{query_end}]"
                 # max column length is 18
-                query_range = trim_str(query_range, 15, '~]')
+                query_range = (
+                    query_range[:13] + "~]" if len(query_range) > 15 else query_range
+                )
                 # hit region
-                hit_start = getattr_str(hsp, 'hit_start')
-                hit_end = getattr_str(hsp, 'hit_end')
-                hit_range = '[%s:%s]' % (hit_start, hit_end)
-                hit_range = trim_str(hit_range, 21, '~]')
+                hit_start = getattr_str(hsp, "hit_start")
+                hit_end = getattr_str(hsp, "hit_end")
+                hit_range = f"[{hit_start}:{hit_end}]"
+                hit_range = hit_range[:19] + "~]" if len(hit_range) > 21 else hit_range
                 # append the hsp row
-                lines.append(pattern % (str(idx), evalue, bitscore, aln_span,
-                             query_range, hit_range))
+                lines.append(
+                    pattern % (idx, evalue, bitscore, aln_span, query_range, hit_range)
+                )
 
-        return '\n'.join(lines)
+        return "\n".join(lines)
 
     def __getitem__(self, idx):
         """Return the HSP object at the given index."""
@@ -273,45 +277,53 @@ class Hit(_BaseSearchObject):
         if self._items:
             if self.id is not None:
                 if hsp.hit_id != self.id:
-                    raise ValueError("Expected HSP with hit ID %r, "
-                                     "found %r instead." %
-                                     (self.id, hsp.hit_id))
+                    raise ValueError(
+                        "Expected HSP with hit ID %r, found %r instead."
+                        % (self.id, hsp.hit_id)
+                    )
             else:
                 self.id = hsp.hit_id
 
             if self.description is not None:
                 if hsp.hit_description != self.description:
-                    raise ValueError("Expected HSP with hit description %r, "
-                                     "found %r instead." %
-                                     (self.description, hsp.hit_description))
+                    raise ValueError(
+                        "Expected HSP with hit description %r, found %r instead."
+                        % (self.description, hsp.hit_description)
+                    )
             else:
                 self.description = hsp.hit_description
 
             if self.query_id is not None:
                 if hsp.query_id != self.query_id:
-                    raise ValueError("Expected HSP with query ID %r, "
-                                     "found %r instead." %
-                                     (self.query_id, hsp.query_id))
+                    raise ValueError(
+                        "Expected HSP with query ID %r, found %r instead."
+                        % (self.query_id, hsp.query_id)
+                    )
             else:
                 self.query_id = hsp.query_id
 
             if self.query_description is not None:
                 if hsp.query_description != self.query_description:
-                    raise ValueError("Expected HSP with query description %r, "
-                                     "found %r instead." %
-                                     (self.query_description, hsp.query_description))
+                    raise ValueError(
+                        "Expected HSP with query description %r, found %r instead."
+                        % (self.query_description, hsp.query_description)
+                    )
             else:
                 self.query_description = hsp.query_description
 
     # properties #
-    description = optionalcascade('_description', 'hit_description',
-                                  """Hit description""")
-    query_description = optionalcascade('_query_description',
-                                        'query_description',
-                                        """Description of the query that produced the hit""")
-    id = optionalcascade('_id', 'hit_id', """Hit ID string.""")
-    query_id = optionalcascade('_query_id', 'query_id',
-                               """ID string of the query that produced the hit""")
+    description = optionalcascade(
+        "_description", "hit_description", """Hit description"""
+    )
+    query_description = optionalcascade(
+        "_query_description",
+        "query_description",
+        """Description of the query that produced the hit""",
+    )
+    id = optionalcascade("_id", "hit_id", """Hit ID string.""")
+    query_id = optionalcascade(
+        "_query_id", "query_id", """ID string of the query that produced the hit"""
+    )
     # returns all hsps
     hsps = allitems(doc="""HSP objects contained in the Hit""")
 
@@ -328,7 +340,7 @@ class Hit(_BaseSearchObject):
     @property
     def fragments(self):
         """Access the HSPFragment objects contained in the Hit."""
-        return [frag for frag in chain(*self._items)]
+        return list(chain(*self._items))
 
     # public methods #
     def append(self, hsp):
@@ -429,7 +441,7 @@ class Hit(_BaseSearchObject):
         :param in_place: whether to do in-place sorting or no
         :type in_place: bool
 
-        ``sort`` defaults to sorting in-place, to mimick Python's ``list.sort``
+        ``sort`` defaults to sorting in-place, to mimic Python's ``list.sort``
         method. If you set the ``in_place`` argument to False, it will treat
         return a new, sorted Hit object and keep the initial one unsorted
 
@@ -447,4 +459,5 @@ class Hit(_BaseSearchObject):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

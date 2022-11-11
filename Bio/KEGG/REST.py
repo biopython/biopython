@@ -1,14 +1,16 @@
 # Copyright 2014 by Kevin Wu.
 # Revisions copyright 2014 by Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Provides code to access the REST-style KEGG online API.
 
 This module aims to make the KEGG online REST-style API easier to use. See:
-http://www.kegg.jp/kegg/rest/keggapi.html
+https://www.kegg.jp/kegg/rest/keggapi.html
 
 The KEGG REST-style API provides simple access to a range of KEGG databases.
 This works using simple URLs (which this module will construct for you),
@@ -27,27 +29,29 @@ Nucleic Acids Res. 28, 29-34 (2000).
 
 """
 
-from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import _binary_to_string_handle
+import io
+from urllib.request import urlopen
 
 
 def _q(op, arg1, arg2=None, arg3=None):
-    URL = "http://rest.kegg.jp/%s"
+    URL = "https://rest.kegg.jp/%s"
     if arg2 and arg3:
-        args = "%s/%s/%s/%s" % (op, arg1, arg2, arg3)
+        args = f"{op}/{arg1}/{arg2}/{arg3}"
     elif arg2:
-        args = "%s/%s/%s" % (op, arg1, arg2)
+        args = f"{op}/{arg1}/{arg2}"
     else:
-        args = "%s/%s" % (op, arg1)
-    resp = _urlopen(URL % (args))
+        args = f"{op}/{arg1}"
+    resp = urlopen(URL % (args))
 
     if "image" == arg2:
         return resp
 
-    return _binary_to_string_handle(resp)
+    handle = io.TextIOWrapper(resp, encoding="UTF-8")
+    handle.url = resp.url
+    return handle
 
 
-# http://www.kegg.jp/kegg/rest/keggapi.html
+# https://www.kegg.jp/kegg/rest/keggapi.html
 def kegg_info(database):
     """KEGG info - Displays the current statistics of a given database.
 
@@ -58,14 +62,14 @@ def kegg_info(database):
     (e.g. 'hsa' or 'T01001' for human).
 
     A valid list of organism codes and their T numbers can be obtained
-    via kegg_info('organism') or http://rest.kegg.jp/list/organism
+    via kegg_info('organism') or https://rest.kegg.jp/list/organism
 
     """
     # TODO - return a string (rather than the handle?)
-    # TODO - chache and validate the organism code / T numbers?
+    # TODO - cache and validate the organism code / T numbers?
     # TODO - can we parse the somewhat formatted output?
     #
-    # http://rest.kegg.jp/info/<database>
+    # https://rest.kegg.jp/info/<database>
     #
     # <database> = pathway | brite | module | disease | drug | environ |
     #              ko | genome |<org> | compound | glycan | reaction |
@@ -86,16 +90,16 @@ def kegg_list(database, org=None):
     """
     # TODO - split into two functions (dbentries seems separate)?
     #
-    #  http://rest.kegg.jp/list/<database>/<org>
+    #  https://rest.kegg.jp/list/<database>/<org>
     #
     #  <database> = pathway | module
     #  <org> = KEGG organism code
-    if isinstance(database, str) and (database in ["pathway", "module"]) and org:
+    if database in ("pathway", "module") and org:
         resp = _q("list", database, org)
     elif isinstance(database, str) and database and org:
-        raise Exception("Invalid database arg for kegg list request.")
+        raise ValueError("Invalid database arg for kegg list request.")
 
-    # http://rest.kegg.jp/list/<database>
+    # https://rest.kegg.jp/list/<database>
     #
     # <database> = pathway | brite | module | disease | drug | environ |
     #              ko | genome | <org> | compound | glycan | reaction |
@@ -103,7 +107,7 @@ def kegg_list(database, org=None):
     # <org> = KEGG organism code or T number
     #
     #
-    # http://rest.kegg.jp/list/<dbentries>
+    # https://rest.kegg.jp/list/<dbentries>
     #
     # <dbentries> = KEGG database entries involving the following <database>
     # <database> = pathway | brite | module | disease | drug | environ |
@@ -111,10 +115,12 @@ def kegg_list(database, org=None):
     #              rpair | rclass | enzyme
     # <org> = KEGG organism code or T number
     else:
-        if isinstance(database, list) and len(database) <= 100:
+        if isinstance(database, list):
+            if len(database) > 100:
+                raise ValueError(
+                    "Maximum number of databases is 100 for kegg list query"
+                )
             database = ("+").join(database)
-        elif isinstance(database, list) and len(database) > 100:
-            raise Exception("Maximuim number of databases is 100 for kegg list query")
         resp = _q("list", database)
 
     return resp
@@ -140,16 +146,20 @@ def kegg_find(database, query, option=None):
     """
     # TODO - return list of tuples?
     #
-    # http://rest.kegg.jp/find/<database>/<query>/<option>
+    # https://rest.kegg.jp/find/<database>/<query>/<option>
     #
     # <database> = compound | drug
     # <option> = formula | exact_mass | mol_weight
-    if (database in ["compound", "drug"] and option in ["formula", "exact_mass", "mol_weight"]):
+    if database in ["compound", "drug"] and option in [
+        "formula",
+        "exact_mass",
+        "mol_weight",
+    ]:
         resp = _q("find", database, query, option)
     elif option:
-        raise Exception("Invalid option arg for kegg find request.")
+        raise ValueError("Invalid option arg for kegg find request.")
 
-    # http://rest.kegg.jp/find/<database>/<query>
+    # https://rest.kegg.jp/find/<database>/<query>
     #
     # <database> = pathway | module | disease | drug | environ | ko |
     #              genome | <org> | compound | glycan | reaction | rpair |
@@ -178,9 +188,9 @@ def kegg_get(dbentries, option=None):
     if isinstance(dbentries, list) and len(dbentries) <= 10:
         dbentries = "+".join(dbentries)
     elif isinstance(dbentries, list) and len(dbentries) > 10:
-        raise Exception("Maximum number of dbentries is 10 for kegg get query")
+        raise ValueError("Maximum number of dbentries is 10 for kegg get query")
 
-    # http://rest.kegg.jp/get/<dbentries>[/<option>]
+    # https://rest.kegg.jp/get/<dbentries>[/<option>]
     #
     # <dbentries> = KEGG database entries involving the following <database>
     # <database> = pathway | brite | module | disease | drug | environ |
@@ -189,10 +199,11 @@ def kegg_get(dbentries, option=None):
     # <org> = KEGG organism code or T number
     #
     # <option> = aaseq | ntseq | mol | kcf | image
-    if option in ["aaseq", "ntseq", "mol", "kcf", "image", "kgml"]:
+    if option in ["aaseq", "ntseq", "mol", "kcf", "image", "kgml", "json"]:
+
         resp = _q("get", dbentries, option)
     elif option:
-        raise Exception("Invalid option arg for kegg get request.")
+        raise ValueError("Invalid option arg for kegg get request.")
     else:
         resp = _q("get", dbentries)
 
@@ -206,8 +217,9 @@ def kegg_conv(target_db, source_db, option=None):
      - target_db - Target database
      - source_db_or_dbentries - source database or database entries
      - option - Can be "turtle" or "n-triple" (string).
+
     """
-    # http://rest.kegg.jp/conv/<target_db>/<source_db>[/<option>]
+    # https://rest.kegg.jp/conv/<target_db>/<source_db>[/<option>]
     #
     # (<target_db> <source_db>) = (<kegg_db> <outside_db>) |
     #                             (<outside_db> <kegg_db>)
@@ -223,7 +235,7 @@ def kegg_conv(target_db, source_db, option=None):
     #
     # <option> = turtle | n-triple
     #
-    # http://rest.kegg.jp/conv/<target_db>/<dbentries>[/<option>]
+    # https://rest.kegg.jp/conv/<target_db>/<dbentries>[/<option>]
     #
     # For gene identifiers:
     # <dbentries> = database entries involving the following <database>
@@ -236,17 +248,23 @@ def kegg_conv(target_db, source_db, option=None):
     #
     # <option> = turtle | n-triple
     if option and option not in ["turtle", "n-triple"]:
-        raise Exception("Invalid option arg for kegg conv request.")
+        raise ValueError("Invalid option arg for kegg conv request.")
 
     if isinstance(source_db, list):
         source_db = "+".join(source_db)
 
-    if target_db in ["ncbi-gi", "ncbi-geneid", "uniprot"] or \
-       source_db in ["ncbi-gi", "ncbi-geneid", "uniprot"] or \
-       (target_db in ["drug", "compound", "glycan"] and
-           source_db in ["pubchem", "glycan"]) or \
-       (target_db in ["pubchem", "glycan"] and
-           source_db in ["drug", "compound", "glycan"]):
+    if (
+        target_db in ["ncbi-gi", "ncbi-geneid", "uniprot"]
+        or source_db in ["ncbi-gi", "ncbi-geneid", "uniprot"]
+        or (
+            target_db in ["drug", "compound", "glycan"]
+            and source_db in ["pubchem", "glycan"]
+        )
+        or (
+            target_db in ["pubchem", "glycan"]
+            and source_db in ["drug", "compound", "glycan"]
+        )
+    ):
 
         if option:
             resp = _q("conv", target_db, source_db, option)
@@ -255,7 +273,7 @@ def kegg_conv(target_db, source_db, option=None):
 
         return resp
     else:
-        raise Exception("Bad argument target_db or source_db for kegg conv request.")
+        raise ValueError("Bad argument target_db or source_db for kegg conv request.")
 
 
 def kegg_link(target_db, source_db, option=None):
@@ -265,7 +283,7 @@ def kegg_link(target_db, source_db, option=None):
     source_db_or_dbentries - source database
     option - Can be "turtle" or "n-triple" (string).
     """
-    # http://rest.kegg.jp/link/<target_db>/<source_db>[/<option>]
+    # https://rest.kegg.jp/link/<target_db>/<source_db>[/<option>]
     #
     # <target_db> = <database>
     # <source_db> = <database>
@@ -275,7 +293,7 @@ def kegg_link(target_db, source_db, option=None):
     #              drug | dgroup | environ
     #
     # <option> = turtle | n-triple
-    # http://rest.kegg.jp/link/<target_db>/<dbentries>[/<option>]
+    # https://rest.kegg.jp/link/<target_db>/<dbentries>[/<option>]
     #
     # <dbentries> = KEGG database entries involving the following <database>
     # <database> = pathway | brite | module | ko | genome | <org> | compound |
@@ -285,7 +303,7 @@ def kegg_link(target_db, source_db, option=None):
     # <option> = turtle | n-triple
 
     if option and option not in ["turtle", "n-triple"]:
-        raise Exception("Invalid option arg for kegg conv request.")
+        raise ValueError("Invalid option arg for kegg conv request.")
 
     if isinstance(source_db, list):
         source_db = "+".join(source_db)

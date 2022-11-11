@@ -9,10 +9,13 @@
 The Biopython Project is an international association of developers
 of freely available Python tools for computational molecular biology.
 
-http://biopython.org
+https://biopython.org
 """
 
-__version__ = "1.74.dev0"
+import os
+import warnings
+
+__version__ = "1.80.dev0"
 
 
 class MissingExternalDependencyError(Exception):
@@ -21,8 +24,6 @@ class MissingExternalDependencyError(Exception):
     Used for things like missing command line tools. Important for our unit
     tests to allow skipping tests with missing external dependencies.
     """
-
-    pass
 
 
 class MissingPythonDependencyError(MissingExternalDependencyError, ImportError):
@@ -34,7 +35,14 @@ class MissingPythonDependencyError(MissingExternalDependencyError, ImportError):
     ImportError.
     """
 
-    pass
+
+class StreamModeError(ValueError):
+    """Incorrect stream mode (text vs binary).
+
+    This error should be raised when a stream (file or file-like object)
+    argument is in text mode while the receiving function expects binary mode,
+    or vice versa.
+    """
 
 
 class BiopythonWarning(Warning):
@@ -50,8 +58,6 @@ class BiopythonWarning(Warning):
     Consult the warnings module documentation for more details.
     """
 
-    pass
-
 
 class BiopythonParserWarning(BiopythonWarning):
     """Biopython parser warning.
@@ -66,8 +72,6 @@ class BiopythonParserWarning(BiopythonWarning):
 
     Consult the warnings module documentation for more details.
     """
-
-    pass
 
 
 class BiopythonDeprecationWarning(BiopythonWarning):
@@ -86,8 +90,6 @@ class BiopythonDeprecationWarning(BiopythonWarning):
     of Biopython. To avoid removal of this code, please contact the Biopython
     developers via the mailing list or GitHub.
     """
-
-    pass
 
 
 class BiopythonExperimentalWarning(BiopythonWarning):
@@ -110,4 +112,36 @@ class BiopythonExperimentalWarning(BiopythonWarning):
     a subsequent release, and this warning removed from it.
     """
 
-    pass
+
+_parent_dir = os.path.dirname(os.path.dirname(__file__))
+if os.path.exists(os.path.join(_parent_dir, "setup.py")):
+    # Looks like we are running from our source directory,
+    # a bad idea except if installed in development mode.
+    #
+    # See https://setuptools.readthedocs.io/en/latest/userguide/development_mode.html
+    # Do we have .../site-packages/biopython.egg-link present?
+    #
+    # Note "pip install -e ." currently calls setuptools internally
+    import site
+
+    _dev_mode = False
+    for _p in site.getsitepackages():
+        if os.path.isfile(os.path.join(_p, "biopython.egg-link")):
+            _dev_mode = True
+            break
+    # Also check the user specific site packages
+    if not _dev_mode and os.path.isfile(
+        os.path.join(site.getusersitepackages(), "biopython.egg-link")
+    ):
+        _dev_mode = True
+    if not _dev_mode:
+        warnings.warn(
+            "You may be importing Biopython from inside the source tree."
+            " This is bad practice and might lead to downstream issues."
+            " In particular, you might encounter ImportErrors due to"
+            " missing compiled C extensions. We recommend that you"
+            " try running your code from outside the source tree."
+            " If you are outside the source tree then you have a"
+            " setup.py file in an unexpected directory: " + _parent_dir,
+            BiopythonWarning,
+        )

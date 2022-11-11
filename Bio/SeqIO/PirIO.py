@@ -86,106 +86,104 @@ Sequence codes and their meanings:
  - XX - Unknown
 
 """
-
-from __future__ import print_function
-
-from Bio.Alphabet import single_letter_alphabet, generic_protein, \
-    generic_dna, generic_rna
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+
+from .Interfaces import _get_seq_string
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 
-_pir_alphabets = {"P1": generic_protein,
-                  "F1": generic_protein,
-                  "D1": generic_dna,
-                  "DL": generic_dna,
-                  "DC": generic_dna,
-                  "RL": generic_rna,
-                  "RC": generic_rna,
-                  "N3": generic_rna,
-                  "XX": single_letter_alphabet,
-                  }
+_pir_mol_type = {
+    "P1": "protein",
+    "F1": "protein",
+    "D1": "DNA",
+    "DL": "DNA",
+    "DC": "DNA",
+    "RL": "RNA",
+    "RC": "RNA",
+    "N3": "RNA",
+    "XX": None,
+}
 
 
-def PirIterator(handle):
-    """Iterate over Fasta records as SeqRecord objects.
+class PirIterator(SequenceIterator):
+    """Parser for PIR files."""
 
-    handle - input file
-    alphabet - optional alphabet
-    title2ids - A function that, when given the title of the FASTA
-    file (without the beginning >), will return the id, name and
-    description (in that order) for the record as a tuple of strings.
+    def __init__(self, source):
+        """Iterate over a PIR file and yield SeqRecord objects.
 
-    If this is not given, then the entire title line will be used
-    as the description, and the first word as the id and name.
+        source - file-like object or a path to a file.
 
-    Note that use of title2ids matches that of Bio.Fasta.SequenceParser
-    but the defaults are slightly different.
+        Examples
+        --------
+        >>> with open("NBRF/DMB_prot.pir") as handle:
+        ...    for record in PirIterator(handle):
+        ...        print("%s length %i" % (record.id, len(record)))
+        HLA:HLA00489 length 263
+        HLA:HLA00490 length 94
+        HLA:HLA00491 length 94
+        HLA:HLA00492 length 80
+        HLA:HLA00493 length 175
+        HLA:HLA01083 length 188
 
-    Examples
-    --------
-    >>> with open("NBRF/DMB_prot.pir") as handle:
-    ...    for record in PirIterator(handle):
-    ...        print("%s length %i" % (record.id, len(record)))
-    HLA:HLA00489 length 263
-    HLA:HLA00490 length 94
-    HLA:HLA00491 length 94
-    HLA:HLA00492 length 80
-    HLA:HLA00493 length 175
-    HLA:HLA01083 length 188
+        """
+        super().__init__(source, mode="t", fmt="Pir")
 
-    """
-    # Skip any text before the first record (e.g. blank lines, comments)
-    while True:
-        line = handle.readline()
-        if line == "":
-            return  # Premature end of file, or just empty?
-        if line[0] == ">":
-            break
+    def parse(self, handle):
+        """Start parsing the file, and return a SeqRecord generator."""
+        records = self.iterate(handle)
+        return records
 
-    while True:
-        if line[0] != ">":
-            raise ValueError(
-                "Records in PIR files should start with '>' character")
-        pir_type = line[1:3]
-        if pir_type not in _pir_alphabets or line[3] != ";":
-            raise ValueError(
-                "Records should start with '>XX;' "
-                "where XX is a valid sequence type")
-        identifier = line[4:].strip()
-        description = handle.readline().strip()
-
-        lines = []
-        line = handle.readline()
-        while True:
-            if not line:
-                break
+    def iterate(self, handle):
+        """Iterate over the records in the PIR file."""
+        # Skip any text before the first record (e.g. blank lines, comments)
+        for line in handle:
             if line[0] == ">":
                 break
-            # Remove trailing whitespace, and any internal spaces
-            lines.append(line.rstrip().replace(" ", ""))
-            line = handle.readline()
-        seq = "".join(lines)
-        if seq[-1] != "*":
-            # Note the * terminator is present on nucleotide sequences too,
-            # it is not a stop codon!
-            raise ValueError(
-                "Sequences in PIR files should include a * terminator!")
+        else:
+            return  # Premature end of file, or just empty?
 
-        # Return the record and then continue...
-        record = SeqRecord(Seq(seq[:-1], _pir_alphabets[pir_type]),
-                           id=identifier, name=identifier,
-                           description=description)
-        record.annotations["PIR-type"] = pir_type
-        yield record
+        while True:
+            pir_type = line[1:3]
+            if pir_type not in _pir_mol_type or line[3] != ";":
+                raise ValueError(
+                    "Records should start with '>XX;' where XX is a valid sequence type"
+                )
+            identifier = line[4:].strip()
+            description = handle.readline().strip()
 
-        if not line:
-            return  # StopIteration
-    assert False, "Should not reach this line"
+            lines = []
+            for line in handle:
+                if line[0] == ">":
+                    break
+                # Remove trailing whitespace, and any internal spaces
+                lines.append(line.rstrip().replace(" ", ""))
+            else:
+                line = None
+            seq = "".join(lines)
+            if seq[-1] != "*":
+                # Note the * terminator is present on nucleotide sequences too,
+                # it is not a stop codon!
+                raise ValueError(
+                    "Sequences in PIR files should include a * terminator!"
+                )
+
+            # Return the record and then continue...
+            record = SeqRecord(
+                Seq(seq[:-1]), id=identifier, name=identifier, description=description
+            )
+            record.annotations["PIR-type"] = pir_type
+            if _pir_mol_type[pir_type]:
+                record.annotations["molecule_type"] = _pir_mol_type[pir_type]
+            yield record
+
+            if line is None:
+                return  # StopIteration
+        raise ValueError("Unrecognised PIR record format.")
 
 
-class PirWriter(SequentialSequenceWriter):
+class PirWriter(SequenceWriter):
     """Class to write PIR format files."""
 
     def __init__(self, handle, wrap=60, record2title=None, code=None):
@@ -204,7 +202,8 @@ class PirWriter(SequentialSequenceWriter):
            record.description is used.
          - code - Optional sequence code must be one of P1, F1,
            D1, DL, DC, RL, RC, N3 and XX. By default None is used,
-           which means auto detection based on record alphabet.
+           which means auto detection based on the molecule type
+           in the record annotation.
 
         You can either use::
 
@@ -225,21 +224,17 @@ class PirWriter(SequentialSequenceWriter):
             handle.close()
 
         """
-        SequentialSequenceWriter.__init__(self, handle)
+        super().__init__(handle)
         self.wrap = None
         if wrap:
             if wrap < 1:
-                raise ValueError
+                raise ValueError("wrap should be None, 0, or a positive integer")
         self.wrap = wrap
         self.record2title = record2title
         self.code = code
 
     def write_record(self, record):
         """Write a single PIR record to the file."""
-        assert self._header_written
-        assert not self._footer_written
-        self._record_written = True
-
         if self.record2title:
             title = self.clean(self.record2title(record))
         else:
@@ -255,24 +250,28 @@ class PirWriter(SequentialSequenceWriter):
         if self.code:
             code = self.code
         else:
-            if isinstance(record.seq.alphabet, type(generic_protein)):
-                code = "P1"
-            elif isinstance(record.seq.alphabet, type(generic_dna)):
+            molecule_type = record.annotations.get("molecule_type")
+            if molecule_type is None:
+                code = "XX"
+            elif "DNA" in molecule_type:
                 code = "D1"
-            elif isinstance(record.seq.alphabet, type(generic_rna)):
+            elif "RNA" in molecule_type:
                 code = "RL"
+            elif "protein" in molecule_type:
+                code = "P1"
             else:
                 code = "XX"
 
-        if code not in _pir_alphabets:
-            raise TypeError("Sequence code must be one of " +
-                            _pir_alphabets.keys() + ".")
+        if code not in _pir_mol_type:
+            raise TypeError(
+                "Sequence code must be one of " + _pir_mol_type.keys() + "."
+            )
         assert "\n" not in title
         assert "\r" not in description
 
-        self.handle.write(">%s;%s\n%s\n" % (code, title, description))
+        self.handle.write(f">{code};{title}\n{description}\n")
 
-        data = self._get_seq_string(record)  # Catches sequence being None
+        data = _get_seq_string(record)  # Catches sequence being None
 
         assert "\n" not in data
         assert "\r" not in data
@@ -280,7 +279,7 @@ class PirWriter(SequentialSequenceWriter):
         if self.wrap:
             line = ""
             for i in range(0, len(data), self.wrap):
-                line += data[i:i + self.wrap] + "\n"
+                line += data[i : i + self.wrap] + "\n"
             line = line[:-1] + "*\n"
             self.handle.write(line)
         else:
@@ -289,4 +288,5 @@ class PirWriter(SequentialSequenceWriter):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

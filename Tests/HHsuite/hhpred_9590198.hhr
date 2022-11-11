@@ -1,0 +1,651 @@
+Query         sp|Q9BSU1|CP070_HUMAN UPF0183 protein C16orf70 OS=Homo sapiens OX=9606 GN=C16orf70 PE=1 SV=1
+Match_columns 422
+No_of_seqs    157 out of 584
+Neff          6.82639
+Searched_HMMs 64707
+Date          Fri Feb  1 15:48:30 2019
+Command       hhsearch -cpu 8 -i ../results/full.a3m -d /cluster/toolkit/production/databases/hh-suite/mmcif70/pdb70 -d /cluster/toolkit/production/databases/hh-suite/pfama/pfama -o ../results/9590198.hhr -oa3m ../results/9590198.a3m -p 20 -Z 250 -loc -z 1 -b 1 -B 250 -ssm 2 -sc 1 -seq 1 -dbstrlen 10000 -norealign -maxres 32000 -contxt /cluster/toolkit/production/bioprogs/tools/hh-suite-build/data/context_data.crf 
+
+ No Hit                             Prob E-value P-value  Score    SS Cols Query HMM  Template HMM
+  1 PF03676.14 ; UPF0183 ; Unchara 100.0  1E-101  2E-106  792.8  45.5  376   22-407     1-394 (394)
+  2 PF12978.7 ; DUF3862 ; Domain o  71.8      67   0.001   28.6   9.5  127  239-409    12-159 (159)
+  3 PF04355.13 ; SmpA_OmlA ; SmpA   70.2     4.9 7.6E-05   30.4   1.6   20  239-258    12-31  (73)
+  4 5EKQ_E Outer membrane protein   68.1     5.9 9.1E-05   32.0   1.7   20  239-258    27-46  (94)
+  5 PF11399.8 ; DUF3192 ; Protein   58.7      13  0.0002   30.7   1.9   20  239-258    34-53  (104)
+  6 5WAM_B Outer membrane protein   58.5      11 0.00017   31.4   1.6   20  239-258    30-49  (108)
+  7 3GMX_B BLP; 2-layer alpha/beta  57.7 1.6E+02  0.0025   26.1   9.0  109   19-139    12-141 (154)
+  8 PF14504.6 ; CAP_assoc_N ; CAP-  57.1      24 0.00037   30.6   3.4   70  239-312    62-131 (140)
+  9 2YH9_C SMALL PROTEIN A; LIPOPR  56.4      14 0.00021   30.0   1.6   20  239-258    13-32  (88)
+ 10 PF14504.6 ; CAP_assoc_N ; CAP-  56.2      30 0.00046   30.0   3.9   54  241-312     1-55  (140)
+ 11 4DM5_A Osmotically inducible l  56.2      14 0.00021   31.5   1.7   20  239-258    24-43  (103)
+ 12 PF14504.6 ; CAP_assoc_N ; CAP-  56.1      77  0.0012   27.4   6.5   65   13-83     61-130 (140)
+ 13 PF14172.6 ; DUF4309 ; Domain o  53.8 2.4E+02  0.0037   24.8  11.3  119    9-174    11-135 (135)
+ 14 PF07467.11 ; BLIP ; Beta-lacta  52.9      16 0.00025   31.4   1.6   20  239-258     8-27  (121)
+ 15 PF11006.8 ; DUF2845 ; Protein   50.9      27 0.00041   28.6   2.5   27  239-265    11-37  (94)
+ 16 PF12978.7 ; DUF3862 ; Domain o  49.4 1.1E+02  0.0017   27.3   6.5  114    5-138    11-146 (159)
+ 17 PF09870.9 ; DUF2097 ; Uncharac  48.7 1.6E+02  0.0025   25.2   6.6   60   23-82      5-69  (92)
+ 18 2PXG_A Outer membrane protein;  43.7      24 0.00037   30.5   1.2   20  239-258    26-45  (118)
+ 19 3GMX_B BLP; 2-layer alpha/beta  43.0      29 0.00045   30.9   1.6   20  239-258    12-31  (154)
+ 20 5D0O_E Outer membrane protein   41.4      33 0.00051   29.0   1.6   20  239-258    46-65  (123)
+ 21 3D4E_A putative beta-lactamase  39.1      83  0.0013   29.2   4.0   58  239-310    31-97  (179)
+ 22 3D4E_A putative beta-lactamase  36.9   3E+02  0.0046   25.5   7.4  105   19-139    31-166 (179)
+ 23 PF14454.6 ; Prok_Ub ; Prokaryo  36.6      88  0.0014   24.4   3.1   30   88-117     5-34  (62)
+ 24 3N4I_B Crystal structure of th  36.4      43 0.00067   30.7   1.7   20  239-258    12-31  (165)
+ 25 3GMX_B BLP; 2-layer alpha/beta  34.7      44 0.00068   29.8   1.4   20  239-258    85-104 (154)
+ 26 PF14172.6 ; DUF4309 ; Domain o  34.6      71  0.0011   28.2   2.7   51  239-307    18-69  (135)
+ 27 PF12978.7 ; DUF3862 ; Domain o  34.2      54 0.00083   29.3   1.9   20  239-258    95-114 (159)
+ 28 4H0A_A Uncharacterized protein  30.9      61 0.00094   33.0   1.8   21  239-259    43-63  (323)
+ 29 PF06185.12 ; YecM ; YecM prote  30.1 3.4E+02  0.0053   25.8   6.5   60   13-73    102-167 (175)
+ 30 4IL7_A Putative uncharacterize  29.8 6.8E+02   0.011   22.7   8.4  133    7-175     9-157 (166)
+ 31 3D4E_A putative beta-lactamase  26.3      89  0.0014   29.0   1.9   20  239-258   114-133 (179)
+ 32 3N4I_B Crystal structure of th  24.4 1.1E+02  0.0016   28.1   2.0   20  239-258    91-110 (165)
+ 33 PF07467.11 ; BLIP ; Beta-lacta  23.8      89  0.0014   26.8   1.3   21  239-259    81-101 (121)
+ 34 PF07467.11 ; BLIP ; Beta-lacta  21.6 3.9E+02   0.006   22.8   4.9   88   19-114     8-96  (121)
+
+No 1
+>PF03676.14 ; UPF0183 ; Uncharacterised protein family (UPF0183)
+Probab=100.00  E-value=9.9e-102  Score=792.76  Aligned_cols=376  Identities=53%  Similarity=0.957  Sum_probs=0.0  Template_Neff=7.100
+
+Q ss_pred             CCcHHHHHHHHHHccCCcCcEEEEECCCCCcCCCEEEEeCCCCeEEEecCccceeeEEEEecCCCCEEEECCEEecCCCC
+Q sp|Q9BSU1|CP07   22 GMPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLKVIEVCDLTKVKLKYCGVHFNSQAI  101 (422)
+Q Consensus        22 G~sL~~vi~~Lr~~~~~~~~vel~Ys~~~pl~~~Ivi~L~~~GirL~Fd~~~QrL~lIEv~d~~~~~L~Y~~~~~~~~~~  101 (422)
+                      |||||+||++||++.+.+++|+|+|++++|++.||+|.|+++||||+||+.+|||++|||+|+++++|+|+++.|++++.
+T Consensus         1 G~~L~~vi~~L~~~~~~~~~Vel~Ys~~~p~~~~Ivl~L~~~glrL~Fd~~~QrL~lIEv~d~~~~~L~Y~~~~~~~~~~   80 (394)
+T H9J4A9_BOMMO/5    1 GMHFSQSVAIIQSQVGTIRGVQVLYSDQNPLSVDLVINMPQDGMRLIFDPVAQRLKIIEIYNMKLVKLRYSGMCFNSPEI   80 (394)
+T ss_pred             CCcHHHHHHHHHhcCCccceEEEEECCCCCCCCcEEEEcCCCceEEEEcCccCeEEEEEEEcCCCcEEEEcCeeecCCCC
+
+
+Q ss_pred             CCcHHHHHHhhcCCCCCCccCcccEEEEEeCcEEEEeeCcccCCCCccCCCcccccccCCCCCCC--eEEEEEEEeCCCh
+Q sp|Q9BSU1|CP07  102 APTIEQIDQSFGATHPGVYNSAEQLFHLNFRGLSFSFQLDSWTEAPKYEPNFAHGLASLQIPHGA--TVKRMYIYSGNSL  179 (422)
+Q Consensus       102 ~ptf~~I~~~FGPTyPG~yd~~~~~Y~LsYpGisF~Fpi~~~~~~~~~~~~~~~~l~~l~~~~~~--~~s~i~If~G~s~  179 (422)
+                      .|||++||++|||||||+|+++++.|+||||||+|.||+++     ++.+.+..++.+++++++.  .|++|+||+|++|
+T Consensus        81 ~~t~~~Iy~~FGPTyPG~~d~~~~~y~LsYpGisF~F~~~~-----~~~~~~~~~~~~l~~~~~~~~~~~~m~If~G~~~  155 (394)
+T H9J4A9_BOMMO/5   81 TPSIEQVEHCFGATHPGLYDSQRHLFALNFRGLSFYFPVDS-----KFEPGYAHGLGSLQFPNGGSPVVSRTTIYYGSQH  155 (394)
+T ss_pred             CCcHHHHHHHhcCCCCCcccCCCCeEEEEeCcEEEEeeCCc-----ccCCCCccccccccCCCCCCCceEEEEEEeCCcc
+
+
+Q ss_pred             H---------hcCC-CCCCcccccCcceeeEEEEeeCCCCCceEEEEEEecCCCCccccccceeEEEEEEEecCCHHHHH
+Q sp|Q9BSU1|CP07  180 Q---------DTKA-PMMPLSCFLGNVYAESVDVLRDGTGPAGLRLRLLAAGCGPGLLADAKMRVFERSVYFGDSCQDVL  249 (422)
+Q Consensus       180 ~---------~~~~-~~~p~~~~~~~~~~~~v~v~~~~~~~~gl~~~~~~~~~~~~~~~~~~~~~~~~~I~~G~T~QDVl  249 (422)
+                      .         ++.. |.+|.+|+.++.+.++|++.+......|+++.|...+.  ....+..+....++|.||+|+|||+
+T Consensus       156 ~~~~~~~~~~~~~~~p~~p~~~~~~~~~~~~v~v~~~~~~~~gl~l~f~~~~~--~~~~~~~~~~~~~~I~~G~t~QDVl  233 (394)
+T H9J4A9_BOMMO/5  156 QLSSNTSSRVSGVPLPDLPLSCYRQQLHLRRCDVLRNTTSTMGLRLHMFTEGT--SRALEPSQVALVRVVRFGDSCQGVA  233 (394)
+T ss_pred             ccccccccccCCCCCCCCCchhcCCCCceEEEEEEEcCCCCceEEEEEEcCCC--CCcCCccceeceEEEEecCCHHHHH
+
+
+Q ss_pred             HHhcCCcEEEEeccccccccCCCCCcCCCCcCCccchhhHhhccceeecCCCCEEEEEEecCCCCCCccccccccCcEEe
+Q sp|Q9BSU1|CP07  250 SMLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFTLGVDILFDANTHKVKKFVLHTNYPGHYNFNIYHRCEFKI  329 (422)
+Q Consensus       250 ~~LG~P~~~f~K~ddrm~IH~~~~~~~~~~~~~dyF~NYF~lG~DiLfd~~t~~v~KiILHtN~PG~~~F~~Y~RC~w~i  329 (422)
+                      ++||+|+++|||+||||+||+...++. .....+||||||+||||||||+.||+|+|||||||+|||++|++|+||+|+|
+T Consensus       234 ~~LG~P~~~f~K~ddrm~Ih~~~~~~~-~~~~~~yF~NYF~lG~DiLfd~~th~v~KiILHtN~Pg~~~F~~Y~RC~~~l  312 (394)
+T H9J4A9_BOMMO/5  234 RALGAPARLYYKADDKMRIHRPTARRR-PPPASDYLFNYFTLGLDVLFDARTNQVKKFVLHTNYPGHYNFNMYHRCEFEL  312 (394)
+T ss_pred             HHhCCCceEEEcCcccccccCCCCCCC-CCCcchhchhHHHhCcceeecCCCcEEEEEEeeCCCCCCccccccccCeEEE
+
+
+Q ss_pred             eccccccCCCC------CcceeccCcCHHHHHHHhCCCCCCCeEeeCCCCCCCCCCCCceEEeccCCEEEEEecCCCEEE
+Q sp|Q9BSU1|CP07  330 PLAIKKENADG------QTETCTTYSKWDNIQELLGHPVEKPVVLHRSSSPNNTNPFGSTFCFGLQRMIFEVMQNNHIAS  403 (422)
+Q Consensus       330 ~~~~~~~~~~~------~~~~it~~~~~~~i~~~l~~~~~~pvvlnR~~s~~~~~~fg~T~~yG~~g~IfEVm~ng~Ias  403 (422)
+                      ..... +.+..      +...++++++|++|++.| ....+||||||+++++..++||+|+||||+|||||||+||+|||
+T Consensus       313 ~~~~~-~~~~~~~~~~~~~~~i~~~~~~~~i~~~l-~~~~~p~vlnR~~~~~~~~~~g~T~lyg~~g~ifEV~~ng~Ias  390 (394)
+T H9J4A9_BOMMO/5  313 TVQPD-KSEAHSLVESGGGVAVTAYSKWEVVSRAL-RVCERPVVLNRASSTNTTNPFGSTFCYGYQDIIFEVMSNNYIAS  390 (394)
+T ss_pred             EeCCC-cchhcceecCCCCceecCcccHHHHHHHh-ccCCCCEEEecCCCCCCCCCCCcEEEEecCCEEEEEecCCcEEE
+
+
+Q ss_pred             EEEe
+Q sp|Q9BSU1|CP07  404 VTLY  407 (422)
+Q Consensus       404 vTl~  407 (422)
+                      ||||
+T Consensus       391 vtlf  394 (394)
+T H9J4A9_BOMMO/5  391 ITLY  394 (394)
+T ss_pred             EEeC
+
+
+No 2
+>PF12978.7 ; DUF3862 ; Domain of Unknown Function with PDB structure (DUF3862)
+Probab=71.77  E-value=67  Score=28.65  Aligned_cols=127  Identities=14%  Similarity=0.172  Sum_probs=0.0  Template_Neff=9.600
+
+Q ss_pred             EEe---------cCCHHHHHHHhcCCcEEEEeccccccccCCCCCcCCCCcCCccchhhHhhccceeecCCCCEEEEEEe
+Q sp|Q9BSU1|CP07  239 VYF---------GDSCQDVLSMLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFTLGVDILFDANTHKVKKFVL  309 (422)
+Q Consensus       239 I~~---------G~T~QDVl~~LG~P~~~f~K~ddrm~IH~~~~~~~~~~~~~dyF~NYF~lG~DiLfd~~t~~v~KiIL  309 (422)
+                      |.+         |.|.+||.+.||.|..+---..+             ......|-|+|...++.+.|+ ....+.|-+.
+T Consensus        12 i~~~~~~~~~~~G~t~~eV~~~lG~p~~~~~~~~~-------------~~~~~~~~w~~~~~~~~v~~~-~~~~~~~~~~   77 (159)
+T Q8DTX1_STRMU/4   12 IKVTTDQNHFSGGTSIEQLKQWFGDPNKSEQRNAG-------------NITLDSYTWVKDGAVINAQLY-KNSTVARSIS   77 (159)
+T ss_pred             eeecCCcccCCCCCCHHHHHHHHCCCceEEeeeeC-------------CeEEEEEEEEeCCeEEEEEEE-CCEEEEEEEE
+
+
+Q ss_pred             -----cCCCCCCccccccccCcEEeeccccccCCCCCcceeccCcCHHHHHHHhCCCCCCCeEeeCCCCCCCCCCCCceE
+Q sp|Q9BSU1|CP07  310 -----HTNYPGHYNFNIYHRCEFKIPLAIKKENADGQTETCTTYSKWDNIQELLGHPVEKPVVLHRSSSPNNTNPFGSTF  384 (422)
+Q Consensus       310 -----HtN~PG~~~F~~Y~RC~w~i~~~~~~~~~~~~~~~it~~~~~~~i~~~l~~~~~~pvvlnR~~s~~~~~~fg~T~  384 (422)
+                           +++.+-...|.                       .+...+..++|.+.+    ++|........   ........
+T Consensus        78 ~~~~~~~~~~t~~~~~-----------------------~i~~G~t~~eV~~~l----G~p~~~~~~~~---~~~~~~~~  127 (159)
+T Q8DTX1_STRMU/4   78 NFSFSREAKIGKEDYD-----------------------ELKIGESYKKVVEKL----GEPDVLSQSMS---SDKEEMQT  127 (159)
+T ss_pred             eceecCCCCCCHHHHH-----------------------hcCCCCCHHHHHHHH----CCCCeeEEEee---CCceEEEE
+
+
+Q ss_pred             EeccC------CEEEEEe-cCCCEEEEEEeCC
+Q sp|Q9BSU1|CP07  385 CFGLQ------RMIFEVM-QNNHIASVTLYGP  409 (422)
+Q Consensus       385 ~yG~~------g~IfEVm-~ng~IasvTl~~~  409 (422)
+                      .|.+.      +..+-+. .||.|.++.-+..
+T Consensus       128 ~~~~~~~~~~~~~~~~~~F~~g~l~~~~~~g~  159 (159)
+T Q8DTX1_STRMU/4  128 VWSSGIKTKSSSATIELYFENGLLKNKTQKDL  159 (159)
+T ss_pred             EEEecccCCCCCcEEEEEEECCeEEEeEecCC
+
+
+No 3
+>PF04355.13 ; SmpA_OmlA ; SmpA / OmlA family
+Probab=70.25  E-value=4.9  Score=30.39  Aligned_cols=20  Identities=30%  Similarity=0.363  Sum_probs=0.0  Template_Neff=10.200
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~  258 (422)
+                      |..|.|.+||++.||.|..+
+T Consensus        12 i~~Gmt~~eV~~~lG~P~~~   31 (73)
+T A6W2D6_MARMS/3   12 LQIGMSESQVTYLLGNPMLR   31 (73)
+T ss_pred             CCCCCCHHHHHHHHCCCcee
+
+
+No 4
+>5EKQ_E Outer membrane protein assembly factor; membrane protein, insertase, beta-barrel, outer; 3.392A {Escherichia coli (strain K12)}; Related PDB entries: 2KM7_A 2KXX_A 5AYW_E 5LJO_E
+Probab=68.06  E-value=5.9  Score=32.02  Aligned_cols=20  Identities=30%  Similarity=0.380  Sum_probs=0.0  Template_Neff=9.600
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~  258 (422)
+                      |..|.|.+||++.||+|..+
+T Consensus        27 l~~G~t~~eV~~~lG~P~~~   46 (94)
+T 5EKQ_E           27 IRVGMTQQQVAYALGTPLMS   46 (94)
+T ss_dssp             CCTTCCSTTTTTSSCCCSEE
+T ss_pred             CCCCCCHHHHHHHhCCCcee
+
+
+No 5
+>PF11399.8 ; DUF3192 ; Protein of unknown function (DUF3192)
+Probab=58.72  E-value=13  Score=30.74  Aligned_cols=20  Identities=15%  Similarity=0.388  Sum_probs=0.0  Template_Neff=9.500
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~  258 (422)
+                      |..|.|-+||+..||.|..+
+T Consensus        34 i~~Gmtk~eV~~~lG~P~~~   53 (104)
+T A3QGB8_SHELP/1   34 LSLGMTRDQVMTLMGTADFN   53 (104)
+T ss_pred             cCCCCCHHHHHHHhCCCcee
+
+
+No 6
+>5WAM_B Outer membrane protein assembly factor; beta-barrel assembly machinery, BAM complex; 2.45A {Neisseria gonorrhoeae (strain ATCC 700825 / FA 1090)}; Related PDB entries: 5WAM_A
+Probab=58.46  E-value=11  Score=31.36  Aligned_cols=20  Identities=35%  Similarity=0.376  Sum_probs=0.0  Template_Neff=9.400
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~  258 (422)
+                      |..|.|.+||+..||.|+.+
+T Consensus        30 l~~G~t~~eV~~~lG~P~~~   49 (108)
+T 5WAM_B           30 LRPGMTKDQVLLLLGSPILR   49 (108)
+T ss_dssp             CCTTCBHHHHHHHHCCCSCC
+T ss_pred             CCCCCCHHHHHHHHCCCcee
+
+
+No 7
+>3GMX_B BLP; 2-layer alpha/beta sandwich, PROTEIN BINDING; HET: ACT; 1.05A {Streptomyces clavuligerus} SCOP: d.98.1.0; Related PDB entries: 3GMX_A 3GMY_A 3GMY_B 
+Probab=57.72  E-value=1.6e+02  Score=26.08  Aligned_cols=109  Identities=11%  Similarity=0.028  Sum_probs=0.0  Template_Neff=9.400
+
+Q ss_pred             EEcCCcHHHHHHHHHHccCCcCc--EEEEECCCCCcCCCEEEEeCCCCeEEEecCccceeeEEEEecCC-CCEEEECCEE
+Q sp|Q9BSU1|CP07   19 FTLGMPLAQAVAILQKHCRIIKN--VQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLKVIEVCDLT-KVKLKYCGVH   95 (422)
+Q Consensus        19 f~LG~sL~~vi~~Lr~~~~~~~~--vel~Ys~~~pl~~~Ivi~L~~~GirL~Fd~~~QrL~lIEv~d~~-~~~L~Y~~~~   95 (422)
+                      +++||+..+|.++|-.-......  -...|.........+.|.+..+|          +|..+++..+. .-.-......
+T Consensus        12 I~~G~s~~eV~~~lG~p~~~~~~~~~~~~W~~~~~~~~~~~v~f~~~~----------kv~~k~~~~~~~~~~~~~t~~~   81 (154)
+T 3GMX_B           12 IQFGMDRTLVWQLAGADQSCSDQVERIICYNNPDHYGPQGHFFFNAAD----------KLIHKRQMELFPAPKPTMRLAT   81 (154)
+T ss_dssp             CCTTCBHHHHHHHHTHHHHEEECSSCEEEESSSCTTSSEEEEEECTTS----------BEEEEEEESSSCCSSCCCCHHH
+T ss_pred             CCCCCCHHHHHHHhCCCceecCCceeEEEEcCCCCCcceEEEEEccCC----------EEEEEEecccCCCCCCCCCHHH
+
+
+Q ss_pred             ecCCCCCCcHHHHHHhhcCCCCCCccC----------cccEEEEEeC--------cEEEEee
+Q sp|Q9BSU1|CP07   96 FNSQAIAPTIEQIDQSFGATHPGVYNS----------AEQLFHLNFR--------GLSFSFQ  139 (422)
+Q Consensus        96 ~~~~~~~ptf~~I~~~FGPTyPG~yd~----------~~~~Y~LsYp--------GisF~Fp  139 (422)
+                      +..=....|..+|.+++|+  |+....          ....|...|.        .+.|.|.
+T Consensus        82 ~~~i~~Gmt~~~V~~~lG~--p~~~~~~~~~~~~~~~~~~~~~y~~~~~~~~~~~~~~~~F~  141 (154)
+T 3GMX_B           82 YNKTQTGMTEAQFWAAVPS--DTCSALAEQYPNWPATNGNLREYVCPSKAERFAPSAYFTFT  141 (154)
+T ss_dssp             HTTCCTTCBHHHHHHHSCG--GGCEEEEEECTTTTSCTTCEEEEEEESSSSTTCCEEEEEEE
+T ss_pred             HhhcCCCCCHHHHHHHcCC--ccceeceeccCCCCCCCCeEEEEEeCCCCCCCCCeEEEEEE
+
+
+No 8
+>PF14504.6 ; CAP_assoc_N ; CAP-associated N-terminal
+Probab=57.07  E-value=24  Score=30.56  Aligned_cols=70  Identities=7%  Similarity=0.027  Sum_probs=0.0  Template_Neff=10.000
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEEEEeccccccccCCCCCcCCCCcCCccchhhHhhccceeecCCCCEEEEEEecCC
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFTLGVDILFDANTHKVKKFVLHTN  312 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~f~K~ddrm~IH~~~~~~~~~~~~~dyF~NYF~lG~DiLfd~~t~~v~KiILHtN  312 (422)
+                      |.+|+|.++|++.+|.|....++.++....-......    ......+.+-...+-+.||..+++|.-|-+...
+T Consensus        62 i~vG~t~~~v~~~~G~p~~~~~~~~~~~~~~~~~~~~----~~~~~~~~~~~~~~~~~fd~~~~~v~~I~~~~~  131 (140)
+T U5LAW6_9BACI/1   62 FHIGQPVSEIYSSVFIDTNINFQYKGSSYRFELSEDD----LNTRPLIKAGNIYAQLYIDRFTGELSSIRYMDA  131 (140)
+T ss_pred             ccCCCcHHHHHHhhcCCceEEEEEcCcEEEEEeCcch----hccceeEEECCEEEEEEEECCCCEEEEEEEecH
+
+
+No 9
+>2YH9_C SMALL PROTEIN A; LIPOPROTEIN, 3D DOMAIN SWAP, MEMBRANE; HET: MSE; 1.8A {ESCHERICHIA COLI}; Related PDB entries: 2YH9_B 2YH9_A 
+Probab=56.37  E-value=14  Score=29.98  Aligned_cols=20  Identities=30%  Similarity=0.380  Sum_probs=0.0  Template_Neff=8.700
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~  258 (422)
+                      |..|.|.+||++.||+|..+
+T Consensus        13 l~~Gmtk~eV~~lLG~P~~~   32 (88)
+T 2YH9_C           13 IRVGMTQQQVAYALGTPLMS   32 (88)
+T ss_dssp             CCTTCBHHHHHHHHCSCSEE
+T ss_pred             CCCCCCHHHHHHHhCCCcee
+
+
+No 10
+>PF14504.6 ; CAP_assoc_N ; CAP-associated N-terminal
+Probab=56.24  E-value=30  Score=29.96  Aligned_cols=54  Identities=11%  Similarity=0.142  Sum_probs=0.0  Template_Neff=10.000
+
+Q ss_pred             ecCCHHHHHHHhcCCcEEEEeccccccccCCCCCcCCCCcCCccchhhHh-hccceeecCCCCEEEEEEecCC
+Q sp|Q9BSU1|CP07  241 FGDSCQDVLSMLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFT-LGVDILFDANTHKVKKFVLHTN  312 (422)
+Q Consensus       241 ~G~T~QDVl~~LG~P~~~f~K~ddrm~IH~~~~~~~~~~~~~dyF~NYF~-lG~DiLfd~~t~~v~KiILHtN  312 (422)
+                      +|+|.++|.+.||.|++...-.++                  ...|.|-. .|--+.+....++|..|.+-++
+T Consensus         1 lG~~~~~v~~~lG~P~~~~~~~~g------------------~~~~~Y~~~~~~~~~v~~~~~~v~~i~~~~~   55 (140)
+T U5LAW6_9BACI/1    1 IGKNASDLQVLLGDPERKDPSEYG------------------YEWWIYKKGTSQYVQAGVLDGRIVTLFATGP   55 (140)
+T ss_pred             CCCCHHHHHHHHCCCcEEeccccC------------------CeEEEEecCCCcEEEEEEECCEEEEEEEcCC
+
+
+No 11
+>4DM5_A Osmotically inducible lipoprotein OsmE; lipoprotein, UNKNOWN FUNCTION; HET: MSE; 1.5A {Pseudomonas aeruginosa PAO1}; Related PDB entries: 4DM5_C 4DM5_D 4DM5_B 
+Probab=56.21  E-value=14  Score=31.47  Aligned_cols=20  Identities=40%  Similarity=0.433  Sum_probs=0.0  Template_Neff=7.400
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~  258 (422)
+                      |..|.|.+||+..||+|..+
+T Consensus        24 I~~GmTk~qV~~~lG~P~~~   43 (103)
+T 4DM5_A           24 VEKGMSQQEVLRIGGTPSGT   43 (103)
+T ss_dssp             CCTTCBHHHHHHHHCSCSEE
+T ss_pred             CCCCCCHHHHHHHhCCCCee
+
+
+No 12
+>PF14504.6 ; CAP_assoc_N ; CAP-associated N-terminal
+Probab=56.09  E-value=77  Score=27.35  Aligned_cols=65  Identities=22%  Similarity=0.238  Sum_probs=0.0  Template_Neff=10.000
+
+Q ss_pred             CCCCccEEcCCcHHHHHHHHHHccCC-----cCcEEEEECCCCCcCCCEEEEeCCCCeEEEecCccceeeEEEEec
+Q sp|Q9BSU1|CP07   13 GNEQWEFTLGMPLAQAVAILQKHCRI-----IKNVQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLKVIEVCD   83 (422)
+Q Consensus        13 G~~~~~f~LG~sL~~vi~~Lr~~~~~-----~~~vel~Ys~~~pl~~~Ivi~L~~~GirL~Fd~~~QrL~lIEv~d   83 (422)
+                      |     +++||+..++++.+-.-...     -....+.+.....-..++.-. .+..+.+.||+..-+++.|.+.+
+T Consensus        61 g-----i~vG~t~~~v~~~~G~p~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-~~~~~~~~fd~~~~~v~~I~~~~  130 (140)
+T U5LAW6_9BACI/1   61 P-----FHIGQPVSEIYSSVFIDTNINFQYKGSSYRFELSEDDLNTRPLIKA-GNIYAQLYIDRFTGELSSIRYMD  130 (140)
+T ss_pred             C-----ccCCCcHHHHHHhhcCCceEEEEEcCcEEEEEeCcchhccceeEEE-CCEEEEEEEECCCCEEEEEEEec
+
+
+No 13
+>PF14172.6 ; DUF4309 ; Domain of unknown function (DUF4309)
+Probab=53.82  E-value=2.4e+02  Score=24.83  Aligned_cols=119  Identities=8%  Similarity=0.090  Sum_probs=0.0  Template_Neff=8.400
+
+Q ss_pred             ccccCCCCccEEcCCc-HHHHHHHHHHccCCcCcEEEEECCCCCcCCCEEEEeCCCCeEEEecCccceeeEEEEecCCCC
+Q sp|Q9BSU1|CP07    9 ERSLGNEQWEFTLGMP-LAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLKVIEVCDLTKV   87 (422)
+Q Consensus         9 g~~LG~~~~~f~LG~s-L~~vi~~Lr~~~~~~~~vel~Ys~~~pl~~~Ivi~L~~~GirL~Fd~~~QrL~lIEv~d~~~~   87 (422)
+                      |+-.|.   +|.||++ +.+|.+.+-+      .-+..|.+..   ..........++.+-|+... ++..|+..+..--
+T Consensus        11 Gk~~g~---~~~lG~s~~~~V~~~~G~------P~~~~~~~~~---~g~~~~Y~~~~~~f~~~~~~-~v~~i~~~~~~~~   77 (135)
+T R4K5N0_CLOPA/8   11 GKVFNS---DFPAKDTNIDSVESKWGK------ADNSEWVASA---KGLYSTYSKHNIVFGSNKGG-QIFEVRSLDKQLG   77 (135)
+T ss_pred             CCCCCC---CCCCCCCcHHHHHHHhCC------CCceehhhhc---CceeEEecCceEEEEECCCC-eEEEEEEechhhc
+
+
+Q ss_pred             EEEECCEEecCCCCCCcHHHHHHhhcCCCCCCccCcccEEEEEe-Cc----EEEEeeCcccCCCCccCCCcccccccCCC
+Q sp|Q9BSU1|CP07   88 KLKYCGVHFNSQAIAPTIEQIDQSFGATHPGVYNSAEQLFHLNF-RG----LSFSFQLDSWTEAPKYEPNFAHGLASLQI  162 (422)
+Q Consensus        88 ~L~Y~~~~~~~~~~~ptf~~I~~~FGPTyPG~yd~~~~~Y~LsY-pG----isF~Fpi~~~~~~~~~~~~~~~~l~~l~~  162 (422)
+                      .              .|+.+|.+.+|  -|..-....+.|.+.| .|    +.|.|+.+...                  
+T Consensus        78 ~--------------lt~~~v~~~LG--~P~~~~~~~~~~~~~Y~~g~~y~L~f~~~~~~~~------------------  123 (135)
+T R4K5N0_CLOPA/8   78 N--------------IYLSMVKDKLG--TPQHDVKVNGEEIIGYKMGNDFKILFVFPEPTNQ------------------  123 (135)
+T ss_pred             C--------------CCHHHHHHHhC--CCcEEEEECCEEEEEEEeCCCEEEEEEeCCCCCC------------------
+
+
+Q ss_pred             CCCCeEEEEEEE
+Q sp|Q9BSU1|CP07  163 PHGATVKRMYIY  174 (422)
+Q Consensus       163 ~~~~~~s~i~If  174 (422)
+                      ..++.+.+|.||
+T Consensus       124 ~~~~~v~~i~v~  135 (135)
+T R4K5N0_CLOPA/8  124 HANPIMSHYSVL  135 (135)
+T ss_pred             CCCCeeeEEEeC
+
+
+No 14
+>PF07467.11 ; BLIP ; Beta-lactamase inhibitor (BLIP)
+Probab=52.88  E-value=16  Score=31.41  Aligned_cols=20  Identities=20%  Similarity=0.320  Sum_probs=0.0  Template_Neff=8.800
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~  258 (422)
+                      |.+|+|.+||++.||.|.++
+T Consensus         8 I~~G~t~~~V~~~lG~P~~~   27 (121)
+T B5GLC0_STRC2/3    8 IQFGMDRTLVWQLAGADQSC   27 (121)
+T ss_pred             CCCCCCHHHHHHHHCCCcee
+
+
+No 15
+>PF11006.8 ; DUF2845 ; Protein of unknown function (DUF2845)
+Probab=50.88  E-value=27  Score=28.63  Aligned_cols=27  Identities=19%  Similarity=0.145  Sum_probs=0.0  Template_Neff=8.700
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEEEEecccc
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKVFYKSEDK  265 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~f~K~ddr  265 (422)
+                      |..|+|..+|+..+|.|.......+..
+T Consensus        11 V~~Gds~~~Vl~~cG~P~~~~~~~~~~   37 (94)
+T B3PEX3_CELJU/2   11 TQTGDTKAEVIAKCGDPVFTDHYCAPM   37 (94)
+T ss_pred             cCCCCCHHHHHHHhCCCcEEEeEeeec
+
+
+No 16
+>PF12978.7 ; DUF3862 ; Domain of Unknown Function with PDB structure (DUF3862)
+Probab=49.44  E-value=1.1e+02  Score=27.28  Aligned_cols=114  Identities=9%  Similarity=0.155  Sum_probs=0.0  Template_Neff=9.600
+
+Q ss_pred             EeccccccCCCCccEEcCCcHHHHHHHHHHccCCcCcE-------EEEECCCCCcCCCEEEEeCCCCeEEEecCccceee
+Q sp|Q9BSU1|CP07    5 EVVPERSLGNEQWEFTLGMPLAQAVAILQKHCRIIKNV-------QVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLK   77 (422)
+Q Consensus         5 ~i~Pg~~LG~~~~~f~LG~sL~~vi~~Lr~~~~~~~~v-------el~Ys~~~pl~~~Ivi~L~~~GirL~Fd~~~QrL~   77 (422)
+                      +|.++.+++.    ++-||+..+|++.|-+-......-       ...|..            +..++.+.|+  ..++.
+T Consensus        11 ~i~~~~~~~~----~~~G~t~~eV~~~lG~p~~~~~~~~~~~~~~~~~w~~------------~~~~~~v~~~--~~~~~   72 (159)
+T Q8DTX1_STRMU/4   11 KIKVTTDQNH----FSGGTSIEQLKQWFGDPNKSEQRNAGNITLDSYTWVK------------DGAVINAQLY--KNSTV   72 (159)
+T ss_pred             ceeecCCccc----CCCCCCHHHHHHHHCCCceEEeeeeCCeEEEEEEEEe------------CCeEEEEEEE--CCEEE
+
+
+Q ss_pred             EEEEecCCCC-EEEECCEEecCCCCCCcHHHHHHhhcCCCCCCccCcc----cEEEEEeC----------cEEEEe
+Q sp|Q9BSU1|CP07   78 VIEVCDLTKV-KLKYCGVHFNSQAIAPTIEQIDQSFGATHPGVYNSAE----QLFHLNFR----------GLSFSF  138 (422)
+Q Consensus        78 lIEv~d~~~~-~L~Y~~~~~~~~~~~ptf~~I~~~FGPTyPG~yd~~~----~~Y~LsYp----------GisF~F  138 (422)
+                      -+.+..+.-. .=......+..-...-|..+|.+.+|  .|+......    ....+.|.          .+.|.|
+T Consensus        73 ~~~~~~~~~~~~~~~t~~~~~~i~~G~t~~eV~~~lG--~p~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~F  146 (159)
+T Q8DTX1_STRMU/4   73 ARSISNFSFSREAKIGKEDYDELKIGESYKKVVEKLG--EPDVLSQSMSSDKEEMQTVWSSGIKTKSSSATIELYF  146 (159)
+T ss_pred             EEEEEeceecCCCCCCHHHHHhcCCCCCHHHHHHHHC--CCCeeEEEeeCCceEEEEEEEecccCCCCCcEEEEEE
+
+
+No 17
+>PF09870.9 ; DUF2097 ; Uncharacterized protein conserved in archaea (DUF2097)
+Probab=48.69  E-value=1.6e+02  Score=25.16  Aligned_cols=60  Identities=18%  Similarity=0.331  Sum_probs=0.0  Template_Neff=4.200
+
+Q ss_pred             CcHHHHHHHHHHccCCcCcEEEEECCCCCcCCCEEEEe----CCCCeEEEecCccceee-EEEEe
+Q sp|Q9BSU1|CP07   23 MPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNL----TQDGIKLMFDAFNQRLK-VIEVC   82 (422)
+Q Consensus        23 ~sL~~vi~~Lr~~~~~~~~vel~Ys~~~pl~~~Ivi~L----~~~GirL~Fd~~~QrL~-lIEv~   82 (422)
+                      |+--+++++++.+-.....++|.|+.--.-..=+.+.-    ...|++++-+-..+.|. +|||.
+T Consensus         5 m~~dE~ieYik~nVk~~D~lEisynRvf~pGeVl~i~~~~~~~~~~~~v~l~l~ge~~~~~veiD   69 (92)
+T A5UN43_METS3/2    5 LTPDKAVEYLKDNVKIHDNLEISYNRIFGSGEVLNMDFSEYFGKPGFKMLLSLDGDSINPTIEID   69 (92)
+T ss_pred             cCHHHHHHHHHHhCCccCeEEEEeceeecceeEEEEeeceecCCCeEEEEEEeCCCeecceEEEe
+
+
+No 18
+>2PXG_A Outer membrane protein; two layer alpha/beta plait, two; NMR {Xanthomonas axonopodis pv. citri}
+Probab=43.68  E-value=24  Score=30.46  Aligned_cols=20  Identities=35%  Similarity=0.526  Sum_probs=0.0  Template_Neff=8.300
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~  258 (422)
+                      |..|.|.+||+..||+|..+
+T Consensus        26 I~~G~Tk~eV~~~LG~P~~~   45 (118)
+T 2PXG_A           26 LQVGQSKQQVSALLGTPSIP   45 (118)
+T ss_dssp             TCCCSCHHHHHHHHTSCCCC
+T ss_pred             CCCCCCHHHHHHHhCCCccC
+
+
+No 19
+>3GMX_B BLP; 2-layer alpha/beta sandwich, PROTEIN BINDING; HET: ACT; 1.05A {Streptomyces clavuligerus} SCOP: d.98.1.0; Related PDB entries: 3GMX_A 3GMY_A 3GMY_B 
+Probab=42.97  E-value=29  Score=30.94  Aligned_cols=20  Identities=20%  Similarity=0.320  Sum_probs=0.0  Template_Neff=9.400
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~  258 (422)
+                      |.+|.|.+||.+.||.|..+
+T Consensus        12 I~~G~s~~eV~~~lG~p~~~   31 (154)
+T 3GMX_B           12 IQFGMDRTLVWQLAGADQSC   31 (154)
+T ss_dssp             CCTTCBHHHHHHHHTHHHHE
+T ss_pred             CCCCCCHHHHHHHhCCCcee
+
+
+No 20
+>5D0O_E Outer membrane protein assembly factor; E.coli, Bacterial outer membrane beta; 2.9A {Escherichia coli}; Related PDB entries: 5D0Q_E 5D0Q_I
+Probab=41.38  E-value=33  Score=29.00  Aligned_cols=20  Identities=30%  Similarity=0.380  Sum_probs=0.0  Template_Neff=9.900
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~  258 (422)
+                      |..|.|.+||+..||.|+..
+T Consensus        46 l~~G~t~~eV~~~lG~P~~~   65 (123)
+T 5D0O_E           46 IRVGMTQQQVAYALGTPLMS   65 (123)
+T ss_dssp             CCSSCBHHHHHHHHCCCSBC
+T ss_pred             CCCCCCHHHHHHHhCCCcee
+
+
+No 21
+>3D4E_A putative beta-lactamase inhibitor protein; NP_721579.1, putative beta-lactamase inhibitor protein; HET: EDO, MSE; 1.4A {Streptococcus mutans}
+Probab=39.07  E-value=83  Score=29.23  Aligned_cols=58  Identities=12%  Similarity=0.176  Sum_probs=0.0  Template_Neff=8.500
+
+Q ss_pred             EEe---------cCCHHHHHHHhcCCcEEEEeccccccccCCCCCcCCCCcCCccchhhHhhccceeecCCCCEEEEEEe
+Q sp|Q9BSU1|CP07  239 VYF---------GDSCQDVLSMLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFTLGVDILFDANTHKVKKFVL  309 (422)
+Q Consensus       239 I~~---------G~T~QDVl~~LG~P~~~f~K~ddrm~IH~~~~~~~~~~~~~dyF~NYF~lG~DiLfd~~t~~v~KiIL  309 (422)
+                      |.+         |.|.+||...||.|..+-....+             ......|-|+|-..++.|.|+ ...++.|-+.
+T Consensus        31 I~~g~~~~~~~~Gmt~~eV~~ilG~P~~~~~~~~~-------------~~~~~~~~W~~~~~~i~v~F~-~~kv~~k~~~   96 (179)
+T 3D4E_A           31 IKVTTDQNHFSGGTSIEQLKQWFGDPNKSEQRNAG-------------NITLDSYTWVKDGAVINAQLY-KNSTVARSIS   96 (179)
+T ss_dssp             CCCCCCTTTCCSSCCHHHHHHHHCSCSEEEEEEET-------------TEEEEEEEEEETTEEEEEEEE-TTEEEEEEEE
+T ss_pred             eeecCCccCCCCCCCHHHHHHHHCCCceeEEEeeC-------------CEEEEEEEEEeCCeEEEEEEE-CCeEEEeeee
+
+
+Q ss_pred             c
+Q sp|Q9BSU1|CP07  310 H  310 (422)
+Q Consensus       310 H  310 (422)
+                      +
+T Consensus        97 ~   97 (179)
+T 3D4E_A           97 N   97 (179)
+T ss_dssp             S
+T ss_pred             c
+
+
+No 22
+>3D4E_A putative beta-lactamase inhibitor protein; NP_721579.1, putative beta-lactamase inhibitor protein; HET: EDO, MSE; 1.4A {Streptococcus mutans}
+Probab=36.91  E-value=3e+02  Score=25.55  Aligned_cols=105  Identities=10%  Similarity=0.142  Sum_probs=0.0  Template_Neff=8.500
+
+Q ss_pred             EEc---------CCcHHHHHHHHHHccCCc-------CcEEEEECCCCCcCCCEEEEeCCCCeEEEecCccceeeEEEEe
+Q sp|Q9BSU1|CP07   19 FTL---------GMPLAQAVAILQKHCRII-------KNVQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLKVIEVC   82 (422)
+Q Consensus        19 f~L---------G~sL~~vi~~Lr~~~~~~-------~~vel~Ys~~~pl~~~Ivi~L~~~GirL~Fd~~~QrL~lIEv~   82 (422)
+                      +++         ||+..+|.++|=.-....       ......|..            ....|.+.|+  ..+|..+.+.
+T Consensus        31 I~~g~~~~~~~~Gmt~~eV~~ilG~P~~~~~~~~~~~~~~~~~W~~------------~~~~i~v~F~--~~kv~~k~~~   96 (179)
+T 3D4E_A           31 IKVTTDQNHFSGGTSIEQLKQWFGDPNKSEQRNAGNITLDSYTWVK------------DGAVINAQLY--KNSTVARSIS   96 (179)
+T ss_dssp             CCCCCCTTTCCSSCCHHHHHHHHCSCSEEEEEEETTEEEEEEEEEE------------TTEEEEEEEE--TTEEEEEEEE
+T ss_pred             eeecCCccCCCCCCCHHHHHHHHCCCceeEEEeeCCEEEEEEEEEe------------CCeEEEEEEE--CCeEEEeeee
+
+
+Q ss_pred             cCCC-CEEEECCEEecCCCCCCcHHHHHHhhcCCCCCCccCccc----EEEEEe----------CcEEEEee
+Q sp|Q9BSU1|CP07   83 DLTK-VKLKYCGVHFNSQAIAPTIEQIDQSFGATHPGVYNSAEQ----LFHLNF----------RGLSFSFQ  139 (422)
+Q Consensus        83 d~~~-~~L~Y~~~~~~~~~~~ptf~~I~~~FGPTyPG~yd~~~~----~Y~LsY----------pGisF~Fp  139 (422)
+                      .+.. -.-...-..+..-....|..+|.+++|.  |........    ...+.|          ..+.|.|.
+T Consensus        97 ~~~~~~~~~it~~~~~~I~~Gmt~~eV~~~lG~--p~~~~~~~~~~~~~~~~~w~~~~~~~~~~~~i~~~F~  166 (179)
+T 3D4E_A           97 NFSFSREAKIGKEDYDELKIGESYKKIVEKLGE--PDVLSQSMSSDKEEMQTVWSSGIKTKSSSATIELYFE  166 (179)
+T ss_dssp             SCCCCCCCCBCHHHHHHCCTTCBHHHHHHHHCC--CSEEEEEECSSCEEEEEEECSSBCSSCTTCEEEEEEE
+T ss_pred             cCccccCCCCCHHHHHHCCCCCCHHHHHHHHCC--CceeeeecCCCceEEEEEEEcCCcCCCCccEEEEEEE
+
+
+No 23
+>PF14454.6 ; Prok_Ub ; Prokaryotic Ubiquitin
+Probab=36.62  E-value=88  Score=24.38  Aligned_cols=30  Identities=23%  Similarity=0.342  Sum_probs=0.0  Template_Neff=5.900
+
+Q ss_pred             EEEECCEEecCCCCCCcHHHHHHhhcCCCC
+Q sp|Q9BSU1|CP07   88 KLKYCGVHFNSQAIAPTIEQIDQSFGATHP  117 (422)
+Q Consensus        88 ~L~Y~~~~~~~~~~~ptf~~I~~~FGPTyP  117 (422)
+                      +++|.+..+..|+...+.+++.+++..+||
+T Consensus         5 ~F~~~~~~l~DP~P~~s~e~v~~~~a~~yP   34 (62)
+T H8H183_DEIGI/2    5 VFKFDGKVLDDPNPKSTPEQVKTFYAPTYP   34 (62)
+T ss_pred             EEEECCEEecCCCCCCCHHHHHHHHHHhCH
+
+
+No 24
+>3N4I_B Crystal structure of the SHV-1; beta-lactamase, protein-protein complex, BLIP, SHV-1; 1.56A {Klebsiella pneumoniae} SCOP: d.98.1.1; Related PDB entries: 3E2K_D 1XXM_C 2G2W_B 3E2L_C 3GMU_B 1XXM_D 3C4P_B 1S0W_C 3C7U_D 3C4O_B 1JTG_B 3C7V_B 3C7V_D 3E2L_D 3E2K_C 2G2U_B 3C7U_B 2B5R_C 1JTG_D 2B5R_D 1S0W_D
+Probab=36.36  E-value=43  Score=30.67  Aligned_cols=20  Identities=30%  Similarity=0.464  Sum_probs=0.0  Template_Neff=8.500
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~  258 (422)
+                      |.+|.|.+||.+.||.|...
+T Consensus        12 I~~Gmt~~eV~~~lG~p~~~   31 (165)
+T 3N4I_B           12 IQFGMTRQQVLDIAGAENCE   31 (165)
+T ss_dssp             SCTTCCHHHHHHHHCGGGEE
+T ss_pred             CCCCCCHHHHHHHHCCCCee
+
+
+No 25
+>3GMX_B BLP; 2-layer alpha/beta sandwich, PROTEIN BINDING; HET: ACT; 1.05A {Streptomyces clavuligerus} SCOP: d.98.1.0; Related PDB entries: 3GMX_A 3GMY_A 3GMY_B 
+Probab=34.69  E-value=44  Score=29.77  Aligned_cols=20  Identities=10%  Similarity=-0.059  Sum_probs=0.0  Template_Neff=9.400
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~  258 (422)
+                      |..|.|.+||+..||.|..+
+T Consensus        85 i~~Gmt~~~V~~~lG~p~~~  104 (154)
+T 3GMX_B           85 TQTGMTEAQFWAAVPSDTCS  104 (154)
+T ss_dssp             CCTTCBHHHHHHHSCGGGCE
+T ss_pred             cCCCCCHHHHHHHcCCccce
+
+
+No 26
+>PF14172.6 ; DUF4309 ; Domain of unknown function (DUF4309)
+Probab=34.59  E-value=71  Score=28.22  Aligned_cols=51  Identities=12%  Similarity=0.088  Sum_probs=0.0  Template_Neff=8.400
+
+Q ss_pred             EEecCC-HHHHHHHhcCCcEEEEeccccccccCCCCCcCCCCcCCccchhhHhhccceeecCCCCEEEEE
+Q sp|Q9BSU1|CP07  239 VYFGDS-CQDVLSMLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFTLGVDILFDANTHKVKKF  307 (422)
+Q Consensus       239 I~~G~T-~QDVl~~LG~P~~~f~K~ddrm~IH~~~~~~~~~~~~~dyF~NYF~lG~DiLfd~~t~~v~Ki  307 (422)
+                      +.+|+| .+||...+|.|++..+-.++.                 ..++.|-..++-+-+|. ..+|.-|
+T Consensus        18 ~~lG~s~~~~V~~~~G~P~~~~~~~~~~-----------------g~~~~Y~~~~~~f~~~~-~~~v~~i   69 (135)
+T R4K5N0_CLOPA/8   18 FPAKDTNIDSVESKWGKADNSEWVASAK-----------------GLYSTYSKHNIVFGSNK-GGQIFEV   69 (135)
+T ss_pred             CCCCCCcHHHHHHHhCCCCceehhhhcC-----------------ceeEEecCceEEEEECC-CCeEEEE
+
+
+No 27
+>PF12978.7 ; DUF3862 ; Domain of Unknown Function with PDB structure (DUF3862)
+Probab=34.21  E-value=54  Score=29.27  Aligned_cols=20  Identities=30%  Similarity=0.610  Sum_probs=0.0  Template_Neff=9.600
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~  258 (422)
+                      |.+|+|.++|++.||.|...
+T Consensus        95 i~~G~t~~eV~~~lG~p~~~  114 (159)
+T Q8DTX1_STRMU/4   95 LKIGESYKKVVEKLGEPDVL  114 (159)
+T ss_pred             cCCCCCHHHHHHHHCCCCee
+
+
+No 28
+>4H0A_A Uncharacterized protein; CAP protein family, cysteine-rich secretory; HET: EDO, MSE; 1.9A {Staphylococcus aureus subsp. aureus}; Related PDB entries: 4H0A_B
+Probab=30.93  E-value=61  Score=33.05  Aligned_cols=21  Identities=19%  Similarity=0.498  Sum_probs=0.0  Template_Neff=9.000
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKVF  259 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~f  259 (422)
+                      |.+|+|.+||.+.||.|.++.
+T Consensus        43 i~iG~s~~~v~~~~G~P~r~~   63 (323)
+T 4H0A_A           43 TWVGKDIKVLTSKFGQADRVY   63 (323)
+T ss_dssp             GGTTSBTHHHHHHHCSCSEEE
+T ss_pred             HhcCCcHHHHHHHhCCCcEEE
+
+
+No 29
+>PF06185.12 ; YecM ; YecM protein
+Probab=30.07  E-value=3.4e+02  Score=25.76  Aligned_cols=60  Identities=20%  Similarity=0.191  Sum_probs=0.0  Template_Neff=6.200
+
+Q ss_pred             CCCCccEEcCCcHHHHHHHHHHccCCc--CcEEEEECCC----CCcCCCEEEEeCCCCeEEEecCcc
+Q sp|Q9BSU1|CP07   13 GNEQWEFTLGMPLAQAVAILQKHCRII--KNVQVLYSEQ----SPLSHDLILNLTQDGIKLMFDAFN   73 (422)
+Q Consensus        13 G~~~~~f~LG~sL~~vi~~Lr~~~~~~--~~vel~Ys~~----~pl~~~Ivi~L~~~GirL~Fd~~~   73 (422)
+                      |.+++||+++.++.+..+..++.-..+  +.++++.+..    +-+.+|- +.+..+|+...|.+.+
+T Consensus       102 G~EHiEfVi~~~~~~~~~~~~~~~~~~~~~~i~~k~s~~~~~~~r~~NP~-~~~~~~~~~VKfH~~s  167 (175)
+T Q7N560_PHOLL/9  102 GWEHVELVLPVAPEILSTAAKALLPQPLPAGFSVKESQPKGEQERLPNPT-LAITDGEITVKFHPFT  167 (175)
+T ss_pred             ceeEEEEEcCCCHHHHHHHHHHhCcCcCCCCCeeEecCCCCccccCCCce-EEeecCCEEEEEccCC
+
+
+No 30
+>4IL7_A Putative uncharacterized protein; partial jelly roll fold, hypothetical; 1.4A {Sulfolobus turreted icosahedral virus}
+Probab=29.78  E-value=6.8e+02  Score=22.72  Aligned_cols=133  Identities=21%  Similarity=0.270  Sum_probs=0.0  Template_Neff=1.300
+
+Q ss_pred             ccccccCCCCccEEcCCcHHHHHHHHHHccCCcCcEEEEECCCCCcCCCEEEEeCCCCeEEEecCccceeeEEEEecCCC
+Q sp|Q9BSU1|CP07    7 VPERSLGNEQWEFTLGMPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLKVIEVCDLTK   86 (422)
+Q Consensus         7 ~Pg~~LG~~~~~f~LG~sL~~vi~~Lr~~~~~~~~vel~Ys~~~pl~~~Ivi~L~~~GirL~Fd~~~QrL~lIEv~d~~~   86 (422)
+                      +||++-|     ++|...     .+||-..-....+...|+..+|....-+|.|+ .-|+=.|+-..|  ..||=...+.
+T Consensus         9 ipgegtg-----I~Ls~G-----QiLkf~N~PlaEI~~~Ydpsn~S~vSS~VklK-GtIHPLFEvPsq--isien~Q~nE   75 (166)
+T 4IL7_A            9 IPGEGTG-----IQLSAG-----QILKFYNVPIAEIIVEYDPSNVSGVSSNVKLK-GTIHPLFEVPSQ--ISIENFQPTE   75 (166)
+T ss_dssp             -------------------------------------------------------------------------------C
+T ss_pred             CCCCCcc-----eEeccc-----cEEEEecccHheEEEEeCCCCcCCccceeEee-eeeeeceeccee--eeeeccCCCC
+
+
+Q ss_pred             CEEEECCEEecCCCCCCcHHHHHHhhcCCCCCCccCcc----------------cEEEEEeCcEEEEeeCcccCCCCccC
+Q sp|Q9BSU1|CP07   87 VKLKYCGVHFNSQAIAPTIEQIDQSFGATHPGVYNSAE----------------QLFHLNFRGLSFSFQLDSWTEAPKYE  150 (422)
+Q Consensus        87 ~~L~Y~~~~~~~~~~~ptf~~I~~~FGPTyPG~yd~~~----------------~~Y~LsYpGisF~Fpi~~~~~~~~~~  150 (422)
+                      --|.|.+                  ||...|-.|.-..                +...|++--+...|.....+.+-...
+T Consensus        76 N~LI~sg------------------fgtslpq~y~~pangyl~~~itnt~tgnigqitl~~g~~tmtfnlqtgenkipvi  137 (166)
+T 4IL7_A           76 NYLIYSG------------------FGTSLPQTYTIPANGYLIISITNTSTGNIGQITLTIGSTTMTFNLQTGENKIPVI  137 (166)
+T ss_dssp             EEEEEEE------------------EEEECSSCEECCSSEEEEEEEECSSCSEEEEEEEEETTEEEEEEEESEEEEEEEC
+T ss_pred             cEEEEec------------------CCCCCCceEEEcCCcEEEEEEEeCCCCceeEEEEEEeeEEEEEEeccCCccccEE
+
+
+Q ss_pred             CCcccccccCCCCCCCeEEEEEEEe
+Q sp|Q9BSU1|CP07  151 PNFAHGLASLQIPHGATVKRMYIYS  175 (422)
+Q Consensus       151 ~~~~~~l~~l~~~~~~~~s~i~If~  175 (422)
+                      ......-.++     +..+.|-||.
+T Consensus       138 agtqit~~~l-----ts~sailiye  157 (166)
+T 4IL7_A          138 AGTQITNMTL-----TSSSAILIYE  157 (166)
+T ss_dssp             TTCEEEEEEE-----EEEEEEEEEE
+T ss_pred             eeceeEeeee-----cCcceEeeee
+
+
+No 31
+>3D4E_A putative beta-lactamase inhibitor protein; NP_721579.1, putative beta-lactamase inhibitor protein; HET: EDO, MSE; 1.4A {Streptococcus mutans}
+Probab=26.30  E-value=89  Score=29.01  Aligned_cols=20  Identities=25%  Similarity=0.605  Sum_probs=0.0  Template_Neff=8.500
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~  258 (422)
+                      |..|.|.++|+..||.|...
+T Consensus       114 I~~Gmt~~eV~~~lG~p~~~  133 (179)
+T 3D4E_A          114 LKIGESYKKIVEKLGEPDVL  133 (179)
+T ss_dssp             CCTTCBHHHHHHHHCCCSEE
+T ss_pred             CCCCCCHHHHHHHHCCCcee
+
+
+No 32
+>3N4I_B Crystal structure of the SHV-1; beta-lactamase, protein-protein complex, BLIP, SHV-1; 1.56A {Klebsiella pneumoniae} SCOP: d.98.1.1; Related PDB entries: 3E2K_D 1XXM_C 2G2W_B 3E2L_C 3GMU_B 1XXM_D 3C4P_B 1S0W_C 3C7U_D 3C4O_B 1JTG_B 3C7V_B 3C7V_D 3E2L_D 3E2K_C 2G2U_B 3C7U_B 2B5R_C 1JTG_D 2B5R_D 1S0W_D
+Probab=24.37  E-value=1.1e+02  Score=28.12  Aligned_cols=20  Identities=25%  Similarity=0.287  Sum_probs=0.0  Template_Neff=8.500
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~  258 (422)
+                      |..|.|.++|+..||.|..+
+T Consensus        91 i~~Gmt~~eV~~~lG~p~~~  110 (165)
+T 3N4I_B           91 VTVGMTRAQVLATVGQGSCT  110 (165)
+T ss_dssp             CCTTCBHHHHHHHHCTBSEE
+T ss_pred             ccCCCCHHHHHHHHCCCcee
+
+
+No 33
+>PF07467.11 ; BLIP ; Beta-lactamase inhibitor (BLIP)
+Probab=23.84  E-value=89  Score=26.82  Aligned_cols=21  Identities=10%  Similarity=-0.092  Sum_probs=0.0  Template_Neff=8.800
+
+Q ss_pred             EEecCCHHHHHHHhcCCcEEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKVF  259 (422)
+Q Consensus       239 I~~G~T~QDVl~~LG~P~~~f  259 (422)
+                      |..|.|.++|...||.|..+.
+T Consensus        81 i~~G~t~~~V~~~lG~p~~~~  101 (121)
+T B5GLC0_STRC2/3   81 TQTGMTEAQFWAAVPSDTCSA  101 (121)
+T ss_pred             cCCCCCHHHHHHhcCCccccc
+
+
+No 34
+>PF07467.11 ; BLIP ; Beta-lactamase inhibitor (BLIP)
+Probab=21.56  E-value=3.9e+02  Score=22.84  Aligned_cols=88  Identities=13%  Similarity=0.078  Sum_probs=0.0  Template_Neff=8.800
+
+Q ss_pred             EEcCCcHHHHHHHHHHccCCcCcEEEEECCCCCcCCCEEEEeCCCCeEEEecCccceeeEEEEecCCCCEEEECCEE-ec
+Q sp|Q9BSU1|CP07   19 FTLGMPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLKVIEVCDLTKVKLKYCGVH-FN   97 (422)
+Q Consensus        19 f~LG~sL~~vi~~Lr~~~~~~~~vel~Ys~~~pl~~~Ivi~L~~~GirL~Fd~~~QrL~lIEv~d~~~~~L~Y~~~~-~~   97 (422)
+                      +++||+..+|+++|-.-....+...-.|.-..+-.       ....+.+.|++ ..+|..+++.++....=...... ++
+T Consensus         8 I~~G~t~~~V~~~lG~P~~~~~~~~~~~~y~~~~~-------~~~~~~v~F~~-~gkv~~k~~~~~~~~~~~~~t~~~~~   79 (121)
+T B5GLC0_STRC2/3    8 IQFGMDRTLVWQLAGADQSCSDQVERIICYNNPDH-------YGPQGHFFFNA-ADKLIHKRQMELFPAPKPTMRLATYN   79 (121)
+T ss_pred             CCCCCCHHHHHHHHCCCceecCCcceEEEEeCCCC-------CCCEEEEEEcC-CCEEEEEEECCCCCCCCCCCCHHHHH
+
+
+Q ss_pred             CCCCCCcHHHHHHhhcC
+Q sp|Q9BSU1|CP07   98 SQAIAPTIEQIDQSFGA  114 (422)
+Q Consensus        98 ~~~~~ptf~~I~~~FGP  114 (422)
+                      .-...-|..+|.+.||.
+T Consensus        80 ~i~~G~t~~~V~~~lG~   96 (121)
+T B5GLC0_STRC2/3   80 KTQTGMTEAQFWAAVPS   96 (121)
+T ss_pred             hcCCCCCHHHHHHhcCC
+
+

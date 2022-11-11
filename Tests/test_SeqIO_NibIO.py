@@ -1,41 +1,61 @@
+"""Tests for SeqIO NibIO module."""
 import unittest
 
 from io import BytesIO
+
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
 class TestNibReaderWriter(unittest.TestCase):
+    def test_read_even(self):
+        with open("Nib/test_even.fa") as handle:
+            record = SeqIO.read(handle, "fasta")
+        sequence = record.seq
+        with open("Nib/test_even_bigendian.nib", "rb") as handle:
+            record = SeqIO.read(handle, "nib")
+        self.assertEqual(sequence, record.seq)
+        with open("Nib/test_even_littleendian.nib", "rb") as handle:
+            record = SeqIO.read(handle, "nib")
+        self.assertEqual(sequence, record.seq)
 
-    nucleotides = 'ACGTAAACCGTACCCGTANANCANNNNACNANNANCN'
+    def test_read_odd(self):
+        with open("Nib/test_odd.fa") as handle:
+            record = SeqIO.read(handle, "fasta")
+        sequence = record.seq
+        with open("Nib/test_odd_bigendian.nib", "rb") as handle:
+            record = SeqIO.read(handle, "nib")
+        self.assertEqual(sequence, record.seq)
+        with open("Nib/test_odd_littleendian.nib", "rb") as handle:
+            record = SeqIO.read(handle, "nib")
+        self.assertEqual(sequence, record.seq)
 
-    def test_read_bigendian(self):
-        handle = open('Nib/test_bigendian.nib', 'rb')
-        records = SeqIO.parse(handle, 'nib')
-        record = next(records)
-        handle.close()
-        self.assertEqual(str(record.seq), self.nucleotides)
-
-    def test_read_littleendian(self):
-        handle = open('Nib/test_littleendian.nib', 'rb')
-        records = SeqIO.parse(handle, 'nib')
-        record = next(records)
-        handle.close()
-        self.assertEqual(str(record.seq), self.nucleotides)
-
-    def test_write_and_read(self):
+    def test_write_even(self):
+        with open("Nib/test_even.fa") as handle:
+            record = SeqIO.read(handle, "fasta")
+        sequence = record.seq
         handle = BytesIO()
-        sequence = Seq(self.nucleotides)
-        record = SeqRecord(sequence)
-        n = SeqIO.write(record, handle, 'nib')
+        n = SeqIO.write(record, handle, "nib")
         self.assertEqual(n, 1)
         handle.flush()
         handle.seek(0)
-        record = SeqIO.read(handle, 'nib')
+        record = SeqIO.read(handle, "nib")
         handle.close()
+        self.assertEqual(sequence, record.seq)
+
+    def test_write_odd(self):
+        with open("Nib/test_odd.fa") as handle:
+            record = SeqIO.read(handle, "fasta")
         sequence = record.seq
-        self.assertEqual(str(sequence), self.nucleotides)
+        handle = BytesIO()
+        n = SeqIO.write(record, handle, "nib")
+        self.assertEqual(n, 1)
+        handle.flush()
+        handle.seek(0)
+        record = SeqIO.read(handle, "nib")
+        handle.close()
+        self.assertEqual(sequence, record.seq)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 \chapter{Cluster analysis}
+\label{chapter:cluster}
 
 Cluster analysis is the grouping of items into clusters based on the similarity of the items to each other. In bioinformatics, clustering is widely used in gene expression data analysis to find groups of genes with similar gene expression profiles. This may identify functionally related genes, as well as suggest the function of presently unknown genes.
 
@@ -52,7 +53,7 @@ Kendall's $\tau$.
 \end{itemize}
 The first two are true distance functions that satisfy the triangle inequality:
 $$d\left(\underline{u},\underline{v}\right) \leq d\left(\underline{u},\underline{w}\right) + d\left(\underline{w},\underline{v}\right) \textrm{ for all } \underline{u}, \underline{v}, \underline{w},$$
-and are therefore refered to as \emph{metrics}. In everyday language, this means that the shortest distance between two points is a straight line.
+and are therefore referred to as \emph{metrics}. In everyday language, this means that the shortest distance between two points is a straight line.
 
 The remaining six distance measures are related to the correlation coefficient, where the distance $d$ is defined in terms of the correlation $r$ by $d=1-r$.  Note that these distance functions are \emph{semi-metrics} that do not satisfy the triangle inequality. For example, for
 $$\underline{u}=\left(1,0,-1\right);$$
@@ -161,13 +162,13 @@ As Kendall's $\tau$ is always between -1 and 1, the corresponding distance will 
 For most of the distance functions available in \verb|Bio.Cluster|, a weight vector can be applied. The weight vector contains weights for the items in the data vector. If the weight for item $i$ is $w_i$, then that item is treated as if it occurred $w_i$ times in the data. The weight do not have to be integers.
 
 \subsection*{Calculating the distance matrix}
-\label{subsec:distancematrix}
+\label{sec:distancematrix}
 
 The distance matrix is a square matrix with all pairwise distances between the items in \verb|data|, and can be calculated by the function \verb|distancematrix| in the \verb|Bio.Cluster| module:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Cluster import distancematrix
 >>> matrix = distancematrix(data)
-\end{verbatim}
+\end{minted}
 where the following arguments are defined:
 \begin{itemize}
 \item \verb|data| (required)\\
@@ -183,21 +184,35 @@ Defines the distance function to be used (see \ref{sec:distancefunctions}).
 \end{itemize}
 
 To save memory, the distance matrix is returned as a list of 1D arrays.
-The number of columns in each row is equal to the row number. Hence, the first row has zero elements. An example of the return value is
-\begin{verbatim}
-[array([]),
- array([1.]),
- array([7., 3.]),
- array([4., 2., 6.])]
-\end{verbatim}
-This corresponds to the distance matrix
+The number of columns in each row is equal to the row number. Hence, the first row has zero elements. For example,
+
+\begin{minted}{pycon}
+>>> from numpy import array
+>>> from Bio.Cluster import distancematrix
+>>> data = array([[0, 1,  2,  3],
+...               [4, 5,  6,  7],
+...               [8, 9, 10, 11],
+...               [1, 2,  3,  4]])  # fmt: skip
+...
+>>> distances = distancematrix(data, dist="e")
+\end{minted}
+yields a distance matrix
+\begin{minted}{pycon}
+>>> distances
+[array([], dtype=float64), array([ 16.]), array([ 64.,  16.]), array([  1.,   9.,  49.])]
+\end{minted}
+which can be rewritten as
+\begin{minted}{python}
+[array([], dtype=float64), array([16.0]), array([64.0, 16.0]), array([1.0, 9.0, 49.0])]
+\end{minted}
+This corresponds to the distance matrix:
 $$
 \left(
 \begin{array}{cccc}
-0 & 1 & 7 & 4  \\
-1 & 0 & 3 & 2  \\
-7 & 3 & 0 & 6  \\
-4 & 2 & 6 & 0
+0  & 16 & 64 &  1  \\
+16 &  0 & 16 &  9  \\
+64 & 16 &  0 & 49  \\
+ 1 &  9 & 49 &  0
 \end{array}
 \right).
 $$
@@ -205,14 +220,14 @@ $$
 \section{Calculating cluster properties}
 
 \subsection*{Calculating the cluster centroids}
-\label{subsec:clustercentroids}
+\label{sec:clustercentroids}
 
 The centroid of a cluster can be defined either as the mean or as the median of each dimension over all cluster items. The function \verb|clustercentroids| in \verb|Bio.Cluster| can be used to calculate either:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Cluster import clustercentroids
 >>> cdata, cmask = clustercentroids(data)
-\end{verbatim}
+\end{minted}
 where the following arguments are defined:
 \begin{itemize}
 \item \verb|data| (required) \\
@@ -234,10 +249,10 @@ This function returns the tuple \verb|(cdata, cmask)|. The centroid data are sto
 Given a distance function between \emph{items}, we can define the distance between two \emph{clusters} in several ways. The distance between the arithmetic means of the two clusters is used in pairwise centroid-linkage clustering and in $k$-means clustering. In $k$-medoids clustering, the distance between the medians of the two clusters is used instead. The shortest pairwise distance between items of the two clusters is used in pairwise single-linkage clustering, while the longest pairwise distance is used in pairwise maximum-linkage clustering. In pairwise average-linkage clustering, the distance between two clusters is defined as the average over the pairwise distances.
 
 To calculate the distance between two clusters, use
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Cluster import clusterdistance
 >>> distance = clusterdistance(data)
-\end{verbatim}
+\end{minted}
 where the following arguments are defined:
 \begin{itemize}
 \item \verb|data| (required)\\
@@ -302,10 +317,10 @@ The EM algorithm terminates when no further reassignments take place.  We notice
 
 The $k$-means and $k$-medians algorithms are implemented as the function \verb|kcluster| in \verb|Bio.Cluster|:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Cluster import kcluster
 >>> clusterid, error, nfound = kcluster(data)
-\end{verbatim}
+\end{minted}
 where the following arguments are defined:
 \begin{itemize}
 \item \verb|data| (required)\\
@@ -339,10 +354,10 @@ This function returns a tuple \verb|(clusterid, error, nfound)|, where \verb|clu
 \subsection*{$k$-medoids clustering}
 
 The \verb+kmedoids+ routine performs $k$-medoids clustering on a given set of items, using the distance matrix and the number of clusters passed by the user:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Cluster import kmedoids
 >>> clusterid, error, nfound = kmedoids(distance)
-\end{verbatim}
+\end{minted}
 where the following arguments are defined:
 , nclusters=2, npass=1, initialid=None)|
 
@@ -351,22 +366,17 @@ where the following arguments are defined:
 The matrix containing the distances between the items; this matrix can be specified in three ways:
 \begin{itemize}
 \item as a 2D Numerical Python array (in which only the left-lower part of the array will be accessed):
-\begin{verbatim}
-distance = array([[0.0, 1.1, 2.3],
-                  [1.1, 0.0, 4.5],
-                  [2.3, 4.5, 0.0]])
-\end{verbatim}
+\begin{minted}{python}
+distance = array([[0.0, 1.1, 2.3], [1.1, 0.0, 4.5], [2.3, 4.5, 0.0]])
+\end{minted}
 \item as a 1D Numerical Python array containing consecutively the distances in the left-lower part of the distance matrix:
-\begin{verbatim}
+\begin{minted}{python}
 distance = array([1.1, 2.3, 4.5])
-\end{verbatim}
+\end{minted}
 \item as a list containing the rows of the left-lower part of the distance matrix:
-\begin{verbatim}
-distance = [array([]|,
-            array([1.1]),
-            array([2.3, 4.5])
-           ]
-\end{verbatim}
+\begin{minted}{python}
+distance = [array([]), array([1.1]), array([2.3, 4.5])]
+\end{minted}
 \end{itemize}
 These three expressions correspond to the same distance matrix.
 \item \verb|nclusters| (default: \verb|2|) \\
@@ -415,31 +425,31 @@ Here, \verb|left| and \verb|right| are integers referring to the two items or su
 To create a new \verb|Node| object, we need to specify \verb|left| and \verb|right|; \verb|distance| is optional.
 
 %doctest . lib:numpy
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Cluster import Node
 >>> Node(2, 3)
 (2, 3): 0
 >>> Node(2, 3, 0.91)
 (2, 3): 0.91
-\end{verbatim}
+\end{minted}
 
 The attributes \verb|left|, \verb|right|, and \verb|distance| of an existing \verb|Node| object can be modified directly:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> node = Node(4, 5)
 >>> node.left = 6
 >>> node.right = 2
 >>> node.distance = 0.73
 >>> node
 (6, 2): 0.73
-\end{verbatim}
+\end{minted}
 An error is raised if \verb|left| and \verb|right| are not integers, or if \verb|distance| cannot be converted to a floating-point value.
 
 The Python class \verb|Tree| represents a full hierarchical clustering solution. A \verb|Tree| object can be created from a list of \verb|Node| objects:
 
 %doctest . lib:numpy
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Cluster import Node, Tree
 >>> nodes = [Node(1, 2, 0.2), Node(0, 3, 0.5), Node(-2, 4, 0.6), Node(-1, -3, 0.9)]
 >>> tree = Tree(nodes)
@@ -448,23 +458,23 @@ The Python class \verb|Tree| represents a full hierarchical clustering solution.
 (0, 3): 0.5
 (-2, 4): 0.6
 (-1, -3): 0.9
-\end{verbatim}
+\end{minted}
 
 The \verb|Tree| initializer checks if the list of nodes is a valid hierarchical clustering result:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> nodes = [Node(1, 2, 0.2), Node(0, 2, 0.5)]
 >>> Tree(nodes)
 Traceback (most recent call last):
   File "<stdin>", line 1, in ?
 ValueError: Inconsistent tree
-\end{verbatim}
+\end{minted}
 
 Individual nodes in a \verb|Tree| object can be accessed using square brackets:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> nodes = [Node(1, 2, 0.2), Node(0, -1, 0.5)]
 >>> tree = Tree(nodes)
 >>> tree[0]
@@ -473,12 +483,12 @@ Individual nodes in a \verb|Tree| object can be accessed using square brackets:
 (0, -1): 0.5
 >>> tree[-1]
 (0, -1): 0.5
-\end{verbatim}
+\end{minted}
 
 As a \verb|Tree| object is immutable, we cannot change individual nodes in a \verb|Tree| object. However, we can convert the tree to a list of nodes, modify this list, and create a new tree from this list:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> tree = Tree([Node(1, 2, 0.1), Node(0, -1, 0.5), Node(-2, 3, 0.9)])
 >>> print(tree)
 (1, 2): 0.1
@@ -492,26 +502,26 @@ As a \verb|Tree| object is immutable, we cannot change individual nodes in a \ve
 (0, 1): 0.2
 (2, -1): 0.5
 (-2, 3): 0.9
-\end{verbatim}
+\end{minted}
 
 This guarantees that any \verb|Tree| object is always well-formed.
 
 To display a hierarchical clustering solution with visualization programs such as Java Treeview, it is better to scale all node distances such that they are between zero and one. This can be accomplished by calling the \verb|scale| method on an existing \verb|Tree| object:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> tree.scale()
-\end{verbatim}
+\end{minted}
 This method takes no arguments, and returns \verb|None|.
 
 Before drawing the tree, you may also want to reorder the tree nodes. A hierarchical clustering solution of $n$ items can be drawn as $2^{n-1}$ different but equivalent dendrograms by switching the left and right subnode at each node. The \verb|tree.sort(order)| method visits each node in the hierarchical clustering tree and verifies if the average order value of the left subnode is less than or equal to the average order value of the right subnode. If not, the left and right subnodes are exchanged. Here, the order values of the items are given by the user. In the resulting dendrogram, items in the left-to-right order will tend to have increasing order values. The method will return the indices of the elements in the left-to-right order after sorting:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> indices = tree.sort(order)
-\end{verbatim}
+\end{minted}
 such that item \verb|indices[i]| will occur at position $i$ in the dendrogram.
 
 After hierarchical clustering, the items can be grouped into $k$ clusters based on the tree structure stored in the \verb|Tree| object by cutting the tree:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> clusterid = tree.cut(nclusters=1)
-\end{verbatim}
+\end{minted}
 where \verb|nclusters| (defaulting to \verb|1|) is the desired number of clusters $k$.
 This method ignores the top $k-1$ linking events in the tree structure, resulting in $k$ separated clusters of items. The number of clusters $k$ should be positive, and less than or equal to the number of items.
 This method returns an array \verb|clusterid| containing the number of the cluster to which each item is assigned. Clusters are numbered $0$ to $k-1$ in their left-to-right order in the dendrogram.
@@ -519,10 +529,10 @@ This method returns an array \verb|clusterid| containing the number of the clust
 \subsection*{Performing hierarchical clustering}
 
 To perform hierarchical clustering, use the \verb|treecluster| function in \verb|Bio.Cluster|.
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Cluster import treecluster
 >>> tree = treecluster(data)
-\end{verbatim}
+\end{minted}
 where the following arguments are defined:
 
 \begin{itemize}
@@ -547,31 +557,27 @@ Defines the distance function to be used (see \ref{sec:distancefunctions}).
 \end{itemize}
 
 To apply hierarchical clustering on a precalculated distance matrix, specify the \verb|distancematrix| argument when calling \verb|treecluster| function instead of the \verb|data| argument:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Cluster import treecluster
 >>> tree = treecluster(distancematrix=distance)
-\end{verbatim}
+\end{minted}
 In this case, the following arguments are defined:
 \begin{itemize}
 \item \verb|distancematrix| \\
 The distance matrix, which can be specified in three ways:
 \begin{itemize}
 \item as a 2D Numerical Python array (in which only the left-lower part of the array will be accessed):
-\begin{verbatim}
-distance = array([[0.0, 1.1, 2.3],
-                  [1.1, 0.0, 4.5],
-                  [2.3, 4.5, 0.0]])
-\end{verbatim}
+\begin{minted}{python}
+distance = array([[0.0, 1.1, 2.3], [1.1, 0.0, 4.5], [2.3, 4.5, 0.0]])
+\end{minted}
 \item as a 1D Numerical Python array containing consecutively the distances in the left-lower part of the distance matrix:
-\begin{verbatim}
+\begin{minted}{python}
 distance = array([1.1, 2.3, 4.5])
-\end{verbatim}
+\end{minted}
 \item as a list containing the rows of the left-lower part of the distance matrix:
-\begin{verbatim}
-distance = [array([]),
-            array([1.1]),
-            array([2.3, 4.5])
-\end{verbatim}
+\begin{minted}{python}
+distance = [array([]), array([1.1]), array([2.3, 4.5])]
+\end{minted}
 \end{itemize}
 These three expressions correspond to the same distance matrix.
 As \verb|treecluster| may shuffle the values in the distance matrix as part of the clustering algorithm, be sure to save this array in a different variable before calling \verb|treecluster| if you need it later.
@@ -617,10 +623,10 @@ are the dimensions of the rectangle defining the topology.
 The function \verb|somcluster| implements the complete algorithm to calculate a Self-Organizing Map on a rectangular grid. First it initializes the random number generator. The node data are then initialized using the random number generator. The order in which genes or samples are used to modify the SOM is also randomized. The total number of iterations in the SOM algorithm is specified by the user.
 
 To run \verb|somcluster|, use
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Cluster import somcluster
 >>> clusterid, celldata = somcluster(data)
-\end{verbatim}
+\end{minted}
 where the following arguments are defined:
 \begin{itemize}
 \item \verb|data| (required) \\
@@ -662,10 +668,10 @@ Before applying principal component analysis, typically the mean is subtracted f
 The function \verb|pca| below first uses the singular value decomposition to calculate the eigenvalues and eigenvectors of the data matrix. The singular value decomposition is implemented as a translation in C of the Algol procedure \verb|svd| \cite{golub1971}, which uses Householder bidiagonalization and a variant of the QR algorithm. The principal components, the coordinates of each data vector along the principal components, and the eigenvalues corresponding to the principal components are then evaluated and returned in decreasing order of the magnitude of the eigenvalue. If data centering is desired, the mean should be subtracted from each column in the data matrix before calling the \verb|pca| routine.
 
 To apply Principal Component Analysis to a rectangular matrix \verb|data|, use
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Cluster import pca
 >>> columnmean, coordinates, components, eigenvalues = pca(data)
-\end{verbatim}
+\end{minted}
 This function returns a tuple \verb|columnmean, coordinates, components, eigenvalues|:
 \begin{itemize}
 \item \verb|columnmean| \\
@@ -685,34 +691,27 @@ Cluster/TreeView are GUI-based codes for clustering gene expression data. They w
 
 An object of the class \verb|Record| contains all information stored in a Cluster/TreeView-type data file. To store the information contained in the data file in a \verb|Record| object, we first open the file and then read it:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Cluster
 >>> with open("mydatafile.txt") as handle:
 ...     record = Cluster.read(handle)
 ...
-\end{verbatim}
+\end{minted}
 This two-step process gives you some flexibility in the source of the data.
 For example, you can use
 
-\begin{verbatim}
->>> import gzip # Python standard library
+\begin{minted}{pycon}
+>>> import gzip  # Python standard library
 >>> handle = gzip.open("mydatafile.txt.gz", "rt")
-\end{verbatim}
+\end{minted}
 to open a gzipped file, or
-\begin{verbatim}
->>> from urllib.request import urlopen # Python 3 only
+\begin{minted}{pycon}
+>>> from urllib.request import urlopen
 >>> from io import TextIOWrapper
->>>
->>> handle = TextIOWrapper(urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt"))
-\end{verbatim}
+>>> url = "https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt"
+>>> handle = TextIOWrapper(urlopen(url))
+\end{minted}
 to open a file stored on the Internet before calling \verb|read|.
-
-Note for Python 2 this can be done by using:
-\begin{verbatim}
->>> from urllib import urlopen # Python 2 only
->>>
->>> handle = urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt")
-\end{verbatim}
 
 The \verb|read| command reads the tab-delimited text file \verb|mydatafile.txt| containing gene expression data in the format specified for Michael Eisen's Cluster/TreeView program. In this file format, rows represent genes and columns represent samples or observations. For a simple time course, a minimal input file would look like this:
 
@@ -731,7 +730,7 @@ YAL010C & 1.2 & 1   & 1.1 &  4.5 &  8.3 \\
 \end{center}
 \end{table}
 
-\noindent Each row (gene) has an identifier that always goes in the first column. In this example, we are using yeast open reading frame codes. Each column (sample) has a label in the first row. In this example, the labels describe the time at which a sample was taken. The first column of the first row contains a special field that tells the program what kind of objects are in each row. In this case, YORF stands for yeast open reading frame. This field can be any alpha-numeric value. The remaining cells in the table contain data for the appropriate gene and sample. The 5.8 in row 2 column 4 means that the observed value for gene YAL001C at 2 hours was 5.8. Missing values are acceptable and are designated by empty cells (e.g. YAL004C at 2 hours).
+\noindent Each row (gene) has an identifier that always goes in the first column. In this example, we are using yeast open reading frame codes. Each column (sample) has a label in the first row. In this example, the labels describe the time at which a sample was taken. The first column of the first row contains a special field that tells the program what kind of objects are in each row. In this case, YORF stands for yeast open reading frame. This field can be any alphanumeric value. The remaining cells in the table contain data for the appropriate gene and sample. The 5.8 in row 2 column 4 means that the observed value for gene YAL001C at 2 hours was 5.8. Missing values are acceptable and are designated by empty cells (e.g. YAL004C at 2 hours).
 
 The input file may contain additional information. A maximal input file would look like this:
 
@@ -792,9 +791,9 @@ After loading a \verb|Record| object, each of these attributes can be accessed a
 \subsection*{Calculating the distance matrix}
 
 To calculate the distance matrix between the items stored in the record, use
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> matrix = record.distancematrix()
-\end{verbatim}
+\end{minted}
 where the following arguments are defined:
 \begin{itemize}
 \item \verb|transpose| (default: \verb|0|) \\
@@ -803,14 +802,14 @@ Determines if the distances between the rows of \verb|data| are to be calculated
 Defines the distance function to be used (see \ref{sec:distancefunctions}).
 \end{itemize}
 
-This function returns the distance matrix as a list of rows, where the number of columns of each row is equal to the row number (see section \ref{subsec:distancematrix}).
+This function returns the distance matrix as a list of rows, where the number of columns of each row is equal to the row number (see section \ref{sec:distancematrix}).
 
 \subsection*{Calculating the cluster centroids}
 
 To calculate the centroids of clusters of items stored in the record, use
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> cdata, cmask = record.clustercentroids()
-\end{verbatim}
+\end{minted}
 
 \begin{itemize}
 \item \verb|clusterid| (default: \verb|None|) \\
@@ -821,13 +820,13 @@ Specifies whether the arithmetic mean (\verb|method=='a'|) or the median (\verb|
 Determines if the centroids of the rows of \verb|data| are to be calculated (\verb|transpose| is \verb|False|), or the centroids of the columns of \verb|data| (\verb|transpose| is \verb|True|).
 \end{itemize}
 
-This function returns the tuple \verb|cdata, cmask|; see section \ref{subsec:clustercentroids} for a description.
+This function returns the tuple \verb|cdata, cmask|; see section \ref{sec:clustercentroids} for a description.
 
 \subsection*{Calculating the distance between clusters}
 To calculate the distance between clusters of items stored in the record, use
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> distance = record.clusterdistance()
-\end{verbatim}
+\end{minted}
 where the following arguments are defined:
 \begin{itemize}
 \item \verb|index1| (default: \verb|0|) \\
@@ -853,9 +852,9 @@ If \verb|transpose| is \verb|True|, calculate the distance between the columns o
 \subsection*{Performing hierarchical clustering}
 
 To perform hierarchical clustering on the items stored in the record, use
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> tree = record.treecluster()
-\end{verbatim}
+\end{minted}
 where the following arguments are defined:
 \begin{itemize}
 \item \verb|transpose| (default: \verb|0|) \\
@@ -879,9 +878,9 @@ This function returns a \verb|Tree| object. This object contains $\left(\textrm{
 \subsection*{Performing $k$-means or $k$-medians clustering}
 
 To perform $k$-means or $k$-medians clustering on the items stored in the record, use
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> clusterid, error, nfound = record.kcluster()
-\end{verbatim}
+\end{minted}
 where the following arguments are defined:
 \begin{itemize}
 \item \verb|nclusters| (default: \verb|2|) \\
@@ -906,9 +905,9 @@ This function returns a tuple \verb|(clusterid, error, nfound)|, where \verb|clu
 \subsection*{Calculating a Self-Organizing Map}
 
 To calculate a Self-Organizing Map of the items stored in the record, use
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> clusterid, celldata = record.somcluster()
-\end{verbatim}
+\end{minted}
 where the following arguments are defined:
 \begin{itemize}
 \item \verb|transpose| (default: \verb|0|) \\
@@ -934,9 +933,9 @@ An array with dimensions $\left(\verb|nxgrid|, \verb|nygrid|, \textrm{number of 
 \subsection*{Saving the clustering result}
 
 To save the clustering result, use
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> record.save(jobname, geneclusters, expclusters)
-\end{verbatim}
+\end{minted}
 where the following arguments are defined:
 \begin{itemize}
 \item \verb|jobname| \\
@@ -954,10 +953,11 @@ This is an example of a hierarchical clustering calculation, using single linkag
 
 The example data \verb|cyano.txt| can be found in Biopython's \verb|Tests/Cluster| subdirectory and is from the paper \cite[Hihara \textit{et al.}, 2001]{hihara2001}.
 
-%all cyano_result* files created here during the run of test_Tutorial.py are 
+%all cyano_result* files created here during the run of test_Tutorial.py are
 %after automatically deleted at the end of the test run.
+
 %doctest ../Tests/Cluster lib:numpy
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Cluster
 >>> with open("cyano.txt") as handle:
 ...     record = Cluster.read(handle)
@@ -966,14 +966,14 @@ The example data \verb|cyano.txt| can be found in Biopython's \verb|Tests/Cluste
 >>> genetree.scale()
 >>> exptree = record.treecluster(dist="u", transpose=1)
 >>> record.save("cyano_result", genetree, exptree)
-\end{verbatim}
+\end{minted}
 
 This will create the files \verb|cyano_result.cdt|, \verb|cyano_result.gtr|, and \verb|cyano_result.atr|.
 
 Similarly, we can save a $k$-means clustering solution:
 
 %doctest ../Tests/Cluster lib:numpy
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Cluster
 >>> with open("cyano.txt") as handle:
 ...     record = Cluster.read(handle)
@@ -981,6 +981,6 @@ Similarly, we can save a $k$-means clustering solution:
 >>> (geneclusters, error, ifound) = record.kcluster(nclusters=5, npass=1000)
 >>> (expclusters, error, ifound) = record.kcluster(nclusters=2, npass=100, transpose=1)
 >>> record.save("cyano_result", geneclusters, expclusters)
-\end{verbatim}
+\end{minted}
 
 This will create the files \verb|cyano_result_K_G2_A2.cdt|, \verb|cyano_result_K_G2.kgg|, and \verb|cyano_result_K_A2.kag|.

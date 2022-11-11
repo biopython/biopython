@@ -9,7 +9,7 @@ import os
 import unittest
 import tempfile
 
-# from Bio._py3k import StringIO
+# from io import StringIO
 from Bio import AlignIO
 from Bio import Phylo
 from Bio.Phylo import BaseTree
@@ -23,16 +23,17 @@ temp_dir = tempfile.mkdtemp()
 
 
 class BitStringTest(unittest.TestCase):
-    """Test for _BitString class"""
+    """Test for _BitString class."""
+
     def test_bitstring(self):
-        bitstr1 = _BitString('0011')
-        bitstr2 = _BitString('0101')
-        bitstr3 = _BitString('0001')
-        bitstr4 = _BitString('0010')
-        self.assertRaises(TypeError, _BitString, '10O1')
-        self.assertEqual(bitstr1 & bitstr2, _BitString('0001'))
-        self.assertEqual(bitstr1 | bitstr2, _BitString('0111'))
-        self.assertEqual(bitstr1 ^ bitstr2, _BitString('0110'))
+        bitstr1 = _BitString("0011")
+        bitstr2 = _BitString("0101")
+        bitstr3 = _BitString("0001")
+        bitstr4 = _BitString("0010")
+        self.assertRaises(TypeError, _BitString, "10O1")
+        self.assertEqual(bitstr1 & bitstr2, _BitString("0001"))
+        self.assertEqual(bitstr1 | bitstr2, _BitString("0111"))
+        self.assertEqual(bitstr1 ^ bitstr2, _BitString("0110"))
         self.assertFalse(bitstr1.contains(bitstr2))
         self.assertTrue(bitstr1.contains(bitstr1))
         self.assertTrue(bitstr1.contains(bitstr3))
@@ -49,24 +50,24 @@ class BitStringTest(unittest.TestCase):
 
 
 class ConsensusTest(unittest.TestCase):
-    """Test for consensus methods"""
+    """Test for consensus methods."""
 
     def setUp(self):
-        self.trees = list(Phylo.parse('./TreeConstruction/trees.tre', 'newick'))
+        self.trees = list(Phylo.parse("./TreeConstruction/trees.tre", "newick"))
 
     def test_count_clades(self):
         bitstr_counts, len_trees = Consensus._count_clades(self.trees)
         self.assertEqual(len_trees, len(self.trees))
         self.assertEqual(len(bitstr_counts), 6)
-        self.assertEqual(bitstr_counts[_BitString('11111')][0], 3)
-        self.assertEqual(bitstr_counts[_BitString('11000')][0], 2)
-        self.assertEqual(bitstr_counts[_BitString('00111')][0], 3)
-        self.assertEqual(bitstr_counts[_BitString('00110')][0], 2)
-        self.assertEqual(bitstr_counts[_BitString('00011')][0], 1)
-        self.assertEqual(bitstr_counts[_BitString('01111')][0], 1)
+        self.assertEqual(bitstr_counts[_BitString("11111")][0], 3)
+        self.assertEqual(bitstr_counts[_BitString("11000")][0], 2)
+        self.assertEqual(bitstr_counts[_BitString("00111")][0], 3)
+        self.assertEqual(bitstr_counts[_BitString("00110")][0], 2)
+        self.assertEqual(bitstr_counts[_BitString("00011")][0], 1)
+        self.assertEqual(bitstr_counts[_BitString("01111")][0], 1)
 
     def test_strict_consensus(self):
-        ref_trees = list(Phylo.parse('./TreeConstruction/strict_refs.tre', 'newick'))
+        ref_trees = list(Phylo.parse("./TreeConstruction/strict_refs.tre", "newick"))
         # three trees
         consensus_tree = Consensus.strict_consensus(self.trees)
         # tree_file = StringIO()
@@ -85,7 +86,7 @@ class ConsensusTest(unittest.TestCase):
         # tree_file.close()
 
     def test_majority_consensus(self):
-        ref_trees = Phylo.parse('./TreeConstruction/majority_ref.tre', 'newick')
+        ref_trees = Phylo.parse("./TreeConstruction/majority_ref.tre", "newick")
         ref_tree = next(ref_trees)
         consensus_tree = Consensus.majority_consensus(self.trees)
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_tree))
@@ -94,7 +95,7 @@ class ConsensusTest(unittest.TestCase):
         self.assertTrue(Consensus._equal_topology(consensus_tree, ref_tree))
 
     def test_adam_consensus(self):
-        ref_trees = list(Phylo.parse('./TreeConstruction/adam_refs.tre', 'newick'))
+        ref_trees = list(Phylo.parse("./TreeConstruction/adam_refs.tre", "newick"))
         # three trees
         consensus_tree = Consensus.adam_consensus(self.trees)
         # tree_file = '/home/yeyanbo/adam.tres'
@@ -115,19 +116,25 @@ class ConsensusTest(unittest.TestCase):
 
     def test_get_support(self):
         support_tree = Consensus.get_support(self.trees[0], self.trees)
-        clade = support_tree.common_ancestor([support_tree.find_any(name="Beta"), support_tree.find_any(name="Gamma")])
+        clade = support_tree.common_ancestor(
+            [support_tree.find_any(name="Beta"), support_tree.find_any(name="Gamma")]
+        )
         self.assertEqual(clade.confidence, 2 * 100.0 / 3)
-        clade = support_tree.common_ancestor([support_tree.find_any(name="Alpha"), support_tree.find_any(name="Beta")])
+        clade = support_tree.common_ancestor(
+            [support_tree.find_any(name="Alpha"), support_tree.find_any(name="Beta")]
+        )
         self.assertEqual(clade.confidence, 3 * 100.0 / 3)
-        clade = support_tree.common_ancestor([support_tree.find_any(name="Delta"), support_tree.find_any(name="Epsilon")])
+        clade = support_tree.common_ancestor(
+            [support_tree.find_any(name="Delta"), support_tree.find_any(name="Epsilon")]
+        )
         self.assertEqual(clade.confidence, 2 * 100.0 / 3)
 
 
 class BootstrapTest(unittest.TestCase):
-    """Test for bootstrap methods"""
+    """Test for bootstrap methods."""
 
     def setUp(self):
-        self.msa = AlignIO.read('TreeConstruction/msa.phy', 'phylip')
+        self.msa = AlignIO.read("TreeConstruction/msa.phy", "phylip")
 
     def test_bootstrap(self):
         msa_list = list(Consensus.bootstrap(self.msa, 100))
@@ -136,20 +143,22 @@ class BootstrapTest(unittest.TestCase):
         self.assertEqual(len(msa_list[0][0]), len(self.msa[0]))
 
     def test_bootstrap_trees(self):
-        calculator = DistanceCalculator('blosum62')
+        calculator = DistanceCalculator("blosum62")
         constructor = DistanceTreeConstructor(calculator)
         trees = list(Consensus.bootstrap_trees(self.msa, 100, constructor))
         self.assertEqual(len(trees), 100)
-        self.assertTrue(isinstance(trees[0], BaseTree.Tree))
+        self.assertIsInstance(trees[0], BaseTree.Tree)
 
     def test_bootstrap_consensus(self):
-        calculator = DistanceCalculator('blosum62')
-        constructor = DistanceTreeConstructor(calculator, 'nj')
-        tree = Consensus.bootstrap_consensus(self.msa, 100, constructor, Consensus.majority_consensus)
-        self.assertTrue(isinstance(tree, BaseTree.Tree))
-        Phylo.write(tree, os.path.join(temp_dir, 'bootstrap_consensus.tre'), 'newick')
+        calculator = DistanceCalculator("blosum62")
+        constructor = DistanceTreeConstructor(calculator, "nj")
+        tree = Consensus.bootstrap_consensus(
+            self.msa, 100, constructor, Consensus.majority_consensus
+        )
+        self.assertIsInstance(tree, BaseTree.Tree)
+        Phylo.write(tree, os.path.join(temp_dir, "bootstrap_consensus.tre"), "newick")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -11,35 +11,45 @@ from Bio import MissingExternalDependencyError
 from Bio.Align.Applications import MafftCommandline
 
 # Try to avoid problems when the OS is in another language
-os.environ['LANG'] = 'C'
+os.environ["LANG"] = "C"
 
 mafft_exe = None
 if sys.platform == "win32":
-    raise MissingExternalDependencyError("Testing with MAFFT not implemented on Windows yet")
+    raise MissingExternalDependencyError(
+        "Testing with MAFFT not implemented on Windows yet"
+    )
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
+
     output = getoutput("mafft -help")
-    if "not found" not in output and "MAFFT" in output:
-        mafft_exe = "mafft"
+    if "not found" not in output and "not recognized" not in output:
+        if "MAFFT" in output:
+            mafft_exe = "mafft"
 if not mafft_exe:
     raise MissingExternalDependencyError(
-        "Install MAFFT if you want to use the Bio.Align.Applications wrapper.")
+        "Install MAFFT if you want to use the Bio.Align.Applications wrapper."
+    )
 
 
 def check_mafft_version(mafft_exe):
-    child = subprocess.Popen("%s --help" % mafft_exe,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE,
-                             universal_newlines=True,
-                             shell=(sys.platform != "win32"))
+    child = subprocess.Popen(
+        f"{mafft_exe} --help",
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,
+        shell=(sys.platform != "win32"),
+    )
     stdoutdata, stderrdata = child.communicate()
     output = stdoutdata + "\n" + stderrdata
     return_code = child.returncode
     del child
-    if "correctly installed?" in output \
-    or "mafft binaries have to be installed" in output:
+    if (
+        "correctly installed?" in output
+        or "mafft binaries have to be installed" in output
+    ):
         raise MissingExternalDependencyError(
-            "MAFFT does not seem to be correctly installed.")
+            "MAFFT does not seem to be correctly installed."
+        )
 
     # e.g. "MAFFT version 5.732 (2005/09/14)\n"
     # e.g. "  MAFFT v6.717b (2009/12/03)\n"
@@ -47,11 +57,12 @@ def check_mafft_version(mafft_exe):
         index = output.find(marker)
         if index == -1:
             continue
-        version = output[index + len(marker):].strip().split(None, 1)[0]
+        version = output[index + len(marker) :].strip().split(None, 1)[0]
         major = int(version.split(".", 1)[0])
         if major < 6:
-            raise MissingExternalDependencyError("Test requires MAFFT v6 or "
-                                                 "later (found %s)." % version)
+            raise MissingExternalDependencyError(
+                f"Test requires MAFFT v6 or later (found {version})."
+            )
         return (major, version)
     raise MissingExternalDependencyError("Couldn't determine MAFFT version.")
 
@@ -61,7 +72,6 @@ version_major, version_string = check_mafft_version(mafft_exe)
 
 
 class MafftApplication(unittest.TestCase):
-
     def setUp(self):
         self.infile1 = "Fasta/f002"
 
@@ -78,8 +88,11 @@ class MafftApplication(unittest.TestCase):
         self.assertTrue(stdoutdata.startswith(">gi|1348912|gb|G26680|G26680"))
         # Used to get "Progressive alignment ..." but in v7.245
         # became "Progressive alignment 1/2..." and "Progressive alignment 2/2..."
-        self.assertTrue(("Progressive alignment ..." in stderrdata) or
-                        ("Progressive alignment 1/" in stderrdata), stderrdata)
+        self.assertTrue(
+            ("Progressive alignment ..." in stderrdata)
+            or ("Progressive alignment 1/" in stderrdata),
+            stderrdata,
+        )
         self.assertNotIn("$#=0", stderrdata)
 
     def test_Mafft_with_options(self):
@@ -107,34 +120,38 @@ class MafftApplication(unittest.TestCase):
         self.assertNotIn("$#=0", stderrdata)
 
     if version_major >= 7:
+
         def test_Mafft_with_PHYLIP_output(self):
             """Simple round-trip through app with PHYLIP output."""
-            cmdline = MafftCommandline(mafft_exe, input=self.infile1,
-                                       phylipout=True)
+            cmdline = MafftCommandline(mafft_exe, input=self.infile1, phylipout=True)
             self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
             stdoutdata, stderrdata = cmdline()
             # e.g. " 3 706\n" or " 3 681" but allow some variation in the column count
-            self.assertTrue(stdoutdata.startswith(" 3 68") or
-                            stdoutdata.startswith(" 3 69") or
-                            stdoutdata.startswith(" 3 70"), stdoutdata)
-            self.assertTrue("gi|1348912 " in stdoutdata,
-                            stdoutdata)
-            self.assertTrue("gi|1348912|gb|G26680|G26680" not in stdoutdata,
-                            stdoutdata)
+            self.assertTrue(
+                stdoutdata.startswith(" 3 68")
+                or stdoutdata.startswith(" 3 69")
+                or stdoutdata.startswith(" 3 70"),
+                stdoutdata,
+            )
+            self.assertIn("gi|1348912 ", stdoutdata, stdoutdata)
+            self.assertNotIn("gi|1348912|gb|G26680|G26680", stdoutdata, stdoutdata)
             self.assertNotIn("$#=0", stderrdata)
 
         def test_Mafft_with_PHYLIP_namelength(self):
             """Check PHYLIP with --namelength."""
-            cmdline = MafftCommandline(mafft_exe, input=self.infile1,
-                                       phylipout=True, namelength=50)
+            cmdline = MafftCommandline(
+                mafft_exe, input=self.infile1, phylipout=True, namelength=50
+            )
             self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
             stdoutdata, stderrdata = cmdline()
             # e.g. " 3 706\n" or " 3 681" but allow some variation in the column count
-            self.assertTrue(stdoutdata.startswith(" 3 68") or
-                            stdoutdata.startswith(" 3 69") or
-                            stdoutdata.startswith(" 3 70"), stdoutdata)
-            self.assertTrue("gi|1348912|gb|G26680|G26680" in stdoutdata,
-                            stdoutdata)
+            self.assertTrue(
+                stdoutdata.startswith(" 3 68")
+                or stdoutdata.startswith(" 3 69")
+                or stdoutdata.startswith(" 3 70"),
+                stdoutdata,
+            )
+            self.assertIn("gi|1348912|gb|G26680|G26680", stdoutdata, stdoutdata)
             self.assertNotIn("$#=0", stderrdata)
 
     def test_Mafft_with_complex_command_line(self):
@@ -154,11 +171,14 @@ class MafftApplication(unittest.TestCase):
         cmdline.set_parameter("--treeout", True)
         cmdline.set_parameter("nuc", True)
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        self.assertEqual(str(cmdline), mafft_exe +
-                         " --localpair --weighti 4.2 --retree 5 " +
-                         "--maxiterate 200 --nofft --op 2.04 --ep 0.51" +
-                         " --lop 0.233 --lep 0.2 --reorder --treeout" +
-                         " --nuc Fasta/f002")
+        self.assertEqual(
+            str(cmdline),
+            mafft_exe
+            + " --localpair --weighti 4.2 --retree 5 "
+            + "--maxiterate 200 --nofft --op 2.04 --ep 0.51"
+            + " --lop 0.233 --lep 0.2 --reorder --treeout"
+            + " --nuc Fasta/f002",
+        )
         stdoutdata, stderrdata = cmdline()
         self.assertTrue(stdoutdata.startswith(">gi|1348912|gb|G26680|G26680"))
         self.assertNotIn("$#=0", stderrdata)

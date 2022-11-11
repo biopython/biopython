@@ -1,38 +1,104 @@
 \chapter{Going 3D: The PDB module}
+\label{chapter:pdb}
 
-Bio.PDB is a Biopython module that focuses on working with crystal structures of biological macromolecules. Among other things, Bio.PDB includes a PDBParser class that produces a Structure object, which can be used to access the atomic data in the file in a convenient manner. There is limited support for parsing the information contained in the PDB header.
+Bio.PDB is a Biopython module that focuses on working with crystal structures of biological macromolecules. Among other things, Bio.PDB includes a PDBParser class that produces a Structure object, which can be used to access the atomic data in the file in a convenient manner. There is limited support for parsing the information contained in the PDB header. PDB file format is no longer being modified or extended to support new content and PDBx/mmCIF became the standard PDB archive format in 2014. All the Worldwide Protein Data Bank (wwPDB) sites uses the macromolecular Crystallographic Information File (mmCIF) data dictionaries to describe the information content of PDB entries. mmCIF uses a flexible and extensible key-value pair format for representing macromolecular structural data and imposes no limitations for the number of atoms, residues or chains that can be represented in a single PDB entry (no split entries!).
 
 %Note the \verb|Bio.PDB| module requires Numerical Python (numpy) to be installed.
 
 \section{Reading and writing crystal structure files}
 
+\subsection{Reading an mmCIF file}
+
+First create an \texttt{MMCIFParser} object:
+
+\begin{minted}{pycon}
+>>> from Bio.PDB.MMCIFParser import MMCIFParser
+>>> parser = MMCIFParser()
+\end{minted}
+Then use this parser to create a structure object from the mmCIF file:
+\begin{minted}{pycon}
+>>> structure = parser.get_structure("1fat", "1fat.cif")
+\end{minted}
+
+To have some more low level access to an mmCIF file, you can use the \verb+MMCIF2Dict+ class to create a Python dictionary that maps all mmCIF
+tags in an mmCIF file to their values. Whether there are multiple values
+(like in the case of tag \verb+_atom_site.Cartn_y+, which holds
+the $y$ coordinates of all atoms) or a single value (like the initial deposition date), the tag is mapped to a list of values.
+The dictionary is created from the mmCIF file as follows:
+
+\begin{minted}{pycon}
+>>> from Bio.PDB.MMCIF2Dict import MMCIF2Dict
+>>> mmcif_dict = MMCIF2Dict("1FAT.cif")
+\end{minted}
+
+Example: get the solvent content from an mmCIF file:
+\begin{minted}{pycon}
+>>> sc = mmcif_dict["_exptl_crystal.density_percent_sol"]
+\end{minted}
+
+Example: get the list of the $y$ coordinates of all atoms
+\begin{minted}{pycon}
+>>> y_list = mmcif_dict["_atom_site.Cartn_y"]
+\end{minted}
+
+
+\subsection{Reading files in the MMTF format}
+
+You can use the direct MMTFParser to read a structure from a file:
+%want to use doctest ../Tests lib:mmtf
+%but will trigger PDBConstructionWarning
+\begin{minted}{pycon}
+>>> from Bio.PDB.mmtf import MMTFParser
+>>> structure = MMTFParser.get_structure("PDB/4CUP.mmtf")
+\end{minted}
+
+Or you can use the same class to get a structure by its PDB ID:
+%want online doctest here
+\begin{minted}{pycon}
+>>> structure = MMTFParser.get_structure_from_url("4CUP")
+\end{minted}
+
+This gives you a Structure object as if read from a PDB or mmCIF file.
+
+You can also have access to the underlying data using the external
+MMTF library which Biopython is using internally:
+%want online doctest here
+\begin{minted}{pycon}
+>>> from mmtf import fetch
+>>> decoded_data = fetch("4CUP")
+\end{minted}
+For example you can access just the X-coordinate.
+\begin{minted}{pycon}
+>>> print(decoded_data.x_coord_list)
+\end{minted}
+
 \subsection{Reading a PDB file}
 
 First we create a \texttt{PDBParser} object:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.PDB.PDBParser import PDBParser
 >>> parser = PDBParser(PERMISSIVE=1)
-\end{verbatim}
+\end{minted}
 
-The {\tt PERMISSIVE} flag indicates that a number of common problems (see \ref{problem structures}) associated with PDB files will be ignored (but note that some atoms and/or residues will be missing). If the flag is not present a {\tt PDBConstructionException} will be generated if any problems are detected during the parse operation.
+The \texttt{PERMISSIVE} flag indicates that a number of common problems (see \ref{sec:problem_structures}) associated with PDB files will be ignored (but note that some atoms and/or residues will be missing). If the flag is not present a \texttt{PDBConstructionException} will be generated if any problems are detected during the parse operation.
 
 The Structure object is then produced by letting the \texttt{PDBParser} object parse a PDB file (the PDB file in this case is called \verb|pdb1fat.ent|, \verb|1fat| is a user defined name for the structure):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> structure_id = "1fat"
 >>> filename = "pdb1fat.ent"
 >>> structure = parser.get_structure(structure_id, filename)
-\end{verbatim}
+\end{minted}
 
 You can extract the header and trailer (simple lists of strings) of the PDB
-file from the PDBParser object with the {\tt get\_header} and {\tt get\_trailer}
+file from the PDBParser object with the \texttt{get\_header} and \texttt{get\_trailer}
 methods.  Note however that many PDB files contain headers with
 incomplete or erroneous information. Many of the errors have been
 fixed in the equivalent mmCIF files. \emph{Hence, if you are interested
 in the header information, it is a good idea to extract information
 from mmCIF files using the} \texttt{\emph{MMCIF2Dict}} \emph{tool
-described below, instead of parsing the PDB header. }
+described above, instead of parsing the PDB header. }
 
 Now that is clarified, let's return to parsing the PDB header. The
 structure object has an attribute called \texttt{header} which is
@@ -40,15 +106,17 @@ a Python dictionary that maps header records to their values.
 
 Example:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> resolution = structure.header["resolution"]
 >>> keywords = structure.header["keywords"]
-\end{verbatim}
+\end{minted}
 The available keys are \verb+name+, \verb+head+, \verb+deposition_date+, 
 \verb+release_date+, \verb+structure_method+, \verb+resolution+, 
-\verb+structure_reference+ (which maps to a list of references), 
-\verb+journal_reference+, \verb+author+, \verb+compound+ (which maps to a dictionary with various information about the crystallized compound),
-\verb+has_missing_residues+, and \verb+missing_residues+.
+\verb+structure_reference+ (which maps to a list of references),
+\verb+journal_reference+, \verb+author+, \verb+compound+ (which maps to
+a dictionary with various information about the crystallized compound),
+\verb+has_missing_residues+, \verb+missing_residues+, and \verb+astral+ 
+(which maps to dictionary with additional information about the domain if present).
 
 \verb+has_missing_residues+ maps to a bool that is True if at least
 one non-empty \verb+REMARK 465+ header line was found. In this case
@@ -62,78 +130,33 @@ the PDB specification.}
 The dictionary can also be created without creating a \texttt{Structure}
 object, ie. directly from the PDB file:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.PDB import parse_pdb_header
 >>> with open(filename, "r") as handle:
 ...     header_dict = parse_pdb_header(handle)
 ...
-\end{verbatim}
+\end{minted}
 
-\subsection{Reading an mmCIF file}
+\subsection{Reading a PQR file}
 
-Similarly to the case of PDB files, first create an \texttt{MMCIFParser} object:
+In order to parse a PQR file, proceed in a similar manner as in the case
+of PDB files:
 
-\begin{verbatim}
->>> from Bio.PDB.MMCIFParser import MMCIFParser
->>> parser = MMCIFParser()
-\end{verbatim}
-Then use this parser to create a structure object from the mmCIF file:
-\begin{verbatim}
->>> structure = parser.get_structure("1fat", "1fat.cif")
-\end{verbatim}
+Create a \texttt{PDBParser} object, using the \texttt{is\_pqr} flag:
 
-To have some more low level access to an mmCIF file, you can use the \verb+MMCIF2Dict+ class to create a Python dictionary that maps all mmCIF
-tags in an mmCIF file to their values. If there are multiple values
-(like in the case of tag \verb+_atom_site.Cartn_y+, which holds
-the $y$ coordinates of all atoms), the tag is mapped to a list of values.
-The dictionary is created from the mmCIF file as follows:
+\begin{minted}{pycon}
+>>> from Bio.PDB.PDBParser import PDBParser
+>>> pqr_parser = PDBParser(PERMISSIVE=1, is_pqr=True)
+\end{minted}
 
-\begin{verbatim}
->>> from Bio.PDB.MMCIF2Dict import MMCIF2Dict
->>> mmcif_dict = MMCIF2Dict("1FAT.cif")
-\end{verbatim}
+The \texttt{is\_pqr} flag set to \texttt{True} indicates that the file to be parsed is a PQR file, 
+and that the parser should read the atomic charge and radius fields for each atom entry. Following the same procedure as for PQR files, a Structure object is then produced, and the PQR file is parsed.
 
-Example: get the solvent content from an mmCIF file:
-\begin{verbatim}
->>> sc = mmcif_dict["_exptl_crystal.density_percent_sol"]
-\end{verbatim}
-
-Example: get the list of the $y$ coordinates of all atoms
-\begin{verbatim}
->>> y_list = mmcif_dict["_atom_site.Cartn_y"]
-\end{verbatim}
-
-
-\subsection{Reading files in the MMTF format}
-
-You can use the direct MMTFParser to read a structure from a file:
-%want to use doctest ../Tests lib:mmtf
-%but will trigger PDBConstructionWarning
-\begin{verbatim}
->>> from Bio.PDB.mmtf import MMTFParser
->>> structure = MMTFParser.get_structure("PDB/4CUP.mmtf")
-\end{verbatim}
-
-Or you can use the same class to get a structure by its PDB ID:
-%want online doctest here
-\begin{verbatim}
->>> structure = MMTFParser.get_structure_from_url("4CUP")
-\end{verbatim}
-
-This gives you a Structure object as if read from a PDB or mmCIF file.
-
-You can also have access to the underlying data using the external
-MMTF library which Biopython is using internally:
-%want online doctest here
-\begin{verbatim}
->>> from mmtf import fetch
->>> decoded_data = fetch("4CUP")
-\end{verbatim}
-For example you can access just the X-coordinate.
-\begin{verbatim}
->>> print(decoded_data.x_coord_list)
-...
-\end{verbatim}
+\begin{minted}{pycon}
+>>> structure_id = "1fat"
+>>> filename = "pdb1fat.ent"
+>>> structure = parser.get_structure(structure_id, filename, is_pqr=True)
+\end{minted}
 
 \subsection{Reading files in the PDB XML format}
 
@@ -141,18 +164,36 @@ That's not yet supported, but we are definitely planning to support that
 in the future (it's not a lot of work). Contact the Biopython developers
 via the mailing list if you need this.
 
+\subsection{Writing mmCIF files}
+
+The \texttt{MMCIFIO} class can be used to write structures to the mmCIF file format:
+
+\begin{minted}{pycon}
+>>> io = MMCIFIO()
+>>> io.set_structure(s)
+>>> io.save("out.cif")
+\end{minted}
+The \texttt{Select} class can be used in a similar way to \texttt{PDBIO} below.
+mmCIF dictionaries read using \texttt{MMCIF2Dict} can also be written:
+
+\begin{minted}{pycon}
+>>> io = MMCIFIO()
+>>> io.set_dict(d)
+>>> io.save("out.cif")
+\end{minted}
+
 \subsection{Writing PDB files}
 
-Use the PDBIO class for this. It's easy to write out specific parts
+Use the \texttt{PDBIO} class for this. It's easy to write out specific parts
 of a structure too, of course.
 
 Example: saving a structure
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> io = PDBIO()
 >>> io.set_structure(s)
 >>> io.save("out.pdb")
-\end{verbatim}
+\end{minted}
 If you want to write out a part of the structure, make use of the
 \texttt{Select} class (also in \texttt{PDBIO}). Select has four methods:
 
@@ -168,10 +209,10 @@ is included in the output). By subclassing \texttt{Select} and returning
 Cumbersome maybe, but very powerful. The following code only writes
 out glycine residues:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> class GlySelect(Select):
 ...     def accept_residue(self, residue):
-...         if residue.get_name()=="GLY":
+...         if residue.get_name() == "GLY":
 ...             return True
 ...         else:
 ...             return False
@@ -179,28 +220,42 @@ out glycine residues:
 >>> io = PDBIO()
 >>> io.set_structure(s)
 >>> io.save("gly_only.pdb", GlySelect())
-\end{verbatim}
+\end{minted}
 If this is all too complicated for you, the \texttt{Dice} module contains
 a handy \texttt{extract} function that writes out all residues in
 a chain between a start and end residue.
 
-\subsection{Writing mmCIF files}
+\subsection{Writing PQR files}
 
-A similar interface can be used to write structures to the mmCIF file format:
+Use the \texttt{PDBIO} class as you would for a PDB file, with the flag \texttt{is\_pqr=True}. 
+The PDBIO methods can be used in the case of PQR files as well.
 
-\begin{verbatim}
->>> io = MMCIFIO()
+Example: writing a PQR file
+
+\begin{minted}{pycon}
+>>> io = PDBIO(is_pqr=True)
 >>> io.set_structure(s)
->>> io.save("out.cif")
-\end{verbatim}
-The \texttt{Select} class can be used in a similar way to \texttt{PDBIO} above.
-mmCIF dictionaries read using \texttt{MMCIF2Dict} can also be written:
+>>> io.save("out.pdb")
+\end{minted}
 
-\begin{verbatim}
->>> io = MMCIFIO()
->>> io.set_dict(d)
->>> io.save("out.cif")
-\end{verbatim}
+\subsection{Writing MMTF files}
+
+To write structures to the MMTF file format:
+
+\begin{minted}{pycon}
+>>> from Bio.PDB.mmtf import MMTFIO
+>>> io = MMTFIO()
+>>> io.set_structure(s)
+>>> io.save("out.mmtf")
+\end{minted}
+
+The \texttt{Select} class can be used as above. Note that the bonding
+information, secondary structure assignment and some other information contained
+in standard MMTF files is not written out as it is not easy to determine from
+the structure object. In addition, molecules that are grouped into the same
+entity in standard MMTF files are treated as separate entities by
+\texttt{MMTFIO}.
+
 
 \section{Structure representation}
 
@@ -226,7 +281,7 @@ is fairly certain that the file contains an error or at least does not describe
 the structure unambiguously. If a SMCRA data structure cannot be generated,
 there is reason to suspect a problem. Parsing a PDB file can thus be used to
 detect likely problems. We will give several examples of this in section
-\ref{problem structures}.
+\ref{sec:problem_structures}.
 
 \begin{figure}[htbp]
 \begin{htmlonly}
@@ -261,58 +316,58 @@ In general, a child Entity object (i.e. Atom, Residue, Chain, Model) can be
 extracted from its parent (i.e. Residue, Chain, Model, Structure, respectively)
 by using an id as a key.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> child_entity = parent_entity[child_id]
-\end{verbatim}
+\end{minted}
 
 You can also get a list of all child Entities of a parent Entity object. Note
 that this list is sorted in a specific way (e.g. according to chain identifier
 for Chain objects in a Model object).
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> child_list = parent_entity.get_list()
-\end{verbatim}
+\end{minted}
 
 You can also get the parent from a child:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> parent_entity = child_entity.get_parent()
-\end{verbatim}
+\end{minted}
 
 At all levels of the SMCRA hierarchy, you can also extract a \emph{full id}.
 The full id is a tuple containing all id's starting from the top object (Structure)
 down to the current object. A full id for a Residue object e.g. is something
 like:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> full_id = residue.get_full_id()
 >>> print(full_id)
 ("1abc", 0, "A", ("", 10, "A"))
-\end{verbatim}
+\end{minted}
 
 This corresponds to:
 
 \begin{itemize}
-\item The Structure with id \char`\"{}1abc\char`\"{}
-\item The Model with id 0
-\item The Chain with id \char`\"{}A\char`\"{}
-\item The Residue with id (\char`\"{} \char`\"{}, 10, \char`\"{}A\char`\"{}).
+\item The Structure with id \verb|"1abc"|
+\item The Model with id \verb|0|
+\item The Chain with id \verb|"A"|
+\item The Residue with id \verb|("", 10, "A")|
 \end{itemize}
 The Residue id indicates that the residue is not a hetero-residue (nor a water)
 because it has a blank hetero field, that its sequence identifier is 10 and
-that its insertion code is \char`\"{}A\char`\"{}.
+that its insertion code is \verb|"A"|.
 
 To get the entity's id, use the \verb+get_id+ method:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> entity.get_id()
-\end{verbatim}
+\end{minted}
 You can check if the entity has a child with a given id by using the \verb+has_id+ method:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> entity.has_id(entity_id)
-\end{verbatim}
+\end{minted}
 The length of an entity is equal to its number of children:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> nr_children = len(entity)
-\end{verbatim}
+\end{minted}
 
 It is possible to delete, rename, add, etc. child entities from a parent entity,
 but this does not include any sanity checks (e.g. it is possible to add two
@@ -336,9 +391,9 @@ of the model in the parsed file (they are automatically numbered starting from
 Crystal structures generally have only one model (with id 0), while NMR files usually have several models. Whereas many PDB parsers assume that there is only one model, the \verb+Structure+ class in \verb+Bio.PDB+ is designed such that it can easily handle PDB files with more than one model.
 
 As an example, to get the first model from a Structure object, use
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> first_model = structure[0]
-\end{verbatim}
+\end{minted}
 
 The Model object stores a list of Chain children.
 
@@ -346,9 +401,9 @@ The Model object stores a list of Chain children.
 
 The id of a Chain object is derived from the chain identifier in the PDB/mmCIF
 file, and is a single character (typically a letter). Each Chain in a Model object has a unique id. As an example, to get the Chain object with identifier ``A'' from a Model object, use
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> chain_A = model["A"]
-\end{verbatim}
+\end{minted}
 
 The Chain object stores a list of Residue children.
 
@@ -363,7 +418,7 @@ A residue id is a tuple with three elements:
     \item \verb+'H_'+ followed by the residue name for other hetero residues (e.g. \verb+'H_GLC'+ in the case of a glucose molecule);
     \item blank for standard amino and nucleic acids.
     \end{itemize}
-This scheme is adopted for reasons described in section \ref{hetero problems}.
+This scheme is adopted for reasons described in section \ref{sec:hetero_problems}.
 \item The \textbf{sequence identifier} (resseq), an integer describing the position of the residue in the chain (e.g., 100);
 \item The \textbf{insertion code} (icode); a string, e.g. 'A'. The insertion code is sometimes used to preserve a certain desirable residue numbering scheme. A Ser 80 insertion mutant (inserted e.g. between a Thr 80 and an Asn 81
 residue) could e.g. have sequence identifiers and insertion codes
@@ -374,12 +429,12 @@ The id of the above glucose residue would thus be \texttt{('H\_GLC',
 100, 'A')}. If the hetero-flag and insertion code are blank, the sequence
 identifier alone can be used:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 # Full id
->>> residue=chain[(" ", 100, " ")]
+>>> residue = chain[(" ", 100, " ")]
 # Shortcut id
->>> residue=chain[100]
-\end{verbatim}
+>>> residue = chain[100]
+\end{minted}
 The reason for the hetero-flag is that many, many PDB files use the
 same sequence identifier for an amino acid and a hetero-residue or
 a water, which would create obvious problems if the hetero-flag was
@@ -390,34 +445,34 @@ and the segment identifier of the residue (well known to X-PLOR users, but not
 used in the construction of the SMCRA data structure).
 
 Let's look at some examples. Asn 10 with a blank insertion code would have residue
-id {\tt (' ', 10, ' ')}. Water 10 would have residue id {\tt ('W', 10, ' ')}.
+id \texttt{(' ', 10, ' ')}. Water 10 would have residue id \texttt{('W', 10, ' ')}.
 A glucose molecule (a hetero residue with residue name GLC) with sequence identifier
-10 would have residue id {\tt ('H\_GLC', 10, ' ')}. In this way, the three
+10 would have residue id \texttt{('H\_GLC', 10, ' ')}. In this way, the three
 residues (with the same insertion code and sequence identifier) can be part
 of the same chain because their residue id's are distinct.
 
-In most cases, the hetflag and insertion code fields will be blank, e.g. {\tt (' ', 10, ' ')}.
+In most cases, the hetflag and insertion code fields will be blank, e.g. \texttt{(' ', 10, ' ')}.
 In these cases, the sequence identifier can be used as a shortcut for the full
 id:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 # use full id
 >>> res10 = chain[(" ", 10, " ")]
 # use shortcut
 >>> res10 = chain[10]
-\end{verbatim}
+\end{minted}
 
 Each Residue object in a Chain object should have a unique id. However, disordered
-residues are dealt with in a special way, as described in section \ref{point mutations}.
+residues are dealt with in a special way, as described in section \ref{sec:point_mutations}.
 
 A Residue object has a number of additional methods:
 
-\begin{verbatim}
->>> residue.get_resname()       # returns the residue name, e.g. "ASN"
->>> residue.is_disordered()     # returns 1 if the residue has disordered atoms
->>> residue.get_segid()	        # returns the SEGID, e.g. "CHN1"
->>> residue.has_id(name)        # test if a residue has a certain atom
-\end{verbatim}
+\begin{minted}{pycon}
+>>> residue.get_resname()  # returns the residue name, e.g. "ASN"
+>>> residue.is_disordered()  # returns 1 if the residue has disordered atoms
+>>> residue.get_segid()  # returns the SEGID, e.g. "CHN1"
+>>> residue.has_id(name)  # test if a residue has a certain atom
+\end{minted}
 
 You can use \texttt{is\_aa(residue)} to test if a Residue object is an amino acid.
 
@@ -425,7 +480,7 @@ You can use \texttt{is\_aa(residue)} to test if a Residue object is an amino aci
 
 The Atom object stores the data associated with an atom, and has no children.
 The id of an atom is its atom name (e.g. ``OG'' for the side chain oxygen
-of a Ser residue). An Atom id needs to be unique in a Residue. Again, an exception is made for disordered atoms, as described in section \ref{disordered atoms}.
+of a Ser residue). An Atom id needs to be unique in a Residue. Again, an exception is made for disordered atoms, as described in section \ref{sec:disordered_atoms}.
 
 The atom id is simply the atom name (eg. \texttt{'CA'}). In practice,
 the atom name is created by stripping all spaces from the atom name
@@ -459,19 +514,19 @@ atomic coordinates directly.
 
 An Atom object has the following additional methods:
 
-\begin{verbatim}
->>> a.get_name()       # atom name (spaces stripped, e.g. "CA")
->>> a.get_id()         # id (equals atom name)
->>> a.get_coord()      # atomic coordinates
->>> a.get_vector()     # atomic coordinates as Vector object
->>> a.get_bfactor()    # isotropic B factor
+\begin{minted}{pycon}
+>>> a.get_name()  # atom name (spaces stripped, e.g. "CA")
+>>> a.get_id()  # id (equals atom name)
+>>> a.get_coord()  # atomic coordinates
+>>> a.get_vector()  # atomic coordinates as Vector object
+>>> a.get_bfactor()  # isotropic B factor
 >>> a.get_occupancy()  # occupancy
->>> a.get_altloc()     # alternative location specifier
->>> a.get_sigatm()     # standard deviation of atomic parameters
->>> a.get_siguij()     # standard deviation of anisotropic B factor
->>> a.get_anisou()     # anisotropic B factor
->>> a.get_fullname()   # atom name (with spaces, e.g. ".CA.")
-\end{verbatim}
+>>> a.get_altloc()  # alternative location specifier
+>>> a.get_sigatm()  # standard deviation of atomic parameters
+>>> a.get_siguij()  # standard deviation of anisotropic B factor
+>>> a.get_anisou()  # anisotropic B factor
+>>> a.get_fullname()  # atom name (with spaces, e.g. ".CA.")
+\end{minted}
 
 To represent the atom coordinates, siguij, anisotropic B factor and sigatm Numpy
 arrays are used.
@@ -487,7 +542,7 @@ do it, making use of the \texttt{rotaxis} method (which can be used
 to construct a rotation around a certain axis) of the \texttt{Vector}
 module:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 # get atom coordinates as vectors
 >>> n = residue["N"].get_vector()
 >>> c = residue["C"].get_vector()
@@ -497,12 +552,12 @@ module:
 >>> c = c - ca
 # find rotation matrix that rotates n
 # -120 degrees along the ca-c vector
->>> rot = rotaxis(-pi * 120.0/180.0, c)
+>>> rot = rotaxis(-pi * 120.0 / 180.0, c)
 # apply rotation to ca-n vector
 >>> cb_at_origin = n.left_multiply(rot)
 # put on top of ca atom
->>> cb = cb_at_origin+ca
-\end{verbatim}
+>>> cb = cb_at_origin + ca
+\end{minted}
 This example shows that it's possible to do some quite nontrivial
 vector operations on atomic data, which can be quite useful. In addition
 to all the usual vector operations (cross (use \texttt{{*}{*}}), and
@@ -516,24 +571,25 @@ from a Structure}
 
 These are some examples:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> model = structure[0]
 >>> chain = model["A"]
 >>> residue = chain[100]
 >>> atom = residue["CA"]
-\end{verbatim}
+\end{minted}
 Note that you can use a shortcut:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> atom = structure[0]["A"][100]["CA"]
-\end{verbatim}
+\end{minted}
 
 \section{Disorder}
 
 Bio.PDB can handle both disordered atoms and point mutations (i.e. a
 Gly and an Ala residue in the same position).
 
-\subsection{General approach\label{disorder problems}}
+\subsection{General approach}
+\label{sec:disorder_problems}
 
 Disorder should be dealt with from two points of view: the atom and the residue
 points of view. In general, we have tried to encapsulate all the complexity that
@@ -546,7 +602,8 @@ subset of the disordered atoms or residues. Which subset is picked (e.g. which
 of the two disordered OG side chain atom positions of a Ser residue is used)
 can be specified by the user.
 
-\subsection{Disordered atoms\label{disordered atoms}}
+\subsection{Disordered atoms}
+\label{sec:disordered_atoms}
 
 Disordered atoms are represented by ordinary \texttt{Atom} objects, but
 all \texttt{Atom} objects that represent the same physical atom are stored
@@ -565,14 +622,14 @@ Each disordered atom has a characteristic altloc identifier. You can
 specify that a \texttt{Disordered\-Atom} object should behave like
 the \texttt{Atom} object associated with a specific altloc identifier:
 
-\begin{verbatim}
->>> atom.disordered_select("A") # select altloc A atom
+\begin{minted}{pycon}
+>>> atom.disordered_select("A")  # select altloc A atom
 >>> print(atom.get_altloc())
 "A"
->>> atom.disordered_select("B") # select altloc B atom
+>>> atom.disordered_select("B")  # select altloc B atom
 >>> print(atom.get_altloc())
 "B"
-\end{verbatim}
+\end{minted}
 
 \subsection{Disordered residues}
 
@@ -585,7 +642,8 @@ Atom objects. The DisorderedAtom will behave exactly like an ordinary atom (in
 fact the atom with the highest occupancy) by forwarding all uncaught method
 calls to one of the Atom objects (the selected Atom object) it contains.
 
-\subsubsection*{Point mutations\label{point mutations}}
+\subsubsection*{Point mutations}
+\label{sec:point_mutations}
 
 A special case arises when disorder is due to a point mutation, i.e. when two
 or more point mutants of a polypeptide are present in the crystal. An example
@@ -610,10 +668,10 @@ residue Cys 60 would have id ``CYS''. The user can select the active
 Example: suppose that a chain has a point mutation at position 10,
 consisting of a Ser and a Cys residue. Make sure that residue 10 of
 this chain behaves as the Cys residue.
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> residue = chain[10]
 >>> residue.disordered_select("CYS")
-\end{verbatim}
+\end{minted}
 In addition, you can get a list of all \texttt{Atom} objects (ie.
 all \texttt{DisorderedAtom} objects are 'unpacked' to their individual
 \texttt{Atom} objects) using the \texttt{get\_unpacked\_list} method
@@ -621,7 +679,8 @@ of a \texttt{(Disordered)\-Residue} object.
 
 \section{Hetero residues}
 
-\subsection{Associated problems\label{hetero problems}}
+\subsection{Associated problems}
+\label{sec:hetero_problems}
 
 A common problem with hetero residues is that several hetero and non-hetero
 residues present in the same chain share the same sequence identifier (and insertion
@@ -647,9 +706,9 @@ would have hetfield ``H\_GLC''. Its residue id could e.g. be (``H\_GLC'',
 
 \section{Navigating through a Structure object}
 
-\subsubsection*{Parse a PDB file, and extract some Model, Chain, Residue and Atom objects}
+\subsection*{Parse a PDB file, and extract some Model, Chain, Residue and Atom objects}
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.PDB.PDBParser import PDBParser
 >>> parser = PDBParser()
 >>> structure = parser.get_structure("test", "1fat.pdb")
@@ -657,11 +716,11 @@ would have hetfield ``H\_GLC''. Its residue id could e.g. be (``H\_GLC'',
 >>> chain = model["A"]
 >>> residue = chain[1]
 >>> atom = residue["CA"]
-\end{verbatim}
+\end{minted}
 
-\subsubsection*{Iterating through all atoms of a structure}
+\subsection*{Iterating through all atoms of a structure}
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> p = PDBParser()
 >>> structure = p.get_structure("X", "pdb1fat.ent")
 >>> for model in structure:
@@ -670,74 +729,74 @@ would have hetfield ``H\_GLC''. Its residue id could e.g. be (``H\_GLC'',
 ...             for atom in residue:
 ...                 print(atom)
 ...
-\end{verbatim}
+\end{minted}
 
 There is a shortcut if you want to iterate over all atoms in a structure:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> atoms = structure.get_atoms()
 >>> for atom in atoms:
 ...     print(atom)
 ...
-\end{verbatim}
+\end{minted}
 
 Similarly, to iterate over all atoms in a chain, use
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> atoms = chain.get_atoms()
 >>> for atom in atoms:
 ...     print(atom)
 ...
-\end{verbatim}
+\end{minted}
 
-\subsubsection*{Iterating over all residues of a model}
+\subsection*{Iterating over all residues of a model}
 
 or if you want to iterate over all residues in a model:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> residues = model.get_residues()
 >>> for residue in residues:
 ...     print(residue)
 ...
-\end{verbatim}
+\end{minted}
 
 You can also use the \verb+Selection.unfold_entities+ function to get all residues from a structure:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> res_list = Selection.unfold_entities(structure, "R")
-\end{verbatim}
+\end{minted}
 or to get all atoms from a chain:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> atom_list = Selection.unfold_entities(chain, "A")
-\end{verbatim}
+\end{minted}
 Obviously, \verb+A=atom, R=residue, C=chain, M=model, S=structure+.
 You can use this to go up in the hierarchy, e.g. to get a list of
 (unique) \verb+Residue+ or \verb+Chain+ parents from a list of
 \verb+Atoms+:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> residue_list = Selection.unfold_entities(atom_list, "R")
 >>> chain_list = Selection.unfold_entities(atom_list, "C")
-\end{verbatim}
+\end{minted}
 For more info, see the API documentation.
 
-\subsubsection*{Extract a hetero residue from a chain (e.g. a glucose (GLC) moiety with resseq 10)}
+\subsection*{Extract a hetero residue from a chain (e.g. a glucose (GLC) moiety with resseq 10)}
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> residue_id = ("H_GLC", 10, " ")
 >>> residue = chain[residue_id]
-\end{verbatim}
+\end{minted}
 
-\subsubsection*{Print all hetero residues in chain}
+\subsection*{Print all hetero residues in chain}
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for residue in chain.get_list():
-...    residue_id = residue.get_id()
-...    hetfield = residue_id[0]
-...    if hetfield[0]=="H":
-...        print(residue_id)
+...     residue_id = residue.get_id()
+...     hetfield = residue_id[0]
+...     if hetfield[0] == "H":
+...         print(residue_id)
 ...
-\end{verbatim}
+\end{minted}
 
-\subsubsection*{Print out the coordinates of all CA atoms in a structure with B factor greater than 50}
+\subsection*{Print out the coordinates of all CA atoms in a structure with B factor greater than 50}
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for model in structure.get_list():
 ...     for chain in model.get_list():
 ...         for residue in chain.get_list():
@@ -746,11 +805,11 @@ For more info, see the API documentation.
 ...                 if ca.get_bfactor() > 50.0:
 ...                     print(ca.get_coord())
 ...
-\end{verbatim}
+\end{minted}
 
-\subsubsection*{Print out all the residues that contain disordered atoms}
+\subsection*{Print out all the residues that contain disordered atoms}
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for model in structure.get_list():
 ...     for chain in model.get_list():
 ...         for residue in chain.get_list():
@@ -761,13 +820,13 @@ For more info, see the API documentation.
 ...                 chain_id = chain.get_id()
 ...                 print(model_id, chain_id, resname, resseq)
 ...
-\end{verbatim}
+\end{minted}
 
-\subsubsection*{Loop over all disordered atoms, and select all atoms with altloc A (if present)}
+\subsection*{Loop over all disordered atoms, and select all atoms with altloc A (if present)}
 This will make sure that the SMCRA data structure will behave as if only the
 atoms with altloc A are present.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for model in structure.get_list():
 ...     for chain in model.get_list():
 ...         for residue in chain.get_list():
@@ -777,96 +836,172 @@ atoms with altloc A are present.
 ...                         if atom.disordered_has_id("A"):
 ...                             atom.disordered_select("A")
 ...
-\end{verbatim}
+\end{minted}
 
-\subsubsection*{Extracting polypeptides from a \texttt{Structure} object\label{subsubsec:extracting_polypeptides}}
+\subsection*{Extracting polypeptides from a \texttt{Structure} object}
 
 To extract polypeptides from a structure, construct a list of \texttt{Polypeptide} objects from a \texttt{Structure} object using \texttt{PolypeptideBuilder} as follows:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> model_nr = 1
 >>> polypeptide_list = build_peptides(structure, model_nr)
 >>> for polypeptide in polypeptide_list:
 ...     print(polypeptide)
 ...
-\end{verbatim}
+\end{minted}
 
 A Polypeptide object is simply a UserList of Residue objects, and is always created from a single Model (in this case model 1).
 You can use the resulting \texttt{Polypeptide} object to get the sequence as a \texttt{Seq} object or to get a list of C$\alpha$ atoms as well. Polypeptides can be built using a C-N or a C$\alpha$-C$\alpha$ distance criterion.
 
 Example:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 # Using C-N
->>> ppb=PPBuilder()
+>>> ppb = PPBuilder()
 >>> for pp in ppb.build_peptides(structure):
 ...     print(pp.get_sequence())
 ...
 # Using CA-CA
->>> ppb=CaPPBuilder()
+>>> ppb = CaPPBuilder()
 >>> for pp in ppb.build_peptides(structure):
 ...     print(pp.get_sequence())
 ...
-\end{verbatim}
+\end{minted}
 Note that in the above case only model 0 of the structure is considered
 by \texttt{PolypeptideBuilder}. However, it is possible to use \texttt{PolypeptideBuilder}
 to build \texttt{Polypeptide} objects from \texttt{Model} and \texttt{Chain}
 objects as well.
 
-\subsubsection*{Obtaining the sequence of a structure}
+\subsection*{Obtaining the sequence of a structure}
 
 The first thing to do is to extract all polypeptides from the structure
 (as above). The sequence of each polypeptide can then easily
 be obtained from the \texttt{Polypeptide} objects. The sequence is
-represented as a Biopython \texttt{Seq} object, and its alphabet is
-defined by a \texttt{ProteinAlphabet} object.
+represented as a Biopython \texttt{Seq} object.
 
 Example:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> seq = polypeptide.get_sequence()
->>> print(seq)
-Seq('SNVVE...', <class Bio.Alphabet.ProteinAlphabet>)
-\end{verbatim}
+>>> seq
+Seq('SNDIYFNFQRFNETNLILQRDASVSSSGQLRLTNLN')
+\end{minted}
 
 \section{Analyzing structures}
 
 \subsection{Measuring distances}
 The minus operator for atoms has been overloaded to return the distance between two atoms.
-\begin{verbatim}
+\begin{minted}{pycon}
 # Get some atoms
 >>> ca1 = residue1["CA"]
 >>> ca2 = residue2["CA"]
 # Simply subtract the atoms to get their distance
->>> distance = ca1-ca2
-\end{verbatim}
+>>> distance = ca1 - ca2
+\end{minted}
 
 \subsection{Measuring angles}
 Use the vector representation of the atomic coordinates, and
 the \texttt{calc\_angle} function from the \texttt{Vector} module:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> vector1 = atom1.get_vector()
 >>> vector2 = atom2.get_vector()
 >>> vector3 = atom3.get_vector()
 >>> angle = calc_angle(vector1, vector2, vector3)
-\end{verbatim}
+\end{minted}
 
 \subsection{Measuring torsion angles}
 Use  the vector representation of the atomic coordinates, and
 the \texttt{calc\_dihedral} function from the \texttt{Vector} module:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> vector1 = atom1.get_vector()
 >>> vector2 = atom2.get_vector()
 >>> vector3 = atom3.get_vector()
 >>> vector4 = atom4.get_vector()
 >>> angle = calc_dihedral(vector1, vector2, vector3, vector4)
-\end{verbatim}
+\end{minted}
+
+\subsection{Internal coordinates for standard residues}
+The \texttt{internal\_coords} module is provided to facilitate working with canonical bond lengths,
+angles and torsion angles for a standard protein.  \texttt{atom\_to\_internal\_coordinates()} for 
+\texttt{Structure}, \texttt{Model}, and \texttt{Chain} entities
+will extend \texttt{Chain} and \texttt{Residue} classes with \texttt{internal\_coord} attributes referencing 
+\texttt{IC\_Chain} and \texttt{IC\_Residue}
+classes respectively.  \texttt{IC\_Residue} provides \texttt{get\_angle()} and \texttt{get\_length()}
+to query the computed values with various specifiers and synonyms:
+\begin{minted}{pycon}
+>>> model.atom_to_internal_coordinates()
+>>> for r in model.get_residues():
+...     if r.internal_coord:
+...         print(
+...             r,
+...             r.internal_coord.get_angle("psi"),
+...             r.internal_coord.get_angle("phi"),
+...             r.internal_coord.get_angle("omega"),  # or "omg"
+...             r.internal_coord.get_angle("chi2"),
+...             r.internal_coord.get_angle("CB:CA:C"),
+...             (
+...                 r.internal_coord.get_length("-1C:0N")  # i-1 to i peptide bond
+...                 if r.internal_coord.rprev
+...                 else "None"
+...             ),
+...         )
+...
+\end{minted}
+Note that only angles, dihedral angles and residue configurations specified in \texttt{ic\_data.py} are computed, 
+however these data structures can be extended to add support for HETATMS as needed.
+ 
+Corresponding \texttt{set\_angle()} and \texttt{set\_length()} routines are also provided, and the atom coordinates 
+may be updated using \texttt{internal\_to\_atom\_coordinates()}.
+
+Missing atoms will cause problems for rebuilding structures from internal coordinates, however chain breaks and
+disordered residues and atoms as described above are handled correctly.  \texttt{structure\_rebuild\_test(entity)}  
+will compare a structure to a copy built from internal coordinates and return a report of success or failure as
+a dictionary.
+
+An entity specification consisting of only internal coordinates (and optional positioning information) may be exported
+as a \emph{.pic} file with \texttt{write\_PIC()}.  This format uses 3- and 4-tuples of \texttt{AtomKey}s to specify 3-atom
+hedra and 4-atom dihedra geometries.  \texttt{AtomKey}s consist of up to six fields, capturing residue position, insertion 
+code, residue name, atom name, altloc and occupancy.  A \emph{.pic} file includes sufficient information to regenerate the
+ATOM records of a \emph{.pdb} file.
+
+The \texttt{internal\_to\_atom\_coords()} assembly algorithm is also implemented in OpenSCAD (\url{http://www.openscad.org/}),
+a language for describing 3D solid CAD models.  \texttt{write\_SCAD()} can thus generate a protein model suitable for rendering 
+on a 3D printer, however the printing process is non-trivial and it is likely that you will want to modify the \emph{.scad} file 
+for your own purposes, just as you might select different rendering options for a 3D protein visualizer.  A modified example 
+is available at \url{https://www.thingiverse.com/thing:3957471}.
+
+A few control attributes are available in the \texttt{internal\_coords} classes to modify or filter data as internal coordinates are calculated.  These are listed in Table~\ref{table:ic-attribs},
+
+\begin{table}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		Class&Attribute&Default&Effect\\
+		\hline
+		\hline
+		AtomKey&d2h&False&Convert D atoms to H if True\\
+		\hline
+		IC\_Chain&MaxPeptideBond&1.4&Max C-N length w/o chain break; \\
+		& & & make large to link over missing \\
+		& & & residues for 3D models \\
+		\hline
+		IC\_Residue&accept\_atoms&mainchain, hydrogen atoms&override to remove some or all H's, D's\\
+		\hline
+		&accept\_resnames&CYG, YCM, UNK&3-letter names for HETATMs to process, \\
+		& & & backbone only unless added to ic\_data.py \\
+		\hline
+		&gly\_Cbeta&False&override to generate Gly C$\beta$ atoms \\
+		& & & based on database averages \\
+		\hline
+	\end{tabular}
+	\caption{Control attributes in Bio.PDB.internal\_coords.}
+	\label{table:ic-attribs}
+\end{table}
 
 \subsection{Determining atom-atom contacts}
 
 Use \texttt{NeighborSearch} to perform neighbor lookup.
-The neighbor lookup is done using a KD tree module written in C (see \texttt{Bio.KDTree}), making it very fast.
-It  also includes a fast method to find all point pairs within a certain distance of each other.
+The neighbor lookup is done using a KD tree module written in C (see the \texttt{KDTree} class in module \texttt{Bio.PDB.kdtrees}), making it very fast.
+It also includes a fast method to find all point pairs within a certain distance of each other.
 
 \subsection{Superimposing two structures}
 
@@ -884,7 +1019,7 @@ The algorithm used by \texttt{Superimposer} comes from \cite[Golub \& Van Loan]{
 
 Example:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> sup = Superimposer()
 # Specify the atom lists
 # 'fixed' and 'moving' are lists of Atom objects
@@ -895,7 +1030,7 @@ Example:
 >>> print(sup.rms)
 # Apply rotation/translation to the moving atoms
 >>> sup.apply(moving)
-\end{verbatim}
+\end{minted}
 
 To superimpose two structures based on their active sites, use the active site atoms to calculate the rotation/translation matrices (as above), and apply these to the whole molecule.
 
@@ -924,18 +1059,18 @@ and contact number values.
 
 Example:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> model = structure[0]
 >>> hse = HSExposure()
 # Calculate HSEalpha
 >>> exp_ca = hse.calc_hs_exposure(model, option="CA3")
 # Calculate HSEbeta
->>> exp_cb=hse.calc_hs_exposure(model, option="CB")
+>>> exp_cb = hse.calc_hs_exposure(model, option="CB")
 # Calculate classical coordination number
 >>> exp_fs = hse.calc_fs_exposure(model)
 # Print HSEalpha for a residue
 >>> print(exp_ca[some_residue])
-\end{verbatim}
+\end{minted}
 
 \subsection{Determining the secondary structure}
 
@@ -943,7 +1078,7 @@ For this functionality, you need to install DSSP (and obtain a license
 for it --- free for academic use, see \url{https://swift.cmbi.umcn.nl/gv/dssp/}).
 Then use the \texttt{DSSP} class, which maps \texttt{Residue} objects
 to their secondary structure (and accessible surface area). The DSSP
-codes are listed in Table \ref{cap:DSSP-codes}. Note that DSSP (the
+codes are listed in Table~\ref{table:DSSP-codes}. Note that DSSP (the
 program, and thus by consequence the class) cannot handle multiple
 models!
 
@@ -979,12 +1114,14 @@ Bend \\
 Other\\
 \hline
 \end{tabular}
-\caption{\label{cap:DSSP-codes}DSSP codes in Bio.PDB.}
+\caption{DSSP codes in Bio.PDB.}
+\label{table:DSSP-codes}
 \end{table}
 
-The \texttt{DSSP} class can also be used to calculate the accessible surface area of a residue. But see also section \ref{subsec:residue_depth}.
+The \texttt{DSSP} class can also be used to calculate the accessible surface area of a residue. But see also section \ref{sec:residue_depth}.
 
-\subsection{Calculating the residue depth\label{subsec:residue_depth}}
+\subsection{Calculating the residue depth}
+\label{sec:residue_depth}
 
 Residue depth is the average distance of a residue's atoms from the
 solvent accessible surface. It's a fairly new and very powerful parameterization
@@ -997,11 +1134,11 @@ of a residue's C$\alpha$ atom to the solvent accessible surface.
 
 Example:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> model = structure[0]
 >>> rd = ResidueDepth(model, pdb_file)
->>> residue_depth, ca_depth=rd[some_residue]
-\end{verbatim}
+>>> residue_depth, ca_depth = rd[some_residue]
+\end{minted}
 You can also get access to the molecular surface itself (via the \texttt{get\_surface}
 function), in the form of a Numeric Python array with the surface points.
 
@@ -1015,13 +1152,13 @@ way, which is the default.
 
 Example:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 # Permissive parser
 >>> parser = PDBParser(PERMISSIVE=1)
->>> parser = PDBParser() # The same (default)
+>>> parser = PDBParser()  # The same (default)
 # Strict parser
 >>> strict_parser = PDBParser(PERMISSIVE=0)
-\end{verbatim}
+\end{minted}
 In the permissive state (DEFAULT), PDB files that obviously contain
 errors are ``corrected'' (i.e. some residues or atoms are left out).
 These errors include:
@@ -1045,7 +1182,8 @@ A, followed by residues belonging to chain B, and again followed by
 residues belonging to chain A, i.e. the chains are 'broken'. This
 is also correctly interpreted.
 
-\subsection{Examples\label{problem structures}}
+\subsection{Examples}
+\label{sec:problem_structures}
 
 The PDBParser/Structure class was tested on about 800 structures (each belonging
 to a unique SCOP superfamily). This takes about 20 minutes, or on average 1.5
@@ -1138,15 +1276,15 @@ Structures can be downloaded from the PDB (Protein Data Bank)
 by using the \texttt{retrieve\_pdb\_file} method on a \texttt{PDBList} object.
 The argument for this method is the PDB identifier of the structure.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> pdbl = PDBList()
 >>> pdbl.retrieve_pdb_file("1FAT")
-\end{verbatim}
+\end{minted}
 
 The \texttt{PDBList} class can also be used as a command-line tool:
-\begin{verbatim}
+\begin{minted}{pycon}
 python PDBList.py 1fat
-\end{verbatim}
+\end{minted}
 The downloaded file will be called \texttt{pdb1fat.ent} and stored
 in the current working directory. Note that the \texttt{retrieve\_pdb\_file}
 method also has an optional argument \texttt{pdir} that specifies
@@ -1165,11 +1303,11 @@ to Kristian Rother for donating this module.
 The following commands will store all PDB files in the \texttt{/data/pdb}
 directory:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 python PDBList.py all /data/pdb
 
 python PDBList.py all /data/pdb -d
-\end{verbatim}
+\end{minted}
 \noindent The API method for this is called \texttt{download\_entire\_pdb}.
 Adding the \texttt{-d} option will store all files in the same directory.
 Otherwise, they are sorted into PDB-style subdirectories according
@@ -1183,10 +1321,10 @@ creates a \texttt{PDBList} object (specifying the directory where
 the local copy of the PDB is present) and calls the \texttt{update\_pdb}
 method:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> pl = PDBList(pdb="/data/pdb")
 >>> pl.update_pdb()
-\end{verbatim}
+\end{minted}
 One can of course make a weekly \texttt{cronjob} out of this to keep
 the local copy automatically up-to-date. The PDB ftp site can also
 be specified (see API documentation).
@@ -1240,9 +1378,7 @@ day). Python based/aware molecular graphics solutions include:
 \subsection{Who's using Bio.PDB?}
 
 Bio.PDB was used in the construction of DISEMBL, a web server that
-predicts disordered regions in proteins (\url{http://dis.embl.de/}),
-and COLUMBA, a website that provides annotated protein structures
-(\url{http://www.columba-db.de/}). Bio.PDB has also been used to
+predicts disordered regions in proteins (\url{http://dis.embl.de/}). Bio.PDB has also been used to
 perform a large scale search for active sites similarities between
 protein structures in the PDB \cite[Hamelryck, 2003]{hamelryck2003b}, and to develop a new algorithm
 that identifies linear secondary structure elements \cite[Majumdar \textit{et al.}, 2005]{majumdar2005}.

@@ -1,7 +1,10 @@
 # Copyright 2005-2008 by Frank Kauff & Cymon J. Cox. All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 """Linked list functionality for use in Bio.Nexus.
 
 Provides functionality of a linked list.
@@ -15,14 +18,18 @@ Bug reports to Frank Kauff (fkauff@biologie.uni-kl.de)
 
 
 class ChainException(Exception):
+    """Provision for the management of Chain exceptions."""
+
     pass
 
 
 class NodeException(Exception):
+    """Provision for the management of Node exceptions."""
+
     pass
 
 
-class Chain(object):
+class Chain:
     """Stores a list of nodes that are linked together."""
 
     def __init__(self):
@@ -42,7 +49,7 @@ class Chain(object):
     def add(self, node, prev=None):
         """Attach node to another."""
         if prev is not None and prev not in self.chain:
-            raise ChainException('Unknown predecessor: ' + str(prev))
+            raise ChainException("Unknown predecessor: " + str(prev))
         else:
             id = self._get_id()
             node.set_id(id)
@@ -55,7 +62,7 @@ class Chain(object):
     def collapse(self, id):
         """Delete node from chain and relinks successors to predecessor."""
         if id not in self.chain:
-            raise ChainException('Unknown ID: ' + str(id))
+            raise ChainException("Unknown ID: " + str(id))
         prev_id = self.chain[id].get_prev()
         self.chain[prev_id].remove_succ(id)
         succ_ids = self.chain[id].get_succ()
@@ -69,14 +76,14 @@ class Chain(object):
     def kill(self, id):
         """Kill a node from chain without caring to what it is connected."""
         if id not in self.chain:
-            raise ChainException('Unknown ID: ' + str(id))
+            raise ChainException("Unknown ID: " + str(id))
         else:
             del self.chain[id]
 
     def unlink(self, id):
         """Disconnect node from his predecessor."""
         if id not in self.chain:
-            raise ChainException('Unknown ID: ' + str(id))
+            raise ChainException("Unknown ID: " + str(id))
         else:
             prev_id = self.chain[id].prev
             if prev_id is not None:
@@ -87,9 +94,9 @@ class Chain(object):
     def link(self, parent, child):
         """Connect son to parent."""
         if child not in self.chain:
-            raise ChainException('Unknown ID: ' + str(child))
+            raise ChainException("Unknown ID: " + str(child))
         elif parent not in self.chain:
-            raise ChainException('Unknown ID: ' + str(parent))
+            raise ChainException("Unknown ID: " + str(parent))
         else:
             self.unlink(child)
             self.chain[parent].succ.append(child)
@@ -109,7 +116,7 @@ class Chain(object):
     def trace(self, start, finish):
         """Return a list of all node_ids between two nodes (excluding start, including end)."""
         if start not in self.chain or finish not in self.chain:
-            raise NodeException('Unknown node.')
+            raise NodeException("Unknown node.")
         if not self.is_parent_of(start, finish) or start == finish:
             return []
         for sn in self.chain[start].get_succ():
@@ -117,7 +124,7 @@ class Chain(object):
                 return [sn] + self.trace(sn, finish)
 
 
-class Node(object):
+class Node:
     """A single node."""
 
     def __init__(self, data=None):
@@ -130,7 +137,7 @@ class Node(object):
     def set_id(self, id):
         """Set the id of a node, if not set yet."""
         if self.id is not None:
-            raise NodeException('Node id cannot be changed.')
+            raise NodeException("Node id cannot be changed.")
         self.id = id
 
     def get_id(self):
@@ -159,7 +166,7 @@ class Node(object):
     def set_succ(self, new_succ):
         """Set the node's successors."""
         if not isinstance(new_succ, type([])):
-            raise NodeException('Node successor must be of list type.')
+            raise NodeException("Node successor must be of list type.")
         self.succ = new_succ
 
     def set_prev(self, id):

@@ -1,20 +1,24 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Base class for Residue, Chain, Model and Structure classes.
 
 It is a simple container class, with list and dictionary like properties.
 """
 
+from collections import deque
 from copy import copy
+
+import numpy as np
 
 from Bio.PDB.PDBExceptions import PDBConstructionException
 
 
-class Entity(object):
-    """Basic container object for PDB heirachy.
+class Entity:
+    """Basic container object for PDB hierarchy.
 
     Structure, Model, Chain and Residue are subclasses of Entity.
     It deals with storage and lookup.
@@ -50,8 +54,7 @@ class Entity(object):
 
     def __iter__(self):
         """Iterate over children."""
-        for child in self.child_list:
-            yield child
+        yield from self.child_list
 
     # Generic id-based comparison methods considers all parents as well as children
     # Works for all Entities - Atoms have comparable custom operators
@@ -171,9 +174,9 @@ class Entity(object):
         if self.parent:
             if value in self.parent.child_dict:
                 raise ValueError(
-                              "Cannot change id from `{}` to `{}`. "
-                              "The id `{}` is already used for a sibling of"
-                              " this entity.".format(self._id, value, value))
+                    f"Cannot change id from `{self._id}` to `{value}`."
+                    f" The id `{value}` is already used for a sibling of this entity."
+                )
             del self.parent.child_dict[self._id]
             self.parent.child_dict[value] = self
 
@@ -211,8 +214,7 @@ class Entity(object):
         """Add a child to the Entity."""
         entity_id = entity.get_id()
         if self.has_id(entity_id):
-            raise PDBConstructionException(
-                "%s defined twice" % str(entity_id))
+            raise PDBConstructionException(f"{entity_id} defined twice")
         entity.set_parent(self)
         self.child_list.append(entity)
         self.child_dict[entity_id] = entity
@@ -221,16 +223,14 @@ class Entity(object):
         """Add a child to the Entity at a specified position."""
         entity_id = entity.get_id()
         if self.has_id(entity_id):
-            raise PDBConstructionException(
-                "%s defined twice" % str(entity_id))
+            raise PDBConstructionException(f"{entity_id} defined twice")
         entity.set_parent(self)
         self.child_list[pos:pos] = [entity]
         self.child_dict[entity_id] = entity
 
     def get_iterator(self):
         """Return iterator over children."""
-        for child in self.child_list:
-            yield child
+        yield from self.child_list
 
     def get_list(self):
         """Return a copy of the list of children."""
@@ -269,7 +269,7 @@ class Entity(object):
         identifier is 10 and its insertion code "A".
         """
         if self.full_id is None:
-            self._reset_full_id()
+            self.full_id = self._generate_full_id()
         return self.full_id
 
     def transform(self, rot, tran):
@@ -295,6 +295,39 @@ class Entity(object):
         for o in self.get_list():
             o.transform(rot, tran)
 
+    def center_of_mass(self, geometric=False):
+        """Return the center of mass of the Entity as a numpy array.
+
+        If geometric is True, returns the center of geometry instead.
+        """
+        # Recursively iterate through children until we get all atom coordinates
+
+        if not len(self):
+            raise ValueError(f"{self} does not have children")
+
+        maybe_disordered = {"R", "C"}  # to know when to use get_unpacked_list
+        only_atom_level = {"A"}
+
+        entities = deque([self])  # start with [self] to avoid auto-unpacking
+        while True:
+            e = entities.popleft()
+            if e.level in maybe_disordered:
+                entities += e.get_unpacked_list()
+            else:
+                entities += e.child_list
+
+            elevels = {e.level for e in entities}
+            if elevels == only_atom_level:
+                break  # nothing else to unpack
+
+        coords = np.asarray([a.coord for a in entities], dtype=np.float32)
+        if geometric:
+            masses = None
+        else:
+            masses = np.asarray([a.mass for a in entities], dtype=np.float32)
+
+        return np.average(coords, axis=0, weights=masses)
+
     def copy(self):
         """Copy entity recursively."""
         shallow = copy(self)
@@ -310,7 +343,7 @@ class Entity(object):
         return shallow
 
 
-class DisorderedEntityWrapper(object):
+class DisorderedEntityWrapper:
     """Wrapper class to group equivalent Entities.
 
     This class is a simple wrapper class that groups a number of equivalent
@@ -333,10 +366,10 @@ class DisorderedEntityWrapper(object):
 
     def __getattr__(self, method):
         """Forward the method call to the selected child."""
-        if method == '__setstate__':
+        if method == "__setstate__":
             # Avoid issues with recursion when attempting deepcopy
             raise AttributeError
-        if not hasattr(self, 'selected_child'):
+        if not hasattr(self, "selected_child"):
             # Avoid problems with pickling
             # Unpickling goes into infinite loop!
             raise AttributeError
@@ -387,6 +420,16 @@ class DisorderedEntityWrapper(object):
         return self.selected_child <= other
 
     # Public methods
+    def copy(self):
+        """Copy disorderd entity recursively."""
+        shallow = copy(self)
+        shallow.child_dict = {}
+        shallow.detach_parent()
+
+        for child in self.disordered_get_list():
+            shallow.disordered_add(child.copy())
+
+        return shallow
 
     def get_id(self):
         """Return the id."""
@@ -421,6 +464,13 @@ class DisorderedEntityWrapper(object):
 
     def disordered_add(self, child):
         """Add disordered entry.
+
+        This is implemented by DisorderedAtom and DisorderedResidue.
+        """
+        raise NotImplementedError
+
+    def disordered_remove(self, child):
+        """Remove disordered entry.
 
         This is implemented by DisorderedAtom and DisorderedResidue.
         """

@@ -1,4 +1,5 @@
 \chapter{Where to go from here -- contributing to Biopython}
+\label{chapter:contributing}
 
 \section{Bug Reports + Feature Requests}
 
@@ -50,9 +51,9 @@ You must first make sure you have a C compiler on your Windows computer, and tha
 
 Once you are setup with a C compiler, making the installer just requires doing:
 
-\begin{verbatim}
-python setup.py bdist_wininst
-\end{verbatim}
+\begin{minted}{console}
+$ python setup.py bdist_wininst
+\end{minted}
 
 Now you've got a Windows installer. Congrats!  At the moment we have no trouble shipping installers built on 32 bit windows.  If anyone would like to look into supporting 64 bit Windows that would be great.
 
@@ -60,9 +61,9 @@ Now you've got a Windows installer. Congrats!  At the moment we have no trouble 
 
 To make the RPM, you just need to do:
 
-\begin{verbatim}
-python setup.py bdist_rpm
-\end{verbatim}
+\begin{minted}{console}
+$ python setup.py bdist_rpm
+\end{minted}
 
 This will create an RPM for your specific platform and a source RPM in the directory \verb|dist|. This RPM should be good and ready to go, so this is all you need to do! Nice and easy.
 
@@ -81,7 +82,7 @@ good about it, make a pull request on GitHub and write to our
 \section{Contributing Unit Tests}
 
 Even if you don't have any new functionality to add to Biopython, but you want to write some code, please
-consider extending our unit test coverage.  We've devoted all of Chapter~\ref{sec:regr_test} to this topic.
+consider extending our unit test coverage.  We've devoted all of Chapter~\ref{chapter:testing} to this topic.
 
 \section{Contributing Code}
 
@@ -97,9 +98,9 @@ The main Biopython release tries to be fairly uniform and interworkable,
 to make it easier for users. You can read about some of (fairly
 informal) coding style guidelines we try to use in Biopython in the
 contributing documentation at
-\url{http://biopython.org/wiki/Contributing}. We also try to add code to the distribution along with tests (see Chapter~\ref{sec:regr_test} for more info on the regression testing framework) and documentation, so that everything can stay as workable and well documented as possible (including docstrings). This is, of course, the most ideal situation, under many situations you'll be able to find other people on the list who will be willing to help add documentation or more tests for your code once you make it available. So, to end this paragraph like the last, feel free to start working!
+\url{http://biopython.org/wiki/Contributing}. We also try to add code to the distribution along with tests (see Chapter~\ref{chapter:testing} for more info on the regression testing framework) and documentation, so that everything can stay as workable and well documented as possible (including docstrings). This is, of course, the most ideal situation, under many situations you'll be able to find other people on the list who will be willing to help add documentation or more tests for your code once you make it available. So, to end this paragraph like the last, feel free to start working!
 
-Please note that to make a code contribution you must have the legal right to contribute it and license it under the Biopython license.  If you wrote it all yourself, and it is not based on any other code, this shouldn't be a problem.  However, there are issues if you want to contribute a derivative work - for example something based on GPL or LPGL licenced code would not be compatible with our license.  If you have any queries on this, please discuss the issue on the mailing list or GitHub.
+Please note that to make a code contribution you must have the legal right to contribute it and license it under the Biopython license.  If you wrote it all yourself, and it is not based on any other code, this shouldn't be a problem.  However, there are issues if you want to contribute a derivative work - for example something based on GPL or LPGL licensed code would not be compatible with our license.  If you have any queries on this, please discuss the issue on the mailing list or GitHub.
 
 Another point of concern for any additions to Biopython regards any build time or run time dependencies.  Generally speaking, writing code to interact with a standalone tool (like BLAST, EMBOSS or ClustalW) doesn't present a big problem.  However, any dependency on another library - even a Python library (especially one needed in order to compile and install Biopython like NumPy) would need further discussion.
 
@@ -111,4 +112,3 @@ which has pointers to freely available code in Python for bioinformatics.
 Hopefully this documentation has got you excited enough about
 Biopython to try it out (and most importantly, contribute!). Thanks
 for reading all the way through!
-

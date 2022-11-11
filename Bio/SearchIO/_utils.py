@@ -5,7 +5,29 @@
 # package.
 """Common SearchIO utility functions."""
 
-from Bio._py3k import basestring
+
+def getattr_str(obj, attr, fmt=None, fallback="?"):
+    """Return string of the given object's attribute.
+
+    Defaults to the given fallback value if attribute is not present.
+    """
+    try:
+        value = getattr(obj, attr)
+    except AttributeError:
+        return fallback
+    if fmt is None:
+        return str(value)
+    return fmt % value
+
+
+def read_forward(handle):
+    """Read through whitespaces, return the first non-whitespace line."""
+    while True:
+        line = handle.readline()
+        # if line is empty or line has characters and stripping does not remove
+        # them, return the line
+        if (not line) or (line and line.strip()):
+            return line
 
 
 def get_processor(format, mapping):
@@ -23,52 +45,56 @@ def get_processor(format, mapping):
     except KeyError:
         # handle the errors with helpful messages
         if format is None:
-            raise ValueError("Format required (lower case string)")
-        elif not isinstance(format, basestring):
-            raise TypeError("Need a string for the file format (lower case)")
+            raise ValueError("Format required (lower case string)") from None
+        elif not isinstance(format, str):
+            raise TypeError("Need a string for the file format (lower case)") from None
         elif format != format.lower():
-            raise ValueError("Format string %r should be lower case" %
-                             format)
+            raise ValueError("Format string %r should be lower case" % format) from None
         else:
-            raise ValueError("Unknown format %r. Supported formats are "
-                             "%r" % (format, "', '".join(mapping)))
+            raise ValueError(
+                "Unknown format %r. Supported formats are %r"
+                % (format, "', '".join(mapping))
+            ) from None
 
     mod_name, obj_name = obj_info
-    mod = __import__('Bio.SearchIO.%s' % mod_name, fromlist=[''])
+    mod = __import__("Bio.SearchIO.%s" % mod_name, fromlist=[""])
 
     return getattr(mod, obj_name)
 
 
-def singleitem(attr=None, doc=''):
+def singleitem(attr=None, doc=""):
     """Property for fetching attribute from first entry of container.
 
     Returns a property that fetches the given attribute from
     the first item in a SearchIO container object.
     """
+
     def getter(self):
         if len(self._items) > 1:
-            raise ValueError("More than one HSPFragment objects "
-                             "found in HSP")
+            raise ValueError("More than one HSPFragment objects found in HSP")
         if attr is None:
             return self._items[0]
         return getattr(self._items[0], attr)
+
     return property(fget=getter, doc=doc)
 
 
-def allitems(attr=None, doc=''):
+def allitems(attr=None, doc=""):
     """Property for fetching attribute from all entries of container.
 
     Returns a property that fetches the given attributes from
     all items in a SearchIO container object.
     """
+
     def getter(self):
         if attr is None:
             return self._items
         return [getattr(frag, attr) for frag in self._items]
+
     return property(fget=getter, doc=doc)
 
 
-def fullcascade(attr, doc=''):
+def fullcascade(attr, doc=""):
     """Return a getter property with a cascading setter.
 
     This is similar to ``optionalcascade``, but for SearchIO containers that have
@@ -78,6 +104,7 @@ def fullcascade(attr, doc=''):
     that it only sets attributes to items in the object, not the object itself.
 
     """
+
     def getter(self):
         return getattr(self._items[0], attr)
 
@@ -88,7 +115,7 @@ def fullcascade(attr, doc=''):
     return property(fget=getter, fset=setter, doc=doc)
 
 
-def optionalcascade(cont_attr, item_attr, doc=''):
+def optionalcascade(cont_attr, item_attr, doc=""):
     """Return a getter property with a cascading setter.
 
     This is used for the ``id`` and ``description`` properties of the container
@@ -101,10 +128,11 @@ def optionalcascade(cont_attr, item_attr, doc=''):
     the setter cascades any new value given to the items' values.
 
     """
+
     def getter(self):
         if self._items:
             # don't use self._items here, so QueryResult can use this property
-            # as well (the underlying OrderedDict is not integer-indexable)
+            # as well (the underlying dict is not integer-indexable)
             return getattr(self[0], item_attr)
         else:
             return getattr(self, cont_attr)
@@ -117,15 +145,15 @@ def optionalcascade(cont_attr, item_attr, doc=''):
     return property(fget=getter, fset=setter, doc=doc)
 
 
-def fragcascade(attr, seq_type, doc=''):
+def fragcascade(attr, seq_type, doc=""):
     """Return a getter property with cascading setter, for HSPFragment objects.
 
     Similar to ``partialcascade``, but for HSPFragment objects and acts on ``query``
     or ``hit`` properties of the object if they are not None.
 
     """
-    assert seq_type in ('hit', 'query')
-    attr_name = '_%s_%s' % (seq_type, attr)
+    assert seq_type in ("hit", "query")
+    attr_name = f"_{seq_type}_{attr}"
 
     def getter(self):
         return getattr(self, attr_name)

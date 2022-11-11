@@ -15,10 +15,10 @@ The DOM files for older releases can be found
 from .Residues import Residues
 
 
-class Record(object):
+class Record:
     """Holds information for one SCOP domain.
 
-    Attribues:
+    Attributes:
      - sid - The SCOP ID of the entry, e.g. d1anu1
      - residues - The domain definition as a Residues object
      - hierarchy - A string specifying where this domain is in the hierarchy.
@@ -27,9 +27,9 @@ class Record(object):
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.sid = ''
+        self.sid = ""
         self.residues = []
-        self.hierarchy = ''
+        self.hierarchy = ""
         if line:
             self._process(line)
 
@@ -49,12 +49,13 @@ class Record(object):
         line = line.rstrip()  # no trailing whitespace
         columns = line.split("\t")  # separate the tab-delineated cols
         if len(columns) != 4:
-            raise ValueError("I don't understand the format of %s" % line)
+            raise ValueError(f"I don't understand the format of {line}")
         self.sid, pdbid, res, self.hierarchy = columns
         self.residues = Residues(res)
         self.residues.pdbid = pdbid
 
     def __str__(self):
+        """Represent the SCOP domain record as a tab-separated string."""
         s = []
         s.append(self.sid)
         s.append(str(self.residues).replace(" ", "\t"))
@@ -70,6 +71,6 @@ def parse(handle):
 
     """
     for line in handle:
-        if line.startswith('#'):
+        if line.startswith("#"):
             continue
         yield Record(line)

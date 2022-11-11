@@ -7,61 +7,52 @@
 This modules requires MySQLdb to be installed.
 
 Example, substitute the your database credentials as
-appropriate:
+appropriate::
 
-    >>> from Bio.motifs.jaspar.db import JASPAR5
-    >>>
-    >>> JASPAR_DB_HOST = "hostname.example.org"
-    >>> JASPAR_DB_NAME = "JASPAR_2013"
-    >>> JASPAR_DB_USER = "guest"
-    >>> JASPAR_DB_PASS = "guest"
-    >>>
-    >>> DFLT_COLLECTION = 'CORE'
-    >>> jdb = JASPAR5(
-    ...     host=JASPAR_DB_HOST,
-    ...     name=JASPAR_DB_NAME,
-    ...     user=JASPAR_DB_USER,
-    ...     password=JASPAR_DB_PASS
-    ... )
-    >>>
-    >>>
-    >>> ets1 = jdb.fetch_motif_by_id('MA0098')
-    >>> print(ets1)
+        from Bio.motifs.jaspar.db import JASPAR5
+        JASPAR_DB_HOST = "hostname.example.org"
+        JASPAR_DB_NAME = "JASPAR2018"
+        JASPAR_DB_USER = "guest"
+        JASPAR_DB_PASS = "guest"
+
+        jdb = JASPAR5(
+            host=JASPAR_DB_HOST,
+            name=JASPAR_DB_NAME,
+            user=JASPAR_DB_USER,
+            password=JASPAR_DB_PASS
+        )
+        ets1 = jdb.fetch_motif_by_id('MA0098')
+        print(ets1)
     TF name ETS1
-    Matrix ID   MA0098.1
+    Matrix ID   MA0098.3
     Collection  CORE
-    TF class    Winged Helix-Turn-Helix
-    TF family   Ets
+    TF class    ['Tryptophan cluster factors']
+    TF family   ['Ets-related factors']
     Species 9606
     Taxonomic group vertebrates
-    Accession   ['CAG47050']
-    Data type used  SELEX
-    Medline 1542566
+    Accession   ['P14921']
+    Data type used  HT-SELEX
+    Medline 20517297
     PAZAR ID    TF0000070
-    Comments    -
+    Comments    Data is from Taipale HTSELEX DBD (2013)
     Matrix:
-            0      1      2      3      4      5
-    A:   4.00  17.00   0.00   0.00   0.00   5.00
-    C:  16.00   0.00   1.00  39.00  39.00   3.00
-    G:   4.00   0.00   0.00   1.00   0.00  17.00
-    T:  16.00  23.00  39.00   0.00   1.00  15.00
+            0      1      2      3      4      5      6      7      8      9
+    A: 2683.00 180.00 425.00   0.00   0.00 2683.00 2683.00 1102.00  89.00 803.00
+    C: 210.00 2683.00 2683.00  21.00   0.00   0.00   9.00  21.00 712.00 401.00
+    G: 640.00 297.00   7.00 2683.00 2683.00   0.00  31.00 1580.00 124.00 1083.00
+    T: 241.00  22.00   0.00   0.00  12.00   0.00 909.00  12.00 1970.00 396.00
 
-
-    >>>
-    >>> motifs = jdb.fetch_motifs(
-    ...     collection = 'CORE',
-    ...     tax_group = ['vertebrates', 'insects'],
-    ...     tf_class = 'Winged Helix-Turn-Helix',
-    ...     tf_family = ['Forkhead', 'Ets'],
-    ...     min_ic = 12
-    ... )
-    >>>
-    >>> for motif in motifs:
-    ...     pass # do something with the motif
-
+        motifs = jdb.fetch_motifs(
+            collection = 'CORE',
+            tax_group = ['vertebrates', 'insects'],
+            tf_class = 'Homeo domain factors',
+            tf_family = ['TALE-type homeo domain factors', 'POU domain factors'],
+            min_ic = 12
+        )
+        for motif in motifs:
+            pass # do something with the motif
 """
 
-from __future__ import print_function
 
 import warnings
 from Bio import BiopythonWarning
@@ -70,17 +61,17 @@ from Bio import MissingPythonDependencyError
 try:
     import MySQLdb as mdb
 except ImportError:
-    raise MissingPythonDependencyError("Install MySQLdb if you want to use "
-                                       "Bio.motifs.jaspar.db")
+    raise MissingPythonDependencyError(
+        "Install MySQLdb if you want to use Bio.motifs.jaspar.db"
+    )
 
-from Bio.Alphabet.IUPAC import unambiguous_dna as dna
 from Bio.motifs import jaspar, matrix
 
 
-JASPAR_DFLT_COLLECTION = 'CORE'
+JASPAR_DFLT_COLLECTION = "CORE"
 
 
-class JASPAR5(object):
+class JASPAR5:
     """Class representing a JASPAR5 database.
 
     Class representing a JASPAR5 DB. The methods within are loosely based
@@ -95,11 +86,10 @@ class JASPAR5(object):
         """Construct a JASPAR5 instance and connect to specified DB.
 
         Arguments:
-
-        - host - host name of the the JASPAR DB server
-        - name - name of the JASPAR database
-        - user - user name to connect to the JASPAR DB
-        - password - JASPAR DB password
+         - host - host name of the the JASPAR DB server
+         - name - name of the JASPAR database
+         - user - user name to connect to the JASPAR DB
+         - password - JASPAR DB password
 
         """
         self.name = name
@@ -111,22 +101,21 @@ class JASPAR5(object):
 
     def __str__(self):
         """Return a string represention of the JASPAR5 DB connection."""
-        return r"%s\@%s:%s" % (self.user, self.host, self.name)
+        return rf"{self.user}\@{self.host}:{self.name}"
 
     def fetch_motif_by_id(self, id):
-        """Fetch a single JASPAR motif from the DB by it's JASPAR matrix ID.
+        """Fetch a single JASPAR motif from the DB by its JASPAR matrix ID.
 
         Example id 'MA0001.1'.
 
         Arguments:
-
-            - id - JASPAR matrix ID. This may be a fully specified ID including
-              the version number (e.g. MA0049.2) or just the base ID (e.g.
-              MA0049). If only a base ID is provided, the latest version is
-              returned.
+         - id - JASPAR matrix ID. This may be a fully specified ID including
+                the version number (e.g. MA0049.2) or just the base ID (e.g.
+                MA0049). If only a base ID is provided, the latest version is
+                returned.
 
         Returns:
-            - A Bio.motifs.jaspar.Motif object
+         - A Bio.motifs.jaspar.Motif object
 
         **NOTE:** The perl TFBS module allows you to specify the type of matrix
         to return (PFM, PWM, ICM) but matrices are always stored in JASPAR as
@@ -159,7 +148,7 @@ class JASPAR5(object):
         Arguments:
         name - a single name or list of names
         Returns:
-        A list of Bio.motifs.Motif.japar objects
+        A list of Bio.motifs.jaspar.Motif objects
 
         Notes:
         Names are not guaranteed to be unique. There may be more than one
@@ -176,10 +165,22 @@ class JASPAR5(object):
         return self.fetch_motifs(collection=None, tf_name=name)
 
     def fetch_motifs(
-        self, collection=JASPAR_DFLT_COLLECTION, tf_name=None, tf_class=None,
-        tf_family=None, matrix_id=None, tax_group=None, species=None,
-        pazar_id=None, data_type=None, medline=None, min_ic=0, min_length=0,
-        min_sites=0, all=False, all_versions=False
+        self,
+        collection=JASPAR_DFLT_COLLECTION,
+        tf_name=None,
+        tf_class=None,
+        tf_family=None,
+        matrix_id=None,
+        tax_group=None,
+        species=None,
+        pazar_id=None,
+        data_type=None,
+        medline=None,
+        min_ic=0,
+        min_length=0,
+        min_sites=0,
+        all=False,
+        all_versions=False,
     ):
         """Fetch jaspar.Record (list) of motifs using selection criteria.
 
@@ -251,7 +252,7 @@ class JASPAR5(object):
             data_type=data_type,
             medline=medline,
             all=all,
-            all_versions=all_versions
+            all_versions=all_versions,
         )
 
         record = jaspar.Record()
@@ -282,9 +283,7 @@ class JASPAR5(object):
             just use the first column sum.
             """
             if min_sites:
-                num_sites = sum(
-                    [motif.counts[nt][0] for nt in motif.alphabet.letters]
-                )
+                num_sites = sum(motif.counts[nt][0] for nt in motif.alphabet)
                 if num_sites < min_sites:
                     continue
 
@@ -295,8 +294,11 @@ class JASPAR5(object):
     def _fetch_latest_version(self, base_id):
         """Get the latest version number for the given base_id (PRIVATE)."""
         cur = self.dbh.cursor()
-        cur.execute("""select VERSION from MATRIX where BASE_id = %s
-                       order by VERSION desc limit 1""", (base_id,))
+        cur.execute(
+            "select VERSION from MATRIX where BASE_id = %s order by VERSION"
+            " desc limit 1",
+            (base_id,),
+        )
 
         row = cur.fetchone()
 
@@ -304,10 +306,12 @@ class JASPAR5(object):
         if row:
             latest = row[0]
         else:
-            warnings.warn("Failed to fetch latest version number for JASPAR "
-                          "motif with base ID '{0}'. "
-                          "No JASPAR motif with this base ID appears to exist "
-                          "in the database.".format(base_id), BiopythonWarning)
+            warnings.warn(
+                "Failed to fetch latest version number for JASPAR motif"
+                f" with base ID '{base_id}'. No JASPAR motif with this"
+                " base ID appears to exist in the database.",
+                BiopythonWarning,
+            )
 
         return latest
 
@@ -317,8 +321,10 @@ class JASPAR5(object):
         Also checks if this combo exists or not.
         """
         cur = self.dbh.cursor()
-        cur.execute("""select id from MATRIX where BASE_id = %s
-                       and VERSION = %s""", (base_id, version))
+        cur.execute(
+            "select id from MATRIX where BASE_id = %s and VERSION = %s",
+            (base_id, version),
+        )
 
         row = cur.fetchone()
 
@@ -326,26 +332,32 @@ class JASPAR5(object):
         if row:
             int_id = row[0]
         else:
-            warnings.warn("Failed to fetch internal database ID for JASPAR "
-                          "motif with matrix ID '{0}.{1}'. "
-                          "No JASPAR motif with this matrix ID appears to "
-                          "exist.".format(base_id, version), BiopythonWarning)
+            warnings.warn(
+                "Failed to fetch internal database ID for JASPAR motif"
+                f" with matrix ID '{base_id}.{version}'. No JASPAR motif"
+                " with this matrix ID appears to exist.",
+                BiopythonWarning,
+            )
 
         return int_id
 
     def _fetch_motif_by_internal_id(self, int_id):
         """Fetch basic motif information (PRIVATE)."""
         cur = self.dbh.cursor()
-        cur.execute("""select BASE_ID, VERSION, COLLECTION, NAME from MATRIX
-                       where id = %s""", (int_id,))
+        cur.execute(
+            "select BASE_ID, VERSION, COLLECTION, NAME from MATRIX where id = %s",
+            (int_id,),
+        )
 
         row = cur.fetchone()
 
         # This should never happen as it is an internal method. If it does
         # we should probably raise an exception
         if not row:
-            warnings.warn("Could not fetch JASPAR motif with internal "
-                          "ID = {0}".format(int_id), BiopythonWarning)
+            warnings.warn(
+                f"Could not fetch JASPAR motif with internal ID = {int_id}",
+                BiopythonWarning,
+            )
             return None
 
         base_id = row[0]
@@ -353,19 +365,16 @@ class JASPAR5(object):
         collection = row[2]
         name = row[3]
 
-        matrix_id = "".join([base_id, '.', str(version)])
+        matrix_id = "".join([base_id, ".", str(version)])
 
         # fetch the counts matrix
         counts = self._fetch_counts_matrix(int_id)
 
         # Create new JASPAR motif
-        motif = jaspar.Motif(
-            matrix_id, name, collection=collection, counts=counts
-        )
+        motif = jaspar.Motif(matrix_id, name, collection=collection, counts=counts)
 
         # fetch species
-        cur.execute("""select TAX_ID from MATRIX_SPECIES
-                       where id = %s""", (int_id,))
+        cur.execute("select TAX_ID from MATRIX_SPECIES where id = %s", (int_id,))
         tax_ids = []
         rows = cur.fetchall()
         for row in rows:
@@ -392,32 +401,37 @@ class JASPAR5(object):
         motif.acc = accs
 
         # fetch remaining annotation as tags from the ANNOTATION table
-        cur.execute("""select TAG, VAL from MATRIX_ANNOTATION
-                       where id = %s""", (int_id,))
+        cur.execute("select TAG, VAL from MATRIX_ANNOTATION where id = %s", (int_id,))
         rows = cur.fetchall()
+
+        # Since JASPAR 2018 tf_family and tf_class are return as array.
+        tf_family = []
+        tf_class = []
+
         for row in rows:
             attr = row[0]
             val = row[1]
-            if attr == 'class':
-                motif.tf_class = val
-            elif attr == 'family':
-                motif.tf_family = val
-            elif attr == 'tax_group':
+            if attr == "class":
+                tf_class.append(val)
+            elif attr == "family":
+                tf_family.append(val)
+            elif attr == "tax_group":
                 motif.tax_group = val
-            elif attr == 'type':
+            elif attr == "type":
                 motif.data_type = val
-            elif attr == 'pazar_tf_id':
+            elif attr == "pazar_tf_id":
                 motif.pazar_id = val
-            elif attr == 'medline':
+            elif attr == "medline":
                 motif.medline = val
-            elif attr == 'comment':
+            elif attr == "comment":
                 motif.comment = val
             else:
-                """
-                TODO If we were to implement additional abitrary tags
-                motif.tag(attr, val)
-                """
+                # TODO If we were to implement additional abitrary tags
+                # motif.tag(attr, val)
                 pass
+
+        motif.tf_family = tf_family
+        motif.tf_class = tf_class
 
         return motif
 
@@ -429,11 +443,13 @@ class JASPAR5(object):
         counts = {}
         cur = self.dbh.cursor()
 
-        for base in dna.letters:
+        for base in "ACGT":
             base_counts = []
 
-            cur.execute("""select val from MATRIX_DATA where ID = %s
-                           and row = %s order by col""", (int_id, base))
+            cur.execute(
+                "select val from MATRIX_DATA where ID = %s and row = %s order by col",
+                (int_id, base),
+            )
 
             rows = cur.fetchall()
             for row in rows:
@@ -441,13 +457,22 @@ class JASPAR5(object):
 
             counts[base] = [float(x) for x in base_counts]
 
-        return matrix.GenericPositionMatrix(dna, counts)
+        return matrix.GenericPositionMatrix("ACGT", counts)
 
     def _fetch_internal_id_list(
-        self, collection=JASPAR_DFLT_COLLECTION, tf_name=None, tf_class=None,
-        tf_family=None, matrix_id=None, tax_group=None, species=None,
-        pazar_id=None, data_type=None, medline=None, all=False,
-        all_versions=False
+        self,
+        collection=JASPAR_DFLT_COLLECTION,
+        tf_name=None,
+        tf_class=None,
+        tf_family=None,
+        matrix_id=None,
+        tax_group=None,
+        species=None,
+        pazar_id=None,
+        data_type=None,
+        medline=None,
+        all=False,
+        all_versions=False,
     ):
         """Fetch list of internal JASPAR motif IDs.
 
@@ -509,17 +534,15 @@ class JASPAR5(object):
             """
             if all_versions:
                 for id in matrix_id:
-                    # ignore vesion here, this is a stupidity filter
+                    # ignore version here, this is a stupidity filter
                     (base_id, version) = jaspar.split_jaspar_id(id)
-                    cur.execute(
-                        "select ID from MATRIX where BASE_ID = %s", (base_id,)
-                    )
+                    cur.execute("select ID from MATRIX where BASE_ID = %s", (base_id,))
 
                     rows = cur.fetchall()
                     for row in rows:
                         int_ids.append(row[0])
             else:
-                # only the lastest version, or the requested version
+                # only the latest version, or the requested version
                 for id in matrix_id:
                     (base_id, version) = jaspar.split_jaspar_id(id)
 
@@ -580,7 +603,7 @@ class JASPAR5(object):
                 clause = "".join([clause, "')"])
             else:
                 # A single tax ID
-                clause = "ms.TAX_ID = '%s'" % str(species)
+                clause = "ms.TAX_ID = '%s'" % species
 
             where_clauses.append(clause)
 
@@ -714,7 +737,7 @@ class JASPAR5(object):
         if where_clauses:
             sql = "".join([sql, " where ", " and ".join(where_clauses)])
 
-        # print "sql = %s" % sql
+        # print("sql = %s" % sql)
 
         cur.execute(sql)
         rows = cur.fetchall()
@@ -729,8 +752,9 @@ class JASPAR5(object):
                     int_ids.append(id)
 
         if len(int_ids) < 1:
-            warnings.warn("Zero motifs returned with current select critera",
-                          BiopythonWarning)
+            warnings.warn(
+                "Zero motifs returned with current select criteria", BiopythonWarning
+            )
 
         return int_ids
 
@@ -742,10 +766,12 @@ class JASPAR5(object):
         """
         cur = self.dbh.cursor()
 
-        cur.execute("select count(*) from MATRIX where "
-                    "BASE_ID = (select BASE_ID from MATRIX where ID = %s) "
-                    "and VERSION > (select VERSION from MATRIX where ID = %s)",
-                    (int_id, int_id))
+        cur.execute(
+            "select count(*) from MATRIX where "
+            "BASE_ID = (select BASE_ID from MATRIX where ID = %s) "
+            "and VERSION > (select VERSION from MATRIX where ID = %s)",
+            (int_id, int_id),
+        )
 
         row = cur.fetchone()
 

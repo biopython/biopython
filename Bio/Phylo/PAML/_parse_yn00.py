@@ -1,7 +1,9 @@
-# Copyright (C) 2011 by Brandon Invergo (b.invergo@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright (C) 2011, 2019 by Brandon Invergo (b.invergo@gmail.com)
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Methods for parsing yn00 results files."""
 
@@ -20,10 +22,6 @@ def parse_ng86(lines, results):
     """
     sequences = []
     for line in lines:
-        # Find all floating point numbers in this line
-        line_floats_res = re.findall(r"-*\d+\.\d+", line)
-        line_floats = [float(val) for val in line_floats_res]
-
         # The purpose of this complex regex is to parse the NG86 section for
         # valid lines of data that are mixed in with citations and comments.
         # The data lines begin with a taxon name, followed by zero or more
@@ -35,8 +33,16 @@ def parse_ng86(lines, results):
         # This regex is an attempt to cover more pathological cases while also
         # parsing all existing versions of yn00 output with shorter names.
 
-        matrix_row_res = re.match(r"^([^\s]+?)(?:\s+-?\d+\.\d+|\s*$|-1.0000\s*\()", line)
+        matrix_row_res = re.match(
+            r"^([^\s]+?)(\s+-?\d+\.\d+.*$|\s*$|-1.0000\s*\(.*$)", line
+        )
         if matrix_row_res is not None:
+            # Find all floating point numbers in this line, accounting
+            # for the fact that the sequence IDs might have bits that
+            # look like floating point values.
+            line_floats_res = re.findall(r"-*\d+\.\d+", matrix_row_res.group(2))
+            line_floats = [float(val) for val in line_floats_res]
+
             seq_name = matrix_row_res.group(1).strip()
             sequences.append(seq_name)
             results[seq_name] = {}
@@ -128,11 +134,10 @@ def parse_others(lines, results, sequences):
                 # sign, while the rest have 7 characters. On Windows,
                 # NaNs take on weird values like -1.#IND, which might fill the
                 # entire fixed column width.
-                res_matches = re.findall("[dSNwrho]{1,3} =.{7,8}?",
-                                         line_stats)
+                res_matches = re.findall(r"[dSNwrho]{1,3} =.{7,8}?", line_stats)
                 for stat_pair in res_matches:
-                    stat = stat_pair.split('=')[0].strip()
-                    value = stat_pair.split('=')[1].strip()
+                    stat = stat_pair.split("=")[0].strip()
+                    value = stat_pair.split("=")[1].strip()
                     try:
                         stats[stat] = float(value)
                     except ValueError:

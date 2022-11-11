@@ -1,14 +1,14 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Class that maps (chain_id, residue_id) to a residue property."""
 
-from __future__ import print_function
 
-
-class AbstractPropertyMap(object):
+class AbstractPropertyMap:
     """Define base class, map holder of residue properties."""
 
     def __init__(self, property_dict, property_keys, property_list):
@@ -81,9 +81,15 @@ class AbstractPropertyMap(object):
 
         Examples
         --------
+        >>> entity_property_list = [
+        ...     ('entity_1', 'property_1'),
+        ...     ('entity_2', 'property_2')
+        ... ]
+        >>> map = AbstractPropertyMap({}, [], entity_property_list)
         >>> for (res, property) in iter(map):
         ...     print(res, property)
-        ...
+        entity_1 property_1
+        entity_2 property_2
 
         """
         for i in range(0, len(self.property_list)):
@@ -95,14 +101,13 @@ class AbstractResiduePropertyMap(AbstractPropertyMap):
 
     def __init__(self, property_dict, property_keys, property_list):
         """Initialize the class."""
-        AbstractPropertyMap.__init__(self, property_dict, property_keys,
-                                     property_list)
+        AbstractPropertyMap.__init__(self, property_dict, property_keys, property_list)
 
     def _translate_id(self, ent_id):
         """Return entity identifier on residue (PRIVATE)."""
         chain_id, res_id = ent_id
         if isinstance(res_id, int):
-            ent_id = (chain_id, (' ', res_id, ' '))
+            ent_id = (chain_id, (" ", res_id, " "))
         return ent_id
 
 
@@ -111,8 +116,7 @@ class AbstractAtomPropertyMap(AbstractPropertyMap):
 
     def __init__(self, property_dict, property_keys, property_list):
         """Initialize the class."""
-        AbstractPropertyMap.__init__(self, property_dict, property_keys,
-                                     property_list)
+        AbstractPropertyMap.__init__(self, property_dict, property_keys, property_list)
 
     def _translate_id(self, ent_id):
         """Return entity identifier on atoms (PRIVATE)."""
@@ -122,5 +126,5 @@ class AbstractAtomPropertyMap(AbstractPropertyMap):
             chain_id, res_id, atom_name = ent_id
             icode = None
         if isinstance(res_id, int):
-            ent_id = (chain_id, (' ', res_id, ' '), atom_name, icode)
+            ent_id = (chain_id, (" ", res_id, " "), atom_name, icode)
         return ent_id

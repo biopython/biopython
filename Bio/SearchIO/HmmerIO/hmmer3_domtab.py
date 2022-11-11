@@ -7,18 +7,17 @@
 
 from itertools import chain
 
-from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 from .hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer
 
 __all__ = (
-    'Hmmer3DomtabHmmhitParser',
-    'Hmmer3DomtabHmmqueryParser',
-    'Hmmer3DomtabHmmhitIndexer',
-    'Hmmer3DomtabHmmqueryIndexer',
-    'Hmmer3DomtabHmmhitWriter',
-    'Hmmer3DomtabHmmqueryWriter',
+    "Hmmer3DomtabHmmhitParser",
+    "Hmmer3DomtabHmmqueryParser",
+    "Hmmer3DomtabHmmhitIndexer",
+    "Hmmer3DomtabHmmqueryIndexer",
+    "Hmmer3DomtabHmmhitWriter",
+    "Hmmer3DomtabHmmqueryWriter",
 )
 
 
@@ -28,56 +27,57 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
     def _parse_row(self):
         """Return a dictionary of parsed row values (PRIVATE)."""
         assert self.line
-        cols = [x for x in self.line.strip().split(' ') if x]
+        cols = [x for x in self.line.strip().split(" ") if x]
         # if len(cols) > 23, we have extra description columns
         # combine them all into one string in the 19th column
         if len(cols) > 23:
-            cols[22] = ' '.join(cols[22:])
+            cols[22] = " ".join(cols[22:])
         elif len(cols) < 23:
-            cols.append('')
+            cols.append("")
             assert len(cols) == 23
 
         # assign parsed column data into qresult, hit, and hsp dicts
         qresult = {}
-        qresult['id'] = cols[3]                 # query name
-        qresult['accession'] = cols[4]          # query accession
-        qresult['seq_len'] = int(cols[5])       # qlen
+        qresult["id"] = cols[3]  # query name
+        qresult["accession"] = cols[4]  # query accession
+        qresult["seq_len"] = int(cols[5])  # qlen
         hit = {}
-        hit['id'] = cols[0]                     # target name
-        hit['accession'] = cols[1]              # target accession
-        hit['seq_len'] = int(cols[2])           # tlen
-        hit['evalue'] = float(cols[6])          # evalue
-        hit['bitscore'] = float(cols[7])        # score
-        hit['bias'] = float(cols[8])            # bias
-        hit['description'] = cols[22]           # description of target
+        hit["id"] = cols[0]  # target name
+        hit["accession"] = cols[1]  # target accession
+        hit["seq_len"] = int(cols[2])  # tlen
+        hit["evalue"] = float(cols[6])  # evalue
+        hit["bitscore"] = float(cols[7])  # score
+        hit["bias"] = float(cols[8])  # bias
+        hit["description"] = cols[22]  # description of target
         hsp = {}
-        hsp['domain_index'] = int(cols[9])      # # (domain number)
+        hsp["domain_index"] = int(cols[9])  # # (domain number)
         # not parsing cols[10] since it's basically len(hit)
-        hsp['evalue_cond'] = float(cols[11])    # c-evalue
-        hsp['evalue'] = float(cols[12])         # i-evalue
-        hsp['bitscore'] = float(cols[13])       # score
-        hsp['bias'] = float(cols[14])           # bias
-        hsp['env_start'] = int(cols[19]) - 1    # env from
-        hsp['env_end'] = int(cols[20])          # env to
-        hsp['acc_avg'] = float(cols[21])        # acc
+        hsp["evalue_cond"] = float(cols[11])  # c-evalue
+        hsp["evalue"] = float(cols[12])  # i-evalue
+        hsp["bitscore"] = float(cols[13])  # score
+        hsp["bias"] = float(cols[14])  # bias
+        hsp["env_start"] = int(cols[19]) - 1  # env from
+        hsp["env_end"] = int(cols[20])  # env to
+        hsp["acc_avg"] = float(cols[21])  # acc
         frag = {}
         # strand is always 0, since HMMER now only handles protein
-        frag['hit_strand'] = frag['query_strand'] = 0
-        frag['hit_start'] = int(cols[15]) - 1    # hmm from
-        frag['hit_end'] = int(cols[16])          # hmm to
-        frag['query_start'] = int(cols[17]) - 1  # ali from
-        frag['query_end'] = int(cols[18])        # ali to
-        # HMMER alphabets are always protein
-        frag['alphabet'] = generic_protein
+        frag["hit_strand"] = frag["query_strand"] = 0
+        frag["hit_start"] = int(cols[15]) - 1  # hmm from
+        frag["hit_end"] = int(cols[16])  # hmm to
+        frag["query_start"] = int(cols[17]) - 1  # ali from
+        frag["query_end"] = int(cols[18])  # ali to
+        # HMMER results are always protein
+        frag["molecule_type"] = "protein"
 
         # switch hmm<-->ali coordinates if hmm is not hit
         if not self.hmm_as_hit:
-            frag['hit_end'], frag['query_end'] = (frag['query_end'],
-                                                  frag['hit_end'])
-            frag['hit_start'], frag['query_start'] = (frag['query_start'],
-                                                      frag['hit_start'])
+            frag["hit_end"], frag["query_end"] = (frag["query_end"], frag["hit_end"])
+            frag["hit_start"], frag["query_start"] = (
+                frag["query_start"],
+                frag["hit_start"],
+            )
 
-        return {'qresult': qresult, 'hit': hit, 'hsp': hsp, 'frag': frag}
+        return {"qresult": qresult, "hit": hit, "hsp": hsp, "frag": frag}
 
     def _parse_qresult(self):
         """Return QueryResult objects (PRIVATE)."""
@@ -106,10 +106,10 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
                 prev_qid = cur_qid
                 prev_hid = cur_hid
             # only parse the line if it's not EOF
-            if self.line and not self.line.startswith('#'):
+            if self.line and not self.line.startswith("#"):
                 cur = self._parse_row()
-                cur_qid = cur['qresult']['id']
-                cur_hid = cur['hit']['id']
+                cur_qid = cur["qresult"]["id"]
+                cur_hid = cur["hit"]["id"]
             else:
                 file_state = state_EOF
                 # mock ID values since the line is empty
@@ -130,10 +130,10 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
             if prev is not None:
                 # each line is basically an HSP with one HSPFragment
                 frag = HSPFragment(prev_hid, prev_qid)
-                for attr, value in prev['frag'].items():
+                for attr, value in prev["frag"].items():
                     setattr(frag, attr, value)
                 hsp = HSP([frag])
-                for attr, value in prev['hsp'].items():
+                for attr, value in prev["hsp"].items():
                     setattr(hsp, attr, value)
                 hsp_list.append(hsp)
 
@@ -141,7 +141,7 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
                 # i.e. when hit state is state_HIT_NEW
                 if hit_state == state_HIT_NEW:
                     hit = Hit(hsp_list)
-                    for attr, value in prev['hit'].items():
+                    for attr, value in prev["hit"].items():
                         setattr(hit, attr, value)
                     hit_list.append(hit)
                     hsp_list = []
@@ -149,7 +149,7 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
                 # create qresult and yield if we're at a new qresult or EOF
                 if qres_state == state_QRES_NEW or file_state == state_EOF:
                     qresult = QueryResult(hit_list, prev_qid)
-                    for attr, value in prev['qresult'].items():
+                    for attr, value in prev["qresult"].items():
                         setattr(qresult, attr, value)
                     yield qresult
                     # if current line is EOF, break
@@ -202,7 +202,7 @@ class Hmmer3DomtabHmmqueryIndexer(Hmmer3TabIndexer):
     _query_id_idx = 3
 
 
-class Hmmer3DomtabHmmhitWriter(object):
+class Hmmer3DomtabHmmhitWriter:
     """HMMER domain table writer using hit coordinates.
 
     Writer for hmmer3-domtab output format which writes hit coordinates
@@ -257,7 +257,8 @@ class Hmmer3DomtabHmmhitWriter(object):
                 qaccw, taccw = 10, 10
         else:
             qnamew, tnamew, qaccw, taccw = 20, 20, 10, 10
-
+        # Turn black code style off
+        # fmt: off
         header = ("#%*s %22s %40s %11s %11s %11s\n"
                   % (tnamew + qnamew - 1 + 15 + taccw + qaccw, "", "--- full sequence ---",
                      "-------------- this domain -------------", "hmm coord",
@@ -279,12 +280,13 @@ class Hmmer3DomtabHmmhitWriter(object):
                       "---------", "---------", "------", "-----", "-----", "-----",
                       "-----", "-----", "-----", "-----", "----",
                       "---------------------"))
-
+        # Turn black code style on
+        # fmt: on
         return header
 
     def _build_row(self, qresult):
         """Return a string or one row or more of the QueryResult object (PRIVATE)."""
-        rows = ''
+        rows = ""
 
         # calculate whitespace required
         # adapted from HMMER's source: src/p7_tophits.c#L1083
@@ -296,7 +298,7 @@ class Hmmer3DomtabHmmhitWriter(object):
             qresult_acc = qresult.accession
         except AttributeError:
             qaccw, taccw = 10, 10
-            qresult_acc = '-'
+            qresult_acc = "-"
 
         for hit in qresult:
 
@@ -304,7 +306,7 @@ class Hmmer3DomtabHmmhitWriter(object):
             try:
                 hit_acc = hit.accession
             except AttributeError:
-                hit_acc = '-'
+                hit_acc = "-"
 
             for hsp in hit.hsps:
                 if self.hmm_as_hit:
@@ -318,16 +320,40 @@ class Hmmer3DomtabHmmhitWriter(object):
                     ali_to = hsp.hit_end
                     ali_from = hsp.hit_start + 1
 
-                rows += "%-*s %-*s %5d %-*s %-*s %5d %9.2g %6.1f %5.1f %3d" \
-                        " %3d %9.2g %9.2g %6.1f %5.1f %5d %5d %5ld %5ld" \
-                        " %5d %5d %4.2f %s\n" % \
-                        (tnamew, hit.id, taccw, hit_acc, hit.seq_len, qnamew,
-                         qresult.id, qaccw, qresult_acc, qresult.seq_len,
-                         hit.evalue, hit.bitscore, hit.bias, hsp.domain_index,
-                         len(hit.hsps), hsp.evalue_cond, hsp.evalue,
-                         hsp.bitscore, hsp.bias, hmm_from, hmm_to, ali_from,
-                         ali_to, hsp.env_start + 1, hsp.env_end, hsp.acc_avg,
-                         hit.description)
+                rows += (
+                    "%-*s %-*s %5d %-*s %-*s %5d %9.2g %6.1f %5.1f %3d"
+                    " %3d %9.2g %9.2g %6.1f %5.1f %5d %5d %5ld %5ld"
+                    " %5d %5d %4.2f %s\n"
+                    % (
+                        tnamew,
+                        hit.id,
+                        taccw,
+                        hit_acc,
+                        hit.seq_len,
+                        qnamew,
+                        qresult.id,
+                        qaccw,
+                        qresult_acc,
+                        qresult.seq_len,
+                        hit.evalue,
+                        hit.bitscore,
+                        hit.bias,
+                        hsp.domain_index,
+                        len(hit.hsps),
+                        hsp.evalue_cond,
+                        hsp.evalue,
+                        hsp.bitscore,
+                        hsp.bias,
+                        hmm_from,
+                        hmm_to,
+                        ali_from,
+                        ali_to,
+                        hsp.env_start + 1,
+                        hsp.env_end,
+                        hsp.acc_avg,
+                        hit.description,
+                    )
+                )
 
         return rows
 
@@ -345,4 +371,5 @@ class Hmmer3DomtabHmmqueryWriter(Hmmer3DomtabHmmhitWriter):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

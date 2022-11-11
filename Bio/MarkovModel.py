@@ -33,7 +33,11 @@ except AttributeError:
     # module to see if we can simplify some of the other functions in
     # this module.
     import warnings
-    warnings.warn("For optimal speed, please update to Numpy version 1.3 or later (current version is %s)" % numpy.__version__)
+
+    warnings.warn(
+        "For optimal speed, please update to Numpy version 1.3 or later (current version is %s)"
+        % numpy.__version__
+    )
 
     def logaddexp(logx, logy):
         """Implement logaddexp method if Numpy version is older than 1.3."""
@@ -57,15 +61,16 @@ def itemindex(values):
 
 numpy.random.seed()
 
-VERY_SMALL_NUMBER = 1E-300
+VERY_SMALL_NUMBER = 1e-300
 LOG0 = numpy.log(VERY_SMALL_NUMBER)
 
 
-class MarkovModel(object):
+class MarkovModel:
     """Create a state-emitting MarkovModel object."""
 
-    def __init__(self, states, alphabet,
-                 p_initial=None, p_transition=None, p_emission=None):
+    def __init__(
+        self, states, alphabet, p_initial=None, p_transition=None, p_emission=None
+    ):
         """Initialize the class."""
         self.states = states
         self.alphabet = alphabet
@@ -75,7 +80,8 @@ class MarkovModel(object):
 
     def __str__(self):
         """Create a string representation of the MarkovModel object."""
-        from Bio._py3k import StringIO
+        from io import StringIO
+
         handle = StringIO()
         save(self, handle)
         handle.seek(0)
@@ -86,7 +92,7 @@ def _readline_and_check_start(handle, start):
     """Read the first line and evaluate that begisn with the correct start (PRIVATE)."""
     line = handle.readline()
     if not line.startswith(start):
-        raise ValueError("I expected %r but got %r" % (start, line))
+        raise ValueError(f"I expected {start!r} but got {line!r}")
     return line
 
 
@@ -107,21 +113,21 @@ def load(handle):
     mm.p_initial = numpy.zeros(N)
     line = _readline_and_check_start(handle, "INITIAL:")
     for i in range(len(states)):
-        line = _readline_and_check_start(handle, "  %s:" % states[i])
+        line = _readline_and_check_start(handle, f"  {states[i]}:")
         mm.p_initial[i] = float(line.split()[-1])
 
     # Load the transition.
     mm.p_transition = numpy.zeros((N, N))
     line = _readline_and_check_start(handle, "TRANSITION:")
     for i in range(len(states)):
-        line = _readline_and_check_start(handle, "  %s:" % states[i])
+        line = _readline_and_check_start(handle, f"  {states[i]}:")
         mm.p_transition[i, :] = [float(v) for v in line.split()[1:]]
 
     # Load the emission.
     mm.p_emission = numpy.zeros((N, M))
     line = _readline_and_check_start(handle, "EMISSION:")
     for i in range(len(states)):
-        line = _readline_and_check_start(handle, "  %s:" % states[i])
+        line = _readline_and_check_start(handle, f"  {states[i]}:")
         mm.p_emission[i, :] = [float(v) for v in line.split()[1:]]
 
     return mm
@@ -131,24 +137,29 @@ def save(mm, handle):
     """Save MarkovModel object into handle."""
     # This will fail if there are spaces in the states or alphabet.
     w = handle.write
-    w("STATES: %s\n" % ' '.join(mm.states))
-    w("ALPHABET: %s\n" % ' '.join(mm.alphabet))
+    w(f"STATES: {' '.join(mm.states)}\n")
+    w(f"ALPHABET: {' '.join(mm.alphabet)}\n")
     w("INITIAL:\n")
     for i in range(len(mm.p_initial)):
-        w("  %s: %g\n" % (mm.states[i], mm.p_initial[i]))
+        w(f"  {mm.states[i]}: {mm.p_initial[i]:g}\n")
     w("TRANSITION:\n")
     for i in range(len(mm.p_transition)):
-        w("  %s: %s\n" % (mm.states[i], ' '.join(str(x) for x in mm.p_transition[i])))
+        w(f"  {mm.states[i]}: {' '.join(str(x) for x in mm.p_transition[i])}\n")
     w("EMISSION:\n")
     for i in range(len(mm.p_emission)):
-        w("  %s: %s\n" % (mm.states[i], ' '.join(str(x) for x in mm.p_emission[i])))
+        w(f"  {mm.states[i]}: {' '.join(str(x) for x in mm.p_emission[i])}\n")
 
 
 # XXX allow them to specify starting points
-def train_bw(states, alphabet, training_data,
-             pseudo_initial=None, pseudo_transition=None, pseudo_emission=None,
-             update_fn=None,
-             ):
+def train_bw(
+    states,
+    alphabet,
+    training_data,
+    pseudo_initial=None,
+    pseudo_transition=None,
+    pseudo_emission=None,
+    update_fn=None,
+):
     """Train a MarkovModel using the Baum-Welch algorithm.
 
     Train a MarkovModel using the Baum-Welch algorithm.  states is a list
@@ -176,13 +187,11 @@ def train_bw(states, alphabet, training_data,
     if pseudo_transition is not None:
         pseudo_transition = numpy.asarray(pseudo_transition)
         if pseudo_transition.shape != (N, N):
-            raise ValueError("pseudo_transition not shape " +
-                             "len(states) X len(states)")
+            raise ValueError("pseudo_transition not shape len(states) X len(states)")
     if pseudo_emission is not None:
         pseudo_emission = numpy.asarray(pseudo_emission)
         if pseudo_emission.shape != (N, M):
-            raise ValueError("pseudo_emission not shape " +
-                             "len(states) X len(alphabet)")
+            raise ValueError("pseudo_emission not shape len(states) X len(alphabet)")
 
     # Training data is given as a list of members of the alphabet.
     # Replace those with indexes into the alphabet list for easier
@@ -198,11 +207,15 @@ def train_bw(states, alphabet, training_data,
         raise ValueError("I got training data with outputs of length 0")
 
     # Do the training with baum welch.
-    x = _baum_welch(N, M, training_outputs,
-                    pseudo_initial=pseudo_initial,
-                    pseudo_transition=pseudo_transition,
-                    pseudo_emission=pseudo_emission,
-                    update_fn=update_fn)
+    x = _baum_welch(
+        N,
+        M,
+        training_outputs,
+        pseudo_initial=pseudo_initial,
+        pseudo_transition=pseudo_transition,
+        pseudo_emission=pseudo_emission,
+        update_fn=update_fn,
+    )
     p_initial, p_transition, p_emission = x
     return MarkovModel(states, alphabet, p_initial, p_transition, p_emission)
 
@@ -210,10 +223,18 @@ def train_bw(states, alphabet, training_data,
 MAX_ITERATIONS = 1000
 
 
-def _baum_welch(N, M, training_outputs,
-                p_initial=None, p_transition=None, p_emission=None,
-                pseudo_initial=None, pseudo_transition=None,
-                pseudo_emission=None, update_fn=None):
+def _baum_welch(
+    N,
+    M,
+    training_outputs,
+    p_initial=None,
+    p_transition=None,
+    p_emission=None,
+    pseudo_initial=None,
+    pseudo_transition=None,
+    pseudo_emission=None,
+    update_fn=None,
+):
     """Implement the Baum-Welch algorithm to evaluate unknown parameters in the MarkovModel object (PRIVATE)."""
     if p_initial is None:
         p_initial = _random_norm(N)
@@ -254,25 +275,39 @@ def _baum_welch(N, M, training_outputs,
         llik = LOG0
         for outputs in training_outputs:
             llik += _baum_welch_one(
-                N, M, outputs,
-                lp_initial, lp_transition, lp_emission,
-                lpseudo_initial, lpseudo_transition, lpseudo_emission,)
+                N,
+                M,
+                outputs,
+                lp_initial,
+                lp_transition,
+                lp_emission,
+                lpseudo_initial,
+                lpseudo_transition,
+                lpseudo_emission,
+            )
         if update_fn is not None:
             update_fn(i, llik)
         if prev_llik is not None and numpy.fabs(prev_llik - llik) < 0.1:
             break
         prev_llik = llik
     else:
-        raise RuntimeError("HMM did not converge in %d iterations"
-                           % MAX_ITERATIONS)
+        raise RuntimeError("HMM did not converge in %d iterations" % MAX_ITERATIONS)
 
     # Return everything back in normal space.
     return [numpy.exp(_) for _ in (lp_initial, lp_transition, lp_emission)]
 
 
-def _baum_welch_one(N, M, outputs,
-                    lp_initial, lp_transition, lp_emission,
-                    lpseudo_initial, lpseudo_transition, lpseudo_emission):
+def _baum_welch_one(
+    N,
+    M,
+    outputs,
+    lp_initial,
+    lp_transition,
+    lp_emission,
+    lpseudo_initial,
+    lpseudo_transition,
+    lpseudo_emission,
+):
     """Execute one step for Baum-Welch algorithm (PRIVATE).
 
     Do one iteration of Baum-Welch based on a sequence of output.
@@ -294,10 +329,12 @@ def _baum_welch_one(N, M, outputs,
                 # P(making this transition)
                 # P(emitting this character)
                 # P(going to the end)
-                lp = (fmat[i][t] +
-                      lp_transition[i][j] +
-                      lp_emission[i][k] +
-                      bmat[j][t + 1])
+                lp = (
+                    fmat[i][t]
+                    + lp_transition[i][j]
+                    + lp_emission[i][k]
+                    + bmat[j][t + 1]
+                )
                 lp_traverse[i][j] = lp
         # Normalize the probability for this time step.
         lp_arc[:, :, t] = lp_traverse - _logsum(lp_traverse)
@@ -333,12 +370,12 @@ def _baum_welch_one(N, M, outputs,
     # transitions out of i when k is observed, divided by the sum of
     # the transitions out of i.
     for i in range(N):
-        ksum = numpy.zeros(M) + LOG0    # ksum[k] is the sum of all i with k.
+        ksum = numpy.zeros(M) + LOG0  # ksum[k] is the sum of all i with k.
         for t in range(T):
             k = outputs[t]
             for j in range(N):
                 ksum[k] = logaddexp(ksum[k], lp_arc[i, j, t])
-        ksum = ksum - _logsum(ksum)      # Normalize
+        ksum = ksum - _logsum(ksum)  # Normalize
         if lpseudo_emission is not None:
             ksum = _logvecadd(ksum, lpseudo_emission[i])
             ksum = ksum - _logsum(ksum)  # Renormalize
@@ -387,17 +424,20 @@ def _backward(N, T, lp_transition, lp_emission, outputs):
             # transitions from all the states from time t+1.
             lprob = LOG0
             for j in range(N):
-                lp = (matrix[j][t + 1] +
-                      lp_transition[i][j] +
-                      lp_emission[i][k])
+                lp = matrix[j][t + 1] + lp_transition[i][j] + lp_emission[i][k]
                 lprob = logaddexp(lprob, lp)
             matrix[i][t] = lprob
     return matrix
 
 
-def train_visible(states, alphabet, training_data,
-                  pseudo_initial=None, pseudo_transition=None,
-                  pseudo_emission=None):
+def train_visible(
+    states,
+    alphabet,
+    training_data,
+    pseudo_initial=None,
+    pseudo_transition=None,
+    pseudo_emission=None,
+):
     """Train a visible MarkovModel using maximum likelihoood estimates for each of the parameters.
 
     Train a visible MarkovModel using maximum likelihoood estimates
@@ -421,13 +461,11 @@ def train_visible(states, alphabet, training_data,
     if pseudo_transition is not None:
         pseudo_transition = numpy.asarray(pseudo_transition)
         if pseudo_transition.shape != (N, N):
-            raise ValueError("pseudo_transition not shape " +
-                             "len(states) X len(states)")
+            raise ValueError("pseudo_transition not shape len(states) X len(states)")
     if pseudo_emission is not None:
         pseudo_emission = numpy.asarray(pseudo_emission)
         if pseudo_emission.shape != (N, M):
-            raise ValueError("pseudo_emission not shape " +
-                             "len(states) X len(alphabet)")
+            raise ValueError("pseudo_emission not shape len(states) X len(alphabet)")
 
     # Training data is given as a list of members of the alphabet.
     # Replace those with indexes into the alphabet list for easier
@@ -441,15 +479,29 @@ def train_visible(states, alphabet, training_data,
         training_states.append([states_indexes[x] for x in tstates])
         training_outputs.append([outputs_indexes[x] for x in toutputs])
 
-    x = _mle(N, M, training_outputs, training_states,
-             pseudo_initial, pseudo_transition, pseudo_emission)
+    x = _mle(
+        N,
+        M,
+        training_outputs,
+        training_states,
+        pseudo_initial,
+        pseudo_transition,
+        pseudo_emission,
+    )
     p_initial, p_transition, p_emission = x
 
     return MarkovModel(states, alphabet, p_initial, p_transition, p_emission)
 
 
-def _mle(N, M, training_outputs, training_states, pseudo_initial,
-         pseudo_transition, pseudo_emission):
+def _mle(
+    N,
+    M,
+    training_outputs,
+    training_states,
+    pseudo_initial,
+    pseudo_transition,
+    pseudo_emission,
+):
     """Implement Maximum likelihood estimation algorithm (PRIVATE)."""
     # p_initial is the probability that a sequence of states starts
     # off with a particular one.
@@ -488,7 +540,7 @@ def _mle(N, M, training_outputs, training_states, pseudo_initial,
 
 
 def _argmaxes(vector, allowance=None):
-    """Return indeces of the maximum values aong the vector (PRIVATE)."""
+    """Return indices of the maximum values aong the vector (PRIVATE)."""
     return [numpy.argmax(vector)]
 
 
@@ -522,7 +574,7 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
     """Implement Viterbi algorithm to find most likely states for a given input (PRIVATE)."""
     T = len(output)
     # Store the backtrace in a NxT matrix.
-    backtrace = []    # list of indexes of states in previous timestep.
+    backtrace = []  # list of indexes of states in previous timestep.
     for i in range(N):
         backtrace.append([None] * T)
 
@@ -533,9 +585,7 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
         k = output[t]
         for j in range(N):
             # Find the most likely place it came from.
-            i_scores = (scores[:, t - 1] +
-                        lp_transition[:, j] +
-                        lp_emission[j, k])
+            i_scores = scores[:, t - 1] + lp_transition[:, j] + lp_emission[j, k]
             indexes = _argmaxes(i_scores)
             scores[j, t] = i_scores[indexes[0]]
             backtrace[j][t] = indexes
@@ -545,9 +595,9 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
     # In the event of ties, there may be multiple paths back through
     # the matrix, which implies a recursive solution.  We'll simulate
     # it by keeping our own stack.
-    in_process = []    # list of (t, states, score)
-    results = []       # return values.  list of (states, score)
-    indexes = _argmaxes(scores[:, T - 1])      # pick the first place
+    in_process = []  # list of (t, states, score)
+    results = []  # return values.  list of (states, score)
+    indexes = _argmaxes(scores[:, T - 1])  # pick the first place
     for i in indexes:
         in_process.append((T - 1, [i], scores[i][T - 1]))
     while in_process:
@@ -564,7 +614,7 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
 def _normalize(matrix):
     """Normalize matrix object (PRIVATE)."""
     if len(matrix.shape) == 1:
-        matrix = matrix / float(sum(matrix))
+        matrix = matrix / sum(matrix)
     elif len(matrix.shape) == 2:
         # Normalize by rows.
         for i in range(len(matrix)):

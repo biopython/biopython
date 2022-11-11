@@ -6,63 +6,54 @@
 # See the Biopython Tutorial for an explanation of the biological
 # background of these tests.
 
+"""Tests for kNN module."""
+
 import unittest
 
 try:
     import numpy
+
     del numpy
     from numpy import asarray
+
     del asarray
 except ImportError:
     from Bio import MissingPythonDependencyError
+
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.kNN.")
+        "Install NumPy if you want to use Bio.kNN."
+    ) from None
 
 from Bio import kNN
 
-xs = [[-53, -200.78],
-      [117, -267.14],
-      [57, -163.47],
-      [16, -190.30],
-      [11, -220.94],
-      [85, -193.94],
-      [16, -182.71],
-      [15, -180.41],
-      [-26, -181.73],
-      [58, -259.87],
-      [126, -414.53],
-      [191, -249.57],
-      [113, -265.28],
-      [145, -312.99],
-      [154, -213.83],
-      [147, -380.85],
-      [93, -291.13]]
+xs = [
+    [-53, -200.78],
+    [117, -267.14],
+    [57, -163.47],
+    [16, -190.30],
+    [11, -220.94],
+    [85, -193.94],
+    [16, -182.71],
+    [15, -180.41],
+    [-26, -181.73],
+    [58, -259.87],
+    [126, -414.53],
+    [191, -249.57],
+    [113, -265.28],
+    [145, -312.99],
+    [154, -213.83],
+    [147, -380.85],
+    [93, -291.13],
+]
 
-ys = [1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0]
+ys = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
 
 
 class TestKNN(unittest.TestCase):
-
     def test_calculate_model(self):
         k = 3
         model = kNN.train(xs, ys, k)
-        self.assertEqual(model.classes, set([0, 1]))
+        self.assertEqual(model.classes, {0, 1})
         n = len(xs)
         for i in range(n):
             self.assertAlmostEqual(model.xs[i, 0], xs[i][0], places=4)
@@ -109,7 +100,7 @@ class TestKNN(unittest.TestCase):
         model = kNN.train(xs, ys, k)
         predictions = [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1]
         for i in range(len(predictions)):
-            model = kNN.train(xs[:i] + xs[i + 1:], ys[:i] + ys[i + 1:], k)
+            model = kNN.train(xs[:i] + xs[i + 1 :], ys[:i] + ys[i + 1 :], k)
             prediction = kNN.classify(model, xs[i])
             self.assertEqual(prediction, predictions[i])
             if prediction == ys[i]:

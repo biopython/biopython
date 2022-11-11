@@ -20,16 +20,18 @@ from Bio.Graphics.BasicChromosome import TelomereSegment
 # --- constants
 # This is a default color scheme based on the light spectrum.
 # Based on my vague recollections from biology, this is our friend ROY G. BIV
-RAINBOW_COLORS = {(1, 1): colors.violet,
-                  (2, 2): colors.indigo,
-                  (3, 3): colors.blue,
-                  (4, 4): colors.green,
-                  (5, 5): colors.yellow,
-                  (6, 6): colors.orange,
-                  (7, 20): colors.red}
+RAINBOW_COLORS = {
+    (1, 1): colors.violet,
+    (2, 2): colors.indigo,
+    (3, 3): colors.blue,
+    (4, 4): colors.green,
+    (5, 5): colors.yellow,
+    (6, 6): colors.orange,
+    (7, 20): colors.red,
+}
 
 
-class ChromosomeCounts(object):
+class ChromosomeCounts:
     """Represent a chromosome with count information.
 
     This is used to display information about counts along a chromosome.
@@ -77,7 +79,7 @@ class ChromosomeCounts(object):
         try:
             self._count_info[segment_name] += count
         except KeyError:
-            raise KeyError("Segment name %s not found." % segment_name)
+            raise KeyError(f"Segment name {segment_name} not found.") from None
 
     def scale_segment_value(self, segment_name, scale_value=None):
         """Divide the counts for a segment by some kind of scale value.
@@ -86,10 +88,9 @@ class ChromosomeCounts(object):
         are instead counts divided by some number.
         """
         try:
-            self._count_info[segment_name] = \
-                float(self._count_info[segment_name]) / float(scale_value)
+            self._count_info[segment_name] /= scale_value
         except KeyError:
-            raise KeyError("Segment name %s not found." % segment_name)
+            raise KeyError(f"Segment name {segment_name} not found.") from None
 
     def add_label(self, segment_name, label):
         """Add a label to a specific segment.
@@ -99,7 +100,7 @@ class ChromosomeCounts(object):
         if segment_name in self._label_info:
             self._label_info[segment_name] = label
         else:
-            raise KeyError("Segment name %s not found." % segment_name)
+            raise KeyError(f"Segment name {segment_name} not found.")
 
     def set_scale(self, segment_name, scale):
         """Set the scale for a specific chromosome segment.
@@ -112,12 +113,12 @@ class ChromosomeCounts(object):
         if segment_name in self._label_info:
             self._scale_info[segment_name] = scale
         else:
-            raise KeyError("Segment name %s not found." % segment_name)
+            raise KeyError(f"Segment name {segment_name} not found.")
 
     def get_segment_info(self):
         """Retrieve the color and label info about the segments.
 
-        Returns a list consiting of two tuples specifying the counts and
+        Returns a list consisting of two tuples specifying the counts and
         label name for each segment. The list is ordered according to the
         original listing of names. Labels are set as None if no label
         was specified.
@@ -125,8 +126,7 @@ class ChromosomeCounts(object):
         order_info = []
 
         for seg_name in self._names:
-            order_info.append((self._count_info[seg_name],
-                               self._label_info[seg_name]))
+            order_info.append((self._count_info[seg_name], self._label_info[seg_name]))
 
         return order_info
 
@@ -182,5 +182,4 @@ class ChromosomeCounts(object):
                 return self._color_scheme[(count_start, count_end)]
 
         # if we got here we didn't find a color for the count
-        raise ValueError("Count value %s was not found in the color scheme."
-                         % count)
+        raise ValueError(f"Count value {count} was not found in the color scheme.")

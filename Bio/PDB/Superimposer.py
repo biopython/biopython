@@ -1,11 +1,12 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Superimpose two structures."""
 
-from __future__ import print_function
 
 import numpy
 
@@ -13,7 +14,7 @@ from Bio.SVDSuperimposer import SVDSuperimposer
 from Bio.PDB.PDBExceptions import PDBException
 
 
-class Superimposer(object):
+class Superimposer:
     """Rotate/translate one set of atoms on top of another to minimize RMSD."""
 
     def __init__(self):
@@ -50,7 +51,7 @@ class Superimposer(object):
         if self.rotran is None:
             raise PDBException("No transformation has been calculated yet")
         rot, tran = self.rotran
-        rot = rot.astype('f')
-        tran = tran.astype('f')
+        rot = rot.astype("f")
+        tran = tran.astype("f")
         for atom in atom_list:
             atom.transform(rot, tran)

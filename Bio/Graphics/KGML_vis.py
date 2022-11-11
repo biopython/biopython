@@ -12,7 +12,6 @@ The KGML definition is as of release KGML v0.7.1
 Classes:
 """
 
-from __future__ import print_function
 
 import os
 import tempfile
@@ -23,17 +22,21 @@ try:
     from reportlab.pdfgen import canvas
 except ImportError:
     from Bio import MissingPythonDependencyError
+
     raise MissingPythonDependencyError(
-        "Install reportlab if you want to use KGML_vis.")
+        "Install reportlab if you want to use KGML_vis."
+    ) from None
 
 try:
     from PIL import Image
 except ImportError:
     from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(
-        "Install pillow if you want to use KGML_vis.")
 
-from Bio._py3k import urlopen as _urlopen
+    raise MissingPythonDependencyError(
+        "Install pillow if you want to use KGML_vis."
+    ) from None
+
+from urllib.request import urlopen
 
 from Bio.KEGG.KGML.KGML_pathway import Pathway
 
@@ -45,7 +48,7 @@ def darken(color, factor=0.7):
     factor indicated in the parameter.
     """
     newcol = color_to_reportlab(color)
-    for a in ['red', 'green', 'blue']:
+    for a in ["red", "green", "blue"]:
         setattr(newcol, a, factor * getattr(newcol, a))
     return newcol
 
@@ -72,7 +75,9 @@ def color_to_reportlab(color):
             try:
                 return colors.HexColor(color, hasAlpha=True)
             except TypeError:  # Catch pre-2.7 Reportlab
-                raise RuntimeError("Your reportlab seems to be too old, try 2.7 onwards")
+                raise RuntimeError(
+                    "Your reportlab seems to be too old, try 2.7 onwards"
+                ) from None
     elif isinstance(color, tuple):  # Tuple implies RGB(alpha) tuple
         return colors.Color(*color)
     return color
@@ -84,26 +89,38 @@ def get_temp_imagefilename(url):
     Create a new temporary file to hold the image file at the passed URL
     and return the filename.
     """
-    img = _urlopen(url).read()
+    img = urlopen(url).read()
     im = Image.open(BytesIO(img))
     # im.transpose(Image.FLIP_TOP_BOTTOM)
-    f = tempfile.NamedTemporaryFile(delete=False, suffix='.png')
+    f = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
     fname = f.name
     f.close()
-    im.save(fname, 'PNG')
+    im.save(fname, "PNG")
     return fname
 
 
-class KGMLCanvas(object):
+class KGMLCanvas:
     """Reportlab Canvas-based representation of a KGML pathway map."""
 
-    def __init__(self, pathway, import_imagemap=False, label_compounds=True,
-                 label_orthologs=True, label_reaction_entries=True,
-                 label_maps=True, show_maps=False, fontname='Helvetica',
-                 fontsize=6, draw_relations=True, show_orthologs=True,
-                 show_compounds=True, show_genes=True,
-                 show_reaction_entries=True, margins=(0.02, 0.02)):
-        """Initialize."""
+    def __init__(
+        self,
+        pathway,
+        import_imagemap=False,
+        label_compounds=True,
+        label_orthologs=True,
+        label_reaction_entries=True,
+        label_maps=True,
+        show_maps=False,
+        fontname="Helvetica",
+        fontsize=6,
+        draw_relations=True,
+        show_orthologs=True,
+        show_compounds=True,
+        show_genes=True,
+        show_reaction_entries=True,
+        margins=(0.02, 0.02),
+    ):
+        """Initialize the class."""
         self.pathway = pathway
         self.show_maps = show_maps
         self.show_orthologs = show_orthologs
@@ -139,17 +156,22 @@ class KGMLCanvas(object):
         else:
             # No image, so we set the canvas size to accommodate visible
             # elements
-            cwidth, cheight = (self.pathway.bounds[1][0],
-                               self.pathway.bounds[1][1])
+            cwidth, cheight = (self.pathway.bounds[1][0], self.pathway.bounds[1][1])
         # Instantiate canvas
-        self.drawing = \
-            canvas.Canvas(filename, bottomup=0,
-                          pagesize=(cwidth * (1 + 2 * self.margins[0]),
-                                    cheight * (1 + 2 * self.margins[1])))
+        self.drawing = canvas.Canvas(
+            filename,
+            bottomup=0,
+            pagesize=(
+                cwidth * (1 + 2 * self.margins[0]),
+                cheight * (1 + 2 * self.margins[1]),
+            ),
+        )
         self.drawing.setFont(self.fontname, self.fontsize)
         # Transform the canvas to add the margins
-        self.drawing.translate(self.margins[0] * self.pathway.bounds[1][0],
-                               self.margins[1] * self.pathway.bounds[1][1])
+        self.drawing.translate(
+            self.margins[0] * self.pathway.bounds[1][0],
+            self.margins[1] * self.pathway.bounds[1][1],
+        )
         # Add the map image, if required
         if self.import_imagemap:
             self.drawing.saveState()
@@ -187,11 +209,11 @@ class KGMLCanvas(object):
         """
         for m in self.pathway.maps:
             for g in m.graphics:
-                self.drawing.setStrokeColor('#888888')
-                self.drawing.setFillColor('#DDDDDD')
+                self.drawing.setStrokeColor("#888888")
+                self.drawing.setFillColor("#DDDDDD")
                 self.__add_graphics(g)
                 if self.label_maps:
-                    self.drawing.setFillColor('#888888')
+                    self.drawing.setFillColor("#888888")
                     self.__add_labels(g)
 
     def __add_graphics(self, graphics):
@@ -199,7 +221,7 @@ class KGMLCanvas(object):
 
         Add text, add after the graphics object, for sane Z-ordering.
         """
-        if graphics.type == 'line':
+        if graphics.type == "line":
             p = self.drawing.beginPath()
             x, y = graphics.coords[0]
             # There are optional settings for lines that aren't necessarily
@@ -212,24 +234,33 @@ class KGMLCanvas(object):
             for (x, y) in graphics.coords:
                 p.lineTo(x, y)
             self.drawing.drawPath(p)
-            self.drawing.setLineWidth(1)        # Return to default
+            self.drawing.setLineWidth(1)  # Return to default
         # KGML defines the (x, y) coordinates as the centre of the circle/
-        # rectangle/roundrectangle, but Reportlab uses the co-ordinates of the
+        # rectangle/roundrectangle, but Reportlab uses the coordinates of the
         # lower-left corner for rectangle/elif.
-        if graphics.type == 'circle':
-            self.drawing.circle(graphics.x, graphics.y, graphics.width * 0.5,
-                                stroke=1, fill=1)
-        elif graphics.type == 'roundrectangle':
-            self.drawing.roundRect(graphics.x - graphics.width * 0.5,
-                                   graphics.y - graphics.height * 0.5,
-                                   graphics.width, graphics.height,
-                                   min(graphics.width, graphics.height) * 0.1,
-                                   stroke=1, fill=1)
-        elif graphics.type == 'rectangle':
-            self.drawing.rect(graphics.x - graphics.width * 0.5,
-                              graphics.y - graphics.height * 0.5,
-                              graphics.width, graphics.height,
-                              stroke=1, fill=1)
+        if graphics.type == "circle":
+            self.drawing.circle(
+                graphics.x, graphics.y, graphics.width * 0.5, stroke=1, fill=1
+            )
+        elif graphics.type == "roundrectangle":
+            self.drawing.roundRect(
+                graphics.x - graphics.width * 0.5,
+                graphics.y - graphics.height * 0.5,
+                graphics.width,
+                graphics.height,
+                min(graphics.width, graphics.height) * 0.1,
+                stroke=1,
+                fill=1,
+            )
+        elif graphics.type == "rectangle":
+            self.drawing.rect(
+                graphics.x - graphics.width * 0.5,
+                graphics.y - graphics.height * 0.5,
+                graphics.width,
+                graphics.height,
+                stroke=1,
+                fill=1,
+            )
 
     def __add_labels(self, graphics):
         """Add labels for the passed graphics objects to the map (PRIVATE).
@@ -237,7 +268,7 @@ class KGMLCanvas(object):
         We don't check that the labels fit inside objects such as circles/
         rectangles/roundrectangles.
         """
-        if graphics.type == 'line':
+        if graphics.type == "line":
             # We use the midpoint of the line - sort of - we take the median
             # line segment (list-wise, not in terms of length), and use the
             # midpoint of that line.  We could have other options here,
@@ -251,18 +282,18 @@ class KGMLCanvas(object):
             x1, y1 = graphics.coords[idx1]
             x2, y2 = graphics.coords[idx2]
             x, y = 0.5 * (x1 + x2), 0.5 * (y1 + y2)
-        elif graphics.type == 'circle':
+        elif graphics.type == "circle":
             x, y = graphics.x, graphics.y
-        elif graphics.type in ('rectangle', 'roundrectangle'):
+        elif graphics.type in ("rectangle", "roundrectangle"):
             x, y = graphics.x, graphics.y
         # How big so we want the text, and how many characters?
-        if graphics._parent.type == 'map':
+        if graphics._parent.type == "map":
             text = graphics.name
             self.drawing.setFont(self.fontname, self.fontsize + 2)
         elif len(graphics.name) < 15:
             text = graphics.name
         else:
-            text = graphics.name[:12] + '...'
+            text = graphics.name[:12] + "..."
         self.drawing.drawCentredString(x, y, text)
         self.drawing.setFont(self.fontname, self.fontsize)
 
@@ -352,7 +383,7 @@ class KGMLCanvas(object):
         """
         # Dashed lines for maplinks, solid for everything else
         for relation in list(self.pathway.relations):
-            if relation.type == 'maplink':
+            if relation.type == "maplink":
                 self.drawing.setDash(6, 3)
             else:
                 self.drawing.setDash()
@@ -371,12 +402,16 @@ class KGMLCanvas(object):
         Draws an arrow from the g_from Entry object to the g_to
         Entry object; both must have Graphics objects.
         """
-        # Centre and bound co-ordinates for the from and two objects
+        # Centre and bound coordinates for the from and two objects
         bounds_from, bounds_to = g_from.bounds, g_to.bounds
-        centre_from = (0.5 * (bounds_from[0][0] + bounds_from[1][0]),
-                       0.5 * (bounds_from[0][1] + bounds_from[1][1]))
-        centre_to = (0.5 * (bounds_to[0][0] + bounds_to[1][0]),
-                     0.5 * (bounds_to[0][1] + bounds_to[1][1]))
+        centre_from = (
+            0.5 * (bounds_from[0][0] + bounds_from[1][0]),
+            0.5 * (bounds_from[0][1] + bounds_from[1][1]),
+        )
+        centre_to = (
+            0.5 * (bounds_to[0][0] + bounds_to[1][0]),
+            0.5 * (bounds_to[0][1] + bounds_to[1][1]),
+        )
         p = self.drawing.beginPath()
         # print(True, g_from.name, g_to.name, bounds_to, bounds_from)
         # If the 'from' and 'to' graphics are vertically-aligned, draw a line
@@ -387,7 +422,7 @@ class KGMLCanvas(object):
                 p.moveTo(centre_from[0], bounds_from[1][1])
                 p.lineTo(centre_from[0], bounds_to[0][1])
                 # Draw arrow point - TODO
-            else:                             # to below from
+            else:  # to below from
                 p.moveTo(centre_from[0], bounds_from[0][1])
                 p.lineTo(centre_from[0], bounds_to[1][1])
                 # Draw arrow point - TODO
@@ -397,11 +432,11 @@ class KGMLCanvas(object):
                 p.moveTo(centre_to[0], bounds_from[1][1])
                 p.lineTo(centre_to[0], bounds_to[0][1])
                 # Draw arrow point - TODO
-            else:                             # to below from
+            else:  # to below from
                 p.moveTo(centre_to[0], bounds_from[0][1])
                 p.lineTo(centre_to[0], bounds_to[1][1])
                 # Draw arrow point - TODO
-        self.drawing.drawPath(p)    # Draw arrow shaft
+        self.drawing.drawPath(p)  # Draw arrow shaft
         # print(g_from)
         # print(bounds_from)
         # print(g_to)

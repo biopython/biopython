@@ -1,7 +1,10 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 """Code for chopping up (dicing) a structure.
 
 This module is used internally by the Bio.PDB.extract() function.
@@ -16,7 +19,7 @@ from Bio import BiopythonWarning
 _hydrogen = re.compile("[123 ]*H.*")
 
 
-class ChainSelector(object):
+class ChainSelector:
     """Only accepts residues with right chainid, between start and end.
 
     Remove hydrogens, waters and ligands. Only use model 0 by default.
@@ -50,8 +53,9 @@ class ChainSelector(object):
             # skip HETATMS
             return 0
         if icode != " ":
-            warnings.warn("WARNING: Icode %s at position %s"
-                          % (icode, resseq), BiopythonWarning)
+            warnings.warn(
+                f"WARNING: Icode {icode} at position {resseq}", BiopythonWarning
+            )
         if self.start <= resseq <= self.end:
             return 1
         return 0

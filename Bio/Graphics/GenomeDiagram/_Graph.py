@@ -22,14 +22,13 @@ the diagram: http://www.reportlab.com
 """
 
 # ReportLab imports
-from __future__ import print_function
 
 from reportlab.lib import colors
 
 from math import sqrt
 
 
-class GraphData(object):
+class GraphData:
     """Graph Data.
 
     Attributes:
@@ -44,9 +43,18 @@ class GraphData(object):
 
     """
 
-    def __init__(self, id=None, data=None, name=None, style='bar',
-                 color=colors.lightgreen, altcolor=colors.darkseagreen,
-                 center=None, colour=None, altcolour=None):
+    def __init__(
+        self,
+        id=None,
+        data=None,
+        name=None,
+        style="bar",
+        color=colors.lightgreen,
+        altcolor=colors.darkseagreen,
+        center=None,
+        colour=None,
+        altcolour=None,
+    ):
         """Initialize.
 
         Arguments:
@@ -70,22 +78,22 @@ class GraphData(object):
         if altcolour is not None:
             altcolor = altcolour
 
-        self.id = id            # Unique identifier for the graph
-        self.data = {}          # holds values, keyed by sequence position
+        self.id = id  # Unique identifier for the graph
+        self.data = {}  # holds values, keyed by sequence position
         if data is not None:
             self.set_data(data)
-        self.name = name        # Descriptive string
+        self.name = name  # Descriptive string
 
         # Attributes describing how the graph will be drawn
-        self.style = style          # One of 'bar', 'heat' or 'line'
-        self.poscolor = color     # Color to draw all, or 'high' values
+        self.style = style  # One of 'bar', 'heat' or 'line'
+        self.poscolor = color  # Color to draw all, or 'high' values
         self.negcolor = altcolor  # Color to draw 'low' values
-        self.linewidth = 2          # linewidth to use in line graphs
-        self.center = center        # value at which x-axis crosses y-axis
+        self.linewidth = 2  # linewidth to use in line graphs
+        self.center = center  # value at which x-axis crosses y-axis
 
     def set_data(self, data):
         """Add data as a list of (position, value) tuples."""
-        for (pos, val) in data:     # Fill data dictionary
+        for (pos, val) in data:  # Fill data dictionary
             self.data[pos] = val
 
     def get_data(self):
@@ -106,8 +114,13 @@ class GraphData(object):
         """Return (minimum, lowerQ, medianQ, upperQ, maximum) values as tuple."""
         data = sorted(self.data.values())
         datalen = len(data)
-        return(data[0], data[datalen // 4], data[datalen // 2],
-               data[3 * datalen // 4], data[-1])
+        return (
+            data[0],
+            data[datalen // 4],
+            data[datalen // 2],
+            data[3 * datalen // 4],
+            data[-1],
+        )
 
     def range(self):
         """Return range of data as (start, end) tuple.
@@ -117,24 +130,21 @@ class GraphData(object):
         """
         positions = sorted(self.data)  # i.e. dict keys
         # Return first and last positions in graph
-        # print len(self.data)
+        # print(len(self.data))
         return (positions[0], positions[-1])
 
     def mean(self):
         """Return the mean value for the data points (float)."""
         data = list(self.data.values())
-        sum = 0.
-        for item in data:
-            sum += float(item)
-        return sum / len(data)
+        return sum(data) / len(data)
 
     def stdev(self):
         """Return the sample standard deviation for the data (float)."""
         data = list(self.data.values())
         m = self.mean()
-        runtotal = 0.
+        runtotal = 0.0
         for entry in data:
-            runtotal += float((entry - m) ** 2)
+            runtotal += (entry - m) ** 2
         # This is sample standard deviation; population stdev would involve
         # division by len(data), rather than len(data)-1
         return sqrt(runtotal / (len(data) - 1))
@@ -171,10 +181,12 @@ class GraphData(object):
 
     def __str__(self):
         """Return a string describing the graph data."""
-        outstr = ["\nGraphData: %s, ID: %s" % (self.name, self.id)]
+        outstr = [f"\nGraphData: {self.name}, ID: {self.id}"]
         outstr.append("Number of points: %d" % len(self.data))
-        outstr.append("Mean data value: %s" % self.mean())
-        outstr.append("Sample SD: %.3f" % self.stdev())
-        outstr.append("Minimum: %s\n1Q: %s\n2Q: %s\n3Q: %s\nMaximum: %s" % self.quartiles())
+        outstr.append(f"Mean data value: {self.mean()}")
+        outstr.append(f"Sample SD: {self.stdev():.3f}")
+        outstr.append(
+            "Minimum: %s\n1Q: %s\n2Q: %s\n3Q: %s\nMaximum: %s" % self.quartiles()
+        )
         outstr.append("Sequence Range: %s..%s" % self.range())
         return "\n".join(outstr)

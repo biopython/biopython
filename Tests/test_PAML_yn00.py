@@ -1,7 +1,9 @@
-# Copyright (C) 2011 by Brandon Invergo (b.invergo@gmail.com)
+# Copyright (C) 2011, 2019 by Brandon Invergo (b.invergo@gmail.com)
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
+
+"""Tests for PAML yn00 module."""
 
 import unittest
 import os
@@ -20,6 +22,7 @@ class ModTest(unittest.TestCase):
     working_dir = os.path.join("PAML", "yn00_test")
 
     align_file = os.path.join(align_dir, "alignment.phylip")
+    dotname_align_file = os.path.join(align_dir, "alignment_dottednames.phylip")
     out_file = os.path.join(results_dir, "test.out")
     results_file = os.path.join(results_dir, "bad_results.out")
     bad_ctl_file1 = os.path.join(ctl_dir, "bad1.ctl")
@@ -28,8 +31,7 @@ class ModTest(unittest.TestCase):
 
     def tearDown(self):
         """Just in case yn00 creates some junk files, do a clean-up."""
-        del_files = [self.out_file, "2YN.dN", "2YN.dS", "2YN.t", "rst",
-                     "rst1", "rub"]
+        del_files = [self.out_file, "2YN.dN", "2YN.dS", "2YN.t", "rst", "rst1", "rub"]
         for filename in del_files:
             if os.path.exists(filename):
                 os.remove(filename)
@@ -43,16 +45,15 @@ class ModTest(unittest.TestCase):
         self.yn00 = yn00.Yn00()
 
     def testAlignmentFileIsValid(self):
-        self.assertRaises((AttributeError, TypeError, OSError),
-                          yn00.Yn00, alignment=list())
-        self.yn00.alignment = list()
+        self.assertRaises((AttributeError, TypeError, OSError), yn00.Yn00, alignment=[])
+        self.yn00.alignment = []
         self.yn00.out_file = self.out_file
-        self.assertRaises((AttributeError, TypeError, OSError),
-                          self.yn00.run)
+        self.assertRaises((AttributeError, TypeError, OSError), self.yn00.run)
 
     def testAlignmentExists(self):
-        self.assertRaises((EnvironmentError, IOError), yn00.Yn00,
-                          alignment="nonexistent")
+        self.assertRaises(
+            (EnvironmentError, IOError), yn00.Yn00, alignment="nonexistent"
+        )
         self.yn00.alignment = "nonexistent"
         self.yn00.out_file = self.out_file
         self.assertRaises(IOError, self.yn00.run)
@@ -60,25 +61,20 @@ class ModTest(unittest.TestCase):
     def testWorkingDirValid(self):
         self.yn00.alignment = self.align_file
         self.yn00.out_file = self.out_file
-        self.yn00.working_dir = list()
-        self.assertRaises((AttributeError, TypeError, OSError),
-                          self.yn00.run)
+        self.yn00.working_dir = []
+        self.assertRaises((AttributeError, TypeError, OSError), self.yn00.run)
 
     def testOptionExists(self):
-        self.assertRaises((AttributeError, KeyError),
-                          self.yn00.set_options, xxxx=1)
-        self.assertRaises((AttributeError, KeyError),
-                          self.yn00.get_option, "xxxx")
+        self.assertRaises((AttributeError, KeyError), self.yn00.set_options, xxxx=1)
+        self.assertRaises((AttributeError, KeyError), self.yn00.get_option, "xxxx")
 
     def testAlignmentSpecified(self):
         self.yn00.out_file = self.out_file
-        self.assertRaises((AttributeError, ValueError),
-                          self.yn00.run)
+        self.assertRaises((AttributeError, ValueError), self.yn00.run)
 
     def testOutputFileSpecified(self):
         self.yn00.alignment = self.align_file
-        self.assertRaises((AttributeError, ValueError),
-                          self.yn00.run)
+        self.assertRaises((AttributeError, ValueError), self.yn00.run)
 
     # def testPamlErrorsCaught(self):
     #     self.yn00.alignment = self.align_file
@@ -89,47 +85,47 @@ class ModTest(unittest.TestCase):
     def testCtlFileValidOnRun(self):
         self.yn00.alignment = self.align_file
         self.yn00.out_file = self.out_file
-        self.assertRaises((AttributeError, TypeError, OSError),
-                          self.yn00.run, ctl_file=list())
+        self.assertRaises(
+            (AttributeError, TypeError, OSError), self.yn00.run, ctl_file=[]
+        )
 
     def testCtlFileExistsOnRun(self):
         self.yn00.alignment = self.align_file
         self.yn00.out_file = self.out_file
-        self.assertRaises(IOError,
-                          self.yn00.run, ctl_file="nonexistent")
+        self.assertRaises(IOError, self.yn00.run, ctl_file="nonexistent")
 
     def testCtlFileValidOnRead(self):
-        self.assertRaises((AttributeError, TypeError, OSError),
-                          self.yn00.read_ctl_file, list())
-        self.assertRaises((AttributeError, KeyError),
-                          self.yn00.read_ctl_file, self.bad_ctl_file1)
-        self.assertRaises(AttributeError,
-                          self.yn00.read_ctl_file, self.bad_ctl_file2)
-        target_options = {"verbose": 1,
-                          "icode": 0,
-                          "weighting": 0,
-                          "commonf3x4": 0,
-                          "ndata": 1}
+        self.assertRaises(
+            (AttributeError, TypeError, OSError), self.yn00.read_ctl_file, []
+        )
+        self.assertRaises(
+            (AttributeError, KeyError), self.yn00.read_ctl_file, self.bad_ctl_file1
+        )
+        self.assertRaises(AttributeError, self.yn00.read_ctl_file, self.bad_ctl_file2)
+        target_options = {
+            "verbose": 1,
+            "icode": 0,
+            "weighting": 0,
+            "commonf3x4": 0,
+            "ndata": 1,
+        }
         self.yn00.read_ctl_file(self.ctl_file)
         self.assertEqual(self.yn00._options, target_options)
 
     def testCtlFileExistsOnRead(self):
-        self.assertRaises(IOError,
-                          self.yn00.read_ctl_file, ctl_file="nonexistent")
+        self.assertRaises(IOError, self.yn00.read_ctl_file, ctl_file="nonexistent")
 
     def testResultsValid(self):
-        self.assertRaises((AttributeError, TypeError, OSError),
-                          yn00.read, list())
+        self.assertRaises((AttributeError, TypeError, OSError), yn00.read, [])
 
     def testResultsExist(self):
-        self.assertRaises((EnvironmentError, IOError),
-                          yn00.read, "nonexistent")
+        self.assertRaises((EnvironmentError, IOError), yn00.read, "nonexistent")
 
     def testResultsParsable(self):
         self.assertRaises(ValueError, yn00.read, self.results_file)
 
     def testParseAllVersions(self):
-        pattern = os.path.join(self.results_dir, "yn00", 'yn00-*')
+        pattern = os.path.join(self.results_dir, "yn00", "yn00-*")
         for results_file in glob.glob(pattern):
             results = yn00.read(results_file)
             self.assertEqual(len(results), 5)
@@ -137,15 +133,45 @@ class ModTest(unittest.TestCase):
             self.assertEqual(len(results["Homo_sapie"]["Pan_troglo"]), 5)
 
     def testParseLongNames(self):
-        pattern = os.path.join(self.results_dir, "yn00", 'yn00_long-*')
+        pattern = os.path.join(self.results_dir, "yn00", "yn00_long-*")
         for results_file in glob.glob(pattern):
             results = yn00.read(results_file)
             # Expect seven taxa...
             self.assertEqual(len(results), 7)
             # ...each of which is compared to the other six.
-            self.assertEqual(set([len(v) for v in results.values()]), set([6]))
+            self.assertEqual({len(v) for v in results.values()}, {6})
             # ...each of which has five measures.
-            self.assertEqual(set([len(v) for taxa in results.values() for v in taxa.values()]), set([5]))
+            self.assertEqual(
+                {len(v) for taxa in results.values() for v in taxa.values()}, {5}
+            )
+
+    def testParseDottedNames(self):
+        pattern = os.path.join(self.results_dir, "yn00", "yn00_dotted-*")
+        for results_file in glob.glob(pattern):
+            results = yn00.read(results_file)
+            # Expect seven taxa...
+            self.assertEqual(len(results), 5)
+            # ...each of which is compared to the other six.
+            self.assertEqual({len(v) for v in results.values()}, {4})
+            # ...each of which has five measures.
+            self.assertEqual(
+                {len(v) for taxa in results.values() for v in taxa.values()}, {5}
+            )
+            self.assertEqual(len(results["Homo.sapie"]), 4)
+            self.assertEqual(len(results["Homo.sapie"]["Pan.troglo"]), 5)
+
+    def testParseDottedNumNames(self):
+        pattern = os.path.join(self.results_dir, "yn00", "yn00_dottednum-*")
+        for results_file in glob.glob(pattern):
+            results = yn00.read(results_file)
+            # Expect seven taxa...
+            self.assertEqual(len(results), 7)
+            # ...each of which is compared to the other six.
+            self.assertEqual({len(v) for v in results.values()}, {6})
+            # ...each of which has five measures.
+            self.assertEqual(
+                {len(v) for taxa in results.values() for v in taxa.values()}, {5}
+            )
 
 
 if __name__ == "__main__":

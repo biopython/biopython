@@ -11,48 +11,44 @@
 
 Examples
 --------
-    >>> from Rana.fts import fts    #
-    >>> from Rana.Vector import *   # Just a way to get a sequence.
-    >>> from Bio.Seq import Seq     # Use your preferred method here.
-    >>> pbr = fts(pBR322)           #
-    >>> seq = Seq(str(pbr))         #
-    >>>
+    >>> from Bio.Seq import Seq
     >>> from Bio.Restriction import *
-    >>> a = Analysis(AllEnzymes, seq, linear=False)
-    >>> b = a.blunt()
+    >>> pBs_mcs = 'GGTACCGGGCCCCCCCTCGAGGTCGACGGTATCGATAAGCTTGATATCGAATTCCTG'
+    >>> pBs_mcs += 'CAGCCCGGGGGATCCACTAGTTCTAGAGCGGCCGCCACCGCGGTGGAGCTC'
+    >>> seq = Seq(pBs_mcs)  # Multiple-cloning site of pBluescript SK(-)
+    >>> a = Analysis(AllEnzymes, seq)
     >>> a.print_that()              # no argument -> print all the results
-    AasI       :  2169, 2582.
-    AatII      :  4289.
-    Acc16I     :  263, 1359, 1457, 3589.
-    ...
-    More enzymes here.
-    ...
-    >>> b = a.without_site()
-    >>> a.print_that(b)  # Enzymes which do not cut pBR322
-    AarI      AatI      Acc65I    AcsI      AcvI      AdeI      AflII     AgeI
-    AhlI      AleI      AloI      ApaI      ApoI      AscI      AsiAI     AsiSI
-    Asp718I   AspA2I    AsuII     AvaIII    AvrII     AxyI      BaeI      BbrPI
-    BbvCI     BclI      BcuI      BfrBI     BfrI      BglII     BlnI      BlpI
-    BmgBI     BmgI      BplI      Bpu1102I  Bpu14I    BsaXI     Bse21I    BsePI
-    BseRI     BshTI     BsiWI     Bsp119I   Bsp120I   Bsp1407I  Bsp1720I  Bsp19I
-    BspT104I  BspTI     BsrGI     BssHI     BssHII    Bst98I    BstAUI    BstBI
-    BstEII    BstPI     BstSNI    BstXI     Bsu36I    BtrI      CciNI     CelII
-    Cfr42I    Cfr9I     CpoI      Csp45I    CspAI     CspCI     CspI      DraIII
-    DrdII     Ecl136II  Eco105I   Eco147I   Eco72I    Eco81I    Eco91I    EcoICRI
-    EcoO65I   EcoRI     EcoT22I   EspI      FalI      FbaI      FseI      FunII
-    HpaI      KpnI      Ksp22I    KspAI     KspI      MabI      MfeI      MluI
-    Mph1103I  MspCI     MssI      MunI      NcoI      NotI      NsiI      NspV
-    OliI      PacI      PaeR7I    PasI      PauI      PceI      Pfl23II   PinAI
-    PmaCI     PmeI      PmlI      Ppu10I    PsiI      Psp124BI  PspAI     PspCI
-    PspEI     PspLI     PspOMI    PspXI     PsrI      RleAI     Rsr2I     RsrII
-    SacI      SacII     SanDI     SauI      SbfI      SciI      SdaI      SexAI
-    SfiI      Sfr274I   Sfr303I   SfuI      SgfI      SgrBI     SlaI      SmaI
-    SmiI      SnaBI     SpeI      SplI      SrfI      Sse232I   Sse8387I  Sse8647I
-    SseBI     SspBI     SstI      StuI      SunI      SwaI      TliI      UthSI
-    Vha464I   XapI      XbaI      XcmI      XhoI      XmaCI     XmaI      XmaJI
-    Zsp2I
+    AbaSI      :  10, 12, 13, 16, 17, 18, 19, 20, 22, 23, 24, 25, 25, 26, 27...
+    BmeDI      :  2, 7, 8, 8, 9, 9, 13, 14, 15, 16, 17, 18, 19, 19, 21, 21...
+    YkrI       :  10, 12, 13, 16, 16, 17, 19, 20, 21, 22, 23, 24, 25, 25, 26...
 
-"""
+    BmeDI      :  1, 2, 7, 8, 8, 9, 9, 13, 14, 15, 16, 17, 18, 19...
+    AccII      :  98.
+    AciI       :  86, 90, 96, 98...
+
+    Enzymes which do not cut the sequence.
+
+    AspLEI    BstHHI    CfoI      CviAII    FaeI      FaiI      FatI      GlaI
+    HhaI      Hin1II    Hin6I     HinP1I    HpyCH4IV  HpySE526I Hsp92II   HspAI
+    MaeII     MseI      NlaIII    SaqAI     TaiI      Tru1I     Tru9I...
+    <BLANKLINE>
+    >>> b = a.blunt()  # Analysis with blunt enzmyes
+    >>> a.print_that(b)  # Print results for blunt cutters
+    AccII      :  98.
+    AfaI       :  4.
+    AluBI      :  40, 106.
+    AluI       :  40, 106.
+    Bsh1236I   :  98.
+    BshFI      :  10, 89.
+    BsnI       :  10, 89.
+    BspANI     :  10, 89...
+
+    Enzymes which do not cut the sequence.
+
+    FaiI      GlaI      CdiI      MlyI      SchI      SspD5I    AanI...
+    <BLANKLINE>
+
+"""  # noqa: W291, W293
 
 from Bio.Restriction.Restriction import *  # noqa (legacy module arrangement)
 
@@ -67,23 +63,21 @@ from Bio.Restriction.Restriction import *  # noqa (legacy module arrangement)
 #   the enzymes in the locals() dictionary when evaluating string to see if
 #   it is an enzyme.
 #
-#   This call for some explanations I guess:
+#   This calls for some explanations I guess:
 #       When testing for the presence of a Restriction enzyme in a
 #       RestrictionBatch, the user can use:
 #
 #           1) a class of type 'RestrictionType'
-#           2) a string of the name of the enzyme (it's repr)
+#           2) a string of the name of the enzyme (its repr)
 #               i.e:
 #                   >>> from Bio.Restriction import RestrictionBatch, EcoRI
 #                   >>> MyBatch = RestrictionBatch(EcoRI)
-#                   >>> #!/usr/bin/env python
 #                   >>> EcoRI in MyBatch        # the class EcoRI.
 #                   True
-#                   >>>
 #                   >>> 'EcoRI' in MyBatch      # a string representation
 #                   True
 #
-#   OK, that's how it is suppose to work. And I find it quite useful.
+#   OK, that's how it is supposed to work. And I find it quite useful.
 #
 #   Now if I leave the code here I got:
 #                   >>> from Bio.Restriction import RestrictionBatch, EcoRI
@@ -111,8 +105,8 @@ from Bio.Restriction.Restriction import *  # noqa (legacy module arrangement)
 #
 
 # ##
-# ##   The restriction enzyme classes are created dynamically when the module is
-# ##   imported. Here is the magic which allow the creation of the
+# ##   The restriction enzyme classes are created dynamically when the module
+# ##   is imported. Here is the magic which allow the creation of the
 # ##   restriction-enzyme classes.
 # ##
 # ##   The reason for the two dictionaries in Restriction_Dictionary
@@ -122,15 +116,15 @@ from Bio.Restriction.Restriction import *  # noqa (legacy module arrangement)
 # ##   once per pseudo-type.
 # ##
 # ##   However Restriction is still a very inefficient module at import. But
-# ##   remember that around 660 classes (which is more or less the size of Rebase)
-# ##   have to be created dynamically. However, this processing take place only
-# ##   once.
+# ##   remember that around 660 classes (which is more or less the size of
+# ##   Rebase) have to be created dynamically. However, this processing take
+# ##   place only once.
 # ##   This inefficiency is however largely compensated by the use of metaclass
 # ##   which provide a very efficient layout for the class themselves mostly
 # ##   alleviating the need of if/else loops in the class methods.
 # ##
-# ##   It is essential to run Restriction with doc string optimisation (-OO switch)
-# ##   as the doc string of 660 classes take a lot of processing.
+# ##   It is essential to run Restriction with doc string optimisation (-OO
+# ##   switch) as the doc string of 660 classes take a lot of processing.
 # ##
 # # CommOnly    = RestrictionBatch()    # commercial enzymes
 # # NonComm     = RestrictionBatch()    # not available commercially
@@ -138,13 +132,13 @@ from Bio.Restriction.Restriction import *  # noqa (legacy module arrangement)
 # #    #
 # #    #   The keys are the pseudo-types TYPE (stored as type1, type2...)
 # #    #   The names are not important and are only present to differentiate
-# #    #   the keys in the dict. All the pseudo-types are in fact RestrictionType.
-# #    #   These names will not be used after and the pseudo-types are not
-# #    #   kept in the locals() dictionary. It is therefore impossible to
-# #    #   import them.
-# #    #   Now, if you have look at the dictionary, you will see that not all the
-# #    #   types are present as those without corresponding enzymes have been
-# #    #   removed by Dictionary_Builder().
+# #    #   the keys in the dict. All the pseudo-types are in fact
+# #    #   RestrictionType. These names will not be used after and the pseudo-
+# #    #   types are not kept in the locals() dictionary. It is therefore
+# #    #   impossible to import them.
+# #    #   Now, if you have look at the dictionary, you will see that not all
+# #    #   the types are present as those without corresponding enzymes have
+# #    #   been removed by Dictionary_Builder().
 # #    #
 # #    #   The values are tuples which contain
 # #    #   as first element a tuple of bases (as string) and
@@ -184,10 +178,12 @@ from Bio.Restriction.Restriction import *  # noqa (legacy module arrangement)
 # ##
 # ##   Limit what can be imported by from Restriction import *
 # ##   Most of the classes here will never be used outside this module
-# ##   (Defined,Palindromic...). It is still possible to request them specifically
+# ##   (Defined,Palindromic...). It is still possible to request them
+# ##   specifically
 # ##
 # ##   also delete the variable that are no longer needed.
 # ##
 # ##
-# # __all__=['Analysis', 'RestrictionBatch','AllEnzymes','CommOnly','NonComm']+names
+# # __all__= ['Analysis', 'RestrictionBatch','AllEnzymes','CommOnly',
+# #           'NonComm']+names
 # # del k, x, enzymes, TYPE, bases, names

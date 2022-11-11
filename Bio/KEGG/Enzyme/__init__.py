@@ -13,30 +13,29 @@ Classes:
  - Record - Holds the information from a KEGG Enzyme record.
 """
 
-from __future__ import print_function
 
-from Bio.KEGG import _write_kegg
-from Bio.KEGG import _wrap_kegg
+from Bio.KEGG import _default_wrap, _struct_wrap, _wrap_kegg, _write_kegg
 
 
 # Set up line wrapping rules (see Bio.KEGG._wrap_kegg)
-rxn_wrap = [0, "",
-            (" + ", "", 1, 1),
-            (" = ", "", 1, 1),
-            (" ", "$", 1, 1),
-            ("-", "$", 1, 1)]
-name_wrap = [0, "",
-             (" ", "$", 1, 1),
-             ("-", "$", 1, 1)]
-id_wrap = lambda indent: [indent, "", (" ", "", 1, 0)]
-struct_wrap = lambda indent: [indent, "", ("  ", "", 1, 1)]
+rxn_wrap = [
+    0,
+    "",
+    (" + ", "", 1, 1),
+    (" = ", "", 1, 1),
+    (" ", "$", 1, 1),
+    ("-", "$", 1, 1),
+]
+name_wrap = [0, "", (" ", "$", 1, 1), ("-", "$", 1, 1)]
+id_wrap = _default_wrap
+struct_wrap = _struct_wrap
 
 
-class Record(object):
+class Record:
     """Holds info from a KEGG Enzyme record.
 
     Attributes:
-     - entry       The EC number (withou the 'EC ').
+     - entry       The EC number (without the 'EC ').
      - name        A list of the enzyme names.
      - classname   A list of the classification terms.
      - sysname     The systematic name of the enzyme.
@@ -76,108 +75,102 @@ class Record(object):
 
     def __str__(self):
         """Return a string representation of this Record."""
-        return (self._entry() +
-                self._name() +
-                self._classname() +
-                self._sysname() +
-                self._reaction() +
-                self._substrate() +
-                self._product() +
-                self._inhibitor() +
-                self._cofactor() +
-                self._effector() +
-                self._comment() +
-                self._pathway() +
-                self._genes() +
-                self._disease() +
-                self._structures() +
-                self._dblinks() +
-                "///")
+        return (
+            self._entry()
+            + self._name()
+            + self._classname()
+            + self._sysname()
+            + self._reaction()
+            + self._substrate()
+            + self._product()
+            + self._inhibitor()
+            + self._cofactor()
+            + self._effector()
+            + self._comment()
+            + self._pathway()
+            + self._genes()
+            + self._disease()
+            + self._structures()
+            + self._dblinks()
+            + "///"
+        )
 
     def _entry(self):
-        return _write_kegg("ENTRY",
-                           ["EC " + self.entry])
+        return _write_kegg("ENTRY", ["EC " + self.entry])
 
     def _name(self):
-        return _write_kegg("NAME",
-                           [_wrap_kegg(l, wrap_rule=name_wrap)
-                            for l in self.name])
+        return _write_kegg(
+            "NAME", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.name]
+        )
 
     def _classname(self):
-        return _write_kegg("CLASS",
-                           self.classname)
+        return _write_kegg("CLASS", self.classname)
 
     def _sysname(self):
-        return _write_kegg("SYSNAME",
-                           [_wrap_kegg(l, wrap_rule=name_wrap)
-                            for l in self.sysname])
+        return _write_kegg(
+            "SYSNAME", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.sysname]
+        )
 
     def _reaction(self):
-        return _write_kegg("REACTION",
-                           [_wrap_kegg(l, wrap_rule=rxn_wrap)
-                            for l in self.reaction])
+        return _write_kegg(
+            "REACTION", [_wrap_kegg(l, wrap_rule=rxn_wrap) for l in self.reaction]
+        )
 
     def _substrate(self):
-        return _write_kegg("SUBSTRATE",
-                           [_wrap_kegg(l, wrap_rule=name_wrap)
-                            for l in self.substrate])
+        return _write_kegg(
+            "SUBSTRATE", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.substrate]
+        )
 
     def _product(self):
-        return _write_kegg("PRODUCT",
-                           [_wrap_kegg(l, wrap_rule=name_wrap)
-                            for l in self.product])
+        return _write_kegg(
+            "PRODUCT", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.product]
+        )
 
     def _inhibitor(self):
-        return _write_kegg("INHIBITOR",
-                           [_wrap_kegg(l, wrap_rule=name_wrap)
-                            for l in self.inhibitor])
+        return _write_kegg(
+            "INHIBITOR", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.inhibitor]
+        )
 
     def _cofactor(self):
-        return _write_kegg("COFACTOR",
-                           [_wrap_kegg(l, wrap_rule=name_wrap)
-                            for l in self.cofactor])
+        return _write_kegg(
+            "COFACTOR", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.cofactor]
+        )
 
     def _effector(self):
-        return _write_kegg("EFFECTOR",
-                           [_wrap_kegg(l, wrap_rule=name_wrap)
-                            for l in self.effector])
+        return _write_kegg(
+            "EFFECTOR", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.effector]
+        )
 
     def _comment(self):
-        return _write_kegg("COMMENT",
-                           [_wrap_kegg(l, wrap_rule=id_wrap(0))
-                            for l in self.comment])
+        return _write_kegg(
+            "COMMENT", [_wrap_kegg(l, wrap_rule=id_wrap(0)) for l in self.comment]
+        )
 
     def _pathway(self):
         s = []
         for entry in self.pathway:
             s.append(entry[0] + ": " + entry[1] + "  " + entry[2])
-        return _write_kegg("PATHWAY",
-                           [_wrap_kegg(l, wrap_rule=id_wrap(16))
-                            for l in s])
+        return _write_kegg("PATHWAY", [_wrap_kegg(l, wrap_rule=id_wrap(16)) for l in s])
 
     def _genes(self):
         s = []
         for entry in self.genes:
             s.append(entry[0] + ": " + " ".join(entry[1]))
-        return _write_kegg("GENES",
-                           [_wrap_kegg(l, wrap_rule=id_wrap(5))
-                            for l in s])
+        return _write_kegg("GENES", [_wrap_kegg(l, wrap_rule=id_wrap(5)) for l in s])
 
     def _disease(self):
         s = []
         for entry in self.disease:
             s.append(entry[0] + ": " + entry[1] + "  " + entry[2])
-        return _write_kegg("DISEASE",
-                           [_wrap_kegg(l, wrap_rule=id_wrap(13))
-                            for l in s])
+        return _write_kegg("DISEASE", [_wrap_kegg(l, wrap_rule=id_wrap(13)) for l in s])
 
     def _structures(self):
         s = []
         for entry in self.structures:
             s.append(entry[0] + ": " + "  ".join(entry[1]) + "  ")
-        return _write_kegg("STRUCTURES",
-                           [_wrap_kegg(l, wrap_rule=struct_wrap(5))
-                            for l in s])
+        return _write_kegg(
+            "STRUCTURES", [_wrap_kegg(l, wrap_rule=struct_wrap(5)) for l in s]
+        )
 
     def _dblinks(self):
         # This is a bit of a cheat that won't work if enzyme entries
@@ -256,7 +249,7 @@ def parse(handle):
         elif keyword == "EFFECTOR    ":
             record.effector.append(data.strip(";"))
         elif keyword == "GENES       ":
-            if data[3:5] == ': ' or data[4:6] == ': ':
+            if data[3:5] == ": " or data[4:6] == ": ":
                 key, values = data.split(":", 1)
                 values = [value.split("(")[0] for value in values.split()]
                 row = (key, values)
@@ -274,20 +267,20 @@ def parse(handle):
         elif keyword == "NAME        ":
             record.name.append(data.strip(";"))
         elif keyword == "PATHWAY     ":
-            if data[:5] == 'PATH:':
+            if data[:5] == "PATH:":
                 _, map_num, name = data.split(None, 2)
-                pathway = ('PATH', map_num, name)
+                pathway = ("PATH", map_num, name)
                 record.pathway.append(pathway)
             else:
                 ec_num, name = data.split(None, 1)
-                pathway = 'PATH', ec_num, name
+                pathway = "PATH", ec_num, name
                 record.pathway.append(pathway)
         elif keyword == "PRODUCT     ":
             record.product.append(data.strip(";"))
         elif keyword == "REACTION    ":
             record.reaction.append(data.strip(";"))
         elif keyword == "STRUCTURES  ":
-            if data[:4] == 'PDB:':
+            if data[:4] == "PDB:":
                 database = data[:3]
                 accessions = data[4:].split()
                 row = (database, accessions)
@@ -316,22 +309,20 @@ def read(handle):
     ...
     6.2.1.25 benzoate---CoA ligase
     """
-    iterator = parse(handle)
+    records = parse(handle)
     try:
-        first = next(iterator)
+        record = next(records)
     except StopIteration:
-        first = None
-    if first is None:
-        raise ValueError("No records found in handle")
+        raise ValueError("No records found in handle") from None
     try:
-        second = next(iterator)
-    except StopIteration:
-        second = None
-    if second is not None:
+        next(records)
         raise ValueError("More than one record found in handle")
-    return first
+    except StopIteration:
+        pass
+    return record
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

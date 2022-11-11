@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE eSummaryResult PUBLIC "-//NLM//DTD esummary v1 20041029//EN" "https://eutils.ncbi.nlm.nih.gov/eutils/dtd/20041029/esummary-v1.dtd">
+<eSummaryResult>
+<DocSum>
+	<Id>7488</Id>
+	<Item Name="CID" Type="Integer">7488</Item>
+	<Item Name="SourceNameList" Type="List"></Item>
+	<Item Name="SourceIDList" Type="List"></Item>
+	<Item Name="SourceCategoryList" Type="List">
+		<Item Name="string" Type="String">Chemical Vendors</Item>
+		<Item Name="string" Type="String">Research and Development</Item>
+		<Item Name="string" Type="String">Curation Efforts</Item>
+		<Item Name="string" Type="String">Governmental Organizations</Item>
+		<Item Name="string" Type="String">Legacy Depositors</Item>
+		<Item Name="string" Type="String">Subscription Services</Item>
+		<Item Name="string" Type="String">Journal Publishers</Item>
+		<Item Name="string" Type="String">NIH Initiatives</Item>
+	</Item>
+	<Item Name="CreateDate" Type="Date">2005/03/26 00:00</Item>
+	<Item Name="SynonymList" Type="List">
+		<Item Name="string" Type="String">Terephthaloyl chloride</Item>
+		<Item Name="string" Type="String">100-20-9</Item>
+		<Item Name="string" Type="String">Terephthaloyl dichloride</Item>
+		<Item Name="string" Type="String">1,4-BENZENEDICARBONYL DICHLORIDE</Item>
+		<Item Name="string" Type="String">Terephthalic acid dichloride</Item>
+		<Item Name="string" Type="String">Terephthalic dichloride</Item>
+		<Item Name="string" Type="String">p-Phthaloyl chloride</Item>
+		<Item Name="string" Type="String">Terephthalic acid chloride</Item>
+		<Item Name="string" Type="String">p-Phthalyl dichloride</Item>
+		<Item Name="string" Type="String">p-Phthaloyl dichloride</Item>
+		<Item Name="string" Type="String">Terephthalyl dichloride</Item>
+		<Item Name="string" Type="String">1,4-Benzenedicarbonyl chloride</Item>
+		<Item Name="string" Type="String">p-Phenylenedicarbonyl dichloride</Item>
+		<Item Name="string" Type="String">benzene-1,4-dicarbonyl chloride</Item>
+		<Item Name="string" Type="String">NSC 41885</Item>
+		<Item Name="string" Type="String">terephthaloylchloride</Item>
+		<Item Name="string" Type="String">UNII-G247CO9608</Item>
+		<Item Name="string" Type="String">HSDB 5332</Item>
+		<Item Name="string" Type="String">EINECS 202-829-5</Item>
+		<Item Name="string" Type="String">BRN 0607796</Item>
+		<Item Name="string" Type="String">LXEJRKJRKIFVNY-UHFFFAOYSA-N</Item>
+		<Item Name="string" Type="String">MFCD00000693</Item>
+		<Item Name="string" Type="String">G247CO9608</Item>
+		<Item Name="string" Type="String">DSSTox_CID_6653</Item>
+		<Item Name="string" Type="String">DSSTox_RID_78175</Item>
+		<Item Name="string" Type="String">DSSTox_GSID_26653</Item>
+		<Item Name="string" Type="String">Q-201791</Item>
+		<Item Name="string" Type="String">Terephthaloyl chloride, 99+%</Item>
+		<Item Name="string" Type="String">CAS-100-20-9</Item>
+		<Item Name="string" Type="String">CCRIS 8626</Item>
+		<Item Name="string" Type="String">p-Phthalyl chloride</Item>
+		<Item Name="string" Type="String">terephthalic chloride</Item>
+		<Item Name="string" Type="String">tere-phthaloyl chloride</Item>
+		<Item Name="string" Type="String">AC1L1OVG</Item>
+		<Item Name="string" Type="String">ACMC-2097nf</Item>
+		<Item Name="string" Type="String">EC 202-829-5</Item>
+		<Item Name="string" Type="String">1,4-Dichloroformyl benzene</Item>
+		<Item Name="string" Type="String">SCHEMBL68148</Item>
+		<Item Name="string" Type="String">4-09-00-03318 (Beilstein Handbook Reference)</Item>
+		<Item Name="string" Type="String">KSC174E9T</Item>
+		<Item Name="string" Type="String">CHEMBL1893301</Item>
+		<Item Name="string" Type="String">DTXSID7026653</Item>
+		<Item Name="string" Type="String">KS-00000VAD</Item>
+		<Item Name="string" Type="String">benzene-1,4-dicarbonyl dichloride</Item>
+		<Item Name="string" Type="String">MolPort-003-926-079</Item>
+		<Item Name="string" Type="String">BCP27385</Item>
+		<Item Name="string" Type="String">NSC41885</Item>
+		<Item Name="string" Type="String">Tox21_201899</Item>
+		<Item Name="string" Type="String">Tox21_303166</Item>
+		<Item Name="string" Type="String">ANW-14185</Item>
+		<Item Name="string" Type="String">NSC-41885</Item>
+		<Item Name="string" Type="String">ZINC38141445</Item>
+		<Item Name="string" Type="String">AKOS015890038</Item>
+		<Item Name="string" Type="String">FCH1319904</Item>
+		<Item Name="string" Type="String">MCULE-9481285116</Item>
+		<Item Name="string" Type="String">RP25985</Item>
+		<Item Name="string" Type="String">Terephthaloyl chloride, &gt;=99%, flakes</Item>
+		<Item Name="string" Type="String">NCGC00164045-01</Item>
+		<Item Name="string" Type="String">NCGC00164045-02</Item>
+		<Item Name="string" Type="String">NCGC00257127-01</Item>
+		<Item Name="string" Type="String">NCGC00259448-01</Item>
+		<Item Name="string" Type="String">AN-24545</Item>
+		<Item Name="string" Type="String">I764</Item>
+		<Item Name="string" Type="String">KB-10499</Item>
+		<Item Name="string" Type="String">OR315758</Item>
+		<Item Name="string" Type="String">SC-19185</Item>
+		<Item Name="string" Type="String">LS-148753</Item>
+		<Item Name="string" Type="String">RT-000669</Item>
+		<Item Name="string" Type="String">ST51037908</Item>
+		<Item Name="string" Type="String">6804-EP1441224A2</Item>
+		<Item Name="string" Type="String">I01-5090</Item>
+		<Item Name="string" Type="String">InChI=1/C8H4Cl2O2/c9-7(11)5-1-2-6(4-3-5)8(10)12/h1-4</Item>
+		<Item Name="string" Type="String">106158-15-0</Item>
+		<Item Name="string" Type="String">108454-76-8</Item>
+		<Item Name="string" Type="String">1640987-72-9</Item>
+		<Item Name="string" Type="String">188665-55-6</Item>
+		<Item Name="string" Type="String">1927884-58-9</Item>
+	</Item>
+	<Item Name="MeSHHeadingList" Type="List">
+		<Item Name="string" Type="String">terephthaloyl chloride</Item>
+	</Item>
+	<Item Name="MeSHTermList" Type="List">
+		<Item Name="string" Type="String">p-phthaloyl dichloride</Item>
+		<Item Name="string" Type="String">terephthaloyl dichloride</Item>
+		<Item Name="string" Type="String">1,4-benzenedicarbonyl dichloride</Item>
+		<Item Name="string" Type="String">1,4-phthaloyl dichloride</Item>
+		<Item Name="string" Type="String">terephthaloyl chloride</Item>
+	</Item>
+	<Item Name="PharmActionList" Type="List"></Item>
+	<Item Name="CommentList" Type="List"></Item>
+	<Item Name="IUPACName" Type="String">benzene-1,4-dicarbonyl chloride</Item>
+	<Item Name="CanonicalSmiles" Type="String">C1=CC(=CC=C1C(=O)Cl)C(=O)Cl</Item>
+	<Item Name="IsomericSmiles" Type="String">C1=CC(=CC=C1C(=O)Cl)C(=O)Cl</Item>
+	<Item Name="RotatableBondCount" Type="Integer">2</Item>
+	<Item Name="MolecularFormula" Type="String">C8H4Cl2O2</Item>
+	<Item Name="MolecularWeight" Type="String">203.018</Item>
+	<Item Name="TotalFormalCharge" Type="Integer">0</Item>
+	<Item Name="XLogP" Type="String">4</Item>
+	<Item Name="HydrogenBondDonorCount" Type="Integer">0</Item>
+	<Item Name="HydrogenBondAcceptorCount" Type="Integer">2</Item>
+	<Item Name="Complexity" Type="String">173.000</Item>
+	<Item Name="HeavyAtomCount" Type="Integer">12</Item>
+	<Item Name="AtomChiralCount" Type="Integer">0</Item>
+	<Item Name="AtomChiralDefCount" Type="Integer">0</Item>
+	<Item Name="AtomChiralUndefCount" Type="Integer">0</Item>
+	<Item Name="BondChiralCount" Type="Integer">0</Item>
+	<Item Name="BondChiralDefCount" Type="Integer">0</Item>
+	<Item Name="BondChiralUndefCount" Type="Integer">0</Item>
+	<Item Name="IsotopeAtomCount" Type="Integer">0</Item>
+	<Item Name="CovalentUnitCount" Type="Integer">1</Item>
+	<Item Name="TautomerCount" Type="Integer"></Item>
+	<Item Name="SubstanceIDList" Type="List"></Item>
+	<Item Name="TPSA" Type="String">34.1</Item>
+	<Item Name="AssaySourceNameList" Type="List"></Item>
+	<Item Name="MinAC" Type="String"></Item>
+	<Item Name="MaxAC" Type="String"></Item>
+	<Item Name="MinTC" Type="String"></Item>
+	<Item Name="MaxTC" Type="String"></Item>
+	<Item Name="ActiveAidCount" Type="Integer">1</Item>
+	<Item Name="InactiveAidCount" Type="Integer"></Item>
+	<Item Name="TotalAidCount" Type="Integer">243</Item>
+	<Item Name="InChIKey" Type="String">LXEJRKJRKIFVNY-UHFFFAOYSA-N</Item>
+	<Item Name="InChI" Type="String">InChI=1S/C8H4Cl2O2/c9-7(11)5-1-2-6(4-3-5)8(10)12/h1-4H</Item>
+</DocSum>
+
+</eSummaryResult>

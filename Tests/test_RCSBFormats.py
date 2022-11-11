@@ -14,12 +14,15 @@ import warnings
 try:
     import numpy
     from numpy import dot  # Missing on old PyPy's micronumpy
+
     del dot
     from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
+
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.PDB.")
+        "Install NumPy if you want to use Bio.PDB."
+    ) from None
 
 from Bio.PDB.MMCIFParser import MMCIFParser
 from Bio.PDB import PDBParser
@@ -27,12 +30,12 @@ from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarni
 
 
 class CompareStructures(unittest.TestCase):
-    """Tests for comparing the same structure parsed by PDB and MMCIF parsers"""
+    """Tests for comparing the same structure parsed by PDB and MMCIF parsers."""
 
     def setUp(self):
 
         # Silence!
-        warnings.simplefilter('ignore', PDBConstructionWarning)
+        warnings.simplefilter("ignore", PDBConstructionWarning)
 
         pdbparser = PDBParser(QUIET=1)
         cifparser = MMCIFParser(QUIET=1)
@@ -42,12 +45,11 @@ class CompareStructures(unittest.TestCase):
         pdb_file = os.path.join(modpath, "PDB", "1LCD.pdb")
         cif_file = os.path.join(modpath, "PDB", "1LCD.cif")
 
-        self.pdbo = pdbparser.get_structure('pdb', pdb_file)
-        self.cifo = cifparser.get_structure('pdb', cif_file)
+        self.pdbo = pdbparser.get_structure("pdb", pdb_file)
+        self.cifo = cifparser.get_structure("pdb", cif_file)
 
     def test_compare_models(self):
-        """Compared parsed models"""
-
+        """Compared parsed models."""
         cif_models = [(m.id, len(m.child_list)) for m in self.cifo.get_models()]
         pdb_models = [(m.id, len(m.child_list)) for m in self.pdbo.get_models()]
 
@@ -56,8 +58,7 @@ class CompareStructures(unittest.TestCase):
         self.assertEqual([i[1] for i in cif_models], [i[1] for i in pdb_models])
 
     def test_compare_chains(self):
-        """Compare parsed chains"""
-
+        """Compare parsed chains."""
         cif_chains = [(c.id, len(c.child_list)) for c in self.cifo.get_chains()]
         pdb_chains = [(c.id, len(c.child_list)) for c in self.pdbo.get_chains()]
 
@@ -66,6 +67,6 @@ class CompareStructures(unittest.TestCase):
         self.assertEqual([i[1] for i in cif_chains], [i[1] for i in pdb_chains])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -1,7 +1,9 @@
 # Copyright 2014-2016 by Marco Galardini.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Growth curves fitting and parameters extraction for phenotype data.
 
 This module provides functions to perform sigmoid functions fitting to
@@ -25,8 +27,8 @@ try:
     from scipy.integrate import trapz
 except ImportError:
     from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(
-        'Install scipy to extract curve parameters.')
+
+    raise MissingPythonDependencyError("Install scipy to extract curve parameters.")
 
 
 def logistic(x, A, u, d, v, y0):
@@ -52,8 +54,17 @@ def richards(x, A, u, d, v, y0):
 
     Proposed in Zwietering et al., 1990 (PMID: 16348228)
     """
-    y = (A * pow(1 + (v + (np.exp(1 + v) * np.exp((u / A) *
-                                                  (1 + v) * (1 + (1 / v)) * (d - x)))), -(1 / v))) + y0
+    y = (
+        A
+        * pow(
+            1
+            + (
+                v
+                + (np.exp(1 + v) * np.exp((u / A) * (1 + v) * (1 + (1 / v)) * (d - x)))
+            ),
+            -(1 / v),
+        )
+    ) + y0
     return y
 
 

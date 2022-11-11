@@ -11,9 +11,8 @@ Classes:
  - Feature - Hold the information in a Feature Table.
  - Qualifier - Qualifiers on a Feature.
 
-17-MAR-2009: added support for WGS and WGS_SCAFLD lines.  Ying Huang & Iddo Friedberg
 """
-# local stuff
+
 import Bio.GenBank
 
 
@@ -46,7 +45,7 @@ def _wrapped_genbank(information, indent, wrap_space=1, split_char=" "):
         cur_pos = 0
         info_parts = []
         while cur_pos < len(information):
-            info_parts.append(information[cur_pos: cur_pos + info_length])
+            info_parts.append(information[cur_pos : cur_pos + info_length])
             cur_pos += info_length
 
     # first get the information string split up by line
@@ -96,7 +95,7 @@ def _indent_genbank(information, indent):
     return output_info
 
 
-class Record(object):
+class Record:
     """Hold GenBank information in a format similar to the original record.
 
     The Record class is meant to make data easy to get to when you are
@@ -149,48 +148,57 @@ class Record(object):
     GB_SEQUENCE_INDENT = 9
 
     BASE_FORMAT = "%-" + str(GB_BASE_INDENT) + "s"
-    INTERNAL_FORMAT = " " * GB_INTERNAL_INDENT + "%-" + \
-                      str(GB_BASE_INDENT - GB_INTERNAL_INDENT) + "s"
-    OTHER_INTERNAL_FORMAT = " " * GB_OTHER_INTERNAL_INDENT + "%-" + \
-                            str(GB_BASE_INDENT - GB_OTHER_INTERNAL_INDENT) + \
-                            "s"
+    INTERNAL_FORMAT = (
+        " " * GB_INTERNAL_INDENT + "%-" + str(GB_BASE_INDENT - GB_INTERNAL_INDENT) + "s"
+    )
+    OTHER_INTERNAL_FORMAT = (
+        " " * GB_OTHER_INTERNAL_INDENT
+        + "%-"
+        + str(GB_BASE_INDENT - GB_OTHER_INTERNAL_INDENT)
+        + "s"
+    )
 
     BASE_FEATURE_FORMAT = "%-" + str(GB_FEATURE_INDENT) + "s"
-    INTERNAL_FEATURE_FORMAT = " " * GB_FEATURE_INTERNAL_INDENT + "%-" + \
-                              str(GB_FEATURE_INDENT -
-                                  GB_FEATURE_INTERNAL_INDENT) + "s"
+    INTERNAL_FEATURE_FORMAT = (
+        " " * GB_FEATURE_INTERNAL_INDENT
+        + "%-"
+        + str(GB_FEATURE_INDENT - GB_FEATURE_INTERNAL_INDENT)
+        + "s"
+    )
     SEQUENCE_FORMAT = "%" + str(GB_SEQUENCE_INDENT) + "s"
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self.accession = []
-        self.base_counts = ''
-        self.comment = ''
-        self.contig = ''
-        self.data_file_division = ''
-        self.date = ''
-        self.db_source = ''
+        self.base_counts = ""
+        self.comment = ""
+        self.contig = ""
+        self.data_file_division = ""
+        self.date = ""
+        self.db_source = ""
         self.dblinks = []
-        self.definition = ''
+        self.definition = ""
         self.features = []
-        self.gi = ''
+        self.gi = ""
         self.keywords = []
-        self.locus = ''
-        self.nid = ''
-        self.organism = ''
-        self.origin = ''
-        self.pid = ''
+        self.locus = ""
+        self.molecule_type = ""
+        self.nid = ""
+        self.organism = ""
+        self.origin = ""
+        self.pid = ""
         self.primary = []
         self.projects = []
         self.references = []
-        self.residue_type = ''
-        self.segment = ''
-        self.sequence = ''
-        self.size = ''
-        self.source = ''
+        self.residue_type = ""
+        self.segment = ""
+        self.sequence = ""
+        self.size = ""
+        self.source = ""
         self.taxonomy = []
-        self.version = ''
-        self.wgs = ''
+        self.topology = ""
+        self.version = ""
+        self.wgs = ""
         self.wgs_scafld = []
 
     def __str__(self):
@@ -279,7 +287,7 @@ class Record(object):
 
             acc_info = ""
             for accession in self.accession:
-                acc_info += "%s " % accession
+                acc_info += f"{accession} "
             # strip off an extra space at the end
             acc_info = acc_info.rstrip()
             output += _wrapped_genbank(acc_info, Record.GB_BASE_INDENT)
@@ -294,7 +302,7 @@ class Record(object):
             output = Record.BASE_FORMAT % "VERSION"
             output += self.version
             output += "  GI:"
-            output += "%s\n" % self.gi
+            output += f"{self.gi}\n"
         else:
             output = ""
         return output
@@ -303,7 +311,7 @@ class Record(object):
         output = ""
         if len(self.projects) > 0:
             output = Record.BASE_FORMAT % "PROJECT"
-            output += "%s\n" % "  ".join(self.projects)
+            output += f"{'  '.join(self.projects)}\n"
         return output
 
     def _dblink_line(self):
@@ -318,7 +326,7 @@ class Record(object):
         """Output for the NID line. Use of NID is obsolete in GenBank files (PRIVATE)."""
         if self.nid:
             output = Record.BASE_FORMAT % "NID"
-            output += "%s\n" % self.nid
+            output += f"{self.nid}\n"
         else:
             output = ""
         return output
@@ -327,7 +335,7 @@ class Record(object):
         """Output for PID line. Presumedly, PID usage is also obsolete (PRIVATE)."""
         if self.pid:
             output = Record.BASE_FORMAT % "PID"
-            output += "%s\n" % self.pid
+            output += f"{self.pid}\n"
         else:
             output = ""
         return output
@@ -335,17 +343,16 @@ class Record(object):
     def _keywords_line(self):
         """Output for the KEYWORDS line (PRIVATE)."""
         output = ""
-        if len(self.keywords) >= 0:
+        if self.keywords:
             output += Record.BASE_FORMAT % "KEYWORDS"
             keyword_info = ""
             for keyword in self.keywords:
-                keyword_info += "%s; " % keyword
+                keyword_info += f"{keyword}; "
             # replace the ; at the end with a period
             keyword_info = keyword_info[:-2]
             keyword_info += "."
 
-            output += _wrapped_genbank(keyword_info,
-                                       Record.GB_BASE_INDENT)
+            output += _wrapped_genbank(keyword_info, Record.GB_BASE_INDENT)
 
         return output
 
@@ -353,7 +360,7 @@ class Record(object):
         """Output for DBSOURCE line (PRIVATE)."""
         if self.db_source:
             output = Record.BASE_FORMAT % "DBSOURCE"
-            output += "%s\n" % self.db_source
+            output += f"{self.db_source}\n"
         else:
             output = ""
         return output
@@ -380,7 +387,7 @@ class Record(object):
         output += " " * Record.GB_BASE_INDENT
         taxonomy_info = ""
         for tax in self.taxonomy:
-            taxonomy_info += "%s; " % tax
+            taxonomy_info += f"{tax}; "
         # replace the ; at the end with a period
         taxonomy_info = taxonomy_info[:-2]
         taxonomy_info += "."
@@ -393,8 +400,7 @@ class Record(object):
         output = ""
         if self.comment:
             output += Record.BASE_FORMAT % "COMMENT"
-            output += _indent_genbank(self.comment,
-                                      Record.GB_BASE_INDENT)
+            output += _indent_genbank(self.comment, Record.GB_BASE_INDENT)
         return output
 
     def _features_line(self):
@@ -412,8 +418,8 @@ class Record(object):
             output += Record.BASE_FORMAT % "BASE COUNT  "
             # split up the base counts into their individual parts
             count_parts = self.base_counts.split(" ")
-            while '' in count_parts:
-                count_parts.remove('')
+            while "" in count_parts:
+                count_parts.remove("")
             # deal with the standard case, with a normal origin line
             # like: 474 a    356 c    428 g    364 t
             if len(count_parts) % 2 == 0:
@@ -421,7 +427,7 @@ class Record(object):
                     count_info = count_parts.pop(0)
                     count_type = count_parts.pop(0)
 
-                    output += "%7s %s" % (count_info, count_type)
+                    output += f"{count_info:>7} {count_type}"
             # deal with ugly ORIGIN lines like:
             # 1311257 a2224835 c2190093 g1309889 t
             # by just outputting the raw information
@@ -437,8 +443,7 @@ class Record(object):
         if self.sequence:
             output += Record.BASE_FORMAT % "ORIGIN"
             if self.origin:
-                output += _wrapped_genbank(self.origin,
-                                           Record.GB_BASE_INDENT)
+                output += _wrapped_genbank(self.origin, Record.GB_BASE_INDENT)
             else:
                 output += "\n"
         return output
@@ -455,7 +460,7 @@ class Record(object):
                     start_pos = cur_seq_pos + section * 10
                     end_pos = start_pos + 10
                     seq_section = self.sequence[start_pos:end_pos]
-                    output += " %s" % seq_section.lower()
+                    output += f" {seq_section.lower()}"
 
                     # stop looping if we are out of sequence
                     if end_pos > len(self.sequence):
@@ -484,12 +489,13 @@ class Record(object):
         output = ""
         if self.contig:
             output += Record.BASE_FORMAT % "CONTIG"
-            output += _wrapped_genbank(self.contig,
-                                       Record.GB_BASE_INDENT, split_char=',')
+            output += _wrapped_genbank(
+                self.contig, Record.GB_BASE_INDENT, split_char=","
+            )
         return output
 
 
-class Reference(object):
+class Reference:
     """Hold information from a GenBank reference.
 
     Attributes:
@@ -506,16 +512,16 @@ class Reference(object):
     """
 
     def __init__(self):
-        """Initialize."""
-        self.number = ''
-        self.bases = ''
-        self.authors = ''
-        self.consrtm = ''
-        self.title = ''
-        self.journal = ''
-        self.medline_id = ''
-        self.pubmed_id = ''
-        self.remark = ''
+        """Initialize the class."""
+        self.number = ""
+        self.bases = ""
+        self.authors = ""
+        self.consrtm = ""
+        self.title = ""
+        self.journal = ""
+        self.medline_id = ""
+        self.pubmed_id = ""
+        self.remark = ""
 
     def __str__(self):
         """Convert the reference to a GenBank format string."""
@@ -536,9 +542,9 @@ class Reference(object):
         if self.number:
             if self.bases:
                 output += "%-3s" % self.number
-                output += "%s" % self.bases
+                output += f"{self.bases}"
             else:
-                output += "%s" % self.number
+                output += f"{self.number}"
 
         output += "\n"
         return output
@@ -600,37 +606,38 @@ class Reference(object):
         return output
 
 
-class Feature(object):
+class Feature:
     """Hold information about a Feature in the Feature Table of GenBank record.
 
     Attributes:
-     - key - The key name of the featue (ie. source)
+     - key - The key name of the feature (ie. source)
      - location - The string specifying the location of the feature.
-     - qualfiers - A list of Qualifier objects in the feature.
+     - qualifiers - A list of Qualifier objects in the feature.
 
     """
 
     def __init__(self, key="", location=""):
-        """Initialize."""
+        """Initialize the class."""
         self.key = key
         self.location = location
         self.qualifiers = []
 
     def __repr__(self):
         """Representation of the object for debugging or logging."""
-        return "Feature(key=%r, location=%r)" % (self.key, self.location)
+        return f"Feature(key={self.key!r}, location={self.location!r})"
 
     def __str__(self):
         """Return feature as a GenBank format string."""
         output = Record.INTERNAL_FEATURE_FORMAT % self.key
-        output += _wrapped_genbank(self.location, Record.GB_FEATURE_INDENT,
-                                   split_char=',')
+        output += _wrapped_genbank(
+            self.location, Record.GB_FEATURE_INDENT, split_char=","
+        )
         for qualifier in self.qualifiers:
             output += str(qualifier)
         return output
 
 
-class Qualifier(object):
+class Qualifier:
     """Hold information about a qualifier in a GenBank feature.
 
     Attributes:
@@ -640,13 +647,13 @@ class Qualifier(object):
     """
 
     def __init__(self, key="", value=""):
-        """Initialize."""
+        """Initialize the class."""
         self.key = key
         self.value = value
 
     def __repr__(self):
         """Representation of the object for debugging or logging."""
-        return "Qualifier(key=%r, value=%r)" % (self.key, self.value)
+        return f"Qualifier(key={self.key!r}, value={self.value!r})"
 
     def __str__(self):
         """Return feature qualifier as a GenBank format string."""
@@ -657,5 +664,6 @@ class Qualifier(object):
             if no_space_key in self.key:
                 space_wrap = 0
         # return double quotes as-is, leave it to the user to escape them
-        return output + _wrapped_genbank(self.key + self.value,
-                                         Record.GB_FEATURE_INDENT, space_wrap)
+        return output + _wrapped_genbank(
+            self.key + self.value, Record.GB_FEATURE_INDENT, space_wrap
+        )

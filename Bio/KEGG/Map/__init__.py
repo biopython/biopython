@@ -1,8 +1,10 @@
 # Copyright 2001 by Tarjei Mikkelsen. All rights reserved.
 # Copyright 2007 by Michiel de Hoon. All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Load KEGG Pathway maps for use with the Biopython Pathway module.
 
@@ -20,6 +22,7 @@ from Bio.Pathway import Reaction
 
 
 def parse(handle):
+    """Parse a KEGG pathway map."""
     for line in handle:
         data, catalysts, reaction = line.split(":")
         catalysts = [(catalysts,)]

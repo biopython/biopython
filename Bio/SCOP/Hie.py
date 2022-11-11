@@ -20,20 +20,20 @@ The latest HIE file can be found `elsewhere at SCOP
 # TODO - Update the above URLs
 
 
-class Record(object):
+class Record:
     """Holds information for one node in the SCOP hierarchy.
 
     Attributes:
      - sunid - SCOP unique identifiers of this node
      - parent - Parents sunid
-     - children - Sequence of childrens sunids
+     - children - Sequence of children sunids
 
     """
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.sunid = ''
-        self.parent = ''
+        self.sunid = ""
+        self.parent = ""
         self.children = []
         if line:
             self._process(line)
@@ -49,30 +49,31 @@ class Record(object):
         # 0       -       46456,48724,51349,53931,56572,56835,56992,57942
         # 21953   49268   -
         # 49267   49266   49268,49269
-        line = line.rstrip()        # no trailing whitespace
-        columns = line.split('\t')   # separate the tab-delineated cols
+        line = line.rstrip()  # no trailing whitespace
+        columns = line.split("\t")  # separate the tab-delineated cols
         if len(columns) != 3:
-            raise ValueError("I don't understand the format of %s" % line)
+            raise ValueError(f"I don't understand the format of {line}")
 
         sunid, parent, children = columns
 
-        if sunid == '-':
-            self.sunid = ''
+        if sunid == "-":
+            self.sunid = ""
         else:
             self.sunid = int(sunid)
 
-        if parent == '-':
-            self.parent = ''
+        if parent == "-":
+            self.parent = ""
         else:
             self.parent = int(parent)
 
-        if children == '-':
+        if children == "-":
             self.children = ()
         else:
-            children = children.split(',')
+            children = children.split(",")
             self.children = [int(x) for x in children]
 
     def __str__(self):
+        """Represent the SCOP hierarchy record as a string."""
         s = []
         s.append(str(self.sunid))
 
@@ -80,14 +81,14 @@ class Record(object):
             s.append(str(self.parent))
         else:
             if self.sunid != 0:
-                s.append('0')
+                s.append("0")
             else:
-                s.append('-')
+                s.append("-")
 
         if self.children:
             s.append(",".join(str(x) for x in self.children))
         else:
-            s.append('-')
+            s.append("-")
 
         return "\t".join(s) + "\n"
 
@@ -100,6 +101,6 @@ def parse(handle):
 
     """
     for line in handle:
-        if line.startswith('#'):
+        if line.startswith("#"):
             continue
         yield Record(line)

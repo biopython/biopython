@@ -1,0 +1,38 @@
+# STOCKHOLM 1.0
+
+#=GF AC   RF04178
+#=GF ID   BTnc005
+#=GF DE   Bacteroides sRNA BTnc005
+#=GF AU   Prezza, G
+#=GF AU   Ryan, D
+#=GF AU   Mädler, G
+#=GF AU   Barquist, L; 0000-0003-4732-2667
+#=GF AU   Westermann, A
+#=GF SE   Published; PMID:32678091;
+#=GF SS   Published; PMID:32678091;
+#=GF GA   174.80
+#=GF TC   179.30
+#=GF NC   174.30
+#=GF TP   Gene; sRNA; 
+#=GF BM   cmbuild -F CM SEED
+#=GF CB   cmcalibrate --mpi CM
+#=GF SM   cmsearch --cpu 4 --verbose --nohmmonly -T 30.00 -Z 742849.287494 CM SEQDB
+#=GF DR   SO; 0000655; ncRNA;
+#=GF RN   [1]
+#=GF RM   32678091
+#=GF RT   A high-resolution transcriptome map identifies small RNA regulation of
+#=GF RT   metabolism in the gut microbe Bacteroides thetaiotaomicron.
+#=GF RA   Ryan D, Jenniches L, Reichardt S, Barquist L, Westermann AJ
+#=GF RL   Nat Commun. 2020;11:3557.
+#=GF CC   An uncharacterized small RNA discovered in Bacteroides thetaiotaomicron
+#=GF CC   [1]
+#=GF WK   Bacteroides_thetaiotaomicron_sRNA
+#=GF SQ   3
+
+
+AE015928.1/72774-72978     GUAAGUAAAAGUGUAACAGGAAGAAAGUUGCAGCAUAUAUGCGGUGAAUUAUGCGGUGUCAUAGGAAUUGAGGAUUUAUGUAAGAUGCUGAUAAUGAGUAAGGAACCUUAAAGUUAAUCGUUCCCUGUCUCUCCGCAGAACCUACUGGACAAAACAGGACAGUAAGUGGACAAAAACCUACAAAUCAGC-GAUUUGUAGGUUUUUU
+CP000139.1/2819055-2819247 AAAAGUAAGAGUGUAACAGGAAGAAAGUUGCAGCAUAUACGCGGUGAAUUAUUCGGUGUCAUAGGAGUAGAGUCUUUUGGUAAGAUGCUGAUAAUGAGUAGGGGAGAUGAAAGUUAAUCGUUCCCUGUCUCUCCGCUGG---------AAAGAAUUGCAAAACAA--AGA-AAAUCCCUGUAAAUUAAU-ACUUUACGGGGAUUUU
+FP929033.1/4930704-4930908 GUAAGUAAAAGUGUAACAGGAAGAAAGUUGCAGCAUAUAUGCGGUGAAUUAUGCGGUGUCAUAGGAAUUGAGGAUUUAUGUAAGAUGCUGAUAAUGAGUAAGGAACCUUAAAGUUAAUCGUUCCCUGUCUCUCCGCUGAACUAUCCGGACAAAACCGGGCAAUGAACAGUCAAA-UCCCACAAAUUCAAUGAUUUGUGGGACUUUU
+#=GC SS_cons               :::::::::::<<<<<<_________>>>>>>,,,,,,,,((((,,,<<<<<-<<<<<<<----<<<_______>>>------>>>>>>>>>>>><<<<<-<<<<_______________>>>>->>->>>,))))---------------------------------------<<<<<<<<<<<____>>>>>>>>>>>:::::
+#=GC RF                    guAAGUAAaAGuGuaaCAGGAAGAAAGuugCaGCAUAUAuGCGGUGAauuaugCgGuguCAUAGgaaUuGAGgauuuauGUAAGaugCuGauaauGaGuaaGGaaccUuAAAGUUAAUCGuuCCCugUCuCUCCGCuGaACuaaCuGGAcAaAAcuGgacAauaAauaGaCAAAacCCcgcaaaucaau.gauuugcgGGguUUUU
+//

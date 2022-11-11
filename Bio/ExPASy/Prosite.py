@@ -58,7 +58,7 @@ def read(handle):
     return record
 
 
-class Record(object):
+class Record:
     """Holds information from a Prosite record.
 
     Main attributes:
@@ -112,23 +112,23 @@ class Record(object):
 
     def __init__(self):
         """Initialize the class."""
-        self.name = ''
-        self.type = ''
-        self.accession = ''
-        self.created = ''
-        self.data_update = ''
-        self.info_update = ''
-        self.pdoc = ''
+        self.name = ""
+        self.type = ""
+        self.accession = ""
+        self.created = ""
+        self.data_update = ""
+        self.info_update = ""
+        self.pdoc = ""
 
-        self.description = ''
-        self.pattern = ''
+        self.description = ""
+        self.pattern = ""
         self.matrix = []
         self.rules = []
         self.prorules = []
         self.postprocessing = []
 
-        self.nr_sp_release = ''
-        self.nr_sp_seqs = ''
+        self.nr_sp_release = ""
+        self.nr_sp_seqs = ""
         self.nr_total = (None, None)
         self.nr_positive = (None, None)
         self.nr_unknown = (None, None)
@@ -136,10 +136,10 @@ class Record(object):
         self.nr_false_neg = None
         self.nr_partial = None
 
-        self.cc_taxo_range = ''
-        self.cc_max_repeat = ''
+        self.cc_taxo_range = ""
+        self.cc_max_repeat = ""
         self.cc_site = []
-        self.cc_skip_flag = ''
+        self.cc_skip_flag = ""
 
         self.dr_positive = []
         self.dr_false_neg = []
@@ -152,89 +152,88 @@ class Record(object):
 
 # Everything below are private functions
 
+
 def __read(handle):
     import re
+
     record = None
     for line in handle:
         keyword, value = line[:2], line[5:].rstrip()
-        if keyword == 'ID':
+        if keyword == "ID":
             record = Record()
             cols = value.split("; ")
             if len(cols) != 2:
-                raise ValueError("I don't understand identification line\n%s"
-                                 % line)
+                raise ValueError(f"I don't understand identification line\n{line}")
             record.name = cols[0]
-            record.type = cols[1].rstrip('.')    # don't want '.'
-        elif keyword == 'AC':
-            record.accession = value.rstrip(';')
-        elif keyword == 'DT':
+            record.type = cols[1].rstrip(".")  # don't want '.'
+        elif keyword == "AC":
+            record.accession = value.rstrip(";")
+        elif keyword == "DT":
             # e.g. from January 2017,
             # DT   01-APR-1990 CREATED; 01-APR-1990 DATA UPDATE; 01-APR-1990 INFO UPDATE.
             # Older files had brackets round the date descriptions and used MMM-YYYY
-            dates = value.rstrip('.').split("; ")
-            if dates[0].endswith((' (CREATED)', ' CREATED')):
+            dates = value.rstrip(".").split("; ")
+            if dates[0].endswith((" (CREATED)", " CREATED")):
                 # Remove last word
                 record.created = dates[0].rsplit(" ", 1)[0]
             else:
-                raise ValueError("I don't understand date line\n%s" % line)
-            if dates[1].endswith((' (DATA UPDATE)', ' DATA UPDATE')):
+                raise ValueError(f"I don't understand date line\n{line}")
+            if dates[1].endswith((" (DATA UPDATE)", " DATA UPDATE")):
                 # Remove last two words
                 record.data_update = dates[1].rsplit(" ", 2)[0]
             else:
-                raise ValueError("I don't understand date line\n%s" % line)
-            if dates[2].endswith((' (INFO UPDATE)', ' INFO UPDATE')):
+                raise ValueError(f"I don't understand date line\n{line}")
+            if dates[2].endswith((" (INFO UPDATE)", " INFO UPDATE")):
                 # Remove last two words
                 record.info_update = dates[2].rsplit(" ", 2)[0]
             else:
-                raise ValueError("I don't understand date line\n%s" % line)
-        elif keyword == 'DE':
+                raise ValueError(f"I don't understand date line\n{line}")
+        elif keyword == "DE":
             record.description = value
-        elif keyword == 'PA':
+        elif keyword == "PA":
             record.pattern += value
-        elif keyword == 'MA':
+        elif keyword == "MA":
             record.matrix.append(value)
-        elif keyword == 'PP':
+        elif keyword == "PP":
             record.postprocessing.extend(value.split(";"))
-        elif keyword == 'RU':
+        elif keyword == "RU":
             record.rules.append(value)
-        elif keyword == 'NR':
+        elif keyword == "NR":
             cols = value.split(";")
             for col in cols:
                 if not col:
                     continue
-                qual, data = [word.lstrip() for word in col.split("=")]
-                if qual == '/RELEASE':
+                qual, data = (word.lstrip() for word in col.split("="))
+                if qual == "/RELEASE":
                     release, seqs = data.split(",")
                     record.nr_sp_release = release
                     record.nr_sp_seqs = int(seqs)
-                elif qual == '/FALSE_NEG':
+                elif qual == "/FALSE_NEG":
                     record.nr_false_neg = int(data)
-                elif qual == '/PARTIAL':
+                elif qual == "/PARTIAL":
                     record.nr_partial = int(data)
-                elif qual in ['/TOTAL', '/POSITIVE', '/UNKNOWN', '/FALSE_POS']:
-                    m = re.match(r'(\d+)\((\d+)\)', data)
+                elif qual in ["/TOTAL", "/POSITIVE", "/UNKNOWN", "/FALSE_POS"]:
+                    m = re.match(r"(\d+)\((\d+)\)", data)
                     if not m:
-                        raise Exception("Broken data %s in comment line\n%s"
-                                        % (repr(data), line))
+                        raise Exception(f"Broken data {data} in comment line\n{line!r}")
                     hits = tuple(map(int, m.groups()))
-                    if(qual == "/TOTAL"):
+                    if qual == "/TOTAL":
                         record.nr_total = hits
-                    elif(qual == "/POSITIVE"):
+                    elif qual == "/POSITIVE":
                         record.nr_positive = hits
-                    elif(qual == "/UNKNOWN"):
+                    elif qual == "/UNKNOWN":
                         record.nr_unknown = hits
-                    elif(qual == "/FALSE_POS"):
+                    elif qual == "/FALSE_POS":
                         record.nr_false_pos = hits
                 else:
-                    raise ValueError("Unknown qual %s in comment line\n%s"
-                                     % (repr(qual), line))
-        elif keyword == 'CC':
+                    raise ValueError(f"Unknown qual {qual} in comment line\n{line!r}")
+        elif keyword == "CC":
             # Expect CC lines like this:
             # CC   /TAXO-RANGE=??EPV; /MAX-REPEAT=2;
             # Can (normally) split on ";" and then on "="
             cols = value.split(";")
             for col in cols:
-                if not col or col[:17] == 'Automatic scaling':
+                if not col or col[:17] == "Automatic scaling":
                     # DNAJ_2 in Release 15 has a non-standard comment line:
                     # CC   Automatic scaling using reversed database
                     # Throw it away.  (Should I keep it?)
@@ -244,67 +243,64 @@ def __read(handle):
                     # For example, from Bug 2403, in PS50293 have:
                     # CC /AUTHOR=K_Hofmann; N_Hulo
                     continue
-                qual, data = [word.lstrip() for word in col.split("=")]
-                if qual == '/TAXO-RANGE':
+                qual, data = (word.lstrip() for word in col.split("="))
+                if qual == "/TAXO-RANGE":
                     record.cc_taxo_range = data
-                elif qual == '/MAX-REPEAT':
+                elif qual == "/MAX-REPEAT":
                     record.cc_max_repeat = data
-                elif qual == '/SITE':
+                elif qual == "/SITE":
                     pos, desc = data.split(",")
                     record.cc_site.append((int(pos), desc))
-                elif qual == '/SKIP-FLAG':
+                elif qual == "/SKIP-FLAG":
                     record.cc_skip_flag = data
-                elif qual == '/MATRIX_TYPE':
+                elif qual == "/MATRIX_TYPE":
                     record.cc_matrix_type = data
-                elif qual == '/SCALING_DB':
+                elif qual == "/SCALING_DB":
                     record.cc_scaling_db = data
-                elif qual == '/AUTHOR':
+                elif qual == "/AUTHOR":
                     record.cc_author = data
-                elif qual == '/FT_KEY':
+                elif qual == "/FT_KEY":
                     record.cc_ft_key = data
-                elif qual == '/FT_DESC':
+                elif qual == "/FT_DESC":
                     record.cc_ft_desc = data
-                elif qual == '/VERSION':
+                elif qual == "/VERSION":
                     record.cc_version = data
                 else:
-                    raise ValueError("Unknown qual %s in comment line\n%s"
-                                     % (repr(qual), line))
-        elif keyword == 'DR':
+                    raise ValueError(f"Unknown qual {qual} in comment line\n{line!r}")
+        elif keyword == "DR":
             refs = value.split(";")
             for ref in refs:
                 if not ref:
                     continue
-                acc, name, type = [word.strip() for word in ref.split(",")]
-                if type == 'T':
+                acc, name, type = (word.strip() for word in ref.split(","))
+                if type == "T":
                     record.dr_positive.append((acc, name))
-                elif type == 'F':
+                elif type == "F":
                     record.dr_false_pos.append((acc, name))
-                elif type == 'N':
+                elif type == "N":
                     record.dr_false_neg.append((acc, name))
-                elif type == 'P':
+                elif type == "P":
                     record.dr_potential.append((acc, name))
-                elif type == '?':
+                elif type == "?":
                     record.dr_unknown.append((acc, name))
                 else:
-                    raise ValueError("I don't understand type flag %s" % type)
-        elif keyword == '3D':
+                    raise ValueError(f"I don't understand type flag {type}")
+        elif keyword == "3D":
             cols = value.split()
             for id in cols:
-                record.pdb_structs.append(id.rstrip(';'))
-        elif keyword == 'PR':
+                record.pdb_structs.append(id.rstrip(";"))
+        elif keyword == "PR":
             rules = value.split(";")
             record.prorules.extend(rules)
-        elif keyword == 'DO':
-            record.pdoc = value.rstrip(';')
-        elif keyword == 'CC':
-            continue
-        elif keyword == '//':
+        elif keyword == "DO":
+            record.pdoc = value.rstrip(";")
+        elif keyword == "//":
             if not record:
                 # Then this was the copyright statement
                 continue
             break
         else:
-            raise ValueError("Unknown keyword %s found" % keyword)
+            raise ValueError(f"Unknown keyword {keyword} found")
     else:
         return
     if not record:

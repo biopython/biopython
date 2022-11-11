@@ -10,42 +10,31 @@ Unless you are writing a new parser or writer for Bio.AlignIO, you should not
 use this module.  It provides base classes to try and simplify things.
 """
 
-from __future__ import print_function
 
-import sys  # for checking if Python 2
-
-from Bio.Alphabet import single_letter_alphabet
-
-
-class AlignmentIterator(object):
+class AlignmentIterator:
     """Base class for building MultipleSeqAlignment iterators.
 
-    You should write a next() method to return Aligment
+    You should write a next() method to return Alignment
     objects.  You may wish to redefine the __init__
     method as well.
     """
 
-    # TODO - Should the default be Gapped(single_letter_alphabet) instead?
-    def __init__(self, handle, seq_count=None,
-                 alphabet=single_letter_alphabet):
+    def __init__(self, handle, seq_count=None):
         """Create an AlignmentIterator object.
 
         Arguments:
          - handle   - input file
          - count    - optional, expected number of records per alignment
            Recommend for fasta file format.
-         - alphabet - optional, e.g. Bio.Alphabet.generic_protein
 
         Note when subclassing:
          - there should be a single non-optional argument, the handle,
-           and optional count and alphabet IN THAT ORDER.
-         - you do not have to require an alphabet (?).
+           and optional count IN THAT ORDER.
          - you can add additional optional arguments.
 
         """
         self.handle = handle
         self.records_per_alignment = seq_count
-        self.alphabet = alphabet
         #####################################################
         # You may want to subclass this, for example        #
         # to read through the file to find the first record,#
@@ -65,11 +54,6 @@ class AlignmentIterator(object):
         # into MultipleSeqAlignment objects.                #
         #####################################################
 
-    if sys.version_info[0] < 3:
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
     def __iter__(self):
         """Iterate over the entries as MultipleSeqAlignment objects.
 
@@ -77,16 +61,16 @@ class AlignmentIterator(object):
 
             with open("many.phy","r") as myFile:
                 for alignment in PhylipIterator(myFile):
-                    print "New alignment:"
+                    print("New alignment:")
                     for record in alignment:
-                        print record.id
-                        print record.seq
+                        print(record.id)
+                        print(record.seq)
 
         """
         return iter(self.__next__, None)
 
 
-class AlignmentWriter(object):
+class AlignmentWriter:
     """Base class for building MultipleSeqAlignment writers.
 
     You should write a write_alignment() method.
@@ -111,12 +95,12 @@ class AlignmentWriter(object):
         raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this, to write the alignment  #
-        # objecta to the file handle                        #
+        # objects to the file handle                        #
         #####################################################
 
     def clean(self, text):
         """Use this to avoid getting newlines in the output."""
-        return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
+        return text.replace("\n", " ").replace("\r", " ")
 
 
 class SequentialAlignmentWriter(AlignmentWriter):
@@ -172,5 +156,5 @@ class SequentialAlignmentWriter(AlignmentWriter):
         raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this, to write the alignment  #
-        # objecta to the file handle                        #
+        # objects to the file handle                        #
         #####################################################

@@ -10,18 +10,19 @@ Uses Improved Iterative Scaling.
 """
 # TODO Define terminology
 
-from __future__ import print_function
 from functools import reduce
 
 try:
     import numpy
 except ImportError:
     from Bio import MissingPythonDependencyError
+
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.MaxEntropy.")
+        "Install NumPy if you want to use Bio.MaxEntropy."
+    )
 
 
-class MaxEntropy(object):
+class MaxEntropy:
     """Hold information for a Maximum Entropy classifier.
 
     Members:
@@ -145,7 +146,7 @@ def _calc_empirical_expects(xs, ys, classes, features):
         s = 0
         for i in range(N):
             s += feature.get((i, ys_i[i]), 0)
-        expect.append(float(s) / N)
+        expect.append(s / N)
     return expect
 
 
@@ -200,8 +201,9 @@ def _calc_f_sharp(N, nclasses, features):
     return f_sharp
 
 
-def _iis_solve_delta(N, feature, f_sharp, empirical, prob_yx,
-                     max_newton_iterations, newton_converge):
+def _iis_solve_delta(
+    N, feature, f_sharp, empirical, prob_yx, max_newton_iterations, newton_converge
+):
     """Solve delta using Newton's method (PRIVATE)."""
     # SUM_x P(x) * SUM_c P(c|x) f_i(x, c) e^[delta_i * f#(x, c)] = 0
     delta = 0.0
@@ -224,8 +226,16 @@ def _iis_solve_delta(N, feature, f_sharp, empirical, prob_yx,
     return delta
 
 
-def _train_iis(xs, classes, features, f_sharp, alphas, e_empirical,
-               max_newton_iterations, newton_converge):
+def _train_iis(
+    xs,
+    classes,
+    features,
+    f_sharp,
+    alphas,
+    e_empirical,
+    max_newton_iterations,
+    newton_converge,
+):
     """Do one iteration of hill climbing to find better alphas (PRIVATE)."""
     # This is a good function to parallelize.
 
@@ -235,15 +245,29 @@ def _train_iis(xs, classes, features, f_sharp, alphas, e_empirical,
     N = len(xs)
     newalphas = alphas[:]
     for i in range(len(alphas)):
-        delta = _iis_solve_delta(N, features[i], f_sharp, e_empirical[i], p_yx,
-                                 max_newton_iterations, newton_converge)
+        delta = _iis_solve_delta(
+            N,
+            features[i],
+            f_sharp,
+            e_empirical[i],
+            p_yx,
+            max_newton_iterations,
+            newton_converge,
+        )
         newalphas[i] += delta
     return newalphas
 
 
-def train(training_set, results, feature_fns, update_fn=None,
-          max_iis_iterations=10000, iis_converge=1.0e-5,
-          max_newton_iterations=100, newton_converge=1.0e-10):
+def train(
+    training_set,
+    results,
+    feature_fns,
+    update_fn=None,
+    max_iis_iterations=10000,
+    iis_converge=1.0e-5,
+    max_newton_iterations=100,
+    newton_converge=1.0e-10,
+):
     """Train a maximum entropy classifier, returns MaxEntropy object.
 
     Train a maximum entropy classifier on a training set.
@@ -272,8 +296,7 @@ def train(training_set, results, feature_fns, update_fn=None,
     classes = sorted(set(results))
 
     # Cache values for all features.
-    features = [_eval_feature_fn(fn, training_set, classes)
-                for fn in feature_fns]
+    features = [_eval_feature_fn(fn, training_set, classes) for fn in feature_fns]
     # Cache values for f#.
     f_sharp = _calc_f_sharp(len(training_set), len(classes), features)
 
@@ -284,9 +307,16 @@ def train(training_set, results, feature_fns, update_fn=None,
     alphas = [0.0] * len(features)
     iters = 0
     while iters < max_iis_iterations:
-        nalphas = _train_iis(xs, classes, features, f_sharp,
-                             alphas, e_empirical,
-                             max_newton_iterations, newton_converge)
+        nalphas = _train_iis(
+            xs,
+            classes,
+            features,
+            f_sharp,
+            alphas,
+            e_empirical,
+            max_newton_iterations,
+            newton_converge,
+        )
         diff = [numpy.fabs(x - y) for x, y in zip(alphas, nalphas)]
         diff = reduce(numpy.add, diff, 0)
         alphas = nalphas
@@ -296,7 +326,7 @@ def train(training_set, results, feature_fns, update_fn=None,
         if update_fn is not None:
             update_fn(me)
 
-        if diff < iis_converge:   # converged
+        if diff < iis_converge:  # converged
             break
     else:
         raise RuntimeError("IIS did not converge")
@@ -306,4 +336,5 @@ def train(training_set, results, feature_fns, update_fn=None,
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

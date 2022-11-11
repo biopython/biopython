@@ -9,7 +9,7 @@ Firstly, running BLAST for your query sequence(s), and getting some output.
 Secondly, parsing the BLAST output in Python for further analysis.
 
 Your first introduction to running BLAST was probably via the NCBI web-service.
-In fact, there are lots of ways you can run BLAST, which can be categorised in several ways.
+In fact, there are lots of ways you can run BLAST, which can be categorized in several ways.
 The most important distinction is running BLAST locally (on your own machine),
 and running BLAST remotely (on another machine, typically the NCBI servers).
 We're going to start this chapter by invoking the NCBI online BLAST service
@@ -35,7 +35,7 @@ available at \url{https://blast.ncbi.nlm.nih.gov/Blast.cgi}.
 Currently \verb|qblast| only works with blastn, blastp, blastx, tblast
 and tblastx.
 \item The second argument specifies the databases to search against. Again,
-the options for this are available on the NCBI Guide to BLAST 
+the options for this are available on the NCBI Guide to BLAST
 \url{ftp://ftp.ncbi.nlm.nih.gov/pub/factsheets/HowTo_BLASTGuide.pdf}.
 \item The third argument is a string containing your query sequence.  This
 can either be the sequence itself, the sequence in fasta format,
@@ -62,11 +62,10 @@ described in section~\ref{sec:parsing-blast} below.
 For more about the optional BLAST arguments, we refer you to the NCBI's own
 documentation, or that built into Biopython:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> help(NCBIWWW.qblast)
-...
-\end{verbatim}
+\end{minted}
 
 Note that the default settings on the NCBI BLAST website are not quite
 the same as the defaults on QBLAST. If you get different results, you'll
@@ -77,46 +76,46 @@ For example, if you have a nucleotide sequence you want to search against
 the nucleotide database (nt) using BLASTN, and you know the GI number of your
 query sequence, you can use:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> result_handle = NCBIWWW.qblast("blastn", "nt", "8332116")
-\end{verbatim}
+\end{minted}
 
 Alternatively, if we have our query sequence already in a FASTA formatted
 file, we just need to open the file and read in this record as a string,
 and use that as the query argument:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> fasta_string = open("m_cold.fasta").read()
 >>> result_handle = NCBIWWW.qblast("blastn", "nt", fasta_string)
-\end{verbatim}
+\end{minted}
 
 We could also have read in the FASTA file as a \verb|SeqRecord| and then
 supplied just the sequence itself:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("m_cold.fasta", format="fasta")
 >>> result_handle = NCBIWWW.qblast("blastn", "nt", record.seq)
-\end{verbatim}
+\end{minted}
 
 Supplying just the sequence means that BLAST will assign an identifier
 for your sequence automatically.  You might prefer to use the
 \verb|SeqRecord| object's format method to make a FASTA string
 (which will include the existing identifier):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("m_cold.fasta", format="fasta")
 >>> result_handle = NCBIWWW.qblast("blastn", "nt", record.format("fasta"))
-\end{verbatim}
+\end{minted}
 
 This approach makes more sense if you have your sequence(s) in a
 non-FASTA file format which you can extract using \verb|Bio.SeqIO|
-(see Chapter~\ref{chapter:Bio.SeqIO}).
+(see Chapter~\ref{chapter:seqio}).
 
 Whatever arguments you give the \verb|qblast()| function, you should
 get back your results in a handle object (by default in XML format).
@@ -133,12 +132,12 @@ We need to be a bit careful since we can use \verb|result_handle.read()| to
 read the BLAST output only once -- calling \verb|result_handle.read()| again
 returns an empty string.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> with open("my_blast.xml", "w") as out_handle:
 ...     out_handle.write(result_handle.read())
 ...
 >>> result_handle.close()
-\end{verbatim}
+\end{minted}
 
 After doing this, the results are in the file \verb|my_blast.xml| and the
 original handle has had all its data extracted (so we closed it). However,
@@ -146,9 +145,9 @@ the \verb|parse| function of the BLAST parser (described
 in~\ref{sec:parsing-blast}) takes a file-handle-like object, so
 we can just open the saved file for input:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> result_handle = open("my_blast.xml")
-\end{verbatim}
+\end{minted}
 
 Now that we've got the BLAST results back into a handle again, we are ready
 to do something with them, so this leads us right into the parsing section
@@ -199,36 +198,27 @@ run a BLASTX (translation) search against the non-redundant (NR) protein databas
 Assuming you (or your systems administrator) has downloaded and installed the NR
 database, you might run:
 
-\begin{verbatim}
-blastx -query opuntia.fasta -db nr -out opuntia.xml -evalue 0.001 -outfmt 5
-\end{verbatim}
+\begin{minted}{console}
+$ blastx -query opuntia.fasta -db nr -out opuntia.xml -evalue 0.001 -outfmt 5
+\end{minted}
 
 This should run BLASTX against the NR database, using an expectation cut-off value
 of $0.001$ and produce XML output to the specified file (which we can then parse).
 On my computer this takes about six minutes - a good reason to save the output
 to a file so you can repeat any analysis as needed.
 
-From within Biopython we can use the NCBI BLASTX wrapper from the
-\verb|Bio.Blast.Applications| module to build the command line string,
-and run it:
+From within python we can use the \verb|subprocess| module to build the command line
+string, and run it:
 
-\begin{verbatim}
->>> from Bio.Blast.Applications import NcbiblastxCommandline
->>> help(NcbiblastxCommandline)
-...
->>> blastx_cline = NcbiblastxCommandline(query="opuntia.fasta", db="nr", evalue=0.001,
-...                                      outfmt=5, out="opuntia.xml")
->>> blastx_cline
-NcbiblastxCommandline(cmd='blastx', out='opuntia.xml', outfmt=5, query='opuntia.fasta',
-db='nr', evalue=0.001)
->>> print(blastx_cline)
-blastx -out opuntia.xml -outfmt 5 -query opuntia.fasta -db nr -evalue 0.001
->>> stdout, stderr = blastx_cline()
-\end{verbatim}
+\begin{minted}{pycon}
+>>> import subprocess
+>>> cmd = "blastx -query opuntia.fasta -db nr -out opuntia.xml"
+>>> cmd += " -evalue 0.001 -outfmt 5"
+>>> subprocess.run(cmd, shell=True)
+\end{minted}
 
-In this example there shouldn't be any output from BLASTX to the terminal,
-so stdout and stderr should be empty. You may want to check the output file
-\verb|opuntia.xml| has been created.
+In this example there shouldn't be any output from BLASTX to the terminal. You may want
+to check the output file \verb|opuntia.xml| has been created.
 
 As you may recall from earlier examples in the tutorial, the \verb|opuntia.fasta|
 contains seven sequences, so the BLAST XML output should contain multiple results.
@@ -264,9 +254,9 @@ XML, HTML, and plain text. Originally, Biopython had parsers for BLAST
 plain text and HTML output, as these were the only output formats offered
 at the time. Unfortunately, the BLAST output in these formats kept changing,
 each time breaking the Biopython parsers. Our HTML BLAST parser has been
-removed, but the plain text BLAST parser is still available (see
-Section~\ref{sec:parsing-blast-deprecated}). Use it at your own risk,
-it may or may not work, depending on which BLAST version you're using.
+removed, while the deprecated plain text BLAST parser is now only available
+via \verb|Bio.SearchIO|. Use it at your own risk, it may or may not work,
+depending on which BLAST version you're using.
 
 As keeping up with changes in BLAST
 became a hopeless endeavor, especially with users running different BLAST
@@ -296,43 +286,43 @@ Doing things in one of these ways, you then need to get a handle
 to the results. In Python, a handle is just a nice general way of
 describing input to any info source so that the info can be retrieved
 using \verb|read()| and \verb|readline()| functions
-(see Section~{sec:appendix-handles}).
+(see Section~\ref{sec:appendix-handles}).
 
 If you followed the code above for interacting with BLAST through a
 script, then you already have \verb|result_handle|, the handle to the
 BLAST results.  For example, using a GI number to do an online search:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> result_handle = NCBIWWW.qblast("blastn", "nt", "8332116")
-\end{verbatim}
+\end{minted}
 
 If instead you ran BLAST some other way, and have the
 BLAST output (in XML format) in the file \verb|my_blast.xml|, all you
 need to do is to open the file for reading:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> result_handle = open("my_blast.xml")
-\end{verbatim}
+\end{minted}
 
 Now that we've got a handle, we are ready to parse the output. The
 code to parse it is really quite small.  If you expect a single
 BLAST result (i.e., you used a single query):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIXML
 >>> blast_record = NCBIXML.read(result_handle)
-\end{verbatim}
+\end{minted}
 
 \noindent or, if you have lots of results (i.e., multiple query sequences):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIXML
 >>> blast_records = NCBIXML.parse(result_handle)
-\end{verbatim}
+\end{minted}
 
 Just like \verb|Bio.SeqIO| and \verb|Bio.AlignIO|
-(see Chapters~\ref{chapter:Bio.SeqIO} and~\ref{chapter:Bio.AlignIO}),
+(see Chapters~\ref{chapter:seqio} and~\ref{chapter:align}),
 we have a pair of input functions, \verb|read| and \verb|parse|, where
 \verb|read| is for when you have exactly one object, and \verb|parse|
 is an iterator for when you can have lots of objects -- but instead of
@@ -345,7 +335,7 @@ iterator. In plain English, an iterator allows you to step through
 the BLAST output, retrieving BLAST records one by one for each BLAST
 search result:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIXML
 >>> blast_records = NCBIXML.parse(result_handle)
 >>> blast_record = next(blast_records)
@@ -359,37 +349,38 @@ Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 StopIteration
 # No further records
-\end{verbatim}
+\end{minted}
 
 Or, you can use a \verb|for|-loop:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for blast_record in blast_records:
-...     # Do something with blast_record
-\end{verbatim}
+...     pass  # Do something with blast_record
+...
+\end{minted}
 
 Note though that you can step through the BLAST records only once.
 Usually, from each BLAST record you would save the information that
 you are interested in. If you want to save all returned BLAST records,
 you can convert the iterator into a list:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> blast_records = list(blast_records)
-\end{verbatim}
+\end{minted}
 Now you can access each BLAST record in the list with an index as usual.
 If your BLAST file is huge though, you may run into memory problems trying to
 save them all in a list.
 
 Usually, you'll be running one BLAST search at a time. Then, all you need
 to do is to pick up the first (and only) BLAST record in \verb|blast_records|:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIXML
 >>> blast_records = NCBIXML.parse(result_handle)
 >>> blast_record = next(blast_records)
-\end{verbatim}
+\end{minted}
 \noindent or more elegantly:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIXML
 >>> blast_record = NCBIXML.read(result_handle)
-\end{verbatim}
+\end{minted}
 
 I guess by now you're wondering what is in a BLAST record.
 
@@ -407,7 +398,7 @@ To continue with our example, let's just print out some summary info
 about all hits in our blast report greater than a particular
 threshold. The following code does this:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> E_VALUE_THRESH = 0.04
 
 >>> for alignment in blast_record.alignments:
@@ -420,11 +411,12 @@ threshold. The following code does this:
 ...             print(hsp.query[0:75] + "...")
 ...             print(hsp.match[0:75] + "...")
 ...             print(hsp.sbjct[0:75] + "...")
-\end{verbatim}
+...
+\end{minted}
 
 This will print out summary reports like the following:
 
-\begin{verbatim}
+\begin{minted}{text}
 ****Alignment****
 sequence: >gb|AF283004.1|AF283004 Arabidopsis thaliana cold acclimation protein WCOR413-like protein
 alpha form mRNA, complete cds
@@ -433,7 +425,7 @@ e value: 0.034
 tacttgttgatattggatcgaacaaactggagaaccaacatgctcacgtcacttttagtcccttacatattcctc...
 ||||||||| | ||||||||||| || ||||  || || |||||||| |||||| |  | |||||||| ||| ||...
 tacttgttggtgttggatcgaaccaattggaagacgaatatgctcacatcacttctcattccttacatcttcttc...
-\end{verbatim}
+\end{minted}
 
 Basically, you can do anything you want to with the info in the BLAST
 report once you have parsed it. This will, of course, depend on what
@@ -478,8 +470,8 @@ The PSIBlast record object is similar, but has support for the rounds that are u
 \section{Dealing with PSI-BLAST}
 
 You can run the standalone version of PSI-BLAST (the legacy NCBI command line
-tool \verb|blastpgp|, or its replacement \verb|psiblast|) using the wrappers
-in \verb|Bio.Blast.Applications| module.
+tool \verb|blastpgp|, or its replacement \verb|psiblast|) directly from the
+command line or using python's \verb|subprocess| module.
 
 At the time of writing, the NCBI do not appear to support tools running a
 PSI-BLAST search via the internet.
@@ -492,12 +484,10 @@ iteration is new or reused isn't present in the XML file.
 
 You can run the standalone version of RPS-BLAST (either the legacy NCBI
 command line tool \verb|rpsblast|, or its replacement with the same name)
-using the wrappers in \verb|Bio.Blast.Applications| module.
+directly from the command line or using python's \verb|subprocess| module.
 
 At the time of writing, the NCBI do not appear to support tools running an
 RPS-BLAST search via the internet.
 
 You can use the \verb|Bio.Blast.NCBIXML| parser to read the XML output from
 current versions of RPS-BLAST.
-
-

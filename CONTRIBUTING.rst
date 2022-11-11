@@ -31,46 +31,20 @@ Coding Conventions
 Biopython tries to follow the coding conventions laid out in PEP8 and PEP257,
 with the notable exception of existing module names which are not lower case.
 
- - http://www.python.org/dev/peps/pep-0008/
- - http://www.python.org/dev/peps/pep-0257/
+- http://www.python.org/dev/peps/pep-0008/
+- http://www.python.org/dev/peps/pep-0257/
 
-For docstrings (Python's in-code documentation) in addition to PEP257 we are
+For docstrings (Python's in-code documentation), in addition to PEP257 we are
 using reStructuredText (RST) markup language which allows basic formatting
 like *italics* and **bold** once rendered into HTML webpages for our online
-API documentation.
+API documentation. We also use reStructuredText for files like ``README.rst``.
 
-We use the continuous integration service TravisCI to enforce some of these
-checks, so if you are making a contribution it is best to check this locally.
-
-We use the tool ``flake8`` for code style checks, together with various
-plugins which can be installed as follows::
-
-    $ pip install flake8 flake8-docstrings flake8-blind-except flake8-rst-docstrings
-
-Unless you are using Python 2.7, please also install the bugbear plugin:
-
-    $ pip install flake8-bugbear
-
-You can then run ``flake8`` directly as follows::
-
-    $ flake8 Bio/
-    $ flake8 BioSQL/
-    $ flake8 Tests/
-    $ flake8 Scripts/
-    $ flake8 Doc/examples/
-
-Each of these folders has its own flake8 settings file, but in the long term
-we would like all the code to follow the same strict settings.
-
-You can run the reStructuredText checks with the ``restructuredtext-lint``
-tool (also known as ``rst-lint``)::
-
-    $ pip install restructuredtext_lint
-    $ rst-lint --level warning *.rst
-
-More simply, we currently suggest you install the git pre-commit hook described
-here which will check our basic coding conventions as you work:
-https://github.com/biopython/biopython/issues/493
+To facilitate style checking, we make use of ``pre-commit`` to automatically
+run various ``flake8`` plugins as well as ``black`` on the Python code, and
+``restructuredtext-lint`` (also known as ``rst-lint``) to check the RST files
+too. We also use continuous integration on GitHub to run these checks, but we
+strongly suggest you install and run ``pre-commit`` in your local machine (see
+below).
 
 
 Testing
@@ -82,41 +56,54 @@ chapter in the Biopython Tutorial for more information on our test framework:
 http://biopython.org/DIST/docs/tutorial/Tutorial.html
 
 
+Local Development
+-----------------
+
+As mentioned above, to simplify your contributions, we provide a `pre-commit
+<https://pre-commit.com/>`_ configuration. Pre-commit is a Python package which
+automatically hooks into git. When you run "git commit" within the biopython
+repository, it will automatically run various fast checks (including ``black``,
+``flake8``, ``rst-lint`` and ``doc8``) before the commit happens. To install
+this, run::
+
+    $ pip install pre-commit
+
+    # Activate pre-commit for biopython
+    $ cd biopython-repository
+    $ pre-commit install
+
+
 Local Testing
 -------------
 
-Please always run the style checks (see above) and the full test suite on
-your local computer before submitting a pull request, e.g.::
+Please always run the full test suite locally before submitting a pull
+request, e.g.::
 
-    $ git commit Bio/XXX.py Tests/test_XXX.py  -m "Fixed bug 123"
-    $ python3.5 setup.py build
-    $ python3.5 setup.py test
+    $ python setup.py build
+    $ python setup.py test
+    $ git commit ...
 
-If you have multiple versions of Python installed, ideally test them all
-(the Python tool ``tox`` can be helpful here).
+Have a look at the `related chapter <http://biopython.org/DIST/docs/tutorial/Tutorial.html#chapter%3Atesting>`_ in the documentation for more details.
 
+Continuous Integration
+----------------------
 
-Continous Integration
----------------------
+Once you submit your pull request on GitHub, several automated tests should be
+run via continuous integration services, and their results reported on the pull
+request. These will run most of the Biopython tests (although not with all the
+optional dependencies included), plus also style checks using ``pre-commit``
+(also used for git pre-commit checks, see above).
 
-Once you submit your pull request on GitHub, several automated tests should
-be run, and their results reported on the pull request.
+**The continuous integration checks must pass before your pull request will be
+merged.**
 
-We use TravisCI to run most of the Biopython tests (although currently only
-under Linux, and not with all the optional dependencies included), plus also
-check Python coding style using the ``flake8`` tool with the ``pydocstyle``
-plugin (``flake8-docstrings``), and reStructuredText using ``rst-lint``.
-https://travis-ci.org/biopython/biopython/branches
-
-We use AppVeyor to run most of the tests under Windows (although currently
-without any optional dependencies).
-https://ci.appveyor.com/project/biopython/biopython/history
-
-**The TravisCI and AppVeyor checks must pass before your pull request will
-be merged.**
-
-Some of the TravisCI and AppVeyor runs collect test coverage information via
+The continuous integration tests collect test coverage information via
 CodeCov: https://codecov.io/github/biopython/biopython/
 
-Ideally the CodeCov checks will also pass, but we currently do not insist
-on this when reviewing pull requests.
+Ideally the CodeCov checks will also pass, but we currently do not insist on
+this when reviewing pull requests.
+
+Contributing to the Biopython Tutorial
+--------------------------------------
+
+For instructions, see `the Biopython Tutorial README <Doc/README.rst>`_

@@ -34,11 +34,7 @@
 #define	max(x, y)	((x) > (y) ? (x) : (y))
 #endif
 
-#ifdef WINDOWS
-#  include <windows.h>
-#endif
-
-#define CLUSTERVERSION "1.55"
+#define CLUSTERVERSION "1.59"
 
 /* Chapter 2 */
 double clusterdistance(int nrows, int ncolumns, double** data, int** mask,

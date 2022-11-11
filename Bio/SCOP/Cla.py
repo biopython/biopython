@@ -20,7 +20,7 @@ The latest CLA file can be found
 from . import Residues
 
 
-class Record(object):
+class Record:
     """Holds information for one SCOP domain.
 
     Attributes:
@@ -38,19 +38,19 @@ class Record(object):
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.sid = ''
+        self.sid = ""
         self.residues = None
-        self.sccs = ''
-        self.sunid = ''
+        self.sccs = ""
+        self.sunid = ""
         self.hierarchy = {}
         if line:
             self._process(line)
 
     def _process(self, line):
-        line = line.rstrip()         # no trailing whitespace
-        columns = line.split('\t')   # separate the tab-delineated cols
+        line = line.rstrip()  # no trailing whitespace
+        columns = line.split("\t")  # separate the tab-delineated cols
         if len(columns) != 6:
-            raise ValueError("I don't understand the format of %s" % line)
+            raise ValueError(f"I don't understand the format of {line}")
 
         self.sid, pdbid, residues, self.sccs, self.sunid, hierarchy = columns
         self.residues = Residues.Residues(residues)
@@ -58,18 +58,22 @@ class Record(object):
         self.sunid = int(self.sunid)
 
         for ht in hierarchy.split(","):
-            key, value = ht.split('=')
+            key, value = ht.split("=")
             self.hierarchy[key] = int(value)
 
     def __str__(self):
+        """Represent the SCOP classification record as a tab-separated string."""
         s = []
         s.append(self.sid)
         s += str(self.residues).split(" ")
         s.append(self.sccs)
         s.append(self.sunid)
 
-        s.append(','.join('='.join((key, str(value))) for key, value
-                          in self.hierarchy.items()))
+        s.append(
+            ",".join(
+                "=".join((key, str(value))) for key, value in self.hierarchy.items()
+            )
+        )
 
         return "\t".join(map(str, s)) + "\n"
 
@@ -82,7 +86,7 @@ def parse(handle):
 
     """
     for line in handle:
-        if line.startswith('#'):
+        if line.startswith("#"):
             continue
         yield Record(line)
 
@@ -99,13 +103,13 @@ class Index(dict):
         """
         dict.__init__(self)
         self.filename = filename
-        with open(self.filename, "rU") as f:
+        with open(self.filename) as f:
             position = 0
             while True:
                 line = f.readline()
                 if not line:
                     break
-                if line.startswith('#'):
+                if line.startswith("#"):
                     continue
                 record = Record(line)
                 key = record.sid
@@ -117,7 +121,7 @@ class Index(dict):
         """Return an item from the indexed file."""
         position = dict.__getitem__(self, key)
 
-        with open(self.filename, "rU") as f:
+        with open(self.filename) as f:
             f.seek(position)
             line = f.readline()
             record = Record(line)

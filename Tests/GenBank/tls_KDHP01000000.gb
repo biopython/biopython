@@ -1,0 +1,40 @@
+LOCUS       KBUV01000000            3714 rc    DNA     linear   ENV 26-FEB-2018
+DEFINITION  TLS: soil metagenome 16S ribosomal RNA, targeted locus study.
+ACCESSION   KBUV00000000
+VERSION     KBUV00000000.1
+DBLINK      BioProject: PRJNA420556
+            BioSample: SAMN08114915
+KEYWORDS    TLS; Targeted Locus Study.
+SOURCE      soil metagenome
+  ORGANISM  soil metagenome
+            unclassified sequences; metagenomes; ecological metagenomes.
+REFERENCE   1  (bases 1 to 3714)
+  AUTHORS   Buscardo,E., Geml,J., Schmidt,S., Freitas,H., Brandao,H. and
+            Nagy,L.
+  TITLE     Spatio-temporal dynamics of soil bacterial communities in function
+            of Amazon forest phenology
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 3714)
+  AUTHORS   Buscardo,E., Geml,J., Schmidt,S., Freitas,H., Brandao,H. and
+            Nagy,L.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (22-NOV-2017) Centre for Functional Ecology, University
+            of Coimbra, Calcada Martim de Freitas, Coimbra, Portugal
+COMMENT     The soil metagenome targeted locus study (TLS) project has the
+            project accession KBUV00000000.  This version of the project (01)
+            has the accession number KBUV01000000, and consists of sequences
+            KBUV01000001-KBUV01003714.
+FEATURES             Location/Qualifiers
+     source          1..3714
+                     /organism="soil metagenome"
+                     /mol_type="genomic DNA"
+                     /isolation_source="soil samples in a lowland tropical
+                     evergreen rain forest in Amazonia"
+                     /db_xref="taxon:410658"
+                     /environmental_sample
+                     /country="Brazil: Manaus"
+                     /lat_lon="2.92 S 59.95 W"
+                     /collection_date="2013"
+                     /note="metagenomic"
+TLS         KBUV01000001-KBUV01003714
+//

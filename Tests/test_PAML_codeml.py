@@ -3,6 +3,8 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for PAML codeml module."""
+
 import unittest
 import os
 import os.path
@@ -41,8 +43,17 @@ class ModTest(unittest.TestCase):
 
     def tearDown(self):
         """Just in case CODEML creates some junk files, do a clean-up."""
-        del_files = [self.out_file, "2NG.dN", "2NG.dS", "2NG.t", "codeml.ctl",
-                     "lnf", "rst", "rst1", "rub"]
+        del_files = [
+            self.out_file,
+            "2NG.dN",
+            "2NG.dS",
+            "2NG.t",
+            "codeml.ctl",
+            "lnf",
+            "rst",
+            "rst1",
+            "rub",
+        ]
         for filename in del_files:
             if os.path.exists(filename):
                 os.remove(filename)
@@ -56,34 +67,34 @@ class ModTest(unittest.TestCase):
         self.cml = codeml.Codeml()
 
     def testAlignmentFileIsValid(self):
-        self.assertRaises((AttributeError, TypeError, OSError),
-                          codeml.Codeml, alignment=list())
-        self.cml.alignment = list()
+        self.assertRaises(
+            (AttributeError, TypeError, OSError), codeml.Codeml, alignment=[]
+        )
+        self.cml.alignment = []
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
-        self.assertRaises((AttributeError, TypeError, OSError),
-                          self.cml.run)
+        self.assertRaises((AttributeError, TypeError, OSError), self.cml.run)
 
     def testAlignmentExists(self):
-        self.assertRaises((EnvironmentError, IOError), codeml.Codeml,
-                          alignment="nonexistent")
+        self.assertRaises(
+            (EnvironmentError, IOError), codeml.Codeml, alignment="nonexistent"
+        )
         self.cml.alignment = "nonexistent"
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
         self.assertRaises(IOError, self.cml.run)
 
     def testTreeFileValid(self):
-        self.assertRaises((AttributeError, TypeError, OSError),
-                          codeml.Codeml, tree=list())
+        self.assertRaises((AttributeError, TypeError, OSError), codeml.Codeml, tree=[])
         self.cml.alignment = self.align_file
-        self.cml.tree = list()
+        self.cml.tree = []
         self.cml.out_file = self.out_file
-        self.assertRaises((AttributeError, TypeError, OSError),
-                          self.cml.run)
+        self.assertRaises((AttributeError, TypeError, OSError), self.cml.run)
 
     def testTreeExists(self):
-        self.assertRaises((EnvironmentError, IOError), codeml.Codeml,
-                          tree="nonexistent")
+        self.assertRaises(
+            (EnvironmentError, IOError), codeml.Codeml, tree="nonexistent"
+        )
         self.cml.alignment = self.align_file
         self.cml.tree = "nonexistent"
         self.cml.out_file = self.out_file
@@ -93,112 +104,110 @@ class ModTest(unittest.TestCase):
         self.cml.tree = self.tree_file
         self.cml.alignment = self.align_file
         self.cml.out_file = self.out_file
-        self.cml.working_dir = list()
-        self.assertRaises((AttributeError, TypeError, OSError),
-                          self.cml.run)
+        self.cml.working_dir = []
+        self.assertRaises((AttributeError, TypeError, OSError), self.cml.run)
 
     def testOptionExists(self):
-        self.assertRaises((AttributeError, KeyError),
-                          self.cml.set_options, xxxx=1)
-        self.assertRaises((AttributeError, KeyError),
-                          self.cml.get_option, "xxxx")
+        self.assertRaises((AttributeError, KeyError), self.cml.set_options, xxxx=1)
+        self.assertRaises((AttributeError, KeyError), self.cml.get_option, "xxxx")
 
     def testAlignmentSpecified(self):
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
-        self.assertRaises((AttributeError, ValueError),
-                          self.cml.run)
+        self.assertRaises((AttributeError, ValueError), self.cml.run)
 
     def testTreeSpecified(self):
         self.cml.alignment = self.align_file
         self.cml.out_file = self.out_file
-        self.assertRaises((AttributeError, ValueError),
-                          self.cml.run)
+        self.assertRaises((AttributeError, ValueError), self.cml.run)
 
     def testOutputFileSpecified(self):
         self.cml.alignment = self.align_file
         self.cml.tree = self.tree_file
-        self.assertRaises((AttributeError, ValueError),
-                          self.cml.run)
+        self.assertRaises((AttributeError, ValueError), self.cml.run)
 
     def testPamlErrorsCaught(self):
         self.cml.alignment = self.align_file
         self.cml.tree = self.bad_tree_file
         self.cml.out_file = self.out_file
-        self.assertRaises((EnvironmentError, PamlError),
-                          self.cml.run)
+        self.assertRaises((EnvironmentError, PamlError), self.cml.run)
 
     def testCtlFileValidOnRun(self):
         self.cml.alignment = self.align_file
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
-        self.assertRaises((AttributeError, TypeError, OSError),
-                          self.cml.run, ctl_file=list())
+        self.assertRaises(
+            (AttributeError, TypeError, OSError), self.cml.run, ctl_file=[]
+        )
 
     def testCtlFileExistsOnRun(self):
         self.cml.alignment = self.align_file
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
-        self.assertRaises((EnvironmentError, IOError),
-                          self.cml.run, ctl_file="nonexistent")
+        self.assertRaises(
+            (EnvironmentError, IOError), self.cml.run, ctl_file="nonexistent"
+        )
 
     def testCtlFileValidOnRead(self):
-        self.assertRaises((AttributeError, TypeError, OSError),
-                          self.cml.read_ctl_file, list())
-        self.assertRaises((AttributeError, KeyError),
-                          self.cml.read_ctl_file, self.bad_ctl_file1)
-        self.assertRaises(AttributeError,
-                          self.cml.read_ctl_file, self.bad_ctl_file2)
-        self.assertRaises(TypeError,
-                          self.cml.read_ctl_file, self.bad_ctl_file3)
-        target_options = {"noisy": 0,
-                          "verbose": 0,
-                          "runmode": 0,
-                          "seqtype": 1,
-                          "CodonFreq": 2,
-                          "ndata": None,
-                          "clock": 0,
-                          "aaDist": None,
-                          "aaRatefile": None,
-                          "model": 0,
-                          "NSsites": [0],
-                          "icode": 0,
-                          "Mgene": 0,
-                          "fix_kappa": 0,
-                          "kappa": 4.54006,
-                          "fix_omega": 0,
-                          "omega": 1,
-                          "fix_alpha": 1,
-                          "alpha": 0,
-                          "Malpha": 0,
-                          "ncatG": None,
-                          "getSE": 0,
-                          "RateAncestor": 0,
-                          "Small_Diff": None,
-                          "cleandata": 1,
-                          "fix_blength": 1,
-                          "method": 0,
-                          "rho": None,
-                          "fix_rho": None}
+        self.assertRaises(
+            (AttributeError, TypeError, OSError), self.cml.read_ctl_file, []
+        )
+        self.assertRaises(
+            (AttributeError, KeyError), self.cml.read_ctl_file, self.bad_ctl_file1
+        )
+        self.assertRaises(AttributeError, self.cml.read_ctl_file, self.bad_ctl_file2)
+        self.assertRaises(TypeError, self.cml.read_ctl_file, self.bad_ctl_file3)
+        target_options = {
+            "noisy": 0,
+            "verbose": 0,
+            "runmode": 0,
+            "seqtype": 1,
+            "CodonFreq": 2,
+            "ndata": None,
+            "clock": 0,
+            "aaDist": None,
+            "aaRatefile": None,
+            "model": 0,
+            "NSsites": [0],
+            "icode": 0,
+            "Mgene": 0,
+            "fix_kappa": 0,
+            "kappa": 4.54006,
+            "fix_omega": 0,
+            "omega": 1,
+            "fix_alpha": 1,
+            "alpha": 0,
+            "Malpha": 0,
+            "ncatG": None,
+            "getSE": 0,
+            "RateAncestor": 0,
+            "Small_Diff": None,
+            "cleandata": 1,
+            "fix_blength": 1,
+            "method": 0,
+            "rho": None,
+            "fix_rho": None,
+        }
         self.cml.read_ctl_file(self.ctl_file)
         # Compare the dictionary keys:
         self.assertEqual(sorted(self.cml._options), sorted(target_options))
         for key in target_options:
-            self.assertEqual(self.cml._options[key], target_options[key],
-                             "%s: %r vs %r"
-                             % (key, self.cml._options[key], target_options[key]))
+            self.assertEqual(
+                self.cml._options[key],
+                target_options[key],
+                f"{key}: {self.cml._options[key]!r} vs {target_options[key]!r}",
+            )
 
     def testCtlFileExistsOnRead(self):
-        self.assertRaises((EnvironmentError, IOError),
-                          self.cml.read_ctl_file, ctl_file="nonexistent")
+        self.assertRaises(
+            (EnvironmentError, IOError), self.cml.read_ctl_file, ctl_file="nonexistent"
+        )
 
     def testResultsValid(self):
-        self.assertRaises((AttributeError, TypeError, OSError),
-                          codeml.read, list())
+        self.assertRaises((AttributeError, TypeError, OSError), codeml.read, [])
 
     def testResultsExist(self):
-        self.assertRaises((EnvironmentError, IOError),
-                          codeml.read, "nonexistent")
+        self.assertRaises((EnvironmentError, IOError), codeml.read, "nonexistent")
 
     def testResultsParsable(self):
         self.assertRaises(ValueError, codeml.read, self.results_file)
@@ -206,9 +215,8 @@ class ModTest(unittest.TestCase):
     def testParseSEs(self):
         res_dir = os.path.join(self.results_dir, "codeml", "SE")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
-            version_msg = ("Improper parsing for version %s"
-                           % version.replace('_', '.'))
+            version = results_file.split("-")[1].split(".")[0]
+            version_msg = f"Improper parsing for version {version.replace('_', '.')}"
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
@@ -228,9 +236,8 @@ class ModTest(unittest.TestCase):
     def testParseAllNSsites(self):
         res_dir = os.path.join(self.results_dir, "codeml", "all_NSsites")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
-            version_msg = ("Improper parsing for version %s"
-                           % version.replace('_', '.'))
+            version = results_file.split("-")[1].split(".")[0]
+            version_msg = f"Improper parsing for version {version.replace('_', '.')}"
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # There should be 4 top-level items: 'codon model', 'model',
@@ -247,34 +254,32 @@ class ModTest(unittest.TestCase):
                 self.assertEqual(len(model), 5, version_msg)
                 self.assertIn("parameters", model, version_msg)
                 params = model["parameters"]
-                self.assertEqual(len(params), SITECLASS_PARAMS[model_num],
-                                 version_msg)
+                self.assertEqual(len(params), SITECLASS_PARAMS[model_num], version_msg)
                 self.assertIn("branches", params, version_msg)
                 branches = params["branches"]
                 # There are 7 branches in the test case (specific to these
                 # test cases)
                 self.assertEqual(len(branches), 7, version_msg)
                 if "site classes" in params:
-                    self.assertEqual(len(params["site classes"]),
-                                     SITECLASSES[model_num], version_msg)
+                    self.assertEqual(
+                        len(params["site classes"]), SITECLASSES[model_num], version_msg
+                    )
 
     def testParseNSsite3(self):
         res_dir = os.path.join(self.results_dir, "codeml", "NSsite3")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
-            version_msg = ("Improper parsing for version %s"
-                           % version.replace('_', '.'))
+            version = results_file.split("-")[1].split(".")[0]
+            version_msg = f"Improper parsing for version {version.replace('_', '.')}"
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # There should be 5 top-level items: 'codon model', 'model',
             # 'version', 'NSsites' & site-class model, the last of which
             # is only there when only one NSsites class is used
             self.assertEqual(len(results), 5, version_msg)
-            self.assertIn('site-class model', results, version_msg)
-            self.assertEqual(results['site-class model'], 'discrete',
-                             version_msg)
+            self.assertIn("site-class model", results, version_msg)
+            self.assertEqual(results["site-class model"], "discrete", version_msg)
             self.assertIn("NSsites", results, version_msg)
-            # There should be 1 NSsites classe: 3
+            # There should be 1 NSsites class: 3
             self.assertEqual(len(results["NSsites"]), 1, version_msg)
             # Each site class model should have 5 sub-items: 'lnL', 'tree',
             # 'description', 'parameters', & 'tree length'. It should
@@ -283,8 +288,7 @@ class ModTest(unittest.TestCase):
             self.assertEqual(len(model), 5, version_msg)
             self.assertIn("parameters", model, version_msg)
             params = model["parameters"]
-            self.assertEqual(len(params), SITECLASS_PARAMS[3],
-                             version)
+            self.assertEqual(len(params), SITECLASS_PARAMS[3], version)
             self.assertIn("site classes", params, version_msg)
             site_classes = params["site classes"]
             self.assertEqual(len(site_classes), 4, version_msg)
@@ -292,9 +296,8 @@ class ModTest(unittest.TestCase):
     def testParseBranchSiteA(self):
         res_dir = os.path.join(self.results_dir, "codeml", "branchsiteA")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
-            version_msg = ("Improper parsing for version %s"
-                           % version.replace('_', '.'))
+            version = results_file.split("-")[1].split(".")[0]
+            version_msg = f"Improper parsing for version {version.replace('_', '.')}"
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # There are 5 top-level items in this case:
@@ -314,8 +317,7 @@ class ModTest(unittest.TestCase):
             self.assertIn("site classes", params, version_msg)
             site_classes = params["site classes"]
             # Branch Site A adds another site class
-            self.assertEqual(len(site_classes), SITECLASSES[2] + 1,
-                             version)
+            self.assertEqual(len(site_classes), SITECLASSES[2] + 1, version)
             for class_num in [0, 1, 2, 3]:
                 self.assertIn(class_num, site_classes, version_msg)
                 site_class = site_classes[class_num]
@@ -325,12 +327,10 @@ class ModTest(unittest.TestCase):
                 self.assertEqual(len(branches), 2, version_msg)
 
     def testParseCladeModelC(self):
-        cladeC_res_dir = os.path.join(self.results_dir, "codeml",
-                                      "clademodelC")
+        cladeC_res_dir = os.path.join(self.results_dir, "codeml", "clademodelC")
         for results_file in os.listdir(cladeC_res_dir):
-            version = results_file.split('-')[1].split('.')[0]
-            version_msg = ("Improper parsing for version %s"
-                           % version.replace('_', '.'))
+            version = results_file.split("-")[1].split(".")[0]
+            version_msg = f"Improper parsing for version {version.replace('_', '.')}"
             results_path = os.path.join(cladeC_res_dir, results_file)
             results = codeml.read(results_path)
             # 5 top-level items again in this case
@@ -348,8 +348,7 @@ class ModTest(unittest.TestCase):
             self.assertEqual(len(params), SITECLASS_PARAMS[2] - 1, version_msg)
             self.assertIn("site classes", params, version_msg)
             site_classes = params["site classes"]
-            self.assertEqual(len(site_classes), SITECLASSES[2],
-                             version)
+            self.assertEqual(len(site_classes), SITECLASSES[2], version)
             for class_num in [0, 1, 2]:
                 self.assertIn(class_num, site_classes, version_msg)
                 site_class = site_classes[class_num]
@@ -361,9 +360,8 @@ class ModTest(unittest.TestCase):
     def testParseNgene2Mgene02(self):
         res_dir = os.path.join(self.results_dir, "codeml", "ngene2_mgene02")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
-            version_msg = ("Improper parsing for version %s"
-                           % version.replace('_', '.'))
+            version = results_file.split("-")[1].split(".")[0]
+            version_msg = f"Improper parsing for version {version.replace('_', '.')}"
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
@@ -384,9 +382,8 @@ class ModTest(unittest.TestCase):
     def testParseNgene2Mgene1(self):
         res_dir = os.path.join(self.results_dir, "codeml", "ngene2_mgene1")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
-            version_msg = ("Improper parsing for version %s"
-                           % version.replace('_', '.'))
+            version = results_file.split("-")[1].split(".")[0]
+            version_msg = f"Improper parsing for version {version.replace('_', '.')}"
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
@@ -402,9 +399,8 @@ class ModTest(unittest.TestCase):
     def testParseNgene2Mgene34(self):
         res_dir = os.path.join(self.results_dir, "codeml", "ngene2_mgene34")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
-            version_msg = ("Improper parsing for version %s"
-                           % version.replace('_', '.'))
+            version = results_file.split("-")[1].split(".")[0]
+            version_msg = f"Improper parsing for version {version.replace('_', '.')}"
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
@@ -428,9 +424,8 @@ class ModTest(unittest.TestCase):
     def testParseFreeRatio(self):
         res_dir = os.path.join(self.results_dir, "codeml", "freeratio")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
-            version_msg = ("Improper parsing for version %s"
-                           % version.replace('_', '.'))
+            version = results_file.split("-")[1].split(".")[0]
+            version_msg = f"Improper parsing for version {version.replace('_', '.')}"
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
@@ -456,55 +451,66 @@ class ModTest(unittest.TestCase):
     def testParsePairwise(self):
         res_dir = os.path.join(self.results_dir, "codeml", "pairwise")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
-            version_msg = ("Improper parsing for version %s"
-                           % version.replace('_', '.'))
+            version = results_file.split("-")[1].split(".")[0]
+            version_msg = f"Improper parsing for version {version.replace('_', '.')}"
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # Pairwise models have an extra top-level item: pairwise
             self.assertEqual(len(results), 5, version_msg)
             self.assertIn("pairwise", results, version_msg)
             pairwise = results["pairwise"]
-            self.assertGreaterEqual(len(pairwise), 2, version_msg +
-                                    ": should have at least two sequences")
+            self.assertGreaterEqual(
+                len(pairwise), 2, version_msg + ": should have at least two sequences"
+            )
             for seq1, seq2 in itertools.combinations(pairwise.keys(), 2):
-                self.assertEqual(len(pairwise[seq1][seq2]), 7, version_msg +
-                                 ": wrong number of parameters parsed")
-                self.assertEqual(len(pairwise[seq2][seq1]), 7, version_msg +
-                                 ": wrong number of parameters parsed")
+                self.assertEqual(
+                    len(pairwise[seq1][seq2]),
+                    7,
+                    version_msg + ": wrong number of parameters parsed",
+                )
+                self.assertEqual(
+                    len(pairwise[seq2][seq1]),
+                    7,
+                    version_msg + ": wrong number of parameters parsed",
+                )
 
     def testParseSitesParamsForPairwise(self):
-        """Verify that pairwise site estimates are indeed parsed. Fixes #483"""
+        """Verify that pairwise site estimates are indeed parsed. Fixes #483."""
         res_dir = os.path.join(self.results_dir, "codeml", "pairwise")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
-            version_msg = ("Improper parsing for version %s"
-                           % version.replace('_', '.'))
+            version = results_file.split("-")[1].split(".")[0]
+            version_msg = f"Improper parsing for version {version.replace('_', '.')}"
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertIn("pairwise", results)
             seqs = list(results["pairwise"].keys())
-            self.assertGreaterEqual(len(seqs), 2, version_msg +
-                                    ": should have at least two sequences")
+            self.assertGreaterEqual(
+                len(seqs), 2, version_msg + ": should have at least two sequences"
+            )
             for seq1, seq2 in itertools.combinations(seqs, 2):
                 params = results["pairwise"][seq1][seq2]
-                self.assertEqual(len(params), 7,
-                                 version_msg + ": wrong number of parsed parameters" +
-                                 " for %s-%s" % (seq1, seq2))
+                self.assertEqual(
+                    len(params),
+                    7,
+                    version_msg
+                    + ": wrong number of parsed parameters"
+                    + f" for {seq1}-{seq2}",
+                )
                 for param in ("t", "S", "N", "omega", "dN", "dS", "lnL"):
-                    self.assertTrue(param in params, version_msg +
-                                    ": '%s' not in parsed parameters"
-                                    % (param))
-                    self.assertTrue(isinstance(params[param], float))
+                    self.assertIn(
+                        param,
+                        params,
+                        version_msg + f": '{param}' not in parsed parameters",
+                    )
+                    self.assertIsInstance(params[param], float)
                     if param != "lnL":
-                        self.assertTrue(params[param] >= 0)
+                        self.assertGreaterEqual(params[param], 0)
 
     def testParseAA(self):
         res_dir = os.path.join(self.results_dir, "codeml", "aa_model0")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
-            version_msg = ("Improper parsing for version %s"
-                           % version.replace('_', '.'))
+            version = results_file.split("-")[1].split(".")[0]
+            version_msg = f"Improper parsing for version {version.replace('_', '.')}"
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # Amino Acid analysis has different top-levels:
@@ -524,9 +530,8 @@ class ModTest(unittest.TestCase):
     def testParseAAPairwise(self):
         res_dir = os.path.join(self.results_dir, "codeml", "aa_pairwise")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
-            version_msg = ("Improper parsing for version %s"
-                           % version.replace('_', '.'))
+            version = results_file.split("-")[1].split(".")[0]
+            version_msg = f"Improper parsing for version {version.replace('_', '.')}"
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # Pairwise AA analysis has one top-level fewer than non-pairwise
@@ -542,23 +547,23 @@ class ModTest(unittest.TestCase):
 
         In response to bug #453, where trees like (A, (B, C)); weren't being caught.
         """
-        res_file = os.path.join(self.results_dir, "codeml",
-                                "tree_regexp_versatility.out")
+        res_file = os.path.join(
+            self.results_dir, "codeml", "tree_regexp_versatility.out"
+        )
         results = codeml.read(res_file)
         self.assertIn("NSsites", results)
         nssites = results["NSsites"]
         self.assertIn(0, nssites)
         m0 = nssites[0]
         self.assertIn("tree", m0)
-        self.assertTrue(m0["tree"] is not None)
+        self.assertIsNotNone(m0["tree"])
         self.assertNotEqual(len(m0["tree"]), 0)
 
     def testParseM2arel(self):
         res_dir = os.path.join(self.results_dir, "codeml", "m2a_rel")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
-            version_msg = ("Improper parsing for version %s"
-                           % version.replace('_', '.'))
+            version = results_file.split("-")[1].split(".")[0]
+            version_msg = f"Improper parsing for version {version.replace('_', '.')}"
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertIn("NSsites", results)
@@ -566,8 +571,7 @@ class ModTest(unittest.TestCase):
             model = results["NSsites"][22]
             self.assertEqual(len(model), 5, version_msg)
             params = model["parameters"]
-            self.assertEqual(len(params), SITECLASS_PARAMS[22],
-                             version_msg)
+            self.assertEqual(len(params), SITECLASS_PARAMS[22], version_msg)
 
 
 if __name__ == "__main__":

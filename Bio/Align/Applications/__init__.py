@@ -4,7 +4,11 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Alignment command line tool wrappers."""
+"""Alignment command line tool wrappers (OBSOLETE).
+
+We have decided to remove this module in future, and instead recommend
+building your command and invoking it via the subprocess module directly.
+"""
 
 from ._Muscle import MuscleCommandline
 from ._Clustalw import ClustalwCommandline
@@ -17,13 +21,14 @@ from ._TCoffee import TCoffeeCommandline
 from ._MSAProbs import MSAProbsCommandline
 
 # Make this explicit, then they show up in the API docs
-__all__ = ("MuscleCommandline",
-           "ClustalwCommandline",
-           "ClustalOmegaCommandline",
-           "PrankCommandline",
-           "MafftCommandline",
-           "DialignCommandline",
-           "ProbconsCommandline",
-           "TCoffeeCommandline",
-           "MSAProbsCommandline",
-           )
+__all__ = (
+    "MuscleCommandline",
+    "ClustalwCommandline",
+    "ClustalOmegaCommandline",
+    "PrankCommandline",
+    "MafftCommandline",
+    "DialignCommandline",
+    "ProbconsCommandline",
+    "TCoffeeCommandline",
+    "MSAProbsCommandline",
+)

@@ -22,18 +22,22 @@ from Bio import MissingPythonDependencyError
 try:
     # Skip the test if reportlab is not installed
     import reportlab as r
+
     del r
 except Exception:
     raise MissingPythonDependencyError(
-        "Install ReportLab if you want to use Bio.Graphics.")
+        "Install ReportLab if you want to use Bio.Graphics."
+    ) from None
 try:
     # Skip the test if reportlab is not installed
     from reportlab.graphics import renderPM
+
     del renderPM
 except Exception:
     raise MissingPythonDependencyError(
-        "Install ReportLab's renderPM module if you want to create "
-        "bitmaps with Bio.Graphics.")
+        "Install ReportLab's renderPM module if you want to create bitmaps with "
+        "Bio.Graphics."
+    ) from None
 try:
     # Skip the test if PIL is not installed
     # The preferred PIL import has changed over time:
@@ -45,7 +49,8 @@ try:
 except Exception:
     raise MissingPythonDependencyError(
         "Install Pillow or its predecessor PIL (Python Imaging Library) "
-        "if you want to create bitmaps with Bio.Graphics.")
+        "if you want to create bitmaps with Bio.Graphics."
+    ) from None
 
 from reportlab.graphics.renderPM import RenderPMError
 
@@ -53,7 +58,7 @@ from reportlab.graphics.renderPM import RenderPMError
 from Bio.Graphics.Comparative import ComparativeScatterPlot
 
 # We're not really using the unittest framework, because we need to
-# raise the dependency error BEFORE the invidual tests in order that
+# raise the dependency error BEFORE the individual tests in order that
 # this be skipped by run_tests.py
 
 
@@ -89,21 +94,25 @@ def real_test():
     # error here.
     except IndexError:
         pass
-    except IOError as err:
+    except OSError as err:
         if "encoder zip not available" in str(err):
             raise MissingExternalDependencyError(
-                "Check zip encoder installed for PIL and ReportLab renderPM")
+                "Check zip encoder installed for PIL and ReportLab renderPM"
+            ) from None
         else:
-            raise err
+            raise
     except RenderPMError as err:
-        if str(err).startswith("Can't setFont("):
+        if str(err).startswith("Can't setFont(") or str(err).startswith(
+            "Error in setFont("
+        ):
             # TODO - can we raise the error BEFORE the unit test function
             # is run? That way it can be skipped in run_tests.py
             raise MissingExternalDependencyError(
                 "Check the fonts needed by ReportLab if you want "
-                "bitmaps from Bio.Graphics\n" + str(err))
+                "bitmaps from Bio.Graphics\n" + str(err)
+            ) from None
         else:
-            raise err
+            raise
 
     return True
 
@@ -114,6 +123,7 @@ real_test()
 
 class ComparativeTest(unittest.TestCase):
     """Do tests for modules involved with comparing data."""
+
     def test_simple_scatter_plot(self):
         """Test creation of a simple PNG scatter plot."""
         # Dummy method to show up via run_tests.py

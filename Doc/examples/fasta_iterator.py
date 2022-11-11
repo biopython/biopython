@@ -5,20 +5,21 @@
 
 """Example using Bio.SeqIO to parse a FASTA file."""
 
-from __future__ import print_function
 
 from Bio import SeqIO
 
 
-def extract_organisms(file_to_parse, format):
-    all_species = []
-    for cur_record in SeqIO.parse(open(file_to_parse), format):
+def extract_organisms(file_to_parse, fmt):
+    """Extract species names from sequence description line."""
+    all_species = set()
+    for cur_record in SeqIO.parse(open(file_to_parse), fmt):
         # extract the info from the description
         new_species = cur_record.description.split()[1]
 
-        # append the new species to the list if it isn't there
-        if new_species not in all_species:
-            all_species.append(new_species)
+        all_species.add(new_species)
+
+    # sorting the species will convert the set to a list
+    all_species = sorted(all_species)
 
     return all_species
 

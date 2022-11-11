@@ -7,62 +7,8 @@
 # package.
 """Common utility functions for various Bio submodules."""
 
-from __future__ import print_function
 
 import os
-
-
-def iterlen(items):
-    """Count the number of items in an iterable.
-
-    If the argument supports len(items), and some iterators do, then
-    this returns len(items). Otherwise it will scan over the entries
-    in order to count them.
-
-    Exhausts a generator, but doesn't require creating a full list.
-
-    >>> iterlen("abcde")
-    5
-    >>> iterlen(iter("abcde"))
-    5
-
-    """
-    try:
-        # e.g. Under Python 2, the xrange iterator defines __len__
-        return len(items)
-    except TypeError:
-        for i, x in enumerate(items):
-            count = i
-        return count + 1
-
-
-def read_forward(handle):
-    """Read through whitespaces, return the first non-whitespace line."""
-    while True:
-        line = handle.readline()
-        # if line is empty or line has characters and stripping does not remove
-        # them, return the line
-        if (not line) or (line and line.strip()):
-            return line
-
-
-def trim_str(string, max_len, concat_char):
-    """Truncate the given string for display."""
-    if len(string) > max_len:
-        return string[:max_len - len(concat_char)] + concat_char
-    return string
-
-
-def getattr_str(obj, attr, fmt=None, fallback='?'):
-    """Return string of the given object's attribute.
-
-    Defaults to the given fallback value if attribute is not present.
-    """
-    if hasattr(obj, attr):
-        if fmt is not None:
-            return fmt % getattr(obj, attr)
-        return str(getattr(obj, attr))
-    return fallback
 
 
 def find_test_dir(start_dir=None):
@@ -83,8 +29,9 @@ def find_test_dir(start_dir=None):
 
     target = os.path.abspath(start_dir)
     while True:
-        if os.path.isdir(os.path.join(target, "Bio")) and \
-                os.path.isdir(os.path.join(target, "Tests")):
+        if os.path.isdir(os.path.join(target, "Bio")) and os.path.isdir(
+            os.path.join(target, "Tests")
+        ):
             # Good, we're in the Biopython root now
             return os.path.abspath(os.path.join(target, "Tests"))
         # Recurse up the tree
@@ -94,8 +41,9 @@ def find_test_dir(start_dir=None):
             # Reached root
             break
         target = new
-    raise ValueError("Not within Biopython source tree: %r" %
-                     os.path.abspath(start_dir))
+    raise ValueError(
+        f"Not within Biopython source tree: {os.path.abspath(start_dir)!r}"
+    )
 
 
 def run_doctest(target_dir=None, *args, **kwargs):
@@ -103,9 +51,7 @@ def run_doctest(target_dir=None, *args, **kwargs):
     import doctest
 
     # default doctest options
-    default_kwargs = {
-        'optionflags': doctest.ELLIPSIS,
-    }
+    default_kwargs = {"optionflags": doctest.ELLIPSIS}
     kwargs.update(default_kwargs)
 
     cur_dir = os.path.abspath(os.curdir)

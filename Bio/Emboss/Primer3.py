@@ -23,7 +23,7 @@ function to iterate over the retsults.
 # --- primer3
 
 
-class Record(object):
+class Record:
     """Represent information from a primer3 run finding primers.
 
     Members:
@@ -40,7 +40,7 @@ class Record(object):
         self.primers = []
 
 
-class Primers(object):
+class Primers:
     """A primer set designed by Primer3.
 
     Members:
@@ -104,15 +104,18 @@ def parse(handle):
     record = None
     primer = None
     while True:
-        if line.startswith('# EPRIMER3') or line.startswith('# PRIMER3'):
+        if line.startswith("# EPRIMER3") or line.startswith("# PRIMER3"):
             # Record data
             if record is not None:
                 yield record
             record = Record()
             record.comments += line
             primer = None
-        elif line.startswith('#'):
-            if line.strip() != '#                      Start  Len   Tm     GC%   Sequence':
+        elif line.startswith("#"):
+            if (
+                line.strip()
+                != "#                      Start  Len   Tm     GC%   Sequence"
+            ):
                 record.comments += line
         elif not line.strip():
             pass
@@ -152,7 +155,7 @@ def parse(handle):
             try:
                 primer.internal_seq = words[6]
             except IndexError:  # eprimer3 reports oligo without sequence
-                primer.internal_seq = ''
+                primer.internal_seq = ""
         try:
             line = next(handle)
         except StopIteration:
@@ -169,13 +172,12 @@ def read(handle):
     """
     iterator = parse(handle)
     try:
-        first = next(iterator)
+        record = next(iterator)
     except StopIteration:
-        raise ValueError("No records found in handle")
+        raise ValueError("No records found in handle") from None
     try:
-        second = next(iterator)
-    except StopIteration:
-        second = None
-    if second is not None:
+        next(iterator)
         raise ValueError("More than one record found in handle")
-    return first
+    except StopIteration:
+        pass
+    return record

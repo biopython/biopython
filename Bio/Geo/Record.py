@@ -12,10 +12,8 @@ o Record - All of the information in an GEO record.
 See http://www.ncbi.nlm.nih.gov/geo/
 """
 
-from __future__ import print_function
 
-
-class Record(object):
+class Record:
     """Hold GEO information in a format similar to the original record.
 
     The Record class is meant to make data easy to get to when you are
@@ -32,61 +30,63 @@ class Record(object):
 
     def __init__(self):
         """Initialize the class."""
-        self.entity_type = ''
-        self.entity_id = ''
+        self.entity_type = ""
+        self.entity_id = ""
         self.entity_attributes = {}
         self.col_defs = {}
         self.table_rows = []
 
     def __str__(self):
-        output = ''
-        output += 'GEO Type: %s\n' % self.entity_type
-        output += 'GEO Id: %s\n' % self.entity_id
+        """Return the GEO record as a string."""
+        output = ""
+        output += f"GEO Type: {self.entity_type}\n"
+        output += f"GEO Id: {self.entity_id}\n"
         att_keys = sorted(self.entity_attributes)
         for key in att_keys:
             contents = self.entity_attributes[key]
             if isinstance(contents, list):
                 for item in contents:
                     try:
-                        output += '%s: %s\n' % (key, item[:40])
+                        output += f"{key}: {item[:40]}\n"
                         output += out_block(item[40:])
                     except Exception:  # TODO: IndexError?
                         pass
             elif isinstance(contents, str):
-                output += '%s: %s\n' % (key, contents[:40])
+                output += f"{key}: {contents[:40]}\n"
                 output += out_block(contents[40:])
             else:
                 print(contents)
-                output += '%s: %s\n' % (key, contents[:40])
+                output += f"{key}: {contents[:40]}\n"
                 output += out_block(contents[40:])
         col_keys = sorted(self.col_defs)
-        output += 'Column Header Definitions\n'
+        output += "Column Header Definitions\n"
         for key in col_keys:
             val = self.col_defs[key]
-            output += '    %s: %s\n' % (key, val[:40])
-            output += out_block(val[40:], '    ')
+            output += f"    {key}: {val[:40]}\n"
+            output += out_block(val[40:], "    ")
         # May have to display VERY large tables,
         # so only show the first 20 lines of data
         MAX_ROWS = 20 + 1  # include header in count
         for row in self.table_rows[0:MAX_ROWS]:
-            output += '%s: ' % self.table_rows.index(row)
+            output += f"{self.table_rows.index(row)}: "
             for col in row:
-                output += '%s\t' % col
-            output += '\n'
+                output += f"{col}\t"
+            output += "\n"
         if len(self.table_rows) > MAX_ROWS:
-            output += '...\n'
+            output += "...\n"
             row = self.table_rows[-1]
-            output += '%s: ' % self.table_rows.index(row)
+            output += f"{self.table_rows.index(row)}: "
             for col in row:
-                output += '%s\t' % col
-            output += '\n'
+                output += f"{col}\t"
+            output += "\n"
 
         return output
 
 
-def out_block(text, prefix=''):
-    output = ''
+def out_block(text, prefix=""):
+    """Format text in blocks of 80 chars with an additional optional prefix."""
+    output = ""
     for j in range(0, len(text), 80):
-        output += '%s%s\n' % (prefix, text[j:j + 80])
-    output += '\n'
+        output += f"{prefix}{text[j : j + 80]}\n"
+    output += "\n"
     return output

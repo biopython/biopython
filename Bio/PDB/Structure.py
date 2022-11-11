@@ -1,7 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """The structure class, representing a macromolecular structure."""
 
@@ -18,27 +20,46 @@ class Structure(Entity):
 
     def __repr__(self):
         """Return the structure identifier."""
-        return "<Structure id=%s>" % self.get_id()
+        return f"<Structure id={self.get_id()}>"
 
     def get_models(self):
         """Return models."""
-        for m in self:
-            yield m
+        yield from self
 
     def get_chains(self):
         """Return chains from models."""
         for m in self.get_models():
-            for c in m:
-                yield c
+            yield from m
 
     def get_residues(self):
         """Return residues from chains."""
         for c in self.get_chains():
-            for r in c:
-                yield r
+            yield from c
 
     def get_atoms(self):
         """Return atoms from residue."""
         for r in self.get_residues():
-            for a in r:
-                yield a
+            yield from r
+
+    def atom_to_internal_coordinates(self, verbose: bool = False) -> None:
+        """Create/update internal coordinates from Atom X,Y,Z coordinates.
+
+        Internal coordinates are bond length, angle and dihedral angles.
+
+        :param verbose bool: default False
+            describe runtime problems
+
+        """
+        for chn in self.get_chains():
+            chn.atom_to_internal_coordinates(verbose)
+
+    def internal_to_atom_coordinates(self, verbose: bool = False) -> None:
+        """Create/update atom coordinates from internal coordinates.
+
+        :param verbose bool: default False
+            describe runtime problems
+
+        :raises Exception: if any chain does not have .internal_coord attribute
+        """
+        for chn in self.get_chains():
+            chn.internal_to_atom_coordinates(verbose)

@@ -18,9 +18,21 @@ Classes:
 
 Examples
 --------
->>> from Bio.ExPASy import cellosaurus
->>> handle = open("cellosaurus.txt")
->>> records = cellosaurus.parse(handle)
+You need to download the Cellosaurus database for this examples to
+run, e.g. from ftp://ftp.expasy.org/databases/cellosaurus/cellosaurus.txt
+
+    >> from Bio.ExPASy import cellosaurus
+    >> with open('cellosaurus.txt') as handle:
+    ...    records = cellosaurus.parse(handle)
+    ...    for record in records:
+    ...        if 'Homo sapiens' in record['OX'][0]:
+    ...            print(record['ID'])
+    ...
+    #15310-LN
+    #W7079
+    (L)PC6
+    00136
+    ...
 
 """
 
@@ -90,10 +102,10 @@ class Record(dict):
     def __init__(self):
         """Initialize the class."""
         dict.__init__(self)
-        self["ID"] = ''
-        self["AC"] = ''
-        self["AS"] = ''
-        self["SY"] = ''
+        self["ID"] = ""
+        self["AC"] = ""
+        self["AS"] = ""
+        self["SY"] = ""
         self["DR"] = []
         self["RX"] = []
         self["WW"] = []
@@ -103,21 +115,21 @@ class Record(dict):
         self["OX"] = []
         self["HI"] = []
         self["OI"] = []
-        self["SX"] = ''
-        self["CA"] = ''
+        self["SX"] = ""
+        self["CA"] = ""
 
     def __repr__(self):
+        """Return the canonical string representation of the Record object."""
         if self["ID"]:
             if self["AC"]:
-                return "%s (%s, %s)" % (
-                    self.__class__.__name__, self["ID"], self["AC"]
-                    )
+                return f"{self.__class__.__name__} ({self['ID']}, {self['AC']})"
             else:
-                return "%s (%s)" % (self.__class__.__name__, self["ID"])
+                return f"{self.__class__.__name__} ({self['ID']})"
         else:
-            return "%s ( )" % (self.__class__.__name__)
+            return f"{self.__class__.__name__} ( )"
 
     def __str__(self):
+        """Return a readable string representation of the Record object."""
         output = "ID: " + self["ID"]
         output += " AC: " + self["AC"]
         output += " AS: " + self["AS"]
@@ -150,11 +162,24 @@ def __read(handle):
             record["ID"] = value
         elif key in ["AC", "AS", "SY", "SX", "CA"]:
             record[key] += value
-        elif key in ["AC", "AS", "SY", "RX", "WW", "CC",
-                     "ST", "DI", "OX", "HI", "OI", "SX", "CA"]:
+        elif key in [
+            "AC",
+            "AS",
+            "SY",
+            "RX",
+            "WW",
+            "CC",
+            "ST",
+            "DI",
+            "OX",
+            "HI",
+            "OI",
+            "SX",
+            "CA",
+        ]:
             record[key].append(value)
         elif key == "DR":
-            k, v = value.split(';')
+            k, v = value.split(";")
             record["DR"].append((k.strip(), v.strip()))
         elif key == "//":
             if record:

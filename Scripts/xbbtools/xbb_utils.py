@@ -11,18 +11,16 @@
 
 """Utility code for graphical Xbbtools tool."""
 
-try:  # Python 2
-    import Tkinter as tk
-    import ttk
-    import tkFileDialog as filedialog
-except ImportError:  # Python 3
-    import tkinter as tk
-    import tkinter.ttk as ttk
-    from tkinter import filedialog
+import tkinter as tk
+import tkinter.ttk as ttk
+from tkinter import filedialog
 
 
 class NotePad(tk.Toplevel):
+    """Top level window for results (translations, BLAST searches...)."""
+
     def __init__(self, master=None):
+        """Set up notepad window."""
         tk.Toplevel.__init__(self, master)
         self.menubar = tk.Menu(self)
         self.filemenu = tk.Menu(self.menubar)
@@ -32,20 +30,23 @@ class NotePad(tk.Toplevel):
 
         self.menubar.add_cascade(label="File", menu=self.filemenu)
         self.configure(menu=self.menubar)
-        self.yscroll = ttk.Scrollbar(self, orient='vertical')
+        self.yscroll = ttk.Scrollbar(self, orient="vertical")
         self.tid = tk.Text(self, width=88, yscrollcommand=self.yscroll.set)
         self.yscroll.configure(command=self.tid.yview)
-        self.tid.pack(side='left', fill='both', expand=1)
-        self.yscroll.pack(side='right', fill='y')
+        self.tid.pack(side="left", fill="both", expand=1)
+        self.yscroll.pack(side="right", fill="y")
 
     def text_id(self):
+        """Get reference to notepad window."""
         return self.tid
 
     def insert(self, start, txt):
+        """Add text to notepad window."""
         self.tid.insert(start, txt)
 
     def save(self):
-        file = filedialog.asksaveasfilename()
-        if file:
-            with open(file, 'w') as fid:
-                fid.write(self.tid.get(0.0, 'end'))
+        """Save text from notepad to file."""
+        filename = filedialog.asksaveasfilename()
+        if filename:
+            with open(filename, "w") as fid:
+                fid.write(self.tid.get(0.0, "end"))

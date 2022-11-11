@@ -14,7 +14,7 @@ be found in the paper `Konieczny and Ausubel (1993)`_ (PMID 8106085).
 """
 
 
-class DifferentialCutsite(object):
+class DifferentialCutsite:
     """Differential enzyme cutsite in an alignment.
 
     A differential cutsite is a location in an alignment where an enzyme cuts
@@ -43,10 +43,12 @@ class DifferentialCutsite(object):
 
 
 class AlignmentHasDifferentLengthsError(Exception):
+    """Exception where sequences in alignment have different lengths."""
+
     pass
 
 
-class CAPSMap(object):
+class CAPSMap:
     """A map of an alignment showing all possible dcuts.
 
     Members:
@@ -120,10 +122,11 @@ class CAPSMap(object):
                     blocked_in.append(i)
 
             if cuts_in != [] and blocked_in != []:
-                self.dcuts.append(DifferentialCutsite(start=cut,
-                                                      enzyme=enzyme,
-                                                      cuts_in=cuts_in,
-                                                      blocked_in=blocked_in))
+                self.dcuts.append(
+                    DifferentialCutsite(
+                        start=cut, enzyme=enzyme, cuts_in=cuts_in, blocked_in=blocked_in
+                    )
+                )
 
     def _digest(self):
         self.dcuts = []

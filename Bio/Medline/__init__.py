@@ -1,7 +1,9 @@
 # Copyright 1999 by Jeffrey Chang.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Code to work with Medline from the NCBI.
 
@@ -109,19 +111,56 @@ def parse(handle):
 
     Typical usage::
 
-        from Bio import Medline
-        with open("mymedlinefile") as handle:
-            records = Medline.parse(handle)
-            for record in records:
-                print(record['TI'])
+        >>> from Bio import Medline
+        >>> with open("Medline/pubmed_result2.txt") as handle:
+        ...     records = Medline.parse(handle)
+        ...     for record in records:
+        ...         print(record['TI'])
+        ...
+        A high level interface to SCOP and ASTRAL ...
+        GenomeDiagram: a python package for the visualization of ...
+        Open source clustering software.
+        PDB file parser and structure class implemented in Python.
 
     """
-    # TODO - Turn that into a working doctest
     # These keys point to string values
-    textkeys = ("ID", "PMID", "SO", "RF", "NI", "JC", "TA", "IS", "CY", "TT",
-                "CA", "IP", "VI", "DP", "YR", "PG", "LID", "DA", "LR", "OWN",
-                "STAT", "DCOM", "PUBM", "DEP", "PL", "JID", "SB", "PMC",
-                "EDAT", "MHDA", "PST", "AB", "AD", "EA", "TI", "JT")
+    textkeys = (
+        "ID",
+        "PMID",
+        "SO",
+        "RF",
+        "NI",
+        "JC",
+        "TA",
+        "IS",
+        "CY",
+        "TT",
+        "CA",
+        "IP",
+        "VI",
+        "DP",
+        "YR",
+        "PG",
+        "LID",
+        "DA",
+        "LR",
+        "OWN",
+        "STAT",
+        "DCOM",
+        "PUBM",
+        "DEP",
+        "PL",
+        "JID",
+        "SB",
+        "PMC",
+        "EDAT",
+        "MHDA",
+        "PST",
+        "AB",
+        "EA",
+        "TI",
+        "JT",
+    )
     handle = iter(handle)
 
     key = ""
@@ -129,7 +168,7 @@ def parse(handle):
     for line in handle:
         line = line.rstrip()
         if line[:6] == "      ":  # continuation line
-            if key == "MH":
+            if key in ["MH", "AD"]:
                 # Multi-line MESH term, want to append to last entry in list
                 record[key][-1] += line[5:]  # including space using line[5:]
             else:
@@ -162,11 +201,12 @@ def read(handle):
     Typical usage:
 
         >>> from Bio import Medline
-        >>> with open("mymedlinefile") as handle:
+        >>> with open("Medline/pubmed_result1.txt") as handle:
         ...     record = Medline.read(handle)
         ...     print(record['TI'])
+        ...
+        The Bio* toolkits--a brief overview.
 
     """
-    # TODO - Turn that into a working doctest
     records = parse(handle)
     return next(records)

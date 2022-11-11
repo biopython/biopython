@@ -28,9 +28,15 @@ Functions:
 
 """
 
-from __future__ import print_function
 
-import numpy
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.MaxEntropy."
+    )
 
 
 def _contents(items):
@@ -42,7 +48,7 @@ def _contents(items):
     return counts
 
 
-class NaiveBayes(object):
+class NaiveBayes:
     """Hold information for a NaiveBayes classifier.
 
     Attributes:
@@ -79,35 +85,38 @@ def calculate(nb, observation, scale=False):
 
     # Make sure the observation has the right dimensionality.
     if len(observation) != nb.dimensionality:
-        raise ValueError("observation in {0} dimension, but classifier in {1}".format(len(observation),
-                                                                                      nb.dimensionality))
+        raise ValueError(
+            f"observation in {len(observation)} dimension,"
+            f" but classifier in {nb.dimensionality}"
+        )
 
     # Calculate log P(observation|class) for every class.
     n = len(nb.classes)
-    lp_observation_class = numpy.zeros(n)   # array of log P(observation|class)
+    lp_observation_class = numpy.zeros(n)  # array of log P(observation|class)
     for i in range(n):
         # log P(observation|class) = SUM_i log P(observation_i|class)
         probs = [None] * len(observation)
         for j in range(len(observation)):
             probs[j] = nb.p_conditional[i][j].get(observation[j], 0)
-        lprobs = numpy.log(numpy.clip(probs, 1.e-300, 1.e+300))
+        lprobs = numpy.log(numpy.clip(probs, 1.0e-300, 1.0e300))
         lp_observation_class[i] = sum(lprobs)
 
     # Calculate log P(class).
     lp_prior = numpy.log(nb.p_prior)
 
     # Calculate log P(observation).
-    lp_observation = 0.0          # P(observation)
-    if scale:   # Only calculate this if requested.
+    lp_observation = 0.0  # P(observation)
+    if scale:  # Only calculate this if requested.
         # log P(observation) = log SUM_i P(observation|class_i)P(class_i)
         obs = numpy.exp(numpy.clip(lp_prior + lp_observation_class, -700, +700))
         lp_observation = numpy.log(sum(obs))
 
     # Calculate log P(class|observation).
-    lp_class_observation = {}      # Dict of class : log P(class|observation)
+    lp_class_observation = {}  # Dict of class : log P(class|observation)
     for i in range(len(nb.classes)):
-        lp_class_observation[nb.classes[i]] = \
+        lp_class_observation[nb.classes[i]] = (
             lp_observation_class[i] + lp_prior[i] - lp_observation
+        )
 
     return lp_class_observation
 
@@ -163,7 +172,7 @@ def train(training_set, results, priors=None, typecode=None):
         class_freq = _contents(results)
         nb.classes = list(class_freq.keys())
         percs = class_freq
-    nb.classes.sort()   # keep it tidy
+    nb.classes.sort()  # keep it tidy
 
     nb.p_prior = numpy.zeros(len(nb.classes))
     for i in range(len(nb.classes)):
@@ -175,7 +184,7 @@ def train(training_set, results, priors=None, typecode=None):
     # were guaranteed to be a matrix.  However, this may not be the
     # case, because the client may be hacking up a sparse matrix or
     # something.
-    c2i = {}      # class to index of class
+    c2i = {}  # class to index of class
     for index, key in enumerate(nb.classes):
         c2i[key] = index
     observations = [[] for c in nb.classes]  # separate observations by class
@@ -191,7 +200,7 @@ def train(training_set, results, priors=None, typecode=None):
     # This is a good loop to optimize.
     nb.p_conditional = []
     for i in range(len(nb.classes)):
-        class_observations = observations[i]   # observations for this class
+        class_observations = observations[i]  # observations for this class
         nb.p_conditional.append([None] * nb.dimensionality)
         for j in range(nb.dimensionality):
             # Collect all the values in this dimension.

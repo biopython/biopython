@@ -5,16 +5,10 @@
 # package.
 """Bio.SearchIO object to model search results from a single query."""
 
-from __future__ import print_function
 
 from copy import deepcopy
 from itertools import chain
-from collections import OrderedDict
 
-from Bio._py3k import filter
-from Bio._py3k import basestring
-
-from Bio._utils import trim_str
 from Bio.SearchIO._utils import optionalcascade
 
 from ._base import _BaseSearchObject
@@ -182,7 +176,7 @@ class QueryResult(_BaseSearchObject):
 
     # attributes we don't want to transfer when creating a new QueryResult class
     # from this one
-    _NON_STICKY_ATTRS = ('_items', '__alt_hit_ids', )
+    _NON_STICKY_ATTRS = ("_items", "__alt_hit_ids")
 
     def __init__(self, hits=(), id=None, hit_key_function=None):
         """Initialize a QueryResult object.
@@ -198,90 +192,48 @@ class QueryResult(_BaseSearchObject):
         # default values
         self._id = id
         self._hit_key_function = hit_key_function or _hit_key_func
-        self._items = OrderedDict()
+        self._items = {}
         self._description = None
         self.__alt_hit_ids = {}
-        self.program = '<unknown program>'
-        self.target = '<unknown target>'
-        self.version = '<unknown version>'
+        self.program = "<unknown program>"
+        self.target = "<unknown target>"
+        self.version = "<unknown version>"
 
         # validate Hit objects and fill up self._items
         for hit in hits:
             # validation is handled by __setitem__
             self.append(hit)
 
-    # handle Python 2 OrderedDict behavior
-    if hasattr(OrderedDict, 'iteritems'):
+    def __iter__(self):
+        """Iterate over hits."""
+        return iter(self.hits)
 
-        def __iter__(self):
-            """Iterate over hit items."""
-            return self.iterhits()
+    @property
+    def hits(self):
+        """Hit objects contained in the QueryResult."""
+        return list(self._items.values())
 
-        @property
-        def hits(self):
-            """Hit objects contained in the QueryResult."""
-            return self._items.values()
+    @property
+    def hit_keys(self):
+        """Hit IDs of the Hit objects contained in the QueryResult."""
+        return list(self._items.keys())
 
-        @property
-        def hit_keys(self):
-            """Hit IDs of the Hit objects contained in the QueryResult."""
-            return self._items.keys()
+    @property
+    def items(self):
+        """List of tuples of Hit IDs and Hit objects."""
+        return list(self._items.items())
 
-        @property
-        def items(self):
-            """List of tuples of Hit IDs and Hit objects."""
-            return self._items.items()
+    def iterhits(self):
+        """Return an iterator over the Hit objects."""
+        yield from self._items.values()
 
-        def iterhits(self):
-            """Return an iterator over the Hit objects."""
-            for hit in self._items.itervalues():  # noqa: B301
-                yield hit
+    def iterhit_keys(self):
+        """Return an iterator over the ID of the Hit objects."""
+        yield from self._items
 
-        def iterhit_keys(self):
-            """Return an iterator over the ID of the Hit objects."""
-            for hit_id in self._items:
-                yield hit_id
-
-        def iteritems(self):
-            """Return an iterator yielding tuples of Hit ID and Hit objects."""
-            for item in self._items.iteritems():  # noqa: B301
-                yield item
-
-    else:
-
-        def __iter__(self):
-            """Iterate over hits."""
-            return iter(self.hits)
-
-        @property
-        def hits(self):
-            """Hit objects contained in the QueryResult."""
-            return list(self._items.values())
-
-        @property
-        def hit_keys(self):
-            """Hit IDs of the Hit objects contained in the QueryResult."""
-            return list(self._items.keys())
-
-        @property
-        def items(self):
-            """List of tuples of Hit IDs and Hit objects."""
-            return list(self._items.items())
-
-        def iterhits(self):
-            """Return an iterator over the Hit objects."""
-            for hit in self._items.values():
-                yield hit
-
-        def iterhit_keys(self):
-            """Return an iterator over the ID of the Hit objects."""
-            for hit_id in self._items:
-                yield hit_id
-
-        def iteritems(self):
-            """Return an iterator yielding tuples of Hit ID and Hit objects."""
-            for item in self._items.items():
-                yield item
+    def iteritems(self):
+        """Return an iterator yielding tuples of Hit ID and Hit objects."""
+        yield from self._items.items()
 
     def __contains__(self, hit_key):
         """Return True if hit key in items or alternative hit identifiers."""
@@ -293,13 +245,9 @@ class QueryResult(_BaseSearchObject):
         """Return the number of items."""
         return len(self._items)
 
-    # Python 3:
     def __bool__(self):
         """Return True if there are items."""
         return bool(self._items)
-
-    # Python 2:
-    __nonzero__ = __bool__
 
     def __repr__(self):
         """Return string representation of the QueryResult object."""
@@ -310,42 +258,48 @@ class QueryResult(_BaseSearchObject):
         lines = []
 
         # set program and version line
-        lines.append('Program: %s (%s)' % (self.program, self.version))
+        lines.append("Program: %s (%s)" % (self.program, self.version))
 
         # set query id line
-        qid_line = '  Query: %s' % self.id
-        if hasattr(self, 'seq_len'):
-            qid_line += ' (%i)' % self.seq_len
-        if self.description:
-            qid_line += trim_str('\n         %s' % self.description, 80, '...')
+        qid_line = "  Query: %s" % self.id
+        try:
+            seq_len = self.seq_len
+        except AttributeError:
+            pass
+        else:
+            qid_line += " (%i)" % seq_len
         lines.append(qid_line)
+        if self.description:
+            line = "         %s" % self.description
+            line = line[:77] + "..." if len(line) > 80 else line
+            lines.append(line)
 
         # set target line
-        lines.append(' Target: %s' % self.target)
+        lines.append(" Target: %s" % self.target)
 
         # set hit lines
         if not self.hits:
-            lines.append('   Hits: 0')
+            lines.append("   Hits: 0")
         else:
-            lines.append('   Hits: %s  %s  %s' % ('-' * 4, '-' * 5, '-' * 58))
-            pattern = '%13s  %5s  %s'
-            lines.append(pattern % ('#', '# HSP', 'ID + description'))
-            lines.append(pattern % ('-' * 4, '-' * 5, '-' * 58))
+            lines.append("   Hits: %s  %s  %s" % ("-" * 4, "-" * 5, "-" * 58))
+            pattern = "%13s  %5s  %s"
+            lines.append(pattern % ("#", "# HSP", "ID + description"))
+            lines.append(pattern % ("-" * 4, "-" * 5, "-" * 58))
             for idx, hit in enumerate(self.hits):
                 if idx < 30:
-                    hid_line = '%s  %s' % (hit.id, hit.description)
+                    hid_line = "%s  %s" % (hit.id, hit.description)
                     if len(hid_line) > 58:
-                        hid_line = hid_line[:55] + '...'
-                    lines.append(pattern % (idx, str(len(hit)), hid_line))
+                        hid_line = hid_line[:55] + "..."
+                    lines.append(pattern % (idx, len(hit), hid_line))
                 elif idx > len(self.hits) - 4:
-                    hid_line = '%s  %s' % (hit.id, hit.description)
+                    hid_line = "%s  %s" % (hit.id, hit.description)
                     if len(hid_line) > 58:
-                        hid_line = hid_line[:55] + '...'
-                    lines.append(pattern % (idx, str(len(hit)), hid_line))
+                        hid_line = hid_line[:55] + "..."
+                    lines.append(pattern % (idx, len(hit), hid_line))
                 elif idx == 30:
-                    lines.append('%14s' % '~~~')
+                    lines.append("%14s" % "~~~")
 
-        return '\n'.join(lines)
+        return "\n".join(lines)
 
     def __getitem__(self, hit_key):
         """Return a QueryResult object that matches the hit_key."""
@@ -381,7 +335,7 @@ class QueryResult(_BaseSearchObject):
     def __setitem__(self, hit_key, hit):
         """Add an item of key hit_key and value hit."""
         # only accept string keys
-        if not isinstance(hit_key, basestring):
+        if not isinstance(hit_key, str):
             raise TypeError("QueryResult object keys must be a string.")
         # hit must be a Hit object
         if not isinstance(hit, Hit):
@@ -393,8 +347,9 @@ class QueryResult(_BaseSearchObject):
         # case we want to use the hit's query ID as the query ID
         if qid is not None:
             if hqid != qid:
-                raise ValueError("Expected Hit with query ID %r, found %r "
-                                 "instead." % (qid, hqid))
+                raise ValueError(
+                    "Expected Hit with query ID %r, found %r instead." % (qid, hqid)
+                )
         else:
             self.id = hqid
         # same thing with descriptions
@@ -402,8 +357,10 @@ class QueryResult(_BaseSearchObject):
         hqdesc = hit.query_description
         if qdesc is not None:
             if hqdesc != qdesc:
-                raise ValueError("Expected Hit with query description %r, "
-                                 "found %r instead." % (qdesc, hqdesc))
+                raise ValueError(
+                    "Expected Hit with query description %r, found %r instead."
+                    % (qdesc, hqdesc)
+                )
         else:
             self.description = hqdesc
 
@@ -445,22 +402,24 @@ class QueryResult(_BaseSearchObject):
                 deleted = True
             if not deleted:
                 raise KeyError(repr(key))
-        return
 
     # properties #
-    id = optionalcascade('_id', 'query_id', """QueryResult ID string""")
-    description = optionalcascade('_description', 'query_description',
-                                  """QueryResult description""")
+    id = optionalcascade("_id", "query_id", """QueryResult ID string""")
+    description = optionalcascade(
+        "_description", "query_description", """QueryResult description"""
+    )
 
     @property
     def hsps(self):
         """Access the HSP objects contained in the QueryResult."""
-        return [hsp for hsp in chain(*self.hits)]
+        return sorted(
+            (hsp for hsp in chain(*self.hits)), key=lambda hsp: hsp.output_index
+        )
 
     @property
     def fragments(self):
         """Access the HSPFragment objects contained in the QueryResult."""
-        return [frag for frag in chain(*self.hsps)]
+        return list(chain(*self.hsps))
 
     # public methods #
     def absorb(self, hit):
@@ -506,8 +465,10 @@ class QueryResult(_BaseSearchObject):
         if hit_key not in self and all(pid not in self for pid in hit.id_all[1:]):
             self[hit_key] = hit
         else:
-            raise ValueError("The ID or alternative IDs of Hit %r exists in "
-                             "this QueryResult." % hit_key)
+            raise ValueError(
+                "The ID or alternative IDs of Hit %r exists in this QueryResult."
+                % hit_key
+            )
 
     def hit_filter(self, func=None):
         """Create new QueryResult object whose Hit objects pass the filter function.
@@ -689,19 +650,18 @@ class QueryResult(_BaseSearchObject):
             hit = self._items.pop(hit_key)
             # remove all alternative IDs of the popped hit
             for alt_id in hit.id_all[1:]:
-                try:
-                    del self.__alt_hit_ids[alt_id]
-                except KeyError:
-                    pass
-            return hit
+                self.__alt_hit_ids.pop(alt_id, None)
         except KeyError:
-            if hit_key in self.__alt_hit_ids:
-                return self.pop(self.__alt_hit_ids[hit_key], default)
-            # if key doesn't exist and no default is set, raise a KeyError
-            if default is self.__marker:
-                raise KeyError(hit_key)
-        # if key doesn't exist but a default is set, return the default value
-        return default
+            try:
+                hit = self.pop(self.__alt_hit_ids[hit_key])
+            except KeyError:
+                # hit_key is not a valid id
+                # use the default if it has been set
+                if default is not self.__marker:
+                    hit = default
+                else:
+                    raise KeyError(hit_key) from None
+        return hit
 
     def index(self, hit_key):
         """Return the index of a given hit key, zero-based.
@@ -728,7 +688,6 @@ class QueryResult(_BaseSearchObject):
             raise
 
     def sort(self, key=None, reverse=False, in_place=True):
-        # no cmp argument to make sort more Python 3-like
         """Sort the Hit objects.
 
         :param key: sorting function
@@ -738,7 +697,7 @@ class QueryResult(_BaseSearchObject):
         :param in_place: whether to do in-place sorting or no
         :type in_place: bool
 
-        ``sort`` defaults to sorting in-place, to mimick Python's ``list.sort``
+        ``sort`` defaults to sorting in-place, to mimic Python's ``list.sort``
         method. If you set the ``in_place`` argument to False, it will treat
         return a new, sorted QueryResult object and keep the initial one
         unsorted.
@@ -756,10 +715,7 @@ class QueryResult(_BaseSearchObject):
 
         # if sorting is in-place, don't create a new QueryResult object
         if in_place:
-            new_hits = OrderedDict()
-            for hit in sorted_hits:
-                new_hits[self._hit_key_function(hit)] = hit
-            self._items = new_hits
+            self._items = {self._hit_key_function(hit): hit for hit in sorted_hits}
         # otherwise, return a new sorted QueryResult object
         else:
             obj = self.__class__(sorted_hits, self.id, self._hit_key_function)
@@ -778,4 +734,5 @@ def _hit_key_func(hit):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

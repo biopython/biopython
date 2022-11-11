@@ -1,0 +1,29 @@
+# BLASTN default substitution scores.
+# For the default gap scores, as used for BLASTN on NCBI Web
+# BLAST, The BLAST documentation shows gap costs a = 5 for opening
+# a gap, and b = 2 for each letter in the gap, and defines the
+# total score of a gap of k residues as -(a + b*k). In contrast,
+# Biopython follows the definition given in "Biological Sequence
+# Analysis" (Durbin et al., 1998), for which the total score of a
+# gap of k residues is -d - e * (k - 1), where d is the gap-open
+# penalty and e is the gap-extend penalty. Biopython uses -d as
+# the gap open score and -e as the gap extend penalty:
+# gap open score: -7
+# gap extend score: -2
+# with the substitution matrix below, as the BLASTN score parameters.
+    A   T   G   C   S   W   R   Y   K   M   B   V   H   D   N
+A   2  -3  -3  -3  -3  -1  -1  -3  -3  -1  -3  -1  -1  -1  -2
+T  -3   2  -3  -3  -3  -1  -3  -1  -1  -3  -1  -3  -1  -1  -2
+G  -3  -3   2  -3  -1  -3  -1  -3  -1  -3  -1  -1  -3  -1  -2
+C  -3  -3  -3   2  -1  -3  -3  -1  -3  -1  -1  -1  -1  -3  -2
+S  -3  -3  -1  -1  -1  -3  -1  -1  -1  -1  -1  -1  -1  -1  -2
+W  -1  -1  -3  -3  -3  -1  -1  -1  -1  -1  -1  -1  -1  -1  -2
+R  -1  -3  -1  -3  -1  -1  -1  -3  -1  -1  -1  -1  -1  -1  -2
+Y  -3  -1  -3  -1  -1  -1  -3  -1  -1  -1  -1  -1  -1  -1  -2
+K  -3  -1  -1  -3  -1  -1  -1  -1  -1  -3  -1  -1  -1  -1  -2
+M  -1  -3  -3  -1  -1  -1  -1  -1  -3  -1  -1  -1  -1  -1  -2
+B  -3  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -2
+V  -1  -3  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -2
+H  -1  -1  -3  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -2
+D  -1  -1  -1  -3  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -2
+N  -2  -2  -2  -2  -2  -2  -2  -2  -2  -2  -2  -2  -2  -2  -2

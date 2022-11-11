@@ -1,7 +1,9 @@
 # Copyright 2013 by Leighton Pritchard.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Classes and functions to parse a KGML pathway map.
 
@@ -16,68 +18,61 @@ Functions:
 
 """
 
-from __future__ import print_function
+from xml.etree import ElementTree
 
-try:
-    import xml.etree.cElementTree as ElementTree
-except ImportError:
-    import xml.etree.ElementTree as ElementTree
-
-from Bio._py3k import StringIO
+from io import StringIO
 
 from Bio.KEGG.KGML.KGML_pathway import Component, Entry, Graphics
 from Bio.KEGG.KGML.KGML_pathway import Pathway, Reaction, Relation
 
 
-def read(handle, debug=0):
+def read(handle):
     """Parse a single KEGG Pathway from given file handle.
 
     Returns a single Pathway object.  There should be one and only
     one pathway in each file, but there may well be pathological
     examples out there.
     """
-    iterator = parse(handle, debug)
+    pathways = parse(handle)
     try:
-        first = next(iterator)
+        pathway = next(pathways)
     except StopIteration:
-        first = None
-    if first is None:
-        raise ValueError("No pathways found in handle")
+        raise ValueError("No pathways found in handle") from None
     try:
-        second = next(iterator)
-    except StopIteration:
-        second = None
-    if second is not None:
+        next(pathways)
         raise ValueError("More than one pathway found in handle")
-    return first
+    except StopIteration:
+        pass
+    return pathway
 
 
-def parse(handle, debug=0):
+def parse(handle):
     """Return an iterator over Pathway elements.
 
     Arguments:
-     - handle - file handle to a KGML file for parsing
-     - debug - integer for amount of debug information to print
+     - handle - file handle to a KGML file for parsing, or a KGML string
 
     This is a generator for the return of multiple Pathway objects.
+
     """
     # Check handle
-    if not hasattr(handle, 'read'):
-        if isinstance(handle, str):
+    try:
+        handle.read(0)
+    except AttributeError:
+        try:
             handle = StringIO(handle)
-        else:
-            exc_txt = "An XML-containing handle or an XML string " + \
-                      "must be provided"
-            raise Exception(exc_txt)
+        except TypeError:
+            raise TypeError(
+                "An XML-containing handle or an XML string must be provided"
+            ) from None
     # Parse XML and return each Pathway
-    for event, elem in \
-            ElementTree.iterparse(handle, events=('start', 'end')):
+    for event, elem in ElementTree.iterparse(handle, events=("start", "end")):
         if event == "end" and elem.tag == "pathway":
             yield KGMLParser(elem).parse()
             elem.clear()
 
 
-class KGMLParser(object):
+class KGMLParser:
     """Parses a KGML XML Pathway entry into a Pathway object.
 
     Example: Read and parse large metabolism file
@@ -111,6 +106,7 @@ class KGMLParser(object):
 
     def parse(self):
         """Parse the input elements."""
+
         def _parse_pathway(attrib):
             for k, v in attrib.items():
                 self.pathway.__setattr__(k, v)
@@ -119,10 +115,10 @@ class KGMLParser(object):
             new_entry = Entry()
             for k, v in element.attrib.items():
                 new_entry.__setattr__(k, v)
-            for subelement in element.getchildren():
-                if subelement.tag == 'graphics':
+            for subelement in element:
+                if subelement.tag == "graphics":
                     _parse_graphics(subelement, new_entry)
-                elif subelement.tag == 'component':
+                elif subelement.tag == "component":
                     _parse_component(subelement, new_entry)
             self.pathway.add_entry(new_entry)
 
@@ -142,21 +138,21 @@ class KGMLParser(object):
             new_reaction = Reaction()
             for k, v in element.attrib.items():
                 new_reaction.__setattr__(k, v)
-            for subelement in element.getchildren():
-                if subelement.tag == 'substrate':
-                    new_reaction.add_substrate(int(subelement.attrib['id']))
-                elif subelement.tag == 'product':
-                    new_reaction.add_product(int(subelement.attrib['id']))
+            for subelement in element:
+                if subelement.tag == "substrate":
+                    new_reaction.add_substrate(int(subelement.attrib["id"]))
+                elif subelement.tag == "product":
+                    new_reaction.add_product(int(subelement.attrib["id"]))
             self.pathway.add_reaction(new_reaction)
 
         def _parse_relation(element):
             new_relation = Relation()
-            new_relation.entry1 = int(element.attrib['entry1'])
-            new_relation.entry2 = int(element.attrib['entry2'])
-            new_relation.type = element.attrib['type']
-            for subtype in element.getchildren():
-                name, value = subtype.attrib['name'], subtype.attrib['value']
-                if name in ('compound', 'hidden compound'):
+            new_relation.entry1 = int(element.attrib["entry1"])
+            new_relation.entry2 = int(element.attrib["entry2"])
+            new_relation.type = element.attrib["type"]
+            for subtype in element:
+                name, value = subtype.attrib["name"], subtype.attrib["value"]
+                if name in ("compound", "hidden compound"):
                     new_relation.subtypes.append((name, int(value)))
                 else:
                     new_relation.subtypes.append((name, value))
@@ -167,23 +163,27 @@ class KGMLParser(object):
         self.pathway = Pathway()
         # Get information about the pathway itself
         _parse_pathway(self.entry.attrib)
-        for element in self.entry.getchildren():
-            if element.tag == 'entry':
+        for element in self.entry:
+            if element.tag == "entry":
                 _parse_entry(element)
-            elif element.tag == 'reaction':
+            elif element.tag == "reaction":
                 _parse_reaction(element)
-            elif element.tag == 'relation':
+            elif element.tag == "relation":
                 _parse_relation(element)
             # Parsing of some elements not implemented - no examples yet
             else:
                 # This should warn us of any unimplemented tags
                 import warnings
                 from Bio import BiopythonParserWarning
-                warnings.warn("Warning: tag %s not implemented in parser" %
-                              element.tag, BiopythonParserWarning)
+
+                warnings.warn(
+                    f"Warning: tag {element.tag} not implemented in parser",
+                    BiopythonParserWarning,
+                )
         return self.pathway
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

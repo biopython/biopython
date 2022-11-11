@@ -65,10 +65,10 @@ class Record(dict):
     - AN: Alternative names (if any)
     - CA: Catalytic activity
     - CF: Cofactors (if any)
-    - PR: Pointers to the Prosite documentation entrie(s) that
-      correspond to the enzyme (if any)
-    - DR: Pointers to the Swiss-Prot protein sequence entrie(s)
-      that correspond to the enzyme (if any)
+    - PR: Pointers to any Prosite documentation entries that correspond to the
+      enzyme
+    - DR: Pointers to any Swiss-Prot protein sequence entries that correspond
+      to the enzyme
     - CC: Comments
 
     """
@@ -76,36 +76,39 @@ class Record(dict):
     def __init__(self):
         """Initialize the class."""
         dict.__init__(self)
-        self["ID"] = ''
-        self["DE"] = ''
+        self["ID"] = ""
+        self["DE"] = ""
         self["AN"] = []
-        self["CA"] = ''
-        self["CF"] = ''
-        self["CC"] = []   # one comment per line
+        self["CA"] = ""
+        self["CF"] = ""
+        self["CC"] = []  # one comment per line
         self["PR"] = []
         self["DR"] = []
 
     def __repr__(self):
+        """Return the canonical string representation of the Record object."""
         if self["ID"]:
             if self["DE"]:
-                return "%s (%s, %s)" % (self.__class__.__name__,
-                                        self["ID"], self["DE"])
+                return f"{self.__class__.__name__} ({self['ID']}, {self['DE']})"
             else:
-                return "%s (%s)" % (self.__class__.__name__,
-                                    self["ID"])
+                return f"{self.__class__.__name__} ({self['ID']})"
         else:
-            return "%s ( )" % (self.__class__.__name__)
+            return f"{self.__class__.__name__} ( )"
 
     def __str__(self):
-        output = ["ID: " + self["ID"],
-                  "DE: " + self["DE"],
-                  "AN: " + repr(self["AN"]),
-                  "CA: '" + self["CA"] + "'",
-                  "CF: " + self["CF"],
-                  "CC: " + repr(self["CC"]),
-                  "PR: " + repr(self["PR"]),
-                  "DR: %d Records" % len(self["DR"])]
+        """Return a readable string representation of the Record object."""
+        output = [
+            "ID: " + self["ID"],
+            "DE: " + self["DE"],
+            "AN: " + repr(self["AN"]),
+            "CA: '" + self["CA"] + "'",
+            "CF: " + self["CF"],
+            "CC: " + repr(self["CC"]),
+            "PR: " + repr(self["PR"]),
+            "DR: %d Records" % len(self["DR"]),
+        ]
         return "\n".join(output)
+
 
 # Everything below is private
 
@@ -127,9 +130,9 @@ def __read(handle):
         elif key == "CA":
             record["CA"] += value
         elif key == "DR":
-            pair_data = value.rstrip(";").split(';')
+            pair_data = value.rstrip(";").split(";")
             for pair in pair_data:
-                t1, t2 = pair.split(',')
+                t1, t2 = pair.split(",")
                 row = [t1.strip(), t2.strip()]
                 record["DR"].append(row)
         elif key == "CF":
@@ -141,7 +144,7 @@ def __read(handle):
             assert value.startswith("PROSITE; ")
             value = value[9:].rstrip(";")
             record["PR"].append(value)
-        elif key == 'CC':
+        elif key == "CC":
             if value.startswith("-!- "):
                 record["CC"].append(value[4:])
             elif value.startswith("    ") and record["CC"]:

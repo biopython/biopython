@@ -16,13 +16,12 @@ Functions:
  - classify     Classify an observation into a class.
 """
 
-from __future__ import print_function
 
 import numpy
 import numpy.linalg
 
 
-class LogisticRegression(object):
+class LogisticRegression:
     """Holds information necessary to do logistic regression classification.
 
     Attributes:
@@ -31,7 +30,7 @@ class LogisticRegression(object):
     """
 
     def __init__(self):
-        """Initialize."""
+        """Initialize the class."""
         self.beta = []
 
 
@@ -46,10 +45,10 @@ def train(xs, ys, update_fn=None, typecode=None):
     if len(xs) != len(ys):
         raise ValueError("xs and ys should be the same length.")
     classes = set(ys)
-    if classes != set([0, 1]):
+    if classes != {0, 1}:
         raise ValueError("Classes should be 0's and 1's")
     if typecode is None:
-        typecode = 'd'
+        typecode = "d"
 
     # Dimensionality of the data is the dimensionality of the
     # observations plus a constant dimension.
@@ -101,12 +100,12 @@ def train(xs, ys, update_fn=None, typecode=None):
         delta = numpy.linalg.solve(XtWX, Xtyp)
         if numpy.fabs(stepsize - 1.0) > 0.001:
             delta *= stepsize
-        beta += delta                 # Update beta.
+        beta += delta  # Update beta.
     else:
         raise RuntimeError("Didn't converge.")
 
     lr = LogisticRegression()
-    lr.beta = [float(x) for x in beta]  # Convert back to regular array.
+    lr.beta = list(beta)
     return lr
 
 

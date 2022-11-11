@@ -32,10 +32,10 @@ and the BLAT output file
 or are included with the Biopython source code under the \verb|Doc/examples/|
 folder. Both output files were generated using this sequence:
 
-\begin{verbatim}
+\begin{minted}{text}
 >mystery_seq
 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
-\end{verbatim}
+\end{minted}
 
 The BLAST result is an XML file generated using \verb|blastn| against the NCBI
 \verb|refseq_rna| database. For BLAT, the sequence database was the February 2009
@@ -116,7 +116,7 @@ The QueryResult object represents a single search query and contains zero or
 more Hit objects. Let's see what it looks like using the BLAST file we have:
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read("my_blast.xml", "blast-xml")
 >>> print(blast_qresult)
@@ -161,7 +161,7 @@ Program: blastn (2.2.27+)
            97      1  gi|356517317|ref|XM_003527287.1|  PREDICTED: Glycine ma...
            98      1  gi|297814701|ref|XM_002875188.1|  Arabidopsis lyrata su...
            99      1  gi|397513516|ref|XM_003827011.1|  PREDICTED: Pan panisc...
-\end{verbatim}
+\end{minted}
 
 We've just begun to scratch the surface of the object model, but you can see that
 there's already some useful information. By invoking \verb|print| on the
@@ -182,7 +182,7 @@ there's already some useful information. By invoking \verb|print| on the
 Now let's check our BLAT results using the same procedure as above:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> blat_qresult = SearchIO.read("my_blat.psl", "blat-psl")
 >>> print(blat_qresult)
 Program: blat (<unknown version>)
@@ -193,7 +193,7 @@ Program: blat (<unknown version>)
             #  # HSP  ID + description
          ----  -----  ----------------------------------------------------------
             0     17  chr19  <unknown description>
-\end{verbatim}
+\end{minted}
 
 You'll immediately notice that there are some differences. Some of these are
 caused by the way PSL format stores its details, as you'll see. The rest are
@@ -224,20 +224,20 @@ notation). There are also other format-specific attributes that you can access
 using the same method.
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print("%s %s" % (blast_qresult.program, blast_qresult.version))
 blastn 2.2.27+
 >>> print("%s %s" % (blat_qresult.program, blat_qresult.version))
 blat <unknown version>
->>> blast_qresult.param_evalue_threshold    # blast-xml specific
+>>> blast_qresult.param_evalue_threshold  # blast-xml specific
 10.0
-\end{verbatim}
+\end{minted}
 
 For a complete list of accessible attributes, you can check each format-specific
 documentation. Here are the ones
-\href{http://biopython.org/DIST/docs/api/Bio.SearchIO.BlastIO-module.html}{for BLAST}
+\href{http://biopython.org/docs/\bpversion/api/Bio.SearchIO.BlastIO.html}{for BLAST}
 and for
-\href{http://biopython.org/DIST/docs/api/Bio.SearchIO.BlatIO-module.html}{BLAT}.
+\href{http://biopython.org/docs/\bpversion/api/Bio.SearchIO.BlatIO.html}{BLAT}.
 
 Having looked at using \verb|print| on \verb|QueryResult| objects, let's drill
 down deeper. What exactly is a \verb|QueryResult|? In terms of Python objects,
@@ -248,46 +248,47 @@ dictionaries.
 Like Python lists and dictionaries, \verb|QueryResult| objects are iterable.
 Each iteration returns a \verb|Hit| object:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for hit in blast_qresult:
 ...     hit
+...
 Hit(id='gi|262205317|ref|NR_030195.1|', query_id='42291', 1 hsps)
 Hit(id='gi|301171311|ref|NR_035856.1|', query_id='42291', 1 hsps)
 Hit(id='gi|270133242|ref|NR_032573.1|', query_id='42291', 1 hsps)
 Hit(id='gi|301171322|ref|NR_035857.1|', query_id='42291', 2 hsps)
 Hit(id='gi|301171267|ref|NR_035851.1|', query_id='42291', 1 hsps)
 ...
-\end{verbatim}
+\end{minted}
 
 To check how many items (hits) a \verb|QueryResult| has, you can simply invoke
 Python's \verb|len| method:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> len(blast_qresult)
 100
 >>> len(blat_qresult)
 1
-\end{verbatim}
+\end{minted}
 
 Like Python lists, you can retrieve items (hits) from a \verb|QueryResult| using
 the slice notation:
 
 %cont-doctest
-\begin{verbatim}
->>> blast_qresult[0]        # retrieves the top hit
+\begin{minted}{pycon}
+>>> blast_qresult[0]  # retrieves the top hit
 Hit(id='gi|262205317|ref|NR_030195.1|', query_id='42291', 1 hsps)
->>> blast_qresult[-1]       # retrieves the last hit
+>>> blast_qresult[-1]  # retrieves the last hit
 Hit(id='gi|397513516|ref|XM_003827011.1|', query_id='42291', 1 hsps)
-\end{verbatim}
+\end{minted}
 
 To retrieve multiple hits, you can slice \verb|QueryResult| objects using the
 slice notation as well. In this case, the slice will return a new
 \verb|QueryResult| object containing only the sliced hits:
 
 %cont-doctest
-\begin{verbatim}
->>> blast_slice = blast_qresult[:3]     # slices the first three hits
+\begin{minted}{pycon}
+>>> blast_slice = blast_qresult[:3]  # slices the first three hits
 >>> print(blast_slice)
 Program: blastn (2.2.27+)
   Query: 42291 (61)
@@ -299,47 +300,47 @@ Program: blastn (2.2.27+)
             0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
             1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
             2      1  gi|270133242|ref|NR_032573.1|  Macaca mulatta microRNA ...
-\end{verbatim}
+\end{minted}
 
 Like Python dictionaries, you can also retrieve hits using the hit's ID. This is
 particularly useful if you know a given hit ID exists within a search query
 results:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> blast_qresult["gi|262205317|ref|NR_030195.1|"]
 Hit(id='gi|262205317|ref|NR_030195.1|', query_id='42291', 1 hsps)
-\end{verbatim}
+\end{minted}
 
 You can also get a full list of \verb|Hit| objects using \verb|hits| and a full
 list of \verb|Hit| IDs using \verb|hit_keys|:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> blast_qresult.hits
 [...]       # list of all hits
 >>> blast_qresult.hit_keys
 [...]       # list of all hit IDs
-\end{verbatim}
+\end{minted}
 
 What if you just want to check whether a particular hit is present in the query
 results? You can do a simple Python membership test using the \verb|in| keyword:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> "gi|262205317|ref|NR_030195.1|" in blast_qresult
 True
 >>> "gi|262205317|ref|NR_030194.1|" in blast_qresult
 False
-\end{verbatim}
+\end{minted}
 
 Sometimes, knowing whether a hit is present is not enough; you also want to know
 the rank of the hit. Here, the \verb|index| method comes to the rescue:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> blast_qresult.index("gi|301171437|ref|NR_035870.1|")
 22
-\end{verbatim}
+\end{minted}
 
 Remember that we're using Python's indexing style here, which is zero-based.
 This means our hit above is ranked at no. 23, not 22.
@@ -360,8 +361,8 @@ each hit's full sequence length. For this particular sort, we'll set the
 the \verb|reverse| flag to \verb|True| so that we sort in descending order.
 
 %cont-doctest
-\begin{verbatim}
->>> for hit in blast_qresult[:5]:   # id and sequence length of the first five hits
+\begin{minted}{pycon}
+>>> for hit in blast_qresult[:5]:  # id and sequence length of the first five hits
 ...     print("%s %i" % (hit.id, hit.seq_len))
 ...
 gi|262205317|ref|NR_030195.1| 61
@@ -380,7 +381,7 @@ gi|390332045|ref|XM_776818.2| 4082
 gi|390332043|ref|XM_003723358.1| 4079
 gi|356517317|ref|XM_003527287.1| 3251
 gi|356543101|ref|XM_003539954.1| 2936
-\end{verbatim}
+\end{minted}
 
 The advantage of having the \verb|in_place| flag here is that we're preserving
 the native ordering, so we may use it again later. You should note that this is
@@ -418,21 +419,22 @@ Here is an example of using \verb|hit_filter| to filter out \verb|Hit| objects
 that only have one HSP:
 
 %cont-doctest
-\begin{verbatim}
->>> filter_func = lambda hit: len(hit.hsps) > 1     # the callback function
->>> len(blast_qresult)      # no. of hits before filtering
+\begin{minted}{pycon}
+>>> filter_func = lambda hit: len(hit.hsps) > 1  # the callback function
+>>> len(blast_qresult)  # no. of hits before filtering
 100
 >>> filtered_qresult = blast_qresult.hit_filter(filter_func)
->>> len(filtered_qresult)   # no. of hits after filtering
+>>> len(filtered_qresult)  # no. of hits after filtering
 37
->>> for hit in filtered_qresult[:5]:    # quick check for the hit lengths
+>>> for hit in filtered_qresult[:5]:  # quick check for the hit lengths
 ...     print("%s %i" % (hit.id, len(hit.hsps)))
+...
 gi|301171322|ref|NR_035857.1| 2
 gi|262205330|ref|NR_030198.1| 2
 gi|301171447|ref|NR_035871.1| 2
 gi|262205298|ref|NR_030190.1| 2
 gi|270132717|ref|NR_032716.1| 2
-\end{verbatim}
+\end{minted}
 
 \verb|hsp_filter| works the same as \verb|hit_filter|, only instead of looking
 at the \verb|Hit| objects, it performs filtering on the \verb|HSP| objects in
@@ -446,20 +448,22 @@ callback function must return the modified \verb|Hit| or \verb|HSP| object
 Let's see an example where we're using \verb|hit_map| to rename the hit IDs:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> def map_func(hit):
-...     hit.id = hit.id.split("|")[3]   # renames "gi|301171322|ref|NR_035857.1|" to "NR_035857.1"
+...     # renames "gi|301171322|ref|NR_035857.1|" to "NR_035857.1"
+...     hit.id = hit.id.split("|")[3]
 ...     return hit
 ...
 >>> mapped_qresult = blast_qresult.hit_map(map_func)
 >>> for hit in mapped_qresult[:5]:
 ...     print(hit.id)
+...
 NR_030195.1
 NR_035856.1
 NR_032573.1
 NR_035857.1
 NR_035851.1
-\end{verbatim}
+\end{minted}
 
 Again, \verb|hsp_map| works the same as \verb|hit_map|, but on \verb|HSP|
 objects instead of \verb|Hit| objects.
@@ -475,10 +479,10 @@ themselves contain \verb|HSP| objects.
 Let's see what they look like, beginning with our BLAST search:
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read("my_blast.xml", "blast-xml")
->>> blast_hit = blast_qresult[3]    # fourth hit from the query result
+>>> blast_hit = blast_qresult[3]  # fourth hit from the query result
 >>> print(blast_hit)
 Query: 42291
        mystery_seq
@@ -489,7 +493,7 @@ Query: 42291
        ----  --------  ---------  ------  ---------------  ---------------------
           0   8.9e-20     100.47      60           [1:61]                [13:73]
           1   3.3e-06      55.39      60           [0:60]                [13:73]
-\end{verbatim}
+\end{minted}
 
 You see that we've got the essentials covered here:
 
@@ -511,9 +515,9 @@ Now let's contrast this with the BLAT search. Remember that in the BLAT search w
 had one hit with 17 HSPs.
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> blat_qresult = SearchIO.read("my_blat.psl", "blat-psl")
->>> blat_hit = blat_qresult[0]      # the only hit
+>>> blat_hit = blat_qresult[0]  # the only hit
 >>> print(blat_hit)
 Query: mystery_seq
        <unknown description>
@@ -539,7 +543,7 @@ Query: mystery_seq
          14         ?          ?       ?           [8:61]    [54212018:54212071]
          15         ?          ?       ?           [8:51]    [54234278:54234321]
          16         ?          ?       ?           [8:61]    [54238143:54238196]
-\end{verbatim}
+\end{minted}
 
 Here, we've got a similar level of detail as with the BLAST hit we saw earlier.
 There are some differences worth explaining, though:
@@ -562,23 +566,24 @@ Just like Python lists, \verb|Hit| objects are iterable, and each iteration
 returns one \verb|HSP| object it contains:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for hsp in blast_hit:
 ...     hsp
+...
 HSP(hit_id='gi|301171322|ref|NR_035857.1|', query_id='42291', 1 fragments)
 HSP(hit_id='gi|301171322|ref|NR_035857.1|', query_id='42291', 1 fragments)
-\end{verbatim}
+\end{minted}
 
 You can invoke \verb|len| on a \verb|Hit| to see how many \verb|HSP| objects it
 has:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> len(blast_hit)
 2
 >>> len(blat_hit)
 17
-\end{verbatim}
+\end{minted}
 
 You can use the slice notation on \verb|Hit| objects, whether to retrieve single
 \verb|HSP| or multiple \verb|HSP| objects. Like \verb|QueryResult|, if you slice
@@ -586,8 +591,8 @@ for multiple \verb|HSP|, a new \verb|Hit| object will be returned containing
 only the sliced \verb|HSP| objects:
 
 %cont-doctest
-\begin{verbatim}
->>> blat_hit[0]                 # retrieve single items
+\begin{minted}{pycon}
+>>> blat_hit[0]  # retrieve single items
 HSP(hit_id='chr19', query_id='mystery_seq', 1 fragments)
 >>> sliced_hit = blat_hit[4:9]  # retrieve multiple items
 >>> len(sliced_hit)
@@ -605,7 +610,7 @@ Query: mystery_seq
           2         ?          ?       ?           [0:61]    [54238143:54240175]
           3         ?          ?       ?           [0:60]    [54189735:54189795]
           4         ?          ?       ?           [0:61]    [54185425:54185486]
-\end{verbatim}
+\end{minted}
 
 You can also sort the \verb|HSP| inside a \verb|Hit|, using the exact same
 arguments like the sort method you saw in the \verb|QueryResult| object.
@@ -632,10 +637,10 @@ Let's see some examples from our BLAST and BLAT searches. We'll look at the
 BLAST HSP first:
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read("my_blast.xml", "blast-xml")
->>> blast_hsp = blast_qresult[0][0]    # first hit, first hsp
+>>> blast_hsp = blast_qresult[0][0]  # first hit, first hsp
 >>> print(blast_hsp)
       Query: 42291 mystery_seq
         Hit: gi|262205317|ref|NR_030195.1| Homo sapiens microRNA 520b (MIR520...
@@ -646,7 +651,7 @@ Quick stats: evalue 4.9e-23; bitscore 111.29
      Query - CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
              |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
        Hit - CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
-\end{verbatim}
+\end{minted}
 
 Just like \verb|QueryResult| and \verb|Hit|, invoking \verb|print| on an
 \verb|HSP| shows its general details:
@@ -668,32 +673,32 @@ These details can be accessed on their own using the dot notation, just like in
 \verb|QueryResult| and \verb|Hit|:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> blast_hsp.query_range
 (0, 61)
-\end{verbatim}
+\end{minted}
 %hack! since float display may be different across versions
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> blast_hsp.evalue
 4.91307e-23
-\end{verbatim}
+\end{minted}
 
 They're not the only attributes available, though. \verb|HSP| objects come with
 a default set of properties that makes it easy to probe their various
 details. Here are some examples:
 
 %cont-doctest
-\begin{verbatim}
->>> blast_hsp.hit_start         # start coordinate of the hit sequence
+\begin{minted}{pycon}
+>>> blast_hsp.hit_start  # start coordinate of the hit sequence
 0
->>> blast_hsp.query_span        # how many residues in the query sequence
+>>> blast_hsp.query_span  # how many residues in the query sequence
 61
->>> blast_hsp.aln_span          # how long the alignment is
+>>> blast_hsp.aln_span  # how long the alignment is
 61
-\end{verbatim}
+\end{minted}
 
 Check out the \verb|HSP|
-\href{http://biopython.org/DIST/docs/api/Bio.SearchIO._model.hsp-module.html}{documentation}
+\href{http://biopython.org/docs/\bpversion/api/Bio.SearchIO.html#module-Bio.SearchIO#module-Bio.SearchIO}{documentation}
 for a full list of these predefined properties.
 
 Furthermore, each sequence search tool usually computes its own statistics /
@@ -702,36 +707,36 @@ outputs the number of gaps and identical residues. These attributes can be
 accessed like so:
 
 %cont-doctest
-\begin{verbatim}
->>> blast_hsp.gap_num       # number of gaps
+\begin{minted}{pycon}
+>>> blast_hsp.gap_num  # number of gaps
 0
->>> blast_hsp.ident_num     # number of identical residues
+>>> blast_hsp.ident_num  # number of identical residues
 61
-\end{verbatim}
+\end{minted}
 
 These details are format-specific; they may not be present in other formats.
 To see which details are available for a given sequence search tool, you
 should check the format's documentation in \verb|Bio.SearchIO|. Alternatively,
 you may also use \verb|.__dict__.keys()| for a quick list of what's available:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> blast_hsp.__dict__.keys()
 ['bitscore', 'evalue', 'ident_num', 'gap_num', 'bitscore_raw', 'pos_num', '_items']
-\end{verbatim}
+\end{minted}
 
 Finally, you may have noticed that the \verb|query| and \verb|hit| attributes
 of our HSP are not just regular strings:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> blast_hsp.query
-SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG', DNAAlphabet()), id='42291', name='aligned query sequence', description='mystery_seq', dbxrefs=[])
+SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG'), id='42291', name='aligned query sequence', description='mystery_seq', dbxrefs=[])
 >>> blast_hsp.hit
-SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG', DNAAlphabet()), id='gi|262205317|ref|NR_030195.1|', name='aligned hit sequence', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
-\end{verbatim}
+SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG'), id='gi|262205317|ref|NR_030195.1|', name='aligned hit sequence', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
+\end{minted}
 
 They are \verb|SeqRecord| objects you saw earlier in
-Section~\ref{chapter:SeqRecord}! This means that you can do all sorts of
+Section~\ref{chapter:seq_annot}! This means that you can do all sorts of
 interesting things you can do with \verb|SeqRecord| objects on \verb|HSP.query|
 and/or \verb|HSP.hit|.
 
@@ -739,21 +744,21 @@ It should not surprise you now that the \verb|HSP| object has an
 \verb|alignment| property which is a \verb|MultipleSeqAlignment| object:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(blast_hsp.aln)
-DNAAlphabet() alignment with 2 rows and 61 columns
+Alignment with 2 rows and 61 columns
 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG 42291
 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG gi|262205317|ref|NR_030195.1|
-\end{verbatim}
+\end{minted}
 
 Having probed the BLAST HSP, let's now take a look at HSPs from our BLAT
 results for a different kind of HSP. As usual, we'll begin by invoking
 \verb|print| on it:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> blat_qresult = SearchIO.read("my_blat.psl", "blat-psl")
->>> blat_hsp = blat_qresult[0][0]       # first hit, first hsp
+>>> blat_hsp = blat_qresult[0][0]  # first hit, first hsp
 >>> print(blat_hsp)
       Query: mystery_seq <unknown description>
         Hit: chr19 <unknown description>
@@ -761,7 +766,7 @@ Query range: [0:61] (1)
   Hit range: [54204480:54204541] (1)
 Quick stats: evalue ?; bitscore ?
   Fragments: 1 (? columns)
-\end{verbatim}
+\end{minted}
 
 Some of the outputs you may have already guessed. We have the query and hit IDs
 and descriptions and the sequence coordinates. Values for evalue and bitscore is
@@ -773,14 +778,14 @@ if you try to access \verb|HSP.query|, \verb|HSP.hit|, or \verb|HSP.aln|?
 You'll get the default values for these attributes, which is \verb|None|:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> blat_hsp.hit is None
 True
 >>> blat_hsp.query is None
 True
 >>> blat_hsp.aln is None
 True
-\end{verbatim}
+\end{minted}
 
 This does not affect other attributes, though. For example, you can still
 access the length of the query or hit alignment. Despite not displaying any
@@ -788,22 +793,22 @@ attributes, the PSL format still have this information so \verb|Bio.SearchIO|
 can extract them:
 
 %cont-doctest
-\begin{verbatim}
->>> blat_hsp.query_span     # length of query match
+\begin{minted}{pycon}
+>>> blat_hsp.query_span  # length of query match
 61
->>> blat_hsp.hit_span       # length of hit match
+>>> blat_hsp.hit_span  # length of hit match
 61
-\end{verbatim}
+\end{minted}
 
 Other format-specific attributes are still present as well:
 
 %cont-doctest
-\begin{verbatim}
->>> blat_hsp.score          # PSL score
+\begin{minted}{pycon}
+>>> blat_hsp.score  # PSL score
 61
->>> blat_hsp.mismatch_num   # the mismatch column
+>>> blat_hsp.mismatch_num  # the mismatch column
 0
-\end{verbatim}
+\end{minted}
 
 So far so good? Things get more interesting when you look at another `variant'
 of HSP present in our BLAT results. You might recall that in BLAT searches,
@@ -815,8 +820,8 @@ Let's take a look at a BLAT HSP that contains multiple blocks to see how
 \verb|Bio.SearchIO| deals with this:
 
 %cont-doctest
-\begin{verbatim}
->>> blat_hsp2 = blat_qresult[0][1]      # first hit, second hsp
+\begin{minted}{pycon}
+>>> blat_hsp2 = blat_qresult[0][1]  # first hit, second hsp
 >>> print(blat_hsp2)
       Query: mystery_seq <unknown description>
         Hit: chr19 <unknown description>
@@ -828,7 +833,7 @@ Quick stats: evalue ?; bitscore ?
              ---  --------------  ----------------------  ----------------------
                0               ?                  [0:18]     [54233104:54233122]
                1               ?                 [18:61]     [54264420:54264463]
-\end{verbatim}
+\end{minted}
 
 What's happening here? We still some essential details covered: the IDs and
 descriptions, the coordinates, and the quick statistics are similar to what
@@ -854,20 +859,20 @@ intervening regions), while the hit match is not.
 All these attributes are accessible from the HSP directly, by the way:
 
 %cont-doctest
-\begin{verbatim}
->>> blat_hsp2.hit_range         # hit start and end coordinates of the entire HSP
+\begin{minted}{pycon}
+>>> blat_hsp2.hit_range  # hit start and end coordinates of the entire HSP
 (54233104, 54264463)
->>> blat_hsp2.hit_range_all     # hit start and end coordinates of each fragment
+>>> blat_hsp2.hit_range_all  # hit start and end coordinates of each fragment
 [(54233104, 54233122), (54264420, 54264463)]
->>> blat_hsp2.hit_span          # hit span of the entire HSP
+>>> blat_hsp2.hit_span  # hit span of the entire HSP
 31359
->>> blat_hsp2.hit_span_all      # hit span of each fragment
+>>> blat_hsp2.hit_span_all  # hit span of each fragment
 [18, 43]
 >>> blat_hsp2.hit_inter_ranges  # start and end coordinates of intervening regions in the hit sequence
 [(54233122, 54264420)]
->>> blat_hsp2.hit_inter_spans   # span of intervening regions in the hit sequence
+>>> blat_hsp2.hit_inter_spans  # span of intervening regions in the hit sequence
 [31298]
-\end{verbatim}
+\end{minted}
 
 Most of these attributes are not readily available from the PSL file we have,
 but \verb|Bio.SearchIO| calculates them for you on the fly when you parse the
@@ -880,19 +885,19 @@ However, you can use their \verb|*_all| counterparts: \verb|query_all|,
 \verb|hit_all|, and \verb|aln_all|. These properties will return a list containing
 \verb|SeqRecord| or \verb|MultipleSeqAlignment| objects from each of the HSP
 fragment. There are other attributes that behave similarly, i.e. they only work
-for HSPs with one fragment. Check out the \verb|HSP| \href{http://biopython.org/DIST/docs/api/Bio.SearchIO._model.hsp-module.html}{documentation}
+for HSPs with one fragment. Check out the \verb|HSP| \href{http://biopython.org/docs/\bpversion/api/Bio.SearchIO.html#module-Bio.SearchIO}{documentation}
 for a full list.
 
 Finally, to check whether you have multiple fragments or not, you can use the
 \verb|is_fragmented| property like so:
 
 %cont-doctest
-\begin{verbatim}
->>> blat_hsp2.is_fragmented     # BLAT HSP with 2 fragments
+\begin{minted}{pycon}
+>>> blat_hsp2.is_fragmented  # BLAT HSP with 2 fragments
 True
->>> blat_hsp.is_fragmented      # BLAT HSP from earlier, with one fragment
+>>> blat_hsp.is_fragmented  # BLAT HSP from earlier, with one fragment
 False
-\end{verbatim}
+\end{minted}
 
 Before we move on, you should also know that we can use the slice notation on
 \verb|HSP| objects, just like \verb|QueryResult| or \verb|Hit| objects. When
@@ -911,17 +916,17 @@ In most cases, you don't have to deal with \verb|HSPFragment| objects directly
 since not that many sequence search tools fragment their HSPs. When you do have
 to deal with them, what you should remember is that \verb|HSPFragment| objects
 were written with to be as compact as possible. In most cases, they only contain
-attributes directly related to sequences: strands, reading frames, alphabets,
-coordinates, the sequences themselves, and their IDs and descriptions.
+attributes directly related to sequences: strands, reading frames, molecule
+types, coordinates, the sequences themselves, and their IDs and descriptions.
 
 These attributes are readily shown when you invoke \verb|print| on an
 \verb|HSPFragment|. Here's an example, taken from our BLAST search:
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read("my_blast.xml", "blast-xml")
->>> blast_frag = blast_qresult[0][0][0]    # first hit, first hsp, first fragment
+>>> blast_frag = blast_qresult[0][0][0]  # first hit, first hsp, first fragment
 >>> print(blast_frag)
       Query: 42291 mystery_seq
         Hit: gi|262205317|ref|NR_030195.1| Homo sapiens microRNA 520b (MIR520...
@@ -931,35 +936,35 @@ Query range: [0:61] (1)
      Query - CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
              |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
        Hit - CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
-\end{verbatim}
+\end{minted}
 
 At this level, the BLAT fragment looks quite similar to the BLAST fragment, save
 for the query and hit sequences which are not present:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> blat_qresult = SearchIO.read("my_blat.psl", "blat-psl")
->>> blat_frag = blat_qresult[0][0][0]    # first hit, first hsp, first fragment
+>>> blat_frag = blat_qresult[0][0][0]  # first hit, first hsp, first fragment
 >>> print(blat_frag)
       Query: mystery_seq <unknown description>
         Hit: chr19 <unknown description>
 Query range: [0:61] (1)
   Hit range: [54204480:54204541] (1)
   Fragments: 1 (? columns)
-\end{verbatim}
+\end{minted}
 
 In all cases, these attributes are accessible using our favorite dot notation.
 Some examples:
 
 %cont-doctest
-\begin{verbatim}
->>> blast_frag.query_start      # query start coordinate
+\begin{minted}{pycon}
+>>> blast_frag.query_start  # query start coordinate
 0
->>> blast_frag.hit_strand       # hit sequence strand
+>>> blast_frag.hit_strand  # hit sequence strand
 1
->>> blast_frag.hit              # hit sequence, as a SeqRecord object
-SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG', DNAAlphabet()), id='gi|262205317|ref|NR_030195.1|', name='aligned hit sequence', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
-\end{verbatim}
+>>> blast_frag.hit  # hit sequence, as a SeqRecord object
+SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG'), id='gi|262205317|ref|NR_030195.1|', name='aligned hit sequence', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
+\end{minted}
 
 \section{A note about standards and conventions}
 \label{sec:searchio-standards}
@@ -1033,7 +1038,7 @@ keyword argument to modify so it parses the BLAST tabular variant with comments
 in it:
 
 %doctest ../Tests/Blast
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SearchIO
 >>> qresult = SearchIO.read("tab_2226_tblastn_003.txt", "blast-tab")
 >>> qresult
@@ -1041,7 +1046,7 @@ QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
 >>> qresult2 = SearchIO.read("tab_2226_tblastn_007.txt", "blast-tab", comments=True)
 >>> qresult2
 QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
-\end{verbatim}
+\end{minted}
 
 These keyword arguments differs among file formats. Check the format
 documentation to see if it has keyword arguments that modifies its parser's
@@ -1053,20 +1058,22 @@ yields a \verb|QueryResult| object in each iteration. Like
 \verb|Bio.SearchIO.read|, it also accepts format-specific keyword arguments:
 
 %doctest ../Tests/Blast
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SearchIO
 >>> qresults = SearchIO.parse("tab_2226_tblastn_001.txt", "blast-tab")
 >>> for qresult in qresults:
 ...     print(qresult.id)
+...
 gi|16080617|ref|NP_391444.1|
 gi|11464971:4-101
 >>> qresults2 = SearchIO.parse("tab_2226_tblastn_005.txt", "blast-tab", comments=True)
 >>> for qresult in qresults2:
 ...     print(qresult.id)
+...
 random_s00
 gi|16080617|ref|NP_391444.1|
 gi|11464971:4-101
-\end{verbatim}
+\end{minted}
 
 \section{Dealing with large search output files with indexing}
 \label{sec:searchio-index}
@@ -1087,7 +1094,7 @@ Here are some examples. You can use \verb|index| with just the filename and
 format name:
 
 %doctest ../Tests/Blast
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SearchIO
 >>> idx = SearchIO.index("tab_2226_tblastn_001.txt", "blast-tab")
 >>> sorted(idx.keys())
@@ -1095,32 +1102,32 @@ format name:
 >>> idx["gi|16080617|ref|NP_391444.1|"]
 QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
 >>> idx.close()
-\end{verbatim}
+\end{minted}
 
 Or also with the format-specific keyword argument:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> idx = SearchIO.index("tab_2226_tblastn_005.txt", "blast-tab", comments=True)
 >>> sorted(idx.keys())
 ['gi|11464971:4-101', 'gi|16080617|ref|NP_391444.1|', 'random_s00']
 >>> idx["gi|16080617|ref|NP_391444.1|"]
 QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
 >>> idx.close()
-\end{verbatim}
+\end{minted}
 
 Or with the \verb|key_function| argument, as in \verb|Bio.SeqIO|:
 
 %cont-doctest
-\begin{verbatim}
->>> key_function = lambda id: id.upper()    # capitalizes the keys
+\begin{minted}{pycon}
+>>> key_function = lambda id: id.upper()  # capitalizes the keys
 >>> idx = SearchIO.index("tab_2226_tblastn_001.txt", "blast-tab", key_function=key_function)
 >>> sorted(idx.keys())
 ['GI|11464971:4-101', 'GI|16080617|REF|NP_391444.1|']
 >>> idx["GI|16080617|REF|NP_391444.1|"]
 QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
 >>> idx.close()
-\end{verbatim}
+\end{minted}
 
 \verb|Bio.SearchIO.index_db| works like as \verb|index|, only it writes the
 query offsets into an SQLite database file.
@@ -1137,12 +1144,12 @@ arguments. It returns a four-item tuple, which denotes the number or
 \verb|QueryResult|, \verb|Hit|, \verb|HSP|, and \verb|HSPFragment| objects that
 were written.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SearchIO
->>> qresults = SearchIO.parse("mirna.xml", "blast-xml")     # read XML file
->>> SearchIO.write(qresults, "results.tab", "blast-tab")    # write to tabular file
+>>> qresults = SearchIO.parse("mirna.xml", "blast-xml")  # read XML file
+>>> SearchIO.write(qresults, "results.tab", "blast-tab")  # write to tabular file
 (3, 239, 277, 277)
-\end{verbatim}
+\end{minted}
 
 You should note different file formats require different attributes of the
 \verb|QueryResult|, \verb|Hit|, \verb|HSP| and \verb|HSPFragment| objects. If
@@ -1161,15 +1168,14 @@ Finally, \verb|Bio.SearchIO| also provides a \verb|convert| function, which is
 simply a shortcut for \verb|Bio.SearchIO.parse| and \verb|Bio.SearchIO.write|.
 Using the convert function, our example above would be:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SearchIO
 >>> SearchIO.convert("mirna.xml", "blast-xml", "results.tab", "blast-tab")
 (3, 239, 277, 277)
-\end{verbatim}
+\end{minted}
 
 As \verb|convert| uses \verb|write|, it is only limited to format conversions
 that have all the required attributes. Here, the BLAST XML file provides all the
 default values a BLAST tabular file requires, so it works just fine. However,
 other format conversions are less likely to work since you need to manually
 assign the required attributes first.
-

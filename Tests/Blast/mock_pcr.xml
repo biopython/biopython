@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+
+<!-- This is a mock file mimicking a qblast response for our mock tests -->
+
+<BlastOutput>
+ <BlastOutput_program>blastn</BlastOutput_program>
+ <BlastOutput_query-ID>GTACCTTGATTTCGTATTCNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNGACTCTACTACCTTTACCC</BlastOutput_query-ID>
+<BlastOutput_param>
+    <Parameters>
+      <Parameters_expect>10</Parameters_expect>
+    </Parameters>
+  </BlastOutput_param>
+<BlastOutput_iterations>
+<Iteration>
+<Iteration_hits>
+ <Hit>
+  <Hit_num>1</Hit_num>
+  <Hit_id>gi|0000000|gb|XM_034941187.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XM_034941187</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>2</Hit_num>
+  <Hit_id>gi|0000001|gb|XM_034941186.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XM_034941186</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>3</Hit_num>
+  <Hit_id>gi|0000000|gb|XM_034941185.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XM_034941185</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>4</Hit_num>
+  <Hit_id>gi|0000000|gb|XM_034941184.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XM_034941184</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>5</Hit_num>
+  <Hit_id>gi|0000000|gb|XM_034941183.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XM_034941183</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>6</Hit_num>
+  <Hit_id>gi|0000000|gb|XM_034941182.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XM_034941182</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>7</Hit_num>
+  <Hit_id>gi|0000000|gb|XM_034941180.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XM_034941180</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>8</Hit_num>
+  <Hit_id>gi|0000000|gb|XM_034941179.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XM_034941179</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>9</Hit_num>
+  <Hit_id>gi|0000000|gb|XM_034941178.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XM_034941178</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>10</Hit_num>
+  <Hit_id>gi|0000000|gb|XM_034941177.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XM_034941177</Hit_accession>
+</Hit>
+</Iteration_hits>
+</Iteration>
+</BlastOutput_iterations>
+</BlastOutput>

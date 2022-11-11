@@ -15,7 +15,6 @@ Bio.Wise.psw is for protein Smith-Waterman alignments
 Bio.Wise.dnal is for Smith-Waterman DNA alignments
 """
 
-from __future__ import print_function
 
 import os
 import re
@@ -31,11 +30,16 @@ _OPTION_SCORES = "-m"
 
 
 class AlignmentColumnFullException(Exception):
+    """Manage exception in the alignment output."""
+
     pass
 
 
 class Alignment(list):
+    """Define a container for all alignment Columns, output from running psw."""
+
     def append(self, column_unit):
+        """Add an alignment Column to Alignment."""
         try:
             self[-1].append(column_unit)
         except AlignmentColumnFullException:
@@ -45,6 +49,8 @@ class Alignment(list):
 
 
 class AlignmentColumn(list):
+    """Define a container for the units that made the Column."""
+
     def _set_kind(self, column_unit):
         if self.kind == "SEQUENCE":
             self.kind = column_unit.kind
@@ -56,9 +62,11 @@ class AlignmentColumn(list):
         list.__init__(self, [column_unit.column, None])
 
     def __repr__(self):
-        return "%s(%s, %s)" % (self.kind, self[0], self[1])
+        """Represent the AlignmentColumn object as a string for debugging."""
+        return f"{self.kind}({self[0]!r}, {self[1]!r})"
 
     def append(self, column_unit):
+        """Add a unit to the Column."""
         if self[1] is not None:
             raise AlignmentColumnFullException
 
@@ -68,17 +76,22 @@ class AlignmentColumn(list):
         self[1] = column_unit.column
 
 
-class ColumnUnit(object):
+class ColumnUnit:
+    """Define a container for the details of each sequence alignment."""
+
     def __init__(self, unit, column, kind):
         """Initialize the class."""
         self.unit = unit
         self.column = column
         self.kind = kind
 
-    def __str__(self):
-        return "ColumnUnit(unit=%s, column=%s, %s)" % (self.unit, self.column, self.kind)
-
-    __repr__ = __str__
+    def __repr__(self):
+        """Represent the ColumnUnit object as a string for debugging."""
+        return "ColumnUnit(unit=%r, column=%r, kind=%r)" % (
+            self.unit,
+            self.column,
+            self.kind,
+        )
 
 
 _re_unit = re.compile(r"^Unit +([01])- \[ *(-?\d+)- *(-?\d+)\] \[(\w+)\]$")
@@ -90,9 +103,9 @@ def parse_line(line):
     >>> print(parse_line("Column 0:"))
     None
     >>> parse_line("Unit  0- [  -1-   0] [SEQUENCE]")
-    ColumnUnit(unit=0, column=0, SEQUENCE)
+    ColumnUnit(unit=0, column=0, kind='SEQUENCE')
     >>> parse_line("Unit  1- [  85-  86] [SEQUENCE]")
-    ColumnUnit(unit=1, column=86, SEQUENCE)
+    ColumnUnit(unit=1, column=86, kind='SEQUENCE')
     """
     match = _re_unit.match(line.rstrip())
 
@@ -128,12 +141,8 @@ def parse(iterable):
     return alignment
 
 
-def align(pair,
-          scores=None,
-          gap_start=None,
-          gap_extension=None,
-          *args, **keywds):
-
+def align(pair, scores=None, gap_start=None, gap_extension=None, *args, **keywds):
+    """Align a pair of DNA files using Wise2 psw."""
     cmdline = _CMDLINE_PSW[:]
     if scores:
         cmdline.extend((_OPTION_SCORES, scores))
@@ -146,11 +155,13 @@ def align(pair,
 
 
 def main():
+    """Command line implementation."""
     print(align(sys.argv[1:3]))
 
 
 def _test(*args, **keywds):
     import doctest
+
     doctest.testmod(sys.modules[__name__], *args, **keywds)
 
 

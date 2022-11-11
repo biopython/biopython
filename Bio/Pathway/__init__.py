@@ -1,7 +1,9 @@
 # Copyright 2001 by Tarjei Mikkelsen.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """BioPython Pathway module.
 
@@ -33,10 +35,10 @@ Note: This module should be regarded as a prototype only. API changes are likely
 
 from functools import reduce
 
-from Bio.Pathway.Rep.MultiGraph import MultiGraph, bf_search, df_search
+from Bio.Pathway.Rep.MultiGraph import MultiGraph
 
 
-class Reaction(object):
+class Reaction:
     """Abstraction for a biochemical transformation.
 
     This class represents a (potentially reversible) biochemical
@@ -67,8 +69,7 @@ class Reaction(object):
 
     """
 
-    def __init__(self, reactants=None, catalysts=(),
-                 reversible=0, data=None):
+    def __init__(self, reactants=None, catalysts=(), reversible=0, data=None):
         """Initialize a new Reaction object."""
         # enforce invariants on reactants:
         if reactants is None:
@@ -85,15 +86,13 @@ class Reaction(object):
 
     def __eq__(self, r):
         """Return true iff self is equal to r."""
-        return (isinstance(r, Reaction)
-                and self.reactants == r.reactants
-                and self.catalysts == r.catalysts
-                and self.data == r.data
-                and self.reversible == r.reversible)
-
-    def __ne__(self, r):
-        """Return true iff self is not equal to r."""
-        return not self.__eq__(r)
+        return (
+            isinstance(r, Reaction)
+            and self.reactants == r.reactants
+            and self.catalysts == r.catalysts
+            and self.data == r.data
+            and self.reversible == r.reversible
+        )
 
     def __hash__(self):
         """Return a hashcode for self."""
@@ -102,11 +101,12 @@ class Reaction(object):
 
     def __repr__(self):
         """Return a debugging string representation of self."""
-        return "Reaction(" + \
-               ",".join(map(repr, [self.reactants,
-                                   self.catalysts,
-                                   self.data,
-                                   self.reversible])) + ")"
+        return "Reaction(%r, %r, %r, %r)" % (
+            self.reactants,
+            self.catalysts,
+            self.reversible,
+            self.data,
+        )
 
     def __str__(self):
         """Return a string representation of self."""
@@ -140,16 +140,15 @@ class Reaction(object):
         """Return a new Reaction that is the reverse of self."""
         reactants = {}
         for r in self.reactants:
-            reactants[r] = - self.reactants[r]
-        return Reaction(reactants, self.catalysts,
-                        self.reversible, self.data)
+            reactants[r] = -self.reactants[r]
+        return Reaction(reactants, self.catalysts, self.reversible, self.data)
 
     def species(self):
         """Return a list of all Species involved in self."""
         return list(self.reactants)
 
 
-class System(object):
+class System:
     """Abstraction for a collection of reactions.
 
     This class is used in the Bio.Pathway framework to represent an arbitrary
@@ -170,9 +169,13 @@ class System(object):
 
     def __str__(self):
         """Return a string representation of self."""
-        return "System of " + str(len(self.__reactions)) + \
-               " reactions involving " + str(len(self.species())) + \
-               " species"
+        return (
+            "System of "
+            + str(len(self.__reactions))
+            + " reactions involving "
+            + str(len(self.species()))
+            + " species"
+        )
 
     def add_reaction(self, reaction):
         """Add reaction to self."""
@@ -192,8 +195,9 @@ class System(object):
 
     def species(self):
         """Return a list of the species in this system."""
-        return sorted(set(reduce(lambda s, x: s + x,
-                          [x.species() for x in self.reactions()], [])))
+        return sorted(
+            set(reduce(lambda s, x: s + x, [x.species() for x in self.reactions()], []))
+        )
 
     def stochiometry(self):
         """Compute the stoichiometry matrix for self.
@@ -222,7 +226,7 @@ class System(object):
         return (species, reactions, stoch)
 
 
-class Interaction(object):
+class Interaction:
     """An arbitrary interaction between any number of species.
 
     This class definition is intended solely as a minimal wrapper interface that should
@@ -249,7 +253,7 @@ class Interaction(object):
         return "<" + str(self.data) + ">"
 
 
-class Network(object):
+class Network:
     """A set of species that are explicitly linked by interactions.
 
     The network is a directed multigraph with labeled edges. The nodes in the graph
@@ -272,8 +276,10 @@ class Network(object):
 
     def __str__(self):
         """Return a string representation of this network."""
-        return "Network of " + str(len(self.species())) + " species and " + \
-               str(len(self.interactions())) + " interactions."
+        return "Network of %i species and %i interactions." % (
+            len(self.species()),
+            len(self.interactions()),
+        )
 
     def add_species(self, species):
         """Add species to this network."""

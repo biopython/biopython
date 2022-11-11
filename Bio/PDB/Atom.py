@@ -1,13 +1,17 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Atom class, used in Structure objects."""
 
-import numpy
-import warnings
 import copy
+import sys
+import warnings
+
+import numpy as np
 
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
@@ -15,17 +19,31 @@ from Bio.PDB.vectors import Vector
 from Bio.Data import IUPACData
 
 
-class Atom(object):
+class Atom:
     """Define Atom class.
 
     The Atom object stores atom name (both with and without spaces),
     coordinates, B factor, occupancy, alternative location specifier
     and (optionally) anisotropic B factor and standard deviations of
     B factor and positions.
+
+    In the case of PQR files, B factor and occupancy are replaced by
+    atomic charge and radius.
     """
 
-    def __init__(self, name, coord, bfactor, occupancy, altloc, fullname, serial_number,
-                 element=None):
+    def __init__(
+        self,
+        name,
+        coord,
+        bfactor,
+        occupancy,
+        altloc,
+        fullname,
+        serial_number,
+        element=None,
+        pqr_charge=None,
+        radius=None,
+    ):
         """Initialize Atom object.
 
         :param name: atom name (eg. "CA"). Note that spaces are normally stripped.
@@ -49,6 +67,12 @@ class Atom(object):
 
         :param element: atom element, e.g. "C" for Carbon, "HG" for mercury,
         :type element: uppercase string (or None if unknown)
+
+        :param pqr_charge: atom charge
+        :type pqr_charge: number
+
+        :param radius: atom radius
+        :type radius: number
         """
         self.level = "A"
         # Reference to the residue
@@ -72,9 +96,11 @@ class Atom(object):
         assert not element or element == element.upper(), element
         self.element = self._assign_element(element)
         self.mass = self._assign_atom_mass()
+        self.pqr_charge = pqr_charge
+        self.radius = radius
 
         # For atom sorting (protein backbone atoms first)
-        self._sorting_keys = {'N': 0, 'CA': 1, 'C': 2, 'O': 3}
+        self._sorting_keys = {"N": 0, "CA": 1, "C": 2, "O": 3}
 
     # Sorting Methods
     # standard across different objects and allows direct comparison
@@ -162,13 +188,25 @@ class Atom(object):
         return hash(self.get_full_id())
 
     def _assign_element(self, element):
-        """Guess element from atom name if not recognised (PRIVATE)."""
-        if not element or element.capitalize() not in IUPACData.atom_weights:
-            # Inorganic elements have their name shifted left by one position
-            #  (is a convention in PDB, but not part of the standard).
-            # isdigit() check on last two characters to avoid mis-assignment of
-            # hydrogens atoms (GLN HE21 for example)
+        """Guess element from atom name if not recognised (PRIVATE).
 
+        There is little documentation about extracting/encoding element
+        information in atom names, but some conventions seem to prevail:
+
+            - C, N, O, S, H, P, F atom names start with a blank space (e.g. " CA ")
+              unless the name is 4 characters long (e.g. HE21 in glutamine). In both
+              these cases, the element is the first character.
+
+            - Inorganic elements do not have a blank space (e.g. "CA  " for calcium)
+              but one must check the full name to differentiate between e.g. helium
+              ("HE  ") and long-name hydrogens (e.g. "HE21").
+
+            - Atoms with unknown or ambiguous elements are marked with 'X', e.g.
+              PDB 4cpa. If we fail to identify an element, we should mark it as
+              such.
+
+        """
+        if not element or element.capitalize() not in IUPACData.atom_weights:
             if self.fullname[0].isalpha() and not self.fullname[2:].isdigit():
                 putative_element = self.name.strip()
             else:
@@ -179,30 +217,34 @@ class Atom(object):
                     putative_element = self.name[0]
 
             if putative_element.capitalize() in IUPACData.atom_weights:
-                msg = "Used element %r for Atom (name=%s) with given element %r" \
-                      % (putative_element, self.name, element)
+                msg = "Used element %r for Atom (name=%s) with given element %r" % (
+                    putative_element,
+                    self.name,
+                    element,
+                )
                 element = putative_element
             else:
-                msg = "Could not assign element %r for Atom (name=%s) with given element %r" \
-                      % (putative_element, self.name, element)
-                element = ""
+                msg = (
+                    "Could not assign element %r for Atom (name=%s) with given element %r"
+                    % (putative_element, self.name, element)
+                )
+                element = "X"  # mark as unknown/ambiguous
             warnings.warn(msg, PDBConstructionWarning)
 
         return element
 
     def _assign_atom_mass(self):
         """Return atom weight (PRIVATE)."""
-        # Needed for Bio/Struct/Geometry.py C.O.M. function
-        if self.element:
+        try:
             return IUPACData.atom_weights[self.element.capitalize()]
-        else:
-            return float('NaN')
+        except (AttributeError, KeyError):
+            return float("NaN")
 
     # Special methods
 
     def __repr__(self):
         """Print Atom object as <Atom atom_name>."""
-        return "<Atom %s>" % self.get_id()
+        return f"<Atom {self.get_id()}>"
 
     def __sub__(self, other):
         """Calculate distance between two atoms.
@@ -218,7 +260,7 @@ class Atom(object):
 
         """
         diff = self.coord - other.coord
-        return numpy.sqrt(numpy.dot(diff, diff))
+        return np.sqrt(np.dot(diff, diff))
 
     # set methods
 
@@ -269,6 +311,14 @@ class Atom(object):
         :type anisou_array: Numeric array (length 6)
         """
         self.anisou_array = anisou_array
+
+    def set_charge(self, pqr_charge):
+        """Set charge."""
+        self.pqr_charge = pqr_charge
+
+    def set_radius(self, radius):
+        """Set radius."""
+        self.radius = radius
 
     # Public methods
 
@@ -328,10 +378,14 @@ class Atom(object):
     def get_full_id(self):
         """Return the full id of the atom.
 
-        The full id of an atom is the tuple
-        (structure id, model id, chain id, residue id, atom name, altloc).
+        The full id of an atom is a tuple used to uniquely identify
+        the atom and consists of the following elements:
+        (structure id, model id, chain id, residue id, atom name, altloc)
         """
-        return self.parent.get_full_id() + ((self.name, self.altloc),)
+        try:
+            return self.parent.get_full_id() + ((self.name, self.altloc),)
+        except AttributeError:
+            return (None, None, None, None, self.name, self.altloc)
 
     def get_coord(self):
         """Return atomic coordinates."""
@@ -357,6 +411,14 @@ class Atom(object):
         """Return level."""
         return self.level
 
+    def get_charge(self):
+        """Return charge."""
+        return self.pqr_charge
+
+    def get_radius(self):
+        """Return radius."""
+        return self.radius
+
     def transform(self, rot, tran):
         """Apply rotation and translation to the atomic coordinates.
 
@@ -377,7 +439,7 @@ class Atom(object):
             atom.transform(rotation, translation)
 
         """
-        self.coord = numpy.dot(self.coord, rot) + tran
+        self.coord = np.dot(self.coord, rot) + tran
 
     def get_vector(self):
         """Return coordinates as Vector.
@@ -420,19 +482,44 @@ class DisorderedAtom(DisorderedEntityWrapper):
 
         """
         # TODO - make this a private attribute?
-        self.last_occupancy = -999999
+        self.last_occupancy = -sys.maxsize
         DisorderedEntityWrapper.__init__(self, id)
 
     # Special methods
     # Override parent class __iter__ method
     def __iter__(self):
         """Iterate through disordered atoms."""
-        for i in self.disordered_get_list():
-            yield i
+        yield from self.disordered_get_list()
 
     def __repr__(self):
         """Return disordered atom identifier."""
-        return "<Disordered Atom %s>" % self.get_id()
+        if self.child_dict:
+            return f"<DisorderedAtom {self.get_id()}>"
+        else:
+            return f"<Empty DisorderedAtom {self.get_id()}>"
+
+    # This is a separate method from Entity.center_of_mass since DisorderedAtoms
+    # will be unpacked by Residue.get_unpacked_list(). Here we allow for a very
+    # specific use case that is much simpler than the general implementation.
+    def center_of_mass(self):
+        """Return the center of mass of the DisorderedAtom as a numpy array.
+
+        Assumes all child atoms have the same mass (same element).
+        """
+        children = self.disordered_get_list()
+
+        if not children:
+            raise ValueError(f"{self} does not have children")
+
+        coords = np.asarray([a.coord for a in children], dtype=np.float32)
+        return np.average(coords, axis=0, weights=None)
+
+    def disordered_get_list(self):
+        """Return list of atom instances.
+
+        Sorts children by altloc (empty, then alphabetical).
+        """
+        return sorted(self.child_dict.values(), key=lambda a: ord(a.altloc))
 
     def disordered_add(self, atom):
         """Add a disordered atom."""
@@ -447,3 +534,33 @@ class DisorderedAtom(DisorderedEntityWrapper):
         if occupancy > self.last_occupancy:
             self.last_occupancy = occupancy
             self.disordered_select(altloc)
+
+    def disordered_remove(self, altloc):
+        """Remove a child atom altloc from the DisorderedAtom.
+
+        Arguments:
+         - altloc - name of the altloc to remove, as a string.
+
+        """
+        # Get child altloc
+        atom = self.child_dict[altloc]
+        is_selected = self.selected_child is atom
+
+        # Detach
+        del self.child_dict[altloc]
+        atom.detach_parent()
+
+        if is_selected and self.child_dict:  # pick next highest occupancy
+            child = sorted(self.child_dict.values(), key=lambda a: a.occupancy)[-1]
+            self.disordered_select(child.altloc)
+        elif not self.child_dict:
+            self.selected_child = None
+            self.last_occupancy = -sys.maxsize
+
+    def transform(self, rot, tran):
+        """Apply rotation and translation to all children.
+
+        See the documentation of Atom.transform for details.
+        """
+        for child in self:
+            child.coord = np.dot(child.coord, rot) + tran

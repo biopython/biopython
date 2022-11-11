@@ -14,7 +14,7 @@ The latest DES file can be found
 """
 
 
-class Record(object):
+class Record:
     """Holds information for one node in the SCOP hierarchy.
 
     Attributes:
@@ -30,11 +30,11 @@ class Record(object):
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.sunid = ''
-        self.nodetype = ''
-        self.sccs = ''
-        self.name = ''
-        self.description = ''
+        self.sunid = ""
+        self.nodetype = ""
+        self.sccs = ""
+        self.name = ""
+        self.description = ""
         if line:
             self._process(line)
 
@@ -55,14 +55,15 @@ class Record(object):
         line = line.rstrip()  # no trailing whitespace
         columns = line.split("\t")  # separate the tab-delineated cols
         if len(columns) != 5:
-            raise ValueError("I don't understand the format of %s" % line)
+            raise ValueError(f"I don't understand the format of {line}")
 
         sunid, self.nodetype, self.sccs, self.name, self.description = columns
-        if self.name == '-':
-            self.name = ''
+        if self.name == "-":
+            self.name = ""
         self.sunid = int(sunid)
 
     def __str__(self):
+        """Represent the SCOP description record as a tab-separated string."""
         s = []
         s.append(self.sunid)
         s.append(self.nodetype)
@@ -83,6 +84,6 @@ def parse(handle):
 
     """
     for line in handle:
-        if line.startswith('#'):
+        if line.startswith("#"):
             continue
         yield Record(line)

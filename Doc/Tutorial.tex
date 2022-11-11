@@ -47,7 +47,12 @@
 \usepackage{fullpage}
 \usepackage{hevea}
 \usepackage{graphicx}
-\usepackage{listings}
+
+% For syntax coloring of python, pycon, bash etc in pdflatex:
+\usepackage{minted}
+% Minted fails on hevea, https://github.com/gpoore/minted/issues/234
+% silently fall back on verbatim - ignore the language argument:
+%HEVEA \newenvironment{minted}[1]{\verbatim}{\endverbatim}
 
 % make everything have section numbers
 \setcounter{secnumdepth}{4}
@@ -81,7 +86,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 18 December 2018 (Biopython 1.74.dev0)}
+\date{Last Update -- \today\ (Biopython \bpversion)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -115,7 +120,6 @@ Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
 \include{Tutorial/chapter_phenotype}
 \include{Tutorial/chapter_cookbook}
 \include{Tutorial/chapter_testing}
-\include{Tutorial/chapter_advanced}
 \include{Tutorial/chapter_contributing}
 \include{Tutorial/chapter_appendix}
 
@@ -157,6 +161,8 @@ Douglas R. Cavener: ``Comparison of the consensus sequence flanking translationa
 Timothy L. Bailey and Charles Elkan: ``Fitting a mixture model by expectation maximization to discover motifs in biopolymers'', \textit{Proceedings of the Second International Conference on Intelligent Systems for Molecular Biology} 28--36. AAAI Press, Menlo Park, California (1994).
 \bibitem{chapman2000}
 Brad Chapman and Jeff Chang: ``Biopython: Python tools for computational biology''. \textit{ACM SIGBIO Newsletter} {\bf 20} (2): 15--19 (August 2000).
+\bibitem{dayhoff1978}
+M.O. Dayhoff, R.M. Schwartz, and B.C. Orcutt: ``A Model of Evolutionary Change in Proteins.'' \textit{Atlas of Protein Sequence and Structure}, Volume 5, Supplement 3, 1978: 345--352. The National Biomedical Research Foundation, 1979.
 \bibitem{dehoon2004}
 Michiel J. L. de Hoon, Seiya Imoto, John Nolan, Satoru Miyano: ``Open source clustering software''. \textit{Bioinformatics} {\bf 20} (9): 1453--1454 (2004).
 \url{https://doi.org/10.1093/bioinformatics/bth078}
@@ -181,8 +187,12 @@ Thomas Hamelryck: ``An amino acid has two sides; A new 2D measure provides a dif
 \url{https://doi.org/10.1002/prot.20379}.
 \bibitem{hartigan1975}
 John A. Hartiga. \textit{Clustering algorithms}. New York: Wiley (1975).
+\bibitem{henikoff1992}
+Steven Henikoff, Jorja G. Henikoff: ``Amino acid substitution matrices from protein blocks.'' \textit{Proceedings of the National Academy of Sciences USA} {\bf 89} (2): 10915--10919 (1992). \url{https://doi.org/10.1073/pnas.89.22.10915}.
 \bibitem{hihara2001}
-Yukako Hiharaa, Ayako Kameib, Minoru Kanehisac, Aaron Kapland and Masahiko Ikeuchib: ``DNA microarray analysis of cyanobacterial gene expression during acclimation to high light''. \textit{Plant Cell} {\bf 13} (4): 793--806 (2001). \url{https://doi.org/10.1105/tpc.13.4.793}.
+Yukako Hihara, Ayako Kamei, Minoru Kanehisa, Aaron Kaplan and Masahiko Ikeuchi: ``DNA microarray analysis of cyanobacterial gene expression during acclimation to high light''. \textit{Plant Cell} {\bf 13} (4): 793--806 (2001). \url{https://doi.org/10.1105/tpc.13.4.793}.
+\bibitem{altschul1990}
+Stephen F. Altschul, Warren Gish, Webb Miller, Eugene W. Myers, David J. Lipman: ``Basic Local Alignment Search Tool''.  \textit{Journal of Molecular Biology} {\bf 215} (3): 403--410 (1990). \url{https://doi.org/10.1016/S0022-2836%2805%2980360-2}.
 \bibitem{jain1988}
 Anil L. Jain, Richard C. Dubes: \textit{Algorithms for clustering data}. Englewood Cliffs, N.J.: Prentice Hall (1988).
 \bibitem{kachitvichyanukul1988}
@@ -195,6 +205,9 @@ Teuvo Kohonen: ``Self-organizing maps'', 2nd Edition. Berlin; New York: Springer
 Pierre L'Ecuyer: ``Efficient and Portable Combined Random Number Generators.''
 \textit{Communications of the ACM} {\bf 31} (6): 742--749,774 (1988).
 \url{https://doi.org/10.1145/62959.62969}
+\bibitem{li2009}
+Heng Li, Bob Handsaker, Alec Wysoker, Tim Fennell, Jue Ruan, Nils Homer, Gabor Marth, Goncalo Abecasis, Richard Durbin: ``The Sequence Alignment/Map format and SAMtools.'' \textit{Bioinformatics} {\bf 25} (16): 2078--2079 (2009).
+\url{https://doi.org/10.1093/bioinformatics/btp352}
 \bibitem{majumdar2005}
 Indraneel Majumdar, S. Sri Krishna, Nick V. Grishin: ``PALSSE: A program to delineate linear secondary structural elements from protein structures.'' \textit{BMC Bioinformatics}, {\bf 6}: 202 (2005).
 \url{https://doi.org/10.1186/1471-2105-6-202}.
@@ -204,6 +217,9 @@ V. Matys, E. Fricke, R. Geffers, E. G\"ossling, M. Haubrock, R. Hehl, K. Hornisc
 \bibitem{saldanha2004}
 Alok Saldanha: ``Java Treeview---extensible visualization of microarray data''. \textit{Bioinformatics} {\bf 20} (17): 3246--3248 (2004).
 \url{https://doi.org/10.1093/bioinformatics/bth349}
+\bibitem{schneider2005}
+Adrian Schneider, Gina M. Cannarozzi, and Gaston H. Gonnet: ``Empirical codon substitution matrix''. \textit{BMC Bioinformatics} {\bf 6}: 134 (2005).
+\url{https://doi.org/10.1186/1471-2105-6-134}
 \bibitem{sibson1973}
 Robin Sibson: ``SLINK: An optimally efficient algorithm for the single-link cluster method''. \textit{The Computer Journal} {\bf 16} (1): 30--34 (1973).
 \url{https://doi.org/10.1093/comjnl/16.1.30}

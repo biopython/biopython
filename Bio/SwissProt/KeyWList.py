@@ -19,8 +19,6 @@ Functions:
 
 """
 
-from __future__ import print_function
-
 
 class Record(dict):
     """Store information of one keyword or category from the keywords list.
@@ -53,6 +51,11 @@ class Record(dict):
 
 
 def parse(handle):
+    """Parse the keyword list from file handle.
+
+    Returns a generator object which yields keyword entries as
+    Bio.SwissProt.KeyWList.Record() object.
+    """
     record = Record()
     # First, skip the header - look for start of a record
     for line in handle:
@@ -82,7 +85,7 @@ def parse(handle):
             elif key in ("DE", "SY", "GO", "HI", "WW"):
                 record[key].append(value)
             else:
-                print("Ignoring: %s" % line.strip())
+                print(f"Ignoring: {line.strip()}")
     # Read the footer and throw it away
     for line in handle:
         pass

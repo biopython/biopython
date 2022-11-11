@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+
+<!-- This is a mock file mimicking a qblast response for our mock tests -->
+
+<BlastOutput>
+ <BlastOutput_program>blastn</BlastOutput_program>
+ <BlastOutput_query-ID>some_id</BlastOutput_query-ID>
+ <BlastOutput_query-def>some sequence</BlastOutput_query-def>
+<BlastOutput_param>
+    <Parameters>
+      <Parameters_expect>0.0000001</Parameters_expect>
+    </Parameters>
+  </BlastOutput_param>
+<BlastOutput_iterations>
+<Iteration>
+<Iteration_hits>
+ <Hit>
+  <Hit_num>1</Hit_num>
+  <Hit_id>gi|0000000|gb|XM_635681.1|</Hit_id>
+  <Hit_def>Some text</Hit_def>
+  <Hit_accession>XM_635681</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>2</Hit_num>
+  <Hit_id>gi|0000001|gb|XM_008496783.1|</Hit_id>
+  <Hit_def>Some other text</Hit_def>
+  <Hit_accession>XM_008496783</Hit_accession>
+</Hit>
+</Iteration_hits>
+</Iteration>
+</BlastOutput_iterations>
+</BlastOutput>

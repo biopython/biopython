@@ -1,9 +1,9 @@
 # Copyright 2014-2016 by Marco Galardini.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
 #
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 r"""phenotype data input/output.
 
 Input
@@ -12,12 +12,10 @@ The main function is Bio.phenotype.parse(...) which takes an input file,
 and format string.  This returns an iterator giving PlateRecord objects:
 
     >>> from Bio import phenotype
-    >>> for record in phenotype.parse("plates.csv", "pm-csv"):
+    >>> for record in phenotype.parse("phenotype/Plates.csv", "pm-csv"):
     ...     print("%s %i" % (record.id, len(record)))
     ...
     PM01 96
-    PM01 96
-    PM09 96
     PM09 96
 
 Note that the parse() function will invoke the relevant parser for the
@@ -31,7 +29,7 @@ the following 'helper' function which will return a single PlateRecord, or
 raise an exception if there are no records or more than one record:
 
     >>> from Bio import phenotype
-    >>> record = phenotype.read("plate.json", "pm-json")
+    >>> record = phenotype.read("phenotype/Plate.json", "pm-json")
     >>> print("%s %i" % (record.id, len(record)))
     PM01 96
 
@@ -40,11 +38,10 @@ consider multiple records an error).  For example, when dealing with PM
 JSON files saved by the opm library.
 
 However, if you just want the first record from a file containing multiple
-record, use the next() function on the iterator (or under Python 2, the
-iterator's next() method):
+record, use the next() function on the iterator:
 
     >>> from Bio import phenotype
-    >>> record = next(phenotype.parse("plates.csv", "pm-csv"))
+    >>> record = next(phenotype.parse("phenotype/Plates.csv", "pm-csv"))
     >>> print("%s %i" % (record.id, len(record)))
     PM01 96
 
@@ -57,18 +54,18 @@ Output
 Use the function Bio.phenotype.write(...), which takes a complete set of
 PlateRecord objects (either as a list, or an iterator), an output file handle
 (or in recent versions of Biopython an output filename as a string) and of
-course the file format:
+course the file format::
 
-    >>> from Bio import phenotype
-    >>> records = ...
-    >>> phenotype.write(records, "example.json", "pm-json")
+        from Bio import phenotype
+        records = ...
+        phenotype.write(records, "example.json", "pm-json")
 
 Or, using a handle::
 
-    >>> from Bio import phenotype
-    >>> records = ...
-    >>> with open("example.json", "w") as handle:
-    >>>    phenotype.write(records, handle, "pm-json")
+        from Bio import phenotype
+        records = ...
+        with open("example.json", "w") as handle:
+           phenotype.write(records, handle, "pm-json")
 
 You are expected to call this function once (with all your records) and if
 using a handle, make sure you close it to flush the data to the hard disk.
@@ -86,28 +83,18 @@ Note that while Bio.phenotype can read the above file formats, it can only
 write in JSON format.
 """
 
-from __future__ import print_function
-from Bio._py3k import basestring
-
-from Bio import BiopythonExperimentalWarning
 from Bio.File import as_handle
 from . import phen_micro
 
-import warnings
-
-
-warnings.warn('Bio.phenotype is an experimental submodule which may undergo '
-              'significant changes prior to its future official release.',
-              BiopythonExperimentalWarning)
 
 # Convention for format names is "mainname-format" in lower case.
 
-_FormatToIterator = {"pm-csv": phen_micro.CsvIterator,
-                     "pm-json": phen_micro.JsonIterator,
-                     }
+_FormatToIterator = {
+    "pm-csv": phen_micro.CsvIterator,
+    "pm-json": phen_micro.JsonIterator,
+}
 
-_FormatToWriter = {"pm-json": phen_micro.JsonWriter,
-                   }
+_FormatToWriter = {"pm-json": phen_micro.JsonWriter}
 
 
 def write(plates, handle, format):
@@ -123,28 +110,29 @@ def write(plates, handle, format):
     Returns the number of records written (as an integer).
     """
     # Try and give helpful error messages:
-    if not isinstance(format, basestring):
+    if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
+        raise ValueError(f"Format string '{format}' should be lower case")
 
     if isinstance(plates, phen_micro.PlateRecord):
         plates = [plates]
 
-    with as_handle(handle, 'w') as fp:
+    with as_handle(handle, "w") as fp:
         # Map the file format to a writer class
         if format in _FormatToWriter:
             writer_class = _FormatToWriter[format]
             count = writer_class(plates).write(fp)
         else:
-            raise ValueError("Unknown format '%s'" % format)
+            raise ValueError(f"Unknown format '{format}'")
 
         if not isinstance(count, int):
-            raise TypeError("Internal error - the underlying %s "
-                            "writer should have returned the record count, "
-                            "not %s" % (format, repr(count)))
+            raise TypeError(
+                "Internal error - the underlying %s "
+                "writer should have returned the record count, not %r" % (format, count)
+            )
 
     return count
 
@@ -159,35 +147,31 @@ def parse(handle, format):
     Typical usage, opening a file to read in, and looping over the record(s):
 
     >>> from Bio import phenotype
-    >>> filename = "plates.csv"
+    >>> filename = "phenotype/Plates.csv"
     >>> for record in phenotype.parse(filename, "pm-csv"):
     ...    print("ID %s" % record.id)
     ...    print("Number of wells %i" % len(record))
     ...
     ID PM01
     Number of wells 96
+    ID PM09
+    Number of wells 96
 
     Use the Bio.phenotype.read(...) function when you expect a single record
     only.
     """
     # Try and give helpful error messages:
-    if not isinstance(format, basestring):
+    if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
+        raise ValueError(f"Format string '{format}' should be lower case")
+    if format not in _FormatToIterator:
+        raise ValueError(f"Unknown format '{format}'")
 
-    with as_handle(handle, 'rU') as fp:
-        # Map the file format to a sequence iterator:
-        if format in _FormatToIterator:
-            iterator_generator = _FormatToIterator[format]
-            i = iterator_generator(fp)
-        else:
-            raise ValueError("Unknown format '%s'" % format)
-        # This imposes some overhead... wait until we drop Python 2.4 to fix it
-        for r in i:
-            yield r
+    with as_handle(handle) as fp:
+        yield from _FormatToIterator[format](fp)
 
 
 def read(handle, format):
@@ -201,29 +185,29 @@ def read(handle, format):
     exactly one record.  For example, reading a PM JSON file:
 
     >>> from Bio import phenotype
-    >>> record = phenotype.read("plate.json", "pm-json")
+    >>> record = phenotype.read("phenotype/Plate.json", "pm-json")
     >>> print("ID %s" % record.id)
-    PM09
+    ID PM01
     >>> print("Number of wells %i" % len(record))
     Number of wells 96
 
     If the handle contains no records, or more than one record,
-    an exception is raised.  For example:
+    an exception is raised.  For example::
 
-    >>> from Bio import phenotype
-    >>> record = phenotype.read("plates.csv", "pm-csv")
-    Traceback (most recent call last):
+        from Bio import phenotype
+        record = phenotype.read("plates.csv", "pm-csv")
+        Traceback (most recent call last):
         ...
-    ValueError: More than one record found in handle
+        ValueError: More than one record found in handle
 
     If however you want the first record from a file containing
     multiple records this function would raise an exception (as
     shown in the example above).  Instead use:
 
     >>> from Bio import phenotype
-    >>> record = next(phenotype.parse("plates.csv", "pm-csv"))
+    >>> record = next(phenotype.parse("phenotype/Plates.csv", "pm-csv"))
     >>> print("First record's ID %s" % record.id)
-    First record's ID PM09
+    First record's ID PM01
 
     Use the Bio.phenotype.parse(handle, format) function if you want
     to read multiple records from the handle.

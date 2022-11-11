@@ -1,16 +1,19 @@
-#!/usr/bin/env python
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Run BioSQL tests using MySQL"""
+"""Run BioSQL tests using MySQL."""
 
 import unittest
 
-from common_BioSQL import *  # noqa
+# Really do want "import *" to get all the test clases:
+from common_BioSQL import *  # noqa: F403
 
-DBDRIVER = 'MySQLdb'
-DBTYPE = 'mysql'
+# Import these explicitly to avoid flake8 F405 below:
+from common_BioSQL import load_biosql_ini, check_config
+
+DBDRIVER = "MySQLdb"
+DBTYPE = "mysql"
 
 DBHOST, DBUSER, DBPASSWD, TESTDB = load_biosql_ini(DBTYPE)
 

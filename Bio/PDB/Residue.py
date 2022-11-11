@@ -1,13 +1,12 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Residue class, used by Structure objects."""
 
-# My Stuff
-import warnings
-from Bio import BiopythonDeprecationWarning
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
 
@@ -28,6 +27,7 @@ class Residue(Entity):
         self.disordered = 0
         self.resname = resname
         self.segid = segid
+        self.internal_coord = None
         Entity.__init__(self, id)
 
     def __repr__(self):
@@ -46,21 +46,9 @@ class Residue(Entity):
         atom_id = atom.get_id()
         if self.has_id(atom_id):
             raise PDBConstructionException(
-                "Atom %s defined twice in residue %s" % (atom_id, self))
+                f"Atom {atom_id} defined twice in residue {self}"
+            )
         Entity.add(self, atom)
-
-    def sort(self):
-        """Sort child atoms.
-
-        Atoms N, CA, C, O always come first, thereafter alphabetically
-        by name, with any alternative location specifier for disordered
-        atoms (altloc) as a tie-breaker.
-        """
-        warnings.warn("The custom sort() method will be removed in the "
-                      "future in favour of rich comparison methods. Use the "
-                      "built-in sorted() function instead.",
-                      BiopythonDeprecationWarning)
-        self.child_list.sort()
 
     def flag_disordered(self):
         """Set the disordered flag."""
@@ -80,7 +68,7 @@ class Residue(Entity):
         undisordered_atom_list = []
         for atom in atom_list:
             if atom.is_disordered():
-                undisordered_atom_list = (undisordered_atom_list + atom.disordered_get_list())
+                undisordered_atom_list += atom.disordered_get_list()
             else:
                 undisordered_atom_list.append(atom)
         return undisordered_atom_list
@@ -91,16 +79,7 @@ class Residue(Entity):
 
     def get_atoms(self):
         """Return atoms."""
-        for a in self:
-            yield a
-
-    def get_atom(self):
-        """Return atom."""
-        warnings.warn("`get_atom` has been deprecated and we intend to remove it"
-                      " in a future release of Biopython. Please use `get_atoms` instead.",
-                      BiopythonDeprecationWarning)
-        for a in self:
-            yield a
+        yield from self
 
 
 class DisorderedResidue(DisorderedEntityWrapper):
@@ -116,10 +95,13 @@ class DisorderedResidue(DisorderedEntityWrapper):
 
     def __repr__(self):
         """Return disordered residue full identifier."""
-        resname = self.get_resname()
-        hetflag, resseq, icode = self.get_id()
-        full_id = (resname, hetflag, resseq, icode)
-        return "<DisorderedResidue %s het=%s resseq=%i icode=%s>" % full_id
+        if self.child_dict:
+            resname = self.get_resname()
+            hetflag, resseq, icode = self.get_id()
+            full_id = (resname, hetflag, resseq, icode)
+            return "<DisorderedResidue %s het=%s resseq=%i icode=%s>" % full_id
+        else:
+            return "<Empty DisorderedResidue>"
 
     def add(self, atom):
         """Add atom to residue."""
@@ -133,7 +115,8 @@ class DisorderedResidue(DisorderedEntityWrapper):
             residue.add(atom)
             raise PDBConstructionException(
                 "Blank altlocs in duplicate residue %s (%s, %i, %s)"
-                % (resname, het, resseq, icode))
+                % (resname, het, resseq, icode)
+            )
         residue.add(atom)
 
     def sort(self):
@@ -152,6 +135,27 @@ class DisorderedResidue(DisorderedEntityWrapper):
         # add chain parent to residue
         chain = self.get_parent()
         residue.set_parent(chain)
-        assert(not self.disordered_has_id(resname))
+        assert not self.disordered_has_id(resname)
         self[resname] = residue
         self.disordered_select(resname)
+
+    def disordered_remove(self, resname):
+        """Remove a child residue from the DisorderedResidue.
+
+        Arguments:
+         - resname - name of the child residue to remove, as a string.
+
+        """
+        # Get child residue
+        residue = self.child_dict[resname]
+        is_selected = self.selected_child is residue
+
+        # Detach
+        del self.child_dict[resname]
+        residue.detach_parent()
+
+        if is_selected and self.child_dict:  # pick another selected_child
+            child = next(iter(self.child_dict))
+            self.disordered_select(child)
+        elif not self.child_dict:  # no more children
+            self.selected_child = None

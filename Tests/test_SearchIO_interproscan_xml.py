@@ -14,19 +14,18 @@ from Bio.SearchIO import parse
 
 
 # test case files are in the Blast directory
-TEST_DIR = 'InterProScan'
-FMT = 'interproscan-xml'
+TEST_DIR = "InterProScan"
+FMT = "interproscan-xml"
 
 
 def get_file(filename):
-    """Returns the path of a test file."""
+    """Return the path of a test file."""
     return os.path.join(TEST_DIR, filename)
 
 
 class InterproscanXmlCases(unittest.TestCase):
-
     def test_xml_001(self):
-        xml_file = get_file('test_001.xml')
+        xml_file = get_file("test_001.xml")
         qresults = parse(xml_file, FMT)
         counter = 0
 
@@ -34,20 +33,26 @@ class InterproscanXmlCases(unittest.TestCase):
         qresult = next(qresults)
         counter += 1
 
-        self.assertEqual('5.26-65.0', qresult.version)
+        self.assertEqual("5.26-65.0", qresult.version)
 
         # test parsed values of qresult
-        self.assertEqual('AT5G23090.4', qresult.id)
-        self.assertEqual('pacid=19665592 transcript=AT5G23090.4 locus=AT5G23090 ID=AT5G23090.4.TAIR10 annot-version=TAIR10',
-                         qresult.description)
+        self.assertEqual("AT5G23090.4", qresult.id)
+        self.assertEqual(
+            "pacid=19665592 transcript=AT5G23090.4 locus=AT5G23090 "
+            "ID=AT5G23090.4.TAIR10 annot-version=TAIR10",
+            qresult.description,
+        )
         self.assertEqual(4, len(qresult))
 
         hit = qresult[0]
-        self.assertEqual('PF00808', hit.id)
-        self.assertEqual('Histone-like transcription factor (CBF/NF-Y) and archaeal histone', hit.description)
-        self.assertEqual('PFAM', hit.attributes['Target'])
-        self.assertEqual('31.0', hit.attributes['Target version'])
-        self.assertEqual('hmmer3', hit.attributes['Hit type'])
+        self.assertEqual("PF00808", hit.id)
+        self.assertEqual(
+            "Histone-like transcription factor (CBF/NF-Y) and archaeal histone",
+            hit.description,
+        )
+        self.assertEqual("PFAM", hit.attributes["Target"])
+        self.assertEqual("31.0", hit.attributes["Target version"])
+        self.assertEqual("hmmer3", hit.attributes["Hit type"])
         self.assertEqual(2, len(hit))
 
         hsp = hit.hsps[0]
@@ -58,14 +63,19 @@ class InterproscanXmlCases(unittest.TestCase):
         self.assertEqual(0, hsp.hit_start)
         self.assertEqual(65, hsp.hit_end)
         self.assertEqual(66, hsp.aln_span)
-        self.assertEqual('MDPMDIVGKSKEDASLPKATMTKIIKEMLPPDVRVARDAQDLLIECCVEFINLVSSESNDVCNKEDKRTIAPEHVLKALQVLGFGEYIEEVYAAYEQHKYETMDTQRSVKWNPGAQMTEEEAAAEQQRMFAEARARMNGGVSVPQPEHPETDQRSPQS', str(hsp.query.seq))
+        self.assertEqual(
+            "MDPMDIVGKSKEDASLPKATMTKIIKEMLPPDVRVARDAQDLLIECCVEFINLVSSESNDVCNKEDKRTIAPEH"
+            "VLKALQVLGFGEYIEEVYAAYEQHKYETMDTQRSVKWNPGAQMTEEEAAAEQQRMFAEARARMNGGVSVPQPEH"
+            "PETDQRSPQS",
+            hsp.query.seq,
+        )
 
         # parse last hit
         hit = qresult[-1]
-        self.assertEqual('SSF47113', hit.id)
+        self.assertEqual("SSF47113", hit.id)
         self.assertEqual(1, len(hit))
-        self.assertEqual('IPR:IPR009072', hit.dbxrefs[0])
-        self.assertEqual('GO:0046982', hit.dbxrefs[1])
+        self.assertEqual("IPR:IPR009072", hit.dbxrefs[0])
+        self.assertEqual("GO:0046982", hit.dbxrefs[1])
 
         hsp = hit.hsps[0]
         self.assertEqual(11, hsp.query_start)

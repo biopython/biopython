@@ -79,28 +79,9 @@ We hope this gives you plenty of reasons to download and start using Biopython!
 All of the installation information for Biopython was separated from
 this document to make it easier to keep updated.
 
-The short version is go to our downloads page (\url{http://biopython.org/wiki/Download}),
-download and install the listed dependencies, then download and install Biopython.
-Biopython runs on many platforms (Windows, Mac, and on the various flavors of Linux and Unix).
-For Windows we provide pre-compiled click-and-run installers, while for Unix and other
-operating systems you must install from source as described in the included README file.
-This is usually as simple as the standard commands:
-
-\begin{verbatim}
-python setup.py build
-python setup.py test
-sudo python setup.py install
-\end{verbatim}
-
-\noindent (You can in fact skip the build and test, and go straight to the install --
-but its better to make sure everything seems to be working.)
-
-The longer version of our installation instructions covers
-installation of Python, Biopython dependencies and Biopython itself.
-It is available in PDF
-(\url{http://biopython.org/DIST/docs/install/Installation.pdf})
-and HTML formats
-(\url{http://biopython.org/DIST/docs/install/Installation.html}).
+The short version is use \verb|pip install biopython|, see the
+\href{https://github.com/biopython/biopython/blob/master/README.rst}{main README}
+file for other options.
 
 \section{Frequently Asked Questions (FAQ)}
 
@@ -159,47 +140,15 @@ and HTML formats
   \href{https://github.com/biopython/biopython/blob/master/NEWS.rst}{latest NEWS file on GitHub}.
 
   \item \emph{What is going wrong with my print commands?} \\
-  This tutorial now uses the Python 3 style print \emph{function}.
-  As of Biopython 1.62, we support both Python 2 and Python 3.
-  The most obvious language difference is the print \emph{statement}
-  in Python 2 became a print \emph{function} in Python 3.
-
-  For example, this will only work under Python 2:
-
-\begin{verbatim}
->>> print "Hello World!"
-Hello World!
-\end{verbatim}
-
-  If you try that on Python 3 you'll get a \verb|SyntaxError|.
-  Under Python 3 you must write:
-
-%doctest
-\begin{verbatim}
->>> print("Hello World!")
-Hello World!
-\end{verbatim}
-
-  Surprisingly that will also work on Python 2 -- but only for simple
-  examples printing one thing. In general you need to add this magic
-  line to the start of your Python scripts to use the print function
-  under Python 2.6 and 2.7:
-
-\begin{verbatim}
-from __future__ import print_function
-\end{verbatim}
-
-  If you forget to add this magic import, under Python 2 you'll see
-  extra brackets produced by trying to use the print function when
-  Python 2 is interpreting it as a print statement and a tuple.
+  As of Biopython 1.77, we only support Python 3, so this tutorial
+  uses the Python 3 style print \emph{function}.
 
   \item \emph{How do I find out what version of Biopython I have installed?} \\
   Use this:
-  \begin{verbatim}
-  >>> import Bio
-  >>> print(Bio.__version__)
-  ...
-  \end{verbatim}
+\begin{minted}{pycon}
+>>> import Bio
+>>> print(Bio.__version__)
+\end{minted}
   If the ``\verb|import Bio|'' line fails, Biopython is not installed.
   Note that those are double underscores before and after version.
   If the second line fails, your version is \emph{very} out of date.
@@ -211,7 +160,7 @@ from __future__ import print_function
 
   If the version string ends with ``\verb|.dev<number>|'' like
   ``\verb|1.68.dev0|'', again you don't have an official release,
-  but instead a snapshot of the in developement code \emph{before}
+  but instead a snapshot of the in development code \emph{before}
   that version was released.
 
   \item \emph{Where is the latest version of this document?}\\
@@ -226,8 +175,7 @@ from __future__ import print_function
   \item \emph{What is wrong with my sequence comparisons?} \\
   There was a major change in Biopython 1.65 making the \verb|Seq| and
   \verb|MutableSeq| classes (and subclasses) use simple string-based
-  comparison (ignoring the alphabet other than if giving a warning),
-  which you can do explicitly with \verb|str(seq1) == str(seq2)|.
+  comparison which you can do explicitly with \verb|str(seq1) == str(seq2)|.
 
   Older versions of Biopython would use instance-based comparison
   for \verb|Seq| objects which you can do explicitly with
@@ -235,13 +183,6 @@ from __future__ import print_function
 
   If you still need to support old versions of Biopython, use these
   explicit forms to avoid problems. See Section~\ref{sec:seq-comparison}.
-
-  \item \emph{Why is the} \verb|Seq| \emph{object missing the upper \& lower methods described in this Tutorial?} \\
-  You need Biopython 1.53 or later.  Alternatively, use \verb|str(my_seq).upper()| to get an upper case string.
-  If you need a Seq object, try \verb|Seq(str(my_seq).upper())| but be careful about blindly re-using the same alphabet.
-
-  \item \emph{Why doesn't the} \verb|Seq| \emph{object translation method support the} \verb|cds| \emph{option described in this Tutorial?} \\
-  You need Biopython 1.51 or later.
 
   \item \emph{What file formats do} \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{read and write?} \\
   Check the built in docstrings (\texttt{from Bio import SeqIO}, then \texttt{help(SeqIO)}), or see \url{http://biopython.org/wiki/SeqIO} and \url{http://biopython.org/wiki/AlignIO} on the wiki for the latest listing.
@@ -261,9 +202,6 @@ from __future__ import print_function
   If you aren't using the latest version of Biopython, you could try upgrading.
   However, we (and the NCBI) recommend you use the XML output instead, which is designed to be read by a computer program.
 
-  \item \emph{Why doesn't} \verb|Bio.Entrez.parse()| \emph{work? The module imports fine but there is no parse function!} \\
-  You need Biopython 1.52 or later.
-
   \item \emph{Why has my script using} \verb|Bio.Entrez.efetch()| \emph{stopped working?} \\
   This could be due to NCBI changes in February 2012 introducing EFetch 2.0.
   First, they changed the default return modes - you probably want to add \verb|retmode="text"| to
@@ -275,24 +213,8 @@ from __future__ import print_function
   You need to specify the same options -- the NCBI often adjust the default settings on the website,
   and they do not match the QBLAST defaults anymore. Check things like the gap penalties and expectation threshold.
 
-  \item \emph{Why doesn't} \verb|Bio.Blast.NCBIXML.read()| \emph{work? The module imports but there is no read function!} \\
-  You need Biopython 1.50 or later.  Or, use \texttt{next(Bio.Blast.NCBIXML.parse(...))} instead.
-
-  \item \emph{Why doesn't my} \verb|SeqRecord| \emph{object have a} \verb|letter_annotations| \emph{attribute?} \\
-  Per-letter-annotation support was added in Biopython 1.50.
-
- \item \emph{Why can't I slice my} \verb|SeqRecord| \emph{to get a sub-record?} \\
-  You need Biopython 1.50 or later.
-
- \item \emph{Why can't I add} \verb|SeqRecord| \emph{objects together?} \\
+  \item \emph{Why can't I add} \verb|SeqRecord| \emph{objects together?} \\
   You need Biopython 1.53 or later.
-
-  \item \emph{Why doesn't} \verb|Bio.SeqIO.convert()| \emph{or} \verb|Bio.AlignIO.convert()| \emph{work? The modules import fine but there is no convert function!} \\
-  You need Biopython 1.52 or later. Alternatively, combine the \verb|parse| and \verb|write|
-  functions as described in this tutorial (see Sections~\ref{sec:SeqIO-conversion} and~\ref{sec:converting-alignments}).
-
-  \item \emph{Why doesn't} \verb|Bio.SeqIO.index()| \emph{work? The module imports fine but there is no index function!} \\
-  You need Biopython 1.52 or later.
 
   \item \emph{Why doesn't} \verb|Bio.SeqIO.index_db()| \emph{work? The module imports fine but there is no \texttt{index\_db} function!} \\
   You need Biopython 1.57 or later (and a Python with SQLite3 support).
@@ -301,13 +223,10 @@ from __future__ import print_function
   You need Biopython 1.54 or later. Alternatively, the older \verb|Bio.Align.Generic.Alignment| class supports some of its functionality, but using this is now discouraged.
 
   \item \emph{Why can't I run command line tools directly from the application wrappers?} \\
-  You need Biopython 1.55 or later. Alternatively, use the Python \verb|subprocess| module directly.
+  You need Biopython 1.55 or later, but these were deprecated in Biopython 1.78. Consider using the Python \verb|subprocess| module directly.
 
   \item \emph{I looked in a directory for code, but I couldn't find the code that does something. Where's it hidden?} \\
   One thing to know is that we put code in \verb|__init__.py| files. If you are not used to looking for code in this file this can be confusing. The reason we do this is to make the imports easier for users. For instance, instead of having to do a ``repetitive'' import like \verb|from Bio.GenBank import GenBank|, you can just use \verb|from Bio import GenBank|.
-
- \item \emph{Why does the code from CVS seem out of date?} \\
-  In late September 2009, just after the release of Biopython 1.52, we switched from using CVS to git, a distributed version control system. The old CVS server will remain available as a static and read only backup, but if you want to grab the latest code, you'll need to use git instead. See our website for more details.
 
   \item \emph{Why doesn't} \verb|Bio.Fasta| \emph{work?} \\
   We deprecated the \verb|Bio.Fasta| module in Biopython 1.51 (August 2009) and removed it in Biopython 1.55 (August 2010). There is a brief example showing how to convert old code to use \verb|Bio.SeqIO| instead in the \href{https://github.com/biopython/biopython/blob/master/DEPRECATED.rst}{DEPRECATED.rst} file.

@@ -15,14 +15,11 @@ Bio.Wise.psw is for protein Smith-Waterman alignments
 Bio.Wise.dnal is for Smith-Waterman DNA alignments
 """
 
-from __future__ import print_function
 
 import re
 
 # Importing with leading underscore as not intended to be exposed
-from Bio._py3k import getoutput as _getoutput
-from Bio._py3k import zip
-from Bio._py3k import map
+from subprocess import getoutput as _getoutput
 
 from Bio import Wise
 
@@ -56,9 +53,10 @@ _re_alb_line2coords = re.compile(r"^\[([^:]+):[^\[]+\[([^:]+):")
 
 
 def _alb_line2coords(line):
-    return tuple([int(coord) + 1  # one-based -> zero-based
-                  for coord
-                  in _re_alb_line2coords.match(line).groups()])
+    return tuple(
+        int(coord) + 1  # one-based -> zero-based
+        for coord in _re_alb_line2coords.match(line).groups()
+    )
 
 
 def _get_coords(filename):
@@ -77,27 +75,31 @@ def _get_coords(filename):
     if end_line is None:  # sequence is too short
         return [(0, 0), (0, 0)]
 
-    return list(zip(*map(_alb_line2coords, [start_line, end_line])))  # returns [(start0, end0), (start1, end1)]
+    return list(
+        zip(*map(_alb_line2coords, [start_line, end_line]))
+    )  # returns [(start0, end0), (start1, end1)]
 
 
-class Statistics(object):
+class Statistics:
     """Calculate statistics from an ALB report."""
 
     def __init__(self, filename, match, mismatch, gap, extension):
         """Initialize the class."""
-        self.matches = _fgrep_count('"SEQUENCE" %s' % match, filename)
-        self.mismatches = _fgrep_count('"SEQUENCE" %s' % mismatch, filename)
-        self.gaps = _fgrep_count('"INSERT" %s' % gap, filename)
+        self.matches = _fgrep_count(f'"SEQUENCE" {match}', filename)
+        self.mismatches = _fgrep_count(f'"SEQUENCE" {mismatch}', filename)
+        self.gaps = _fgrep_count(f'"INSERT" {gap}', filename)
 
         if gap == extension:
             self.extensions = 0
         else:
-            self.extensions = _fgrep_count('"INSERT" %s' % extension, filename)
+            self.extensions = _fgrep_count(f'"INSERT" {extension}', filename)
 
-        self.score = (match * self.matches +
-                      mismatch * self.mismatches +
-                      gap * self.gaps +
-                      extension * self.extensions)
+        self.score = (
+            match * self.matches
+            + mismatch * self.mismatches
+            + gap * self.gaps
+            + extension * self.extensions
+        )
 
         if self.matches or self.mismatches or self.gaps or self.extensions:
             self.coords = _get_coords(filename)
@@ -105,41 +107,65 @@ class Statistics(object):
             self.coords = [(0, 0), (0, 0)]
 
     def identity_fraction(self):
+        """Calculate the fraction of matches."""
         return self.matches / (self.matches + self.mismatches)
 
     header = "identity_fraction\tmatches\tmismatches\tgaps\textensions"
 
     def __str__(self):
-        return "\t".join(str(x) for x in (self.identity_fraction(),
-                                          self.matches, self.mismatches,
-                                          self.gaps, self.extensions))
+        """Statistics as a tab separated string."""
+        return "\t".join(
+            str(x)
+            for x in (
+                self.identity_fraction(),
+                self.matches,
+                self.mismatches,
+                self.gaps,
+                self.extensions,
+            )
+        )
 
 
-def align(pair, match=_SCORE_MATCH, mismatch=_SCORE_MISMATCH, gap=_SCORE_GAP_START, extension=_SCORE_GAP_EXTENSION, **keywds):
+def align(
+    pair,
+    match=_SCORE_MATCH,
+    mismatch=_SCORE_MISMATCH,
+    gap=_SCORE_GAP_START,
+    extension=_SCORE_GAP_EXTENSION,
+    **keywds,
+):
+    """Align a pair of DNA files using dnal and calculate the statistics of the alignment."""
     cmdline = _build_dnal_cmdline(match, mismatch, gap, extension)
     temp_file = Wise.align(cmdline, pair, **keywds)
     try:
         return Statistics(temp_file.name, match, mismatch, gap, extension)
     except AttributeError:
         try:
-            keywds['dry_run']
+            keywds["dry_run"]
             return None
         except KeyError:
             raise
 
 
 def main():
+    """Command line implementation."""
     import sys
+
     stats = align(sys.argv[1:3])
-    print("\n".join("%s: %s" % (attr, getattr(stats, attr))
-                    for attr in ("matches", "mismatches", "gaps", "extensions")))
-    print("identity_fraction: %s" % stats.identity_fraction())
-    print("coords: %s" % stats.coords)
+    print(
+        "\n".join(
+            f"{attr}: {getattr(stats, attr)}"
+            for attr in ("matches", "mismatches", "gaps", "extensions")
+        )
+    )
+    print(f"identity_fraction: {stats.identity_fraction()}")
+    print(f"coords: {stats.coords}")
 
 
 def _test(*args, **keywds):
     import doctest
     import sys
+
     doctest.testmod(sys.modules[__name__], *args, **keywds)
 
 

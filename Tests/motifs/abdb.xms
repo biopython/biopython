@@ -1,0 +1,102 @@
+<motif>
+  <name>Abd-B</name>
+    <weightmatrix alphabet="DNA" columns="14">
+      <column pos="0">
+        <weight symbol="thymine">0.125</weight>
+        <weight symbol="guanine">0.333333333333333</weight>
+        <weight symbol="cytosine">0.208333333333333</weight>
+        <weight symbol="adenine">0.333333333333333</weight>
+      </column>
+      <column pos="1">
+        <weight symbol="thymine">0.103448275862069</weight>
+        <weight symbol="guanine">0.379310344827586</weight>
+        <weight symbol="cytosine">0.413793103448276</weight>
+        <weight symbol="adenine">0.103448275862069</weight>
+      </column>
+      <column pos="2">
+        <weight symbol="thymine">0.205882352941176</weight>
+        <weight symbol="guanine">0.264705882352941</weight>
+        <weight symbol="cytosine">0.264705882352941</weight>
+        <weight symbol="adenine">0.264705882352941</weight>
+      </column>
+      <column pos="3">
+        <weight symbol="thymine">0.777777777777778</weight>
+        <weight symbol="guanine">0.194444444444444</weight>
+        <weight symbol="cytosine">0.0277777777777778</weight>
+        <weight symbol="adenine">0</weight>
+      </column>
+      <column pos="4">
+        <weight symbol="thymine">0.743589743589744</weight>
+        <weight symbol="guanine">0.102564102564103</weight>
+        <weight symbol="cytosine">0.0512820512820513</weight>
+        <weight symbol="adenine">0.102564102564103</weight>
+      </column>
+      <column pos="5">
+        <weight symbol="thymine">0.533333333333333</weight>
+        <weight symbol="guanine">0.177777777777778</weight>
+        <weight symbol="cytosine">0.0444444444444444</weight>
+        <weight symbol="adenine">0.244444444444444</weight>
+      </column>
+      <column pos="6">
+        <weight symbol="thymine">0.155555555555556</weight>
+        <weight symbol="guanine">0</weight>
+        <weight symbol="cytosine">0.0444444444444444</weight>
+        <weight symbol="adenine">0.8</weight>
+      </column>
+      <column pos="7">
+        <weight symbol="thymine">0.688888888888889</weight>
+        <weight symbol="guanine">0.0222222222222222</weight>
+        <weight symbol="cytosine">0.155555555555556</weight>
+        <weight symbol="adenine">0.133333333333333</weight>
+      </column>
+      <column pos="8">
+        <weight symbol="thymine">0.209302325581395</weight>
+        <weight symbol="guanine">0.697674418604651</weight>
+        <weight symbol="cytosine">0.0465116279069767</weight>
+        <weight symbol="adenine">0.0465116279069767</weight>
+      </column>
+      <column pos="9">
+        <weight symbol="thymine">0.0952380952380952</weight>
+        <weight symbol="guanine">0.571428571428571</weight>
+        <weight symbol="cytosine">0.0952380952380952</weight>
+        <weight symbol="adenine">0.238095238095238</weight>
+      </column>
+      <column pos="10">
+        <weight symbol="thymine">0.025</weight>
+        <weight symbol="guanine">0.15</weight>
+        <weight symbol="cytosine">0.8</weight>
+        <weight symbol="adenine">0.025</weight>
+      </column>
+      <column pos="11">
+        <weight symbol="thymine">0.194444444444444</weight>
+        <weight symbol="guanine">0.305555555555556</weight>
+        <weight symbol="cytosine">0.277777777777778</weight>
+        <weight symbol="adenine">0.222222222222222</weight>
+      </column>
+      <column pos="12">
+        <weight symbol="thymine">0.129032258064516</weight>
+        <weight symbol="guanine">0.258064516129032</weight>
+        <weight symbol="cytosine">0.258064516129032</weight>
+        <weight symbol="adenine">0.354838709677419</weight>
+      </column>
+      <column pos="13">
+        <weight symbol="thymine">0.222222222222222</weight>
+        <weight symbol="guanine">0.259259259259259</weight>
+        <weight symbol="cytosine">0.333333333333333</weight>
+        <weight symbol="adenine">0.185185185185185</weight>
+      </column>
+    </weightmatrix>
+     <prop>
+      <key>PMID</key>
+      <value>7914870</value>
+     </prop>
+     <prop>
+      <key>PWM_type</key>
+      <value>selex</value>
+     </prop>
+     <prop>
+      <key>Transfac_ID</key>
+      <value>M00090</value>
+     </prop>
+   <threshold>0.0</threshold>
+</motif> 

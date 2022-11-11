@@ -1,11 +1,12 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Selection of atoms, residues, etc."""
 
-from __future__ import print_function
 
 import itertools
 
@@ -27,7 +28,7 @@ def uniqueify(items):
 
 def get_unique_parents(entity_list):
     """Translate a list of entities to a list of their (unique) parents."""
-    unique_parents = set(entity.get_parent() for entity in entity_list)
+    unique_parents = {entity.get_parent() for entity in entity_list}
     return list(unique_parents)
 
 
@@ -51,7 +52,7 @@ def unfold_entities(entity_list, target_level):
 
     """
     if target_level not in entity_levels:
-        raise PDBException("%s: Not an entity level." % target_level)
+        raise PDBException(f"{target_level}: Not an entity level.")
     if entity_list == []:
         return []
     if isinstance(entity_list, (Entity, Atom)):
@@ -67,16 +68,20 @@ def unfold_entities(entity_list, target_level):
     if level_index == target_index:  # already right level
         return entity_list
 
+    entities = entity_list
+
     if level_index > target_index:  # we're going down, e.g. S->A
         for i in range(target_index, level_index):
-            entity_list = itertools.chain.from_iterable(entity_list)
+            entities = itertools.chain.from_iterable(entities)
     else:  # we're going up, e.g. A->S
         for i in range(level_index, target_index):
-            # find unique parents
-            entity_list = set(entity.get_parent() for entity in entity_list)
-    return list(entity_list)
+            # get unique parents by removing duplicates while preserving order
+            entities = {entity.get_parent(): None for entity in entities}
+
+    return list(entities)
 
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

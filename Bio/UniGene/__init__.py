@@ -75,7 +75,7 @@ Here is an overview of the flat file format that this parser deals with:
 """
 
 
-class SequenceLine(object):
+class SequenceLine:
     """Store the information for one SEQUENCE line from a Unigene file.
 
     Initialize with the text part of the SEQUENCE line, or nothing.
@@ -104,36 +104,37 @@ class SequenceLine(object):
 
     def __init__(self, text=None):
         """Initialize the class."""
-        self.acc = ''
-        self.nid = ''
-        self.lid = ''
-        self.pid = ''
-        self.clone = ''
-        self.image = ''
+        self.acc = ""
+        self.nid = ""
+        self.lid = ""
+        self.pid = ""
+        self.clone = ""
+        self.image = ""
         self.is_image = False
-        self.end = ''
-        self.mgc = ''
-        self.seqtype = ''
-        self.trace = ''
+        self.end = ""
+        self.mgc = ""
+        self.seqtype = ""
+        self.trace = ""
         if text is not None:
             self.text = text
             self._init_from_text(text)
 
     def _init_from_text(self, text):
-        parts = text.split('; ')
+        parts = text.split("; ")
         for part in parts:
             key, val = part.split("=")
-            if key == 'CLONE':
-                if val[:5] == 'IMAGE':
+            if key == "CLONE":
+                if val[:5] == "IMAGE":
                     self.is_image = True
                     self.image = val[6:]
             setattr(self, key.lower(), val)
 
     def __repr__(self):
+        """Return UniGene SequenceLine object as a string."""
         return self.text
 
 
-class ProtsimLine(object):
+class ProtsimLine:
     """Store the information for one PROTSIM line from a Unigene file.
 
     Initialize with the text part of the PROTSIM line, or nothing.
@@ -148,27 +149,28 @@ class ProtsimLine(object):
 
     def __init__(self, text=None):
         """Initialize the class."""
-        self.org = ''
-        self.protgi = ''
-        self.protid = ''
-        self.pct = ''
-        self.aln = ''
+        self.org = ""
+        self.protgi = ""
+        self.protid = ""
+        self.pct = ""
+        self.aln = ""
         if text is not None:
             self.text = text
             self._init_from_text(text)
 
     def _init_from_text(self, text):
-        parts = text.split('; ')
+        parts = text.split("; ")
 
         for part in parts:
             key, val = part.split("=")
             setattr(self, key.lower(), val)
 
     def __repr__(self):
+        """Return UniGene ProtsimLine object as a string."""
         return self.text
 
 
-class STSLine(object):
+class STSLine:
     """Store the information for one STS line from a Unigene file.
 
     Initialize with the text part of the STS line, or nothing.
@@ -181,24 +183,25 @@ class STSLine(object):
 
     def __init__(self, text=None):
         """Initialize the class."""
-        self.acc = ''
-        self.unists = ''
+        self.acc = ""
+        self.unists = ""
         if text is not None:
             self.text = text
             self._init_from_text(text)
 
     def _init_from_text(self, text):
-        parts = text.split(' ')
+        parts = text.split(" ")
 
         for part in parts:
             key, val = part.split("=")
             setattr(self, key.lower(), val)
 
     def __repr__(self):
+        """Return UniGene STSLine object as a string."""
         return self.text
 
 
-class Record(object):
+class Record:
     """Store a Unigene record.
 
     Here is what is stored::
@@ -228,29 +231,30 @@ class Record(object):
 
     def __init__(self):
         """Initialize the class."""
-        self.ID = ''  # ID line
-        self.species = ''  # Hs, Bt, etc.
-        self.title = ''  # TITLE line
-        self.symbol = ''  # GENE line
-        self.cytoband = ''  # CYTOBAND line
+        self.ID = ""  # ID line
+        self.species = ""  # Hs, Bt, etc.
+        self.title = ""  # TITLE line
+        self.symbol = ""  # GENE line
+        self.cytoband = ""  # CYTOBAND line
         self.express = []  # EXPRESS line, parsed on ';'
-        self.restr_expr = ''  # RESTR_EXPR line
-        self.gnm_terminus = ''  # GNM_TERMINUS line
-        self.gene_id = ''  # GENE_ID line
-        self.locuslink = ''  # LOCUSLINK line
-        self.homol = ''  # HOMOL line
-        self.chromosome = ''  # CHROMOSOME line
+        self.restr_expr = ""  # RESTR_EXPR line
+        self.gnm_terminus = ""  # GNM_TERMINUS line
+        self.gene_id = ""  # GENE_ID line
+        self.locuslink = ""  # LOCUSLINK line
+        self.homol = ""  # HOMOL line
+        self.chromosome = ""  # CHROMOSOME line
         self.protsim = []  # PROTSIM entries, array of Protsims
         self.sequence = []  # SEQUENCE entries, array of Sequence entries
         self.sts = []  # STS entries, array of STS entries
         self.txmap = []  # TXMAP entries, array of TXMap entries
 
     def __repr__(self):
-        return "<%s> %s %s\n%s" % (self.__class__.__name__,
-                                   self.ID, self.symbol, self.title)
+        """Represent the UniGene Record object as a string for debugging."""
+        return f"<{self.__class__.__name__}> {self.ID} {self.symbol} {self.title}"
 
 
 def parse(handle):
+    """Read and load a UniGene records, for files containing multiple records."""
     while True:
         record = _read(handle)
         if not record:
@@ -259,6 +263,7 @@ def parse(handle):
 
 
 def read(handle):
+    """Read and load a UniGene record, one record per file."""
     record = _read(handle)
     if not record:
         raise ValueError("No SwissProt record found")
@@ -281,7 +286,7 @@ def _read(handle):
         if tag == "ID":
             record = Record()
             record.ID = value
-            record.species = record.ID.split('.')[0]
+            record.species = record.ID.split(".")[0]
         elif tag == "TITLE":
             record.title = value
         elif tag == "GENE":
@@ -296,7 +301,7 @@ def _read(handle):
             elif value == "NO":
                 record.homol = True
             else:
-                raise ValueError("Cannot parse HOMOL line %s" % line)
+                raise ValueError(f"Cannot parse HOMOL line {line}")
         elif tag == "EXPRESS":
             record.express = [word.strip() for word in value.split("|")]
         elif tag == "RESTR_EXPR":
@@ -316,12 +321,15 @@ def _read(handle):
         elif tag == "STS":
             sts = STSLine(value)
             record.sts.append(sts)
-        elif tag == '//':
+        elif tag == "//":
             if len(record.sequence) != scount:
-                raise ValueError("The number of sequences specified in the record"
-                                 " (%d) does not agree with the number of sequences found (%d)" % (scount, len(record.sequence)))
+                raise ValueError(
+                    "The number of sequences specified in the record "
+                    "(%d) does not agree with the number of sequences found (%d)"
+                    % (scount, len(record.sequence))
+                )
             return record
         else:
-            raise ValueError("Unknown tag %s" % tag)
+            raise ValueError(f"Unknown tag {tag}")
     if record:
         raise ValueError("Unexpected end of stream.")

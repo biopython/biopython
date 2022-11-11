@@ -1,19 +1,20 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Map residues of two structures to each other based on a FASTA alignment."""
 
-from __future__ import print_function
 
-from Bio.Data import SCOPData
+from Bio.Data import PDBData
 
 from Bio.PDB import Selection
 from Bio.PDB.Polypeptide import is_aa
 
 
-class StructureAlignment(object):
+class StructureAlignment:
     """Class to align two structures based on an alignment of their sequences."""
 
     def __init__(self, fasta_align, m1, m2, si=0, sj=1):
@@ -26,10 +27,13 @@ class StructureAlignment(object):
            correspond to the structures
 
         """
-        length = fasta_align.get_alignment_length()
+        try:  # MultipleSeqAlignment object
+            ncolumns = fasta_align.get_alignment_length()
+        except AttributeError:  # Alignment object
+            nrows, ncolumns = fasta_align.shape
         # Get the residues in the models
-        rl1 = Selection.unfold_entities(m1, 'R')
-        rl2 = Selection.unfold_entities(m2, 'R')
+        rl1 = Selection.unfold_entities(m1, "R")
+        rl2 = Selection.unfold_entities(m2, "R")
         # Residue positions
         p1 = 0
         p2 = 0
@@ -38,7 +42,7 @@ class StructureAlignment(object):
         map21 = {}
         # List of residue pairs (None if -)
         duos = []
-        for i in range(length):
+        for i in range(ncolumns):
             column = fasta_align[:, i]
             aa1 = column[si]
             aa2 = column[sj]
@@ -79,8 +83,8 @@ class StructureAlignment(object):
     def _test_equivalence(self, r1, aa1):
         """Test if aa in sequence fits aa in structure (PRIVATE)."""
         resname = r1.get_resname()
-        resname = SCOPData.protein_letters_3to1[resname]
-        assert(aa1 == resname)
+        resname = PDBData.protein_letters_3to1_extended[resname]
+        assert aa1 == resname
 
     def get_maps(self):
         """Map residues between the structures.

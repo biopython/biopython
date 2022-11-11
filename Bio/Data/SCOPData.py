@@ -11,7 +11,20 @@
 See Bio.SCOP for more information about SCOP and Biopython's SCOP module.
 """
 
+import warnings
 
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.Data.SCOPData' module will be deprecated in a future release "
+    "of Biopython in favor of 'Bio.Data.PDBData.",
+    BiopythonDeprecationWarning,
+)
+
+
+# This file was automatically generated from PDB data.
+# Black would reformat this to one entry per line, so tell it not to:
+# fmt: off
 protein_letters_3to1 = {
     "00C": "C", "01W": "X", "02K": "A", "03Y": "C", "07O": "C",
     "08P": "C", "0A0": "D", "0A1": "Y", "0A2": "K", "0A8": "C",

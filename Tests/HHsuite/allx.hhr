@@ -1,0 +1,151 @@
+Query         Only X amino acids
+Match_columns 39
+No_of_seqs    1 out of 1
+Neff          1.0 
+Searched_HMMs 38388
+Date          Fri Feb 15 16:24:19 2019
+Command       hhsearch -i allx.fasta -d /pdb70_hhm_db 
+
+ No Hit                             Prob E-value P-value  Score    SS Cols Query HMM  Template HMM
+  1 1klr_A Zinc finger Y-chromosom   0.0 3.4E+04    0.88   -0.0   0.0    1   39-39     24-24  (30)
+  2 5ion_A Zinc finger and BTB dom   0.0 3.4E+04    0.89    0.0   0.0    1    4-4      10-10  (29)
+  3 2jvx_A NF-kappa-B essential mo   0.0 3.4E+04    0.89    0.0   0.0    1    4-4       1-1   (28)
+  4 2ab3_A ZNF29; zinc finger prot   0.0 3.4E+04    0.89    0.0   0.0    1    4-4      11-11  (29)
+  5 1sp2_A SP1F2; zinc finger, tra   0.0 3.5E+04    0.91    0.0   0.0    1    4-4       6-6   (31)
+  6 2lvr_A Zinc finger and BTB dom   0.0 3.5E+04    0.91    0.0   0.0    1   38-38     29-29  (30)
+  7 2kvf_A Zinc finger and BTB dom   0.0 3.5E+04    0.91    0.0   0.0    1    2-2       1-1   (28)
+  8 1dsq_A Nucleic acid binding pr   0.0 3.6E+04    0.94    0.0   0.0    1   36-36     17-17  (21)
+  9 5a7u_A ADR1, regulatory protei   0.0 3.6E+04    0.94    0.0   0.0    1   36-36     29-29  (29)
+ 10 1zfd_A SWI5; DNA binding motif   0.0 3.6E+04    0.95    0.0   0.0    1    4-4       1-1   (32)
+
+No 1  
+>1klr_A Zinc finger Y-chromosomal protein; transcription; NMR {Synthetic} SCOP: g.37.1.1 PDB: 5znf_A 1kls_A 1xrz_A* 7znf_A
+Probab=0.04  E-value=3.4e+04  Score=-0.01  Aligned_cols=1  Identities=0%  Similarity=0.427  Sum_probs=0.0
+
+Q Only             39 X   39 (39)
+Q Consensus        39 ~   39 (39)
+                      .
+T Consensus        24 ~   24 (30)
+T 1klr_A           24 T   24 (30)
+T ss_dssp             H
+T ss_pred             H
+
+
+No 2  
+>5ion_A Zinc finger and BTB domain-containing protein 17; C2H2 zinc finger, MIZ-1, ZBTB17, transcription factor, trans; NMR {Homo sapiens}
+Probab=0.04  E-value=3.4e+04  Score=0.00  Aligned_cols=1  Identities=0%  Similarity=0.158  Sum_probs=0.0
+
+Q Only              4 X    4 (39)
+Q Consensus         4 ~    4 (39)
+                      .
+T Consensus        10 ~   10 (29)
+T 5ion_A           10 G   10 (29)
+T ss_dssp             T
+T ss_pred             C
+
+
+No 3  
+>2jvx_A NF-kappa-B essential modulator; CCHC classical zinc finger, NEMO zinc finger, beta-BETA- alpha fold, coiled coil, cytoplasm, disease mutation; NMR {Synthetic} PDB: 2jvy_A
+Probab=0.04  E-value=3.4e+04  Score=0.04  Aligned_cols=1  Identities=0%  Similarity=0.575  Sum_probs=0.0
+
+Q Only              4 X    4 (39)
+Q Consensus         4 ~    4 (39)
+                      .
+T Consensus         1 ~    1 (28)
+T 2jvx_A            1 S    1 (28)
+T ss_dssp             C
+T ss_pred             C
+
+
+No 4  
+>2ab3_A ZNF29; zinc finger protein, beta BETA alpha, RREIIB-TR, RNA binding protein; NMR {Escherichia coli} SCOP: k.12.1.1 PDB: 2ab7_A
+Probab=0.04  E-value=3.4e+04  Score=0.03  Aligned_cols=1  Identities=0%  Similarity=0.158  Sum_probs=0.0
+
+Q Only              4 X    4 (39)
+Q Consensus         4 ~    4 (39)
+                      .
+T Consensus        11 ~   11 (29)
+T 2ab3_A           11 G   11 (29)
+T ss_dssp             C
+T ss_pred             C
+
+
+No 5  
+>1sp2_A SP1F2; zinc finger, transcription activation; NMR {Homo sapiens} SCOP: g.37.1.1 PDB: 1va2_A
+Probab=0.04  E-value=3.5e+04  Score=0.02  Aligned_cols=1  Identities=0%  Similarity=0.427  Sum_probs=0.0
+
+Q Only              4 X    4 (39)
+Q Consensus         4 ~    4 (39)
+                      .
+T Consensus         6 ~    6 (31)
+T 1sp2_A            6 T    6 (31)
+T ss_dssp             C
+T ss_pred             C
+
+
+No 6  
+>2lvr_A Zinc finger and BTB domain-containing protein 17; C2H2 zinc finger, classical zinc finger, transcription; NMR {Homo sapiens}
+Probab=0.04  E-value=3.5e+04  Score=0.00  Aligned_cols=1  Identities=0%  Similarity=0.251  Sum_probs=0.0
+
+Q Only             38 X   38 (39)
+Q Consensus        38 ~   38 (39)
+                      .
+T Consensus        29 ~   29 (30)
+T 2lvr_A           29 E   29 (30)
+T ss_dssp             C
+T ss_pred             C
+
+
+No 7  
+>2kvf_A Zinc finger and BTB domain-containing protein 32; protein/DNA, metal-binding, transcription; NMR {Mus musculus}
+Probab=0.04  E-value=3.5e+04  Score=0.02  Aligned_cols=1  Identities=0%  Similarity=0.155  Sum_probs=0.0
+
+Q Only              2 X    2 (39)
+Q Consensus         2 ~    2 (39)
+                      .
+T Consensus         1 ~    1 (28)
+T 2kvf_A            1 M    1 (28)
+T ss_dssp             C
+T ss_pred             C
+
+
+No 8  
+>1dsq_A Nucleic acid binding protein P14; CCHC type zinc finger, virus/viral protein; NMR {Mouse mammary tumor virus} SCOP: g.40.1.1
+Probab=0.03  E-value=3.6e+04  Score=0.02  Aligned_cols=1  Identities=0%  Similarity=0.170  Sum_probs=0.0
+
+Q Only             36 X   36 (39)
+Q Consensus        36 ~   36 (39)
+                      .
+T Consensus        17 ~   17 (21)
+T 1dsq_A           17 D   17 (26)
+T ss_dssp             T
+T ss_pred             h
+
+
+No 9  
+>5a7u_A ADR1, regulatory protein ADR1; protein folding, translation, ribosome, zinc finger, SECM, translational arrest peptide, cryo-EM; 4.80A {Saccharomyces cerevisiae} PDB: 1paa_A
+Probab=0.03  E-value=3.6e+04  Score=0.03  Aligned_cols=1  Identities=0%  Similarity=0.209  Sum_probs=0.0
+
+Q Only             36 X   36 (39)
+Q Consensus        36 ~   36 (39)
+                      .
+T Consensus        29 ~   29 (29)
+T 5a7u_A           29 N   29 (29)
+T ss_dssp             -
+T ss_pred             C
+
+
+No 10 
+>1zfd_A SWI5; DNA binding motif, zinc finger DNA binding domain; NMR {Saccharomyces cerevisiae} SCOP: g.37.1.1
+Probab=0.03  E-value=3.6e+04  Score=0.03  Aligned_cols=1  Identities=0%  Similarity=0.170  Sum_probs=0.0
+
+Q Only              4 X    4 (39)
+Q Consensus         4 ~    4 (39)
+                      .
+T Consensus         1 ~    1 (32)
+T 1zfd_A            1 D    1 (32)
+T ss_dssp             C
+T ss_pred             C
+
+
+Done!

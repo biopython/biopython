@@ -1,11 +1,16 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Chain class, used in Structure objects."""
 
 from Bio.PDB.Entity import Entity
+from Bio.PDB.internal_coords import IC_Chain
+
+from typing import Optional
 
 
 class Chain(Entity):
@@ -18,15 +23,16 @@ class Chain(Entity):
     def __init__(self, id):
         """Initialize the class."""
         self.level = "C"
+        self.internal_coord = None
         Entity.__init__(self, id)
 
     # Sorting methods: empty chain IDs come last.
     def __gt__(self, other):
         """Validate if id is greater than other.id."""
         if isinstance(other, Chain):
-            if self.id == ' ' and other.id != ' ':
+            if self.id == " " and other.id != " ":
                 return 0
-            elif self.id != ' ' and other.id == ' ':
+            elif self.id != " " and other.id == " ":
                 return 1
             else:
                 return self.id > other.id
@@ -36,9 +42,9 @@ class Chain(Entity):
     def __ge__(self, other):
         """Validate if id is greater or equal than other.id."""
         if isinstance(other, Chain):
-            if self.id == ' ' and other.id != ' ':
+            if self.id == " " and other.id != " ":
                 return 0
-            elif self.id != ' ' and other.id == ' ':
+            elif self.id != " " and other.id == " ":
                 return 1
             else:
                 return self.id >= other.id
@@ -48,9 +54,9 @@ class Chain(Entity):
     def __lt__(self, other):
         """Validate if id is less than other.id."""
         if isinstance(other, Chain):
-            if self.id == ' ' and other.id != ' ':
+            if self.id == " " and other.id != " ":
                 return 0
-            elif self.id != ' ' and other.id == ' ':
+            elif self.id != " " and other.id == " ":
                 return 1
             else:
                 return self.id < other.id
@@ -60,9 +66,9 @@ class Chain(Entity):
     def __le__(self, other):
         """Validate if id is less or equal than other id."""
         if isinstance(other, Chain):
-            if self.id == ' ' and other.id != ' ':
+            if self.id == " " and other.id != " ":
                 return 0
-            elif self.id != ' ' and other.id == ' ':
+            elif self.id != " " and other.id == " ":
                 return 1
             else:
                 return self.id <= other.id
@@ -80,12 +86,11 @@ class Chain(Entity):
         " ") tuple.
 
         Arguments:
-
-        - id - int, residue resseq
+         - id - int, residue resseq
 
         """
         if isinstance(id, int):
-            id = (' ', id, ' ')
+            id = (" ", id, " ")
         return id
 
     def __getitem__(self, id):
@@ -96,8 +101,7 @@ class Chain(Entity):
         method.
 
         Arguments:
-
-        - id - (string, int, string) or int
+         - id - (string, int, string) or int
 
         """
         id = self._translate_id(id)
@@ -107,8 +111,7 @@ class Chain(Entity):
         """Check if a residue with given id is present in this chain.
 
         Arguments:
-
-        - id - (string, int, string) or int
+         - id - (string, int, string) or int
 
         """
         id = self._translate_id(id)
@@ -118,8 +121,7 @@ class Chain(Entity):
         """Delete item.
 
         Arguments:
-
-        - id - (string, int, string) or int
+         - id - (string, int, string) or int
 
         """
         id = self._translate_id(id)
@@ -127,7 +129,7 @@ class Chain(Entity):
 
     def __repr__(self):
         """Return the chain identifier."""
-        return "<Chain id=%s>" % self.get_id()
+        return f"<Chain id={self.get_id()}>"
 
     # Public methods
 
@@ -156,8 +158,7 @@ class Chain(Entity):
         method.
 
         Arguments:
-
-        - id - (string, int, string) or int
+         - id - (string, int, string) or int
 
         """
         id = self._translate_id(id)
@@ -167,11 +168,47 @@ class Chain(Entity):
 
     def get_residues(self):
         """Return residues."""
-        for r in self:
-            yield r
+        yield from self
 
     def get_atoms(self):
         """Return atoms from residues."""
         for r in self.get_residues():
-            for a in r:
-                yield a
+            yield from r
+
+    def atom_to_internal_coordinates(self, verbose: bool = False) -> None:
+        """Create/update internal coordinates from Atom X,Y,Z coordinates.
+
+        Internal coordinates are bond length, angle and dihedral angles.
+
+        :param verbose bool: default False
+            describe runtime problems
+        """
+        if not self.internal_coord:
+            self.internal_coord = IC_Chain(self, verbose)
+        self.internal_coord.atom_to_internal_coordinates(verbose=verbose)
+
+    def internal_to_atom_coordinates(
+        self,
+        verbose: bool = False,
+        start: Optional[int] = None,
+        fin: Optional[int] = None,
+    ):
+        """Create/update atom coordinates from internal coordinates.
+
+        :param verbose bool: default False
+            describe runtime problems
+        :param: start, fin integers
+            optional sequence positions for begin, end of subregion to process.
+            N.B. this activates serial residue assembly, <start> residue CA will
+            be at origin
+        :raises Exception: if any chain does not have .internal_coord attribute
+        """
+        if self.internal_coord:
+            self.internal_coord.internal_to_atom_coordinates(
+                verbose=verbose, start=start, fin=fin
+            )
+        else:
+            raise Exception(
+                "Structure %s Chain %s does not have internal coordinates set"
+                % (self.parent.parent, self)
+            )
