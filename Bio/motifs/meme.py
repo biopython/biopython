@@ -92,11 +92,9 @@ class Record(list):
 
     A meme.Record is an object that holds the results from running
     MEME. It implements no methods of its own.
-
     The meme.Record class inherits from list, so you can access individual
     motifs in the record by their index. Alternatively, you can find a motif
     by its name:
-
     >>> from Bio import motifs
     >>> with open("motifs/meme.INO_up800.classic.oops.xml") as f:
     ...     record = motifs.parse(f, 'MEME')
@@ -112,12 +110,12 @@ class Record(list):
         """Initialize the class."""
         self.version = ""
         self.datafile = ""
+        self.control_seq = ""
         self.command = ""
         self.alphabet = ""
         self.sequences = []
 
     def __getitem__(self, key):
-        """Return the motif of index key."""
         if isinstance(key, str):
             for motif in self:
                 if motif.name == key:
