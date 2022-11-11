@@ -65,7 +65,8 @@ to the test suite.
 Add new ``gc_fraction`` function in ``SeqUtils`` and marks ``GC`` for future
 deprecation.
 
-The MEME motifs output parser is updated for compatbility with the output of MEME version 5.0.4.
+The MEME motifs output parser is updated for compatibility with the output of
+MEME version 5.0.4.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
