@@ -90,7 +90,7 @@ def qblast(
     megablast=None,
     template_type=None,
     template_length=None,
-    username=None,
+    username="blast",
     password=None,
 ):
     """BLAST search using NCBI's QBLAST server or a cloud service provider.
@@ -206,7 +206,7 @@ def qblast(
         "CMD": "Put",
     }
 
-    if username is not None and password is not None:
+    if password is not None:
         # handle authentication for BLAST cloud
         password_mgr = HTTPPasswordMgrWithDefaultRealm()
         password_mgr.add_password(None, url_base, username, password)
