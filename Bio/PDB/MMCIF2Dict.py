@@ -117,7 +117,7 @@ class MMCIF2Dict(dict):
                     if line.startswith(";"):
                         yield "\n".join(token_buffer)
                         line = line[1:]
-                        if line and not line[0] in self.whitespace_chars:
+                        if line and line[0] not in self.whitespace_chars:
                             raise ValueError("Missing whitespace")
                         break
                     token_buffer.append(line)
