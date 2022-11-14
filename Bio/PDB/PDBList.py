@@ -35,18 +35,50 @@
 
 """Access the PDB over the internet (e.g. to download structures)."""
 
+from __future__ import annotations
 
+import collections
 import contextlib
+import dataclasses
 import ftplib
+import functools
 import gzip
 import os
 import re
 import shutil
+import socket
 import sys
+import time
 
 from urllib.request import urlopen
 from urllib.request import urlretrieve
 from urllib.request import urlcleanup
+from urllib.parse import urljoin
+from urllib.parse import urlunsplit
+
+from Bio.PDB.PDBExceptions import PDBException
+
+
+@dataclasses.dataclass
+class PDBServer:
+    """Dataclass to store parameters for connecting to PDB server.
+
+    param domain: server domain name.
+    type domain: string
+
+    :param pdb_dir_path: path to the PDB data directory.
+    :type domain: string
+    """
+
+    domain: str
+    pdb_dir_path: str
+
+
+SERVERS = [
+    PDBServer("ftp.rcsb.org", "/pub/pdb/"),
+    PDBServer("ftp.ebi.ac.uk", "/pub/databases/pdb/"),
+    PDBServer("ftp.pdbj.org", "/pub/pdb/"),
+]
 
 
 class PDBList:
@@ -84,15 +116,14 @@ class PDBList:
     http://www.pdb.org/.
     """
 
-    def __init__(
-        self, server="ftp://ftp.wwpdb.org", pdb=None, obsolete_pdb=None, verbose=True
-    ):
+    def __init__(self, server=None, pdb=None, obsolete_pdb=None, verbose=True):
         """Initialize the class with the default server or a custom one.
 
         Argument pdb is the local path to use, defaulting to the current
         directory at the moment of initialisation.
         """
-        self.pdb_server = server  # remote pdb server
+        self.pdb_server = self._get_pdb_server_url(server)
+
         if pdb:
             self.local_pdb = pdb  # local pdb file tree
         else:
@@ -111,6 +142,27 @@ class PDBList:
 
         # variable for command-line option
         self.flat_tree = False
+
+    def _get_pdb_server_url(self, server: str | PDBServer | None) -> str:
+        """Get remote PDB server url.
+
+        Handle legacy server declaration (str).
+        If no server specified, chose the fastest one.
+        """
+        pdb_server = None
+        if server is None:
+            pdb_server = get_fastest_server()
+        elif isinstance(server, str):
+            return urljoin(server, "pub/pdb/")
+        elif isinstance(server, PDBServer):
+            pdb_server = server
+
+        if pdb_server:
+            return urlunsplit(
+                ("ftp", pdb_server.domain, pdb_server.pdb_dir_path, None, None)
+            )
+
+        raise TypeError(f"Unsupported server option: {server}")
 
     @staticmethod
     def _print_default_format_warning(file_format):
@@ -157,12 +209,12 @@ class PDBList:
             -rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
 
         """
-        path = self.pdb_server + "/pub/pdb/data/status/latest/"
+        url = urljoin(self.pdb_server, "data/status/latest")
 
         # Retrieve the lists
-        added = self.get_status_list(path + "added.pdb")
-        modified = self.get_status_list(path + "modified.pdb")
-        obsolete = self.get_status_list(path + "obsolete.pdb")
+        added = self.get_status_list(f"{url}/added.pdb")
+        modified = self.get_status_list(f"{url}/modified.pdb")
+        obsolete = self.get_status_list(f"{url}/obsolete.pdb")
         return [added, modified, obsolete]
 
     def get_all_entries(self):
@@ -170,7 +222,7 @@ class PDBList:
 
         Returns a list of PDB codes in the index file.
         """
-        url = self.pdb_server + "/pub/pdb/derived_data/index/entries.idx"
+        url = urljoin(self.pdb_server, "derived_data/index/entries.idx")
         if self._verbose:
             print("Retrieving index file. Takes about 27 MB.")
         with contextlib.closing(urlopen(url)) as handle:
@@ -202,7 +254,7 @@ class PDBList:
             ...
 
         """
-        url = self.pdb_server + "/pub/pdb/data/status/obsolete.dat"
+        url = urljoin(self.pdb_server, "data/status/obsolete.dat")
         with contextlib.closing(urlopen(url)) as handle:
             # Extract pdb codes. Could use a list comprehension, but I want
             # to include an assert to check for mis-reading the data.
@@ -290,17 +342,14 @@ class PDBList:
                 if file_format == "mmCif"
                 else "XML"
             )
-            url = self.pdb_server + "/pub/pdb/data/structures/%s/%s/%s/%s" % (
-                pdb_dir,
-                file_type,
-                code[1:3],
-                archive_fn,
+            url = urljoin(
+                self.pdb_server,
+                f"data/structures/{pdb_dir}/{file_type}/{code[1:3]}/{archive_fn}",
             )
         elif file_format == "bundle":
-            url = self.pdb_server + "/pub/pdb/compatible/pdb_bundle/%s/%s/%s" % (
-                code[1:3],
-                code,
-                archive_fn,
+            url = urljoin(
+                self.pdb_server,
+                f"compatible/pdb_bundle/{code[1:3]}/{code}/{archive_fn}",
             )
         else:
             url = f"http://mmtf.rcsb.org/v1.0/full/{code}"
@@ -479,17 +528,20 @@ class PDBList:
 
         # FTPLib is much faster than urlopen
         idx = self.pdb_server.find("://")
+        pdb_server = self.pdb_server
         if idx >= 0:
-            ftp = ftplib.FTP(self.pdb_server[idx + 3 :])
+            pdb_server = self.pdb_server[idx + 3 :]
+            ftp = ftplib.FTP(pdb_server.split("/", 1)[0])
         else:
-            ftp = ftplib.FTP(self.pdb_server)
+            ftp = ftplib.FTP(pdb_server.split("/", 1)[0])
         ftp.login()  # anonymous
-
+        pdb_dir_path = pdb_server.split("/", 1)[1]
+        ftp.cwd(pdb_dir_path)
         if file_format.lower() == "mmcif":
-            ftp.cwd("/pub/pdb/data/assemblies/mmCIF/all/")
+            ftp.cwd("data/assemblies/mmCIF/all/")
             re_name = re.compile(r"(\d[0-9a-z]{3})-assembly(\d+).cif.gz")
         elif file_format.lower() == "pdb":
-            ftp.cwd("/pub/pdb/data/biounit/PDB/all/")
+            ftp.cwd("data/biounit/PDB/all/")
             re_name = re.compile(r"(\d[0-9a-z]{3}).pdb(\d+).gz")
         else:
             msg = "file_format for assemblies must be 'pdb' or 'mmCif'"
@@ -548,9 +600,9 @@ class PDBList:
         archive_fn = archive[file_format] % (pdb_code.lower(), int(assembly_num))
 
         if file_format == "mmcif":
-            url = self.pdb_server + "/pub/pdb/data/assemblies/mmCIF/all/%s" % archive_fn
+            url = urljoin(self.pdb_server, f"data/assemblies/mmCIF/all/{archive_fn}")
         elif file_format == "pdb":
-            url = self.pdb_server + "/pub/pdb/data/biounit/PDB/all/%s" % archive_fn
+            url = urljoin(self.pdb_server, f"data/biounit/PDB/all/{archive_fn}")
         else:  # better safe than sorry
             raise ValueError("file_format '%s' not supported: %s" % file_format)
 
@@ -665,8 +717,38 @@ class PDBList:
         """Retrieve and save a (big) file containing all the sequences of PDB entries."""
         if self._verbose:
             print("Retrieving sequence file (takes over 110 MB).")
-        url = self.pdb_server + "/pub/pdb/derived_data/pdb_seqres.txt"
+        url = urljoin(self.pdb_server, "derived_data/pdb_seqres.txt")
         urlretrieve(url, savefile)
+
+
+@functools.lru_cache(maxsize=None)
+def get_fastest_server(servers: list[PDBServer] | None = None) -> PDBServer:
+    """Fastest server among the available ones."""
+    servers = servers or SERVERS
+    fastest_server = None
+    fastest_timing = None
+
+    for server in servers:
+        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server_socket.settimeout(1)
+
+        time_before_connect = time.time()
+        try:
+            server_socket.connect((server.domain, 21))
+        except Exception:
+            continue
+        finally:
+            server_socket.close()
+        timing = time.time() - time_before_connect
+
+        if timing and (not fastest_timing or timing < fastest_timing):
+            fastest_server = server
+            fastest_timing = timing
+
+    if not fastest_server:
+        raise PDBException("Unable to connect to any PDB servers.")
+
+    return fastest_server
 
 
 if __name__ == "__main__":
