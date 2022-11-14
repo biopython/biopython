@@ -18,6 +18,11 @@ repos:
     hooks:
     -   id: black
         args: [--check,--target-version,py37]
+-   repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.0.118
+    hooks:
+    -   id: ruff
+        args: ['--extend-ignore=E501,F401,F841']
 -   repo: https://github.com/PyCQA/flake8
     rev: 5.0.4
     hooks:
