@@ -75,13 +75,13 @@ peaklist = xpktools.Peaklist(infn)  # infn is the name of the xpk file
 # of any of the nuclei in the file -- here, the detected atom
 # is used
 
-dict = peaklist.residue_dict(detectatom)
+res_dict = peaklist.residue_dict(detectatom)
 
 # As well as the data, the dictionary contains two other entries,
 # corresponding to the maximum and minimum residues indexed
 
-MAXRES = dict["maxres"]
-MINRES = dict["minres"]
+MAXRES = res_dict["maxres"]
+MINRES = res_dict["minres"]
 
 # ****** CALCULATE AND WRITE CROSSPEAK PEAKLIST *****
 
