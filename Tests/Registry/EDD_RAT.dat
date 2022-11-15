@@ -1,96 +1,471 @@
-ID   EDD_RAT        STANDARD;      PRT;   920 AA.
-AC   Q62671;
-DT   01-NOV-1997 (Rel. 35, Created)
-DT   15-JUN-2002 (Rel. 41, Last sequence update)
-DT   15-JUN-2002 (Rel. 41, Last annotation update)
-DE   Ubiquitin--protein ligase EDD (EC 6.3.2.-) (Hyperplastic discs
-DE   protein homolog) (100 kDa protein) (Fragment).
-GN   EDD OR HYD.
+ID   UBR5_RAT                Reviewed;        2788 AA.
+AC   Q62671; F1LRS0;
+DT   01-NOV-1997, integrated into UniProtKB/Swiss-Prot.
+DT   22-FEB-2012, sequence version 3.
+DT   03-AUG-2022, entry version 151.
+DE   RecName: Full=E3 ubiquitin-protein ligase UBR5;
+DE            EC=2.3.2.26;
+DE   AltName: Full=100 kDa protein;
+DE   AltName: Full=E3 ubiquitin-protein ligase, HECT domain-containing 1;
+DE   AltName: Full=HECT-type E3 ubiquitin transferase UBR5;
+DE   AltName: Full=Hyperplastic discs protein homolog;
+GN   Name=Ubr5; Synonyms=Dd5, Edd, Edd1, Hyd;
 OS   Rattus norvegicus (Rat).
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
-OC   Mammalia; Eutheria; Rodentia; Sciurognathi; Muridae; Murinae; Rattus.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Myomorpha; Muroidea; Muridae;
+OC   Murinae; Rattus.
+OX   NCBI_TaxID=10116;
 RN   [1]
-RP   SEQUENCE FROM N.A.
-RC   STRAIN=Wistar; TISSUE=Testis;
-RA   Mueller D., Rehbein M., Baumeister H., Richter D.;
-RT   "Molecular characterization of a novel rat protein structurally
-RT   related to poly(A) binding proteins and the 70K protein of the U1
-RT   small nuclear ribonucleoprotein particle (snRNP).";
-RL   Nucleic Acids Res. 20:1471-1475(1992).
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=Brown Norway;
+RX   PubMed=15057822; DOI=10.1038/nature02426;
+RA   Gibbs R.A., Weinstock G.M., Metzker M.L., Muzny D.M., Sodergren E.J.,
+RA   Scherer S., Scott G., Steffen D., Worley K.C., Burch P.E., Okwuonu G.,
+RA   Hines S., Lewis L., Deramo C., Delgado O., Dugan-Rocha S., Miner G.,
+RA   Morgan M., Hawes A., Gill R., Holt R.A., Adams M.D., Amanatides P.G.,
+RA   Baden-Tillson H., Barnstead M., Chin S., Evans C.A., Ferriera S.,
+RA   Fosler C., Glodek A., Gu Z., Jennings D., Kraft C.L., Nguyen T.,
+RA   Pfannkoch C.M., Sitter C., Sutton G.G., Venter J.C., Woodage T., Smith D.,
+RA   Lee H.-M., Gustafson E., Cahill P., Kana A., Doucette-Stamm L.,
+RA   Weinstock K., Fechtel K., Weiss R.B., Dunn D.M., Green E.D.,
+RA   Blakesley R.W., Bouffard G.G., De Jong P.J., Osoegawa K., Zhu B., Marra M.,
+RA   Schein J., Bosdet I., Fjell C., Jones S., Krzywinski M., Mathewson C.,
+RA   Siddiqui A., Wye N., McPherson J., Zhao S., Fraser C.M., Shetty J.,
+RA   Shatsman S., Geer K., Chen Y., Abramzon S., Nierman W.C., Havlak P.H.,
+RA   Chen R., Durbin K.J., Egan A., Ren Y., Song X.-Z., Li B., Liu Y., Qin X.,
+RA   Cawley S., Cooney A.J., D'Souza L.M., Martin K., Wu J.Q.,
+RA   Gonzalez-Garay M.L., Jackson A.R., Kalafus K.J., McLeod M.P.,
+RA   Milosavljevic A., Virk D., Volkov A., Wheeler D.A., Zhang Z., Bailey J.A.,
+RA   Eichler E.E., Tuzun E., Birney E., Mongin E., Ureta-Vidal A., Woodwark C.,
+RA   Zdobnov E., Bork P., Suyama M., Torrents D., Alexandersson M., Trask B.J.,
+RA   Young J.M., Huang H., Wang H., Xing H., Daniels S., Gietzen D., Schmidt J.,
+RA   Stevens K., Vitt U., Wingrove J., Camara F., Mar Alba M., Abril J.F.,
+RA   Guigo R., Smit A., Dubchak I., Rubin E.M., Couronne O., Poliakov A.,
+RA   Huebner N., Ganten D., Goesele C., Hummel O., Kreitler T., Lee Y.-A.,
+RA   Monti J., Schulz H., Zimdahl H., Himmelbauer H., Lehrach H., Jacob H.J.,
+RA   Bromberg S., Gullings-Handley J., Jensen-Seaman M.I., Kwitek A.E.,
+RA   Lazar J., Pasko D., Tonellato P.J., Twigger S., Ponting C.P., Duarte J.M.,
+RA   Rice S., Goodstadt L., Beatson S.A., Emes R.D., Winter E.E., Webber C.,
+RA   Brandt P., Nyakatura G., Adetobi M., Chiaromonte F., Elnitski L.,
+RA   Eswara P., Hardison R.C., Hou M., Kolbe D., Makova K., Miller W.,
+RA   Nekrutenko A., Riemer C., Schwartz S., Taylor J., Yang S., Zhang Y.,
+RA   Lindpaintner K., Andrews T.D., Caccamo M., Clamp M., Clarke L., Curwen V.,
+RA   Durbin R.M., Eyras E., Searle S.M., Cooper G.M., Batzoglou S., Brudno M.,
+RA   Sidow A., Stone E.A., Payseur B.A., Bourque G., Lopez-Otin C., Puente X.S.,
+RA   Chakrabarti K., Chatterji S., Dewey C., Pachter L., Bray N., Yap V.B.,
+RA   Caspi A., Tesler G., Pevzner P.A., Haussler D., Roskin K.M., Baertsch R.,
+RA   Clawson H., Furey T.S., Hinrichs A.S., Karolchik D., Kent W.J.,
+RA   Rosenbloom K.R., Trumbower H., Weirauch M., Cooper D.N., Stenson P.D.,
+RA   Ma B., Brent M., Arumugam M., Shteynberg D., Copley R.R., Taylor M.S.,
+RA   Riethman H., Mudunuri U., Peterson J., Guyer M., Felsenfeld A., Old S.,
+RA   Mockrin S., Collins F.S.;
+RT   "Genome sequence of the Brown Norway rat yields insights into mammalian
+RT   evolution.";
+RL   Nature 428:493-521(2004).
 RN   [2]
-RP   ERRATUM.
+RP   NUCLEOTIDE SEQUENCE [MRNA] OF 1868-2788.
+RC   STRAIN=Wistar; TISSUE=Testis;
+RX   PubMed=1533713; DOI=10.1093/nar/20.7.1471;
+RA   Mueller D., Rehbein M., Baumeister H., Richter D.;
+RT   "Molecular characterization of a novel rat protein structurally related to
+RT   poly(A) binding proteins and the 70K protein of the U1 small nuclear
+RT   ribonucleoprotein particle (snRNP).";
+RL   Nucleic Acids Res. 20:1471-1475(1992).
+RN   [3]
+RP   ERRATUM OF PUBMED:1533713.
 RA   Mueller D., Rehbein M., Baumeister H., Richter D.;
 RL   Nucleic Acids Res. 20:2624-2624(1992).
-RN   [3]
+RN   [4]
 RP   IDENTIFICATION OF PROBABLE FRAMESHIFT.
+RX   PubMed=10030672; DOI=10.1038/sj.onc.1202249;
 RA   Callaghan M.J., Russell A.J., Woollatt E., Sutherland G.R.,
 RA   Sutherland R.L., Watts C.K.W.;
 RT   "Identification of a human HECT family protein with homology to the
 RT   Drosophila tumor suppressor gene hyperplastic discs.";
 RL   Oncogene 17:3479-3491(1998).
-CC   -!- FUNCTION: E3 ubiquitin-protein ligase which accepts ubiquitin from
-CC       an E2 ubiquitin-conjugating enzyme in the form of a thioester and
-CC       then directly transfers the ubiquitin to targeted substrates (By
-CC       similarity). May be involved in maturation and/or post-
-CC       transcriptional regulation of mRNA. May play a role in control of
-CC       cell cycle progression. May have tumor suppressor function.
-CC       Regulates DNA topoisomerase II binding protein (TopBP1) for the
-CC       DNA damage response (By similarity).
-CC   -!- SUBCELLULAR LOCATION: Nuclear (By similarity).
-CC   -!- TISSUE SPECIFICITY: Highest levels found in testis. Also present
-CC       in liver, kidney, lung and brain.
-CC   -!- DEVELOPMENTAL STAGE: In early post-natal life, expression in
-CC       the testis increases to reach a maximum around day 28.
-CC   -!- MISCELLANEOUS: A cysteine residue is required for ubiquitin-
-CC       thiolester formation.
-CC   -!- SIMILARITY: CONTAINS 1 HECT-TYPE E3 UBIQUITIN-PROTEIN LIGASE
-CC       DOMAIN.
-CC   -!- CAUTION: Ref.1 sequence differs from that shown due to a
-CC       frameshift in position 30.
-CC   --------------------------------------------------------------------------
-CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
-CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
-CC   the European Bioinformatics Institute.  There are no  restrictions on  its
-CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
-CC   modified and this statement is not removed.  Usage  by  and for commercial
-CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
-CC   or send an email to license@isb-sib.ch).
-CC   --------------------------------------------------------------------------
-DR   EMBL; X64411; CAA45756.1; ALT_FRAME.
-DR   HSSP; O95071; 1I2T.
-DR   InterPro; IPR000569; HECT_domain.
-DR   InterPro; IPR002004; PABP/HECT.
+RN   [5]
+RP   TISSUE SPECIFICITY, AND DEVELOPMENTAL STAGE.
+RX   PubMed=12239083; DOI=10.1210/en.2002-220262;
+RA   Oughtred R., Bedard N., Adegoke O.A.J., Morales C.R., Trasler J.,
+RA   Rajapurohitam V., Wing S.S.;
+RT   "Characterization of rat100, a 300-kilodalton ubiquitin-protein ligase
+RT   induced in germ cells of the rat testis and similar to the Drosophila
+RT   hyperplastic discs gene.";
+RL   Endocrinology 143:3740-3747(2002).
+RN   [6]
+RP   PHOSPHORYLATION [LARGE SCALE ANALYSIS] AT SER-2231 AND SER-2475, AND
+RP   IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS].
+RX   PubMed=22673903; DOI=10.1038/ncomms1871;
+RA   Lundby A., Secher A., Lage K., Nordsborg N.B., Dmytriyev A., Lundby C.,
+RA   Olsen J.V.;
+RT   "Quantitative maps of protein phosphorylation sites across 14 different rat
+RT   organs and tissues.";
+RL   Nat. Commun. 3:876-876(2012).
+CC   -!- FUNCTION: E3 ubiquitin-protein ligase which is a component of the N-end
+CC       rule pathway. Recognizes and binds to proteins bearing specific N-
+CC       terminal residues that are destabilizing according to the N-end rule,
+CC       leading to their ubiquitination and subsequent degradation (By
+CC       similarity). Involved in maturation and/or transcriptional regulation
+CC       of mRNA by activating CDK9 by polyubiquitination. May play a role in
+CC       control of cell cycle progression. May have tumor suppressor function.
+CC       Regulates DNA topoisomerase II binding protein (TopBP1) for the DNA
+CC       damage response. Plays an essential role in extraembryonic development.
+CC       Ubiquitinates acetylated PCK1. Also acts as a regulator of DNA damage
+CC       response by acting as a suppressor of RNF168, an E3 ubiquitin-protein
+CC       ligase that promotes accumulation of 'Lys-63'-linked histone H2A and
+CC       H2AX at DNA damage sites, thereby acting as a guard against excessive
+CC       spreading of ubiquitinated chromatin at damaged chromosomes (By
+CC       similarity). {ECO:0000250}.
+CC   -!- CATALYTIC ACTIVITY:
+CC       Reaction=S-ubiquitinyl-[E2 ubiquitin-conjugating enzyme]-L-cysteine +
+CC         [acceptor protein]-L-lysine = [E2 ubiquitin-conjugating enzyme]-L-
+CC         cysteine + N(6)-ubiquitinyl-[acceptor protein]-L-lysine.;
+CC         EC=2.3.2.26;
+CC   -!- PATHWAY: Protein modification; protein ubiquitination.
+CC   -!- SUBUNIT: Binds TOPBP1. Associates with CDK9 and TFIIS/TCEA1 and forms a
+CC       transcription regulatory complex made of CDK9, RNAP II, UBR5 and
+CC       TFIIS/TCEA1 that can stimulate target gene transcription by recruiting
+CC       their promoters. Interacts with PIH1D1. {ECO:0000250|UniProtKB:O95071}.
+CC   -!- SUBCELLULAR LOCATION: Nucleus {ECO:0000250}.
+CC   -!- TISSUE SPECIFICITY: Highest levels found in testis. Also present in
+CC       liver, kidney, lung and brain. {ECO:0000269|PubMed:12239083}.
+CC   -!- DEVELOPMENTAL STAGE: In early postnatal life, expression in the testis
+CC       increases to reach a maximum around day 28.
+CC       {ECO:0000269|PubMed:12239083}.
+CC   -!- MISCELLANEOUS: A cysteine residue is required for ubiquitin-thioester
+CC       formation.
+CC   -!- SEQUENCE CAUTION:
+CC       Sequence=CAA45756.1; Type=Frameshift; Evidence={ECO:0000305};
+CC   ---------------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see https://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution (CC BY 4.0) License
+CC   ---------------------------------------------------------------------------
+DR   EMBL; X64411; CAA45756.1; ALT_FRAME; mRNA.
+DR   PIR; S22659; S22659.
+DR   PDB; 3NTW; X-ray; 2.60 A; A/C=2383-2442.
+DR   PDBsum; 3NTW; -.
+DR   SMR; Q62671; -.
+DR   ELM; Q62671; -.
+DR   IntAct; Q62671; 1.
+DR   STRING; 10116.ENSRNOP00000009115; -.
+DR   iPTMnet; Q62671; -.
+DR   PhosphoSitePlus; Q62671; -.
+DR   jPOST; Q62671; -.
+DR   PaxDb; Q62671; -.
+DR   UCSC; RGD:621236; rat.
+DR   RGD; 621236; Ubr5.
+DR   eggNOG; KOG0943; Eukaryota.
+DR   InParanoid; Q62671; -.
+DR   UniPathway; UPA00143; -.
+DR   PRO; PR:Q62671; -.
+DR   Proteomes; UP000002494; Unplaced.
+DR   GO; GO:0005737; C:cytoplasm; IBA:GO_Central.
+DR   GO; GO:0005829; C:cytosol; IDA:RGD.
+DR   GO; GO:0005634; C:nucleus; ISO:RGD.
+DR   GO; GO:0048471; C:perinuclear region of cytoplasm; ISO:RGD.
+DR   GO; GO:0032991; C:protein-containing complex; ISO:RGD.
+DR   GO; GO:0019904; F:protein domain specific binding; IDA:RGD.
+DR   GO; GO:0003723; F:RNA binding; IEA:InterPro.
+DR   GO; GO:0043130; F:ubiquitin binding; IEA:InterPro.
+DR   GO; GO:0061630; F:ubiquitin protein ligase activity; IDA:RGD.
+DR   GO; GO:0034450; F:ubiquitin-ubiquitin ligase activity; ISO:RGD.
+DR   GO; GO:0008270; F:zinc ion binding; IEA:InterPro.
+DR   GO; GO:0006974; P:cellular response to DNA damage stimulus; ISS:UniProtKB.
+DR   GO; GO:0006281; P:DNA repair; IEA:UniProtKB-KW.
+DR   GO; GO:2000780; P:negative regulation of double-strand break repair; ISS:UniProtKB.
+DR   GO; GO:1901315; P:negative regulation of histone H2A K63-linked ubiquitination; ISS:UniProtKB.
+DR   GO; GO:0032700; P:negative regulation of interleukin-17 production; ISO:RGD.
+DR   GO; GO:0090263; P:positive regulation of canonical Wnt signaling pathway; ISO:RGD.
+DR   GO; GO:0010628; P:positive regulation of gene expression; ISO:RGD.
+DR   GO; GO:0042307; P:positive regulation of protein import into nucleus; ISO:RGD.
+DR   GO; GO:0050847; P:progesterone receptor signaling pathway; ISO:RGD.
+DR   GO; GO:0070936; P:protein K48-linked ubiquitination; ISO:RGD.
+DR   GO; GO:0000209; P:protein polyubiquitination; ISO:RGD.
+DR   GO; GO:0016567; P:protein ubiquitination; IDA:RGD.
+DR   GO; GO:2000779; P:regulation of double-strand break repair; IBA:GO_Central.
+DR   GO; GO:0031647; P:regulation of protein stability; ISO:RGD.
+DR   CDD; cd14423; CUE_UBR5; 1.
+DR   Gene3D; 2.130.10.30; -; 1.
+DR   InterPro; IPR024725; E3_UbLigase_EDD_UBA.
+DR   InterPro; IPR000569; HECT_dom.
+DR   InterPro; IPR035983; Hect_E3_ubiquitin_ligase.
+DR   InterPro; IPR036053; PABP-dom.
+DR   InterPro; IPR002004; PABP_HYD.
+DR   InterPro; IPR009091; RCC1/BLIP-II.
+DR   InterPro; IPR003126; Znf_UBR.
+DR   Pfam; PF11547; E3_UbLigase_EDD; 1.
 DR   Pfam; PF00632; HECT; 1.
 DR   Pfam; PF00658; PABP; 1.
 DR   SMART; SM00119; HECTc; 1.
 DR   SMART; SM00517; PolyA; 1.
+DR   SMART; SM00396; ZnF_UBR1; 1.
+DR   SUPFAM; SSF50985; SSF50985; 1.
+DR   SUPFAM; SSF56204; SSF56204; 1.
+DR   SUPFAM; SSF63570; SSF63570; 1.
 DR   PROSITE; PS50237; HECT; 1.
-KW   Ubl conjugation pathway; Ligase; Nuclear protein.
-FT   NON_TER       1      1
-FT   DOMAIN      515    571       PABP-LIKE.
-FT   DOMAIN      583    920       HECT.
-FT   DOMAIN      108    119       ASP/GLU-RICH (ACIDIC).
-FT   DOMAIN      158    181       PRO-RICH.
-FT   DOMAIN      451    470       ARG/GLU-RICH (MIXED CHARGE).
-FT   DOMAIN      479    488       ARG/ASP-RICH (MIXED CHARGE).
-FT   DOMAIN      610    621       ASP/GLU-RICH (ACIDIC).
-FT   DOMAIN      858    878       PRO-RICH.
-FT   BINDING     889    889       UBIQUITIN (BY SIMILARITY).
-SQ   SEQUENCE   920 AA;  103949 MW;  465771084536C3AA CRC32;
-     ARRERMTARE EASLRTLEGR RRATLLSARQ GMMSARGDFL NYALSLMRSH NDEHSDVLPV
-     LDVCSLKHVA YVFQALIYWI KAMNQQTTLD TPQLERKRTR ELLELGIDNE DSEHENDDDT
-     SQSATLNDKD DESLPAETGQ NHPFFRRSDS MTFLGCIPPN PFEVPLAEAI PLADQPHLLQ
-     PNARKEDLFG RPSQGLYSSS AGSGKCLVEV TMDRNCLEVL PTKMSYAANL KNVMNMQNRQ
-     KKAGEDQSML AEEADSSKPG PSAHDVAAQL KSSLLAEIGL TESEGPPLTS FRPQCSFMGM
-     VISHDMLLGR WRLSLELFGR VFMEDVGAEP GSILTELGGF EVKESKFRRE MEKLRNQQSR
-     DLSLEVDRDR DLLIQQTMRQ LNNHFGRRCA TTPMAVHRVK VTFKDEPGEG SGVARSFYTA
-     IAQAFLSNEK LPNLDCIQNA NKGTHTSLMQ RLRNRGERDR EREREREMRR SSGLRAGSRR
-     DRDRDFRRQL SIDTRPFRPA SEGNPSDDPD PLPAHRQALG ERLYPRVQAM QPAFASKITG
-     MLLELSPAQL LLLLASEDSL RARVEEAMEL IVAHGRENGA DSILDLGLLD SSEKVQENRK
-     RHGSSRSVVD MDLDDTDDGD DNAPLFYQPG KRGFYTPRPG KNTEARLNCF RNIGRILGLC
-     LLQNELCPIT LNRHVIKVLL GRKVNWHDFA FFDPVMYESL RQLILASQSS DADAVFSAMD
-     LAFAVDLCKE EGGGQVELIP NGVNIPVTPQ NVYEYVRKYA EHRMLVVAEQ PLHAMRKGLL
-     DVLPKNSLED LTAEDFRLLV NGCGEVNVQM LISFTSFNDE SGENAEKLLQ FKRWFWSIVE
-     RMSMTERQDL VYFWTSSPSL PASEEGFQPM PSITIRPPDD QHLPTANTCI SRLYVPLYSS
-     KQILKQKLLL AIKTKNFGFV
+DR   PROSITE; PS51309; PABC; 1.
+DR   PROSITE; PS51157; ZF_UBR; 1.
+PE   1: Evidence at protein level;
+KW   3D-structure; DNA damage; DNA repair; Metal-binding; Nucleus;
+KW   Phosphoprotein; Reference proteome; Transferase; Ubl conjugation pathway;
+KW   Zinc; Zinc-finger.
+FT   CHAIN           1..2788
+FT                   /note="E3 ubiquitin-protein ligase UBR5"
+FT                   /id="PRO_0000086933"
+FT   DOMAIN          2367..2444
+FT                   /note="PABC"
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU00641"
+FT   DOMAIN          2451..2788
+FT                   /note="HECT"
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU00104"
+FT   ZN_FING         1166..1234
+FT                   /note="UBR-type"
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU00508"
+FT   REGION          68..165
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   REGION          318..343
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   REGION          572..636
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   REGION          988..1024
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   REGION          1041..1064
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   REGION          1288..1308
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   REGION          1504..1729
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   REGION          1848..1881
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   REGION          1974..2011
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   REGION          2106..2132
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   REGION          2313..2383
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   REGION          2463..2490
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        77..141
+FT                   /note="Polar residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        318..334
+FT                   /note="Basic and acidic residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        572..591
+FT                   /note="Basic and acidic residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        600..621
+FT                   /note="Polar residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        1006..1020
+FT                   /note="Pro residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        1041..1061
+FT                   /note="Polar residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        1510..1540
+FT                   /note="Polar residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        1552..1566
+FT                   /note="Acidic residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        1567..1597
+FT                   /note="Basic and acidic residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        1611..1640
+FT                   /note="Polar residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        1649..1674
+FT                   /note="Polar residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        1682..1729
+FT                   /note="Polar residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        1865..1881
+FT                   /note="Basic and acidic residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        1986..2004
+FT                   /note="Basic and acidic residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        2319..2360
+FT                   /note="Basic and acidic residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        2463..2480
+FT                   /note="Basic and acidic residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   ACT_SITE        2757
+FT                   /note="Glycyl thioester intermediate"
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU00104"
+FT   MOD_RES         100
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         317
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         342
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         567
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         601
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         626
+FT                   /note="Phosphothreonine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         797
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         917
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         1007
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         1104
+FT                   /note="Phosphothreonine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         1124
+FT                   /note="Phosphothreonine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         1216
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         1297
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         1344
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         1364
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         1470
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         1538
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         1725
+FT                   /note="Phosphothreonine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         1730
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         1735
+FT                   /note="Phosphotyrosine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         1769
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         1959
+FT                   /note="Phosphothreonine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         1980
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         2016
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         2018
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         2020
+FT                   /note="Phosphothreonine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         2066
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         2203
+FT                   /note="Phosphothreonine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         2231
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0007744|PubMed:22673903"
+FT   MOD_RES         2279
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         2459
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         2473
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:O95071"
+FT   MOD_RES         2475
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0007744|PubMed:22673903"
+FT   CONFLICT        1890
+FT                   /note="Missing (in Ref. 2; CAA45756)"
+FT                   /evidence="ECO:0000305"
+FT   HELIX           2383..2396
+FT                   /evidence="ECO:0007829|PDB:3NTW"
+FT   HELIX           2400..2402
+FT                   /evidence="ECO:0007829|PDB:3NTW"
+FT   HELIX           2403..2410
+FT                   /evidence="ECO:0007829|PDB:3NTW"
+FT   HELIX           2415..2423
+FT                   /evidence="ECO:0007829|PDB:3NTW"
+FT   HELIX           2425..2439
+FT                   /evidence="ECO:0007829|PDB:3NTW"
+SQ   SEQUENCE   2788 AA;  308027 MW;  C2EA68B962627231 CRC64;
+     MNKQAVKRLH MLREVSEKLN KYNLNSHPPL NVLEQATIKQ CVVGPNHAAF LLEDGRICRI
+     GFSVQPDRLE LGKPDNNDGS KLNSSSGTGR TSRPGRTSDS PWFLSGSETL GRLAGNTLGS
+     RWSSGVGGSG GGSSGRSSAG ARDSRRQTRV IRTGRDRGSG LLGSQPQPVI PASVIPEELI
+     SQAQVVLQGK SRSVIIRELQ RTNLDVNLAV NNLLSRDDED GDDGDDTASE SYLPGEDLMS
+     LLDADIHSAH PSVIIDADAM FSEDISYFGY PSFRRSSLSR LGSSRVLLLP LERDSELLRE
+     RESVLRLRER RWLDGASFDN ERGSTSKEGE PNPDKKNTPV QSPVSLGEDL QWWPDKDGTK
+     FTCIGALYSE LVAVSSKGEL YQWKWTESEP YRNAQNPSLH HPRATFLGLT NEKIVLLSAN
+     SIRATVATEN NKVATWVDET LSSVASKLEH TAQTYSELQG ERIVSLHCCA LYTCAQLENN
+     LYWWGVVPFS QRKKMLEKAR AKNKKPKSSA GVQSLNVRGG RQVCLRNNPL YHAGAVAFSI
+     SAGIPKVGVL MESVWNMNDS CRFQLRSPES LKSMEKASKT IETKPESKQE PVKTEMGPPP
+     SPASTCSDAS SIASSASMPY KRRRSTPAPK EEEKVNEEQW SLREVVFVED VKNVPVGKVL
+     KVDGAYVAVK FPGTSSNTNC QNSSGPDADP SSLLQDCRLL RIDELQVVKT GGTPKVPDCF
+     QRTPKKLCIP EKTEILAVNV DSKGVHAVLK TGNWVRYCIF DLATGKAEQE NNFPTSSVAF
+     LGQNERSVAI FTAGQESPII LRDGNGTIYP MAKDCMGGIR DPDWLDLPPI SSLGMGVHSL
+     INLPANSTIK KKAAIIIMAV EKQTLMQHIL RCDYEACRQY LVNLEQAVVL EQNLQMLQTF
+     ISHRCDGNRN ILHACVSVCF PTSNKETKEE EEAERSERNT FAERLSAVEA IANAISVVSS
+     NGPGNRAGSS SSRSLRLREM MRRSLRAAGL GRHEAGASSS DHQDPVSPPI APPSWVPDPP
+     SMDPDGDIDF ILAPAVGSLT TAATGGGQGP STSTIPGPST EPSVVESKDR KANAHFILKL
+     LCDSAVLQPY LRELLSAKDA RGMTPFMSAV SGRAYPAAIT ILETAQKIAK AEVSGSEKEE
+     DVFMGMVCPS GTNPDDSPLY VLCCNDTCSF TWTGAEHINQ DIFECRTCGL LESLCCCTEC
+     ARVCHKGHDC KLKRTSPTAY CDCWEKCKCK TLIAGQKSAR LDLLYRLLTA TNLVTLPNSR
+     GEHLLLFLVQ TVARQTVEHC QYRPPRIRED RNRKTASPDD SDMPDHDLEP PRFAQLALER
+     VLQDWNALRS MIMFGSQENK DPLSASSRIG HLLPEEQVYL NQQSGTIRLD CFTHCLIVKC
+     TADILLLDTL LGTLVKELQN KYTPGRREEA IAVTMRFLRS VARVFVILSV EMASSKKKNN
+     FIPQPIGKCK RVFQALLPYA VEELCNVAES LIVPVRMGIA RPTAPFTLAS TSIDAMQGSE
+     ELFSVEPLPP RPSSDQSSSS SQSQSSYIIR NPQQRRISQS QPVRGREEEQ DDIVSADVEE
+     VEVVEGVAGE EDHHDEQEEH GEENAEAEGH HDEHDEDGSD MELDLLAAAE TESDSESNHS
+     NQDNASGRRS VVTAATAGSE AGASSVPAFF SEDDSQSNDS SDSDSSSSQS DDIEQETFML
+     DEPLERTTNS SHANGAAQAP RSMQWAVRNT QHQRAASTAP SSTSTPAASS AGLIYIDPSN
+     LRRSGTISTS AAAAAAALEA SNASSYLTSA SSLARAYSIV IRQISDLMGL IPKYNHLVYS
+     QIPAAVKLTY QDAVNLQNYV EEKLIPTWNW MVSIMDSTEA QLRYGSALAS AGDPGHPNHP
+     LHASQNSARR ERMTAREEAS LRTLEGRRRR ATLLSARQGM MSARGDFLNY ALSLMRSHND
+     EHSDVLPVLD VCSLKHVAYV FQALIYWIKA MNQQTTLDTP QLERKRTREL LELGIDNEDS
+     EHENDDDTSQ SATLNDKDDE SLPAETGQNH PFFRRSDSMT FLGCIPPNPF EVPLAEAIPL
+     ADQPHLLQPN ARKEDLFGRP SQGLYSSSAG SGKCLVEVTM DRNCLEVLPT KMSYAANLKN
+     VMNMQNRQKK AGEDQSMLAE EADSSKPGPS AHDVAAQLKS SLLAEIGLTE SEGPPLTSFR
+     PQCSFMGMVI SHDMLLGRWR LSLELFGRVF MEDVGAEPGS ILTELGGFEV KESKFRREME
+     KLRNQQSRDL SLEVDRDRDL LIQQTMRQLN NHFGRRCATT PMAVHRVKVT FKDEPGEGSG
+     VARSFYTAIA QAFLSNEKLP NLDCIQNANK GTHTSLMQRL RNRGERDRER EREREMRRSS
+     GLRAGSRRDR DRDFRRQLSI DTRPFRPASE GNPSDDPDPL PAHRQALGER LYPRVQAMQP
+     AFASKITGML LELSPAQLLL LLASEDSLRA RVEEAMELIV AHGRENGADS ILDLGLLDSS
+     EKVQENRKRH GSSRSVVDMD LDDTDDGDDN APLFYQPGKR GFYTPRPGKN TEARLNCFRN
+     IGRILGLCLL QNELCPITLN RHVIKVLLGR KVNWHDFAFF DPVMYESLRQ LILASQSSDA
+     DAVFSAMDLA FAVDLCKEEG GGQVELIPNG VNIPVTPQNV YEYVRKYAEH RMLVVAEQPL
+     HAMRKGLLDV LPKNSLEDLT AEDFRLLVNG CGEVNVQMLI SFTSFNDESG ENAEKLLQFK
+     RWFWSIVERM SMTERQDLVY FWTSSPSLPA SEEGFQPMPS ITIRPPDDQH LPTANTCISR
+     LYVPLYSSKQ ILKQKLLLAI KTKNFGFV
 //

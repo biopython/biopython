@@ -473,9 +473,9 @@ class TestUniprot(SeqRecordTestBaseClass):
         # test Entry version
         self.assertEqual(seq_record.annotations["entry_version"], 93)
 
-    def test_sp002(self):
-        """Parsing SwissProt file sp002."""
-        filename = "sp002"
+    def test_P60904(self):
+        """Parsing SwissProt file P60904.txt."""
+        filename = "P60904.txt"
         # test the record parser
 
         datafile = os.path.join("SwissProt", filename)
@@ -486,9 +486,9 @@ class TestUniprot(SeqRecordTestBaseClass):
         self.assertIsInstance(seq_record, SeqRecord)
 
         # test Sequence version
-        self.assertEqual(seq_record.annotations["sequence_version"], 34)
+        self.assertEqual(seq_record.annotations["sequence_version"], 1)
         # test Entry version
-        self.assertEqual(seq_record.annotations["entry_version"], 36)
+        self.assertEqual(seq_record.annotations["entry_version"], 158)
 
     def compare_txt_xml(self, old, new):
         """Compare text and XML based parser output."""
@@ -565,7 +565,8 @@ class TestUniprot(SeqRecordTestBaseClass):
         # TODO - Why the mismatch gene_name vs gene_name_primary?
         # TODO - Handle evidence codes on GN line (see GitHub isse #416)
         self.assertEqual(
-            old.annotations["gene_name"], "Name=HvPIP2;8 {ECO:0000313|EMBL:BAN04711.1};"
+            old.annotations["gene_name"],
+            [{"Name": "HvPIP2;8 {ECO:0000313|EMBL:BAN04711.1}"}],
         )
         self.assertEqual(new.annotations["gene_name_primary"], "HvPIP2;8")
         self.assertEqual(old.name, "F2CXE6_HORVD")

@@ -45,7 +45,8 @@ class Record:
      - sequence_update   A tuple of (date, release).
      - annotation_update A tuple of (date, release).
      - description       Free-format description.
-     - gene_name         Gene name.  See userman.txt for description.
+     - gene_name         A list of dictionaries with keys 'Name', 'Synonyms',
+                         'OrderedLocusNames' and 'ORFNames'.
      - organism          The source of the sequence.
      - organelle         The origin of the sequence.
      - organism_classification  The taxonomy classification.  List of strings.
@@ -67,21 +68,21 @@ class Record:
     Examples
     --------
     >>> from Bio import SwissProt
-    >>> example_filename = "SwissProt/sp008"
+    >>> example_filename = "SwissProt/P68308.txt"
     >>> with open(example_filename) as handle:
     ...     records = SwissProt.parse(handle)
     ...     for record in records:
     ...         print(record.entry_name)
-    ...         print(",".join(record.accessions))
+    ...         print(record.accessions)
     ...         print(record.keywords)
-    ...         print(repr(record.organism))
+    ...         print(record.organism)
     ...         print(record.sequence[:20] + "...")
     ...
-    1A02_HUMAN
-    P01892,P06338,P30514,P30444,P30445,P30446,Q29680,Q29899,Q95352,Q29837,Q95380
-    ['MHC I', 'Transmembrane', 'Glycoprotein', 'Signal', 'Polymorphism', '3D-structure']
-    'Homo sapiens (Human).'
-    MAVMAPRTLVLLLSGALALT...
+    NU3M_BALPH
+    ['P68308', 'P24973']
+    ['Electron transport', 'Membrane', 'Mitochondrion', 'Mitochondrion inner membrane', 'NAD', 'Respiratory chain', 'Translocase', 'Transmembrane', 'Transmembrane helix', 'Transport', 'Ubiquinone']
+    Balaenoptera physalus (Fin whale) (Balaena physalus).
+    MNLLLTLLTNTTLALLLVFI...
 
     """
 
@@ -98,7 +99,7 @@ class Record:
         self.annotation_update = None
 
         self.description = []
-        self.gene_name = ""
+        self.gene_name = []
         self.organism = []
         self.organelle = ""
         self.organism_classification = []
@@ -304,9 +305,7 @@ def _read(handle):
         elif key == "DE":
             record.description.append(value.strip())
         elif key == "GN":
-            if record.gene_name:
-                record.gene_name += " "
-            record.gene_name += value
+            _read_gn(record, value)
         elif key == "OS":
             record.organism.append(value)
         elif key == "OG":
@@ -404,6 +403,31 @@ def _read(handle):
             raise SwissProtParserError(f"Unknown keyword '{key}' found", line=line)
     if record:
         raise ValueError("Unexpected end of stream.")
+
+
+def _read_gn(record, value):
+    tokens = value.rstrip(";").split("; ")
+    try:
+        gene_name = record.gene_name[-1]
+    except IndexError:
+        pass
+    for token in tokens:
+        if token.startswith("Name="):
+            name = token[5:]
+            gene_name = {"Name": name}
+            record.gene_name.append(gene_name)
+        else:
+            for keyword in ("Synonyms", "OrderedLocusNames", "ORFNames"):
+                if token.startswith(keyword + "="):
+                    token = token[len(keyword) + 1 :]
+                    gene_name[keyword] = token.rstrip(",").split(", ")
+                    break
+            else:
+                keyword = list(record.gene_name[-1].keys())[-1]
+                if keyword == "Name":
+                    gene_name[keyword] += " " + token
+                else:
+                    gene_name[keyword] += token.rstrip(",").split(", ")
 
 
 def _read_id(record, line):
