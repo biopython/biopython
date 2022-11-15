@@ -25,7 +25,6 @@ from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
 from BioSQL import BioSeqDatabase
-from BioSQL import BioSeq
 
 from seq_tests_common import SeqRecordTestBaseClass
 
@@ -36,6 +35,7 @@ if __name__ == "__main__":
 # DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE, SYSTEM
 
 SYSTEM = platform.system()
+DBDRIVER = DBTYPE = DBHOST = DBUSER = DBPASSWD = TESTDB = DBSCHEMA = SQL_FILE = None
 
 
 def load_biosql_ini(DBTYPE):
@@ -88,9 +88,9 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
     if SYSTEM == "Java":
         try:
             if DBDRIVER in ["MySQLdb"]:
-                import com.mysql.jdbc.Driver
+                import com.mysql.jdbc.Driver  # noqa: F401
             elif DBDRIVER in ["psycopg2", "pgdb"]:
-                import org.postgresql.Driver
+                import org.postgresql.Driver  # noqa: F401
         except ImportError:
             message = f"Install the JDBC driver for {DBTYPE} to use BioSQL "
             raise MissingExternalDependencyError(message) from None
@@ -171,7 +171,7 @@ def _do_db_cleanup():
             server.module.OperationalError,
             server.module.Error,
             server.module.DatabaseError,
-        ) as e:  # the database doesn't exist
+        ):  # the database doesn't exist
             pass
         except (
             server.module.IntegrityError,
@@ -354,7 +354,7 @@ class MultiReadTest(unittest.TestCase):
         db2 = self.db2
         for db2_id in db2.keys():
             with self.assertRaises(KeyError):
-                rec = db[db2_id]
+                db[db2_id]
 
 
 class ReadTest(unittest.TestCase):
@@ -549,7 +549,6 @@ class SeqInterfaceTest(unittest.TestCase):
             str(cds_feature.location), "join{[103:160](+), [319:390](+), [503:579](+)}"
         )
 
-        msg = f"Missing expected entries, have {cds_feature.qualifiers!r}"
         self.assertIn("gene", cds_feature.qualifiers)
         self.assertIn("protein_id", cds_feature.qualifiers)
         self.assertIn("codon_start", cds_feature.qualifiers)
@@ -972,9 +971,8 @@ class DeleteTest(unittest.TestCase):
     def test_del_db_items(self):
         """Check all associated data is deleted from an item."""
         db = self.db
-        items = list(db.values())
         keys = list(db)
-        length = len(items)
+        self.assertEqual(len(keys), len(list(db.values())))
 
         for seq_id in keys:
             sql = "SELECT seqfeature_id from seqfeature where bioentry_id = '%s'"
@@ -1072,7 +1070,7 @@ class ClosedLoopTest(SeqRecordTestBaseClass):
     def setUpClass(cls):
         # NOTE - For speed I don't bother to create a new database each time,
         # simply a new unique namespace is used for each test.
-        TESTDB = create_database()
+        TESTDB = create_database()  # noqa: F841
 
     def test_NC_005816(self):
         """From GenBank file to BioSQL and back to a GenBank file, NC_005816."""
@@ -1160,7 +1158,7 @@ class TransferTest(SeqRecordTestBaseClass):
     # simply a new unique namespace is used for each test.
 
     def setUp(self):
-        TESTDB = create_database()
+        TESTDB = create_database()  # noqa: F841
 
     def test_NC_005816(self):
         """From GenBank file to BioSQL, then again to a new namespace, NC_005816."""
@@ -1361,7 +1359,7 @@ class AutoSeqIOTests(SeqRecordTestBaseClass):
     @classmethod
     def setUpClass(cls):
         # Create and reuse on database for all tests in this class
-        TESTDB = create_database()
+        TESTDB = create_database()  # noqa: F841
 
     def setUp(self):
         """Connect to the database."""
