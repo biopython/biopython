@@ -1725,9 +1725,9 @@ This matrix can be used as the substitution matrix when performing alignments. F
 >>> aligner.gap_score = -3.0
 >>> alignments = aligner.align("DEHEK", "DHHKK")
 >>> print(alignments[0])
-DEHEK
-|.|.|
-DHHKK
+target            0 DEHEK 5
+                  0 |.|.| 5
+query             0 DHHKK 5
 <BLANKLINE>
 >>> print("%.2f" % alignments.score)
 -2.18

@@ -40,15 +40,26 @@ class TestPairwiseAlignment(unittest.TestCase):
             repr(alignment),
             "<Alignment object (2 rows x 12 columns) at 0x%x>" % id(alignment),
         )
-        self.assertEqual(
-            str(alignment),
-            """\
-AACCGGGA-CCG
-|-|-||-|-|--
-A-C-GG-AAC--
+        if strand == "forward":
+            self.assertEqual(
+                str(alignment),
+                """\
+target            0 AACCGGGA-CCG 11
+                  0 |-|-||-|-|-- 12
+query             0 A-C-GG-AAC--  7
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(alignment),
+                """\
+target            0 AACCGGGA-CCG 11
+                  0 |-|-||-|-|-- 12
+query             7 A-C-GG-AAC--  0
+""",
+                msg=msg,
+            )
         self.assertAlmostEqual(alignment.score, 6.0)
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.shape, (2, 12))
@@ -122,15 +133,26 @@ A-C-GG-AAC--
         self.assertEqual(alignment[0, range(0, 12, 2)], "ACGG-C", msg=msg)
         subalignment = alignment[:, :]
         self.assertAlmostEqual(subalignment.score, 6.0, msg=msg)
-        self.assertEqual(
-            str(alignment[:, :]),
-            """\
-AACCGGGA-CCG
-|-|-||-|-|--
-A-C-GG-AAC--
+        if strand == "forward":
+            self.assertEqual(
+                str(alignment[:, :]),
+                """\
+target            0 AACCGGGA-CCG 11
+                  0 |-|-||-|-|-- 12
+query             0 A-C-GG-AAC--  7
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(alignment[:, :]),
+                """\
+target            0 AACCGGGA-CCG 11
+                  0 |-|-||-|-|-- 12
+query             7 A-C-GG-AAC--  0
+""",
+                msg=msg,
+            )
         self.assertIsInstance(subalignment.sequences[0], cls)
         self.assertIsInstance(subalignment.sequences[1], cls)
         self.assertEqual(alignment[0, 0:12], "AACCGGGA-CCG", msg=msg)
@@ -139,15 +161,26 @@ A-C-GG-AAC--
         self.assertEqual(alignment[1, 0:], "A-C-GG-AAC--", msg=msg)
         subalignment = alignment[:, 0:]
         self.assertAlmostEqual(subalignment.score, 6.0, msg=msg)
-        self.assertEqual(
-            str(subalignment),
-            """\
-AACCGGGA-CCG
-|-|-||-|-|--
-A-C-GG-AAC--
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            0 AACCGGGA-CCG 11
+                  0 |-|-||-|-|-- 12
+query             0 A-C-GG-AAC--  7
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            0 AACCGGGA-CCG 11
+                  0 |-|-||-|-|-- 12
+query             7 A-C-GG-AAC--  0
+""",
+                msg=msg,
+            )
         self.assertIsInstance(subalignment.sequences[0], cls)
         self.assertIsInstance(subalignment.sequences[1], cls)
         self.assertEqual(alignment[0, :12], "AACCGGGA-CCG", msg=msg)
@@ -192,169 +225,312 @@ A-C-GG-AAC--
         self.assertEqual(alignment[1, 2:-2], "C-GG-AAC", msg=msg)
         subalignment = alignment[:, :12]
         self.assertAlmostEqual(subalignment.score, 6.0, msg=msg)
-        self.assertEqual(
-            str(subalignment),
-            """\
-AACCGGGA-CCG
-|-|-||-|-|--
-A-C-GG-AAC--
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            0 AACCGGGA-CCG 11
+                  0 |-|-||-|-|-- 12
+query             0 A-C-GG-AAC--  7
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            0 AACCGGGA-CCG 11
+                  0 |-|-||-|-|-- 12
+query             7 A-C-GG-AAC--  0
+""",
+                msg=msg,
+            )
         self.assertIsInstance(subalignment.sequences[0], cls)
         self.assertIsInstance(subalignment.sequences[1], cls)
         subalignment = alignment[:, 0:12]
         self.assertAlmostEqual(alignment.score, 6.0, msg=msg)
-        self.assertEqual(
-            str(subalignment),
-            """\
-AACCGGGA-CCG
-|-|-||-|-|--
-A-C-GG-AAC--
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            0 AACCGGGA-CCG 11
+                  0 |-|-||-|-|-- 12
+query             0 A-C-GG-AAC--  7
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            0 AACCGGGA-CCG 11
+                  0 |-|-||-|-|-- 12
+query             7 A-C-GG-AAC--  0
+""",
+                msg=msg,
+            )
         self.assertIsInstance(subalignment.sequences[0], cls)
         self.assertIsInstance(subalignment.sequences[1], cls)
         subalignment = alignment[:, 1:]
-        self.assertEqual(
-            str(subalignment),
-            """\
-AACCGGGA-CCG
- -|-||-|-|--
-A-C-GG-AAC--
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            1 ACCGGGA-CCG 11
+                  0 -|-||-|-|-- 11
+query             1 -C-GG-AAC--  7
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            1 ACCGGGA-CCG 11
+                  0 -|-||-|-|-- 11
+query             6 -C-GG-AAC--  0
+""",
+                msg=msg,
+            )
         self.assertIsInstance(subalignment.sequences[0], cls)
         self.assertIsInstance(subalignment.sequences[1], cls)
         subalignment = alignment[:, 2:]
-        self.assertEqual(
-            str(subalignment),
-            """\
-AACCGGGA-CCG
-  |-||-|-|--
- AC-GG-AAC--
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            2 CCGGGA-CCG 11
+                  0 |-||-|-|-- 10
+query             1 C-GG-AAC--  7
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            2 CCGGGA-CCG 11
+                  0 |-||-|-|-- 10
+query             6 C-GG-AAC--  0
+""",
+                msg=msg,
+            )
         self.assertIsInstance(subalignment.sequences[0], cls)
         self.assertIsInstance(subalignment.sequences[1], cls)
         subalignment = alignment[:, 3:]
-        self.assertEqual(
-            str(subalignment),
-            """\
-AACCGGGA-CCG
-   -||-|-|--
- AC-GG-AAC--
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            3 CGGGA-CCG 11
+                  0 -||-|-|--  9
+query             2 -GG-AAC--  7
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            3 CGGGA-CCG 11
+                  0 -||-|-|--  9
+query             5 -GG-AAC--  0
+""",
+                msg=msg,
+            )
         self.assertIsInstance(subalignment.sequences[0], cls)
         self.assertIsInstance(subalignment.sequences[1], cls)
         subalignment = alignment[:, 4:]
-        self.assertEqual(
-            str(subalignment),
-            """\
-AACCGGGA-CCG
-    ||-|-|--
-  ACGG-AAC--
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            4 GGGA-CCG 11
+                  0 ||-|-|--  8
+query             2 GG-AAC--  7
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            4 GGGA-CCG 11
+                  0 ||-|-|--  8
+query             5 GG-AAC--  0
+""",
+                msg=msg,
+            )
         self.assertIsInstance(subalignment.sequences[0], cls)
         self.assertIsInstance(subalignment.sequences[1], cls)
         subalignment = alignment[:, :-1]
-        self.assertEqual(
-            str(subalignment),
-            """\
-AACCGGGA-CCG
-|-|-||-|-|-
-A-C-GG-AAC-
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            0 AACCGGGA-CC 10
+                  0 |-|-||-|-|- 11
+query             0 A-C-GG-AAC-  7
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            0 AACCGGGA-CC 10
+                  0 |-|-||-|-|- 11
+query             7 A-C-GG-AAC-  0
+""",
+                msg=msg,
+            )
         self.assertIsInstance(subalignment.sequences[0], cls)
         self.assertIsInstance(subalignment.sequences[1], cls)
         subalignment = alignment[:, :-2]
-        self.assertEqual(
-            str(subalignment),
-            """\
-AACCGGGA-CCG
-|-|-||-|-|
-A-C-GG-AAC
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            0 AACCGGGA-C  9
+                  0 |-|-||-|-| 10
+query             0 A-C-GG-AAC  7
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            0 AACCGGGA-C  9
+                  0 |-|-||-|-| 10
+query             7 A-C-GG-AAC  0
+""",
+                msg=msg,
+            )
         self.assertIsInstance(subalignment.sequences[0], cls)
         self.assertIsInstance(subalignment.sequences[1], cls)
         subalignment = alignment[:, :-3]
-        self.assertEqual(
-            str(subalignment),
-            """\
-AACCGGGA-CCG
-|-|-||-|-
-A-C-GG-AAC
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            0 AACCGGGA- 8
+                  0 |-|-||-|- 9
+query             0 A-C-GG-AA 6
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            0 AACCGGGA- 8
+                  0 |-|-||-|- 9
+query             7 A-C-GG-AA 1
+""",
+                msg=msg,
+            )
         self.assertIsInstance(subalignment.sequences[0], cls)
         self.assertIsInstance(subalignment.sequences[1], cls)
         subalignment = alignment[:, 1:-1]
-        self.assertEqual(
-            str(subalignment),
-            """\
-AACCGGGA-CCG
- -|-||-|-|-
-A-C-GG-AAC-
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            1 ACCGGGA-CC 10
+                  0 -|-||-|-|- 10
+query             1 -C-GG-AAC-  7
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            1 ACCGGGA-CC 10
+                  0 -|-||-|-|- 10
+query             6 -C-GG-AAC-  0
+""",
+                msg=msg,
+            )
         self.assertIsInstance(subalignment.sequences[0], cls)
         self.assertIsInstance(subalignment.sequences[1], cls)
         subalignment = alignment[:, 1:-2]
-        self.assertEqual(
-            str(subalignment),
-            """\
-AACCGGGA-CCG
- -|-||-|-|
-A-C-GG-AAC
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            1 ACCGGGA-C 9
+                  0 -|-||-|-| 9
+query             1 -C-GG-AAC 7
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            1 ACCGGGA-C 9
+                  0 -|-||-|-| 9
+query             6 -C-GG-AAC 0
+""",
+                msg=msg,
+            )
         self.assertIsInstance(subalignment.sequences[0], cls)
         self.assertIsInstance(subalignment.sequences[1], cls)
         subalignment = alignment[:, 2:-1]
-        self.assertEqual(
-            str(subalignment),
-            """\
-AACCGGGA-CCG
-  |-||-|-|-
- AC-GG-AAC-
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            2 CCGGGA-CC 10
+                  0 |-||-|-|-  9
+query             1 C-GG-AAC-  7
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            2 CCGGGA-CC 10
+                  0 |-||-|-|-  9
+query             6 C-GG-AAC-  0
+""",
+                msg=msg,
+            )
         self.assertIsInstance(subalignment.sequences[0], cls)
         self.assertIsInstance(subalignment.sequences[1], cls)
         subalignment = alignment[:, 2:-2]
-        self.assertEqual(
-            str(subalignment),
-            """\
-AACCGGGA-CCG
-  |-||-|-|
- AC-GG-AAC
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            2 CCGGGA-C 9
+                  0 |-||-|-| 8
+query             1 C-GG-AAC 7
 """,
-            msg=msg,
-        )
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+target            2 CCGGGA-C 9
+                  0 |-||-|-| 8
+query             6 C-GG-AAC 0
+""",
+                msg=msg,
+            )
         self.assertIsInstance(subalignment.sequences[0], cls)
         self.assertIsInstance(subalignment.sequences[1], cls)
         subalignment = alignment[:, ::2]
         self.assertEqual(
             str(subalignment),
             """\
-ACGG-C
-|||---
-ACG-A-
+target            0 ACGG-C 5
+                  0 |||--- 6
+query             0 ACG-A- 4
 """,
             msg=msg,
         )
@@ -364,9 +540,9 @@ ACG-A-
         self.assertEqual(
             str(subalignment),
             """\
-ACGG-C
-|||---
-ACG-A-
+target            0 ACGG-C 5
+                  0 |||--- 6
+query             0 ACG-A- 4
 """,
             msg=msg,
         )
@@ -376,9 +552,9 @@ ACG-A-
         self.assertEqual(
             str(subalignment),
             """\
-A-G
---|
--AG
+target            0 A-G 2
+                  0 --| 3
+query             0 -AG 2
 """,
             msg=msg,
         )
@@ -437,9 +613,9 @@ A-G
         alignment = Align.Alignment(sequences, self.reverse_coordinates)
         alignment.score = 6.0
         self.check_indexing_slicing(alignment, Seq, "reverse")
-        target = SeqRecord(target)
-        query = SeqRecord(query)
-        query_rc = SeqRecord(query_rc)
+        target = SeqRecord(target, id=None)
+        query = SeqRecord(query, id=None)
+        query_rc = SeqRecord(query_rc, id=None)
         sequences = (target, query)
         alignment = Align.Alignment(sequences, self.forward_coordinates)
         alignment.score = 6.0
@@ -455,9 +631,9 @@ A-G
         self.assertEqual(
             str(alignment),
             """\
-AACCGGGA-CCG
-|-|-||-|-|--
-A-C-GG-AAC--
+target            0 AACCGGGA-CCG 11
+                  0 |-|-||-|-|-- 12
+query             0 A-C-GG-AAC--  7
 """,
         )
         self.assertTrue(
@@ -517,9 +693,9 @@ A-C-GG-AAC--
         self.assertEqual(
             str(alignment),
             """\
-AACCGGGA-CCG
- -|-||-|-|--
-A-C-GG-AAC--
+target            1 ACCGGGA-CCG 11
+                  0 -|-||-|-|-- 11
+query             1 -C-GG-AAC--  7
 """,
         )
         self.assertTrue(
@@ -577,9 +753,9 @@ A-C-GG-AAC--
         self.assertEqual(
             str(alignment),
             """\
-AACCGGGA-CCG
-|-|-||-|-|
-A-C-GG-AAC
+target            0 AACCGGGA-C  9
+                  0 |-|-||-|-| 10
+query             0 A-C-GG-AAC  7
 """,
         )
         self.assertTrue(
@@ -639,9 +815,9 @@ A-C-GG-AAC
         self.assertEqual(
             str(alignment),
             """\
-AACCGGGA-CCG
- -|-||-|-|
-A-C-GG-AAC
+target            1 ACCGGGA-C 9
+                  0 -|-||-|-| 9
+query             1 -C-GG-AAC 7
 """,
         )
         self.assertTrue(
@@ -719,9 +895,9 @@ A-C-GG-AAC
         self.assertEqual(
             str(alignment),
             """\
-AACCGGGA-CCG
-|-|-||-|-|--
-A-C-GG-AAC--
+target            0 AACCGGGA-CCG 11
+                  0 |-|-||-|-|-- 12
+query             7 A-C-GG-AAC--  0
 """,
         )
         self.assertTrue(
@@ -779,9 +955,9 @@ A-C-GG-AAC--
         self.assertEqual(
             str(alignment),
             """\
-AACCGGGA-CCG
- -|-||-|-|--
-A-C-GG-AAC--
+target            1 ACCGGGA-CCG 11
+                  0 -|-||-|-|-- 11
+query             6 -C-GG-AAC--  0
 """,
         )
         self.assertTrue(
@@ -841,9 +1017,9 @@ A-C-GG-AAC--
         self.assertEqual(
             str(alignment),
             """\
-AACCGGGA-CCG
-|-|-||-|-|
-A-C-GG-AAC
+target            0 AACCGGGA-C  9
+                  0 |-|-||-|-| 10
+query             7 A-C-GG-AAC  0
 """,
         )
         self.assertTrue(
@@ -901,9 +1077,9 @@ A-C-GG-AAC
         self.assertEqual(
             str(alignment),
             """\
-AACCGGGA-CCG
- -|-||-|-|
-A-C-GG-AAC
+target            1 ACCGGGA-C 9
+                  0 -|-||-|-| 9
+query             6 -C-GG-AAC 0
 """,
         )
         self.assertTrue(
@@ -950,27 +1126,27 @@ A-C-GG-AAC
         self.assertEqual(
             str(alignment),
             """\
-ACTT
-||.|
-ACCT
+target            0 ACTT 4
+                  0 ||.| 4
+query             0 ACCT 4
 """,
         )
         alignment.sort()
         self.assertEqual(
             str(alignment),
             """\
-ACCT
-||.|
-ACTT
+target            0 ACCT 4
+                  0 ||.| 4
+query             0 ACTT 4
 """,
         )
         alignment.sort(reverse=True)
         self.assertEqual(
             str(alignment),
             """\
-ACTT
-||.|
-ACCT
+target            0 ACTT 4
+                  0 ||.| 4
+query             0 ACCT 4
 """,
         )
         target.id = "seq1"
@@ -979,36 +1155,36 @@ ACCT
         self.assertEqual(
             str(alignment),
             """\
-ACTT
-||.|
-ACCT
+seq1              0 ACTT 4
+                  0 ||.| 4
+seq2              0 ACCT 4
 """,
         )
         alignment.sort(reverse=True)
         self.assertEqual(
             str(alignment),
             """\
-ACCT
-||.|
-ACTT
+seq2              0 ACCT 4
+                  0 ||.| 4
+seq1              0 ACTT 4
 """,
         )
         alignment.sort(key=gc_fraction)
         self.assertEqual(
             str(alignment),
             """\
-ACTT
-||.|
-ACCT
+seq1              0 ACTT 4
+                  0 ||.| 4
+seq2              0 ACCT 4
 """,
         )
         alignment.sort(key=gc_fraction, reverse=True)
         self.assertEqual(
             str(alignment),
             """\
-ACCT
-||.|
-ACTT
+seq2              0 ACCT 4
+                  0 ||.| 4
+seq1              0 ACTT 4
 """,
         )
 
@@ -1142,12 +1318,94 @@ class TestMultipleAlignment(unittest.TestCase):
         self.assertGreater(other, alignment)
         self.assertGreaterEqual(other, alignment)
 
-    def check_indexing_slicing(self, alignment, msg):
+    def check_indexing_slicing(self, alignment, strand):
+        msg = "%s strand" % strand
         self.assertEqual(
             repr(alignment),
             "<Alignment object (7 rows x 156 columns) at 0x%x>" % id(alignment),
         )
-        # self.assertEqual(str(alignment), ..., msg=msg)  # FIXME
+        if strand == "forward":
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627328         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+
+gi|627328        56 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        58 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        56 ------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        56 ------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 TATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+
+gi|627328       110 TGAATATCAAAGAATCCATTGATTTAGTGTACCAGA 146
+gi|627328       112 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 148
+gi|627328       110 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 146
+gi|627328       110 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 146
+gi|627329       114 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 150
+gi|627328       114 TGAATATCAAAGAATCTATTGATTTAGTATACCAGA 150
+gi|627329       120 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 156
+""",
+                msg=msg,
+            )
+        self.assertEqual(len(alignment), 7)
+        self.assertEqual(alignment.shape, (7, 156))
+        self.assertEqual(
+            alignment[0],
+            "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA",
+            msg=msg,
+        )
+        self.assertEqual(
+            alignment[1],
+            "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+            msg=msg,
+        )
+        self.assertEqual(
+            alignment[-2],
+            "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTATACCAGA",
+            msg=msg,
+        )
+        self.assertEqual(
+            alignment[-1],
+            "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+            msg=msg,
+        )
+        if strand == "reverse":
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--
+gi|627328       146 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627328         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+
+gi|627328        56 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        58 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        90 ------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        56 ------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 TATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+
+gi|627328       110 TGAATATCAAAGAATCCATTGATTTAGTGTACCAGA 146
+gi|627328       112 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 148
+gi|627328        36 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA   0
+gi|627328       110 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 146
+gi|627329       114 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 150
+gi|627328       114 TGAATATCAAAGAATCTATTGATTTAGTATACCAGA 150
+gi|627329       120 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 156
+""",
+                msg=msg,
+            )
         self.assertEqual(len(alignment), 7)
         self.assertEqual(alignment.shape, (7, 156))
         self.assertEqual(
@@ -1227,7 +1485,66 @@ class TestMultipleAlignment(unittest.TestCase):
         )
         self.assertEqual(alignment[0, (1, 4, 9)], "ACA", msg=msg)
         self.assertEqual(alignment[1, (1, 57, 58)], "AA-", msg=msg)
-        # self.assertEqual(str(alignment[:, :]), ..., msg=msg)
+        if strand == "forward":
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627328         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+
+gi|627328        56 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        58 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        56 ------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        56 ------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 TATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+
+gi|627328       110 TGAATATCAAAGAATCCATTGATTTAGTGTACCAGA 146
+gi|627328       112 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 148
+gi|627328       110 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 146
+gi|627328       110 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 146
+gi|627329       114 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 150
+gi|627328       114 TGAATATCAAAGAATCTATTGATTTAGTATACCAGA 150
+gi|627329       120 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 156
+""",
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--
+gi|627328       146 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627328         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+
+gi|627328        56 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        58 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        90 ------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        56 ------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 TATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+
+gi|627328       110 TGAATATCAAAGAATCCATTGATTTAGTGTACCAGA 146
+gi|627328       112 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 148
+gi|627328        36 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA   0
+gi|627328       110 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 146
+gi|627329       114 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 150
+gi|627328       114 TGAATATCAAAGAATCTATTGATTTAGTATACCAGA 150
+gi|627329       120 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 156
+""",
+                msg=msg,
+            )
         self.assertEqual(
             alignment[0, 0:156],
             "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA",
@@ -1248,7 +1565,66 @@ class TestMultipleAlignment(unittest.TestCase):
             "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
             msg=msg,
         )
-        # self.assertEqual(str(alignment[:, 0:]), ..., msg=msg)
+        if strand == "forward":
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627328         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+
+gi|627328        56 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        58 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        56 ------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        56 ------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 TATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+
+gi|627328       110 TGAATATCAAAGAATCCATTGATTTAGTGTACCAGA 146
+gi|627328       112 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 148
+gi|627328       110 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 146
+gi|627328       110 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 146
+gi|627329       114 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 150
+gi|627328       114 TGAATATCAAAGAATCTATTGATTTAGTATACCAGA 150
+gi|627329       120 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 156
+""",
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--
+gi|627328       146 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627328         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+
+gi|627328        56 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        58 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        90 ------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        56 ------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 TATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+
+gi|627328       110 TGAATATCAAAGAATCCATTGATTTAGTGTACCAGA 146
+gi|627328       112 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 148
+gi|627328        36 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA   0
+gi|627328       110 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 146
+gi|627329       114 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 150
+gi|627328       114 TGAATATCAAAGAATCTATTGATTTAGTATACCAGA 150
+gi|627329       120 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 156
+""",
+                msg=msg,
+            )
         self.assertEqual(
             alignment[0, :156],
             "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA",
@@ -1378,18 +1754,50 @@ class TestMultipleAlignment(unittest.TestCase):
             msg=msg,
         )
         subalignment = alignment[:, 60:]
-        self.assertEqual(
-            "\n".join(row for row in subalignment),  # str(subalignment),
-            """\
-------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA
-------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
-------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
-------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
-------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
-------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTATACCAGA
-TATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA""",
-            msg=msg,
-        )
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+gi|627328        56 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        58 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        56 ------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        56 ------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 TATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+
+gi|627328       110 TGAATATCAAAGAATCCATTGATTTAGTGTACCAGA 146
+gi|627328       112 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 148
+gi|627328       110 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 146
+gi|627328       110 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 146
+gi|627329       114 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 150
+gi|627328       114 TGAATATCAAAGAATCTATTGATTTAGTATACCAGA 150
+gi|627329       120 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 156
+""",
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+gi|627328        56 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        58 ------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        90 ------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        56 ------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627328        60 ------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+gi|627329        60 TATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+
+gi|627328       110 TGAATATCAAAGAATCCATTGATTTAGTGTACCAGA 146
+gi|627328       112 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 148
+gi|627328        36 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA   0
+gi|627328       110 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 146
+gi|627329       114 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 150
+gi|627328       114 TGAATATCAAAGAATCTATTGATTTAGTATACCAGA 150
+gi|627329       120 TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA 156
+""",
+                msg=msg,
+            )
         self.assertEqual(len(subalignment.column_annotations), 1)
         self.assertEqual(
             subalignment.column_annotations["clustal_consensus"],
@@ -1397,18 +1805,50 @@ TATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATT
             msg=msg,
         )
         subalignment = alignment[:, :-60]
-        self.assertEqual(
-            "\n".join(row for row in subalignment),  # str(subalignment),
-            """\
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAA
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAA
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAA
-TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAA
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAA
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAA
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAA""",
-            msg=msg,
-        )
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627328         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+
+gi|627328        56 ------ATATATTTCAAATTTCCTTATATACCCAAA 86
+gi|627328        58 ------ATATATTTCAAATTTCCTTATATACCCAAA 88
+gi|627328        56 ------ATATATTTCAAATTTCCTTATATATCCAAA 86
+gi|627328        56 ------ATATATTTATAATTTCCTTATATATCCAAA 86
+gi|627329        60 ------ATATATTTCAAATTCCCTTATATATCCAAA 90
+gi|627328        60 ------ATATATTTCAAATTCCCTTATATATCCAAA 90
+gi|627329        60 TATATAATATATTTCAAATTCCCTTATATATCCAAA 96
+""",
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--
+gi|627328       146 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627328         0 TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627328         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+
+gi|627328        56 ------ATATATTTCAAATTTCCTTATATACCCAAA 86
+gi|627328        58 ------ATATATTTCAAATTTCCTTATATACCCAAA 88
+gi|627328        90 ------ATATATTTCAAATTTCCTTATATATCCAAA 60
+gi|627328        56 ------ATATATTTATAATTTCCTTATATATCCAAA 86
+gi|627329        60 ------ATATATTTCAAATTCCCTTATATATCCAAA 90
+gi|627328        60 ------ATATATTTCAAATTCCCTTATATATCCAAA 90
+gi|627329        60 TATATAATATATTTCAAATTCCCTTATATATCCAAA 96
+""",
+                msg=msg,
+            )
         self.assertEqual(len(subalignment.column_annotations), 1)
         self.assertEqual(
             subalignment.column_annotations["clustal_consensus"],
@@ -1416,18 +1856,50 @@ TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATT
             msg=msg,
         )
         subalignment = alignment[:, 20:-60]
-        self.assertEqual(
-            "\n".join(row for row in subalignment),  # str(subalignment),
-            """\
-TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAA
-TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAA
-TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAA
-TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAA
-TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAA
-TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAA
-TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAA""",
-            msg=msg,
-        )
+        if strand == "forward":
+            self.assertEqual(
+                str(subalignment),
+                """\
+gi|627328        20 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATT
+gi|627328        20 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATT
+gi|627328        20 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATT
+gi|627328        20 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTATAATT
+gi|627329        20 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATT
+gi|627328        20 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATT
+gi|627329        20 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATT
+
+gi|627328        70 TCCTTATATACCCAAA 86
+gi|627328        72 TCCTTATATACCCAAA 88
+gi|627328        70 TCCTTATATATCCAAA 86
+gi|627328        70 TCCTTATATATCCAAA 86
+gi|627329        74 CCCTTATATATCCAAA 90
+gi|627328        74 CCCTTATATATCCAAA 90
+gi|627329        80 CCCTTATATATCCAAA 96
+""",
+                msg=msg,
+            )
+        if strand == "reverse":
+            self.assertEqual(
+                str(subalignment),
+                """\
+gi|627328        20 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATT
+gi|627328        20 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATT
+gi|627328       126 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATT
+gi|627328        20 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTATAATT
+gi|627329        20 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATT
+gi|627328        20 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATT
+gi|627329        20 TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATT
+
+gi|627328        70 TCCTTATATACCCAAA 86
+gi|627328        72 TCCTTATATACCCAAA 88
+gi|627328        76 TCCTTATATATCCAAA 60
+gi|627328        70 TCCTTATATATCCAAA 86
+gi|627329        74 CCCTTATATATCCAAA 90
+gi|627328        74 CCCTTATATATCCAAA 90
+gi|627329        80 CCCTTATATATCCAAA 96
+""",
+                msg=msg,
+            )
         self.assertEqual(len(subalignment.column_annotations), 1)
         self.assertEqual(
             subalignment.column_annotations["clustal_consensus"],
@@ -1436,15 +1908,24 @@ TGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAA""",
         )
         subalignment = alignment[:, ::2]
         self.assertEqual(
-            "\n".join(row for row in subalignment),  # str(subalignment),
+            str(subalignment),
             """\
-TTCTAAAGGGTCGTATGAGCAAAAATTT-----AAATCATTCTTTCCATTAATTTAAATGTATTAAATCTGTTGGACG
-TTCTAAAGGGTCGTATGAGCAAAAATTTT----AAATCATTCTTTCCATTAATTTAAATGTATTAAATTTGTTGGACG
-TTCTAAAGGGTCGTATGAGCAAAAATTT-----AAATCATTCTTTTCATTAATTTAAATGTATTAAATTTGTTGGACG
-TTCTAAAGGGTCGTATGAGCAAAAATTT-----AAATAATTCTTTTCATTAATTTAAATGTATTAAATTTGTTGGACG
-TTCTAAGGGGTCGTATGAGCAAAAATTTTT---AAATCATCCTTTTCATTAATTTAAATGTATTAAATTTGTTGGACG
-TTCTAAGGGGTCGTATGAGCAAAAATTTTT---AAATCATCCTTTTCATTAATTTAAATGTATTAAATTTGTTGAACG
-TTCTAAGGGGTCGTATGAGCAAAAATTTTTTTTAAATCATCCTTTTCATTAATTTAAATGTATTAAATTTGTTGGACG""",
+gi|627328         0 TTCTAAAGGGTCGTATGAGCAAAAATTT-----AAATCATTCTTTCCATTAATTTAAATG
+gi|627328         0 TTCTAAAGGGTCGTATGAGCAAAAATTTT----AAATCATTCTTTCCATTAATTTAAATG
+gi|627328         0 TTCTAAAGGGTCGTATGAGCAAAAATTT-----AAATCATTCTTTTCATTAATTTAAATG
+gi|627328         0 TTCTAAAGGGTCGTATGAGCAAAAATTT-----AAATAATTCTTTTCATTAATTTAAATG
+gi|627329         0 TTCTAAGGGGTCGTATGAGCAAAAATTTTT---AAATCATCCTTTTCATTAATTTAAATG
+gi|627328         0 TTCTAAGGGGTCGTATGAGCAAAAATTTTT---AAATCATCCTTTTCATTAATTTAAATG
+gi|627329         0 TTCTAAGGGGTCGTATGAGCAAAAATTTTTTTTAAATCATCCTTTTCATTAATTTAAATG
+
+gi|627328        55 TATTAAATCTGTTGGACG 73
+gi|627328        56 TATTAAATTTGTTGGACG 74
+gi|627328        55 TATTAAATTTGTTGGACG 73
+gi|627328        55 TATTAAATTTGTTGGACG 73
+gi|627329        57 TATTAAATTTGTTGGACG 75
+gi|627328        57 TATTAAATTTGTTGAACG 75
+gi|627329        60 TATTAAATTTGTTGGACG 78
+""",
             msg=msg,
         )
         self.assertEqual(len(subalignment.column_annotations), 1)
@@ -1468,18 +1949,34 @@ TTCTAAGGGGTCGTATGAGCAAAAATTTTTTTTAAATCATCCTTTTCATTAATTTAAATGTATTAAATTTGTTGGACG""
         self.assertEqual(
             str(alignment[1::3]),
             """\
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
-||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||--||||||||||||||.|||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--
+                  0 ||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||--
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+
+gi|627328        58 ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATA
+                 60 ||||||||||||||.|||||||||.|||||||||||||||||||||||||||||||||||
+gi|627329        60 ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATA
+
+gi|627328       118 TCAAAGAATCTATTGATTTAGTGTACCAGA 148
+                120 |||||||||||||||||||||||||||||| 150
+gi|627329       120 TCAAAGAATCTATTGATTTAGTGTACCAGA 150
 """,
             msg=msg,
         )
         self.assertEqual(
             str(alignment[1::3, :]),
             """\
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
-||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||--||||||||||||||.|||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+gi|627328         0 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--
+                  0 ||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||--
+gi|627329         0 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+
+gi|627328        58 ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATA
+                 60 ||||||||||||||.|||||||||.|||||||||||||||||||||||||||||||||||
+gi|627329        60 ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATA
+
+gi|627328       118 TCAAAGAATCTATTGATTTAGTGTACCAGA 148
+                120 |||||||||||||||||||||||||||||| 150
+gi|627329       120 TCAAAGAATCTATTGATTTAGTGTACCAGA 150
 """,
             msg=msg,
         )
@@ -1487,26 +1984,37 @@ TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATAATATATTTCAAATTCCCTTA
 
     def test_indexing_slicing(self):
         alignment = self.alignment
-        msg = "forward strand"
-        self.check_indexing_slicing(alignment, msg)
+        strand = "forward"
+        self.check_indexing_slicing(alignment, strand)
+        name = alignment.sequences[2].id
         alignment.sequences[2] = alignment.sequences[2].reverse_complement()
+        alignment.sequences[2].id = name
         n = len(alignment.sequences[2])
         alignment.coordinates[2, :] = n - alignment.coordinates[2, :]
-        msg = "reverse strand"
-        self.check_indexing_slicing(alignment, msg)
+        strand = "reverse"
+        self.check_indexing_slicing(alignment, strand)
 
     def test_sort(self):
         alignment = self.alignment[:, 40:100]
         self.assertEqual(
-            "\n".join(row for row in alignment),  # str(alignment),
+            str(alignment),
             """\
-AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
-AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA""",
+gi|627328        40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
+gi|627328        40 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
+gi|627328        40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
+gi|627328        40 AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
+gi|627329        40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
+gi|627328        40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
+gi|627329        40 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
+
+gi|627328        90
+gi|627328        92
+gi|627328        90
+gi|627328        90
+gi|627329        94
+gi|627328        94
+gi|627329       100
+""",
         )
         self.assertEqual(
             tuple(sequence.id for sequence in alignment.sequences),
@@ -1522,15 +2030,24 @@ AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA""",
         )
         alignment.sort()
         self.assertEqual(
-            "\n".join(row for row in alignment),  # str(alignment),
+            str(alignment),
             """\
-AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA""",
+gi|627328        40 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
+gi|627328        40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
+gi|627328        40 AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
+gi|627328        40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
+gi|627328        40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
+gi|627329        40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
+gi|627329        40 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
+
+gi|627328        92
+gi|627328        90
+gi|627328        90
+gi|627328        90
+gi|627328        94
+gi|627329        94
+gi|627329       100
+""",
         )
         self.assertEqual(
             tuple(sequence.id for sequence in alignment.sequences),
@@ -1546,15 +2063,24 @@ AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA""",
         )
         alignment.sort(reverse=True)
         self.assertEqual(
-            "\n".join(row for row in alignment),  # str(alignment),
+            str(alignment),
             """\
-AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
-AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA""",
+gi|627329        40 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
+gi|627329        40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
+gi|627328        40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
+gi|627328        40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
+gi|627328        40 AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
+gi|627328        40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
+gi|627328        40 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
+
+gi|627329       100
+gi|627329        94
+gi|627328        94
+gi|627328        90
+gi|627328        90
+gi|627328        90
+gi|627328        92
+""",
         )
         self.assertEqual(
             tuple(sequence.id for sequence in alignment.sequences),
@@ -1576,15 +2102,24 @@ AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA""",
         )
         alignment.sort()
         self.assertEqual(
-            "\n".join(row for row in alignment),  # str(alignment),
+            str(alignment),
             """\
-AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA""",
+seq1             40 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
+seq2             40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
+seq3             40 AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
+seq4             40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
+seq5             40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
+seq6             40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
+seq7             40 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
+
+seq1             92
+seq2             90
+seq3             90
+seq4             90
+seq5             94
+seq6             94
+seq7            100
+""",
         )
         self.assertEqual(
             tuple(sequence.id for sequence in alignment.sequences),
@@ -1592,15 +2127,24 @@ AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA""",
         )
         alignment.sort(reverse=True)
         self.assertEqual(
-            "\n".join(row for row in alignment),  # str(alignment),
+            str(alignment),
             """\
-AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
-AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA""",
+seq7             40 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
+seq6             40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
+seq5             40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
+seq4             40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
+seq3             40 AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
+seq2             40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
+seq1             40 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
+
+seq7            100
+seq6             94
+seq5             94
+seq4             90
+seq3             90
+seq2             90
+seq1             92
+""",
         )
         self.assertEqual(
             tuple(sequence.id for sequence in alignment.sequences),
@@ -1608,15 +2152,24 @@ AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA""",
         )
         alignment.sort(key=lambda record: gc_fraction(record.seq))
         self.assertEqual(
-            "\n".join(row for row in alignment),  # str(alignment),
+            str(alignment),
             """\
-AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
-AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA""",
+seq3             40 AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
+seq7             40 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
+seq4             40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
+seq5             40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
+seq1             40 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
+seq6             40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
+seq2             40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
+
+seq3             90
+seq7            100
+seq4             90
+seq5             94
+seq1             92
+seq6             94
+seq2             90
+""",
         )
         self.assertEqual(
             tuple(sequence.id for sequence in alignment.sequences),
@@ -1624,15 +2177,24 @@ AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA""",
         )
         alignment.sort(key=lambda record: gc_fraction(record.seq), reverse=True)
         self.assertEqual(
-            "\n".join(row for row in alignment),  # str(alignment),
+            str(alignment),
             """\
-AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
-AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
-AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
-AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
-AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA""",
+seq2             40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
+seq6             40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
+seq1             40 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
+seq5             40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
+seq4             40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
+seq7             40 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
+seq3             40 AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
+
+seq2             90
+seq6             94
+seq1             92
+seq5             94
+seq4             90
+seq7            100
+seq3             90
+""",
         )
         self.assertEqual(
             tuple(sequence.id for sequence in alignment.sequences),

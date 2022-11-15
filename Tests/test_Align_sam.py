@@ -3007,9 +3007,9 @@ class TestAlign_clippping(unittest.TestCase):
         self.assertEqual(
             str(alignment),
             """\
-AAAAAAAACCCCCC
-        ||||||
-        CCCCCC
+target            8 CCCCCC 14
+                  0 ||||||  6
+query             0 CCCCCC  6
 """,
         )
         line = alignment.format("sam")
@@ -3047,9 +3047,9 @@ numpy.array([['C', 'C', 'C', 'C', 'C', 'C'],
         self.assertEqual(
             str(alignment),
             """\
-AAAAAAAACCCCCC
---------||||||
---------CCCCCC
+target            0 AAAAAAAACCCCCC 14
+                  0 --------|||||| 14
+query             0 --------CCCCCC  6
 """,
         )
         line = alignment.format("sam")
@@ -3089,9 +3089,9 @@ numpy.array([['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
         self.assertEqual(
             str(alignment),
             """\
-GGGGAAAAAAAACCCCCC
-    --------||||||
-    --------CCCCCC
+target            4 AAAAAAAACCCCCC 18
+                  0 --------|||||| 14
+query             0 --------CCCCCC  6
 """,
         )
         line = alignment.format("sam")
@@ -3131,9 +3131,9 @@ numpy.array([['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
         self.assertEqual(
             str(alignment),
             """\
---------CCCCCC
---------||||||
-AAAAAAAACCCCCC
+target            0 --------CCCCCC  6
+                  0 --------|||||| 14
+query             0 AAAAAAAACCCCCC 14
 """,
         )
         line = alignment.format("sam")
@@ -3175,9 +3175,9 @@ numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
         self.assertEqual(
             str(alignment),
             """\
-GGGG--------CCCCCC
-    --------||||||
-    AAAAAAAACCCCCC
+target            4 --------CCCCCC 10
+                  0 --------|||||| 14
+query             0 AAAAAAAACCCCCC 14
 """,
         )
         line = alignment.format("sam")
@@ -3219,9 +3219,9 @@ numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
         self.assertEqual(
             str(alignment),
             """\
-        CCCCCC
-        ||||||
-AAAAAAAACCCCCC
+target            0 CCCCCC  6
+                  0 ||||||  6
+query             8 CCCCCC 14
 """,
         )
         line = alignment.format("sam")
@@ -3261,9 +3261,9 @@ numpy.array([['C', 'C', 'C', 'C', 'C', 'C'],
         self.assertEqual(
             str(alignment),
             """\
-    AAAAAAAACCCCCC
-    --------||||||
-GGGG--------CCCCCC
+target            0 AAAAAAAACCCCCC 14
+                  0 --------|||||| 14
+query             4 --------CCCCCC 10
 """,
         )
         line = alignment.format("sam")
@@ -3305,9 +3305,9 @@ numpy.array([['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
         self.assertEqual(
             str(alignment),
             """\
-----AAAAAAAACCCCCC
-------------||||||
-GGGG--------CCCCCC
+target            0 ----AAAAAAAACCCCCC 14
+                  0 ------------|||||| 18
+query             0 GGGG--------CCCCCC 10
 """,
         )
         line = alignment.format("sam")
@@ -3349,9 +3349,9 @@ numpy.array([['-', '-', '-', '-', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C',
         self.assertEqual(
             str(alignment),
             """\
-AAAAAAAACCCCCC
-        ||||||
-    GGGGCCCCCC
+target            8 CCCCCC 14
+                  0 ||||||  6
+query             4 CCCCCC 10
 """,
         )
         line = alignment.format("sam")
@@ -3391,9 +3391,9 @@ numpy.array([['C', 'C', 'C', 'C', 'C', 'C'],
         self.assertEqual(
             str(alignment),
             """\
-GGGG--------CCCCCC
-------------||||||
-----AAAAAAAACCCCCC
+target            0 GGGG--------CCCCCC 10
+                  0 ------------|||||| 18
+query             0 ----AAAAAAAACCCCCC 14
 """,
         )
         line = alignment.format("sam")
@@ -3435,9 +3435,9 @@ numpy.array([['G', 'G', 'G', 'G', '-', '-', '-', '-', '-', '-', '-', '-', 'C',
         self.assertEqual(
             str(alignment),
             """\
-    --------CCCCCC
-    --------||||||
-GGGGAAAAAAAACCCCCC
+target            0 --------CCCCCC  6
+                  0 --------|||||| 14
+query             4 AAAAAAAACCCCCC 18
 """,
         )
         line = alignment.format("sam")
