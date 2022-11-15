@@ -277,7 +277,7 @@ XX
                         )
                         line = line % tuple(
                             [i + 1]
-                            + [motif.counts[l][i] for l in letters]
+                            + [motif.counts[_][i] for _ in letters]
                             + [sequence[i]]
                         )
                         lines.append(line)

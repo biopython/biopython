@@ -124,7 +124,7 @@ class NeighborSearch:
             # return atoms
             return atom_pair_list
         next_level_pair_list = atom_pair_list
-        for l in ["R", "C", "M", "S"]:
+        for next_level in ["R", "C", "M", "S"]:
             next_level_pair_list = self._get_unique_parent_pairs(next_level_pair_list)
-            if level == l:
+            if level == next_level:
                 return next_level_pair_list

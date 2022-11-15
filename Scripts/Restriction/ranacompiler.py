@@ -938,7 +938,7 @@ class DictionaryBuilder:
 
     def removestart(self, file):
         """Remove the header of the file."""
-        return list(itertools.dropwhile(lambda l: l.startswith("#"), file))
+        return list(itertools.dropwhile(lambda line: line.startswith("#"), file))
 
     def getblock(self, file, index):
         """Get a data block from the emboss_r file."""
@@ -946,7 +946,7 @@ class DictionaryBuilder:
         #   emboss_r.txt, separation between blocks is //
         #
         take = itertools.takewhile
-        block = list(take(lambda l: not l.startswith("//"), file[index:]))
+        block = list(take(lambda line: not line.startswith("//"), file[index:]))
         index += len(block) + 1
         return block, index
 

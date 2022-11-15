@@ -496,8 +496,8 @@ def _read_vertex_array(filename):
     """Read the vertex list into a Numeric array (PRIVATE)."""
     with open(filename) as fp:
         vertex_list = []
-        for l in fp:
-            sl = l.split()
+        for line in fp:
+            sl = line.split()
             if len(sl) != 9:
                 # skip header
                 continue

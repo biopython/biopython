@@ -292,7 +292,7 @@ class WriteTest(unittest.TestCase):
             self.io.save(filename)
             # Check if there are lines besides 'ATOM', 'TER' and 'END'
             with open(filename) as handle:
-                record_set = {l[0:6] for l in handle}
+                record_set = {line[0:6] for line in handle}
             record_set -= {
                 "ATOM  ",
                 "HETATM",

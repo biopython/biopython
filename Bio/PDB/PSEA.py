@@ -55,15 +55,15 @@ def psea(pname):
     start = 0
     ss = ""
     with open(fname) as fp:
-        for l in fp:
-            if l[0:6] == ">p-sea":
+        for line in fp:
+            if line[0:6] == ">p-sea":
                 start = 1
                 continue
             if not start:
                 continue
-            if l[0] == "\n":
+            if line[0] == "\n":
                 break
-            ss = ss + l[0:-1]
+            ss = ss + line[0:-1]
     return ss
 
 

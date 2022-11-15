@@ -22,9 +22,9 @@ from Bio import File
 def _get_journal(inl):
     # JRNL        AUTH   L.CHEN,M.DOI,F.S.MATHEWS,A.Y.CHISTOSERDOV,           2BBK   7
     journal = ""
-    for l in inl:
-        if re.search(r"\AJRNL", l):
-            journal += l[19:72].lower()
+    for line in inl:
+        if re.search(r"\AJRNL", line):
+            journal += line[19:72].lower()
     journal = re.sub(r"\s\s+", " ", journal)
     return journal
 
@@ -34,16 +34,16 @@ def _get_references(inl):
     # REMARK   1  AUTH   W.BODE,E.PAPAMOKOS,D.MUSIL                           1CSE  12
     references = []
     actref = ""
-    for l in inl:
-        if re.search(r"\AREMARK   1", l):
-            if re.search(r"\AREMARK   1 REFERENCE", l):
+    for line in inl:
+        if re.search(r"\AREMARK   1", line):
+            if re.search(r"\AREMARK   1 REFERENCE", line):
                 if actref != "":
                     actref = re.sub(r"\s\s+", " ", actref)
                     if actref != " ":
                         references.append(actref)
                     actref = ""
             else:
-                actref += l[19:72].lower()
+                actref += line[19:72].lower()
 
     if actref != "":
         actref = re.sub(r"\s\s+", " ", actref)
@@ -121,12 +121,12 @@ def parse_pdb_header(infile):
     """
     header = []
     with File.as_handle(infile) as f:
-        for l in f:
-            record_type = l[0:6]
+        for line in f:
+            record_type = line[0:6]
             if record_type in ("ATOM  ", "HETATM", "MODEL "):
                 break
             else:
-                header.append(l)
+                header.append(line)
     return _parse_pdb_header_list(header)
 
 
