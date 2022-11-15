@@ -181,7 +181,10 @@ class _IndexedSeqFileDict(collections.abc.Mapping):
         self._obj_repr = obj_repr
         self._cached_prev_record = (None, None)  # (key, record)
         if key_function:
-            offset_iter = ((key_function(k), o, l) for (k, o, l) in random_access_proxy)
+            offset_iter = (
+                (key_function(key), offset, length)
+                for (key, offset, length) in random_access_proxy
+            )
         else:
             offset_iter = random_access_proxy
         offsets = {}
@@ -464,7 +467,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             "file_number INTEGER, offset INTEGER, length INTEGER);"
         )
         count = 0
-        for i, filename in enumerate(filenames):
+        for file_index, filename in enumerate(filenames):
             # Default to storing as an absolute path,
             f = os.path.abspath(filename)
             if not os.path.isabs(filename) and not os.path.isabs(index_filename):
@@ -483,15 +486,20 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 assert not f.startswith("../"), f
             # print("DEBUG - storing %r as [%r] %r" % (filename, relative_path, f))
             con.execute(
-                "INSERT INTO file_data (file_number, name) VALUES (?,?);", (i, f)
+                "INSERT INTO file_data (file_number, name) VALUES (?,?);",
+                (file_index, f),
             )
             random_access_proxy = proxy_factory(fmt, filename)
             if key_function:
                 offset_iter = (
-                    (key_function(k), i, o, l) for (k, o, l) in random_access_proxy
+                    (key_function(key), file_index, offset, length)
+                    for (key, offset, length) in random_access_proxy
                 )
             else:
-                offset_iter = ((k, i, o, l) for (k, o, l) in random_access_proxy)
+                offset_iter = (
+                    (key, file_index, offset, length)
+                    for (key, offset, length) in random_access_proxy
+                )
             while True:
                 batch = list(itertools.islice(offset_iter, 100))
                 if not batch:
@@ -505,7 +513,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 con.commit()
                 count += len(batch)
             if len(random_access_proxies) < max_open:
-                random_access_proxies[i] = random_access_proxy
+                random_access_proxies[file_index] = random_access_proxy
             else:
                 random_access_proxy._handle.close()
         self._length = count

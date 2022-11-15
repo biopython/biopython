@@ -104,16 +104,15 @@ class _Matrix:
             # check if all elements are numbers
             if (
                 isinstance(matrix, list)
-                and all(isinstance(l, list) for l in matrix)
+                and all(isinstance(row, list) for row in matrix)
                 and all(
-                    isinstance(n, numbers.Number)
-                    for n in [item for sublist in matrix for item in sublist]
+                    isinstance(item, numbers.Number) for row in matrix for item in row
                 )
             ):
                 # check if the same length with names
                 if len(matrix) == len(names):
                     # check if is lower triangle format
-                    if [len(m) for m in matrix] == list(range(1, len(self) + 1)):
+                    if [len(row) for row in matrix] == list(range(1, len(self) + 1)):
                         self.matrix = matrix
                     else:
                         raise ValueError("'matrix' should be in lower triangle format")

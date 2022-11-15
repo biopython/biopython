@@ -121,19 +121,19 @@ def gc_fraction(seq, ambiguous="remove"):
     gc = sum(seq.count(x) for x in "CGScgs")
 
     if ambiguous == "remove":
-        l = gc + sum(seq.count(x) for x in "ATWatw")
+        length = gc + sum(seq.count(x) for x in "ATWatw")
     else:
-        l = len(seq)
+        length = len(seq)
 
     if ambiguous == "weighted":
         gc += sum(
             (seq.count(x) + seq.count(x.lower())) * _gc_values[x] for x in "BDHKMNRVXY"
         )
 
-    if l == 0:
+    if length == 0:
         return 0
 
-    return gc / l
+    return gc / length
 
 
 def GC(seq):

@@ -630,7 +630,9 @@ class Tree(Nodes.Chain):
                         comment,
                     )
                 )
-        print("\n".join("%3s %32s %15s %15s %8s %10s %8s %20s" % l for l in table))
+        print(
+            "\n".join("%3s %32s %15s %15s %8s %10s %8s %20s" % line for line in table)
+        )
         print(f"\nRoot:  {self.root}")
 
     def to_string(

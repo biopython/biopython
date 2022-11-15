@@ -59,7 +59,7 @@ class Record:
 
     def _name(self):
         return _write_kegg(
-            "NAME", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.name]
+            "NAME", [_wrap_kegg(line, wrap_rule=name_wrap) for line in self.name]
         )
 
     def _definition(self):
@@ -69,7 +69,9 @@ class Record:
         s = []
         for entry in self.dblinks:
             s.append(entry[0] + ": " + " ".join(entry[1]))
-        return _write_kegg("DBLINKS", [_wrap_kegg(l, wrap_rule=id_wrap(9)) for l in s])
+        return _write_kegg(
+            "DBLINKS", [_wrap_kegg(line, wrap_rule=id_wrap(9)) for line in s]
+        )
 
 
 def parse(handle):

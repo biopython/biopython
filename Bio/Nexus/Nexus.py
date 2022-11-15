@@ -312,9 +312,9 @@ def _sort_keys_by_values(p):
     return sorted((pn for pn in p if p[pn]), key=lambda pn: p[pn])
 
 
-def _make_unique(l):
+def _make_unique(values):
     """Check all values in list are unique and return a pruned and sorted list (PRIVATE)."""
-    return sorted(set(l))
+    return sorted(set(values))
 
 
 def _unique_label(previous_labels, label):

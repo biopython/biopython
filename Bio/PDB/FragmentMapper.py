@@ -78,11 +78,11 @@ def _read_fragments(size, length, dir="."):
         flist = []
         # ID of fragment=rank in spec file
         fid = 0
-        for l in fp:
+        for line in fp:
             # skip comment and blank lines
-            if l[0] == "*" or l[0] == "\n":
+            if line[0] == "*" or line[0] == "\n":
                 continue
-            sl = l.split()
+            sl = line.split()
             if sl[1] == "------":
                 # Start of fragment definition
                 f = Fragment(length, fid)
