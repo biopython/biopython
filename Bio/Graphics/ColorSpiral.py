@@ -187,7 +187,7 @@ def get_colors(k, **kwargs):
     return cs.get_colors(k)
 
 
-def get_color_dict(l, **kwargs):
+def get_color_dict(l, **kwargs):  # noqa: E741
     """Return a dictionary of colours using the provided values as keys.
 
     Returns a dictionary, keyed by the members of iterable l, with a

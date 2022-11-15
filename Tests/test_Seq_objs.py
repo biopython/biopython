@@ -2002,7 +2002,7 @@ class PartialSequenceTests(unittest.TestCase):
 
     def test_lower_upper(self):
         u = Seq({3: "KLM", 11: "XYZ"}, length=17)
-        l = Seq({0: "pqrst", 8: "hij"}, length=13)
+        l = Seq({0: "pqrst", 8: "hij"}, length=13)  # noqa: E741
         m = Seq({5: "ABCD", 10: "efgh"}, length=20)
         self.assertEqual(repr(u.upper()), "Seq({3: 'KLM', 11: 'XYZ'}, length=17)")
         self.assertEqual(repr(u.lower()), "Seq({3: 'klm', 11: 'xyz'}, length=17)")

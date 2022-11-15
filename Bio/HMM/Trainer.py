@@ -278,7 +278,7 @@ class BaumWelchTrainer(AbstractTrainer):
 
         # loop over the possible combinations of state path letters
         for k in self._markov_model.state_alphabet:
-            for l in self._markov_model.transitions_from(k):
+            for l in self._markov_model.transitions_from(k):  # noqa: E741
                 estimated_counts = 0
                 # now loop over the entire training sequence
                 for i in range(len(training_seq.emissions) - 1):
