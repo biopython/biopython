@@ -9,7 +9,7 @@
 # flake8-bugbear: B###
 # flake8-quotes: Q###
 # flake8-black : BLK###
-# flake8-commas: C#### (in case installed locally)
+# flake8-commas: C8## (in case installed locally)
 # flake8-pie : PIE### (in case installed locally)
 # flake8-sfs : SFS### (in case installed locally)
 # =================================================
@@ -49,18 +49,19 @@ ignore =
     # =========================================
     PIE781, # Assigning to temp variable and then returning, not enforcing
     SFS101,SFS301, # typical string formatting
+    C8, # everything from flake8-commas - just use black
 
 # ========================
 # Folder specific ignores:
 # ========================
 per-file-ignores =
-    Bio/*:F401,F841,D105,B009,B010,B011,C812,C815
-    Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B011,B015,C812
+    Bio/*:F401,F841,D105,B009,B010
+    Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B015
 
     # Due to a bug in flake8, we need the following lines for running the
     # pre-commit hook. If you made edits above, please change also here!
-    /Bio/*:F401,F841,D105,B009,B010,B011,C812,C815
-    /Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B011,B015,C812
+    /Bio/*:F401,F841,D105,B009,B010
+    /Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B015
 
 #Explanation of the codes being ignored in Bio/ and Tests/:
 #
@@ -71,10 +72,6 @@ per-file-ignores =
 #           it is not any safer than normal property access
 #      B010 do not call setattr with a constant attribute value,
 #           it is not any safer than normal property access
-#      B011 do not call assert False since python -O removes these calls;
-#           instead callers should raise AssertionError().
-#      C812 missing trailing comma
-#      C815 missing trailing comma in Python 3.5+
 #Tests/*:F401 module imported but unused TODO? (88 occurrences)
 #        F841 local variable is assigned to but never used TODO? (64 occurrences)
 #        D101 missing docstring in public class (207 occurrences)
@@ -85,11 +82,8 @@ per-file-ignores =
 #             it is not any safer than normal property access
 #        B010 do not call setattr with a constant attribute value,
 #             it is not any safer than normal property access
-#        B011 do not call assert False since python -O removes these calls;
-#             instead callers should raise AssertionError()
 #        B015 Pointless comparison. This comparison does nothing ...
 #             (Intended to trigger exceptions in our tests)
-#        C812 missing trailing comma
 
 # =======================
 # flake8-quotes settings:
