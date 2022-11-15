@@ -43,7 +43,6 @@ ignore =
           # Maybe we find a sensible limit, e.g. 88 (black) and enforce it
     B007, # Loop control variable not used within the loop body.
           # If this is intended, start the name with an underscore
-    E741, # ambiguous variable name 'l' (lots of these)
     B902, # blind except Exception: statement
     # =========================================
     # Optional ignores for local installations:
