@@ -65,6 +65,9 @@ to the test suite.
 Add new ``gc_fraction`` function in ``SeqUtils`` and marks ``GC`` for future
 deprecation.
 
+Support for the old format (dating back to 2004) of the GN line in SwissProt
+files was dropped in ``Bio.SwissProt``.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
