@@ -83,8 +83,7 @@ class AlignmentIterator(ABC):
         """
         return self
 
-    @abstractmethod
-    def _read_header(self, stream):
+    def _read_header(self, stream):  # noqa: B027
         """Read the file header and store it in metadata."""
 
     @abstractmethod
