@@ -88,8 +88,9 @@ possible, especially the following contributors:
 - Hussein Faara (first contribution)
 - Manuel Lera Ramirez
 - Jacob Beal (first contribution)
-- João Rodrigues
 - Jarrod Millman
+- João Rodrigues
+- Josha Inglis
 - Markus Piotrowski
 - Michiel de Hoon
 - Neil P. (first contribution)
