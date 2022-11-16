@@ -305,7 +305,12 @@ def _read(handle):
         elif key == "DE":
             record.description.append(value.strip())
         elif key == "GN":
-            _read_gn(record, value)
+            if value == "and":
+                record.gene_name.append("")
+            else:
+                if len(record.gene_name) == 0:
+                    record.gene_name.append("")
+                record.gene_name[-1] += value + " "
         elif key == "OS":
             record.organism.append(value)
         elif key == "OG":
@@ -369,6 +374,7 @@ def _read(handle):
         elif key == "  ":
             _sequence_lines.append(value.replace(" ", "").rstrip())
         elif key == "//":
+            _read_gn(record)
             # Join multiline data into one string
             record.description = " ".join(record.description)
             record.organism = " ".join(record.organism)
@@ -405,29 +411,18 @@ def _read(handle):
         raise ValueError("Unexpected end of stream.")
 
 
-def _read_gn(record, value):
-    tokens = value.rstrip(";").split("; ")
-    try:
-        gene_name = record.gene_name[-1]
-    except IndexError:
-        pass
-    for token in tokens:
-        if token.startswith("Name="):
-            name = token[5:]
-            gene_name = {"Name": name}
-            record.gene_name.append(gene_name)
-        else:
-            for keyword in ("Synonyms", "OrderedLocusNames", "ORFNames"):
-                if token.startswith(keyword + "="):
-                    token = token[len(keyword) + 1 :]
-                    gene_name[keyword] = token.rstrip(",").split(", ")
-                    break
+def _read_gn(record):
+    for i, text in enumerate(record.gene_name):
+        tokens = text.rstrip("; ").split("; ")
+        gene_name = {}
+        for token in tokens:
+            key, value = token.strip().split("=")
+            if key == "Name":
+                gene_name["Name"] = value
             else:
-                keyword = list(record.gene_name[-1].keys())[-1]
-                if keyword == "Name":
-                    gene_name[keyword] += " " + token
-                else:
-                    gene_name[keyword] += token.rstrip(",").split(", ")
+                assert key in ("Synonyms", "OrderedLocusNames", "ORFNames")
+                gene_name[key] = value.split(", ")
+        record.gene_name[i] = gene_name
 
 
 def _read_id(record, line):
