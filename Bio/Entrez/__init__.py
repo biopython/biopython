@@ -455,7 +455,7 @@ def ecitmatch(**keywds):
     return _open(request)
 
 
-def read(handle, validate=True, escape=False):
+def read(handle, validate=True, escape=False, ignore_errors=False):
     """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
@@ -495,12 +495,12 @@ def read(handle, validate=True, escape=False):
     """
     from .Parser import DataHandler
 
-    handler = DataHandler(validate, escape)
+    handler = DataHandler(validate, escape, ignore_errors)
     record = handler.read(handle)
     return record
 
 
-def parse(handle, validate=True, escape=False):
+def parse(handle, validate=True, escape=False, ignore_errors=False):
     """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
@@ -549,7 +549,7 @@ def parse(handle, validate=True, escape=False):
     """
     from .Parser import DataHandler
 
-    handler = DataHandler(validate, escape)
+    handler = DataHandler(validate, escape, ignore_errors)
     records = handler.parse(handle)
     return records
 
