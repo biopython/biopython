@@ -261,7 +261,7 @@ def elink(**keywds):
     >>> print(record[0]["LinkSetDb"][0]["LinkName"])
     pubmed_pubmed
     >>> linked = [link["Id"] for link in record[0]["LinkSetDb"][0]["Link"]]
-    >>> "17121776" in linked
+    >>> "14630660" in linked
     True
 
     This is explained in much more detail in the Biopython Tutorial.
