@@ -166,7 +166,7 @@ class ProteinAnalysis:
         weights = [0.25, 0.4375, 0.625, 0.8125, 1]
         scores = []
 
-        for i in range(self.length - window_size):
+        for i in range(self.length - window_size + 1):
             subsequence = self.sequence[i : i + window_size]
             score = 0.0
 
