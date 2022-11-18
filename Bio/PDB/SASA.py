@@ -98,7 +98,7 @@ class ShrakeRupley:
                 f"Probe radius must be a positive number: {probe_radius} <= 0"
             )
 
-        self.probe_radius = probe_radius
+        self.probe_radius = float(probe_radius)
 
         if n_points < 1:
             raise ValueError(
