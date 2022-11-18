@@ -11,8 +11,8 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.80
 ===============================================
 
-This release of Biopython supports Python 3.7, 3.8, 3.9 and 3.10. It has also
-been tested on PyPy3.7 v7.3.5.
+This release of Biopython supports Python 3.7, 3.8, 3.9, 3.10, 3.11. It has
+also been tested on PyPy3.7 v7.3.5.
 
 Functions ``read``, ``parse``, and ``write`` were added to ``Bio.Align`` to
 read and write ``Alignment`` objects.
@@ -59,14 +59,14 @@ property giving the numerical identifier for the REBASE database identifier
 from which the enzyme object was created, and a `uri` property with a canonical
 `identifiers.org` link to the database, for use in linked-data representations.
 
-Additionally, a number of small bugs and typos have been fixed with additions
-to the test suite.
-
 Add new ``gc_fraction`` function in ``SeqUtils`` and marks ``GC`` for future
 deprecation.
 
 Support for the old format (dating back to 2004) of the GN line in SwissProt
 files was dropped in ``Bio.SwissProt``.
+
+Additionally, a number of small bugs and typos have been fixed with additions
+to the test suite.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
