@@ -159,6 +159,7 @@ class ListElement(list):
         key = value.key
         if self.allowed_tags is not None and key not in self.allowed_tags:
             raise ValueError("Unexpected item '%s' in list" % key)
+        del value.key
         self.append(value)
 
 
@@ -193,6 +194,7 @@ class DictionaryElement(dict):
         tag = value.tag
         if self.allowed_tags is not None and tag not in self.allowed_tags:
             raise ValueError("Unexpected item '%s' in dictionary" % key)
+        del value.key
         if self.repeated_tags and key in self.repeated_tags:
             self[key].append(value)
         else:
@@ -399,7 +401,7 @@ class DataHandler(metaclass=DataHandlerMeta):
                 # the input data is not in XML format.
                 raise NotXMLError(e) from None
         try:
-            return self.record
+            record = self.record
         except AttributeError:
             if self.parser.StartElementHandler:
                 # We saw the initial <!xml declaration, and expat didn't notice
@@ -414,6 +416,9 @@ class DataHandler(metaclass=DataHandlerMeta):
                 # We did not see the initial <!xml declaration, so probably
                 # the input data is not in XML format.
                 raise NotXMLError("XML declaration not found") from None
+        else:
+            del record.key
+            return record
 
     def parse(self, handle):
         """Parse the XML in the given file handle."""
@@ -479,6 +484,7 @@ class DataHandler(metaclass=DataHandlerMeta):
                 # Then the first record is finished, while the second record
                 # is still a work in progress.
                 record = records.pop(0)
+                del record.key
                 yield record
 
         # We have reached the end of the XML file
@@ -488,7 +494,9 @@ class DataHandler(metaclass=DataHandlerMeta):
             raise CorruptedXMLError("Premature end of data")
 
         # Send out the remaining records
-        yield from records
+        for record in records:
+            del record.key
+            yield record
 
     def xmlDeclHandler(self, version, encoding, standalone):
         """Set XML handlers when an XML declaration is found."""

@@ -1778,7 +1778,6 @@ class EPostTest(unittest.TestCase):
         self.assertEqual(len(record.attributes), 0)
         self.assertEqual(record["ERROR"], "Wrong DB name")
         self.assertEqual(record["ERROR"].tag, "ERROR")
-        self.assertEqual(record["ERROR"].key, "ERROR")
 
     def test_invalid(self):
         """Test parsing XML returned by EPost with invalid id (overflow tag)."""
@@ -2195,7 +2194,6 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(len(record.attributes), 0)
         self.assertEqual(record[0], "Neither query_key nor id specified")
         self.assertEqual(record[0].tag, "ERROR")
-        self.assertEqual(record[0].key, "ERROR")
 
     def test_integer_none(self):
         """Test parsing ESummary XML where an Integer is not defined."""
