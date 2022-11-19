@@ -48,12 +48,12 @@ assembly step by ~30%, this adds distance plot support (including
 re-generating structures from distance plot data), coordinate space
 transforms for superimposing residues and their environments, a
 per-chain all-atom array for Atom coordinates, and optional default
-values for all internal coordinates.  The internal coordinates module
-continues to support extracting dihedral angle, bond angle and bond
-length (internal coordinates) data, reading/writing structure files of
-internal coordinates, and OpenSCAD output of structures for 3D CAD/3D
-printing work.  See the Biopython Tutorial and Cookbook for more
-information.
+values for all internal coordinates (code released in in 1.80).  The
+internal coordinates module continues to support extracting dihedral
+angle, bond angle and bond length (internal coordinates) data,
+reading/writing structure files of internal coordinates, and OpenSCAD
+output of structures for 3D CAD/3D printing work.  See the Biopython
+Tutorial and Cookbook for more information.
 
 The ``Bio.motifs.jaspar.db`` now returns ``tf_family`` and ``tf_class`` as a
 string array since the JASPAR 2018 release.
