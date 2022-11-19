@@ -484,7 +484,6 @@ class DataHandler(metaclass=DataHandlerMeta):
                 # Then the first record is finished, while the second record
                 # is still a work in progress.
                 record = records.pop(0)
-                del record.key
                 yield record
 
         # We have reached the end of the XML file
@@ -494,9 +493,7 @@ class DataHandler(metaclass=DataHandlerMeta):
             raise CorruptedXMLError("Premature end of data")
 
         # Send out the remaining records
-        for record in records:
-            del record.key
-            yield record
+        yield from records
 
     def xmlDeclHandler(self, version, encoding, standalone):
         """Set XML handlers when an XML declaration is found."""
