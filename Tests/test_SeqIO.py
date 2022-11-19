@@ -85,21 +85,20 @@ class SeqIOTestBaseClass(unittest.TestCase):
         )
         self.assertEqual(len(old.seq), len(new.seq))
         if len(old.seq) == 0:
-            pass
+            return
+        try:
+            bytes(old.seq)
+            bytes(new.seq)
+        except UndefinedSequenceError:
+            return
         else:
-            try:
-                bytes(old.seq)
-                bytes(new.seq)
-            except UndefinedSequenceError:
-                pass
+            if len(old.seq) < 200:
+                err_msg = f"'{old.seq}' vs '{new.seq}'"
             else:
-                if len(old.seq) < 200:
-                    err_msg = f"'{old.seq}' vs '{new.seq}'"
-                else:
-                    err_msg = f"'{old.seq[:100]}...' vs '{new.seq[:100]}...'"
-                if msg is not None:
-                    err_msg = f"{msg}: {err_msg}"
-                self.assertEqual(old.seq, new.seq, msg=err_msg)
+                err_msg = f"'{old.seq[:100]}...' vs '{new.seq[:100]}...'"
+            if msg is not None:
+                err_msg = f"{msg}: {err_msg}"
+            self.assertEqual(old.seq, new.seq, msg=err_msg)
 
     def compare_records(self, old_list, new_list, *args, **kwargs):
         """Check if two lists of SeqRecords are equal."""
