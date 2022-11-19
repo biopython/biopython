@@ -6,7 +6,7 @@
 
 import unittest
 
-from Bio.Seq import UnknownSeq, UndefinedSequenceError
+from Bio.Seq import UndefinedSequenceError
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqFeature import ExactPosition, UnknownPosition
 from Bio.SeqFeature import SimpleLocation, CompoundLocation, SeqFeature
@@ -136,11 +136,6 @@ class SeqRecordTestBaseClass(unittest.TestCase):
     def compare_sequence(self, old, new):
         """Compare two Seq objects."""
         self.assertEqual(len(old), len(new))
-
-        if isinstance(old, UnknownSeq):
-            self.assertIsInstance(new, UnknownSeq)
-        else:
-            self.assertNotIsInstance(new, UnknownSeq)
 
         self.assertEqual(len(old), len(new))
         try:

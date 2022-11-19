@@ -22,7 +22,6 @@ from Bio.AlignIO import PhylipIO
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.Seq import Seq
 from Bio.Seq import UndefinedSequenceError
-from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
 
 
@@ -85,9 +84,7 @@ class SeqIOTestBaseClass(unittest.TestCase):
             msg=f"'{old.description}' vs '{new.description}' ",
         )
         self.assertEqual(len(old.seq), len(new.seq))
-        if isinstance(old.seq, UnknownSeq) or isinstance(new.seq, UnknownSeq):
-            pass
-        elif len(old.seq) == 0:
+        if len(old.seq) == 0:
             pass
         else:
             try:
@@ -545,8 +542,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                 self.assertIsInstance(record, SeqRecord)
                 if t_format in possible_unknown_seq_formats:
                     if not isinstance(record.seq, Seq):
-                        # UnknownSeq is a subclass of Seq
-                        self.failureException("Expected a Seq or UnknownSeq object")
+                        self.failureException("Expected a Seq object")
                 else:
                     self.assertIsInstance(record.seq, Seq)
                 self.assertIsInstance(record.id, str)
