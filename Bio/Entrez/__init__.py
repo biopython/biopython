@@ -486,7 +486,7 @@ def read(handle, validate=True, escape=False, ignore_errors=False):
     by HTML escape characters to guarantee that the returned strings are
     valid HTML fragments. For example, a less-than sign (<) is replaced by
     &lt;. If escape is False (default), the string is returned as is.
-    
+
     If ignore_errors is False (default), any error messages in the XML file
     will raise a RuntimeError. If ignore_errors is True, error messages will
     be stored as ErrorElement items, without raising an exception.
@@ -544,7 +544,7 @@ def parse(handle, validate=True, escape=False, ignore_errors=False):
     by HTML escape characters to guarantee that the returned strings are
     valid HTML fragments. For example, a less-than sign (<) is replaced by
     &lt;. If escape is False (default), the string is returned as is.
-    
+
     If ignore_errors is False (default), any error messages in the XML file
     will raise a RuntimeError. If ignore_errors is True, error messages will
     be stored as ErrorElement items, without raising an exception.
