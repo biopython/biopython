@@ -77,14 +77,16 @@ class GeneralTests(unittest.TestCase):
                 "biosample.xml",  # DTD not specified in XML file
                 "einfo3.xml",  # DTD incomplete
                 "einfo4.xml",  # XML corrupted
-                "epost2.xml",  # XML returned by EPost with incorrect arguments
-                "esummary8.xml",  # XML returned by ESummary with incorrect arguments
                 "journals.xml",  # Missing XML declaration
             ):
                 continue
             path = os.path.join(directory, filename)
             with open(path, "rb") as stream:
-                record = Entrez.read(stream)
+                if filename in ("epost2.xml", "esummary8.xml", "esummary10.xml"):
+                    # these include an ErrorElement
+                    record = Entrez.read(stream, ignore_errors=True)
+                else:
+                    record = Entrez.read(stream)
             with BytesIO() as stream:
                 pickle.dump(record, stream)
                 stream.seek(0)
@@ -1770,6 +1772,12 @@ class EPostTest(unittest.TestCase):
         # >>> Bio.Entrez.epost(db="nothing")
         with open("Entrez/epost2.xml", "rb") as handle:
             self.assertRaises(RuntimeError, Entrez.read, handle)
+        with open("Entrez/epost2.xml", "rb") as handle:
+            record = Entrez.read(handle, ignore_errors=True)
+        self.assertEqual(len(record), 1)
+        self.assertEqual(len(record.attributes), 0)
+        self.assertEqual(record["ERROR"], "Wrong DB name")
+        self.assertEqual(record["ERROR"].tag, "ERROR")
 
     def test_invalid(self):
         """Test parsing XML returned by EPost with invalid id (overflow tag)."""
@@ -2180,6 +2188,12 @@ class ESummaryTest(unittest.TestCase):
         # >>> Bio.Entrez.esummary()
         with open("Entrez/esummary8.xml", "rb") as handle:
             self.assertRaises(RuntimeError, Entrez.read, handle)
+        with open("Entrez/esummary8.xml", "rb") as handle:
+            record = Entrez.read(handle, ignore_errors=True)
+        self.assertEqual(len(record), 1)
+        self.assertEqual(len(record.attributes), 0)
+        self.assertEqual(record[0], "Neither query_key nor id specified")
+        self.assertEqual(record[0].tag, "ERROR")
 
     def test_integer_none(self):
         """Test parsing ESummary XML where an Integer is not defined."""
