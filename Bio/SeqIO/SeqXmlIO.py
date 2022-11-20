@@ -19,7 +19,6 @@ from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
 
 from Bio.Seq import Seq
-from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
 
 from .Interfaces import SequenceIterator
@@ -589,9 +588,6 @@ class SeqXmlWriter(SequenceWriter):
         Note that SeqXML requires the molecule type to contain the term
         "DNA", "RNA", or "protein".
         """
-        if isinstance(record.seq, UnknownSeq):
-            raise TypeError("Sequence type is UnknownSeq but SeqXML requires sequence")
-
         seq = bytes(record.seq)
 
         if not len(seq) > 0:

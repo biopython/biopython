@@ -173,7 +173,7 @@ fast access to genome-size DNA sequence files by not having to read the full
 genome sequence. The new ``_UndefinedSequenceData`` class in ``Bio.Seq``  also
 inherits from ``SequenceDataAbstractBaseClass`` to represent sequences of known
 length but unknown sequence contents. This provides an alternative to
-``UnknownSeq``, which is now deprecated as its definition was ambiguous. For
+``UnknownSeq``, which has now been removed as its definition was ambiguous. For
 example, in these examples the ``UnknownSeq`` is interpreted as a sequence with
 a well-defined sequence contents::
 

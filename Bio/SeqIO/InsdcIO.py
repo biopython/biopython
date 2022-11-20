@@ -40,7 +40,6 @@ from Bio.GenBank.Scanner import _ImgtScanner
 from Bio.GenBank.Scanner import EmblScanner
 from Bio.GenBank.Scanner import GenBankScanner
 from Bio.Seq import UndefinedSequenceError
-from Bio.Seq import UnknownSeq
 
 from .Interfaces import _get_seq_string
 from .Interfaces import SequenceIterator
@@ -961,15 +960,9 @@ class GenBankWriter(_InsdcWriter):
         # Loosely based on code from Howard Salis
         # TODO - Force lower case?
 
-        if isinstance(record.seq, UnknownSeq):
-            data = None
-        else:
-            try:
-                data = _get_seq_string(record)
-            except UndefinedSequenceError:
-                data = None
-
-        if data is None:
+        try:
+            data = _get_seq_string(record)
+        except UndefinedSequenceError:
             # We have already recorded the length, and there is no need
             # to record a long sequence of NNNNNNN...NNN or whatever.
             if "contig" in record.annotations:
@@ -1148,15 +1141,9 @@ class EmblWriter(_InsdcWriter):
     def _write_sequence(self, record):
         handle = self.handle  # save looking up this multiple times
 
-        if isinstance(record.seq, UnknownSeq):
-            data = None
-        else:
-            try:
-                data = _get_seq_string(record)
-            except UndefinedSequenceError:
-                data = None
-
-        if data is None:
+        try:
+            data = _get_seq_string(record)
+        except UndefinedSequenceError:
             # We have already recorded the length, and there is no need
             # to record a long sequence of NNNNNNN...NNN or whatever.
             if "contig" in record.annotations:

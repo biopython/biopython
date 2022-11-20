@@ -203,7 +203,7 @@ Instead of myseq.ungap(), please use myseq.replace("-", "").
 
 Bio.Seq.UnknownSeq
 ------------------
-Deprecated in release 1.79.
+Deprecated in release 1.79, and removed in release 1.81.
 Instead of ``UnknownSeq(length)``, please use ``Seq(None, length=length)``.
 Note that the sequence contents of a ``Seq`` object constructed in this way
 is considered to be unknown, and any attempt to access the sequence contents
