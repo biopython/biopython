@@ -18,6 +18,7 @@ from Bio.Phylo import Consensus
 from Bio.Phylo.TreeConstruction import _Matrix
 from Bio.Phylo.TreeConstruction import DistanceMatrix
 from Bio.Phylo.TreeConstruction import DistanceCalculator
+from Bio.Phylo.TreeConstruction import parse_phylip_distance_matrix
 from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 from Bio.Phylo.TreeConstruction import ParsimonyScorer
 from Bio.Phylo.TreeConstruction import NNITreeSearcher
@@ -135,6 +136,48 @@ class DistanceMatrixTest(unittest.TestCase):
         self.assertTrue(lines[0].endswith(str(len(dm))))
         for name, line in zip(self.names, lines[1:]):
             self.assertTrue(line.startswith(name))
+
+        handle.seek(0)
+        dm2 = parse_phylip_distance_matrix(handle)
+        # We don't have equality defined, and due to int vs float
+        # comparing repr fails:
+        self.assertEqual(dm.names, dm2.names)
+        for i in range(len(dm)):
+            for j in range(len(dm)):
+                self.assertEqual(dm[i, j], dm2[i, j])
+
+
+class PhylipDistanceParser(unittest.TestCase):
+    """Test parsing PHYLIP distance matrices."""
+
+    def test_msa(self):
+        # Created from TreeConstruction/msa.phy after conversion to FASTA
+        # using GrapeTree v2.2:
+        # grapetree -m distance -p msa.fasta > msa.phylip-dist.txt
+        with open("TreeConstruction/msa.phylip-dist.txt") as handle:
+            dm = parse_phylip_distance_matrix(handle)
+        self.assertEqual(len(dm), 5)
+        self.assertEqual(dm["Alpha", "Beta"], 0.230769)
+
+    def test_pathological(self):
+        """Test hand-crafted PHYLIP distance matrix example mixing tabs and spaces."""
+        with open("TreeConstruction/pathological.phylip-dist.txt") as handle:
+            dm = parse_phylip_distance_matrix(handle)
+        self.assertEqual(len(dm), 8)
+        self.assertEqual(dm["V_Harveyi_PATH", "B_subtilis_GlnH_homo_YCKK"], 0.697)
+
+    def test_truncated(self):
+        """Test hand-crafted PHYLIP distance matrix example with truncated names."""
+        # Same data as TreeConstruction/pathological.phylip-dist.txt but with
+        # trailing blank lines AND due to strict PHYLIP style name truncation
+        # get two entries of just B_subtilis
+        with open("TreeConstruction/truncated.phylip-dist.txt") as handle:
+            self.assertRaisesRegex(
+                ValueError,
+                "Duplicate names found",
+                parse_phylip_distance_matrix,
+                handle,
+            )
 
 
 class DistanceCalculatorTest(unittest.TestCase):
