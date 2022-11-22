@@ -55,6 +55,12 @@ does a maximum of three tries before giving up, and sleeps for 15
 seconds between tries. You can tweak these parameters by setting
 ``Bio.Entrez.max_tries`` and ``Bio.Entrez.sleep_between_tries``.
 
+Please note that, when using the ``Bio.Entrez``with the ``pubmed``
+database, the results differ from the web version of PubMed,
+https://pubmed.ncbi.nlm.nih.gov/, due to a new release of PubMed. Please
+check here https://dataguide.nlm.nih.gov/eutilities/how_eutilities_works.html
+for more information.
+
 The Entrez module also provides an XML parser which takes a handle
 as input.
 

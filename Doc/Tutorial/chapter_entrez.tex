@@ -215,6 +215,11 @@ True
 \end{minted}
 In this output, you see PubMed IDs (including 19304878 which is the PMID for the Biopython application note), which can be retrieved by EFetch (see section \ref{sec:efetch}).
 
+Please note that, when using the \verb+Bio.Entrez+ with the PubMed database, the results differ from the web version of PubMed, 
+\url{https://pubmed.ncbi.nlm.nih.gov/}, due to a new release of PubMed. Please 
+check \url{https://dataguide.nlm.nih.gov/eutilities/how_eutilities_works.html}
+for more information.
+
 You can also use ESearch to search GenBank. Here we'll do a quick
 search for the \emph{matK} gene in \emph{Cypripedioideae} orchids
 (see Section~\ref{sec:entrez-einfo} about EInfo for one way to
