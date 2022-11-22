@@ -172,7 +172,7 @@ class IC_Chain:
     Attributes
     ----------
     chain: object reference
-        The Biopython :class:`Bio.PDB.Chain` object this extends
+        The Biopython :class:`Bio.PDB.Chain.Chain` object this extends
 
     MaxPeptideBond: float
         **Class** attribute to detect chain breaks.
@@ -575,7 +575,7 @@ class IC_Chain:
         """Initialize .internal_coord for loaded Biopython Residue objects.
 
         Add IC_Residue as .internal_coord attribute for each :class:`.Residue`
-        in parent :class:`Bio.PDB.Chain`; populate ordered_aa_ic_list with
+        in parent :class:`Bio.PDB.Chain.Chain`; populate ordered_aa_ic_list with
         :class:`IC_Residue` references for residues which can be built (amino
         acids and some hetatms); set rprev and rnext on each sequential
         IC_Residue, populate initNCaC at start and after chain breaks.
