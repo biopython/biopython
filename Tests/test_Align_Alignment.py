@@ -7,6 +7,7 @@
 
 import os
 import unittest
+from io import StringIO
 
 try:
     import numpy
@@ -2503,6 +2504,59 @@ AT3G20900.1-SEQ                 ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGTGAACAAAAAAAA
             self.alignment.format,
             "tabular",
         )
+
+
+class TestAlignment_format(unittest.TestCase):
+    def setUp(self):
+        aligner = Align.PairwiseAligner("blastn")
+        aligner.mode = "local"
+        seqA = "AAAAACCCGGGTTTT"
+        seqB = "CCCTGGG"
+        alignments = aligner.align(seqA, seqB)
+        self.assertEqual(len(alignments), 2)
+        self.plain_alignments = list(alignments)
+        seqA = Seq("AAAAACCCGGGTTTT")
+        seqB = Seq("CCCTGGG")
+        alignments = aligner.align(seqA, seqB)
+        self.assertEqual(len(alignments), 2)
+        self.seq_alignments = list(alignments)
+        alignments = aligner.align(seqA, seqB)
+        for alignment in alignments:
+            alignment.sequences[0] = SeqRecord(seqA, id="A", description="sequence A")
+            alignment.sequences[1] = SeqRecord(seqB, id="B", description="sequence B")
+        self.seqrecord_alignments = list(alignments)
+
+    def test_a2m(self):
+        stream = StringIO()
+        for alignment in self.plain_alignments:
+            alignment.column_annotations = {"state": "DDDDDD"}
+        Align.write(self.plain_alignments[0], stream, "a2m")
+        stream.seek(0)
+        alignment = Align.read(stream, "a2m")
+        self.assertEqual(alignment.sequences[0].id, None)
+        self.assertEqual(alignment.sequences[1].id, None)
+        self.assertEqual(alignment.sequences[0].description, "<unknown description>")
+        self.assertEqual(alignment.sequences[1].description, "<unknown description>")
+        stream = StringIO()
+        for alignment in self.seq_alignments:
+            alignment.column_annotations = {"state": "DDDDDD"}
+        Align.write(self.seq_alignments[0], stream, "a2m")
+        stream.seek(0)
+        alignment = Align.read(stream, "a2m")
+        self.assertEqual(alignment.sequences[0].id, None)
+        self.assertEqual(alignment.sequences[1].id, None)
+        self.assertEqual(alignment.sequences[0].description, "<unknown description>")
+        self.assertEqual(alignment.sequences[1].description, "<unknown description>")
+        stream = StringIO()
+        for alignment in self.seqrecord_alignments:
+            alignment.column_annotations = {"state": "DDDDDD"}
+        Align.write(self.seqrecord_alignments[0], stream, "a2m")
+        stream.seek(0)
+        alignment = Align.read(stream, "a2m")
+        self.assertEqual(alignment.sequences[0].id, "A")
+        self.assertEqual(alignment.sequences[1].id, "B")
+        self.assertEqual(alignment.sequences[0].description, "sequence A")
+        self.assertEqual(alignment.sequences[1].description, "sequence B")
 
 
 if __name__ == "__main__":

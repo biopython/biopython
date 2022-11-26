@@ -38,6 +38,8 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the Exonerate cigar and vulgar file format."""
 
+    fmt = "Exonerate"
+
     def __init__(self, target, fmt="vulgar"):
         """Create an AlignmentWriter object.
 
@@ -50,7 +52,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                        Default value is 'vulgar'.
 
         """
-        super().__init__(target, mode="w")
+        super().__init__(target)
         if fmt == "vulgar":
             self.format_alignment = self._format_alignment_vulgar
         elif fmt == "cigar":
@@ -417,14 +419,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     of matches and mismatches are stored as attributes of each alignment.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="Exonerate")
+    fmt = "Exonerate"
 
     def _read_header(self, stream):
         self.metadata = {}

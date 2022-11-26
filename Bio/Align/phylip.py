@@ -20,6 +20,8 @@ _PHYLIP_ID_WIDTH = 10
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Clustalw alignment writer."""
 
+    fmt = "PHYLIP"
+
     def format_alignment(self, alignment):
         """Return a string with a single alignment in the Phylip format."""
         names = []
@@ -66,14 +68,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     http://evolution.genetics.washington.edu/phylip/doc/main.html#inputfiles
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="PHYLIP")
+    fmt = "PHYLIP"
 
     def _read_header(self, stream):
         try:

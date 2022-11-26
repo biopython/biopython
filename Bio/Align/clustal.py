@@ -19,6 +19,8 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Clustalw alignment writer."""
 
+    fmt = "Clustal"
+
     def write_header(self, alignments):
         """Use this to write the file header."""
         stream = self.stream
@@ -93,14 +95,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Clustalw alignment iterator."""
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="Clustal")
+    fmt = "Clustal"
 
     def _read_header(self, stream):
         try:

@@ -41,6 +41,8 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Accepts Alignment objects, writes a MAF file."""
 
+    fmt = "MAF"
+
     def _write_trackline(self, metadata):
         stream = self.stream
         stream.write("track")
@@ -254,17 +256,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     ``.annotations`` attribute of the corresponding sequence record.
     """
 
+    fmt = "MAF"
+
     status_characters = ("C", "I", "N", "n", "M", "T")
     empty_status_characters = ("C", "I", "M", "n")
-
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="MAF")
 
     def _read_header(self, stream):
         metadata = {}

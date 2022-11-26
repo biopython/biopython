@@ -117,14 +117,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     of each alignment.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="b", fmt="bigBed")
+    fmt = "bigBed"
+    mode = "b"
 
     def _read_header(self, stream):
 
