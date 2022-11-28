@@ -429,7 +429,7 @@ class CustomDirectoryTest(unittest.TestCase):
         import os
         import shutil
 
-        handler = Parser.DataHandler(validate=False, escape=False)
+        handler = Parser.DataHandler(validate=False, escape=False, ignore_errors=False)
 
         # Create a temporary directory
         tmpdir = tempfile.mkdtemp()

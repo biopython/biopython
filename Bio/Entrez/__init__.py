@@ -455,7 +455,7 @@ def ecitmatch(**keywds):
     return _open(request)
 
 
-def read(handle, validate=True, escape=False):
+def read(handle, validate=True, escape=False, ignore_errors=False):
     """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
@@ -487,6 +487,10 @@ def read(handle, validate=True, escape=False):
     valid HTML fragments. For example, a less-than sign (<) is replaced by
     &lt;. If escape is False (default), the string is returned as is.
 
+    If ignore_errors is False (default), any error messages in the XML file
+    will raise a RuntimeError. If ignore_errors is True, error messages will
+    be stored as ErrorElement items, without raising an exception.
+
     Whereas the data structure seems to consist of generic Python lists,
     dictionaries, strings, and so on, each of these is actually a class
     derived from the base type. This allows us to store the attributes
@@ -495,12 +499,12 @@ def read(handle, validate=True, escape=False):
     """
     from .Parser import DataHandler
 
-    handler = DataHandler(validate, escape)
+    handler = DataHandler(validate, escape, ignore_errors)
     record = handler.read(handle)
     return record
 
 
-def parse(handle, validate=True, escape=False):
+def parse(handle, validate=True, escape=False, ignore_errors=False):
     """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
@@ -541,6 +545,10 @@ def parse(handle, validate=True, escape=False):
     valid HTML fragments. For example, a less-than sign (<) is replaced by
     &lt;. If escape is False (default), the string is returned as is.
 
+    If ignore_errors is False (default), any error messages in the XML file
+    will raise a RuntimeError. If ignore_errors is True, error messages will
+    be stored as ErrorElement items, without raising an exception.
+
     Whereas the data structure seems to consist of generic Python lists,
     dictionaries, strings, and so on, each of these is actually a class
     derived from the base type. This allows us to store the attributes
@@ -549,7 +557,7 @@ def parse(handle, validate=True, escape=False):
     """
     from .Parser import DataHandler
 
-    handler = DataHandler(validate, escape)
+    handler = DataHandler(validate, escape, ignore_errors)
     records = handler.parse(handle)
     return records
 

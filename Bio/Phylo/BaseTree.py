@@ -18,8 +18,6 @@ import random
 import re
 import warnings
 
-from Bio import BiopythonDeprecationWarning
-
 
 # General tree-traversal algorithms
 
@@ -972,21 +970,13 @@ class Tree(TreeElement, TreeMixin):
             # Follow python convention and default to using __str__
             return str(self)
 
-    def format(self, fmt=None, format=None):
+    def format(self, fmt=None):
         """Serialize the tree as a string in the specified file format.
 
         :param fmt: a lower-case string supported by ``Bio.Phylo.write``
             as an output file format.
 
         """
-        if format is not None:
-            if fmt is not None:
-                raise ValueError("The ``format`` argument has been renamed to ``fmt``.")
-            warnings.warn(
-                "The ``format`` argument has been renamed to ``fmt``.",
-                BiopythonDeprecationWarning,
-            )
-            fmt = format
         return self.__format__(fmt)
 
     # Pretty-printer for the entire tree hierarchy

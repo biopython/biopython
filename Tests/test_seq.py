@@ -542,13 +542,6 @@ class TestMutableSeq(unittest.TestCase):
         self.assertIsInstance(
             mutable_s, Seq.MutableSeq, "Initializing MutableSeq from MutableSeq"
         )
-        # Deprecated:
-        with self.assertWarns(BiopythonDeprecationWarning):
-            mutable_s = Seq.MutableSeq(array.array("u", sequence.decode("ASCII")))
-        self.assertIsInstance(
-            mutable_s, Seq.MutableSeq, "Creating MutableSeq using array"
-        )
-        self.assertEqual(mutable_s, self.s)
         self.assertRaises(
             UnicodeEncodeError, Seq.MutableSeq, "ÄþÇÐ"
         )  # All are Latin-1 characters
@@ -856,121 +849,6 @@ class TestMutableSeq(unittest.TestCase):
             start, step = numpy.array([2, 3])  # numpy integers
             self.mutable_s[start::step] = "X" * len(self.mutable_s[2::3])
             self.assertEqual(Seq.MutableSeq("TCXAAXGGXTGXATXATX"), self.mutable_s)
-
-
-class TestUnknownSeq(unittest.TestCase):
-    def setUp(self):
-        warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-        self.s = Seq.UnknownSeq(6)
-        self.u = Seq.Seq(None, length=6)
-
-    def tearDown(self):
-        warnings.simplefilter("default", BiopythonDeprecationWarning)
-
-    def test_unknownseq_construction(self):
-        self.assertEqual("??????", Seq.UnknownSeq(6))
-        self.assertEqual("NNNNNN", Seq.UnknownSeq(6, character="N"))
-        self.assertEqual("XXXXXX", Seq.UnknownSeq(6, character="X"))
-        self.assertEqual("??????", Seq.UnknownSeq(6, character="?"))
-        with self.assertRaises(ValueError):
-            "??????" == self.u
-        with self.assertRaises(ValueError):
-            self.u == "??????"
-
-        with self.assertRaises(ValueError):
-            Seq.UnknownSeq(-10)
-
-        with self.assertRaises(ValueError):
-            Seq.Seq(None, length=-10)
-
-        with self.assertRaises(ValueError):
-            Seq.UnknownSeq(6, character="??")
-
-    def test_length(self):
-        self.assertEqual(6, len(self.s))
-        self.assertEqual(6, len(self.u))
-
-    def test_repr(self):
-        self.assertEqual("UnknownSeq(6, character='?')", repr(self.s))
-        self.assertEqual("Seq(None, length=6)", repr(self.u))
-
-    def test_add_method(self):
-        seq1 = Seq.UnknownSeq(3, character="N")
-        self.assertEqual("??????NNN", self.s + seq1)
-
-        seq2 = Seq.UnknownSeq(3, character="N")
-        self.assertEqual("NNNNNN", seq1 + seq2)
-
-    def test_getitem_method(self):
-        self.assertEqual("", self.s[-1:-1])
-        self.assertEqual("?", self.s[1])
-        self.assertEqual("?", self.s[5:])
-        self.assertEqual("?", self.s[:1])
-        self.assertEqual("??", self.s[1:3])
-        self.assertEqual("???", self.s[1:6:2])
-        self.assertEqual("????", self.s[1:-1])
-        with self.assertRaises(ValueError):
-            self.s[1:6:0]
-        with self.assertRaises(ValueError):
-            self.u[1:6:0]
-
-    def test_count(self):
-        self.assertEqual(6, self.s.count("?"))
-        self.assertEqual(3, self.s.count("??"))
-        self.assertEqual(0, Seq.UnknownSeq(6, character="N").count("?"))
-        self.assertEqual(0, Seq.UnknownSeq(6, character="N").count("??"))
-        self.assertEqual(4, Seq.UnknownSeq(6, character="?").count("?", start=2))
-        self.assertEqual(2, Seq.UnknownSeq(6, character="?").count("??", start=2))
-        self.assertRaises(ValueError, self.u.count, "?")
-
-    def test_complement(self):
-        self.s.complement()
-        self.assertEqual("??????", self.s)
-        t = self.u.complement()
-        self.assertEqual(len(t), 6)
-        self.assertRaises(ValueError, str, t)
-
-    def test_reverse_complement(self):
-        self.s.reverse_complement()
-        self.assertEqual("??????", self.s)
-        t = self.u.reverse_complement()
-        self.assertEqual(len(t), 6)
-        self.assertRaises(ValueError, str, t)
-
-    def test_transcribe(self):
-        self.assertEqual("??????", self.s.transcribe())
-        t = self.u.transcribe()
-        self.assertEqual(len(t), 6)
-        self.assertRaises(ValueError, str, t)
-
-    def test_back_transcribe(self):
-        self.assertEqual("??????", self.s.back_transcribe())
-        t = self.u.back_transcribe()
-        self.assertEqual(len(t), 6)
-        self.assertRaises(ValueError, str, t)
-
-    def test_upper(self):
-        seq = Seq.UnknownSeq(6, character="N")
-        self.assertEqual("NNNNNN", seq.upper())
-        self.assertEqual("Seq(None, length=6)", repr(self.u.upper()))
-
-    def test_lower(self):
-        seq = Seq.UnknownSeq(6, character="N")
-        self.assertEqual("nnnnnn", seq.lower())
-        self.assertEqual("Seq(None, length=6)", repr(self.u.lower()))
-
-    def test_translation(self):
-        self.assertEqual("XX", self.s.translate())
-        t = self.u.translate()
-        self.assertEqual(len(t), 2)
-        self.assertRaises(ValueError, str, t)
-
-    def test_ungap(self):
-        seq = Seq.UnknownSeq(7, character="N")
-        self.assertEqual("NNNNNNN", seq.ungap("-"))
-
-        seq = Seq.UnknownSeq(20, character="-")
-        self.assertEqual("", seq.ungap("-"))
 
 
 class TestAmbiguousComplements(unittest.TestCase):
@@ -1474,15 +1352,12 @@ class TestAttributes(unittest.TestCase):
 
 class TestSeqDefined(unittest.TestCase):
     def test_zero_length(self):
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
-            zero_length_seqs = [
-                Seq.Seq(""),
-                Seq.Seq(None, length=0),
-                Seq.Seq({}, length=0),
-                Seq.UnknownSeq(length=0),
-                Seq.MutableSeq(""),
-            ]
+        zero_length_seqs = [
+            Seq.Seq(""),
+            Seq.Seq(None, length=0),
+            Seq.Seq({}, length=0),
+            Seq.MutableSeq(""),
+        ]
 
         for seq in zero_length_seqs:
             self.assertTrue(seq.defined, msg=repr(seq))
@@ -1495,11 +1370,6 @@ class TestSeqDefined(unittest.TestCase):
         seq = Seq.Seq({3: "ACGT"}, length=10)
         self.assertFalse(seq.defined)
         self.assertEqual(seq.defined_ranges, ((3, 7),))
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
-            seq = Seq.UnknownSeq(length=1)
-        self.assertFalse(seq.defined)
-        self.assertEqual(seq.defined_ranges, ())
 
     def test_defined(self):
         seqs = [

@@ -669,14 +669,9 @@ which is a valid HTML fragment. By default, \verb+escape+ is \verb+False+.
 
 \section{Handling errors}
 
-Three things can go wrong when parsing an XML file:
-\begin{itemize}
-\item The file may not be an XML file to begin with;
-\item The file may end prematurely or otherwise be corrupted;
-\item The file may be correct XML, but contain items that are not represented in the associated DTD.
-\end{itemize}
+\subsection*{The file is not an XML file}
 
-The first case occurs if, for example, you try to parse a Fasta file as if it were an XML file:
+For example, this error occurs if you try to parse a Fasta file as if it were an XML file:
 
 %doctest ../Tests/GenBank
 \begin{minted}{pycon}
@@ -689,7 +684,10 @@ Bio.Entrez.Parser.NotXMLError: Failed to parse the XML data (syntax error: line 
 \end{minted}
 Here, the parser didn't find the \verb|<?xml ...| tag with which an XML file is supposed to start, and therefore decides (correctly) that the file is not an XML file.
 
+\subsection*{The file ends prematurely or is otherwise corrupted}
+
 When your file is in the XML format but is corrupted (for example, by ending prematurely), the parser will raise a CorruptedXMLError.
+
 Here is an example of an XML file that ends prematurely:
 \begin{minted}{text}
 <?xml version="1.0"?>
@@ -717,7 +715,9 @@ Bio.Entrez.Parser.CorruptedXMLError: Failed to parse the XML data (no element fo
 \end{minted}
 Note that the error message tells you at what point in the XML file the error was detected.
 
-The third type of error occurs if the XML file contains tags that do not have a description in the corresponding DTD file. This is an example of such an XML file:
+\subsection*{The file contains items that are missing from the associated DTD}
+
+This is an example of an XML file containing tags that do not have a description in the corresponding DTD file:
 
 \begin{minted}{text}
 <?xml version="1.0"?>
@@ -769,6 +769,44 @@ Optionally, you can instruct the parser to skip such tags instead of raising a V
 \end{minted}
 Of course, the information contained in the XML tags that are not in the DTD are not present in the record returned by \verb|Entrez.read|.
 
+\subsection*{The file contains an error message}
+
+This may occur, for example, when you attempt to access a PubMed record for a nonexistent PubMed ID. By default, this will raise a \verb+RuntimeError+:
+
+%doctest . internet
+\begin{minted}{pycon}
+>>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+>>> stream = Entrez.esummary(db="pubmed", id="99999999")
+>>> record = Entrez.read(stream)
+Traceback (most recent call last):
+...
+RuntimeError: UID=99999999: cannot get document summary
+\end{minted}
+
+If you are accessing multiple PubMed records, the \verb+RuntimeError+ would prevent you from receiving results for any of the PubMed records if one of the PubMed IDs is incorrect. To circumvent this, you can set the \verb+ignore_errors+ argument to \verb+True+. This will return the requested results for the valid PubMed IDs, and an \verb+ErrorElement+ for the incorrect ID:
+
+%doctest . internet
+\begin{minted}{pycon}
+>>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+>>> stream = Entrez.esummary(db="pubmed", id="19304878,99999999,31278684")
+>>> record = Entrez.read(stream, ignore_errors=True)
+>>> len(record)
+3
+>>> record[0].tag
+'DocSum'
+>>> record[0]["Title"]
+'Biopython: freely available Python tools for computational molecular biology and bioinformatics.'
+>>> record[1].tag
+'ERROR'
+>>> record[1]
+ErrorElement('UID=99999999: cannot get document summary')
+>>> record[2].tag
+'DocSum'
+>>> record[2]["Title"]
+'Sharing Programming Resources Between Bio* Projects.'
+\end{minted}
 
 \section{Specialized parsers}
 \label{sec:entrez-specialized-parsers}
