@@ -173,9 +173,9 @@ class ProteinAnalysis:
         # Calculate neighbor-correlated B_norm values first
         for i, res in enumerate(self.sequence[1 : self.length - 1]):
             bnorm_nc[i] = bnorm_0[res]
-            if bnorm[self.sequence[i]] >= 1 or bnorm[self.sequence[i + 2]] >= 1:
+            if bnorm[self.sequence[i]] < 1 or bnorm[self.sequence[i + 2]] < 1:
                 bnorm_nc[i] = bnorm_1[res]
-            if bnorm[self.sequence[i]] >= 1 and bnorm[self.sequence[i + 2]] >= 1:
+            if bnorm[self.sequence[i]] < 1 and bnorm[self.sequence[i + 2]] < 1:
                 bnorm_nc[i] = bnorm_2[res]
 
         # Use neighbor-correlated B_norm values to predict flexibility
