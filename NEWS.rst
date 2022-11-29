@@ -14,6 +14,13 @@ The latest news is at the top of this file.
 This release of Biopython supports Python 3.7, 3.8, 3.9, 3.10, 3.11. It has
 also been tested on PyPy3.7 v7.3.5. We intend to drop Python 3.7 support.
 
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Michiel de Hoon
+- Peter Cock
+- Robert Miller
+
 18 November 2022: Biopython 1.80
 ================================
 
