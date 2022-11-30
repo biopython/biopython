@@ -28,7 +28,12 @@ This release of Biopython supports Python 3.7, 3.8, 3.9, 3.10, 3.11. It has
 also been tested on PyPy3.7 v7.3.5.
 
 Functions ``read``, ``parse``, and ``write`` were added to ``Bio.Align`` to
-read and write ``Alignment`` objects.
+read and write ``Alignment`` objects.  String formatting and printing output
+of ``Alignment`` objects from ``Bio.Align`` were changed to support these new
+functions. To obtain a string showing the aligned sequence with the appropriate
+gap characters (as previously shown when calling ``format`` on an alignment),
+use ``alignment[i]``, where ``alignment`` is an ``Alignment`` object and ``i``
+is the index of the aligned sequence.
 
 Because dict retains the item order by default since Python3.6, all instances
 of ``collections.OrderedDict`` have been replaced by either standard ``dict``
