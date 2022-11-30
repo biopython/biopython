@@ -64,8 +64,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
     def write_header(self, alignments):
         """Write the header."""
-        commandline = alignments.metadata.get("Command line", "")
-        hostname = alignments.metadata.get("Hostname", "")
+        try:
+            metadata = alignments.metadata
+        except AttributeError:
+            commandline = ""
+            hostname = ""
+        else:
+            commandline = metadata.get("Command line", "")
+            hostname = metadata.get("Hostname", "")
         self.stream.write(f"Command line: [{commandline}]\n")
         self.stream.write(f"Hostname: [{hostname}]\n")
 
@@ -449,7 +455,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_start = int(words[5])
         target_end = int(words[6])
         target_strand = words[7]
-        score = int(words[8])
+        score = float(words[8])
         target_seq = Seq(None, length=target_end)
         query_seq = Seq(None, length=query_end)
         target = SeqRecord(target_seq, id=target_id)
@@ -513,7 +519,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_start = int(words[5])
         target_end = int(words[6])
         target_strand = words[7]
-        score = int(words[8])
+        score = float(words[8])
         target_seq = Seq(None, length=target_end)
         query_seq = Seq(None, length=query_end)
         target = SeqRecord(target_seq, id=target_id)

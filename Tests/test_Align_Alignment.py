@@ -2527,36 +2527,62 @@ class TestAlignment_format(unittest.TestCase):
         self.seqrecord_alignments = list(alignments)
 
     def test_a2m(self):
-        stream = StringIO()
         for alignment in self.plain_alignments:
             alignment.column_annotations = {"state": "DDDDDD"}
-        Align.write(self.plain_alignments[0], stream, "a2m")
-        stream.seek(0)
-        alignment = Align.read(stream, "a2m")
-        self.assertEqual(alignment.sequences[0].id, None)
-        self.assertEqual(alignment.sequences[1].id, None)
-        self.assertEqual(alignment.sequences[0].description, "<unknown description>")
-        self.assertEqual(alignment.sequences[1].description, "<unknown description>")
-        stream = StringIO()
         for alignment in self.seq_alignments:
             alignment.column_annotations = {"state": "DDDDDD"}
-        Align.write(self.seq_alignments[0], stream, "a2m")
-        stream.seek(0)
-        alignment = Align.read(stream, "a2m")
-        self.assertEqual(alignment.sequences[0].id, None)
-        self.assertEqual(alignment.sequences[1].id, None)
-        self.assertEqual(alignment.sequences[0].description, "<unknown description>")
-        self.assertEqual(alignment.sequences[1].description, "<unknown description>")
-        stream = StringIO()
         for alignment in self.seqrecord_alignments:
             alignment.column_annotations = {"state": "DDDDDD"}
-        Align.write(self.seqrecord_alignments[0], stream, "a2m")
+        self.check("a2m", self.plain_alignments)
+        self.check("a2m", self.seq_alignments)
+        self.check(
+            "a2m", self.seqrecord_alignments, ("A", "B"), ("sequence A", "sequence B")
+        )
+
+    def test_bed(self):
+        self.check("bed", self.plain_alignments, ("target", "query"))
+        self.check("bed", self.seq_alignments, ("target", "query"))
+        self.check("bed", self.seqrecord_alignments, ("A", "B"))
+
+    def test_clustal(self):
+        self.check("clustal", self.plain_alignments, ("sequence_0", "sequence_1"))
+        self.check("clustal", self.seq_alignments, ("sequence_0", "sequence_1"))
+        self.check("clustal", self.seqrecord_alignments, ("A", "B"))
+
+    def test_exonerate(self):
+        self.check("exonerate", self.plain_alignments, ("target", "query"))
+        self.check("exonerate", self.seq_alignments, ("target", "query"))
+        self.check("exonerate", self.seqrecord_alignments, ("A", "B"))
+
+    def test_fasta(self):
+        self.check("fasta", self.plain_alignments, ("", ""), ("", ""))
+        self.check("fasta", self.seq_alignments, ("", ""), ("", ""))
+        self.check(
+            "fasta", self.seqrecord_alignments, ("A", "B"), ("sequence A", "sequence B")
+        )
+
+    def test_maf(self):
+        self.check("maf", self.plain_alignments, ("sequence_0", "sequence_1"), ("", ""))
+        self.check("maf", self.seq_alignments, ("sequence_0", "sequence_1"), ("", ""))
+        self.check(
+            "maf", self.seqrecord_alignments, ("A", "B"), ("sequence A", "sequence B")
+        )
+
+    def check(
+        self,
+        fmt,
+        alignments,
+        ids=(None, None),
+        descriptions=("<unknown description>", "<unknown description>"),
+    ):
+        stream = StringIO()
+        Align.write(alignments[0], stream, fmt)
         stream.seek(0)
-        alignment = Align.read(stream, "a2m")
-        self.assertEqual(alignment.sequences[0].id, "A")
-        self.assertEqual(alignment.sequences[1].id, "B")
-        self.assertEqual(alignment.sequences[0].description, "sequence A")
-        self.assertEqual(alignment.sequences[1].description, "sequence B")
+        alignment = Align.read(stream, fmt)
+        self.assertEqual(alignment.sequences[0].id, ids[0])
+        self.assertEqual(alignment.sequences[1].id, ids[1])
+        self.assertEqual(alignment.sequences[0].description, descriptions[0])
+        self.assertEqual(alignment.sequences[1].description, descriptions[1])
 
 
 if __name__ == "__main__":

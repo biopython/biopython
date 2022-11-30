@@ -238,10 +238,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if i == n:
                     i = 0
 
-        records = [
-            SeqRecord(Seq(seq), id=seqid, description=seqid)
-            for (seqid, seq) in zip(ids, seqs)
-        ]
+        records = [SeqRecord(Seq(seq), id=seqid) for (seqid, seq) in zip(ids, seqs)]
         coordinates = Alignment.infer_coordinates(aligned_seqs)
         alignment = Alignment(records, coordinates)
         if consensus:
