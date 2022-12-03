@@ -2533,8 +2533,8 @@ class TestAlignment_format(unittest.TestCase):
             alignment.column_annotations = {"state": "DDDDDD"}
         for alignment in self.seqrecord_alignments:
             alignment.column_annotations = {"state": "DDDDDD"}
-        self.check("a2m", self.plain_alignments)
-        self.check("a2m", self.seq_alignments)
+        self.check("a2m", self.plain_alignments, ("", ""), ("", ""))
+        self.check("a2m", self.seq_alignments, ("", ""), ("", ""))
         self.check(
             "a2m", self.seqrecord_alignments, ("A", "B"), ("sequence A", "sequence B")
         )
@@ -2565,6 +2565,21 @@ class TestAlignment_format(unittest.TestCase):
         self.check("maf", self.plain_alignments, ("sequence_0", "sequence_1"), ("", ""))
         self.check("maf", self.seq_alignments, ("sequence_0", "sequence_1"), ("", ""))
         self.check("maf", self.seqrecord_alignments, ("A", "B"), ("", ""))
+
+    def test_phylip(self):
+        self.check("phylip", self.plain_alignments, ("", ""))
+        self.check("phylip", self.seq_alignments, ("", ""))
+        self.check("phylip", self.seqrecord_alignments, ("A", "B"))
+
+    def test_psl(self):
+        self.check("psl", self.plain_alignments, ("target", "query"))
+        self.check("psl", self.seq_alignments, ("target", "query"))
+        self.check("psl", self.seqrecord_alignments, ("A", "B"))
+
+    def test_sam(self):
+        self.check("sam", self.plain_alignments, ("target", "query"))
+        self.check("sam", self.seq_alignments, ("target", "query"))
+        self.check("sam", self.seqrecord_alignments, ("A", "B"))
 
     def check(
         self,

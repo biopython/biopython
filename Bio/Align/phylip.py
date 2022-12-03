@@ -26,12 +26,17 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         """Return a string with a single alignment in the Phylip format."""
         names = []
         for record in alignment.sequences:
-            name = record.id.strip()
-            for char in "[](),":
-                name = name.replace(char, "")
-            for char in ":;":
-                name = name.replace(char, "|")
-            name = name[:_PHYLIP_ID_WIDTH]
+            try:
+                name = record.id
+            except AttributeError:
+                name = ""
+            else:
+                name = name.strip()
+                for char in "[](),":
+                    name = name.replace(char, "")
+                for char in ":;":
+                    name = name.replace(char, "|")
+                name = name[:_PHYLIP_ID_WIDTH]
             names.append(name)
 
         lines = []

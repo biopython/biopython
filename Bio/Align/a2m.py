@@ -76,11 +76,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 try:
                     name = parts[0]
                 except IndexError:
-                    name = None
+                    name = ""
                 try:
                     description = parts[1]
                 except IndexError:
-                    description = None
+                    description = ""
                 names.append(name)
                 descriptions.append(description)
                 lines.append("")
@@ -111,10 +111,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         for name, description, line in zip(names, descriptions, lines):
             line = line.replace("-", "")
             sequence = Seq(line)
-            if description is None:
-                record = SeqRecord(sequence, name)
-            else:
-                record = SeqRecord(sequence, name, description=description)
+            record = SeqRecord(sequence, name, description=description)
             records.append(record)
         alignment = Alignment(records, coordinates)
         alignment.column_annotations = {}
