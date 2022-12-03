@@ -2533,8 +2533,8 @@ class TestAlignment_format(unittest.TestCase):
             alignment.column_annotations = {"state": "DDDDDD"}
         for alignment in self.seqrecord_alignments:
             alignment.column_annotations = {"state": "DDDDDD"}
-        self.check("a2m", self.plain_alignments, ("", ""), ("", ""))
-        self.check("a2m", self.seq_alignments, ("", ""), ("", ""))
+        self.check("a2m", self.plain_alignments)
+        self.check("a2m", self.seq_alignments)
         self.check(
             "a2m", self.seqrecord_alignments, ("A", "B"), ("sequence A", "sequence B")
         )
@@ -2545,8 +2545,8 @@ class TestAlignment_format(unittest.TestCase):
         self.check("bed", self.seqrecord_alignments, ("A", "B"))
 
     def test_clustal(self):
-        self.check("clustal", self.plain_alignments, ("sequence_0", "sequence_1"))
-        self.check("clustal", self.seq_alignments, ("sequence_0", "sequence_1"))
+        self.check("clustal", self.plain_alignments, ("0", "1"))
+        self.check("clustal", self.seq_alignments, ("0", "1"))
         self.check("clustal", self.seqrecord_alignments, ("A", "B"))
 
     def test_exonerate(self):
@@ -2555,20 +2555,20 @@ class TestAlignment_format(unittest.TestCase):
         self.check("exonerate", self.seqrecord_alignments, ("A", "B"))
 
     def test_fasta(self):
-        self.check("fasta", self.plain_alignments, ("", ""), ("", ""))
-        self.check("fasta", self.seq_alignments, ("", ""), ("", ""))
+        self.check("fasta", self.plain_alignments)
+        self.check("fasta", self.seq_alignments)
         self.check(
             "fasta", self.seqrecord_alignments, ("A", "B"), ("sequence A", "sequence B")
         )
 
     def test_maf(self):
-        self.check("maf", self.plain_alignments, ("sequence_0", "sequence_1"), ("", ""))
-        self.check("maf", self.seq_alignments, ("sequence_0", "sequence_1"), ("", ""))
-        self.check("maf", self.seqrecord_alignments, ("A", "B"), ("", ""))
+        self.check("maf", self.plain_alignments, ("0", "1"))
+        self.check("maf", self.seq_alignments, ("0", "1"))
+        self.check("maf", self.seqrecord_alignments, ("A", "B"))
 
     def test_phylip(self):
-        self.check("phylip", self.plain_alignments, ("", ""))
-        self.check("phylip", self.seq_alignments, ("", ""))
+        self.check("phylip", self.plain_alignments)
+        self.check("phylip", self.seq_alignments)
         self.check("phylip", self.seqrecord_alignments, ("A", "B"))
 
     def test_psl(self):
@@ -2581,13 +2581,7 @@ class TestAlignment_format(unittest.TestCase):
         self.check("sam", self.seq_alignments, ("target", "query"))
         self.check("sam", self.seqrecord_alignments, ("A", "B"))
 
-    def check(
-        self,
-        fmt,
-        alignments,
-        ids=(None, None),
-        descriptions=("<unknown description>", "<unknown description>"),
-    ):
+    def check(self, fmt, alignments, ids=("", ""), descriptions=("", "")):
         stream = StringIO()
         Align.write(alignments[0], stream, fmt)
         stream.seek(0)

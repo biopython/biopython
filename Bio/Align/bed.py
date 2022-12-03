@@ -215,8 +215,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             qSize = blockSize
         coordinates[0, :] += chromStart
         query_sequence = Seq(None, length=qSize)
-        query_record = SeqRecord(query_sequence, id=name)
-        target_record = SeqRecord(None, id=chrom)
+        query_record = SeqRecord(query_sequence, id=name, description="")
+        target_record = SeqRecord(None, id=chrom, description="")
         records = [target_record, query_record]
         if strand == "-":
             coordinates[1, :] = qSize - coordinates[1, :]

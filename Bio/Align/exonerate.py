@@ -458,8 +458,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         score = float(words[8])
         target_seq = Seq(None, length=target_end)
         query_seq = Seq(None, length=query_end)
-        target = SeqRecord(target_seq, id=target_id)
-        query = SeqRecord(query_seq, id=query_id)
+        target = SeqRecord(target_seq, id=target_id, description="")
+        query = SeqRecord(query_seq, id=query_id, description="")
         qs = 0
         ts = 0
         n = (len(words) - 8) // 2
@@ -522,8 +522,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         score = float(words[8])
         target_seq = Seq(None, length=target_end)
         query_seq = Seq(None, length=query_end)
-        target = SeqRecord(target_seq, id=target_id)
-        query = SeqRecord(query_seq, id=query_id)
+        target = SeqRecord(target_seq, id=target_id, description="")
+        query = SeqRecord(query_seq, id=query_id, description="")
         ops = words[9::3]
         qs = 0
         ts = 0

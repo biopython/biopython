@@ -172,7 +172,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         coordinates = Alignment.infer_coordinates(seqs)
         seqs = [seq.replace("-", "") for seq in seqs]
-        records = [SeqRecord(Seq(seq), id=name) for (name, seq) in zip(names, seqs)]
+        records = [
+            SeqRecord(Seq(seq), id=name, description="")
+            for (name, seq) in zip(names, seqs)
+        ]
         alignment = Alignment(records, coordinates)
         del self._number_of_seqs
         del self._length_of_seqs

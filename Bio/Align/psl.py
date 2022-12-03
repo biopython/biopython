@@ -514,8 +514,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 target_sequence = Seq(None, length=tSize)
                 query_sequence = Seq(None, length=qSize)
-            target_record = SeqRecord(target_sequence, id=tName)
-            query_record = SeqRecord(query_sequence, id=qName)
+            target_record = SeqRecord(target_sequence, id=tName, description="")
+            query_record = SeqRecord(query_sequence, id=qName, description="")
             if feature is not None:
                 target_record.features.append(feature)
             records = [target_record, query_record]
