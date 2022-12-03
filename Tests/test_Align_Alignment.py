@@ -2564,9 +2564,7 @@ class TestAlignment_format(unittest.TestCase):
     def test_maf(self):
         self.check("maf", self.plain_alignments, ("sequence_0", "sequence_1"), ("", ""))
         self.check("maf", self.seq_alignments, ("sequence_0", "sequence_1"), ("", ""))
-        self.check(
-            "maf", self.seqrecord_alignments, ("A", "B"), ("sequence A", "sequence B")
-        )
+        self.check("maf", self.seqrecord_alignments, ("A", "B"), ("", ""))
 
     def check(
         self,

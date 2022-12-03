@@ -3298,11 +3298,11 @@ def parse(source, fmt):
     ...    print("Number of sequences in alignment", len(alignment))
     ...    print("Alignment score:", alignment.score)
     Number of sequences in alignment 2
-    Alignment score: 6150
+    Alignment score: 6150.0
     Number of sequences in alignment 2
-    Alignment score: 502
+    Alignment score: 502.0
     Number of sequences in alignment 2
-    Alignment score: 440
+    Alignment score: 440.0
 
     For lazy-loading file formats such as bigMaf, for which the file contents
     is read on demand only, ensure that the file remains open while extracting

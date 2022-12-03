@@ -392,7 +392,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     sequence = reverse_complement(sequence)
                     start = srcSize - start - size
                 seq = Seq({start: sequence}, length=srcSize)
-                record = SeqRecord(seq, id=src)
+                record = SeqRecord(seq, id=src, name="", description="")
                 records.append(record)
                 strands.append(strand)
             elif line.startswith("i "):
@@ -420,7 +420,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 status = words[5]
                 assert status in AlignmentIterator.empty_status_characters
                 sequence = Seq(None, length=srcSize)
-                record = SeqRecord(sequence, id=src)
+                record = SeqRecord(sequence, id=src, name="", description="")
                 end = start + size
                 if strand == "+":
                     segment = (start, end)

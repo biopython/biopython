@@ -121,7 +121,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         elif query_start > query_end:
             query_strand = "-"
             steps[1, :] = -steps[1, :]
-        score = alignment.score
+        score = format(alignment.score, "g")
         words = [
             "cigar:",
             query_id,
@@ -132,7 +132,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             str(target_start),
             str(target_end),
             target_strand,
-            str(score),
+            score,
         ]
         try:
             operations = alignment.operations
@@ -313,7 +313,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         elif query_start > query_end:
             query_strand = "-"
             steps[1, :] = -steps[1, :]
-        score = alignment.score
+        score = format(alignment.score, "g")
         words = [
             "vulgar:",
             query_id,
