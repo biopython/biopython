@@ -167,6 +167,9 @@ class SeqRecordMethods(unittest.TestCase):
     def test_contains(self):
         self.assertIn(Seq("ABC"), self.record)
 
+    def test_bytes(self):
+        self.assertEqual(b"ABCDEFGHIJKLMNOPQRSTUVWZYX", bytes(self.record))
+
     def test_str(self):
         expected = """
 ID: TestID
