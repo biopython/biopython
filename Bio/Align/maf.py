@@ -146,7 +146,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             try:
                 name = record.id
             except AttributeError:
-                name = str(i)
+                name = "sequence_%d" % i
             start = coordinates[0]
             end = coordinates[-1]
             length = len(record)
@@ -164,7 +164,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             try:
                 name = record.id
             except AttributeError:
-                name = str(i + n)
+                name = "sequence_%d" % (i + n)
             name_width = max(name_width, len(name))
             start, end = segment
             length = len(record.seq)
@@ -183,7 +183,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             try:
                 record_id = record.id
             except AttributeError:
-                record_id = str(i)
+                record_id = "sequence_%d" % i
             start = coordinates[0]
             end = coordinates[-1]
             length = len(record)
@@ -235,7 +235,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             try:
                 name = record.id
             except AttributeError:
-                name = str(i + n)
+                name = "sequence_%d" % (i + n)
             name = name.ljust(name_width)
             start, end = segment
             length = len(record.seq)

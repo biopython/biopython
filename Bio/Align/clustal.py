@@ -58,7 +58,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             try:
                 name = sequence.id
             except AttributeError:
-                name = str(i)  # Clustal files would not allow an empty string
+                name = "sequence_%d" % i  # Clustal format doesn't allow an empty string
             else:
                 # when we output, we do a nice 80 column output, although
                 # this may result in truncation of the ids.  Also, make sure

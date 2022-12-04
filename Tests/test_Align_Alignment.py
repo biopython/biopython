@@ -2545,8 +2545,8 @@ class TestAlignment_format(unittest.TestCase):
         self.check("bed", self.seqrecord_alignments, ("A", "B"))
 
     def test_clustal(self):
-        self.check("clustal", self.plain_alignments, ("0", "1"))
-        self.check("clustal", self.seq_alignments, ("0", "1"))
+        self.check("clustal", self.plain_alignments, ("sequence_0", "sequence_1"))
+        self.check("clustal", self.seq_alignments, ("sequence_0", "sequence_1"))
         self.check("clustal", self.seqrecord_alignments, ("A", "B"))
 
     def test_exonerate(self):
@@ -2562,8 +2562,8 @@ class TestAlignment_format(unittest.TestCase):
         )
 
     def test_maf(self):
-        self.check("maf", self.plain_alignments, ("0", "1"))
-        self.check("maf", self.seq_alignments, ("0", "1"))
+        self.check("maf", self.plain_alignments, ("sequence_0", "sequence_1"))
+        self.check("maf", self.seq_alignments, ("sequence_0", "sequence_1"))
         self.check("maf", self.seqrecord_alignments, ("A", "B"))
 
     def test_phylip(self):
