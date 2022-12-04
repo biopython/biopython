@@ -20,6 +20,7 @@ except ImportError:
 
 from Bio import Align, SeqIO
 from Bio.Seq import Seq, reverse_complement
+from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import GC
 
 
@@ -3302,14 +3303,11 @@ query             2 AA 0
             alignments = list(alignments)
 
 
-class TestSequencesAsLists(unittest.TestCase):
-    """Check aligning sequences provided as lists.
-
-    This tests whether we can align sequences that are provided as lists
-    consisting of three-letter codons or three-letter amino acids.
-    """
+class TestAlignerInput(unittest.TestCase):
+    """Check aligning sequences provided as lists, str, Seq, or SeqRecord objects."""
 
     def test_three_letter_amino_acids_global(self):
+        """Test aligning sequences provided as lists of three-letter amino acids."""
         seq1 = ["Gly", "Ala", "Thr"]
         seq2 = ["Gly", "Ala", "Ala", "Cys", "Thr"]
         aligner = Align.PairwiseAligner()
@@ -3401,6 +3399,76 @@ Gly Ala Ala Cys Thr
         )
         self.assertAlmostEqual(alignments[0].score, 3.0)
         self.assertAlmostEqual(alignments[1].score, 3.0)
+
+    def test_str_seq_seqrecord(self):
+        """Test aligning sequences provided as str, Seq, or SeqRecord objects."""
+        aligner = Align.PairwiseAligner("blastn")
+        t1 = "ACGT"
+        t2 = "CGTT"
+        s1 = Seq(t1)
+        s2 = Seq(t2)
+        r1 = SeqRecord(s1, id="first", description="1st sequence")
+        r2 = SeqRecord(s2, id="second", description="2nd sequence")
+        alignments = aligner.align(t1, t2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 ACGT 4
+                  0 ...| 4
+query             0 CGTT 4
+""",
+        )
+        self.assertEqual(
+            format(alignment, "fasta"),
+            """\
+>
+ACGT
+>
+CGTT
+""",
+        )
+        alignments = aligner.align(s1, s2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 ACGT 4
+                  0 ...| 4
+query             0 CGTT 4
+""",
+        )
+        self.assertEqual(
+            format(alignment, "fasta"),
+            """\
+>
+ACGT
+>
+CGTT
+""",
+        )
+        alignments = aligner.align(r1, r2)
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+first             0 ACGT 4
+                  0 ...| 4
+second            0 CGTT 4
+""",
+        )
+        self.assertEqual(
+            format(alignment, "fasta"),
+            """\
+>first 1st sequence
+ACGT
+>second 2nd sequence
+CGTT
+""",
+        )
 
 
 class TestArgumentErrors(unittest.TestCase):

@@ -3110,7 +3110,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     def align(self, seqA, seqB, strand="+"):
         """Return the alignments of two sequences using PairwiseAligner."""
-        if isinstance(seqA, (Seq, MutableSeq)):
+        if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
             sA = bytes(seqA)
         else:
             sA = seqA
@@ -3118,7 +3118,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
             sB = seqB
         else:  # strand == "-":
             sB = reverse_complement(seqB, inplace=False)
-        if isinstance(sB, (Seq, MutableSeq)):
+        if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             sB = bytes(sB)
         score, paths = _aligners.PairwiseAligner.align(self, sA, sB, strand)
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
@@ -3126,11 +3126,11 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     def score(self, seqA, seqB, strand="+"):
         """Return the alignments score of two sequences using PairwiseAligner."""
-        if isinstance(seqA, (Seq, MutableSeq)):
+        if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
             seqA = bytes(seqA)
         if strand == "-":
             seqB = reverse_complement(seqB, inplace=False)
-        if isinstance(seqB, (Seq, MutableSeq)):
+        if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             seqB = bytes(seqB)
         return _aligners.PairwiseAligner.score(self, seqA, seqB, strand)
 
