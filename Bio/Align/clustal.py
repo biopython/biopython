@@ -19,6 +19,8 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Clustalw alignment writer."""
 
+    fmt = "Clustal"
+
     def write_header(self, alignments):
         """Use this to write the file header."""
         stream = self.stream
@@ -56,7 +58,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             try:
                 name = sequence.id
             except AttributeError:
-                name = "sequence_%d" % i
+                name = "sequence_%d" % i  # Clustal format doesn't allow an empty string
             else:
                 # when we output, we do a nice 80 column output, although
                 # this may result in truncation of the ids.  Also, make sure
@@ -93,14 +95,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Clustalw alignment iterator."""
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="Clustal")
+    fmt = "Clustal"
 
     def _read_header(self, stream):
         try:
@@ -244,7 +239,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     i = 0
 
         records = [
-            SeqRecord(Seq(seq), id=seqid, description=seqid)
+            SeqRecord(Seq(seq), id=seqid, description="")
             for (seqid, seq) in zip(ids, seqs)
         ]
         coordinates = Alignment.infer_coordinates(aligned_seqs)

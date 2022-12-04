@@ -39,6 +39,8 @@ from Bio.SeqFeature import SeqFeature, ExactPosition, SimpleLocation, CompoundLo
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the Pattern Space Layout (PSL) file format."""
 
+    fmt = "PSL"
+
     def __init__(self, target, header=True, mask=None, wildcard="N"):
         """Create an AlignmentWriter object.
 
@@ -63,7 +65,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                        Default value is 'N'.
 
         """
-        super().__init__(target, mode="w")
+        super().__init__(target)
         self.header = header
         if wildcard is not None:
             if mask == "upper":
@@ -299,14 +301,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     of matches and mismatches are stored as attributes of each alignment.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="PSL")
+    fmt = "PSL"
 
     def _read_header(self, stream):
         line = next(stream)
@@ -519,8 +514,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 target_sequence = Seq(None, length=tSize)
                 query_sequence = Seq(None, length=qSize)
-            target_record = SeqRecord(target_sequence, id=tName)
-            query_record = SeqRecord(query_sequence, id=qName)
+            target_record = SeqRecord(target_sequence, id=tName, description="")
+            query_record = SeqRecord(query_sequence, id=qName, description="")
             if feature is not None:
                 target_record.features.append(feature)
             records = [target_record, query_record]

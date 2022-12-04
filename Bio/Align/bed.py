@@ -48,7 +48,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         """
         if bedN < 3 or bedN > 12:
             raise ValueError("bedN must be between 3 and 12")
-        super().__init__(target, mode="w")
+        super().__init__(target)
         self.bedN = bedN
 
     def format_alignment(self, alignment):
@@ -155,14 +155,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     attributes of each alignment.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="BED")
+    fmt = "BED"
 
     def _read_next_alignment(self, stream):
         try:
@@ -222,8 +215,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             qSize = blockSize
         coordinates[0, :] += chromStart
         query_sequence = Seq(None, length=qSize)
-        query_record = SeqRecord(query_sequence, id=name)
-        target_record = SeqRecord(None, id=chrom)
+        query_record = SeqRecord(query_sequence, id=name, description="")
+        target_record = SeqRecord(None, id=chrom, description="")
         records = [target_record, query_record]
         if strand == "-":
             coordinates[1, :] = qSize - coordinates[1, :]

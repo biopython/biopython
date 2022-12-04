@@ -25,14 +25,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     alignments for a single query sequence.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="hhr")
+    fmt = "hhr"
 
     def _read_header(self, stream):
         metadata = {}

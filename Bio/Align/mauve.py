@@ -16,7 +16,9 @@ from Bio.SeqRecord import SeqRecord
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
-    """Mauve/XMFA alignment writer."""
+    """Mauve xmfa alignment writer."""
+
+    fmt = "Mauve"
 
     def __init__(self, target, metadata=None, identifiers=None):
         """Create an AlignmentWriter object.
@@ -32,7 +34,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                           then the alignments object to be written must have
                           an attribute `identifiers`.
         """
-        super().__init__(target, mode="w")
+        super().__init__(target)
         self._metadata = metadata
         self._identifiers = identifiers
 
@@ -137,14 +139,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Mauve xmfa alignment iterator."""
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="Mauve")
+    fmt = "Mauve"
 
     def _read_header(self, stream):
         metadata = {}

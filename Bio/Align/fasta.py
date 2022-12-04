@@ -19,14 +19,7 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the aligned FASTA file format."""
 
-    def __init__(self, target):
-        """Create an AlignmentWriter object.
-
-        Arguments:
-         - target    - output stream or file name
-
-        """
-        super().__init__(target, mode="w")
+    fmt = "FASTA"
 
     def format_alignment(self, alignment):
         """Return a string with the alignment in aligned FASTA format."""
@@ -34,10 +27,15 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             raise TypeError("Expected an Alignment object")
         lines = []
         for sequence, line in zip(alignment.sequences, alignment):
-            if sequence.description:
-                lines.append(f">{sequence.id} {sequence.description}")
-            else:
-                lines.append(f">{sequence.id}")
+            try:
+                name = sequence.id
+            except AttributeError:  # Seq or plain string
+                lines.append(">")
+            else:  # SeqRecord
+                if sequence.description:
+                    lines.append(f">{sequence.id} {sequence.description}")
+                else:
+                    lines.append(f">{sequence.id}")
             lines.append(line)
         return "\n".join(lines) + "\n"
 
@@ -50,14 +48,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     followed by the name of the sequence, and optionally a description.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="FASTA")
+    fmt = "FASTA"
 
     def _read_next_alignment(self, stream):
         names = []
@@ -66,11 +57,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         for line in stream:
             if line.startswith(">"):
                 parts = line[1:].rstrip().split(None, 1)
-                try:
+                if len(parts) == 2:
                     name, description = parts
-                except ValueError:
-                    name = parts[0]
+                else:
                     description = ""
+                    if len(parts) == 1:
+                        name = parts[0]
+                    else:
+                        name = ""
                 names.append(name)
                 descriptions.append(description)
                 lines.append("")
@@ -83,7 +77,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         for name, description, line in zip(names, descriptions, lines):
             line = line.replace("-", "")
             sequence = Seq(line)
-            record = SeqRecord(sequence, name, description=description)
+            record = SeqRecord(sequence, id=name, description=description)
             records.append(record)
         alignment = Alignment(records, coordinates)
         self._close()

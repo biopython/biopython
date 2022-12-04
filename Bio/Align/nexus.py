@@ -30,6 +30,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
     You are expected to call this class via Bio.Align.write().
     """
 
+    fmt = "Nexus"
+
     def write_file(self, alignments):
         """Write a file with the alignments, and return the number of alignments.
 
@@ -110,14 +112,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Nexus alignment iterator."""
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="Nexus")
+    fmt = "Nexus"
 
     def _read_header(self, stream):
         try:

@@ -20,16 +20,23 @@ _PHYLIP_ID_WIDTH = 10
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Clustalw alignment writer."""
 
+    fmt = "PHYLIP"
+
     def format_alignment(self, alignment):
         """Return a string with a single alignment in the Phylip format."""
         names = []
         for record in alignment.sequences:
-            name = record.id.strip()
-            for char in "[](),":
-                name = name.replace(char, "")
-            for char in ":;":
-                name = name.replace(char, "|")
-            name = name[:_PHYLIP_ID_WIDTH]
+            try:
+                name = record.id
+            except AttributeError:
+                name = ""
+            else:
+                name = name.strip()
+                for char in "[](),":
+                    name = name.replace(char, "")
+                for char in ":;":
+                    name = name.replace(char, "|")
+                name = name[:_PHYLIP_ID_WIDTH]
             names.append(name)
 
         lines = []
@@ -66,14 +73,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     http://evolution.genetics.washington.edu/phylip/doc/main.html#inputfiles
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="PHYLIP")
+    fmt = "PHYLIP"
 
     def _read_header(self, stream):
         try:
@@ -172,7 +172,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         coordinates = Alignment.infer_coordinates(seqs)
         seqs = [seq.replace("-", "") for seq in seqs]
-        records = [SeqRecord(Seq(seq), id=name) for (name, seq) in zip(names, seqs)]
+        records = [
+            SeqRecord(Seq(seq), id=name, description="")
+            for (name, seq) in zip(names, seqs)
+        ]
         alignment = Alignment(records, coordinates)
         del self._number_of_seqs
         del self._length_of_seqs

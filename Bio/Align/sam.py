@@ -43,6 +43,8 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the Sequence Alignment/Map (SAM) file format."""
 
+    fmt = "SAM"
+
     def __init__(self, target, md=False):
         """Create an AlignmentWriter object.
 
@@ -52,7 +54,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 If False (default), do not include the MD tag in the output.
 
         """
-        super().__init__(target, mode="w")
+        super().__init__(target)
         self.md = md
 
     def write_header(self, alignments):
@@ -379,14 +381,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     letter_annotations dictionary attribute of the query sequence record.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="SAM")
+    fmt = "SAM"
 
     def _read_header(self, stream):
         self.metadata = {}
@@ -428,7 +423,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     else:
                         annotations[key] = value
                 sequence = Seq(None, length=length)
-                record = SeqRecord(sequence, id=rname, annotations=annotations)
+                record = SeqRecord(
+                    sequence, id=rname, description="", annotations=annotations
+                )
                 if description is not None:
                     record.description = description
                 self.targets.append(record)
@@ -576,7 +573,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if index is None:
                     if self.targets:
                         raise ValueError(f"Found target {rname} missing from header")
-                    target = SeqRecord(None, id=rname)
+                    target = SeqRecord(None, id=rname, description="")
                 else:
                     target = self.targets[index]
             else:
@@ -709,7 +706,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     assert len(query) == query_pos
                     if strand == "-":
                         sequence = sequence.reverse_complement()
-            query = SeqRecord(sequence, id=qname)
+            query = SeqRecord(sequence, id=qname, description="")
             if strand == "-":
                 hard_clip_left, hard_clip_right = hard_clip_right, hard_clip_left
             if hard_clip_left is not None:
