@@ -3896,12 +3896,22 @@ class Edron:
     def gen_key(lst: List["AtomKey"]) -> str:
         """Generate string of ':'-joined AtomKey strings from input.
 
+        Generate '2_A_C:3_P_N:3_P_CA' from (2_A_C, 3_P_N, 3_P_CA)
         :param list lst: list of AtomKey objects
         """
         if 4 == len(lst):
             return f"{lst[0].id}:{lst[1].id}:{lst[2].id}:{lst[3].id}"
         else:
             return f"{lst[0].id}:{lst[1].id}:{lst[2].id}"
+
+    @staticmethod
+    def gen_tuple(akstr: str) -> Tuple:
+        """Generate AtomKey tuple for ':'-joined AtomKey string.
+
+        Generate (2_A_C, 3_P_N, 3_P_CA) from '2_A_C:3_P_N:3_P_CA'
+        :param str akstr: string of ':'-separated AtomKey strings
+        """
+        return tuple([AtomKey(i) for i in akstr.split(":")])
 
     # @profile
     def __init__(self, *args: Union[List["AtomKey"], EKT], **kwargs: str) -> None:
