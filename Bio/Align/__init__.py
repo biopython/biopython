@@ -1296,7 +1296,9 @@ class Alignment:
 
         self[row]
 
-        where row is an integer. Return value is a string.
+        where row is an integer.
+        Return value is a string if the aligned sequences are string, Seq,
+        or SeqRecord objects, otherwise the return value is a list.
         """
         steps = abs(numpy.diff(self.coordinates, 1))
         gaps = steps.max(0)
@@ -1313,14 +1315,24 @@ class Alignment:
             sequence = reverse_complement(sequence, inplace=False)
             i = len(sequence) - i
         steps = steps[index]
-        line = ""
-        for step, gap in zip(steps, gaps):
-            if step:
-                j = i + step
-                line += str(sequence[i:j])
-                i = j
-            else:
-                line += "-" * gap
+        if isinstance(sequence, (str, Seq)):
+            line = ""
+            for step, gap in zip(steps, gaps):
+                if step:
+                    j = i + step
+                    line += str(sequence[i:j])
+                    i = j
+                else:
+                    line += "-" * gap
+        else:
+            line = []
+            for step, gap in zip(steps, gaps):
+                if step:
+                    j = i + step
+                    line.extend(sequence[i:j])
+                    i = j
+                else:
+                    line.extend([None] * gap)
         return line
 
     def _get_rows(self, key):
@@ -1375,7 +1387,8 @@ class Alignment:
         self[row, cols]
 
         where row is an integer and cols is a slice object with step 1.
-        Return value is a string.
+        Return value is a string if the aligned sequences are string, Seq,
+        or SeqRecord objects, otherwise the return value is a list.
         """
         sequence_indices = coordinate + steps.cumsum()
         indices = gaps.cumsum()
@@ -1385,41 +1398,78 @@ class Alignment:
             sequence = sequence.seq  # stupid SeqRecord
         except AttributeError:
             pass
-        if i == j:
-            length = stop_index - start_index
-            if steps[i] == 0:
-                line = "-" * length
-            else:
-                offset = start_index - indices[i]
-                start = sequence_indices[i] + offset
-                stop = start + length
-                line = str(sequence[start:stop])
-        else:
-            length = indices[i] - start_index
-            stop = sequence_indices[i]
-            if steps[i] == 0:
-                line = "-" * length
-            else:
-                start = stop - length
-                line = str(sequence[start:stop])
-            i += 1
-            while i < j:
-                step = gaps[i]
+        if isinstance(sequence, (str, Seq)):
+            if i == j:
+                length = stop_index - start_index
                 if steps[i] == 0:
-                    line += "-" * step
+                    line = "-" * length
                 else:
-                    start = stop
-                    stop = start + step
-                    line += str(sequence[start:stop])
-                i += 1
-            length = stop_index - indices[j - 1]
-            if length > 0:
-                if steps[j] == 0:
-                    line += "-" * length
-                else:
-                    start = stop
+                    offset = start_index - indices[i]
+                    start = sequence_indices[i] + offset
                     stop = start + length
-                    line += str(sequence[start:stop])
+                    line = str(sequence[start:stop])
+            else:
+                length = indices[i] - start_index
+                stop = sequence_indices[i]
+                if steps[i] == 0:
+                    line = "-" * length
+                else:
+                    start = stop - length
+                    line = str(sequence[start:stop])
+                i += 1
+                while i < j:
+                    step = gaps[i]
+                    if steps[i] == 0:
+                        line += "-" * step
+                    else:
+                        start = stop
+                        stop = start + step
+                        line += str(sequence[start:stop])
+                    i += 1
+                length = stop_index - indices[j - 1]
+                if length > 0:
+                    if steps[j] == 0:
+                        line += "-" * length
+                    else:
+                        start = stop
+                        stop = start + length
+                        line += str(sequence[start:stop])
+        else:
+            if i == j:
+                length = stop_index - start_index
+                if steps[i] == 0:
+                    line = [None] * length
+                else:
+                    offset = start_index - indices[i]
+                    start = sequence_indices[i] + offset
+                    stop = start + length
+                    line = sequence[start:stop]
+            else:
+                length = indices[i] - start_index
+                stop = sequence_indices[i]
+                if steps[i] == 0:
+                    line = [None] * length
+                else:
+                    start = stop - length
+                    line = sequence[start:stop]
+                i += 1
+                while i < j:
+                    step = gaps[i]
+                    if steps[i] == 0:
+                        line.extend([None] * step)
+                    else:
+                        start = stop
+                        stop = start + step
+                        line.extend(sequence[start:stop])
+                    i += 1
+                length = stop_index - indices[j - 1]
+                if length > 0:
+                    if steps[j] == 0:
+                        line.extend([None] * length)
+                    else:
+                        start = stop
+                        stop = start + length
+                        line.extend(sequence[start:stop])
         return line
 
     def _get_row_cols_iterable(self, i, cols, steps, gaps, sequence):
@@ -1430,28 +1480,47 @@ class Alignment:
         self[row, cols]
 
         where row is an integer and cols is an iterable of integers.
-        Return value is a string.
+        Return value is a string if the aligned sequences are string, Seq,
+        or SeqRecord objects, otherwise the return value is a list.
         """
         try:
             sequence = sequence.seq  # stupid SeqRecord
         except AttributeError:
             pass
-        line = ""
-        for step, gap in zip(steps, gaps):
-            if step:
-                j = i + step
-                line += str(sequence[i:j])
-                i = j
-            else:
-                line += "-" * gap
-        try:
-            line = "".join(line[col] for col in cols)
-        except IndexError:
-            raise
-        except Exception:
-            raise TypeError(
-                "second index must be an integer, slice, or iterable of integers"
-            ) from None
+        if isinstance(sequence, (str, Seq)):
+            line = ""
+            for step, gap in zip(steps, gaps):
+                if step:
+                    j = i + step
+                    line += str(sequence[i:j])
+                    i = j
+                else:
+                    line += "-" * gap
+            try:
+                line = "".join(line[col] for col in cols)
+            except IndexError:
+                raise
+            except Exception:
+                raise TypeError(
+                    "second index must be an integer, slice, or iterable of integers"
+                ) from None
+        else:
+            line = []
+            for step, gap in zip(steps, gaps):
+                if step:
+                    j = i + step
+                    line.extend(sequence[i:j])
+                    i = j
+                else:
+                    line.extend([None] * gap)
+            try:
+                line = [line[col] for col in cols]
+            except IndexError:
+                raise
+            except Exception:
+                raise TypeError(
+                    "second index must be an integer, slice, or iterable of integers"
+                ) from None
         return line
 
     def _get_rows_col(self, coordinates, col, steps, gaps, sequences):
