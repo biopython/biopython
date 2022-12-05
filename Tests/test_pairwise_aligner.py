@@ -3349,24 +3349,68 @@ Gly Ala Ala Cys Thr
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
         self.assertEqual(
-            str(alignments[0]),
+            str(alignment),
             """\
 Pro Pro Gly Ala --- --- Thr --- ---
 --- --- ||| ||| --- --- ||| --- ---
 --- --- Gly Ala Ala Cys Thr Asn Asn
 """,
         )
+        self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(
-            str(alignments[1]),
+            alignment[0], ["Pro", "Pro", "Gly", "Ala", None, None, "Thr", None, None]
+        )
+        self.assertEqual(
+            alignment[0, :], ["Pro", "Pro", "Gly", "Ala", None, None, "Thr", None, None]
+        )
+        self.assertEqual(
+            alignment[0, 1:], ["Pro", "Gly", "Ala", None, None, "Thr", None, None]
+        )
+        self.assertEqual(alignment[0, ::2], ["Pro", "Gly", None, "Thr", None])
+        self.assertEqual(
+            alignment[1], [None, None, "Gly", "Ala", "Ala", "Cys", "Thr", "Asn", "Asn"]
+        )
+        self.assertEqual(
+            alignment[1, :],
+            [None, None, "Gly", "Ala", "Ala", "Cys", "Thr", "Asn", "Asn"],
+        )
+        self.assertEqual(
+            alignment[1, 1:], [None, "Gly", "Ala", "Ala", "Cys", "Thr", "Asn", "Asn"]
+        )
+        self.assertEqual(alignment[1, ::2], [None, "Gly", "Ala", "Thr", "Asn"])
+        alignment = alignments[1]
+        self.assertEqual(
+            str(alignment),
             """\
 Pro Pro Gly --- Ala --- Thr --- ---
 --- --- ||| --- ||| --- ||| --- ---
 --- --- Gly Ala Ala Cys Thr Asn Asn
 """,
         )
-        self.assertAlmostEqual(alignments[0].score, 3.0)
-        self.assertAlmostEqual(alignments[1].score, 3.0)
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(
+            alignment[0], ["Pro", "Pro", "Gly", None, "Ala", None, "Thr", None, None]
+        )
+        self.assertEqual(
+            alignment[0, :], ["Pro", "Pro", "Gly", None, "Ala", None, "Thr", None, None]
+        )
+        self.assertEqual(
+            alignment[0, 1:-1], ["Pro", "Gly", None, "Ala", None, "Thr", None]
+        )
+        self.assertEqual(alignment[0, 1::2], ["Pro", None, None, None])
+        self.assertEqual(
+            alignment[1], [None, None, "Gly", "Ala", "Ala", "Cys", "Thr", "Asn", "Asn"]
+        )
+        self.assertEqual(
+            alignment[1, :],
+            [None, None, "Gly", "Ala", "Ala", "Cys", "Thr", "Asn", "Asn"],
+        )
+        self.assertEqual(
+            alignment[1, 1:-1], [None, "Gly", "Ala", "Ala", "Cys", "Thr", "Asn"]
+        )
+        self.assertEqual(alignment[1, 1::2], [None, "Ala", "Cys", "Asn"])
 
     def test_three_letter_amino_acids_local(self):
         seq1 = ["Asn", "Asn", "Gly", "Ala", "Thr", "Glu", "Glu"]
@@ -3383,24 +3427,46 @@ Pro Pro Gly --- Ala --- Thr --- ---
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 2)
+        alignment = alignments[0]
         self.assertEqual(
-            str(alignments[0]),
+            str(alignment),
             """\
 Gly Ala --- --- Thr
 ||| ||| --- --- |||
 Gly Ala Ala Cys Thr
 """,
         )
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(alignment[0], ["Gly", "Ala", None, None, "Thr"])
+        self.assertEqual(alignment[0, :], ["Gly", "Ala", None, None, "Thr"])
+        self.assertEqual(alignment[0, 1:], ["Ala", None, None, "Thr"])
+        self.assertEqual(alignment[0, :-1], ["Gly", "Ala", None, None])
+        self.assertEqual(alignment[0, ::2], ["Gly", None, "Thr"])
+        self.assertEqual(alignment[1], ["Gly", "Ala", "Ala", "Cys", "Thr"])
+        self.assertEqual(alignment[1, :], ["Gly", "Ala", "Ala", "Cys", "Thr"])
+        self.assertEqual(alignment[1, 1:], ["Ala", "Ala", "Cys", "Thr"])
+        self.assertEqual(alignment[1, :-1], ["Gly", "Ala", "Ala", "Cys"])
+        self.assertEqual(alignment[1, ::2], ["Gly", "Ala", "Thr"])
+        alignment = alignments[1]
         self.assertEqual(
-            str(alignments[1]),
+            str(alignment),
             """\
 Gly --- Ala --- Thr
 ||| --- ||| --- |||
 Gly Ala Ala Cys Thr
 """,
         )
-        self.assertAlmostEqual(alignments[0].score, 3.0)
-        self.assertAlmostEqual(alignments[1].score, 3.0)
+        self.assertAlmostEqual(alignment.score, 3.0)
+        self.assertEqual(alignment[0], ["Gly", None, "Ala", None, "Thr"])
+        self.assertEqual(alignment[0, :], ["Gly", None, "Ala", None, "Thr"])
+        self.assertEqual(alignment[0, 1:], [None, "Ala", None, "Thr"])
+        self.assertEqual(alignment[0, :-1], ["Gly", None, "Ala", None])
+        self.assertEqual(alignment[0, ::2], ["Gly", "Ala", "Thr"])
+        self.assertEqual(alignment[1], ["Gly", "Ala", "Ala", "Cys", "Thr"])
+        self.assertEqual(alignment[1, :], ["Gly", "Ala", "Ala", "Cys", "Thr"])
+        self.assertEqual(alignment[1, 1:], ["Ala", "Ala", "Cys", "Thr"])
+        self.assertEqual(alignment[1, :-1], ["Gly", "Ala", "Ala", "Cys"])
+        self.assertEqual(alignment[1, ::2], ["Gly", "Ala", "Thr"])
 
 
 class TestArgumentErrors(unittest.TestCase):
