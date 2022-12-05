@@ -24,6 +24,19 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import gc_fraction
 
 
+class TestAlignment(unittest.TestCase):
+    def test_empty_alignment(self):
+        alignment = Align.Alignment([])
+        self.assertEqual(
+            repr(alignment),
+            "<Alignment object (0 rows x 0 columns) at 0x%x>" % id(alignment),
+        )
+        self.assertEqual(len(alignment), 0)
+        self.assertEqual(len(alignment.sequences), 0)
+        self.assertEqual(alignment.shape, (0, 0))
+        self.assertEqual(alignment.coordinates.shape, (0, 0))
+
+
 class TestPairwiseAlignment(unittest.TestCase):
     target = "AACCGGGACCG"
     query = "ACGGAAC"

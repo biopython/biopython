@@ -1027,7 +1027,7 @@ class Alignment:
 
         Arguments:
          - sequences   - A list of the sequences (Seq, MutableSeq, SeqRecord,
-                         or string objects)that were aligned.
+                         or string objects) that were aligned.
          - coordinates - The sequence coordinates that define the alignment.
                          If None (the default value), assume that the sequences
                          align to each other without any gaps.
@@ -1042,12 +1042,15 @@ class Alignment:
                 # its length are known.
                 pass
             else:
-                if len(lengths) != 1:
+                if len(lengths) == 0:
+                    coordinates = numpy.empty((0, 0), dtype=int)
+                elif len(lengths) == 1:
+                    length = lengths.pop()
+                    coordinates = numpy.array([[0, length]] * len(sequences))
+                else:
                     raise ValueError(
                         "sequences must have the same length if coordinates is None"
                     )
-                length = lengths.pop()
-                coordinates = numpy.array([[0, length]] * len(sequences))
         self.coordinates = coordinates
 
     def __array__(self, dtype=None):
@@ -2262,6 +2265,8 @@ class Alignment:
         """
         coordinates = numpy.array(self.coordinates)
         n = len(coordinates)
+        if n == 0:  # no sequences
+            return (0, 0)
         for i in range(n):
             if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
                 k = len(self.sequences[i])
