@@ -18,13 +18,28 @@ import re
 
 from Bio import File
 
+# Added to parse SSBOND records from the PDB header and add them back to the header dict
+# Eric G. Suchanek, PhD 11/25/22
+def _get_ssbond(inl):
+	# SSBOND   1 CYS A   26    CYS A   84                          1555   1555  2.04
+    # CYS A   26    CYS A   84                          1555   1555  2.0
+    # print(inl)
+    tok = inl.split()
+    
+    chn = tok[1]
+    prox = tok[2]
+    chn2 = tok[4]
+    dist = tok[5]
+    
+    ssbond = tuple((prox, dist, chn, chn2))
+    return ssbond
 
 def _get_journal(inl):
     # JRNL        AUTH   L.CHEN,M.DOI,F.S.MATHEWS,A.Y.CHISTOSERDOV,           2BBK   7
     journal = ""
-    for line in inl:
-        if re.search(r"\AJRNL", line):
-            journal += line[19:72].lower()
+    for l in inl:
+        if re.search(r"\AJRNL", l):
+            journal += l[19:72].lower()
     journal = re.sub(r"\s\s+", " ", journal)
     return journal
 
@@ -34,16 +49,16 @@ def _get_references(inl):
     # REMARK   1  AUTH   W.BODE,E.PAPAMOKOS,D.MUSIL                           1CSE  12
     references = []
     actref = ""
-    for line in inl:
-        if re.search(r"\AREMARK   1", line):
-            if re.search(r"\AREMARK   1 REFERENCE", line):
+    for l in inl:
+        if re.search(r"\AREMARK   1", l):
+            if re.search(r"\AREMARK   1 REFERENCE", l):
                 if actref != "":
                     actref = re.sub(r"\s\s+", " ", actref)
                     if actref != " ":
                         references.append(actref)
                     actref = ""
             else:
-                actref += line[19:72].lower()
+                actref += l[19:72].lower()
 
     if actref != "":
         actref = re.sub(r"\s\s+", " ", actref)
@@ -121,12 +136,12 @@ def parse_pdb_header(infile):
     """
     header = []
     with File.as_handle(infile) as f:
-        for line in f:
-            record_type = line[0:6]
+        for l in f:
+            record_type = l[0:6]
             if record_type in ("ATOM  ", "HETATM", "MODEL "):
                 break
             else:
-                header.append(line)
+                header.append(l)
     return _parse_pdb_header_list(header)
 
 
@@ -179,6 +194,7 @@ def _parse_remark_465(line):
 
 def _parse_pdb_header_list(header):
     # database fields
+    # added ssbond 11/20/22 Eric G. Suchanek
     pdbh_dict = {
         "name": "",
         "head": "",
@@ -194,6 +210,7 @@ def _parse_pdb_header_list(header):
         "source": {"1": {"misc": ""}},
         "has_missing_residues": False,
         "missing_residues": [],
+        "ssbond":{},
     }
 
     pdbh_dict["structure_reference"] = _get_references(header)
@@ -201,6 +218,7 @@ def _parse_pdb_header_list(header):
     comp_molid = "1"
     last_comp_key = "misc"
     last_src_key = "misc"
+    ssbond_numb = 0 # number of ssbonds
 
     for hh in header:
         h = re.sub(r"[\s\n\r]*\Z", "", hh)  # chop linebreaks off
@@ -291,6 +309,13 @@ def _parse_pdb_header_list(header):
                 pdbh_dict["author"] += auth
             else:
                 pdbh_dict["author"] = auth
+        # parse SSBOND records and add them to the Header dict
+        elif key == "SSBOND":
+            ssbond_numb += 1
+            ssb = _get_ssbond(tail)
+            ssbdict = {ssbond_numb: ssb}
+            pdbh_dict['ssbond'].update(ssbdict)
+        	#print(f'SSBOND: {tail}')            
         elif key == "REMARK":
             if re.search("REMARK   2 RESOLUTION.", hh):
                 r = _chop_end_codes(re.sub("REMARK   2 RESOLUTION.", "", hh))

@@ -32,6 +32,7 @@ class StructureBuilder:
         """Initialize the class."""
         self.line_counter = 0
         self.header = {}
+        self.QUIET=True
 
     def _is_completely_disordered(self, residue):
         """Return 1 if all atoms in the residue have a non blank altloc (PRIVATE)."""
@@ -65,6 +66,8 @@ class StructureBuilder:
 
         """
         self.structure = Structure(structure_id)
+        if self.QUIET:
+            warnings.filterwarnings("ignore", category=PDBConstructionWarning)
 
     def init_model(self, model_id, serial_num=None):
         """Create a new Model object with given id.
@@ -86,11 +89,13 @@ class StructureBuilder:
         """
         if self.model.has_id(chain_id):
             self.chain = self.model[chain_id]
-            warnings.warn(
-                "WARNING: Chain %s is discontinuous at line %i."
-                % (chain_id, self.line_counter),
+            with warnings.catch_warnings():
+            	if self.QUIET:
+                	warnings.filterwarnings("ignore", category=PDBConstructionWarning)
+                	
+            	warnings.warn("WARNING: Chain %s is discontinuous."% (chain_id),
                 PDBConstructionWarning,
-            )
+            	)
         else:
             self.chain = Chain(chain_id)
             self.model.add(self.chain)
