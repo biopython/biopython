@@ -11,7 +11,7 @@ import itertools
 import copy
 import numbers
 from Bio.Phylo import BaseTree
-from Bio.Align import MultipleSeqAlignment
+from Bio.Align import Alignment, MultipleSeqAlignment
 from Bio.Align import substitution_matrices
 
 
@@ -521,13 +521,23 @@ class DistanceCalculator:
                 DNA or Protein multiple sequence alignment.
 
         """
-        if not isinstance(msa, MultipleSeqAlignment):
-            raise TypeError("Must provide a MultipleSeqAlignment object.")
+        if isinstance(msa, Alignment):
+            names = [s.id for s in msa.sequences]
+            dm = DistanceMatrix(names)
+            n = len(names)
+            for i1 in range(n):
+                for i2 in range(i1 + 1, n):
+                    dm[names[i1], names[i2]] = self._pairwise(msa[i1], msa[i2])
+        elif isinstance(msa, MultipleSeqAlignment):
+            names = [s.id for s in msa]
+            dm = DistanceMatrix(names)
+            for seq1, seq2 in itertools.combinations(msa, 2):
+                dm[seq1.id, seq2.id] = self._pairwise(seq1, seq2)
+        else:
+            raise TypeError(
+                "Must provide an Alignment object or a MultipleSeqAlignment object."
+            )
 
-        names = [s.id for s in msa]
-        dm = DistanceMatrix(names)
-        for seq1, seq2 in itertools.combinations(msa, 2):
-            dm[seq1.id, seq2.id] = self._pairwise(seq1, seq2)
         return dm
 
 

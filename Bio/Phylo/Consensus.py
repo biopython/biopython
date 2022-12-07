@@ -17,6 +17,9 @@ import itertools
 
 from ast import literal_eval
 from Bio.Phylo import BaseTree
+from Bio.Align import Alignment, MultipleSeqAlignment
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 
 class _BitString(str):
@@ -539,7 +542,7 @@ def get_support(target_tree, trees, len_trees=None):
 
 
 def bootstrap(msa, times):
-    """Generate bootstrap replicates from a multiple sequence alignment object.
+    """Generate bootstrap replicates from a multiple sequence alignment (OBSOLETE).
 
     :Parameters:
         msa : MultipleSeqAlignment
@@ -574,10 +577,28 @@ def bootstrap_trees(msa, times, tree_constructor):
             tree constructor to be used to build trees.
 
     """
-    msas = bootstrap(msa, times)
-    for aln in msas:
-        tree = tree_constructor.build_tree(aln)
-        yield tree
+    alignment = Alignment([str(row.seq) for row in msa])
+    alignment.sequences = [
+        SeqRecord(Seq(seq), row.id) for row, seq in zip(msa, alignment.sequences)
+    ]
+    if False and isinstance(msa, MultipleSeqAlignment):
+        length = len(msa[0])
+        for i in range(times):
+            bootstrapped_msa = None
+            for j in range(length):
+                col = random.randint(0, length - 1)
+                if bootstrapped_msa is None:
+                    bootstrapped_msa = msa[:, col : col + 1]
+                else:
+                    bootstrapped_msa += msa[:, col : col + 1]
+            tree = tree_constructor.build_tree(alignment)
+            yield tree
+    else:
+        n, m = alignment.shape
+        for i in range(times):
+            cols = [random.randint(0, m - 1) for j in range(m)]
+            tree = tree_constructor.build_tree(alignment[:, cols])
+            yield tree
 
 
 def bootstrap_consensus(msa, times, tree_constructor, consensus):
