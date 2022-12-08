@@ -17,9 +17,7 @@ import itertools
 
 from ast import literal_eval
 from Bio.Phylo import BaseTree
-from Bio.Align import Alignment, MultipleSeqAlignment
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
+from Bio.Align import MultipleSeqAlignment
 
 
 class _BitString(str):
@@ -565,11 +563,11 @@ def bootstrap(msa, times):
         yield item
 
 
-def bootstrap_trees(msa, times, tree_constructor):
+def bootstrap_trees(alignment, times, tree_constructor):
     """Generate bootstrap replicate trees from a multiple sequence alignment.
 
     :Parameters:
-        msa : MultipleSeqAlignment
+        alignment : Alignment or MultipleSeqAlignment object
             multiple sequence alignment to generate replicates.
         times : int
             number of bootstrap times.
@@ -577,20 +575,16 @@ def bootstrap_trees(msa, times, tree_constructor):
             tree constructor to be used to build trees.
 
     """
-    alignment = Alignment([str(row.seq) for row in msa])
-    alignment.sequences = [
-        SeqRecord(Seq(seq), row.id) for row, seq in zip(msa, alignment.sequences)
-    ]
-    if False and isinstance(msa, MultipleSeqAlignment):
-        length = len(msa[0])
+    if isinstance(alignment, MultipleSeqAlignment):
+        length = len(alignment[0])
         for i in range(times):
-            bootstrapped_msa = None
+            bootstrapped_alignment = None
             for j in range(length):
                 col = random.randint(0, length - 1)
-                if bootstrapped_msa is None:
-                    bootstrapped_msa = msa[:, col : col + 1]
+                if bootstrapped_alignment is None:
+                    bootstrapped_alignment = alignment[:, col : col + 1]
                 else:
-                    bootstrapped_msa += msa[:, col : col + 1]
+                    bootstrapped_alignment += alignment[:, col : col + 1]
             tree = tree_constructor.build_tree(alignment)
             yield tree
     else:
@@ -601,11 +595,11 @@ def bootstrap_trees(msa, times, tree_constructor):
             yield tree
 
 
-def bootstrap_consensus(msa, times, tree_constructor, consensus):
+def bootstrap_consensus(alignment, times, tree_constructor, consensus):
     """Consensus tree of a series of bootstrap trees for a multiple sequence alignment.
 
     :Parameters:
-        msa : MultipleSeqAlignment
+        alignment : Alignment or MultipleSeqAlignment object
             Multiple sequence alignment to generate replicates.
         times : int
             Number of bootstrap times.
@@ -616,8 +610,8 @@ def bootstrap_consensus(msa, times, tree_constructor, consensus):
             ``majority_consensus``, ``adam_consensus``.
 
     """
-    trees = bootstrap_trees(msa, times, tree_constructor)
-    tree = consensus(list(trees))
+    trees = bootstrap_trees(alignment, times, tree_constructor)
+    tree = consensus(trees)
     return tree
 
 
