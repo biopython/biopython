@@ -301,7 +301,9 @@ class _Matrix:
         """Get a lower triangular matrix string."""
         matrix_string = "\n".join(
             [
-                self.names[i] + "\t" + "\t".join([str(n) for n in self.matrix[i]])
+                self.names[i]
+                + "\t"
+                + "\t".join([format(n, "f") for n in self.matrix[i]])
                 for i in range(0, len(self))
             ]
         )
@@ -394,30 +396,30 @@ class DistanceCalculator:
     >>> calculator = DistanceCalculator('identity')
     >>> dm = calculator.get_distance(aln)
     >>> print(dm)  # doctest:+NORMALIZE_WHITESPACE
-    Alpha   0
-    Beta    0.23076923076923073     0
-    Gamma   0.3846153846153846      0.23076923076923073     0
-    Delta   0.5384615384615384      0.5384615384615384      0.5384615384615384     0
-    Epsilon 0.6153846153846154      0.3846153846153846      0.46153846153846156    0.15384615384615385      0
-            Alpha   Beta    Gamma   Delta   Epsilon
+    Alpha	0.000000
+    Beta	0.230769	0.000000
+    Gamma	0.384615	0.230769	0.000000
+    Delta	0.538462	0.538462	0.538462	0.000000
+    Epsilon	0.615385	0.384615	0.461538	0.153846	0.000000
+        Alpha	Beta	Gamma	Delta	Epsilon
 
     Protein calculator with 'blosum62' model::
 
     >>> calculator = DistanceCalculator('blosum62')
     >>> dm = calculator.get_distance(aln)
     >>> print(dm)  # doctest:+NORMALIZE_WHITESPACE
-    Alpha   0
-    Beta    0.36904761904761907     0
-    Gamma   0.49397590361445787     0.25                    0
-    Delta   0.5853658536585367      0.5476190476190477      0.5662650602409638	0
-    Epsilon 0.7                     0.3555555555555555      0.48888888888888893    0.2222222222222222       0
-            Alpha   Beta    Gamma   Delta   Epsilon
+    Alpha	0.000000
+    Beta	0.369048	0.000000
+    Gamma	0.493976	0.250000	0.000000
+    Delta	0.585366	0.547619	0.566265	0.000000
+    Epsilon	0.700000	0.355556	0.488889	0.222222	0.000000
+        Alpha	Beta	Gamma	Delta	Epsilon
 
-    Same calculation, using the new Alignment objects:
+    Same calculation, using the new Alignment object:
 
     >>> from Bio.Phylo.TreeConstruction import DistanceCalculator
     >>> from Bio import Align
-    >>> aln = Align.read(open('TreeConstruction/msa.phy'), 'phylip')
+    >>> aln = Align.read('TreeConstruction/msa.phy', 'phylip')
     >>> print(aln)
     Alpha             0 AACGTGGCCACAT 13
     Beta              0 AAGGTCGCCACAC 13
@@ -431,24 +433,25 @@ class DistanceCalculator:
     >>> calculator = DistanceCalculator('identity')
     >>> dm = calculator.get_distance(aln)
     >>> print(dm)  # doctest:+NORMALIZE_WHITESPACE
-    Alpha   0
-    Beta    0.23076923076923073     0
-    Gamma   0.3846153846153846      0.23076923076923073     0
-    Delta   0.5384615384615384      0.5384615384615384      0.5384615384615384     0
-    Epsilon 0.6153846153846154      0.3846153846153846      0.46153846153846156    0.15384615384615385      0
-            Alpha   Beta    Gamma   Delta   Epsilon
+    Alpha	0.000000
+    Beta	0.230769	0.000000
+    Gamma	0.384615	0.230769	0.000000
+    Delta	0.538462	0.538462	0.538462	0.000000
+    Epsilon	0.615385	0.384615	0.461538	0.153846	0.000000
+        Alpha	Beta	Gamma	Delta	Epsilon
 
     Protein calculator with 'blosum62' model::
 
     >>> calculator = DistanceCalculator('blosum62')
     >>> dm = calculator.get_distance(aln)
     >>> print(dm)  # doctest:+NORMALIZE_WHITESPACE
-    Alpha   0
-    Beta    0.36904761904761907     0
-    Gamma   0.49397590361445787     0.25                    0
-    Delta   0.5853658536585367      0.5476190476190477      0.5662650602409638	0
-    Epsilon 0.7                     0.3555555555555555      0.48888888888888893    0.2222222222222222       0
-            Alpha   Beta    Gamma   Delta   Epsilon
+    Alpha	0.000000
+    Beta	0.369048	0.000000
+    Gamma	0.493976	0.250000	0.000000
+    Delta	0.585366	0.547619	0.566265	0.000000
+    Epsilon	0.700000	0.355556	0.488889	0.222222	0.000000
+        Alpha	Beta	Gamma	Delta	Epsilon
+
     """
 
     protein_alphabet = set("ABCDEFGHIKLMNPQRSTVWXYZ")
