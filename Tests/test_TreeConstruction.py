@@ -299,8 +299,78 @@ class DistanceTreeConstructorTest(unittest.TestCase):
 class ParsimonyScorerTest(unittest.TestCase):
     """Test ParsimonyScorer."""
 
-    def test_get_score(self):
+    def test_get_score_msa(self):
         aln = AlignIO.read("TreeConstruction/msa.phy", "phylip")
+        tree = Phylo.read("./TreeConstruction/upgma.tre", "newick")
+        scorer = ParsimonyScorer()
+        score = scorer.get_score(tree, aln)
+        self.assertEqual(score, 2 + 1 + 2 + 2 + 1 + 1 + 1 + 3)
+
+        alphabet = ["A", "T", "C", "G"]
+        step_matrix = [[0], [2.5, 0], [2.5, 1, 0], [1, 2.5, 2.5, 0]]
+        matrix = _Matrix(alphabet, step_matrix)
+        scorer = ParsimonyScorer(matrix)
+        score = scorer.get_score(tree, aln)
+        self.assertEqual(score, 3.5 + 2.5 + 3.5 + 3.5 + 2.5 + 1 + 2.5 + 4.5)
+
+        alphabet = [
+            "A",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "K",
+            "L",
+            "M",
+            "N",
+            "P",
+            "Q",
+            "R",
+            "1",
+            "2",
+            "T",
+            "V",
+            "W",
+            "Y",
+            "*",
+            "-",
+        ]
+        step_matrix = [
+            [0],
+            [2, 0],
+            [1, 2, 0],
+            [1, 2, 1, 0],
+            [2, 1, 2, 2, 0],
+            [1, 1, 1, 1, 2, 0],
+            [2, 2, 1, 2, 2, 2, 0],
+            [2, 2, 2, 2, 1, 2, 2, 0],
+            [2, 2, 2, 1, 2, 2, 2, 1, 0],
+            [2, 2, 2, 2, 1, 2, 1, 1, 2, 0],
+            [2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0],
+            [2, 2, 1, 2, 2, 2, 1, 1, 1, 2, 2, 0],
+            [1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 0],
+            [2, 2, 2, 1, 2, 2, 1, 2, 1, 1, 2, 2, 1, 0],
+            [2, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 0],
+            [1, 1, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 0],
+            [2, 1, 2, 2, 2, 1, 2, 1, 2, 2, 2, 1, 2, 2, 1, 2, 0],
+            [1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 0],
+            [1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 0],
+            [2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 3, 2, 2, 1, 1, 2, 2, 2, 0],
+            [2, 1, 1, 2, 1, 2, 1, 2, 2, 2, 3, 1, 2, 2, 2, 1, 2, 2, 2, 2, 0],
+            [2, 1, 2, 1, 2, 1, 2, 2, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1, 1, 0],
+            [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0],
+        ]
+
+        matrix = _Matrix(alphabet, step_matrix)
+        scorer = ParsimonyScorer(matrix)
+        score = scorer.get_score(tree, aln)
+        self.assertEqual(score, 3 + 1 + 3 + 3 + 2 + 1 + 2 + 5)
+
+    def test_get_score(self):
+        aln = Align.read("TreeConstruction/msa.phy", "phylip")
         tree = Phylo.read("./TreeConstruction/upgma.tre", "newick")
         scorer = ParsimonyScorer()
         score = scorer.get_score(tree, aln)
@@ -388,8 +458,27 @@ class NNITreeSearcherTest(unittest.TestCase):
 class ParsimonyTreeConstructorTest(unittest.TestCase):
     """Test ParsimonyTreeConstructor."""
 
-    def test_build_tree(self):
+    def test_build_tree_msa(self):
         aln = AlignIO.read("TreeConstruction/msa.phy", "phylip")
+        tree1 = Phylo.read("./TreeConstruction/upgma.tre", "newick")
+        tree2 = Phylo.read("./TreeConstruction/nj.tre", "newick")
+        alphabet = ["A", "T", "C", "G"]
+        step_matrix = [[0], [2.5, 0], [2.5, 1, 0], [1, 2.5, 2.5, 0]]
+        matrix = _Matrix(alphabet, step_matrix)
+        scorer = ParsimonyScorer(matrix)
+        searcher = NNITreeSearcher(scorer)
+        constructor = ParsimonyTreeConstructor(searcher, tree1)
+        best_tree = constructor.build_tree(aln)
+        Phylo.write(best_tree, os.path.join(temp_dir, "pars1.tre"), "newick")
+        constructor.starting_tree = tree2
+        best_tree = constructor.build_tree(aln)
+        Phylo.write(best_tree, os.path.join(temp_dir, "pars2.tre"), "newick")
+        constructor.starting_tree = None
+        best_tree = constructor.build_tree(aln)
+        Phylo.write(best_tree, os.path.join(temp_dir, "pars3.tre"), "newick")
+
+    def test_build_tree(self):
+        aln = Align.read("TreeConstruction/msa.phy", "phylip")
         tree1 = Phylo.read("./TreeConstruction/upgma.tre", "newick")
         tree2 = Phylo.read("./TreeConstruction/nj.tre", "newick")
         alphabet = ["A", "T", "C", "G"]

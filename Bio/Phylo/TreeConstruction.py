@@ -634,6 +634,42 @@ class DistanceTreeConstructor(TreeConstructor):
                     Clade(branch_length=0.10256410256410259, name='Delta')
                 Clade(branch_length=0.14423076923076922, name='Gamma')
 
+    Same example, using the new Alignment class:
+
+    >>> from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
+    >>> from Bio.Phylo.TreeConstruction import DistanceCalculator
+    >>> from Bio import Align
+    >>> aln = Align.read(open('TreeConstruction/msa.phy'), 'phylip')
+    >>> constructor = DistanceTreeConstructor()
+    >>> calculator = DistanceCalculator('identity')
+    >>> dm = calculator.get_distance(aln)
+    >>> upgmatree = constructor.upgma(dm)
+    >>> print(upgmatree)
+    Tree(rooted=True)
+        Clade(branch_length=0, name='Inner4')
+            Clade(branch_length=0.18749999999999994, name='Inner1')
+                Clade(branch_length=0.07692307692307693, name='Epsilon')
+                Clade(branch_length=0.07692307692307693, name='Delta')
+            Clade(branch_length=0.11057692307692304, name='Inner3')
+                Clade(branch_length=0.038461538461538464, name='Inner2')
+                    Clade(branch_length=0.11538461538461536, name='Gamma')
+                    Clade(branch_length=0.11538461538461536, name='Beta')
+                Clade(branch_length=0.15384615384615383, name='Alpha')
+
+    Build a NJ Tree::
+
+    >>> njtree = constructor.nj(dm)
+    >>> print(njtree)
+    Tree(rooted=False)
+        Clade(branch_length=0, name='Inner3')
+            Clade(branch_length=0.18269230769230765, name='Alpha')
+            Clade(branch_length=0.04807692307692307, name='Beta')
+            Clade(branch_length=0.04807692307692307, name='Inner2')
+                Clade(branch_length=0.27884615384615385, name='Inner1')
+                    Clade(branch_length=0.051282051282051266, name='Epsilon')
+                    Clade(branch_length=0.10256410256410259, name='Delta')
+                Clade(branch_length=0.14423076923076922, name='Gamma')
+
     """
 
     methods = ["nj", "upgma"]
@@ -1059,10 +1095,16 @@ class ParsimonyScorer(Scorer):
         terms = tree.get_terminals()
         terms.sort(key=lambda term: term.name)
         alignment.sort()
-        if not all(t.name == a.id for t, a in zip(terms, alignment)):
-            raise ValueError(
-                "Taxon names of the input tree should be the same with the alignment."
-            )
+        if isinstance(alignment, MultipleSeqAlignment):
+            if not all(t.name == a.id for t, a in zip(terms, alignment)):
+                raise ValueError(
+                    "Taxon names of the input tree should be the same with the alignment."
+                )
+        else:  # Alignment object
+            if not all(t.name == s.id for t, s in zip(terms, alignment.sequences)):
+                raise ValueError(
+                    "Taxon names of the input tree should be the same with the alignment."
+                )
         # term_align = dict(zip(terms, alignment))
         score = 0
         for i in range(len(alignment[0])):
@@ -1087,7 +1129,7 @@ class ParsimonyScorer(Scorer):
                     state = left_state & right_state
                     if not state:
                         state = left_state | right_state
-                        score_i = score_i + 1
+                        score_i += 1
                     clade_states[clade] = state
             # Sankoff algorithm with the penalty matrix
             else:
@@ -1122,7 +1164,7 @@ class ParsimonyScorer(Scorer):
                 # minimum from root score
                 score_i = min(array)
                 # TODO: resolve internal states
-            score = score + score_i
+            score += score_i
         return score
 
 
@@ -1169,6 +1211,50 @@ class ParsimonyTreeConstructor(TreeConstructor):
     >>> searcher = Phylo.TreeConstruction.NNITreeSearcher(scorer)
     >>> constructor = Phylo.TreeConstruction.ParsimonyTreeConstructor(searcher, starting_tree)
     >>> pars_tree = constructor.build_tree(aln)
+    >>> print(pars_tree)
+    Tree(rooted=True, weight=1.0)
+        Clade(branch_length=0.0)
+            Clade(branch_length=0.19732999999999998, name='Inner1')
+                Clade(branch_length=0.13691, name='Delta')
+                Clade(branch_length=0.08531, name='Epsilon')
+            Clade(branch_length=0.04194000000000003, name='Inner2')
+                Clade(branch_length=0.01421, name='Inner3')
+                    Clade(branch_length=0.17523, name='Gamma')
+                    Clade(branch_length=0.07477, name='Beta')
+                Clade(branch_length=0.2923, name='Alpha')
+
+    Same example, using the new Alignment class:
+
+    >>> from Bio import Align, Phylo
+    >>> alignment = Align.read(open('TreeConstruction/msa.phy'), 'phylip')
+    >>> print(alignment)
+    Alpha             0 AACGTGGCCACAT 13
+    Beta              0 AAGGTCGCCACAC 13
+    Gamma             0 CAGTTCGCCACAA 13
+    Delta             0 GAGATTTCCGCCT 13
+    Epsilon           0 GAGATCTCCGCCC 13
+    <BLANKLINE>
+
+    Load a starting tree::
+
+    >>> starting_tree = Phylo.read('TreeConstruction/nj.tre', 'newick')
+    >>> print(starting_tree)
+    Tree(rooted=False, weight=1.0)
+        Clade(branch_length=0.0, name='Inner3')
+            Clade(branch_length=0.01421, name='Inner2')
+                Clade(branch_length=0.23927, name='Inner1')
+                    Clade(branch_length=0.08531, name='Epsilon')
+                    Clade(branch_length=0.13691, name='Delta')
+                Clade(branch_length=0.2923, name='Alpha')
+            Clade(branch_length=0.07477, name='Beta')
+            Clade(branch_length=0.17523, name='Gamma')
+
+    Build the Parsimony tree from the starting tree::
+
+    >>> scorer = Phylo.TreeConstruction.ParsimonyScorer()
+    >>> searcher = Phylo.TreeConstruction.NNITreeSearcher(scorer)
+    >>> constructor = Phylo.TreeConstruction.ParsimonyTreeConstructor(searcher, starting_tree)
+    >>> pars_tree = constructor.build_tree(alignment)
     >>> print(pars_tree)
     Tree(rooted=True, weight=1.0)
         Clade(branch_length=0.0)
