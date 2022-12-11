@@ -18,6 +18,7 @@ import tempfile
 import sys
 from io import StringIO
 from Bio.Align import MultipleSeqAlignment
+from Bio.Align.nexus import AlignmentIterator
 from Bio.AlignIO.NexusIO import NexusIterator, NexusWriter
 from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus, Trees
@@ -1131,6 +1132,52 @@ Root:  16
 
 
 class TestSelf(unittest.TestCase):
+    def test_repeated_names_no_taxa(self):
+        handle = StringIO(
+            """#NEXUS
+        [TITLE: NoName]
+        begin data;
+        dimensions ntax=4 nchar=50;
+        format interleave datatype=protein   gap=- symbols="FSTNKEYVQMCLAWPHDRIG";
+        matrix
+        CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ----
+        ALEU_HORVU          MAHARVLLLA LAVLATAAVA VASSSSFADS NPIRPVTDRA ASTLESAVLG
+        CATH_HUMAN          ------MWAT LPLLCAGAWL LGV------- -PVCGAAELS VNSLEK----
+        CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---X
+        ;
+        end;
+        """
+        )
+        alignments = AlignmentIterator(handle)
+        alignment = next(alignments)
+        self.assertEqual(alignment.shape, (4, 50))
+        self.assertEqual(
+            str(alignment),
+            """\
+CYS1_DICD         0 -----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ---- 26
+ALEU_HORV         0 MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLG 50
+CATH_HUMA         0 ------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK---- 32
+CYS1_DICD         0 -----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ---X 27
+""",
+        )
+        self.assertEqual(
+            alignment[0], "-----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ----"
+        )
+        self.assertEqual(alignment.sequences[0].id, "CYS1_DICDI")
+        self.assertEqual(
+            alignment[1], "MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLG"
+        )
+        self.assertEqual(alignment.sequences[1].id, "ALEU_HORVU")
+        self.assertEqual(
+            alignment[2], "------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK----"
+        )
+        self.assertEqual(alignment.sequences[2].id, "CATH_HUMAN")
+        self.assertEqual(
+            alignment[3], "-----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ---X"
+        )
+        self.assertEqual(alignment.sequences[3].id, "CYS1_DICDI")
+        self.assertRaises(StopIteration, next, alignments)
+
     def test_repeated_names_no_taxa_msa(self):
         handle = StringIO(
             """#NEXUS
@@ -1185,6 +1232,58 @@ MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLG ALEU_HORVU
         self.assertEqual(record.name, "CYS1_DICDI")
         self.assertEqual(record.id, "CYS1_DICDI.copy")
         self.assertRaises(StopIteration, next, records)
+        self.assertRaises(StopIteration, next, alignments)
+
+    def test_repeated_names_with_taxa(self):
+        handle = StringIO(
+            """#NEXUS
+        [TITLE: NoName]
+        begin taxa
+        CYS1_DICDI
+        ALEU_HORVU
+        CATH_HUMAN
+        CYS1_DICDI;
+        end;
+        begin data;
+        dimensions ntax=4 nchar=50;
+        format interleave datatype=protein   gap=- symbols="FSTNKEYVQMCLAWPHDRIG";
+        matrix
+        CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ----
+        ALEU_HORVU          MAHARVLLLA LAVLATAAVA VASSSSFADS NPIRPVTDRA ASTLESAVLG
+        CATH_HUMAN          ------MWAT LPLLCAGAWL LGV------- -PVCGAAELS VNSLEK----
+        CYS1_DICDI          -----MKVIL LFVLAVFTVF VSS------- --------RG IPPEEQ---X
+        ;
+        end;
+        """
+        )
+        alignments = AlignmentIterator(handle)
+        alignment = next(alignments)
+        self.assertEqual(len(alignment), 4)
+        self.assertEqual(
+            str(alignment),
+            """\
+CYS1_DICD         0 -----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ---- 26
+ALEU_HORV         0 MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLG 50
+CATH_HUMA         0 ------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK---- 32
+CYS1_DICD         0 -----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ---X 27
+""",
+        )
+        self.assertEqual(
+            alignment[0], "-----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ----"
+        )
+        self.assertEqual(alignment.sequences[0].id, "CYS1_DICDI")
+        self.assertEqual(
+            alignment[1], "MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLG"
+        )
+        self.assertEqual(alignment.sequences[1].id, "ALEU_HORVU")
+        self.assertEqual(
+            alignment[2], "------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK----"
+        )
+        self.assertEqual(alignment.sequences[2].id, "CATH_HUMAN")
+        self.assertEqual(
+            alignment[3], "-----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ---X"
+        )
+        self.assertEqual(alignment.sequences[3].id, "CYS1_DICDI")
         self.assertRaises(StopIteration, next, alignments)
 
     def test_repeated_names_with_taxa_msa(self):
@@ -1248,6 +1347,11 @@ MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLG ALEU_HORVU
         self.assertEqual(record.id, "CYS1_DICDI.copy")
         self.assertRaises(StopIteration, next, records)
         self.assertRaises(StopIteration, next, alignments)
+
+    def test_empty_file_read(self):
+        with self.assertRaises(ValueError) as cm:
+            AlignmentIterator(StringIO())
+        self.assertEqual(str(cm.exception), "Empty file.")
 
     def test_empty_file_read_msa(self):
         self.assertEqual([], list(NexusIterator(StringIO())))
