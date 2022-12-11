@@ -730,7 +730,7 @@ usertype matrix_test stepmatrix=5
 """,  # noqa : W291
         )
 
-    def test_write_alignment(self):
+    def test_write_alignment_msa(self):
         # Default causes no interleave (columns <= 1000)
         records = [
             SeqRecord(
@@ -1131,9 +1131,7 @@ Root:  16
 
 
 class TestSelf(unittest.TestCase):
-    def test_repeated_names_no_taxa(self):
-        # TODO - remove these prints, check output explicitly
-        print("Repeated names without a TAXA block")
+    def test_repeated_names_no_taxa_msa(self):
         handle = StringIO(
             """#NEXUS
         [TITLE: NoName]
@@ -1149,15 +1147,47 @@ class TestSelf(unittest.TestCase):
         end;
         """
         )
-        for a in NexusIterator(handle):
-            print(a)
-            for r in a:
-                print(f"{r.seq!r} {r.name} {r.id}")
-        print("Done")
+        alignments = NexusIterator(handle)
+        alignment = next(alignments)
+        self.assertEqual(len(alignment), 4)
+        self.assertEqual(
+            str(alignment),
+            """\
+Alignment with 4 rows and 50 columns
+-----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ---- CYS1_DICDI
+MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLG ALEU_HORVU
+------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK---- CATH_HUMAN
+-----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ---X CYS1_DICDI.copy""",
+        )
+        records = iter(alignment)
+        record = next(records)
+        self.assertEqual(
+            record.seq, Seq("-----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ----")
+        )
+        self.assertEqual(record.name, "CYS1_DICDI")
+        self.assertEqual(record.id, "CYS1_DICDI")
+        record = next(records)
+        self.assertEqual(
+            record.seq, Seq("MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLG")
+        )
+        self.assertEqual(record.name, "ALEU_HORVU")
+        self.assertEqual(record.id, "ALEU_HORVU")
+        record = next(records)
+        self.assertEqual(
+            record.seq, Seq("------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK----")
+        )
+        self.assertEqual(record.name, "CATH_HUMAN")
+        self.assertEqual(record.id, "CATH_HUMAN")
+        record = next(records)
+        self.assertEqual(
+            record.seq, Seq("-----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ---X")
+        )
+        self.assertEqual(record.name, "CYS1_DICDI")
+        self.assertEqual(record.id, "CYS1_DICDI.copy")
+        self.assertRaises(StopIteration, next, records)
+        self.assertRaises(StopIteration, next, alignments)
 
-    def test_repeated_names_with_taxa(self):
-        # TODO - remove these prints, check output explicitly
-        print("Repeated names with a TAXA block")
+    def test_repeated_names_with_taxa_msa(self):
         handle = StringIO(
             """#NEXUS
         [TITLE: NoName]
@@ -1179,16 +1209,50 @@ class TestSelf(unittest.TestCase):
         end;
         """
         )
-        for a in NexusIterator(handle):
-            print(a)
-            for r in a:
-                print(f"{r.seq!r} {r.name} {r.id}")
-        print("Done")
+        alignments = NexusIterator(handle)
+        alignment = next(alignments)
+        self.assertEqual(len(alignment), 4)
+        self.assertEqual(
+            str(alignment),
+            """\
+Alignment with 4 rows and 50 columns
+-----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ---- CYS1_DICDI
+MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLG ALEU_HORVU
+------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK---- CATH_HUMAN
+-----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ---X CYS1_DICDI.copy""",
+        )
+        records = iter(alignment)
+        record = next(records)
+        self.assertEqual(
+            record.seq, Seq("-----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ----")
+        )
+        self.assertEqual(record.name, "CYS1_DICDI")
+        self.assertEqual(record.id, "CYS1_DICDI")
+        record = next(records)
+        self.assertEqual(
+            record.seq, Seq("MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLG")
+        )
+        self.assertEqual(record.name, "ALEU_HORVU")
+        self.assertEqual(record.id, "ALEU_HORVU")
+        record = next(records)
+        self.assertEqual(
+            record.seq, Seq("------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK----")
+        )
+        self.assertEqual(record.name, "CATH_HUMAN")
+        self.assertEqual(record.id, "CATH_HUMAN")
+        record = next(records)
+        self.assertEqual(
+            record.seq, Seq("-----MKVILLFVLAVFTVFVSS---------------RGIPPEEQ---X")
+        )
+        self.assertEqual(record.name, "CYS1_DICDI")
+        self.assertEqual(record.id, "CYS1_DICDI.copy")
+        self.assertRaises(StopIteration, next, records)
+        self.assertRaises(StopIteration, next, alignments)
 
-    def test_empty_file_read(self):
+    def test_empty_file_read_msa(self):
         self.assertEqual([], list(NexusIterator(StringIO())))
 
-    def test_multiple_output(self):
+    def test_multiple_output_msa(self):
         records = [
             SeqRecord(
                 Seq("ATGCTGCTGAT"), id="foo", annotations={"molecule_type": "DNA"}
