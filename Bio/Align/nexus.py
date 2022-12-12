@@ -71,7 +71,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream.seek(0)
         return stream.read()
 
-    def write_alignment(self, alignment, stream, interleave):
+    def write_alignment(self, alignment, stream, interleave=None):
         """Write a single alignment to the output file.
 
         - alignment  - An Alignment object
