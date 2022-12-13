@@ -18,7 +18,11 @@ Classes:
 
 Examples
 --------
-This example downloads the Cellosaurus database and parses it:
+This example downloads the Cellosaurus database and parses it. Note that
+urlopen returns a stream of bytes, while the parser expects a stream of plain
+string, so we use TextIOWrapper to convert bytes to string using the UTF-8
+encoding. This is not needed if you download the cellosaurus.txt file in
+advance and open it (see the comment below).
 
     >>> from urllib.request import urlopen
     >>> from io import TextIOWrapper
@@ -26,6 +30,9 @@ This example downloads the Cellosaurus database and parses it:
     >>> url = "ftp://ftp.expasy.org/databases/cellosaurus/cellosaurus.txt"
     >>> bytestream = urlopen(url)
     >>> textstream = TextIOWrapper(bytestream, "UTF-8")
+    >>> # alternatively, use
+    >>> # textstream = open("cellosaurus.txt")
+    >>> # if you downloaded the cellosaurus.txt file in advance.
     >>> records = cellosaurus.parse(textstream)
     >>> for record in records:
     ...     if 'Homo sapiens' in record['OX'][0]:
