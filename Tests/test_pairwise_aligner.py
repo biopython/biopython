@@ -21,7 +21,6 @@ except ImportError:
 from Bio import Align, SeqIO
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqUtils import GC
 
 
 class TestAlignerProperties(unittest.TestCase):

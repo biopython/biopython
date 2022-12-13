@@ -247,8 +247,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         if consensus:
             rows, columns = alignment.shape
             if len(consensus) != columns:
-                for aligned_seq in aligned_seqs:
-                    print(aligned_seq, len(aligned_seq))
                 raise ValueError(
                     "Alignment has %i columns, consensus length is %i, '%s'"
                     % (columns, len(consensus), consensus)
