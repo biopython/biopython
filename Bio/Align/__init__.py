@@ -2623,8 +2623,8 @@ class Alignment:
         to a sort value.  For example, you could sort on the GC content of each
         sequence.
 
-        >>> from Bio.SeqUtils import GC
-        >>> alignment.sort(key=GC)
+        >>> from Bio.SeqUtils import gc_fraction
+        >>> alignment.sort(key=gc_fraction)
         >>> print(alignment)
         target            0 AATAA 5
                           0 ||.|| 5
@@ -2633,7 +2633,7 @@ class Alignment:
 
         You can reverse the sort order by passing `reverse=True`:
 
-        >>> alignment.sort(key=GC, reverse=True)
+        >>> alignment.sort(key=gc_fraction, reverse=True)
         >>> print(alignment)
         target            0 AAGAA 5
                           0 ||.|| 5
