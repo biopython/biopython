@@ -18,20 +18,23 @@ Classes:
 
 Examples
 --------
-You need to download the Cellosaurus database for this examples to
-run, e.g. from ftp://ftp.expasy.org/databases/cellosaurus/cellosaurus.txt
+This example downloads the Cellosaurus database and parses it:
 
-    >> from Bio.ExPASy import cellosaurus
-    >> with open('cellosaurus.txt') as handle:
-    ...    records = cellosaurus.parse(handle)
-    ...    for record in records:
-    ...        if 'Homo sapiens' in record['OX'][0]:
-    ...            print(record['ID'])
+    >>> from urllib.request import urlopen
+    >>> from io import TextIOWrapper
+    >>> from Bio.ExPASy import cellosaurus
+    >>> url = "ftp://ftp.expasy.org/databases/cellosaurus/cellosaurus.txt"
+    >>> bytestream = urlopen(url)
+    >>> textstream = TextIOWrapper(bytestream, "UTF-8")
+    >>> records = cellosaurus.parse(textstream)
+    >>> for record in records:
+    ...     if 'Homo sapiens' in record['OX'][0]:
+    ...         print(record['ID'])  # doctest:+ELLIPSIS
     ...
     #15310-LN
     #W7079
     (L)PC6
-    00136
+    0.5alpha
     ...
 
 """
@@ -188,3 +191,9 @@ def __read(handle):
                 continue
     if record:
         raise ValueError("Unexpected end of stream")
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()
