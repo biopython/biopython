@@ -239,7 +239,7 @@ class MMCIFParser:
                 except (KeyError, IndexError):
                     msg = f"Non-existing residue ID in chain '{chainid}'"
                 warnings.warn(
-                    "PDBConstructionWarning: ",
+                    "PDBConstructionWarning: "+\
                     msg,
                     PDBConstructionWarning,
                 )
@@ -530,7 +530,7 @@ class FastMMCIFParser:
                 except (KeyError, IndexError):
                     msg = f"Non-existing residue ID in chain '{chainid}'"
                 warnings.warn(
-                    "PDBConstructionWarning: ",
+                    "PDBConstructionWarning: "+\
                     msg,
                     PDBConstructionWarning,
                 )
