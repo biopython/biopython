@@ -37,14 +37,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     output formats.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="Tabular")
+    fmt = "Tabular"
 
     def _read_header(self, stream):
         try:

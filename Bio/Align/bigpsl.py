@@ -36,6 +36,8 @@ class AlignmentIterator(bigbed.AlignmentIterator):
     of each alignment.
     """
 
+    fmt = "bigPsl"
+
     def _analyze_fields(self, fields, fieldCount, definedFieldCount):
         names = (
             "chrom",

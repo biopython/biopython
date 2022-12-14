@@ -25,14 +25,7 @@ from Bio import BiopythonParserWarning
 class AlignmentIterator(interfaces.AlignmentIterator):
     """GCG MSF alignment iterator."""
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="MSF")
+    fmt = "MSF"
 
     def _read_next_alignment(self, stream):
         try:

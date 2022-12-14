@@ -193,3 +193,9 @@ def __convert_strand(strand):
         return "-"
     if strand == "plus" or strand == "none":
         return "+"
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()

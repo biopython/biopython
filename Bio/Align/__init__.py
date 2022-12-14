@@ -1027,7 +1027,7 @@ class Alignment:
 
         Arguments:
          - sequences   - A list of the sequences (Seq, MutableSeq, SeqRecord,
-                         or string objects)that were aligned.
+                         or string objects) that were aligned.
          - coordinates - The sequence coordinates that define the alignment.
                          If None (the default value), assume that the sequences
                          align to each other without any gaps.
@@ -1042,12 +1042,15 @@ class Alignment:
                 # its length are known.
                 pass
             else:
-                if len(lengths) != 1:
+                if len(lengths) == 0:
+                    coordinates = numpy.empty((0, 0), dtype=int)
+                elif len(lengths) == 1:
+                    length = lengths.pop()
+                    coordinates = numpy.array([[0, length]] * len(sequences))
+                else:
                     raise ValueError(
                         "sequences must have the same length if coordinates is None"
                     )
-                length = lengths.pop()
-                coordinates = numpy.array([[0, length]] * len(sequences))
         self.coordinates = coordinates
 
     def __array__(self, dtype=None):
@@ -1293,7 +1296,9 @@ class Alignment:
 
         self[row]
 
-        where row is an integer. Return value is a string.
+        where row is an integer.
+        Return value is a string if the aligned sequences are string, Seq,
+        or SeqRecord objects, otherwise the return value is a list.
         """
         steps = abs(numpy.diff(self.coordinates, 1))
         gaps = steps.max(0)
@@ -1310,14 +1315,24 @@ class Alignment:
             sequence = reverse_complement(sequence, inplace=False)
             i = len(sequence) - i
         steps = steps[index]
-        line = ""
-        for step, gap in zip(steps, gaps):
-            if step:
-                j = i + step
-                line += str(sequence[i:j])
-                i = j
-            else:
-                line += "-" * gap
+        if isinstance(sequence, (str, Seq)):
+            line = ""
+            for step, gap in zip(steps, gaps):
+                if step:
+                    j = i + step
+                    line += str(sequence[i:j])
+                    i = j
+                else:
+                    line += "-" * gap
+        else:
+            line = []
+            for step, gap in zip(steps, gaps):
+                if step:
+                    j = i + step
+                    line.extend(sequence[i:j])
+                    i = j
+                else:
+                    line.extend([None] * gap)
         return line
 
     def _get_rows(self, key):
@@ -1372,7 +1387,8 @@ class Alignment:
         self[row, cols]
 
         where row is an integer and cols is a slice object with step 1.
-        Return value is a string.
+        Return value is a string if the aligned sequences are string, Seq,
+        or SeqRecord objects, otherwise the return value is a list.
         """
         sequence_indices = coordinate + steps.cumsum()
         indices = gaps.cumsum()
@@ -1382,41 +1398,78 @@ class Alignment:
             sequence = sequence.seq  # stupid SeqRecord
         except AttributeError:
             pass
-        if i == j:
-            length = stop_index - start_index
-            if steps[i] == 0:
-                line = "-" * length
-            else:
-                offset = start_index - indices[i]
-                start = sequence_indices[i] + offset
-                stop = start + length
-                line = str(sequence[start:stop])
-        else:
-            length = indices[i] - start_index
-            stop = sequence_indices[i]
-            if steps[i] == 0:
-                line = "-" * length
-            else:
-                start = stop - length
-                line = str(sequence[start:stop])
-            i += 1
-            while i < j:
-                step = gaps[i]
+        if isinstance(sequence, (str, Seq)):
+            if i == j:
+                length = stop_index - start_index
                 if steps[i] == 0:
-                    line += "-" * step
+                    line = "-" * length
                 else:
-                    start = stop
-                    stop = start + step
-                    line += str(sequence[start:stop])
-                i += 1
-            length = stop_index - indices[j - 1]
-            if length > 0:
-                if steps[j] == 0:
-                    line += "-" * length
-                else:
-                    start = stop
+                    offset = start_index - indices[i]
+                    start = sequence_indices[i] + offset
                     stop = start + length
-                    line += str(sequence[start:stop])
+                    line = str(sequence[start:stop])
+            else:
+                length = indices[i] - start_index
+                stop = sequence_indices[i]
+                if steps[i] == 0:
+                    line = "-" * length
+                else:
+                    start = stop - length
+                    line = str(sequence[start:stop])
+                i += 1
+                while i < j:
+                    step = gaps[i]
+                    if steps[i] == 0:
+                        line += "-" * step
+                    else:
+                        start = stop
+                        stop = start + step
+                        line += str(sequence[start:stop])
+                    i += 1
+                length = stop_index - indices[j - 1]
+                if length > 0:
+                    if steps[j] == 0:
+                        line += "-" * length
+                    else:
+                        start = stop
+                        stop = start + length
+                        line += str(sequence[start:stop])
+        else:
+            if i == j:
+                length = stop_index - start_index
+                if steps[i] == 0:
+                    line = [None] * length
+                else:
+                    offset = start_index - indices[i]
+                    start = sequence_indices[i] + offset
+                    stop = start + length
+                    line = sequence[start:stop]
+            else:
+                length = indices[i] - start_index
+                stop = sequence_indices[i]
+                if steps[i] == 0:
+                    line = [None] * length
+                else:
+                    start = stop - length
+                    line = sequence[start:stop]
+                i += 1
+                while i < j:
+                    step = gaps[i]
+                    if steps[i] == 0:
+                        line.extend([None] * step)
+                    else:
+                        start = stop
+                        stop = start + step
+                        line.extend(sequence[start:stop])
+                    i += 1
+                length = stop_index - indices[j - 1]
+                if length > 0:
+                    if steps[j] == 0:
+                        line.extend([None] * length)
+                    else:
+                        start = stop
+                        stop = start + length
+                        line.extend(sequence[start:stop])
         return line
 
     def _get_row_cols_iterable(self, i, cols, steps, gaps, sequence):
@@ -1427,28 +1480,47 @@ class Alignment:
         self[row, cols]
 
         where row is an integer and cols is an iterable of integers.
-        Return value is a string.
+        Return value is a string if the aligned sequences are string, Seq,
+        or SeqRecord objects, otherwise the return value is a list.
         """
         try:
             sequence = sequence.seq  # stupid SeqRecord
         except AttributeError:
             pass
-        line = ""
-        for step, gap in zip(steps, gaps):
-            if step:
-                j = i + step
-                line += str(sequence[i:j])
-                i = j
-            else:
-                line += "-" * gap
-        try:
-            line = "".join(line[col] for col in cols)
-        except IndexError:
-            raise
-        except Exception:
-            raise TypeError(
-                "second index must be an integer, slice, or iterable of integers"
-            ) from None
+        if isinstance(sequence, (str, Seq)):
+            line = ""
+            for step, gap in zip(steps, gaps):
+                if step:
+                    j = i + step
+                    line += str(sequence[i:j])
+                    i = j
+                else:
+                    line += "-" * gap
+            try:
+                line = "".join(line[col] for col in cols)
+            except IndexError:
+                raise
+            except Exception:
+                raise TypeError(
+                    "second index must be an integer, slice, or iterable of integers"
+                ) from None
+        else:
+            line = []
+            for step, gap in zip(steps, gaps):
+                if step:
+                    j = i + step
+                    line.extend(sequence[i:j])
+                    i = j
+                else:
+                    line.extend([None] * gap)
+            try:
+                line = [line[col] for col in cols]
+            except IndexError:
+                raise
+            except Exception:
+                raise TypeError(
+                    "second index must be an integer, slice, or iterable of integers"
+                ) from None
         return line
 
     def _get_rows_col(self, coordinates, col, steps, gaps, sequences):
@@ -1819,6 +1891,8 @@ class Alignment:
         try:
             writer = module.AlignmentWriter(None, *args, **kwargs)
         except AttributeError:
+            if module.AlignmentIterator.mode == "b":
+                raise ValueError(f"{fmt} is a binary file format")
             raise ValueError(
                 f"Formatting alignments has not yet been implemented for the {fmt} format"
             ) from None
@@ -2260,6 +2334,8 @@ class Alignment:
         """
         coordinates = numpy.array(self.coordinates)
         n = len(coordinates)
+        if n == 0:  # no sequences
+            return (0, 0)
         for i in range(n):
             if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
                 k = len(self.sequences[i])
@@ -2547,8 +2623,8 @@ class Alignment:
         to a sort value.  For example, you could sort on the GC content of each
         sequence.
 
-        >>> from Bio.SeqUtils import GC
-        >>> alignment.sort(key=GC)
+        >>> from Bio.SeqUtils import gc_fraction
+        >>> alignment.sort(key=gc_fraction)
         >>> print(alignment)
         target            0 AATAA 5
                           0 ||.|| 5
@@ -2557,7 +2633,7 @@ class Alignment:
 
         You can reverse the sort order by passing `reverse=True`:
 
-        >>> alignment.sort(key=GC, reverse=True)
+        >>> alignment.sort(key=gc_fraction, reverse=True)
         >>> print(alignment)
         target            0 AAGAA 5
                           0 ||.|| 5
@@ -3108,7 +3184,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     def align(self, seqA, seqB, strand="+"):
         """Return the alignments of two sequences using PairwiseAligner."""
-        if isinstance(seqA, (Seq, MutableSeq)):
+        if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
             sA = bytes(seqA)
         else:
             sA = seqA
@@ -3116,7 +3192,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
             sB = seqB
         else:  # strand == "-":
             sB = reverse_complement(seqB, inplace=False)
-        if isinstance(sB, (Seq, MutableSeq)):
+        if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             sB = bytes(sB)
         score, paths = _aligners.PairwiseAligner.align(self, sA, sB, strand)
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
@@ -3124,11 +3200,11 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     def score(self, seqA, seqB, strand="+"):
         """Return the alignments score of two sequences using PairwiseAligner."""
-        if isinstance(seqA, (Seq, MutableSeq)):
+        if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
             seqA = bytes(seqA)
         if strand == "-":
             seqB = reverse_complement(seqB, inplace=False)
-        if isinstance(seqB, (Seq, MutableSeq)):
+        if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             seqB = bytes(seqB)
         return _aligners.PairwiseAligner.score(self, seqA, seqB, strand)
 
@@ -3298,11 +3374,11 @@ def parse(source, fmt):
     ...    print("Number of sequences in alignment", len(alignment))
     ...    print("Alignment score:", alignment.score)
     Number of sequences in alignment 2
-    Alignment score: 6150
+    Alignment score: 6150.0
     Number of sequences in alignment 2
-    Alignment score: 502
+    Alignment score: 502.0
     Number of sequences in alignment 2
-    Alignment score: 440
+    Alignment score: 440.0
 
     For lazy-loading file formats such as bigMaf, for which the file contents
     is read on demand only, ensure that the file remains open while extracting

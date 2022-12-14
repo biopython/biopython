@@ -642,7 +642,6 @@ class FastqRandomAccess(SeqFileRandomAccess):
                 raise ValueError("Problem with quality section")
             yield id.decode(), start_offset, length
             start_offset = end_offset
-        # print("EOF")
 
     def get_raw(self, offset):
         """Return the raw record from the file as a bytes string."""
