@@ -15,13 +15,16 @@
 # The 'fmt:off' lines prevent black for formatting the dictionaries.
 
 from Bio.Data.IUPACData import protein_letters_3to1 as _protein_letters_3to1
-
+from Bio.Data.IUPACData import protein_letters_3to1_extended as _protein_letters_3to1_extended
 # Protein
 protein_letters_3to1 = {k.upper(): v for k, v in _protein_letters_3to1.items()}
 protein_letters_1to3 = {v: k for k, v in protein_letters_3to1.items()}
-
+# Add the extended amino acid one letter codes from IUPACData.py
+protein_letters_3to1_extended_one_letter = {k.upper(): v for \
+        k, v in _protein_letters_3to1_extended.items()}
 # fmt: off
 protein_letters_3to1_extended = {
+    **protein_letters_3to1_extended_one_letter,
     "A5N": "N", "A8E": "V", "A9D": "S", "AA3": "A", "AA4": "A", "AAR": "R",
     "ABA": "A", "ACL": "R", "AEA": "C", "AEI": "D", "AFA": "N", "AGM": "R",
     "AGQ": "Y", "AGT": "C", "AHB": "N", "AHL": "R", "AHO": "A", "AHP": "A",
