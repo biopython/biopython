@@ -19,6 +19,7 @@ possible, especially the following contributors:
 
 - Michiel de Hoon
 - Peter Cock
+- Joe Greener
 - Robert Miller
 
 18 November 2022: Biopython 1.80
