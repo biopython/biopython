@@ -34,14 +34,8 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
     the corresponding sequence record.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        interfaces.AlignmentIterator.__init__(self, source, mode="b", fmt="bigMaf")
+    fmt = "bigMaf"
+    mode = "b"
 
     def _create_alignment(self, chunk):
         chromId, chromStart, chromEnd, rest = chunk

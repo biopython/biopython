@@ -64,6 +64,7 @@ EXCLUDE_DOCTEST_MODULES = ["Bio.Alphabet"]
 ONLINE_DOCTEST_MODULES = [
     "Bio.Entrez",
     "Bio.ExPASy",
+    "Bio.ExPASy.cellosaurus",
     "Bio.TogoWS",
 ]
 

@@ -41,6 +41,8 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Accepts Alignment objects, writes a MAF file."""
 
+    fmt = "MAF"
+
     def _write_trackline(self, metadata):
         stream = self.stream
         stream.write("track")
@@ -70,7 +72,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
     def write_header(self, alignments):
         """Write the MAF header."""
         stream = self.stream
-        metadata = alignments.metadata
+        try:
+            metadata = alignments.metadata
+        except AttributeError:
+            metadata = {"MAF Version": "1"}
         track_keys = (
             "name",
             "description",
@@ -138,10 +143,13 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         for i in range(n):
             record = alignment.sequences[i]
             coordinates = alignment.coordinates[i]
-            name = record.id
+            try:
+                name = record.id
+            except AttributeError:
+                name = "sequence_%d" % i
             start = coordinates[0]
             end = coordinates[-1]
-            length = len(record.seq)
+            length = len(record)
             if start < end:
                 size = end - start
             else:
@@ -151,9 +159,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             start_width = max(start_width, len(str(start)))
             size_width = max(size_width, len(str(size)))
             length_width = max(length_width, len(str(length)))
-        for empty in alignment_annotations.get("empty", []):
+        for i, empty in enumerate(alignment_annotations.get("empty", [])):
             record, segment, status = empty
-            name = record.id
+            try:
+                name = record.id
+            except AttributeError:
+                name = "sequence_%d" % (i + n)
             name_width = max(name_width, len(name))
             start, end = segment
             length = len(record.seq)
@@ -169,10 +180,13 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         for i in range(n):
             record = alignment.sequences[i]
             coordinates = alignment.coordinates[i]
-            name = record.id
+            try:
+                record_id = record.id
+            except AttributeError:
+                record_id = "sequence_%d" % i
             start = coordinates[0]
             end = coordinates[-1]
-            length = len(record.seq)
+            length = len(record)
             if start < end:
                 size = end - start
                 strand = "+"
@@ -181,7 +195,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 start = length - start
                 strand = "-"
             text = alignment[i]
-            name = record.id.ljust(name_width)
+            name = record_id.ljust(name_width)
             start = str(start).rjust(start_width)
             size = str(size).rjust(size_width)
             length = str(length).rjust(length_width)
@@ -195,14 +209,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 quality = annotations.get("quality")
                 if quality is not None:
                     gapped_quality = ""
-                    i = 0
+                    j = 0
                     for letter in text:
                         if letter == "-":
                             gapped_quality += "-"
                         else:
-                            gapped_quality += quality[i]
-                            i += 1
-                    name = record.id.ljust(quality_width)
+                            gapped_quality += quality[j]
+                            j += 1
+                    name = record_id.ljust(quality_width)
                     line = f"q {name} {gapped_quality}\n"
                     lines.append(line)
                 try:
@@ -213,12 +227,16 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 except KeyError:
                     pass
                 else:
-                    name = record.id.ljust(name_width)
+                    name = record_id.ljust(name_width)
                     line = f"i {name} {leftStatus} {leftCount} {rightStatus} {rightCount}\n"
                     lines.append(line)
-        for empty in alignment_annotations.get("empty", []):
+        for i, empty in enumerate(alignment_annotations.get("empty", [])):
             record, segment, status = empty
-            name = record.id.ljust(name_width)
+            try:
+                name = record.id
+            except AttributeError:
+                name = "sequence_%d" % (i + n)
+            name = name.ljust(name_width)
             start, end = segment
             length = len(record.seq)
             if start <= end:
@@ -254,17 +272,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     ``.annotations`` attribute of the corresponding sequence record.
     """
 
+    fmt = "MAF"
+
     status_characters = ("C", "I", "N", "n", "M", "T")
     empty_status_characters = ("C", "I", "M", "n")
-
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="MAF")
 
     def _read_header(self, stream):
         metadata = {}
@@ -381,7 +392,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     sequence = reverse_complement(sequence)
                     start = srcSize - start - size
                 seq = Seq({start: sequence}, length=srcSize)
-                record = SeqRecord(seq, id=src)
+                record = SeqRecord(seq, id=src, name="", description="")
                 records.append(record)
                 strands.append(strand)
             elif line.startswith("i "):
@@ -409,7 +420,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 status = words[5]
                 assert status in AlignmentIterator.empty_status_characters
                 sequence = Seq(None, length=srcSize)
-                record = SeqRecord(sequence, id=src)
+                record = SeqRecord(sequence, id=src, name="", description="")
                 end = start + size
                 if strand == "+":
                     segment = (start, end)

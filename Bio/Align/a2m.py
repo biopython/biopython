@@ -18,14 +18,7 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the A2M file format."""
 
-    def __init__(self, target):
-        """Create an AlignmentWriter object.
-
-        Arguments:
-         - target    - output stream or file name
-
-        """
-        super().__init__(target, mode="w")
+    fmt = "A2M"
 
     def format_alignment(self, alignment):
         """Return a string with the alignment in the A2M file format."""
@@ -34,7 +27,18 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         lines = []
         state = alignment.column_annotations["state"]
         for sequence, line in zip(alignment.sequences, alignment):
-            lines.append(f">{sequence.id} {sequence.description}")
+            try:
+                name = sequence.id
+            except AttributeError:
+                name = ""
+            try:
+                description = sequence.description
+            except AttributeError:
+                description = ""
+            if description:
+                lines.append(f">{name} {description}")
+            else:
+                lines.append(f">{name}")
             s = ""
             for c, m in zip(line, state):
                 if m == "D":
@@ -47,6 +51,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             lines.append(s)
         return "\n".join(lines) + "\n"
 
+    write_alignments = interfaces.AlignmentWriter.write_single_alignment
+
 
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Alignment iterator for files in the A2M file format.
@@ -58,14 +64,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     with '>' followed by the name of the sequence, and optionally a description.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="A2M")
+    fmt = "A2M"
 
     def _read_next_alignment(self, stream):
         names = []
@@ -75,10 +74,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if line.startswith(">"):
                 parts = line[1:].rstrip().split(None, 1)
                 try:
-                    name, description = parts
-                except ValueError:
                     name = parts[0]
-                    description = None
+                except IndexError:
+                    name = ""
+                try:
+                    description = parts[1]
+                except IndexError:
+                    description = ""
                 names.append(name)
                 descriptions.append(description)
                 lines.append("")
@@ -109,10 +111,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         for name, description, line in zip(names, descriptions, lines):
             line = line.replace("-", "")
             sequence = Seq(line)
-            if description is None:
-                record = SeqRecord(sequence, name)
-            else:
-                record = SeqRecord(sequence, name, description=description)
+            record = SeqRecord(sequence, name, description=description)
             records.append(record)
         alignment = Alignment(records, coordinates)
         alignment.column_annotations = {}

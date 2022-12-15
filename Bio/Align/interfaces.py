@@ -22,9 +22,16 @@ class AlignmentIterator(ABC):
 
     You should write a parse method that returns an Alignment generator.  You
     may wish to redefine the __init__ method as well.
+
+    Subclasses may define the following class attributes:
+    - mode   - 't' or 'b' for text or binary files, respectively
+    - fmt    - a human-readable name for the file format.
     """
 
-    def __init__(self, source, mode="t", fmt=None):
+    mode = "t"  # assume text files by default
+    fmt = None  # to be defined in the subclass
+
+    def __init__(self, source):
         """Create an AlignmentIterator object.
 
         Arguments:
@@ -38,20 +45,20 @@ class AlignmentIterator(ABC):
         """
         self.source = source
         try:
-            self._stream = open(source, "r" + mode)
+            self._stream = open(source, "r" + self.mode)
         except TypeError:  # not a path, assume we received a stream
-            if mode == "t":
+            if self.mode == "t":
                 if source.read(0) != "":
                     raise StreamModeError(
-                        "%s files must be opened in text mode." % fmt
+                        f"{self.fmt} files must be opened in text mode."
                     ) from None
-            elif mode == "b":
+            elif self.mode == "b":
                 if source.read(0) != b"":
                     raise StreamModeError(
-                        "%s files must be opened in binary mode." % fmt
+                        f"{self.fmt} files must be opened in binary mode."
                     ) from None
             else:
-                raise ValueError("Unknown mode '%s'" % mode) from None
+                raise ValueError(f"Unknown mode '{self.mode}'") from None
             self._stream = source
         try:
             self._read_header(self._stream)
@@ -85,6 +92,7 @@ class AlignmentIterator(ABC):
 
     def _read_header(self, stream):
         """Read the file header and store it in metadata."""
+        return
 
     @abstractmethod
     def _read_next_alignment(self, stream):
@@ -100,10 +108,10 @@ class AlignmentIterator(ABC):
         del self._stream
 
 
-class AlignmentWriter:
+class AlignmentWriter(ABC):
     """Base class for alignment writers. This class should be subclassed.
 
-    It is intended for sequential file formats with an (optional)
+    It is intended for alignment file formats with an (optional)
     header, one or more alignments, and an (optional) footer.
 
     The user may call the write_file() method to write a complete
@@ -113,15 +121,29 @@ class AlignmentWriter:
     by multiple calls to format_alignment() and/or write_alignments(),
     followed finally by write_footer().
 
-    Note that write_header() cannot require any assumptions about
-    the number of alignments.
+    Subclasses may define the following class attributes:
+    - mode   - 'w' or 'wb' for text or binary files, respectively
+    - fmt    - a human-readable name for the file format.
     """
 
-    def __init__(self, target, mode="w"):
-        """Create the writer object."""
+    mode = "w"  # assume text files by default
+    fmt = None  # to be defined in the subclass
+
+    def __init__(self, target):
+        """Create the writer object.
+
+        Arguments:
+        - target - output file stream, or path to output file
+
+        This method MAY be overridden by any subclass.
+
+        Note when subclassing:
+        - there should be a single non-optional argument, the target.
+        - you can add additional optional arguments.
+        """
         if target is not None:
             # target is None if we only use the writer to format strings.
-            if mode == "w":
+            if self.mode == "w":
                 try:
                     target.write("")
                 except TypeError:
@@ -129,10 +151,10 @@ class AlignmentWriter:
                     raise StreamModeError("File must be opened in text mode.") from None
                 except AttributeError:
                     # target is a path
-                    stream = open(target, mode)
+                    stream = open(target, self.mode)
                 else:
                     stream = target
-            elif mode == "wb":
+            elif self.mode == "wb":
                 try:
                     target.write(b"")
                 except TypeError:
@@ -142,18 +164,18 @@ class AlignmentWriter:
                     ) from None
                 except AttributeError:
                     # target is a path
-                    stream = open(target, mode)
+                    stream = open(target, self.mode)
                 else:
                     stream = target
             else:
-                raise RuntimeError("Unknown mode '%s'" % mode)
+                raise RuntimeError("Unknown mode '%s'" % self.mode)
             self.stream = stream
 
         self._target = target
 
     def write_header(self, alignments):
         """Write the file header to the output file."""
-        pass
+        return
         ##################################################
         # You MUST implement this method in the subclass #
         # if the file format defines a file header.      #
@@ -161,7 +183,7 @@ class AlignmentWriter:
 
     def write_footer(self):
         """Write the file footer to the output file."""
-        pass
+        return
         ##################################################
         # You MUST implement this method in the subclass #
         # if the file format defines a file footer.      #
@@ -177,7 +199,23 @@ class AlignmentWriter:
         # You MUST implement this method in the subclass. #
         ###################################################
 
-    def write_alignments(self, alignments):
+    def write_single_alignment(self, alignments):
+        """Write a single alignment to the output file, and return 1.
+
+        alignments - A list or iterator returning Alignment objects
+        """
+        count = 0
+        for alignment in alignments:
+            if count == 1:
+                raise ValueError(
+                    f"Alignment files in the {self.fmt} format can contain a single alignment only."
+                )
+            line = self.format_alignment(alignment)
+            self.stream.write(line)
+            count += 1
+        return count
+
+    def write_multiple_alignments(self, alignments):
         """Write alignments to the output file, and return the number of alignments.
 
         alignments - A list or iterator returning Alignment objects
@@ -188,6 +226,8 @@ class AlignmentWriter:
             self.stream.write(line)
             count += 1
         return count
+
+    write_alignments = write_multiple_alignments
 
     def write_file(self, alignments):
         """Write a file with the alignments, and return the number of alignments.

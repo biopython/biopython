@@ -38,6 +38,8 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the Exonerate cigar and vulgar file format."""
 
+    fmt = "Exonerate"
+
     def __init__(self, target, fmt="vulgar"):
         """Create an AlignmentWriter object.
 
@@ -50,7 +52,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                        Default value is 'vulgar'.
 
         """
-        super().__init__(target, mode="w")
+        super().__init__(target)
         if fmt == "vulgar":
             self.format_alignment = self._format_alignment_vulgar
         elif fmt == "cigar":
@@ -62,8 +64,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
     def write_header(self, alignments):
         """Write the header."""
-        commandline = alignments.metadata.get("Command line", "")
-        hostname = alignments.metadata.get("Hostname", "")
+        try:
+            metadata = alignments.metadata
+        except AttributeError:
+            commandline = ""
+            hostname = ""
+        else:
+            commandline = metadata.get("Command line", "")
+            hostname = metadata.get("Hostname", "")
         self.stream.write(f"Command line: [{commandline}]\n")
         self.stream.write(f"Hostname: [{hostname}]\n")
 
@@ -113,7 +121,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         elif query_start > query_end:
             query_strand = "-"
             steps[1, :] = -steps[1, :]
-        score = alignment.score
+        score = format(alignment.score, "g")
         words = [
             "cigar:",
             query_id,
@@ -124,7 +132,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             str(target_start),
             str(target_end),
             target_strand,
-            str(score),
+            score,
         ]
         try:
             operations = alignment.operations
@@ -305,7 +313,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         elif query_start > query_end:
             query_strand = "-"
             steps[1, :] = -steps[1, :]
-        score = alignment.score
+        score = format(alignment.score, "g")
         words = [
             "vulgar:",
             query_id,
@@ -417,14 +425,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     of matches and mismatches are stored as attributes of each alignment.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="Exonerate")
+    fmt = "Exonerate"
 
     def _read_header(self, stream):
         self.metadata = {}
@@ -454,11 +455,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_start = int(words[5])
         target_end = int(words[6])
         target_strand = words[7]
-        score = int(words[8])
+        score = float(words[8])
         target_seq = Seq(None, length=target_end)
         query_seq = Seq(None, length=query_end)
-        target = SeqRecord(target_seq, id=target_id)
-        query = SeqRecord(query_seq, id=query_id)
+        target = SeqRecord(target_seq, id=target_id, description="")
+        query = SeqRecord(query_seq, id=query_id, description="")
         qs = 0
         ts = 0
         n = (len(words) - 8) // 2
@@ -518,11 +519,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_start = int(words[5])
         target_end = int(words[6])
         target_strand = words[7]
-        score = int(words[8])
+        score = float(words[8])
         target_seq = Seq(None, length=target_end)
         query_seq = Seq(None, length=query_end)
-        target = SeqRecord(target_seq, id=target_id)
-        query = SeqRecord(query_seq, id=query_id)
+        target = SeqRecord(target_seq, id=target_id, description="")
+        query = SeqRecord(query_seq, id=query_id, description="")
         ops = words[9::3]
         qs = 0
         ts = 0
