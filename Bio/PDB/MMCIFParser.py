@@ -215,7 +215,6 @@ class MMCIFParser:
             except ValueError:
                 serial = atom_serial_list[i]
                 warnings.warn(
-                    "PDBConstructionWarning: "
                     "Some atom serial numbers are not numerical",
                     PDBConstructionWarning,
                 )
@@ -239,7 +238,6 @@ class MMCIFParser:
                 except (KeyError, IndexError):
                     msg = f"Non-existing residue ID in chain '{chainid}'"
                 warnings.warn(
-                    "PDBConstructionWarning: ",
                     msg,
                     PDBConstructionWarning,
                 )
@@ -530,7 +528,6 @@ class FastMMCIFParser:
                 except (KeyError, IndexError):
                     msg = f"Non-existing residue ID in chain '{chainid}'"
                 warnings.warn(
-                    "PDBConstructionWarning: ",
                     msg,
                     PDBConstructionWarning,
                 )
