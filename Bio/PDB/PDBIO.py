@@ -320,11 +320,9 @@ class PDBIO(StructureIO):
         """
         if isinstance(file, str):
             fhandle = open(file, "w")
-            should_close = True
         else:
             # filehandle, I hope :-)
             fhandle = file
-            should_close = False
 
         get_atom_line = self._get_atom_line
 
@@ -410,5 +408,5 @@ class PDBIO(StructureIO):
         if write_end:
             fhandle.write("END   \n")
 
-        if should_close:
+        if isinstance(file, str):
             fhandle.close()
