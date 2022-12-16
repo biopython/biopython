@@ -74,6 +74,22 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "799999999999999999999999999999999999999999999999999999999999999999999999999999999999999999998899999999999999999999999999999999999999999999999999999999999999999999999999986",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2uvo_A            0 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQC
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2UVO:A|PD         0 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQC
+
+2uvo_A           60 CSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGG
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2UVO:A|PD        60 CSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGG
+
+2uvo_A          120 CQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQSGGCDG 171
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||| 171
+2UVO:A|PD       120 CQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQSGGCDG 171
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -170,6 +186,22 @@ numpy.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
             alignment.target.letter_annotations["Confidence"],
             " 699999999999999999999999999999999999888888899873567889999999999999999999999988888888999744568899999999999999999999999999998899987356788999999999999999999999999876 ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2wga              1 GXGCXGXXMYCSTNNCCXXWESCGSGGYXCGEGCNLGACQXGXPCXX--PGSVCTNLHCC
+                  0 ..|..|..|.|..|.||.....||.||..||.||..|||.....|..--.|..|||..||
+2UVO:A|PD         1 RCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCC
+
+2wga             59 ARGGHCGMGSGYCGXGCXGGACXADIXCGXG--XXXCPTDSCCGGWGXCGNGXEFCGXGC
+                 60 ...|.||.|..|||.||.||.|.|||.||..--...||...||..||.||.|.||||.||
+2UVO:A|PD        61 SQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGC
+
+2wga            117 XVGGCAAXSPCGXP--GSXCTLDKCCSGXGACXSGSGGCGXGCXAGGC 163
+                120 ..|.|....|||..--|..||...|||..|.|..|.|.||.||..||| 168
+2UVO:A|PD       121 QSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQSGGC 169
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -265,6 +297,22 @@ numpy.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
             alignment.target.letter_annotations["Confidence"],
             " 389999999999999999999999999999999999752346788765567888999999999999999999999986422467877554567899999999999999999999999973     ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1ulk_A            1 PVCGVRASGRVCPDGYCCSQWGYCGTTEEYCGKGCQSQ-C-DYNRCGKEFGGKECHDELC
+                  0 ..||...|...||...||||.||||....|||||||..-|-...|||...||..|....|
+2UVO:A|PD         0 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQC
+
+1ulk_A           59 CSQYGWCGNSDGHCGEGCQSQ-C-SYWRCGKDFGGRLCTEDMCCSQYGWCGLTDDHCEDG
+                 60 |||||.||.....||.|||..-|-....||...||.||....||||.|.|||....|..|
+2UVO:A|PD        60 CSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGG
+
+1ulk_A          117 CQSQ 121
+                120 |||. 124
+2UVO:A|PD       120 CQSG 124
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -352,6 +400,22 @@ numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             " 468888778999999999999999999999999998642345777654456788899999999999999999999997422467787555668999999999999999999999999984     ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1ulk_A            1 PVCGVRASGRVCPDGYCCSQWGYCGTTEEYCGKGCQSQ-C-DYNRCGKEFGGKECHDELC
+                  0 ..||..|.|..|....||||.||||...||||.|||..-|-....||...|||.|...||
+2UVO:A|PD        43 KRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLC
+
+1ulk_A           59 CSQYGWCGNSDGHCGEGCQSQ-C-SYWRCGKDFGGRLCTEDMCCSQYGWCGLTDDHCEDG
+                 60 |||.|.||.....||.||||.-|-....||||.|||.||...|||..|.||.....|..|
+2UVO:A|PD       103 CSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAG
+
+1ulk_A          117 CQSQ 121
+                120 |||. 124
+2UVO:A|PD       163 CQSG 167
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -441,6 +505,22 @@ numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
             alignment.target.letter_annotations["Confidence"],
             " 57776556789999999999999999999999999888888899998654567889999999999999999999999988888889999754456789999999999999999999999998755                                             ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2uvo_A            1 RCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCC
+                  0 |||.|.....|.||.|||||||||.|..|||.|||.|.|.....|||||||..|.||.||
+2UVO:A|PD        44 RCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCC
+
+2uvo_A           61 SQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGC
+                 60 ||.|.||.|.|.||.|||.|.|..|..||..|||..|.||.|||.||.||.|...||.||
+2UVO:A|PD       104 SQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGC
+
+2uvo_A          121 QSGAC 126
+                120 |||.| 125
+2UVO:A|PD       164 QSGGC 169
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -524,6 +604,22 @@ numpy.array([['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "  cCCCcccccCCCCceECCcceECCCCccccCccccCcccccceeccCCCcCCCCcccCCCceeCCCCcccCCCccccccccccccCcccccCCCCCccCCCCCccCccccccCCccccccc                                         ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+2wga              2 XGCXGXXMYCSTNNCCXXWESCGSGGYXCGEGCNLGACQXGXPCXX--PGSVCTNLHCCA
+                  0 .|.......|..|.||.....||.|...||.||..|.|.....|..--.|..|.|..||.
+2UVO:A|PD        45 CGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCS
+
+2wga             60 RGGHCGMGSGYCGXGCXGGACXADIXCGXG--XXXCPTDSCCGGWGXCGNGXEFCGXGCX
+                 60 ..|.||.||..||.||..|||..|..||..--...|....||..||.||.|...||.||.
+2UVO:A|PD       105 QWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQ
+
+2wga            118 VGGCA 123
+                120 .|||. 125
+2UVO:A|PD       165 SGGCD 170
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -613,6 +709,18 @@ numpy.array([['X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T', 'N',
             alignment.target.letter_annotations["Confidence"],
             " 467776667789999999999999999999999998642356788765567788999999999999999999999986   ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1uha_A            1 PECGERASGKRCPNGKCCSQWGYCGTTDNYCGQGCQSQ--CDYWRCGRDFGGRLCEEDMC
+                  0 ..||..|.|..|.|..||||.||||....|||.|||..--.....||...||.||....|
+2UVO:A|PD        43 KRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLC
+
+1uha_A           59 CSKYGWCGYSDDHCEDGCQS  79
+                 60 ||..|.||.....|..||||  80
+2UVO:A|PD       103 CSQWGFCGLGSEFCGGGCQS 123
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -694,6 +802,18 @@ numpy.array([['P', 'E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "689999988999999999999999999999999999764347889986556788999999999999999999998698753        ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1en2_A            0 ERCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENK-CWSGERSDHRCGAAVGNPPCG
+                  0 ||||.||....||...|||..|.||....|||..|.|.-||----...|||...|...|.
+2UVO:A|PD         0 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACW----TSKRCGSQAGGATCT
+
+1en2_A           59 QDRCCSVHGWCGGGNDYCSGGNCQYRC 86
+                 60 ...|||..|.||.|..||..|-||... 87
+2UVO:A|PD        56 NNQCCSQYGYCGFGAEYCGAG-CQGGP 82
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -777,6 +897,18 @@ numpy.array([['E', 'R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P',
             alignment.target.letter_annotations["Confidence"],
             " 5777666678999999999999999999999999875434788887654567889999999999999999999979974         ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1en2_A            1 RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENK-CWSGERSDHRCGAAVGNPPCGQ
+                  0 |||||.||.||....|||..|.||....|||..|...-|.----.|..||...|...|..
+2UVO:A|PD        44 RCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCR----ADIKCGSQAGGKLCPN
+
+1en2_A           60 DRCCSVHGWCGGGNDYCSGGNCQYR  85
+                 60 ..|||..|.||.|...|.||-||..  85
+2UVO:A|PD       100 NLCCSQWGFCGLGSEFCGGG-CQSG 124
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -859,6 +991,18 @@ numpy.array([['R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P', 'G',
             alignment.target.letter_annotations["Confidence"],
             "  466654457789999999999999999999999997423467887655678899999999999999999999999974  ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1uha_A            2 ECGERASGKRCPNGKCCSQWGYCGTTDNYCGQGCQSQ-C-DYWRCGRDFGGRLCEEDMCC
+                  0 .||..|.||.|||..||||||.||.....||.||||.-|-....||.|.|||.|....||
+2UVO:A|PD        87 KCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCC
+
+1uha_A           60 SKYGWCGYSDDHCEDGCQSQ  80
+                 60 ||.|.||.....|..||||.  80
+2UVO:A|PD       147 SKWGSCGIGPGYCGAGCQSG 167
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -933,6 +1077,14 @@ numpy.array([['E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P', 'N',
             alignment.target.letter_annotations["Confidence"],
             " 3555444567889999999999999999998679874     ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1wkx_A            1 QCGRQAGGKLCPDNLCCSQWGWCGSTDEYCSPDHNCQSN  40
+                  0 .||.||||||||.||||||||.||...|.|..--.|||.  39
+2UVO:A|PD        87 KCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGG--GCQSG 124
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -999,6 +1151,14 @@ numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'D',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "6899567789999999999999999999999849864    ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1p9g_A            0 ETCAS-RCPRPCNAGLCCSIYGYCGSGAAYCGAGNCRCQ 38
+                  0 |.|..-.....|...||||.|||||.|..|||.-.|... 39
+2UVO:A|PD         0 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGK-GCQNG 38
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -1067,6 +1227,14 @@ numpy.array([['E', 'T', 'C', 'A', 'S', '-', 'R', 'C', 'P', 'R', 'P', 'C', 'N',
             alignment.target.letter_annotations["Confidence"],
             " 355333567889999999999999999999849874    ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1p9g_A            1 TCAS-RCPRPCNAGLCCSIYGYCGSGAAYCGAGNCRCQ  38
+                  0 .|.|-.....|...||||..|.||.|...||.|-|...  38
+2UVO:A|PD        87 KCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGG-CQSG 124
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1133,6 +1301,14 @@ numpy.array([['T', 'C', 'A', 'S', '-', 'R', 'C', 'P', 'R', 'P', 'C', 'N', 'A',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "57999988889999999999999999999999679864     ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1wkx_A            0 EQCGRQAGGKLCPDNLCCSQWGWCGSTDEYCSPDHNCQSN 40
+                  0 |.||.|.....||.||||||.|.||....||..--.||.. 40
+2UVO:A|PD         0 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGK--GCQNG 38
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -1202,6 +1378,14 @@ numpy.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
             alignment.target.letter_annotations["Confidence"],
             "   6888887789999999999999999999999999864     ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+4mpi_A            3 QCGRQAGGALCPGGLCCSQYGWCANTPEYCGSGCQSQ 40
+                  0 .||.|.....||..|||||||.|.....|||.|||.. 37
+2UVO:A|PD         1 RCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNG 38
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1268,6 +1452,14 @@ numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P', 'G',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "  4555444567889999999999999999999868864     ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+2lb7_A            2 RCGDQARGAKCPNCLCCGKYGFCGSGDAYCGAGSCQSQ  40
+                  0 .||.||.|..|||.|||...||||.|...||.|-|||.  38
+2UVO:A|PD        87 KCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGG-CQSG 124
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -1336,6 +1528,14 @@ numpy.array([['R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P', 'N',
             alignment.target.letter_annotations["Confidence"],
             "  45665544567889999999999999999999999873     ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+4mpi_A            2 EQCGRQAGGALCPGGLCCSQYGWCANTPEYCGSGCQSQ  40
+                  0 ..||.||||.|||..|||||.|.|....|.||.||||.  38
+2UVO:A|PD        86 IKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSG 124
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1403,6 +1603,14 @@ numpy.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P',
             alignment.target.letter_annotations["Confidence"],
             " 47899987789999999999999999999999868864     ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2lb7_A            1 QRCGDQARGAKCPNCLCCGKYGFCGSGDAYCGAGSCQSQ 40
+                  0 .|||.|.....|||.|||..||.||.|..|||.|-||.. 39
+2UVO:A|PD         0 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKG-CQNG 38
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1468,6 +1676,14 @@ numpy.array([['Q', 'R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P',
             alignment.target.letter_annotations["Confidence"],
             "  45678875436899999999999999999986 ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2kus_A            2 PNGQCGPGWG--GCRGGLCCSQYGYCGSGPKYCA 34
+                  0 ....||...|--.|....|||||||||.|..||. 34
+2UVO:A|PD        41 TSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYCG 75
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1532,6 +1748,14 @@ numpy.array([['P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G',
             alignment.target.letter_annotations["Confidence"],
             "  45677775436889999999999999999986 ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2kus_A            2 PNGQCGPGWG--GCRGGLCCSQYGYCGSGPKYCA  34
+                  0 ....||...|--.|...|||||.|.||.|...|.  34
+2UVO:A|PD        84 ADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCG 118
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1594,6 +1818,14 @@ numpy.array([['P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G',
             alignment.target.letter_annotations["Confidence"],
             "     3468899999999999999999963",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1mmc_A            5 RGRCPSGMCCSQFGYCGKGPKYCGR  30
+                  0 ...||...||||.|.||.|...||.  25
+2UVO:A|PD        94 GKLCPNNLCCSQWGFCGLGSEFCGG 119
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1654,6 +1886,14 @@ numpy.array([['R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C', 'S', 'Q', 'F',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "   345689999999999999999999973",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1mmc_A            3 CVRGRCPSGMCCSQFGYCGKGPKYCGR 30
+                  0 .....||...||||.||||.|..|||. 27
+2UVO:A|PD         6 GSNMECPNNLCCSQYGYCGMGGDYCGK 33
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -1717,6 +1957,14 @@ numpy.array([['C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C', 'S',
             alignment.target.letter_annotations["Confidence"],
             "       36888999999999999999985",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2n1s_A            7 GRCSGGLCCSKYGYCGSGPAYCG  30
+                  0 ..|...||||..|.||.|...||  23
+2UVO:A|PD        95 KLCPNNLCCSQWGFCGLGSEFCG 118
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1776,6 +2024,14 @@ numpy.array([['G', 'R', 'C', 'S', 'G', 'G', 'L', 'C', 'C', 'S', 'K', 'Y', 'G',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "   566258999999999999999999985",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+2n1s_A            3 QCY----RGRCSGGLCCSKYGYCGSGPAYCG 30
+                  0 .|.----...|...||||.|||||.|..||| 31
+2UVO:A|PD         1 RCGEQGSNMECPNNLCCSQYGYCGMGGDYCG 32
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -1842,6 +2098,14 @@ numpy.array([['Q', 'C', 'Y', '-', '-', '-', '-', 'R', 'G', 'R', 'C', 'S', 'G',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             " 35666555578999999999999999999999999975                                                                                                                                                                                                                                                                              ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+2dkv_A            1 EQCGAQAGGARCPNCLCCSRWGWCGTTSDFCGDGCQSQ  39
+                  0 ..||.||||..|||.||||.||.||..|.|||.||||.  38
+2UVO:A|PD        86 IKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSG 124
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -1910,6 +2174,14 @@ numpy.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
             alignment.target.letter_annotations["Confidence"],
             " 46777666678999999999999999999999999865                                                                                                                                                                                                                                                                              ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2dkv_A            1 EQCGAQAGGARCPNCLCCSRWGWCGTTSDFCGDGCQSQ 39
+                  0 ..||.|||||.|.|..|||..|.||.....||.|||.. 38
+2UVO:A|PD        43 KRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGG 81
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1972,6 +2244,14 @@ numpy.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "                                               6899999999999999973565                                                                                                                                                                                           ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+4zxm_A           47 DHCCSEWGWCGRETSHCTCSSCV  70
+                  0 ..|||.||.||.....|.-..|.  23
+2UVO:A|PD       143 NYCCSKWGSCGIGPGYCG-AGCQ 165
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -2040,6 +2320,22 @@ numpy.array([['D', 'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "          456667777777777777777665554434333344332235666778877777777777776665544333333343323456667788888888777777776665544433334443234566677888777787777777665543    ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1wga             10 XCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXX--XXXCXXXXCCXXXXXCXXX
+                  0 .|....||.....|......|...|....|.....|...--...|....||.....|...
+2UVO:A|PD        10 ECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCGFG
+
+1wga             68 XXXCXXXCXXXXCXXXXXCXXX--XXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXX
+                 60 ...|...|....|.....|...--...|....||.....|......|...|....|....
+2UVO:A|PD        70 AEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDK
+
+1wga            126 XCXXX--XXXCXXXXCCXXXXXCXXXXXXCXXXCXX 160
+                120 .|...--...|....||.....|......|...|.. 156
+2UVO:A|PD       130 PCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQS 166
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -2126,6 +2422,14 @@ numpy.array([['X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X',
             alignment.target.letter_annotations["Confidence"],
             "                          57765423467657899999999999999974576                                                                                                                                                                                                   ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+4zxm_A           26 RCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCTCSSCV 70
+                  0 |||...-----...||..---..|||..|.||.....|..-.|. 44
+2UVO:A|PD         1 RCGEQG-----SNMECPN---NLCCSQYGYCGMGGDYCGK-GCQ 36
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2189,6 +2493,14 @@ numpy.array([['R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N', 'P',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "                             368999999999999999835553                                                                                                                                                                                       ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+4z8i_A           29 VDHCCSEWGWCGRETSHCTCSSCVD  54
+                  0 ...|||.||.||.....|..-.|..  25
+2UVO:A|PD        99 NNLCCSQWGFCGLGSEFCGG-GCQS 123
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -2254,6 +2566,14 @@ numpy.array([['V', 'D', 'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "        3677664334565378999999999999999845654                                                                                                                                                                                               ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+4z8i_A            8 GRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCTCSSCVD 54
+                  0 .|||...-----...||..---..|||..|.||.....|..-.|.. 46
+2UVO:A|PD         0 ERCGEQG-----SNMECPN---NLCCSQYGYCGMGGDYCGK-GCQN 37
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -2326,6 +2646,18 @@ numpy.array([['G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "          3445566666666666665665555433332233333212346666777777777777666666555443322233332223344455555555555555544433                                                ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1wga             10 XCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXX--XXXCXXXXCCXXXXXCXXX
+                  0 .|....||.....|......|...|....|.....|...--...|....||.....|...
+2UVO:A|PD        53 TCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLG
+
+1wga             68 XXXCXXXCXXXXCXXXXXCXXX--XXXCXXXXCCXXXXXCXXXXXXCXXX 116
+                 60 ...|...|....|.....|...--...|....||.....|......|... 110
+2UVO:A|PD       113 SEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAG 163
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -2437,6 +2769,22 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.letter_annotations["Confidence"],
             "799999999999999999999999999999999999999999999999999999999999999999999999999999999999999999998899999999999999999999999999999999999999999999999999999999999999999999999999986",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2uvo_A            0 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQC
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2UVO:A|PD         0 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQC
+
+2uvo_A           60 CSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGG
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2UVO:A|PD        60 CSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGG
+
+2uvo_A          120 CQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQSGGCDG 171
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||| 171
+2UVO:A|PD       120 CQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQSGGCDG 171
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2533,6 +2881,22 @@ numpy.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
             alignment.target.letter_annotations["Confidence"],
             " 588899999999999999999999999999999999999999999985789999999999999999999999999999999999999855679999999999999999999999999999999999988367899999999999999999999999999876 ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2wga              1 GXGCXGXXMYCSTNNCCXXWESCGSGGYXCGEGCNLGACQXGXPCXX--PGSVCTNLHCC
+                  0 ..|..|..|.|..|.||.....||.||..||.||..|||.....|..--.|..|||..||
+2UVO:A|PD         1 RCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCC
+
+2wga             59 ARGGHCGMGSGYCGXGCXGGACXADIXCGXG--XXXCPTDSCCGGWGXCGNGXEFCGXGC
+                 60 ...|.||.|..|||.||.||.|.|||.||..--...||...||..||.||.|.||||.||
+2UVO:A|PD        61 SQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGC
+
+2wga            117 XVGGCAAXSPCGX--PGSXCTLDKCCSGXGACXSGSGGCGXGCXAGGC 163
+                120 ..|.|....|||.--.|..||...|||..|.|..|.|.||.||..||| 168
+2UVO:A|PD       121 QSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQSGGC 169
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2628,6 +2992,22 @@ numpy.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
             alignment.target.letter_annotations["Confidence"],
             "489999999999999999999999999999999999999999999999998899999999999999999999999999999999999999988889999999999999999999999999998644                                             ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2uvo_A            0 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQC
+                  0 .|||.|.....|.||.|||||||||.|..|||.|||.|.|.....|||||||..|.||.|
+2UVO:A|PD        43 KRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLC
+
+2uvo_A           60 CSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGG
+                 60 |||.|.||.|.|.||.|||.|.|..|..||..|||..|.||.|||.||.||.|...||.|
+2UVO:A|PD       103 CSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAG
+
+2uvo_A          120 CQSGAC 126
+                120 ||||.| 126
+2UVO:A|PD       163 CQSGGC 169
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2715,6 +3095,22 @@ numpy.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             " 699999999999999999999999999999999999764355788888889999999999999999999999999998633578999888999999999999999999999999999984     ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1ulk_A            1 PVCGVRASGRVCPDGYCCSQWGYCGTTEEYCGKGCQSQ-CD-YNRCGKEFGGKECHDELC
+                  0 ..||..|.|..|....||||.||||...||||.|||..-|.-...||...|||.|...||
+2UVO:A|PD        43 KRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLC
+
+1ulk_A           59 CSQYGWCGNSDGHCGEGCQSQ-C-SYWRCGKDFGGRLCTEDMCCSQYGWCGLTDDHCEDG
+                 60 |||.|.||.....||.||||.-|-....||||.|||.||...|||..|.||.....|..|
+2UVO:A|PD       103 CSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAG
+
+1ulk_A          117 CQSQ 121
+                120 |||. 124
+2UVO:A|PD       163 CQSG 167
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -2804,6 +3200,22 @@ numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
             alignment.target.letter_annotations["Confidence"],
             " 48999999999999999999999999999999999976444589988889999999999999999999999999999753356888888888999999999999999999999999997      ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1ulk_A            1 PVCGVRASGRVCPDGYCCSQWGYCGTTEEYCGKGCQSQ-CD-YNRCGKEFGGKECHDELC
+                  0 ..||...|...||...||||.||||....|||||||..-|.-..|||...||..|....|
+2UVO:A|PD         0 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQC
+
+1ulk_A           59 CSQYGWCGNSDGHCGEGCQSQ-CS-YWRCGKDFGGRLCTEDMCCSQYGWCGLTDDHCEDG
+                 60 |||||.||.....||.|||..-|.-...||...||.||....||||.|.|||....|..|
+2UVO:A|PD        60 CSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGG
+
+1ulk_A          117 CQS 120
+                120 ||| 123
+2UVO:A|PD       120 CQS 123
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2891,6 +3303,22 @@ numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             " 4889999999999999999999999999999999999999999999857889999999999999999999999999999999999998667899999999999999999999999998654                                          ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+2wga              1 GXGCXGXXMYCSTNNCCXXWESCGSGGYXCGEGCNLGACQXGXPCXX--PGSVCTNLHCC
+                  0 ..|.......|..|.||.....||.|...||.||..|.|.....|..--.|..|.|..||
+2UVO:A|PD        44 RCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCC
+
+2wga             59 ARGGHCGMGSGYCGXGCXGGACXADIXCGXG--XXXCPTDSCCGGWGXCGNGXEFCGXGC
+                 60 ...|.||.||..||.||..|||..|..||..--...|....||..||.||.|...||.||
+2UVO:A|PD       104 SQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGC
+
+2wga            117 XVGGC 122
+                120 ..||| 125
+2UVO:A|PD       164 QSGGC 169
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -2980,6 +3408,18 @@ numpy.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
             alignment.target.letter_annotations["Confidence"],
             " 5899999999999999999999999999999999996534678998888999999999999999999999999999984  ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1uha_A            1 PECGERASGKRCPNGKCCSQWGYCGTTDNYCGQGCQSQ-C-DYWRCGRDFGGRLCEEDMC
+                  0 ..||..|.|..|.|..||||.||||....|||.|||..-|-....||...||.||....|
+2UVO:A|PD        43 KRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLC
+
+1uha_A           59 CSKYGWCGYSDDHCEDGCQSQ  80
+                 60 ||..|.||.....|..||||.  81
+2UVO:A|PD       103 CSQWGFCGLGSEFCGGGCQSG 124
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3061,6 +3501,18 @@ numpy.array([['P', 'E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             " 7999999999999999999999999999999999976665889999888899999999999999999999999989985         ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1en2_A            1 RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENK-CWSGERSDHRCGAAVGNPPCGQ
+                  0 |||||.||.||....|||..|.||....|||..|...-|..----|..||...|...|..
+2UVO:A|PD        44 RCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRA----DIKCGSQAGGKLCPN
+
+1en2_A           60 DRCCSVHGWCGGGNDYCSGGNCQYR  85
+                 60 ..|||..|.||.|...|.||-||..  85
+2UVO:A|PD       100 NLCCSQWGFCGLGSEFCGGG-CQSG 124
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -3144,6 +3596,18 @@ numpy.array([['R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P', 'G',
             alignment.target.letter_annotations["Confidence"],
             "68999999999999999999999999999999999986764678998888889999999999999999999999988863         ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1en2_A            0 ERCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENK-CWSGERSDHRCGAAVGNPPCG
+                  0 ||||.||....||...|||..|.||....|||..|.|.-||.----..|||...|...|.
+2UVO:A|PD         0 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWT----SKRCGSQAGGATCT
+
+1en2_A           59 QDRCCSVHGWCGGGNDYCSGGNCQYR 85
+                 60 ...|||..|.||.|..||..|-||.. 86
+2UVO:A|PD        56 NNQCCSQYGYCGFGAEYCGAG-CQGG 81
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3226,6 +3690,18 @@ numpy.array([['E', 'R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P',
             alignment.target.letter_annotations["Confidence"],
             "  588999999999999999999999999999999998624678999889999999999999999999999999999984  ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1uha_A            2 ECGERASGKRCPNGKCCSQWGYCGTTDNYCGQGCQSQ--CDYWRCGRDFGGRLCEEDMCC
+                  0 .||..|.||.|||..||||||.||.....||.||||.--.....||.|.|||.|....||
+2UVO:A|PD        87 KCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCC
+
+1uha_A           60 SKYGWCGYSDDHCEDGCQSQ  80
+                 60 ||.|.||.....|..||||.  80
+2UVO:A|PD       147 SKWGSCGIGPGYCGAGCQSG 167
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3300,6 +3776,14 @@ numpy.array([['E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P', 'N',
             alignment.target.letter_annotations["Confidence"],
             " 45688888889999999999999999999999999998554   ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+4mpi_A            1 MEQCGRQAGGALCPGGLCCSQYGWCANTPEYCGSGCQSQ-CD  42
+                  0 ...||.||||.|||..|||||.|.|....|.||.||||.-|.  42
+2UVO:A|PD        85 DIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACS 127
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3368,6 +3852,14 @@ numpy.array([['M', 'E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C',
             alignment.target.letter_annotations["Confidence"],
             " 4788888899999999999999999999999689985     ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1wkx_A            1 QCGRQAGGKLCPDNLCCSQWGWCGSTDEYCSPDHNCQSN  40
+                  0 .||.||||||||.||||||||.||...|.|..--.|||.  39
+2UVO:A|PD        87 KCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGG--GCQSG 124
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3434,6 +3926,14 @@ numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'D',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "   68888888999999999999999999999999999756543 ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+4mpi_A            3 QCGRQAGGALCPGGLCCSQYGWCANTPEYCGSGCQSQ-CDGG 44
+                  0 .||.|.....||..|||||||.|.....|||.|||..-|... 42
+2UVO:A|PD         1 RCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTS 43
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -3503,6 +4003,14 @@ numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P', 'G',
             alignment.target.letter_annotations["Confidence"],
             "  5788888899999999999999999999999879976     ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2lb7_A            2 RCGDQARGAKCPNCLCCGKYGFCGSGDAYCGAGSCQSQ  40
+                  0 .||.||.|..|||.|||...||||.|...||.|-|||.  38
+2UVO:A|PD        87 KCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGG-CQSG 124
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3570,6 +4078,14 @@ numpy.array([['R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P', 'N',
             alignment.target.letter_annotations["Confidence"],
             "6899578889999999999999999999999959976    ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1p9g_A            0 ETCA-SRCPRPCNAGLCCSIYGYCGSGAAYCGAGNCRCQ 38
+                  0 |.|.-......|...||||.|||||.|..|||.|-|... 39
+2UVO:A|PD         0 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKG-CQNG 38
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3632,6 +4148,14 @@ numpy.array([['E', 'T', 'C', 'A', '-', 'S', 'R', 'C', 'P', 'R', 'P', 'C', 'N',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "  788889999999999999999999996 ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1mmc_A            2 ECVRGRCPSGMCCSQFGYCGKGPKYCG  29
+                  0 ......||...||||.|.||.|...||  27
+2UVO:A|PD        91 QAGGKLCPNNLCCSQWGFCGLGSEFCG 118
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -3699,6 +4223,14 @@ numpy.array([['E', 'C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C',
             alignment.target.letter_annotations["Confidence"],
             " 477477889999999999999999999999859986    ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1p9g_A            1 TCA-SRCPRPCNAGLCCSIYGYCGSGAAYCGAGNCRCQ  38
+                  0 .|.-......|...||||..|.||.|...||.|-|...  38
+2UVO:A|PD        87 KCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGG-CQSG 124
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3765,6 +4297,14 @@ numpy.array([['T', 'C', 'A', '-', 'S', 'R', 'C', 'P', 'R', 'P', 'C', 'N', 'A',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "58999988899999999999999999999999778864     ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1wkx_A            0 EQCGRQAGGKLCPDNLCCSQWGWCGSTDEYCSPDHNCQSN 40
+                  0 |.||.|.....||.||||||.|.||....||..--.||.. 40
+2UVO:A|PD         0 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGK--GCQNG 38
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -3834,6 +4374,14 @@ numpy.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
             alignment.target.letter_annotations["Confidence"],
             " 47888888889999999999999999999999878865     ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2lb7_A            1 QRCGDQARGAKCPNCLCCGKYGFCGSGDAYCGAGSCQSQ 40
+                  0 .|||.|.....|||.|||..||.||.|..|||.|-||.. 39
+2UVO:A|PD         0 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKG-CQNG 38
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3896,6 +4444,14 @@ numpy.array([['Q', 'R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "    34568999999999999999999985",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+2n1s_A            4 CYRGRCSGGLCCSKYGYCGSGPAYCG  30
+                  0 .....|...||||..|.||.|...||  26
+2UVO:A|PD        92 AGGKLCPNNLCCSQWGFCGLGSEFCG 118
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -3961,6 +4517,14 @@ numpy.array([['C', 'Y', 'R', 'G', 'R', 'C', 'S', 'G', 'G', 'L', 'C', 'C', 'S',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             " 467889988876999999999999999999986 ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+2kus_A            1 GPNGQCGPGWG--GCRGGLCCSQYGYCGSGPKYCA  34
+                  0 .....||...|--.|...|||||.|.||.|...|.  35
+2UVO:A|PD        83 RADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCG 118
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -4028,6 +4592,14 @@ numpy.array([['G', 'P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-',
             alignment.target.letter_annotations["Confidence"],
             "  4888889999999999999999999999999999987                                                                                                                                                                                                                                                                              ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2dkv_A            2 QCGAQAGGARCPNCLCCSRWGWCGTTSDFCGDGCQSQ  39
+                  0 .||.||||..|||.||||.||.||..|.|||.||||.  37
+2UVO:A|PD        87 KCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSG 124
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4091,6 +4663,14 @@ numpy.array([['Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P', 'N',
             alignment.target.letter_annotations["Confidence"],
             "  4456689999999999999999999974",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1mmc_A            2 ECVRGRCPSGMCCSQFGYCGKGPKYCGR 30
+                  0 ......||...||||.||||.|..|||. 28
+2UVO:A|PD         5 QGSNMECPNNLCCSQYGYCGMGGDYCGK 33
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4152,6 +4732,14 @@ numpy.array([['E', 'C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "   566348999999999999999999985",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+2n1s_A            3 QCY----RGRCSGGLCCSKYGYCGSGPAYCG 30
+                  0 .|.----...|...||||.|||||.|..||| 31
+2UVO:A|PD         1 RCGEQGSNMECPNNLCCSQYGYCGMGGDYCG 32
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -4219,6 +4807,14 @@ numpy.array([['Q', 'C', 'Y', '-', '-', '-', '-', 'R', 'G', 'R', 'C', 'S', 'G',
             alignment.target.letter_annotations["Confidence"],
             " 47999999999999999999999999999999999965                                                                                                                                                                                                                                                                              ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2dkv_A            1 EQCGAQAGGARCPNCLCCSRWGWCGTTSDFCGDGCQSQ 39
+                  0 ..||.|||||.|.|..|||..|.||.....||.|||.. 38
+2UVO:A|PD        43 KRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGG 81
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4283,6 +4879,14 @@ numpy.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "   45788888779999999999999999999963",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+2kus_A            3 NGQCGPGWG--GCRGGLCCSQYGYCGSGPKYCAH 35
+                  0 ...||...|--.|....|||||||||.|..||.. 34
+2UVO:A|PD        42 SKRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGA 76
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -4353,6 +4957,22 @@ numpy.array([['N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G', 'C',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "        45688889999999999999999999999999999988754467999999999999999999999999999999999887544679999999999999999999999999999999998876446799999999999998888888877765444 ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1wga              8 XXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXX--XXXCXXXXCCXXXXXCX
+                  0 ...|....||.....|......|...|....|.....|...--...|....||.....|.
+2UVO:A|PD         8 NMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCG
+
+1wga             66 XXXXXCXXXCXXXXCXXXXXCXXX--XXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXX
+                 60 .....|...|....|.....|...--...|....||.....|......|...|....|..
+2UVO:A|PD        68 FGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACST
+
+1wga            124 XXXCXXX--XXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXC 163
+                120 ...|...--...|....||.....|......|...|....| 161
+2UVO:A|PD       128 DKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQSGGC 169
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -4440,6 +5060,14 @@ numpy.array([['X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X',
             alignment.target.letter_annotations["Confidence"],
             "     55666776655567775899999999999999886                                                                                                                                                                                                    ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+4z8i_A            5 RSDGRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCT  48
+                  0 |.|..||...-----....|..---..|||.||.||.....|.  43
+2UVO:A|PD        83 RADIKCGSQA-----GGKLCPN---NLCCSQWGFCGLGSEFCG 118
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4507,6 +5135,14 @@ numpy.array([['R', 'S', 'D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "       346666656678875899999999999999997                                                                                                                                                                                                    ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+4z8i_A            7 DGRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCT 48
+                  0 ..|||...-----....|..---..|||..|.||.....|. 41
+2UVO:A|PD        42 SKRCGSQA-----GGATCTN---NQCCSQYGYCGFGAEYCG 75
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -4576,6 +5212,14 @@ numpy.array([['D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A',
             alignment.target.letter_annotations["Confidence"],
             "                      34555555544457776899999999999999875                                                                                                                                                                                                       ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+4zxm_A           22 RSDGRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCT  65
+                  0 |.|..||...-----....|..---..|||.||.||.....|.  43
+2UVO:A|PD        83 RADIKCGSQA-----GGKLCPN---NLCCSQWGFCGLGSEFCG 118
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4643,6 +5287,14 @@ numpy.array([['R', 'S', 'D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "                         456665555788768999999999999999864555                                                                                                                                                                                                   ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+4zxm_A           25 GRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCTCSSCV 70
+                  0 .|||...-----....|..---..|||..|.||.....|.-..|. 45
+2UVO:A|PD        43 KRCGSQA-----GGATCTN---NQCCSQYGYCGFGAEYCG-AGCQ 79
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -4715,6 +5367,22 @@ numpy.array([['G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N',
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
             "                                                 456788899999999999999999999999999998887544679999999999999999999999999999999998875446799999999999998888888776655443 ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1wga             49 XXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXX--XXXCXXXXCCXXXXXCX
+                  0 ...|....||.....|......|...|....|.....|...--...|....||.....|.
+2UVO:A|PD         8 NMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCG
+
+1wga            107 XXXXXCXXXCXXXXCXXXXXCXXX--XXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXC
+                 60 .....|...|....|.....|...--...|....||.....|......|...|....|
+2UVO:A|PD        68 FGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGAC
+
+1wga            163
+                118
+2UVO:A|PD       126
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -4812,6 +5480,14 @@ class Align_hhr_allx(unittest.TestCase):
             alignment.target.letter_annotations["ss_pred"],
             "                       H      ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1klr_A           23 T 24
+                  0 .  1
+Only X am        38 X 39
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4865,6 +5541,14 @@ numpy.array([['T'],
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "         C                   ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+5ion_A            9 G 10
+                  0 .  1
+Only X am         3 X  4
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -4920,6 +5604,14 @@ numpy.array([['G'],
             alignment.target.letter_annotations["ss_pred"],
             "C                           ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2jvx_A            0 S 1
+                  0 . 1
+Only X am         3 X 4
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4973,6 +5665,14 @@ numpy.array([['S'],
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "          C                  ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+2ab3_A           10 G 11
+                  0 .  1
+Only X am         3 X  4
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -5028,6 +5728,14 @@ numpy.array([['G'],
             alignment.target.letter_annotations["ss_pred"],
             "     C                         ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1sp2_A            5 T 6
+                  0 . 1
+Only X am         3 X 4
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -5081,6 +5789,14 @@ numpy.array([['T'],
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                            C ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+2lvr_A           28 E 29
+                  0 .  1
+Only X am        37 X 38
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -5136,6 +5852,14 @@ numpy.array([['E'],
             alignment.target.letter_annotations["ss_pred"],
             "C                           ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2kvf_A            0 M 1
+                  0 . 1
+Only X am         1 X 2
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -5187,6 +5911,14 @@ numpy.array([['M'],
         )
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"], "                h         "
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1dsq_A           16 D 17
+                  0 .  1
+Only X am        35 X 36
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -5242,6 +5974,14 @@ numpy.array([['D'],
             alignment.target.letter_annotations["ss_pred"],
             "                            C",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+5a7u_A           28 N 29
+                  0 .  1
+Only X am        35 X 36
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -5295,6 +6035,14 @@ numpy.array([['N'],
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "C                               ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1zfd_A            0 D 1
+                  0 . 1
+Only X am         3 X 4
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -5390,6 +6138,26 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "CChHHHHHHHHHHHHHHHHHHHHHHHHHcCCcccccccCCCccccceEEeccchhhhhcCCCCcccccchHHhcCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhccccCCChhHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhccCcCCCCCCcccchhHHHHHHHHHHHHHHHHHHHhchhccCCCCccCC",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+4P79_A            0 GSEFMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGNVITTNTIFENLWYSCATDS
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4P79:A|PD         0 GSEFMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGNVITTNTIFENLWYSCATDS
+
+4P79_A           60 LGVSNCWDFPSMLALSGYVQGCRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKL
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4P79:A|PD        60 LGVSNCWDFPSMLALSGYVQGCRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKL
+
+4P79_A          120 LAIAGTLHILAGACGMVAISWYAVNITTDFFNPLYAGTKYELGPALYLGWSASLLSILGG
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4P79:A|PD       120 LAIAGTLHILAGACGMVAISWYAVNITTDFFNPLYAGTKYELGPALYLGWSASLLSILGG
+
+4P79_A          180 ICVFSTAAASSKEEPATR 198
+                180 |||||||||||||||||| 198
+4P79:A|PD       180 ICVFSTAAASSKEEPATR 198
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -5492,6 +6260,26 @@ numpy.array([['G', 'S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G',
             alignment.target.letter_annotations["ss_pred"],
             "ChhHHHHHHHHHHHHHHHHHHHHHHhCchhhhcccCCCcccccceeeeeccchhhhcCCCcEEceechhHhcCCHHHHHHHHHHHHHHHHHHHHHHHHHHcchhhhcCCCChhHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCCCCCCCcccccHHHHHHHHHHHHHHHHHHHHhcC",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+3X29_C            0 MANSGLQLLGYFLALGGWVGIIASTALPQWKQSSYAGDAIITAVGLYEGLWMSCASQSTG
+                  0 .........|.|....|............|..|...|.-.||.....|.||.|||..|.|
+4P79:A|PD         3 FMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGN-VITTNTIFENLWYSCATDSLG
+
+3X29_C           60 QVQCKLYDSLLALDGHIQSARALMVVAVLLGFVAMVLSVVGMKATRVGDSNPTAKSRVAI
+                 60 ...|....|.|||.|..|..||||..|.||||....|..||..||.||......|.....
+4P79:A|PD        62 VSNCWDFPSMLALSGYVQGCRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKLLA
+
+3X29_C          120 SGGALFLLAGLCTLTAVSWYATLVTQEFFNPSTPVNARYEFGPALFVGWASAGLAMLGGS
+                120 ..|.|..|||.|...|.||||...|..||||..-....||.||||..||....|..|||.
+4P79:A|PD       122 IAGTLHILAGACGMVAISWYAVNITTDFFNPLY-AGTKYELGPALYLGWSASLLSILGGI
+
+3X29_C          180 FLAAT 185
+                180 ....| 185
+4P79:A|PD       181 CVFST 186
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -5590,6 +6378,26 @@ numpy.array([['M', 'A', 'N', 'S', 'G', 'L', 'Q', 'L', 'L', 'G', 'Y', 'F', 'L',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                                                                                                       hhhHHHHHHHHHHHHHHHHHHHHHHHHhCchhhhhcccCCcccCceeEEEeccchheeecCCceEeeechhhhcCCHHHHHHHHHHHHHHHHHHHHHHHHHHhhhcccCCCChhhHHHHHHHHHHHHHHHHHHhHHHHHHHHHHHHHHhcCcccCCCCCcccchHHHHHHHHHHHHHHHHHHHHhcCCCCCCccccC",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+5B2G_A          167 KGMASMGLQVMGIALAVLGWLAVMLCCALPMWRVTAFIGSNIVTSQTIWEGLWMNCVVQS
+                  0 ....|......|.....||.|...|......|||....|.-..|..||.|.||..|...|
+4P79:A|PD         1 SEFMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGN-VITTNTIFENLWYSCATDS
+
+5B2G_A          227 TGQMQCKVYDSLLALPQDLQAARALVIISIIVAALGVLLSVVGGKCTNCLED-ESAKAKT
+                 60 .|...|....|.|||....|..|||.|..|....||..|..||...||....-.|.|||.
+4P79:A|PD        60 LGVSNCWDFPSMLALSGYVQGCRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKL
+
+5B2G_A          286 MIVAGVVFLLAGLMVIVPVSWTAHNIIQDFYNPLVASGQKREMGASLYVGWAASGLLLLG
+                120 ...||....|||....|..||.|.||..||.|||.-.|.|.|.|..||.||.||.|..||
+4P79:A|PD       120 LAIAGTLHILAGACGMVAISWYAVNITTDFFNPLY-AGTKYELGPALYLGWSASLLSILG
+
+5B2G_A          346 GGLLCCSGPSSGENLYFQ 364
+                180 |.........|....... 198
+4P79:A|PD       179 GICVFSTAAASSKEEPAT 197
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -5691,6 +6499,26 @@ numpy.array([['K', 'G', 'M', 'A', 'S', 'M', 'G', 'L', 'Q', 'V', 'M', 'G', 'I',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "CchhhHHHHHHHHHHHHHHHHHHHHHHHhcCCceeeecccCCCCCcccccccccceeeeeccccchhccccccCCceeeccCCCCCccCCcccHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHcccchHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCcccCccCCCcccccHHHHHHHHHHHHHHHHHHHHHHHHhhhhHHHHHHH                                                                                                               ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+5KK2_G            0 MGLFDRGVQMLLTTVGAFAAFSLMTIAVGTDYWLYSRGVCKTKSVSENETSKKNEEVMTH
+                  0 ...|...........................||..|.....-----------........
+4P79:A|PD         0 GSEFMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGN-----------VITTNTIF
+
+5KK2_G           60 SGLWRTCCLEGNFKGLCKQIDHFPEDADYEADTAEYFLRAVRASSIFPILSVILLFMGGL
+                 60 ..||..|.........|.........-----------...|.......|....|.|.|..
+4P79:A|PD        49 ENLWYSCATDSLGVSNCWDFPSMLAL-----------SGYVQGCRALMITAILLGFLGLF
+
+5KK2_G          120 CIAASEFY--------KTRHNIILSAGIFFVSAGLSNIIGIIVYISANAGDPSKSDSKKN
+                120 ........--------.........||.....||......|..|......|.........
+4P79:A|PD        98 LGMVGLRATNVGNMDLSKKAKLLAIAGTLHILAGACGMVAISWYAVNITTDFFNPLYAGT
+
+5KK2_G          172 SYSYGWSFYFGALSFIIAEMVGVLAVHMFIDRHKQLRATA 212
+                180 .|..|...|.|..........|...........|...||. 220
+4P79:A|PD       158 KYELGPALYLGWSASLLSILGGICVFSTAAASSKEEPATR 198
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -5795,6 +6623,26 @@ numpy.array([['M', 'G', 'L', 'F', 'D', 'R', 'G', 'V', 'Q', 'M', 'L', 'L', 'T',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "CCccccHHHHHHHHHHHHHHHHHHHHHhCcchhhcCCCCCCCCcchheeecccHHHhchhhccCCCCCCccccCCCcccceeeeccCCCCCCCCCCcccHHHHHHHHHHHHHHHHHHHHHHHHHHHHHccCCChhhHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCCCCcceEeecchHHHHHHHHHHHHHHHHHHHHHHcccCCCCCcchh        ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+5GJV_E            0 MSPTEAPKVRVTLFCILVGIVLAMTAVVSDHWAVLSPHMENHNTTCEAAHFGLWRICTKR
+                  0 .............|....|............|.|...|...--.|.......||..|...
+4P79:A|PD         1 SEFMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGNV--ITTNTIFENLWYSCATD
+
+5GJV_E           60 IALGEDRSCGPITLPGEKNCSYFRHFNPGESSEIFEFTTQKEYSISAAAISVFSLGFLIM
+                 60 ...-------------..||..|....-----------....|.....|...........
+4P79:A|PD        59 SLG-------------VSNCWDFPSML-----------ALSGYVQGCRALMITAILLGFL
+
+5GJV_E          120 GTICALMAFRK---------KRDYLLRPASMFYVFAGLCLFVSLEVMRQSVKRMIDSEDT
+                120 |........|.---------|...||..|......||.|..|..................
+4P79:A|PD        95 GLFLGMVGLRATNVGNMDLSKKAKLLAIAGTLHILAGACGMVAISWYAVNITTDFFNPLY
+
+5GJV_E          171 VWIEYYYSWSFACACAAFVLLFLGGISLLLFSLPRMPQNPWES 214
+                180 ....|...........|..|..||||.............|... 223
+4P79:A|PD       155 AGTKYELGPALYLGWSASLLSILGGICVFSTAAASSKEEPATR 198
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -5901,6 +6749,26 @@ numpy.array([['M', 'S', 'P', 'T', 'E', 'A', 'P', 'K', 'V', 'R', 'V', 'T', 'L',
             alignment.target.letter_annotations["ss_pred"],
             "                           HhHHHHHHHHHHHHHHHHHHHHHHHChHhhCCCCCCCCCceeehhhhhccccCCcceeeecCCCCHhhCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHcccchHHHHHHHHHHHHHHHHHHHHHHcccCCCCHHHHHHhcCCCCCCCCCCCcHHHHHHHHHHHHHHHHHHHHHHHHHHHhhhhcCchhh          ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+6C14_D           27 NSRAVGVMWGTLTICFSVLVMALFIQPYWIGDSVSTP----QAGYFGLFSYCVGNVLSSE
+                  0 .|.||......................||....|...----......|...|....|-..
+4P79:A|PD         4 MSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGNVITTNTIFENLWYSCATDSL-GV
+
+6C14_D           83 LICKGGPLDFSSIPSRAFKTAMFFVALAMFLIIGSIICFSLFFVC---------NTATVY
+                 60 ..|...|.....--|............|..|..............---------..|...
+4P79:A|PD        63 SNCWDFPSMLAL--SGYVQGCRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKLL
+
+6C14_D          134 KICAWMQLAAATGLMIGCLVYPDGWDSSEVRRMCGEQTGKYTLGHCTIRWAFMLAILSIG
+                120 .|.......|....|.....|..........-------..|.........|..|......
+4P79:A|PD       121 AIAGTLHILAGACGMVAISWYAVNITTDFFN-------PLYAGTKYELGPALYLGWSASL
+
+6C14_D          194 DALILSFLAFVLGYRQDKLLPDDY 218
+                180 .........|.......|..|... 204
+4P79:A|PD       174 LSILGGICVFSTAAASSKEEPATR 198
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -6002,6 +6870,26 @@ numpy.array([['N', 'S', 'R', 'A', 'V', 'G', 'V', 'M', 'W', 'G', 'T', 'L', 'T',
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   CchHHHHHHHHHHHHHHHHHHHHHHHhccCcceeeccccccccCCcCccccccccccccccceeeeeecCcccCceeecccCCCCcCCCCCcHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcccCCceehhhHHHHHHHHHHHHHHHHHHHHHhcCCcccCCCCcccceecHHHHHHHHHHHHHHHHHHHHHHHHHHHhHhhcCCC ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+6DLZ_D          819 GLFDRGVQMLLTTVGAFAAFSLMTIAVGTDYWLYSRGVCKTKSVSEDETSKKNEEVMTHS
+                  0 ..|...........................||-----------.................
+4P79:A|PD         1 SEFMSVAVETFGFFMSALGLLMLGLTLSNSYW-----------RVSTVHGNVITTNTIFE
+
+6DLZ_D          879 GLWRTCCLEGNFKGLCKQIDHFPEDADYEADTAEYFLRAVRASSIFPILSVILLFMGGLC
+                 60 .||..|.........|.......-----------.....|.......|....|.|.|...
+4P79:A|PD        50 NLWYSCATDSLGVSNCWDFPSML-----------ALSGYVQGCRALMITAILLGFLGLFL
+
+6DLZ_D          939 IAASEFY--------KTRHNIILSAGIFFVSAGLSNIIGIIVYISANAGDPSKSDSKKNS
+                120 .......--------.........||.....||......|..|......|..........
+4P79:A|PD        99 GMVGLRATNVGNMDLSKKAKLLAIAGTLHILAGACGMVAISWYAVNITTDFFNPLYAGTK
+
+6DLZ_D          991 YSYGWSFYFGALSFIIAEMVGVLAVHMFIDRHKQLTGGA 1030
+                180 |..|...|.|..........|...........|......  219
+4P79:A|PD       159 YELGPALYLGWSASLLSILGGICVFSTAAASSKEEPATR  198
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -6095,6 +6983,14 @@ numpy.array([['G', 'L', 'F', 'D', 'R', 'G', 'V', 'Q', 'M', 'L', 'L', 'T', 'T',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "        HHHHHHHHHHHHHHHHHHHHHHHcccccccccCC",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+5YQ7_F            8 RTSVVVSTLLGLVMALLIHFVVLSSGAFNWLRAP 42
+                  0 ...|...........||.....||..--.|.... 34
+4P79:A|PD         5 SVAVETFGFFMSALGLLMLGLTLSNS--YWRVST 37
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -6194,6 +7090,26 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             " CCcHHHHHHHHHHHHHHHHHHHHHHhcCCCChhhHHHHHHHHHHHHHHHHHHHHHHcCCCceeeccCCCCCcchHHHHHHHHHHHHHHHHHHHHHcCCCHHHHHHHHHHHHHHHHHHHHHHHcccchHHHHHHHHHHHHHHHHHHHHHHhHHHHHHhCCHHHHHHHHHHHHHHHHHHHHHHHHHHHccCCCCCCChhHHHHHHHHHHHHHHHHHHHHHHHHHHHhC ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+5ZIM_A            1 GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYG
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4Y9H:A|PD         0 GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYG
+
+5ZIM_A           61 LTMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVG
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4Y9H:A|PD        60 LTMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVG
+
+5ZIM_A          121 ALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWSAY
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4Y9H:A|PD       120 ALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWSAY
+
+5ZIM_A          181 PVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIFG 227
+                180 |||||||||||||||||||||||||||||||||||||||||||||| 226
+4Y9H:A|PD       180 PVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIFG 226
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -6300,6 +7216,26 @@ numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
             alignment.target.letter_annotations["ss_pred"],
             "                  CchHHHHHHHHHHHHHHHHHHHHHHHcCCCChhhHHHHHHHHHHHHHHHHHHHHHHcCCCceeccCCCCcCccchHHHHHHHhHHHHHHHHHHHHhCCCHHHHHHHHHHHHHHHHHHHHHHHcccchhhHHHHHHHHHHHHHHHHHHHHhHHHHHHhCCHHHHHHHHHHHHHHHHHHHHHHHHHHHccCCCCCCCchHHHHHHHHHHHHHHHHHHHHHHHHHHHhc                  ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1M0K_A           18 GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYG
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4Y9H:A|PD         0 GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYG
+
+1M0K_A           78 LTMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVG
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4Y9H:A|PD        60 LTMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVG
+
+1M0K_A          138 ALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWSAY
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4Y9H:A|PD       120 ALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWSAY
+
+1M0K_A          198 PVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIFG 244
+                180 |||||||||||||||||||||||||||||||||||||||||||||| 226
+4Y9H:A|PD       180 PVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIFG 226
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -6404,6 +7340,26 @@ numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "     hhHHHHHHHHHHHHHHHHHHHHHHhcCCCChhHHHHHHHHHHHHHHHHHHHHHHHcCCCceeEecCCcceeeeHHHHHHHHHHHHHHHHHHHHHhCCCHHHHHHHHHHHHHHHHHHHHHHHcCChhhHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCHHHHHHHHHHHHHHHHHHHHHHHHHHHcccccCCCCChHHHHHHHHHHHHHHHHhHHHHHHHhhHHHH          ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+4FBZ_A            5 GPESIWLWIGTIGMTLGTLYFVGRGRGVRDRKMQEFYIITTFITTIAAAMYFAMATGFGV
+                  0 .||.|||..||..|.||||||...|.||.|.....||.|||....||..||..|..|.|.
+4Y9H:A|PD         1 RPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGL
+
+4FBZ_A           65 TEVVVGDEALTIYWARYADWLFTTPLLLLDLGLLAGANRNTIATLIGLDVFMIGTGMIAA
+                 60 |.|..|.|...||||||||||||||||||||.||..|...||..|.|.|..|||||...|
+4Y9H:A|PD        61 TMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVGA
+
+4FBZ_A          125 FAATPGTRIAWWGISTGALLALLYVLVGTLSKDARGQSPEVASLFGRLRNLVIVLWLLYP
+                120 .......|..||.|||.|.|..||||.......|....|||||.|..|||...|||..||
+4Y9H:A|PD       121 LTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWSAYP
+
+4FBZ_A          185 VVWILGTEGTFGILPLYWETAAFMVLDLSAKVGFGVVLLRSRSVLR 231
+                180 |||..|.||-.||.||..||..|||||.|||||||..|||||.... 226
+4Y9H:A|PD       181 VVWLIGSEG-AGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIFG 226
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -6510,6 +7466,26 @@ numpy.array([['G', 'P', 'E', 'S', 'I', 'W', 'L', 'W', 'I', 'G', 'T', 'I', 'G',
             alignment.target.letter_annotations["ss_pred"],
             "               CchHHHHHHHHHHHHHHHHHHHHHHhcCCCCHHHHHHHHHHHHHHHHHHHHHHHHHcCCCceeEecCCCCeeeecHHHHHHHHHHHHHHHHHHHHHhCCCHHHHHHHHHHHHHHHHHHHHHHhCCCchhHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCHHHHHHHHHHHHHHHHHHHHHHHHHHHCcCCCCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhc                 ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+3WQJ_A           15 GRPETLWLGIGTLLMLIGTFYFIARGWGVTDKEAREYYAITILVPGIASAAYLAMFFGIG
+                  0 ||||..||..||.||..||.||...|.||.|..|...||||.|||.||...||.|..|.|
+4Y9H:A|PD         0 GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYG
+
+3WQJ_A           75 VTEVELASGTVLDIYYARYADWLFTTPLLLLDLALLAKVDRVTIGTLIGVDALMIVTGLI
+                 60 .|.|.-..|....||.||||||||||||||||||||...|..||..|.|.|..||.|||.
+4Y9H:A|PD        60 LTMVP-FGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLV
+
+3WQJ_A          135 GALSKTPLARYTWWLFSTIAFLFVLYYLLTSLRSAAAKRSEEVRSTFNTLTALVAVLWTA
+                120 |||.|....|..||..||.|.|..||.|.....|.|.....||.|||..|.....|||.|
+4Y9H:A|PD       119 GALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWSA
+
+3WQJ_A          195 YPILWIVGTEGAGVVGLGIETLAFMVLDVTAKVGFGFVLLRSRAILG 242
+                180 ||..|..|.||||.|.|.||||.||||||.||||||..|||||||.| 227
+4Y9H:A|PD       179 YPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIFG 226
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -6614,6 +7590,26 @@ numpy.array([['G', 'R', 'P', 'E', 'T', 'L', 'W', 'L', 'G', 'I', 'G', 'T', 'L',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "    hhHHHHHHHHHHHHHHHHHHHHHHHcCCCChhHHHHHHHHHHHHHHHHHHHHHHHcCCCeeEeecCCcceeeeHHHHHHHHHHHHHHHHHHHHHhCCCHHHHHHHHHHHHHHHHHHHHHHHcccCCccCcchHHHHHHHHHHHHHHHHHHHHHhhhhHHHhcCChhHHHHHHHHHHHHHHHHHHHHHHHHHccccccccCHHHHHHHHHHHHHHHHHHHHHHHHHHcchh                ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+4L35_A            4 EGEAIWLWLGTAGMFLGMLYFIARGWGETDSRRQKFYIATILITAIAFVNYLAMALGFGL
+                  0 ..|.|||.||||.|.||.|||...|.|..|....|||..|.|..||||..||.|.||.||
+4Y9H:A|PD         1 RPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGL
+
+4L35_A           64 TIVEIAGEQRPIYWARYSDWLFTTPLLLYDLGLLAGADRNTISSLVSLDVLMIGTGLVAT
+                 60 |.|...|||.|||||||.||||||||||.||.||..||..||..||..|..|||||||..
+4Y9H:A|PD        61 TMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVGA
+
+4L35_A          124 LSAGSGVLSAGAERLVWWGISTAFLLVLLYFLFSSLSGRVADLPSDTRSTFKTLRNLVTV
+                120 |...------...|.|||.||||..|..||.||...............||||.|||...|
+4Y9H:A|PD       121 LTKV------YSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVV
+
+4L35_A          184 VWLVYPVWWLVGTEGIGLVGIGIETAGFMVIDLVAKVGFGIILLRSHGVL 234
+                180 .|..|||.||.|.||.|.|...|||..|||.|..||||||.|||||.... 230
+4Y9H:A|PD       175 LWSAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIF 225
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -6720,6 +7716,26 @@ numpy.array([['E', 'G', 'E', 'A', 'I', 'W', 'L', 'W', 'L', 'G', 'T', 'A', 'G',
             alignment.target.letter_annotations["ss_pred"],
             "             hhHHHHHHHHHHHHHHHHHHHHHHhcCCCChhHHHHHHHHHHHHHHHHHHHHHHHcCCCceeeeccCCCeeeeeHHHHHHHHHHHHHHHHHHHHHcCCCHHHHHHHHHHHHHHHHHHHHHHHccchhhHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCHHHHHHHHHHHHHHHHHHHHHHHHHHHCcccccccCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhC                       ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+4QI1_A           13 EGEGIWLALGTIGMLLGMLYFIADGLDVQDPRQKEFYVITILIPAIAAASYLSMFFGFGL
+                  0 ..|.|||||||..|.||.|||...|..|.||..|.||.||.|.||||...||||..|.||
+4Y9H:A|PD         1 RPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGL
+
+4QI1_A           73 TEVSLANGRVVDVYWARYADWLFTTPLLLLDIGLLAGASQRDIGALVGIDAFMIVTGLVA
+                 60 |.|..-.|.....||||||||||||||||||..||..|.|..|.||||.|..||.||||.
+4Y9H:A|PD        61 TMVPF-GGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVG
+
+4QI1_A          133 TLTKVVVARYAFWTISTISMVFLLYYLVAVFGEAVSDADEDTRSTFNALRNIILVTWAIY
+                120 .||||...|...|.|||..|...||.|...|............|||..|||...|.|..|
+4Y9H:A|PD       120 ALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWSAY
+
+4QI1_A          193 PVAWLVGTEGLALTGLYGETLLFMVLDLVAKVGFGFILLRSRAIMG 239
+                180 ||.||.|.||.....|..|||||||||..||||||.||||||||.| 226
+4Y9H:A|PD       180 PVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIFG 226
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -6824,6 +7840,26 @@ numpy.array([['E', 'G', 'E', 'G', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'I', 'G',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             " chHHHHHHHHHHHHHHHHHHHHHHHcCCCCCcHHHHHHHHHHHHHHHHHHHHHHcCCCccccCcccccHHHHHHHHHHHHHHHHHHHHHcCCChHHHHHHHHHHHHHHHHHHHHHhCCcchHHHHHHHHHHHHHHHHHHHHchHHHHHhhcchhHHHHHHHHHHHHHHHHHHHHHHHHHCccccCCCChhHHHHHHHHHHHHHHHHHHHHHHHHHHH       ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1H2S_A            1 VGLTTLFWLGAIGMLVGTLAFAWAGRDAG-SGERRYYVTLVGISGIAAVAYVVMALGVGW
+                  0 ........||...|..|||.|...|....-......|........||...|..|.||.|.
+4Y9H:A|PD         1 RPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGL
+
+1H2S_A           60 VPV----AERTVFAPRYIDWILTTPLIVYFLGLLAGLDSREFGIVITLNTVVMLAGFAGA
+                 60 ..|----........||.||..||||....|.||...|.................|..||
+4Y9H:A|PD        61 TMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVGA
+
+1H2S_A          116 MVPG-IERYALFGMGAVAFLGLVYYLVGPMTESASQRSSGIKSLYVRLRNLTVILWAIYP
+                120 ....-..|.........|.|...|.|....|..|........|....|||.||.||..||
+4Y9H:A|PD       121 LTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWSAYP
+
+1H2S_A          175 FIWLLGPPGVALLTPTVDVALIVYLDLVTKVGFGFIALDAAAT 218
+                180 ..||.|..|...........|...||...|||||.|.|...|. 223
+4Y9H:A|PD       181 VVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAI 224
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -6930,6 +7966,26 @@ numpy.array([['V', 'G', 'L', 'T', 'T', 'L', 'F', 'W', 'L', 'G', 'A', 'I', 'G',
             alignment.target.letter_annotations["ss_pred"],
             "     cHHHHHHHHHHHHHHHHHHHHHHHHHcCCChhhHHHHHHHHHHHHHHHHHHHHHHhcccccccCCcccchHHHHHHHHHHHHHHHHHHHHHhcCCHHHHHHHHHHHHHHHHHHHHHHhCCccchHHHHHHHHHHHHHHHHHHHHHhhHHHHHhcCHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCcCCCChHHHHHHHHHHHHHhhHHHHHHHHHHHHHH    ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+3AM6_A            5 TETGMIAQWIVFAIMAAAAIAFGVAVHFRP-SELKSAYYINIAICTIAATAYYAMAVNYQ
+                  0 .....|......|.|......|.|......-...|..|.|......||.|.|..|...|.
+4Y9H:A|PD         0 GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYG
+
+3AM6_A           64 DLTMN---GERQVVYARYIDWVLTTPLLLLDLIVMTKMGGVMISWVIGADIFMIVFGILG
+                 60 .....---.......|||.||..|||||||||..........|....|||..||..|..|
+4Y9H:A|PD        60 LTMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVG
+
+3AM6_A          121 AFEDEHKFKWVYFIAGCVMQAVLTYGMYNATWKDDLKKSPEYHSSYVSLLVFLSILWVFY
+                120 |.........|.............|..............||..|....|......||..|
+4Y9H:A|PD       120 ALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWSAY
+
+3AM6_A          181 PVVWAFG-SGSGVLSVDNEAILMGILDVLAKPLFGMGCLIAHETI 225
+                180 ||||..|-.|.|......|..|...|||.||..||...|...... 225
+4Y9H:A|PD       180 PVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIF 225
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -7030,6 +8086,26 @@ numpy.array([['T', 'E', 'T', 'G', 'M', 'I', 'A', 'Q', 'W', 'I', 'V', 'F', 'A',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "  HHHHHHHHHHHHHHHHHHHHHHHcCCCCCcHHHHHHHHHHHHHHHHHHHHHHcCCCceecCcccccHHHHHHHHHHHHHHHHHHHHHcCCCHHHHHHHHHHHHHHHHHHHHHHhCCcchHHHHHHHHHHHHHHHHHHHHcHHHHHHhcCCHHHHHHHHHHHHHHHHHHHHHHHHHHHCCcccCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHH                               ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+5JJF_A            2 LTTLFWLGAIGMLVGTLAFAWAGRDAG-SGERRYYVTLVGISGIAAVAYVVMALGVGWVP
+                  0 ......||...|..|||.|...|....-......|........||...|..|.||.|...
+4Y9H:A|PD         3 EWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGLTM
+
+5JJF_A           61 V----AERTVFAPRYIDWILTTPLIVYFLGLLAGLDSREFGIVITLNTVVMLAGFAGAMV
+                 60 |----........||.||..||||....|.||...|.................|..||..
+4Y9H:A|PD        63 VPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVGALT
+
+5JJF_A          117 PG-IERYALFGMGAVAFLGLVYYLVGPMTESASQRSSGIKSLYVRLRNLTVILWAIYPFI
+                120 ..-..|.........|.|...|.|....|..|........|....|||.||.||..||..
+4Y9H:A|PD       123 KVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWSAYPVV
+
+5JJF_A          176 WLLGPPGVALLTPTVDVALIVYLDLVTKVGFGFIALDAAAT 217
+                180 ||.|..|...........|...||...|||||.|.|...|. 221
+4Y9H:A|PD       183 WLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAI 224
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -7135,6 +8211,26 @@ numpy.array([['L', 'T', 'T', 'L', 'F', 'W', 'L', 'G', 'A', 'I', 'G', 'M', 'L',
             alignment.target.letter_annotations["ss_pred"],
             "                     HHHHHHHHHHHHHHHHHHHhcCCCcchhhHHHHHHHHHHHHHHHHHHHHhcCCCCCCCCCCCCCceeeeHHHHHHHHHHHHHHHHHHHHHcCCCHHHHHHHHHHHHHHHHHHHHHHHcccchHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhChhhHHHHHHHHHHHHHHHHHHHHHHHHcCccccCChhHHHHHHHHHHHHHHHHHHHHHHHHHHHH     ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+5AX0_A           21 AQWVVFAVMALAAIVFSIAVQFRP-LPLRLTYYVNIAICTIAATAYYAMAVNGGDNKPTA
+                  0 ......|.|.|....|........-......|........||.|.|..|....|...--.
+4Y9H:A|PD         6 WLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGLTM--V
+
+5AX0_A           80 GTGADERQVIYARYIDWVFTTPLLLLDLVLLTNMPATMIAWIMGADIAMIAFGIIGAFTV
+                 60 ..|........|||.||.||||||||||.||.......|....|||..||..|..||.|.
+4Y9H:A|PD        64 PFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVGALTK
+
+5AX0_A          140 G-SYKWFYFVVGCIMLAVLAWGMINPIFKEELQKHKEYTGAYTTLLIYLIVLWVIYPIVW
+                120 .-||................................|.......|.....|||..||.||
+4Y9H:A|PD       124 VYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWSAYPVVW
+
+5AX0_A          199 GL-GAGGHIIGVDVEIIAMGILDLLAKPLYAIGVLITVEVV 239
+                180 ..-..|..|.....|......||..||.......|...... 221
+4Y9H:A|PD       184 LIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIF 225
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -7238,6 +8334,26 @@ numpy.array([['A', 'Q', 'W', 'V', 'V', 'F', 'A', 'V', 'M', 'A', 'L', 'A', 'A',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             " chHHHHHHHHHHHHHHHHHHHHHHhCCCCCCchHHHHHHHHHHHHHHHHHHHHHhccCceecccccccHHHHHHHHHHHHHHHHHHHHHHHhcccCCHHHHHHHHHHHHHHHHHHHHHHhcCCcchHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCHHHHHHHHHHHHHHHHHHHHHHHHHHHCCCCCCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHhhcc                                    ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+1XIO_A            1 NLESLLHWIYVAGMTIGALHFWSLSRN-PRGVPQYEYLVAMFIPIWSGLAYMAMAIDQGK
+                  0 ..|........|.|..|.|.|......-........|......|......|..|....|.
+4Y9H:A|PD         1 RPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGL
+
+1XIO_A           60 VEA----AGQIAHYARYIDWMVTTPLLLLSLSWTAMQFIKKDWTLIGFLMSTQIVVITSG
+                 60 ...----.......|||.||..|||||||.|......----|...|..|.......|..|
+4Y9H:A|PD        61 TMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDA----DQGTILALVGADGIMIGTG
+
+1XIO_A          116 LIADLSERDWVRYLWYICGVCAFLIILWGIWNPLRAKTRTQSSELANLYDKLVTYFTVLW
+                120 |...|......|..|......|.|.||.........|......|.|.....|.....|||
+4Y9H:A|PD       117 LVGALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLW
+
+1XIO_A          176 IGYPIVWIIGPSGFGWINQTIDTFLFCLLPFFSKVGFSFLDLHGLRNLN 225
+                180 ..||.||.||..|.|.....|.|.||..|....||||....|....... 229
+4Y9H:A|PD       177 SAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIFG 226
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -7343,6 +8459,26 @@ numpy.array([['N', 'L', 'E', 'S', 'L', 'L', 'H', 'W', 'I', 'Y', 'V', 'A', 'G',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                    HHHHHHHHHHHHHHHHHHHHcCCCChHHHHHHHHHHHHHHHHHHHHHHHHcCCCceEEecccccccCCceeeecCCccCceeccHHHHHHHHHHHHHHHHHHHHHhCCCHHHHHHHHHHHHHHHHHHHHHHHcCCCcccHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhChHHHHHHHHHHHHHHHHHHHHHHHHccCCCCCCChhHHHHHHHHHHHHHHHHHHHHHHHHHHh                      ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+5B0W_G           36 SLYINIALAGLSILLFVFMTRGLDDPRAKLIAVSTILVPVVSIASYTGLASGLTISVLEM
+                  0 .|....||.||..|.|.....|..||.||.....|.|||......|.....|.......-
+4Y9H:A|PD         6 WLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGLTMVP-
+
+5B0W_G           96 PAGHFAEGSSVMLGGEEVDGVVTMWGRYLTWALSTPMILLALGLLAGSNATKLFTAITFD
+                 60 ---------------.........|.||..|...||..||.|.||..............|
+4Y9H:A|PD        65 ---------------FGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGAD
+
+5B0W_G          156 IAMCVTGLAAALTTSSHLMRWFWYAISCACFIVVLYILLVEWAQDAKAAG--TADIFSTL
+                120 ..|..|||..|||...-..|..|.|||.|.....||.|.......|....--.|..|..|
+4Y9H:A|PD       110 GIMIGTGLVGALTKVY-SYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVL
+
+5B0W_G          214 KLLTVVMWLGYPIVWALGVEGVAVLPVGYTSWAYSALDIVAKYIFAFLLLNYLTS 269
+                180 ...|||.|..||.||..|.||....|..........||..||..|...||..... 235
+4Y9H:A|PD       169 RNVTVVLWSAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAI 224
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -7451,6 +8587,26 @@ numpy.array([['S', 'L', 'Y', 'I', 'N', 'I', 'A', 'L', 'A', 'G', 'L', 'S', 'I',
             alignment.target.letter_annotations["ss_pred"],
             "                               HHHHHHHHHHHHHHHHHHHHcCCCCCCccHHHHHHHHHHHHHHHHHHHHHcCCCceeeecccCCcccCCeEeeeHHHHHHHHhHHHHHHHHHHHHcCCCHHHHHHHHHHHHHHHHHHHHHHHcCCchhhHHHHHHHHHHHHHHHHHHHHhHHHHhcCChhHHHHHHHHHHHHHHHHHHHHHHHHHccccccccCChHHHHHHHHHHHHHHHHHHHHHHHHHHHhch                 ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2JAF_A           31 SLWVNVALAGIAILVFVYMGRTIRPGRPRLIWGATLMIPLVSISSYLGLLSGLTVGMIEM
+                  0 .|....||.|...|.|...|..............|...|......||..|.|....|...
+4Y9H:A|PD         6 WLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGLTMVPF
+
+2JAF_A           91 PAGHALAGEMVRSQWGRYLTWALSTPMILLALGLLADVDLGSLFTVIAADIGMCVTGLAA
+                 60 ------.||.....|.||..|...||..||.|.||.|.|.|.......||..|..|||..
+4Y9H:A|PD        66 ------GGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVG
+
+2JAF_A          151 AMTTS-ALLFRWAFYAISCAFFVVVLSALVTDWAASAS--SAGTAEIFDTLRVLVVVLWL
+                120 |.|..-.--.|....|||.|.....|..|.......|.--....|..|..||...||||.
+4Y9H:A|PD       120 ALTKVYS--YRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWS
+
+2JAF_A          208 GYPIVWAVGVEGLALVQSVGATSWAYSVLDVFAKYVFAFILLRWVANNE 257
+                180 .||.||..|.||...|-..........||||.||..|..||||..|... 229
+4Y9H:A|PD       178 AYPVVWLIGSEGAGIV-PLNIETLLFMVLDVSAKVGFGLILLRSRAIFG 226
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -7556,6 +8712,26 @@ numpy.array([['S', 'L', 'W', 'V', 'N', 'V', 'A', 'L', 'A', 'G', 'I', 'A', 'I',
             alignment.target.letter_annotations["ss_pred"],
             " CCcHHHHHHHHHHHHHHHHHHHHHHHhCCCChHHHHHHHHHHHHHHHHHHHHHHHHhCCCceeccCCCCCCcchhHHHHHHHHHHHHHHHHHHHHhCCCHHHHHHHHHHHHHHHHHHHHHHhccchhHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHccCCCCCCChhHHHHHHHHHHHHhHHhHhcC",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1C8S_A            1 GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYG
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4Y9H:A|PD         0 GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYG
+
+1C8S_A           61 LTMVPFGGEQNPIYWARYADWLFTTPLLLLNLALLVDADQGTILALVGADGIMIGTGLVG
+                 60 ||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||
+4Y9H:A|PD        60 LTMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVG
+
+1C8S_A          121 ALTKVYSYRFVWWAISTAAMLYILYVLF----------------------NVTVVLWSAY
+                120 ||||||||||||||||||||||||||||----------------------||||||||||
+4Y9H:A|PD       120 ALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWSAY
+
+1C8S_A          159 PVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLI 196
+                180 ||||||||||||||||||||||||||||||||||||| 217
+4Y9H:A|PD       180 PVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLI 217
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -7658,6 +8834,30 @@ numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                        hHHHHHHHHHHHHHHHHHHHHHHHHHcCCCcchhHHHHHHHHHHHHHHHHHHHHHhchhhcccccchhcccccCCCCCccchHHHHHHHHHHHHHHHHHHHHHHcccccchHHHHHHHHHHHHHHHHHHHHHHHhccCcchhHHHHHHHHHHHHHHHHHHHHHHHHHhhcCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCCCcccCCCCHHHHHHHHHHHHHHhHHHHHHHHHHHHHH                    ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+4XTL_A           24 YQFTSHILTLGYAVMLAGLLYFILTIKNVD-KKFQMSNILSAVVMVSAFLLLYAQAQNWT
+                  0 .......|.||.|.|..|.|||......|.-............|...||...........
+4Y9H:A|PD         0 GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYG
+
+4XTL_A           83 SSFTFNEEVGRYFLDPSGDLFNNGYRYLNWLIDVPMLLFQILFVVSLTTSKFSSVRNQFW
+                 60 .......-------......--...||..||...|.||......|........----...
+4Y9H:A|PD        60 LTMVPFG-------GEQNPI--YWARYADWLFTTPLLLLDLALLVDADQGTIL----ALV
+
+4XTL_A          143 FSGAMMIITGYIGQFYEVSNLTAFLVWGAISSAFFFHILWVMKKVINEGKEGISPAGQKI
+                120 .....||.||..|....|--.....||.|||.|....||.|.........|...|.....
+4Y9H:A|PD       107 GADGIMIGTGLVGALTKV--YSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVAST
+
+4XTL_A          203 LSNIWILFLISWTLYPGAYLMPYLTGVDGFLYSEDGVMARQLVYTIADVSSXVIYGVLLG
+                180 ...........|..||...|....----|....--......|.....|||..|..|..|.
+4Y9H:A|PD       165 FKVLRNVTVVLWSAYPVVWLIGSE----GAGIV--PLNIETLLFMVLDVSAKVGFGLILL
+
+4XTL_A          263 NLAIT 268
+                240 ..... 245
+4Y9H:A|PD       219 RSRAI 224
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -7769,6 +8969,26 @@ numpy.array([['Y', 'Q', 'F', 'T', 'S', 'H', 'I', 'L', 'T', 'L', 'G', 'Y', 'A',
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                       chhHHHHHHHHHHHHHHHHHHHHHHHccCCCCchhHHHHHHHHHHHHHHHHHHHHHHHHcCcCCCccccHHHHHHHHHHHHHHHHHHHHHhCCCCcchHHHHHHHHHHHHHHHHHHHHHHccchHHHHHHHHHHHHHHHHHHHHHHHHHHHhccCCchHHHHHHHHHHHHHHHHHHHHHHHHHHCcccCCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH                                    ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+5ZIH_B           87 KIGAQVCQWIAFSIAIALLTFYGFSAWKAT-CGWEEVYVCCVEVLFVTLEIFKEFSSPAT
+                  0 ..............................-......|...---..|....|....|...
+4Y9H:A|PD         0 GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAIT---TLVPAIAFTMYLSMLL
+
+5ZIH_B          146 VYLS-------TGNHAYCLRYFEWLLSCPVILIKLSNLSGLKNDYSKRTMGLIVSCVGMI
+                 60 .|..-------..|..|..||..||...|..|..|..|.....---.....|......||
+4Y9H:A|PD        57 GYGLTMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQ---GTILALVGADGIMI
+
+5ZIH_B          199 VFGMAAGLATD-WLKWLLYIVSCIYGGYMYFQAAKCYVEANHSVPKGHCRMVVKLMAYAY
+                120 ..|....|...-.........|.....|..............|.-........|......
+4Y9H:A|PD       114 GTGLVGALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESM-RPEVASTFKVLRNVT
+
+5ZIH_B          258 FASWGSYPILWAVGPEGLLKLSPYANSIGHSICDIIAXEFWTFLAHHLRIKIH 311
+                180 ...|..||..|..|.||................|..|...........|.... 233
+4Y9H:A|PD       173 VVLWSAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIFG 226
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -7877,6 +9097,26 @@ numpy.array([['K', 'I', 'G', 'A', 'Q', 'V', 'C', 'Q', 'W', 'I', 'A', 'F', 'S',
             alignment.target.letter_annotations["ss_pred"],
             "            HHHHHHHHHHHHHHHHHHHHccCCChHHHHHHHHHHHHHHHHHHHHHHHHcchhhcCCCCchHHHHHHHhHHHHHHHHHHHHHHHHccCCHHHHHHHHHHHHHHHHHHHHHHhccccHHHHHHHHHHHHHHHHHHHHhhHHHHHhhCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHhhhccCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHH         ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+4JQ6_C           12 ISFWLAAAIMLASTVFFFVERSDVP-VKWKTSLTVAGLVTGVAFWHYLYMRGVWIY----
+                  0 |...|..|.|...|..|.|....|.-...|.......||...||..||.|......----
+4Y9H:A|PD         5 IWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGLTMVP
+
+4JQ6_C           67 ---AGETPTVFRYIDWLITVPLQIIEFYLIIAAVTAISSAVFWKLLIASLVMLIGGFIGE
+                 60 ---........||.|||.|.||......|...|----.......|..|...|...|..|.
+4Y9H:A|PD        65 FGGEQNPIYWARYADWLFTTPLLLLDLALLVDA----DQGTILALVGADGIMIGTGLVGA
+
+4JQ6_C          124 AGLGD--VVVWWIVGMIAWLYIIYEIFLGETAKANAGSGNAASQQAFNTIKWIVTVGWAI
+                120 .....--..|||.....|.|||.|..|.|.|.||..--........|........|.|..
+4Y9H:A|PD       121 LTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAES--MRPEVASTFKVLRNVTVVLWSA
+
+4JQ6_C          182 YPIGYAW-GYFGDGLNEDALNIVYNLADLINKAAFGLAIWAAAMK 226
+                180 ||.....-...................|...|..|||........ 225
+4Y9H:A|PD       179 YPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAI 224
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -7984,6 +9224,26 @@ numpy.array([['I', 'S', 'F', 'W', 'L', 'A', 'A', 'A', 'I', 'M', 'L', 'A', 'S',
             alignment.target.letter_annotations["ss_pred"],
             "                       HHHHHHHHHHHHHHHHHHHhccCCchhHHHHHHHHHHHHHHHHHHHHHHcccccceeeeCCccccCCcccccHHHHHHHHHHHHHHHHHHHHHHccCCcchHHHHHHHHHHHHHHHHHHHHHHhcCCChhHHHHHHHHHHHHHHHHHHHHHhhHHHHHHHhccCCchHHHHHHHHHHHHHHHHHHHHHHhhhhcCCCCcHHHHHHHHHHHHHHHHHHHHHHHHHHHHH                        ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+5G28_A           23 LLTMGVGVHFAALIFFLVVSQFVA-PKYRIATALSCIVMVSAGLILNSQAVMWTDAYAYV
+                  0 .|..|..........|||....|.-|......|....|...|.....|............
+4Y9H:A|PD         6 WLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGLTMVPF
+
+5G28_A           82 DGSYQLQDLTFSN-GYRYVNWMATIPCLLLQLLIVLNLKGKELFSTATWLILAAWGMIIT
+                 60 ------.......-..||..|..|.|.|||.|.........----|...|..|...||.|
+4Y9H:A|PD        66 ------GGEQNPIYWARYADWLFTTPLLLLDLALLVDADQG----TILALVGADGIMIGT
+
+5G28_A          141 GYVGQLYEVDDIAQLMIWGAVSTAFFVVMNWIVGTKIFKNRATMLGGTDSTITKVFWLMM
+                120 |.||.|..|.--.....|.|.|||...................|.....||.........
+4Y9H:A|PD       116 GLVGALTKVY--SYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTV
+
+5G28_A          201 FAWTLYPIAYLVPAFMNNADGVVLRQLLFTIADISSKVIYGLMITYIAIQ 251
+                180 ..|..||...|...............|||...|.|.||..||........ 230
+4Y9H:A|PD       174 VLWSAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAI 224
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -8088,6 +9348,26 @@ numpy.array([['L', 'L', 'T', 'M', 'G', 'V', 'G', 'V', 'H', 'F', 'A', 'A', 'L',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "       hHHHHHHHHHHHHHHHHHHHHHHHHHcCCChhhHHHHHHHHHHHHHHHHHHHHHHhcccccccccccCCCCcHHHHhHHHhHHHHHHHHHHHHHccccccCHHHHHHHHHHHHHHHHHHHHHHHhhhccCCCcchHHHHHHHHHHHHHHHHHHHHHHHHHHHhCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHhhcCCCcchhHHHHHHHHHHHHHHHHHHHHHHHHHHHh                    ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+4HYJ_A            7 VLATQYMFWVGFVGMAAGTLYFLVERNSLA-PEYRSTATVAALVTFVAAIHYYFMKDAVG
+                  0 ..........|...|..|||||||......-|..........||...|...|..|....|
+4Y9H:A|PD         0 GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYG
+
+4HYJ_A           66 TSGLLSEIDGFPT-EIRYIDWLVTTPLLLVKFPLLLGLKGRLGRPLLTKLVIADVIMIVG
+                 60 ...........|.-..||.|||.||||||....||...----.......||.||.|||..
+4Y9H:A|PD        60 LTMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDA----DQGTILALVGADGIMIGT
+
+4HYJ_A          125 GYIGESSINIAGGFTQLGLWSYLIGCFAWIYIIYLLFTNVTKAAENKPAPIRDALLKMRL
+                120 |..|.....-----.........|...|..||.|.||...|..||.............|.
+4Y9H:A|PD       116 GLVGALTKV-----YSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRN
+
+4HYJ_A          185 FILIGWAIYPIGYAVTLFAPGVEIQLVRELIYNFADLTNKVGFGLIAFFAVKT 238
+                180 .....|..||..........|........|.....|...|||||||....... 233
+4Y9H:A|PD       171 VTVVLWSAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAI 224
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -8194,6 +9474,26 @@ numpy.array([['V', 'L', 'A', 'T', 'Q', 'Y', 'M', 'F', 'W', 'V', 'G', 'F', 'V',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                          chHHHHHHHHHHHHHHHHHHHHHHHhcCCCcchHHHHHHHHHHHHHHHHHHHHHHhccccCCCCCcHHHHHHHHhHHHHHHHHHHHHHhhcccchHHHHHHHHHHHHHHHHHHHHHHhcccchHHHHHHHHHHHHHHHHHHHhhhHHHHHhcCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHH               ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+4KNF_D           26 SDTVGVSFWLVTAGMLAATVFFFVERDQVS-AKWKTSLTVSGLITGIAFWHYLYMRGVWI
+                  0 .........|.||.|...|..|.|....||-...|.......|...|||..||.|.....
+4Y9H:A|PD         0 GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYG
+
+4KNF_D           85 D-------TGDTPTVFRYINWLLTVPLLVVEFYLILAACTSVAASLFKKLLAGSLVMLGA
+                 60 .-------........||..||.|.|||.....|...|.----......|......|.|.
+4Y9H:A|PD        60 LTMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDAD----QGTILALVGADGIMIGT
+
+4KNF_D          138 GFAGEAGLA--PVLPAFIIGMAGWLYMIYELYMGEGKAAVSTASPAVNSAYNAMMMIIVV
+                120 |..|.....--.......|..|..||..|.|..|-.........|.|.|.........||
+4Y9H:A|PD       116 GLVGALTKVYSYRFVWWAISTAAMLYILYVLFFG-FTSKAESMRPEVASTFKVLRNVTVV
+
+4KNF_D          196 GWAIYPAGYAAGYLMGGEGVYASNLNLIYNLADFVNKILFGLIIWNVAVK 246
+                180 .|..||.....|-..|...|......|.....|...|..||||....... 230
+4Y9H:A|PD       175 LWSAYPVVWLIG-SEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAI 224
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -8302,6 +9602,26 @@ numpy.array([['S', 'D', 'T', 'V', 'G', 'V', 'S', 'F', 'W', 'L', 'V', 'T', 'A',
             alignment.target.letter_annotations["ss_pred"],
             "                  HHHHHHHHHHHHHHHHHHhccCCcchHHHHHHHHHHHHHHHHHHHHHHHhcccceeccCCcccCCCceeccHHHHHHHHHHHHHHHHHHHHHHccchhccHHHHHHHHHHHHHHHHhHHHHHhCCCCcchhHHHHHHHHHHHHHHHHHHHHHHHHHHHhhcCHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCCCCCchHHHHHHHHHHHHHhcHHHHHHHHHHHHHh                      ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+5AZD_C           18 LSLTIAGMLAAFVFFLLARSYVA-PRYHIALYLSALIVFIAGYHYLRIFESWVGAYQLQD
+                  0 |.|..|.|......||.....|.-|..........|...||...||...-...|......
+4Y9H:A|PD         7 LALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSML-LGYGLTMVPF
+
+5AZD_C           77 GVYVPTGKPFNDFYRYADWLLTVPLLLLELILVLGLTAARTWNLSIKLVVASVLMLALGY
+                 60 |----.........||||||.|.|||||.|.|.....----......||.|...|...|.
+4Y9H:A|PD        66 G----GEQNPIYWARYADWLFTTPLLLLDLALLVDAD----QGTILALVGADGIMIGTGL
+
+5AZD_C          137 VGEVNTEPGPRTLWGALSSIPFFYILYVLWVELGQAIREAKFGPRVLELLGATRLVLLMS
+                120 ||........|..|.|.|.....||||||..........--..|.|.......|.|....
+4Y9H:A|PD       118 VGALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAES--MRPEVASTFKVLRNVTVVL
+
+5AZD_C          197 WGFYPIAYALGTWLPGGAAQEVAIQIGYSLADLIAXPIYGLLVFAIARA 246
+                180 |..||.....|...-.|..............|..|....||........ 229
+4Y9H:A|PD       176 WSAYPVVWLIGSEG-AGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAI 224
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -8408,6 +9728,26 @@ numpy.array([['L', 'S', 'L', 'T', 'I', 'A', 'G', 'M', 'L', 'A', 'A', 'F', 'V',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                  HHHHHHHHHHHHHHHHHHHhcCCCcchhHHHHHHHHHHHHHHHHHHHHHhchHhHHHhhCCCCCCCCcccchHHHHHHHHHHHHHHHHHHHHHhCCCcccchhHHHHHHHHHHHHHHhchHHHhcccccccchhHHHHHHHHHHHHHHHHHHHHHHHHHHHhCCHHHHHHHHHHHHHHHHHHHHHHHHHHhhhcCcccCCCCCCCcHHHHHHHHHHHHHHHHHHHHHHHHHHHHH                    ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+3DDL_A           18 MFSFTVATMTASFVFFVLARNNVA-PKYRISMMVSALVVFIAGYHYFRITSSWEAAYALQ
+                  0 ......|.|......|......|.-|..........||..||...|..............
+4Y9H:A|PD         6 WLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGLTMVPF
+
+3DDL_A           77 NGMYQPTGELFNDAYRYVDWLLTVPLLTVELVLVMGLPKNERGPLAAKLGFLAALMIVLG
+                 60 .|---.......--.||.|||.|.|||...|.|........----...|......||..|
+4Y9H:A|PD        66 GG---EQNPIYW--ARYADWLFTTPLLLLDLALLVDADQGT----ILALVGADGIMIGTG
+
+3DDL_A          137 YPGEVSENAALFGTRGLWGFLSTIPFVWILYILFTQLGDTIQRQSSRVSTLLGNARLLLL
+                120 ..|......---..|..|...||.....|||.||.............|.......|....
+4Y9H:A|PD       117 LVGALTKVY---SYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTV
+
+3DDL_A          197 ATWGFYPIAYMIPMAFPEAFPSNTPGTIVALQVGYTIADVLAKAGYGVLIYNIAKA 253
+                180 ..|..||....|...---.......---..........||.||.|.|......... 236
+4Y9H:A|PD       174 VLWSAYPVVWLIGSE---GAGIVPL---NIETLLFMVLDVSAKVGFGLILLRSRAI 224
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -8518,6 +9858,26 @@ numpy.array([['M', 'F', 'S', 'F', 'T', 'V', 'A', 'T', 'M', 'T', 'A', 'S', 'F',
             alignment.target.letter_annotations["ss_pred"],
             "                                                                    HHHHHHHHHHHHHHHHHHHHHHhcCCCCchHHHHHHHHHHHHHHHHHHHhcCCceeecCCCceeeHHHHHHHHhHHHHHHHHHHHHhCCCCcchHHHHHHHHHHHHHHHHHHHHHHcccchhHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCChHHHHHHHHHHHHHHHHHHHHHHHHHHCccCCCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHH                                               ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+3UG9_A           68 NILQWITFALSALCLMFYGYQTWKST-CGWEEIYVATIEMIKFI--IEYFHEFDEPAVIY
+                  0 .|......||..|.............-......|..|..-...|--..|...........
+4Y9H:A|PD         4 WIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTL-VPAIAFTMYLSMLLGYGLTM
+
+3UG9_A          125 SS---NGNKTVWLRYAEWLLTCPVILIHLSNLTGLANDYNKRTMGLLVSDIGTIVWGTTA
+                 60 ..---..|...|.|||.||.|.|..|..|..|......---....|...|...|..|...
+4Y9H:A|PD        63 VPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQG---TILALVGADGIMIGTGLVG
+
+3UG9_A          182 ALSKG-YVRVIFFLMGLCYGIYTFFNAAKVYIEAYHTVPKGRCRQVVTGMAWLFFVSWGM
+                120 ||.|.-..|............|.................-...............|.|..
+4Y9H:A|PD       120 ALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMR-PEVASTFKVLRNVTVVLWSA
+
+3UG9_A          241 FPILFILGPEGFGVLSVYGSTVGHTIIDLMSKNCWGLLGHYLRVL 286
+                180 .|.....|.||.|.......|......|...|...||.....|.. 225
+4Y9H:A|PD       179 YPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAI 224
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -8624,6 +9984,26 @@ numpy.array([['N', 'I', 'L', 'Q', 'W', 'I', 'T', 'F', 'A', 'L', 'S', 'A', 'L',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "      HHHHHHHHHHHHHHHHHHHHcCCCChHHHHHHHHHHHHHHHHHHHHHHHHHHhhcCCCCcHHHHhHHHhHHHHHHHHHHHHHhcccchHHHHHHHHHHHHHHHHHHHHHHHhcCCccchHHHHHHHHHHHHHHHHHHHHhhccCCHHHHHHHHHHHHHHHHHHHHHHHHHHhhhcCChHHHHHHHHHHHHHHhHHHHHHHHHHHHHH       ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+5JSI_A            6 RLFMVATVGMLAGTVFLLASSREVK-PEHRRGVYISALVCGIAWYHYQKMGASWE-----
+                  0 ......|..|..||...|.....|.-|.......|..||..||...|..|.....-----
+4Y9H:A|PD         5 IWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGLTMVP
+
+5JSI_A           60 ---SGSYDTGLRYVDWVLTVPLMFVEVLAVTRKGAAYNEAVRNWGIAATVMIGAGYYGET
+                 60 ---........||.||..|.||..............---.......|...|||.|..|..
+4Y9H:A|PD        65 FGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQG---TILALVGADGIMIGTGLVGAL
+
+5JSI_A          117 SAAGSNEYWTGFVIAMATYVWLMRNLQA----EGEGLKGDQAVAFENIKNLILVGWIIYP
+                120 ...-.........|..|........|..----..|......|..|....|...|.|..||
+4Y9H:A|PD       122 TKV-YSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWSAYP
+
+5JSI_A          173 LGYIAPVVG--DFD-AIREVLYTIADIINXVGLGVLVLQMARV 213
+                180 ........|--...-.|...|....|....||.|...|..... 223
+4Y9H:A|PD       181 VVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAI 224
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -8732,6 +10112,26 @@ numpy.array([['R', 'L', 'F', 'M', 'V', 'A', 'T', 'V', 'G', 'M', 'L', 'A', 'G',
             alignment.target.letter_annotations["ss_pred"],
             "                          HHHHHHHHHHHHHHHHHHHHHHhcCCCCcHHHHHHHHHHHHHHHHHHhCCCceecCCCccchHHHHHHHHHHHHHHHHHHHHHhcCCcccCChHHHHHHHHHHHHHHHHHHHhcCCchHHHHHHHHHHHHHHHHHHHHHHHHHHHHhhHHhhcccCCHHHHHHHHHHHHHHHHHHHHHHHHHHHCccCCCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHh                             ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+6CSM_D           26 DGIKYVQL---VMAVVSACQVFFMVTRAPK------VPWEAIYLPTTEMITYSLAFTGNG
+                  0 .......|---..........|........------........|......|.....|.|
+4Y9H:A|PD         0 GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYG
+
+6CSM_D           77 YIRVA---NGKYLPWARMASWLCTCPIMLGLVSNMALVKYKSIPLNPMMIAASSICTVFG
+                 60 ...|.---......|||.|.||.|.|..|...........---........|..|....|
+4Y9H:A|PD        60 LTMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQ---GTILALVGADGIMIGTG
+
+6CSM_D          134 ITASVVLDPLHVWLYCFISSIFFIFEMVVAFAIFAITIHDFQTIGSPMSLKVVERLKLMR
+                120 .................||.........|.|..-------|......|...|....|..|
+4Y9H:A|PD       117 LVGALTKVYSYRFVWWAISTAAMLYILYVLFFG-------FTSKAESMRPEVASTFKVLR
+
+6CSM_D          194 IVFYVSWMAYPILWSFSSTGACIMSENTSSVLYLLGDALCKNTYGILLWATTWG 248
+                180 .|..|.|.|||..|...|.||.|...|....|....|...|...|..|...... 234
+4Y9H:A|PD       170 NVTVVLWSAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAI 224
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -8837,6 +10237,26 @@ numpy.array([['D', 'G', 'I', 'K', 'Y', 'V', 'Q', 'L', '-', '-', '-', 'V', 'M',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "        cccchHHHHHHHHHHHHHHHHHHHHHHhCCCCChHHHHHHHHHHHHHHHHHHHHHccccchhHHHHHHHHHHHHHHHHHHHHHHhcCCCchhHHHHHHHHHHHHHHHHHHHHHHHcCCCHHHHHHHHHHHHHHHHHHchHHHHHHhcCHHHHHHHHHHHHHHHHHHHHHHHHHHHhccccCCCCcccCCHHHHHHHHHHHHHhhHHHHHHHHHHHHHH      ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+6EYU_B            8 GGFGSQPFILAYIITAMISGLLFLYLPRKL--DVPQKFGIIHFFIVVWSGLMYTNFLNQ-
+                  0 |........|....-.....|.||......--....||..|..........||...|..-
+4Y9H:A|PD         0 GRPEWIWLALGTAL-MGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGY
+
+6EYU_B           65 ----------SFLSDYAWYMDWMVSTPLILLALGLTAFHGADTKRYDLLGALLGAEFTLV
+                 60 ----------......|.|.||...|||.||.|.|.......|-----..||.||.....
+4Y9H:A|PD        59 GLTMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGT-----ILALVGADGIMI
+
+6EYU_B          115 ITGLLAQAQGS----ITPYYVGVLLLLGVVYLLAKPFREIAEESSDGLARAYKILAGYIG
+                120 .|||.......----...........|...|.|...|...||......|...|.|.....
+4Y9H:A|PD       114 GTGLVGALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTV
+
+6EYU_B          171 IFFLSYPTVWYISGIDALPGSLNILDPTQTSIALVVLPFFCKQVYGFLDMYLIHK 226
+                180 .....||.||.|.-----.....|...........||....|...|......... 235
+4Y9H:A|PD       174 VLWSAYPVVWLIG-----SEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAI 224
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -8947,6 +10367,18 @@ numpy.array([['G', 'G', 'F', 'G', 'S', 'Q', 'P', 'F', 'I', 'L', 'A', 'Y', 'I',
             alignment.target.letter_annotations["ss_pred"],
             " CHHHHHHHHHHHHHHHHHHHHHHHHHHHccCCCCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhC",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1BCT_A            1 RPEVASTFKVLRNVTVVLWSAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLIL
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4Y9H:A|PD       158 RPEVASTFKVLRNVTVVLWSAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLIL
+
+1BCT_A           61 LRSRAIFG  69
+                 60 ||||||||  68
+4Y9H:A|PD       218 LRSRAIFG 226
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -9028,6 +10460,18 @@ numpy.array([['R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N',
             alignment.target.letter_annotations["ss_pred"],
             "     ChhHHHHHHHHHHHHHHHHHHHHHHHhCCCChhhHHHHHHHHHHHHHHHHHHHHHHhcCCcccCCC",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+1BHA_A            5 GRPEWIWLALGTALMGLGTLYFLVKGMGVSD-PDAKKFYAITTLVPAIAFTMYLSMLLGY
+                  0 ||||||||||||||||||||||||||||-..-||||||||||||||||||||||||||||
+4Y9H:A|PD         0 GRPEWIWLALGTALMGLGTLYFLVKGMG-VSDPDAKKFYAITTLVPAIAFTMYLSMLLGY
+
+1BHA_A           64 GLTMVPF 71
+                 60 ||||||| 67
+4Y9H:A|PD        59 GLTMVPF 66
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -9106,6 +10550,14 @@ numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "              HHHHHHHHHHHHHHHHHHhhccChhhhHHHHHHHHHHHHHHHHHHHHHHHH    ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+5ABB_Z           14 FWLVTAALLASTVFFFVERDRVS-AKWKTSLTVSGLVTGIAFWHYMYMRGVW 65
+                  0 ..|.||.....|..|.|....||-...|.......||..|||..|..|.... 52
+4Y9H:A|PD         7 LALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGY 59
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -9207,6 +10659,38 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "CCcHHHHHHHHHhcCCccceEEEEECCCCCCCCcEEEEcCCCceEEEEcCccCeEEEEEEEcCCCcEEEEcCeeecCCCCCCcHHHHHHHhcCCCCCcccCCCCeEEEEeCcEEEEeeCCcccCCCCccccccccCCCCCCCceEEEEEEeCCccccccccccccCCCCCCCCCchhcCCCCceEEEEEEEcCCCCceEEEEEEcCCCCCcCCccceeceEEEEecCCHHHHHHHhCCCceEEEcCcccccccCCCCCCCCCCcchhchhHHHhCcceeecCCCcEEEEEEeeCCCCCCccccccccCeEEEEeCCCcchhcceecCCCCceecCcccHHHHHHHhccCCCCEEEecCCCCCCCCCCCcEEEEecCCEEEEEecCCcEEEEEeC",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+H9J4A9_BO         0 GMHFSQSVAIIQSQVGTIRGVQVLYSDQNPLSVDLVINMPQDGMRLIFDPVAQRLKIIEI
+                  0 ||...|.|||.|.....|..||||||.|.|||.||..|..|||..|.||...||||.||.
+sp|Q9BSU1        21 GMPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLKVIEV
+
+H9J4A9_BO        60 YNMKLVKLRYSGMCFNSPEITPSIEQVEHCFGATHPGLYDSQRHLFALNFRGLSFYFPVD
+                 60 .....|||.|.|..|||..|.|.|||....|||||||.|.|...||.||||||||.|..|
+sp|Q9BSU1        81 CDLTKVKLKYCGVHFNSQAIAPTIEQIDQSFGATHPGVYNSAEQLFHLNFRGLSFSFQLD
+
+H9J4A9_BO       120 S-----KFEPGYAHGLGSLQFPNGGSPVVSRTTIYYGSQHQLSSNTSSRVSGVPLPDLPL
+                120 |-----|.||..||||.|||.|.|.--.|.|..||.|...|---------....-|..||
+sp|Q9BSU1       141 SWTEAPKYEPNFAHGLASLQIPHGA--TVKRMYIYSGNSLQ---------DTKA-PMMPL
+
+H9J4A9_BO       175 SCYRQQLHLRRCDVLRNTTSTMGLRLHMFTEGT--SRALEPSQVALVRVVRFGDSCQGVA
+                180 ||..........||||..|...||||.....|.--............|.|.||||||.|.
+sp|Q9BSU1       189 SCFLGNVYAESVDVLRDGTGPAGLRLRLLAAGCGPGLLADAKMRVFERSVYFGDSCQDVL
+
+H9J4A9_BO       233 RALGAPARLYYKADDKMRIHRPTARRR-PPPASDYLFNYFTLGLDVLFDARTNQVKKFVL
+                240 ..||.|....||..|||.||.|.....-|....||.|||||||.|.||||.|..||||||
+sp|Q9BSU1       249 SMLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFTLGVDILFDANTHKVKKFVL
+
+H9J4A9_BO       292 HTNYPGHYNFNMYHRCEFELTVQPD-KSEAHSLVESGGGVAVTAYSKWEVVSRAL-RVCE
+                300 |||||||||||.||||||.......-.....------.....|.||||......|-...|
+sp|Q9BSU1       309 HTNYPGHYNFNIYHRCEFKIPLAIKKENADG------QTETCTTYSKWDNIQELLGHPVE
+
+H9J4A9_BO       350 RPVVLNRASSTNTTNPFGSTFCYGYQDIIFEVMSNNYIASITLY 394
+                360 .||||.|.||.|.|||||||||.|.|..|||||.||.|||.||| 404
+sp|Q9BSU1       363 KPVVLHRSSSPNNTNPFGSTFCFGLQRMIFEVMQNNHIASVTLY 407
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -9342,6 +10826,26 @@ numpy.array([['G', 'M', 'H', 'F', 'S', 'Q', 'S', 'V', 'A', 'I', 'I', 'Q', 'S',
             alignment.target.letter_annotations["ss_pred"],
             "           eeecCCcccCCCCCCHHHHHHHHCCCceEEeeeeCCeEEEEEEEEeCCeEEEEEEECCEEEEEEEEeceecCCCCCCHHHHHhcCCCCCHHHHHHHHCCCCeeEEEeeCCceEEEEEEEecccCCCCCcEEEEEEECCeEEEeEecCC",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+Q8DTX1_ST        11 IKVTTDQNHFSGGTSIEQLKQWFGDPNKSEQRNAG-------------NITLDSYTWVKD
+                  0 ...---------|.|........|.|.|.......-------------......|.....
+sp|Q9BSU1       238 VYF---------GDSCQDVLSMLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYF
+
+Q8DTX1_ST        58 GAVINAQLY-KNSTVARSISNFSFSREAKIGKEDYD-----------------------E
+                 60 .........-....|.....-----.....|.....-----------------------.
+sp|Q9BSU1       289 TLGVDILFDANTHKVKKFVL-----HTNYPGHYNFNIYHRCEFKIPLAIKKENADGQTET
+
+Q8DTX1_ST        94 LKIGESYKKVVEKL----GEPDVLSQSMS---SDKEEMQTVWSSGIKTKSSSATIELYFE
+                120 ...........|.|----..|.||..|.|---.............------....|..-.
+sp|Q9BSU1       344 CTTYSKWDNIQELLGHPVEKPVVLHRSSSPNNTNPFGSTFCFGLQ------RMIFEVM-Q
+
+Q8DTX1_ST       147 NGLLKNKTQKDL 159
+                180 |......|.... 192
+sp|Q9BSU1       397 NNHIASVTLYGP 409
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -9430,6 +10934,14 @@ numpy.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
             alignment.target.letter_annotations["ss_pred"],
             "           CCCCCCHHHHHHHHCCCcee                                          ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+A6W2D6_MA        11 LQIGMSESQVTYLLGNPMLR  31
+                  0 ...|.|...|...||.|...  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -9494,6 +11006,14 @@ numpy.array([['L', 'Q', 'I', 'G', 'M', 'S', 'E', 'S', 'Q', 'V', 'T', 'Y', 'L',
             alignment.target.letter_annotations["ss_pred"],
             "                          CCCCCCHHHHHHHhCCCcee                                                ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+5EKQ_E           26 IRVGMTQQQVAYALGTPLMS  46
+                  0 ...|...|.|...||.|...  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -9553,6 +11073,14 @@ numpy.array([['I', 'R', 'V', 'G', 'M', 'T', 'Q', 'Q', 'Q', 'V', 'A', 'Y', 'A',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                 cCCCCCHHHHHHHhCCCcee                                                   ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+A3QGB8_SH        33 LSLGMTRDQVMTLMGTADFN  53
+                  0 ...|.....|....|.....  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -9617,6 +11145,14 @@ numpy.array([['L', 'S', 'L', 'G', 'M', 'T', 'R', 'D', 'Q', 'V', 'M', 'T', 'L',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                             CCCCCCHHHHHHHHCCCcee                                                           ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+5WAM_B           29 LRPGMTKDQVLLLLGSPILR  49
+                  0 ...|.....||..||||...  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -9693,6 +11229,22 @@ numpy.array([['L', 'R', 'P', 'G', 'M', 'T', 'K', 'D', 'Q', 'V', 'L', 'L', 'L',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "           CCCCCCHHHHHHHhCCCceecCCceeEEEEcCCCCCcceEEEEEccCCEEEEEEecccCCCCCCCCCHHHHhhcCCCCCHHHHHHHcCCccceeceeccCCCCCCCCeEEEEEeCCCCCCCCCeEEEEEE             ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+3GMX_B           11 IQFGMDRTLVWQLAGADQSCSDQVERIICYNNPDHYGPQGHFFFNAAD----------KL
+                  0 ...||..................--....|..................----------.|
+sp|Q9BSU1        18 FTLGMPLAQAVAILQKHCRIIKN--VQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRL
+
+3GMX_B           61 IHKRQMELFPAPKPTMRLATYNKTQTGMTEAQFWAAVPS--DTCSALAEQYPNWPATNGN
+                 60 .......|.-..|........|......|..|.......--......----------...
+sp|Q9BSU1        76 KVIEVCDLT-KVKLKYCGVHFNSQAIAPTIEQIDQSFGATHPGVYNS----------AEQ
+
+3GMX_B          119 LREYVCPSKAERFAPSAYFTFT 141
+                120 |......--------...|.|. 142
+sp|Q9BSU1       125 LFHLNFR--------GLSFSFQ 139
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -9787,6 +11339,18 @@ numpy.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
             alignment.target.letter_annotations["ss_pred"],
             "                                                             ccCCCcHHHHHHhhcCCceEEEEEcCcEEEEEeCcchhccceeEEECCEEEEEEEECCCCEEEEEEEecH         ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+U5LAW6_9B        61 FHIGQPVSEIYSSVFIDTNINFQYKGSSYRFELSEDD----LNTRPLIKAGNIYAQLYID
+                  0 ...|.......|.....................|...----..................|
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFTLGVDILFD
+
+U5LAW6_9B       117 RFTGELSSIRYMDA 131
+                 60 ..|...........  74
+sp|Q9BSU1       298 ANTHKVKKFVLHTN 312
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -9858,6 +11422,14 @@ numpy.array([['F', 'H', 'I', 'G', 'Q', 'P', 'V', 'S', 'E', 'I', 'Y', 'S', 'S',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "            CCCCCCHHHHHHHhCCCcee                                                        ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+2YH9_C           12 IRVGMTQQQVAYALGTPLMS  32
+                  0 ...|...|.|...||.|...  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -9931,6 +11503,18 @@ numpy.array([['I', 'R', 'V', 'G', 'M', 'T', 'Q', 'Q', 'Q', 'V', 'A', 'Y', 'A',
             alignment.target.letter_annotations["ss_pred"],
             "CCCCHHHHHHHHCCCcEEeccccCCeEEEEecCCCcEEEEEEECCEEEEEEEcCC                                                                                     ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+U5LAW6_9B         0 IGKNASDLQVLLGDPERKDPSEYG------------------YEWWIYKKGTSQYVQAGV
+                  0 .|....|....||.|.........------------------.....|..-.........
+sp|Q9BSU1       240 FGDSCQDVLSMLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFT-LGVDILFDA
+
+U5LAW6_9B        42 LDGRIVTLFATGP  55
+                 60 .............  73
+sp|Q9BSU1       299 NTHKVKKFVLHTN 312
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -10003,6 +11587,14 @@ numpy.array([['I', 'G', 'K', 'N', 'A', 'S', 'D', 'L', 'Q', 'V', 'L', 'L', 'G',
             alignment.target.letter_annotations["ss_pred"],
             "                       CCCCCCHHHHHHHhCCCCee                                                            ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+4DM5_A           23 VEKGMSQQEVLRIGGTPSGT  43
+                  0 |..|.|.|.||...|.|...  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -10074,6 +11666,18 @@ numpy.array([['V', 'E', 'K', 'G', 'M', 'S', 'Q', 'Q', 'E', 'V', 'L', 'R', 'I',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                                            CccCCCcHHHHHHhhcCCceEEEEEcCcEEEEEeCcchhccceeEEECCEEEEEEEECCCCEEEEEEEec          ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+U5LAW6_9B        60 P-----FHIGQPVSEIYSSVFIDTNINFQYKGSSYRFELSEDDLNTRPLIKA-GNIYAQL
+                  0 .-----|..|.|.............|-----........||.......||..-......|
+sp|Q9BSU1        12 GNEQWEFTLGMPLAQAVAILQKHCRI-----IKNVQVLYSEQSPLSHDLILNLTQDGIKL
+
+U5LAW6_9B       114 YIDRFTGELSSIRYMD 130
+                 60 ..|.|...|..|...|  76
+sp|Q9BSU1        67 MFDAFNQRLKVIEVCD  83
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -10155,6 +11759,22 @@ numpy.array([['P', '-', '-', '-', '-', '-', 'F', 'H', 'I', 'G', 'Q', 'P', 'V',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "          CCCCCCCCCCCCCcHHHHHHHhCCCCceehhhhcCceeEEecCceEEEEECCCCeEEEEEEechhhcCCCHHHHHHHhCCCcEEEEECCEEEEEEEeCCCEEEEEEeCCCCCCCCCCeeeEEEeC",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+R4K5N0_CL        10 GKVFNS---DFPAKDTNIDSVESKWGK------ADNSEWVASA---KGLYSTYSKHNIVF
+                  0 ......---.|.....-.........|------..........---..|........|..
+sp|Q9BSU1         8 ERSLGNEQWEFTLGMP-LAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNLTQDGIKL
+
+R4K5N0_CL        58 GSNKGG-QIFEVRSLDKQLGN--------------IYLSMVKDKLG--TPQHDVKVNGEE
+                 60 ......-........|.....--------------..........|--.|..........
+sp|Q9BSU1        67 MFDAFNQRLKVIEVCDLTKVKLKYCGVHFNSQAIAPTIEQIDQSFGATHPGVYNSAEQLF
+
+R4K5N0_CL       101 IIGYKMGNDFKILFVFPEPTNQ------------------HANPIMSHYSVL 135
+                120 ....-.|----..|.|......------------------............ 172
+sp|Q9BSU1       127 HLNF-RG----LSFSFQLDSWTEAPKYEPNFAHGLASLQIPHGATVKRMYIY 174
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -10242,6 +11862,14 @@ numpy.array([['G', 'K', 'V', 'F', 'N', 'S', '-', '-', '-', 'D', 'F', 'P', 'A',
             alignment.target.letter_annotations["ss_pred"],
             "       CCCCCCHHHHHHHHCCCcee                                                                                              ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+B5GLC0_ST         7 IQFGMDRTLVWQLAGADQSC  27
+                  0 ..||.....|....|.....  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -10301,6 +11929,14 @@ numpy.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "          cCCCCCHHHHHHHhCCCcEEEeEeeec                                                         ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+B3PEX3_CE        10 TQTGDTKAEVIAKCGDPVFTDHYCAPM  37
+                  0 ...||....|....|.|..........  27
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKVFYKSEDK 265
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -10375,6 +12011,22 @@ numpy.array([['T', 'Q', 'T', 'G', 'D', 'T', 'K', 'A', 'E', 'V', 'I', 'A', 'K',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "          ceeecCCcccCCCCCCHHHHHHHHCCCceEEeeeeCCeEEEEEEEEeCCeEEEEEEECCEEEEEEEEeceecCCCCCCHHHHHhcCCCCCHHHHHHHHCCCCeeEEEeeCCceEEEEEEEecccCCCCCcEEEEEE             ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+Q8DTX1_ST        10 KIKVTTDQNH----FSGGTSIEQLKQWFGDPNKSEQRNAGNITLDSYTWVK---------
+                  0 ..........----|..|....|...............-------......---------
+sp|Q9BSU1         4 EVVPERSLGNEQWEFTLGMPLAQAVAILQKHCRIIKNV-------QVLYSEQSPLSHDLI
+
+Q8DTX1_ST        57 ---DGAVINAQLY--KNSTVARSISNFSFSREAKIGKEDYDELKIGESYKKVVEKLG--E
+                 60 ---....|.....--...............-..|..........|...........|--.
+sp|Q9BSU1        57 LNLTQDGIKLMFDAFNQRLKVIEVCDLTKV-KLKYCGVHFNSQAIAPTIEQIDQSFGATH
+
+Q8DTX1_ST       110 PDVLSQSMSSDKEEMQTVWSSGIKTKSSSATIELYF 146
+                120 |.|.....----........----------.....| 156
+sp|Q9BSU1       116 PGVYNSAE----QLFHLNFR----------GLSFSF 138
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -10471,6 +12123,18 @@ numpy.array([['K', 'I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', '-', '-', '-',
             alignment.target.letter_annotations["ss_pred"],
             "    cCHHHHHHHHHHhCCccCeEEEEeceeecceeEEEEeeceecCCCeEEEEEEeCCCeecceEEEe                       ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+A5UN43_ME         4 LTPDKAVEYLKDNVKIHDNLEISYNRIFGSGEVLNMDFSEYFGKPGFKMLLSLDGDSINP
+                  0 .....||..|.....|..|....|.........|....----...|.|...........-
+sp|Q9BSU1        22 MPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNL----TQDGIKLMFDAFNQRLK-
+
+A5UN43_ME        64 TIEID 69
+                 60 .||.. 65
+sp|Q9BSU1        77 VIEVC 82
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -10542,6 +12206,14 @@ numpy.array([['L', 'T', 'P', 'D', 'K', 'A', 'V', 'E', 'Y', 'L', 'K', 'D', 'N',
             alignment.target.letter_annotations["ss_pred"],
             "                         CCCCCCHHHHHHHhCCCccC                                                                         ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+2PXG_A           25 LQVGQSKQQVSALLGTPSIP  45
+                  0 ...|.|.|.|...||.|...  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -10606,6 +12278,14 @@ numpy.array([['L', 'Q', 'V', 'G', 'Q', 'S', 'K', 'Q', 'Q', 'V', 'S', 'A', 'L',
             alignment.target.letter_annotations["ss_pred"],
             "           CCCCCCHHHHHHHhCCCcee                                                                                                                           ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+3GMX_B           11 IQFGMDRTLVWQLAGADQSC  31
+                  0 ..||.....|....|.....  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -10669,6 +12349,14 @@ numpy.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                             CCCCCCHHHHHHHhCCCcee                                                          ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+5D0O_E           45 IRVGMTQQQVAYALGTPLMS  65
+                  0 ...|...|.|...||.|...  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -10745,6 +12433,18 @@ numpy.array([['I', 'R', 'V', 'G', 'M', 'T', 'Q', 'Q', 'Q', 'V', 'A', 'Y', 'A',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                              eeecCCccCCCCCCCHHHHHHHHCCCceeEEEeeCCEEEEEEEEEeCCeEEEEEEECCeEEEeeeec                                                                                  ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+3D4E_A           30 IKVTTDQNHFSGGTSIEQLKQWFGDPNKSEQRNAG-------------NITLDSYTWVKD
+                  0 ...---------|.|........|.|.|.......-------------......|.....
+sp|Q9BSU1       238 VYF---------GDSCQDVLSMLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYF
+
+3D4E_A           77 GAVINAQLY-KNSTVARSISN  97
+                 60 .........-....|......  81
+sp|Q9BSU1       289 TLGVDILFDANTHKVKKFVLH 310
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -10832,6 +12532,22 @@ numpy.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
             alignment.target.letter_annotations["ss_pred"],
             "                              eeecCCccCCCCCCCHHHHHHHHCCCceeEEEeeCCEEEEEEEEEeCCeEEEEEEECCeEEEeeeecCccccCCCCCHHHHHHCCCCCCHHHHHHHHCCCceeeeecCCCceEEEEEEEcCCcCCCCccEEEEEEE             ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+3D4E_A           30 IKVTTDQNHFSGGTSIEQLKQWFGDPNKSEQRNAGNITLDSYTWVK------------DG
+                  0 ...---------|....|............-------.........------------..
+sp|Q9BSU1        18 FTL---------GMPLAQAVAILQKHCRII-------KNVQVLYSEQSPLSHDLILNLTQ
+
+3D4E_A           78 AVINAQLY--KNSTVARSISNFSFSREAKIGKEDYDELKIGESYKKIVEKLGE--PDVLS
+                 60 ..|.....--..............-...|..........|......|....|.--|.|..
+sp|Q9BSU1        62 DGIKLMFDAFNQRLKVIEVCDLTK-VKLKYCGVHFNSQAIAPTIEQIDQSFGATHPGVYN
+
+3D4E_A          134 QSMSSDKEEMQTVWSSGIKTKSSSATIELYFE 166
+                120 ....----......----------......|. 152
+sp|Q9BSU1       121 SAEQ----LFHLNF----------RGLSFSFQ 139
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -10914,6 +12630,14 @@ numpy.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
             alignment.target.letter_annotations["ss_pred"],
             "    EEEECCEEecCCCCCCCHHHHHHHHHHhCH                            ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+H8H183_DE         4 VFKFDGKVLDDPNPKSTPEQVKTFYAPTYP  34
+                  0 ..|..|..........|.||.......|.|  30
+sp|Q9BSU1        87 KLKYCGVHFNSQAIAPTIEQIDQSFGATHP 117
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -10980,6 +12704,14 @@ numpy.array([['V', 'F', 'K', 'F', 'D', 'G', 'K', 'V', 'L', 'D', 'D', 'P', 'N',
             alignment.target.letter_annotations["ss_pred"],
             "           CCCCCCHHHHHHHHCCCCee                                                                                                                                      ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+3N4I_B           11 IQFGMTRQQVLDIAGAENCE  31
+                  0 ..||...|.||...|.....  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -11043,6 +12775,14 @@ numpy.array([['I', 'Q', 'F', 'G', 'M', 'T', 'R', 'Q', 'Q', 'V', 'L', 'D', 'I',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                    cCCCCCHHHHHHHcCCccce                                                  ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+3GMX_B           84 TQTGMTEAQFWAAVPSDTCS 104
+                  0 ...|...........|....  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -11116,6 +12856,18 @@ numpy.array([['T', 'Q', 'T', 'G', 'M', 'T', 'E', 'A', 'Q', 'F', 'W', 'A', 'A',
             alignment.target.letter_annotations["ss_pred"],
             "                 CCCCCCcHHHHHHHhCCCCceehhhhcCceeEEecCceEEEEECCCCeEEEE                                                                  ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+R4K5N0_CL        17 FPAKDTNIDSVESKWGKADNSEWVASAK-----------------GLYSTYSKHNIVFGS
+                  0 ....|.-...|.|..|...........|-----------------.....|.........
+sp|Q9BSU1       238 VYFGDS-CQDVLSMLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFTLGVDILF
+
+R4K5N0_CL        60 NK-GGQIFEV  69
+                 60 ..-.......  70
+sp|Q9BSU1       297 DANTHKVKKF 307
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -11184,6 +12936,14 @@ numpy.array([['F', 'P', 'A', 'K', 'D', 'T', 'N', 'I', 'D', 'S', 'V', 'E', 'S',
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                              cCCCCCHHHHHHHHCCCCee                                             ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+Q8DTX1_ST        94 LKIGESYKKVVEKLGEPDVL 114
+                  0 ...|.|...|...||.|...  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -11247,6 +13007,14 @@ numpy.array([['L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'V', 'V', 'E', 'K',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                          HhcCCcHHHHHHHhCCCcEEE                                                                                                                                                                                                                                                                    ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+4H0A_A           42 TWVGKDIKVLTSKFGQADRVY  63
+                  0 ...|.......|..|....|.  21
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKVF 259
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -11318,6 +13086,18 @@ numpy.array([['T', 'W', 'V', 'G', 'K', 'D', 'I', 'K', 'V', 'L', 'T', 'S', 'K',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                                     ceeEEEEEcCCCHHHHHHHHHHhCcCcCCCCCeeEecCCCCccccCCCceEEeecCCEEEEEccCC        ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+Q7N560_PH       101 GWEHVELVLPVAPEILSTAAKALLPQPLPAGFSVKESQPKGEQERLPNPT-LAITDGEIT
+                  0 |.|..|..|..................--....|..|..----..|....-|..|...|.
+sp|Q9BSU1        12 GNEQWEFTLGMPLAQAVAILQKHCRII--KNVQVLYSEQ----SPLSHDLILNLTQDGIK
+
+Q7N560_PH       160 VKFHPFT 167
+                 60 ..|..|.  67
+sp|Q9BSU1        66 LMFDAFN  73
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -11402,6 +13182,26 @@ numpy.array([['G', 'W', 'E', 'H', 'V', 'E', 'L', 'V', 'L', 'P', 'V', 'A', 'P',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "        CCCCCcceEeccccEEEEecccHheEEEEeCCCCcCCccceeEeeeeeeeceecceeeeeeccCCCCcEEEEecCCCCCCceEEEcCCcEEEEEEEeCCCCceeEEEEEEeeEEEEEEeccCCccccEEeeceeEeeeecCcceEeeee         ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+4IL7_A            8 IPGEGTG-----IQLSAG-----QILKFYNVPIAEIIVEYDPSNVSGVSSNVKLK-GTIH
+                  0 .|....|-----..|...-----.||......|....|.|.............|.-..|.
+sp|Q9BSU1         6 VPERSLGNEQWEFTLGMPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNLTQDGIK
+
+4IL7_A           57 PLFEVPSQ--ISIENFQPTENYLIYSG------------------FGTSLPQTYTIPANG
+                 60 ..|....|--..||....|...|.|.|------------------||...|..|....--
+sp|Q9BSU1        66 LMFDAFNQRLKVIEVCDLTKVKLKYCGVHFNSQAIAPTIEQIDQSFGATHPGVYNSAE--
+
+4IL7_A           97 YLIISITNTSTGNIGQITLTIGSTTMTFNLQTGENKIPVIAGTQITNMTL-----TSSSA
+                120 --------------....|........|.|...................|-----.....
+sp|Q9BSU1       124 --------------QLFHLNFRGLSFSFQLDSWTEAPKYEPNFAHGLASLQIPHGATVKR
+
+4IL7_A          152 ILIYE 157
+                180 ..||. 185
+sp|Q9BSU1       170 MYIYS 175
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -11495,6 +13295,14 @@ numpy.array([['I', 'P', 'G', 'E', 'G', 'T', 'G', '-', '-', '-', '-', '-', 'I',
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                                                 CCCCCCHHHHHHHHCCCcee                                              ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+3D4E_A          113 LKIGESYKKIVEKLGEPDVL 133
+                  0 ...|.|.......||.|...  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -11559,6 +13367,14 @@ numpy.array([['L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'I', 'V', 'E', 'K',
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                          ccCCCCHHHHHHHHCCCcee                                                       ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+3N4I_B           90 VTVGMTRAQVLATVGQGSCT 110
+                  0 |..|.....||...|.....  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -11618,6 +13434,14 @@ numpy.array([['V', 'T', 'V', 'G', 'M', 'T', 'R', 'A', 'Q', 'V', 'L', 'A', 'T',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                cCCCCCHHHHHHhcCCccccc                    ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+B5GLC0_ST        80 TQTGMTEAQFWAAVPSDTCSA 101
+                  0 ...|...........|.....  21
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKVF 259
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -11690,6 +13514,18 @@ numpy.array([['T', 'Q', 'T', 'G', 'M', 'T', 'E', 'A', 'Q', 'F', 'W', 'A', 'A',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "       CCCCCCHHHHHHHHCCCceecCCcceEEEEeCCCCCCCEEEEEEcCCCEEEEEEECCCCCCCCCCCCHHHHHhcCCCCCHHHHHHhcCC                         ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+B5GLC0_ST         7 IQFGMDRTLVWQLAGADQSCSDQVERIICYNNPDH-------YGPQGHFFFNA-ADKLIH
+                  0 ...||..................|........|..-------........|.|-...|..
+sp|Q9BSU1        18 FTLGMPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLKV
+
+B5GLC0_ST        59 KRQMELFPAPKPTMRLATYNKTQTGMTEAQFWAAVPS  96
+                 60 .....|...........-.|......|..|.......  97
+sp|Q9BSU1        78 IEVCDLTKVKLKYCGVH-FNSQAIAPTIEQIDQSFGA 114
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -11798,6 +13634,38 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "CCccEEeCCcHHHHHHHHHhcccccccEEEEECCCCccCCcEEEEeCCCcEEEEEcCCCcEEEEEEEEcCCccEEEECCEEecCCCCCCCHHHHHHHhcCCCCCccccccCEEEEeeCCEEEEeeCCccccCCccCCCcccccccccCCCCCeeEEEEEeeCCCccccCCCCCCchhcCCceeeEEEEEEeCCCCCcceEEEEEeCCCCCCcccccccccceEEEEecCCHHHHHHHhCCCceEEEcCcccccccCCCCCCCCCccccccchhhHHhceeeeeeCCCceeEEEEEecCCCCccccCccccCcEEEEecCCcCCCccCcccceecCCCcHHHHHHHhcCCCCCCEEEecCCCCCCCCCCccEEEEeeCCEEEEEecCCcEEEEEeC",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+Q1LV04_DA         0 EQWE----FALGMPLAQAISILQKHCRIIKNVQVLYSEQMPLSHDLILNLTQDGIKLLFD
+                  0 ....----|.||||||||..|||||||||||||||||||.|||||||||||||||||.||
+sp|Q9BSU1        10 SLGNEQWEFTLGMPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNLTQDGIKLMFD
+
+Q1LV04_DA        56 ACNQRLKVIEVYDLTKVKLKYCGVHFNSQAIAPTIEQIDQSFGATHPGVYNAAEQLFHLN
+                 60 |.|||||||||.|||||||||||||||||||||||||||||||||||||||.||||||||
+sp|Q9BSU1        70 AFNQRLKVIEVCDLTKVKLKYCGVHFNSQAIAPTIEQIDQSFGATHPGVYNSAEQLFHLN
+
+Q1LV04_DA       116 FRGLSFSFQLDSWSEAPKYEPNFAHGLASLQIPHGATVKRMYIYSGNNLQETKAPAMPLA
+                120 |||||||||||||.|||||||||||||||||||||||||||||||||.||.||||.|||.
+sp|Q9BSU1       130 FRGLSFSFQLDSWTEAPKYEPNFAHGLASLQIPHGATVKRMYIYSGNSLQDTKAPMMPLS
+
+Q1LV04_DA       176 CFLGNVYAECVEVLRDGAGPLGLKLRLLTAGCGPGVLADTKVRAVERSIYFGDSCQDVLS
+                180 |||||||||.|.|||||.||.||.||||.||||||.|||.|.|..|||.|||||||||||
+sp|Q9BSU1       190 CFLGNVYAESVDVLRDGTGPAGLRLRLLAAGCGPGLLADAKMRVFERSVYFGDSCQDVLS
+
+Q1LV04_DA       236 ALGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYYILGVDILFDSTTHLVKKFVLH
+                240 .|||||||||||||||||||||||||||||||||||||..||||||||..||.|||||||
+sp|Q9BSU1       250 MLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFTLGVDILFDANTHKVKKFVLH
+
+Q1LV04_DA       296 TNFPGHYNFNIYHRCDFKIPLIIKKDGADAHSEDCILTTYSKWDQIQELLGHPMEKPVVL
+                300 ||.||||||||||||.|||||.|||..||...|--..|||||||.||||||||.||||||
+sp|Q9BSU1       310 TNYPGHYNFNIYHRCEFKIPLAIKKENADGQTE--TCTTYSKWDNIQELLGHPVEKPVVL
+
+Q1LV04_DA       356 HRSSSANNTNPFGSTFCFGLQRMIFEVMQNNHIASVTLY 395
+                360 |||||.||||||||||||||||||||||||||||||||| 399
+sp|Q9BSU1       368 HRSSSPNNTNPFGSTFCFGLQRMIFEVMQNNHIASVTLY 407
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -11917,6 +13785,14 @@ numpy.array([['E', 'Q', 'W', 'E', '-', '-', '-', '-', 'F', 'A', 'L', 'G', 'M',
             alignment.target.letter_annotations["ss_pred"],
             "           CCCCCCHHHHHHHHCCCCcc                                          ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+A6W2D6_MA        11 LQIGMSESQVTYLLGNPMLR  31
+                  0 ...|.|...|...||.|...  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -11976,6 +13852,14 @@ numpy.array([['L', 'Q', 'I', 'G', 'M', 'S', 'E', 'S', 'Q', 'V', 'T', 'Y', 'L',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                 CCCCCCHHHHHHHhCCCcee                                                   ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+A3QGB8_SH        33 LSLGMTRDQVMTLMGTADFN  53
+                  0 ...|.....|....|.....  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -12049,6 +13933,18 @@ numpy.array([['L', 'S', 'L', 'G', 'M', 'T', 'R', 'D', 'Q', 'V', 'M', 'T', 'L',
             alignment.target.letter_annotations["ss_pred"],
             "                 CCCCCCcHHHHHHHhCCCCceehhhhcCCeeEEEeCCeEEEEECCCCcEEEEEEeCccccc                                                         ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+R4K5N0_CL        17 FPAKDTNIDSVESKWGKADNSEWVASAK-----------------GLYSTYSKHNIVFGS
+                  0 ....|.-...|.|..|...........|-----------------.....|.........
+sp|Q9BSU1       238 VYFGDS-CQDVLSMLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFTLGVDILF
+
+R4K5N0_CL        60 NKGGQIFEVRSLDKQLGN  78
+                 60 ...........|......  78
+sp|Q9BSU1       297 DANTHKVKKFVLHTNYPG 315
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -12118,6 +14014,14 @@ numpy.array([['F', 'P', 'A', 'K', 'D', 'T', 'N', 'I', 'D', 'S', 'V', 'E', 'S',
             alignment.target.letter_annotations["ss_pred"],
             "CCCcccCCcccCCCCCHHHHHHHhCCCeee                                                               ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+H8MKT6_CO         0 ASALRCDNKIVSEGASQVDALAKCGQPVTK  30
+                  0 ....|.....|..|.|..|.|...|.|...  30
+sp|Q9BSU1       228 DAKMRVFERSVYFGDSCQDVLSMLGSPHKV 258
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -12179,6 +14083,14 @@ numpy.array([['A', 'S', 'A', 'L', 'R', 'C', 'D', 'N', 'K', 'I', 'V', 'S', 'E',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "CCCCHHHHHHHHCCCceeC                                                                                                                         ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+U5LAW6_9B         0 IGKNASDLQVLLGDPERKD  19
+                  0 .|....|....||.|....  19
+sp|Q9BSU1       240 FGDSCQDVLSMLGSPHKVF 259
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -12252,6 +14164,18 @@ numpy.array([['I', 'G', 'K', 'N', 'A', 'S', 'D', 'L', 'Q', 'V', 'L', 'L', 'G',
             alignment.target.letter_annotations["ss_pred"],
             "                                                             ccCCCcHHHHHHhhCCCceEEEEEcCeEEEEEECcchhceeeeEEECCEEEEEEEeCCCCEEEEEEE            ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+U5LAW6_9B        61 FHIGQPVSEIYSSVFIDTNINFQYKGSSYRFELSE-------------DDLNTRPLIKAG
+                  0 ...|.......|........---------......-------------............
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV---------FYKSEDKMKIHSPSPHKQVPSKCNDYFFNYF
+
+U5LAW6_9B       108 NIYAQLYIDRFTGELSSIRY 128
+                 60 ........|..|........  80
+sp|Q9BSU1       289 TLGVDILFDANTHKVKKFVL 309
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -12321,6 +14245,14 @@ numpy.array([['F', 'H', 'I', 'G', 'Q', 'P', 'V', 'S', 'E', 'I', 'Y', 'S', 'S',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "    EEEECCEEccCCCCCCCHHHHHHHHHhhCH                            ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+H8H183_DE         4 VFKFDGKVLDDPNPKSTPEQVKTFYAPTYP  34
+                  0 ..|..|..........|.||.......|.|  30
+sp|Q9BSU1        87 KLKYCGVHFNSQAIAPTIEQIDQSFGATHP 117
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -12395,6 +14327,26 @@ numpy.array([['V', 'F', 'K', 'F', 'D', 'G', 'K', 'V', 'L', 'D', 'D', 'P', 'N',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "          CCCCCCCCCCCCCcHHHHHHHhCCCCceehhhhcCCeeEEEeCCeEEEEECCCCcEEEEEEeCccccccCHHHHHHhhCCCceEEEECCEEEEEEEcCCCEEEEEEeCCCCCCCCCCceeEEEeC",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+R4K5N0_CL        10 GKVFNS---DFPAKDTNIDSVESKW----------------GKADNSEWVASAKGLYSTY
+                  0 ......---.|.....-........----------------.......-------|....
+sp|Q9BSU1         8 ERSLGNEQWEFTLGMP-LAQAVAILQKHCRIIKNVQVLYSEQSPLSHD-------LILNL
+
+R4K5N0_CL        51 SKHNIVFGSNKGGQ---IFEVRSL------------DKQLGNIYLSMVKDKLGT--PQHD
+                 60 ....|........|---..||..|------------..|.............|.--|...
+sp|Q9BSU1        60 TQDGIKLMFDAFNQRLKVIEVCDLTKVKLKYCGVHFNSQAIAPTIEQIDQSFGATHPGVY
+
+R4K5N0_CL        94 VKVNGEEIIGYKMGNDFKILFVFPEPTNQ------------------HANPIMSHYSVL
+                120 ............-|----..|.|......------------------............
+sp|Q9BSU1       120 NSAEQLFHLNFR-G----LSFSFQLDSWTEAPKYEPNFAHGLASLQIPHGATVKRMYIY
+
+R4K5N0_CL       135
+                179
+sp|Q9BSU1       174
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -12493,6 +14445,18 @@ numpy.array([['G', 'K', 'V', 'F', 'N', 'S', '-', '-', '-', 'D', 'F', 'P', 'A',
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                                     CeeEEEEEecCChHHHHHHHHHHCCCCCCCCcEEEEecCCCcccCCCCceEEEEcCCEEEEEccCC        ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+Q7N560_PH       101 GWEHVELVLPVAPEILSTAAKALLPQPLPAGFSVKESQPKGEQERLPNPTLAITD--GEI
+                  0 |.|..|..|...................--...|..|.-----.......|....--..|
+sp|Q9BSU1        12 GNEQWEFTLGMPLAQAVAILQKHCRIIK--NVQVLYSE-----QSPLSHDLILNLTQDGI
+
+Q7N560_PH       159 TVKFHPFT 167
+                 60 ...|..|.  68
+sp|Q9BSU1        65 KLMFDAFN  73
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -12560,6 +14524,14 @@ numpy.array([['G', 'W', 'E', 'H', 'V', 'E', 'L', 'V', 'L', 'P', 'V', 'A', 'P',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                                                                              cCCCCCHHHHHHHHCCCCee                                             ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+Q8DTX1_ST        94 LKIGESYKKVVEKLGEPDVL 114
+                  0 ...|.|...|...||.|...  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -12632,6 +14604,18 @@ numpy.array([['L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'V', 'V', 'E', 'K',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                                                            CccCCCcHHHHHHhhCCCceEEEEEcCeEEEEEECcchhceeeeEEECCEEEEEEEeCCCCEEEEEEEec          ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+U5LAW6_9B        60 P-----FHIGQPVSEIYSSVFIDTNINFQYKGSSYRFELSEDDLNTRPLIKA-GNIYAQL
+                  0 .-----|..|.|.............|-----........||.......||..-......|
+sp|Q9BSU1        12 GNEQWEFTLGMPLAQAVAILQKHCRI-----IKNVQVLYSEQSPLSHDLILNLTQDGIKL
+
+U5LAW6_9B       114 YIDRFTGELSSIRYMD 130
+                 60 ..|.|...|..|...|  76
+sp|Q9BSU1        67 MFDAFNQRLKVIEVCD  83
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -12714,6 +14698,18 @@ numpy.array([['P', '-', '-', '-', '-', '-', 'F', 'H', 'I', 'G', 'Q', 'P', 'V',
             alignment.target.letter_annotations["ss_pred"],
             "    CCHHHHHHHHHHhCCcCCeEEEEeceeeeeeeEEEEecccccCCCcEEEEEEECCCcccceEEEe                       ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+A5UN43_ME         4 LTPDKAVEYLKDNVKIHDNLEISYNRIFGSGEVLNMDFSEYFGKPGFKMLLSLDGDSINP
+                  0 .....||..|.....|..|....|.........|....----...|.|...........-
+sp|Q9BSU1        22 MPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNL----TQDGIKLMFDAFNQRLK-
+
+A5UN43_ME        64 TIEID 69
+                 60 .||.. 65
+sp|Q9BSU1        77 VIEVC 82
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -12781,6 +14777,14 @@ numpy.array([['L', 'T', 'P', 'D', 'K', 'A', 'V', 'E', 'Y', 'L', 'K', 'D', 'N',
             alignment.target.letter_annotations["ss_pred"],
             "                                       cCCCCCHHHHHHHhCCCCee                                                                                                                             ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+Q9KJ90_ST        39 IQFGMTFDEVWEIGGGEAAC  59
+                  0 ..||.....|....|.....  20
+sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -12840,6 +14844,14 @@ numpy.array([['I', 'Q', 'F', 'G', 'M', 'T', 'F', 'D', 'E', 'V', 'W', 'E', 'I',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "           eeecCcccCCCCCCCHHHHHHHHCCCceE                                                                                                                       ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+Q8DTX1_ST        11 IKVTTDQNHFSGGTSIEQLKQWFGDPNKS  40
+                  0 ....---------.|........|.|.|.  29
+sp|Q9BSU1       238 VYFG---------DSCQDVLSMLGSPHKV 258
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -12902,6 +14914,14 @@ numpy.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
         self.assertEqual(
             alignment.target.letter_annotations["ss_pred"],
             "                         cCCEEEEECCCCCEEEEEEEecC",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+Q21BS2_RH        25 APNVIFDYDA-EGRIVGIELLDAR 48
+                  0 ........||-..|...||..|.. 24
+sp|Q9BSU1        61 QDGIKLMFDAFNQRLKVIEVCDLT 85
+""",
         )
         self.assertTrue(
             numpy.array_equal(
