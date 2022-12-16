@@ -218,7 +218,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         query_sequence = Seq(None, length=qSize)
         query_record = SeqRecord(query_sequence, id=name, description="")
         target_sequence = Seq(None, length=sys.maxsize)
-        target_record = SeqRecord(None, id=chrom, description="")
+        target_record = SeqRecord(target_sequence, id=chrom, description="")
         records = [target_record, query_record]
         if strand == "-":
             coordinates[1, :] = qSize - coordinates[1, :]
