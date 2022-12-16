@@ -108,6 +108,22 @@ numpy.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
         self.assertEqual(alignment.sequences[1].annotations["leftCount"], 0)
         self.assertEqual(alignment.sequences[1].annotations["rightStatus"], "N")
         self.assertEqual(alignment.sequences[1].annotations["rightCount"], 0)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm8.chr10   3009319 TCATAGGTATTTATTTTTAAATATGGTTTGCTTTATGGCTAGAACACACCGATTACTTAA
+                  0 |||.||.||||||.|.||||||||||||||.|.|||||.||.....||..|.||||||..
+oryCun1.s     11087 TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGGTTCATAGGTTACTTGG
+
+mm8.chr10   3009379 AATAGGATTAACC--CCCATACACTTTAAAAATGATTAAACAACATTTCTGCTGCTCGCT
+                 60 |||.|||||||||--|..||.||.|..|.||.||.|||.||....||..||....|.|||
+oryCun1.s     11147 AATTGGATTAACCTTCTTATTCATTGCAGAATTGGTTACACTGTGTTCTTGACCTTTGCT
+
+mm8.chr10   3009437 CACATTCTTCATAGAAGATGACATAATGTATTTTCCTTTTGGTT 3009481
+                120 ....||||.|||.|||..|||..|.|..||.|||||.|||||||     164
+oryCun1.s     11207 TGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT   11251
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -178,6 +194,22 @@ table bedMaf
         self.assertEqual(alignment.sequences[1].annotations["rightCount"], 0)
         self.assertEqual(len(alignment.sequences), 2)
         self.assertNotIn("empty", alignment.annotations)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3009319 TCATAGGTATTTATTTTTAAATATGGTTTGCTTTATGGCTAGAACACACCGATTACTTAA
+                  0 |||.||.||||||.|.||||||||||||||.|.|||||.||.....||..|.||||||..
+oryCun1.s     11087 TCACAGATATTTACTATTAAATATGGTTTGTTATATGGTTACGGTTCATAGGTTACTTGG
+
+mm9.chr10   3009379 AATAGGATTAACC--CCCATACACTTTAAAAATGATTAAACAACATTTCTGCTGCTCGCT
+                 60 |||.|||||||||--|..||.||.|..|.||.||.|||.||....||..||....|.|||
+oryCun1.s     11147 AATTGGATTAACCTTCTTATTCATTGCAGAATTGGTTACACTGTGTTCTTGACCTTTGCT
+
+mm9.chr10   3009437 CACATTCTTCATAGAAGATGACATAATGTATTTTCCTTTTGGTT 3009481
+                120 ....||||.|||.|||..|||..|.|..||.|||||.|||||||     164
+oryCun1.s     11207 TGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT   11251
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -282,6 +314,50 @@ numpy.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
         self.assertEqual(alignment.sequences[3].annotations["rightCount"], 0)
         self.assertEqual(len(alignment.sequences), 4)
         self.assertNotIn("empty", alignment.annotations)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3012076 AGTCTTTCCAATGGGACCTGTGAGTCCTAACTATGCCAGC-----ACTCCCAACAGCAAG
+ponAbe2.c 158050228 AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTCCAGCCAAATCATCACAGTAAAAAG
+panTro2.c 157529608 AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTCCAGCTAAATCATCACAGTAAAAAG
+hg18.chr6 155039536 AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTCCAGCTAAATCATCACAGTAAAAAG
+
+mm9.chr10   3012131 ACACTAAGTT---------CACTCATCCTTGGTGGATGGGATTTTGCTCCTGGAGTGTCA
+ponAbe2.c 158050168 ATGTTAATATTTATCTCCATACTCATCCTTACCAGATAGCCTTGTGCTCTTGGAATGTCG
+panTro2.c 157529548 ATGTTAATATTTATCTCCATACTCATCCTTACCAGATAGCCTTGTGCTCTTGGAATGTCG
+hg18.chr6 155039476 ATGTTAATATTTATCTCCATACTCATCCTTACCAGATAGCCTTGTGCTCTTGGAATGTCG
+
+mm9.chr10   3012182 C-----CAAATTAAATAACCAGTGAGCAGAGTTG--TGACGAGCATCAGGCTCTGGATTT
+ponAbe2.c 158050108 TACTTATGAAGTGAGCAAGCAGTATTTAGAATAGCATGAGATAGACCAGTCACCAA----
+panTro2.c 157529488 TATTTGTGAAGTGAGCAAGCAGTATGTAGAATAGCATGAGATAGACCAGTCACCAA----
+hg18.chr6 155039416 TATTTGTGAAGTGAGCAAGCAGTATGTAGAATAGCATGAGATAGACCAGTCACCAA----
+
+mm9.chr10   3012235 AGGTGAGAGACCTTAGTGTATGTCTCCTGTAGGTCGCAGCTCCCTATGGAT---------
+ponAbe2.c 158050052 AGGTTGTTGATTTCTAGGAATGTCTCATGCTGGTTGCATCTGTGTGTGAACTGGGAAGTT
+panTro2.c 157529432 AGGTTGTTGATTTCTAGGAATGTCTCATGCTGGTTGCATCTGTGTGTGAACTGGGAAGTT
+hg18.chr6 155039360 AGGTTGTTGATTTCTAGGAATGTCTCATGCTGGTTGCATCTGTGTGTGAACTGGGAAGTT
+
+mm9.chr10   3012286 -----------------GAGTCAAGTGAAGGTCCTGAGACAA------------------
+ponAbe2.c 158049992 GAGATCGCTTTCCACAGAAATTAAGCAAAATCCTGGAGGTAAGTTGTGGA----------
+panTro2.c 157529372 GAGATCGCTTTCCACAGAAATTAAGCAAAATCCTGGAGGTAAGTTGTGGA----------
+hg18.chr6 155039300 GAGATCGCTTTCCACAGAAATTAAGCAAAATCCTGGAGGTAAGTTGTGGATAGGGATGCT
+
+mm9.chr10   3012311 -CAAGTCCTC----GGCTATGTGGGGGTGAGGG-------------ATGC----AG----
+ponAbe2.c 158049942 -TAGGGCTGCTGTAGACTCCCTGACAGCGTAGGAACT--------AGAACTCTGAAGCAA
+panTro2.c 157529322 -TAGGGATGCTGTAGACTCCCTGACAGCATAGGAACTAGAACTCTGAAGC----AAGCCA
+hg18.chr6 155039240 GTAGACTCCCT---GACAGCATAGGAAC-TAGAACTCTGAAGC---AAGC----CA----
+
+mm9.chr10   3012345 ----CTGGAACCTCAGGGA-TCTCTGT-AAGCAGTGGCATAAATGCTTGGCGG--GAGAG
+ponAbe2.c 158049891 GCCACTGGTGCCTAACAAATTCTTTCTAAAGTTGTAGAGTGGATCTGTGGGGGCTGACGT
+panTro2.c 157529267 ----CTGGTGCCTAACAAATTCTTTATAAAGTTGTAGAGTGGATCTGTGGGGGCTGACGT
+hg18.chr6 155039195 ----CTGGTGCCTAACAAATTCTTTATAAAGTTGTAGAGTGGATCCATGGGGGCTGACGT
+
+mm9.chr10   3012397 AGCATGTTAGAGCTCACACGACATAGGAAGCCACTGA--GACACTG   3012441
+ponAbe2.c 158049831 GGCCTCCAACGCCTAACGTGGTTGAAAAGGCCATGGACTTGTGTTC 158049785
+panTro2.c 157529211 GGCCTCCAACGCCTAACATGGTTGAAAAGGCCATGGACTTGTGTTC 157529165
+hg18.chr6 155039139 GGCCTCCAACGCCTAACATGGTTGAAAAGGCCATGGACTTGTGTTC 155039093
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -398,6 +474,28 @@ numpy.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
         self.assertEqual(alignment.sequences[4].annotations["rightCount"], 0)
         self.assertEqual(len(alignment.sequences), 5)
         self.assertNotIn("empty", alignment.annotations)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3012441 TGGGTCCCCTTGGCACATCCAGATCTCCCCAGTTAACCTGTCCTGCTTAGACCACTTACC
+hg18.chr6 155039093 TGGGTTCCTCTAGAATAACCAAG--TCCTCACGTAACCTGGTGTGTATTGACCACCTCTC
+panTro2.c 157529165 TGGGTTCCTCTAGAATAACCAAG--TCCTCACGTAACCTGGTGTGTATTGACCACCTCTC
+ponAbe2.c 158049785 TGGGTTCCTCTAGAATAACCAAG--TCCTCACGTAACCTGGTCTATATTGACCACCTGTC
+otoGar1.s    178939 TGGGCCCCCCTGACCTGGCCAAG--TCCTCACTCACCCGGGTTTACACTGACCACC----
+
+mm9.chr10   3012501 TGAATTG--AATTGGGAGGAGAGAAAGAAGCCAGTTTCCCAGAGAGGGAAAAGGAAAAGC
+hg18.chr6 155039035 TTGACCGCTGATCTTGGGGAG----------CACCTTGCT-GAGGGCCAATGGAAAATGC
+panTro2.c 157529107 TTGACCGCTGATCTTGGGGAG----------CACCTTGCT-GAGGGCCAATGGAAAATGC
+ponAbe2.c 158049727 TTGACTGTTGATCTTGGGGAG----------CACCTTGCT-GAGGGCCAATGGAAAATGC
+otoGar1.s    178885 ---------AAACTTGGGGAG----------CCCTTTGCT-GAGGGGCAACAGCAAACAC
+
+mm9.chr10   3012559 TCGACAC   3012566
+hg18.chr6 155038986 TGGAAGC 155038979
+panTro2.c 157529058 TGGAAGC 157529051
+ponAbe2.c 158049678 TGGAAGC 158049671
+otoGar1.s    178845 GGGAAGC    178838
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -572,6 +670,45 @@ numpy.array([['T', 'G', 'G', 'G', 'T', 'C', 'C', 'C', 'C', 'T', 'T', 'G', 'G',
         self.assertEqual(alignment.sequences[5].annotations["rightCount"], 0)
         self.assertEqual(len(alignment.sequences), 6)
         self.assertNotIn("empty", alignment.annotations)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3012566 --TGTGGGCTCCTCACTTTCCTG-TCTCAGGTGTGTCTGTGAGTTTCGGTGAGTGTCGTA
+hg18.chr6 155038979 CATGAGCCCTCCTTGTATCCCTGATCTTAGATGGGTCTATGGTTTTTGGTGGAAGCCATC
+panTro2.c 157529051 CATGAGCCCTCCTTGTATCCCTGATCTTAGATGGGTCTATGGTTTTTGGTGGAAGCCATC
+ponAbe2.c 158049671 CATGAGCCCTCCTTGTATCCCTGATCTTAGATGGGTCTATGGTTTTTGGTGGAAGCCATC
+otoGar1.s    178838 CACATGCACTCATCGTGTCTCTG-TCTTAGGCGTAGCCCTGGTTTCTGGGGAAAGCTGTC
+cavPor2.s     39622 --TGCGTATCCCTTGCGATCCTGATCCGAGGTGTGGCTGTGGTTTTTGGTGAAAGCCATC
+
+mm9.chr10   3012623 CAGGAAAGAGGGTGAAAACTCAGTCTGAGCTGTCATTCTTGCCAGCTATGTTGCTTTCCT
+hg18.chr6 155038919 CAG-AAACAGCCTCAAAATCCAGTCTGAGTTTTCATTCCTGTCAATCAATCCTCTTATTT
+panTro2.c 157528991 CAG-AAACAGCCTCAAAATCCAGTCTGAGTTTTCATTCCTGTCAATCAATCCTCTTATTT
+ponAbe2.c 158049611 CAG-AAACAGCCTCAAAATCCAGTCTGAGTTGTCATTCCTGTCAATCAATCCTCTTGTTT
+otoGar1.s    178779 CAGAAAACCACCTGAAAACCCAGTCTCTGTGGTCATTGCTGGCAATCAGTCC-CTTATTT
+cavPor2.s     39564 CAGAAAAGAACTTCAAAACCTAGTCTAAATTGTTATTCCCTCCTGCCAATCCTCTTGTTT
+
+mm9.chr10   3012683 GTCCTCTTTAGC-------TTATCTCAGGCAACCTATCTTATTTTGTT-TGCTTTC--AG
+hg18.chr6 155038860 TTTTCCTTCACTACC----TTATTTCTAGCAACACATCTTAC-TTATTCTGTTTTCCCAG
+panTro2.c 157528932 TTTTCCTTCACTACC----TTATTTCTAGCAACACATCTTAC-TTATTTTGTTTTCCCAG
+ponAbe2.c 158049552 TTTTCCTTCATTACC----TTATTTCTAGCAACATATCTTAC-TTATTTTGTTTTCCCAG
+otoGar1.s    178720 TTAGGTTGCCTTG------TTATTTCAGGTGACATAGCTTACTTTGTTTTGTTTTCCCAG
+cavPor2.s     39504 TTACCCCATAGTGACCTCGTTATTGCAA--AACATatcttattttgttctgttttcctgg
+
+mm9.chr10   3012733 AAGGCAAG---CGAtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtatgtgtgtgtgcgtg
+hg18.chr6 155038805 AAGA-------TGAGTTGTGTATGAGTTTTGG----------------------------
+panTro2.c 157528877 AAGA-------TGAGTTGTGTATGAGTTTTGG----------------------------
+ponAbe2.c 158049497 AAGA-------TGAGTTGTGTATGAGTTTTGG----------------------------
+otoGar1.s    178666 AAGACAAGTGGTGACTTGTGTATGAGTTTTGA----------------------------
+cavPor2.s     39446 aagataaa---tgaattttgtgtgaGTTTGAG----------------------------
+
+mm9.chr10   3012790 CGCGCGCGCGAGCACATGTGCATGCATGCGCACTCGTG   3012828
+hg18.chr6 155038780 -------------------------------------- 155038780
+panTro2.c 157528852 -------------------------------------- 157528852
+ponAbe2.c 158049472 -------------------------------------- 158049472
+otoGar1.s    178634 --------------------------------------    178634
+cavPor2.s     39417 --------------------------------------     39417
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -726,6 +863,42 @@ numpy.array([['T', 'G', 'G', 'G', 'T', 'C', 'C', 'C', 'C', 'T', 'T', 'G', 'G',
         self.assertEqual(alignment.sequences[6].annotations["rightCount"], 7564)
         self.assertEqual(len(alignment.sequences), 7)
         self.assertNotIn("empty", alignment.annotations)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3012828 TTTGCATAGACTCTCTTGGCAACAAAATAACGTTATATTTAAACATCCATTAAAATAATG
+cavPor2.s     39417 -----GTGGGATGTCTTGACAGCTAAATAGTcttatatttaagcatttatGAAAATAATG
+otoGar1.s    178634 -----GTGGACATTCGTGACAGGCAAATAGTGTTCTATTTAAACATTTGTTGAAATGATA
+ponAbe2.c 158049472 -----GTGGACTATCCTGACAACCAAATAGCGTTATATTTAAACATTTATGAAAATAATA
+panTro2.c 157528852 -----GCGGACTATCTTGACAACCAAATAGCGTTATATTTAAACGTTTATGAAAATAATA
+hg18.chr6 155038780 -----GTGGACTATCTTGACAACCAAATAGCGTTATATTTAAACGTTTGTGAAAATAATA
+echTel1.s     87492 TTGGGGTGGATGCTCTTGGCAGTCACACAGTGCTCTATTTTAGGATTTACTAGAACAATG
+
+mm9.chr10   3012888 CACTTAGCACAGCCTGCCCTGAGGGAT----GAACACT--ATTGTTAA-AGAACTATTCC
+cavPor2.s     39362 AGGTTATCATGGTTCGCTCTAGTAGCTCTGAGACCTTT--ATTGTCAGCAAAGCTGTTTA
+otoGar1.s    178579 AACTTAGCTCAGCC--CCTT---AGAAGTG-AGAGGCT--ACTGTCAGGGAAGCGGTTTT
+ponAbe2.c 158049417 AGCTTAGCATAACCTGCCTTGACAGATGTG-GTATGC-------CTAGTGAAGTTGTTTA
+panTro2.c 157528797 AGCTTAGCATAACCTGCCTTGACAGATGTG-GTATGC-------CTAGTGAAGTTGCTTA
+hg18.chr6 155038725 AGCTTAGCATAACCTGCCTTGACAGATGTG-GTATGC-------CTAGTGAAGTTGCTTA
+echTel1.s     87552 AGTTTGTCATAACT-GCCTCCTCCCAAGTG-GGAAGCTGAAGCACCAA-GTACTGACTCA
+
+mm9.chr10   3012941 GCTAAGGCAGCAACCTCTGGATCTTCAGCATTCTGGCGCCATCTGCTGGTCATAT
+cavPor2.s     39304 GC--AGGAGGCAACTTCAGGTTCCGTGGGATTCTAGTGCCATCTGCTGGTCATAT
+otoGar1.s    178527 GCG-GAGCAGCAGCCTCAGGATCTGTGGGATTTTAGCGCCATCTGCTGGTCACAG
+ponAbe2.c 158049365 GCT-AAGGCTCAATCTCAGGATCTGTGGGACTCTAATGCCATCTGCTGGTCACAT
+panTro2.c 157528745 GCT-ATGGCTCAATCTCAGGATCTGTGGGACTCTAATGCCATCTGCTGGTCACAC
+hg18.chr6 155038673 GCT-ATGGCTCAATCTCAGGATCTGTGGGACTCTAATGCCATCTGCTGGTCACAC
+echTel1.s     87609 GC--AGTCCCTGACCTCA-CATCCATGGAAATCTAGTGACATCTGCTGGACACAT
+
+mm9.chr10   3012996
+cavPor2.s     39251
+otoGar1.s    178473
+ponAbe2.c 158049311
+panTro2.c 157528691
+hg18.chr6 155038619
+echTel1.s     87661
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -884,6 +1057,50 @@ numpy.array([['T', 'G', 'G', 'G', 'T', 'C', 'C', 'C', 'C', 'T', 'T', 'G', 'G',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3012996 AGATGTCTGCTGTGGAGA-------CCTGGCCAACTTTG----CTT--TCTTC-----AA
+cavPor2.s     39251 TGACGTCTGCAGCCACGG-------GCTGGCTAACTCCA--GTCTT--CCGCG-----CT
+hg18.chr6 155038619 TGATGGCTGCTGCCATCA---CTTTCTTGGCCTACTCTGCTGTCTT--ACTCT-----AT
+panTro2.c 157528691 TGATGGCTGCTGCCATCA---CTTTCTTGGCCTACTCTGCTGTCTT--ATTCT-----AT
+ponAbe2.c 158049311 TGATGGCTGCTGCCATCA---CTTTCTTGGCCTACTAGGCCGTCTT--ACTCT-----AT
+otoGar1.s    178473 GGACGGCCGCCGCCACCACCGCTTTCCCTGCCAACTCCACCGTCTTAAATTCTGCAACAA
+tupBel1.s    331237 TGATGGCTACAGCTGTCA---CTTTCTTGGACCACTCAGCTCTCTC--AAC-------GA
+
+mm9.chr10   3013038 AAAGGCAACAGAAGGTAATCAGTTGAATGCCCACCA-----TTAGGAAGGCGACCTCTAG
+cavPor2.s     39207 AAAGCCGAC--------------------CACACCACATAGTGGGGAGAGTGACCTCTAG
+hg18.chr6 155038569 AAGACTAAC--------------------AGGACCCCATAGTTAGGAGAGCGACCTCTAG
+panTro2.c 157528641 AAGACTAAC--------------------AGGACCCCATGGTTAGGAGAGCGACCTCTAG
+ponAbe2.c 158049261 AAGACTAAC--------------------AGGACCCCATAGTTAGGAGAGCGACCTCTAG
+otoGar1.s    178413 AAGAAAAAT--------------------CGGACCCTGCAGTTACTAGAGCGACCTCTGG
+tupBel1.s    331189 AAGACAAAC--------------------TGGATCCTCCGG---GAGAGGAGACCTCTAG
+
+mm9.chr10   3013093 TGCACAAACCTTGAC-ATTTTCCCTTTTAATGGAA-TTTAACAGAAGTTCAGGATGTTCT
+cavPor2.s     39167 CGGAAAagctttgca-atttttttcttc----gAC-TCTGTCAG--GTTCAGAATTCCAT
+hg18.chr6 155038529 CGAGCAGGCCTTGGC-ATTTTTCTTTTTAATTGAA-TTCATAAA-GGCTTAGAATGCCAT
+panTro2.c 157528601 CGAGCAGGCCTTGGA-ATTTTTCTTTTTAATTAAA-TTCATAAA-GGCTTAGAATGCCAT
+ponAbe2.c 158049221 CGAGCAGGCCTTGGA-ATTTTTCTTTTTAATTGAA-TTCATAAA-GGCTTAGAATGCCAT
+otoGar1.s    178373 TGAACAAGCCTTGGATTTTTTTCTTTTTAATTGAATTTTACAAC-GGCTCAAAATGCAAG
+tupBel1.s    331152 TGAGCAAACCTTGGA-ATTTTTCTTTAAAACAGAA-TTTATAAA-GGTTCA-AATGCCAT
+
+mm9.chr10   3013151 TTGGGTAATTTACAATT---A----GGGGGCAAAAATCAAAAGTATTTCGAGCATATCAA
+cavPor2.s     39115 TTAAACAATTTacagct---a----gaaaaggaaaagcagaggCATTT------------
+hg18.chr6 155038472 TTAGACAATTTGTAATG---GTGGGGGGAGGTAAGAGTAT--------------------
+panTro2.c 157528544 TTAGACAATTTGTAATG---GTGGGGGGAGGTAAGAGTAT--------------------
+ponAbe2.c 158049164 TTAGACAATTTGTAATG---GTGGGGGGAGGTAAGAGTATAAATATTGAATGTAT-TCAA
+otoGar1.s    178314 TTAGACAATTCATAGTGTATGTGTGGGGACCTGAGAGTGCAAATATTGCTGGCAT-TCAG
+tupBel1.s    331096 TTAGACAACTTATAATT---A---------------------------------------
+
+mm9.chr10   3013204 AACTGTTAGCTATG   3013218
+cavPor2.s     39074 --------------     39074
+hg18.chr6 155038435 -------------- 155038435
+panTro2.c 157528507 -------------- 157528507
+ponAbe2.c 158049108 ACCTGTCAATGATG 158049094
+otoGar1.s    178255 CCTTGTTA------    178247
+tupBel1.s    331078 --------------    331078
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -993,6 +1210,18 @@ numpy.array([['T', 'G', 'G', 'G', 'T', 'C', 'C', 'C', 'C', 'T', 'T', 'G', 'G',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3013218 agccaggcgtggtggcacacacctttactcccagcatttggggggcagaggcaggtggat
+
+mm9.chr10   3013278 ctgtgagtttgaggccagcctggtctacagagggagtctcaggacagccagagctacaca
+
+mm9.chr10   3013338 gaaataacctgcctagaaaaacaaaacaaaacaaaacatcaaaactcaaaacaaaTAAAA
+
+mm9.chr10   3013398 AAAATAAAAAACCCAACCTAAACCAAATAACAAAACACT 3013437
+""",
+        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3013218, 3013437]]))
         )
@@ -1100,6 +1329,25 @@ numpy.array([['a', 'g', 'c', 'c', 'a', 'g', 'g', 'c', 'g', 't', 'g', 'g', 't',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3013437 TCCAAAATGGTTAGCTATGCCCAACTCCTTTCACTCCAAGAAAATATCCTAACCATGTAA
+panTro2.c 157528493 TTCAAACCTGTCAATGATGTTCAACTCTTTTCACTGTGGATAAAGATCTTCTAGATGCAA
+hg18.chr6 155038421 TTCAAACCTGTCAATGATGTTCAACTCTTTTCACTGTGGATAAAGATCTTCTAGATGCAA
+ponAbe2.c 158049092 ---------------------CAACTCTTTTCACTGTGGATAAAGATCTTCTAGATGCAA
+
+mm9.chr10   3013497 GAGAGCTAGCCTGTTGGTGGCAGCCAAGCCTGATGGTGGCAGACTAGATTGATGGTGCCA
+panTro2.c 157528433 TAGAATTAGATT------------------------------------TTGGCGATTACA
+hg18.chr6 155038361 TAGAATTAGATT------------------------------------TTGGCGATTACA
+ponAbe2.c 158049053 TAGAATTAGATT------------------------------------TTGGCGATTACA
+
+mm9.chr10   3013557 GACTACTTTATGGCTGTATCATTTTCCATTCATGTGTTGTGTTATA   3013603
+panTro2.c 157528409 TCCTATTTTATGGGTGTATCGTTTTGCATTCATGGGCTGTTTGATA 157528363
+hg18.chr6 155038337 TCCTATTTTATGGGTGTATCGTTTTGCATTCATGGGCTGTTTGATA 155038291
+ponAbe2.c 158049029 TCCTATTTTATGGGTGTATCGTTTTGCATTCATGGGCTGTTTGATA 158048983
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1224,6 +1472,46 @@ numpy.array([['T', 'C', 'C', 'A', 'A', 'A', 'A', 'T', 'G', 'G', 'T', 'T', 'A',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3013603 CCTTCTTAAGAACACTAGACTCAggactggggagatggctcagcagttaagaatcggtgc
+
+mm9.chr10   3013663 tgttaagagtgggagacaagtttggttcccagctcccacattggtcagctcacagccacc
+
+mm9.chr10   3013723 cgtaactctaagatggtacacacctttaatcccaggagacagaggcaatcagatctgagt
+
+mm9.chr10   3013783 tcaagattcagcctgagacagagcatgttccaaattcaggcatggtgggtcataccttta
+
+mm9.chr10   3013843 atatgggacataccttctgctggaggcctacctaaggacaacggagaaaggaagtattcg
+
+mm9.chr10   3013903 ttcttctcctgcttgcacttacttgccagcgcatctactggaacccacttcttcaggatt
+
+mm9.chr10   3013963 ccagcttatacaggagaccagctgaaatatccagcctctcgggactgaacaagtactaga
+
+mm9.chr10   3014023 gtctcagacttcccattcacagctgcccattgttggttggttgtactacagactgtaagt
+
+mm9.chr10   3014083 cattgtaataatttcccttaatatatagagacattatataagttctgtgactctagagaa
+
+mm9.chr10   3014143 ccctgactagtacaCGTGGCTAACTAGAAAGctctggtatgtgcttacttaatgctgagg
+
+mm9.chr10   3014203 ttttaggcatggccacggtgctctgcttcttatgtgggtgctgggaatgcagactcaggt
+
+mm9.chr10   3014263 cctcatgtgtatgcagcaaacacttcatacactcagctgcttccctaacccTATGCTTGT
+
+mm9.chr10   3014323 GTCTTATTACTAACTTGTGAAAAGCTTTGAGTTTATTTTCTATGTTTTCAACCACTTTCT
+
+mm9.chr10   3014383 TGAGTATGCTCAGCTCGTGGCTTTAAACTGGATTTCCCCCTAATATGTAATGACTATAAG
+
+mm9.chr10   3014443 TATTCCTTAAATAGGACACACTTTTGTTATACTTTTTGTTATCatataaaatatttcaaa
+
+mm9.chr10   3014503 aaaatttttttGCTATTTTTATCTTTGAGCCATTGGTCATTTTGACGTGTATCTCTTGAT
+
+mm9.chr10   3014563 TTTTATAGATGGTAATATTTTATGTATTGCTAGCCAATCTCGTTTTCTTGTTTGCTTGCT
+
+mm9.chr10   3014623 TGTTTGTTTTGGTCAATGCAG 3014644
+""",
+        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3013603, 3014644]]))
         )
@@ -1324,6 +1612,16 @@ numpy.array([['T', 'C', 'C', 'A', 'A', 'A', 'A', 'T', 'G', 'G', 'T', 'T', 'A',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014644 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG   3014689
+hg18.chr6 155029206 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT 155029160
+panTro2.c 157519257 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT 157519211
+calJac1.C      6182 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT      6228
+loxAfr1.s      9407 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC      9373
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1480,6 +1778,24 @@ numpy.array([['C', 'C', 'T', 'G', 'T', 'A', 'C', 'C', '-', '-', '-', 'C', 'T',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 6)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014689 GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCT-TTGGAAAGAGTTG
+hg18.chr6 155029160 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+panTro2.c 157519211 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+calJac1.C      6228 GGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTT-TGGGAAACAGTGG
+otoGar1.s    175316 GGAAGCATAAACT-TTTAATCTATGAAATATCAAATCACT-TGGGCAATAGCTG
+loxAfr1.s      9373 GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG
+
+mm9.chr10   3014742
+hg18.chr6 155029107
+panTro2.c 157519158
+calJac1.C      6281
+otoGar1.s    175264
+loxAfr1.s      9319
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1613,6 +1929,15 @@ numpy.array([['G', 'G', 'G', 'A', 'G', 'C', 'A', 'T', 'A', 'A', 'A', 'A', 'C',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 5)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014742 AAGTTCCCTCCATAATTCCTTCCTCCCACCCCCACA 3014778
+calJac1.C      6283 AAATGTA-----TGATCTCCCCATCCTGCCCTG---    6311
+otoGar1.s    175262 AGATTTC-----TGATGCCCTCACCCCCTCCGTGCA  175231
+loxAfr1.s      9317 AGGCTTA-----TG----CCACCCCCCACCCCCACA    9290
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1705,6 +2030,12 @@ numpy.array([['A', 'A', 'G', 'T', 'T', 'C', 'C', 'C', 'T', 'C', 'C', 'A', 'T',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 8)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014778 TCCCATGTCCACCCTGA 3014795
+""",
+        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3014778, 3014795]]))
         )
@@ -1866,6 +2197,30 @@ numpy.array([['T', 'C', 'C', 'C', 'A', 'T', 'G', 'T', 'C', 'C', 'A', 'C', 'C',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 9)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014795 GTTTCAGGGGCAGCTCGCTG----------------TTAGCAG-CTAAGGCATGGTGTCT
+otoGar1.s    175207 ---TCGGGAACAAGTTGCAGTCATGGATAT-TTGGTTTAGATGGTTTAGGTGGGGTGTAT
+calJac1.C      6365 -------------------GCCATGAATAT-----TTTAGAC-ATGCAGGTGTGGCGTGT
+hg18.chr6 155028706 --------------------------------------------aGCAGGTGTGGCATGT
+panTro2.c 157518758 --------------------------------------------aGCAGGTGTGGCATGT
+ponAbe2.c 158040939 --------------------------------------------aGCAGGTGTGGCATGT
+tupBel1.s    326933 ------------------------------------TTAGAAA-TGTGGGTGTGGCGCAT
+cavPor2.s      2210 ------------------------------------TTAGAAA-TTTAGGTGTGGCATGG
+loxAfr1.s      9265 GTT-TGAGAGCAAGTTTAGGACATCAATACGTTGTTTCAGAAA-TTGAGGTTTGCTGTAT
+
+mm9.chr10   3014838 CTCA   3014842
+otoGar1.s    175151 TTCT    175147
+calJac1.C      6400 TTCT      6404
+hg18.chr6 155028690 TTCT 155028686
+panTro2.c 157518742 TTCT 157518738
+ponAbe2.c 158040923 TTCT 158040919
+tupBel1.s    326910 CGCT    326906
+cavPor2.s      2187 TTC-      2184
+loxAfr1.s      9207 CTCt      9203
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2123,6 +2478,65 @@ numpy.array([['G', 'T', 'T', 'T', 'C', 'A', 'G', 'G', 'G', 'G', 'C', 'A', 'G',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 10)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014842 C--TTGGGA---------TGCTTTATAGTGGAAATGGAAAGCA----A-TTTATTTAGAT
+loxAfr1.s      9203 tatttttgatttttttttttttttaaaGCTGAAGTGAAAGTCACACTG-TTTCTTTTGGC
+cavPor2.s      2184 ---TTTGGA---------TA-TTCACAGTTGGAATGAAAGGCACCCTG-TTTCTTTAGGA
+tupBel1.s    326906 CCTTTTGGA---------TTTTTTACAGCTGAAATAAAAAGCACACTG-TGTCTGTAGGT
+ponAbe2.c 158040919 CCTTTTGGA---------CTTTTTATAGCTGAAATGGAAGGCACACTG-TTTCTTTAGGT
+panTro2.c 157518738 CCTTTTGGA---------CTTTTTATAGCTGAAATGGAAGGCACAATA-TTTCTTTAGGT
+hg18.chr6 155028686 CCTTTTGGA---------CTTTTTATAGCTGAAATGGAAGGCACAATA-TTTCTTTAGGT
+calJac1.C      6404 TCTTTTGTA--------TTTTTTTATAGCTGAAAAGGAAGGCACACTG-TCTCTTTAGGT
+otoGar1.s    175147 TATTTTGGG--------CTTTTTTATGGGTGAAATGAAAGGCACACTG-TTTTTTTAGGA
+ornAna1.c  40046323 --CCTTGGA---------AATGTTACTGCAAAAGTGAAAGGCTCATTGTTTTCTTTCTAT
+
+mm9.chr10   3014886 CTTAAATCATTTT-GAAGGTTAATAAAATGACCATATTAATATTCCCATGAACAAAGCCT
+loxAfr1.s      9144 CATAAATCCCTTT-GAAGTATAATGAAATTTTCACTTTAATATTCCTGTGAACAATACCC
+cavPor2.s      2138 CTTAAATCCTTTT-GAAGTATAATAAAATGATCACATTAATATTCCTACTAACAATGCCC
+tupBel1.s    326856 CTTAAATCCTTTT-GAAGTATAATAAAATGATCACTTTACTATTCCTGTGAACAATGCCC
+ponAbe2.c 158040869 CTTAAATACTTTT-GAAGTATAATAAAACGATCACTTTAATACTCCTGTGAGCAATGTCC
+panTro2.c 157518688 CTTAAATACTTTT-GAAGTATAAAAAAATGATCACTTTAATACTCCTGTGAACAATGCCC
+hg18.chr6 155028636 CTTAAATACTTTT-GAAGTATAAAAAAATGATCACTTTAATACTCCTGTGAACAATGCCC
+calJac1.C      6455 CTTAAATACGTTT-GAAGCATAATAAAATGATCACTTTCATACTCCTGTGAATAATGCCC
+otoGar1.s    175096 CTTAAATCCTTTT-GAAGTATAATAAAACGATTACTTTACTGTTCCTGTGAACAATGCCC
+ornAna1.c  40046274 CTTAAGCCTTTTTAAAAGTGTATTGTAATTATGATCTTCATTTCCCCGCTAACAAAGCCC
+
+mm9.chr10   3014945 TCATTT----TTAAAATATTGCATCCTATAATACACATAA-ATCTTGT-----TCTCGtt
+loxAfr1.s      9085 TCATTT-AAAAAAAAAAATTGGGTTTTATACCACACACAGCATCTTTTCAAAATCTCATT
+cavPor2.s      2079 TCATTT----AAAAAAGTTTGGATTTTGTACCACATACAGCATATTTCCAACATCTCATT
+tupBel1.s    326797 TCATTT---TACAAAATCTGGGATTTTATACCACGTACAGCATATTTCCAAAATCTCATT
+ponAbe2.c 158040810 TCTTTT---AAAAAAATCCTGGATTTTATACCACATGCAGCATATTTCTGAAATCTCATT
+panTro2.c 157518629 TCTTTTT--AAAAAAATCCTGGATTTTATACCACATGCAGCATATTTCTGAAATCCCATT
+hg18.chr6 155028577 TCTTTTT-AAAAAAAATCCTGGATTTTATACCACATGCAGCATATTTCTGAAATCTCATT
+calJac1.C      6514 TCCTTTTAAAAAGAAATCTTGGATTTTATATCACACGCAGCATATTTCTGAAATCTCATT
+otoGar1.s    175037 TCATTT---AAAAAAATCTTGGATTTTATACCAGATCCAGCATATTTCCAAAATCTCATT
+ornAna1.c  40046214 TCATTA----AAATATCTTTGTATTTTA-ACGACATACAGCCCATTTCCAAAATCTTAGT
+
+mm9.chr10   3014995 tttatttttt----tatt-tat-----------------------ttattttttttt---
+loxAfr1.s      9026 CCC-TTTTTAAGCAGGTG-TCT---TAGCAAGTTCACTCTCTCTCTCTTTTTTCATTGAC
+cavPor2.s      2023 TCCTTCTTCTGGCAGGTT-TAt-----------------------tagtctctcttt---
+tupBel1.s    326740 TCC-TTTTTTGGCAGGTT-TAT---TAGCAAGTTCCCT-------TTTTGTCTATTG---
+ponAbe2.c 158040753 TCC-TTTCTTGGCAGGTT-TATTTATAGCAAGTTATCTC------TCTCTCTTATTT---
+panTro2.c 157518571 T-----------------------------------------------------------
+hg18.chr6 155028518 T-----------------------------------------------------------
+calJac1.C      6574 TCC-TTTCCTGGCAGGTT-TATTAATAGCAAGTTCTCTC------TCTTATTTATTT---
+otoGar1.s    174980 T-C-CTTTTTGGCGGGTT-TGT---TAGCAAGTTCTCTCCGGCTTTCTTCTTCTTTT---
+ornAna1.c  40046159 TCC-TTTTTGGGTGCATTGTAT---TAAC----------------CGTTCTCTCTTT---
+
+mm9.chr10   3015024 ---------cttt   3015028
+loxAfr1.s      8971 TTTGGCCAAATCT      8958
+cavPor2.s      1990 ---------ctct      1986
+tupBel1.s    326695 ---------ACTT    326691
+ponAbe2.c 158040704 ---------ACTT 158040700
+panTro2.c 157518570 ------------- 157518570
+hg18.chr6 155028517 ------------- 155028517
+calJac1.C      6623 ---------ATTT      6627
+otoGar1.s    174929 ---------TCTC    174925
+ornAna1.c  40046122 -------------  40046122
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2337,6 +2751,26 @@ numpy.array([['G', 'T', 'T', 'T', 'C', 'A', 'G', 'G', 'G', 'G', 'C', 'A', 'G',
         self.assertEqual(status, "C")
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3015028 ccatttt----------ttattaggtatttagctcatttacatttccaatgctatac---
+loxAfr1.s      8958 TCACTTCTA---------------------------------------CCTCCATTCCTT
+cavPor2.s      1986 ctgtgtc----------t------------------------------------------
+tupBel1.s    326691 T-----------------------------------------------------------
+ponAbe2.c 158040700 TTTTGCCTTTTC------------------------------------------------
+calJac1.C      6627 TGCTTTTTCTCAAATCTCCACT--------------------------------------
+otoGar1.s    174925 TTTTTTCTATT------------GACTTTTGCCAAATATTCACTTCCA------------
+
+mm9.chr10   3015075 -caaaagtcccc   3015086
+loxAfr1.s      8937 ACAAAAGTTCTC      8925
+cavPor2.s      1978 ------------      1978
+tupBel1.s    326690 ------------    326690
+ponAbe2.c 158040688 ------------ 158040688
+calJac1.C      6649 ------------      6649
+otoGar1.s    174889 ------------    174889
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2486,6 +2920,96 @@ numpy.array([['c', 'c', 'a', 't', 't', 't', 't', '-', '-', '-', '-', '-', '-',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3015086 catacccacccacccccactcccctacccgcccactccccctttttggccctggcgttcc
+
+mm9.chr10   3015146 cctgttctggggcatataaagtttgtgtgtccaatgggcctctctttccagtgatggccg
+
+mm9.chr10   3015206 actaggccatcttttgatacatatgcagctagagtcaagagctccggggtactggttagt
+
+mm9.chr10   3015266 tcataatgttgatccacctatagggttgcagatccctttagctccttgggtactttctct
+
+mm9.chr10   3015326 agctcccccattgggagccctgtgatccatccattagctgactgtgggcatccacttctg
+
+mm9.chr10   3015386 tgtttgctaggccccggcatagtctcacaagagacagctacatctgggtcctttcgataa
+
+mm9.chr10   3015446 gatcttgctagtgtatgcaatggtgtcagcgtttggatgctgattatggggtagatccct
+
+mm9.chr10   3015506 ggataaggcagtctctacatggtccatcctttcatctcagctccaaactttgtctctgta
+
+mm9.chr10   3015566 actccttccaagggtgttttgttcccacttctaaggaggggcatagtgtccacacttcag
+
+mm9.chr10   3015626 tcttcatttttcttgagtttcatgtgtttaggaaattgtatcttatatcttgggtatcct
+
+mm9.chr10   3015686 aggttttgggctaatatccacttatcagtgagtacatattgtgtgagttcctttgtgaat
+
+mm9.chr10   3015746 gtgttacctcactcaggatgatgccctccaggtccatccatttggctaggaatttcataa
+
+mm9.chr10   3015806 attaattctttttaatagctgagtagtactccattgtgtagatgtaccacattttctgta
+
+mm9.chr10   3015866 tccattcctctgttgaggggcatctgggttctttccagcttctggctattataaataagg
+
+mm9.chr10   3015926 ctgctatgaacatagtggagcatgtgtccttcttaccagttggggcatcttttggatata
+
+mm9.chr10   3015986 tgcccaggagaggtattgctggatcctccggtagtactatgtccaattttctgaggaacc
+
+mm9.chr10   3016046 gccagacggatttccagagtggttgtacaagcctgcaatcccaccaacaatggaggagtg
+
+mm9.chr10   3016106 ttcctctttctccacatcctcgccagcatctgctgtcacctgaatttttgatcttagcca
+
+mm9.chr10   3016166 ttctgactggtgtgaggtggaatctcagggttgttttgatttgcatttctctgatgatta
+
+mm9.chr10   3016226 aggatgttgaacatgttttcaggtgcttctctgccattcggtattcctcaggtgagaatt
+
+mm9.chr10   3016286 ctttgttcagttctgagccccattttttaatggggttatttgattttctgaagtccacct
+
+mm9.chr10   3016346 tcttgagttctttatatatgttggatattagtcccctatctgatttaggataggtaaaga
+
+mm9.chr10   3016406 tcctttcccaatctgttggtggtctctttgtgttattgacggtgtcttttgccttgcaga
+
+mm9.chr10   3016466 aactttggagtttcattaggtcccatttgtcaattctcgatcttacagcacaagccattg
+
+mm9.chr10   3016526 ctgttctgttcaggaatttttcccctgtgcccatatcttcaaggcttttccccactttct
+
+mm9.chr10   3016586 cctctataagtttcagtgtctctggttttatgtggagttctttgatccatttagatttga
+
+mm9.chr10   3016646 ccttagtacaaggagataagtatggatcgattcgcattcttctacatgataacaaccagt
+
+mm9.chr10   3016706 tgtgccagcaccaattgttgaaaatgctgtctttcttccactggatggttttagctccct
+
+mm9.chr10   3016766 tgtcgaagatcaagtgaccataggtgtgtgggttcatttctgggtcttcaattctattcc
+
+mm9.chr10   3016826 attggtctacttgtctgtctctataccagtaccatgcagtttttaccacaattgctctgt
+
+mm9.chr10   3016886 agtaaagctttaggtcaggcatggtgattccaccagaggttcttttatccttgagaagag
+
+mm9.chr10   3016946 tttttgctatcctaggttttttgttattccagatgaatttgcaaattgctccttctaatt
+
+mm9.chr10   3017006 cgttgaagaattgagttggaattgtgatggggattgcattgaatctgtagattgcttttg
+
+mm9.chr10   3017066 gcaagatagccatttttacaatgttgatcctgccaatccatgagcatgggagagctttcc
+
+mm9.chr10   3017126 atcttctgagatcttctttaatttctttcttcagagacttgaagtttttatcatacagat
+
+mm9.chr10   3017186 ctttcacttccttagttagagtcacgccgagatattttatattatttgtgactattgaga
+
+mm9.chr10   3017246 agggtgttgtttccctaatttctttctcagcctgtttattctttgtgtagagaaaggcca
+
+mm9.chr10   3017306 ttgacttgtttgagttaattttatatccagctacttcaccgaagctgtttatcaggttta
+
+mm9.chr10   3017366 ggagttctctggtggaatttttagggtcacttatatatactatcatatcatctgcaaaaa
+
+mm9.chr10   3017426 gtgatattttgacttcctcctttccaatttgtatccccttgatctccttttgttgtcgaa
+
+mm9.chr10   3017486 ttgctctggctaatacttcaagtactatgttgaaaaggtagggagaaagtgggcagcctt
+
+mm9.chr10   3017546 gtctagtccctgattttagtgagattgcttccagcttctctccatttactttgatgttgg
+
+mm9.chr10   3017606 ctactggtttgctgtagattgcttttatcatgtttaggtatgggTGTTCTCG 3017658
+""",
+        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3015086, 3017658]]))
         )
@@ -2577,6 +3101,18 @@ numpy.array([['c', 'c', 'a', 't', 't', 't', 't', '-', '-', '-', '-', '-', '-',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 3)
         self.assertEqual(len(alignment.annotations["empty"]), 7)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3017658 TTTTTATTTGCAGGTTTCTTTAC----AGTTCTCTTTCATTCTTCTCCTCTTTTCTTCTG
+hg18.chr6 155028517 CCTTTCTTGGCAGGGTTATTTATAGCAAGTTATCTCTCTCTCTTA------TTTATTTTT
+panTro2.c 157518570 CCTTTCTTGGCAGGGTTATTTATAGCAAGTTATCTCTCTCTCTTA------TTTATTTTT
+
+mm9.chr10   3017714 TTGACCTTTATCAGATTTCTGCTTTAACC   3017743
+hg18.chr6 155028463 TTGCCTTTTCCCAAATCTCCACTTCCACC 155028434
+panTro2.c 157518516 TTGCCTTTTCCCAAATCTCCACTTCCACC 157518487
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2688,6 +3224,26 @@ numpy.array([['T', 'T', 'T', 'T', 'T', 'A', 'T', 'T', 'T', 'G', 'C', 'A', 'G',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3017743 ACCACAGACCTTCTGTTTAGTCCAAAGGACGCAAATTATGTATCCACTTtagtaggaggc
+
+mm9.chr10   3017803 tgacccgcagcctacatgaaccaggtatttctggaaggcaggctggggttgaaagagaaa
+
+mm9.chr10   3017863 ttagatggtgagaaaagaataatgaggccaagacaaatttttctcttatcaaggcccaag
+
+mm9.chr10   3017923 agagtttactaagagactatgcttaaaagggggaaggcccatcccccccccccctcgcgc
+
+mm9.chr10   3017983 cagtctatccttggtgctttgtcaccatgccatcagcacttggtcggcaggtagcagaat
+
+mm9.chr10   3018043 ctcagggcagttgacacttcaaaagaaaccagccaagtcagaaagctgcactgcaggaga
+
+mm9.chr10   3018103 cctgcactcagtggtgacaaggtctgtaccagcctgcttcaggctgggggaggctaca
+
+mm9.chr10   3018161
+""",
+        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3017743, 3018161]]))
         )
@@ -2828,6 +3384,20 @@ numpy.array([['A', 'C', 'C', 'A', 'C', 'A', 'G', 'A', 'C', 'C', 'T', 'T', 'C',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3018161 ATCCACAAAAGAGAC-----AAAGAAGAAAACCAAAAGAAAAGATTGTAGCTTAAAACAA
+panTro2.c 157518434 ACCTACAAAGG---------AAAACAATTAACCATAAGAAAAGTTTGTACCATAAAACAA
+hg18.chr6 155028381 ACCTACAAAGG---------AAAACAATTAACCACAAGAAAAGTTTGTACCATAAAACAA
+ponAbe2.c 158040613 -------------ACAAAGGAAAACAATTAACCATAAGAAAAGTTTGTACCATAAAACAA
+
+mm9.chr10   3018216 TTCCATTTTATTGA   3018230
+panTro2.c 157518383 TTTTATTTTATTGA 157518369
+hg18.chr6 155028330 TTTTATTTTATTGA 155028316
+ponAbe2.c 158040566 TTTTATTTTATTGA 158040552
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2962,6 +3532,22 @@ numpy.array([['A', 'T', 'C', 'C', 'A', 'C', 'A', 'A', 'A', 'A', 'G', 'A', 'G',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 3)
         self.assertEqual(len(alignment.annotations["empty"]), 7)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3018230 AGGA-CAAAATAATACAGAtttttttttttttttttttttGCAGTACTGGAAATGGAATG
+hg18.chr6 155028316 ATAATCCAATCAATATATAT---------------------CAGAACCTGGCTCCCAATG
+panTro2.c 157518369 ATAATCCAATCAATATATAT---------------------CAGAACCTGGCTCCCAATG
+
+mm9.chr10   3018289 AATGTCCCTCACAATCACTATCAAGGTCCCTATCAAGGCAATCACTCTGTCACCGAGCTA
+hg18.chr6 155028277 -----TTCTGATAGTCATTATGAA----------AAAGAATTTACACATATATAGATTTA
+panTro2.c 157518330 -----TTCTGATAGTCATTGTGAA----------AAAGAatttacacatatatagattta
+
+mm9.chr10   3018349 -CAGCCCCAGC   3018359
+hg18.chr6 155028232 TTAGGTATATG 155028221
+panTro2.c 157518285 ttaggtatatg 157518274
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3127,6 +3713,28 @@ numpy.array([['A', 'G', 'G', 'A', '-', 'C', 'A', 'A', 'A', 'A', 'T', 'A', 'A',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(len(alignment.annotations["empty"]), 5)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3018359 TT-CAAACATGCATACATGCATTCATGTCTCATAA-TAATTATTAACA-TTGTCTTAGGC
+panTro2.c 157518274 -tataaatgtacaaatatatgtgtatgtCTCATAAATAATTATTAACAGTCATCTTAGGT
+hg18.chr6 155028221 -TATAAACGTACAAATATATGTGTATGTCTCATAAATAATTATTAACAGTCATCTTAGGT
+otoGar1.s    174752 TT-TATACATGTATGTGTAAATGTAGGTCCTGTAAGTAATTATTAACATTTGTCTTAGGT
+ponAbe2.c 158040455 ---taaatgtacaaatatatgtgtatgtgtcataaataATTATTAACAGTCATCTTAGGT
+
+mm9.chr10   3018416 CAGAGGCTCGACTGCCCCAAAGCAATCCACT-------TAAACTGTCCCTGAGAA-AGTC
+panTro2.c 157518215 CAGTGGCCTGAGTGATACAAACTAAGCCATCCATATTTTATATTCTCTCCGGGAAGGGTC
+hg18.chr6 155028162 CAGTGGCCTGAATGATACAAACTAAGCCATCCATATTTTATATTCTCTCCGGGAAGGGTC
+otoGar1.s    174693 TAGAGGCCCGAGTGACACAAGCTAACCCATCC------TATCCTCCCTGTGTGAAGGGTC
+ponAbe2.c 158040398 CAGTGGCCTGAGTGATAGAAACTAAGCCATCCATATTTTATATTCTCTCTGGGAAGGGTC
+
+mm9.chr10   3018468 Attcctctccctaa   3018482
+panTro2.c 157518155 ATCCTTTTCTTT-- 157518143
+hg18.chr6 155028102 ATCCTTTTCTTT-- 155028090
+otoGar1.s    174639 ATCCTTTCTTCTGA    174625
+ponAbe2.c 158040338 ATCCTTTTCTTT-- 158040326
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3283,6 +3891,16 @@ numpy.array([['T', 'T', '-', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3018482 tcttcatctcctcttttcctccttttttttttctcatttctctttctctttcttttgtcc
+
+mm9.chr10   3018542 ttttccttTATAGCAAGCAAGGCAAGTAGTCTCTATTTAGAAGGCATggagagaatgggg
+
+mm9.chr10   3018602 agaggaggaaaggaggagaggggaggagaggaggggagGTAT 3018644
+""",
+        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3018482, 3018644]]))
         )
@@ -3393,6 +4011,26 @@ numpy.array([['t', 'c', 't', 't', 'c', 'a', 't', 'c', 't', 'c', 'c', 't', 'c',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3018644 AGGGTAGGCCAAGTGCCTTGGGAAGTAGTTGTTGGTAGACTGAAAGTGTGTTC---TGAG
+                  0 ||...||||.||...||.|||||.|.|-----|.|.|.|.|||--||.|.|||---||.|
+canFam2.c  47545836 AGAAAAGGCAAATGCCCCTGGGAGGGA-----TAGCACATTGA--GTTTATTCACATGCG
+
+mm9.chr10   3018701 TGTCAGTGATGTTCA-TGAGATTATCACCAGCAAGGATG--GCTGACGGGAACTG---CA
+                 60 |||.|||||||...|-||||||..||.||--.|||||||--|.|||.||.|.|.|---||
+canFam2.c  47545783 TGTAAGTGATGGATACTGAGATCCTCTCC--TAAGGATGCGGTTGATGGAATCAGAAGCA
+
+mm9.chr10   3018755 AGAGGCATAGCCCTGAGTTCTAAAGGAGAGGGAAACGTCACAGAAAGGATG---------
+                120 |....||....||.||..||||||......|||||..|||..||.||.||.---------
+canFam2.c  47545725 AATACCACCAGCCAGAACTCTAAAATGAGAGGAAAGATCATGGATAGAATAGAATTGTAA
+
+mm9.chr10   3018806 -----------------CACTGTTTCAGCATCT  3018822
+                180 -----------------|.||.||..||.||.|      213
+canFam2.c  47545665 TATGAAATATAAAATTTCCCTATTGAAGAATTT 47545632
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3537,6 +4175,22 @@ numpy.array([['A', 'G', 'G', 'G', 'T', 'A', 'G', 'G', 'C', 'C', 'A', 'A', 'G',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3018822 CTGCCTTCCATTACGATTTACTGATCACTTACAACCCTCCCACA----GAAGAGAACCTA
+                  0 ||...||.|..|.|...|||.|..|||||||.||..||||-|||----.|||.|||...|
+canFam2.c  47545472 CTTTTTTTCCCTGCCCATTATTACTCACTTAAAATTCTCC-ACATTGTAAAGGGAATTCA
+
+mm9.chr10   3018878 ACTTG-CTTAGGAGCATATGTACAGTTAATCAAGAC-----AAAAATAAGAATGGAGACt
+                 60 |.|.|-|||......||....|||.||.|.|||||.-----|||||||||.|||||.|..
+canFam2.c  47545413 AATCGACTTCTAGAGATGCACACAATTTAGCAAGATCAACTAAAAATAAGTATGGAAAAT
+
+mm9.chr10   3018932
+                120
+canFam2.c  47545353
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3653,6 +4307,22 @@ numpy.array([['C', 'T', 'G', 'C', 'C', 'T', 'T', 'C', 'C', 'A', 'T', 'T', 'A',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 10)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3018932 gtctgagttagggttttactgctgtgaacagacaccatgaccaaggcatgtcttataaaa
+
+mm9.chr10   3018992 aaaatttaattagggctggcttacagattcagaggttcagtgggagcatcaaggtggggg
+
+mm9.chr10   3019052 catggcagcatccaggcaggcatggtgcaggcagagctgagagttctacatcttcatcca
+
+mm9.chr10   3019112 aaggcttctagtggaagactgacttccaggcacctagggtgagggtcttaagcccacacc
+
+mm9.chr10   3019172 cacagtgacacacctattccaaccaggtcacacctattccaacaaggccatacctccaaa
+
+mm9.chr10   3019232 tggcaccactcctggtccaagaatatacaaaccatgaca 3019271
+""",
+        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3018932, 3019271]]))
         )
@@ -3777,6 +4447,22 @@ numpy.array([['g', 't', 'c', 't', 'g', 'a', 'g', 't', 't', 'a', 'g', 'g', 'g',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019271 GAGACCAAATG------------TGGCGCTCACG-TGAGGCCAGGAGTAAATCGCACACA
+                  0 |||.|-|||||------------.|..|..||.|-||.|.|||.|.||.|--||||||..
+canFam2.c  47545353 GAGGC-AAATGGAAAATGCCCCACGATGTCCAGGCTGTGTCCATGTGTGA--CGCACATG
+
+mm9.chr10   3019318 CAGCCCATGCTTTCACCATCTGCTAGGGTGCTCTGGAGCAGGGCAGGCTTCTAACCTGG
+                 60 |.|.||----------||.|||||....|.|.||.||.......|||...|.|||||||
+canFam2.c  47545296 CTGTCC----------CACCTGCTTCTATTCACTTGACACACATAGGTCCCAAACCTGG
+
+mm9.chr10   3019377
+                119
+canFam2.c  47545247
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3923,6 +4609,18 @@ numpy.array([['G', 'A', 'G', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', '-', '-',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 3)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019377 CCCCAGCATTCTGGCAGACACAGTG-AAAAGAGACAGATGGTCACTAATAAAATCTGT-A
+felCat3.s     46845 CCCAAGTGTTCTGATAGCTAATGTGAAAAAGAAGCATGTGCCCACCAGTAAGCTTTGTGG
+canFam2.c  47545247 CCCAAGTGTTCTGATTGCCTCTGTGAAAAAGAAACATGGGCCCGCTAATAagatttgcaa
+
+mm9.chr10   3019435 TAAATTAG-ATCTCAGAGGATGGATGGACCA  3019465
+felCat3.s     46785 TGAACTAGAATCTCAGAGGATG---GGACTC    46757
+canFam2.c  47545187 tgacctagaatctcagaggatg---ggactc 47545159
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4095,6 +4793,17 @@ numpy.array([['C', 'C', 'C', 'C', 'A', 'G', 'C', 'A', 'T', 'T', 'C', 'T', 'G',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 6)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019465 AAGATAGATATTTAGAAGTAGCTTTTTATGTTTTTCTGATGTGTGTT   3019512
+calJac1.C     10128 aacaTCTATATTTTGAAATGGCTTTTCATGTTACTCTGATGTGTGTC     10175
+panTro2.c 157515743 -------atattttgaaatggcttttcatgttattctgatgTGTTTT 157515703
+hg18.chr6 155025688 -------atattttgaaatggcttttcatgttattctgatgTGTTTT 155025648
+canFam2.c  47545159 ---aggtatatttaaaaatagctcttcatgttgttctaatgtgtgtt  47545115
+felCat3.s     46757 ---ACGTGTTTTTAAAAATAG-TTTTCATGTTGTTCTGATGTGTGTT     46714
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4263,6 +4972,28 @@ numpy.array([['A', 'A', 'G', 'A', 'T', 'A', 'G', 'A', 'T', 'A', 'T', 'T', 'T',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(len(alignment.annotations["empty"]), 7)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019512 TGCATCATTAAGACTAGAGTTCCT---------------TTCTGTCTT---TGCTTTCTT
+calJac1.C     10175 --CCTCATGAAGGCCCAAGTTCCTAAA-----ACATTAATTCTCTTCC---TATTTCCTA
+panTro2.c 157515703 --CTTCATTAAGGCCCAAGTTCCTAAA-----ACATTCATTCTCTTCC---TCTTTTCTA
+hg18.chr6 155025648 --CTTCATTAAGGCCCAAGTTCCTAAA-----ACATTCATTCTCTTCC---TCTTTTCTA
+canFam2.c  47545115 --CCTCATCTAAACCCAGGTTCTTACAGGCTTATATTTTTTCTTTCTTCAACCCTTCCTC
+
+mm9.chr10   3019554 G--------ACAGGGCCATGCTCGGCAGTCATTCTTAGACTGCTTTTTGTTTgtttgg
+calJac1.C     10225 GCTGTCTCGCCTAGGCCTTGCCCGCCAGCAATTCCC----------------------
+panTro2.c 157515653 G------AAAAGAGGTCTTGCCCGCCAGCAATTCCCACATGGGTATTGG---------
+hg18.chr6 155025598 G------AAAAGAGGTCTTGCCCGCCAGCAATTCCCACATGGGTATTGG---------
+canFam2.c  47545057 A--------TCAGTGTCTTGCCTGCCAGTCATTCCTAC-----------TTTGTTCGG
+
+mm9.chr10   3019604
+calJac1.C     10261
+panTro2.c 157515610
+hg18.chr6 155025555
+canFam2.c  47545018
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4426,6 +5157,14 @@ numpy.array([['T', 'G', 'C', 'A', 'T', 'C', 'A', 'T', 'T', 'A', 'A', 'G', 'A',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 11)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019604 tttggtttggtttggttttttcaagacagggtttctttgtatagtcctagctgtcctgga
+
+mm9.chr10   3019664 actcactttgtagaccagactggccttgaactcagaaa 3019702
+""",
+        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3019604, 3019702]]))
         )
@@ -4537,6 +5276,18 @@ numpy.array([['t', 't', 't', 'g', 'g', 't', 't', 't', 'g', 'g', 't', 't', 't',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 10)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019702 tctgcctgcctctgcctcccaag--------------------------------tcctg
+                  0 ||||.||..||||..|||.|||.--------------------------------.....
+felCat3.s     46521 tctgtctctctctctctctcaaaaataaacattaaaaaaaaCCAAACAAACAAACTCAAG
+
+mm9.chr10   3019730 ggattaaaggcgtg 3019744
+                 60 ..............      74
+felCat3.s     46461 TTCTTAAAGGTTTA   46447
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4706,6 +5457,26 @@ numpy.array([['t', 'c', 't', 'g', 'c', 'c', 't', 'g', 'c', 'c', 't', 'c', 't',
         self.assertEqual(status, "C")
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019744 -----------------cgccaccactgccctgcCT------------TAAACTGCTCTT
+ponAbe2.c 158037803 -----------------CGCCAGCAATTCC------------------CACATGGGTATT
+tupBel1.s    324316 ----------------------------------------------------------TT
+calJac1.C     10261 -------------------------------------------------ACATGGCTACT
+otoGar1.s    171894 ---------------------------------------------------ATTGGTGTT
+oryCun1.s      4534 --------------------CACCATTGTCTTGCCTGTC-TCAGGTCCCATAGGGGTGTT
+felCat3.s     46447 TGATTTCTCTTTCTCTTACTCATCAGTGTCTTGTCTTTCAGTCATTCCCACATTGGTGTA
+
+mm9.chr10   3019775 AA   3019777
+ponAbe2.c 158037778 GG 158037776
+tupBel1.s    324314 GA    324312
+calJac1.C     10272 GG     10274
+otoGar1.s    171885 GA    171883
+oryCun1.s      4495 GA      4493
+felCat3.s     46387 GA     46385
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -4955,6 +5726,54 @@ numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 10)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019777 GGCAATGTCA-GGCTATGCGT------TCTAGACAGGGCACAAGAAAAGCTTTTAGCAGC
+oryCun1.s      4493 GGCAACATCATGACCTTATGT------TCTAA----GGGACAGGAAAAGCTTTTTCCAGT
+hg18.chr6 155025555 GGCAACACCATGA-TACATAT------TCAAGATAAAGTACAGGAAAAGCTTTTTGCAGT
+panTro2.c 157515610 GGCAACACCATGA-TACATAT------TCAAGATAAAGTACAGGAAAAGCTTTTTGCAGT
+ponAbe2.c 158037776 GGCAACACCATGA-TACATAT------TCAAGATAAAGTACAGGAAAAGCTTTTTGCGGT
+calJac1.C     10274 GGCAACACCGTGA-TACATAT------CCGAGATAAAGTACAGGAAAAGC-TTTTGCAGT
+otoGar1.s    171883 GGCAACGCCGTGA-TCCTTGCTGTAGATAAAGACAAAGTGCAGGAAAAGCCCTTTACGGT
+tupBel1.s    324312 GGCAATGTCATGA----ATGT------TCTAGATAAAGTACAGGAAAAGCTTTTTGCAGT
+felCat3.s     46385 GACATC---ATAA-AGTACAT------TCTAGATAAAGTGCAGGAAAAGCATTTTG-AGT
+canFam2.c  47545018 ------ATCATGA-TGTAAAT------TCCGGGTAAAGTACAACAAAAGGATTTTG-AAC
+
+mm9.chr10   3019830 AGAATAAACTTTT-AAAGTAAATTACTTTCCTTGATAGCAACTAGACGACCCAATTGA-T
+oryCun1.s      4443 AGAATAAGCCTTT-AGAGGAAACTGCTTCCCTTGCTAGTAATCAAGTGTTCAAAGTGA-T
+hg18.chr6 155025502 GGAATAAAATGTT-AAAGGGAATTGCTTTCCTTGATAGCAATCAGGTCACCAAAGTGA-G
+panTro2.c 157515557 GGAATAAAATGTT-AAAGGAAATTGCTTTCCTTGATAGCAATCAGGTCACCAAAGTGA-G
+ponAbe2.c 158037723 GGAATAAAATGTT-AAAGGAAATTGCTTTCCTTGATAGCAATCAGGTCACCAAAGTGA-G
+calJac1.C     10326 GGACGAAAATGTT-GAAGGAAATTGCTTTTCTTGATAGCAATCAGGTCACCAAAGTGA-G
+otoGar1.s    171824 AGAATAAAAGGTT-AAAGGAAATTGCTTTTCTTGATAGCAATCAGGTGACCAAAGTGATT
+tupBel1.s    324262 AGGATAAACTTTT-AAAGGAAATTGCCTTCCTTGACAGCAATCAGGTGACCAAAGTCATA
+felCat3.s     46336 AGAATAAAATGTT-GTAGGAAATTGCTTTCTTCAAGAGACATTAGGTGATTAAAGTAA-T
+canFam2.c  47544972 AGGATAAAATGTTAATAGGAAATTACTTTCTTTGAGAGCAATCAGGTGATTGAAGGAA-T
+
+mm9.chr10   3019888 ACAGT------GGAAAG-----A----------GGCCTTTGAGAAT---GCATGAGAGAA
+oryCun1.s      4385 ACAACAAAGAAAAAAAA-----A----------GCCTTTTGGGAAT-CAGGATGGAATAA
+hg18.chr6 155025444 ATGA-------AGAAAA-----A----------TTTTTTTGAGAATGCAGGATAGAATAA
+panTro2.c 157515499 ATGA-------AGAAAA-----A---------TTTTTTTTGAGAATGCAGGATAGAATAA
+ponAbe2.c 158037665 ATGA-------AGAAAA-----A---------TTCTTTTTGAGAATGCAGCACAGAATAA
+calJac1.C     10384 ATGA-------AGAAA-----------------GTTTTTTGAGAATGTGGGATAGAATAA
+otoGar1.s    171765 ATAA-------AGAAAA-----A----------ATGTTTTGAGAATGCTGGAAAGAATAA
+tupBel1.s    324203 CTGA-------AAAAAA-----AAACAAAAACAAACTTTTGTGGATGCAGTATAGAAGCA
+felCat3.s     46278 ATAA-------AGGGAA-----T----------TTTTTTTGAGAATACAGGATACAATAA
+canFam2.c  47544913 ATAA-------AGGGAAAAAACA----------AAGTTCAGTGAATCCAAGTTAGAATAA
+
+mm9.chr10   3019924 TAT---TTCCTGTA------AGAGTTGAACAATTTAGAATTTACc   3019960
+oryCun1.s      4341 TATTACTTCCCCTATTTCTCAGAGCTAAATAGTTTAGGATT----      4300
+hg18.chr6 155025406 TATTATTTCCCTTATTTCTAAGAGTTAAACAATTTAGGATT---- 155025365
+panTro2.c 157515460 TATTATTTCCCTTATTTCTAAGAGTTAAACAATTTAGGATT---- 157515419
+ponAbe2.c 158037626 TATTATTTCCCTTATTTCT-AGAGTTAAACAATTTAGGATT---- 158037586
+calJac1.C     10420 TATTGTTTTCGTTATTTCTAAGAGTTAAACAATTTAGGATT----     10461
+otoGar1.s    171727 TTTTATCCACCCTCCATTTCAGAGTTAAATAATTCAGGATT----    171686
+tupBel1.s    324155 TATTATTTTCCCTATGTCT--AAGTTAAATAACTTGGGCTT----    324116
+felCat3.s     46240 TATTATTTCCCCTACATCTAAGAGttaaataatttaaaatt----     46199
+canFam2.c  47544870 TATTGTTTCCCTTACTTCTAAGAGttaaataatttaaaatttaat  47544825
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -5121,6 +5940,36 @@ numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 12)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3019960 actagggatgggagaggctcccagaacccagtaatgatgacattaagaaatacacaacag
+
+mm9.chr10   3020020 ttgggaaatggaacccaaagagaacacctccagtagataagcatgacccccagttgaggg
+
+mm9.chr10   3020080 atgggcccatgcacccatcttaaaattttggacccagaattattcttctcaaaaggaaat
+
+mm9.chr10   3020140 gcagggatgaaaatggagcagagactggaagaaaggccaaccagagactgccctaactca
+
+mm9.chr10   3020200 ggatccatcgcatgtgcaggcaccaaccccaacactattgctgatgccatgttgtacttg
+
+mm9.chr10   3020260 ctgatggaagcctggcatggctgtcctctgagagtctcaaatgaggcacctgacagatgc
+
+mm9.chr10   3020320 agatacttacagccaaccaatggactgagccccgggacctcaataaaagaatgaggggat
+
+mm9.chr10   3020380 ggcaaccccataggaagaacaacagtatcaactccctggactcctcagagctcccgggga
+
+mm9.chr10   3020440 ctaagccaccaactaaagagcatacataggctgctctgaggccccagatacatatgtagc
+
+mm9.chr10   3020500 agaggactgcctcagtgggaggggatgtgcttggtcttgtgaaggcttgatgctccagag
+
+mm9.chr10   3020560 aaggaggatgctagaggggtgaggtgggagtggatgggtgggtgggcaggggagcaccct
+
+mm9.chr10   3020620 cttagaggacaagggctctggggtgggggagctcatggagggggaactgggaaggaggga
+
+mm9.chr10   3020680 gaacatttgaaatgtaaataaataaaataataaaaaa 3020717
+""",
+        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3019960, 3020717]]))
         )
@@ -5297,6 +6146,15 @@ numpy.array([['a', 'c', 't', 'a', 'g', 'g', 'g', 'a', 't', 'g', 'g', 'g', 'a',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3020717 TGTCAAACATGCATAAAGATATACT-GAGGAGCCCATGAATTTTA   3020761
+canFam2.c  47544825 tGTT------------TAACATAATAGAGGGGCCCATGAATTTTA  47544792
+panTro2.c 157515419 ----AAAAAT---TTTAAATATACTAGAGGGGTCCATGAATTTTA 157515381
+hg18.chr6 155025365 ----AAAAAT---TTTAAATATACTAGAGGGGTCCATGAATTTTA 155025327
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -5425,6 +6283,16 @@ numpy.array([['T', 'G', 'T', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 12)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3020761 TATATATGCTATCCGTGTGCTGTGATTTTTGTTTTAAATGTTATTTTATGTATATGcaag
+
+mm9.chr10   3020821 attttgcattgtagcagaaggtggcttcaaactcacgatcctcctgcctcagccttccaa
+
+mm9.chr10   3020881 gtgctgagatcatacctctgcaccatcctgcccACCT 3020918
+""",
+        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[3020761, 3020918]]))
         )
@@ -5619,6 +6487,30 @@ numpy.array([['T', 'A', 'T', 'A', 'T', 'A', 'T', 'G', 'C', 'T', 'A', 'T', 'C',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 9)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3020918 GAGGTTTGTGACTTTTAATA----------CTGATTGTTATCTAACATCACAGAATTCTC
+hg18.chr6 155025316 ---------------------------------ATGGTTATTTAATACTGCACAATCCTC
+panTro2.c 157515370 ---------------------------------ATGGTTATTTAATACTGCACAATCCTC
+canFam2.c  47544783 --------------------------TAATAAAATAATTCTGTACCATTATGAAGTTCTC
+felCat3.s     46172 ---GTCCATGAATTTTAATGGTGAAGTAATGAAATAATTCTTTAATATCAC---------
+cavPor2.s       606 GAGTTCTGCAAATtttaata----------ggaaaagaagatTAATATTACAAAGTTTTC
+oryCun1.s      4263 -AGATCCATGAATTTTAATA---AAGCAATGAGATAATTATTTAATGTTGGAAAATCCTC
+calJac1.C     10482 GGGGTCCATGAATTTTAATA-----GTAACAAAATGGTTATTCAATATTGCAAAATCCTC
+ponAbe2.c 158037565 GGGGTCCATGAATTTTAATA-----GTAATAAAATGGTTATTTAATATTGCAAAATCCTC
+
+mm9.chr10   3020968 AGTTCTTAAGGAAACAATTGTTCTGTGTGTTATTTGTCTAGGAGGA   3021014
+hg18.chr6 155025289 AGCTTTTAAGGAAAAACATGTTTGACTTATTAATTATTTAGGACAA 155025243
+panTro2.c 157515343 AGCTTTTAAGGAAAAACATGTTTGACTTATTAATTATTTAGGACAA 157515297
+canFam2.c  47544749 AGCTCTTAAGGAAAAA-----GTGATTTGTTAATTACTTAGGACAA  47544708
+felCat3.s     46124 -------------AAA-----GTAATTTATTAATTATTTAGGACAA     46096
+cavPor2.s       556 AGTTCTGATGGAAaaa----------gtgtgatttttttaaa----       524
+oryCun1.s      4207 AAGTCTTAAGGAAAAAAGTGTTTGACTTGTTAATGACTTGGGATGA      4161
+calJac1.C     10537 AGC-TTTAAGGAAAAACATATTTGATTTGTTAATTATTTAGGACAA     10582
+ponAbe2.c 158037510 AGCTTTTAAGGAAAAACGTGTTTGACTTATTAATTATTTAGGACAA 158037464
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -5903,6 +6795,21 @@ numpy.array([['G', 'A', 'G', 'G', 'T', 'T', 'T', 'G', 'T', 'G', 'A', 'C', 'T',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 10)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021014 ACCTTGGTGACGCCACTGGATTTTGTATGACTGAATACTG   3021054
+oryCun1.s      4161 ATCTTGATGAAGTCATTCCAACTTGGATGATTTAGGAATT      4121
+otoGar1.s    171328 ATCTTGGTGAAGTTATTCCAATTTATGTGATTTAGGAATG    171288
+calJac1.C     10582 ATTTTGGTGAAGTTATTCCAACTTGTGTGGCTTAGGAATG     10622
+hg18.chr6 155025243 ATTTTGGTGAAGTTATTCCAACTTGCATGGCTTAGGAATG 155025203
+panTro2.c 157515297 ATTTTGGTGAAGTTATTCCAACTTGCATGGCTTAGGAATG 157515257
+ponAbe2.c 158037464 ATTTTGGTGAAGTTATTCCAACTTGCATGGCTTAGGAATG 158037424
+canFam2.c  47544708 ATCTCAGTGAAGTCATTCTGACTCGCATGATTTAGGAATG  47544668
+felCat3.s     46096 ATCTCAGTGAAGTTATTCTGACTTGCATGATTTAGGTATG     46056
+dasNov1.s      7354 ACATCAGTGAAATCATTCCGACTCGTATGACTGAGCGATG      7314
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 # fmt: off
@@ -6168,6 +7075,34 @@ numpy.array([['A', 'C', 'C', 'T', 'T', 'G', 'G', 'T', 'G', 'A', 'C', 'G', 'C',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 11)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021054 CTCATTTGGGAACTTACAGGTCAGCAAAGGCTTCCAG--------------------GAC
+cavPor2.s       496 CTCATTTGGGAGTTCAGAGTT--------GCTATAAA--------------------TAC
+oryCun1.s      4121 CTAATTTGGGCTCTTACATTTTATAACTGCCTAATGGAGTCTTCTTTTTTCCT-CCTTAA
+otoGar1.s    171288 CTAACTTGGGGACACAGG-TTCATAAAGGCTTAATGGAGCCCACTGGTCCCTTCCCCAGA
+calJac1.C     10622 CCAGTTTGGGGACTTAGATTTTCTAACTGCCTAATGAAGTCTGCTCTTTCCTTCCCTAGC
+hg18.chr6 155025203 ACAATTTGGGGATTTACATTTCCTAACTGCCTAATGAAGTCTGCTCCTTCCTTCCCTAGA
+panTro2.c 157515257 CCAATTTGGGGATTTACATTTCCTAACTGCCTAATGAAGTCTGCTCTTTCCTTCCCTAGA
+ponAbe2.c 158037424 CCAATTTGGGGATTTACATTTCCTAACTGCCTAATGAAGTCTGCTCTTTCCTTCCCTAGA
+canFam2.c  47544668 CTAATTTGGTGACTCAAATTTCATAATTGCTTAATGAAAGCTGATGTTTTCTTCCCTACA
+felCat3.s     46056 CTAATTTGGTGACTTGAATTTCATAATTGCTTAAGGAAGCCTGCTGTTTCCTTCCCAAGA
+dasNov1.s      7314 CTAATTGGGGGACTCACATTTTAAAATTGCTAACCGAAGCCTGCTGTTTTCTTCTCTAGA
+
+mm9.chr10   3021094 TTACATGCAG   3021104
+cavPor2.s       464 TTGTGA----       458
+oryCun1.s      4062 TTACACGTAT      4052
+otoGar1.s    171229 CTCTATGTAC    171219
+calJac1.C     10682 CTATATGTAT     10692
+hg18.chr6 155025143 CTATATGTAT 155025133
+panTro2.c 157515197 CTATATGTAT 157515187
+ponAbe2.c 158037364 CTATATGTAT 158037354
+canFam2.c  47544608 CCATATGTAT  47544598
+felCat3.s     45996 CTATATGCAT     45986
+dasNov1.s      7254 CTATAAGTAT      7244
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -6443,6 +7378,23 @@ numpy.array([['C', 'T', 'C', 'A', 'T', 'T', 'T', 'G', 'G', 'G', 'A', 'A', 'C',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 12)
         self.assertEqual(len(alignment.annotations["empty"]), 2)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021104 CTGTTAGTGCTGTTTT---AATGTACCTCGCAGTA   3021136
+cavPor2.s       458 -----ATTACTTTCTT---AATGTAAATTTTTATA       431
+oryCun1.s      4052 TTGCTAGTA--TTCTC---AATGTAATATTTTATA      4022
+otoGar1.s    171219 TTGCTGGTGTTCCCTT---AATATAATGTTTTATA    171187
+calJac1.C     10692 TTACTCGTG--CCCTT---AATATAGCATTTTATA     10722
+hg18.chr6 155025133 TTGCTGGTA--CTCTT---AATATCACATTTTATA 155025103
+panTro2.c 157515187 TTGCTGGTA--CTCTT---AATATCACATTTTATA 157515157
+ponAbe2.c 158037354 TTGCTGGTG--CTCTT---AATATAACATTTTATA 158037324
+canFam2.c  47544598 TTGCTGGTGCTCTCAA---AATGTAGCA-------  47544573
+felCat3.s     45986 TTGCTGGTGCTCTCAA---AATATAACA-------     45961
+dasNov1.s      7244 TTGCTGGTG--ATCTGATTAATGTAACATTTTATG      7211
+echTel1.s     95225 CTGTTAATG--CTCTG------------TTTTATG     95246
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -6751,6 +7703,38 @@ numpy.array([['C', 'T', 'G', 'T', 'T', 'A', 'G', 'T', 'G', 'C', 'T', 'G', 'T',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 13)
         self.assertEqual(len(alignment.annotations["empty"]), 2)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021136 AGGCAAATGAGGTGATAAGA-------TTGTGTT-----TAC----TCCCTCTGTGC---
+cavPor2.s       431 AG-CAGATGAGATAACAGTG-------ATATATT-----cat----tctctgtgtgt---
+oryCun1.s      4022 AAGCAAATGAGGTGATGAGG---------GCATC-----TAT----TTCTTATTTGT---
+otoGar1.s    171187 AAACAAATGAGATCACA-GG-------ACATATG-----TA--CTTGTCCCCCACGT---
+calJac1.C     10722 AAGCAAATGAGATCACA----------GCACATG-----TATATTTTTTCTCCGTGT---
+hg18.chr6 155025103 AAACAAATGAGATCACAAGG-------GCATATA-----TGT-TTTTTTCTCTGTGT---
+panTro2.c 157515157 AAACAAATGAGATCACAAGG-------GCATATA-----TGT-TTTTTTCTCTGTGT---
+ponAbe2.c 158037324 AAACAAATGAGATCACAAGG-------GCATATG-----TAT-TTTTTTCTCTGTGT---
+eriEur1.s       358 taaataataagataagatgaaagCATAGCATGTA-----TTTTCTtgccctctccttctc
+canFam2.c  47544377 tAGAAAATGAGATACC-----------GTGTGTA-----TATGCTTTCTCTCTGTGT---
+felCat3.s     45955 AAGCAAATGAGATAAG-----------ACACGTG-----TATTCTTCCTCTCTGTGT---
+dasNov1.s      7211 AGGAAAGTGAGAGGACCAGG-------GCAAATA-----AATATTCTTTCTCTGTGT---
+echTel1.s     95246 AAGAAGGTGAGATGACAAGG-------GTGTATAGATAGGATATTCTTGCTTTGGGT---
+
+mm9.chr10   3021177 -------TTG   3021180
+cavPor2.s       391 -------atg       388
+oryCun1.s      3983 -------GTG      3980
+otoGar1.s    171145 -------GTG    171142
+calJac1.C     10764 -------GTG     10767
+hg18.chr6 155025059 -------GTG 155025056
+panTro2.c 157515113 -------GTG 157515110
+ponAbe2.c 158037280 -------GTG 158037277
+eriEur1.s       413 tgtctctgtc       423
+canFam2.c  47544336 GGGGTCTGTG  47544326
+felCat3.s     45914 GGTGTCTGTG     45904
+dasNov1.s      7166 -------A--      7165
+echTel1.s     95296 -------G--     95297
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -7116,6 +8100,40 @@ numpy.array([['A', 'G', 'G', 'C', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'G', 'T',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 14)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021180 -------------------TCCC-------AGAGAGTCTGA-TAGGAGGAG
+cavPor2.s       388 -------------------tgcctTTGTATAGTGGCTCTGAGTATAAAGTA
+oryCun1.s      3980 -------------------TGCCTGTGTATAGCATTTCTGAATATA-----
+ponAbe2.c 158037262 -----------------------TCTG---AGTGTGTATGAATATGAAGTA
+panTro2.c 157515095 -----------------------TCTG---AGTATGTATGAATATGAAGTA
+hg18.chr6 155025041 -----------------------TCTG---AGTATGTATGAATATGAAGTA
+calJac1.C     10782 -----------------------TCTG---AGTATGTCTGAATATGAAGTG
+otoGar1.s    171127 -----------------------TCTA---AGTGTGTCTGAACATGATGTG
+tupBel1.s    323493 -----------------------TCTC---TGAGTGTCTGAACTTGAGGTA
+eriEur1.s       432 -----------------------TCTC---AGTGTGTCTGACCAG------
+canFam2.c  47544317 -----------------------TCTG---AGTGTGTCTGAATGTGAGGTA
+felCat3.s     45895 -----------------------TCTG---AGTGTTCCTGAATGTGAGGTG
+dasNov1.s      7165 T-TGTGTGCCTTTGCGGAGCATTTCTG---AGCGTGTCTGAACTTGAGGTA
+echTel1.s     95297 TGCCCAGGACTGCGCATGGTATTTCTT---GGTGTGTCTGAAGGTGAGATA
+
+mm9.chr10   3021204
+cavPor2.s       356
+oryCun1.s      3953
+ponAbe2.c 158037237
+panTro2.c 157515070
+hg18.chr6 155025016
+calJac1.C     10807
+otoGar1.s    171102
+tupBel1.s    323468
+eriEur1.s       451
+canFam2.c  47544292
+felCat3.s     45870
+dasNov1.s      7118
+echTel1.s     95345
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -7479,6 +8497,42 @@ numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 15)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021204 TGCACTGGTTTTCC-TGCAGTGGTTCTCAGTAATAGGAAGACA-ACAGAATTTGAAGTAT
+echTel1.s     95345 GGCATTGGTTTTTAGAGAGAGAACCCACATAAGTAGGAAAACATTTTGAATTTATAGTAA
+dasNov1.s      7118 TGCATTGATTTTCAGTGAGGGAAATCACAC---TAAGAGAGCATTTTGAATTTATAATAA
+felCat3.s     45870 TGCATTGATTTTCA-TGCATTGATTCACATGAATAGGAATGCATTTTGAAATTATAGCAA
+canFam2.c  47544292 TGCATTAATTTTCA-TGCGTTGATTCACATGAATAGGAATACA-TTTGAATTTATAGGAA
+eriEur1.s       451 -GCACTGATTCTCG-AGGGTTGATTCCCAGTAAGAGGAAACTG-CGTGAGTTTACAGTAC
+sorAra1.s      1685 TGCATTGATTTTTA-AGTATTGATTCACATGAAAAGGAAAGCA-CTTCAATTTATGATAA
+tupBel1.s    323468 TGCATTGAATTCCA-TGTGTTATGTCACATTAATAGGAAACGA-TTCTAATTGATAGGAA
+otoGar1.s    171102 TG----GATTTTTA-CACATTGATTCACCTTAACGGGAAAACA-TGTGAATTTGTAGGAA
+calJac1.C     10807 TGCATTGGTTTTTA-TGCCTTGATTCACATGAATAGGAAAACG-TTTGAATTTATAGGAA
+hg18.chr6 155025016 TGCTTTGATTTTTA-TGCATTGATTTACATGAATAGGAAAATG-TTTGAATTTATAGTAA
+panTro2.c 157515070 TGCTTTGATTTTTA-TGCATTGATTTACATGAATAGGAAAACA-TTTGAATTTATAGTAA
+ponAbe2.c 158037237 TGCTTTGATTTTTA-TGCATTGATTTACATGGATAGGAAAACG-TTTGAATTTATAGTAA
+oryCun1.s      3953 ------TCTTTACA-TACTTTGATTTACATCGACGGGAAAACA-TTTGCATTTATAGCAA
+cavPor2.s       356 GGCATTGATTTCCA-TGCATTAATTCACATTAATAGGAAAACA-GTCCAATTTATAGTAA
+
+mm9.chr10   3021262 CCGGCTTTGGCCA   3021275
+echTel1.s     95405 ATATTCTTGGCTA     95418
+dasNov1.s      7061 ATGCTCTTGGCTA      7048
+felCat3.s     45811 ATGTTTTTGGCTG     45798
+canFam2.c  47544234 ATGCTTTTGGCTG  47544221
+eriEur1.s       508 ATGGGCTTGGCTG       521
+sorAra1.s      1627 AT-GATTTGGCCA      1615
+tupBel1.s    323410 ATGCTTCTGACCA    323397
+otoGar1.s    171048 AGGCATTTGGCCA    171035
+calJac1.C     10865 ATGGTTTTGGCCA     10878
+hg18.chr6 155024958 ATGGTTTTGGCCA 155024945
+panTro2.c 157515012 ATGGTTTTGGCCA 157514999
+ponAbe2.c 158037179 ATGGTTTTGGCCA 158037166
+oryCun1.s      3901 TGGCTTTTGGTCA      3888
+cavPor2.s       298 ATGGTTTTGGCCA       285
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -7790,6 +8844,58 @@ numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 15)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021275 CTTTCTCTGACATTACTGTAACTGAAGTAGCTC-AGAAGCACAAAAGGTCACATCATGCA
+cavPor2.s       285 CCTTTGCTGATGTTACTGTAAGCGAACTAGCTG-AAAAGCACAAAAGGTCATGTCAGGCA
+oryCun1.s      3888 TCGTCTCTGATGTTACTCTAGCTGAAAGCGCTC-CAAAGCACAAAAGGCCATGGCAGGCA
+ponAbe2.c 158037166 CCTTCTCTGATGTTACTGTAACTGAAATAGCTC-AAAAGCACAAAAGGTCATGGGAGGCA
+panTro2.c 157514999 CCTTCTCTGATGTTACTGTAACTGAAATAGCTC-AAAAGCACAAAAGGTCATGGGAGGCA
+hg18.chr6 155024945 CCTTCTCTGATGTTACTGTAACTGAAATAGCTC-AAAAGCACAAAAGGTCATGGGAGGCA
+calJac1.C     10878 CCTTCTCTGATATTACTGTAACTGAAATAGCTC-AAAAGCACAAAAGGTCATGGCAGGCA
+tupBel1.s    323397 TCCTCTCAGATGTTCCTGTAACCAAAGTAGCTC-AGAAGCACAAAAGGTCATGCCAGGCA
+sorAra1.s      1615 CCTTCTCTGATGTTACTGTAACTGAGGTAGCTCAAAAAGCACAAAAGGTCATGTCAGGCA
+eriEur1.s       521 CCTTCTCTGATCTGACTGTAACCGAAGTCTCTC-GAAAGCACAAAAGCTCACGGCAGGCC
+canFam2.c  47544221 CTGTCTCTGATGTTACTGTAACTGAAGTAGCTC-AAAAGCACAAAAGGTCATGTCAGGC-
+felCat3.s     45798 CTGTCTCTGATGTTACTGTAACTGAAATAGTTC-AAAAGCACAAAAGGTGATGTCAGGCA
+dasNov1.s      7048 CCTTCTCTGATGTTACTGTAACTGAAGAGGCTC-AAAAGCACAAAAGGTCATGTCGGGCA
+echTel1.s     95418 CCATCTCTGATATTACTGTAATGGAATTACTTT-GAAAGCACAAAAGGTCAGGACAAGCG
+ornAna1.c  40040432 CCACCTCTGATATCACTGTAACTCAGCTACCCA-GAAGATAGGAAAGGTCATATCAGCCA
+
+mm9.chr10   3021334 TCCATGCAGAATCCACTGAAGCTGTTTGGAAAGGC-----------------------CA
+cavPor2.s       226 TTTATGCAAAATTTACTAGTTCCGTTCATAAAGGCACCTCGCATTTTATTACTTAGTTCA
+oryCun1.s      3829 TTTATGTCAAATGTACTAGCACTGTTTATAACAGCACCTTGTGTTGTATTACTTTGTTCA
+ponAbe2.c 158037107 TTCATGTAAAACTTACTAGTGCTGTTTATAAGGGTACCTTGTGTTTTATTACTTTGTTAA
+panTro2.c 157514940 TTTATGTAAAACTTACTAGTGCTGTTTATAAGGGTACCTTGTGTTTTATTACTTTGTTAA
+hg18.chr6 155024886 TTTATGTAAAACTTACTAGTGCTGTTTATAAGGGTATCTTGTGTTTTATTACTTTGTTAA
+calJac1.C     10937 TTTATGTAAAACTTACTAGTGCTGTTTATAAAGGCACCTTGTGTTTTATTACTTTGTTAA
+tupBel1.s    323338 TTGATGTAAA-------------GTTTCTGAAGGCATCTCGTGTTTTATTACTTTGTTCA
+sorAra1.s      1555 TTGATGTAAAATATACCAGTGCTGTTTATAAAGACCCCTTGCATATAATGTTGTTGATCA
+eriEur1.s       580 TTTCTGTAAAATACAGCGGCGCTGCTTCCAAAGGCaccttgca------gatgtctctca
+canFam2.c  47544163 TTTATGTAAAATTTACTAGAGCTGTTTATAAAGGCACCTCGTGTAATATTGCTTTGTTCA
+felCat3.s     45739 TTTATGTAAAATTTACTAGTGCTGTTTATAAAGGTACCTTGTGTATTATTGCTTTGTTCA
+dasNov1.s      6989 TTGATGTAAAATTTACTAGTGCTG-TTTATAAAGGACCTTGTGTTCTATTACTTTTTCTA
+echTel1.s     95477 TGTATGTGAAATTTCCTAGAGCTGTTTTCCTGCACACCTTGGATTTTATTGCTTAGTTCA
+ornAna1.c  40040373 ATCATGTGCAACTTAATAGCCCTGTTCATAAAGCTGCTTTGTGTTTTATGAGGCTATTCA
+
+mm9.chr10   3021371 CGTGTCTTCCCAGAAGGCCAGTTACACCATCATTTCCTTCCATGTTTCAG   3021421
+cavPor2.s       166 TGTGTCTCGCAGGAAATCCAGTCACGCCATCATTTCCTTCCATATTTCAA       116
+oryCun1.s      3769 -----------GGAAATCCAGTCACGCCGCGATTTCCTTCCACATTTCAA      3730
+ponAbe2.c 158037047 TGTATCTTTCAGGAAATTCAGTCACGCCATCATTTCCTTCCATATTTCAT 158036997
+panTro2.c 157514880 TGTACCTTTCAGGAAATCCAGTCATGCCATCATTTCCTTCCATATTTCAT 157514830
+hg18.chr6 155024826 TGTACCTTTCAGGAAATCCAGTCATGCCATCATTTCCTTCCATATTTCAT 155024776
+calJac1.C     10997 TGTACCTTTCAGGAAATCCAGTCATGCCATCATTTCCTTCCATATTTCAT     11047
+tupBel1.s    323291 TGTGCCTTACAGGAAATCCAGTCGGGCCATCATTTCCTTCCATATCTCAG    323241
+sorAra1.s      1495 TGAACTTTTCCGGAAATCCTGTAATCTCATCATTTCCTCCCATATTCCAG      1445
+eriEur1.s       634 cgcATTTGGCAGGAGTCCCTGTCACTCGGCCAGTTCC-------TTCCTG       677
+canFam2.c  47544103 TGTACTTTACAGGAAATCCTGTCATCCTGTTACTTCCTTCCATATTTCAA  47544053
+felCat3.s     45679 TGCACTTTATAGGAAATCCTGTCATCCTGTCATTTCCTTCCATAGTTCAG     45629
+dasNov1.s      6930 TCCCCCTTACAGGAAATCCTGTCATACCATCATTTCCTTCCATAAGTCAC      6880
+echTel1.s     95537 TTTGCTTTCCCAGAAATCCCGCCATGCCATCATTTCCTTCCACATCTCAG     95587
+ornAna1.c  40040313 TTCACCTTAGGGGAAATCCTGTCAAGCCATCATTTCCTTCCATATCTTCA  40040263
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -8089,6 +9195,40 @@ numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 14)
         self.assertEqual(len(alignment.annotations["empty"]), 2)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021421 -ACGTTGCTCATTGT-----AATTGAAGCATTTATTACCAA--------TG---------
+cavPor2.s       116 -CTGTTCCTTGTTACA----AATAAAAGTATGTTTTGCTGA--------CG-------G-
+oryCun1.s      3730 -TGGTTCCTCATTATG----GATTAAAGCATTCACTGCTAA--------T----------
+ponAbe2.c 158036997 -CTGTTGCTCATTATA----AATAAAAGTGTTTATTGCTAA--------T----------
+panTro2.c 157514830 -CTGTTCCTCATTATA----AATAAAAGTGTTTATTGCTAA--------C----------
+hg18.chr6 155024776 -CTGTTCCTCATTATA----AATAAAAGTGTTTATTGCTAA--------C----------
+calJac1.C     11047 -CTGTTTCTCATTATA----AAT--AAGTGTTTATTGCTAA--------C----------
+tupBel1.s    323241 -CTGCTCCTCATGATA----AAT-ATAGCGTTTGTTGCTAA-------------------
+sorAra1.s      1445 -CTGTTCCTTCTTAGATTaaaaaaaGAGCGTTTATGACCAG--------CA-------GG
+eriEur1.s       677 -CTCCTTGTTCTTGAAGC----------CGTTTTTTATTGT--------CA-------GT
+canFam2.c  47544053 -CTGTTTCTCATTATA----AATAAAAGCATTTATTGCTAA--------TG-------T-
+dasNov1.s      6880 -CTGTTCCTCTTTAT-----AATAAAAGCATTTACTGCTAA--------CGGCTCCTC--
+echTel1.s     95587 -CTGATCCTCATTATA----AATAAAAGTGTTTGTTACTAA--------TG---------
+ornAna1.c  40040263 ACTG-TCCTCATTGTA----CAGGGACTCTTTTATTACTAAAGATCCCCC----------
+
+mm9.chr10   3021458 -----CCTTCCC   3021465
+cavPor2.s        77 ----CCCCTCTG        69
+oryCun1.s      3693 ------------      3693
+ponAbe2.c 158036960 ----GCTTTCTC 158036952
+panTro2.c 157514793 ----GCTTTCTC 157514785
+hg18.chr6 155024739 ----GCTTTCTC 155024731
+calJac1.C     11082 ----GCTTTCTC     11090
+tupBel1.s    323206 ------------    323206
+sorAra1.s      1401 TTCC--------      1397
+eriEur1.s       711 G-----------       712
+canFam2.c  47544014 -----------C  47544013
+dasNov1.s      6836 ------------      6836
+echTel1.s     95625 ------------     95625
+ornAna1.c  40040218 ------------  40040218
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -8292,6 +9432,26 @@ numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021465 CCCT--ACACTGTC----AAGTGGGAGGAGACAGT--------------------
+cavPor2.s        69 AGCC--acactgg-----gggtggggtgggatggt--------------------
+ponAbe2.c 158036948 -------CCCTGTG----GGGGCGATAGGAGCAGC--------------------
+panTro2.c 157514781 -------CCATGTG----GGGGCGATAGGGGCAGC--------------------
+hg18.chr6 155024727 -------CCATGTG----GGGGCGATAGGGGCAGC--------------------
+canFam2.c  47544013 CCCTGAACCACATG----GGGGGTGTGTGTGTGTG--------------------
+ornAna1.c  40040218 ----------TGTGTCATAGGAGTTTGGATGTAGCCCTCTTTCATCTTTGCTGGC
+
+mm9.chr10   3021494
+cavPor2.s        41
+ponAbe2.c 158036924
+panTro2.c 157514757
+hg18.chr6 155024703
+canFam2.c  47543982
+ornAna1.c  40040173
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -8469,6 +9629,17 @@ numpy.array([['C', 'C', 'C', 'T', '-', '-', 'A', 'C', 'A', 'C', 'T', 'G', 'T',
         self.assertEqual(status, "I")
         self.assertEqual(len(alignment.sequences), 6)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3021494 TGTTTAGTACC----ATGCTTAGGAATGATAAACTCACTTAGTGtt   3021536
+ponAbe2.c 158036915 TGTTGCATGTCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT 158036869
+panTro2.c 157514748 TGTTGCATATCCTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT 157514702
+hg18.chr6 155024694 TGTTGCATGTCGTTTATTCTTTGGCGTGATAGGCTCACCCAATCTT 155024648
+canFam2.c  47543969 TGTTAAGTCTCACTTGCTGTTCAAAGTGATAGCTTCACTCCATCAT  47543923
+ornAna1.c  40040173 TGTTTAAAATG----ATTGCTAGAACTTCTA--CTCACTGGA----  40040137
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -8591,6 +9762,16 @@ table bedMaf
             "AAGGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG",
         )
         self.assertEqual(alignment[4], "-AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG")
+        self.assertEqual(
+            str(alignment),
+            """\
+hg16.chr7  27578828 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 27578866
+panTro1.c  28741140 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 28741178
+baboon       116834 AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG   116872
+mm4.chr6   53215344 -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG 53215382
+rn3.chr4   81344243 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG 81344283
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -8658,6 +9839,16 @@ numpy.array([['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
         self.assertEqual(len(alignment.sequences[4]), 187371129)
         self.assertEqual(alignment.sequences[4].seq[81444246 : 81444246 + 6], "taagga")
         self.assertEqual(alignment[4], "taagga")
+        self.assertEqual(
+            str(alignment),
+            """\
+hg16.chr7  27699739 TAAAGA 27699745
+panTro1.c  28862317 TAAAGA 28862323
+baboon       241163 TAAAGA   241169
+mm4.chr6   53303881 TAAAGA 53303887
+rn3.chr4   81444246 taagga 81444252
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -8714,6 +9905,15 @@ numpy.array([['T', 'A', 'A', 'A', 'G', 'A'],
             alignment.sequences[3].seq[53310102 : 53310102 + 13], "ACAGCTGAAAATA"
         )
         self.assertEqual(alignment[3], "ACAGCTGAAAATA")
+        self.assertEqual(
+            str(alignment),
+            """\
+hg16.chr7  27707221 gcagctgaaaaca 27707234
+panTro1.c  28869787 gcagctgaaaaca 28869800
+baboon       249182 gcagctgaaaaca   249195
+mm4.chr6   53310102 ACAGCTGAAAATA 53310115
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -8756,14 +9956,43 @@ class TestAlign_searching(unittest.TestCase):
         self.assertEqual(alignment.coordinates[0, 0], 27578828)
         self.assertEqual(alignment.coordinates[0, -1], 27578866)
         self.assertAlmostEqual(alignment.score, 23262.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+hg16.chr7  27578828 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 27578866
+panTro1.c  28741140 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 28741178
+baboon       116834 AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG   116872
+mm4.chr6   53215344 -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG 53215382
+rn3.chr4   81344243 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG 81344283
+""",
+        )
         alignment = next(selected_alignments)
         self.assertEqual(alignment.coordinates[0, 0], 27699739)
         self.assertEqual(alignment.coordinates[0, -1], 27699745)
         self.assertAlmostEqual(alignment.score, 5062.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+hg16.chr7  27699739 TAAAGA 27699745
+panTro1.c  28862317 TAAAGA 28862323
+baboon       241163 TAAAGA   241169
+mm4.chr6   53303881 TAAAGA 53303887
+rn3.chr4   81444246 taagga 81444252
+""",
+        )
         alignment = next(selected_alignments)
         self.assertEqual(alignment.coordinates[0, 0], 27707221)
         self.assertEqual(alignment.coordinates[0, -1], 27707234)
         self.assertAlmostEqual(alignment.score, 6636.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+hg16.chr7  27707221 gcagctgaaaaca 27707234
+panTro1.c  28869787 gcagctgaaaaca 28869800
+baboon       249182 gcagctgaaaaca   249195
+mm4.chr6   53310102 ACAGCTGAAAATA 53310115
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 numpy.array(alignment, "U"),
@@ -8788,30 +10017,196 @@ numpy.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
         self.assertEqual(alignment.coordinates[0, 0], 3013603)
         self.assertEqual(alignment.coordinates[0, -1], 3014644)
         self.assertAlmostEqual(alignment.score, 0.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3013603 CCTTCTTAAGAACACTAGACTCAggactggggagatggctcagcagttaagaatcggtgc
+
+mm9.chr10   3013663 tgttaagagtgggagacaagtttggttcccagctcccacattggtcagctcacagccacc
+
+mm9.chr10   3013723 cgtaactctaagatggtacacacctttaatcccaggagacagaggcaatcagatctgagt
+
+mm9.chr10   3013783 tcaagattcagcctgagacagagcatgttccaaattcaggcatggtgggtcataccttta
+
+mm9.chr10   3013843 atatgggacataccttctgctggaggcctacctaaggacaacggagaaaggaagtattcg
+
+mm9.chr10   3013903 ttcttctcctgcttgcacttacttgccagcgcatctactggaacccacttcttcaggatt
+
+mm9.chr10   3013963 ccagcttatacaggagaccagctgaaatatccagcctctcgggactgaacaagtactaga
+
+mm9.chr10   3014023 gtctcagacttcccattcacagctgcccattgttggttggttgtactacagactgtaagt
+
+mm9.chr10   3014083 cattgtaataatttcccttaatatatagagacattatataagttctgtgactctagagaa
+
+mm9.chr10   3014143 ccctgactagtacaCGTGGCTAACTAGAAAGctctggtatgtgcttacttaatgctgagg
+
+mm9.chr10   3014203 ttttaggcatggccacggtgctctgcttcttatgtgggtgctgggaatgcagactcaggt
+
+mm9.chr10   3014263 cctcatgtgtatgcagcaaacacttcatacactcagctgcttccctaacccTATGCTTGT
+
+mm9.chr10   3014323 GTCTTATTACTAACTTGTGAAAAGCTTTGAGTTTATTTTCTATGTTTTCAACCACTTTCT
+
+mm9.chr10   3014383 TGAGTATGCTCAGCTCGTGGCTTTAAACTGGATTTCCCCCTAATATGTAATGACTATAAG
+
+mm9.chr10   3014443 TATTCCTTAAATAGGACACACTTTTGTTATACTTTTTGTTATCatataaaatatttcaaa
+
+mm9.chr10   3014503 aaaatttttttGCTATTTTTATCTTTGAGCCATTGGTCATTTTGACGTGTATCTCTTGAT
+
+mm9.chr10   3014563 TTTTATAGATGGTAATATTTTATGTATTGCTAGCCAATCTCGTTTTCTTGTTTGCTTGCT
+
+mm9.chr10   3014623 TGTTTGTTTTGGTCAATGCAG 3014644
+""",
+        )
         alignment = next(selected_alignments)
         self.assertEqual(alignment.coordinates[0, 0], 3014644)
         self.assertEqual(alignment.coordinates[0, -1], 3014689)
         self.assertAlmostEqual(alignment.score, 19159.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014644 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG   3014689
+hg18.chr6 155029206 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT 155029160
+panTro2.c 157519257 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT 157519211
+calJac1.C      6182 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT      6228
+loxAfr1.s      9407 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC      9373
+""",
+        )
         alignment = next(selected_alignments)
         self.assertAlmostEqual(alignment.score, 40840.0)
         self.assertEqual(alignment.coordinates[0, 0], 3014689)
         self.assertEqual(alignment.coordinates[0, -1], 3014742)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014689 GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCT-TTGGAAAGAGTTG
+hg18.chr6 155029160 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+panTro2.c 157519211 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+calJac1.C      6228 GGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTT-TGGGAAACAGTGG
+otoGar1.s    175316 GGAAGCATAAACT-TTTAATCTATGAAATATCAAATCACT-TGGGCAATAGCTG
+loxAfr1.s      9373 GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG
+
+mm9.chr10   3014742
+hg18.chr6 155029107
+panTro2.c 157519158
+calJac1.C      6281
+otoGar1.s    175264
+loxAfr1.s      9319
+""",
+        )
         alignment = next(selected_alignments)
         self.assertAlmostEqual(alignment.score, 411.0)
         self.assertEqual(alignment.coordinates[0, 0], 3014742)
         self.assertEqual(alignment.coordinates[0, -1], 3014778)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014742 AAGTTCCCTCCATAATTCCTTCCTCCCACCCCCACA 3014778
+calJac1.C      6283 AAATGTA-----TGATCTCCCCATCCTGCCCTG---    6311
+otoGar1.s    175262 AGATTTC-----TGATGCCCTCACCCCCTCCGTGCA  175231
+loxAfr1.s      9317 AGGCTTA-----TG----CCACCCCCCACCCCCACA    9290
+""",
+        )
         alignment = next(selected_alignments)
         self.assertAlmostEqual(alignment.score, 0.0)
         self.assertEqual(alignment.coordinates[0, 0], 3014778)
         self.assertEqual(alignment.coordinates[0, -1], 3014795)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014778 TCCCATGTCCACCCTGA 3014795
+""",
+        )
         alignment = next(selected_alignments)
         self.assertAlmostEqual(alignment.score, -12243.0)
         self.assertEqual(alignment.coordinates[0, 0], 3014795)
         self.assertEqual(alignment.coordinates[0, -1], 3014842)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014795 GTTTCAGGGGCAGCTCGCTG----------------TTAGCAG-CTAAGGCATGGTGTCT
+otoGar1.s    175207 ---TCGGGAACAAGTTGCAGTCATGGATAT-TTGGTTTAGATGGTTTAGGTGGGGTGTAT
+calJac1.C      6365 -------------------GCCATGAATAT-----TTTAGAC-ATGCAGGTGTGGCGTGT
+hg18.chr6 155028706 --------------------------------------------aGCAGGTGTGGCATGT
+panTro2.c 157518758 --------------------------------------------aGCAGGTGTGGCATGT
+ponAbe2.c 158040939 --------------------------------------------aGCAGGTGTGGCATGT
+tupBel1.s    326933 ------------------------------------TTAGAAA-TGTGGGTGTGGCGCAT
+cavPor2.s      2210 ------------------------------------TTAGAAA-TTTAGGTGTGGCATGG
+loxAfr1.s      9265 GTT-TGAGAGCAAGTTTAGGACATCAATACGTTGTTTCAGAAA-TTGAGGTTTGCTGTAT
+
+mm9.chr10   3014838 CTCA   3014842
+otoGar1.s    175151 TTCT    175147
+calJac1.C      6400 TTCT      6404
+hg18.chr6 155028690 TTCT 155028686
+panTro2.c 157518742 TTCT 157518738
+ponAbe2.c 158040923 TTCT 158040919
+tupBel1.s    326910 CGCT    326906
+cavPor2.s      2187 TTC-      2184
+loxAfr1.s      9207 CTCt      9203
+""",
+        )
         alignment = next(selected_alignments)
         self.assertAlmostEqual(alignment.score, 320596.0)
         self.assertEqual(alignment.coordinates[0, 0], 3014842)
         self.assertEqual(alignment.coordinates[0, -1], 3015028)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014842 C--TTGGGA---------TGCTTTATAGTGGAAATGGAAAGCA----A-TTTATTTAGAT
+loxAfr1.s      9203 tatttttgatttttttttttttttaaaGCTGAAGTGAAAGTCACACTG-TTTCTTTTGGC
+cavPor2.s      2184 ---TTTGGA---------TA-TTCACAGTTGGAATGAAAGGCACCCTG-TTTCTTTAGGA
+tupBel1.s    326906 CCTTTTGGA---------TTTTTTACAGCTGAAATAAAAAGCACACTG-TGTCTGTAGGT
+ponAbe2.c 158040919 CCTTTTGGA---------CTTTTTATAGCTGAAATGGAAGGCACACTG-TTTCTTTAGGT
+panTro2.c 157518738 CCTTTTGGA---------CTTTTTATAGCTGAAATGGAAGGCACAATA-TTTCTTTAGGT
+hg18.chr6 155028686 CCTTTTGGA---------CTTTTTATAGCTGAAATGGAAGGCACAATA-TTTCTTTAGGT
+calJac1.C      6404 TCTTTTGTA--------TTTTTTTATAGCTGAAAAGGAAGGCACACTG-TCTCTTTAGGT
+otoGar1.s    175147 TATTTTGGG--------CTTTTTTATGGGTGAAATGAAAGGCACACTG-TTTTTTTAGGA
+ornAna1.c  40046323 --CCTTGGA---------AATGTTACTGCAAAAGTGAAAGGCTCATTGTTTTCTTTCTAT
+
+mm9.chr10   3014886 CTTAAATCATTTT-GAAGGTTAATAAAATGACCATATTAATATTCCCATGAACAAAGCCT
+loxAfr1.s      9144 CATAAATCCCTTT-GAAGTATAATGAAATTTTCACTTTAATATTCCTGTGAACAATACCC
+cavPor2.s      2138 CTTAAATCCTTTT-GAAGTATAATAAAATGATCACATTAATATTCCTACTAACAATGCCC
+tupBel1.s    326856 CTTAAATCCTTTT-GAAGTATAATAAAATGATCACTTTACTATTCCTGTGAACAATGCCC
+ponAbe2.c 158040869 CTTAAATACTTTT-GAAGTATAATAAAACGATCACTTTAATACTCCTGTGAGCAATGTCC
+panTro2.c 157518688 CTTAAATACTTTT-GAAGTATAAAAAAATGATCACTTTAATACTCCTGTGAACAATGCCC
+hg18.chr6 155028636 CTTAAATACTTTT-GAAGTATAAAAAAATGATCACTTTAATACTCCTGTGAACAATGCCC
+calJac1.C      6455 CTTAAATACGTTT-GAAGCATAATAAAATGATCACTTTCATACTCCTGTGAATAATGCCC
+otoGar1.s    175096 CTTAAATCCTTTT-GAAGTATAATAAAACGATTACTTTACTGTTCCTGTGAACAATGCCC
+ornAna1.c  40046274 CTTAAGCCTTTTTAAAAGTGTATTGTAATTATGATCTTCATTTCCCCGCTAACAAAGCCC
+
+mm9.chr10   3014945 TCATTT----TTAAAATATTGCATCCTATAATACACATAA-ATCTTGT-----TCTCGtt
+loxAfr1.s      9085 TCATTT-AAAAAAAAAAATTGGGTTTTATACCACACACAGCATCTTTTCAAAATCTCATT
+cavPor2.s      2079 TCATTT----AAAAAAGTTTGGATTTTGTACCACATACAGCATATTTCCAACATCTCATT
+tupBel1.s    326797 TCATTT---TACAAAATCTGGGATTTTATACCACGTACAGCATATTTCCAAAATCTCATT
+ponAbe2.c 158040810 TCTTTT---AAAAAAATCCTGGATTTTATACCACATGCAGCATATTTCTGAAATCTCATT
+panTro2.c 157518629 TCTTTTT--AAAAAAATCCTGGATTTTATACCACATGCAGCATATTTCTGAAATCCCATT
+hg18.chr6 155028577 TCTTTTT-AAAAAAAATCCTGGATTTTATACCACATGCAGCATATTTCTGAAATCTCATT
+calJac1.C      6514 TCCTTTTAAAAAGAAATCTTGGATTTTATATCACACGCAGCATATTTCTGAAATCTCATT
+otoGar1.s    175037 TCATTT---AAAAAAATCTTGGATTTTATACCAGATCCAGCATATTTCCAAAATCTCATT
+ornAna1.c  40046214 TCATTA----AAATATCTTTGTATTTTA-ACGACATACAGCCCATTTCCAAAATCTTAGT
+
+mm9.chr10   3014995 tttatttttt----tatt-tat-----------------------ttattttttttt---
+loxAfr1.s      9026 CCC-TTTTTAAGCAGGTG-TCT---TAGCAAGTTCACTCTCTCTCTCTTTTTTCATTGAC
+cavPor2.s      2023 TCCTTCTTCTGGCAGGTT-TAt-----------------------tagtctctcttt---
+tupBel1.s    326740 TCC-TTTTTTGGCAGGTT-TAT---TAGCAAGTTCCCT-------TTTTGTCTATTG---
+ponAbe2.c 158040753 TCC-TTTCTTGGCAGGTT-TATTTATAGCAAGTTATCTC------TCTCTCTTATTT---
+panTro2.c 157518571 T-----------------------------------------------------------
+hg18.chr6 155028518 T-----------------------------------------------------------
+calJac1.C      6574 TCC-TTTCCTGGCAGGTT-TATTAATAGCAAGTTCTCTC------TCTTATTTATTT---
+otoGar1.s    174980 T-C-CTTTTTGGCGGGTT-TGT---TAGCAAGTTCTCTCCGGCTTTCTTCTTCTTTT---
+ornAna1.c  40046159 TCC-TTTTTGGGTGCATTGTAT---TAAC----------------CGTTCTCTCTTT---
+
+mm9.chr10   3015024 ---------cttt   3015028
+loxAfr1.s      8971 TTTGGCCAAATCT      8958
+cavPor2.s      1990 ---------ctct      1986
+tupBel1.s    326695 ---------ACTT    326691
+ponAbe2.c 158040704 ---------ACTT 158040700
+panTro2.c 157518570 ------------- 157518570
+hg18.chr6 155028517 ------------- 155028517
+calJac1.C      6623 ---------ATTT      6627
+otoGar1.s    174929 ---------TCTC    174925
+ornAna1.c  40046122 -------------  40046122
+""",
+        )
         self.assertRaises(StopIteration, next, selected_alignments)
 
     def test_search_position(self):
@@ -8823,6 +10218,65 @@ numpy.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
         self.assertEqual(alignment.coordinates[0, 0], 3014842)
         self.assertEqual(alignment.coordinates[0, -1], 3015028)
         self.assertAlmostEqual(alignment.score, 320596.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+mm9.chr10   3014842 C--TTGGGA---------TGCTTTATAGTGGAAATGGAAAGCA----A-TTTATTTAGAT
+loxAfr1.s      9203 tatttttgatttttttttttttttaaaGCTGAAGTGAAAGTCACACTG-TTTCTTTTGGC
+cavPor2.s      2184 ---TTTGGA---------TA-TTCACAGTTGGAATGAAAGGCACCCTG-TTTCTTTAGGA
+tupBel1.s    326906 CCTTTTGGA---------TTTTTTACAGCTGAAATAAAAAGCACACTG-TGTCTGTAGGT
+ponAbe2.c 158040919 CCTTTTGGA---------CTTTTTATAGCTGAAATGGAAGGCACACTG-TTTCTTTAGGT
+panTro2.c 157518738 CCTTTTGGA---------CTTTTTATAGCTGAAATGGAAGGCACAATA-TTTCTTTAGGT
+hg18.chr6 155028686 CCTTTTGGA---------CTTTTTATAGCTGAAATGGAAGGCACAATA-TTTCTTTAGGT
+calJac1.C      6404 TCTTTTGTA--------TTTTTTTATAGCTGAAAAGGAAGGCACACTG-TCTCTTTAGGT
+otoGar1.s    175147 TATTTTGGG--------CTTTTTTATGGGTGAAATGAAAGGCACACTG-TTTTTTTAGGA
+ornAna1.c  40046323 --CCTTGGA---------AATGTTACTGCAAAAGTGAAAGGCTCATTGTTTTCTTTCTAT
+
+mm9.chr10   3014886 CTTAAATCATTTT-GAAGGTTAATAAAATGACCATATTAATATTCCCATGAACAAAGCCT
+loxAfr1.s      9144 CATAAATCCCTTT-GAAGTATAATGAAATTTTCACTTTAATATTCCTGTGAACAATACCC
+cavPor2.s      2138 CTTAAATCCTTTT-GAAGTATAATAAAATGATCACATTAATATTCCTACTAACAATGCCC
+tupBel1.s    326856 CTTAAATCCTTTT-GAAGTATAATAAAATGATCACTTTACTATTCCTGTGAACAATGCCC
+ponAbe2.c 158040869 CTTAAATACTTTT-GAAGTATAATAAAACGATCACTTTAATACTCCTGTGAGCAATGTCC
+panTro2.c 157518688 CTTAAATACTTTT-GAAGTATAAAAAAATGATCACTTTAATACTCCTGTGAACAATGCCC
+hg18.chr6 155028636 CTTAAATACTTTT-GAAGTATAAAAAAATGATCACTTTAATACTCCTGTGAACAATGCCC
+calJac1.C      6455 CTTAAATACGTTT-GAAGCATAATAAAATGATCACTTTCATACTCCTGTGAATAATGCCC
+otoGar1.s    175096 CTTAAATCCTTTT-GAAGTATAATAAAACGATTACTTTACTGTTCCTGTGAACAATGCCC
+ornAna1.c  40046274 CTTAAGCCTTTTTAAAAGTGTATTGTAATTATGATCTTCATTTCCCCGCTAACAAAGCCC
+
+mm9.chr10   3014945 TCATTT----TTAAAATATTGCATCCTATAATACACATAA-ATCTTGT-----TCTCGtt
+loxAfr1.s      9085 TCATTT-AAAAAAAAAAATTGGGTTTTATACCACACACAGCATCTTTTCAAAATCTCATT
+cavPor2.s      2079 TCATTT----AAAAAAGTTTGGATTTTGTACCACATACAGCATATTTCCAACATCTCATT
+tupBel1.s    326797 TCATTT---TACAAAATCTGGGATTTTATACCACGTACAGCATATTTCCAAAATCTCATT
+ponAbe2.c 158040810 TCTTTT---AAAAAAATCCTGGATTTTATACCACATGCAGCATATTTCTGAAATCTCATT
+panTro2.c 157518629 TCTTTTT--AAAAAAATCCTGGATTTTATACCACATGCAGCATATTTCTGAAATCCCATT
+hg18.chr6 155028577 TCTTTTT-AAAAAAAATCCTGGATTTTATACCACATGCAGCATATTTCTGAAATCTCATT
+calJac1.C      6514 TCCTTTTAAAAAGAAATCTTGGATTTTATATCACACGCAGCATATTTCTGAAATCTCATT
+otoGar1.s    175037 TCATTT---AAAAAAATCTTGGATTTTATACCAGATCCAGCATATTTCCAAAATCTCATT
+ornAna1.c  40046214 TCATTA----AAATATCTTTGTATTTTA-ACGACATACAGCCCATTTCCAAAATCTTAGT
+
+mm9.chr10   3014995 tttatttttt----tatt-tat-----------------------ttattttttttt---
+loxAfr1.s      9026 CCC-TTTTTAAGCAGGTG-TCT---TAGCAAGTTCACTCTCTCTCTCTTTTTTCATTGAC
+cavPor2.s      2023 TCCTTCTTCTGGCAGGTT-TAt-----------------------tagtctctcttt---
+tupBel1.s    326740 TCC-TTTTTTGGCAGGTT-TAT---TAGCAAGTTCCCT-------TTTTGTCTATTG---
+ponAbe2.c 158040753 TCC-TTTCTTGGCAGGTT-TATTTATAGCAAGTTATCTC------TCTCTCTTATTT---
+panTro2.c 157518571 T-----------------------------------------------------------
+hg18.chr6 155028518 T-----------------------------------------------------------
+calJac1.C      6574 TCC-TTTCCTGGCAGGTT-TATTAATAGCAAGTTCTCTC------TCTTATTTATTT---
+otoGar1.s    174980 T-C-CTTTTTGGCGGGTT-TGT---TAGCAAGTTCTCTCCGGCTTTCTTCTTCTTTT---
+ornAna1.c  40046159 TCC-TTTTTGGGTGCATTGTAT---TAAC----------------CGTTCTCTCTTT---
+
+mm9.chr10   3015024 ---------cttt   3015028
+loxAfr1.s      8971 TTTGGCCAAATCT      8958
+cavPor2.s      1990 ---------ctct      1986
+tupBel1.s    326695 ---------ACTT    326691
+ponAbe2.c 158040704 ---------ACTT 158040700
+panTro2.c 157518570 ------------- 157518570
+hg18.chr6 155028517 ------------- 155028517
+calJac1.C      6623 ---------ATTT      6627
+otoGar1.s    174929 ---------TCTC    174925
+ornAna1.c  40046122 -------------  40046122
+""",
+        )
         self.assertRaises(StopIteration, next, selected_alignments)
 
 
