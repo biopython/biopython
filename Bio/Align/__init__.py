@@ -1931,6 +1931,10 @@ class Alignment:
             if row[0] > row[-1]:  # mapped to reverse strand
                 row[:] = len(seq) - row[:]
                 seq = reverse_complement(seq, inplace=False)
+            start = min(row)
+            end = max(row)
+            row[:] -= start
+            seq = seq[start:end]
             if isinstance(seq, str):
                 try:
                     seq = bytes(seq, "ASCII")
