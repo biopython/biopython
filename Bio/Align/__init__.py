@@ -1941,7 +1941,13 @@ class Alignment:
                 except UnicodeEncodeError:
                     return self._format_unicode()
             elif isinstance(seq, (Seq, MutableSeq)):
-                seq = bytes(seq)
+                try:
+                    seq = bytes(seq)
+                except UndefinedSequenceError:
+                    s = bytearray(b"?" * (end - start))
+                    for start, end in seq.defined_ranges:
+                        s[start:end] = bytes(seq[start:end])
+                    seq = s
             else:
                 return self._format_generalized()
             seqs.append(seq)
