@@ -1972,7 +1972,7 @@ class Alignment:
                     s = b"-" * step
                 else:
                     s = seq[start:end]
-                while column + step > width:
+                while column + step >= width:
                     aligned_seq[column:width] = s[: width - column]
                     if start < end:
                         position += sign * (width - column)
@@ -2018,7 +2018,11 @@ class Alignment:
                 lines.append("")
                 position += len(pattern)
             position_width = len(str(max(max(self.coordinates[:, -1]), position)))
-            if 0 < mod < alignment_width - position_width - 1:
+            if mod == 0:
+                lines[-4] = lines[-4].rstrip()
+                lines[-3] = lines[-3].rstrip()
+                lines[-2] = lines[-2].rstrip()
+            elif mod < alignment_width - position_width:
                 fmt = f" %{position_width}d"
                 lines[-4] += fmt % self.coordinates[0, -1]
                 lines[-3] += fmt % position
@@ -2034,26 +2038,21 @@ class Alignment:
                 lines.append("")
         else:
             position_width = len(str(max(self.coordinates[:, -1])))
-            for i in range(div):
+            for i in range(div + 1):
                 for j, name in enumerate(names):
                     lines.append(name + aligned_seqs[i * n + j].decode())
                 lines.append("")
-            if 0 < mod < alignment_width - position_width - 1:
+            if mod == 0:
+                for i in range(div * (n + 1), div * (n + 1) + n):
+                    lines[i] = lines[i].rstrip()
+            elif mod < alignment_width - position_width:
                 fmt = f" %{position_width}d"
-                for j, name in enumerate(names):
-                    line = aligned_seqs[div * n + j].decode()
-                    line += fmt % self.coordinates[j, -1]
-                    lines.append(name + line)
-                lines.append("")
+                for j in range(n):
+                    lines[div * (n + 1) + j] += fmt % self.coordinates[j, -1]
             else:
-                if 0 < mod:
-                    for j, name in enumerate(names):
-                        line = aligned_seqs[div * n + j].decode()
-                        lines.append(name + line)
-                    lines.append("")
                 fmt = "%s%9d"
-                for j, name in enumerate(names):
-                    line = fmt % (name, self.coordinates[j, -1])
+                for i, name in enumerate(names):
+                    line = fmt % (name, self.coordinates[i, -1])
                     lines.append(line)
                 lines.append("")
         return "\n".join(lines)

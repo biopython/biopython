@@ -895,7 +895,6 @@ HBB2_TRICR                      .VHLTAEDRKEIAAILGKV--NVDSLGGQCLARLIVVNPWSRRYFHDF
             alignment.column_annotations["consensus sequence"],
             "LAEQhtKE.....EcD+phpsFhuN.sNhthIsKAhEsschKKpLEphEIsGYKNVhsTaSsAsGY.GGFpPVQWENQVSAsDLRuTVVKNDtG-ELCTLNETTVKTKshhVAKQDGTQVQIsSYREIsFPIKLDKAsGSMHLSMVALKADGTKPuKDKAVYFTAHYEEGPNGKPQLKEISSPpPLKFsGTGDDAlAYIEHGGEIYTLAVTRGKYKEMMKEVtLNpGQSVsLSQ..AEDl",
         )
-        print(alignment)
         self.assertEqual(
             str(alignment),
             """\
