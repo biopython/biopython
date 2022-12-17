@@ -6842,6 +6842,25 @@ CAG33136.       180 YELDAIEVCKKFMERDPDELRFNAIALSAA 210
             self.assertEqual(alignment.nCount, protein_alignment.nCount)
 
 
+class TestAlign_out_of_order(unittest.TestCase):
+    def test_out_of_order1(self):
+        """Test an alignment in which the segments align out of order."""
+        seq1 = "AAAACCCCCGGGGGG"
+        seq2 = "GGGGGGAAAA"
+        coordinates = numpy.array([[9, 15, 0, 4], [0, 6, 6, 10]])
+        alignment = Align.Alignment([seq1, seq2], coordinates)
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['G', 'G', 'G', 'G', 'G', 'G', 'A', 'A', 'A', 'A'],
+             ['G', 'G', 'G', 'G', 'G', 'G', 'A', 'A', 'A', 'A']], dtype='U')
+                # fmt: on
+            )
+        )
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

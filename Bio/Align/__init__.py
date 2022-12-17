@@ -1054,27 +1054,33 @@ class Alignment:
         self.coordinates = coordinates
 
     def __array__(self, dtype=None):
-        steps = abs(numpy.diff(self.coordinates, 1))
+        coordinates = self.coordinates.copy()
+        sequences = self.sequences[:]
+        steps = numpy.diff(self.coordinates, 1)
+        aligned = sum(steps != 0, 0) > 1
+        # True for steps in which at least two sequences align, False if a gap
+        for i, sequence in enumerate(sequences):
+            row = steps[i, aligned]
+            if (row >= 0).all():
+                pass
+            elif (row <= 0).all():
+                sequences[i] = reverse_complement(sequence, inplace=False)
+                coordinates[i, :] = len(sequence) - coordinates[i, :]
+                steps[i, :] = -steps[i, :]
+            else:
+                raise ValueError(f"Inconsistent steps in row {i}")
         gaps = steps.max(0)
-        if not ((steps == gaps) | (steps == 0)).all():
+        if not ((steps == gaps) | (steps <= 0)).all():
             raise ValueError("Unequal step sizes in alignment")
         n = len(steps)
         m = sum(gaps)
         data = numpy.empty((n, m), "S1")
         for i in range(n):
-            sequence = self.sequences[i]
-            try:
-                sequence = sequence.seq  # SeqRecord confusion
-            except AttributeError:
-                pass
-            k = self.coordinates[i, 0]
-            if self.coordinates[i, 0] > self.coordinates[i, -1]:
-                # reverse strand
-                sequence = reverse_complement(sequence, inplace=False)
-                k = len(sequence) - k
+            sequence = sequences[i]
+            k = coordinates[i, 0]
             m = 0
             for step, gap in zip(steps[i], gaps):
-                if step:
+                if step > 0:
                     j = k + step
                     n = m + step
                     try:
@@ -1083,10 +1089,13 @@ class Alignment:
                         subsequence = bytes(sequence[k:j], "UTF8")
                     data[i, :].data.cast("B")[m:n] = subsequence
                     k = j
-                else:
+                    m = n
+                elif step < 0:
+                    k += step
+                else:  # step == 0
                     n = m + gap
                     data[i, m:n] = b"-"
-                m = n
+                    m = n
         if dtype is not None:
             data = numpy.array(data, dtype)
         return data
