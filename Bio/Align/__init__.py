@@ -1791,17 +1791,25 @@ class Alignment:
             return self._get_rows(key)
         sequences = list(self.sequences)
         coordinates = self.coordinates.copy()
+        steps = numpy.diff(coordinates, 1)
+        aligned = sum(steps != 0, 0) > 1
+        # True for steps in which at least two sequences align, False if a gap
         for i, sequence in enumerate(sequences):
-            if coordinates[i, 0] > coordinates[i, -1]:  # reverse strand
+            row = steps[i, aligned]
+            if (row >= 0).all():
+                pass
+            elif (row <= 0).all():
+                steps[i, :] = -steps[i, :]
                 coordinates[i, :] = len(sequence) - coordinates[i, :]
                 sequences[i] = reverse_complement(sequence, inplace=False)
                 try:
                     sequences[i].id = sequence.id
                 except AttributeError:
                     pass
-        steps = numpy.diff(coordinates, 1)
+            else:
+                raise ValueError(f"Inconsistent steps in row {i}")
         gaps = steps.max(0)
-        if not ((steps == gaps) | (steps == 0)).all():
+        if not ((steps == gaps) | (steps <= 0)).all():
             raise ValueError("Unequal step sizes in alignment")
         m = sum(gaps)
         if isinstance(key, tuple):

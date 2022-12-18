@@ -6846,7 +6846,7 @@ class TestAlign_out_of_order(unittest.TestCase):
     def test_out_of_order1(self):
         """Test an alignment in which the segments align out of order."""
         seq1 = "AAAACCCCCGGGGGG"
-        seq2 = "GGGGGGAAAA"
+        seq2 = "GGGTGGAAAA"
         coordinates = numpy.array([[9, 15, 0, 4], [0, 6, 6, 10]])
         alignment = Align.Alignment([seq1, seq2], coordinates)
         self.assertTrue(
@@ -6855,12 +6855,54 @@ class TestAlign_out_of_order(unittest.TestCase):
                 # fmt: off
 # flake8: noqa
 numpy.array([['G', 'G', 'G', 'G', 'G', 'G', 'A', 'A', 'A', 'A'],
-             ['G', 'G', 'G', 'G', 'G', 'G', 'A', 'A', 'A', 'A']], dtype='U')
+             ['G', 'G', 'G', 'T', 'G', 'G', 'A', 'A', 'A', 'A']], dtype='U')
                 # fmt: on
             )
         )
         self.assertEqual(alignment[0], "GGGGGGAAAA")
-        self.assertEqual(alignment[1], "GGGGGGAAAA")
+        self.assertEqual(alignment[1], "GGGTGGAAAA")
+        self.assertEqual(alignment[-2], "GGGGGGAAAA")
+        self.assertEqual(alignment[-1], "GGGTGGAAAA")
+        self.assertEqual(alignment[0, 0], "G")
+        self.assertEqual(alignment[0, 1], "G")
+        self.assertEqual(alignment[0, 2], "G")
+        self.assertEqual(alignment[0, 3], "G")
+        self.assertEqual(alignment[0, 4], "G")
+        self.assertEqual(alignment[0, 5], "G")
+        self.assertEqual(alignment[0, 6], "A")
+        self.assertEqual(alignment[0, 7], "A")
+        self.assertEqual(alignment[0, 8], "A")
+        self.assertEqual(alignment[0, 9], "A")
+        self.assertEqual(alignment[1, 0], "G")
+        self.assertEqual(alignment[1, 1], "G")
+        self.assertEqual(alignment[1, 2], "G")
+        self.assertEqual(alignment[1, 3], "T")
+        self.assertEqual(alignment[1, 4], "G")
+        self.assertEqual(alignment[1, 5], "G")
+        self.assertEqual(alignment[1, 6], "A")
+        self.assertEqual(alignment[1, 7], "A")
+        self.assertEqual(alignment[1, 8], "A")
+        self.assertEqual(alignment[1, 9], "A")
+        self.assertEqual(alignment[0, -10], "G")
+        self.assertEqual(alignment[0, -9], "G")
+        self.assertEqual(alignment[0, -8], "G")
+        self.assertEqual(alignment[0, -7], "G")
+        self.assertEqual(alignment[0, -6], "G")
+        self.assertEqual(alignment[0, -5], "G")
+        self.assertEqual(alignment[0, -4], "A")
+        self.assertEqual(alignment[0, -3], "A")
+        self.assertEqual(alignment[0, -2], "A")
+        self.assertEqual(alignment[0, -1], "A")
+        self.assertEqual(alignment[1, -10], "G")
+        self.assertEqual(alignment[1, -9], "G")
+        self.assertEqual(alignment[1, -8], "G")
+        self.assertEqual(alignment[1, -7], "T")
+        self.assertEqual(alignment[1, -6], "G")
+        self.assertEqual(alignment[1, -5], "G")
+        self.assertEqual(alignment[1, -4], "A")
+        self.assertEqual(alignment[1, -3], "A")
+        self.assertEqual(alignment[1, -2], "A")
+        self.assertEqual(alignment[1, -1], "A")
 
 
 if __name__ == "__main__":
