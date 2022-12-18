@@ -6859,6 +6859,8 @@ numpy.array([['G', 'G', 'G', 'G', 'G', 'G', 'A', 'A', 'A', 'A'],
                 # fmt: on
             )
         )
+        self.assertEqual(alignment[0], "GGGGGGAAAA")
+        self.assertEqual(alignment[1], "GGGGGGAAAA")
 
 
 if __name__ == "__main__":

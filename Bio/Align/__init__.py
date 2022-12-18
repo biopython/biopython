@@ -1309,37 +1309,57 @@ class Alignment:
         Return value is a string if the aligned sequences are string, Seq,
         or SeqRecord objects, otherwise the return value is a list.
         """
-        steps = abs(numpy.diff(self.coordinates, 1))
-        gaps = steps.max(0)
-        if not ((steps == gaps) | (steps == 0)).all():
-            raise ValueError("Unequal step sizes in alignment")
+        steps = numpy.diff(self.coordinates, 1)
+        n = len(steps)
+        if index < 0:
+            index += n
+            if index < 0:
+                raise IndexError("row index out of range")
+        elif index >= n:
+            raise IndexError("row index out of range")
+        aligned = sum(steps != 0, 0) > 1
+        # True for steps in which at least two sequences align, False if a gap
+        coordinates = self.coordinates[index, :]
         sequence = self.sequences[index]
+        for i in range(n):
+            row = steps[i, aligned]
+            if (row >= 0).all():
+                pass
+            elif (row <= 0).all():
+                steps[i, :] = -steps[i, :]
+                if i == index:
+                    sequence = reverse_complement(sequence, inplace=False)
+                    coordinates = len(sequence) - coordinates
+            else:
+                raise ValueError(f"Inconsistent steps in row {index}")
+        gaps = steps.max(0)
+        if not ((steps == gaps) | (steps <= 0)).all():
+            raise ValueError("Unequal step sizes in alignment")
+        m = sum(gaps)
         try:
             sequence = sequence.seq  # SeqRecord confusion
         except AttributeError:
             pass
-        i = self.coordinates[index, 0]
-        if self.coordinates[index, 0] > self.coordinates[index, -1]:
-            # reverse strand
-            sequence = reverse_complement(sequence, inplace=False)
-            i = len(sequence) - i
         steps = steps[index]
+        k = coordinates[0]
+        line = ""
         if isinstance(sequence, (str, Seq)):
-            line = ""
             for step, gap in zip(steps, gaps):
-                if step:
-                    j = i + step
-                    line += str(sequence[i:j])
-                    i = j
-                else:
+                if step > 0:
+                    j = k + step
+                    line += str(sequence[k:j])
+                    k = j
+                elif step < 0:
+                    k += step
+                else:  # step == 0
                     line += "-" * gap
         else:
             line = []
             for step, gap in zip(steps, gaps):
-                if step:
-                    j = i + step
-                    line.extend(sequence[i:j])
-                    i = j
+                if step > 0:
+                    j = k + step
+                    line.extend(sequence[k:j])
+                    k = j
                 else:
                     line.extend([None] * gap)
         return line
