@@ -1419,7 +1419,6 @@ class Alignment:
         Return value is a string if the aligned sequences are string, Seq,
         or SeqRecord objects, otherwise the return value is a list.
         """
-        sequence_indices = coordinate + steps.cumsum()
         indices = gaps.cumsum()
         i = indices.searchsorted(start_index, side="right")
         j = i + indices[i:].searchsorted(stop_index, side="right")
@@ -1433,16 +1432,15 @@ class Alignment:
                 if steps[i] == 0:
                     line = "-" * length
                 else:
-                    offset = start_index - indices[i]
-                    start = sequence_indices[i] + offset
+                    start = coordinate[i] + start_index - indices[i - 1]
                     stop = start + length
                     line = str(sequence[start:stop])
             else:
                 length = indices[i] - start_index
-                stop = sequence_indices[i]
                 if steps[i] == 0:
                     line = "-" * length
                 else:
+                    stop = coordinate[i + 1]
                     start = stop - length
                     line = str(sequence[start:stop])
                 i += 1
@@ -1451,16 +1449,16 @@ class Alignment:
                     if steps[i] == 0:
                         line += "-" * step
                     else:
-                        start = stop
-                        stop = start + step
+                        start = coordinate[i]
+                        stop = coordinate[i + 1]
                         line += str(sequence[start:stop])
                     i += 1
-                length = stop_index - indices[j - 1]
+                length = stop_index - indices[i - 1]
                 if length > 0:
-                    if steps[j] == 0:
+                    if steps[i] == 0:
                         line += "-" * length
                     else:
-                        start = stop
+                        start = coordinate[i]
                         stop = start + length
                         line += str(sequence[start:stop])
         else:
@@ -1469,16 +1467,15 @@ class Alignment:
                 if steps[i] == 0:
                     line = [None] * length
                 else:
-                    offset = start_index - indices[i]
-                    start = sequence_indices[i] + offset
+                    start = coordinate[i] + start_index - indices[i - 1]
                     stop = start + length
                     line = sequence[start:stop]
             else:
                 length = indices[i] - start_index
-                stop = sequence_indices[i]
                 if steps[i] == 0:
                     line = [None] * length
                 else:
+                    stop = coordinate[i + 1]
                     start = stop - length
                     line = sequence[start:stop]
                 i += 1
@@ -1487,21 +1484,21 @@ class Alignment:
                     if steps[i] == 0:
                         line.extend([None] * step)
                     else:
-                        start = stop
-                        stop = start + step
+                        start = coordinate[i]
+                        stop = coordinate[i + 1]
                         line.extend(sequence[start:stop])
                     i += 1
-                length = stop_index - indices[j - 1]
+                length = stop_index - indices[i - 1]
                 if length > 0:
                     if steps[j] == 0:
                         line.extend([None] * length)
                     else:
-                        start = stop
+                        start = coordinate[i]
                         stop = start + length
                         line.extend(sequence[start:stop])
         return line
 
-    def _get_row_cols_iterable(self, i, cols, steps, gaps, sequence):
+    def _get_row_cols_iterable(self, coordinate, cols, gaps, sequence):
         """Return the alignment contents of one row and multiple columns (PRIVATE).
 
         This method is called by __getitem__ for invocations of the form
@@ -1518,13 +1515,13 @@ class Alignment:
             pass
         if isinstance(sequence, (str, Seq)):
             line = ""
-            for step, gap in zip(steps, gaps):
-                if step:
-                    j = i + step
-                    line += str(sequence[i:j])
-                    i = j
+            start = coordinate[0]
+            for end, gap in zip(coordinate[1:], gaps):
+                if start < end:
+                    line += str(sequence[start:end])
                 else:
                     line += "-" * gap
+                start = end
             try:
                 line = "".join(line[col] for col in cols)
             except IndexError:
@@ -1535,13 +1532,13 @@ class Alignment:
                 ) from None
         else:
             line = []
-            for step, gap in zip(steps, gaps):
-                if step:
-                    j = i + step
-                    line.extend(sequence[i:j])
-                    i = j
+            start = coordinate[0]
+            for end, gap in zip(coordinate[1:], gaps):
+                if start < end:
+                    line.extend(sequence[start:end])
                 else:
                     line.extend([None] * gap)
+                start = end
             try:
                 line = [line[col] for col in cols]
             except IndexError:
@@ -1829,9 +1826,11 @@ class Alignment:
         steps = steps[row]
         if isinstance(row, numbers.Integral):
             sequence = sequences[row]
-            coordinate = coordinates[row, 0]
             if isinstance(col, numbers.Integral):
-                return self._get_row_col(coordinate, col, steps, gaps, sequence)
+                return self._get_row_col(
+                    coordinates[row, 0], col, steps, gaps, sequence
+                )
+            coordinate = coordinates[row, :]
             if isinstance(col, slice):
                 start_index, stop_index, step = col.indices(m)
                 if start_index < stop_index and step == 1:
@@ -1840,7 +1839,7 @@ class Alignment:
                     )
                 # make an iterable if step != 1
                 col = range(start_index, stop_index, step)
-            return self._get_row_cols_iterable(coordinate, col, steps, gaps, sequence)
+            return self._get_row_cols_iterable(coordinate, col, gaps, sequence)
         if isinstance(row, slice):
             sequences = sequences[row]
             coordinates = coordinates[row]
