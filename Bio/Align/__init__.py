@@ -2377,17 +2377,22 @@ class Alignment:
         >>> alignment.shape
         (2, 7)
         """
-        coordinates = numpy.array(self.coordinates)
-        n = len(coordinates)
+        n = len(self.coordinates)
         if n == 0:  # no sequences
             return (0, 0)
+        steps = numpy.diff(self.coordinates, 1)
+        aligned = sum(steps != 0, 0) > 1
+        # True for steps in which at least two sequences align, False if a gap
         for i in range(n):
-            if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
-                k = len(self.sequences[i])
-                coordinates[i, :] = k - coordinates[i, :]
-        steps = numpy.diff(coordinates, 1)
+            row = steps[i, aligned]
+            if (row >= 0).all():
+                pass
+            elif (row <= 0).all():
+                steps[i, :] = -steps[i, :]
+            else:
+                raise ValueError(f"Inconsistent steps in row {i}")
         gaps = steps.max(0)
-        if not ((steps == gaps) | (steps == 0)).all():
+        if not ((steps == gaps) | (steps <= 0)).all():
             raise ValueError("Unequal step sizes in alignment")
         m = sum(gaps)
         return (n, m)

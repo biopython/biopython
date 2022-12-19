@@ -6843,12 +6843,18 @@ CAG33136.       180 YELDAIEVCKKFMERDPDELRFNAIALSAA 210
 
 
 class TestAlign_out_of_order(unittest.TestCase):
-    def test_out_of_order1(self):
-        """Test an alignment in which the segments align out of order."""
-        seq1 = "AAAACCCCCGGGGGG"
-        seq2 = "GGGTGGAAAA"
-        coordinates = numpy.array([[9, 15, 0, 4], [0, 6, 6, 10]])
-        alignment = Align.Alignment([seq1, seq2], coordinates)
+
+    seq1 = "AAAACCCCCGGGGGG"
+    seq2 = "GGGTGGAAAA"
+    coordinates = numpy.array([[9, 15, 0, 4], [0, 6, 6, 10]])
+    alignment = Align.Alignment([seq1, seq2], coordinates)
+    del seq1
+    del seq2
+    del coordinates
+
+    def test_array(self):
+        alignment = self.alignment
+        self.assertEqual(alignment.shape, (2, 10))
         self.assertTrue(
             numpy.array_equal(
                 numpy.array(alignment, "U"),
@@ -6859,6 +6865,9 @@ numpy.array([['G', 'G', 'G', 'G', 'G', 'G', 'A', 'A', 'A', 'A'],
                 # fmt: on
             )
         )
+
+    def test_indices(self):
+        alignment = self.alignment
         self.assertEqual(alignment[0], "GGGGGGAAAA")
         self.assertEqual(alignment[1], "GGGTGGAAAA")
         self.assertEqual(alignment[-2], "GGGGGGAAAA")
