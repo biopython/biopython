@@ -512,6 +512,8 @@ def read_PIC(
         chkLst.append((sN, sCA, sC, sO))  # locate backbone O
         if ric.lc != "G":
             chkLst.append((sO, sC, sCA, sCB))  # locate CB
+            if ric.lc == "A":
+                chkLst.append((sN, sCA, sCB))  # missed for generate from seq
         if ric.rprev != [] and ric.lc != "P" and proton:
             chkLst.append((sC, sCA, sN, sH))  # amide proton
 
@@ -535,7 +537,10 @@ def read_PIC(
                 pass  # ignore missing hydrogens
             elif all(atm.akl[altloc_ndx] is None for atm in dk):
                 if defaults:
-                    default_dihedron(dk, ric)
+                    if len(dk) != 3:
+                        default_dihedron(dk, ric)
+                    else:
+                        default_hedron(dk, ric)  # add ALA N-Ca-Cb
                 else:
                     if verbose:
                         print(f"{ric}-{rn} missing {dk}")
