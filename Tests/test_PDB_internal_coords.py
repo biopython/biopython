@@ -505,7 +505,8 @@ class Rebuild(unittest.TestCase):
         cic2.distance_to_internal_coordinates()
 
         # clear chn2 atom coordinates
-        cic2.atomArrayValid[:] = False
+        # cic2.atomArrayValid[:] = False  # done in distance_to_internal_coordinates
+
         # initialize values but this is redundant to Valid=False above
         cic2.atomArray = np.zeros((cic2.AAsiz, 4), dtype=np.float64)
         cic2.atomArray[:, 3] = 1.0
