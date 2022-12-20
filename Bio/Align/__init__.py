@@ -1342,8 +1342,8 @@ class Alignment:
             pass
         steps = steps[index]
         k = coordinates[0]
-        line = ""
         if isinstance(sequence, (str, Seq)):
+            line = ""
             for step, gap in zip(steps, gaps):
                 if step > 0:
                     j = k + step

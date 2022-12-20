@@ -6866,12 +6866,15 @@ numpy.array([['G', 'G', 'G', 'G', 'G', 'G', 'A', 'A', 'A', 'A'],
             )
         )
 
-    def test_indices(self):
+    def test_row(self):
         alignment = self.alignment
         self.assertEqual(alignment[0], "GGGGGGAAAA")
         self.assertEqual(alignment[1], "GGGTGGAAAA")
         self.assertEqual(alignment[-2], "GGGGGGAAAA")
         self.assertEqual(alignment[-1], "GGGTGGAAAA")
+
+    def test_row_col(self):
+        alignment = self.alignment
         self.assertEqual(alignment[0, 0], "G")
         self.assertEqual(alignment[0, 1], "G")
         self.assertEqual(alignment[0, 2], "G")
@@ -6912,6 +6915,9 @@ numpy.array([['G', 'G', 'G', 'G', 'G', 'G', 'A', 'A', 'A', 'A'],
         self.assertEqual(alignment[1, -3], "A")
         self.assertEqual(alignment[1, -2], "A")
         self.assertEqual(alignment[1, -1], "A")
+
+    def test_row_slice(self):
+        alignment = self.alignment
         self.assertEqual(alignment[0, 1:], "GGGGGAAAA")
         self.assertEqual(alignment[0, 2:], "GGGGAAAA")
         self.assertEqual(alignment[0, 3:], "GGGAAAA")
@@ -6948,8 +6954,14 @@ numpy.array([['G', 'G', 'G', 'G', 'G', 'G', 'A', 'A', 'A', 'A'],
         self.assertEqual(alignment[1, 6:-1], "AAA")
         self.assertEqual(alignment[1, 7:-1], "AA")
         self.assertEqual(alignment[1, 8:-1], "A")
+
+    def test_row_iterable(self):
+        alignment = self.alignment
         self.assertEqual(alignment[0, (1, 2, 6, 8)], "GGAA")
         self.assertEqual(alignment[1, (3, 3, 2, 7)], "TTGA")
+
+    def test_rows_col(self):
+        alignment = self.alignment
         self.assertEqual(alignment[:, 0], "GG")
         self.assertEqual(alignment[:, 1], "GG")
         self.assertEqual(alignment[:, 2], "GG")
@@ -6960,6 +6972,34 @@ numpy.array([['G', 'G', 'G', 'G', 'G', 'G', 'A', 'A', 'A', 'A'],
         self.assertEqual(alignment[:, 7], "AA")
         self.assertEqual(alignment[:, 8], "AA")
         self.assertEqual(alignment[:, 9], "AA")
+
+    def test_str(self):
+        alignment = self.alignment
+        print(alignment.aligned)
+        print(alignment.indices)
+        print(alignment.inverse_indices)
+        # map
+        # substitutions
+        self.assertEqual(
+            str(alignment),
+            """\
+target  9 GGGGGG 15
+        0 |||.|| 6
+query   0 GGGTGG 6
+
+target  0 AAAA 4
+        6 |||| 10
+query   6 AAAA 10
+""",
+        )
+
+    # def test_rows_cols(self):
+    # alignment = self.alignment[:, 1:]
+    # print(alignment)
+    # alignment = self.alignment[:, :-1]
+    # print(alignment)
+    # alignment = self.alignment[:, 2:-2]
+    # print(alignment)
 
 
 if __name__ == "__main__":
