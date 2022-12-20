@@ -2102,7 +2102,7 @@ class IC_Chain:
         Distance properties on hedra L12, L23, L13 and dihedra L14 configured
         by :meth:`.distplot_to_dh_arrays` or alternative loader.
 
-        dihedraAngles result is multiplied by dihedra_signs at final step to
+        dihedraAngles result is multiplied by dihedra_signs at final step
         recover chirality information lost in distance plot (mirror image of
         structure has same distances but opposite sign dihedral angles).
 
