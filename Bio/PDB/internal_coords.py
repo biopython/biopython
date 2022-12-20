@@ -2094,13 +2094,15 @@ class IC_Chain:
         self.dihedraL14 = distplot[da[:, 0], da[:, 3]]
         self.dihedra_signs = dihedra_signs
 
-    def distance_to_internal_coordinates(self) -> None:
+    def distance_to_internal_coordinates(
+        self, resetAtoms: Optional[Union[bool, None]] = True
+    ) -> None:
         """Compute chain di/hedra from from distance and chirality data.
 
         Distance properties on hedra L12, L23, L13 and dihedra L14 configured
         by :meth:`.distplot_to_dh_arrays` or alternative loader.
 
-        dihedraAngles result multiplied by dihedra_signs at final step to
+        dihedraAngles result is multiplied by dihedra_signs at final step to
         recover chirality information lost in distance plot (mirror image of
         structure has same distances but opposite sign dihedral angles).
 
@@ -2123,7 +2125,13 @@ class IC_Chain:
         * oc = hedron2 L13 = law of cosines on OA, AC (hedron2 L12, L23)
         * bc = dihedron L14
 
-        target is OA, the dihedral angle along edge oa
+        target is OA, the dihedral angle along edge oa.
+
+        :param bool resetAtoms: default True.
+            Mark all atoms in di/hedra and atomArray for updating by
+            :meth:`.internal_to_atom_coordinates`.  Alternatvely set this to
+            False and manipulate `atomArrayValid`, `dAtoms_needs_update` and
+            `hAtoms_needs_update` directly to reduce computation.
         """  # noqa
         oa = self.hedraL12[self.dH1ndx]
         oa[self.dFwd] = self.hedraL23[self.dH1ndx][self.dFwd]
@@ -2196,6 +2204,11 @@ class IC_Chain:
             ),
             out=self.hedraAngle,
         )
+
+        if resetAtoms:
+            self.atomArrayValid[:] = False
+            self.dAtoms_needs_update[:] = True
+            self.hAtoms_needs_update[:] = True
 
     def copy_initNCaCs(self, other: "IC_Chain") -> None:
         """Copy atom coordinates for initNCaC atoms from other IC_Chain.
