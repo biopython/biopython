@@ -6973,9 +6973,29 @@ numpy.array([['G', 'G', 'G', 'G', 'G', 'G', 'A', 'A', 'A', 'A'],
         self.assertEqual(alignment[:, 8], "AA")
         self.assertEqual(alignment[:, 9], "AA")
 
-    def test_str(self):
+    def test_aligned(self):
+        seq1 = "AAAACCCCCGGGGGGTTTTT"
+        seq2 = "GGGTGGAAAATTTTT"
+        coordinates = numpy.array([[9, 15, 0, 4, 15, 20], [0, 6, 6, 10, 10, 15]])
+        alignment = Align.Alignment([seq1, seq2], coordinates)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.aligned,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[[ 9, 15],
+                              [ 0,  4],
+                              [15, 20]],
+
+                             [[ 0,  6],
+                              [ 6, 10],
+                              [10, 15]]])
+                # fmt: on
+            )
+        )
+
+    def notest_str(self):
         alignment = self.alignment
-        print(alignment.aligned)
         print(alignment.indices)
         print(alignment.inverse_indices)
         # map

@@ -2480,21 +2480,34 @@ class Alignment:
                 "aligned is currently implemented for pairwise alignments only"
             )
         coordinates = self.coordinates.copy()
+        steps = numpy.diff(coordinates, 1)
+        aligned = sum(steps != 0, 0) > 1
+        # True for steps in which at least two sequences align, False if a gap
         for i, sequence in enumerate(self.sequences):
-            if coordinates[i, 0] > coordinates[i, -1]:  # mapped to reverse strand
-                n = len(sequence)
-                coordinates[i, :] = n - coordinates[i, :]
+            row = steps[i, aligned]
+            if (row >= 0).all():
+                pass
+            elif (row <= 0).all():
+                steps[i, :] = -steps[i, :]
+                coordinates[i, :] = len(sequence) - coordinates[i, :]
+            else:
+                raise ValueError(f"Inconsistent steps in row {i}")
         coordinates = coordinates.transpose()
-        steps = numpy.diff(coordinates, axis=0).min(1)
+        steps = numpy.diff(coordinates, axis=0)
+        steps = abs(steps).min(1)
         indices = numpy.flatnonzero(steps)
         starts = coordinates[indices, :]
         ends = coordinates[indices + 1, :]
         segments = numpy.stack([starts, ends], axis=0).transpose()
+        steps = numpy.diff(self.coordinates, 1)
         for i, sequence in enumerate(self.sequences):
-            if self.coordinates[i, 0] > self.coordinates[i, -1]:
-                # mapped to reverse strand
-                n = len(sequence)
-                segments[i, :] = n - segments[i, :]
+            row = steps[i, aligned]
+            if (row >= 0).all():
+                pass
+            elif (row <= 0).all():  # mapped to reverse strand
+                segments[i, :] = len(sequence) - segments[i, :]
+            else:
+                raise ValueError(f"Inconsistent steps in row {i}")
         return segments
 
     @property
