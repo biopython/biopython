@@ -6944,10 +6944,36 @@ numpy.array([['G', 'G', 'G', 'A', 'A', 'C', 'C', 'C', 'G', 'G', 'G', 'T', 'T'],
             )
         )
 
+    def test_indices(self):
+        alignment = self.alignment_forward
+        indices = alignment.indices
+        self.assertTrue(
+            numpy.array_equal(
+                indices,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 5, 6, 7, 0, 1,  2,  3,  4,  5,  6,  7,  8, 9],
+                             [ 0, 1, 2, 3, 4, -1, -1, -1, -1, -1, -1,  5, 6]])
+                # fmt: on
+            )
+        )
+        inverse_indices = alignment.inverse_indices
+        self.assertEqual(len(inverse_indices), 2)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.inverse_indices[0],
+                numpy.array([3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.inverse_indices[1],
+                numpy.array([0, 1, 2, 3, 4, 11, 12]),
+            )
+        )
+
     def notest_str(self):
         alignment = self.alignment
-        print(alignment.indices)
-        print(alignment.inverse_indices)
         # map
         # substitutions
         self.assertEqual(

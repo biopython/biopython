@@ -2568,16 +2568,29 @@ class Alignment:
         """
         a = -numpy.ones(self.shape, int)
         n, m = self.coordinates.shape
+        steps = numpy.diff(self.coordinates, 1)
+        aligned = sum(steps != 0, 0) > 1
+        # True for steps in which at least two sequences align, False if a gap
+        steps = steps[:, aligned]
+        rcs = numpy.zeros(n, bool)
+        for i, row in enumerate(steps):
+            if (row >= 0).all():
+                rcs[i] = False
+            elif (row <= 0).all():
+                rcs[i] = True
+            else:
+                raise ValueError(f"Inconsistent steps in row {i}")
         i = 0
         j = 0
-        for k in range(m - 1):
-            starts = self.coordinates[:, k]
-            ends = self.coordinates[:, k + 1]
-            for row, start, end in zip(a, starts, ends):
-                if start < end:
+        ends = self.coordinates[:, 0]
+        for k in range(1, m):
+            starts = ends
+            ends = self.coordinates[:, k]
+            for row, start, end, rc in zip(a, starts, ends, rcs):
+                if rc == False and start < end:  # noqa: 712
                     j = i + end - start
                     row[i:j] = range(start, end)
-                elif start > end:
+                elif rc == True and start > end:  # noqa: 712
                     j = i + start - end
                     row[i:j] = range(start - 1, end - 1, -1)
             i = j
@@ -2638,16 +2651,28 @@ class Alignment:
         """
         a = [-numpy.ones(len(sequence), int) for sequence in self.sequences]
         n, m = self.coordinates.shape
+        steps = numpy.diff(self.coordinates, 1)
+        aligned = sum(steps != 0, 0) > 1
+        # True for steps in which at least two sequences align, False if a gap
+        steps = steps[:, aligned]
+        rcs = numpy.zeros(n, bool)
+        for i, row in enumerate(steps):
+            if (row >= 0).all():
+                rcs[i] = False
+            elif (row <= 0).all():
+                rcs[i] = True
+            else:
+                raise ValueError(f"Inconsistent steps in row {i}")
         i = 0
         j = 0
         for k in range(m - 1):
             starts = self.coordinates[:, k]
             ends = self.coordinates[:, k + 1]
-            for row, start, end in zip(a, starts, ends):
-                if start < end:
+            for row, start, end, rc in zip(a, starts, ends, rcs):
+                if rc == False and start < end:  # noqa: 712
                     j = i + end - start
                     row[start:end] = range(i, j)
-                elif start > end:
+                elif rc == True and start > end:  # noqa: 712
                     j = i + start - end
                     if end > 0:
                         row[start - 1 : end - 1 : -1] = range(i, j)
