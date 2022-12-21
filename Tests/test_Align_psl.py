@@ -6844,152 +6844,102 @@ CAG33136.       180 YELDAIEVCKKFMERDPDELRFNAIALSAA 210
 
 class TestAlign_out_of_order(unittest.TestCase):
 
-    seq1 = "AAAACCCCCGGGGGG"
-    seq2 = "GGGTGGAAAA"
-    coordinates = numpy.array([[9, 15, 0, 4], [0, 6, 6, 10]])
-    alignment = Align.Alignment([seq1, seq2], coordinates)
+    seq1 = "AACCCGGGTT"
+    seq2 = "GTGAATT"
+    coordinates = numpy.array([[5, 8, 0, 2, 8, 10], [0, 3, 3, 5, 5, 7]])
+    alignment_forward = Align.Alignment([seq1, seq2], coordinates)
     del seq1
     del seq2
     del coordinates
+    array_forward = numpy.array(alignment_forward, "U")
 
     def test_array(self):
-        alignment = self.alignment
-        self.assertEqual(alignment.shape, (2, 10))
+        self.assertEqual(self.alignment_forward.shape, (2, 13))
         self.assertTrue(
             numpy.array_equal(
-                numpy.array(alignment, "U"),
+                self.array_forward,
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'G', 'G', 'G', 'G', 'G', 'A', 'A', 'A', 'A'],
-             ['G', 'G', 'G', 'T', 'G', 'G', 'A', 'A', 'A', 'A']], dtype='U')
+numpy.array([['G', 'G', 'G', 'A', 'A', 'C', 'C', 'C', 'G', 'G', 'G', 'T', 'T'],
+             ['G', 'T', 'G', 'A', 'A', '-', '-', '-', '-', '-', '-', 'T', 'T']],
+            dtype='U')
                 # fmt: on
             )
         )
 
     def test_row(self):
-        alignment = self.alignment
-        self.assertEqual(alignment[0], "GGGGGGAAAA")
-        self.assertEqual(alignment[1], "GGGTGGAAAA")
-        self.assertEqual(alignment[-2], "GGGGGGAAAA")
-        self.assertEqual(alignment[-1], "GGGTGGAAAA")
+        alignment = self.alignment_forward
+        a = self.array_forward
+        n = len(alignment)
+        for i in range(n):
+            s = "".join(a[i, :])
+            self.assertEqual(alignment[i], s)
+        for i in range(-n, 0):
+            s = "".join(a[i, :])
+            self.assertEqual(alignment[i], s)
 
     def test_row_col(self):
-        alignment = self.alignment
-        self.assertEqual(alignment[0, 0], "G")
-        self.assertEqual(alignment[0, 1], "G")
-        self.assertEqual(alignment[0, 2], "G")
-        self.assertEqual(alignment[0, 3], "G")
-        self.assertEqual(alignment[0, 4], "G")
-        self.assertEqual(alignment[0, 5], "G")
-        self.assertEqual(alignment[0, 6], "A")
-        self.assertEqual(alignment[0, 7], "A")
-        self.assertEqual(alignment[0, 8], "A")
-        self.assertEqual(alignment[0, 9], "A")
-        self.assertEqual(alignment[1, 0], "G")
-        self.assertEqual(alignment[1, 1], "G")
-        self.assertEqual(alignment[1, 2], "G")
-        self.assertEqual(alignment[1, 3], "T")
-        self.assertEqual(alignment[1, 4], "G")
-        self.assertEqual(alignment[1, 5], "G")
-        self.assertEqual(alignment[1, 6], "A")
-        self.assertEqual(alignment[1, 7], "A")
-        self.assertEqual(alignment[1, 8], "A")
-        self.assertEqual(alignment[1, 9], "A")
-        self.assertEqual(alignment[0, -10], "G")
-        self.assertEqual(alignment[0, -9], "G")
-        self.assertEqual(alignment[0, -8], "G")
-        self.assertEqual(alignment[0, -7], "G")
-        self.assertEqual(alignment[0, -6], "G")
-        self.assertEqual(alignment[0, -5], "G")
-        self.assertEqual(alignment[0, -4], "A")
-        self.assertEqual(alignment[0, -3], "A")
-        self.assertEqual(alignment[0, -2], "A")
-        self.assertEqual(alignment[0, -1], "A")
-        self.assertEqual(alignment[1, -10], "G")
-        self.assertEqual(alignment[1, -9], "G")
-        self.assertEqual(alignment[1, -8], "G")
-        self.assertEqual(alignment[1, -7], "T")
-        self.assertEqual(alignment[1, -6], "G")
-        self.assertEqual(alignment[1, -5], "G")
-        self.assertEqual(alignment[1, -4], "A")
-        self.assertEqual(alignment[1, -3], "A")
-        self.assertEqual(alignment[1, -2], "A")
-        self.assertEqual(alignment[1, -1], "A")
+        alignment = self.alignment_forward
+        a = self.array_forward
+        n, m = alignment.shape
+        for i in range(n):
+            for j in range(m):
+                self.assertEqual(alignment[i, j], a[i, j])
+            for j in range(-m, 0):
+                self.assertEqual(alignment[i, j], a[i, j])
 
     def test_row_slice(self):
-        alignment = self.alignment
-        self.assertEqual(alignment[0, 1:], "GGGGGAAAA")
-        self.assertEqual(alignment[0, 2:], "GGGGAAAA")
-        self.assertEqual(alignment[0, 3:], "GGGAAAA")
-        self.assertEqual(alignment[0, 4:], "GGAAAA")
-        self.assertEqual(alignment[0, 5:], "GAAAA")
-        self.assertEqual(alignment[0, 6:], "AAAA")
-        self.assertEqual(alignment[0, 7:], "AAA")
-        self.assertEqual(alignment[0, 8:], "AA")
-        self.assertEqual(alignment[0, 9:], "A")
-        self.assertEqual(alignment[1, 1:], "GGTGGAAAA")
-        self.assertEqual(alignment[1, 2:], "GTGGAAAA")
-        self.assertEqual(alignment[1, 3:], "TGGAAAA")
-        self.assertEqual(alignment[1, 4:], "GGAAAA")
-        self.assertEqual(alignment[1, 5:], "GAAAA")
-        self.assertEqual(alignment[1, 6:], "AAAA")
-        self.assertEqual(alignment[1, 7:], "AAA")
-        self.assertEqual(alignment[1, 8:], "AA")
-        self.assertEqual(alignment[1, 9:], "A")
-        self.assertEqual(alignment[0, 0:-1], "GGGGGGAAA")
-        self.assertEqual(alignment[0, 1:-1], "GGGGGAAA")
-        self.assertEqual(alignment[0, 2:-1], "GGGGAAA")
-        self.assertEqual(alignment[0, 3:-1], "GGGAAA")
-        self.assertEqual(alignment[0, 4:-1], "GGAAA")
-        self.assertEqual(alignment[0, 5:-1], "GAAA")
-        self.assertEqual(alignment[0, 6:-1], "AAA")
-        self.assertEqual(alignment[0, 7:-1], "AA")
-        self.assertEqual(alignment[0, 8:-1], "A")
-        self.assertEqual(alignment[1, 0:-1], "GGGTGGAAA")
-        self.assertEqual(alignment[1, 1:-1], "GGTGGAAA")
-        self.assertEqual(alignment[1, 2:-1], "GTGGAAA")
-        self.assertEqual(alignment[1, 3:-1], "TGGAAA")
-        self.assertEqual(alignment[1, 4:-1], "GGAAA")
-        self.assertEqual(alignment[1, 5:-1], "GAAA")
-        self.assertEqual(alignment[1, 6:-1], "AAA")
-        self.assertEqual(alignment[1, 7:-1], "AA")
-        self.assertEqual(alignment[1, 8:-1], "A")
+        alignment = self.alignment_forward
+        a = self.array_forward
+        n, m = alignment.shape
+        for i in range(2):
+            s = "".join(a[i, :])
+            for j in range(m):
+                self.assertEqual(alignment[i, j:], s[j:])
+            for j in range(-m, 0):
+                self.assertEqual(alignment[i, j:], s[j:])
+            for j in range(m):
+                self.assertEqual(alignment[i, j:-1], s[j:-1])
+            for j in range(-m, 0):
+                self.assertEqual(alignment[i, j:-1], s[j:-1])
 
     def test_row_iterable(self):
-        alignment = self.alignment
-        self.assertEqual(alignment[0, (1, 2, 6, 8)], "GGAA")
-        self.assertEqual(alignment[1, (3, 3, 2, 7)], "TTGA")
+        alignment = self.alignment_forward
+        a = self.array_forward
+        n = len(alignment)
+        for i in range(n):
+            jj = (1, 2, 6, 8)
+            s = "".join([a[i, j] for j in jj])
+            self.assertEqual(alignment[i, jj], s)
+            jj = (3, 3, 2, 7)
+            s = "".join([a[i, j] for j in jj])
+            self.assertEqual(alignment[i, jj], s)
 
     def test_rows_col(self):
-        alignment = self.alignment
-        self.assertEqual(alignment[:, 0], "GG")
-        self.assertEqual(alignment[:, 1], "GG")
-        self.assertEqual(alignment[:, 2], "GG")
-        self.assertEqual(alignment[:, 3], "GT")
-        self.assertEqual(alignment[:, 4], "GG")
-        self.assertEqual(alignment[:, 5], "GG")
-        self.assertEqual(alignment[:, 6], "AA")
-        self.assertEqual(alignment[:, 7], "AA")
-        self.assertEqual(alignment[:, 8], "AA")
-        self.assertEqual(alignment[:, 9], "AA")
+        alignment = self.alignment_forward
+        a = self.array_forward
+        n, m = alignment.shape
+        for j in range(m):
+            s = "".join(a[:, j])
+            self.assertEqual(alignment[:, j], s)
+        for j in range(-m, 0):
+            s = "".join(a[:, j])
+            self.assertEqual(alignment[:, j], s)
 
     def test_aligned(self):
-        seq1 = "AAAACCCCCGGGGGGTTTTT"
-        seq2 = "GGGTGGAAAATTTTT"
-        coordinates = numpy.array([[9, 15, 0, 4, 15, 20], [0, 6, 6, 10, 10, 15]])
-        alignment = Align.Alignment([seq1, seq2], coordinates)
+        alignment = self.alignment_forward
         self.assertTrue(
             numpy.array_equal(
                 alignment.aligned,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[[ 9, 15],
-                              [ 0,  4],
-                              [15, 20]],
+                numpy.array([[[ 5,  8],
+                              [ 0,  2],
+                              [ 8, 10]],
 
-                             [[ 0,  6],
-                              [ 6, 10],
-                              [10, 15]]])
+                             [[ 0,  3],
+                              [ 3,  5],
+                              [ 5,  7]]])
                 # fmt: on
             )
         )
