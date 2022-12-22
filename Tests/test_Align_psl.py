@@ -6972,10 +6972,22 @@ numpy.array([['G', 'G', 'G', 'A', 'A', 'C', 'C', 'C', 'G', 'G', 'G', 'T', 'T'],
             )
         )
 
+    def test_substitutions(self):
+        alignment = self.alignment_forward
+        self.assertEqual(
+            str(alignment.substitutions),
+            """\
+    A   C   G   T
+A 2.0 0.0 0.0 0.0
+C 0.0 0.0 0.0 0.0
+G 0.0 0.0 2.0 1.0
+T 0.0 0.0 0.0 2.0
+""",
+        )
+
     def notest_str(self):
         alignment = self.alignment
         # map
-        # substitutions
         self.assertEqual(
             str(alignment),
             """\
