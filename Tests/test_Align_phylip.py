@@ -318,11 +318,11 @@ Tax3              0 CCATCTCCCGCTCAGTAAGATACCCCTGCTGTTGGCGGGAAATCGTCAATATTAAAAGGT
 Tax4              0 TCATCTCATGGTCAATAAGATACTCCTGCTTTTGGCGGGAAATGGTCAATCTTAAAAGGT
 Tax5              0 CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT
 
-Tax1             60
-Tax2             60
-Tax3             60
-Tax4             60
-Tax5             60
+Tax1             60 
+Tax2             60 
+Tax3             60 
+Tax4             60 
+Tax5             60 
 """,
             )
             self.assertEqual(

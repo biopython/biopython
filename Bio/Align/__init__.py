@@ -1939,42 +1939,66 @@ class Alignment:
 
         Helper for self.format().
         """
-        seqs = []
-        names = []
-        coordinates = self.coordinates.copy()
         n = len(self.sequences)
-        for seq, row in zip(self.sequences, coordinates):
+        name_width = 10
+        names = []
+        for i, seq in enumerate(self.sequences):
             try:
                 name = seq.id
                 if name is None:
                     raise AttributeError
             except AttributeError:
                 if n == 2:
-                    if len(names) == 0:
+                    if i == 0:
                         name = "target"
                     else:
                         name = "query"
                 else:
                     name = ""
             else:
-                name = name[:9]
-            name = name.ljust(10)
+                name = name[: name_width - 1]
+            name = name.ljust(name_width)
             names.append(name)
+        steps = numpy.diff(self.coordinates, 1)
+        aligned = sum(steps != 0, 0) > 1
+        # True for steps in which at least two sequences align, False if a gap
+        signs = numpy.zeros(n, int)
+        for i in range(n):
+            row = steps[i, aligned]
+            if len(row) == 0:
+                row = steps[i]
+            if (row >= 0).all():
+                signs[i] = +1
+            elif (row <= 0).all():
+                steps[i, :] = -steps[i, :]
+                signs[i] = -1
+            else:
+                raise ValueError(f"Inconsistent steps in row {i}")
+        minstep = steps.min(0)
+        maxstep = steps.max(0)
+        steps = numpy.where(-minstep > maxstep, minstep, maxstep)
+        length = sum(abs(steps))
+        prefix_width = 10
+        position_width = 10
+        line_width = 80
+        lines = []
+        for name, seq, positions, sign in zip(
+            names, self.sequences, self.coordinates, signs
+        ):
             try:
                 seq = seq.seq  # SeqRecord confusion
             except AttributeError:
                 pass
-            if row[0] > row[-1]:  # mapped to reverse strand
-                row[:] = len(seq) - row[:]
-                seq = reverse_complement(seq, inplace=False)
-            start = min(row)
-            end = max(row)
-            row[:] -= start
+            start = min(positions)
+            end = max(positions)
             seq = seq[start:end]
+            if sign > 0:
+                row = positions - start
+            else:
+                row = end - positions
+                seq = reverse_complement(seq, inplace=False)
             if isinstance(seq, str):
-                try:
-                    seq = bytes(seq, "ASCII")
-                except UnicodeEncodeError:
+                if not seq.isascii():
                     return self._format_unicode()
             elif isinstance(seq, (Seq, MutableSeq)):
                 try:
@@ -1984,124 +2008,116 @@ class Alignment:
                     for start, end in seq.defined_ranges:
                         s[start:end] = bytes(seq[start:end])
                     seq = s
+                seq = seq.decode()
             else:
                 return self._format_generalized()
-            seqs.append(seq)
-        steps = numpy.diff(coordinates, 1).max(0)
-        length = sum(steps)
-        position_width = 10
-        alignment_width = 60
-        width = position_width + alignment_width
-        div, mod = divmod(length, alignment_width)
-        aligned_seqs = [bytearray(width) for i in range(div * n)] + [
-            bytearray(position_width + mod) for i in range(n)
-        ]
-        for index, (positions, row, seq) in enumerate(
-            zip(self.coordinates, coordinates, seqs)
-        ):
-            if positions[0] < positions[-1]:
-                sign = +1
-            else:
-                sign = -1
             position = positions[0]
-            prefix = str(position)
-            if len(prefix) > 9:
-                prefix = "..%7s " % prefix[-7:]
-            else:
-                prefix = "%9s " % prefix
             start = row[0]
-            aligned_seq = aligned_seqs[index]
-            aligned_seq[:position_width] = prefix.encode()
-            column = position_width
+            column = line_width
             for step, end in zip(steps, row[1:]):
-                if end == start:
-                    s = b"-" * step
-                else:
-                    s = seq[start:end]
-                while column + step >= width:
-                    aligned_seq[column:width] = s[: width - column]
-                    if start < end:
-                        position += sign * (width - column)
-                    index += n
-                    aligned_seq = aligned_seqs[index]
-                    prefix = str(position)
-                    if len(prefix) > 9:
-                        prefix = "..%7s " % prefix[-7:]
-                    else:
-                        prefix = "%9s " % prefix
-                    aligned_seq[:position_width] = prefix.encode()
-                    s = s[width - column :]
-                    step -= width - column
-                    column = position_width
-                if s:
-                    aligned_seq[column : column + step] = s
-                    if start < end:
+                if step < 0:
+                    if prefix_width + position_width < column:
+                        position_text = str(position)
+                        offset = position_width - len(position_text) - 1
+                        if offset < 0:
+                            lines[-1] += " .." + position_text[-offset + 3 :]
+                        else:
+                            lines[-1] += " " + position_text
+                    column = line_width
+                    if start != end:
                         position += sign * step
-                    column += step
+                    start = end
+                    continue
+                elif end == start:
+                    s = "-" * step
+                else:
+                    s = str(seq[start:end])
+                while column + len(s) >= line_width:
+                    rest = line_width - column
+                    if rest > 0:
+                        lines[-1] += s[:rest]
+                        s = s[rest:]
+                        if end > start:
+                            position += sign * rest
+                    line = name
+                    position_text = str(position)
+                    offset = position_width - len(position_text) - 1
+                    if offset < 0:
+                        line += " .." + position_text[-offset + 3 :]
+                    else:
+                        line += " " * offset + position_text
+                    line += " "
+                    lines.append(line)
+                    column = name_width + position_width
+                lines[-1] += s
+                if start != end:
+                    position += sign * len(s)
+                column += len(s)
                 start = end
-        lines = []
         if n == 2:
-            dash = ord("-")
-            name1, name2 = names
+            dash = "-"
             position = 0
-            for aligned_seq1, aligned_seq2 in zip(
-                aligned_seqs[::2], aligned_seqs[1::2]
-            ):
+            m = len(lines) // 2
+            lines1 = lines[:m]
+            lines2 = lines[m:]
+            pattern_lines = []
+            for line1, line2 in zip(lines1, lines2):
+                aligned_seq1 = line1[name_width + position_width :]
+                aligned_seq2 = line2[name_width + position_width :]
                 pattern = ""
-                for c1, c2 in zip(
-                    aligned_seq1[position_width:], aligned_seq2[position_width:]
-                ):
+                for c1, c2 in zip(aligned_seq1, aligned_seq2):
                     if c1 == c2:
+                        if c1 == " ":
+                            break
                         c = "|"
                     elif c1 == dash or c2 == dash:
                         c = "-"
                     else:
                         c = "."
                     pattern += c
-                lines.append(name1 + aligned_seq1.decode())
-                lines.append("          %9d %s" % (position, pattern))
-                lines.append(name2 + aligned_seq2.decode())
-                lines.append("")
+                pattern_line = "          %9d %s" % (position, pattern)
+                pattern_lines.append(pattern_line)
                 position += len(pattern)
-            position_width = len(str(max(max(self.coordinates[:, -1]), position)))
-            if mod == 0:
-                lines[-4] = lines[-4].rstrip()
-                lines[-3] = lines[-3].rstrip()
-                lines[-2] = lines[-2].rstrip()
-            elif mod < alignment_width - position_width:
-                fmt = f" %{position_width}d"
-                lines[-4] += fmt % self.coordinates[0, -1]
-                lines[-3] += fmt % position
-                lines[-2] += fmt % self.coordinates[1, -1]
+            final_position_width = len(str(max(max(self.coordinates[:, -1]), position)))
+            if column + final_position_width <= line_width:
+                if prefix_width + position_width < column:
+                    fmt = f" %{final_position_width}d"
+                    lines1[-1] += fmt % self.coordinates[0, -1]
+                    lines2[-1] += fmt % self.coordinates[1, -1]
+                    pattern_lines[-1] += fmt % position
             else:
+                name1, name2 = names
                 fmt = "%s%9d"
-                line = fmt % (name1, self.coordinates[0, -1])
-                lines.append(line)
+                line = name1 + format(self.coordinates[0, -1], "9d")
+                lines1.append(line)
                 line = fmt % ("          ", position)
-                lines.append(line)
+                pattern_lines.append(line)
                 line = fmt % (name2, self.coordinates[1, -1])
-                lines.append(line)
+                lines2.append(line)
                 lines.append("")
+            return "\n".join(
+                f"{line1}\n{pattern_line}\n{line2}\n"
+                for (line1, line2, pattern_line) in zip(lines1, lines2, pattern_lines)
+            )
         else:
-            position_width = len(str(max(self.coordinates[:, -1])))
-            for i in range(div + 1):
-                for j, name in enumerate(names):
-                    lines.append(name + aligned_seqs[i * n + j].decode())
-                lines.append("")
-            if mod == 0:
-                for i in range(div * (n + 1), div * (n + 1) + n):
-                    lines[i] = lines[i].rstrip()
-            elif mod < alignment_width - position_width:
-                fmt = f" %{position_width}d"
-                for j in range(n):
-                    lines[div * (n + 1) + j] += fmt % self.coordinates[j, -1]
+            m = len(lines) // n
+            final_position_width = len(str(max(self.coordinates[:, -1])))
+            if column + final_position_width < line_width:
+                if prefix_width + position_width < column:
+                    fmt = f" %{final_position_width}d"
+                    for i in range(n):
+                        lines[m - 1 + i * m] += fmt % self.coordinates[i, -1]
+                blocks = ["\n".join(lines[j::m]) + "\n" for j in range(m)]
             else:
+                blocks = ["\n".join(lines[j::m]) + "\n" for j in range(m)]
+                lines = []
                 fmt = "%s%9d"
-                for i, name in enumerate(names):
-                    line = fmt % (name, self.coordinates[i, -1])
+                for i in range(n):
+                    line = names[i] + format(self.coordinates[i, -1], "9d")
                     lines.append(line)
-                lines.append("")
-        return "\n".join(lines)
+                block = "\n".join(lines) + "\n"
+                blocks.append(block)
+            return "\n".join(blocks)
 
     def _format_unicode(self):
         """Return default string representation (PRIVATE).

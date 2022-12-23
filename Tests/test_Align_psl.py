@@ -2052,7 +2052,6 @@ hg19_dna         49
                 # fmt: on
             )
         )
-        self.maxDiff = None
         self.assertEqual(
             format(alignment, "psl"),
             """\
@@ -4875,7 +4874,6 @@ hg19_dna         35 ---------------------------------------???????????       46
             self.assertEqual(
                 alignment.query.seq[10:46], self.queries[alignment.query.id][10:46]
             )
-            self.maxDiff = None
             self.assertEqual(
                 str(alignment),
                 """\
@@ -6985,21 +6983,24 @@ T 0.0 0.0 0.0 2.0
 """,
         )
 
-    def notest_str(self):
-        alignment = self.alignment
-        # map
+    def test_str(self):
+        alignment = self.alignment_forward
         self.assertEqual(
             str(alignment),
             """\
-target  9 GGGGGG 15
-        0 |||.|| 6
-query   0 GGGTGG 6
+target            5 GGG 8
+                  0 |.|
+query             0 GTG 3
 
-target  0 AAAA 4
-        6 |||| 10
-query   6 AAAA 10
+target            0 AACCCGGGTT 10
+                  3 ||------|| 13
+query             3 AA------TT  7
 """,
         )
+
+    def test_map(self):
+        alignment = self.alignment_forward
+        # map
 
     # def test_rows_cols(self):
     # alignment = self.alignment[:, 1:]

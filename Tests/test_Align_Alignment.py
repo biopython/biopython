@@ -2021,13 +2021,13 @@ gi|627329        40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
 gi|627328        40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
 gi|627329        40 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
 
-gi|627328        90
-gi|627328        92
-gi|627328        90
-gi|627328        90
-gi|627329        94
-gi|627328        94
-gi|627329       100
+gi|627328        90 
+gi|627328        92 
+gi|627328        90 
+gi|627328        90 
+gi|627329        94 
+gi|627328        94 
+gi|627329       100 
 """,
         )
         self.assertEqual(
@@ -2054,13 +2054,13 @@ gi|627328        40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
 gi|627329        40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
 gi|627329        40 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
 
-gi|627328        92
-gi|627328        90
-gi|627328        90
-gi|627328        90
-gi|627328        94
-gi|627329        94
-gi|627329       100
+gi|627328        92 
+gi|627328        90 
+gi|627328        90 
+gi|627328        90 
+gi|627328        94 
+gi|627329        94 
+gi|627329       100 
 """,
         )
         self.assertEqual(
@@ -2087,13 +2087,13 @@ gi|627328        40 AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
 gi|627328        40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
 gi|627328        40 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
 
-gi|627329       100
-gi|627329        94
-gi|627328        94
-gi|627328        90
-gi|627328        90
-gi|627328        90
-gi|627328        92
+gi|627329       100 
+gi|627329        94 
+gi|627328        94 
+gi|627328        90 
+gi|627328        90 
+gi|627328        90 
+gi|627328        92 
 """,
         )
         self.assertEqual(
@@ -2126,13 +2126,13 @@ seq5             40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
 seq6             40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
 seq7             40 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
 
-seq1             92
-seq2             90
-seq3             90
-seq4             90
-seq5             94
-seq6             94
-seq7            100
+seq1             92 
+seq2             90 
+seq3             90 
+seq4             90 
+seq5             94 
+seq6             94 
+seq7            100 
 """,
         )
         self.assertEqual(
@@ -2151,13 +2151,13 @@ seq3             40 AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
 seq2             40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
 seq1             40 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
 
-seq7            100
-seq6             94
-seq5             94
-seq4             90
-seq3             90
-seq2             90
-seq1             92
+seq7            100 
+seq6             94 
+seq5             94 
+seq4             90 
+seq3             90 
+seq2             90 
+seq1             92 
 """,
         )
         self.assertEqual(
@@ -2176,13 +2176,13 @@ seq1             40 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
 seq6             40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
 seq2             40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
 
-seq3             90
-seq7            100
-seq4             90
-seq5             94
-seq1             92
-seq6             94
-seq2             90
+seq3             90 
+seq7            100 
+seq4             90 
+seq5             94 
+seq1             92 
+seq6             94 
+seq2             90 
 """,
         )
         self.assertEqual(
@@ -2201,13 +2201,13 @@ seq4             40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
 seq7             40 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
 seq3             40 AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
 
-seq2             90
-seq6             94
-seq1             92
-seq5             94
-seq4             90
-seq7            100
-seq3             90
+seq2             90 
+seq6             94 
+seq1             92 
+seq5             94 
+seq4             90 
+seq7            100 
+seq3             90 
 """,
         )
         self.assertEqual(

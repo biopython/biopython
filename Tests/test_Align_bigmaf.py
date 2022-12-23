@@ -4186,9 +4186,9 @@ mm9.chr10   3018878 ACTTG-CTTAGGAGCATATGTACAGTTAATCAAGAC-----AAAAATAAGAATGGAGACt
                  60 |.|.|-|||......||....|||.||.|.|||||.-----|||||||||.|||||.|..
 canFam2.c  47545413 AATCGACTTCTAGAGATGCACACAATTTAGCAAGATCAACTAAAAATAAGTATGGAAAAT
 
-mm9.chr10   3018932
-                120
-canFam2.c  47545353
+mm9.chr10   3018932 
+                120 
+canFam2.c  47545353 
 """,
         )
         self.assertTrue(

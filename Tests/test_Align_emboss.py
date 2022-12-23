@@ -1060,9 +1060,9 @@ ref_rec          59 EILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHFAKPFDIDEIRDAV--------
                  60 |.|.|..|........|.|....|.|...|...||.....||.|||......--------
 gi|949675        60 EVLRRCRVHRPKLYAVIITGQISLEMAARSIAEGAVDYIQKPIDIDALLNIAERALEHKE
 
-ref_rec         111
-                120
-gi|949675       120
+ref_rec         111 
+                120 
+gi|949675       120 
 """,
         )
         self.assertTrue(

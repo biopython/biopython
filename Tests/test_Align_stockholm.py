@@ -914,9 +914,9 @@ SCA4_RICP       175 SSPQPLKFVGTGDDAVAYIEHGGEIYTLAVTRGKYKEMMKEVALNHGQSVALSQTIAEDL
                 180 |||.||||.||||||.||||||||||||||||||||||||||.||.||||.|||--|||.
 H8K5G2_RI       180 SSPKPLKFAGTGDDAIAYIEHGGEIYTLAVTRGKYKEMMKEVELNQGQSVDLSQ--AEDI
 
-SCA4_RICP       235
-                240
-H8K5G2_RI       238
+SCA4_RICP       235 
+                240 
+H8K5G2_RI       238 
 """,
         )
         self.assertEqual(
