@@ -8,7 +8,7 @@ from io import StringIO
 
 
 from Bio.Align import Alignment
-from Bio.Seq import Seq
+from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SimpleLocation, ExactPosition, CompoundLocation
 from Bio import SeqIO
@@ -6846,89 +6846,100 @@ class TestAlign_out_of_order(unittest.TestCase):
     seq2 = "GTGAATT"
     coordinates = numpy.array([[5, 8, 0, 2, 8, 10], [0, 3, 3, 5, 5, 7]])
     alignment_forward = Align.Alignment([seq1, seq2], coordinates)
+    seq1 = reverse_complement(seq1)
+    coordinates = numpy.array([[5, 2, 10, 8, 2, 0], [0, 3, 3, 5, 5, 7]])
+    alignment_reverse = Align.Alignment([seq1, seq2], coordinates)
     del seq1
     del seq2
     del coordinates
     array_forward = numpy.array(alignment_forward, "U")
+    array_reverse = numpy.array(alignment_reverse, "U")
 
     def test_array(self):
-        self.assertEqual(self.alignment_forward.shape, (2, 13))
-        self.assertTrue(
-            numpy.array_equal(
-                self.array_forward,
-                # fmt: off
+        alignments = (self.alignment_forward, self.alignment_reverse)
+        arrays = (self.array_forward, self.array_reverse)
+        for alignment, a in zip(alignments, arrays):
+            self.assertEqual(alignment.shape, (2, 13))
+            self.assertTrue(
+                numpy.array_equal(
+                    a,
+                    # fmt: off
 # flake8: noqa
 numpy.array([['G', 'G', 'G', 'A', 'A', 'C', 'C', 'C', 'G', 'G', 'G', 'T', 'T'],
              ['G', 'T', 'G', 'A', 'A', '-', '-', '-', '-', '-', '-', 'T', 'T']],
             dtype='U')
-                # fmt: on
+                    # fmt: on
+                )
             )
-        )
 
     def test_row(self):
-        alignment = self.alignment_forward
-        a = self.array_forward
-        n = len(alignment)
-        for i in range(n):
-            s = "".join(a[i, :])
-            self.assertEqual(alignment[i], s)
-        for i in range(-n, 0):
-            s = "".join(a[i, :])
-            self.assertEqual(alignment[i], s)
+        alignments = (self.alignment_forward, self.alignment_reverse)
+        arrays = (self.array_forward, self.array_reverse)
+        for alignment, a in zip(alignments, arrays):
+            n = len(alignment)
+            for i in range(n):
+                s = "".join(a[i, :])
+                self.assertEqual(alignment[i], s)
+            for i in range(-n, 0):
+                s = "".join(a[i, :])
+                self.assertEqual(alignment[i], s)
 
     def test_row_col(self):
-        alignment = self.alignment_forward
-        a = self.array_forward
-        n, m = alignment.shape
-        for i in range(n):
-            for j in range(m):
-                self.assertEqual(alignment[i, j], a[i, j])
-            for j in range(-m, 0):
-                self.assertEqual(alignment[i, j], a[i, j])
+        alignments = (self.alignment_forward, self.alignment_reverse)
+        arrays = (self.array_forward, self.array_reverse)
+        for alignment, a in zip(alignments, arrays):
+            n, m = alignment.shape
+            for i in range(n):
+                for j in range(m):
+                    self.assertEqual(alignment[i, j], a[i, j])
+                for j in range(-m, 0):
+                    self.assertEqual(alignment[i, j], a[i, j])
 
     def test_row_slice(self):
-        alignment = self.alignment_forward
-        a = self.array_forward
-        n, m = alignment.shape
-        for i in range(2):
-            s = "".join(a[i, :])
-            for j in range(m):
-                self.assertEqual(alignment[i, j:], s[j:])
-            for j in range(-m, 0):
-                self.assertEqual(alignment[i, j:], s[j:])
-            for j in range(m):
-                self.assertEqual(alignment[i, j:-1], s[j:-1])
-            for j in range(-m, 0):
-                self.assertEqual(alignment[i, j:-1], s[j:-1])
+        alignments = (self.alignment_forward, self.alignment_reverse)
+        arrays = (self.array_forward, self.array_reverse)
+        for alignment, a in zip(alignments, arrays):
+            n, m = alignment.shape
+            for i in range(2):
+                s = "".join(a[i, :])
+                for j in range(m):
+                    self.assertEqual(alignment[i, j:], s[j:])
+                for j in range(-m, 0):
+                    self.assertEqual(alignment[i, j:], s[j:])
+                for j in range(m):
+                    self.assertEqual(alignment[i, j:-1], s[j:-1])
+                for j in range(-m, 0):
+                    self.assertEqual(alignment[i, j:-1], s[j:-1])
 
     def test_row_iterable(self):
-        alignment = self.alignment_forward
-        a = self.array_forward
-        n = len(alignment)
-        for i in range(n):
-            jj = (1, 2, 6, 8)
-            s = "".join([a[i, j] for j in jj])
-            self.assertEqual(alignment[i, jj], s)
-            jj = (3, 3, 2, 7)
-            s = "".join([a[i, j] for j in jj])
-            self.assertEqual(alignment[i, jj], s)
+        alignments = (self.alignment_forward, self.alignment_reverse)
+        arrays = (self.array_forward, self.array_reverse)
+        for alignment, a in zip(alignments, arrays):
+            n = len(alignment)
+            for i in range(n):
+                jj = (1, 2, 6, 8)
+                s = "".join([a[i, j] for j in jj])
+                self.assertEqual(alignment[i, jj], s)
+                jj = (3, 3, 2, 7)
+                s = "".join([a[i, j] for j in jj])
+                self.assertEqual(alignment[i, jj], s)
 
     def test_rows_col(self):
-        alignment = self.alignment_forward
-        a = self.array_forward
-        n, m = alignment.shape
-        for j in range(m):
-            s = "".join(a[:, j])
-            self.assertEqual(alignment[:, j], s)
-        for j in range(-m, 0):
-            s = "".join(a[:, j])
-            self.assertEqual(alignment[:, j], s)
+        alignments = (self.alignment_forward, self.alignment_reverse)
+        arrays = (self.array_forward, self.array_reverse)
+        for alignment, a in zip(alignments, arrays):
+            n, m = alignment.shape
+            for j in range(m):
+                s = "".join(a[:, j])
+                self.assertEqual(alignment[:, j], s)
+            for j in range(-m, 0):
+                s = "".join(a[:, j])
+                self.assertEqual(alignment[:, j], s)
 
     def test_aligned(self):
-        alignment = self.alignment_forward
         self.assertTrue(
             numpy.array_equal(
-                alignment.aligned,
+                self.alignment_forward.aligned,
                 # fmt: off
 # flake8: noqa
                 numpy.array([[[ 5,  8],
@@ -6941,58 +6952,108 @@ numpy.array([['G', 'G', 'G', 'A', 'A', 'C', 'C', 'C', 'G', 'G', 'G', 'T', 'T'],
                 # fmt: on
             )
         )
+        self.assertTrue(
+            numpy.array_equal(
+                self.alignment_reverse.aligned,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[[ 5, 2],
+                              [10, 8],
+                              [ 2, 0]],
+
+                             [[ 0, 3],
+                              [ 3, 5],
+                              [ 5, 7]]])
+                # fmt: on
+            )
+        )
 
     def test_indices(self):
-        alignment = self.alignment_forward
-        indices = alignment.indices
+        indices = self.alignment_forward.indices
         self.assertTrue(
             numpy.array_equal(
                 indices,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 5, 6, 7, 0, 1,  2,  3,  4,  5,  6,  7,  8, 9],
-                             [ 0, 1, 2, 3, 4, -1, -1, -1, -1, -1, -1,  5, 6]])
+                numpy.array([[ 5, 6, 7, 0, 1,  2,  3,  4,  5,  6,  7, 8, 9],
+                             [ 0, 1, 2, 3, 4, -1, -1, -1, -1, -1, -1, 5, 6]])
                 # fmt: on
             )
         )
-        inverse_indices = alignment.inverse_indices
+        inverse_indices = self.alignment_forward.inverse_indices
         self.assertEqual(len(inverse_indices), 2)
         self.assertTrue(
             numpy.array_equal(
-                alignment.inverse_indices[0],
+                inverse_indices[0],
                 numpy.array([3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
             )
         )
         self.assertTrue(
             numpy.array_equal(
-                alignment.inverse_indices[1],
+                inverse_indices[1],
+                numpy.array([0, 1, 2, 3, 4, 11, 12]),
+            )
+        )
+        indices = self.alignment_reverse.indices
+        self.assertTrue(
+            numpy.array_equal(
+                indices,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[ 4, 3, 2, 9, 8,  7,  6,  5,  4,  3,  2, 1, 0],
+                             [ 0, 1, 2, 3, 4, -1, -1, -1, -1, -1, -1, 5, 6]])
+                # fmt: on
+            )
+        )
+        inverse_indices = self.alignment_reverse.inverse_indices
+        self.assertEqual(len(inverse_indices), 2)
+        self.assertTrue(
+            numpy.array_equal(
+                inverse_indices[0],
+                numpy.array([12, 11, 10, 9, 8, 7, 6, 5, 4, 3]),
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                inverse_indices[1],
                 numpy.array([0, 1, 2, 3, 4, 11, 12]),
             )
         )
 
     def test_substitutions(self):
-        alignment = self.alignment_forward
-        self.assertEqual(
-            str(alignment.substitutions),
-            """\
+        for alignment in (self.alignment_forward, self.alignment_reverse):
+            self.assertEqual(
+                str(alignment.substitutions),
+                """\
     A   C   G   T
 A 2.0 0.0 0.0 0.0
 C 0.0 0.0 0.0 0.0
 G 0.0 0.0 2.0 1.0
 T 0.0 0.0 0.0 2.0
 """,
-        )
+            )
 
     def test_str(self):
-        alignment = self.alignment_forward
         self.assertEqual(
-            str(alignment),
+            str(self.alignment_forward),
             """\
 target            5 GGG 8
                   0 |.|
 query             0 GTG 3
 
 target            0 AACCCGGGTT 10
+                  3 ||------|| 13
+query             3 AA------TT  7
+""",
+        )
+        self.assertEqual(
+            str(self.alignment_reverse),
+            """\
+target            5 GGG 2
+                  0 |.|
+query             0 GTG 3
+
+target           10 AACCCGGGTT  0
                   3 ||------|| 13
 query             3 AA------TT  7
 """,
