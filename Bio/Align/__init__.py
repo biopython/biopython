@@ -1335,7 +1335,6 @@ class Alignment:
         gaps = steps.max(0)
         if not ((steps == gaps) | (steps <= 0)).all():
             raise ValueError("Unequal step sizes in alignment")
-        m = sum(gaps)
         try:
             sequence = sequence.seq  # SeqRecord confusion
         except AttributeError:
@@ -1977,13 +1976,35 @@ class Alignment:
         minstep = steps.min(0)
         maxstep = steps.max(0)
         steps = numpy.where(-minstep > maxstep, minstep, maxstep)
-        length = sum(abs(steps))
+        multipliers = numpy.zeros(n, int)
+        for i, (positions, sign) in enumerate(zip(self.coordinates, signs)):
+            start = min(positions)
+            end = max(positions)
+            if sign > 0:
+                row = positions - start
+            else:
+                row = end - positions
+            multiplier = 1
+            start = row[0]
+            for step, end in zip(steps, row[1:]):
+                if start < end:
+                    if end - start == step:
+                        pass
+                    elif 3 * (end - start) == step:
+                        multiplier = 3
+                    else:
+                        raise Exception(
+                            "start = %d, end = %d, step = %d" % (start, end, step)
+                        )
+                start = end
+            multipliers[i] = multiplier
         prefix_width = 10
         position_width = 10
         line_width = 80
+        max_multiplier = max(multipliers)
         lines = []
-        for name, seq, positions, sign in zip(
-            names, self.sequences, self.coordinates, signs
+        for name, seq, positions, sign, multiplier in zip(
+            names, self.sequences, self.coordinates, signs, multipliers
         ):
             try:
                 seq = seq.seq  # SeqRecord confusion
@@ -2012,8 +2033,11 @@ class Alignment:
             else:
                 return self._format_generalized()
             position = positions[0]
-            start = row[0]
+            if multiplier == 3:
+                seq = "  ".join(seq) + "  "
+                row *= 3
             column = line_width
+            start = row[0]
             for step, end in zip(steps, row[1:]):
                 if step < 0:
                     if prefix_width + position_width < column:
@@ -2025,11 +2049,14 @@ class Alignment:
                             lines[-1] += " " + position_text
                     column = line_width
                     if start != end:
-                        position += sign * step
+                        position += sign * step // multiplier
                     start = end
                     continue
                 elif end == start:
-                    s = "-" * step
+                    if multiplier == max_multiplier:
+                        s = "-" * step
+                    else:
+                        s = "-" * step * max_multiplier
                 else:
                     s = str(seq[start:end])
                 while column + len(s) >= line_width:
@@ -2038,7 +2065,8 @@ class Alignment:
                         lines[-1] += s[:rest]
                         s = s[rest:]
                         if end > start:
-                            position += sign * rest
+                            position += sign * (-(rest // -multiplier))
+                            #                   ceil integer division
                     line = name
                     position_text = str(position)
                     offset = position_width - len(position_text) - 1
@@ -2051,10 +2079,10 @@ class Alignment:
                     column = name_width + position_width
                 lines[-1] += s
                 if start != end:
-                    position += sign * len(s)
+                    position += sign * len(s) // multiplier
                 column += len(s)
                 start = end
-        if n == 2:
+        if n == 2 and max_multiplier == 1:
             dash = "-"
             position = 0
             m = len(lines) // 2

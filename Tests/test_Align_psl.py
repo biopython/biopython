@@ -1337,7 +1337,7 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 33)
-        if fmt == "pxl":
+        if fmt == "psl":
             self.assertEqual(
                 str(alignment),
                 """\
@@ -5864,6 +5864,24 @@ numpy.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
 
 
 class TestAlign_dnax_prot(unittest.TestCase):
+    @classmethod
+    def read_dna(cls, assembly, sequence):
+        path = "Blat/%s.fa" % assembly
+        records = SeqIO.parse(path, "fasta")
+        for record in records:
+            name, start_end = record.id.split(":")
+            if name == sequence.id:
+                break
+        else:
+            raise Exception("Failed to find DNA sequence")
+        start, end = start_end.split("-")
+        start = int(start)
+        end = int(end)
+        length = len(sequence)
+        sequence = str(record.seq)
+        dna = Seq({start: sequence}, length=length)
+        return dna
+
     def test_reading_psl_35_001(self):
         """Test parsing psl_35_001.psl and pslx_35_001.pslx."""
         self.check_reading_psl_35_001("psl")
@@ -5906,6 +5924,9 @@ class TestAlign_dnax_prot(unittest.TestCase):
             self.assertEqual(
                 feature.qualifiers["translation"][0],
                 "YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF",
+            )
+            alignment.target.seq = TestAlign_dnax_prot.read_dna(
+                "hg38", alignment.target
             )
         self.assertTrue(
             numpy.array_equal(
@@ -6315,20 +6336,9 @@ class TestAlign_dnax_prot(unittest.TestCase):
         protein_alignments = []
         alignments = Align.parse(path, "psl")
         for i, alignment in enumerate(alignments):
-            records = SeqIO.parse("Blat/hg38.fa", "fasta")
-            for record in records:
-                name, start_end = record.id.split(":")
-                if name == alignment.sequences[0].id:
-                    break
-            else:
-                raise Exception("Failed to find DNA sequence")
-            start, end = start_end.split("-")
-            start = int(start)
-            end = int(end)
-            length = len(alignment.sequences[0])
-            sequence = str(record.seq)
-            dna = Seq({start: sequence}, length=length)
-            alignment.sequences[0].seq = dna
+            alignment.sequences[0].seq = TestAlign_dnax_prot.read_dna(
+                "hg38", alignment.sequences[0]
+            )
             self.assertEqual(alignment.sequences[1].id, protein.id)
             alignment.sequences[1].seq = protein.seq
             # The alignment is on the forward strand of the DNA sequence:
@@ -6526,7 +6536,7 @@ CAG33136.        60 YEL 63
                 "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEIFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASMSPEERARYLENYDAIRVTHETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA",
             )
             # confirm that the feature coordinates are correct by extracting
-            # the feature sequence from the target sequence and tranlating it.
+            # the feature sequence from the target sequence and translating it.
             cds = feature.extract(self.dna[alignment.target.id]).translate()
             self.assertEqual(feature.qualifiers["translation"][0], cds)
         self.assertTrue(
@@ -6590,7 +6600,7 @@ CAG33136.        60 YEL 63
                 "MEGQCWLPLEANPEVTNQLLQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQNITSSGYFMRQTISSACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASLSPEERAIYLENYDSIRVTHKTSDHEGQTEAQNIDEKVDLHFIALVHVDGHLYELDGWKPFPINHGETSDATLLRDAIEVFKKFRERDPDERRFNVIALSAA",
             )
             # confirm that the feature coordinates are correct by extracting
-            # the feature sequence from the target sequence and tranlating it.
+            # the feature sequence from the target sequence and translating it.
             cds = feature.extract(self.dna[alignment.target.id]).translate()
             self.assertEqual(feature.qualifiers["translation"][0], cds)
         self.assertTrue(
@@ -6652,7 +6662,7 @@ CAG33136.        60 YEL 63
                 "MESQRWLPLEANPEVTNQFLKQLGLHPNWQCVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEIFRTEEEEKTKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASMSPEERARYLENYDAIRVTHETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYELDAIEVCKKFMERDPDELRFNAIALSAA",
             )
             # confirm that the feature coordinates are correct by extracting
-            # the feature sequence from the target sequence and tranlating it.
+            # the feature sequence from the target sequence and translating it.
             cds = feature.extract(self.dna[alignment.target.id]).translate()
             self.assertEqual(feature.qualifiers["translation"][0], cds)
         self.assertTrue(
@@ -6708,20 +6718,9 @@ CAG33136.        60 YEL 63
         protein_alignments = []
         alignments = Align.parse(path, "psl")
         for i, alignment in enumerate(alignments):
-            records = SeqIO.parse("Blat/balAcu1.fa", "fasta")
-            for record in records:
-                name, start_end = record.id.split(":")
-                if name == alignment.sequences[0].id:
-                    break
-            else:
-                raise Exception("Failed to find DNA sequence")
-            start, end = start_end.split("-")
-            start = int(start)
-            end = int(end)
-            length = len(alignment.sequences[0])
-            sequence = str(record.seq)
-            dna = Seq({start: sequence}, length=length)
-            alignment.sequences[0].seq = dna
+            alignment.sequences[0].seq = TestAlign_dnax_prot.read_dna(
+                "balAcu1", alignment.sequences[0]
+            )
             self.assertEqual(alignment.sequences[1].id, protein.id)
             alignment.sequences[1].seq = protein.seq
             if i == 0 or i == 1:
@@ -6735,8 +6734,12 @@ CAG33136.        60 YEL 63
                     alignment.coordinates[0, 0], alignment.coordinates[0, -1]
                 )
                 # so we take the reverse complement:
-                alignment.coordinates[0, :] = len(dna) - alignment.coordinates[0, :]
-                alignment.sequences[0].seq = dna.reverse_complement()
+                alignment.coordinates[0, :] = (
+                    len(alignment.sequences[0].seq) - alignment.coordinates[0, :]
+                )
+                alignment.sequences[0].seq = alignment.sequences[
+                    0
+                ].seq.reverse_complement()
             # The protein alignment is always in the forward orientation:
             self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
             # Now extract the aligned sequences:
