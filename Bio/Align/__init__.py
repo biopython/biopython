@@ -1985,10 +1985,14 @@ class Alignment:
             else:
                 raise ValueError(f"Inconsistent steps in row {i}")
             signs[i] = sign
+            try:
+                seq = seq.seq  # SeqRecord confusion
+            except AttributeError:
+                pass
+            seqs.append(seq)
         minstep = steps.min(0)
         maxstep = steps.max(0)
         steps = numpy.where(-minstep > maxstep, minstep, maxstep)
-        seqs = list(self.sequences)
         for i, (seq, positions, row, sign) in enumerate(
             zip(seqs, self.coordinates, indices, signs)
         ):
@@ -2005,10 +2009,6 @@ class Alignment:
                             "start = %d, end = %d, step = %d" % (start, end, step)
                         )
                 start = end
-            try:
-                seq = seq.seq  # SeqRecord confusion
-            except AttributeError:
-                pass
             start = min(positions)
             end = max(positions)
             seq = seq[start:end]
