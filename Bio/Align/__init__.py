@@ -2011,10 +2011,7 @@ class Alignment:
             start = min(positions)
             end = max(positions)
             seq = seq[start:end]
-            if sign > 0:
-                row[:] = positions - start
-            else:
-                row[:] = end - positions
+            if sign < 0:
                 seq = reverse_complement(seq, inplace=False)
             if isinstance(seq, str):
                 if not seq.isascii():
