@@ -1989,6 +1989,25 @@ class Alignment:
                 seq = seq.seq  # SeqRecord confusion
             except AttributeError:
                 pass
+            start = min(positions)
+            end = max(positions)
+            seq = seq[start:end]
+            if sign < 0:
+                seq = reverse_complement(seq, inplace=False)
+            if isinstance(seq, str):
+                if not seq.isascii():
+                    return self._format_unicode()
+            elif isinstance(seq, (Seq, MutableSeq)):
+                try:
+                    seq = bytes(seq)
+                except UndefinedSequenceError:
+                    s = bytearray(b"?" * (end - start))
+                    for start, end in seq.defined_ranges:
+                        s[start:end] = bytes(seq[start:end])
+                    seq = s
+                seq = seq.decode()
+            else:
+                return self._format_generalized()
             seqs.append(seq)
         minstep = steps.min(0)
         maxstep = steps.max(0)
@@ -2011,23 +2030,6 @@ class Alignment:
                 start = end
             start = min(positions)
             end = max(positions)
-            seq = seq[start:end]
-            if sign < 0:
-                seq = reverse_complement(seq, inplace=False)
-            if isinstance(seq, str):
-                if not seq.isascii():
-                    return self._format_unicode()
-            elif isinstance(seq, (Seq, MutableSeq)):
-                try:
-                    seq = bytes(seq)
-                except UndefinedSequenceError:
-                    s = bytearray(b"?" * (end - start))
-                    for start, end in seq.defined_ranges:
-                        s[start:end] = bytes(seq[start:end])
-                    seq = s
-                seq = seq.decode()
-            else:
-                return self._format_generalized()
             if multiplier == 3:
                 row[:] *= 3
                 seq = "  ".join(seq) + "  "
