@@ -1949,7 +1949,11 @@ class Alignment:
         signs = numpy.zeros(n, int)
         name_width = 10
         names = []
-        for i, seq in enumerate(self.sequences):
+        seqs = []
+        indices = numpy.zeros(self.coordinates.shape, int)
+        for i, (seq, positions, row) in enumerate(
+            zip(self.sequences, self.coordinates, indices)
+        ):
             try:
                 name = seq.id
                 if name is None:
@@ -1966,30 +1970,27 @@ class Alignment:
                 name = name[: name_width - 1]
             name = name.ljust(name_width)
             names.append(name)
-            row = steps[i, aligned]
-            if len(row) == 0:
-                row = steps[i]
-            if (row >= 0).all():
-                signs[i] = +1
-            elif (row <= 0).all():
+            aligned_steps = steps[i, aligned]
+            if len(aligned_steps) == 0:
+                aligned_steps = steps[i]
+            if (aligned_steps >= 0).all():
+                sign = +1
+                start = min(positions)
+                row[:] = positions - start
+            elif (aligned_steps <= 0).all():
                 steps[i, :] = -steps[i, :]
-                signs[i] = -1
+                sign = -1
+                end = max(positions)
+                row[:] = end - positions
             else:
                 raise ValueError(f"Inconsistent steps in row {i}")
+            signs[i] = sign
         minstep = steps.min(0)
         maxstep = steps.max(0)
         steps = numpy.where(-minstep > maxstep, minstep, maxstep)
-        indices = numpy.zeros(self.coordinates.shape, int)
-        seqs = []
         for seq, positions, row, sign in zip(
             self.sequences, self.coordinates, indices, signs
         ):
-            start = min(positions)
-            end = max(positions)
-            if sign > 0:
-                row[:] = positions - start
-            else:
-                row[:] = end - positions
             multiplier = 1
             start = row[0]
             for step, end in zip(steps, row[1:]):
