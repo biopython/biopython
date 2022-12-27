@@ -1976,14 +1976,21 @@ class Alignment:
         minstep = steps.min(0)
         maxstep = steps.max(0)
         steps = numpy.where(-minstep > maxstep, minstep, maxstep)
-        multipliers = numpy.zeros(n, int)
-        for i, (positions, sign) in enumerate(zip(self.coordinates, signs)):
+        indices = numpy.zeros(self.coordinates.shape, int)
+        seqs = []
+        if n == 2:
+            write_pattern = True
+        else:
+            write_pattern = False
+        for seq, positions, row, sign in zip(
+            self.sequences, self.coordinates, indices, signs
+        ):
             start = min(positions)
             end = max(positions)
             if sign > 0:
-                row = positions - start
+                row[:] = positions - start
             else:
-                row = end - positions
+                row[:] = end - positions
             multiplier = 1
             start = row[0]
             for step, end in zip(steps, row[1:]):
@@ -1997,15 +2004,6 @@ class Alignment:
                             "start = %d, end = %d, step = %d" % (start, end, step)
                         )
                 start = end
-            multipliers[i] = multiplier
-        prefix_width = 10
-        position_width = 10
-        line_width = 80
-        max_multiplier = max(multipliers)
-        lines = []
-        for name, seq, positions, sign, multiplier in zip(
-            names, self.sequences, self.coordinates, signs, multipliers
-        ):
             try:
                 seq = seq.seq  # SeqRecord confusion
             except AttributeError:
@@ -2014,9 +2012,9 @@ class Alignment:
             end = max(positions)
             seq = seq[start:end]
             if sign > 0:
-                row = positions - start
+                row[:] = positions - start
             else:
-                row = end - positions
+                row[:] = end - positions
                 seq = reverse_complement(seq, inplace=False)
             if isinstance(seq, str):
                 if not seq.isascii():
@@ -2032,43 +2030,53 @@ class Alignment:
                 seq = seq.decode()
             else:
                 return self._format_generalized()
-            position = positions[0]
             if multiplier == 3:
+                row[:] *= 3
                 seq = "  ".join(seq) + "  "
-                row *= 3
+                write_pattern = False
+            seqs.append(seq)
+        prefix_width = 10
+        position_width = 10
+        line_width = 80
+        lines = []
+        steps = indices[:, 1:] - indices[:, :-1]
+        minstep = steps.min(0)
+        maxstep = steps.max(0)
+        steps = numpy.where(-minstep > maxstep, minstep, maxstep)
+        for name, seq, positions, row, sign in zip(
+            names, seqs, self.coordinates, indices, signs
+        ):
+            start = positions[0]
             column = line_width
-            start = row[0]
-            for step, end in zip(steps, row[1:]):
+            start_index = row[0]
+            for step, end, end_index in zip(steps, positions[1:], row[1:]):
                 if step < 0:
                     if prefix_width + position_width < column:
-                        position_text = str(position)
+                        position_text = str(start)
                         offset = position_width - len(position_text) - 1
                         if offset < 0:
                             lines[-1] += " .." + position_text[-offset + 3 :]
                         else:
                             lines[-1] += " " + position_text
                     column = line_width
-                    if start != end:
-                        position += sign * step // multiplier
                     start = end
+                    start_index = end_index
                     continue
-                elif end == start:
-                    if multiplier == max_multiplier:
-                        s = "-" * step
-                    else:
-                        s = "-" * step * max_multiplier
+                elif end_index == start_index:
+                    s = "-" * step
                 else:
-                    s = str(seq[start:end])
+                    s = seq[start_index:end_index]
                 while column + len(s) >= line_width:
                     rest = line_width - column
                     if rest > 0:
                         lines[-1] += s[:rest]
                         s = s[rest:]
-                        if end > start:
-                            position += sign * (-(rest // -multiplier))
-                            #                   ceil integer division
+                        if start != end:
+                            multiplier = (end_index - start_index) // abs(end - start)
+                            start += sign * (-(rest // -multiplier))
+                        start_index += rest
                     line = name
-                    position_text = str(position)
+                    position_text = str(start)
                     offset = position_width - len(position_text) - 1
                     if offset < 0:
                         line += " .." + position_text[-offset + 3 :]
@@ -2078,11 +2086,11 @@ class Alignment:
                     lines.append(line)
                     column = name_width + position_width
                 lines[-1] += s
-                if start != end:
-                    position += sign * len(s) // multiplier
+                if start_index != end_index:
+                    start_index = end_index
+                    start = end
                 column += len(s)
-                start = end
-        if n == 2 and max_multiplier == 1:
+        if write_pattern is True:
             dash = "-"
             position = 0
             m = len(lines) // 2
