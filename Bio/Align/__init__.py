@@ -2012,9 +2012,7 @@ class Alignment:
         minstep = steps.min(0)
         maxstep = steps.max(0)
         steps = numpy.where(-minstep > maxstep, minstep, maxstep)
-        for i, (seq, positions, row, sign) in enumerate(
-            zip(seqs, self.coordinates, indices, signs)
-        ):
+        for i, (seq, row) in enumerate(zip(seqs, indices)):
             multiplier = 1
             start = row[0]
             for step, end in zip(steps, row[1:]):
@@ -2028,13 +2026,10 @@ class Alignment:
                             "start = %d, end = %d, step = %d" % (start, end, step)
                         )
                 start = end
-            start = min(positions)
-            end = max(positions)
             if multiplier == 3:
                 row[:] *= 3
-                seq = "  ".join(seq) + "  "
+                seqs[i] = "  ".join(seq) + "  "
                 write_pattern = False
-            seqs[i] = seq
         prefix_width = 10
         position_width = 10
         line_width = 80
