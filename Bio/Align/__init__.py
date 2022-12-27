@@ -1946,7 +1946,6 @@ class Alignment:
         steps = numpy.diff(self.coordinates, 1)
         aligned = sum(steps != 0, 0) > 1
         # True for steps in which at least two sequences align, False if a gap
-        signs = numpy.zeros(n, int)
         name_width = 10
         names = []
         seqs = []
@@ -1970,21 +1969,6 @@ class Alignment:
                 name = name[: name_width - 1]
             name = name.ljust(name_width)
             names.append(name)
-            aligned_steps = steps[i, aligned]
-            if len(aligned_steps) == 0:
-                aligned_steps = steps[i]
-            if (aligned_steps >= 0).all():
-                sign = +1
-                start = min(positions)
-                row[:] = positions - start
-            elif (aligned_steps <= 0).all():
-                steps[i, :] = -steps[i, :]
-                sign = -1
-                end = max(positions)
-                row[:] = end - positions
-            else:
-                raise ValueError(f"Inconsistent steps in row {i}")
-            signs[i] = sign
             try:
                 seq = seq.seq  # SeqRecord confusion
             except AttributeError:
@@ -1992,8 +1976,19 @@ class Alignment:
             start = min(positions)
             end = max(positions)
             seq = seq[start:end]
-            if sign < 0:
+            aligned_steps = steps[i, aligned]
+            if len(aligned_steps) == 0:
+                aligned_steps = steps[i]
+            if (aligned_steps >= 0).all():
+                start = min(positions)
+                row[:] = positions - start
+            elif (aligned_steps <= 0).all():
+                steps[i, :] = -steps[i, :]
                 seq = reverse_complement(seq, inplace=False)
+                end = max(positions)
+                row[:] = end - positions
+            else:
+                raise ValueError(f"Inconsistent steps in row {i}")
             if isinstance(seq, str):
                 if not seq.isascii():
                     return self._format_unicode()
@@ -2038,9 +2033,7 @@ class Alignment:
         minstep = steps.min(0)
         maxstep = steps.max(0)
         steps = numpy.where(-minstep > maxstep, minstep, maxstep)
-        for name, seq, positions, row, sign in zip(
-            names, seqs, self.coordinates, indices, signs
-        ):
+        for name, seq, positions, row in zip(names, seqs, self.coordinates, indices):
             start = positions[0]
             column = line_width
             start_index = row[0]
@@ -2067,8 +2060,14 @@ class Alignment:
                         lines[-1] += s[:rest]
                         s = s[rest:]
                         if start != end:
-                            multiplier = (end_index - start_index) // abs(end - start)
-                            start += sign * (-(rest // -multiplier))
+                            if (end_index - start_index) == abs(end - start):
+                                step = rest
+                            else:
+                                step = -(rest // -3)
+                            if start < end:
+                                start += step
+                            else:
+                                start -= step
                         start_index += rest
                     line = name
                     position_text = str(start)
