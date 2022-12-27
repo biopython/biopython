@@ -1939,6 +1939,14 @@ class Alignment:
         Helper for self.format().
         """
         n = len(self.sequences)
+        if n == 2:
+            write_pattern = True
+        else:
+            write_pattern = False
+        steps = numpy.diff(self.coordinates, 1)
+        aligned = sum(steps != 0, 0) > 1
+        # True for steps in which at least two sequences align, False if a gap
+        signs = numpy.zeros(n, int)
         name_width = 10
         names = []
         for i, seq in enumerate(self.sequences):
@@ -1958,11 +1966,6 @@ class Alignment:
                 name = name[: name_width - 1]
             name = name.ljust(name_width)
             names.append(name)
-        steps = numpy.diff(self.coordinates, 1)
-        aligned = sum(steps != 0, 0) > 1
-        # True for steps in which at least two sequences align, False if a gap
-        signs = numpy.zeros(n, int)
-        for i in range(n):
             row = steps[i, aligned]
             if len(row) == 0:
                 row = steps[i]
@@ -1978,10 +1981,6 @@ class Alignment:
         steps = numpy.where(-minstep > maxstep, minstep, maxstep)
         indices = numpy.zeros(self.coordinates.shape, int)
         seqs = []
-        if n == 2:
-            write_pattern = True
-        else:
-            write_pattern = False
         for seq, positions, row, sign in zip(
             self.sequences, self.coordinates, indices, signs
         ):
