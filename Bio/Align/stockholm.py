@@ -535,7 +535,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             for key, value in record.annotations.items():
                 feature = self.gs_mapping[key]
                 lines.append(f"#=GS {name}  {feature} {value}\n")
-            if record.description != "<unknown description>":
+            if record.description:
                 lines.append(f"#=GS {name}  DE {record.description}\n")
             for value in record.dbxrefs:
                 lines.append(f"#=GS {name}  DR {value}\n")
