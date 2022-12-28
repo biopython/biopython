@@ -1571,7 +1571,7 @@ class Alignment:
         return line
 
     def _get_rows_cols_slice(
-        self, coordinates, row, start_index, stop_index, steps, gaps, sequences
+        self, coordinates, row, start_index, stop_index, steps, gaps
     ):
         """Return a subalignment of multiple rows and consecutive columns (PRIVATE).
 
@@ -1583,6 +1583,7 @@ class Alignment:
         with step 1, allowing the alignment sequences to be reused in the
         subalignment. Return value is an Alignment object.
         """
+        rcs = numpy.any(coordinates != self.coordinates[row], axis=1)
         indices = gaps.cumsum()
         i = indices.searchsorted(start_index, side="right")
         j = i + indices[i:].searchsorted(stop_index, side="left") + 1
@@ -1591,12 +1592,12 @@ class Alignment:
         offset = indices[j - 1] - stop_index
         coordinates[:, j] -= offset * (steps[:, j - 1] > 0)
         coordinates = coordinates[:, i : j + 1]
-        reverse_complemented = self.coordinates[row, 0] > self.coordinates[row, -1]
-        for i, sequence in enumerate(sequences):
-            if reverse_complemented[i]:
+        sequences = self.sequences[row]
+        for coordinate, rc, sequence in zip(coordinates, rcs, sequences):
+            if rc:
                 # mapped to reverse strand
-                coordinates[i, :] = len(sequence) - coordinates[i, :]
-        alignment = Alignment(self.sequences[row], coordinates)
+                coordinate[:] = len(sequence) - coordinate[:]
+        alignment = Alignment(sequences, coordinates)
         if numpy.array_equal(self.coordinates, coordinates):
             try:
                 alignment.score = self.score
@@ -1854,7 +1855,6 @@ class Alignment:
                         stop_index,
                         steps,
                         gaps,
-                        sequences,
                     )
                 # make an iterable if step != 1
                 col = range(start_index, stop_index, step)

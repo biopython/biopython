@@ -149,7 +149,7 @@ query             7 A-C-GG-AAC--  0
         self.assertAlmostEqual(subalignment.score, 6.0, msg=msg)
         if strand == "forward":
             self.assertEqual(
-                str(alignment[:, :]),
+                str(subalignment),
                 """\
 target            0 AACCGGGA-CCG 11
                   0 |-|-||-|-|-- 12
@@ -159,7 +159,7 @@ query             0 A-C-GG-AAC--  7
             )
         if strand == "reverse":
             self.assertEqual(
-                str(alignment[:, :]),
+                str(subalignment),
                 """\
 target            0 AACCGGGA-CCG 11
                   0 |-|-||-|-|-- 12
@@ -2769,6 +2769,86 @@ numpy.array([['G', 'G', 'G', 'A', 'A', 'C', 'C', 'C', 'G', 'G', 'G', 'T', 'T'],
             s = "".join(a[:, j])
             self.assertEqual(alignment[:, j], s)
 
+    def test_rows_cols(self):
+        alignment = self.forward_alignment[:, 1:]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            6 GG 8
+                  0 .|
+query             1 TG 3
+
+target            0 AACCCGGGTT 10
+                  2 ||------|| 12
+query             3 AA------TT  7
+""",
+        )
+        alignment = self.forward_alignment[:, :-1]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            5 GGG 8
+                  0 |.|
+query             0 GTG 3
+
+target            0 AACCCGGGT  9
+                  3 ||------| 12
+query             3 AA------T  6
+""",
+        )
+        alignment = self.forward_alignment[:, 2:-2]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            7 G 8
+                  0 |
+query             2 G 3
+
+target            0 AACCCGGG 8
+                  1 ||------ 9
+query             3 AA------ 5
+""",
+        )
+        alignment = self.reverse_alignment[:, 1:]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            4 GG 2
+                  0 .|
+query             1 TG 3
+
+target           10 AACCCGGGTT  0
+                  2 ||------|| 12
+query             3 AA------TT  7
+""",
+        )
+        alignment = self.reverse_alignment[:, :-1]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            5 GGG 2
+                  0 |.|
+query             0 GTG 3
+
+target           10 AACCCGGGT  1
+                  3 ||------| 12
+query             3 AA------T  6
+""",
+        )
+        alignment = self.reverse_alignment[:, 2:-2]
+        self.assertEqual(
+            str(alignment),
+            """\
+target            3 G 2
+                  0 |
+query             2 G 3
+
+target           10 AACCCGGG 2
+                  1 ||------ 9
+query             3 AA------ 5
+""",
+        )
+
     def test_aligned(self):
         self.assertTrue(
             numpy.array_equal(
@@ -2949,14 +3029,6 @@ query             3 AA------TT  7
     def test_map(self):
         alignment = self.forward_alignment
         # map
-
-    # def test_rows_cols(self):
-    # alignment = self.alignment[:, 1:]
-    # print(alignment)
-    # alignment = self.alignment[:, :-1]
-    # print(alignment)
-    # alignment = self.alignment[:, 2:-2]
-    # print(alignment)
 
 
 class TestAlign_nucleotide_protein_str(unittest.TestCase):
