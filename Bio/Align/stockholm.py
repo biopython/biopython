@@ -366,7 +366,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 sequence = aligned_sequence.replace("-", "")
                 aligned_sequences.append(aligned_sequence)
                 seq = Seq(sequence)
-                record = SeqRecord(seq, id=seqname)
+                record = SeqRecord(seq, id=seqname, description="")
                 records.append(record)
             elif line.startswith("#=GF "):
                 # Generic per-File annotation, free text
