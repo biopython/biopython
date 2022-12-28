@@ -88,7 +88,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         target_end = coordinates[0, -1]
         query_start = coordinates[1, 0]
         query_end = coordinates[1, -1]
-        steps = coordinates[:, 1:] - coordinates[:, :-1]
+        steps = numpy.diff(coordinates)
         query = alignment.query
         target = alignment.target
         try:
@@ -280,7 +280,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         target_end = coordinates[0, -1]
         query_start = coordinates[1, 0]
         query_end = coordinates[1, -1]
-        steps = coordinates[:, 1:] - coordinates[:, :-1]
+        steps = numpy.diff(coordinates)
         query = alignment.query
         target = alignment.target
         try:
@@ -502,7 +502,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         elif query_strand == ".":  # protein
             if target_strand != ".":
                 # protein to dna alignment; integer division, but round up:
-                coordinates[1, :] = (coordinates[1, :] + 2) // 3
+                coordinates[1, :] = -(coordinates[1, :] // -3)
             coordinates[1, :] += query_start
             query.annotations["molecule_type"] = "protein"
         alignment = Alignment([target, query], coordinates)

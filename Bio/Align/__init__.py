@@ -2058,6 +2058,8 @@ class Alignment:
                             if (end_index - start_index) == abs(end - start):
                                 step = rest
                             else:
+                                # protein to dna alignment;
+                                # integer division, but round up:
                                 step = -(rest // -3)
                             if start < end:
                                 start += step
