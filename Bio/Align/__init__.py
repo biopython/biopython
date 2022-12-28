@@ -2007,24 +2007,19 @@ class Alignment:
         minstep = steps.min(0)
         maxstep = steps.max(0)
         steps = numpy.where(-minstep > maxstep, minstep, maxstep)
-        for i, (seq, row) in enumerate(zip(seqs, indices)):
-            multiplier = 1
-            start = row[0]
-            for step, end in zip(steps, row[1:]):
-                if start < end:
-                    if end - start == step:
-                        pass
-                    elif 3 * (end - start) == step:
-                        multiplier = 3
-                    else:
-                        raise Exception(
-                            "start = %d, end = %d, step = %d" % (start, end, step)
-                        )
-                start = end
-            if multiplier == 3:
+        for i, row in enumerate(indices):
+            row_steps = numpy.diff(row)
+            row_aligned = (row_steps > 0) & aligned
+            row_steps = row_steps[row_aligned]
+            aligned_steps = steps[row_aligned]
+            if (row_steps == aligned_steps).all():
+                pass
+            elif (3 * row_steps == aligned_steps).all():
                 row[:] *= 3
-                seqs[i] = "  ".join(seq) + "  "
+                seqs[i] = "  ".join(seqs[i]) + "  "
                 write_pattern = False
+            else:
+                raise ValueError("Inconsistent coordinates")
         prefix_width = 10
         position_width = 10
         line_width = 80
