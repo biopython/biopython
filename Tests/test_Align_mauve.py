@@ -98,6 +98,14 @@ class TestCombinedFile(unittest.TestCase):
                 )
             )
             self.assertEqual(
+                str(alignment),
+                """\
+0                49 AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT  1
+1                 0 -------------------------------------------------  0
+2                 1 AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT 48
+""",
+            )
+            self.assertEqual(
                 alignment.format("mauve", metadata, identifiers),
                 """\
 > 1:2-49 - combined.fa
@@ -144,6 +152,12 @@ numpy.array([['A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G', 'C',
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 1]]))
             )
             self.assertEqual(
+                str(alignment),
+                """\
+0                 0 G 1
+""",
+            )
+            self.assertEqual(
                 alignment.format("mauve", metadata, identifiers),
                 """\
 > 1:1-1 + combined.fa
@@ -177,6 +191,12 @@ numpy.array([['G']], dtype='U')
                 numpy.array_equal(alignment.coordinates, numpy.array([[49, 50]]))
             )
             self.assertEqual(
+                str(alignment),
+                """\
+0                49 A 50
+""",
+            )
+            self.assertEqual(
                 alignment.format("mauve", metadata, identifiers),
                 """\
 > 1:50-50 + combined.fa
@@ -208,6 +228,12 @@ numpy.array([['A']], dtype='U')
             self.assertEqual(alignment[0], "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT")
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 41]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+1                 0 GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT 41
+""",
             )
             self.assertEqual(
                 alignment.format("mauve", metadata, identifiers),
@@ -244,6 +270,12 @@ numpy.array([['G', 'A', 'A', 'G', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'G', 'T',
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 1]]))
             )
             self.assertEqual(
+                str(alignment),
+                """\
+2                 0 C 1
+""",
+            )
+            self.assertEqual(
                 alignment.format("mauve", metadata, identifiers),
                 """\
 > 3:1-1 + combined.fa
@@ -275,6 +307,12 @@ numpy.array([['C']], dtype='U')
             self.assertEqual(alignment[0], "C")
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[48, 49]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+2                48 C 49
+""",
             )
             self.assertEqual(
                 alignment.format("mauve", metadata, identifiers),
@@ -441,6 +479,14 @@ class TestDSeparateFiles(unittest.TestCase):
             self.assertEqual(alignment[0], "------------------------")
             self.assertEqual(alignment[1], "GTCCCGGGCCCTGCTTTCCTTTTC")
             self.assertEqual(alignment[2], "GCCAGGGATCTACTTTTCCTCTTC")
+            self.assertEqual(
+                str(alignment),
+                """\
+equCab1.f         0 ------------------------  0
+canFam2.f        25 GTCCCGGGCCCTGCTTTCCTTTTC 49
+mm9.fa           24 GCCAGGGATCTACTTTTCCTCTTC  0
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
@@ -494,6 +540,12 @@ numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 50]]))
             )
             self.assertEqual(
+                str(alignment),
+                """\
+equCab1.f         0 GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA 50
+""",
+            )
+            self.assertEqual(
                 alignment.format("mauve", metadata, identifiers),
                 """\
 > 1:1-50 + equCab1.fa
@@ -527,6 +579,12 @@ numpy.array([['G', 'A', 'A', 'A', 'A', 'G', 'G', 'A', 'A', 'A', 'G', 'T', 'A',
             self.assertEqual(alignment[0], "CAAGCCCTGCGCGCTCAGCCGGAGT")
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[0, 25]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+canFam2.f         0 CAAGCCCTGCGCGCTCAGCCGGAGT 25
+""",
             )
             self.assertEqual(
                 alignment.format("mauve", metadata, identifiers),
@@ -563,6 +621,12 @@ numpy.array([['C', 'A', 'A', 'G', 'C', 'C', 'C', 'T', 'G', 'C', 'G', 'C', 'G',
             end = alignment.coordinates[0, -1]
             self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
             self.assertEqual(alignment[0], "GTCCGGAGCTGGGACGT")
+            self.assertEqual(
+                str(alignment),
+                """\
+mm9.fa           24 GTCCGGAGCTGGGACGT 41
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(alignment.coordinates, numpy.array([[24, 41]]))
             )
