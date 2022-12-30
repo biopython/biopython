@@ -1055,7 +1055,7 @@ class Alignment:
 
     def __array__(self, dtype=None):
         coordinates = self.coordinates.copy()
-        sequences = self.sequences[:]
+        sequences = list(self.sequences)
         steps = numpy.diff(self.coordinates, 1)
         aligned = sum(steps != 0, 0) > 1
         # True for steps in which at least two sequences align, False if a gap
@@ -3012,7 +3012,20 @@ class Alignment:
         The total number of substitutions between T's and C's in the alignment
         is 3.5 + 3.5 = 7.
         """
-        sequences = self.sequences
+        coordinates = self.coordinates.copy()
+        sequences = list(self.sequences)
+        steps = numpy.diff(self.coordinates, 1)
+        aligned = sum(steps != 0, 0) > 1
+        # True for steps in which at least two sequences align, False if a gap
+        for i, sequence in enumerate(sequences):
+            row = steps[i, aligned]
+            if (row >= 0).all():
+                pass
+            elif (row <= 0).all():
+                sequences[i] = reverse_complement(sequence, inplace=False)
+                coordinates[i, :] = len(sequence) - coordinates[i, :]
+            else:
+                raise ValueError(f"Inconsistent steps in row {i}")
         letters = set()
         for sequence in sequences:
             try:
@@ -3032,16 +3045,10 @@ class Alignment:
         n = len(sequences)
         for i1 in range(n):
             sequence1 = sequences[i1]
-            coordinates1 = self.coordinates[i1, :]
-            if coordinates1[0] > coordinates1[-1]:
-                sequence1 = reverse_complement(sequence1)
-                coordinates1 = len(sequence1) - coordinates1
+            coordinates1 = coordinates[i1, :]
             for i2 in range(i1 + 1, n):
                 sequence2 = sequences[i2]
-                coordinates2 = self.coordinates[i2, :]
-                if coordinates2[0] > coordinates2[-1]:
-                    sequence2 = reverse_complement(sequence2)
-                    coordinates2 = len(sequence2) - coordinates2
+                coordinates2 = coordinates[i2, :]
                 start1, start2 = sys.maxsize, sys.maxsize
                 for end1, end2 in zip(coordinates1, coordinates2):
                     if start1 < end1 and start2 < end2:  # aligned

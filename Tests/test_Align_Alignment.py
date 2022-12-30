@@ -2607,14 +2607,22 @@ class TestAlignment_pairwise_format(unittest.TestCase):
 
 class TestAlign_out_of_order(unittest.TestCase):
 
-    seq1 = "AACCCGGGTT"
-    seq2 = "GTGAATT"
-    coordinates = numpy.array([[5, 8, 0, 2, 8, 10], [0, 3, 3, 5, 5, 7]])
+    seq1 = "AACCCAAAACCAAAAATTTAAATTTTAAA"
+    seq2 = "TGTTTTTCCCCC"
+    coordinates = numpy.array(
+        [[16, 19, 22, 26, 2, 5, 9, 11], [0, 3, 3, 7, 7, 10, 10, 12]]
+    )
     forward_alignment = Align.Alignment([seq1, seq2], coordinates)
-    coordinates = numpy.array([[5, 2, 10, 8, 2, 0], [0, 3, 3, 5, 5, 7]])
+    coordinates = numpy.array(
+        [[13, 10, 7, 3, 27, 24, 20, 18], [0, 3, 3, 7, 7, 10, 10, 12]]
+    )
     reverse_alignment = Align.Alignment([reverse_complement(seq1), seq2], coordinates)
     coordinates = numpy.array(
-        [[5, 8, 0, 0, 2, 8, 10], [5, 2, 2, 10, 8, 2, 0], [0, 3, 3, 3, 5, 5, 7]]
+        [
+            [16, 19, 22, 26, 2, 2, 5, 9, 11],
+            [13, 10, 7, 3, 3, 27, 24, 20, 18],
+            [0, 3, 3, 7, 7, 7, 10, 10, 12],
+        ]
     )
     multiple_alignment = Align.Alignment(
         [seq1, reverse_complement(seq1), seq2], coordinates
@@ -2630,27 +2638,27 @@ class TestAlign_out_of_order(unittest.TestCase):
         alignments = (self.forward_alignment, self.reverse_alignment)
         arrays = (self.forward_array, self.reverse_array)
         for alignment, a in zip(alignments, arrays):
-            self.assertEqual(alignment.shape, (2, 13))
+            self.assertEqual(alignment.shape, (2, 19))
             self.assertTrue(
                 numpy.array_equal(
                     a,
                     # fmt: off
 # flake8: noqa
-numpy.array([['G', 'G', 'G', 'A', 'A', 'C', 'C', 'C', 'G', 'G', 'G', 'T', 'T'],
-             ['G', 'T', 'G', 'A', 'A', '-', '-', '-', '-', '-', '-', 'T', 'T']],
+numpy.array([['T', 'T', 'T', 'A', 'A', 'A', 'T', 'T', 'T', 'T', 'C', 'C', 'C', 'A', 'A', 'A', 'A', 'C', 'C'],
+             ['T', 'G', 'T', '-', '-', '-', 'T', 'T', 'T', 'T', 'C', 'C', 'C', '-', '-', '-', '-', 'C', 'C']],
             dtype='U')
                     # fmt: on
                 )
             )
-        self.assertEqual(self.multiple_alignment.shape, (3, 13))
+        self.assertEqual(self.multiple_alignment.shape, (3, 19))
         self.assertTrue(
             numpy.array_equal(
                 self.multiple_array,
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'G', 'G', 'A', 'A', 'C', 'C', 'C', 'G', 'G', 'G', 'T', 'T'],
-             ['G', 'G', 'G', 'A', 'A', 'C', 'C', 'C', 'G', 'G', 'G', 'T', 'T'],
-             ['G', 'T', 'G', 'A', 'A', '-', '-', '-', '-', '-', '-', 'T', 'T']],
+numpy.array([['T', 'T', 'T', 'A', 'A', 'A', 'T', 'T', 'T', 'T', 'C', 'C', 'C', 'A', 'A', 'A', 'A', 'C', 'C'],
+             ['T', 'T', 'T', 'A', 'A', 'A', 'T', 'T', 'T', 'T', 'C', 'C', 'C', 'A', 'A', 'A', 'A', 'C', 'C'],
+             ['T', 'G', 'T', '-', '-', '-', 'T', 'T', 'T', 'T', 'C', 'C', 'C', '-', '-', '-', '-', 'C', 'C']],
             dtype='U')
                 # fmt: on
             )
@@ -2774,78 +2782,78 @@ numpy.array([['G', 'G', 'G', 'A', 'A', 'C', 'C', 'C', 'G', 'G', 'G', 'T', 'T'],
         self.assertEqual(
             str(alignment),
             """\
-target            6 GG 8
-                  0 .|
-query             1 TG 3
+target           17 TTAAATTTT 26
+                  0 .|---||||
+query             1 GT---TTTT 7
 
-target            0 AACCCGGGTT 10
-                  2 ||------|| 12
-query             3 AA------TT  7
+target            2 CCCAAAACC 11
+                  9 |||----|| 18
+query             7 CCC----CC 12
 """,
         )
         alignment = self.forward_alignment[:, :-1]
         self.assertEqual(
             str(alignment),
             """\
-target            5 GGG 8
-                  0 |.|
-query             0 GTG 3
+target           16 TTTAAATTTT 26
+                  0 |.|---||||
+query             0 TGT---TTTT 7
 
-target            0 AACCCGGGT  9
-                  3 ||------| 12
-query             3 AA------T  6
+target            2 CCCAAAAC 10
+                 10 |||----| 18
+query             7 CCC----C 11
 """,
         )
         alignment = self.forward_alignment[:, 2:-2]
         self.assertEqual(
             str(alignment),
             """\
-target            7 G 8
-                  0 |
-query             2 G 3
+target           18 TAAATTTT 26
+                  0 |---||||
+query             2 T---TTTT 7
 
-target            0 AACCCGGG 8
-                  1 ||------ 9
-query             3 AA------ 5
+target            2 CCCAAAA  9
+                  8 |||---- 15
+query             7 CCC---- 10
 """,
         )
         alignment = self.reverse_alignment[:, 1:]
         self.assertEqual(
             str(alignment),
             """\
-target            4 GG 2
-                  0 .|
-query             1 TG 3
+target           12 TTAAATTTT 3
+                  0 .|---||||
+query             1 GT---TTTT 7
 
-target           10 AACCCGGGTT  0
-                  2 ||------|| 12
-query             3 AA------TT  7
+target           27 CCCAAAACC 18
+                  9 |||----|| 18
+query             7 CCC----CC 12
 """,
         )
         alignment = self.reverse_alignment[:, :-1]
         self.assertEqual(
             str(alignment),
             """\
-target            5 GGG 2
-                  0 |.|
-query             0 GTG 3
+target           13 TTTAAATTTT 3
+                  0 |.|---||||
+query             0 TGT---TTTT 7
 
-target           10 AACCCGGGT  1
-                  3 ||------| 12
-query             3 AA------T  6
+target           27 CCCAAAAC 19
+                 10 |||----| 18
+query             7 CCC----C 11
 """,
         )
         alignment = self.reverse_alignment[:, 2:-2]
         self.assertEqual(
             str(alignment),
             """\
-target            3 G 2
-                  0 |
-query             2 G 3
+target           11 TAAATTTT 3
+                  0 |---||||
+query             2 T---TTTT 7
 
-target           10 AACCCGGG 2
-                  1 ||------ 9
-query             3 AA------ 5
+target           27 CCCAAAA 20
+                  8 |||---- 15
+query             7 CCC---- 10
 """,
         )
 
@@ -2855,13 +2863,15 @@ query             3 AA------ 5
                 self.forward_alignment.aligned,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[[ 5,  8],
-                              [ 0,  2],
-                              [ 8, 10]],
+                numpy.array([[[16, 19],
+                              [22, 26],
+                              [ 2,  5],
+                              [ 9, 11]],
 
                              [[ 0,  3],
-                              [ 3,  5],
-                              [ 5,  7]]])
+                              [ 3,  7],
+                              [ 7, 10],
+                              [10, 12]]])
                 # fmt: on
             )
         )
@@ -2870,13 +2880,15 @@ query             3 AA------ 5
                 self.reverse_alignment.aligned,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[[ 5, 2],
-                              [10, 8],
-                              [ 2, 0]],
+                numpy.array([[[13, 10],
+                              [ 7,  3],
+                              [27, 24],
+                              [20, 18]],
 
-                             [[ 0, 3],
-                              [ 3, 5],
-                              [ 5, 7]]])
+                             [[ 0,  3],
+                              [ 3,  7],
+                              [ 7, 10],
+                              [10, 12]]])
                 # fmt: on
             )
         )
@@ -2888,8 +2900,8 @@ query             3 AA------ 5
                 indices,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 5, 6, 7, 0, 1,  2,  3,  4,  5,  6,  7, 8, 9],
-                             [ 0, 1, 2, 3, 4, -1, -1, -1, -1, -1, -1, 5, 6]])
+                numpy.array([[16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  2,  3,  4,  5,  6,  7, 8,  9, 10],
+                             [ 0,  1,  2, -1, -1, -1,  3,  4,  5,  6,  7,  8,  9, -1, -1, -1, -1, 10, 11]])
                 # fmt: on
             )
         )
@@ -2898,13 +2910,45 @@ query             3 AA------ 5
         self.assertTrue(
             numpy.array_equal(
                 inverse_indices[0],
-                numpy.array([3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
+                numpy.array(
+                    [
+                        -1,
+                        -1,
+                        10,
+                        11,
+                        12,
+                        13,
+                        14,
+                        15,
+                        16,
+                        17,
+                        18,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        -1,
+                        -1,
+                        -1,
+                    ]
+                ),
             )
         )
         self.assertTrue(
             numpy.array_equal(
                 inverse_indices[1],
-                numpy.array([0, 1, 2, 3, 4, 11, 12]),
+                numpy.array([0, 1, 2, 6, 7, 8, 9, 10, 11, 12, 17, 18]),
             )
         )
         indices = self.reverse_alignment.indices
@@ -2913,8 +2957,8 @@ query             3 AA------ 5
                 indices,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 4, 3, 2, 9, 8,  7,  6,  5,  4,  3,  2, 1, 0],
-                             [ 0, 1, 2, 3, 4, -1, -1, -1, -1, -1, -1, 5, 6]])
+                numpy.array([[12, 11, 10,  9,  8,  7,  6,  5,  4,  3, 26, 25, 24, 23, 22, 21, 20, 19, 18],
+                             [ 0,  1,  2, -1, -1, -1,  3,  4,  5,  6,  7,  8,  9, -1, -1, -1, -1, 10, 11]])
                 # fmt: on
             )
         )
@@ -2923,13 +2967,45 @@ query             3 AA------ 5
         self.assertTrue(
             numpy.array_equal(
                 inverse_indices[0],
-                numpy.array([12, 11, 10, 9, 8, 7, 6, 5, 4, 3]),
+                numpy.array(
+                    [
+                        -1,
+                        -1,
+                        -1,
+                        9,
+                        8,
+                        7,
+                        6,
+                        5,
+                        4,
+                        3,
+                        2,
+                        1,
+                        0,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        18,
+                        17,
+                        16,
+                        15,
+                        14,
+                        13,
+                        12,
+                        11,
+                        10,
+                        -1,
+                        -1,
+                    ]
+                ),
             )
         )
         self.assertTrue(
             numpy.array_equal(
                 inverse_indices[1],
-                numpy.array([0, 1, 2, 3, 4, 11, 12]),
+                numpy.array([0, 1, 2, 6, 7, 8, 9, 10, 11, 12, 17, 18]),
             )
         )
         indices = self.multiple_alignment.indices
@@ -2938,9 +3014,9 @@ query             3 AA------ 5
                 indices,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 5, 6, 7, 0, 1,  2,  3,  4,  5,  6,  7, 8, 9],
-                             [ 4, 3, 2, 9, 8,  7,  6,  5,  4,  3,  2, 1, 0],
-                             [ 0, 1, 2, 3, 4, -1, -1, -1, -1, -1, -1, 5, 6]])
+                numpy.array([[16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  2,  3,  4,  5,  6,  7,  8,  9, 10],
+                             [12, 11, 10,  9,  8,  7,  6,  5,  4,  3, 26, 25, 24, 23, 22, 21, 20, 19, 18],
+                             [ 0,  1,  2, -1, -1, -1,  3,  4,  5,  6,  7,  8,  9, -1, -1, -1, -1, 10, 11]])
                 # fmt: on
             )
         )
@@ -2949,19 +3025,83 @@ query             3 AA------ 5
         self.assertTrue(
             numpy.array_equal(
                 inverse_indices[0],
-                numpy.array([3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
+                numpy.array(
+                    [
+                        -1,
+                        -1,
+                        10,
+                        11,
+                        12,
+                        13,
+                        14,
+                        15,
+                        16,
+                        17,
+                        18,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        -1,
+                        -1,
+                        -1,
+                    ]
+                ),
             )
         )
         self.assertTrue(
             numpy.array_equal(
                 inverse_indices[1],
-                numpy.array([12, 11, 10, 9, 8, 7, 6, 5, 4, 3]),
+                numpy.array(
+                    [
+                        -1,
+                        -1,
+                        -1,
+                        9,
+                        8,
+                        7,
+                        6,
+                        5,
+                        4,
+                        3,
+                        2,
+                        1,
+                        0,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        -1,
+                        18,
+                        17,
+                        16,
+                        15,
+                        14,
+                        13,
+                        12,
+                        11,
+                        10,
+                        -1,
+                        -1,
+                    ]
+                ),
             )
         )
         self.assertTrue(
             numpy.array_equal(
                 inverse_indices[2],
-                numpy.array([0, 1, 2, 3, 4, 11, 12]),
+                numpy.array([0, 1, 2, 6, 7, 8, 9, 10, 11, 12, 17, 18]),
             )
         )
 
@@ -2971,20 +3111,20 @@ query             3 AA------ 5
                 str(alignment.substitutions),
                 """\
     A   C   G   T
-A 2.0 0.0 0.0 0.0
-C 0.0 0.0 0.0 0.0
-G 0.0 0.0 2.0 1.0
-T 0.0 0.0 0.0 2.0
+A 0.0 0.0 0.0 0.0
+C 0.0 5.0 0.0 0.0
+G 0.0 0.0 0.0 0.0
+T 0.0 0.0 1.0 6.0
 """,
             )
         self.assertEqual(
             str(self.multiple_alignment.substitutions),
             """\
-    A   C    G   T
-A 6.0 0.0  0.0 0.0
-C 0.0 3.0  0.0 0.0
-G 0.0 0.0 10.0 2.0
-T 0.0 0.0  0.0 6.0
+    A    C   G    T
+A 7.0  0.0 0.0  0.0
+C 0.0 15.0 0.0  0.0
+G 0.0  0.0 0.0  0.0
+T 0.0  0.0 2.0 19.0
 """,
         )
 
@@ -2992,37 +3132,37 @@ T 0.0 0.0  0.0 6.0
         self.assertEqual(
             str(self.forward_alignment),
             """\
-target            5 GGG 8
-                  0 |.|
-query             0 GTG 3
+target           16 TTTAAATTTT 26
+                  0 |.|---||||
+query             0 TGT---TTTT 7
 
-target            0 AACCCGGGTT 10
-                  3 ||------|| 13
-query             3 AA------TT  7
+target            2 CCCAAAACC 11
+                 10 |||----|| 19
+query             7 CCC----CC 12
 """,
         )
         self.assertEqual(
             str(self.reverse_alignment),
             """\
-target            5 GGG 2
-                  0 |.|
-query             0 GTG 3
+target           13 TTTAAATTTT 3
+                  0 |.|---||||
+query             0 TGT---TTTT 7
 
-target           10 AACCCGGGTT  0
-                  3 ||------|| 13
-query             3 AA------TT  7
+target           27 CCCAAAACC 18
+                 10 |||----|| 19
+query             7 CCC----CC 12
 """,
         )
         self.assertEqual(
             str(self.multiple_alignment),
             """\
-                  5 GGG 8 0
-                  5 GGG 2 2
-                  0 GTG 3 3
+                 16 TTTAAATTTT 26 2
+                 13 TTTAAATTTT 3 3
+                  0 TGT---TTTT 7 7
 
-                  0 AACCCGGGTT 10
-                 10 AACCCGGGTT  0
-                  3 AA------TT  7
+                  2 CCCAAAACC 11
+                 27 CCCAAAACC 18
+                  7 CCC----CC 12
 """,
         )
 
