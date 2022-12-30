@@ -2617,13 +2617,15 @@ class TestAlign_out_of_order(unittest.TestCase):
         [[13, 10, 7, 3, 27, 24, 20, 18], [0, 3, 3, 7, 7, 10, 10, 12]]
     )
     reverse_alignment = Align.Alignment([reverse_complement(seq1), seq2], coordinates)
+    # fmt: off
     coordinates = numpy.array(
         [
-            [16, 19, 22, 26, 2, 2, 5, 9, 11],
-            [13, 10, 7, 3, 3, 27, 24, 20, 18],
-            [0, 3, 3, 7, 7, 7, 10, 10, 12],
+            [16, 19, 22, 26, 2,  2,  5,  9, 11],
+            [13, 10,  7,  3, 3, 27, 24, 20, 18],
+            [ 0,  3,  3,  7, 7,  7, 10, 10, 12],
         ]
     )
+    # fmt: on
     multiple_alignment = Align.Alignment(
         [seq1, reverse_complement(seq1), seq2], coordinates
     )
@@ -2910,39 +2912,9 @@ query             7 CCC---- 10
         self.assertTrue(
             numpy.array_equal(
                 inverse_indices[0],
-                numpy.array(
-                    [
-                        -1,
-                        -1,
-                        10,
-                        11,
-                        12,
-                        13,
-                        14,
-                        15,
-                        16,
-                        17,
-                        18,
-                        -1,
-                        -1,
-                        -1,
-                        -1,
-                        -1,
-                        0,
-                        1,
-                        2,
-                        3,
-                        4,
-                        5,
-                        6,
-                        7,
-                        8,
-                        9,
-                        -1,
-                        -1,
-                        -1,
-                    ]
-                ),
+                # fmt: off
+                numpy.array([-1, -1, 10, 11, 12, 13, 14, 15, 16, 17, 18, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -1, -1]),
+                # fmt: on
             )
         )
         self.assertTrue(
@@ -2967,39 +2939,9 @@ query             7 CCC---- 10
         self.assertTrue(
             numpy.array_equal(
                 inverse_indices[0],
-                numpy.array(
-                    [
-                        -1,
-                        -1,
-                        -1,
-                        9,
-                        8,
-                        7,
-                        6,
-                        5,
-                        4,
-                        3,
-                        2,
-                        1,
-                        0,
-                        -1,
-                        -1,
-                        -1,
-                        -1,
-                        -1,
-                        18,
-                        17,
-                        16,
-                        15,
-                        14,
-                        13,
-                        12,
-                        11,
-                        10,
-                        -1,
-                        -1,
-                    ]
-                ),
+                # fmt: off
+                numpy.array([-1, -1, -1, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -1, -1, -1, -1, 18, 17, 16, 15, 14, 13, 12, 11, 10, -1, -1]),
+                # fmt: on
             )
         )
         self.assertTrue(
@@ -3025,77 +2967,17 @@ query             7 CCC---- 10
         self.assertTrue(
             numpy.array_equal(
                 inverse_indices[0],
-                numpy.array(
-                    [
-                        -1,
-                        -1,
-                        10,
-                        11,
-                        12,
-                        13,
-                        14,
-                        15,
-                        16,
-                        17,
-                        18,
-                        -1,
-                        -1,
-                        -1,
-                        -1,
-                        -1,
-                        0,
-                        1,
-                        2,
-                        3,
-                        4,
-                        5,
-                        6,
-                        7,
-                        8,
-                        9,
-                        -1,
-                        -1,
-                        -1,
-                    ]
-                ),
+                # fmt: off
+                numpy.array([-1, -1, 10, 11, 12, 13, 14, 15, 16, 17, 18, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -1, -1])
+                # fmt: on
             )
         )
         self.assertTrue(
             numpy.array_equal(
                 inverse_indices[1],
-                numpy.array(
-                    [
-                        -1,
-                        -1,
-                        -1,
-                        9,
-                        8,
-                        7,
-                        6,
-                        5,
-                        4,
-                        3,
-                        2,
-                        1,
-                        0,
-                        -1,
-                        -1,
-                        -1,
-                        -1,
-                        -1,
-                        18,
-                        17,
-                        16,
-                        15,
-                        14,
-                        13,
-                        12,
-                        11,
-                        10,
-                        -1,
-                        -1,
-                    ]
-                ),
+                # fmt: off
+                numpy.array([-1, -1, -1, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -1, -1, -1, -1, 18, 17, 16, 15, 14, 13, 12, 11, 10, -1, -1]),
+                # fmt: on
             )
         )
         self.assertTrue(
@@ -3165,10 +3047,6 @@ query             7 CCC----CC 12
                   7 CCC----CC 12
 """,
         )
-
-    def test_map(self):
-        alignment = self.forward_alignment
-        # map
 
 
 class TestAlign_nucleotide_protein_str(unittest.TestCase):

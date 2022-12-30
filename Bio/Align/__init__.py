@@ -2854,14 +2854,22 @@ class Alignment:
         coordinates2 = alignment2.coordinates
         n1 = len(alignment1.query)
         n2 = len(alignment2.query)
-        if coordinates1[1, 0] < coordinates1[1, -1]:  # mapped to forward strand
+        steps1 = numpy.diff(coordinates1, 1)
+        row = numpy.prod(numpy.sign(steps1), 0)
+        if (row >= 0).all():
             strand1 = "+"
-        else:  # mapped to reverse strand
+        elif (row <= 0).all():
             strand1 = "-"
-        if coordinates2[1, 0] < coordinates2[1, -1]:  # mapped to forward strand
+        else:
+            raise ValueError("Inconsistent steps in the first alignment")
+        steps2 = numpy.diff(coordinates2, 1)
+        row = numpy.prod(numpy.sign(steps2), 0)
+        if (row >= 0).all():
             strand2 = "+"
-        else:  # mapped to reverse strand
+        elif (row <= 0).all():
             strand2 = "-"
+        else:
+            raise ValueError("Inconsistent steps in the second alignment")
         if strand1 == "+":
             if strand2 == "-":  # mapped to reverse strand
                 coordinates2 = coordinates2.copy()
@@ -2877,11 +2885,11 @@ class Alignment:
                 coordinates2[1, :] = coordinates2[1, ::-1]
         steps1 = numpy.diff(coordinates1, 1)
         gaps1 = steps1.max(0)
-        if not ((steps1 == gaps1) | (steps1 == 0)).all():
+        if not ((steps1 == gaps1) | (steps1 <= 0)).all():
             raise ValueError("Unequal step sizes in first alignment")
         steps2 = numpy.diff(coordinates2, 1)
         gaps2 = steps2.max(0)
-        if not ((steps2 == gaps2) | (steps2 == 0)).all():
+        if not ((steps2 == gaps2) | (steps2 <= 0)).all():
             raise ValueError("Unequal step sizes in second alignment")
         path = []
         tEnd, qEnd = sys.maxsize, sys.maxsize
