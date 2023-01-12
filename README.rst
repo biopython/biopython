@@ -13,7 +13,7 @@
 .. image:: https://img.shields.io/appveyor/ci/biopython/biopython/master.svg?logo=appveyor
    :alt: Windows testing with AppVeyor
    :target: https://ci.appveyor.com/project/biopython/biopython/history
-.. image:: https://img.shields.io/github/workflow/status/biopython/biopython/Basic%20Checks?logo=github-actions
+.. image:: https://img.shields.io/github/actions/workflow/status/biopython/biopython/ci.yml?logo=github-actions
    :alt: GitHub workflow status
    :target: https://github.com/biopython/biopython/actions
 .. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg?logo=codecov
