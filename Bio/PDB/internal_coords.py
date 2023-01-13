@@ -3788,6 +3788,10 @@ class IC_Residue:
                 else ric.get_length((ric.rak("C"), ric.rnext[0].rak("N"))),
             )
 
+        If atom not found on current residue then will look on rprev[0] to
+        handle cases like Gly N:CA.  For finer control please access
+        `IC_Chain.hedra` directly.
+
         :return: list of hedra containing specified atom pair as tuples of
                 AtomKeys
         """
@@ -3800,12 +3804,17 @@ class IC_Residue:
         for hed_key, hed_val in self.hedra.items():
             if all(ak in hed_key for ak in ak_spec):
                 rlst.append(hed_val)
+        # handle bonds stored on rprev, e.g. set backbone, read gly N:CA
+        for rp in self.rprev:
+            for hed_key, hed_val in rp.hedra.items():
+                if all(ak in hed_key for ak in ak_spec):
+                    rlst.append(hed_val)
         return rlst, ak_spec
 
     def get_length(self, ak_spec: Union[str, BKT]) -> Optional[float]:
         """Get bond length for specified atom pair.
 
-        See :meth:`.pick_length` for ak_spec.
+        See :meth:`.pick_length` for ak_spec and details.
         """
         hed_lst, ak_spec2 = self.pick_length(ak_spec)
         if hed_lst is None or ak_spec2 is None:
