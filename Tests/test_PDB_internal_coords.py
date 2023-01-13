@@ -251,7 +251,9 @@ class Rebuild(unittest.TestCase):
         nvc1 = {}
         nvpsi = {}
         nvlen = {}
+        nvlen2 = {}
         tcount = 0
+        l2count = 0
         c1count = 0
         psicount = 0
         lcount = 0
@@ -265,6 +267,12 @@ class Rebuild(unittest.TestCase):
                     nv = tau + 0.5
                     ric.set_angle("tau", nv)
                     nvt[str(r)] = nv
+                    l2count += 1
+                    leng2 = ric.get_length("N:CA")
+                    nv = leng2 + 0.05
+                    ric.set_length("N:CA", nv)
+                    nvlen2[str(r)] = nv
+
                 # sidechain dihedron change
                 chi1 = ric.get_angle("chi1")
                 if chi1 is not None:
@@ -306,6 +314,7 @@ class Rebuild(unittest.TestCase):
 
         mdl.atom_to_internal_coordinates()
         ttcount = 0
+        l2tcount = 0
         c1tcount = 0
         psitcount = 0
         ltcount = 0
@@ -317,6 +326,9 @@ class Rebuild(unittest.TestCase):
                     ttcount += 1
                     # print(str(r), "tau", tau, nvt[str(r)])
                     self.assertAlmostEqual(tau, nvt[str(r)], places=3)
+                    l2tcount += 1
+                    l2 = ric.get_length("N:CA")
+                    self.assertAlmostEqual(l2, nvlen2[str(r)], places=3)
                 chi1 = ric.get_angle("chi1")
                 if chi1 is not None:
                     c1tcount += 1
@@ -333,6 +345,7 @@ class Rebuild(unittest.TestCase):
                     self.assertAlmostEqual(leng, nvlen[str(r)], places=3)
 
         self.assertEqual(tcount, ttcount)
+        self.assertEqual(l2count, l2tcount)
         self.assertEqual(c1count, c1tcount)
         self.assertEqual(psicount, psitcount)
         self.assertEqual(lcount, ltcount)
