@@ -173,7 +173,8 @@ class PDBIO(StructureIO):
 
         # Ensure chain id isn't longer than 1 character
         if len(chain_id) > 1:
-            raise ValueError(f"Chain ID ('{chain_id!r} exceeds PDB format limit")
+            e = f"Chain ID ('{chain_id!r} exceeds PDB format limit"
+            raise PDBIOException(e)
         # Atom properties
 
         # Check if the atom serial number is an integer
@@ -430,26 +431,15 @@ class PDBIO(StructureIO):
             # do not write ENDMDL if no residues were written
             # for this model
             model_residues_written = 0
-            if not preserve_atom_numbering:
-                atom_number = 1
+            self.atom_number = None if preserve_atom_numbering else 1
+
             if model_flag:
                 fhandle.write(f"MODEL      {model.serial_num}\n")
 
             for chain in model.get_list():
                 if not select.accept_chain(chain):
                     continue
-                chain_id = chain.id
-                if len(chain_id) > 1:
-                    e = f"Chain id ('{chain_id}') exceeds PDB format limit."
-                    raise PDBIOException(e)
-                # necessary for ENDMDL
-                # do not write ENDMDL if no residues were written
-                # for this model
-                model_residues_written = 0
-                self.atom_number = None if preserve_atom_numbering else 1
-
-                if model_flag:
-                    fhandle.write(f"MODEL      {model.serial_num}\n")
+                self.chain_id = chain.id
 
                 # necessary for TER
                 # do not write TER if no residues were written
@@ -459,26 +449,18 @@ class PDBIO(StructureIO):
                 for residue in chain.get_unpacked_list():
                     if not select.accept_residue(residue):
                         continue
-                    hetfield, resseq, icode = residue.id
-                    resname = residue.resname
-                    segid = residue.segid
-                    resid = residue.id[1]
-                    if resid > 9999:
-                        e = f"Residue number ('{resid}') exceeds PDB format limit."
-                        raise PDBIOException(e)
-                    self.chain_id = chain.id
+                    res_str = self.pdb_residue_string(residue)
+                    if res_str is not None:
+                        chain_residues_written = 1
+                        model_residues_written = 1
+                        fhandle.write(res_str)
 
-                    for atom in residue.get_unpacked_list():
-                        if not select.accept_atom(atom):
-                            continue
-                        res_str = self.pdb_residue_string(residue)
-                        if res_str is not None:
-                            chain_residues_written = 1
-                            model_residues_written = 1
-                            fhandle.write(res_str)
+                if chain_residues_written:
+                    fhandle.write(self.get_ter_str())
 
-                    if chain_residues_written:
-                        fhandle.write(self.get_ter_str())
-
+            if model_flag and model_residues_written:
+                fhandle.write("ENDMDL\n")
+        if write_end:
+            fhandle.write("END   \n")
         if isinstance(file, str):
             fhandle.close()
