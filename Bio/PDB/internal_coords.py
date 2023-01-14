@@ -749,7 +749,7 @@ class IC_Chain:
         self.dCoordSpace: np.ndarray = np.empty(
             (2, self.dihedraLen, 4, 4), dtype=np.float64
         )
-        self.dcsValid: np.ndarray = np.zeros((self.dihedraLen), dtype=np.bool)
+        self.dcsValid: np.ndarray = np.zeros((self.dihedraLen), dtype=bool)
 
         # hedra atoms
         self.hAtoms: np.ndarray = np.zeros((self.hedraLen, 3, 4), dtype=np.float64)
@@ -786,10 +786,10 @@ class IC_Chain:
         # dihedra forward/reverse data
         a2da_map = {}
         a2d_map = [[[], []] for _ in range(self.AAsiz)]
-        self.dRev: np.ndarray = np.zeros((self.dihedraLen), dtype=np.bool)
+        self.dRev: np.ndarray = np.zeros((self.dihedraLen), dtype=bool)
 
-        self.dH1ndx = np.empty(self.dihedraLen, dtype=np.int)
-        self.dH2ndx = np.empty(self.dihedraLen, dtype=np.int)
+        self.dH1ndx = np.empty(self.dihedraLen, dtype=np.int64)
+        self.dH2ndx = np.empty(self.dihedraLen, dtype=np.int64)
         self.h1d_map = [[] for _ in range(self.hedraLen)]
 
         self.id3_dh_index = {k[0:3]: [] for k in self.dihedraNdx.keys()}

@@ -8,7 +8,7 @@ from io import StringIO
 
 
 from Bio.Align import Alignment
-from Bio.Seq import Seq
+from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SimpleLocation, ExactPosition, CompoundLocation
 from Bio import SeqIO
@@ -57,8 +57,6 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.repMatches, 39)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 5407))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -106,6 +104,374 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
         self.assertEqual(
+            str(alignment),
+            """\
+chr3       48663767 CACGAGAGGAGCGGAGGCGAGGGGTGAACGCGGAGCACTCCAATCGGTCAGTCATTGTTT
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||--------------
+NR_111921         0 CACGAGAGGAGCGGAGGCGAGGGGTGAACGCGGAGCACTCCAATCG--------------
+
+chr3       48663827 CTATTGGCACAATGGGAGGCCCCGCCCCTCACGGCGGACTCATCGCATGGGGGAGGGGGC
+                 60 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48663887 TCCGCGGGTTGCCGGCTAACCGTGAGAGAGTCCGGGAGGTACACTATACGGACCGGCCTC
+                120 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48663947 CAAAGGCGGAATCGATAACGAGCTGCAGCGCCGGGTGCAGAGGACGCGGGCATCCCGAAG
+                180 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664007 CCCAGGAAGAGGTCAGGGCCGGGACCCCAGAACGCTCCACAGGGTGCGGCTCCCGCGATG
+                240 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664067 GGGTGGATCCTGGTTCTAACAGGCGAGGAACTCCTGGCCAAGGCCTCTGGCCCGCCCCGA
+                300 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664127 ACGGTCCCTATGACATCACCATCAACCAATCAGTCGGCGCATCCTTTCGCCCCTTGACTG
+                360 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664187 CTCCGCTTCCGGGAGGCGGGGCTTCTGCGGGTTCCACCTCCCGAGCGCCCCTTGTGGCTA
+                420 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664247 CCAAGGTCAGGCAACAGGTGTCCAGTTGTTCCCTCTCCTGTCTACGAATCTGAGGACCTC
+                480 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664307 CCCAGGATCAGAGCTCTGGGCCTGATACACGGCCGGGGTTCCTACGGGTTTGTGAGTGGG
+                540 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664367 GGTGGAAGATCTGCAGAGGCACTTAGGGCTGAACTCCTTTGAATGGGAGCCAATCGGTGC
+                600 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664427 AGGGGCTGGAGGAGCGAGTCCCCCAAAGTAGttttatttatctatttagagacaaggtct
+                660 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664487 cactctttcggagtgcagtggtgatcacagctcaccgtagcctcgaactccccaggcgat
+                720 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664547 tctctcacctcagcctcccgagtagctgggactacgggtacatgtcatcacacttggcta
+                780 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664607 atttttgcattttttatagagacagggtctcaccatgtaggccagattagtcttgaactc
+                840 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664667 ctgggctcaagcaatccgcccatcttggcctcccaaagtgctgggattataggtgtgagc
+                900 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664727 caccgcgcccggcAACCCAGAAGTGGTTTTGACAGCAccagcgctttctgtgtccacaat
+                960 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664787 ctagtgagtagagggcacaaaacctgacaccacggaggcagacaggcaggggctctgccg
+               1020 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664847 gggaagggtgttggagtcccaaaggaggcgtctgagtcaccttcgcaacctgggacgcct
+               1080 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664907 tcttgcataagatgcctgagcagtgccttgaatgaccaaggggagatccgcatctgcaaa
+               1140 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48664967 ggaagggcagggagggatagggattgggggtgggcatcctaggtcttggagactgtgtgg
+               1200 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48665027 gcaaatgtgcagagacataaagggactatggctgagggaaatcaagCCCTGCCCTCTCAC
+               1260 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48665087 CAATAGGGCTGGCGCTGGTCCCAGCTAACACTCCTTTTGGAGAGCAAAGCTCCTCACTTC
+               1320 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48665147 TGAGTAGTGAGATTGATTGCGGATCACTCTCCATGTTGCTGCCTGCTGTGTGTCATCCCA
+               1380 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48665207 CTGTCATCCTCCCTTTGTGGCTGTTCTGTGGAGCCCCTCTCCCTCAATCTGCACTCACCT
+               1440 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48665267 CTATGCCCCAGCCCCATTGGCAGCTCCTAATGCACTCCCGGTaaaaaaaaaaaaacaaaa
+               1500 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48665327 aCCAGATGTTAGTGATAGTGGTGGTAGTTCTTCTCTCCACCTCCAAATCTTGCCCTTGCC
+               1560 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48665387 TCCTAATAAGACCCCTATGTGGTTTAACCTCAttttttttttttttttttttttttgaga
+               1620 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48665447 tggagtttcactctgtcacccaggctggagtgaagtggtgtgatGGGGCTTCACCATGTg
+               1680 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48665507 atggggcttcaccatgttggccaggctggtatcaaactcctgacctctagtgatctgccc
+               1740 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48665567 gcctcagcctcccaaagtgctgggattaccggcatgaggcaccgtgcccagccTATCCTC
+               1800 ------------------------------------------------------------
+NR_111921        46 ------------------------------------------------------------
+
+chr3       48665627 CTTCTCTTATCAGCTCCCAACTAGAGGTCCACCCAGGACCCAGAGACCTGGATTTGAGGC
+               1860 -------------|||||||||||||||||||||||||||||||||||||||||||||||
+NR_111921        46 -------------CTCCCAACTAGAGGTCCACCCAGGACCCAGAGACCTGGATTTGAGGC
+
+chr3       48665687 TGCTGGGCGGCAGATGGAGCGATCAGAAGACCAGGGTAAGGGTGTGGCAGATACTGCCAC
+               1920 |||||||||||||||||||||||||||||||||||-------------------------
+NR_111921        93 TGCTGGGCGGCAGATGGAGCGATCAGAAGACCAGG-------------------------
+
+chr3       48665747 TAACACTTCTCAGCCTTTCCTTCTCCTGCCTTTTCCACCCCACCCTGTGTTTGTCTACTC
+               1980 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48665807 CCAGCCAGGTGTACCTTTCCAGGGGAAGACCTGGCCAACCTGTCCAGCTCAATTAtccag
+               2040 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48665867 cagttctttgacctcactgagatctcgagtccattgttcatcacctcagctattgacctg
+               2100 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48665927 tgtcattagccttatagagttcagtgccacggaaactccctgccctgttctttttctttt
+               2160 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48665987 tctttttttttttttttttgagacagagccttgctctgtcgcccaggctggagtgcagtg
+               2220 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666047 gcgcgatctcggctcactgcaagctctgcctcccaggttcacaccattctcctgactcag
+               2280 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666107 cctcccgagtagctgggactacaggcgtccaccaccatgcccagctaatttttttttttg
+               2340 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666167 tatttttagtagagacggcgtttcaccgtgttagccaggctggtctcgatctcctgacct
+               2400 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666227 tgtgatgctcccgcctcggcctcccaaagtgctgggattacaggcatgagccattgtgcc
+               2460 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666287 cggcctgccctgttcttcttagacaaacttgctgggctaaaatctaaccccgttaaaata
+               2520 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666347 gactatttacgtattgtttgcctctagcgcagcagaacattgctggagaaaaacaaacaa
+               2580 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666407 ccgtgctaattggtctcattttatattcatgaccacaagcctcagtattatatcggaggg
+               2640 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666467 cctatccagtgcagtagggcaagaaaaataataagttatgaagattggaagggaaaaaaa
+               2700 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666527 actaattcacaagcagtaggattgtatatgtaaaaatttcaaaggaacctataggtaagt
+               2760 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666587 tgttagaatgagttcagcaaagttgttggacacaagatcaatatataaaaatcagttgca
+               2820 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666647 atttctatatgtcaccaacagttagaaaataaatttcttgcctgggcatgttggctcaag
+               2880 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666707 cctgtaatcccagcactttgggtggccaaggcgggcagatcacctgaggtcaggagtttg
+               2940 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666767 agaccagtttggccaacatggtgaaatcccgtctctactaaaaatacagaaattagccgg
+               3000 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666827 gcgtggtggtgggcacctgtagtcccagctactgaggaggctgaggcaggagaatcactt
+               3060 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666887 gaacctgggaggcagaggttgcagtgaacgagaaaaaaaaattttttttcttaaaaacaa
+               3120 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48666947 tgatgtttacaatagcatcaagtaatatcaaatgctgaggaataaacctaatgaaagatg
+               3180 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667007 tgcaaagactacatacacacatacaaaaaaactataaaacattattgagggaaataaaga
+               3240 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667067 cataggcctggcattggtggctcatgcctgaaatctcagcactttggagggccaaggtgg
+               3300 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667127 gtggatcatttgaggtcaggagttagagatcagtccggccaacatggtgaaacctcatct
+               3360 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667187 ctactaaaaatacaaaaaaattagcttggccaggtgcagtggctcacacctgtaatccca
+               3420 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667247 gcactttgggaggctgaggcgggcggatcatgaggtcaggagatcgagaccatcctggct
+               3480 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667307 aacacggtgaaaccctgtctctactaaaaatacaaaaaaaaattagccgggcctgatggc
+               3540 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667367 gggcgcccgtagtcccagctactcgggaggctgaggtagcagaatggcgtgaacctggga
+               3600 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667427 ggtgcagcttgcagtgagcctaaattgcgccactgcactccagcctgggtaacagagcga
+               3660 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667487 gactccgtttcaaaaaaaaaaaaaaaaattagctgggcatgctgttgtgcacctgcaatc
+               3720 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667547 ccagctactctggaggatgaggcagaagtgcctgaacctgggacacagaggttgcagtga
+               3780 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667607 gccaagatcatgccattgcactccagcctggacaacacagccagacgctatctgaaaaaa
+               3840 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667667 aaaaaaaaaaaaaaagtaaaaaaaatgagaaataaagacataaataaagtgaaaaattgt
+               3900 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667727 tccaatattggaaaagtcaatattataaaggtgccaattttcccaaattgatatatggat
+               3960 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667787 tcgatgcaacttcagttaaaaatcccactaaattttggctgggtgcggtggctcacacct
+               4020 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667847 gtaatcccagcactttgggaggctgaggcgggcggatcacaaggtcaggagatcgagacc
+               4080 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667907 atcttggctaacatggtgaaaccgtctctactaaaaatacaaaagttagccgggtgtggt
+               4140 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48667967 ggcgggcacctgtagtcccagctacttgggaggctgagacagaatggcgtgaacctgggg
+               4200 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668027 aggcggagcttgcagtgagccaagttgacgccactgcactccagcctgggcgacagagca
+               4260 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668087 agactctgtctcaaaaaaaaaaaaaaaaaaaTCCCACTAGATTTTGTGTGTGTGTAAACT
+               4320 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668147 GACAAACTAGATTTAGcagcctgagcaacacagcaaaaccccatctctacaaaaaataca
+               4380 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668207 aaaattttgcacatgcctgtatagtcccagctacttgggaggctgaagtgggaggatcat
+               4440 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668267 gtgagctctggggaggtcgaggctgtagtgagctatgatcacatgctgcactctagcctg
+               4500 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668327 ggcaacagagcaagagaccctgtatctaaaaaaagaatgaaaattaaaaaataaaaaGAa
+               4560 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668387 accaagattgtgtggtactggtacgaggataggaagactaaaggaacgaaatccagagac
+               4620 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668447 aggcctgaagatgtgtggaaacttgaattttgacaagggtgGTTCTTCAGAGCTAACATG
+               4680 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668507 AAGAAAGGGTTGTTTTCTTTTTTTTGTTTCCCcaggagcaactctattaactgaaagaat
+               4740 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668567 aggcttttcaataaatgatgctgggtcagttggatatccatatagaaaaaattaaatgag
+               4800 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668627 atctctatttcacactgcttgcataatcaattccatataaatttgacatctgaaaatata
+               4860 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668687 cagtttctagaaaacagtatTAAGACCttgttttgttttttgttgttgttgttttttgtt
+               4920 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668747 ttgttttttgttttttgagacagagtctcgctctgtcgccaggctggaatacagtggtgc
+               4980 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668807 aaccttggctcactgcaacctctgactccctagttcaagcaattctcctgcctcagcctc
+               5040 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668867 ccgagtagctgcgattacaggcacatgccaccacgcccagctaatttttgtatttttagt
+               5100 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668927 agagatgggggtttcaccatgttggccaggatggtctcgatctcctgaccctgtaatccg
+               5160 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48668987 cccacctcggcctcccaaagtgctgggattacaggcgtgagccactgcacctggccAAGA
+               5220 ------------------------------------------------------------
+NR_111921       128 ------------------------------------------------------------
+
+chr3       48669047 GAAGATCTTAAAGGTGACTTTAAGCAAACttttttttttttttttttacagagacgggag
+               5280 ---------------------------------------------------.........
+NR_111921       128 ---------------------------------------------------AGACGGGAG
+
+chr3       48669107 ctggagtgcagtggctgttcacaagcgtgaAAGCAAAGATTAAAAAATTTGTTTTTATAT
+               5340 ..............................||||||||||||||||||||||||||||||
+NR_111921       137 CTGGAGTGCAGTGGCTGTTCACAAGCGTGAAAGCAAAGATTAAAAAATTTGTTTTTATAT
+
+chr3       48669167 TAAAAAA 48669174
+               5400 |||||||     5407
+NR_111921       197 TAAAAAA      204
+""",
+        )
+        self.assertEqual(
             format(alignment, "psl"),
             """\
 165	0	39	0	0	0	2	5203	+	NR_111921.1	216	0	204	chr3	198295559	48663767	48669174	3	46,82,76,	0,46,128,	48663767,48665640,48669098,
@@ -117,8 +483,6 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.repMatches, 6)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 1711))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -166,6 +530,126 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
         self.assertEqual(
+            str(alignment),
+            """\
+chr3       42530895 CGGAAGTACTTCTGGGGGTACATACTCATCGGCTGGGGTATGGTACCAGGGAGGGCTTCC
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+NR_046654       181 CGGAAGTACTTCTGGGGGTACATACTCATCGGCTGGGGTATGGTACCAGGGAGGGCTTCC
+
+chr3       42530955 AGGCTGGGGACAGAGGGGGCAAGGCCTGGAGAACTCCCTAGGGGGAGGGTGCCAACCCAG
+                 60 |||---------------------------------------------------------
+NR_046654       121 AGG---------------------------------------------------------
+
+chr3       42531015 CTTGCAGTCCTACGTCTTGCTTAGCTGCAGGTCCTGCCTGCAAGGATATCAGCCAAGGGT
+                120 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531075 CAAGAAAGTCCTCAAAATGTCTGATCCCAGGACAAGTCCCTCAGGTTGCAGCTGCACCTA
+                180 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531135 GGGCTGACCTGTGGGACAGATTTTGTGAACATCTTTCCATTTCCCTTTAGTTCCCGAAAT
+                240 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531195 ACAcagggccactgctaatctataaagggcctctgtcacaattagaaagagaatgtccgt
+                300 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531255 ctaggtagacacagcccttcaggcatacagcttCACCCCCTCAGTGGAGCATCCCTCCGT
+                360 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531315 GGTGAACAACCTATGCAACCAAAGACAGCAGACTGACAACCCACCCTTTtctctctccct
+                420 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531375 ccctctccctgcttttctccaaaatctctccctcatgccctctacccctgcttcctgtgc
+                480 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531435 cctctctgctctttcactctccctGGGCCTGACAGGGGTACCCAGCACATTCACCATGGT
+                540 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531495 GTGGACCATCGCCAGGATCCATTTTGAGGATTATGGGTGAGCTGCTGCCCCACACACTCC
+                600 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531555 CCCGGCCGCCATCACTTGGGCAGGCCCCCTGGGTGGGATGATAATGCCATCTGGCCTTGG
+                660 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531615 TGAGTGGACAAAAACCACAGCTCTCGGGCCAGAGGGGAGGCTGGAGGAGGACCTGGGGAG
+                720 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531675 CAACAGACTCTGGGCCCGGGGTTGCTAAAGTGCTCAGGAGCAGAGCTGGGGACAACTGGG
+                780 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531735 GGAGGTGCTGCTGAGTCTCTCTCTGGCTGAGGACAATCCCTCTCATTCCTCCCCACGGTC
+                840 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531795 TGCTCAGGTGCTGGGACACCATCAACTCCTCACTGTGGTGGATCATAAAGGGCCCCATCC
+                900 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531855 TCACCTCCATCTTGGTAAGATaccctcccaccacctagagatggggaaacaggcccaaag
+                960 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531915 ggcaggcaacttagcccaaggtcacatgggaaattagtatctaggtcagaactgaaacgt
+               1020 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531975 agcttcctaatgcccaatgcaggatcatccccacccctgtcctaccagTTCTTCCTTGAG
+               1080 ---------------------------------------------...||||||||||||
+NR_046654       118 ---------------------------------------------CAGTTCTTCCTTGAG
+
+chr3       42532035 CGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGATGAC
+               1140 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+NR_046654       103 CGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGATGAC
+
+chr3       42532095 CTGCCCAAAGGGGAAATGCCAGAGGAGAGGTAAGATAGAGAGAGGGGCAGCAGGACCCTG
+               1200 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532155 GGAAAGAAGACAGGCCAGCAGTCAAGGGGCCTGAACACCTCAGCCTTCCCGCTCTGACTG
+               1260 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532215 CCCGAACTCGGGTCCCCACCCACTAGGTAAACTTCATCCTGTTTATTTGCATCATCCGAA
+               1320 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532275 TCCTGCTTCAGAAACTGCGGCCCCCAGATATCAGGAAGAGTGACAGCAGTCCATACTCGT
+               1380 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532335 GAGTGTGGGCCTAGTGCCTCAGCCCCCAGTACCTCCATCCCCAGTCCTCAAATCATCCCA
+               1440 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532395 CATCTCCTTGAAGTCCTCCCACCCCAAACATCCAGAGTCACCAAAGAGCCACATTGTTCT
+               1500 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532455 TTCCCACCTCCACCATGGCCTGGCTcagcccaccaccatcccctgctccagccccaccct
+               1560 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532515 caCCAGGCTGCACTCAGAGCCCTGCATGCTTCTCCTGCCCACACTCACCTAGCATCCTTC
+               1620 ------------------------------------------------||||||||||||
+NR_046654        43 ------------------------------------------------CTAGCATCCTTC
+
+chr3       42532575 CCAGGTATGCATCTGCTGCCAAGCCAGGgag 42532606
+               1680 ||||||||||||||||||||||||||||...     1711
+NR_046654        31 CCAGGTATGCATCTGCTGCCAAGCCAGGGAG        0
+""",
+        )
+        self.assertEqual(
             format(alignment, "psl"),
             """\
 175	0	6	0	0	0	2	1530	-	NR_046654.1	181	0	181	chr3	198295559	42530895	42532606	3	63,75,43,	0,63,138,	42530895,42532020,42532563,
@@ -177,8 +661,6 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.repMatches, 39)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 5409))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -230,6 +712,374 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
         self.assertEqual(
+            str(alignment),
+            """\
+chr3       48663767 CACGAGAGGAGCGGAGGCGAGGGGTGAACGCGGAGCACTCCAATCGGTCAGTCATTGTTT
+                  0 ||||||||||||||||||||||||||||-|||||||||||||||||--------------
+NR_111921         3 CACGAGAGGAGCGGAGGCGAGGGGTGAA-GCGGAGCACTCCAATCG--------------
+
+chr3       48663827 CTATTGGCACAATGGGAGGCCCCGCCCCTCACGGCGGACTCATCGCATGGGGGAGGGGGC
+                 60 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48663887 TCCGCGGGTTGCCGGCTAACCGTGAGAGAGTCCGGGAGGTACACTATACGGACCGGCCTC
+                120 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48663947 CAAAGGCGGAATCGATAACGAGCTGCAGCGCCGGGTGCAGAGGACGCGGGCATCCCGAAG
+                180 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664007 CCCAGGAAGAGGTCAGGGCCGGGACCCCAGAACGCTCCACAGGGTGCGGCTCCCGCGATG
+                240 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664067 GGGTGGATCCTGGTTCTAACAGGCGAGGAACTCCTGGCCAAGGCCTCTGGCCCGCCCCGA
+                300 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664127 ACGGTCCCTATGACATCACCATCAACCAATCAGTCGGCGCATCCTTTCGCCCCTTGACTG
+                360 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664187 CTCCGCTTCCGGGAGGCGGGGCTTCTGCGGGTTCCACCTCCCGAGCGCCCCTTGTGGCTA
+                420 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664247 CCAAGGTCAGGCAACAGGTGTCCAGTTGTTCCCTCTCCTGTCTACGAATCTGAGGACCTC
+                480 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664307 CCCAGGATCAGAGCTCTGGGCCTGATACACGGCCGGGGTTCCTACGGGTTTGTGAGTGGG
+                540 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664367 GGTGGAAGATCTGCAGAGGCACTTAGGGCTGAACTCCTTTGAATGGGAGCCAATCGGTGC
+                600 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664427 AGGGGCTGGAGGAGCGAGTCCCCCAAAGTAGttttatttatctatttagagacaaggtct
+                660 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664487 cactctttcggagtgcagtggtgatcacagctcaccgtagcctcgaactccccaggcgat
+                720 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664547 tctctcacctcagcctcccgagtagctgggactacgggtacatgtcatcacacttggcta
+                780 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664607 atttttgcattttttatagagacagggtctcaccatgtaggccagattagtcttgaactc
+                840 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664667 ctgggctcaagcaatccgcccatcttggcctcccaaagtgctgggattataggtgtgagc
+                900 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664727 caccgcgcccggcAACCCAGAAGTGGTTTTGACAGCAccagcgctttctgtgtccacaat
+                960 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664787 ctagtgagtagagggcacaaaacctgacaccacggaggcagacaggcaggggctctgccg
+               1020 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664847 gggaagggtgttggagtcccaaaggaggcgtctgagtcaccttcgcaacctgggacgcct
+               1080 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664907 tcttgcataagatgcctgagcagtgccttgaatgaccaaggggagatccgcatctgcaaa
+               1140 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48664967 ggaagggcagggagggatagggattgggggtgggcatcctaggtcttggagactgtgtgg
+               1200 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48665027 gcaaatgtgcagagacataaagggactatggctgagggaaatcaagCCCTGCCCTCTCAC
+               1260 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48665087 CAATAGGGCTGGCGCTGGTCCCAGCTAACACTCCTTTTGGAGAGCAAAGCTCCTCACTTC
+               1320 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48665147 TGAGTAGTGAGATTGATTGCGGATCACTCTCCATGTTGCTGCCTGCTGTGTGTCATCCCA
+               1380 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48665207 CTGTCATCCTCCCTTTGTGGCTGTTCTGTGGAGCCCCTCTCCCTCAATCTGCACTCACCT
+               1440 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48665267 CTATGCCCCAGCCCCATTGGCAGCTCCTAATGCACTCCCGGTaaaaaaaaaaaaacaaaa
+               1500 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48665327 aCCAGATGTTAGTGATAGTGGTGGTAGTTCTTCTCTCCACCTCCAAATCTTGCCCTTGCC
+               1560 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48665387 TCCTAATAAGACCCCTATGTGGTTTAACCTCAttttttttttttttttttttttttgaga
+               1620 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48665447 tggagtttcactctgtcacccaggctggagtgaagtggtgtgatGGGGCTTCACCATGTg
+               1680 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48665507 atggggcttcaccatgttggccaggctggtatcaaactcctgacctctagtgatctgccc
+               1740 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48665567 gcctcagcctcccaaagtgctgggattaccggcatgaggcaccgtgcccagccTATCCTC
+               1800 ------------------------------------------------------------
+NR_111921        48 ------------------------------------------------------------
+
+chr3       48665627 CTTCTCTTATCAGCTCCCAACTAGAGGTCCACCCAGGACCCAGAGACCTGGATTTGAGGC
+               1860 -------------|||||||||||||||||||||||||||||||||||||||||||||||
+NR_111921        48 -------------CTCCCAACTAGAGGTCCACCCAGGACCCAGAGACCTGGATTTGAGGC
+
+chr3       48665687 TGCTGGGCGGCAGATGGAGCGATCAGAAG--ACCAGGGTAAGGGTGTGGCAGATACTGCC
+               1920 |||||..||||||||||||||||||||||--||||||-----------------------
+NR_111921        95 TGCTGCCCGGCAGATGGAGCGATCAGAAGCCACCAGG-----------------------
+
+chr3       48665745 ACTAACACTTCTCAGCCTTTCCTTCTCCTGCCTTTTCCACCCCACCCTGTGTTTGTCTAC
+               1980 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48665805 TCCCAGCCAGGTGTACCTTTCCAGGGGAAGACCTGGCCAACCTGTCCAGCTCAATTAtcc
+               2040 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48665865 agcagttctttgacctcactgagatctcgagtccattgttcatcacctcagctattgacc
+               2100 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48665925 tgtgtcattagccttatagagttcagtgccacggaaactccctgccctgttctttttctt
+               2160 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48665985 tttctttttttttttttttttgagacagagccttgctctgtcgcccaggctggagtgcag
+               2220 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666045 tggcgcgatctcggctcactgcaagctctgcctcccaggttcacaccattctcctgactc
+               2280 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666105 agcctcccgagtagctgggactacaggcgtccaccaccatgcccagctaatttttttttt
+               2340 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666165 tgtatttttagtagagacggcgtttcaccgtgttagccaggctggtctcgatctcctgac
+               2400 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666225 cttgtgatgctcccgcctcggcctcccaaagtgctgggattacaggcatgagccattgtg
+               2460 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666285 cccggcctgccctgttcttcttagacaaacttgctgggctaaaatctaaccccgttaaaa
+               2520 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666345 tagactatttacgtattgtttgcctctagcgcagcagaacattgctggagaaaaacaaac
+               2580 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666405 aaccgtgctaattggtctcattttatattcatgaccacaagcctcagtattatatcggag
+               2640 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666465 ggcctatccagtgcagtagggcaagaaaaataataagttatgaagattggaagggaaaaa
+               2700 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666525 aaactaattcacaagcagtaggattgtatatgtaaaaatttcaaaggaacctataggtaa
+               2760 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666585 gttgttagaatgagttcagcaaagttgttggacacaagatcaatatataaaaatcagttg
+               2820 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666645 caatttctatatgtcaccaacagttagaaaataaatttcttgcctgggcatgttggctca
+               2880 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666705 agcctgtaatcccagcactttgggtggccaaggcgggcagatcacctgaggtcaggagtt
+               2940 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666765 tgagaccagtttggccaacatggtgaaatcccgtctctactaaaaatacagaaattagcc
+               3000 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666825 gggcgtggtggtgggcacctgtagtcccagctactgaggaggctgaggcaggagaatcac
+               3060 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666885 ttgaacctgggaggcagaggttgcagtgaacgagaaaaaaaaattttttttcttaaaaac
+               3120 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48666945 aatgatgtttacaatagcatcaagtaatatcaaatgctgaggaataaacctaatgaaaga
+               3180 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667005 tgtgcaaagactacatacacacatacaaaaaaactataaaacattattgagggaaataaa
+               3240 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667065 gacataggcctggcattggtggctcatgcctgaaatctcagcactttggagggccaaggt
+               3300 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667125 gggtggatcatttgaggtcaggagttagagatcagtccggccaacatggtgaaacctcat
+               3360 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667185 ctctactaaaaatacaaaaaaattagcttggccaggtgcagtggctcacacctgtaatcc
+               3420 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667245 cagcactttgggaggctgaggcgggcggatcatgaggtcaggagatcgagaccatcctgg
+               3480 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667305 ctaacacggtgaaaccctgtctctactaaaaatacaaaaaaaaattagccgggcctgatg
+               3540 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667365 gcgggcgcccgtagtcccagctactcgggaggctgaggtagcagaatggcgtgaacctgg
+               3600 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667425 gaggtgcagcttgcagtgagcctaaattgcgccactgcactccagcctgggtaacagagc
+               3660 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667485 gagactccgtttcaaaaaaaaaaaaaaaaattagctgggcatgctgttgtgcacctgcaa
+               3720 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667545 tcccagctactctggaggatgaggcagaagtgcctgaacctgggacacagaggttgcagt
+               3780 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667605 gagccaagatcatgccattgcactccagcctggacaacacagccagacgctatctgaaaa
+               3840 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667665 aaaaaaaaaaaaaaaaagtaaaaaaaatgagaaataaagacataaataaagtgaaaaatt
+               3900 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667725 gttccaatattggaaaagtcaatattataaaggtgccaattttcccaaattgatatatgg
+               3960 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667785 attcgatgcaacttcagttaaaaatcccactaaattttggctgggtgcggtggctcacac
+               4020 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667845 ctgtaatcccagcactttgggaggctgaggcgggcggatcacaaggtcaggagatcgaga
+               4080 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667905 ccatcttggctaacatggtgaaaccgtctctactaaaaatacaaaagttagccgggtgtg
+               4140 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48667965 gtggcgggcacctgtagtcccagctacttgggaggctgagacagaatggcgtgaacctgg
+               4200 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668025 ggaggcggagcttgcagtgagccaagttgacgccactgcactccagcctgggcgacagag
+               4260 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668085 caagactctgtctcaaaaaaaaaaaaaaaaaaaTCCCACTAGATTTTGTGTGTGTGTAAA
+               4320 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668145 CTGACAAACTAGATTTAGcagcctgagcaacacagcaaaaccccatctctacaaaaaata
+               4380 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668205 caaaaattttgcacatgcctgtatagtcccagctacttgggaggctgaagtgggaggatc
+               4440 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668265 atgtgagctctggggaggtcgaggctgtagtgagctatgatcacatgctgcactctagcc
+               4500 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668325 tgggcaacagagcaagagaccctgtatctaaaaaaagaatgaaaattaaaaaataaaaaG
+               4560 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668385 Aaaccaagattgtgtggtactggtacgaggataggaagactaaaggaacgaaatccagag
+               4620 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668445 acaggcctgaagatgtgtggaaacttgaattttgacaagggtgGTTCTTCAGAGCTAACA
+               4680 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668505 TGAAGAAAGGGTTGTTTTCTTTTTTTTGTTTCCCcaggagcaactctattaactgaaaga
+               4740 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668565 ataggcttttcaataaatgatgctgggtcagttggatatccatatagaaaaaattaaatg
+               4800 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668625 agatctctatttcacactgcttgcataatcaattccatataaatttgacatctgaaaata
+               4860 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668685 tacagtttctagaaaacagtatTAAGACCttgttttgttttttgttgttgttgttttttg
+               4920 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668745 ttttgttttttgttttttgagacagagtctcgctctgtcgccaggctggaatacagtggt
+               4980 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668805 gcaaccttggctcactgcaacctctgactccctagttcaagcaattctcctgcctcagcc
+               5040 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668865 tcccgagtagctgcgattacaggcacatgccaccacgcccagctaatttttgtattttta
+               5100 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668925 gtagagatgggggtttcaccatgttggccaggatggtctcgatctcctgaccctgtaatc
+               5160 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48668985 cgcccacctcggcctcccaaagtgctgggattacaggcgtgagccactgcacctggccAA
+               5220 ------------------------------------------------------------
+NR_111921       132 ------------------------------------------------------------
+
+chr3       48669045 GAGAAGATCTTAAAGGTGACTTTAAGCAAACttttttttttttttttttacagagacggg
+               5280 -----------------------------------------------------.......
+NR_111921       132 -----------------------------------------------------AGACGGG
+
+chr3       48669105 agctggagtgcagtggctgttcacaagcgtgaAAGCAAAGATTAAAAAATTTGTTTTTAT
+               5340 ................................||||||||||||||||||||||||||||
+NR_111921       139 AGCTGGAGTGCAGTGGCTGTTCACAAGCGTGAAAGCAAAGATTAAAAAATTTGTTTTTAT
+
+chr3       48669165 ATTAAAAAA 48669174
+               5400 |||||||||     5409
+NR_111921       199 ATTAAAAAA      208
+""",
+        )
+        self.assertEqual(
             format(alignment, "psl"),
             """\
 162	2	39	0	1	2	3	5204	+	NR_111921.1_modified	220	3	208	chr3	198295559	48663767	48669174	5	28,17,76,6,76,	3,31,48,126,132,	48663767,48663796,48665640,48665716,48669098,
@@ -241,8 +1091,6 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.repMatches, 6)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 1714))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -293,6 +1141,126 @@ class TestAlign_dna_rna(unittest.TestCase):
         )
         self.assertEqual(matches, alignment.matches)
         self.assertEqual(repMatches, alignment.repMatches)
+        self.assertEqual(
+            str(alignment),
+            """\
+chr3       42530895 CGGAAGTACTTCTGGGGGTACATACTC---ATCGGCTGGGGTATGGTACCAGGGAGGGCT
+                  0 |||||||||||||||||||||||||||---||||||||||||||||||||||||||||||
+NR_046654       185 CGGAAGTACTTCTGGGGGTACATACTCCCCATCGGCTGGGGTATGGTACCAGGGAGGGCT
+
+chr3       42530952 TCCAGGCTGGGGACAGAGGGGGCAAGGCCTGGAGAACTCCCTAGGGGGAGGGTGCCAACC
+                 60 ||||||------------------------------------------------------
+NR_046654       125 TCCAGG------------------------------------------------------
+
+chr3       42531012 CAGCTTGCAGTCCTACGTCTTGCTTAGCTGCAGGTCCTGCCTGCAAGGATATCAGCCAAG
+                120 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531072 GGTCAAGAAAGTCCTCAAAATGTCTGATCCCAGGACAAGTCCCTCAGGTTGCAGCTGCAC
+                180 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531132 CTAGGGCTGACCTGTGGGACAGATTTTGTGAACATCTTTCCATTTCCCTTTAGTTCCCGA
+                240 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531192 AATACAcagggccactgctaatctataaagggcctctgtcacaattagaaagagaatgtc
+                300 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531252 cgtctaggtagacacagcccttcaggcatacagcttCACCCCCTCAGTGGAGCATCCCTC
+                360 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531312 CGTGGTGAACAACCTATGCAACCAAAGACAGCAGACTGACAACCCACCCTTTtctctctc
+                420 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531372 cctccctctccctgcttttctccaaaatctctccctcatgccctctacccctgcttcctg
+                480 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531432 tgccctctctgctctttcactctccctGGGCCTGACAGGGGTACCCAGCACATTCACCAT
+                540 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531492 GGTGTGGACCATCGCCAGGATCCATTTTGAGGATTATGGGTGAGCTGCTGCCCCACACAC
+                600 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531552 TCCCCCGGCCGCCATCACTTGGGCAGGCCCCCTGGGTGGGATGATAATGCCATCTGGCCT
+                660 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531612 TGGTGAGTGGACAAAAACCACAGCTCTCGGGCCAGAGGGGAGGCTGGAGGAGGACCTGGG
+                720 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531672 GAGCAACAGACTCTGGGCCCGGGGTTGCTAAAGTGCTCAGGAGCAGAGCTGGGGACAACT
+                780 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531732 GGGGGAGGTGCTGCTGAGTCTCTCTCTGGCTGAGGACAATCCCTCTCATTCCTCCCCACG
+                840 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531792 GTCTGCTCAGGTGCTGGGACACCATCAACTCCTCACTGTGGTGGATCATAAAGGGCCCCA
+                900 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531852 TCCTCACCTCCATCTTGGTAAGATaccctcccaccacctagagatggggaaacaggccca
+                960 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531912 aagggcaggcaacttagcccaaggtcacatgggaaattagtatctaggtcagaactgaaa
+               1020 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531972 cgtagcttcctaatgcccaatgcaggatcatccccacccctgtcctaccagTTCTTCCTT
+               1080 ------------------------------------------------...|||||||||
+NR_046654       119 ------------------------------------------------CAGTTCTTCCTT
+
+chr3       42532032 GAGCGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGAT
+               1140 |||||--|||||||||||.|||||||||||||||||||||||||||||||||||||||||
+NR_046654       107 GAGCG--AGCGGATTGGGTGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGAT
+
+chr3       42532092 GACCTGCCCAAAGGGGAAATGCCAGAGGAGAGGTAAGATAGAGAGAGGGGCAGCAGGACC
+               1200 |||---------------------------------------------------------
+NR_046654        49 GAC---------------------------------------------------------
+
+chr3       42532152 CTGGGAAAGAAGACAGGCCAGCAGTCAAGGGGCCTGAACACCTCAGCCTTCCCGCTCTGA
+               1260 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532212 CTGCCCGAACTCGGGTCCCCACCCACTAGGTAAACTTCATCCTGTTTATTTGCATCATCC
+               1320 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532272 GAATCCTGCTTCAGAAACTGCGGCCCCCAGATATCAGGAAGAGTGACAGCAGTCCATACT
+               1380 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532332 CGTGAGTGTGGGCCTAGTGCCTCAGCCCCCAGTACCTCCATCCCCAGTCCTCAAATCATC
+               1440 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532392 CCACATCTCCTTGAAGTCCTCCCACCCCAAACATCCAGAGTCACCAAAGAGCCACATTGT
+               1500 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532452 TCTTTCCCACCTCCACCATGGCCTGGCTcagcccaccaccatcccctgctccagccccac
+               1560 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532512 cctcaCCAGGCTGCACTCAGAGCCCTGCATGCTTCTCCTGCCCACACTCACCTAGCATCC
+               1620 ---------------------------------------------------|||||||||
+NR_046654        46 ---------------------------------------------------CTAGCATCC
+
+chr3       42532572 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGgag 42532606
+               1680 |||||||||||||||||||||||||||||||...     1714
+NR_046654        37 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGGAG        3
+""",
+        )
         self.assertEqual(
             format(alignment, "psl"),
             """\
@@ -362,8 +1330,6 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 16))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -371,12 +1337,29 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 33)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr4       61646095 ???????????????? 61646111
+                  0 ||||||||||||||||       16
+hg18_dna         11 ????????????????       27
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[61646095:61646111], "aggtaaactgccttca"
             )
             self.assertEqual(
                 alignment.query.seq[11:27], self.queries[alignment.query.id][11:27]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr4       61646095 aggtaaactgccttca 61646111
+                  0 ||||||||||||||||       16
+hg18_dna         11 aggtaaactgccttca       27
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -412,8 +1395,6 @@ numpy.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 33))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -421,12 +1402,29 @@ numpy.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 33)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       10271783 ????????????????????????????????? 10271816
+                  0 |||||||||||||||||||||||||||||||||       33
+hg18_dna          0 ?????????????????????????????????       33
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[10271783:10271816],
                 "atgagcttccaaggtaaactgccttcaagattc",
             )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       10271783 atgagcttccaaggtaaactgccttcaagattc 10271816
+                  0 |||||||||||||||||||||||||||||||||       33
+hg18_dna          0 atgagcttccaaggtaaactgccttcaagattc       33
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     numpy.array(alignment, "U"),
@@ -463,8 +1461,6 @@ numpy.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 17))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -472,12 +1468,29 @@ numpy.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 33)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2       53575980 ????????????????? 53575997
+                  0 |||||||||||||||||       17
+hg18_dna         25 ?????????????????        8
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[53575980:53575997], "aaggcagtttaccttgg"
             )
             self.assertEqual(
                 alignment.query.seq[8:25], self.queries[alignment.query.id][8:25]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2       53575980 aaggcagtttaccttgg 53575997
+                  0 |||||||||||||||||       17
+hg18_dna         25 aaggcagtttaccttgg        8
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -513,8 +1526,6 @@ numpy.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -522,13 +1533,30 @@ numpy.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 141213431)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr9       85737865 ????????????????????????????????????????? 85737906
+                  0 |||||||||||||||||||||||||||||||||||||||||       41
+hg19_dna          9 ?????????????????????????????????????????       50
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[85737865:85737906],
                 "acaaaggggctgggcgcagtggctcacgcctgtaatcccaa",
             )
             self.assertEqual(
                 alignment.query.seq[9:50], self.queries[alignment.query.id][9:50]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr9       85737865 acaaaggggctgggcgcagtggctcacgcctgtaatcccaa 85737906
+                  0 ||||||||||||||||..|||||||||.|||||||||||||       41
+hg19_dna          9 acaaaggggctgggcgtggtggctcacacctgtaatcccaa       50
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -568,8 +1596,6 @@ numpy.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -577,13 +1603,30 @@ numpy.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 146364022)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr8       95160479 ????????????????????????????????????????? 95160520
+                  0 |||||||||||||||||||||||||||||||||||||||||       41
+hg19_dna          8 ?????????????????????????????????????????       49
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[95160479:95160520],
                 "cacaaaggggctgggcgtggtggctcacacctgtaatccca",
             )
             self.assertEqual(
                 alignment.query.seq[8:49], self.queries[alignment.query.id][8:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr8       95160479 cacaaaggggctgggcgtggtggctcacacctgtaatccca 95160520
+                  0 |||||||||||||||||||||||||||||||||||||||||       41
+hg19_dna          8 cacaaaggggctgggcgtggtggctcacacctgtaatccca       49
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -623,8 +1666,6 @@ numpy.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -632,13 +1673,30 @@ numpy.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr22      42144400 ???????????????????????????????????? 42144436
+                  0 ||||||||||||||||||||||||||||||||||||       36
+hg19_dna         11 ????????????????????????????????????       47
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[42144400:42144436],
                 "aaaggggctgggcgtggtagctcatgcctgtaatcc",
             )
             self.assertEqual(
                 alignment.query.seq[11:47], self.queries[alignment.query.id][11:47]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr22      42144400 aaaggggctgggcgtggtagctcatgcctgtaatcc 42144436
+                  0 ||||||||||||||||||.|||||..||||||||||       36
+hg19_dna         11 aaaggggctgggcgtggtggctcacacctgtaatcc       47
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -676,8 +1734,6 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 48))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -685,7 +1741,16 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2      183925984 ??????----?????????????????????????????????????? 183926028
+                  0 ||||||----||||||||||||||||||||||||||||||||||||||        48
+hg19_dna          1 ????????????????????????????????????????????????        49
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(alignment.target.seq[183925984:183925990], "aaaaat")
             self.assertEqual(
                 alignment.target.seq[183925990:183926028],
@@ -696,6 +1761,14 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
             )
             self.assertEqual(
                 alignment.query.seq[38:49], self.queries[alignment.query.id][38:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2      183925984 aaaaat----aaaggggctgggcgtggtggctcacgcctgtaatccca 183926028
+                  0 ||||||----|||||||||||||||||||||||||.||||||||||||        48
+hg19_dna          1 aaaaat????aaaggggctgggcgtggtggctcacacctgtaatccca        49
+""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -719,8 +1792,6 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 170))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -728,13 +1799,46 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19      35483340 ????????????????????????????????????????????????????????????
+                  0 |||||||||||||||||||||||||-----------------------------------
+hg19_dna         10 ?????????????????????????-----------------------------------
+
+chr19      35483400 ????????????????????????????????????????????????????????????
+                 60 ------------------------------------------------------------
+hg19_dna         35 ------------------------------------------------------------
+
+chr19      35483460 ?????????????????????????????????????????????????? 35483510
+                120 ---------------------------------------|||||||||||      170
+hg19_dna         35 ---------------------------------------???????????       46
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[35483340:35483365], "caaaggggctgggcgtagtggctga"
             )
             self.assertEqual(alignment.target.seq[35483499:35483510], "cacctgtaatc")
             self.assertEqual(
                 alignment.query.seq[10:46], self.queries[alignment.query.id][10:46]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19      35483340 caaaggggctgggcgtagtggctga???????????????????????????????????
+                  0 ||||||||||||||||.||||||.|-----------------------------------
+hg19_dna         10 caaaggggctgggcgtggtggctca-----------------------------------
+
+chr19      35483400 ????????????????????????????????????????????????????????????
+                 60 ------------------------------------------------------------
+hg19_dna         35 ------------------------------------------------------------
+
+chr19      35483460 ???????????????????????????????????????cacctgtaatc 35483510
+                120 ---------------------------------------|||||||||||      170
+hg19_dna         35 ---------------------------------------cacctgtaatc       46
+""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -758,8 +1862,6 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -767,13 +1869,30 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr18      23891310 ??????????????????????????????????????? 23891349
+                  0 |||||||||||||||||||||||||||||||||||||||       39
+hg19_dna         10 ???????????????????????????????????????       49
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[23891310:23891349],
                 "caaaggggctgggcgtggtggctcacacctgtaatccca",
             )
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr18      23891310 caaaggggctgggcgtggtggctcacacctgtaatccca 23891349
+                  0 |||||||||||||||||||||||||||||||||||||||       39
+hg19_dna         10 caaaggggctgggcgtggtggctcacacctgtaatccca       49
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -812,8 +1931,6 @@ numpy.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 28))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -821,12 +1938,29 @@ numpy.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr18      43252217 ???????????????????????????? 43252245
+                  0 ||||||||||||||||||||||||||||       28
+hg19_dna         21 ????????????????????????????       49
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[43252217:43252245], "ggcgtggtggctcacgcctgtaatccca"
             )
             self.assertEqual(
                 alignment.query.seq[21:49], self.queries[alignment.query.id][21:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr18      43252217 ggcgtggtggctcacgcctgtaatccca 43252245
+                  0 |||||||||||||||.||||||||||||       28
+hg19_dna         21 ggcgtggtggctcacacctgtaatccca       49
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -864,8 +1998,6 @@ numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 54))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -873,7 +2005,20 @@ numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 115169878)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr13      52759147 ?????????????---??????????????????????????????????????
+                  0 |||||||---------||||||||||||||||||||||||||||||||||||||
+hg19_dna          1 ???????------?????????????????????????????????????????
+
+chr13      52759198
+                 54
+hg19_dna         49
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(alignment.target.seq[52759147:52759154], "aaaaatt")
             self.assertEqual(
                 alignment.target.seq[52759160:52759198],
@@ -884,6 +2029,18 @@ numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
             )
             self.assertEqual(
                 alignment.query.seq[38:49], self.queries[alignment.query.id][38:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr13      52759147 aaaaatt??????---aaaggggctgggcgtggtggctcacgcctgtaatccca
+                  0 |||||||---------|||||||||||||||||||||||||.||||||||||||
+hg19_dna          1 aaaaatt------???aaaggggctgggcgtggtggctcacacctgtaatccca
+
+chr13      52759198
+                 54
+hg19_dna         49
+""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -907,8 +2064,6 @@ numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 50))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -916,12 +2071,29 @@ numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1        1207056 ?????????????????????????????????????????????????? 1207106
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||      50
+hg19_dna          0 ??????????????????????????????????????????????????      50
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[1207056:1207106],
                 "caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa",
             )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1        1207056 caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa 1207106
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||      50
+hg19_dna          0 caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa      50
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     numpy.array(alignment, "U"),
@@ -961,8 +2133,6 @@ numpy.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -970,13 +2140,30 @@ numpy.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       61700837 ?????????????????????????????????? 61700871
+                  0 ||||||||||||||||||||||||||||||||||       34
+hg19_dna          1 ??????????????????????????????????       35
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[61700837:61700871],
                 "aaaaatgaacaaaggggctgggcgcggtggctca",
             )
             self.assertEqual(
                 alignment.query.seq[1:35], self.queries[alignment.query.id][1:35]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       61700837 aaaaatgaacaaaggggctgggcgcggtggctca 61700871
+                  0 ||||||..||||||||||||||||.|||||||||       34
+hg19_dna          1 aaaaattcacaaaggggctgggcgtggtggctca       35
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -1014,8 +2201,6 @@ numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 44))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1023,7 +2208,16 @@ numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr4       37558157 ????????????????----------?????????????????? 37558191
+                  0 ||||||||||----------------||||||||||||||||||       44
+hg19_dna         49 ??????????------????????????????????????????       11
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(alignment.target.seq[37558157:37558167], "tgggattaca")
             self.assertEqual(
                 alignment.target.seq[37558173:37558191], "accacgcccagccccttt"
@@ -1033,6 +2227,14 @@ numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
             )
             self.assertEqual(
                 alignment.query.seq[39:49], self.queries[alignment.query.id][39:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr4       37558157 tgggattaca??????----------accacgcccagccccttt 37558191
+                  0 ||||||||||----------------||||||||||||||||||       44
+hg19_dna         49 tgggattaca------??????????accacgcccagccccttt       11
+""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -1056,8 +2258,6 @@ numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 37))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1065,13 +2265,30 @@ numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr22      48997405 ????????????????????????????????????? 48997442
+                  0 |||||||||||||||||||||||||||||||||||||       37
+hg19_dna         49 ?????????????????????????????????????       12
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[48997405:48997442],
                 "tgggattacaggcgggagccaccacgcccagcccctt",
             )
             self.assertEqual(
                 alignment.query.seq[12:49], self.queries[alignment.query.id][12:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr22      48997405 tgggattacaggcgggagccaccacgcccagcccctt 48997442
+                  0 ||||||||||||.|.||||||||||||||||||||||       37
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctt       12
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -1110,8 +2327,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1119,13 +2334,30 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2      120641740 ???????????????????????????????????? 120641776
+                  0 ||||||||||||||||||||||||||||||||||||        36
+hg19_dna         49 ????????????????????????????????????        13
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[120641740:120641776],
                 "tgggattacaggcgtgagccaccacgcccagcccct",
             )
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2      120641740 tgggattacaggcgtgagccaccacgcccagcccct 120641776
+                  0 ||||||||||||.|||||||||||||||||||||||        36
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct        13
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -1163,8 +2395,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1172,13 +2402,30 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19      54017130 ??????????????????????????????????????? 54017169
+                  0 |||||||||||||||||||||||||||||||||||||||       39
+hg19_dna         49 ???????????????????????????????????????       10
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[54017130:54017169],
                 "tgggattacaggtgtgagccaccacgcccagcccctttg",
             )
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19      54017130 tgggattacaggtgtgagccaccacgcccagcccctttg 54017169
+                  0 |||||||||||||||||||||||||||||||||||||||       39
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctttg       10
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -1217,8 +2464,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1226,13 +2471,30 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19        553742 ??????????????????????????????????????? 553781
+                  0 |||||||||||||||||||||||||||||||||||||||     39
+hg19_dna         49 ???????????????????????????????????????     10
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[553742:553781],
                 "tgggatgacaggggtgaggcaccacgcccagcccctttg",
             )
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19        553742 tgggatgacaggggtgaggcaccacgcccagcccctttg 553781
+                  0 ||||||.|||||.|||||.||||||||||||||||||||     39
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctttg     10
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -1271,8 +2533,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1280,13 +2540,30 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr10      99388555 ???????????????????????????????????? 99388591
+                  0 ||||||||||||||||||||||||||||||||||||       36
+hg19_dna         49 ????????????????????????????????????       13
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[99388555:99388591],
                 "tgggattataggcatgagccaccacgcccagcccct",
             )
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr10      99388555 tgggattataggcatgagccaccacgcccagcccct 99388591
+                  0 ||||||||.|||..||||||||||||||||||||||       36
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct       13
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -1324,8 +2601,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 25))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1333,12 +2608,29 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr10     112178171 ????????????????????????? 112178196
+                  0 |||||||||||||||||||||||||        25
+hg19_dna         35 ?????????????????????????        10
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[112178171:112178196], "tgagtcaccacgcccagcccctttg"
             )
             self.assertEqual(
                 alignment.query.seq[10:35], self.queries[alignment.query.id][10:35]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr10     112178171 tgagtcaccacgcccagcccctttg 112178196
+                  0 ||||.||||||||||||||||||||        25
+hg19_dna         35 tgagccaccacgcccagcccctttg        10
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -1375,8 +2667,6 @@ numpy.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1384,13 +2674,30 @@ numpy.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       39368490 ???????????????????????????????????? 39368526
+                  0 ||||||||||||||||||||||||||||||||||||       36
+hg19_dna         49 ????????????????????????????????????       13
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[39368490:39368526],
                 "tgggattacaggcgtgagccaccacgcccagcccct",
             )
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       39368490 tgggattacaggcgtgagccaccacgcccagcccct 39368526
+                  0 ||||||||||||.|||||||||||||||||||||||       36
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct       13
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -1428,8 +2735,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1437,13 +2742,30 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1      220325687 ?????????????????????????????????? 220325721
+                  0 ||||||||||||||||||||||||||||||||||        34
+hg19_dna         47 ??????????????????????????????????        13
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[220325687:220325721],
                 "ggattacaggcgtgagccaccacgcccagcccct",
             )
             self.assertEqual(
                 alignment.query.seq[13:47], self.queries[alignment.query.id][13:47]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1      220325687 ggattacaggcgtgagccaccacgcccagcccct 220325721
+                  0 ||||||||||.|||||||||||||||||||||||        34
+hg19_dna         47 ggattacaggtgtgagccaccacgcccagcccct        13
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -1534,8 +2856,6 @@ numpy.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 16))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1543,12 +2863,29 @@ numpy.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 33)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr4       61646095 ???????????????? 61646111
+                  0 ||||||||||||||||       16
+hg18_dna         11 ????????????????       27
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[61646095:61646111], "aggtaaactgccttca"
             )
             self.assertEqual(
                 alignment.query.seq[11:27], self.queries[alignment.query.id][11:27]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr4       61646095 aggtaaactgccttca 61646111
+                  0 ||||||||||||||||       16
+hg18_dna         11 aggtaaactgccttca       27
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -1584,8 +2921,6 @@ numpy.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 33))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1593,12 +2928,29 @@ numpy.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 33)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       10271783 ????????????????????????????????? 10271816
+                  0 |||||||||||||||||||||||||||||||||       33
+hg18_dna          0 ?????????????????????????????????       33
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[10271783:10271816],
                 "atgagcttccaaggtaaactgccttcaagattc",
             )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       10271783 atgagcttccaaggtaaactgccttcaagattc 10271816
+                  0 |||||||||||||||||||||||||||||||||       33
+hg18_dna          0 atgagcttccaaggtaaactgccttcaagattc       33
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     numpy.array(alignment, "U"),
@@ -1635,8 +2987,6 @@ numpy.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 17))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1644,12 +2994,29 @@ numpy.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 33)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2       53575980 ????????????????? 53575997
+                  0 |||||||||||||||||       17
+hg18_dna         25 ?????????????????        8
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[53575980:53575997], "aaggcagtttaccttgg"
             )
             self.assertEqual(
                 alignment.query.seq[8:25], self.queries[alignment.query.id][8:25]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2       53575980 aaggcagtttaccttgg 53575997
+                  0 |||||||||||||||||       17
+hg18_dna         25 aaggcagtttaccttgg        8
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -1711,8 +3078,6 @@ numpy.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1720,13 +3085,30 @@ numpy.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 141213431)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr9       85737865 ????????????????????????????????????????? 85737906
+                  0 |||||||||||||||||||||||||||||||||||||||||       41
+hg19_dna          9 ?????????????????????????????????????????       50
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[85737865:85737906],
                 "acaaaggggctgggcgcagtggctcacgcctgtaatcccaa",
             )
             self.assertEqual(
                 alignment.query.seq[9:50], self.queries[alignment.query.id][9:50]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr9       85737865 acaaaggggctgggcgcagtggctcacgcctgtaatcccaa 85737906
+                  0 ||||||||||||||||..|||||||||.|||||||||||||       41
+hg19_dna          9 acaaaggggctgggcgtggtggctcacacctgtaatcccaa       50
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -1766,8 +3148,6 @@ numpy.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1775,13 +3155,30 @@ numpy.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 146364022)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr8       95160479 ????????????????????????????????????????? 95160520
+                  0 |||||||||||||||||||||||||||||||||||||||||       41
+hg19_dna          8 ?????????????????????????????????????????       49
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[95160479:95160520],
                 "cacaaaggggctgggcgtggtggctcacacctgtaatccca",
             )
             self.assertEqual(
                 alignment.query.seq[8:49], self.queries[alignment.query.id][8:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr8       95160479 cacaaaggggctgggcgtggtggctcacacctgtaatccca 95160520
+                  0 |||||||||||||||||||||||||||||||||||||||||       41
+hg19_dna          8 cacaaaggggctgggcgtggtggctcacacctgtaatccca       49
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -1821,8 +3218,6 @@ numpy.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1830,13 +3225,30 @@ numpy.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr22      42144400 ???????????????????????????????????? 42144436
+                  0 ||||||||||||||||||||||||||||||||||||       36
+hg19_dna         11 ????????????????????????????????????       47
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[42144400:42144436],
                 "aaaggggctgggcgtggtagctcatgcctgtaatcc",
             )
             self.assertEqual(
                 alignment.query.seq[11:47], self.queries[alignment.query.id][11:47]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr22      42144400 aaaggggctgggcgtggtagctcatgcctgtaatcc 42144436
+                  0 ||||||||||||||||||.|||||..||||||||||       36
+hg19_dna         11 aaaggggctgggcgtggtggctcacacctgtaatcc       47
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -1874,8 +3286,6 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 48))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1883,11 +3293,28 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2      183925984 ??????----?????????????????????????????????????? 183926028
+                  0 ||||||----||||||||||||||||||||||||||||||||||||||        48
+hg19_dna          1 ????????????????????????????????????????????????        49
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(alignment.target.seq[183925984:183925990], "aaaaat")
             self.assertEqual(
                 alignment.target.seq[183925990:183926028],
                 "aaaggggctgggcgtggtggctcacgcctgtaatccca",
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2      183925984 aaaaat----aaaggggctgggcgtggtggctcacgcctgtaatccca 183926028
+                  0 ||||||----|||||||||||||||||||||||||.||||||||||||        48
+hg19_dna          1 aaaaat????aaaggggctgggcgtggtggctcacacctgtaatccca        49
+""",
             )
             self.assertEqual(
                 alignment.query.seq[1:7], self.queries[alignment.query.id][1:7]
@@ -1917,8 +3344,6 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 170))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1926,13 +3351,46 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19      35483340 ????????????????????????????????????????????????????????????
+                  0 |||||||||||||||||||||||||-----------------------------------
+hg19_dna         10 ?????????????????????????-----------------------------------
+
+chr19      35483400 ????????????????????????????????????????????????????????????
+                 60 ------------------------------------------------------------
+hg19_dna         35 ------------------------------------------------------------
+
+chr19      35483460 ?????????????????????????????????????????????????? 35483510
+                120 ---------------------------------------|||||||||||      170
+hg19_dna         35 ---------------------------------------???????????       46
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[35483340:35483365], "caaaggggctgggcgtagtggctga"
             )
             self.assertEqual(alignment.target.seq[35483499:35483510], "cacctgtaatc")
             self.assertEqual(
                 alignment.query.seq[10:46], self.queries[alignment.query.id][10:46]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19      35483340 caaaggggctgggcgtagtggctga???????????????????????????????????
+                  0 ||||||||||||||||.||||||.|-----------------------------------
+hg19_dna         10 caaaggggctgggcgtggtggctca-----------------------------------
+
+chr19      35483400 ????????????????????????????????????????????????????????????
+                 60 ------------------------------------------------------------
+hg19_dna         35 ------------------------------------------------------------
+
+chr19      35483460 ???????????????????????????????????????cacctgtaatc 35483510
+                120 ---------------------------------------|||||||||||      170
+hg19_dna         35 ---------------------------------------cacctgtaatc       46
+""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -1956,8 +3414,6 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -1965,13 +3421,30 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr18      23891310 ??????????????????????????????????????? 23891349
+                  0 |||||||||||||||||||||||||||||||||||||||       39
+hg19_dna         10 ???????????????????????????????????????       49
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[23891310:23891349],
                 "caaaggggctgggcgtggtggctcacacctgtaatccca",
             )
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr18      23891310 caaaggggctgggcgtggtggctcacacctgtaatccca 23891349
+                  0 |||||||||||||||||||||||||||||||||||||||       39
+hg19_dna         10 caaaggggctgggcgtggtggctcacacctgtaatccca       49
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -2010,8 +3483,6 @@ numpy.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 28))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2019,12 +3490,29 @@ numpy.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr18      43252217 ???????????????????????????? 43252245
+                  0 ||||||||||||||||||||||||||||       28
+hg19_dna         21 ????????????????????????????       49
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[43252217:43252245], "ggcgtggtggctcacgcctgtaatccca"
             )
             self.assertEqual(
                 alignment.query.seq[21:49], self.queries[alignment.query.id][21:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr18      43252217 ggcgtggtggctcacgcctgtaatccca 43252245
+                  0 |||||||||||||||.||||||||||||       28
+hg19_dna         21 ggcgtggtggctcacacctgtaatccca       49
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -2062,8 +3550,6 @@ numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 54))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2071,7 +3557,20 @@ numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 115169878)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr13      52759147 ?????????????---??????????????????????????????????????
+                  0 |||||||---------||||||||||||||||||||||||||||||||||||||
+hg19_dna          1 ???????------?????????????????????????????????????????
+
+chr13      52759198
+                 54
+hg19_dna         49
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(alignment.target.seq[52759147:52759154], "aaaaatt")
             self.assertEqual(
                 alignment.target.seq[52759160:52759198],
@@ -2082,6 +3581,18 @@ numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
             )
             self.assertEqual(
                 alignment.query.seq[38:49], self.queries[alignment.query.id][38:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr13      52759147 aaaaatt??????---aaaggggctgggcgtggtggctcacgcctgtaatccca
+                  0 |||||||---------|||||||||||||||||||||||||.||||||||||||
+hg19_dna          1 aaaaatt------???aaaggggctgggcgtggtggctcacacctgtaatccca
+
+chr13      52759198
+                 54
+hg19_dna         49
+""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -2105,8 +3616,6 @@ numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 50))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2114,12 +3623,29 @@ numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1        1207056 ?????????????????????????????????????????????????? 1207106
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||      50
+hg19_dna          0 ??????????????????????????????????????????????????      50
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[1207056:1207106],
                 "caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa",
             )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1        1207056 caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa 1207106
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||      50
+hg19_dna          0 caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa      50
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     numpy.array(alignment, "U"),
@@ -2159,8 +3685,6 @@ numpy.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2168,13 +3692,30 @@ numpy.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       61700837 ?????????????????????????????????? 61700871
+                  0 ||||||||||||||||||||||||||||||||||       34
+hg19_dna          1 ??????????????????????????????????       35
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[61700837:61700871],
                 "aaaaatgaacaaaggggctgggcgcggtggctca",
             )
             self.assertEqual(
                 alignment.query.seq[1:35], self.queries[alignment.query.id][1:35]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       61700837 aaaaatgaacaaaggggctgggcgcggtggctca 61700871
+                  0 ||||||..||||||||||||||||.|||||||||       34
+hg19_dna          1 aaaaattcacaaaggggctgggcgtggtggctca       35
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -2212,8 +3753,6 @@ numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 44))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2221,7 +3760,16 @@ numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr4       37558157 ????????????????----------?????????????????? 37558191
+                  0 ||||||||||----------------||||||||||||||||||       44
+hg19_dna         49 ??????????------????????????????????????????       11
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(alignment.target.seq[37558157:37558167], "tgggattaca")
             self.assertEqual(
                 alignment.target.seq[37558173:37558191], "accacgcccagccccttt"
@@ -2231,6 +3779,14 @@ numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
             )
             self.assertEqual(
                 alignment.query.seq[39:49], self.queries[alignment.query.id][39:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr4       37558157 tgggattaca??????----------accacgcccagccccttt 37558191
+                  0 ||||||||||----------------||||||||||||||||||       44
+hg19_dna         49 tgggattaca------??????????accacgcccagccccttt       11
+""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -2254,8 +3810,6 @@ numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 37))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2263,13 +3817,30 @@ numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr22      48997405 ????????????????????????????????????? 48997442
+                  0 |||||||||||||||||||||||||||||||||||||       37
+hg19_dna         49 ?????????????????????????????????????       12
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[48997405:48997442],
                 "tgggattacaggcgggagccaccacgcccagcccctt",
             )
             self.assertEqual(
                 alignment.query.seq[12:49], self.queries[alignment.query.id][12:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr22      48997405 tgggattacaggcgggagccaccacgcccagcccctt 48997442
+                  0 ||||||||||||.|.||||||||||||||||||||||       37
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctt       12
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -2308,8 +3879,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2317,13 +3886,30 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2      120641740 ???????????????????????????????????? 120641776
+                  0 ||||||||||||||||||||||||||||||||||||        36
+hg19_dna         49 ????????????????????????????????????        13
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[120641740:120641776],
                 "tgggattacaggcgtgagccaccacgcccagcccct",
             )
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2      120641740 tgggattacaggcgtgagccaccacgcccagcccct 120641776
+                  0 ||||||||||||.|||||||||||||||||||||||        36
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct        13
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -2361,8 +3947,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2370,13 +3954,30 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19      54017130 ??????????????????????????????????????? 54017169
+                  0 |||||||||||||||||||||||||||||||||||||||       39
+hg19_dna         49 ???????????????????????????????????????       10
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[54017130:54017169],
                 "tgggattacaggtgtgagccaccacgcccagcccctttg",
             )
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19      54017130 tgggattacaggtgtgagccaccacgcccagcccctttg 54017169
+                  0 |||||||||||||||||||||||||||||||||||||||       39
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctttg       10
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -2415,8 +4016,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2424,13 +4023,30 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19        553742 ??????????????????????????????????????? 553781
+                  0 |||||||||||||||||||||||||||||||||||||||     39
+hg19_dna         49 ???????????????????????????????????????     10
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[553742:553781],
                 "tgggatgacaggggtgaggcaccacgcccagcccctttg",
             )
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19        553742 tgggatgacaggggtgaggcaccacgcccagcccctttg 553781
+                  0 ||||||.|||||.|||||.||||||||||||||||||||     39
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctttg     10
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -2469,8 +4085,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2478,13 +4092,30 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr10      99388555 ???????????????????????????????????? 99388591
+                  0 ||||||||||||||||||||||||||||||||||||       36
+hg19_dna         49 ????????????????????????????????????       13
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[99388555:99388591],
                 "tgggattataggcatgagccaccacgcccagcccct",
             )
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr10      99388555 tgggattataggcatgagccaccacgcccagcccct 99388591
+                  0 ||||||||.|||..||||||||||||||||||||||       36
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct       13
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -2522,8 +4153,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 25))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2531,12 +4160,29 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr10     112178171 ????????????????????????? 112178196
+                  0 |||||||||||||||||||||||||        25
+hg19_dna         35 ?????????????????????????        10
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[112178171:112178196], "tgagtcaccacgcccagcccctttg"
             )
             self.assertEqual(
                 alignment.query.seq[10:35], self.queries[alignment.query.id][10:35]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr10     112178171 tgagtcaccacgcccagcccctttg 112178196
+                  0 ||||.||||||||||||||||||||        25
+hg19_dna         35 tgagccaccacgcccagcccctttg        10
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -2573,8 +4219,6 @@ numpy.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2582,13 +4226,30 @@ numpy.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       39368490 ???????????????????????????????????? 39368526
+                  0 ||||||||||||||||||||||||||||||||||||       36
+hg19_dna         49 ????????????????????????????????????       13
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[39368490:39368526],
                 "tgggattacaggcgtgagccaccacgcccagcccct",
             )
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       39368490 tgggattacaggcgtgagccaccacgcccagcccct 39368526
+                  0 ||||||||||||.|||||||||||||||||||||||       36
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct       13
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -2626,8 +4287,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2635,13 +4294,30 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1      220325687 ?????????????????????????????????? 220325721
+                  0 ||||||||||||||||||||||||||||||||||        34
+hg19_dna         47 ??????????????????????????????????        13
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[220325687:220325721],
                 "ggattacaggcgtgagccaccacgcccagcccct",
             )
             self.assertEqual(
                 alignment.query.seq[13:47], self.queries[alignment.query.id][13:47]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1      220325687 ggattacaggcgtgagccaccacgcccagcccct 220325721
+                  0 ||||||||||.|||||||||||||||||||||||        34
+hg19_dna         47 ggattacaggtgtgagccaccacgcccagcccct        13
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -2704,8 +4380,6 @@ numpy.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 16))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2713,12 +4387,29 @@ numpy.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 33)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr4       61646095 ???????????????? 61646111
+                  0 ||||||||||||||||       16
+hg18_dna         11 ????????????????       27
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[61646095:61646111], "aggtaaactgccttca"
             )
             self.assertEqual(
                 alignment.query.seq[11:27], self.queries[alignment.query.id][11:27]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr4       61646095 aggtaaactgccttca 61646111
+                  0 ||||||||||||||||       16
+hg18_dna         11 aggtaaactgccttca       27
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -2754,8 +4445,6 @@ numpy.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 33))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2763,12 +4452,29 @@ numpy.array([['a', 'g', 'g', 't', 'a', 'a', 'a', 'c', 't', 'g', 'c', 'c', 't',
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 33)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       10271783 ????????????????????????????????? 10271816
+                  0 |||||||||||||||||||||||||||||||||       33
+hg18_dna          0 ?????????????????????????????????       33
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[10271783:10271816],
                 "atgagcttccaaggtaaactgccttcaagattc",
             )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       10271783 atgagcttccaaggtaaactgccttcaagattc 10271816
+                  0 |||||||||||||||||||||||||||||||||       33
+hg18_dna          0 atgagcttccaaggtaaactgccttcaagattc       33
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     numpy.array(alignment, "U"),
@@ -2805,8 +4511,6 @@ numpy.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 17))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2814,12 +4518,29 @@ numpy.array([['a', 't', 'g', 'a', 'g', 'c', 't', 't', 'c', 'c', 'a', 'a', 'g',
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 33)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2       53575980 ????????????????? 53575997
+                  0 |||||||||||||||||       17
+hg18_dna         25 ?????????????????        8
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[53575980:53575997], "aaggcagtttaccttgg"
             )
             self.assertEqual(
                 alignment.query.seq[8:25], self.queries[alignment.query.id][8:25]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2       53575980 aaggcagtttaccttgg 53575997
+                  0 |||||||||||||||||       17
+hg18_dna         25 aaggcagtttaccttgg        8
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -2855,8 +4576,6 @@ numpy.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2864,13 +4583,30 @@ numpy.array([['a', 'a', 'g', 'g', 'c', 'a', 'g', 't', 't', 't', 'a', 'c', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 141213431)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr9       85737865 ????????????????????????????????????????? 85737906
+                  0 |||||||||||||||||||||||||||||||||||||||||       41
+hg19_dna          9 ?????????????????????????????????????????       50
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[85737865:85737906],
                 "acaaaggggctgggcgcagtggctcacgcctgtaatcccaa",
             )
             self.assertEqual(
                 alignment.query.seq[9:], self.queries[alignment.query.id][9:]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr9       85737865 acaaaggggctgggcgcagtggctcacgcctgtaatcccaa 85737906
+                  0 ||||||||||||||||..|||||||||.|||||||||||||       41
+hg19_dna          9 acaaaggggctgggcgtggtggctcacacctgtaatcccaa       50
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -2910,8 +4646,6 @@ numpy.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2919,13 +4653,30 @@ numpy.array([['a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 146364022)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr8       95160479 ????????????????????????????????????????? 95160520
+                  0 |||||||||||||||||||||||||||||||||||||||||       41
+hg19_dna          8 ?????????????????????????????????????????       49
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[95160479:95160520],
                 "cacaaaggggctgggcgtggtggctcacacctgtaatccca",
             )
             self.assertEqual(
                 alignment.query.seq[8:49], self.queries[alignment.query.id][8:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr8       95160479 cacaaaggggctgggcgtggtggctcacacctgtaatccca 95160520
+                  0 |||||||||||||||||||||||||||||||||||||||||       41
+hg19_dna          8 cacaaaggggctgggcgtggtggctcacacctgtaatccca       49
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -2965,8 +4716,6 @@ numpy.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -2974,13 +4723,30 @@ numpy.array([['c', 'a', 'c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr22      42144400 ???????????????????????????????????? 42144436
+                  0 ||||||||||||||||||||||||||||||||||||       36
+hg19_dna         11 ????????????????????????????????????       47
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[42144400:42144436],
                 "aaaggggctgggcgtggtagctcatgcctgtaatcc",
             )
             self.assertEqual(
                 alignment.query.seq[11:47], self.queries[alignment.query.id][11:47]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr22      42144400 aaaggggctgggcgtggtagctcatgcctgtaatcc 42144436
+                  0 ||||||||||||||||||.|||||..||||||||||       36
+hg19_dna         11 aaaggggctgggcgtggtggctcacacctgtaatcc       47
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -3018,8 +4784,6 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 48))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3027,7 +4791,16 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2      183925984 ??????----?????????????????????????????????????? 183926028
+                  0 ||||||----||||||||||||||||||||||||||||||||||||||        48
+hg19_dna          1 ????????????????????????????????????????????????        49
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(alignment.target.seq[183925984:183925990], "aaaaat")
             self.assertEqual(
                 alignment.target.seq[183925990:183926028],
@@ -3038,6 +4811,14 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
             )
             self.assertEqual(
                 alignment.query.seq[11:49], self.queries[alignment.query.id][11:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2      183925984 aaaaat----aaaggggctgggcgtggtggctcacgcctgtaatccca 183926028
+                  0 ||||||----|||||||||||||||||||||||||.||||||||||||        48
+hg19_dna          1 aaaaat????aaaggggctgggcgtggtggctcacacctgtaatccca        49
+""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -3061,8 +4842,6 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 170))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3070,13 +4849,46 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19      35483340 ????????????????????????????????????????????????????????????
+                  0 |||||||||||||||||||||||||-----------------------------------
+hg19_dna         10 ?????????????????????????-----------------------------------
+
+chr19      35483400 ????????????????????????????????????????????????????????????
+                 60 ------------------------------------------------------------
+hg19_dna         35 ------------------------------------------------------------
+
+chr19      35483460 ?????????????????????????????????????????????????? 35483510
+                120 ---------------------------------------|||||||||||      170
+hg19_dna         35 ---------------------------------------???????????       46
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[35483340:35483365], "caaaggggctgggcgtagtggctga"
             )
             self.assertEqual(alignment.target.seq[35483499:35483510], "cacctgtaatc")
             self.assertEqual(
                 alignment.query.seq[10:46], self.queries[alignment.query.id][10:46]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19      35483340 caaaggggctgggcgtagtggctga???????????????????????????????????
+                  0 ||||||||||||||||.||||||.|-----------------------------------
+hg19_dna         10 caaaggggctgggcgtggtggctca-----------------------------------
+
+chr19      35483400 ????????????????????????????????????????????????????????????
+                 60 ------------------------------------------------------------
+hg19_dna         35 ------------------------------------------------------------
+
+chr19      35483460 ???????????????????????????????????????cacctgtaatc 35483510
+                120 ---------------------------------------|||||||||||      170
+hg19_dna         35 ---------------------------------------cacctgtaatc       46
+""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -3100,8 +4912,6 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3109,13 +4919,30 @@ numpy.array([['a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr18      23891310 ??????????????????????????????????????? 23891349
+                  0 |||||||||||||||||||||||||||||||||||||||       39
+hg19_dna         10 ???????????????????????????????????????       49
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[23891310:23891349],
                 "caaaggggctgggcgtggtggctcacacctgtaatccca",
             )
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr18      23891310 caaaggggctgggcgtggtggctcacacctgtaatccca 23891349
+                  0 |||||||||||||||||||||||||||||||||||||||       39
+hg19_dna         10 caaaggggctgggcgtggtggctcacacctgtaatccca       49
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -3154,8 +4981,6 @@ numpy.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 28))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3163,12 +4988,29 @@ numpy.array([['c', 'a', 'a', 'a', 'g', 'g', 'g', 'g', 'c', 't', 'g', 'g', 'g',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 78077248)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr18      43252217 ???????????????????????????? 43252245
+                  0 ||||||||||||||||||||||||||||       28
+hg19_dna         21 ????????????????????????????       49
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[43252217:43252245], "ggcgtggtggctcacgcctgtaatccca"
             )
             self.assertEqual(
                 alignment.query.seq[21:49], self.queries[alignment.query.id][21:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr18      43252217 ggcgtggtggctcacgcctgtaatccca 43252245
+                  0 |||||||||||||||.||||||||||||       28
+hg19_dna         21 ggcgtggtggctcacacctgtaatccca       49
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -3206,8 +5048,6 @@ numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 54))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3215,7 +5055,20 @@ numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 115169878)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr13      52759147 ?????????????---??????????????????????????????????????
+                  0 |||||||---------||||||||||||||||||||||||||||||||||||||
+hg19_dna          1 ???????------?????????????????????????????????????????
+
+chr13      52759198
+                 54
+hg19_dna         49
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(alignment.target.seq[52759147:52759154], "aaaaatt")
             self.assertEqual(
                 alignment.target.seq[52759160:52759198],
@@ -3226,6 +5079,18 @@ numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
             )
             self.assertEqual(
                 alignment.query.seq[38:49], self.queries[alignment.query.id][38:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr13      52759147 aaaaatt??????---aaaggggctgggcgtggtggctcacgcctgtaatccca
+                  0 |||||||---------|||||||||||||||||||||||||.||||||||||||
+hg19_dna          1 aaaaatt------???aaaggggctgggcgtggtggctcacacctgtaatccca
+
+chr13      52759198
+                 54
+hg19_dna         49
+""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -3249,8 +5114,6 @@ numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 50))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3258,12 +5121,29 @@ numpy.array([['g', 'g', 'c', 'g', 't', 'g', 'g', 't', 'g', 'g', 'c', 't', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1        1207056 ?????????????????????????????????????????????????? 1207106
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||      50
+hg19_dna          0 ??????????????????????????????????????????????????      50
+""",
+            )
         if fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[1207056:1207106],
                 "caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa",
             )
             self.assertEqual(alignment.query.seq, self.queries[alignment.query.id])
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1        1207056 caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa 1207106
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||      50
+hg19_dna          0 caaaaattcacaaaggggctgggcgtggtggctcacacctgtaatcccaa      50
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     numpy.array(alignment, "U"),
@@ -3303,8 +5183,6 @@ numpy.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3312,13 +5190,30 @@ numpy.array([['c', 'a', 'a', 'a', 'a', 'a', 't', 't', 'c', 'a', 'c', 'a', 'a',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       61700837 ?????????????????????????????????? 61700871
+                  0 ||||||||||||||||||||||||||||||||||       34
+hg19_dna          1 ??????????????????????????????????       35
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[61700837:61700871],
                 "aaaaatgaacaaaggggctgggcgcggtggctca",
             )
             self.assertEqual(
                 alignment.query.seq[1:35], self.queries[alignment.query.id][1:35]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       61700837 aaaaatgaacaaaggggctgggcgcggtggctca 61700871
+                  0 ||||||..||||||||||||||||.|||||||||       34
+hg19_dna          1 aaaaattcacaaaggggctgggcgtggtggctca       35
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -3356,8 +5251,6 @@ numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 44))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3365,7 +5258,16 @@ numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 191154276)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr4       37558157 ????????????????----------?????????????????? 37558191
+                  0 ||||||||||----------------||||||||||||||||||       44
+hg19_dna         49 ??????????------????????????????????????????       11
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(alignment.target.seq[37558157:37558167], "tgggattaca")
             self.assertEqual(
                 alignment.target.seq[37558173:37558191], "accacgcccagccccttt"
@@ -3375,6 +5277,14 @@ numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
             )
             self.assertEqual(
                 alignment.query.seq[39:49], self.queries[alignment.query.id][39:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr4       37558157 tgggattaca??????----------accacgcccagccccttt 37558191
+                  0 ||||||||||----------------||||||||||||||||||       44
+hg19_dna         49 tgggattaca------??????????accacgcccagccccttt       11
+""",
             )
         self.assertTrue(
             numpy.array_equal(
@@ -3398,8 +5308,6 @@ numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 37))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3407,13 +5315,30 @@ numpy.array([['a', 'a', 'a', 'a', 'a', 't', 'g', 'a', 'a', 'c', 'a', 'a', 'a',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 51304566)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr22      48997405 ????????????????????????????????????? 48997442
+                  0 |||||||||||||||||||||||||||||||||||||       37
+hg19_dna         49 ?????????????????????????????????????       12
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[48997405:48997442],
                 "tgggattacaggcgggagccaccacgcccagcccctt",
             )
             self.assertEqual(
                 alignment.query.seq[12:49], self.queries[alignment.query.id][12:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr22      48997405 tgggattacaggcgggagccaccacgcccagcccctt 48997442
+                  0 ||||||||||||.|.||||||||||||||||||||||       37
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctt       12
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -3452,8 +5377,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3461,13 +5384,30 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 243199373)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2      120641740 ???????????????????????????????????? 120641776
+                  0 ||||||||||||||||||||||||||||||||||||        36
+hg19_dna         49 ????????????????????????????????????        13
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[120641740:120641776],
                 "tgggattacaggcgtgagccaccacgcccagcccct",
             )
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr2      120641740 tgggattacaggcgtgagccaccacgcccagcccct 120641776
+                  0 ||||||||||||.|||||||||||||||||||||||        36
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct        13
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -3505,8 +5445,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3514,13 +5452,30 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19      54017130 ??????????????????????????????????????? 54017169
+                  0 |||||||||||||||||||||||||||||||||||||||       39
+hg19_dna         49 ???????????????????????????????????????       10
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[54017130:54017169],
                 "tgggattacaggtgtgagccaccacgcccagcccctttg",
             )
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19      54017130 tgggattacaggtgtgagccaccacgcccagcccctttg 54017169
+                  0 |||||||||||||||||||||||||||||||||||||||       39
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctttg       10
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -3559,8 +5514,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3568,13 +5521,30 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 't',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 59128983)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19        553742 ??????????????????????????????????????? 553781
+                  0 |||||||||||||||||||||||||||||||||||||||     39
+hg19_dna         49 ???????????????????????????????????????     10
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[553742:553781],
                 "tgggatgacaggggtgaggcaccacgcccagcccctttg",
             )
             self.assertEqual(
                 alignment.query.seq[10:49], self.queries[alignment.query.id][10:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr19        553742 tgggatgacaggggtgaggcaccacgcccagcccctttg 553781
+                  0 ||||||.|||||.|||||.||||||||||||||||||||     39
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccctttg     10
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -3613,8 +5583,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3622,13 +5590,30 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 'g', 'a', 'c', 'a', 'g', 'g', 'g',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr10      99388555 ???????????????????????????????????? 99388591
+                  0 ||||||||||||||||||||||||||||||||||||       36
+hg19_dna         49 ????????????????????????????????????       13
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[99388555:99388591],
                 "tgggattataggcatgagccaccacgcccagcccct",
             )
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr10      99388555 tgggattataggcatgagccaccacgcccagcccct 99388591
+                  0 ||||||||.|||..||||||||||||||||||||||       36
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct       13
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -3666,8 +5651,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 25))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3675,12 +5658,29 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 't', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 135534747)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr10     112178171 ????????????????????????? 112178196
+                  0 |||||||||||||||||||||||||        25
+hg19_dna         35 ?????????????????????????        10
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[112178171:112178196], "tgagtcaccacgcccagcccctttg"
             )
             self.assertEqual(
                 alignment.query.seq[10:35], self.queries[alignment.query.id][10:35]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr10     112178171 tgagtcaccacgcccagcccctttg 112178196
+                  0 ||||.||||||||||||||||||||        25
+hg19_dna         35 tgagccaccacgcccagcccctttg        10
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -3717,8 +5717,6 @@ numpy.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3726,13 +5724,30 @@ numpy.array([['t', 'g', 'a', 'g', 't', 'c', 'a', 'c', 'c', 'a', 'c', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       39368490 ???????????????????????????????????? 39368526
+                  0 ||||||||||||||||||||||||||||||||||||       36
+hg19_dna         49 ????????????????????????????????????       13
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[39368490:39368526],
                 "tgggattacaggcgtgagccaccacgcccagcccct",
             )
             self.assertEqual(
                 alignment.query.seq[13:49], self.queries[alignment.query.id][13:49]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1       39368490 tgggattacaggcgtgagccaccacgcccagcccct 39368526
+                  0 ||||||||||||.|||||||||||||||||||||||       36
+hg19_dna         49 tgggattacaggtgtgagccaccacgcccagcccct       13
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -3769,8 +5784,6 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3778,13 +5791,30 @@ numpy.array([['t', 'g', 'g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c',
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertEqual(len(alignment.target.seq), 249250621)
         self.assertEqual(len(alignment.query.seq), 50)
-        if fmt == "pslx":
+        if fmt == "psl":
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1      220325687 ?????????????????????????????????? 220325721
+                  0 ||||||||||||||||||||||||||||||||||        34
+hg19_dna         47 ??????????????????????????????????        13
+""",
+            )
+        elif fmt == "pslx":
             self.assertEqual(
                 alignment.target.seq[220325687:220325721],
                 "ggattacaggcgtgagccaccacgcccagcccct",
             )
             self.assertEqual(
                 alignment.query.seq[13:47], self.queries[alignment.query.id][13:47]
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
+chr1      220325687 ggattacaggcgtgagccaccacgcccagcccct 220325721
+                  0 ||||||||||.|||||||||||||||||||||||        34
+hg19_dna         47 ggattacaggtgtgagccaccacgcccagcccct        13
+""",
             )
             self.assertTrue(
                 numpy.array_equal(
@@ -3834,6 +5864,24 @@ numpy.array([['g', 'g', 'a', 't', 't', 'a', 'c', 'a', 'g', 'g', 'c', 'g', 't',
 
 
 class TestAlign_dnax_prot(unittest.TestCase):
+    @classmethod
+    def read_dna(cls, assembly, sequence):
+        path = "Blat/%s.fa" % assembly
+        records = SeqIO.parse(path, "fasta")
+        for record in records:
+            name, start_end = record.id.split(":")
+            if name == sequence.id:
+                break
+        else:
+            raise Exception("Failed to find DNA sequence")
+        start, end = start_end.split("-")
+        start = int(start)
+        end = int(end)
+        length = len(sequence)
+        sequence = str(record.seq)
+        dna = Seq({start: sequence}, length=length)
+        return dna
+
     def test_reading_psl_35_001(self):
         """Test parsing psl_35_001.psl and pslx_35_001.pslx."""
         self.check_reading_psl_35_001("psl")
@@ -3849,8 +5897,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3879,6 +5925,9 @@ class TestAlign_dnax_prot(unittest.TestCase):
                 feature.qualifiers["translation"][0],
                 "YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF",
             )
+            alignment.target.seq = TestAlign_dnax_prot.read_dna(
+                "hg38", alignment.target
+            )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3900,8 +5949,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3951,8 +5998,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -4010,8 +6055,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -4069,8 +6112,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -4116,8 +6157,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 0)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -4161,8 +6200,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 8)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -4211,8 +6248,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(alignment.misMatches, 26)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -4301,20 +6336,9 @@ class TestAlign_dnax_prot(unittest.TestCase):
         protein_alignments = []
         alignments = Align.parse(path, "psl")
         for i, alignment in enumerate(alignments):
-            records = SeqIO.parse("Blat/hg38.fa", "fasta")
-            for record in records:
-                name, start_end = record.id.split(":")
-                if name == alignment.sequences[0].id:
-                    break
-            else:
-                raise Exception("Failed to find DNA sequence")
-            start, end = start_end.split("-")
-            start = int(start)
-            end = int(end)
-            length = len(alignment.sequences[0])
-            sequence = str(record.seq)
-            dna = Seq({start: sequence}, length=length)
-            alignment.sequences[0].seq = dna
+            alignment.sequences[0].seq = TestAlign_dnax_prot.read_dna(
+                "hg38", alignment.sequences[0]
+            )
             self.assertEqual(alignment.sequences[1].id, protein.id)
             alignment.sequences[1].seq = protein.seq
             # The alignment is on the forward strand of the DNA sequence:
@@ -4460,8 +6484,6 @@ CAG33136.        60 YEL 63
         self.assertEqual(alignment.misMatches, 3)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -4514,7 +6536,7 @@ CAG33136.        60 YEL 63
                 "QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEIFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASMSPEERARYLENYDAIRVTHETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA",
             )
             # confirm that the feature coordinates are correct by extracting
-            # the feature sequence from the target sequence and tranlating it.
+            # the feature sequence from the target sequence and translating it.
             cds = feature.extract(self.dna[alignment.target.id]).translate()
             self.assertEqual(feature.qualifiers["translation"][0], cds)
         self.assertTrue(
@@ -4540,8 +6562,6 @@ CAG33136.        60 YEL 63
         self.assertEqual(alignment.misMatches, 22)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
-        self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -4580,7 +6600,7 @@ CAG33136.        60 YEL 63
                 "MEGQCWLPLEANPEVTNQLLQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQGQNITSSGYFMRQTISSACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASLSPEERAIYLENYDSIRVTHKTSDHEGQTEAQNIDEKVDLHFIALVHVDGHLYELDGWKPFPINHGETSDATLLRDAIEVFKKFRERDPDERRFNVIALSAA",
             )
             # confirm that the feature coordinates are correct by extracting
-            # the feature sequence from the target sequence and tranlating it.
+            # the feature sequence from the target sequence and translating it.
             cds = feature.extract(self.dna[alignment.target.id]).translate()
             self.assertEqual(feature.qualifiers["translation"][0], cds)
         self.assertTrue(
@@ -4604,8 +6624,6 @@ CAG33136.        60 YEL 63
         self.assertEqual(alignment.misMatches, 6)
         self.assertEqual(alignment.repMatches, 0)
         self.assertEqual(alignment.nCount, 0)
-        self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-        self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -4644,7 +6662,7 @@ CAG33136.        60 YEL 63
                 "MESQRWLPLEANPEVTNQFLKQLGLHPNWQCVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEIFRTEEEEKTKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHFESGSTLKKFLEESASMSPEERARYLENYDAIRVTHETSAHEGQTEAPNIDEKVDLHFIALVHVDGHLYELDAIEVCKKFMERDPDELRFNAIALSAA",
             )
             # confirm that the feature coordinates are correct by extracting
-            # the feature sequence from the target sequence and tranlating it.
+            # the feature sequence from the target sequence and translating it.
             cds = feature.extract(self.dna[alignment.target.id]).translate()
             self.assertEqual(feature.qualifiers["translation"][0], cds)
         self.assertTrue(
@@ -4700,20 +6718,9 @@ CAG33136.        60 YEL 63
         protein_alignments = []
         alignments = Align.parse(path, "psl")
         for i, alignment in enumerate(alignments):
-            records = SeqIO.parse("Blat/balAcu1.fa", "fasta")
-            for record in records:
-                name, start_end = record.id.split(":")
-                if name == alignment.sequences[0].id:
-                    break
-            else:
-                raise Exception("Failed to find DNA sequence")
-            start, end = start_end.split("-")
-            start = int(start)
-            end = int(end)
-            length = len(alignment.sequences[0])
-            sequence = str(record.seq)
-            dna = Seq({start: sequence}, length=length)
-            alignment.sequences[0].seq = dna
+            alignment.sequences[0].seq = TestAlign_dnax_prot.read_dna(
+                "balAcu1", alignment.sequences[0]
+            )
             self.assertEqual(alignment.sequences[1].id, protein.id)
             alignment.sequences[1].seq = protein.seq
             if i == 0 or i == 1:
@@ -4727,8 +6734,12 @@ CAG33136.        60 YEL 63
                     alignment.coordinates[0, 0], alignment.coordinates[0, -1]
                 )
                 # so we take the reverse complement:
-                alignment.coordinates[0, :] = len(dna) - alignment.coordinates[0, :]
-                alignment.sequences[0].seq = dna.reverse_complement()
+                alignment.coordinates[0, :] = (
+                    len(alignment.sequences[0].seq) - alignment.coordinates[0, :]
+                )
+                alignment.sequences[0].seq = alignment.sequences[
+                    0
+                ].seq.reverse_complement()
             # The protein alignment is always in the forward orientation:
             self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
             # Now extract the aligned sequences:

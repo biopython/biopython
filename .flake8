@@ -31,25 +31,33 @@ ignore =
     # =============================================================
     # Biopython's 'standard' ignores we can agree to always accept:
     # =============================================================
-    W503, # line-break before binary operator
-          # deliberately ignore (in favour of enforcing W504)
+    W503,
+    # line-break before binary operator
+    # deliberately ignore (in favour of enforcing W504)
     # ===========================================
     # Ignores that we have to accept for a while:
     # ===========================================
-    E203, # whitespace before ':'
-          # gives false positives after running black, see
-          # https://github.com/PyCQA/pycodestyle/issues/373
-    E501, # line too long
-          # Maybe we find a sensible limit, e.g. 88 (black) and enforce it
-    B007, # Loop control variable not used within the loop body.
-          # If this is intended, start the name with an underscore
-    B902, # blind except Exception: statement
+    E203,
+    # whitespace before ':'
+    # gives false positives after running black, see
+    # https://github.com/PyCQA/pycodestyle/issues/373
+    E501,
+    # line too long
+    # Maybe we find a sensible limit, e.g. 88 (black) and enforce it
+    B007,
+    # Loop control variable not used within the loop body.
+    # If this is intended, start the name with an underscore
+    B902,
+    # blind except Exception: statement
     # =========================================
     # Optional ignores for local installations:
     # =========================================
-    PIE781, # Assigning to temp variable and then returning, not enforcing
-    SFS101,SFS301, # typical string formatting
-    C8, # everything from flake8-commas - just use black
+    PIE781,
+    # Assigning to temp variable and then returning, not enforcing
+    SFS101,SFS301,
+    # typical string formatting
+    C8,
+    # everything from flake8-commas - just use black
 
 # ========================
 # Folder specific ignores:

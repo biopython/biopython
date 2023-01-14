@@ -17,8 +17,10 @@ also been tested on PyPy3.7 v7.3.5. We intend to drop Python 3.7 support.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Adam Vandergriff
 - Michiel de Hoon
 - Peter Cock
+- Joe Greener
 - Robert Miller
 
 18 November 2022: Biopython 1.80

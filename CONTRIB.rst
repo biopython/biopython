@@ -15,6 +15,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Aaron Rosenfeld <https://github.com/arosenfeld>
 - Adam Kurkiewicz <adam@kurkiewicz.pl>
 - Adam Novak <https://github.com/AdamNovak>
+- Adam Vandergriff <https://github.com/acvander>
 - Adhemar Zerlotini <https://github.com/azneto>
 - Adil Iqbal <https://github.com/Adil-Iqbal>
 - Adrian Altenhoff <https://github.com/alpae>

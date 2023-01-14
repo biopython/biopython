@@ -203,7 +203,7 @@ class ShrakeRupley:
         twice_maxradii = np.max(radii) * 2
 
         # Calculate ASAs
-        asa_array = np.zeros((n_atoms, 1), dtype=np.int)
+        asa_array = np.zeros((n_atoms, 1), dtype=np.int64)
         ptset = set(range(self.n_points))
         for i in range(n_atoms):
 

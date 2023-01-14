@@ -92,6 +92,20 @@ class TestNexusReading(unittest.TestCase):
         self.assertEqual(
             alignment.sequences[8].seq, "cccccccccccccccccccNcccccccccccccccccccccNcc"
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+t1                0 A-C-G-Tcgtgtgtgctct-t-t------acgtgtgtgctct-t-t 33
+t2 the na         0 A-C-GcTcgtg-----tct-t-t----acacgtg-----tct-t-t 26
+isn'that          0 A-CcGcTcgtgtgtgct--------acacacgtgtgtgct------ 31
+one shoul         0 A-C-G-T---------------------------------------  4
+t5                0 A-C?G-T?-acgt??-???-???--??---?-acgt??-???-??? 33
+t6                0 AcCaGtTc?--aaaaaaaa-a-aacgactac?--aaaaaaaa-a-a 38
+t7                0 A?C-GgTgggggggggggg-g-g??--?gggggggggggggg-g-g 39
+t8                0 AtCtGtTtttttttttttt-?-?ttttttttttttttttttt-?-? 42
+t9                0 cccccccccccccccccccNc-ccccccccccccccccccccNc-c 44
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -228,6 +242,14 @@ numpy.array([['A', '-', 'C', '-', 'G', '-', 'T', 'c', 'g', 't', 'g', 't', 'g',
         )
         self.assertEqual(alignment[0], "AAAAAGGCATTGTGGTGGGAAT")
         self.assertEqual(alignment[1], "?????????TTGTGGTGGGAAT")
+        self.assertEqual(
+            str(alignment),
+            """\
+Aegothele         0 AAAAAGGCATTGTGGTGGGAAT 22
+                  0 .........||||||||||||| 22
+Aerodramu         0 ?????????TTGTGGTGGGAAT 22
+""",
+        )
         self.assertEqual(
             format(alignment, "nexus"),
             """\

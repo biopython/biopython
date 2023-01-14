@@ -251,7 +251,7 @@ class TestCluster(unittest.TestCase):
                 [4.1, 2.2, 0.6, 5.5, 0.6],
                 [2.7, 2.5, 0.4, 5.7, 0.2],
             ],
-            numpy.float,
+            float,
         )
         try:
             treecluster(data, mask1)

@@ -68,6 +68,22 @@ class TestEmboss(unittest.TestCase):
             alignment.column_annotations["emboss_consensus"],
             "|||||||||||||||         ||||||||||||||||||||||||||||||||||||||||||||||||||          |||||||||||||||||||||||||||||||||||||||||||||||",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+IXI_234           0 TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTC
+                  0 |||||||||||||||---------||||||||||||||||||||||||||||||||||||
+IXI_235           0 TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTC
+
+IXI_234          60 TTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTG
+                 60 ||||||||||||||----------||||||||||||||||||||||||||||||||||||
+IXI_235          51 TTSTSTRHRGRSGW----------RASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTG
+
+IXI_234         120 PPAWAGDRSHE 131
+                120 ||||||||||| 131
+IXI_235         101 PPAWAGDRSHE 112
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 numpy.array(alignment, "U"),
@@ -141,6 +157,14 @@ numpy.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"], "||||||||| ||||||||"
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+asis             78 CGTTTGAGT-CTGGGATG 95
+                  0 |||||||||-|||||||| 18
+asis              0 CGTTTGAGTACTGGGATG 18
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 numpy.array(alignment, "U"),
@@ -196,6 +220,14 @@ numpy.array([['C', 'G', 'T', 'T', 'T', 'G', 'A', 'G', 'T', '-', 'C', 'T', 'G',
         self.assertEqual(alignment[1], "GVPPEEAGAAVAAESS")
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"], "|.||:......|.|||"
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+AF069992_        72 GPPPQSPDENRAGESS 88
+                  0 |.||.......|.||| 16
+CAA85685.        46 GVPPEEAGAAVAAESS 62
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -271,6 +303,22 @@ numpy.array([['G', 'P', 'P', 'P', 'Q', 'S', 'P', 'D', 'E', 'N', 'R', 'A', 'G',
             alignment.column_annotations["emboss_consensus"],
             "|:|.:|:.|.|.||||  :..|.|.|||.|:.:.:|.|:.:|..| |||.     |:.:||.|||||..|.::.:||:|::....:.||:||..||.|||.||:||.:.|:..||.|...||||.|.|:..|.:|.|:..|..||",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+HBA_HUMAN         2 LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH-----GSAQV
+                  0 |.|..|..|.|.||||--...|.|.|||.|.....|.|...|..|-|||.-----|...|
+HBB_HUMAN         3 LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+
+HBA_HUMAN        56 KGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPA
+                 60 |.|||||..|.....||.|........||.||..||.|||.||.||...|...||.|...
+HBB_HUMAN        61 KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+
+HBA_HUMAN       116 EFTPAVHASLDKFLASVSTVLTSKY 141
+                120 ||||.|.|...|..|.|...|..|| 145
+HBB_HUMAN       121 EFTPPVQAAYQKVVAGVANALAHKY 146
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 numpy.array(alignment, "U"),
@@ -335,6 +383,14 @@ numpy.array([['L', 'S', 'P', 'A', 'D', 'K', 'T', 'N', 'V', 'K', 'A', 'A', 'W',
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"], ":||...:.||:||"
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+HBA_HUMAN        60 KKVADALTNAVAH  73
+                  0 .||.....||.||  13
+HBB_HUMAN       131 QKVVAGVANALAH 144
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 numpy.array(alignment, "U"),
@@ -376,6 +432,14 @@ numpy.array([['K', 'K', 'V', 'A', 'D', 'A', 'L', 'T', 'N', 'A', 'V', 'A', 'H'],
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"], "|:.||.|..:.|...|:|"
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+HBA_HUMAN        90 KLRVDPVNFKLLSHCLLV 108
+                  0 |..||.|....|...|.|  18
+HBB_HUMAN        17 KVNVDEVGGEALGRLLVV  35
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 numpy.array(alignment, "U"),
@@ -416,6 +480,14 @@ numpy.array([['K', 'L', 'R', 'V', 'D', 'P', 'V', 'N', 'F', 'K', 'L', 'L', 'S',
         self.assertEqual(alignment[0], "LSALSDLHAH")
         self.assertEqual(alignment[1], "LGAFSDGLAH")
         self.assertEqual(alignment.column_annotations["emboss_consensus"], "|.|.||..||")
+        self.assertEqual(
+            str(alignment),
+            """\
+HBA_HUMAN        80 LSALSDLHAH 90
+                  0 |.|.||..|| 10
+HBB_HUMAN        68 LGAFSDGLAH 78
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 numpy.array(alignment, "U"),
@@ -456,6 +528,14 @@ numpy.array([['L', 'S', 'A', 'L', 'S', 'D', 'L', 'H', 'A', 'H'],
         self.assertEqual(alignment[0], "VKAAWGKVGA")
         self.assertEqual(alignment[1], "VQAAYQKVVA")
         self.assertEqual(alignment.column_annotations["emboss_consensus"], "|:||:.||.|")
+        self.assertEqual(
+            str(alignment),
+            """\
+HBA_HUMAN        10 VKAAWGKVGA  20
+                  0 |.||..||.|  10
+HBB_HUMAN       126 VQAAYQKVVA 136
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 numpy.array(alignment, "U"),
@@ -525,6 +605,22 @@ numpy.array([['V', 'K', 'A', 'A', 'W', 'G', 'K', 'V', 'G', 'A'],
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             "|||||||||||||||         ||||||||||||||||||||||||||||||||||||||||||||||||||          |||||||||||||||||||||||||||||||||||||||||||||||",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+IXI_234           0 TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTC
+                  0 |||||||||||||||---------||||||||||||||||||||||||||||||||||||
+IXI_235           0 TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTC
+
+IXI_234          60 TTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTG
+                 60 ||||||||||||||----------||||||||||||||||||||||||||||||||||||
+IXI_235          51 TTSTSTRHRGRSGW----------RASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTG
+
+IXI_234         120 PPAWAGDRSHE 131
+                120 ||||||||||| 131
+IXI_235         101 PPAWAGDRSHE 112
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -597,6 +693,22 @@ numpy.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             "||||||||||||||||||||||  |||||.||||.|||||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||  ||||.||||.|||||||||||||..|||||||",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+IXI_234           0 TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTC
+                  0 ||||||||||||||||||||||--|||||.||||.|||||||||.|||||||||||||||
+IXI_236           0 TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCCSAAPPRPQATGGWKTCSGTC
+
+IXI_234          60 TTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTG
+                 60 |||||||||||||||||||||||||||||||||||||--||||.||||.|||||||||||
+IXI_236          58 TTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR--GSRPPRFAPPLMSSCITSTTG
+
+IXI_234         120 PPAWAGDRSHE 131
+                120 ||..||||||| 131
+IXI_236         116 PPPPAGDRSHE 127
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -671,6 +783,22 @@ numpy.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             "|||||:||||||||||||||||| |||||||||||    |||||||||||||:||||||||||||||||||||:|||||||||||||||||||||||  |||||||||||||||:||||||||:|||||||",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+IXI_234           0 TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTC
+                  0 |||||.|||||||||||||||||-|||||||||||----|||||||||||||.|||||||
+IXI_237           0 TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----CSAAPRRPQATGGYKTCSGTC
+
+IXI_234          60 TTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTG
+                 60 |||||||||||||.|||||||||||||||||||||||--|||||||||||||||.|||||
+IXI_237          55 TTSTSTRHRGRSGYSARTTTAACLRASRKSMRAACSR--GSRPNRFAPTLMSSCLTSTTG
+
+IXI_234         120 PPAWAGDRSHE 131
+                120 |||.||||||| 131
+IXI_237         113 PPAYAGDRSHE 124
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -759,6 +887,22 @@ numpy.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
             alignment.column_annotations["emboss_consensus"],
             " :|:.||    :.|.|::|.:  :.|.....:|.:|.||:.:..:..|.:|::|..:|||.|::..|:::....:|.|:::|.:.|...::.:.|.||..:..| ..|:|.|: ||        ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+ref_rec           0 KILIVDD----QYGIRILLNEVFNKEGYQTFQAANGLQALDIVTKERPDLVLLDMKIPGM
+                  0 -.|..||----..|.|..|..--..|......|..|.||........|..|..|...|||
+gi|949687         0 -VLLADDHALVRRGFRLMLED--DPEIEIVAEAGDGAQAVKLAGELHPRVVVMDCAMPGM
+
+ref_rec          56 DGIEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHFAK-PFDIDEIRDAV----
+                 60 .|....|........|.|...|...|........|.||.....|-..|.|.|.-||----
+gi|949687        57 SGMDATKQIRTQWPDIAVLMLTMHSEDTWVRLALEAGANGYILKSAIDLDLIQ-AVRRVA
+
+ref_rec         111 ---- 111
+                120 ---- 124
+gi|949687       116 NGET 120
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 numpy.array(alignment, "U"),
@@ -824,6 +968,22 @@ numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', '-', '-', '-', '-', 'Q', 'Y',
             alignment.column_annotations["emboss_consensus"],
             " ||||||:......|:..|...|::.....|.::||:|...:..||:|.|:.:||.||:.:|:.:|.......|::|:....::|..::..||||....||...|::...|        ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+ref_rec           0 KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVTKERPDLVLLDMKIPGMDGIE
+                  0 -||||||.......|...|...|.......|...||.|......||.|.|...||.||..
+gi|949687         0 -ILIVDDEANTLASLSRAFRLAGHEATVCDNAVRALEIAKSKPFDLILSDVVMPGRDGLT
+
+ref_rec          60 ILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHFAKPFDIDEIRDAV--------
+                 60 .|...|.......|..|.......|......||||....||...|.....|--------
+gi|949687        59 LLEDLKTAGVQAPVVMMSGQAHIEMAVKATRLGALDFLEKPLSTDKLLLTVENALKLKR
+
+ref_rec         111
+                119
+gi|949687       118
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 numpy.array(alignment, "U"),
@@ -888,6 +1048,22 @@ numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             " .|::|||..|..:.:..||.:.|:..........|.:.:.....||.::|:.:....|:|:|:|.:|....:..:|:|....|:|...|...||:.:..||.|||.:.:..        ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+ref_rec           0 -KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVTKERPDLVLLDMKIPGMDGI
+                  0 -.|..|||..|.......||...|...........|.........||...|.......|.
+gi|949675         0 LHIVVVDDDPGTCVYIESVFAELGHTCKSFVRPEAAEEYILTHPVDLAIVDVYLGSTTGV
+
+ref_rec          59 EILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHFAKPFDIDEIRDAV--------
+                 60 |.|.|..|........|.|....|.|...|...||.....||.|||......--------
+gi|949675        60 EVLRRCRVHRPKLYAVIITGQISLEMAARSIAEGAVDYIQKPIDIDALLNIAERALEHKE
+
+ref_rec         111 
+                120 
+gi|949675       120 
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -960,6 +1136,22 @@ numpy.array([['-', 'K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R',
             alignment.column_annotations["emboss_consensus"],
             " :|:|:|:..:|....:.....||:...|.:|.:||.:.:|  ||.|:::.|:.:||:.|..:.:.:..|....:|:.|:.|.: :.:..:.|:.:.:.| .|||.:|    :||:.:",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+ref_rec           0 KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVTK--ERPDLVLLDMKIPGMDG
+                  0 -.|.|.|....|..........||....|..|..||....|--||.|....|...||..|
+gi|949700         0 -VLLVEDEEALRAAAGDFLETRGYKIMTARDGTEALSMASKFAERIDVLITDLVMPGISG
+
+ref_rec          58 IEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHF-AKPFDID----EIRDAV
+                 60 .........|.....|..|..|..-.......|......|-.|||..|----.||...
+gi|949700        59 RVLAQELVKIHPETKVMYMSGYDD-ETVMVNGEIDSSSAFLRKPFRMDALSAKIREVL
+
+ref_rec         111
+                118
+gi|949700       116
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 numpy.array(alignment, "U"),
@@ -1030,6 +1222,22 @@ numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             ".:|:|:|:.|:|.|:..:.:::||...:|.:|.:||:||  :.::.|::|.|:.:.||.|.|:.:|:::...:::||.|:.|.:..:::.    |.||..|    |||..|.:...|        ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+ref_rec           0 KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIV--TKERPDLVLLDMKIPGMDG
+                  0 ..|.|.|..|.|.|........||....|..|..||.||--.....|..|.|....||.|
+gi|949700         0 TVLLVEDEEGVRKLVRGILSRQGYHVLEATSGEEALEIVRESTQKIDMLLSDVVLVGMSG
+
+ref_rec          58 IEILKRMKVIDENIRVIIMTAYGELDMIQESKELGALTHFA----KPFDIDEIRDAV---
+                 60 .|...|.........||.|..|........----|.||..|----|||..|.....|---
+gi|949700        60 RELSERLRIQMPSLKVIYMSGYTDDAIVRH----GVLTESAEFLQKPFTSDSLLRKVRAV
+
+ref_rec         111 ----- 111
+                120 ----- 125
+gi|949700       116 LQKRQ 121
+""",
         )
         self.assertTrue(
             numpy.array_equal(
@@ -1123,6 +1331,58 @@ numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
             alignment.column_annotations["emboss_consensus"],
             "                                                                                                                                                                  .||||||                                .|||||.||      |||..|..||  ||||.||||.||.|    ||.|         ||.|.|||||.|||.||||.||||      | |||||||||||.|.|||||||     ||||||||.|  ||.|      |||.|.||||||||                 ||||||    .||||...||||..|||||..| |||||||||||             ||  ||.||.||.||                     ||..||.||.|.|||..||||.||  |||||    |    ||| |.|||     |||||||||.||| .||||||...|||||||||||||||||..| ||||||||                                                                                                 ",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+asis              0 TGTGGTTAGGTTTGGTTTTATTGGGGGCTTGGTTTGGGCCCACCCCAAATAGGGAGTGGG
+                  0 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis             60 GGTATGACCTCAGATAGACGAGCTTATTTTAGGGCGGCGACTATAATTATTTCGTTTCCT
+                 60 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis            120 ACAAGGATTAAAGTTTTTTCTTTTACTGTGGGAGGGGGTTTGGTATTAAGAAACGCTAGT
+                120 ------------------------------------------.||||||-----------
+asis              0 ------------------------------------------TTATTAA-----------
+
+asis            180 CCGGATGTGGCTCTCCATGATACTTATTGT------GTAGTAGCTCATTTTCATTATGTT
+                180 ---------------------.|||||.||------|||..|..||--||||.||||.||
+asis              7 ---------------------TCTTATGGTTTTGCCGTAAAATTTC--TTTCTTTATTTT
+
+asis            234 CTTCGAATGGGAGCAGTCATTGGTATTTTTTTGGTTTTTTTTT------GAAATTTTTAG
+                240 .|----||.|---------||.|.|||||.|||.||||.||||------|-|||||||||
+asis             44 TT----ATTG---------TTAGGATTTTGTTGATTTTATTTTTCTCAAG-AATTTTTAG
+
+asis            288 GTTATTTAGACC-----ATTTTTTTTT--GTTTCGCTAATTAGAATTTTATTAGCCTTTG
+                300 ||.|.|||||||-----||||||||.|--||.|------|||.|.||||||||-------
+asis             90 GTCAATTAGACCGGCTTATTTTTTTGTCAGTGT------TTAAAGTTTTATTA-------
+
+asis            341 GTTTTTTTTTATTTTT----TGGGGTTAAGACAAGGTGTCGT-TGAATTAGTTTAGCAAA
+                360 ----------||||||----.||||...||||..|||||..|-|||||||||||------
+asis            137 ----------ATTTTTGGGGGGGGGGGGAGACGGGGTGTTATCTGAATTAGTTT------
+
+asis            396 ATACTGCTTAAGGTAGGCTATA---------------------GGATCTACCTTTTATCT
+                420 -------||--||.||.||.||---------------------||..||.||.|.|||..
+asis            181 -------TT--GGGAGTCTCTAGACATCTCATGGGTTGGCCGGGGGCCTGCCGTCTATAG
+
+asis            435 TTCTAAT--CTTTT----GTTTTAGT-ATAATTGGTCTTCGATTCAACAATTTTTAGTCT
+                480 ||||.||--|||||----|----|||-|.|||-----|||||||||.|||-.||||||..
+asis            232 TTCTTATTCCTTTTAAGGG----AGTAAGAAT-----TTCGATTCAGCAA-CTTTAGTTC
+
+asis            488 TCAGTCTTTTTTTTTATTTTGAAAAGGTTTTAACACTCTTGGTTTTGGAGGCTTTGGCTT
+                540 .|||||||||||||||||..|-||||||||------------------------------
+asis            282 ACAGTCTTTTTTTTTATTAAG-AAAGGTTT------------------------------
+
+asis            548 TCTTCTTACTCTTAGGAGGATGGGCGCTAGAAAGAGTTTTAAGAGGGTGTGAAAGGGGGT
+                600 ------------------------------------------------------------
+asis            311 ------------------------------------------------------------
+
+asis            608 TAATAGC 615
+                660 ------- 667
+asis            311 ------- 311
+""",
+        )
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1211,6 +1471,254 @@ numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
             alignment.column_annotations["emboss_consensus"],
             "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              .||||||                                .|||||.||      |||..|..||  ||||.||||.||.|    ||.|         ||.|.|||||.|||.||||.||||      | |||||||||||.|.|||||||     ||||||||.|  ||.|      |||.|.||||||||                 ||||||    .||||...||||..|||||..| |||||||||||             ||  ||.||.||.||                     ||..||.||.|.|||..||||.||  |||||    |    ||| |.|||     |||||||||.||| .||||||...|||||||||||||||||..| |||||||||||.|.|||  ||||||| ||..||||.|.||||||  .|||| |||.|..||| |||||.||||||.||||||||||||.||||||||||||| ||.||||||||   |  |||||||||||||||||||||.|||||||||||.||.||||||||||||||.||||||||||||||||||||.|||||||||||.|||||.||  .||||.|||||||| ||||.|||| |||.||.||||||||.||||||| |||.||| |||.||||.|.|||  ||.|||||....|.|.||    |||||       ||||| ||..|||  ||.||||||.|||||.|||||||| ||||||||||||||||||||||||||||||||..||||||||||||.||||||||||||||||||||||| |   ||||         |||||       ||..||| ||   ||.|||.|.||||||| |.||||||||||||||| |||| ||||||||||||||||.||||||||||||||||| |||||||||||||||||||||||||||||||||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||||||.|||||||.||||||||||||||||||.||||||||.||.|| |||||||||| ||||            |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||.|||..|..|||||||||.||||||||||||||||||| |||    ||||    |..||||  |.|| .|||||||||||||||||||||||||||||||||||||.||||.||..||||||||.||..||||||||||||||||||||.|||||.|||||||||.|..|||||||||||||||||||||||||||||||||||.|||||..||||||||||||||.||||||.||| ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||.|||.|||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| |||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||||.|.|||||||||||||||||||||||||.||||||||||||||||||||.||||||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ||||||||||..||||||||||||||||||||||||.||  .||||||||||||||||||||||||||||||||||||",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+asis              0 TATTTTTTGGATTTTTTTCTAGATTTTCTAGGTTATTTAAACCGTTTTTTTTTAATTTAG
+                  0 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis             60 TGTTTGAGTTTTGACAGGTCTCCACTTTGGGGGCTCCATCGCAAGGAAATTAGAATTCTT
+                 60 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis            120 ATACTTGGTTCTCTTTCCCAGGGACTCCAAGGATCTTTTCATTAGTTTGGATTTTGGTGT
+                120 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis            180 TTTCTTTAATTTTGTTAAGAAACAAATCCTTTCTAGAGTTTTTTCTAGCATTATGTTTTT
+                180 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis            240 TTTTCTCCTTATCTAAGGGGGTTTGTCGAGGTTTCTTAAATCTTTTTTTCTCTGGGTTTT
+                240 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis            300 AAAATTGTTTAAATTTTTTTGACCGAGGGGTTGGGGTGGTTTTCTCATGATAACAGGGGC
+                300 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis            360 TGGTGCTTTAGATCCTACCTCTACTGACCCGGGGTCTGCTACTGTGGCTTCTGATGAAGA
+                360 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis            420 TCCACAGTATGCGCCTACGGAARCTCGGCAGTTTGGTGTTCGAAATCCAGCCCCTCGAAT
+                420 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis            480 TAATACTCTTGTGCAGGTGGTTGACGAGCGCGGTATCGAATTGCAAAATTTGGGGCGGGA
+                480 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis            540 CCCCGCTGTTCCGCCTGTTGCTCCGGGGGGGGCAGGTTAATCCTCCAGTCGTCTCCTTTT
+                540 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis            600 GGGGGCGTCTTTGACGGGGGTTTAAATCTTTCTTTGGTTGTGGATAGGATTTTTTTTCTA
+                600 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis            660 ATATCGATCCTACCTGTTTTGGCGGGGCTATTACTTTGTTACTTTTGACCGAAATTTTAA
+                660 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis            720 TGGAAATTTCTTTGATTCAAATGAATCCCTTAGTTTTCCAACACTTTTTTTTGGTTTTTT
+                720 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis            780 TAGGGATAGTCTACGCTGTGGTTAGGTTTGGTTTTATTGGGGGCTTGGTTTGGGCCCACC
+                780 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis            840 CCAAATAGGGAGTGGGGGTATGACCTCAGATAGACGAGCTTATTTTAGGGCGGCGACTAT
+                840 ------------------------------------------------------------
+asis              0 ------------------------------------------------------------
+
+asis            900 AATTATTTCGTTTCCTACAAGGATTAAAGTTTTTTCTTTTACTGTGGGAGGGGGTTTGGT
+                900 ----------------------------------------------------------.|
+asis              0 ----------------------------------------------------------TT
+
+asis            960 ATTAAGAAACGCTAGTCCGGATGTGGCTCTCCATGATACTTATTGT------GTAGTAGC
+                960 |||||--------------------------------.|||||.||------|||..|..
+asis              2 ATTAA--------------------------------TCTTATGGTTTTGCCGTAAAATT
+
+asis           1014 TCATTTTCATTATGTTCTTCGAATGGGAGCAGTCATTGGTATTTTTTTGGTTTTTTTTT-
+               1020 ||--||||.||||.||.|----||.|---------||.|.|||||.|||.||||.||||-
+asis             30 TC--TTTCTTTATTTTTT----ATTG---------TTAGGATTTTGTTGATTTTATTTTT
+
+asis           1073 -----GAAATTTTTAGGTTATTTAGACC-----ATTTTTTTTT--GTTTCGCTAATTAGA
+               1080 -----|-|||||||||||.|.|||||||-----||||||||.|--||.|------|||.|
+asis             75 CTCAAG-AATTTTTAGGTCAATTAGACCGGCTTATTTTTTTGTCAGTGT------TTAAA
+
+asis           1121 ATTTTATTAGCCTTTGGTTTTTTTTTATTTTT----TGGGGTTAAGACAAGGTGTCGT-T
+               1140 .||||||||-----------------||||||----.||||...||||..|||||..|-|
+asis            128 GTTTTATTA-----------------ATTTTTGGGGGGGGGGGGAGACGGGGTGTTATCT
+
+asis           1176 GAATTAGTTTAGCAAAATACTGCTTAAGGTAGGCTATA---------------------G
+               1200 ||||||||||-------------||--||.||.||.||---------------------|
+asis            171 GAATTAGTTT-------------TT--GGGAGTCTCTAGACATCTCATGGGTTGGCCGGG
+
+asis           1215 GATCTACCTTTTATCTTTCTAAT--CTTTT----GTTTTAGT-ATAATTGGTCTTCGATT
+               1260 |..||.||.|.|||..||||.||--|||||----|----|||-|.|||-----|||||||
+asis            216 GGCCTGCCGTCTATAGTTCTTATTCCTTTTAAGGG----AGTAAGAAT-----TTCGATT
+
+asis           1268 CAACAATTTTTAGTCTTCAGTCTTTTTTTTTATTTTGAAAAGGTTTTAACACTCT--TGG
+               1320 ||.|||-.||||||...|||||||||||||||||..|-|||||||||||.|.|||--|||
+asis            267 CAGCAA-CTTTAGTTCACAGTCTTTTTTTTTATTAAG-AAAGGTTTTAATATTCTTGTGG
+
+asis           1326 TTTTGGAGGCTTTGGCTTTCTT--CTTACTCTTAGGAGGA-TGGGCGCTAGAAAGAGTTT
+               1380 ||||-||..||||.|.||||||--.||||-|||.|..|||-|||||.||||||.||||||
+asis            325 TTTT-GAACCTTTAGGTTTCTTTCTTTAC-CTTCGAGGGATTGGGCACTAGAATGAGTTT
+
+asis           1383 TAAGAGGGTGTGAAAGGGGG-TTAATAGCAGG---ATTTGCTTTTTTAACTTATACTGGT
+               1440 ||||||.|||||||||||||-||.||||||||---|--|||||||||||||||||||||.
+asis            383 TAAGAGTGTGTGAAAGGGGGCTTGATAGCAGGGGAA--TGCTTTTTTAACTTATACTGGC
+
+asis           1439 TCGTAACGCATTAGCTCAACTCTCTCTTGTAGTTCTAGCAGCCGCCTTTTCTTTGTTGGG
+               1500 |||||||||||.||.||||||||||||||.||||||||||||||||||||.|||||||||
+asis            441 TCGTAACGCATCAGTTCAACTCTCTCTTGCAGTTCTAGCAGCCGCCTTTTTTTTGTTGGG
+
+asis           1499 GGAGGGTTTAGGAGGAGTCTTTTTTTTCCTAACCCAA-GGTGTTTCTTTCTTTTTTTCTT
+               1560 ||.|||||.||--.||||.||||||||-||||.||||-|||.||.||||||||.||||||
+asis            501 GGGGGGTTAAG--AGAGTGTTTTTTTT-CTAATCCAAGGGTCTTACTTTCTTTCTTTCTT
+
+asis           1558 T-AAAGTTC-TTGACTGTTGGCAC--TTGTCTCCATAAATTTTC----TTTCTTGTAAAG
+               1620 |-|||.|||-|||.||||.|.|||--||.|||||....|.|.||----|||||-------
+asis            558 TAAAAATTCTTTGGCTGTCGACACCTTTCTCTCCCGTCAGTCTCATGGTTTCT-------
+
+asis           1610 GGCTC-CTAAGGC--TTCTTGTTTCTGAATTCCTCTTTTCTTTTATTCTGTTTTGAGCTT
+               1680 |||||-||..|||--||.||||||.|||||.||||||||-||||||||||||||||||||
+asis            611 GGCTCTCTTGGGCTTTTTTTGTTTGTGAATGCCTCTTTT-TTTTATTCTGTTTTGAGCTT
+
+asis           1667 ATTTTTCTTGTTAGCTATTACGTAGGCATAGGGCAAATAATTTTTTTTTCTG---CTCT-
+               1740 ||||||||||||..||||||||||||.|||||||||||||||||||||||-|---||||-
+asis            670 ATTTTTCTTGTTTACTATTACGTAGGTATAGGGCAAATAATTTTTTTTTC-GCGTCTCTT
+
+asis           1723 --------CATTA-------TTCCTTCTCC---CTGCTTGTTTCACCCT-GTGGGCTCTT
+               1800 --------|||||-------||..|||-||---||.|||.|.|||||||-|.||||||||
+asis            729 GGCATGCCCATTACTCTAGTTTTATTC-CCGGGCTTCTTCTCTCACCCTAGAGGGCTCTT
+
+asis           1764 TGAGCCC-CACT-AAGTGAGCGGGGCTCCTGCTTCCGCTCAATTAAATTTTGGTGGGTAT
+               1860 |||||||-||||-||||||||||||||||.|||||||||||||||||-||||||||||||
+asis            788 TGAGCCCACACTCAAGTGAGCGGGGCTCCCGCTTCCGCTCAATTAAA-TTTGGTGGGTAT
+
+asis           1822 TGAGTCTCAGAGGGACTATGATATAGGTTCAGATTGATGGACCTAATCAATCAATTGTAT
+               1920 |||||||||||||||||||||||||||||||||||||||||||||.||||||||||||||
+asis            847 TGAGTCTCAGAGGGACTATGATATAGGTTCAGATTGATGGACCTAGTCAATCAATTGTAT
+
+asis           1882 CGCTATACAATCTAGTACCCCTACCAGGGTACCAAGAGAGAGATAACTAGGGTGAATACT
+               1980 ||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||
+asis            907 CGCTATACAATCTAGTACCCCTACCAGGGTACCAGGAGAGAGATAACTAGGGTGAATACT
+
+asis           1942 ACGACTTAGATGTAGTGTTTAAGTTTCTACGGGCTACAGAGAAGCTACCCGCAGGGTAYA
+               2040 ||||||||||||||.|||||||||||||||||||||||||||||||||||||||||||.|
+asis            967 ACGACTTAGATGTACTGTTTAAGTTTCTACGGGCTACAGAGAAGCTACCCGCAGGGTATA
+
+asis           2002 TATTTGTTCATTACATATTTGTTGACTTTTCTATCTCTGCTTTTACTTTTT-TATTTATT
+               2100 ||||||.||||||||||||||||||.||||||||.||.||-||||||||||-||||----
+asis           1027 TATTTGCTCATTACATATTTGTTGATTTTTCTATGTCCGC-TTTACTTTTTATATT----
+
+asis           2061 TTTAAATCTTTTTAACTTCAGCTGTTTTTCCTTATCTATTTGACGTAGGCATAGGAAAGT
+               2160 --------||||||||||||||||||||||||||||||||||||||||||||||||||||
+asis           1082 --------TTTTTAACTTCAGCTGTTTTTCCTTATCTATTTGACGTAGGCATAGGAAAGT
+
+asis           2121 TAACGAATTTTGTAATATTTTTAATTATTTTGTATAGTATACAGGGTAGTGGTATGTAAT
+               2220 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+asis           1134 TAACGAATTTTGTAATATTTTTAATTATTTTGTATAGTATACAGGGTAGTGGTATGTAAT
+
+asis           2181 AGGTAAATTCCATAAGTTCATTATAGTTTATCAGTTGAGAGGAATTTAGTATAAGAAGGC
+               2280 |||||||||||||||||||||||||||.|||||||||||||||||||||||||||||.||
+asis           1194 AGGTAAATTCCATAAGTTCATTATAGTCTATCAGTTGAGAGGAATTTAGTATAAGAAAGC
+
+asis           2241 CCATTGGGGCTCTTGTCTTATCCAAGAACTGGTAA-GATTTAATTCT----ACCGGGA--
+               2340 |..|..|||||||||.|||||||||||||||||||-|||----||||----|..||||--
+asis           1254 CTGTCAGGGCTCTTGCCTTATCCAAGAACTGGTAAGGAT----TTCTTGACAGAGGGACT
+
+asis           2294 CGGTAGAAATCGGGCAGAGCATGATCTATTTCTTCGGGTATGGCTATAGGGACTAGGTGC
+               2400 |.||-.|||||||||||||||||||||||||||||||||||||.||||.||..|||||||
+asis           1310 CTGT-CAAATCGGGCAGAGCATGATCTATTTCTTCGGGTATGGTTATAAGGCTTAGGTGC
+
+asis           2354 TAGGGAGGTATTAGGGCACCGCTCTTTATACAATCTCCATAGATACAACCAGGTCAACTA
+               2460 |.||..||||||||||||||||||||.|||||.|||||||||.|..||||||||||||||
+asis           1369 TTGGAGGGTATTAGGGCACCGCTCTTAATACAGTCTCCATAGGTGTAACCAGGTCAACTA
+
+asis           2414 GGACAACGGAGGACGTTGACAGAGCATAAATAGCGATAGCGTACAAGATAWAATAGGGGC
+               2520 |||||||||||||||||||||.|||||..||||||||||||||.||||||.|||-|||||
+asis           1429 GGACAACGGAGGACGTTGACAAAGCATGGATAGCGATAGCGTAGAAGATAAAAT-GGGGC
+
+asis           2474 AGTGGTAGCGAAGCGTAGAAGAAAAAATAAGAGTATTGTTTGTAAATAATTCTTTTTTTA
+               2580 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+asis           1488 AGTGGTAGCGAAGCGTAGAAGAAAAAATAAGAGTATTGTTTGTAAATAATTCTTTTTTTA
+
+asis           2534 GTTTTTAAATATTCTTTTTTTAGGTGGTGTGTGGTTAGGTATGGGGTTAAGGGTGTGGCA
+               2640 |||||||||||||||||||||||||||||||||||||||||||||||||.|||.||||||
+asis           1548 GTTTTTAAATATTCTTTTTTTAGGTGGTGTGTGGTTAGGTATGGGGTTAGGGGAGTGGCA
+
+asis           2594 AAGAGAAATGTTTATTAAACATTCTTATGGCCGTAGATAGCATATCGATTATACGAGACC
+               2700 |||||||.||||||||||||||||||||||||||||||||||||||||||||||||||||
+asis           1608 AAGAGAAGTGTTTATTAAACATTCTTATGGCCGTAGATAGCATATCGATTATACGAGACC
+
+asis           2654 TTCGTAAGATCAATCCCCACTAGCATTGCTCATACAGGTTAACTCAATAGGAGGAGCTGG
+               2760 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+asis           1668 TTCGTAAGATCAATCCCCACTAGCATTGCTCATACAGGTTAACTCAATAGGAGGAGCTGG
+
+asis           2714 GGTAGAACGTTTCTAGTTCGGGGGTAACCGCAGTTCAATGAAAGTGACGACGTCGGATGG
+               2820 ||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||
+asis           1728 GGTAGAACGTATCTAGTTCGGGGGTAACCGCAGTTCAATGAAAGTGACGACGTCGGATGG
+
+asis           2774 AACAAACTTAATACCACCAGTTGTGCTAACGATTGTTATCTCAATCTATCCCAACAGGCC
+               2880 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+asis           1788 AACAAACTTAATACCACCAGTTGTGCTAACGATTGTTATCTCAATCTATCCCAACAGGCC
+
+asis           2834 CCCAGGTAGTGATGAGTGGTGGAATGGTACAGGGTACCAGTGGGTGAAGAGCGTCACGAA
+               2940 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+asis           1848 CCCAGGTAGTGATGAGTGGTGGAATGGTACAGGGTACCAGTGGGTGAAGAGCGTCACGAA
+
+asis           2894 CCAGGGAATACGGAGTACAGAGTTGAGCGCCCGGGGCTCCGCCCCCGGCTTTTATAGCGC
+               3000 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+asis           1908 CCAGGGAATACGGAGTACAGAGTTGAGCGCCCGGGGCTCCGCCCCCGGCTTTTATAGCGC
+
+asis           2954 GAGACGTGGTCAGTCGATTCAGCGTTAGG-TTTAAACTCCTTTGGCAAAGATTGACTCTA
+               3060 |||||||||||||||||||||||||||||-|||||||||||||||||||||||||.||||
+asis           1968 GAGACGTGGTCAGTCGATTCAGCGTTAGGTTTTAAACTCCTTTGGCAAAGATTGATTCTA
+
+asis           3013 GCGATCCAGAGACCCTGCCTGGCATAAAAGTCTTTATWAACACCAGTAGGTTCAATAAGG
+               3120 |||||||||||||||||||||||||||||||||||||.|.||||||||||||||||||||
+asis           2028 GCGATCCAGAGACCCTGCCTGGCATAAAAGTCTTTATTAGCACCAGTAGGTTCAATAAGG
+
+asis           3073 TAGTAATCCAATAGAATGGAAAACTCAAGATCTAATCTCTCGAYTTCCTAGTGTCATGGA
+               3180 |||||.||||||||||||||||||||.||||||||||||||||.||||||||||||||||
+asis           2088 TAGTAGTCCAATAGAATGGAAAACTCGAGATCTAATCTCTCGATTTCCTAGTGTCATGGA
+
+asis           3133 AATCAGCCAGGTTCTCTTCATCTGCAACAGTAGAAGAAGAAGAGAGACTAGCGAGAGAGT
+               3240 ||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||
+asis           2148 AATCAGCCAGGTTCTCTTCATCTGCAACAGTAGAAGAAGAAGAGAGGCTAGCGAGAGAGT
+
+asis           3193 CTTATGGCGGAGACGCTAAGGCTTAAATGTAATGTAGATAACCCCTTACGGAACACTAGA
+               3300 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||.||
+asis           2208 CTTATGGCGGAGACGCTAAGGCTTAAATGTAATGTAGATAACCCCTTACGGAACACTTGA
+
+asis           3253 GTGCGACGTAGACTACATAATCCCTCAGGGATATTAGCTCTGCTCGATTAACAATAGCAT
+               3360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+asis           2268 GTGCGACGTAGACTACATAATCCCTCAGGGATATTAGCTCTGCTCGATTAACAATAGCAT
+
+asis           3313 ACTTTGTTACACGGAGTGTATCTAGGGGGAATAATACTAACTTACTTAGCACTATCGCGA
+               3420 |||||||||||||||||||||||.||||||||||||||||||||||||||||||||||||
+asis           2328 ACTTTGTTACACGGAGTGTATCTGGGGGGAATAATACTAACTTACTTAGCACTATCGCGA
+
+asis           3373 TGCTACGCATTCGCTCTTTCGCTAAATAAGATACGACGATGAGTGGTTGGTGGAGAGAAT
+               3480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+asis           2388 TGCTACGCATTCGCTCTTTCGCTAAATAAGATACGACGATGAGTGGTTGGTGGAGAGAAT
+
+asis           3433 AACCGATTCTAACTTGATAATTCGCATGAAATAATTTTTTTATTTTGTTTTTTTTTTGCT
+               3540 ||||||||||||||||||||||||||||||||||-||||||||||..|||||||||||||
+asis           2448 AACCGATTCTAACTTGATAATTCGCATGAAATAA-TTTTTTATTTGTTTTTTTTTTTGCT
+
+asis           3493 CTTAATTTTAGWGGGRGTGTTTATTTTTATTCTAATAAAAAGGATCCGTTGAA 3546
+               3600 |||||||||||.||--.|||||||||||||||||||||||||||||||||||| 3653
+asis           2507 CTTAATTTTAGAGG--ATGTTTATTTTTATTCTAATAAAAAGGATCCGTTGAA 2558
+""",
+        )
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1269,6 +1777,22 @@ numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
             alignment.column_annotations["emboss_consensus"],
             "|||||||||||||||||||                                                                                         |||||||||||||",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+seqA            121 GGGGGGGGGGGGGGGGGGGTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+                  0 |||||||||||||||||||-----------------------------------------
+seqB              0 GGGGGGGGGGGGGGGGGGG-----------------------------------------
+
+seqA             61 TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTCCCCCCCCCCCC
+                 60 ------------------------------------------------||||||||||||
+seqB             19 ------------------------------------------------CCCCCCCCCCCC
+
+seqA              1 C   0
+                120 | 121
+seqB             31 C  32
+""",
+        )
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1325,6 +1849,22 @@ numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
             alignment.column_annotations["emboss_consensus"],
             "|||||||||||||                                                                                         |||||||||||||||||||",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+seqA              0 GGGGGGGGGGGGGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                  0 |||||||||||||-----------------------------------------------
+seqB             32 GGGGGGGGGGGGG-----------------------------------------------
+
+seqA             60 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCCCCCCCCCCCCCCCCC
+                 60 ------------------------------------------||||||||||||||||||
+seqB             19 ------------------------------------------CCCCCCCCCCCCCCCCCC
+
+seqA            120 C 121
+                120 | 121
+seqB              1 C   0
+""",
+        )
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1377,6 +1917,14 @@ numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
             alignment.column_annotations["emboss_consensus"],
             "|||||||  | ||||||||",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+seqA             20 TTTTTTTAAA-CCGGGCCC  2
+                  0 |||||||--|-|||||||| 19
+seqB              2 TTTTTTT--ACCCGGGCCC 19
+""",
+        )
         with self.assertRaises(StopIteration):
             next(alignments)
 
@@ -1427,6 +1975,14 @@ numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             "||||||||   ||||||||",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+seqA              2 GGGCCCGGTT-TAAAAAAA 20
+                  0 ||||||||---|||||||| 19
+seqB             19 GGGCCCGG--GTAAAAAAA  2
+""",
         )
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -1519,6 +2075,110 @@ numpy.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
         self.assertEqual(
             alignment.column_annotations["emboss_consensus"],
             "|                          ||||||.|||.||..||.    ||.||       ||.|..|           |.||.|...|.|  ||||.|||    |||..|||                    ||.||.|||.||            ||||||     |.||||      ||.||.||.|.|..||||.                         ||||||.|||.|                 |||.||                                                                                                               |.|.||| |.|..|||.||.|                 |.|.|||.||..                    |||...|||..|.|||..|.||||..   |..|.|.|||    |||.||||...|||            |||..||||                   |||||.                                 ||.|.||||          |||        ||||.||||.                               |.|.|.||||.|         ||.||   |||.|.           ||.|||||                                                    ||.||||       ||.||.|.|.|                                               ||.|.|||||||||     |||       |.||   ||     ||||.||.|    ||||          ||| |.|.||.|..|||.|.|||.||||.|.|            |.|.|  ||.|.|.|.||     ||        ||..|||||..  ||| |.|..|||           .|||||||.|.  |||||..|.|.|.||      ||                    |||...||.|||.|||       ||||               |||                        |.||||||.||                                             |.||||||             |.|||             ||||.|||           |.||..||||.|||.|      |.|||||..|      |.|.|.||.||.  |..|||   ||.||.|||..|.|..|||  ||   |||||||                |.||.|.|.|.        |||.|     |||.|    |.||||||||.|       |.||||||                ||||||||.|||",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+hg38_chrX         0 GGCAGGTGCATAGCTTGAGCCTAGGAGTTCAAGTCCAGCCCTGACAATGTAGAGAGACCC
+                  0 |--------------------------||||||.|||.||..||.----||.||------
+mm10_chrX         0 G--------------------------TTCAAGGCCATCCGGGAT----TAAAG------
+
+hg38_chrX        60 CGTCTCTTCAAAAAATACAAAAAATAGCCAGGCATGGTGACCTACAATGGAAGCCCTAGC
+                 60 -||.|..|-----------|.||.|...|.|--||||.|||----|||..|||-------
+mm10_chrX        24 -GTGTGGT-----------AGAACTCTTCTG--ATGGAGAC----AATATAAG-------
+
+hg38_chrX       120 TACGTAGGAGGCGGAAATGGGAGGATCACCTCAGCCCAGGGAGGCTGATGTTGCAGTGAG
+                120 -------------||.||.|||.||------------||||||-----|.||||------
+mm10_chrX        59 -------------GACATTGGAAGA------------AGGGAG-----TCTTGC------
+
+hg38_chrX       180 CCATGATCATGCCTCTACACTCCACCCTGGGCAACAGAGTAAGATGCTGTCTAAAATATA
+                180 ||.||.||.|.|..||||.-------------------------||||||.|||.|----
+mm10_chrX        83 CCTTGCTCCTTCGCCTACT-------------------------TGCTGTGTAAGA----
+
+hg38_chrX       240 TATATATGCATATCTGTGTGTATATATATATATATATATGTGTGTGTGTGTGTGTGTATA
+                240 -------------|||.||-----------------------------------------
+mm10_chrX       114 -------------CTGAGT-----------------------------------------
+
+hg38_chrX       300 TACATATGTGTGTGTATATACATATATGTGTATATATATATGTGTGTATATATACATATA
+                300 ------------------------------------------------------------
+mm10_chrX       120 ------------------------------------------------------------
+
+hg38_chrX       360 CATATTCAGCATCACCTTATATTCTTTGAATATATCTACATCAATACATACTTTTGAGTG
+                360 ----------|.|.|||-|.|..|||.||.|-----------------|.|.|||.||..
+mm10_chrX       120 ----------AACTCCT-AGACCCTTGGACT-----------------TCCATTTCAGCC
+
+hg38_chrX       420 CTTGAAATTTTTTATATTTTACTCTAGAAGAACTGTAAGAAATTATAAAGTAGAAAACTT
+                420 --------------------|||...|||..|.|||..|.||||..---|..|.|.|||-
+mm10_chrX       152 --------------------ACTACTGAACCATTGTTGGGAATTGG---GCTGCAGACT-
+
+hg38_chrX       480 GTGGTAGGTCAAACATAGTAAGAAGAAATAATCACTTTTTAAAGGTCTGTGCTAGGTACT
+                480 ---|||.||||...|||------------|||..||||-------------------|||
+mm10_chrX       188 ---GTAAGTCATCAATA------------AATTCCTTT-------------------ACT
+
+hg38_chrX       540 ATGATCTGTTCCCTATATATACATAATATGGACTTTTATAAACTAATGTTCAAATTCCCC
+                540 ||.---------------------------------||.|.||||----------|||--
+mm10_chrX       214 ATA---------------------------------TAGAGACTA----------TCC--
+
+hg38_chrX       600 TGTAGTATAACTTCTTGTTGTTGTTTATTTTTTTTTTTTTGTATTTTTCATTTTAGATAT
+                600 ------||||.||||.-------------------------------|.|.|.||||.|-
+mm10_chrX       229 ------ATAAATTCTG-------------------------------TGACTCTAGAGA-
+
+hg38_chrX       660 GGGGTTTCACTCTGTTGACCAGGCTGATCTCGAACCACTGGTCTCAAGCGATCCTCCCAT
+                660 --------||.||---|||.|.-----------||.|||||-------------------
+mm10_chrX       251 --------ACCCT---GACAAT-----------ACAACTGG-------------------
+
+hg38_chrX       720 CTTGGACTCCCAAAGTGCTAGGATTACAGGCACGAGGCACCTTGACTGGCCACCATGTAC
+                720 ---------------------------------||.||||-------||.||.|.|.|--
+mm10_chrX       270 ---------------------------------GAAGCAC-------GGACATCCTCT--
+
+hg38_chrX       780 TATAGCTGTTAAAACAAGTTTGTTTCACTGATAACTGGAGTACTTTTCAAATATAATTAA
+                780 ---------------------------------------------||.|.|||||||||-
+mm10_chrX       288 ---------------------------------------------TTGAGATATAATTA-
+
+hg38_chrX       840 TAATTCATGGAAATAATGATAGCTTTAAAAGTATTGGCACTTTTAAAAACTGAGTTTGTA
+                840 ----|||-------|.||---||-----||||.||.|----||||----------|||-|
+mm10_chrX       302 ----TCA-------ACTG---GC-----AAGTGTTTG----TTTA----------TTG-A
+
+hg38_chrX       900 AACTTCATATAACATAAAATTAACCATTAAAATGTATTAATTTCAATGGCATTTAGGACA
+                900 .|.||.|..|||.|.|||.||||.|.|------------|.|.|--||.|.|.|.||---
+mm10_chrX       328 TATTTTACTTAAGACAAAGTTAAACCT------------ACTCC--TGTCCTCTGGG---
+
+hg38_chrX       960 CTCACAATGCAGTGCAAGCATTACCACTATGTAGTGGCAAATCATTTTCACTACCACAAA
+                960 --||--------||..|||||..--|||-|.|..|||-----------.|||||||.|.-
+mm10_chrX       371 --CA--------TGGTAGCATGG--ACT-TATTCTGG-----------AACTACCAGAG-
+
+hg38_chrX      1020 AGAAAATCCTGGACCCATTAGTTAGTCATTCCCCATTCCACTCTCTGCCCAGCCCCTGGC
+               1020 -|||||..|.|.|.||------||--------------------|||...||.|||.|||
+mm10_chrX       406 -GAAAAGACAGAAGCC------TA--------------------CTGGAAAGGCCCAGGC
+
+hg38_chrX      1080 AAACACTCATCTGATTTCCCTCACTACTGATCATCACAACAAGTGGCCTTGTTCATCTTG
+               1080 -------||||---------------|||------------------------|.|||||
+mm10_chrX       439 -------CATC---------------CTG------------------------CCTCTTG
+
+hg38_chrX      1140 TTGTGGGAACCAGGAGACCAGAGAGACCAATGGGTGGAACAGGAGGATTTTACTAGGTGG
+               1140 |.||---------------------------------------------|.||||||---
+mm10_chrX       453 TAGT---------------------------------------------TCACTAGG---
+
+hg38_chrX      1200 TCACCGACTCAGCAGATTAACATCCAAAGGCTGAGCCCCAAACCAAGAGAGGGCTTGACT
+               1200 ----------|.|||-------------||||.|||-----------|.||..||||.||
+mm10_chrX       465 ----------ACCAG-------------GGCTCAGC-----------ATAGTCCTTGGCT
+
+hg38_chrX      1260 TTTATACATATATCTGAAAAGGGCCCAAAACCTGTAAGGCCGGTAAGCAAGCTTACAGCA
+               1260 |.|------|.|||||..|------|.|.|.||.||.--|..|||---||.||.|||..|
+mm10_chrX       491 TCT------AAATCTGCTA------CCATATCTTTAT--CATGTA---AAACTGACACAA
+
+hg38_chrX      1320 GAACAAAGGCAGTTTATCAAACAGTGACAGGTTTTACAGTTCAGGCATGTCTTGTGACCT
+               1320 .|..|||--||---|||||||----------------|.||.|.|.|.--------|||.
+mm10_chrX       534 AATTAAA--CA---TATCAAA----------------ATTTTATGAAA--------ACCA
+
+hg38_chrX      1380 TTGCCATAACTGCACAGCTGGAAAACAGGAACTTACAAAATCCTTACAAGCTTGCAGAAA
+               1380 |-----|||.|----|.||||||||.|-------|.||||||----------------||
+mm10_chrX       565 T-----TAAGT----ATCTGGAAAAGA-------AAAAAATC----------------AA
+
+hg38_chrX      1440 CAGTTACAAA 1450
+               1440 ||||||.||| 1450
+mm10_chrX       593 CAGTTATAAA  603
+""",
         )
         with self.assertRaises(StopIteration):
             next(alignments)

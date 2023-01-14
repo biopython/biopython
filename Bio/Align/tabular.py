@@ -160,11 +160,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif field == "gap opens":
                 annotations[field] = int(column)
             elif field == "q. start":
-                query_start = int(column) - 1
+                query_start = int(column)
             elif field == "q. end":
                 query_end = int(column)
             elif field == "s. start":
-                target_start = int(column) - 1
+                target_start = int(column)
             elif field == "s. end":
                 target_end = int(column)
             elif field == "evalue":
@@ -247,27 +247,45 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 target_annotations["frame"] = column
             else:
                 raise ValueError("Unexpected field '%s'" % field)
+        program = self.metadata["Program"]
         if coordinates is None:
             if alignment_length is not None:
                 annotations["alignment length"] = alignment_length
                 # otherwise, get it from alignment.shape
+        if query_start is not None and query_end is not None:
+            if query_start < query_end:
+                query_start -= 1
+            else:
+                query_end -= 1
+        if target_start is not None and target_end is not None:
+            if target_start < target_end:
+                target_start -= 1
+            else:
+                target_end -= 1
+        if coordinates is None or program in ("BLASTX", "TBLASTX"):
             if query_start is not None:
                 query_annotations["start"] = query_start
             if query_end is not None:
                 query_annotations["end"] = query_end
-        else:
+        elif coordinates is not None:
             if query_start < query_end:
                 coordinates[1, :] += query_start
             else:
                 # mapped to reverse strand
-                coordinates[1, :] = query_start - coordinates[1, :] + 1
+                coordinates[1, :] = query_start - coordinates[1, :]
+        if coordinates is None or program in ("TBLASTN", "TBLASTX"):
+            if target_start is not None:
+                target_annotations["start"] = target_start
+            if target_end is not None:
+                target_annotations["end"] = target_end
+        elif coordinates is not None:
+            coordinates[0, :] += target_start
         if query_sequence is None:
             if query_size is None:
                 query_seq = None
             else:
                 query_seq = Seq(None, length=query_size)
         else:
-            program = self.metadata["Program"]
             query_sequence = query_sequence.replace("-", "")
             if program == "TBLASTN":
                 assert len(query_sequence) == query_end - query_start
@@ -284,8 +302,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         if query_annotations:
             query.annotations = query_annotations
         if self.metadata["Program"] in ("TBLASTN", "TBLASTX"):
-            target_annotations["start"] = target_start
-            target_annotations["end"] = target_end
             target_annotations["length"] = target_length
             if target_sequence is None:
                 target_seq = None
@@ -293,8 +309,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 target_sequence = target_sequence.replace("-", "")
                 target_seq = Seq(target_sequence)
         else:
-            if coordinates is not None:
-                coordinates[0, :] += target_start
             if target_sequence is None:
                 if target_end is None:
                     target_seq = None

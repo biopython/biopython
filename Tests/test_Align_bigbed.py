@@ -2208,7 +2208,6 @@ class TestAlign_extended_bed(unittest.TestCase):
         """Test parsing bigbed_extended.bb."""
         path = "Blat/bigbed_extended.bb"
         alignments = Align.parse(path, "bigbed")
-        self.maxDiff = None
         self.assertEqual(
             str(alignments.declaration),
             """\

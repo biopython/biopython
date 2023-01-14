@@ -59,6 +59,26 @@ class TestFastaProtein(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 48)
         self.assertAlmostEqual(alignment.annotations["evalue"], 6.1e-78)
         self.assertAlmostEqual(alignment.annotations["bit score"], 275.6)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P09488         0 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+sp|P10649         0 ????????????????????????????????????????????????????????????
+
+sp|P09488        60 ????????????????????????????????????????????????????????????
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+sp|P10649        60 ????????????????????????????????????????????????????????????
+
+sp|P09488       120 ????????????????????????????????????????????????????????????
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+sp|P10649       120 ????????????????????????????????????????????????????????????
+
+sp|P09488       180 ?????????????????????????????????????? 218
+                180 |||||||||||||||||||||||||||||||||||||| 218
+sp|P10649       180 ?????????????????????????????????????? 218
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -135,6 +155,26 @@ numpy.array([['M', 'P', 'M', 'I', 'L', 'G', 'Y', 'W', 'D', 'I', 'R', 'G', 'L',
         self.assertEqual(alignment.annotations["mismatches"], 144)
         self.assertAlmostEqual(alignment.annotations["evalue"], 3.1e-13)
         self.assertAlmostEqual(alignment.annotations["bit score"], 60.7)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P00502         5 ????????????????????????????---------???????????????????????
+                  0 ||||||||||||||||||||||||||||---------|||||||||||||--||||||||
+sp|P10649         3 ??????????????????????????????????????????????????--????????
+
+sp|P00502        56 ??????-?????????????????????????????????????????????????????
+                 60 ||-|||-|||||||||||||||||||||||||||||||||||||||-|||||||||||||
+sp|P10649        61 ??-???????????????????????????????????????????-?????????????
+
+sp|P00502       115 ????????????????????????????????????????????????????????????
+                120 ||||||||||--|||||||||||||||--|||||||||||||||||||||||||||||||
+sp|P10649       119 ??????????--???????????????--???????????????????????????????
+
+sp|P00502       175 ??????????????????????????????????????????? 218
+                180 ||||||||||||||||||||||||||||||||||||||||||| 223
+sp|P10649       175 ??????????????????????????????????????????? 218
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -219,6 +259,14 @@ numpy.array([['V', 'L', 'H', 'Y', 'F', 'N', 'A', 'R', 'G', 'R', 'M', 'E', 'C',
         self.assertEqual(alignment.annotations["mismatches"], 27)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.19)
         self.assertAlmostEqual(alignment.annotations["bit score"], 20.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P69905        35 ?????????????-?????????????????????????  73
+                  0 |||||||||||||-||||||||||-||||||||||||||  39
+sp|P10649       176 ????????????????????????-?????????????? 214
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -266,6 +314,18 @@ numpy.array([['S', 'F', 'P', 'T', 'T', 'K', 'T', 'Y', 'F', 'P', 'H', 'F', 'D',
         self.assertEqual(alignment.annotations["mismatches"], 53)
         self.assertAlmostEqual(alignment.annotations["evalue"], 1.4)
         self.assertAlmostEqual(alignment.annotations["bit score"], 19.2)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P00517       228 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||--||||||||||||
+sp|P10649       136 ??????????????????????????????????????????????--????????????
+
+sp|P00517       288 ???????????? 300
+                 60 ||||||||||||  72
+sp|P10649       194 ???????????? 206
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -324,6 +384,14 @@ numpy.array([['I', 'Y', 'E', 'M', 'A', 'A', 'G', 'Y', 'P', 'P', 'F', 'F', 'A',
         self.assertEqual(alignment.annotations["mismatches"], 3)
         self.assertAlmostEqual(alignment.annotations["evalue"], 1.6)
         self.assertAlmostEqual(alignment.annotations["bit score"], 17.7)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P14960        46 ??????? 53
+                  0 |||||||  7
+sp|P10649         6 ??????? 13
+""",
+        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[46, 53], [6, 13]]))
         )
@@ -359,6 +427,14 @@ numpy.array([['Y', 'W', 'D', 'L', 'W', 'G', 'L'],
         self.assertEqual(alignment.annotations["mismatches"], 22)
         self.assertAlmostEqual(alignment.annotations["evalue"], 2.5)
         self.assertAlmostEqual(alignment.annotations["bit score"], 16.6)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P01593        15 ????????????????????????????????????-?????????????  64
+                  0 ||||||||||||||---||||||||---||||--||-|||||||-|||||  50
+sp|P10649       149 ??????????????---????????---????--??????????-????? 190
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -414,6 +490,18 @@ numpy.array([['G', 'D', 'R', 'V', 'T', 'I', 'T', 'C', 'Q', 'A', 'S', 'Q', 'D',
         self.assertEqual(alignment.annotations["mismatches"], 40)
         self.assertAlmostEqual(alignment.annotations["evalue"], 2.7)
         self.assertAlmostEqual(alignment.annotations["bit score"], 16.4)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P99998        27 ???????????????????????????????-??????????-?????--?????????-
+                  0 ||||||||||||||||||||---||||||||-||||||||||-|||||--|||||||||-
+sp|P10649       128 ????????????????????---?????????????????????????????????????
+
+sp|P99998        82 --??????  88
+                 60 --||||||  68
+sp|P10649       185 ???????? 193
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -474,6 +562,14 @@ numpy.array([['K', 'T', 'G', 'P', 'N', 'L', 'H', 'G', 'L', 'F', 'G', 'R', 'K',
         self.assertEqual(alignment.annotations["mismatches"], 31)
         self.assertAlmostEqual(alignment.annotations["evalue"], 3.9)
         self.assertAlmostEqual(alignment.annotations["bit score"], 16.4)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P02585        12 ??????????????----???????????????????????????????????? 62
+                  0 ||||||||||||||----||||||||||--|||||||||||---|||||||||| 54
+sp|P10649        43 ????????????????????????????--???????????---?????????? 92
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -529,6 +625,14 @@ numpy.array([['S', 'E', 'E', 'M', 'I', 'A', 'E', 'F', 'K', 'A', 'A', 'F', 'D',
         self.assertEqual(alignment.annotations["mismatches"], 3)
         self.assertAlmostEqual(alignment.annotations["evalue"], 4.2)
         self.assertAlmostEqual(alignment.annotations["bit score"], 15.6)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P60615        85 ?-???-?????  94
+                  0 |-|||-|||||  11
+sp|P10649       114 ??????????? 125
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -572,6 +676,14 @@ numpy.array([['C', '-', 'N', 'P', 'H', '-', 'P', 'K', 'Q', 'R', 'P'],
         self.assertEqual(alignment.annotations["mismatches"], 2)
         self.assertAlmostEqual(alignment.annotations["evalue"], 4.2)
         self.assertAlmostEqual(alignment.annotations["bit score"], 14.7)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P00193        14 ????  18
+                  0 ||||   4
+sp|P10649       170 ???? 174
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -610,6 +722,14 @@ numpy.array([['K', 'P', 'E', 'C'],
         self.assertEqual(alignment.annotations["mismatches"], 27)
         self.assertAlmostEqual(alignment.annotations["evalue"], 4.7)
         self.assertAlmostEqual(alignment.annotations["bit score"], 17.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P03435       398 ??????????????????????????????????????? 437
+                  0 ||||||||||-||||||||||||||||||||||||||||  39
+sp|P10649        73 ??????????-???????????????????????????? 111
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -653,6 +773,18 @@ numpy.array([['N', 'R', 'V', 'I', 'E', 'K', 'T', 'N', 'E', 'K', 'F', 'H', 'Q',
         self.assertEqual(alignment.annotations["mismatches"], 54)
         self.assertAlmostEqual(alignment.annotations["evalue"], 6.3)
         self.assertAlmostEqual(alignment.annotations["bit score"], 14.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P01834        11 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||--||||||||||||||||||||||||||||||||||||||||--||
+sp|P10649        57 ??????????????--????????????????????????????????????????--??
+
+sp|P01834        71 ???????????  82
+                 60 |||||||||||  71
+sp|P10649       113 ??????????? 124
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -727,6 +859,26 @@ numpy.array([['P', 'S', 'D', 'E', 'Q', 'L', 'K', 'S', 'G', 'T', 'A', 'S', 'V',
         self.assertEqual(alignment.annotations["mismatches"], 48)
         self.assertAlmostEqual(alignment.annotations["evalue"], 7.6e-83)
         self.assertAlmostEqual(alignment.annotations["bit score"], 291.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P09488         0 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+sp|P10649         0 ????????????????????????????????????????????????????????????
+
+sp|P09488        60 ????????????????????????????????????????????????????????????
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+sp|P10649        60 ????????????????????????????????????????????????????????????
+
+sp|P09488       120 ????????????????????????????????????????????????????????????
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+sp|P10649       120 ????????????????????????????????????????????????????????????
+
+sp|P09488       180 ?????????????????????????????????????? 218
+                180 |||||||||||||||||||||||||||||||||||||| 218
+sp|P10649       180 ?????????????????????????????????????? 218
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -803,6 +955,26 @@ numpy.array([['M', 'P', 'M', 'I', 'L', 'G', 'Y', 'W', 'D', 'I', 'R', 'G', 'L',
         self.assertEqual(alignment.annotations["mismatches"], 144)
         self.assertAlmostEqual(alignment.annotations["evalue"], 4.4e-14)
         self.assertAlmostEqual(alignment.annotations["bit score"], 63.5)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P00502         5 ????????????????????????????---------???????????????????????
+                  0 ||||||||||||||||||||||||||||---------|||||||||||||--||||||||
+sp|P10649         3 ??????????????????????????????????????????????????--????????
+
+sp|P00502        56 ??????-?????????????????????????????????????????????????????
+                 60 ||-|||-|||||||||||||||||||||||||||||||||||||||-|||||||||||||
+sp|P10649        61 ??-???????????????????????????????????????????-?????????????
+
+sp|P00502       115 ????????????????????????????????????????????????????????????
+                120 ||||||||||--|||||||||||||||--|||||||||||||||||||||||||||||||
+sp|P10649       119 ??????????--???????????????--???????????????????????????????
+
+sp|P00502       175 ??????????????????????????????????????????? 218
+                180 ||||||||||||||||||||||||||||||||||||||||||| 223
+sp|P10649       175 ??????????????????????????????????????????? 218
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -887,6 +1059,14 @@ numpy.array([['V', 'L', 'H', 'Y', 'F', 'N', 'A', 'R', 'G', 'R', 'M', 'E', 'C',
         self.assertEqual(alignment.annotations["mismatches"], 27)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.15)
         self.assertAlmostEqual(alignment.annotations["bit score"], 21.2)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P69905        35 ?????????????-?????????????????????????  73
+                  0 |||||||||||||-||||||||||-||||||||||||||  39
+sp|P10649       176 ????????????????????????-?????????????? 214
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -934,6 +1114,18 @@ numpy.array([['S', 'F', 'P', 'T', 'T', 'K', 'T', 'Y', 'F', 'P', 'H', 'F', 'D',
         self.assertEqual(alignment.annotations["mismatches"], 53)
         self.assertAlmostEqual(alignment.annotations["evalue"], 1.2)
         self.assertAlmostEqual(alignment.annotations["bit score"], 19.4)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P00517       228 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||--||||||||||||
+sp|P10649       136 ??????????????????????????????????????????????--????????????
+
+sp|P00517       288 ???????????? 300
+                 60 ||||||||||||  72
+sp|P10649       194 ???????????? 206
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -992,6 +1184,14 @@ numpy.array([['I', 'Y', 'E', 'M', 'A', 'A', 'G', 'Y', 'P', 'P', 'F', 'F', 'A',
         self.assertEqual(alignment.annotations["mismatches"], 3)
         self.assertAlmostEqual(alignment.annotations["evalue"], 1.5)
         self.assertAlmostEqual(alignment.annotations["bit score"], 17.8)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P14960        46 ??????? 53
+                  0 |||||||  7
+sp|P10649         6 ??????? 13
+""",
+        )
         self.assertTrue(
             numpy.array_equal(alignment.coordinates, numpy.array([[46, 53], [6, 13]]))
         )
@@ -1027,6 +1227,14 @@ numpy.array([['Y', 'W', 'D', 'L', 'W', 'G', 'L'],
         self.assertEqual(alignment.annotations["mismatches"], 22)
         self.assertAlmostEqual(alignment.annotations["evalue"], 2.4)
         self.assertAlmostEqual(alignment.annotations["bit score"], 16.7)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P01593        15 ????????????????????????????????????-?????????????  64
+                  0 ||||||||||||||---||||||||---||||--||-|||||||-|||||  50
+sp|P10649       149 ??????????????---????????---????--??????????-????? 190
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1082,6 +1290,18 @@ numpy.array([['G', 'D', 'R', 'V', 'T', 'I', 'T', 'C', 'Q', 'A', 'S', 'Q', 'D',
         self.assertEqual(alignment.annotations["mismatches"], 40)
         self.assertAlmostEqual(alignment.annotations["evalue"], 2.7)
         self.assertAlmostEqual(alignment.annotations["bit score"], 16.5)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P99998        27 ???????????????????????????????-??????????-?????--?????????-
+                  0 ||||||||||||||||||||---||||||||-||||||||||-|||||--|||||||||-
+sp|P10649       128 ????????????????????---?????????????????????????????????????
+
+sp|P99998        82 --??????  88
+                 60 --||||||  68
+sp|P10649       185 ???????? 193
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1142,6 +1362,14 @@ numpy.array([['K', 'T', 'G', 'P', 'N', 'L', 'H', 'G', 'L', 'F', 'G', 'R', 'K',
         self.assertEqual(alignment.annotations["mismatches"], 31)
         self.assertAlmostEqual(alignment.annotations["evalue"], 3.8)
         self.assertAlmostEqual(alignment.annotations["bit score"], 16.5)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P02585        12 ??????????????----???????????????????????????????????? 62
+                  0 ||||||||||||||----||||||||||--|||||||||||---|||||||||| 54
+sp|P10649        43 ????????????????????????????--???????????---?????????? 92
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1196,6 +1424,14 @@ numpy.array([['S', 'E', 'E', 'M', 'I', 'A', 'E', 'F', 'K', 'A', 'A', 'F', 'D',
         self.assertEqual(alignment.annotations["mismatches"], 3)
         self.assertAlmostEqual(alignment.annotations["evalue"], 4.2)
         self.assertAlmostEqual(alignment.annotations["bit score"], 15.6)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P60615        85 ?-???-?????  94
+                  0 |-|||-|||||  11
+sp|P10649       114 ??????????? 125
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1239,6 +1475,14 @@ numpy.array([['C', '-', 'N', 'P', 'H', '-', 'P', 'K', 'Q', 'R', 'P'],
         self.assertEqual(alignment.annotations["mismatches"], 27)
         self.assertAlmostEqual(alignment.annotations["evalue"], 4.4)
         self.assertAlmostEqual(alignment.annotations["bit score"], 18.1)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P03435       398 ??????????????????????????????????????? 437
+                  0 ||||||||||-||||||||||||||||||||||||||||  39
+sp|P10649        73 ??????????-???????????????????????????? 111
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1286,6 +1530,14 @@ numpy.array([['N', 'R', 'V', 'I', 'E', 'K', 'T', 'N', 'E', 'K', 'F', 'H', 'Q',
         self.assertEqual(alignment.annotations["mismatches"], 2)
         self.assertAlmostEqual(alignment.annotations["evalue"], 4.4)
         self.assertAlmostEqual(alignment.annotations["bit score"], 14.7)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P00193        14 ????  18
+                  0 ||||   4
+sp|P10649       170 ???? 174
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1324,6 +1576,18 @@ numpy.array([['K', 'P', 'E', 'C'],
         self.assertEqual(alignment.annotations["mismatches"], 54)
         self.assertAlmostEqual(alignment.annotations["evalue"], 6.4)
         self.assertAlmostEqual(alignment.annotations["bit score"], 14.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+sp|P01834        11 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||--||||||||||||||||||||||||||||||||||||||||--||
+sp|P10649        57 ??????????????--????????????????????????????????????????--??
+
+sp|P01834        71 ???????????  82
+                 60 |||||||||||  71
+sp|P10649       113 ??????????? 124
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1409,6 +1673,54 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 3.6e-194)
         self.assertAlmostEqual(alignment.annotations["bit score"], 666.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+pGT875           37 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875            0 ????????????????????????????????????????????????????????????
+
+pGT875           97 ????????????????????????????????????????????????????????????
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875           60 ????????????????????????????????????????????????????????????
+
+pGT875          157 ????????????????????????????????????????????????????????????
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          120 ????????????????????????????????????????????????????????????
+
+pGT875          217 ????????????????????????????????????????????????????????????
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          180 ????????????????????????????????????????????????????????????
+
+pGT875          277 ????????????????????????????????????????????????????????????
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          240 ????????????????????????????????????????????????????????????
+
+pGT875          337 ????????????????????????????????????????????????????????????
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          300 ????????????????????????????????????????????????????????????
+
+pGT875          397 ????????????????????????????????????????????????????????????
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          360 ????????????????????????????????????????????????????????????
+
+pGT875          457 ????????????????????????????????????????????????????????????
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          420 ????????????????????????????????????????????????????????????
+
+pGT875          517 ????????????????????????????????????????????????????????????
+                480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          480 ????????????????????????????????????????????????????????????
+
+pGT875          577 ????????????????????????????????????????????????????????????
+                540 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          540 ????????????????????????????????????????????????????????????
+
+pGT875          637 ????????????????????????????????????????????????????????? 694
+                600 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 657
+pGT875          600 ????????????????????????????????????????????????????????? 657
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1443,6 +1755,54 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 135)
         self.assertAlmostEqual(alignment.annotations["evalue"], 1.9e-118)
         self.assertAlmostEqual(alignment.annotations["bit score"], 414.4)
+        self.assertEqual(
+            str(alignment),
+            """\
+RABGLTR          33 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875            0 ????????????????????????????????????????????????????????????
+
+RABGLTR          93 ????????????????????????????????????????????????????????????
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875           60 ????????????????????????????????????????????????????????????
+
+RABGLTR         153 ????????????????????????????????????????????????????????????
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          120 ????????????????????????????????????????????????????????????
+
+RABGLTR         213 ????????????????????????????????????????????????????????????
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          180 ????????????????????????????????????????????????????????????
+
+RABGLTR         273 ????????????????????????????????????????????????????????????
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          240 ????????????????????????????????????????????????????????????
+
+RABGLTR         333 ????????????????????????????????????????????????????????????
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          300 ????????????????????????????????????????????????????????????
+
+RABGLTR         393 ????????????????????????????????????????????????????????????
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          360 ????????????????????????????????????????????????????????????
+
+RABGLTR         453 ????????????????????????????????????????????????????????????
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          420 ????????????????????????????????????????????????????????????
+
+RABGLTR         513 ????????????????????????????????????????????????????????????
+                480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          480 ????????????????????????????????????????????????????????????
+
+RABGLTR         573 ????????????????????????????????????????????????????????????
+                540 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          540 ????????????????????????????????????????????????????????????
+
+RABGLTR         633 ?????????????????????????????????????????????? 679
+                600 |||||||||||||||||||||||||||||||||||||||||||||| 646
+pGT875          600 ?????????????????????????????????????????????? 646
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1477,6 +1837,42 @@ class TestFastaNucleotide(unittest.TestCase):
         self.assertEqual(alignment.annotations["mismatches"], 167)
         self.assertAlmostEqual(alignment.annotations["evalue"], 1.2e-07)
         self.assertAlmostEqual(alignment.annotations["bit score"], 46.4)
+        self.assertEqual(
+            str(alignment),
+            """\
+BTGST           227 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          175 ????????????????????????????????????????????????????????????
+
+BTGST           287 ????????????????????????????????????????????????????????????
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          235 ????????????????????????????????????????????????????????????
+
+BTGST           347 ?????????????????????????????-?????????????????????????---??
+                120 |||||||||||||||||||||||||||||-|||||||-|||||||||||||||||---||
+pGT875          295 ?????????????????????????????????????-??????????????????????
+
+BTGST           403 ????????????????????????????????????????????????????????????
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||--
+pGT875          354 ??????????????????????????????????????????????????????????--
+
+BTGST           463 ????????????????????????????????????????????????????????????
+                240 ---||||||-|||||||||||||--|||||||||||||----||||||||||||||||||
+pGT875          412 ---??????-?????????????--?????????????----??????????????????
+
+BTGST           523 ????????????????????--??????????????????????????????????????
+                300 ||||||||||||--||||||--||||||||||||||||||||||||||||||||||||||
+pGT875          462 ????????????--??????????????????????????????????????????????
+
+BTGST           581 ????????????????????????????????????????????????????????????
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          520 ????????????????????????????????????????????????????????????
+
+BTGST           641 ?????????????? 655
+                420 |||||||||||||| 434
+pGT875          580 ?????????????? 594
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1593,6 +1989,22 @@ numpy.array([['A', 'G', 'C', 'T', 'C', 'C', 'C', 'C', 'A', 'A', 'G', 'T', 'T',
         self.assertEqual(alignment.annotations["mismatches"], 42)
         self.assertAlmostEqual(alignment.annotations["evalue"], 2.1e-07)
         self.assertAlmostEqual(alignment.annotations["bit score"], 45.6)
+        self.assertEqual(
+            str(alignment),
+            """\
+RABGSTB         156 ??????????????????????????????????--????????????????????????
+                  0 |||||||||||||||--|||||||||||||||||--|||||||||||-||||||||||||
+pGT875          158 ???????????????--??????????????????????????????-????????????
+
+RABGSTB         214 ??????????????????????????????????????????????????????????-?
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||-|||||||||||-|
+pGT875          215 ??????????????????????????????????????????????-?????????????
+
+RABGSTB         273 ??????-???????? 287
+                120 ||||||-|||||||| 135
+pGT875          274 ??????????????? 289
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1663,6 +2075,14 @@ numpy.array([['G', 'G', 'G', 'T', 'A', 'T', 'T', 'G', 'A', 'T', 'G', 'T', 'T',
         self.assertEqual(alignment.annotations["mismatches"], 2)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.0092)
         self.assertAlmostEqual(alignment.annotations["bit score"], 30.1)
+        self.assertEqual(
+            str(alignment),
+            """\
+OCDHPR         2302 ?????????????????-?????? 2325
+                  0 |||||||||||||||||-||||||   24
+pGT875          265 ????????????????????????  289
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1708,6 +2128,14 @@ numpy.array([['A', 'G', 'A', 'C', 'A', 'G', 'A', 'G', 'G', 'A', 'G', 'G', 'A',
         self.assertEqual(alignment.annotations["mismatches"], 10)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.036)
         self.assertAlmostEqual(alignment.annotations["bit score"], 28.1)
+        self.assertEqual(
+            str(alignment),
+            """\
+RABALP1A       4973 ??????????????--???-?????????????????????????? 5016
+                  0 ||||||||||||||--|||-||||||||||||-|||||||||||||   46
+pGT875          240 ????????????????????????????????-?????????????  285
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1756,6 +2184,14 @@ numpy.array([['G', 'C', 'T', 'G', 'G', 'A', 'G', 'A', 'G', 'A', 'G', 'C', 'C',
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.071)
         self.assertAlmostEqual(alignment.annotations["bit score"], 27.2)
+        self.assertEqual(
+            str(alignment),
+            """\
+OCDHPR         1499 ???????????? 1511
+                  0 ||||||||||||   12
+pGT875          316 ????????????  304
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1795,6 +2231,14 @@ numpy.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.071)
         self.assertAlmostEqual(alignment.annotations["bit score"], 27.2)
+        self.assertEqual(
+            str(alignment),
+            """\
+RABALP1A       1499 ???????????? 1511
+                  0 ||||||||||||   12
+pGT875          316 ????????????  304
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1834,6 +2278,14 @@ numpy.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
         self.assertEqual(alignment.annotations["mismatches"], 2)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.14)
         self.assertAlmostEqual(alignment.annotations["bit score"], 26.2)
+        self.assertEqual(
+            str(alignment),
+            """\
+RABGSTB         490 ???????????????? 506
+                  0 ||||||||||||||||  16
+pGT875          160 ???????????????? 144
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1874,6 +2326,18 @@ numpy.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'G', 'A', 'A', 'C', 'T', 'T',
         self.assertEqual(alignment.annotations["mismatches"], 39)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.28)
         self.assertAlmostEqual(alignment.annotations["bit score"], 25.2)
+        self.assertEqual(
+            str(alignment),
+            """\
+RABGLTR        1116 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          242 ????????????????????????????????????????????????????????????
+
+RABGLTR        1176 ???????????????????????? 1200
+                 60 ||||||||||||||||||||||||   84
+pGT875          182 ????????????????????????  158
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1930,6 +2394,14 @@ numpy.array([['G', 'C', 'A', 'T', 'G', 'G', 'C', 'T', 'G', 'G', 'G', 'T', 'G',
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.28)
         self.assertAlmostEqual(alignment.annotations["bit score"], 25.2)
+        self.assertEqual(
+            str(alignment),
+            """\
+pGT875          792 ?????????? 802
+                  0 ||||||||||  10
+pGT875          310 ?????????? 300
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -1968,6 +2440,18 @@ numpy.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'C', 'T', 'C'],
         self.assertEqual(alignment.annotations["mismatches"], 29)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.56)
         self.assertAlmostEqual(alignment.annotations["bit score"], 24.2)
+        self.assertEqual(
+            str(alignment),
+            """\
+BTGST           280 ????????????????????????-????????--?????????????????????????
+                  0 ||||||||||||||||||||||||-||||||||--|||||||||||||||||||||||||
+pGT875          378 ????????????????????????????????????????????????????????????
+
+BTGST           337 ?????????????? 351
+                 60 ||||||||||||||  74
+pGT875          318 ?????????????? 304
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2042,6 +2526,54 @@ numpy.array([['C', 'T', 'G', 'C', 'G', 'G', 'C', 'A', 'C', 'C', 'T', 'G', 'G',
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 3.6e-194)
         self.assertAlmostEqual(alignment.annotations["bit score"], 655.6)
+        self.assertEqual(
+            str(alignment),
+            """\
+pGT875           37 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875            0 ????????????????????????????????????????????????????????????
+
+pGT875           97 ????????????????????????????????????????????????????????????
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875           60 ????????????????????????????????????????????????????????????
+
+pGT875          157 ????????????????????????????????????????????????????????????
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          120 ????????????????????????????????????????????????????????????
+
+pGT875          217 ????????????????????????????????????????????????????????????
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          180 ????????????????????????????????????????????????????????????
+
+pGT875          277 ????????????????????????????????????????????????????????????
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          240 ????????????????????????????????????????????????????????????
+
+pGT875          337 ????????????????????????????????????????????????????????????
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          300 ????????????????????????????????????????????????????????????
+
+pGT875          397 ????????????????????????????????????????????????????????????
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          360 ????????????????????????????????????????????????????????????
+
+pGT875          457 ????????????????????????????????????????????????????????????
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          420 ????????????????????????????????????????????????????????????
+
+pGT875          517 ????????????????????????????????????????????????????????????
+                480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          480 ????????????????????????????????????????????????????????????
+
+pGT875          577 ????????????????????????????????????????????????????????????
+                540 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          540 ????????????????????????????????????????????????????????????
+
+pGT875          637 ????????????????????????????????????????????????????????? 694
+                600 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 657
+pGT875          600 ????????????????????????????????????????????????????????? 657
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2076,6 +2608,54 @@ numpy.array([['C', 'T', 'G', 'C', 'G', 'G', 'C', 'A', 'C', 'C', 'T', 'G', 'G',
         self.assertEqual(alignment.annotations["mismatches"], 135)
         self.assertAlmostEqual(alignment.annotations["evalue"], 1.9e-118)
         self.assertAlmostEqual(alignment.annotations["bit score"], 408.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+RABGLTR          33 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875            0 ????????????????????????????????????????????????????????????
+
+RABGLTR          93 ????????????????????????????????????????????????????????????
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875           60 ????????????????????????????????????????????????????????????
+
+RABGLTR         153 ????????????????????????????????????????????????????????????
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          120 ????????????????????????????????????????????????????????????
+
+RABGLTR         213 ????????????????????????????????????????????????????????????
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          180 ????????????????????????????????????????????????????????????
+
+RABGLTR         273 ????????????????????????????????????????????????????????????
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          240 ????????????????????????????????????????????????????????????
+
+RABGLTR         333 ????????????????????????????????????????????????????????????
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          300 ????????????????????????????????????????????????????????????
+
+RABGLTR         393 ????????????????????????????????????????????????????????????
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          360 ????????????????????????????????????????????????????????????
+
+RABGLTR         453 ????????????????????????????????????????????????????????????
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          420 ????????????????????????????????????????????????????????????
+
+RABGLTR         513 ????????????????????????????????????????????????????????????
+                480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          480 ????????????????????????????????????????????????????????????
+
+RABGLTR         573 ????????????????????????????????????????????????????????????
+                540 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          540 ????????????????????????????????????????????????????????????
+
+RABGLTR         633 ?????????????????????????????????????????????? 679
+                600 |||||||||||||||||||||||||||||||||||||||||||||| 646
+pGT875          600 ?????????????????????????????????????????????? 646
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2110,6 +2690,42 @@ numpy.array([['C', 'T', 'G', 'C', 'G', 'G', 'C', 'A', 'C', 'C', 'T', 'G', 'G',
         self.assertEqual(alignment.annotations["mismatches"], 167)
         self.assertAlmostEqual(alignment.annotations["evalue"], 1.9e-07)
         self.assertAlmostEqual(alignment.annotations["bit score"], 45.7)
+        self.assertEqual(
+            str(alignment),
+            """\
+BTGST           227 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          175 ????????????????????????????????????????????????????????????
+
+BTGST           287 ????????????????????????????????????????????????????????????
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          235 ????????????????????????????????????????????????????????????
+
+BTGST           347 ?????????????????????????????-?????????????????????????---??
+                120 |||||||||||||||||||||||||||||-|||||||-|||||||||||||||||---||
+pGT875          295 ?????????????????????????????????????-??????????????????????
+
+BTGST           403 ????????????????????????????????????????????????????????????
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||--
+pGT875          354 ??????????????????????????????????????????????????????????--
+
+BTGST           463 ????????????????????????????????????????????????????????????
+                240 ---||||||-|||||||||||||--|||||||||||||----||||||||||||||||||
+pGT875          412 ---??????-?????????????--?????????????----??????????????????
+
+BTGST           523 ????????????????????--??????????????????????????????????????
+                300 ||||||||||||--||||||--||||||||||||||||||||||||||||||||||||||
+pGT875          462 ????????????--??????????????????????????????????????????????
+
+BTGST           581 ????????????????????????????????????????????????????????????
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          520 ????????????????????????????????????????????????????????????
+
+BTGST           641 ?????????????? 655
+                420 |||||||||||||| 434
+pGT875          580 ?????????????? 594
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2226,6 +2842,22 @@ numpy.array([['A', 'G', 'C', 'T', 'C', 'C', 'C', 'C', 'A', 'A', 'G', 'T', 'T',
         self.assertEqual(alignment.annotations["mismatches"], 42)
         self.assertAlmostEqual(alignment.annotations["evalue"], 3.2e-07)
         self.assertAlmostEqual(alignment.annotations["bit score"], 45.0)
+        self.assertEqual(
+            str(alignment),
+            """\
+RABGSTB         156 ??????????????????????????????????--????????????????????????
+                  0 |||||||||||||||--|||||||||||||||||--|||||||||||-||||||||||||
+pGT875          158 ???????????????--??????????????????????????????-????????????
+
+RABGSTB         214 ??????????????????????????????????????????????????????????-?
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||-|||||||||||-|
+pGT875          215 ??????????????????????????????????????????????-?????????????
+
+RABGSTB         273 ??????-???????? 287
+                120 ||||||-|||||||| 135
+pGT875          274 ??????????????? 289
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2296,6 +2928,14 @@ numpy.array([['G', 'G', 'G', 'T', 'A', 'T', 'T', 'G', 'A', 'T', 'G', 'T', 'T',
         self.assertEqual(alignment.annotations["mismatches"], 2)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.012)
         self.assertAlmostEqual(alignment.annotations["bit score"], 29.7)
+        self.assertEqual(
+            str(alignment),
+            """\
+OCDHPR         2302 ?????????????????-?????? 2325
+                  0 |||||||||||||||||-||||||   24
+pGT875          265 ????????????????????????  289
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2341,6 +2981,14 @@ numpy.array([['A', 'G', 'A', 'C', 'A', 'G', 'A', 'G', 'G', 'A', 'G', 'G', 'A',
         self.assertEqual(alignment.annotations["mismatches"], 10)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.046)
         self.assertAlmostEqual(alignment.annotations["bit score"], 27.8)
+        self.assertEqual(
+            str(alignment),
+            """\
+RABALP1A       4973 ??????????????--???-?????????????????????????? 5016
+                  0 ||||||||||||||--|||-||||||||||||-|||||||||||||   46
+pGT875          240 ????????????????????????????????-?????????????  285
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2389,6 +3037,14 @@ numpy.array([['G', 'C', 'T', 'G', 'G', 'A', 'G', 'A', 'G', 'A', 'G', 'C', 'C',
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.09)
         self.assertAlmostEqual(alignment.annotations["bit score"], 26.8)
+        self.assertEqual(
+            str(alignment),
+            """\
+OCDHPR         1499 ???????????? 1511
+                  0 ||||||||||||   12
+pGT875          316 ????????????  304
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2428,6 +3084,14 @@ numpy.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.09)
         self.assertAlmostEqual(alignment.annotations["bit score"], 26.8)
+        self.assertEqual(
+            str(alignment),
+            """\
+RABALP1A       1499 ???????????? 1511
+                  0 ||||||||||||   12
+pGT875          316 ????????????  304
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2467,6 +3131,14 @@ numpy.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
         self.assertEqual(alignment.annotations["mismatches"], 2)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.18)
         self.assertAlmostEqual(alignment.annotations["bit score"], 25.8)
+        self.assertEqual(
+            str(alignment),
+            """\
+RABGSTB         490 ???????????????? 506
+                  0 ||||||||||||||||  16
+pGT875          160 ???????????????? 144
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2507,6 +3179,18 @@ numpy.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'G', 'A', 'A', 'C', 'T', 'T',
         self.assertEqual(alignment.annotations["mismatches"], 39)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.35)
         self.assertAlmostEqual(alignment.annotations["bit score"], 24.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+RABGLTR        1116 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+pGT875          242 ????????????????????????????????????????????????????????????
+
+RABGLTR        1176 ???????????????????????? 1200
+                 60 ||||||||||||||||||||||||   84
+pGT875          182 ????????????????????????  158
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2563,6 +3247,14 @@ numpy.array([['G', 'C', 'A', 'T', 'G', 'G', 'C', 'T', 'G', 'G', 'G', 'T', 'G',
         self.assertEqual(alignment.annotations["mismatches"], 0)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.35)
         self.assertAlmostEqual(alignment.annotations["bit score"], 24.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+pGT875          792 ?????????? 802
+                  0 ||||||||||  10
+pGT875          310 ?????????? 300
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -2601,6 +3293,18 @@ numpy.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'C', 'T', 'C'],
         self.assertEqual(alignment.annotations["mismatches"], 29)
         self.assertAlmostEqual(alignment.annotations["evalue"], 0.68)
         self.assertAlmostEqual(alignment.annotations["bit score"], 23.9)
+        self.assertEqual(
+            str(alignment),
+            """\
+BTGST           280 ????????????????????????-????????--?????????????????????????
+                  0 ||||||||||||||||||||||||-||||||||--|||||||||||||||||||||||||
+pGT875          378 ????????????????????????????????????????????????????????????
+
+BTGST           337 ?????????????? 351
+                 60 ||||||||||||||  74
+pGT875          318 ?????????????? 304
+""",
+        )
         self.assertTrue(
             numpy.array_equal(
                 alignment.coordinates,
@@ -3168,6 +3872,14 @@ class TestBlast(unittest.TestCase):
                 "gi|145479850|ref|XM_001425911.1|",
             )
             self.assertEqual(alignment.target.annotations["length"], 4632)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|145479         0 PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID 43
+                  0 |.....||.||..||...|||.........||...|....|.| 43
+gi|160806        30 PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD 73
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
@@ -3224,6 +3936,18 @@ class TestBlast(unittest.TestCase):
                 alignment.target.annotations["acc.ver"], "gi|72012412|ref|XM_777959.1|"
             )
             self.assertEqual(alignment.target.annotations["length"], 1593)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|720124         0 GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL
+                  0 ||...||....|......||.|||....||.|.|.--------.|....||.|...|.|
+gi|160806        43 GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL
+
+gi|720124        59
+                 59
+gi|160806        94
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
@@ -3286,6 +4010,18 @@ class TestBlast(unittest.TestCase):
                 "gi|115975252|ref|XM_001180111.1|",
             )
             self.assertEqual(alignment.target.annotations["length"], 1593)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|115975         0 GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL
+                  0 ||...||....|......||.|||....||.|.|.--------.|....||.|...|.|
+gi|160806        43 GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL
+
+gi|115975        59
+                 59
+gi|160806        94
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
@@ -3343,6 +4079,18 @@ class TestBlast(unittest.TestCase):
                 "gi|350596019|ref|XM_003360601.2|",
             )
             self.assertEqual(alignment.target.annotations["length"], 772)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|350596         0 KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+                  0 |||||||||||||.|||||||||.||||||||||||||||||||||||||||||||||||
+gi|114649         0 KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+
+gi|350596        60 KRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK 98
+                 60 |||||.|||||||||||||||||||||.|||||||||| 98
+gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates, numpy.array([[0, 98], [0, 98]])
@@ -3395,6 +4143,18 @@ class TestBlast(unittest.TestCase):
                 "gi|350596019|ref|XM_003360601.2|",
             )
             self.assertEqual(alignment.target.annotations["length"], 772)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|350596         0 LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWERAXXITADEVHYFLQAANPKE
+                  0 ...|.......|.|.|.|.|...||-.....||..|...---..|......|.|||...|
+gi|114649        29 IEFYKKKSDNSPKGMIPLKGSTLTS-PCQDFGKRMFVLK---ITTTKQQDHFFQAAFLEE
+
+gi|350596        60 RTEWIKAIQVA 71
+                 60 |..|...|..| 71
+gi|114649        85 RDAWVRDIKKA 96
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
@@ -3452,6 +4212,18 @@ class TestBlast(unittest.TestCase):
                 "gi|301779869|ref|XM_002925302.1|",
             )
             self.assertEqual(alignment.target.annotations["length"], 1144)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|301779         0 KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+                  0 ||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||
+gi|114649         0 KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+
+gi|301779        60 KRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
+                 60 |||||.|||||||||||||||||||||||||||||||| 98
+gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
@@ -3505,6 +4277,18 @@ class TestBlast(unittest.TestCase):
                 "gi|301779869|ref|XM_002925302.1|",
             )
             self.assertEqual(alignment.target.annotations["length"], 1144)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|301779         0 IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAIHLRGCVVTSVESNPD
+                  0 |..|.|.|.|.....||.....|.||.--...|.......|.|.|.|.|...||----|.
+gi|114649         2 IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS----PC
+
+gi|301779        60 VRKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA 100
+                 60 ...........|.|......|.|||...||..|...|..| 100
+gi|114649        56 QDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
@@ -3562,6 +4346,18 @@ class TestBlast(unittest.TestCase):
                 "gi|296223671|ref|XM_002757683.1|",
             )
             self.assertEqual(alignment.target.annotations["length"], 1183)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|296223         0 KRIREGYLVKKGSMFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+                  0 |||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||
+gi|114649         0 KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+
+gi|296223        60 KRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
+                 60 |||||.|||||||||||||||||||||||||||||||| 98
+gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
@@ -3615,6 +4411,18 @@ class TestBlast(unittest.TestCase):
                 "gi|296223671|ref|XM_002757683.1|",
             )
             self.assertEqual(alignment.target.annotations["length"], 1183)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|296223         0 IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAIHLRGCVVTSVESNSD
+                  0 |..|.|.|.|.....||.....|.||.--...|.......|.|.|.|.|...||......
+gi|114649         2 IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+
+gi|296223        60 GRKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA 100
+                 60 .|..----...|.|......|.|||...||..|...|..| 100
+gi|114649        60 KRMF----VLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
@@ -3672,6 +4480,18 @@ class TestBlast(unittest.TestCase):
                 "gi|338714227|ref|XM_001492113.3|",
             )
             self.assertEqual(alignment.target.annotations["length"], 1390)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|338714         0 KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+                  0 ||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||
+gi|114649         0 KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+
+gi|338714        60 KRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
+                 60 |||||.|||||||||||||||||||||||||||||||| 98
+gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
@@ -3725,6 +4545,18 @@ class TestBlast(unittest.TestCase):
                 "gi|338714227|ref|XM_001492113.3|",
             )
             self.assertEqual(alignment.target.annotations["length"], 1390)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|338714         0 IKQGCLLKQGHRRKNWKVRKFVLREDPAYVHYYDPAGGEEPLGAIHLRGCVVTSVEGNPD
+                  0 |..|.|.|.|.....||....||.||.--...|.......|.|.|.|.|...||----|.
+gi|114649         2 IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS----PC
+
+gi|338714        60 GKKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA 100
+                 60 ...........|.|......|.|||...||..|...|..| 100
+gi|114649        56 QDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
@@ -3782,6 +4614,14 @@ class TestBlast(unittest.TestCase):
                 "gi|365982352|ref|XM_003667962.1|",
             )
             self.assertEqual(alignment.target.annotations["length"], 4932)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|365982         0 GSCFPTWDLIFIEVLNPFLKEKLWEADNEEISKFVDLTLKGLVDLYPSHFTS 52
+                  0 ||.|.||.......|---------|...|...|..|...||...|..|..|| 52
+gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
@@ -4088,13 +4928,25 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignments.metadata["RID"], "P06P5RN0015")
             self.assertEqual(alignments.metadata["Database"], "refseq_rna")
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|296147         0 WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISH
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+gi|296147         0 WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISH
+
+gi|296147        60 SLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 116
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||| 116
+gi|296147        60 SLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 116
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0, 116],
-                                 [  1, 117]])
+                                 [  0, 116]])
                     # fmt: on
                 )
             )
@@ -4164,13 +5016,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|296147         0 LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALPGSSF*HSLIGKPTRKGVRNP
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+gi|296147         0 LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALPGSSF*HSLIGKPTRKGVRNP
+
+gi|296147        60 DVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP 116
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||| 116
+gi|296147        60 DVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP 116
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0, 116],
-                                 [349, 233]])
+                    numpy.array([[0, 116],
+                                 [0, 116]])
                     # fmt: on
                 )
             )
@@ -4197,10 +5061,10 @@ class TestBlast(unittest.TestCase):
             )
             self.assertEqual(alignment.target.annotations["acc.ver"], "NM_001183135.1")
             self.assertEqual(alignment.target.annotations["length"], 4911)
-            self.assertEqual(alignment.query.annotations["start"], 348)
-            self.assertEqual(alignment.query.annotations["end"], 2)
-            self.assertEqual(alignment.target.annotations["start"], 348)
-            self.assertEqual(alignment.target.annotations["end"], 2)
+            self.assertEqual(alignment.query.annotations["start"], 349)
+            self.assertEqual(alignment.query.annotations["end"], 1)
+            self.assertEqual(alignment.target.annotations["start"], 349)
+            self.assertEqual(alignment.target.annotations["end"], 1)
             self.assertEqual(
                 alignment.target.seq,
                 "LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALPGSSF*HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP",
@@ -4240,13 +5104,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|296147         0 F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIR
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+gi|296147         0 F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIR
+
+gi|296147        60 MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 116
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||| 116
+gi|296147        60 MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 116
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0, 116],
-                                 [348, 232]])
+                                 [  0, 116]])
                     # fmt: on
                 )
             )
@@ -4273,10 +5149,10 @@ class TestBlast(unittest.TestCase):
             )
             self.assertEqual(alignment.target.annotations["acc.ver"], "NM_001183135.1")
             self.assertEqual(alignment.target.annotations["length"], 4911)
-            self.assertEqual(alignment.query.annotations["start"], 347)
-            self.assertEqual(alignment.query.annotations["end"], 1)
-            self.assertEqual(alignment.target.annotations["start"], 347)
-            self.assertEqual(alignment.target.annotations["end"], 1)
+            self.assertEqual(alignment.query.annotations["start"], 348)
+            self.assertEqual(alignment.query.annotations["end"], 0)
+            self.assertEqual(alignment.target.annotations["start"], 348)
+            self.assertEqual(alignment.target.annotations["end"], 0)
             self.assertEqual(
                 alignment.target.seq,
                 "F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH",
@@ -4316,13 +5192,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|296147         0 GHEHWRV*LHAKAT*SRIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRT
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+gi|296147         0 GHEHWRV*LHAKAT*SRIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRT
+
+gi|296147        60 PFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS 116
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||| 116
+gi|296147        60 PFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS 116
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0, 116],
-                                 [  2, 118]])
+                                 [  0, 116]])
                     # fmt: on
                 )
             )
@@ -4392,13 +5280,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKS
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKS
+
+gi|296147        60 GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA 116
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||| 116
+gi|296147        60 GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA 116
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0, 116],
-                                 [350, 234]])
+                                 [  0, 116]])
                     # fmt: on
                 )
             )
@@ -4425,10 +5325,10 @@ class TestBlast(unittest.TestCase):
             )
             self.assertEqual(alignment.target.annotations["acc.ver"], "NM_001183135.1")
             self.assertEqual(alignment.target.annotations["length"], 4911)
-            self.assertEqual(alignment.query.annotations["start"], 349)
-            self.assertEqual(alignment.query.annotations["end"], 3)
-            self.assertEqual(alignment.target.annotations["start"], 349)
-            self.assertEqual(alignment.target.annotations["end"], 3)
+            self.assertEqual(alignment.query.annotations["start"], 350)
+            self.assertEqual(alignment.query.annotations["end"], 2)
+            self.assertEqual(alignment.target.annotations["start"], 350)
+            self.assertEqual(alignment.target.annotations["end"], 2)
             self.assertEqual(
                 alignment.target.seq,
                 "TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKSGCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA",
@@ -4468,13 +5368,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|296147         0 TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSI
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+gi|296147         0 TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSI
+
+gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
+                 60 ||||||||||||||||||||||||| 85
+gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  85],
-                                 [ 93, 178]])
+                                 [  0,  85]])
                     # fmt: on
                 )
             )
@@ -4544,6 +5456,14 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 73)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|296147         0 MAMNTGGFDSMQRQ 14
+                  0 |||||||||||||| 14
+gi|296147         0 MAMNTGGFDSMQRQ 14
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
@@ -4614,13 +5534,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 12)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|365982         0 TIKHASDKSIDILKTIQNIEELVRHPDFVTPLVLACSSRNAKLTSIAMQCLQGLASVPSI
+                  0 ||.|||||||.|||.....|||.|||||..|.||||.|||||.|..||||||||..||||
+gi|296147         0 TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSI
+
+gi|365982        60 PESRIPEVLDGFIEATQLAMEIQLK 85
+                 60 |.||..|.||.|||||.|||||||| 85
+gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  85],
-                                 [ 93, 178]])
+                                 [  0,  85]])
                     # fmt: on
                 )
             )
@@ -4687,13 +5619,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 73)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|365982         0 FRI*KKKFNH*TC* 14
+                  0 |||.||||||..|| 14
+gi|296147         0 FRIEKKKFNHSPC* 14
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[ 0, 14],
-                                 [68, 82]])
+                                 [ 0, 14]])
                     # fmt: on
                 )
             )
@@ -4754,13 +5694,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 12)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|365982         0 TFNCISIAS*VASMNPSRTSGILDSGIEGTDANPCRHCMAIEVNLAFLDEQARTK 55
+                  0 |||.||||.|||||..|..|.....||.||...|||||.|..|.|||||.||.|| 55
+gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  55],
-                                 [350, 295]])
+                                 [  0,  55]])
                     # fmt: on
                 )
             )
@@ -4784,10 +5732,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003667962")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003667962.1")
             self.assertEqual(alignment.target.annotations["length"], 4932)
-            self.assertEqual(alignment.query.annotations["start"], 349)
-            self.assertEqual(alignment.query.annotations["end"], 186)
-            self.assertEqual(alignment.target.annotations["start"], 343)
-            self.assertEqual(alignment.target.annotations["end"], 180)
+            self.assertEqual(alignment.query.annotations["start"], 350)
+            self.assertEqual(alignment.query.annotations["end"], 185)
+            self.assertEqual(alignment.target.annotations["start"], 344)
+            self.assertEqual(alignment.target.annotations["end"], 179)
             self.assertEqual(
                 alignment.target.seq,
                 "TFNCISIAS*VASMNPSRTSGILDSGIEGTDANPCRHCMAIEVNLAFLDEQARTK",
@@ -4827,13 +5775,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|365982         0 VFRISIDLSLACLMVEFLLLDSEERECNSWSNCFRKEVN 39
+                  0 .|.||.|||||..||||||.|||..|.||.|.|...|.| 39
+gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESN 39
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  39],
-                                 [137,  98]])
+                                 [  0,  39]])
                     # fmt: on
                 )
             )
@@ -4857,10 +5813,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003667962")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003667962.1")
             self.assertEqual(alignment.target.annotations["length"], 4932)
-            self.assertEqual(alignment.query.annotations["start"], 136)
-            self.assertEqual(alignment.query.annotations["end"], 21)
-            self.assertEqual(alignment.target.annotations["start"], 130)
-            self.assertEqual(alignment.target.annotations["end"], 15)
+            self.assertEqual(alignment.query.annotations["start"], 137)
+            self.assertEqual(alignment.query.annotations["end"], 20)
+            self.assertEqual(alignment.target.annotations["start"], 131)
+            self.assertEqual(alignment.target.annotations["end"], 14)
             self.assertEqual(
                 alignment.target.seq, "VFRISIDLSLACLMVEFLLLDSEERECNSWSNCFRKEVN"
             )
@@ -4898,13 +5854,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 33)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|365982         0 NWTRNYTPFLQNLKEEIQPLNMLATNQSIF*RLFKI*KNL*GTLILLHLWSWPVHREMPN
+                  0 |...|....|.|.||||||..||..|....|.............|...|..|.....|..
+gi|296147         0 NLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK
+
+gi|365982        60 *LQLPCNAYKDWRPYLQYQSQESQKF*TDSLKPLS*RWRYN*K 103
+                 60 |....||||.|..|..........||...||..|..|||.||| 103
+gi|296147        60 *RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 103
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0, 103],
-                                 [ 40, 143]])
+                                 [  0, 103]])
                     # fmt: on
                 )
             )
@@ -4971,13 +5939,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 88)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|365982         0 GRQSL*ALHGN*S*FGISR*TGQDQRCNKIRVPYKFFYILNSL*NID*FVASMFNG*ISS
+                  0 |.|||||||.....|.|.....|..|...||..........|......|..||.||||||
+gi|296147         0 G*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISS
+
+gi|365982        60 FRF*R 65
+                 60 |||.| 65
+gi|296147        60 FRFGR 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [261, 196]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -5001,10 +5981,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003667962")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003667962.1")
             self.assertEqual(alignment.target.annotations["length"], 4932)
-            self.assertEqual(alignment.query.annotations["start"], 260)
-            self.assertEqual(alignment.query.annotations["end"], 67)
-            self.assertEqual(alignment.target.annotations["start"], 254)
-            self.assertEqual(alignment.target.annotations["end"], 61)
+            self.assertEqual(alignment.query.annotations["start"], 261)
+            self.assertEqual(alignment.query.annotations["end"], 66)
+            self.assertEqual(alignment.target.annotations["start"], 255)
+            self.assertEqual(alignment.target.annotations["end"], 60)
             self.assertEqual(
                 alignment.target.seq,
                 "GRQSL*ALHGN*S*FGISR*TGQDQRCNKIRVPYKFFYILNSL*NID*FVASMFNG*ISSFRF*R",
@@ -5044,13 +6024,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|366988         0 SIKHASDKSIEILKTIQNIEDLASHPDFVTPLVESCLSRNAKLTSIAMQCLQGLASAPSI
+                  0 .|.|||||||||||.....|.|..||||..|.|..|.|||||.|..||||||||...|||
+gi|296147         0 TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSI
+
+gi|366988        60 PESRLSGVLDGFIEATHLAIEIQLK 85
+                 60 |.||||..||.||||||||.||||| 85
+gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  85],
-                                 [ 93, 178]])
+                                 [  0,  85]])
                     # fmt: on
                 )
             )
@@ -5117,13 +6109,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 73)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|366988         0 TFSCISIARCVASINPSRTPDSLLSGMDGADAKPCKHCIAIEVNLAFLDRHDST 54
+                  0 ||..|||||.|||...|...||.|.|.||....||.||||..|.|||||....| 54
+gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANT 54
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  54],
-                                 [350, 296]])
+                                 [  0,  54]])
                     # fmt: on
                 )
             )
@@ -5147,10 +6147,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003673886")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003673886.1")
             self.assertEqual(alignment.target.annotations["length"], 4938)
-            self.assertEqual(alignment.query.annotations["start"], 349)
-            self.assertEqual(alignment.query.annotations["end"], 189)
-            self.assertEqual(alignment.target.annotations["start"], 349)
-            self.assertEqual(alignment.target.annotations["end"], 189)
+            self.assertEqual(alignment.query.annotations["start"], 350)
+            self.assertEqual(alignment.query.annotations["end"], 188)
+            self.assertEqual(alignment.target.annotations["start"], 350)
+            self.assertEqual(alignment.target.annotations["end"], 188)
             self.assertEqual(
                 alignment.target.seq,
                 "TFSCISIARCVASINPSRTPDSLLSGMDGADAKPCKHCIAIEVNLAFLDRHDST",
@@ -5190,13 +6190,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 46)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|366988         0 VFKISIDLSLACLIEVFLLLDSEDNECNSRSNC 33
+                  0 .|.||.|||||.....|||.||||.|.||.|.| 33
+gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSC 33
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  33],
-                                 [137, 104]])
+                                 [  0,  33]])
                     # fmt: on
                 )
             )
@@ -5220,10 +6228,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003673886")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003673886.1")
             self.assertEqual(alignment.target.annotations["length"], 4938)
-            self.assertEqual(alignment.query.annotations["start"], 136)
-            self.assertEqual(alignment.query.annotations["end"], 39)
-            self.assertEqual(alignment.target.annotations["start"], 136)
-            self.assertEqual(alignment.target.annotations["end"], 39)
+            self.assertEqual(alignment.query.annotations["start"], 137)
+            self.assertEqual(alignment.query.annotations["end"], 38)
+            self.assertEqual(alignment.target.annotations["start"], 137)
+            self.assertEqual(alignment.target.annotations["end"], 38)
             self.assertEqual(alignment.target.seq, "VFKISIDLSLACLIEVFLLLDSEDNECNSRSNC")
             self.assertEqual(alignment.query.seq, "LFNISMDLSLAWRMVEFLLFDSEDKERNSASSC")
             self.assertAlmostEqual(alignment.annotations["evalue"], 7e-16)
@@ -5257,13 +6265,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 28)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|366988         0 *LYFNCKMCRFYKSIENSR*SAFRYGWCRC*AL*TLHSNRGQLSVP**T*FYQWSDKIRM
+                  0 ||.....|......|.|.|..|.|..|.....||.||......|.||..........|||
+gi|296147         0 *LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRM
+
+gi|366988        60 ACQIFNVLDSF*DLDRLVTCMLDRSVPSFRFGRQ*MQF*VQLFLKGLKTCSLNSH 115
+                 60 .........||..|....|.|......||||||...||...|.|.|.|..|...| 115
+gi|296147        60 SF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 115
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0, 115],
-                                 [345, 230]])
+                                 [  0, 115]])
                     # fmt: on
                 )
             )
@@ -5287,10 +6307,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003673886")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003673886.1")
             self.assertEqual(alignment.target.annotations["length"], 4938)
-            self.assertEqual(alignment.query.annotations["start"], 344)
-            self.assertEqual(alignment.query.annotations["end"], 1)
-            self.assertEqual(alignment.target.annotations["start"], 344)
-            self.assertEqual(alignment.target.annotations["end"], 1)
+            self.assertEqual(alignment.query.annotations["start"], 345)
+            self.assertEqual(alignment.query.annotations["end"], 0)
+            self.assertEqual(alignment.target.annotations["start"], 345)
+            self.assertEqual(alignment.target.annotations["end"], 0)
             self.assertEqual(
                 alignment.target.seq,
                 "*LYFNCKMCRFYKSIENSR*SAFRYGWCRC*AL*TLHSNRGQLSVP**T*FYQWSDKIRMACQIFNVLDSF*DLDRLVTCMLDRSVPSFRFGRQ*MQF*VQLFLKGLKTCSLNSH",
@@ -5330,13 +6350,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|255710         0 VRHASDKSIEILKTVHEFEDLPRHPDFVTPFVLSCASKNAKLTSVSVQCLQKMSSVNCIP
+                  0 .||||||||||||.||.||.|.|||||..||||.|.|.|||.|....||||..|.|..||
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|255710        60 EDRIEDVLDAFIDSTHLAAEIQLK 84
+                 60 ..|....|||||..||||.||||| 84
+gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  84],
-                                 [ 96, 180]])
+                                 [  0,  84]])
                     # fmt: on
                 )
             )
@@ -5403,13 +6435,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 73)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|255710         0 TLSCISAARWVESMNASSTSSILSSGMQLTDDIFCRHCTETLVSLAFLEAHERTK 55
+                  0 |...||.||.|.||.||..|.....|...|.|..||||....|.||||.....|| 55
+gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  55],
-                                 [350, 295]])
+                                 [  0,  55]])
                     # fmt: on
                 )
             )
@@ -5433,10 +6473,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_002551475")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_002551475.1")
             self.assertEqual(alignment.target.annotations["length"], 4845)
-            self.assertEqual(alignment.query.annotations["start"], 349)
-            self.assertEqual(alignment.query.annotations["end"], 186)
-            self.assertEqual(alignment.target.annotations["start"], 346)
-            self.assertEqual(alignment.target.annotations["end"], 183)
+            self.assertEqual(alignment.query.annotations["start"], 350)
+            self.assertEqual(alignment.query.annotations["end"], 185)
+            self.assertEqual(alignment.target.annotations["start"], 347)
+            self.assertEqual(alignment.target.annotations["end"], 182)
             self.assertEqual(
                 alignment.target.seq,
                 "TLSCISAARWVESMNASSTSSILSSGMQLTDDIFCRHCTETLVSLAFLEAHERTK",
@@ -5476,13 +6516,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 73)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|254579         0 IRNASDKSIEILKVVHSYEELSRHPDFIVPLVMSCASKNAKLTTISMQCFQKLATVPCIP
+                  0 ||.||||||||||.|||.|||.|||||..|.|..|.|.|||.||..|||.|.|.|||.||
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|254579        60 VDKLSDVLDAFIEANQLAMDIKLK 84
+                 60 ...||..|||||||..|||.|.|| 84
+gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  84],
-                                 [ 96, 180]])
+                                 [  0,  84]])
                     # fmt: on
                 )
             )
@@ -5549,13 +6601,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|254579         0 TFSFISIASWLASINASSTSESLSTGIHGTVANFWKHCIDIVVNLAFLD 49
+                  0 ||..||||...||..||..|.|...||.|||.....|||..||.||||| 49
+gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLD 49
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  49],
-                                 [350, 301]])
+                                 [  0,  49]])
                     # fmt: on
                 )
             )
@@ -5579,10 +6639,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_002495708")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_002495708.1")
             self.assertEqual(alignment.target.annotations["length"], 4866)
-            self.assertEqual(alignment.query.annotations["start"], 349)
-            self.assertEqual(alignment.query.annotations["end"], 204)
-            self.assertEqual(alignment.target.annotations["start"], 349)
-            self.assertEqual(alignment.target.annotations["end"], 204)
+            self.assertEqual(alignment.query.annotations["start"], 350)
+            self.assertEqual(alignment.query.annotations["end"], 203)
+            self.assertEqual(alignment.target.annotations["start"], 350)
+            self.assertEqual(alignment.target.annotations["end"], 203)
             self.assertEqual(
                 alignment.target.seq,
                 "TFSFISIASWLASINASSTSESLSTGIHGTVANFWKHCIDIVVNLAFLD",
@@ -5621,13 +6681,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 42)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|254579         0 TTFKISIDLSLAFLIAVFLFFDSDESECNSELSSFQKLPNSP 42
+                  0 |.|.||.|||||.....||.|||...|.||..|......|.| 42
+gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPP 42
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  42],
-                                 [140,  98]])
+                                 [  0,  42]])
                     # fmt: on
                 )
             )
@@ -5651,10 +6719,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_002495708")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_002495708.1")
             self.assertEqual(alignment.target.annotations["length"], 4866)
-            self.assertEqual(alignment.query.annotations["start"], 139)
-            self.assertEqual(alignment.query.annotations["end"], 15)
-            self.assertEqual(alignment.target.annotations["start"], 139)
-            self.assertEqual(alignment.target.annotations["end"], 15)
+            self.assertEqual(alignment.query.annotations["start"], 140)
+            self.assertEqual(alignment.query.annotations["end"], 14)
+            self.assertEqual(alignment.target.annotations["start"], 140)
+            self.assertEqual(alignment.target.annotations["end"], 14)
             self.assertEqual(
                 alignment.target.seq, "TTFKISIDLSLAFLIAVFLFFDSDESECNSELSSFQKLPNSP"
             )
@@ -5692,13 +6760,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 36)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|254579         0 RVAFTFIRVEEKEYCY*EC*R*IN*NFESSSQL*GIIKTSRFYSTASDVMCIQECQIDYY
+                  0 |.||...|.|.|......||.||.|..|.|...||..|||.|.........|.||..|..
+gi|296147         0 RIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDP
+
+gi|254579        60 INAMFPKIGHSAMYTGR*TLRRT*CVYRGQPAGNGYKTK 99
+                 60 .|||.........|..........|...|.....|...| 99
+gi|296147        60 GNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIK 99
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  99],
-                                 [ 50, 149]])
+                                 [  0,  99]])
                     # fmt: on
                 )
             )
@@ -5765,13 +6845,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 85)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|156843         0 VKHASDKSIEILKTVTNINDLTRHPDFVVPFILACSSGNAKLTSISMQCIQVISTVQCIP
+                  0 ..|||||||||||.|.....|.|||||..||.|||.|.|||.|...|||.|..|||..||
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|156843        60 STRISEILDAFINATHLAVEIQLK 84
+                 60 ..|.||||||||.|||||.||||| 84
+gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  84],
-                                 [ 96, 180]])
+                                 [  0,  84]])
                     # fmt: on
                 )
             )
@@ -5838,13 +6930,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|156843         0 WQLNLLILQPLKSN*LQTYNLYLLNRKEKVQMLNTLVINLLKF*KL*LI*MI*QDIQIS*
+                  0 |...|..|.|.|.|..|...|||.||||..|....||||.|..||.......|.||.||.
+gi|296147         0 WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISH
+
+gi|156843        60 YHSFWHVLQEMQS*LQFLCNAFKLYQLYNVYQVLEFLKF*MLLLMLLI*RWKYN*K 116
+                 60 ..|.|...|.|..|....|||....|..........|||.|..|.|||.||..||| 116
+gi|296147        60 SLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 116
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0, 116],
-                                 [  1, 117]])
+                                 [  0, 116]])
                     # fmt: on
                 )
             )
@@ -5911,13 +7015,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|156843         0 F*LYFHR*MSSINKSI*NFRNSSTWYTLYS*YNLNALHRN*S*LCIS*RTCQNEWYYEIW
+                  0 |||..||.|||.|..|.|||..........|..|.|||.......|.|...|.|...||.
+gi|296147         0 F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIR
+
+gi|156843        60 MSC*IIYISYSFQNFNRFITSVFNICTFSFRFRR*RL*VCSQLLFKGCKIKRFNCH 116
+                 60 ||.|.....||||..|.||||..|....||||.|||...|..|...|.|......| 116
+gi|296147        60 MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 116
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0, 116],
-                                 [348, 232]])
+                                 [  0, 116]])
                     # fmt: on
                 )
             )
@@ -5941,10 +7057,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_001644719")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_001644719.1")
             self.assertEqual(alignment.target.annotations["length"], 4914)
-            self.assertEqual(alignment.query.annotations["start"], 347)
-            self.assertEqual(alignment.query.annotations["end"], 1)
-            self.assertEqual(alignment.target.annotations["start"], 347)
-            self.assertEqual(alignment.target.annotations["end"], 1)
+            self.assertEqual(alignment.query.annotations["start"], 348)
+            self.assertEqual(alignment.query.annotations["end"], 0)
+            self.assertEqual(alignment.target.annotations["start"], 348)
+            self.assertEqual(alignment.target.annotations["end"], 0)
             self.assertEqual(
                 alignment.target.seq,
                 "F*LYFHR*MSSINKSI*NFRNSSTWYTLYS*YNLNALHRN*S*LCIS*RTCQNEWYYEIWMSC*IIYISYSFQNFNRFITSVFNICTFSFRFRR*RL*VCSQLLFKGCKIKRFNCH",
@@ -5984,13 +7100,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 99)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|156843         0 TFNCISTAK*VALIKASKISEILVLGIHCTVDIT*MHCIEIEVSFAF 47
+                  0 |||.||.|.|||..||||||.....||..|||....|||...|..|| 47
+gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAF 47
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  47],
-                                 [350, 303]])
+                                 [  0,  47]])
                     # fmt: on
                 )
             )
@@ -6014,10 +7138,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_001644719")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_001644719.1")
             self.assertEqual(alignment.target.annotations["length"], 4914)
-            self.assertEqual(alignment.query.annotations["start"], 349)
-            self.assertEqual(alignment.query.annotations["end"], 210)
-            self.assertEqual(alignment.target.annotations["start"], 349)
-            self.assertEqual(alignment.target.annotations["end"], 210)
+            self.assertEqual(alignment.query.annotations["start"], 350)
+            self.assertEqual(alignment.query.annotations["end"], 209)
+            self.assertEqual(alignment.target.annotations["start"], 350)
+            self.assertEqual(alignment.target.annotations["end"], 209)
             self.assertEqual(
                 alignment.target.seq, "TFNCISTAK*VALIKASKISEILVLGIHCTVDIT*MHCIEIEVSFAF"
             )
@@ -6055,13 +7179,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 40)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|156843         0 HFLKNMPK*MVLRNLDVLLNHLY*LQFSKFQ*IYH*RV*HLYFFFSIQKIKIVSL*SIAF
+                  0 |.|...|.....||.||.|.......||..|.||||....|.|||||.|||...|...||
+gi|296147         0 HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAF
+
+gi|156843        60 
+                 60 
+gi|296147        60 
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  60],
-                                 [214, 154]])
+                                 [  0,  60]])
                     # fmt: on
                 )
             )
@@ -6085,10 +7221,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_001644719")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_001644719.1")
             self.assertEqual(alignment.target.annotations["length"], 4914)
-            self.assertEqual(alignment.query.annotations["start"], 213)
-            self.assertEqual(alignment.query.annotations["end"], 35)
-            self.assertEqual(alignment.target.annotations["start"], 213)
-            self.assertEqual(alignment.target.annotations["end"], 35)
+            self.assertEqual(alignment.query.annotations["start"], 214)
+            self.assertEqual(alignment.query.annotations["end"], 34)
+            self.assertEqual(alignment.target.annotations["start"], 214)
+            self.assertEqual(alignment.target.annotations["end"], 34)
             self.assertEqual(
                 alignment.target.seq,
                 "HFLKNMPK*MVLRNLDVLLNHLY*LQFSKFQ*IYH*RV*HLYFFFSIQKIKIVSL*SIAF",
@@ -6128,13 +7264,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 51)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|156843         0 KAIDYRLTIFIF*IEKKKYRC*TR***IY*NFENCN*YK*FNKTSRFRSTIHFGMFFRKC
+                  0 ||...|...|||.|||||......||||.|..|...|.....|||.||.....|.....|
+gi|296147         0 KAT*SRIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC
+
+gi|156843        60 KANFNFYAMHSSYINCTMYTKY*NF*NFRCFY*CYSFSGGNTIKS 105
+                 60 .......||.....|...|......|||.|..|.||...|..||| 105
+gi|296147        60 *NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS 105
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0, 105],
-                                 [ 35, 140]])
+                                 [  0, 105]])
                     # fmt: on
                 )
             )
@@ -6201,13 +7349,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 90)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|156843         0 TVFKISIDLSLACLTSVLFLFDSEDKDCKSVVNC 34
+                  0 |.|.||.|||||.......|||||||...|...| 34
+gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSC 34
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  34],
-                                 [140, 106]])
+                                 [  0,  34]])
                     # fmt: on
                 )
             )
@@ -6231,10 +7387,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_001644719")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_001644719.1")
             self.assertEqual(alignment.target.annotations["length"], 4914)
-            self.assertEqual(alignment.query.annotations["start"], 139)
-            self.assertEqual(alignment.query.annotations["end"], 39)
-            self.assertEqual(alignment.target.annotations["start"], 139)
-            self.assertEqual(alignment.target.annotations["end"], 39)
+            self.assertEqual(alignment.query.annotations["start"], 140)
+            self.assertEqual(alignment.query.annotations["end"], 38)
+            self.assertEqual(alignment.target.annotations["start"], 140)
+            self.assertEqual(alignment.target.annotations["end"], 38)
             self.assertEqual(alignment.target.seq, "TVFKISIDLSLACLTSVLFLFDSEDKDCKSVVNC")
             self.assertEqual(alignment.query.seq, "TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSC")
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.19)
@@ -6268,13 +7424,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 100)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 29)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|410075         0 VKHASEKSLKILKTVHDSGDFLRHPDFVVPFVLACSSRSAKLTTIGLQGLQNLSSTNCIP
+                  0 ..|||.||..|||.||......|||||..||||||.||.||.||...|.||.||....||
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|410075        60 KDRLIEVLDGFIDATHLAMEIQLK 84
+                 60 ..||.|.||.||.||||||||||| 84
+gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  84],
-                                 [ 96, 180]])
+                                 [  0,  84]])
                     # fmt: on
                 )
             )
@@ -6341,13 +7509,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|410075         0 TFS*ISIAKCVASINPSNTSINRSLGIQLVDDKFCKP*RPIVVNLALRDEQAKTNGTTKS
+                  0 ||.|||||..|||...|..|..|..||....|..|......||.||..|.||.|.|..||
+gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKS
+
+gi|410075        60 GCLRKSPLSCTVFKILRDFSLACLTSEFLLLASDDKE*SPVSSCL 105
+                 60 |||..|...||.|.|..|.|||....||||..|.|||....|||| 105
+gi|296147        60 GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL 105
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0, 105],
-                                 [350, 245]])
+                                 [  0, 105]])
                     # fmt: on
                 )
             )
@@ -6371,10 +7551,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003955355")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003955355.1")
             self.assertEqual(alignment.target.annotations["length"], 4881)
-            self.assertEqual(alignment.query.annotations["start"], 349)
-            self.assertEqual(alignment.query.annotations["end"], 36)
-            self.assertEqual(alignment.target.annotations["start"], 349)
-            self.assertEqual(alignment.target.annotations["end"], 36)
+            self.assertEqual(alignment.query.annotations["start"], 350)
+            self.assertEqual(alignment.query.annotations["end"], 35)
+            self.assertEqual(alignment.target.annotations["start"], 350)
+            self.assertEqual(alignment.target.annotations["end"], 35)
             self.assertEqual(
                 alignment.target.seq,
                 "TFS*ISIAKCVASINPSNTSINRSLGIQLVDDKFCKP*RPIVVNLALRDEQAKTNGTTKSGCLRKSPLSCTVFKILRDFSLACLTSEFLLLASDDKE*SPVSSCL",
@@ -6414,13 +7594,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 90)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|470736         0 VKHASDRSLQILRIVHSFEELERHPDFILPFVLSCKSGNAKFTSLSMQSLQRLAIHQSIP
+                  0 ..||||.|..||..|||||||||||||.|||||.|.|.|||.|.|.||.||.|....|||
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|470736        60 REQIEHVLEALIDSTQLAVEIQLK 84
+                 60 |......|.|.|..|.||.||||| 84
+gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  84],
-                                 [ 96, 180]])
+                                 [  0,  84]])
                     # fmt: on
                 )
             )
@@ -6487,13 +7679,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|470736         0 TFS*ISTASCVESISASSTCSICSRGIDWWIARRCRLCIDSEVNFAFPDLHERTNGRIKS
+                  0 ||.|||.|..|.|..||.......||||......||.||...|..||.|....|.|..||
+gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKS
+
+gi|470736        60 GCRSSSSKLWTIRNICNERSLACFTSELRRLDSEARACRSCVSCLTVLVN 110
+                 60 ||.||||||.|..||....|||....|....|||.....|..|||....| 110
+gi|296147        60 GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESN 110
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0, 110],
-                                 [350, 240]])
+                                 [  0, 110]])
                     # fmt: on
                 )
             )
@@ -6517,10 +7721,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "NM_210010")
             self.assertEqual(alignment.target.annotations["acc.ver"], "NM_210010.1")
             self.assertEqual(alignment.target.annotations["length"], 4776)
-            self.assertEqual(alignment.query.annotations["start"], 349)
-            self.assertEqual(alignment.query.annotations["end"], 21)
-            self.assertEqual(alignment.target.annotations["start"], 346)
-            self.assertEqual(alignment.target.annotations["end"], 18)
+            self.assertEqual(alignment.query.annotations["start"], 350)
+            self.assertEqual(alignment.query.annotations["end"], 20)
+            self.assertEqual(alignment.target.annotations["start"], 347)
+            self.assertEqual(alignment.target.annotations["end"], 17)
             self.assertEqual(
                 alignment.target.seq,
                 "TFS*ISTASCVESISASSTCSICSRGIDWWIARRCRLCIDSEVNFAFPDLHERTNGRIKSGCRSSSSKLWTIRNICNERSLACFTSELRRLDSEARACRSCVSCLTVLVN",
@@ -6560,13 +7764,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 94)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|470736         0 F*LNLNGQLCGINQCFEYMFYLLPWNRLVDSQTLQTLH*QRSKLRIS*LT*EDERKNKVW
+                  0 |||||.......|............||....|.|..||.|.....|.||....||.....
+gi|296147         0 F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIR
+
+gi|470736        60 VSF*FFKTMDYPQYL*RAIACMFHFRITSLRFRS*GVQILCQLP 104
+                 60 .|||..|||...|||...|..|....|.|.||..|..|....|| 104
+gi|296147        60 MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLP 104
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0, 104],
-                                 [348, 244]])
+                                 [  0, 104]])
                     # fmt: on
                 )
             )
@@ -6590,10 +7806,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "NM_210010")
             self.assertEqual(alignment.target.annotations["acc.ver"], "NM_210010.1")
             self.assertEqual(alignment.target.annotations["length"], 4776)
-            self.assertEqual(alignment.query.annotations["start"], 347)
-            self.assertEqual(alignment.query.annotations["end"], 37)
-            self.assertEqual(alignment.target.annotations["start"], 344)
-            self.assertEqual(alignment.target.annotations["end"], 34)
+            self.assertEqual(alignment.query.annotations["start"], 348)
+            self.assertEqual(alignment.query.annotations["end"], 36)
+            self.assertEqual(alignment.target.annotations["start"], 345)
+            self.assertEqual(alignment.target.annotations["end"], 33)
             self.assertEqual(
                 alignment.target.seq,
                 "F*LNLNGQLCGINQCFEYMFYLLPWNRLVDSQTLQTLH*QRSKLRIS*LT*EDERKNKVWVSF*FFKTMDYPQYL*RAIACMFHFRITSLRFRS*GVQILCQLP",
@@ -6633,13 +7849,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 94)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 89)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|502941         0 VKEASHKSIEILKTIKTINDLENHPDFVVPFALACKTKNAKMTTIAMQCLQNMASTRCIP
+                  0 ...||.|||||||.......||.||||..||.|||...||||||.||||||.......||
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|502941        60 EKRMDMILDAFIEATQLAMDIQLK 84
+                 60 ..|...|||||||||.|||.|||| 84
+gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  84],
-                                 [ 96, 180]])
+                                 [  0,  84]])
                     # fmt: on
                 )
             )
@@ -6706,13 +7934,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|502941         0 TFNCISMASCVASINASNIISILFSGIHLVEAMFCRHCIAIVVILAFL 48
+                  0 |||.||.|..|||..||.|......||.......||||||.||||||| 48
+gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFL 48
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  48],
-                                 [350, 302]])
+                                 [  0,  48]])
                     # fmt: on
                 )
             )
@@ -6736,10 +7972,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_449507")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_449507.1")
             self.assertEqual(alignment.target.annotations["length"], 4980)
-            self.assertEqual(alignment.query.annotations["start"], 349)
-            self.assertEqual(alignment.query.annotations["end"], 207)
-            self.assertEqual(alignment.target.annotations["start"], 436)
-            self.assertEqual(alignment.target.annotations["end"], 294)
+            self.assertEqual(alignment.query.annotations["start"], 350)
+            self.assertEqual(alignment.query.annotations["end"], 206)
+            self.assertEqual(alignment.target.annotations["start"], 437)
+            self.assertEqual(alignment.target.annotations["end"], 293)
             self.assertEqual(
                 alignment.target.seq, "TFNCISMASCVASINASNIISILFSGIHLVEAMFCRHCIAIVVILAFL"
             )
@@ -6777,13 +8013,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 41)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|502941         0 VFNISIDLWLASLTSELRLRASATSA*RSASNCL 34
+                  0 .||||.||.||....|..|..|......|||.|| 34
+gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL 34
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  34],
-                                 [137, 103]])
+                                 [  0,  34]])
                     # fmt: on
                 )
             )
@@ -6807,10 +8051,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_449507")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_449507.1")
             self.assertEqual(alignment.target.annotations["length"], 4980)
-            self.assertEqual(alignment.query.annotations["start"], 136)
-            self.assertEqual(alignment.query.annotations["end"], 36)
-            self.assertEqual(alignment.target.annotations["start"], 223)
-            self.assertEqual(alignment.target.annotations["end"], 123)
+            self.assertEqual(alignment.query.annotations["start"], 137)
+            self.assertEqual(alignment.query.annotations["end"], 35)
+            self.assertEqual(alignment.target.annotations["start"], 224)
+            self.assertEqual(alignment.target.annotations["end"], 122)
             self.assertEqual(alignment.target.seq, "VFNISIDLWLASLTSELRLRASATSA*RSASNCL")
             self.assertEqual(alignment.query.seq, "LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL")
             self.assertAlmostEqual(alignment.annotations["evalue"], 5e-07)
@@ -6844,13 +8088,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 29)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|444314         0 VKHTSDKALEILKTCHSNLDLKRHPDFIIPLIKACSSKSAKLTTIAMQCLQRMSSVDCIP
+                  0 ..|.|||..||||..||...|.|||||..|...||.|..||.||.||||||..|.|..||
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|444314        60 DSRISQVLDSFIEATLLASDIQLK 84
+                 60 .||.|..||.|||||.||..|||| 84
+gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  84],
-                                 [ 96, 180]])
+                                 [  0,  84]])
                     # fmt: on
                 )
             )
@@ -6917,13 +8173,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 82)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|444314         0 TFS*ISEANRVASMKESNT*DILESGIQSTDDILCKHCIAIVVNLALFELHAFIK 55
+                  0 ||.|||.|..|||||.|...|....||..|.|..|.||||.||.||.....|..| 55
+gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  55],
-                                 [350, 295]])
+                                 [  0,  55]])
                     # fmt: on
                 )
             )
@@ -6947,10 +8211,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_004178046")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_004178046.1")
             self.assertEqual(alignment.target.annotations["length"], 5190)
-            self.assertEqual(alignment.query.annotations["start"], 349)
-            self.assertEqual(alignment.query.annotations["end"], 186)
-            self.assertEqual(alignment.target.annotations["start"], 352)
-            self.assertEqual(alignment.target.annotations["end"], 189)
+            self.assertEqual(alignment.query.annotations["start"], 350)
+            self.assertEqual(alignment.query.annotations["end"], 185)
+            self.assertEqual(alignment.target.annotations["start"], 353)
+            self.assertEqual(alignment.target.annotations["end"], 188)
             self.assertEqual(
                 alignment.target.seq,
                 "TFS*ISEANRVASMKESNT*DILESGIQSTDDILCKHCIAIVVNLALFELHAFIK",
@@ -6990,13 +8254,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 82)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|444314         0 VLRISKALSLVCLTSEFFLLDSETK 25
+                  0 ...||..|||.....||.|.|||.| 25
+gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDK 25
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  25],
-                                 [137, 112]])
+                                 [  0,  25]])
                     # fmt: on
                 )
             )
@@ -7020,10 +8292,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_004178046")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_004178046.1")
             self.assertEqual(alignment.target.annotations["length"], 5190)
-            self.assertEqual(alignment.query.annotations["start"], 136)
-            self.assertEqual(alignment.query.annotations["end"], 63)
-            self.assertEqual(alignment.target.annotations["start"], 139)
-            self.assertEqual(alignment.target.annotations["end"], 66)
+            self.assertEqual(alignment.query.annotations["start"], 137)
+            self.assertEqual(alignment.query.annotations["end"], 62)
+            self.assertEqual(alignment.target.annotations["start"], 140)
+            self.assertEqual(alignment.target.annotations["end"], 65)
             self.assertEqual(alignment.target.seq, "VLRISKALSLVCLTSEFFLLDSETK")
             self.assertEqual(alignment.query.seq, "LFNISMDLSLAWRMVEFLLFDSEDK")
             self.assertAlmostEqual(alignment.annotations["evalue"], 1e-05)
@@ -7057,13 +8329,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 82)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 21)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|444314         0 SL*ALHCDSSQFGTLRTTCFYQRYYEIRVTF*IQIAMACLKDLQSFITCMFNF*IFSSGF
+                  0 |||||||....|..........|..|||..||....|.....|..|||.|.|.||.|..|
+gi|296147         0 SL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRF
+
+gi|444314        60 
+                 60 
+gi|296147        60 
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  60],
-                                 [252, 192]])
+                                 [  0,  60]])
                     # fmt: on
                 )
             )
@@ -7087,10 +8371,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_004178046")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_004178046.1")
             self.assertEqual(alignment.target.annotations["length"], 5190)
-            self.assertEqual(alignment.query.annotations["start"], 251)
-            self.assertEqual(alignment.query.annotations["end"], 73)
-            self.assertEqual(alignment.target.annotations["start"], 254)
-            self.assertEqual(alignment.target.annotations["end"], 76)
+            self.assertEqual(alignment.query.annotations["start"], 252)
+            self.assertEqual(alignment.query.annotations["end"], 72)
+            self.assertEqual(alignment.target.annotations["start"], 255)
+            self.assertEqual(alignment.target.annotations["end"], 75)
             self.assertEqual(
                 alignment.target.seq,
                 "SL*ALHCDSSQFGTLRTTCFYQRYYEIRVTF*IQIAMACLKDLQSFITCMFNF*IFSSGF",
@@ -7130,13 +8414,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 82)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 51)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|363751         0 VKHASDKSLQILRIVHSFQELERHPDFVHPFVLSCKSGNAKFTTLSMQCLQRLAIHRSIS
+                  0 ..||||||..||..||||.||||||||..||||.|.|.|||.|||.|||||.|....||.
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|363751        60 KEQIEPVLEALIDSTQLAVEIQLK 84
+                 60 .......|.|.|..|.||.||||| 84
+gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  84],
-                                 [ 96, 180]])
+                                 [  0,  84]])
                     # fmt: on
                 )
             )
@@ -7203,13 +8499,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|363751         0 TFNWISTAN*VESINASKTGSICSLEIDLWIANRCKHCIERVVNLAFPDLHDNTK 55
+                  0 |||.||.|.||.|..|||........||......|.|||.|||.|||.|...||| 55
+gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  55],
-                                 [350, 295]])
+                                 [  0,  55]])
                     # fmt: on
                 )
             )
@@ -7233,10 +8537,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003645773")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003645773.1")
             self.assertEqual(alignment.target.annotations["length"], 4794)
-            self.assertEqual(alignment.query.annotations["start"], 349)
-            self.assertEqual(alignment.query.annotations["end"], 186)
-            self.assertEqual(alignment.target.annotations["start"], 346)
-            self.assertEqual(alignment.target.annotations["end"], 183)
+            self.assertEqual(alignment.query.annotations["start"], 350)
+            self.assertEqual(alignment.query.annotations["end"], 185)
+            self.assertEqual(alignment.target.annotations["start"], 347)
+            self.assertEqual(alignment.target.annotations["end"], 182)
             self.assertEqual(
                 alignment.target.seq,
                 "TFNWISTAN*VESINASKTGSICSLEIDLWIANRCKHCIERVVNLAFPDLHDNTK",
@@ -7276,13 +8580,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|363751         0 TILKI*SDLSDACLTSEFLLLDSED 25
+                  0 |...|..|||.|....||||.|||| 25
+gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSED 25
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  25],
-                                 [140, 115]])
+                                 [  0,  25]])
                     # fmt: on
                 )
             )
@@ -7306,10 +8618,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003645773")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003645773.1")
             self.assertEqual(alignment.target.annotations["length"], 4794)
-            self.assertEqual(alignment.query.annotations["start"], 139)
-            self.assertEqual(alignment.query.annotations["end"], 66)
-            self.assertEqual(alignment.target.annotations["start"], 136)
-            self.assertEqual(alignment.target.annotations["end"], 63)
+            self.assertEqual(alignment.query.annotations["start"], 140)
+            self.assertEqual(alignment.query.annotations["end"], 65)
+            self.assertEqual(alignment.target.annotations["start"], 137)
+            self.assertEqual(alignment.target.annotations["end"], 62)
             self.assertEqual(alignment.target.seq, "TILKI*SDLSDACLTSEFLLLDSED")
             self.assertEqual(alignment.query.seq, "TLFNISMDLSLAWRMVEFLLFDSED")
             self.assertAlmostEqual(alignment.annotations["evalue"], 8e-08)
@@ -7343,13 +8655,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 21)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|363751         0 QSLQTLHRKSSKFSIS*FT**YKRVYKIGMSFQFLKTMNYS*DLKRFIRCMFNLRISSFG
+                  0 |||..||.....|||.|......|...|.|||..||||.....|..||..|.|..||||.
+gi|296147         0 QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFR
+
+gi|363751        60 FRRQRIQILIQL 72
+                 60 |.|.|.|....| 72
+gi|296147        60 FGR*RTQFCFKL 72
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  72],
-                                 [255, 183]])
+                                 [  0,  72]])
                     # fmt: on
                 )
             )
@@ -7373,10 +8697,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003645773")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003645773.1")
             self.assertEqual(alignment.target.annotations["length"], 4794)
-            self.assertEqual(alignment.query.annotations["start"], 254)
-            self.assertEqual(alignment.query.annotations["end"], 40)
-            self.assertEqual(alignment.target.annotations["start"], 251)
-            self.assertEqual(alignment.target.annotations["end"], 37)
+            self.assertEqual(alignment.query.annotations["start"], 255)
+            self.assertEqual(alignment.query.annotations["end"], 39)
+            self.assertEqual(alignment.target.annotations["start"], 252)
+            self.assertEqual(alignment.target.annotations["end"], 36)
             self.assertEqual(
                 alignment.target.seq,
                 "QSLQTLHRKSSKFSIS*FT**YKRVYKIGMSFQFLKTMNYS*DLKRFIRCMFNLRISSFGFRRQRIQILIQL",
@@ -7416,13 +8740,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 62)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|363751         0 *HFLIYMIIQKGVQNRDVVPIPENYELFLRFEAIYQMHV*PQNFFFWIQK 50
+                  0 ||.||.....|||.|.||...|.||.||.....||..|....||||.|.| 50
+gi|296147         0 *HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRK 50
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  50],
-                                 [217, 167]])
+                                 [  0,  50]])
                     # fmt: on
                 )
             )
@@ -7446,10 +8778,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003645773")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003645773.1")
             self.assertEqual(alignment.target.annotations["length"], 4794)
-            self.assertEqual(alignment.query.annotations["start"], 216)
-            self.assertEqual(alignment.query.annotations["end"], 68)
-            self.assertEqual(alignment.target.annotations["start"], 213)
-            self.assertEqual(alignment.target.annotations["end"], 65)
+            self.assertEqual(alignment.query.annotations["start"], 217)
+            self.assertEqual(alignment.query.annotations["end"], 67)
+            self.assertEqual(alignment.target.annotations["start"], 214)
+            self.assertEqual(alignment.target.annotations["end"], 64)
             self.assertEqual(
                 alignment.target.seq,
                 "*HFLIYMIIQKGVQNRDVVPIPENYELFLRFEAIYQMHV*PQNFFFWIQK",
@@ -7489,13 +8821,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 43)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|363751         0 VF*IQKKKF*G*TCI**IASNLKNSS*FSGIGTTSRFCTPFCIIM*IRKC*IYYSFYAMF
+                  0 .|.|.||||....|.|||......|.||.|...||.|.|||.....|..||......||.
+gi|296147         0 IFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRTPFRVGLPIKEC*NDDPGNAMP
+
+gi|363751        60 AAIGNPQIY 69
+                 60 ....|..|| 69
+gi|296147        60 TGTVNRSIY 69
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  69],
-                                 [ 65, 134]])
+                                 [  0,  69]])
                     # fmt: on
                 )
             )
@@ -7562,13 +8906,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 89)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 59)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|366997         0 IHQASDKSIEILKTVKSIDELRRHPDFILPFIIATSSGNAKLTSIALQCIQRFLTVEYIP
+                  0 |..||||||||||.|.|..||.|||||.|||..|..|.|||.|..|.||.|...||..||
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|366997        60 KSQLGALLDSFISATHLADEIKLK 84
+                 60 .|.|...||.||.|||||.||.|| 84
+gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  84],
-                                 [ 96, 180]])
+                                 [  0,  84]])
                     # fmt: on
                 )
             )
@@ -7635,13 +8991,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|366997         0 NQDVFSIHQLT*LFSKFQWTYH*LDESHCLFFLIRLIKDPSLIIVIF*KPRRLQ 54
+                  0 |.|||...|...|||..||.|||..|....||.||.||...|..|.|.....|| 54
+gi|296147         0 NPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQ 54
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  54],
-                                 [175, 121]])
+                                 [  0,  54]])
                     # fmt: on
                 )
             )
@@ -7665,10 +9029,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003683526")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003683526.1")
             self.assertEqual(alignment.target.annotations["length"], 4890)
-            self.assertEqual(alignment.query.annotations["start"], 174)
-            self.assertEqual(alignment.query.annotations["end"], 14)
-            self.assertEqual(alignment.target.annotations["start"], 177)
-            self.assertEqual(alignment.target.annotations["end"], 17)
+            self.assertEqual(alignment.query.annotations["start"], 175)
+            self.assertEqual(alignment.query.annotations["end"], 13)
+            self.assertEqual(alignment.target.annotations["start"], 178)
+            self.assertEqual(alignment.target.annotations["end"], 16)
             self.assertEqual(
                 alignment.target.seq,
                 "NQDVFSIHQLT*LFSKFQWTYH*LDESHCLFFLIRLIKDPSLIIVIF*KPRRLQ",
@@ -7708,13 +9072,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 46)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|366997         0 TFNFISSAKWVAEIKESSKAPN*LLGIYSTVKNLCIHCKAILVNFA 46
+                  0 |||.||.|..||..|.|......|.||..||...|.||.|..|..| 46
+gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILA 46
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  46],
-                                 [350, 304]])
+                                 [  0,  46]])
                     # fmt: on
                 )
             )
@@ -7738,10 +9110,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003683526")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003683526.1")
             self.assertEqual(alignment.target.annotations["length"], 4890)
-            self.assertEqual(alignment.query.annotations["start"], 349)
-            self.assertEqual(alignment.query.annotations["end"], 213)
-            self.assertEqual(alignment.target.annotations["start"], 352)
-            self.assertEqual(alignment.target.annotations["end"], 216)
+            self.assertEqual(alignment.query.annotations["start"], 350)
+            self.assertEqual(alignment.query.annotations["end"], 212)
+            self.assertEqual(alignment.target.annotations["start"], 353)
+            self.assertEqual(alignment.target.annotations["end"], 215)
             self.assertEqual(
                 alignment.target.seq, "TFNFISSAKWVAEIKESSKAPN*LLGIYSTVKNLCIHCKAILVNFA"
             )
@@ -7779,13 +9151,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 39)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|366997         0 QMGS*NKRV*QSAQLTLRNIFNS*KSLYTLQSNTC*FCITRRGSNYKWQYKIRMSSQFIN
+                  0 .|.|.|.......|...||..|.|.||..|......|.|....|.......||||.....
+gi|296147         0 EMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLK
+
+gi|366997        60 *LNCFQNFNGLITSLMNLIVSSF*FV**KTQ 91
+                 60 ....||..||.|||..|...|||.|..|.|| 91
+gi|296147        60 TMYSFQYLNGFITSMANG*ISSFRFGR*RTQ 91
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  91],
-                                 [327, 236]])
+                                 [  0,  91]])
                     # fmt: on
                 )
             )
@@ -7809,10 +9193,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003683526")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003683526.1")
             self.assertEqual(alignment.target.annotations["length"], 4890)
-            self.assertEqual(alignment.query.annotations["start"], 326)
-            self.assertEqual(alignment.query.annotations["end"], 55)
-            self.assertEqual(alignment.target.annotations["start"], 329)
-            self.assertEqual(alignment.target.annotations["end"], 58)
+            self.assertEqual(alignment.query.annotations["start"], 327)
+            self.assertEqual(alignment.query.annotations["end"], 54)
+            self.assertEqual(alignment.target.annotations["start"], 330)
+            self.assertEqual(alignment.target.annotations["end"], 57)
             self.assertEqual(
                 alignment.target.seq,
                 "QMGS*NKRV*QSAQLTLRNIFNS*KSLYTLQSNTC*FCITRRGSNYKWQYKIRMSSQFIN*LNCFQNFNGLITSLMNLIVSSF*FV**KTQ",
@@ -7852,13 +9236,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 78)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|366997         0 QTWVFYQTNQKEETMRFIKLVISPLKF*KQLSQLMN*EDILI 42
+                  0 |..|.|..|.|||...|..|||.||..||....|..|.||.| 42
+gi|296147         0 QNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRI 42
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[ 0, 42],
-                                 [49, 91]])
+                                 [ 0, 42]])
                     # fmt: on
                 )
             )
@@ -7923,13 +9315,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 96)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 36)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|367014         0 IKQASDKSIEILRTVRNYEELSNRSEFLAPFLMSCSSKNAKLTSISMQCLQRLSSTPSLS
+                  0 |..|||||||||..|...|||.....|..||...|.|.|||.|...|||||.||..||..
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|367014        60 KDKLSDVLEAFIVATQLALDMKLK 84
+                 60 ...||..|.|||.||.||....|| 84
+gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  84],
-                                 [ 96, 180]])
+                                 [  0,  84]])
                     # fmt: on
                 )
             )
@@ -7996,13 +9400,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|367014         0 TFNFMSRAN*VATMNASRTSDNLSFDRDGVDDNLCKHCIDIDVNLAFFEEQ 51
+                  0 |||..|.|.|||.|.||..||......||..|..|.|||...|.|||...| 51
+gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQ 51
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  51],
-                                 [350, 299]])
+                                 [  0,  51]])
                     # fmt: on
                 )
             )
@@ -8026,10 +9438,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003681476")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003681476.1")
             self.assertEqual(alignment.target.annotations["length"], 4902)
-            self.assertEqual(alignment.query.annotations["start"], 349)
-            self.assertEqual(alignment.query.annotations["end"], 198)
-            self.assertEqual(alignment.target.annotations["start"], 349)
-            self.assertEqual(alignment.target.annotations["end"], 198)
+            self.assertEqual(alignment.query.annotations["start"], 350)
+            self.assertEqual(alignment.query.annotations["end"], 197)
+            self.assertEqual(alignment.target.annotations["start"], 350)
+            self.assertEqual(alignment.target.annotations["end"], 197)
             self.assertEqual(
                 alignment.target.seq,
                 "TFNFMSRAN*VATMNASRTSDNLSFDRDGVDDNLCKHCIDIDVNLAFFEEQ",
@@ -8069,13 +9481,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 44)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|367014         0 TVLRISIDLSLACLMAELLFFASEDKSCNSEFNCL 35
+                  0 |...||.|||||..|.|.|.|.||||..||...|| 35
+gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL 35
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  35],
-                                 [140, 105]])
+                                 [  0,  35]])
                     # fmt: on
                 )
             )
@@ -8099,10 +9519,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003681476")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003681476.1")
             self.assertEqual(alignment.target.annotations["length"], 4902)
-            self.assertEqual(alignment.query.annotations["start"], 139)
-            self.assertEqual(alignment.query.annotations["end"], 36)
-            self.assertEqual(alignment.target.annotations["start"], 139)
-            self.assertEqual(alignment.target.annotations["end"], 36)
+            self.assertEqual(alignment.query.annotations["start"], 140)
+            self.assertEqual(alignment.query.annotations["end"], 35)
+            self.assertEqual(alignment.target.annotations["start"], 140)
+            self.assertEqual(alignment.target.annotations["end"], 35)
             self.assertEqual(
                 alignment.target.seq, "TVLRISIDLSLACLMAELLFFASEDKSCNSEFNCL"
             )
@@ -8138,13 +9558,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 90)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 30)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|503027         0 IKQACEKSIEILQRSHSEEELVRHPDFVDPFITACLSGNAKLTSISMQSMQRISGIRCIC
+                  0 |..|..||||||.|.||.|||.|||||..||..||.|.|||.|...||..|..|....|.
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|503027        60 TSKMESLLNALLKSTELAIDIQLK 84
+                 60 .|.....|.|....|.||..|||| 84
+gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  84],
-                                 [ 96, 180]])
+                                 [  0,  84]])
                     # fmt: on
                 )
             )
@@ -8211,13 +9643,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 72)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 72)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|367029         0 KNLRASTEVQASEELAQRPNFVNPFIIACGTKNVKFTGIAIVCLQRLIVSRALPRARLSQ
+                  0 |.......|...|||...|.|..||..||...|.|.|..|..|||.|......||.|||.
+gi|296147         0 KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE
+
+gi|367029        60 VLEALQQATSAGLDVQLK 78
+                 60 .|.|...||......||| 78
+gi|296147        60 ILDAFIEATHLAMEIQLK 78
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  78],
-                                 [114, 192]])
+                                 [  0,  78]])
                     # fmt: on
                 )
             )
@@ -8284,13 +9728,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|367039         0 KSLRASSEPQFADELAQRPNFVNPFIIACGTKNSKFTGIAIVCLQRLIIARAFPRSKLSQ
+                  0 ||...........||...|.|..||..||...|.|.|..|..|||.|......|||.||.
+gi|296147         0 KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE
+
+gi|367039        60 ILDALQQATSAGLDVQLK 78
+                 60 ||||...||......||| 78
+gi|296147        60 ILDAFIEATHLAMEIQLK 78
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  78],
-                                 [114, 192]])
+                                 [  0,  78]])
                     # fmt: on
                 )
             )
@@ -8357,13 +9813,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|302895         0 EELSQKVNFVNPFIIACGTKNAKFTAIAIVCLQRLIVAQALPRSKLNQVLEALMQATSAG
+                  0 |||.....|..||..||...|||.|..|..|||.|......|||.|...|.|...||...
+gi|296147         0 EELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLA
+
+gi|302895        60 LDVQLK 66
+                 60 ...||| 66
+gi|296147        60 MEIQLK 66
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  66],
-                                 [150, 216]])
+                                 [  0,  66]])
                     # fmt: on
                 )
             )
@@ -8430,13 +9898,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 57)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 57)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|302403         0 ELTQRPNFVNPFVIACGTKNTKFTAIAIVCLQRLILVRALPRGKLSHVLEALREATSAGL
+                  0 ||...|.|..|||.||...|.|.|..|..|||.|..|...||..||..|.|..|||....
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|302403        60 DVQLK 65
+                 60 ..||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -8503,13 +9983,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|154323         0 DLTQRPNFVTPFLIACGTRNVKFTGIAVVCLQRLVVSRALPKSRLKEVLEALREATSAGL
+                  0 .|...|.|..||..||..||.|.|..|..|||.|......|.|||.|.|.|..|||....
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|154323        60 DVQLK 65
+                 60 ..||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -8576,13 +10068,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|389631         0 KSLNISSEAQLGPELTQKTNFANPFIIACGTKNAKFTGIAIVCLQRLIVSKALPRPRLNQ
+                  0 ||..|........||.....||.||..||...|||.|..|..|||.|......||.||..
+gi|296147         0 KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE
+
+gi|389631        60 VLEALQGATSAGLDVQLK 78
+                 60 .|.|...||......||| 78
+gi|296147        60 ILDAFIEATHLAMEIQLK 78
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  78],
-                                 [114, 192]])
+                                 [  0,  78]])
                     # fmt: on
                 )
             )
@@ -8649,13 +10153,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|336276         0 KSLKVTSEAQISAELSQRSNFVNPFIIACGTKNVKFTGIAIVCLQRLIASRALPRFKLSQ
+                  0 ||...........||.....|..||..||...|.|.|..|..|||.|......||..||.
+gi|296147         0 KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE
+
+gi|336276        60 VLEALQQATSAGLDVQLK 78
+                 60 .|.|...||......||| 78
+gi|296147        60 ILDAFIEATHLAMEIQLK 78
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  78],
-                                 [114, 192]])
+                                 [  0,  78]])
                     # fmt: on
                 )
             )
@@ -8722,13 +10238,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|164425         0 KSLKVTSEAQISAELSQRSNFVNPFIIACGTKNVKFTGIAIVCLQRLIASRALPRFKLSQ
+                  0 ||...........||.....|..||..||...|.|.|..|..|||.|......||..||.
+gi|296147         0 KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE
+
+gi|164425        60 VLEALQQATSAGLDVQLK 78
+                 60 .|.|...||......||| 78
+gi|296147        60 ILDAFIEATHLAMEIQLK 78
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  78],
-                                 [114, 192]])
+                                 [  0,  78]])
                     # fmt: on
                 )
             )
@@ -8795,13 +10323,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|296807         0 DLARKPQFARPFVLACQTRHTRLAAIGVANLQRLVTIGALPQERLKDVLQGLHETANLSL
+                  0 .|.|.|.||.|||||||.|...........||.|.|....|..||...|....|...|..
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|296807        60 EIQLK 65
+                 60 ||||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -8868,13 +10408,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|327295         0 DLARKPQFARPFVLACQTRHTRLAAIGVTNLQRLVTIGALPHERLKDVLQGLHETANLSL
+                  0 .|.|.|.||.|||||||.|...........||.|.|....|..||...|....|...|..
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|327295        60 EIQLK 65
+                 60 ||||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -8941,13 +10493,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|317026         0 DLVRKPKFANPFILACHSRHAKLAGIGVVCLQRLVASRSLPSERLKDVLAGLKETTNMSL
+                  0 .|.|.|.||.||.|||.||.||.......|||.|....|.|..||...|....|.|....
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|317026        60 DIQLK 65
+                 60 .|||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -9014,13 +10578,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|156058         0 DLTQRANFVTPFLIACGTKNVKFTGIAVVCLQRLVVSRALPRSRLREVLEALREATSAGL
+                  0 .|.....|..||..||...|.|.|..|..|||.|......|||||.|.|.|..|||....
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|156058        60 DVQLK 65
+                 60 ..||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -9087,13 +10663,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|315042         0 DLARKPQFSRPFVLACQTRHARLAAIGVANLQRLVTIGALPHERLKDVVQGLHETANLSL
+                  0 .|.|.|.|..|||||||.|.|.........||.|.|....|..||........|...|..
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|315042        60 EIQLK 65
+                 60 ||||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -9160,13 +10748,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|255947         0 DLVRKPNFVEPFIIACHTRHAKLAGIGVICLQRLIASRSLPSSRLKDVLGGLKETTSLSL
+                  0 .|.|.|.|..||..||..|.||.......|||.|....|.|.|||...|....|.|.|..
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|255947        60 DIQLK 65
+                 60 .|||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -9233,13 +10833,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|121708         0 DLVRKPKFVDPFILACHSRHAKLSGIGVVCLQRLVASRSLPSSRLKDVLGGLRETTSLNL
+                  0 .|.|.|.|..||.|||.||.||.......|||.|....|.|.|||...|....|.|.|..
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|121708        60 DVQLK 65
+                 60 ..||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -9306,13 +10918,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|303311         0 KAVPSTSEVQLAADLVRRPQFANPFILACHTRHAKLAAVGVGCIHRLVASGALPSEQLKD
+                  0 |.......|.....|.|.|.||.||.|||..|.||.......|...|......|...|..
+gi|296147         0 KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE
+
+gi|303311        60 VVDGLHETTNLSLDVQLK 78
+                 60 ..|...|.|.|....||| 78
+gi|296147        60 ILDAFIEATHLAMEIQLK 78
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  78],
-                                 [114, 192]])
+                                 [  0,  78]])
                     # fmt: on
                 )
             )
@@ -9379,13 +11003,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|709935         0 DLVRKPKFVDPFILACHSRHAKLAGIGVVCLQRLVASRSLPSERLKDVLGGLKETTSLSL
+                  0 .|.|.|.|..||.|||.||.||.......|||.|....|.|..||...|....|.|.|..
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|709935        60 DIQLK 65
+                 60 .|||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -9452,13 +11088,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|212542         0 DLIRRPHFVTPFILACQTRQSKLASIGVVCLQRLATSHAISPSRLNDTLSALGDITGLSQ
+                  0 .|.|.|.|..||.||||.|..|.......|||.|.|...|..|||...|.|....|.|..
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|212542        60 DVQLK 65
+                 60 ..||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -9525,13 +11173,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|119500         0 DLVRKPRFVDPFILACHSRHAKLAGIGVVCLQRLVASRSLPSERLKDVLGGLKETTSLSL
+                  0 .|.|.|.|..||.|||.||.||.......|||.|....|.|..||...|....|.|.|..
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|119500        60 DIQLK 65
+                 60 .|||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -9598,13 +11258,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|119194         0 KALPSTSEVQLAADLVRRPQFANPFILACHTRHAKLAAVGVGCIHRLVASGALPSEQLKD
+                  0 |.......|.....|.|.|.||.||.|||..|.||.......|...|......|...|..
+gi|296147         0 KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE
+
+gi|119194        60 VVDGLHETTNLSLDVQLK 78
+                 60 ..|...|.|.|....||| 78
+gi|296147        60 ILDAFIEATHLAMEIQLK 78
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  78],
-                                 [114, 192]])
+                                 [  0,  78]])
                     # fmt: on
                 )
             )
@@ -9671,13 +11343,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|238486         0 DLVRKPKFVDPFILACHTRHAKLAGIGVVCLQRLVASRALPSERLKDVLSGLKETTNLSL
+                  0 .|.|.|.|..||.|||..|.||.......|||.|......|..||...|....|.|.|..
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|238486        60 DIQLK 65
+                 60 .|||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -9744,13 +11428,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|505475         0 QDLKKDEKIAQPLVLACSSRNAKLTAIAVPLIQRLLAISALSDKSIPSVLGALEEATHLG
+                  0 ..|......|.|.||||.|||||.|..|....|.|..............|.|..|||||.
+gi|296147         0 EELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLA
+
+gi|505475        60 VEIQLK 66
+                 60 .||||| 66
+gi|296147        60 MEIQLK 66
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  66],
-                                 [150, 216]])
+                                 [  0,  66]])
                     # fmt: on
                 )
             )
@@ -9817,13 +11513,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 57)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 57)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|242768         0 DLIRRPHFVTPFILACQTRQSKLASIGVVCLQRLATSHAISPHRLNDTLSALRDITGLGQ
+                  0 .|.|.|.|..||.||||.|..|.......|||.|.|...|...||...|.|....|.|..
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|242768        60 DVQLK 65
+                 60 ..||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -9890,13 +11598,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|115391         0 DLARKPKFVDPFILACHTRHAKLAGIGVVCLQRLVASRALPSERLKDVLAGLKETTSLSL
+                  0 .|.|.|.|..||.|||..|.||.......|||.|......|..||...|....|.|.|..
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|115391        60 DIQLK 65
+                 60 .|||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -9963,13 +11683,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|261194         0 DLIRKPQFVKPFVIACQTRHGRLAAIGVVCIQRLVASRALPPELLRDVLDGLHETTNLGL
+                  0 .|.|.|.|..|||.|||.|..........|.|.|......|...|...||...|.|.|..
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|261194        60 DVQLK 65
+                 60 ..||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -10036,13 +11768,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|398410         0 DLSRRPAFIEPFLVACGTRNPKFAGPGIICLQKLVIVRGLPKARLQDALEAFNACTDLGQ
+                  0 .|.|.|.|..||..||..||.|.......|||.|..|...|..||...|.||...|.|..
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|398410        60 DIQLK 65
+                 60 .|||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -10109,13 +11853,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|295669         0 DLLRKPHFVKPFVIACQTRHARLAAIGVVGVQRLVASRALPPERLRDVLNALQETTNLGL
+                  0 .|.|.|.|..|||.|||.|.|..........|.|......|..||...|.|..|.|.|..
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAM
+
+gi|295669        60 DVQLK 65
+                 60 ..||| 65
+gi|296147        60 EIQLK 65
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  65],
-                                 [153, 218]])
+                                 [  0,  65]])
                     # fmt: on
                 )
             )
@@ -10182,13 +11938,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 56)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 56)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|504227         0 KSYQPQEKIHDISQNEIKMDILKPFLISCNTGNAKFATISIPIIHKLIIGEIIPVECLNE
+                  0 ||.......|.....|...|...||...|...|||..|........|.....||...|.|
+gi|296147         0 KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE
+
+gi|504227        60 LLDSLKEATNLATDIQLR 78
+                 60 .||...|||.||..|||. 78
+gi|296147        60 ILDAFIEATHLAMEIQLK 78
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  78],
-                                 [114, 192]])
+                                 [  0,  78]])
                     # fmt: on
                 )
             )
@@ -10255,13 +12023,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|126258         0 KSIHDITNEQHRQHIIAPFVASCRTGNAKIATIAIPTIHKLIMAGVVPLGSLGSLVDSLM
+                  0 |..|.............|||..|...|||..|.|......|......|...|....|...
+gi|296147         0 KRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFI
+
+gi|126258        60 EASHLAVDIQLR 72
+                 60 ||.|||..|||. 72
+gi|296147        60 EATHLAMEIQLK 72
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  72],
-                                 [132, 204]])
+                                 [  0,  72]])
                     # fmt: on
                 )
             )
@@ -10328,13 +12108,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 62)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 62)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|302663         0 DLARKPQFARPFVLACQTRQTRLAAIGVTNLQRLVTIGALPHERLKDVLQGLHETANLS
+                  0 .|.|.|.||.|||||||.|...........||.|.|....|..||...|....|...|.
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLA
+
+gi|302663        59
+                 59
+gi|296147        59
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  59],
-                                 [153, 212]])
+                                 [  0,  59]])
                     # fmt: on
                 )
             )
@@ -10401,13 +12193,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 51)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 51)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|255728         0 PFILACKSGNIKLTNTATPVIYKLILAHAIPEENIPELLQALLEASNLAIDIQLR 55
+                  0 ||.|||.|.|.|.|..|......|.....||.....|.|.|..||..||..|||. 55
+gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 55
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  55],
-                                 [183, 238]])
+                                 [  0,  55]])
                     # fmt: on
                 )
             )
@@ -10474,13 +12274,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|171682         0 RQTYTIPELTQRPNFVNPFIIACGTKNVKFTGIAI 35
+                  0 .......||...|.|..||..||...|.|.|..|. 35
+gi|296147         0 KRVHSFEELERHPDFALPFVLACQSRNAKMTTLAM 35
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  35],
-                                 [132, 167]])
+                                 [  0,  35]])
                     # fmt: on
                 )
             )
@@ -10543,13 +12351,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 52)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 30)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|171682         0 LPRSRLSQVLEALQQATSAGLDVQLK 26
+                  0 .||||||..|.|...||......||| 26
+gi|296147         0 IPRSRLSEILDAFIEATHLAMEIQLK 26
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  26],
-                                 [270, 296]])
+                                 [  0,  26]])
                     # fmt: on
                 )
             )
@@ -10610,13 +12426,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 52)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 22)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|460402         0 VKDAAEHAILKLRSLSSPSEIAHNEDILNIFLMACEVRNVKMSVIGLSCLQKLISHDVVA
+                  0 ...|....|..|....|..|.....|....|..||..||.||......|||.|.......
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|460402        60 TSALKEILDTLKDHGEMADE 80
+                 60 .|.|.||||........|.| 80
+gi|296147        60 RSRLSEILDAFIEATHLAME 80
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  80],
-                                 [ 96, 176]])
+                                 [  0,  80]])
                     # fmt: on
                 )
             )
@@ -10683,13 +12511,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|684672         0 KSYSLVVPIQEINKEDHKEEILKPFILSCKSGNIKLTNISIPVIHKLILAHLIPELDITQ
+                  0 ||.....................||.|.|.|.|.|.|.........|.....||......
+gi|296147         0 KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE
+
+gi|684672        60 VLLCLLEASNLAVDIQLR 78
+                 60 .|....||..||..|||. 78
+gi|296147        60 ILDAFIEATHLAMEIQLK 78
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  78],
-                                 [114, 192]])
+                                 [  0,  78]])
                     # fmt: on
                 )
             )
@@ -10756,13 +12596,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|684674         0 KSYSLVVPIQEINKEDHKEEILKPFILSCKSGNIKLTNISIPVIHKLILAHLIPELDITQ
+                  0 ||.....................||.|.|.|.|.|.|.........|.....||......
+gi|296147         0 KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE
+
+gi|684674        60 VLLCLLEASNLAVDIQLR 78
+                 60 .|....||..||..|||. 78
+gi|296147        60 ILDAFIEATHLAMEIQLK 78
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  78],
-                                 [114, 192]])
+                                 [  0,  78]])
                     # fmt: on
                 )
             )
@@ -10829,13 +12681,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|317144         0 ACHTRHAKLAGIGVVCLQRLVASRALPSERLKDVLSGLKETTNLSLDIQLK 51
+                  0 ||..|.||.......|||.|......|..||...|....|.|.|...|||| 51
+gi|296147         0 ACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 51
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  51],
-                                 [195, 246]])
+                                 [  0,  51]])
                     # fmt: on
                 )
             )
@@ -10902,13 +12762,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 44)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 44)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|241950         0 KSYSSVVPIQEINKENHREEVLKPFILSCKSGNIKLTNISIPVIYKLILAHLIPELDISQ
+                  0 ||.....................||.|.|.|.|.|.|.........|.....||....|.
+gi|296147         0 KSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE
+
+gi|241950        60 VLLCLLEASNLAVDIQLR 78
+                 60 .|....||..||..|||. 78
+gi|296147        60 ILDAFIEATHLAMEIQLK 78
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  78],
-                                 [114, 192]])
+                                 [  0,  78]])
                     # fmt: on
                 )
             )
@@ -10975,13 +12847,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|448082         0 PFILSSHNWNAKTATISIPIIHKLIISNAVSREDLEQLLHALKEASNLALDIQLR 55
+                  0 ||.|.....|||..|........|.......|..|...|.|..||..||..|||. 55
+gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 55
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  55],
-                                 [183, 238]])
+                                 [  0,  55]])
                     # fmt: on
                 )
             )
@@ -11048,13 +12928,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 62)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|448082         0 CIVFSVNRREETPVFVM 17
+                  0 |.....||.||...|.| 17
+gi|296147         0 CVLYLPNRKEEIQPFAM 17
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[ 0, 17],
-                                 [55, 72]])
+                                 [ 0, 17]])
                     # fmt: on
                 )
             )
@@ -11115,13 +13003,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 62)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 15)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|359487         0 VKDGAEHGILKLRSLSSPSEIAHNEDILRIFLMACEVRNVKLSVIGLSCLQKLISHDAVA
+                  0 ........|..|....|..|.....|....|..||..||.|.......|||.|.......
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|359487        60 PSALKEILSTLKDHAEMADE 80
+                 60 .|.|.|||.........|.| 80
+gi|296147        60 RSRLSEILDAFIEATHLAME 80
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  80],
-                                 [ 96, 176]])
+                                 [  0,  80]])
                     # fmt: on
                 )
             )
@@ -11188,13 +13088,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|302795         0 VKDAAEHAILKLRTITDPSQISRNDDVLRLYMLACDTRNVKLSILGLSCLQKLLAHDAVP
+                  0 ...|....|..|..........|..|......|||..||.|...|...|||.|......|
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|302795        60 PLAFPQILETLQEHCEINDEI 81
+                 60 ......||....|......|| 81
+gi|296147        60 RSRLSEILDAFIEATHLAMEI 81
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  81],
-                                 [ 96, 177]])
+                                 [  0,  81]])
                     # fmt: on
                 )
             )
@@ -11261,13 +13173,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|302792         0 VKDAAEHAILKLRTVTDPSQIARNDDVLRLYMLACDTRNVKLSILGLSCLQKLLAHDAVP
+                  0 ...|....|..|..|.......|..|......|||..||.|...|...|||.|......|
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|302792        60 PLAFPQILETLQEHCEINDEI 81
+                 60 ......||....|......|| 81
+gi|296147        60 RSRLSEILDAFIEATHLAMEI 81
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  81],
-                                 [ 96, 177]])
+                                 [  0,  81]])
                     # fmt: on
                 )
             )
@@ -11334,13 +13258,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|146416         0 AAPLVSTLASNNTKLVTISILAINRLAGTTAFSTATLGPLLDGLLEASHLAMDIQLR 57
+                  0 |.|.|....|.|.|..|........|..........|...||...||.||||.|||. 57
+gi|296147         0 ALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 57
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  57],
-                                 [177, 234]])
+                                 [  0,  57]])
                     # fmt: on
                 )
             )
@@ -11407,13 +13339,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 49)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 49)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|255542         0 VKDGAEHAILKLRSLSSPNEIAHNEDILRIFLMACEVRTVKLSVIGLSCLQKLISHDAVA
+                  0 ........|..|....|..|.....|....|..||..|..|.......|||.|.......
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|255542        60 PSALKEILSTLKDHAEMADE 80
+                 60 .|.|.|||.........|.| 80
+gi|296147        60 RSRLSEILDAFIEATHLAME 80
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  80],
-                                 [ 96, 176]])
+                                 [  0,  80]])
                     # fmt: on
                 )
             )
@@ -11480,13 +13424,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|470133         0 VKDGAEHAILKLRSLSSPGEIAQNEDILRIFLMACEVRTVKLSVIGLSCLQKLISHDAVA
+                  0 ........|..|....|..|.....|....|..||..|..|.......|||.|.......
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|470133        60 SSALHEILSTLKDHAEMADE 80
+                 60 .|.|.|||.........|.| 80
+gi|296147        60 RSRLSEILDAFIEATHLAME 80
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  80],
-                                 [ 96, 176]])
+                                 [  0,  80]])
                     # fmt: on
                 )
             )
@@ -11553,13 +13509,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|356574         0 TVKDGAEHAILKLRTLSSPSEIAHNDDILRIFLMACEVRTVKLSVIGLSCLQKLISHDAV
+                  0 |........|..|....|..|.....|....|..||..|..|.......|||.|......
+gi|296147         0 TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSI
+
+gi|356574        60 SPSALREIL 69
+                 60 ..|.|.||| 69
+gi|296147        60 PRSRLSEIL 69
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  69],
-                                 [ 93, 162]])
+                                 [  0,  69]])
                     # fmt: on
                 )
             )
@@ -11626,13 +13594,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 59)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 59)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|334187         0 VKDGAEHAILKLRSSSSASDLSSNEDILRIFLMACGVRNTKLSVIGLSCLQKLISHDAVE
+                  0 ........|..|....|...|....|....|..||..||.|.......|||.|.......
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|334187        60 PSSLKEILYTLKDHSEMAEE 80
+                 60 .|.|.|||.........|.| 80
+gi|296147        60 RSRLSEILDAFIEATHLAME 80
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  80],
-                                 [ 96, 176]])
+                                 [  0,  80]])
                     # fmt: on
                 )
             )
@@ -11699,13 +13679,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|334187         0 VKDGAEHAILKLRSSSSASDLSSNEDILRIFLMACGVRNTKLSVIGLSCLQKLISHDAVE
+                  0 ........|..|....|...|....|....|..||..||.|.......|||.|.......
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|334187        60 PSSLKEILYTLKDAKQLS 78
+                 60 .|.|.|||.....|..|. 78
+gi|296147        60 RSRLSEILDAFIEATHLA 78
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  78],
-                                 [ 96, 174]])
+                                 [  0,  78]])
                     # fmt: on
                 )
             )
@@ -11772,13 +13764,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 67)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 67)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|356535         0 VKDGAEHAILKLRTLSSPSEIAHNDDILRIFLMACEVRTVKLSIIGLSCLQKLISHDAVS
+                  0 ........|..|....|..|.....|....|..||..|..|.......|||.|.......
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|356535        60 PSALTEILSTLKDA 74
+                 60 .|.|.|||.....| 74
+gi|296147        60 RSRLSEILDAFIEA 74
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  74],
-                                 [ 96, 170]])
+                                 [  0,  74]])
                     # fmt: on
                 )
             )
@@ -11845,13 +13849,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 63)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 63)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|296414         0 ELSGRPQFIHPFLIACSTRNAKFSTIGVVCLQRLIVSQGLAKVCRQDIL 49
+                  0 ||...|.|..||..||..||||..|....|||.|.............|| 49
+gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 49
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  49],
-                                 [153, 202]])
+                                 [  0,  49]])
                     # fmt: on
                 )
             )
@@ -11917,13 +13929,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 42)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 42)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|297597         0 SVKDAAEHAILKLRSLSSPMEIAQNEDILRMFLVACSVKSVKLSVIGLSCLQKLISHDAV
+                  0 ....|....|..|....|..|.....|....|..||.....|.......|||.|......
+gi|296147         0 TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSI
+
+gi|297597        60 ASSALKDILTTLKDHAEMTDEI 82
+                 60 ..|.|..||...........|| 82
+gi|296147        60 PRSRLSEILDAFIEATHLAMEI 82
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  82],
-                                 [ 93, 175]])
+                                 [  0,  82]])
                     # fmt: on
                 )
             )
@@ -11990,13 +14014,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 70)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 70)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|448086         0 PFILSSHNWNAKTATISIPIIHKLIISNAVSREDLEQLLHALKEASNLALDIQLR 55
+                  0 ||.|.....|||..|........|.......|..|...|.|..||..||..|||. 55
+gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 55
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  55],
-                                 [183, 238]])
+                                 [  0,  55]])
                     # fmt: on
                 )
             )
@@ -12063,13 +14095,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|403176         0 DIFRPISMACATKNAKVVVIALGSLQRLIAMDAVPSCKIPQIVNLLSTVLPLGVEIQLR
+                  0 |...|...||...|||....|...||.|......|......|.........|..||||.
+gi|296147         0 DFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK
+
+gi|403176        59
+                 59
+gi|296147        59
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  59],
-                                 [171, 230]])
+                                 [  0,  59]])
                     # fmt: on
                 )
             )
@@ -12136,13 +14180,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 51)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 51)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|356535         0 VKDGAEHAILKLRTLSSPSEIAHNDDILRIFLMACEVRTVKLSIIGLSCLQKLISHDAVS
+                  0 ........|..|....|..|.....|....|..||..|..|.......|||.|.......
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|356535        60 PSALTEILSTLKDHAEMVDE 80
+                 60 .|.|.|||...........| 80
+gi|296147        60 RSRLSEILDAFIEATHLAME 80
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  80],
-                                 [ 96, 176]])
+                                 [  0,  80]])
                     # fmt: on
                 )
             )
@@ -12209,13 +14265,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|297808         0 VKDGAEHAILKLRSSSSASDLSSNEDILRIFLMACGVRNTKLSVIGLSCLQKLISHDAVE
+                  0 ........|..|....|...|....|....|..||..||.|.......|||.|.......
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|297808        60 PSSLKEIL 68
+                 60 .|.|.||| 68
+gi|296147        60 RSRLSEIL 68
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  68],
-                                 [ 96, 164]])
+                                 [  0,  68]])
                     # fmt: on
                 )
             )
@@ -12282,13 +14350,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 58)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 58)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|242054         0 VKDAAEHAVLKLRSLSGPSEIAQNEDILRMFLMACSVKSVKLSVIGLSCLQKLISHGAVA
+                  0 ...|.......|.......|.....|....|..||.....|.......|||.|.......
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|242054        60 SSALKEILATLKDHAEMTDEI 81
+                 60 .|.|.|||...........|| 81
+gi|296147        60 RSRLSEILDAFIEATHLAMEI 81
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  81],
-                                 [ 96, 177]])
+                                 [  0,  81]])
                     # fmt: on
                 )
             )
@@ -12355,13 +14435,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 69)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 69)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|224125         0 VKDGAEHAILKLRSLSSPSEIADNEDILRIFLMACEVRTVKLSVIGLSCLQKLISHDAVA
+                  0 ........|..|....|..|.....|....|..||..|..|.......|||.|.......
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|224125        60 PSALKEIL 68
+                 60 .|.|.||| 68
+gi|296147        60 RSRLSEIL 68
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  68],
-                                 [ 96, 164]])
+                                 [  0,  68]])
                     # fmt: on
                 )
             )
@@ -12428,13 +14520,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 58)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 58)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|357131         0 VKDAAEHATLKLRSLSNPSEIAQNGDILRMFLMACSVKSVKLSAIGLSCLQKLISHDAVA
+                  0 ...|.......|.......|.....|....|..||.....|.......|||.|.......
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|357131        60 SSALKEIL 68
+                 60 .|.|.||| 68
+gi|296147        60 RSRLSEIL 68
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  68],
-                                 [ 96, 164]])
+                                 [  0,  68]])
                     # fmt: on
                 )
             )
@@ -12501,13 +14605,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 58)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 58)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|403290         0 TLEVSCLQGLHTSPSLEDQGVSQITNAFNMVVHLSNTLELQ 41
+                  0 ||...|||||.|.||......|.|..||....||.....|. 41
+gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  41],
-                                 [225, 266]])
+                                 [  0,  41]])
                     # fmt: on
                 )
             )
@@ -12533,8 +14645,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["length"], 7255)
             self.assertEqual(alignment.query.annotations["start"], 225)
             self.assertEqual(alignment.query.annotations["end"], 348)
-            self.assertEqual(alignment.target.annotations["start"], 6674)
-            self.assertEqual(alignment.target.annotations["end"], 6553)
+            self.assertEqual(alignment.target.annotations["start"], 6675)
+            self.assertEqual(alignment.target.annotations["end"], 6552)
             self.assertEqual(
                 alignment.target.seq, "TLEVSCLQGLHTSPSLEDQGVSQITNAFNMVVHLSNTLELQ"
             )
@@ -12572,13 +14684,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|297707         0 TLGVSCLQGLHTLPSLEDKGVSQITNAFNMIVHVSNTLELQ 41
+                  0 ||...|||||.|.||......|.|..||....|......|. 41
+gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  41],
-                                 [225, 266]])
+                                 [  0,  41]])
                     # fmt: on
                 )
             )
@@ -12604,8 +14724,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["length"], 8045)
             self.assertEqual(alignment.query.annotations["start"], 225)
             self.assertEqual(alignment.query.annotations["end"], 348)
-            self.assertEqual(alignment.target.annotations["start"], 6176)
-            self.assertEqual(alignment.target.annotations["end"], 6055)
+            self.assertEqual(alignment.target.annotations["start"], 6177)
+            self.assertEqual(alignment.target.annotations["end"], 6054)
             self.assertEqual(
                 alignment.target.seq, "TLGVSCLQGLHTLPSLEDKGVSQITNAFNMIVHVSNTLELQ"
             )
@@ -12643,13 +14763,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|254567         0 ASIDMIRSFKQRVPIQELVKFESFVDPFLLSIQTRSLKLVNTGLACLQKLIIESAIADTK
+                  0 ||...|...|......||.....|..||.|..|.|..|.......|||.|.....|....
+gi|296147         0 ASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSR
+
+gi|254567        60 LESLVNSLL 69
+                 60 |........ 69
+gi|296147        60 LSEILDAFI 69
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  69],
-                                 [105, 174]])
+                                 [  0,  69]])
                     # fmt: on
                 )
             )
@@ -12716,13 +14848,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 59)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 59)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|302772         0 MLTCKTRNIKLSVLGLSCLQKLLAHDAIPPLAVPQILEILQEHSEIHYEV 50
+                  0 .|.|..||.|...|...|||.|.....||......||....|......|. 50
+gi|296147         0 VLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEI 50
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  50],
-                                 [189, 239]])
+                                 [  0,  50]])
                     # fmt: on
                 )
             )
@@ -12789,13 +14929,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 43)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 43)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|189235         0 YFLPFELACQSRSARIVVTALDCLQKL 27
+                  0 ..|||.||||||.|.....|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -12856,13 +15004,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|238586         0 MACATKNAKVVAISLGSLQRLIALKAVPQSDVPLIIKTMSDSMSQGVDIQLK 52
+                  0 .||...|||........||.|......|.|....|.............|||| 52
+gi|296147         0 LACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 52
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  52],
-                                 [192, 244]])
+                                 [  0,  52]])
                     # fmt: on
                 )
             )
@@ -12929,13 +15085,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 45)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 45)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|827342         0 TLGVSCLQGLHILPSLEDEEVSQITNAFNMIVHVSNTLELQ 41
+                  0 ||...|||||...||......|.|..||....|......|. 41
+gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  41],
-                                 [225, 266]])
+                                 [  0,  41]])
                     # fmt: on
                 )
             )
@@ -12961,8 +15125,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["length"], 8636)
             self.assertEqual(alignment.query.annotations["start"], 225)
             self.assertEqual(alignment.query.annotations["end"], 348)
-            self.assertEqual(alignment.target.annotations["start"], 6901)
-            self.assertEqual(alignment.target.annotations["end"], 6780)
+            self.assertEqual(alignment.target.annotations["start"], 6902)
+            self.assertEqual(alignment.target.annotations["end"], 6779)
             self.assertEqual(
                 alignment.target.seq, "TLGVSCLQGLHILPSLEDEEVSQITNAFNMIVHVSNTLELQ"
             )
@@ -13000,13 +15164,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|391342         0 FMAPFELACQSKSPRLTVIALDCVQKL 27
+                  0 |..||.|||||.....|..|..|.|.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -13067,13 +15239,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|291235         0 YFLPFELACQSKSARIVNTALDCLQKL 27
+                  0 ..|||.|||||..|.....|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -13134,13 +15314,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|330938         0 ISAMSPVPVLARVRLSDVDDAYFRISHVVSDL 32
+                  0 ....|.||...|.|||...||.....|..... 32
+gi|296147         0 LQGLSTVPSIPRSRLSEILDAFIEATHLAMEI 32
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  32],
-                                 [243, 275]])
+                                 [  0,  32]])
                     # fmt: on
                 )
             )
@@ -13166,8 +15354,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["length"], 459)
             self.assertEqual(alignment.query.annotations["start"], 243)
             self.assertEqual(alignment.query.annotations["end"], 339)
-            self.assertEqual(alignment.target.annotations["start"], 163)
-            self.assertEqual(alignment.target.annotations["end"], 69)
+            self.assertEqual(alignment.target.annotations["start"], 164)
+            self.assertEqual(alignment.target.annotations["end"], 68)
             self.assertEqual(alignment.target.seq, "ISAMSPVPVLARVRLSDVDDAYFRISHVVSDL")
             self.assertEqual(alignment.query.seq, "LQGLSTVPSIPRSRLSEILDAFIEATHLAMEI")
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.77)
@@ -13201,13 +15389,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 42)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 27)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|330938         0 SLPVIIRTHSLPQLERH 17
+                  0 |.....|.||...|||| 17
+gi|296147         0 SIEILKRVHSFEELERH 17
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  17],
-                                 [117, 134]])
+                                 [  0,  17]])
                     # fmt: on
                 )
             )
@@ -13233,8 +15429,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["length"], 459)
             self.assertEqual(alignment.query.annotations["start"], 117)
             self.assertEqual(alignment.query.annotations["end"], 168)
-            self.assertEqual(alignment.target.annotations["start"], 446)
-            self.assertEqual(alignment.target.annotations["end"], 397)
+            self.assertEqual(alignment.target.annotations["start"], 447)
+            self.assertEqual(alignment.target.annotations["end"], 396)
             self.assertEqual(alignment.target.seq, "SLPVIIRTHSLPQLERH")
             self.assertEqual(alignment.query.seq, "SIEILKRVHSFEELERH")
             self.assertAlmostEqual(alignment.annotations["evalue"], 0.77)
@@ -13268,13 +15464,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 42)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 15)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|397511         0 TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ 41
+                  0 ||...|||||...||......|.|..||....|......|. 41
+gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  41],
-                                 [225, 266]])
+                                 [  0,  41]])
                     # fmt: on
                 )
             )
@@ -13300,8 +15504,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["length"], 8056)
             self.assertEqual(alignment.query.annotations["start"], 225)
             self.assertEqual(alignment.query.annotations["end"], 348)
-            self.assertEqual(alignment.target.annotations["start"], 6170)
-            self.assertEqual(alignment.target.annotations["end"], 6049)
+            self.assertEqual(alignment.target.annotations["start"], 6171)
+            self.assertEqual(alignment.target.annotations["end"], 6048)
             self.assertEqual(
                 alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ"
             )
@@ -13339,13 +15543,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|397511         0 TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ 41
+                  0 ||...|||||...||......|.|..||....|......|. 41
+gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  41],
-                                 [225, 266]])
+                                 [  0,  41]])
                     # fmt: on
                 )
             )
@@ -13371,8 +15583,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["length"], 8831)
             self.assertEqual(alignment.query.annotations["start"], 225)
             self.assertEqual(alignment.query.annotations["end"], 348)
-            self.assertEqual(alignment.target.annotations["start"], 6945)
-            self.assertEqual(alignment.target.annotations["end"], 6824)
+            self.assertEqual(alignment.target.annotations["start"], 6946)
+            self.assertEqual(alignment.target.annotations["end"], 6823)
             self.assertEqual(
                 alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ"
             )
@@ -13410,13 +15622,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|390362         0 LPFELACQSKSARIVNTALDCLQKL 25
+                  0 |||.|||||..|.....|..|||.| 25
+gi|296147         0 LPFVLACQSRNAKMTTLAMQCLQGL 25
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  25],
-                                 [180, 205]])
+                                 [  0,  25]])
                     # fmt: on
                 )
             )
@@ -13477,13 +15697,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 21)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 21)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|390341         0 LPFELACQSKSARIVNTALDCLQKL 25
+                  0 |||.|||||..|.....|..|||.| 25
+gi|296147         0 LPFVLACQSRNAKMTTLAMQCLQGL 25
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  25],
-                                 [180, 205]])
+                                 [  0,  25]])
                     # fmt: on
                 )
             )
@@ -13544,13 +15772,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 21)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 21)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|332858         0 TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ 41
+                  0 ||...|||||...||......|.|..||....|......|. 41
+gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  41],
-                                 [225, 266]])
+                                 [  0,  41]])
                     # fmt: on
                 )
             )
@@ -13576,8 +15812,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["length"], 8054)
             self.assertEqual(alignment.query.annotations["start"], 225)
             self.assertEqual(alignment.query.annotations["end"], 348)
-            self.assertEqual(alignment.target.annotations["start"], 6170)
-            self.assertEqual(alignment.target.annotations["end"], 6049)
+            self.assertEqual(alignment.target.annotations["start"], 6171)
+            self.assertEqual(alignment.target.annotations["end"], 6048)
             self.assertEqual(
                 alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ"
             )
@@ -13615,13 +15851,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|332858         0 TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ 41
+                  0 ||...|||||...||......|.|..||....|......|. 41
+gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  41],
-                                 [225, 266]])
+                                 [  0,  41]])
                     # fmt: on
                 )
             )
@@ -13647,8 +15891,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["length"], 8593)
             self.assertEqual(alignment.query.annotations["start"], 225)
             self.assertEqual(alignment.query.annotations["end"], 348)
-            self.assertEqual(alignment.target.annotations["start"], 6709)
-            self.assertEqual(alignment.target.annotations["end"], 6588)
+            self.assertEqual(alignment.target.annotations["start"], 6710)
+            self.assertEqual(alignment.target.annotations["end"], 6587)
             self.assertEqual(
                 alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ"
             )
@@ -13686,13 +15930,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|332858         0 TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ 41
+                  0 ||...|||||...||......|.|..||....|......|. 41
+gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  41],
-                                 [225, 266]])
+                                 [  0,  41]])
                     # fmt: on
                 )
             )
@@ -13718,8 +15970,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["length"], 8829)
             self.assertEqual(alignment.query.annotations["start"], 225)
             self.assertEqual(alignment.query.annotations["end"], 348)
-            self.assertEqual(alignment.target.annotations["start"], 6945)
-            self.assertEqual(alignment.target.annotations["end"], 6824)
+            self.assertEqual(alignment.target.annotations["start"], 6946)
+            self.assertEqual(alignment.target.annotations["end"], 6823)
             self.assertEqual(
                 alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNTLELQ"
             )
@@ -13757,13 +16009,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|470302         0 YFLPFQLACETQNVKITVTTLDCLQKL 27
+                  0 ..|||.|||...|.|.|.....|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -13824,13 +16084,25 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|449435         0 VKDGAEHAILKLRTMSCPSDIAENEDILRIFLLACEAKTIKLSVIGLSSLQKLISHDAVT
+                  0 ........|..|.............|....|.|||.....|........||.|.......
+gi|296147         0 IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP
+
+gi|449435        60 PSALKEIL 68
+                 60 .|.|.||| 68
+gi|296147        60 RSRLSEIL 68
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  68],
-                                 [ 96, 164]])
+                                 [  0,  68]])
                     # fmt: on
                 )
             )
@@ -13897,13 +16169,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 58)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 58)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|426391         0 TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNILELQ 41
+                  0 ||...|||||...||......|.|..||....|......|. 41
+gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  41],
-                                 [225, 266]])
+                                 [  0,  41]])
                     # fmt: on
                 )
             )
@@ -13929,8 +16209,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["length"], 8057)
             self.assertEqual(alignment.query.annotations["start"], 225)
             self.assertEqual(alignment.query.annotations["end"], 348)
-            self.assertEqual(alignment.target.annotations["start"], 6171)
-            self.assertEqual(alignment.target.annotations["end"], 6050)
+            self.assertEqual(alignment.target.annotations["start"], 6172)
+            self.assertEqual(alignment.target.annotations["end"], 6049)
             self.assertEqual(
                 alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNILELQ"
             )
@@ -13968,13 +16248,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|426391         0 TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNILELQ 41
+                  0 ||...|||||...||......|.|..||....|......|. 41
+gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  41],
-                                 [225, 266]])
+                                 [  0,  41]])
                     # fmt: on
                 )
             )
@@ -14000,8 +16288,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["length"], 8832)
             self.assertEqual(alignment.query.annotations["start"], 225)
             self.assertEqual(alignment.query.annotations["end"], 348)
-            self.assertEqual(alignment.target.annotations["start"], 6946)
-            self.assertEqual(alignment.target.annotations["end"], 6825)
+            self.assertEqual(alignment.target.annotations["start"], 6947)
+            self.assertEqual(alignment.target.annotations["end"], 6824)
             self.assertEqual(
                 alignment.target.seq, "TLGVSCLQGLHILPSLEDEGVSQITNAFNMIVHVSNILELQ"
             )
@@ -14039,13 +16327,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 35)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 35)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|347973         0 YFLPFELACQSRTPRIVVTALDCLQKL 27
+                  0 ..|||.||||||.......|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -14106,13 +16402,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|339252         0 YFLPFELACSSKSTKIVVIALDCLQKL 27
+                  0 ..|||.|||.|...|....|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -14173,13 +16477,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|189192         0 ISAMSPVPVLARVRLSDVADAYFRINHVVSDL 32
+                  0 ....|.||...|.|||...||.....|..... 32
+gi|296147         0 LQGLSTVPSIPRSRLSEILDAFIEATHLAMEI 32
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  32],
-                                 [243, 275]])
+                                 [  0,  32]])
                     # fmt: on
                 )
             )
@@ -14205,8 +16517,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["length"], 769)
             self.assertEqual(alignment.query.annotations["start"], 243)
             self.assertEqual(alignment.query.annotations["end"], 339)
-            self.assertEqual(alignment.target.annotations["start"], 334)
-            self.assertEqual(alignment.target.annotations["end"], 240)
+            self.assertEqual(alignment.target.annotations["start"], 335)
+            self.assertEqual(alignment.target.annotations["end"], 239)
             self.assertEqual(alignment.target.seq, "ISAMSPVPVLARVRLSDVADAYFRINHVVSDL")
             self.assertEqual(alignment.query.seq, "LQGLSTVPSIPRSRLSEILDAFIEATHLAMEI")
             self.assertAlmostEqual(alignment.annotations["evalue"], 1.9)
@@ -14240,13 +16552,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 43)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 27)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|189192         0 RSLPIIIRAHGLPQLERH 18
+                  0 .|..|..|.|....|||| 18
+gi|296147         0 KSIEILKRVHSFEELERH 18
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  18],
-                                 [114, 132]])
+                                 [  0,  18]])
                     # fmt: on
                 )
             )
@@ -14272,8 +16592,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["length"], 769)
             self.assertEqual(alignment.query.annotations["start"], 114)
             self.assertEqual(alignment.query.annotations["end"], 168)
-            self.assertEqual(alignment.target.annotations["start"], 620)
-            self.assertEqual(alignment.target.annotations["end"], 568)
+            self.assertEqual(alignment.target.annotations["start"], 621)
+            self.assertEqual(alignment.target.annotations["end"], 567)
             self.assertEqual(alignment.target.seq, "RSLPIIIRAHGLPQLERH")
             self.assertEqual(alignment.query.seq, "KSIEILKRVHSFEELERH")
             self.assertAlmostEqual(alignment.annotations["evalue"], 1.9)
@@ -14307,13 +16627,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 43)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 15)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|426242         0 YFLPFELACQSRSPRVVSTSLDCLQKL 27
+                  0 ..|||.||||||..........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -14374,13 +16702,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|329663         0 YFLPFELACQSRSPRVVSTSLDCLQKL 27
+                  0 ..|||.||||||..........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -14441,13 +16777,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|167533         0 PFRLACECKSAKVTRTALDCLQKMMAYGHINSHMMAEV 38
+                  0 ||.|||....||.|..|..|||.......|......|. 38
+gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEI 38
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  38],
-                                 [183, 221]])
+                                 [  0,  38]])
                     # fmt: on
                 )
             )
@@ -14512,13 +16856,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 33)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|410970         0 AGLLDFWMPGLRLWPRRWKF 20
+                  0 ||.|.||||.|||...||.| 20
+gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  20],
-                                 [280, 300]])
+                                 [  0,  20]])
                     # fmt: on
                 )
             )
@@ -14579,13 +16931,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|410929         0 YVLPFELACQSKSPRIVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -14646,13 +17006,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|402903         0 DSISSFEKTGARSQWRGTQDSSGDPCRGRSFQLP*LAT 38
+                  0 ..|..|.....|..|.|.|......|.||.|..||||. 38
+gi|296147         0 EGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LAS 38
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  38],
-                                 [309, 271]])
+                                 [  0,  38]])
                     # fmt: on
                 )
             )
@@ -14676,10 +17044,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_003914364")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_003914364.1")
             self.assertEqual(alignment.target.annotations["length"], 3776)
-            self.assertEqual(alignment.query.annotations["start"], 308)
-            self.assertEqual(alignment.query.annotations["end"], 196)
-            self.assertEqual(alignment.target.annotations["start"], 2580)
-            self.assertEqual(alignment.target.annotations["end"], 2468)
+            self.assertEqual(alignment.query.annotations["start"], 309)
+            self.assertEqual(alignment.query.annotations["end"], 195)
+            self.assertEqual(alignment.target.annotations["start"], 2581)
+            self.assertEqual(alignment.target.annotations["end"], 2467)
             self.assertEqual(
                 alignment.target.seq, "DSISSFEKTGARSQWRGTQDSSGDPCRGRSFQLP*LAT"
             )
@@ -14717,13 +17085,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 33)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|383853         0 YFLPFELACQSKSPRIVVTALDCLQKL 27
+                  0 ..|||.|||||........|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -14784,13 +17160,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|380017         0 YFLPFELACQSKSPRIVVTALDCLQKL 27
+                  0 ..|||.|||||........|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -14851,13 +17235,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|350411         0 YFLPFELACQSKSPRIVVTALDCLQKL 27
+                  0 ..|||.|||||........|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -14918,13 +17310,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|348539         0 YVLPFELACQSKSPRIVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -14985,13 +17385,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|345796         0 AGLLDFWMPGLRLWPRRWKF 20
+                  0 ||.|.||||.|||...||.| 20
+gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  20],
-                                 [280, 300]])
+                                 [  0,  20]])
                     # fmt: on
                 )
             )
@@ -15052,13 +17460,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|345796         0 AGLLDFWMPGLRLWPRRWKF 20
+                  0 ||.|.||||.|||...||.| 20
+gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  20],
-                                 [280, 300]])
+                                 [  0,  20]])
                     # fmt: on
                 )
             )
@@ -15119,13 +17535,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|340729         0 YFLPFELACQSKSPRIVVTALDCLQKL 27
+                  0 ..|||.|||||........|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -15186,13 +17610,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|338716         0 AGLLDFWMPGLRLWPRRWKF 20
+                  0 ||.|.||||.|||...||.| 20
+gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  20],
-                                 [280, 300]])
+                                 [  0,  20]])
                     # fmt: on
                 )
             )
@@ -15253,13 +17685,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|328778         0 YFLPFELACQSKSPRIVVTALDCLQKL 27
+                  0 ..|||.|||||........|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -15320,13 +17760,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|301759         0 AGLLDFWMPGLRLWPRRWKF 20
+                  0 ||.|.||||.|||...||.| 20
+gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  20],
-                                 [280, 300]])
+                                 [  0,  20]])
                     # fmt: on
                 )
             )
@@ -15387,13 +17835,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|301759         0 AGLLDFWMPGLRLWPRRWKF 20
+                  0 ||.|.||||.|||...||.| 20
+gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  20],
-                                 [280, 300]])
+                                 [  0,  20]])
                     # fmt: on
                 )
             )
@@ -15454,13 +17910,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|292626         0 YVLPFELACQSKSPRIVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -15521,13 +17985,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|237836         0 PWCRDAQRECRPFSFFVR*RCKRFFSPGL 29
+                  0 ||...|.|.|.||..|....|..|..|.| 29
+gi|296147         0 PWQCNAYRDCQPFHLFLEAGCLKFWMPSL 29
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  29],
-                                 [226, 255]])
+                                 [  0,  29]])
                     # fmt: on
                 )
             )
@@ -15588,13 +18060,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 25)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 25)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|396462         0 SRKDLSRRPHFISPFLIACGTRNAKV 26
+                  0 |...|.|.|.|..||..||..||||. 26
+gi|296147         0 SFEELERHPDFALPFVLACQSRNAKM 26
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  26],
-                                 [144, 170]])
+                                 [  0,  26]])
                     # fmt: on
                 )
             )
@@ -15655,13 +18135,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 22)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 22)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|268570         0 YFLPFELACNSKNPRVVITALDCLQKL 27
+                  0 ..|||.|||.|.|......|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -15722,13 +18210,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|198473         0 YFLPFELACKSRSPRIVVTALDCLQKL 27
+                  0 ..|||.|||.||.......|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -15789,13 +18285,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|196008         0 DYFLPFELACKSRCSRIVIASLDCLQKL 28
+                  0 |..|||.|||.||..........|||.| 28
+gi|296147         0 DFALPFVLACQSRNAKMTTLAMQCLQGL 28
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  28],
-                                 [171, 199]])
+                                 [  0,  28]])
                     # fmt: on
                 )
             )
@@ -15856,13 +18360,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 24)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 24)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|195579         0 YFLPFELACKSRSPRIVVTALDCLQKL 27
+                  0 ..|||.|||.||.......|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -15923,13 +18435,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|195472         0 YFLPFELACKSRSPRIVVTALDCLQKL 27
+                  0 ..|||.|||.||.......|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -15990,13 +18510,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|195438         0 YFLPFELACKSRSPRIVVTALDCLQKL 27
+                  0 ..|||.|||.||.......|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -16057,13 +18585,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|195397         0 YFLPFELACKSRSPRIVVTALDCLQKL 27
+                  0 ..|||.|||.||.......|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -16124,13 +18660,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|195338         0 YFLPFELACKSRSPRIVVTALDCLQKL 27
+                  0 ..|||.|||.||.......|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -16191,13 +18735,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|195164         0 YFLPFELACKSRSPRIVVTALDCLQKL 27
+                  0 ..|||.|||.||.......|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -16258,13 +18810,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|195119         0 YFLPFELACKSRSPRIVVTALDCLQKL 27
+                  0 ..|||.|||.||.......|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -16325,13 +18885,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|195031         0 YFLPFELACKSRSPRIVVTALDCLQKL 27
+                  0 ..|||.|||.||.......|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -16392,13 +18960,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|194860         0 YFLPFELACKSRSPRIVVTALDCLQKL 27
+                  0 ..|||.|||.||.......|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -16459,13 +19035,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|194761         0 YFLPFELACKSRSPRIVVTALDCLQKL 27
+                  0 ..|||.|||.||.......|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -16526,13 +19110,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|170037         0 YFLPFELACQSKTPRIVVTALDCLQKL 27
+                  0 ..|||.|||||........|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -16593,13 +19185,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|157134         0 YFLPFELACQSKTPRIVVTALDCLQKL 27
+                  0 ..|||.|||||........|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -16660,13 +19260,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|156386         0 YLLPFELACQSKCPRIVTTSLDCLQKL 27
+                  0 ..|||.|||||......|....|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -16727,13 +19335,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|245841         0 YFLPFELACKSRSPRIVVTALDCLQKL 27
+                  0 ..|||.|||.||.......|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -16794,13 +19410,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|245841         0 YFLPFELACKSRSPRIVVTALDCLQKL 27
+                  0 ..|||.|||.||.......|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -16861,13 +19485,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|157110         0 FLIVGSNCWLFIVSSDWLNFFFS 23
+                  0 ........|.......||||||| 23
+gi|296147         0 YVLFSISQWIYH*HGEWLNFFFS 23
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  23],
-                                 [145, 122]])
+                                 [  0,  23]])
                     # fmt: on
                 )
             )
@@ -16891,10 +19523,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_001651005")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_001651005.1")
             self.assertEqual(alignment.target.annotations["length"], 9654)
-            self.assertEqual(alignment.query.annotations["start"], 144)
-            self.assertEqual(alignment.query.annotations["end"], 77)
-            self.assertEqual(alignment.target.annotations["start"], 5690)
-            self.assertEqual(alignment.target.annotations["end"], 5623)
+            self.assertEqual(alignment.query.annotations["start"], 145)
+            self.assertEqual(alignment.query.annotations["end"], 76)
+            self.assertEqual(alignment.target.annotations["start"], 5691)
+            self.assertEqual(alignment.target.annotations["end"], 5622)
             self.assertEqual(alignment.target.seq, "FLIVGSNCWLFIVSSDWLNFFFS")
             self.assertEqual(alignment.query.seq, "YVLFSISQWIYH*HGEWLNFFFS")
             self.assertAlmostEqual(alignment.annotations["evalue"], 5.2)
@@ -16928,13 +19560,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 40)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 20)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|157110         0 GNWFHFFFSWFLIVGSNWLNFFLSWFFIISRNW 33
+                  0 |.|..||||...|.....|.....|.......| 33
+gi|296147         0 GEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSW 33
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  33],
-                                 [103,  70]])
+                                 [  0,  33]])
                     # fmt: on
                 )
             )
@@ -16958,10 +19598,10 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_001651005")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_001651005.1")
             self.assertEqual(alignment.target.annotations["length"], 9654)
-            self.assertEqual(alignment.query.annotations["start"], 102)
-            self.assertEqual(alignment.query.annotations["end"], 5)
-            self.assertEqual(alignment.target.annotations["start"], 5516)
-            self.assertEqual(alignment.target.annotations["end"], 5419)
+            self.assertEqual(alignment.query.annotations["start"], 103)
+            self.assertEqual(alignment.query.annotations["end"], 4)
+            self.assertEqual(alignment.target.annotations["start"], 5517)
+            self.assertEqual(alignment.target.annotations["end"], 5418)
             self.assertEqual(alignment.target.seq, "GNWFHFFFSWFLIVGSNWLNFFLSWFFIISRNW")
             self.assertEqual(alignment.query.seq, "GEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSW")
             self.assertAlmostEqual(alignment.annotations["evalue"], 5.2)
@@ -16995,13 +19635,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 40)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 28)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|156388         0 CQPFLRFLEWGNMDL*LPALLVL 23
+                  0 ||||..|||.|......|.|..| 23
+gi|296147         0 CQPFHLFLEAGCLKFWMPSLRLL 23
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  23],
-                                 [253, 276]])
+                                 [  0,  23]])
                     # fmt: on
                 )
             )
@@ -17062,13 +19710,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 20)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|156388         0 RNAKVMVIFLWCLSLLSAIPPV 22
+                  0 ||||.......||..||..|.. 22
+gi|296147         0 RNAKMTTLAMQCLQGLSTVPSI 22
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  22],
-                                 [207, 229]])
+                                 [  0,  22]])
                     # fmt: on
                 )
             )
@@ -17129,13 +19785,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 19)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|156359         0 CQPFLRFLEWGNMDL*LPALLVL 23
+                  0 ||||..|||.|......|.|..| 23
+gi|296147         0 CQPFHLFLEAGCLKFWMPSLRLL 23
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  23],
-                                 [253, 276]])
+                                 [  0,  23]])
                     # fmt: on
                 )
             )
@@ -17196,13 +19860,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 20)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|156359         0 RNAKVMVIFLWCLSLLSAIPPV 22
+                  0 ||||.......||..||..|.. 22
+gi|296147         0 RNAKMTTLAMQCLQGLSTVPSI 22
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  22],
-                                 [207, 229]])
+                                 [  0,  22]])
                     # fmt: on
                 )
             )
@@ -17263,13 +19935,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 19)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|471359         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -17330,13 +20010,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|470652         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -17397,13 +20085,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|470125         0 FVQSCSSPNFKFSTSSSEHSQGSSNSKSIPRLRVSD 36
+                  0 ||..|.|.|.|..|......||.|...||||.|.|. 36
+gi|296147         0 FVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE 36
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  36],
-                                 [186, 222]])
+                                 [  0,  36]])
                     # fmt: on
                 )
             )
@@ -17468,13 +20164,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 31)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 31)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|466073         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -17535,13 +20239,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|449492         0 RLEEVSPLGSLLTGQLNRAREFIILKS*KTVRLSIEL 37
+                  0 |.||..|...|....|....|.|.|.|||..|.|..| 37
+gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  37],
-                                 [ 76, 113]])
+                                 [  0,  37]])
                     # fmt: on
                 )
             )
@@ -17606,13 +20318,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|449492         0 RLEEVSPLGSLLTGQLNRAREFIILKS*KTVRLSIEL 37
+                  0 |.||..|...|....|....|.|.|.|||..|.|..| 37
+gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  37],
-                                 [ 76, 113]])
+                                 [  0,  37]])
                     # fmt: on
                 )
             )
@@ -17677,13 +20397,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|449443         0 RLEEVSPLGSLLTGQLNRAREFIILKS*KTVRLSIEL 37
+                  0 |.||..|...|....|....|.|.|.|||..|.|..| 37
+gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  37],
-                                 [ 76, 113]])
+                                 [  0,  37]])
                     # fmt: on
                 )
             )
@@ -17748,13 +20476,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|449443         0 RLEEVSPLGSLLTGQLNRAREFIILKS*KTVRLSIEL 37
+                  0 |.||..|...|....|....|.|.|.|||..|.|..| 37
+gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  37],
-                                 [ 76, 113]])
+                                 [  0,  37]])
                     # fmt: on
                 )
             )
@@ -17819,13 +20555,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|432873         0 CWLRSQGTTERRPLQMRSSADRAPSHFQMETAYLVFQM 38
+                  0 |||..||....||.|.....|..|.|...|...|.|.| 38
+gi|296147         0 CWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWM 38
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  38],
-                                 [190, 228]])
+                                 [  0,  38]])
                     # fmt: on
                 )
             )
@@ -17851,8 +20595,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["length"], 6378)
             self.assertEqual(alignment.query.annotations["start"], 190)
             self.assertEqual(alignment.query.annotations["end"], 304)
-            self.assertEqual(alignment.target.annotations["start"], 4026)
-            self.assertEqual(alignment.target.annotations["end"], 3914)
+            self.assertEqual(alignment.target.annotations["start"], 4027)
+            self.assertEqual(alignment.target.annotations["end"], 3913)
             self.assertEqual(
                 alignment.target.seq, "CWLRSQGTTERRPLQMRSSADRAPSHFQMETAYLVFQM"
             )
@@ -17890,13 +20634,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 33)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 33)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|426392         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -17957,13 +20709,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|410953         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -18024,13 +20784,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|403282         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -18091,13 +20859,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|402882         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -18158,13 +20934,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|397475         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -18225,13 +21009,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|395752         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -18292,13 +21084,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|395506         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -18359,13 +21159,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|363741         0 YFLPFELACQSKSPRIVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -18426,13 +21234,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|359322         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -18493,13 +21309,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|354476         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -18560,13 +21384,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|350595         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -18627,13 +21459,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|350591         0 AGRVDFWMPGLRLWPRRWRF 20
+                  0 ||...||||.|||...|||| 20
+gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  20],
-                                 [280, 300]])
+                                 [  0,  20]])
                     # fmt: on
                 )
             )
@@ -18694,13 +21534,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|350591         0 AGRVDFWMPGLRLWPRRWRF 20
+                  0 ||...||||.|||...|||| 20
+gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  20],
-                                 [280, 300]])
+                                 [  0,  20]])
                     # fmt: on
                 )
             )
@@ -18761,13 +21609,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|348563         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -18828,13 +21684,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|344280         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -18895,13 +21759,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|338719         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -18962,13 +21834,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|335300         0 AGRVDFWMPGLRLWPRRWRF 20
+                  0 ||...||||.|||...|||| 20
+gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  20],
-                                 [280, 300]])
+                                 [  0,  20]])
                     # fmt: on
                 )
             )
@@ -19029,13 +21909,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 17)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 17)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|334312         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -19096,13 +21984,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|332858         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -19163,13 +22059,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|332207         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -19230,13 +22134,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|332207         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -19297,13 +22209,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|326931         0 YFLPFELACQSKSPRIVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -19364,13 +22284,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|327271         0 YFLPFELACQSKSPRIVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -19431,13 +22359,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|301754         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -19498,13 +22434,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|297259         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -19565,13 +22509,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|296200         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -19632,13 +22584,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|242009         0 YFLPFELVCQSKSSRIVVTALDCLQKL 27
+                  0 ..|||.|.|||........|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -19699,13 +22659,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|224078         0 YFLPFELACQSKSPRIVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -19766,13 +22734,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|167736         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -19833,13 +22809,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|150417         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -19900,13 +22884,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|149639         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -19967,13 +22959,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|114682         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -20034,13 +23034,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|313420         0 YFLPFELACQSKSPRVVSTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -20104,13 +23112,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|410036         0 RVHLSPLRQLWPGSSQPAVFPVQIKDSSPTCVACVRGQGKTTVPSPPRNRTSATL 55
+                  0 |||........|....|.|...|......|..|....||..||||.||.|.|..| 55
+gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  55],
-                                 [135, 190]])
+                                 [  0,  55]])
                     # fmt: on
                 )
             )
@@ -20177,13 +23193,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|410036         0 RVHLSPLRQLWPGSSQPAVFPVQIKDSSPTCVACVRGQGKTTVPSPPRNRTSATL 55
+                  0 |||........|....|.|...|......|..|....||..||||.||.|.|..| 55
+gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  55],
-                                 [135, 190]])
+                                 [  0,  55]])
                     # fmt: on
                 )
             )
@@ -20250,13 +23274,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|397495         0 RVHLSPLRQLWPGSSQPAVFPVQIKDSSPTCVACVRGQGKTTVPSPPRNRTSATL 55
+                  0 |||........|....|.|...|......|..|....||..||||.||.|.|..| 55
+gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  55],
-                                 [135, 190]])
+                                 [  0,  55]])
                     # fmt: on
                 )
             )
@@ -20323,13 +23355,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|397495         0 RVHLSPLRQLWPGSSQPAVFPVQIKDSSPTCVACVRGQGKTTVPSPPRNRTSATL 55
+                  0 |||........|....|.|...|......|..|....||..||||.||.|.|..| 55
+gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  55],
-                                 [135, 190]])
+                                 [  0,  55]])
                     # fmt: on
                 )
             )
@@ -20396,13 +23436,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 47)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 47)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|392887         0 YFLPFELACNSKSPKIVITALDCLQKL 27
+                  0 ..|||.|||.|...|....|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -20463,13 +23511,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|392887         0 YFLPFELACNSKSPKIVITALDCLQKL 27
+                  0 ..|||.|||.|...|....|..|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -20530,13 +23586,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|363727         0 NIGTMWNLQWEFKR*FSFSSRDDRRDPATSCQCMEGFLSLFCA 43
+                  0 ||.....|.|.......|.|.|..|..|.||.|||.....|.| 43
+gi|296147         0 NISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA 43
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  43],
-                                 [131,  88]])
+                                 [  0,  43]])
                     # fmt: on
                 )
             )
@@ -20560,8 +23624,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_001235329")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_001235329.2")
             self.assertEqual(alignment.target.annotations["length"], 8058)
-            self.assertEqual(alignment.query.annotations["start"], 130)
-            self.assertEqual(alignment.query.annotations["end"], 3)
+            self.assertEqual(alignment.query.annotations["start"], 131)
+            self.assertEqual(alignment.query.annotations["end"], 2)
             self.assertEqual(alignment.target.annotations["start"], 1805)
             self.assertEqual(alignment.target.annotations["end"], 1934)
             self.assertEqual(
@@ -20601,13 +23665,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 37)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 37)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|350583         0 YFLPFELACQSRCPRIVSTSLDCLQKL 27
+                  0 ..|||.||||||..........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -20668,13 +23740,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|345486         0 YFLPFELACQSKSPRIVVTSLDCLQKL 27
+                  0 ..|||.|||||...........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -20735,13 +23815,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|344272         0 YFLPFELACQSRCPRIVSTSLDCLQKL 27
+                  0 ..|||.||||||..........|||.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -20802,13 +23890,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|241632         0 YLMPFELACQSKSPRIVVTALDCIQKL 27
+                  0 ...||.|||||........|..|.|.| 27
+gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  27],
-                                 [174, 201]])
+                                 [  0,  27]])
                     # fmt: on
                 )
             )
@@ -20869,13 +23965,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 23)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 23)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|157129         0 QAYNMSVTDLAIKSIQGIASLHTLPRSRAIIAFQAFV 37
+                  0 |..|...|.||....||.......||||......||. 37
+gi|296147         0 QSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFI 37
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  37],
-                                 [201, 238]])
+                                 [  0,  37]])
                     # fmt: on
                 )
             )
@@ -20940,13 +24044,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|157129         0 QAYNMSVTDLAIKSIQGIASLHTLPRSRAIIAFQAFV 37
+                  0 |..|...|.||....||.......||||......||. 37
+gi|296147         0 QSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFI 37
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  37],
-                                 [201, 238]])
+                                 [  0,  37]])
                     # fmt: on
                 )
             )
@@ -21011,13 +24123,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 32)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 32)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|470250         0 HSQIGNPSTNNNNNQNLITQPQNYEMYKIN 30
+                  0 ||.||.|......|......||||....|. 30
+gi|296147         0 HSLIGKPTRKGVRNPDVFLAPQNYVLFSIS 30
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  30],
-                                 [214, 184]])
+                                 [  0,  30]])
                     # fmt: on
                 )
             )
@@ -21041,8 +24161,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_004367211")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_004367211.1")
             self.assertEqual(alignment.target.annotations["length"], 1509)
-            self.assertEqual(alignment.query.annotations["start"], 213)
-            self.assertEqual(alignment.query.annotations["end"], 125)
+            self.assertEqual(alignment.query.annotations["start"], 214)
+            self.assertEqual(alignment.query.annotations["end"], 124)
             self.assertEqual(alignment.target.annotations["start"], 1083)
             self.assertEqual(alignment.target.annotations["end"], 1173)
             self.assertEqual(alignment.target.seq, "HSQIGNPSTNNNNNQNLITQPQNYEMYKIN")
@@ -21078,13 +24198,21 @@ class TestBlast(unittest.TestCase):
             self.assertAlmostEqual(alignment.target.annotations["% coverage"], 55)
             self.assertAlmostEqual(alignment.annotations["% hsp coverage"], 26)
             alignment = next(alignments)
+            self.assertEqual(
+                str(alignment),
+                """\
+gi|470250         0 LFQEKTSLS*LWKVILFTML*SPSHCTRLPTQCPCLRS 38
+                  0 ||.....||..|....|....|..........|.|..| 38
+gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMES 38
+""",
+            )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
                     numpy.array([[  0,  38],
-                                 [137,  99]])
+                                 [  0,  38]])
                     # fmt: on
                 )
             )
@@ -21108,8 +24236,8 @@ class TestBlast(unittest.TestCase):
             self.assertEqual(alignment.target.annotations["accs."], "XM_004367211")
             self.assertEqual(alignment.target.annotations["acc.ver"], "XM_004367211.1")
             self.assertEqual(alignment.target.annotations["length"], 1509)
-            self.assertEqual(alignment.query.annotations["start"], 136)
-            self.assertEqual(alignment.query.annotations["end"], 24)
+            self.assertEqual(alignment.query.annotations["start"], 137)
+            self.assertEqual(alignment.query.annotations["end"], 23)
             self.assertEqual(alignment.target.annotations["start"], 1298)
             self.assertEqual(alignment.target.annotations["end"], 1412)
             self.assertEqual(
