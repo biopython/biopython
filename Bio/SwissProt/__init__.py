@@ -416,7 +416,9 @@ def _read_gn(record):
         tokens = text.rstrip("; ").split("; ")
         gene_name = {}
         for token in tokens:
-            key, value = token.strip().split("=")
+            # value may include an equals sign, e.g.
+            # GN   Name=Lacc1=POX4 {ECO:0000313|EMBL:KDQ27217.1};
+            key, value = token.strip().split("=", 1)
             if key == "Name":
                 gene_name["Name"] = value
             else:
