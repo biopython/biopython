@@ -18,11 +18,6 @@ temperature of oligonucleotides:
    Correction for mismatches, dangling ends, salt concentration and other
    additives are available.
 
-Tm_staluc is the 'old' NN calculation and is kept for compatibility. It is,
-however, recommended to use Tm_NN instead, since Tm_staluc may be deprecated
-in the future. Also, Tm_NN has much more options. Using Tm_staluc and Tm_NN
-with default parameters gives (essentially) the same results.
-
 General parameters for most Tm methods:
  - seq -- A Biopython sequence object or a string.
  - check -- Checks if the sequence is valid for the given method (default=
@@ -66,11 +61,6 @@ For example:
     >>> print('%0.2f' % mt.Tm_NN(myseq))
     60.32
 
-Tm_NN with default values gives same result as 'old' Tm_staluc. However, values
-differ for RNA, since Tm_staluc had some errors for RNA calculation. These
-errors have been fixed in this version.
-
-New Tm_NN can do slightly more:
 Using different thermodynamic tables, e.g. from Breslauer '86 or Sugimoto '96:
 
     >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.DNA_NN1))  # Breslauer '86
