@@ -217,6 +217,7 @@ def _parse_primers_packet(length, data, record):
         if name:
             quals["label"] = [name]
 
+        locations = []
         for site in primer.getElementsByTagName("BindingSite"):
             rng = _get_attribute_value(
                 site, "location", error="Missing binding site location"
@@ -227,8 +228,15 @@ def _parse_primers_packet(length, data, record):
             else:
                 strand = +1
 
+            location = _parse_location(rng, strand, record)
+            simplified = int(_get_attribute_value(site, "simplified", default="0")) == 1
+            if simplified and location in locations:
+                # Duplicate "simplified" binding site, ignore
+                continue
+
+            locations.append(location)
             feature = SeqFeature(
-                _parse_location(rng, strand, record),
+                location,
                 type="primer_bind",
                 qualifiers=quals,
             )
