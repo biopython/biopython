@@ -109,10 +109,15 @@ def _parse_cookie_packet(length, data, record):
         raise ValueError("The file is not a valid SnapGene file")
 
 
-def _parse_location(rangespec, strand, record):
+def _parse_location(rangespec, strand, record, is_primer=False):
     start, end = (int(x) for x in rangespec.split("-"))
     # Account for SnapGene's 1-based coordinates
     start = start - 1
+    if is_primer:
+        # Primers' coordinates in SnapGene files are shifted by -1
+        # for some reasons
+        start += 1
+        end += 1
     if start > end:
         # Range wrapping the end of the sequence
         l1 = SimpleLocation(start, len(record), strand=strand)
@@ -228,7 +233,7 @@ def _parse_primers_packet(length, data, record):
             else:
                 strand = +1
 
-            location = _parse_location(rng, strand, record)
+            location = _parse_location(rng, strand, record, is_primer=True)
             simplified = int(_get_attribute_value(site, "simplified", default="0")) == 1
             if simplified and location in locations:
                 # Duplicate "simplified" binding site, ignore
