@@ -18,6 +18,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Adam Vandergriff
+- Damien Goutte-Gattat
 - Michiel de Hoon
 - Peter Cock
 - Joe Greener
