@@ -14,6 +14,10 @@ The latest news is at the top of this file.
 This release of Biopython supports Python 3.7, 3.8, 3.9, 3.10, 3.11. It has
 also been tested on PyPy3.7 v7.3.5. We intend to drop Python 3.7 support.
 
+The API documentation and the `Biopython Tutorial and Cookbook` have
+been updated to better annotate use and application of the
+``Bio.PDB.internal_coords`` module.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
@@ -49,12 +53,11 @@ assembly step by ~30%, this adds distance plot support (including
 re-generating structures from distance plot data), coordinate space
 transforms for superimposing residues and their environments, a
 per-chain all-atom array for Atom coordinates, and optional default
-values for all internal coordinates (code released in in 1.80).  The
-internal coordinates module continues to support extracting dihedral
-angle, bond angle and bond length (internal coordinates) data,
-reading/writing structure files of internal coordinates, and OpenSCAD
-output of structures for 3D CAD/3D printing work.  See the Biopython
-Tutorial and Cookbook for more information.
+values for all internal coordinates.  The internal coordinates module
+continues to support extracting dihedral angle, bond angle and bond
+length (internal coordinates) data, reading/writing structure files of
+internal coordinates, and OpenSCAD output of structures for 3D CAD/3D
+printing work.
 
 The ``Bio.motifs.jaspar.db`` now returns ``tf_family`` and ``tf_class`` as a
 string array since the JASPAR 2018 release.
