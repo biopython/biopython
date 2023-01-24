@@ -3069,6 +3069,51 @@ class Alignment:
                     start1, start2 = end1, end2
         return m
 
+    def counts(self):
+        """Return number of identities, mismatches, and gaps, of a pairwise alignment.
+
+        >>> aligner = PairwiseAligner(mode='global', match_score=2, mismatch_score=-1)
+        >>> for alignment in aligner.align("TACCG", "ACG"):
+        ...     print("Score = %.1f:" % alignment.score)
+        ...     gaps, identities, mismatches = alignment.counts()
+        ...     print(f"{gaps} gaps, {identities} identities, {mismatches} mismatches")
+        ...     print(alignment)
+        ...     assert gaps + identities + mismatches == 5
+        ...
+        Score = 6.0:
+        2 gaps, 3 identities, 0 mismatches
+        target            0 TACCG 5
+                          0 -||-| 5
+        query             0 -AC-G 3
+        <BLANKLINE>
+        Score = 6.0:
+        2 gaps, 3 identities, 0 mismatches
+        target            0 TACCG 5
+                          0 -|-|| 5
+        query             0 -A-CG 3
+        <BLANKLINE>
+
+        This classifies each pair of letters in a pairwise alignment into gaps,
+        perfect matches, or mismatches. It has been defined as a method (not a
+        property) so that it may in future take optional argument(s) allowing
+        the behaviour to be customised.
+        """
+        n = len(self.sequences)
+        if n != 2:
+            raise ValueError(
+                "counts(...) is defined for pairwise alignments only (found alignment of %d sequences)"
+                % n
+            )
+        gaps = identities = mismatches = 0
+        for a, b in zip(self[0], self[1]):
+            if a == "-" or b == "-":
+                gaps += 1
+            elif a == b:
+                identities += 1
+            else:
+                mismatches += 1
+        return gaps, identities, mismatches
+
 
 class PairwiseAlignments:
     """Implements an iterator over pairwise alignments returned by the aligner.
