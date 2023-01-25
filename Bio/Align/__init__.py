@@ -3101,22 +3101,23 @@ class Alignment:
         This classifies each pair of letters in a pairwise alignment into gaps,
         perfect matches, or mismatches. It has been defined as a method (not a
         property) so that it may in future take optional argument(s) allowing
-        the behaviour to be customised.
+        the behaviour to be customised. These three values are returned as a
+        namedtuple. This is calculated for all the pairs of sequences in the
+        alignment.
         """
-        n = len(self.sequences)
-        if n != 2:
-            raise ValueError(
-                "counts(...) is defined for pairwise alignments only (found alignment of %d sequences)"
-                % n
-            )
         gaps = identities = mismatches = 0
-        for a, b in zip(self[0], self[1]):
-            if a == "-" or b == "-":
-                gaps += 1
-            elif a == b:
-                identities += 1
-            else:
-                mismatches += 1
+        for i, seq1 in enumerate(self):
+            for j, seq2 in enumerate(self):
+                if i == j:
+                    # Don't count seq1 vs seq2 and seq2 vs seq1
+                    break
+                for a, b in zip(seq1, seq2):
+                    if a == "-" or b == "-":
+                        gaps += 1
+                    elif a == b:
+                        identities += 1
+                    else:
+                        mismatches += 1
         return AlignmentCounts(gaps, identities, mismatches)
 
 
