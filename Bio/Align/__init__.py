@@ -14,6 +14,7 @@ class, used in the Bio.AlignIO module.
 """
 
 import sys
+import collections
 import copy
 import importlib
 import warnings
@@ -40,6 +41,11 @@ from Bio.SeqRecord import SeqRecord, _RestrictedDict
 # (_aligners.pyd or _aligners.so) is missing or if the user is
 # importing from within the Biopython source tree, see PR #2007:
 # https://github.com/biopython/biopython/pull/2007
+
+
+AlignmentCounts = collections.namedtuple(
+    "AlignmentCounts", ["gaps", "identities", "mismatches"]
+)
 
 
 class MultipleSeqAlignment:
@@ -3075,10 +3081,9 @@ class Alignment:
         >>> aligner = PairwiseAligner(mode='global', match_score=2, mismatch_score=-1)
         >>> for alignment in aligner.align("TACCG", "ACG"):
         ...     print("Score = %.1f:" % alignment.score)
-        ...     gaps, identities, mismatches = alignment.counts()
-        ...     print(f"{gaps} gaps, {identities} identities, {mismatches} mismatches")
+        ...     c = alignment.counts()  # namedtuple
+        ...     print(f"{c.gaps} gaps, {c.identities} identities, {c.mismatches} mismatches")
         ...     print(alignment)
-        ...     assert gaps + identities + mismatches == 5
         ...
         Score = 6.0:
         2 gaps, 3 identities, 0 mismatches
@@ -3112,7 +3117,7 @@ class Alignment:
                 identities += 1
             else:
                 mismatches += 1
-        return gaps, identities, mismatches
+        return AlignmentCounts(gaps, identities, mismatches)
 
 
 class PairwiseAlignments:
