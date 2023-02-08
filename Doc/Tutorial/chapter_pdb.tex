@@ -1133,7 +1133,7 @@ io.save("myChain2.pdb")
 
 A file format is defined in the \texttt{PICIO} module to describe protein chains as hedra and
 dihedra relative to initial coordinates.  All parts of the file other than the residue sequence
-information (e.g. \texttt{\('1A8O', 0, 'A', \(' ', 153, ' '\)\) ILE}) are optional, and will be
+information (e.g. \texttt{('1A8O', 0, 'A', (' ', 153, ' ')) ILE}) are optional, and will be
 filled in with default values if not specified and \texttt{read\_PIC\(\)} is called with the
 \texttt{defaults=True} option.  Default values are calculated from Sep 2019 Dunbrack
 cullpdb\_pc20\_res2.2\_R1.0.
