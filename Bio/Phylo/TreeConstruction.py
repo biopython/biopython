@@ -308,7 +308,7 @@ class _Matrix:
             ]
         )
         matrix_string = matrix_string + "\n\t" + "\t".join(self.names)
-        return matrix_string
+        return matrix_string.expandtabs(tabsize=4)
 
 
 class DistanceMatrix(_Matrix):
@@ -396,24 +396,24 @@ class DistanceCalculator:
     >>> calculator = DistanceCalculator('identity')
     >>> dm = calculator.get_distance(aln)
     >>> print(dm)  # doctest:+NORMALIZE_WHITESPACE
-    Alpha	0.000000
-    Beta	0.230769	0.000000
-    Gamma	0.384615	0.230769	0.000000
-    Delta	0.538462	0.538462	0.538462	0.000000
-    Epsilon	0.615385	0.384615	0.461538	0.153846	0.000000
-        Alpha	Beta	Gamma	Delta	Epsilon
+    Alpha   0.000000
+    Beta    0.230769    0.000000
+    Gamma   0.384615    0.230769    0.000000
+    Delta   0.538462    0.538462    0.538462    0.000000
+    Epsilon 0.615385    0.384615    0.461538    0.153846    0.000000
+        Alpha   Beta    Gamma   Delta   Epsilon
 
     Protein calculator with 'blosum62' model::
 
     >>> calculator = DistanceCalculator('blosum62')
     >>> dm = calculator.get_distance(aln)
     >>> print(dm)  # doctest:+NORMALIZE_WHITESPACE
-    Alpha	0.000000
-    Beta	0.369048	0.000000
-    Gamma	0.493976	0.250000	0.000000
-    Delta	0.585366	0.547619	0.566265	0.000000
-    Epsilon	0.700000	0.355556	0.488889	0.222222	0.000000
-        Alpha	Beta	Gamma	Delta	Epsilon
+    Alpha   0.000000
+    Beta    0.369048    0.000000
+    Gamma   0.493976    0.250000    0.000000
+    Delta   0.585366    0.547619    0.566265    0.000000
+    Epsilon 0.700000    0.355556    0.488889    0.222222    0.000000
+        Alpha   Beta    Gamma   Delta   Epsilon
 
     Same calculation, using the new Alignment object:
 
@@ -433,24 +433,24 @@ class DistanceCalculator:
     >>> calculator = DistanceCalculator('identity')
     >>> dm = calculator.get_distance(aln)
     >>> print(dm)  # doctest:+NORMALIZE_WHITESPACE
-    Alpha	0.000000
-    Beta	0.230769	0.000000
-    Gamma	0.384615	0.230769	0.000000
-    Delta	0.538462	0.538462	0.538462	0.000000
-    Epsilon	0.615385	0.384615	0.461538	0.153846	0.000000
-        Alpha	Beta	Gamma	Delta	Epsilon
+    Alpha   0.000000
+    Beta    0.230769    0.000000
+    Gamma   0.384615    0.230769    0.000000
+    Delta   0.538462    0.538462    0.538462    0.000000
+    Epsilon 0.615385    0.384615    0.461538    0.153846    0.000000
+        Alpha   Beta    Gamma   Delta   Epsilon
 
     Protein calculator with 'blosum62' model::
 
     >>> calculator = DistanceCalculator('blosum62')
     >>> dm = calculator.get_distance(aln)
     >>> print(dm)  # doctest:+NORMALIZE_WHITESPACE
-    Alpha	0.000000
-    Beta	0.369048	0.000000
-    Gamma	0.493976	0.250000	0.000000
-    Delta	0.585366	0.547619	0.566265	0.000000
-    Epsilon	0.700000	0.355556	0.488889	0.222222	0.000000
-        Alpha	Beta	Gamma	Delta	Epsilon
+    Alpha   0.000000
+    Beta    0.369048    0.000000
+    Gamma   0.493976    0.250000    0.000000
+    Delta   0.585366    0.547619    0.566265    0.000000
+    Epsilon 0.700000    0.355556    0.488889    0.222222    0.000000
+        Alpha   Beta    Gamma   Delta   Epsilon
 
     """
 
