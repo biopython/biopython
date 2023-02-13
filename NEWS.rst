@@ -8,6 +8,10 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
+(In progress, not yet released): Biopython 1.82
+===============================================
+
+
 12 February 2023: Biopython 1.81
 ===============================================
 
