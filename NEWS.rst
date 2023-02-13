@@ -8,7 +8,7 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released): Biopython 1.81
+12 February 2023: Biopython 1.81
 ===============================================
 
 This release of Biopython supports Python 3.7, 3.8, 3.9, 3.10, 3.11. It has
@@ -18,8 +18,17 @@ The API documentation and the `Biopython Tutorial and Cookbook` have
 been updated to better annotate use and application of the
 ``Bio.PDB.internal_coords`` module.
 
+``Bio.Phylo`` now supports ``Alignment`` and ``MultipleSeqAlignment``
+objects as input.
+
+Several improvements and bug fixes to the snapgene parser contributes by
+Damien Goutte-Gattat.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
+
+Additionally, a number of small bugs and typos have been fixed with additions
+to the test suite.
 
 - Adam Vandergriff
 - Damien Goutte-Gattat
