@@ -45,10 +45,12 @@ to the test suite.
 
 - Adam Vandergriff
 - Damien Goutte-Gattat
+- Joe Greener
 - Michiel de Hoon
 - Peter Cock
-- Joe Greener
+- Ricardas Ralys
 - Robert Miller
+- Vladislav Kuznetsov
 
 18 November 2022: Biopython 1.80
 ================================
