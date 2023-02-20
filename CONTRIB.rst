@@ -248,6 +248,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Oscar G. Garcia <https://github.com/oscarmaestre>
 - Osvaldo Zagordi <https://github.com/ozagordi>
 - Owen Solberg <https://github.com/odoublewen>
+- Paarth Agarwal <https://github.com/PaarthAgarwal>
 - Pamela Russell <https://github.com/pamelarussell>
 - Pascal Schläpfer <https://github.com/pascalschlaepferprivate>
 - Patrick Kunzmann <https://github.com/padix-key>
