@@ -9,7 +9,7 @@ import unittest
 
 from Bio import Align
 
-import numpy
+import numpy as np
 
 
 class Align_hhr_2uvo_hhblits(unittest.TestCase):

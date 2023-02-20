@@ -12,7 +12,7 @@ import numpy as np
 from itertools import zip_longest
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 

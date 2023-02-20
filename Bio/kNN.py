@@ -28,7 +28,7 @@ Weighting Functions:
 
 """
 
-import numpy
+import numpy as np
 
 
 class kNN:

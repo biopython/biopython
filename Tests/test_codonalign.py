@@ -447,7 +447,7 @@ class Test_dn_ds(unittest.TestCase):
 
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     numpy = None
 

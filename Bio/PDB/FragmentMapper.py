@@ -43,7 +43,7 @@ The library files can be found in directory 'fragment_data'.
 """
 
 
-import numpy
+import numpy as np
 
 from Bio.SVDSuperimposer import SVDSuperimposer
 

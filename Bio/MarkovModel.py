@@ -22,7 +22,7 @@ Classes:
 MarkovModel     Holds the description of a markov model
 """
 
-import numpy
+import numpy as np
 
 
 try:

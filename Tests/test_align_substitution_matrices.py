@@ -5,7 +5,7 @@
 """Tests for Array in the Bio.Align.substitution_matrices module."""
 
 try:
-    import numpy
+    import numpy as np
 
     del numpy
 except ImportError:
@@ -22,7 +22,7 @@ from collections import Counter
 import unittest
 
 
-import numpy
+import numpy as np
 from Bio import SeqIO
 from Bio.Align import substitution_matrices
 

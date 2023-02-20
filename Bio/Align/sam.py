@@ -25,7 +25,7 @@ from itertools import chain
 import copy
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 

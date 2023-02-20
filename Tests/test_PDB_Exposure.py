@@ -23,7 +23,7 @@ import warnings
 from io import StringIO
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 

@@ -9,7 +9,7 @@
 
 import os
 import string
-import numpy
+import numpy as np
 
 
 class Array(numpy.ndarray):

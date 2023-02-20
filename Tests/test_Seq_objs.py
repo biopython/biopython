@@ -20,7 +20,7 @@ from Bio.Seq import UndefinedSequenceError, _UndefinedSequenceData
 from Bio.SeqRecord import SeqRecord
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     numpy = None
 

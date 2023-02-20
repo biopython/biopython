@@ -9,7 +9,7 @@
 """Fast atom neighbor lookup using a KD tree (implemented in C)."""
 
 
-import numpy
+import numpy as np
 
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Selection import unfold_entities, entity_levels, uniqueify

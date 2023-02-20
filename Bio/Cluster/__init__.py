@@ -15,7 +15,7 @@ M. de Hoon et al. (2004) https://doi.org/10.1093/bioinformatics/bth078
 import numbers
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 

@@ -8,7 +8,7 @@
 """Tests for the Bio.phenotype module's fitting functionality."""
 
 try:
-    import numpy
+    import numpy as np
 
     del numpy
 except ImportError:

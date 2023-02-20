@@ -11,7 +11,7 @@
 import unittest
 
 try:
-    import numpy
+    import numpy as np
 
     del numpy
     from numpy import asarray

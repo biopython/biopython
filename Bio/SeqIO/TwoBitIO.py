@@ -71,7 +71,7 @@ methods that allow it to be used as a dictionary.
 #             T - 00, C - 01, A - 10, G - 11. The first base is in the most
 #             significant 2-bit byte; the last base is in the least significan
 #             2 bits. For example, the sequence TCAG is represented as 00011011.
-import numpy
+import numpy as np
 
 from Bio.Seq import Seq
 from Bio.Seq import SequenceDataAbstractBaseClass

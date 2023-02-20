@@ -9,7 +9,7 @@ from io import StringIO
 
 from Bio import Align
 
-import numpy
+import numpy as np
 
 
 class TestClustalReadingWriting(unittest.TestCase):

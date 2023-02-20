@@ -24,7 +24,7 @@ You are expected to use this module via the Bio.Align functions.
 # of a bigBed file byte-by-byte.
 
 
-import numpy
+import numpy as np
 import struct
 import zlib
 from collections import namedtuple

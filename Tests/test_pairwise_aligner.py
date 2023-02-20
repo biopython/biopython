@@ -10,7 +10,7 @@ import os
 import unittest
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -3581,7 +3581,7 @@ class TestArgumentErrors(unittest.TestCase):
         score = aligner.score(s1, s2b)
         self.assertAlmostEqual(score, 4.0)
         try:
-            import numpy
+            import numpy as np
         except ImportError:
             return
         aligner = Align.PairwiseAligner()

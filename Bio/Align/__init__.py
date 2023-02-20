@@ -22,7 +22,7 @@ import numbers
 from itertools import zip_longest
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -2353,7 +2353,7 @@ class Alignment:
         distinguish different Alignment objects.  See help(id) for more
         information.
 
-        >>> import numpy
+        >>> import numpy as np
         >>> from Bio.Align import Alignment
         >>> alignment = Alignment(("ACCGT", "ACGT"),
         ...                       coordinates = numpy.array([[0, 2, 3, 5],

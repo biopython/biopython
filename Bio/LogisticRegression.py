@@ -17,7 +17,7 @@ Functions:
 """
 
 
-import numpy
+import numpy as np
 import numpy.linalg
 
 

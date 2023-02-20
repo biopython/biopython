@@ -9,7 +9,7 @@
 """Tests for LogisticRegression module."""
 
 try:
-    import numpy
+    import numpy as np
     from numpy import linalg  # missing in PyPy's micronumpy
 except ImportError:
     from Bio import MissingExternalDependencyError

@@ -13,7 +13,7 @@ import unittest
 import math
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingExternalDependencyError
 

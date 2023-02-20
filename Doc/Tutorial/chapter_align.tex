@@ -2838,7 +2838,7 @@ Internally, the first step when performing an alignment is to replace the two se
 
 %doctest . lib:numpy
 \begin{minted}{pycon}
->>> import numpy
+>>> import numpy as np
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
 >>> s1 = numpy.array([2, 10, 10, 13], numpy.int32)
@@ -2896,7 +2896,7 @@ Integer sequences can also be aligned using a substitution matrix, in this case 
 %doctest . lib:numpy
 \begin{minted}{pycon}
 >>> from Bio import Align
->>> import numpy
+>>> import numpy as np
 >>> aligner = Align.PairwiseAligner()
 >>> m = numpy.eye(5)
 >>> m[0, 1:] = m[1:, 0] = -2
@@ -3050,7 +3050,7 @@ Array([12.,  0.,  5.,  0.],
 
 %cont-doctest
 \begin{minted}{pycon}
->>> import numpy
+>>> import numpy as np
 >>> x = Array("ACGT")
 >>> x["C"] = 5
 \end{minted}
@@ -3157,7 +3157,7 @@ We normalize against the total number to find the probability of each substituti
 
 %cont-doctest
 \begin{minted}{pycon}
->>> import numpy
+>>> import numpy as np
 >>> probabilities = frequency / numpy.sum(frequency)
 >>> probabilities = (probabilities + probabilities.transpose()) / 2.0
 >>> print(probabilities.format("%.4f"))

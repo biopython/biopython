@@ -10,7 +10,7 @@ from io import StringIO
 
 from Bio import Align
 
-import numpy
+import numpy as np
 
 
 class TestA2MReadingWriting(unittest.TestCase):

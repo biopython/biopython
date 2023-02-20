@@ -7,7 +7,7 @@
 """Code handle loading mmtf-python into Biopython's structures."""
 
 from Bio.PDB.StructureBuilder import StructureBuilder
-import numpy
+import numpy as np
 
 
 class StructureDecoder:

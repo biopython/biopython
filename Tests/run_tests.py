@@ -38,7 +38,7 @@ from setuptools import find_packages
 from io import StringIO
 
 try:
-    import numpy
+    import numpy as np
 
     try:
         # NumPy 1.14 changed repr output breaking our doctests,

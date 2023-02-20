@@ -12,7 +12,7 @@ from Bio import NaiveBayes
 
 # Importing NaiveBayes will itself raise MissingPythonDependencyError
 # if NumPy is unavailable.
-import numpy
+import numpy as np
 
 try:
     hash(numpy.float64(123.456))

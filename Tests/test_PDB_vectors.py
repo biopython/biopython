@@ -9,7 +9,7 @@
 import unittest
 
 try:
-    import numpy
+    import numpy as np
     from numpy.random import random
 except ImportError:
     from Bio import MissingPythonDependencyError

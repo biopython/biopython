@@ -1665,7 +1665,7 @@ Rows and columns for other amino acids were removed from the matrix.
 Next, we normalize the matrix:
 %cont-doctest
 \begin{minted}{pycon}
->>> import numpy
+>>> import numpy as np
 >>> observed_frequencies /= numpy.sum(observed_frequencies)
 \end{minted}
 

@@ -55,7 +55,7 @@ import subprocess
 import tempfile
 import warnings
 
-import numpy
+import numpy as np
 
 from Bio.PDB import PDBParser
 from Bio.PDB import Selection

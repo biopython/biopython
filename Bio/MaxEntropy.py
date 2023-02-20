@@ -13,7 +13,7 @@ Uses Improved Iterative Scaling.
 from functools import reduce
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 

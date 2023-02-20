@@ -8,7 +8,7 @@
 """Tests for the Bio.phenotype module."""
 
 try:
-    import numpy
+    import numpy as np
 
     del numpy
 except ImportError:

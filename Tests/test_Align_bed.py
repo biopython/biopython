@@ -16,7 +16,7 @@ from Bio import SeqIO
 from Bio import BiopythonExperimentalWarning
 
 
-import numpy
+import numpy as np
 
 
 class TestAlign_dna_rna(unittest.TestCase):

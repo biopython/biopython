@@ -21,7 +21,7 @@ with warnings.catch_warnings():
 
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 

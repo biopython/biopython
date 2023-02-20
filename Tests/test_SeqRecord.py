@@ -10,7 +10,7 @@ and confirms they are consistent using our different parsers.
 import unittest
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     numpy = None
 

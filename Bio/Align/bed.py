@@ -26,7 +26,7 @@ zero-based end position. We can therefore manipulate ``start`` and
 ``start + size`` as python list slice boundaries.
 """
 import sys
-import numpy
+import numpy as np
 
 
 from Bio.Align import Alignment
