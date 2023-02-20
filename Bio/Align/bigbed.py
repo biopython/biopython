@@ -600,8 +600,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     "Inconsistent number of block start positions (%d found, expected %d)"
                     % (len(blockStarts), blockCount)
                 )
-            blockSizes = numpy.array(blockSizes)
-            blockStarts = numpy.array(blockStarts)
+            blockSizes = np.array(blockSizes)
+            blockStarts = np.array(blockStarts)
             tPosition = 0
             qPosition = 0
             coordinates = [[tPosition, qPosition]]
@@ -612,11 +612,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 tPosition += blockSize
                 qPosition += blockSize
                 coordinates.append([tPosition, qPosition])
-            coordinates = numpy.array(coordinates).transpose()
+            coordinates = np.array(coordinates).transpose()
             qSize = sum(blockSizes)
         else:
             blockSize = chromEnd - chromStart
-            coordinates = numpy.array([[0, blockSize], [0, blockSize]])
+            coordinates = np.array([[0, blockSize], [0, blockSize]])
             qSize = blockSize
         coordinates[0, :] += chromStart
         query_sequence = Seq(None, length=qSize)

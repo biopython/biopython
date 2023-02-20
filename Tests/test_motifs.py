@@ -2260,9 +2260,9 @@ class MotifTestPWM(unittest.TestCase):
     def test_getitem(self):
         counts = self.m.counts
         python_integers = range(13)
-        numpy_integers = numpy.array(python_integers)
-        integers = {"python": python_integers, "numpy": numpy_integers}
-        for int_type in ("python", "numpy"):
+        np_integers = np.array(python_integers)
+        integers = {"python": python_integers, "np": np_integers}
+        for int_type in ("python", "np"):
             i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12 = integers[int_type]
             msg = f"using {int_type} integers as indices"
             # slice, slice

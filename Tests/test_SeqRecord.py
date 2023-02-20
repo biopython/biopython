@@ -12,7 +12,7 @@ import unittest
 try:
     import numpy as np
 except ImportError:
-    numpy = None
+    np = None
 
 from Bio import SeqIO
 from Bio.Seq import MutableSeq
@@ -238,8 +238,8 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
         self.assertEqual("BC", self.record[1:3].seq)
         with self.assertRaises(ValueError):
             c = self.record["a"].seq
-        if numpy is not None:
-            start, stop = numpy.array([1, 3])  # numpy integers
+        if np is not None:
+            start, stop = np.array([1, 3])  # np integers
             self.assertEqual("B", self.record[start])
             self.assertEqual("BC", self.record[start:stop].seq)
 

@@ -14,7 +14,7 @@ Quaternion Characteristic Polynomial, which is used in the algorithm.
 """
 
 
-from numpy import dot, sqrt, array, inner
+from mp import dot, sqrt, array, inner
 from .qcprotmodule import FastCalcRMSDAndRotation
 
 import warnings

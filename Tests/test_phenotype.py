@@ -10,7 +10,7 @@
 try:
     import numpy as np
 
-    del numpy
+    del np
 except ImportError:
     from Bio import MissingExternalDependencyError
 

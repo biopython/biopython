@@ -57,8 +57,8 @@ class Exonerate_est2genome(unittest.TestCase):
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         self.assertEqual(
@@ -74,11 +74,11 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
+                np.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
                                85040,  85041,  85041,  85049,  85049,  85066,
                               253974, 253978, 253979, 253987, 253987, 253990,
                               253990, 254023, 254024, 254031, 254033, 254135,
@@ -110,11 +110,11 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 85
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[130198, 130184, 130183, 130179, 130179, 130154,
+                np.array([[130198, 130184, 130183, 130179, 130179, 130154,
                               130153, 130144, 130138, 130096, 130096, 130080,
                               130078, 130071, 130070, 130067, 130067, 130044,
                               130044, 130038, 120681, 120680, 120680, 120669,
@@ -178,8 +178,8 @@ cigar: gi|296143771|ref|NM_001180731.1| 25 406 + gi|330443688|ref|NC_001145.3| 1
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         if check_operations:
@@ -197,11 +197,11 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
+                np.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
                                85040,  85041,  85041,  85049,  85049,  85066,
                                85068, 253972, 253974, 253978, 253979, 253987,
                               253987, 253990, 253990, 254023, 254024, 254031,
@@ -240,11 +240,11 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 8
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[130198, 130184, 130183, 130179, 130179, 130154,
+                np.array([[130198, 130184, 130183, 130179, 130179, 130154,
                               130153, 130144, 130138, 130096, 130096, 130080,
                               130078, 130071, 130070, 130067, 130067, 130044,
                               130044, 130038, 130036, 120683, 120681, 120680,
@@ -315,8 +315,8 @@ class Exonerate_affine_local(unittest.TestCase):
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
         self.assertEqual(alignment.score, 6150)
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         self.assertEqual(
@@ -330,11 +330,11 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
         self.assertEqual(alignment.score, 359)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[253990, 254024, 254025, 254031, 254033, 254134,
+                np.array([[253990, 254024, 254025, 254031, 254033, 254134,
                               254136, 254142, 254142, 254145, 254145, 254157,
                               254158, 254167, 254167, 254193, 254194, 254228,
                               254233, 254246, 254248, 254255, 254256, 254266,
@@ -370,11 +370,11 @@ cigar: gi|296143771|ref|NM_001180731.1| 83 552 + gi|330443688|ref|NC_001145.3| 2
         self.assertEqual(alignment.target.id, "gi|330443715|ref|NC_001146.8|")
         self.assertEqual(alignment.score, 219)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[454073, 454087, 454087, 454094, 454094, 454097,
+                np.array([[454073, 454087, 454087, 454094, 454094, 454097,
                               454097, 454109, 454110, 454133, 454134, 454150,
                               454150, 454167, 454169, 454175, 454176, 454183,
                               454184, 454192, 454192, 454204, 454205, 454208,
@@ -438,8 +438,8 @@ cigar: gi|296143771|ref|NM_001180731.1| 60 517 + gi|330443715|ref|NC_001146.8| 4
         self.assertEqual(alignment.target.id, "gi|330443520|ref|NC_001136.10|")
         self.assertEqual(alignment.score, 6150)
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         if check_operations:
@@ -455,11 +455,11 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertEqual(alignment.target.id, "gi|330443688|ref|NC_001145.3|")
         self.assertEqual(alignment.score, 359)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[253990, 254024, 254025, 254031, 254033, 254134,
+                np.array([[253990, 254024, 254025, 254031, 254033, 254134,
                               254136, 254142, 254142, 254145, 254145, 254157,
                               254158, 254167, 254167, 254193, 254194, 254228,
                               254233, 254246, 254248, 254255, 254256, 254266,
@@ -502,11 +502,11 @@ vulgar: gi|296143771|ref|NM_001180731.1| 83 552 + gi|330443688|ref|NC_001145.3| 
         self.assertEqual(alignment.target.id, "gi|330443715|ref|NC_001146.8|")
         self.assertEqual(alignment.score, 219)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[454073, 454087, 454087, 454094, 454094, 454097,
+                np.array([[454073, 454087, 454087, 454094, 454094, 454097,
                               454097, 454109, 454110, 454133, 454134, 454150,
                               454150, 454167, 454169, 454175, 454176, 454183,
                               454184, 454192, 454192, 454204, 454205, 454208,
@@ -581,11 +581,11 @@ class Exonerate_cdna2genome(unittest.TestCase):
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 # fmt: off
 # flake8: noqa
                 alignment.coordinates,
-                numpy.array([[1319275, 1319274, 1319271, 1318045],
+                np.array([[1319275, 1319274, 1319271, 1318045],
                              [      0,       1,       4,    1230]])
                 # fmt: on
             )
@@ -603,11 +603,11 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[1318045, 1318174, 1318177, 1319275],
+                np.array([[1318045, 1318174, 1318177, 1319275],
                              [   1230,    1101,    1098,       0]])
                 # fmt: on
             )
@@ -625,11 +625,11 @@ cigar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10| 
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
+                np.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
                                85040,  85041,  85041,  85049,  85049,  85066,
                               253974, 253978, 253979, 253987, 253987, 253990,
                               253990, 254023, 254025, 254032, 254033, 254135,
@@ -697,11 +697,11 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 516 + gi|330443688|ref|NC_001145.3| 85
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[1319275, 1319274, 1319271, 1318045],
+                np.array([[1319275, 1319274, 1319271, 1318045],
                              [      0,       1,       4,    1230]])
                 # fmt: on
             )
@@ -721,11 +721,11 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[1318045, 1318174, 1318177, 1319275],
+                np.array([[1318045, 1318174, 1318177, 1319275],
                              [   1230,    1101,    1098,       0]])
                 # fmt: on
             )
@@ -745,11 +745,11 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10|
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
+                np.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
                                85040,  85041,  85041,  85049,  85049,  85066,
                                85068, 253972, 253974, 253978, 253979, 253987,
                               253987, 253990, 253990, 254023, 254025, 254032,
@@ -830,8 +830,8 @@ class Exonerate_coding2coding(unittest.TestCase):
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1318047, 1319274], [1228, 1]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1318047, 1319274], [1228, 1]])
             )
         )
         self.assertEqual(
@@ -847,8 +847,8 @@ cigar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         self.assertEqual(
@@ -864,11 +864,11 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[255638, 255743, 255743, 255794],
+                np.array([[255638, 255743, 255743, 255794],
                              [  1065,   1170,   1173,   1224]])
                 # fmt: on
             )
@@ -916,8 +916,8 @@ cigar: gi|296143771|ref|NM_001180731.1| 1065 1224 + gi|330443688|ref|NC_001145.3
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1318047, 1319274], [1228, 1]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1318047, 1319274], [1228, 1]])
             )
         )
         if check_operations:
@@ -935,8 +935,8 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10|
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         if check_operations:
@@ -954,11 +954,11 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[255638, 255743, 255743, 255794],
+                np.array([[255638, 255743, 255743, 255794],
                              [  1065,   1170,   1173,   1224]])
                 # fmt: on
             )
@@ -1010,10 +1010,10 @@ class Exonerate_coding2genome(unittest.TestCase):
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 # fmt: off
 # flake8: noqa
-                alignment.coordinates, numpy.array([[1318047, 1319274], [1228, 1]])
+                alignment.coordinates, np.array([[1318047, 1319274], [1228, 1]])
                 # fmt: on
             )
         )
@@ -1030,8 +1030,8 @@ cigar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         self.assertEqual(
@@ -1047,11 +1047,11 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[255638, 255743, 255743, 255794],
+                np.array([[255638, 255743, 255743, 255794],
                              [  1065,   1170,   1173,   1224]])
                 # fmt: on
             )
@@ -1099,10 +1099,10 @@ cigar: gi|296143771|ref|NM_001180731.1| 1065 1224 + gi|330443688|ref|NC_001145.3
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 # fmt: off
 # flake8: noqa
-                alignment.coordinates, numpy.array([[1318047, 1319274], [1228, 1]])
+                alignment.coordinates, np.array([[1318047, 1319274], [1228, 1]])
                 # fmt: on
             )
         )
@@ -1121,8 +1121,8 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10|
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         if check_operations:
@@ -1140,11 +1140,11 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[255638, 255743, 255743, 255794],
+                np.array([[255638, 255743, 255743, 255794],
                              [  1065,   1170,   1173,   1224]])
                 # fmt: on
             )
@@ -1196,7 +1196,7 @@ class Exonerate_dna2protein(unittest.TestCase):
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[313, 344], [0, 93]]))
+            np.array_equal(alignment.coordinates, np.array([[313, 344], [0, 93]]))
         )
         self.assertEqual(alignment.target.annotations["molecule_type"], "protein")
         self.assertEqual(
@@ -1242,7 +1242,7 @@ cigar: dna 0 93 + protein 313 344 . 105 M 93
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[313, 344], [0, 93]]))
+            np.array_equal(alignment.coordinates, np.array([[313, 344], [0, 93]]))
         )
         if check_operations:
             self.assertEqual(alignment.operations, bytearray(b"M"))
@@ -1291,11 +1291,11 @@ class Exonerate_genome2genome(unittest.TestCase):
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[1319997, 1319971, 1319968, 1319468],
+                np.array([[1319997, 1319971, 1319968, 1319468],
                              [    529,     503,     500,       0]])
                 # fmt: on
             )
@@ -1313,11 +1313,11 @@ cigar: sacCer3_dna 529 0 - gi|330443520|ref|NC_001136.10| 1319997 1319468 - 2641
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[1319997, 1319971, 1319968, 1319468],
+                np.array([[1319997, 1319971, 1319968, 1319468],
                              [    529,     503,     500,       0]])
                 # fmt: on
             )
@@ -1337,11 +1337,11 @@ cigar: sacCer3_dna 529 0 - gi|330443520|ref|NC_001136.10| 1319997 1319468 - 2641
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[1319468, 1319558, 1319561, 1319997],
+                np.array([[1319468, 1319558, 1319561, 1319997],
                              [      0,      90,      93,     529]])
                 # fmt: on
             )
@@ -1359,11 +1359,11 @@ cigar: sacCer3_dna 0 529 + gi|330443520|ref|NC_001136.10| 1319468 1319997 + 2641
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[1319468, 1319558, 1319561, 1319997],
+                np.array([[1319468, 1319558, 1319561, 1319997],
                              [      0,      90,      93,     529]])
                 # fmt: on
             )
@@ -1383,11 +1383,11 @@ cigar: sacCer3_dna 0 529 + gi|330443520|ref|NC_001136.10| 1319468 1319997 + 2641
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 23668,  23697,  32680,  32712,  32714,  32716,
+                np.array([[ 23668,  23697,  32680,  32712,  32714,  32716,
                                32717,  32732,  42287,  42290,  42290,  42295,
                                42297,  42300,  42301,  42305,  42306,  42324,
                                42325,  97748,  97753,  97775,  97775,  97821,
@@ -1419,11 +1419,11 @@ cigar: sacCer3_dna 491 162 - gi|330443489|ref|NC_001135.5| 23668 115569 + 267 M 
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 23668,  23697,  23699,  32678,  32680,  32712,
+                np.array([[ 23668,  23697,  23699,  32678,  32680,  32712,
                                32714,  32716,  32717,  32732,  32734,  42285,
                                42287,  42290,  42290,  42295,  42297,  42300,
                                42301,  42305,  42306,  42324,  42325,  42327,
@@ -1462,11 +1462,11 @@ cigar: sacCer3_dna 491 162 - gi|330443489|ref|NC_001135.5| 23668 115569 + 267 M 
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[641760, 641729, 641729, 641725, 641725, 641706,
+                np.array([[641760, 641729, 641729, 641725, 641725, 641706,
                               641703, 641694, 641693, 641687, 641687, 641680,
                               487436, 487436, 487389, 487362, 487362, 487358,
                               487358, 487355, 487355, 487351, 487351, 487342,
@@ -1508,11 +1508,11 @@ cigar: sacCer3_dna 529 78 - gi|330443667|ref|NC_001143.9| 641760 71883 - 267 M 3
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[641760, 641729, 641729, 641725, 641725, 641706,
+                np.array([[641760, 641729, 641729, 641725, 641725, 641706,
                               641703, 641694, 641693, 641687, 641687, 641682,
                               641680, 487436, 487436, 487389, 487387, 487362,
                               487362, 487358, 487358, 487355, 487355, 487351,
@@ -1588,11 +1588,11 @@ cigar: sacCer3_dna 529 78 - gi|330443667|ref|NC_001143.9| 641760 71883 - 267 M 3
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[1319997, 1319971, 1319968, 1319468],
+                np.array([[1319997, 1319971, 1319968, 1319468],
                              [    529,     503,     500,       0]])
                 # fmt: on
             )
@@ -1612,9 +1612,9 @@ vulgar: sacCer3_dna 529 0 - gi|330443520|ref|NC_001136.10| 1319997 1319468 - 264
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[1319468, 1319558, 1319561, 1319997], [0, 90, 93, 529]]),
+                np.array([[1319468, 1319558, 1319561, 1319997], [0, 90, 93, 529]]),
             )
         )
         if check_operations:
@@ -1632,11 +1632,11 @@ vulgar: sacCer3_dna 0 529 + gi|330443520|ref|NC_001136.10| 1319468 1319997 + 264
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 23668,  23697,  23699,  32678,  32680,  32712,
+                np.array([[ 23668,  23697,  23699,  32678,  32680,  32712,
                                32714,  32716,  32717,  32732,  32734,  42285,
                                42287,  42290,  42290,  42295,  42297,  42300,
                                42301,  42305,  42306,  42324,  42325,  42327,
@@ -1675,11 +1675,11 @@ vulgar: sacCer3_dna 491 162 - gi|330443489|ref|NC_001135.5| 23668 115569 + 267 M
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[641760, 641729, 641729, 641725, 641725, 641706,
+                np.array([[641760, 641729, 641729, 641725, 641725, 641706,
                               641703, 641694, 641693, 641687, 641687, 641682,
                               641680, 487436, 487436, 487389, 487387, 487362,
                               487362, 487358, 487358, 487355, 487355, 487351,
@@ -1764,8 +1764,8 @@ class Exonerate_ungapped(unittest.TestCase):
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         self.assertEqual(
@@ -1781,8 +1781,8 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[254031, 254146], [121, 236]])
+            np.array_equal(
+                alignment.coordinates, np.array([[254031, 254146], [121, 236]])
             )
         )
         self.assertEqual(
@@ -1798,8 +1798,8 @@ cigar: gi|296143771|ref|NM_001180731.1| 121 236 + gi|330443688|ref|NC_001145.3| 
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[255671, 255739], [1098, 1166]])
+            np.array_equal(
+                alignment.coordinates, np.array([[255671, 255739], [1098, 1166]])
             )
         )
         self.assertEqual(
@@ -1845,8 +1845,8 @@ cigar: gi|296143771|ref|NM_001180731.1| 1098 1166 + gi|330443688|ref|NC_001145.3
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         if check_operations:
@@ -1864,8 +1864,8 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[254031, 254146], [121, 236]])
+            np.array_equal(
+                alignment.coordinates, np.array([[254031, 254146], [121, 236]])
             )
         )
         if check_operations:
@@ -1883,8 +1883,8 @@ vulgar: gi|296143771|ref|NM_001180731.1| 121 236 + gi|330443688|ref|NC_001145.3|
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[255671, 255739], [1098, 1166]])
+            np.array_equal(
+                alignment.coordinates, np.array([[255671, 255739], [1098, 1166]])
             )
         )
         if check_operations:
@@ -1934,8 +1934,8 @@ class Exonerate_ungapped_trans(unittest.TestCase):
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1318047, 1319274], [1228, 1]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1318047, 1319274], [1228, 1]])
             )
         )
         self.assertEqual(
@@ -1951,8 +1951,8 @@ cigar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         self.assertEqual(
@@ -1968,8 +1968,8 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1318045, 1319275], [1230, 0]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1318045, 1319275], [1230, 0]])
             )
         )
         self.assertEqual(
@@ -2015,8 +2015,8 @@ cigar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10| 
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1318047, 1319274], [1228, 1]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1318047, 1319274], [1228, 1]])
             )
         )
         if check_operations:
@@ -2034,8 +2034,8 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10|
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         if check_operations:
@@ -2053,8 +2053,8 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1318045, 1319275], [1230, 0]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1318045, 1319275], [1230, 0]])
             )
         )
         if check_operations:
@@ -2104,8 +2104,8 @@ class Exonerate_ner(unittest.TestCase):
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         self.assertEqual(
@@ -2121,11 +2121,11 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[297910, 297918, 297946, 297946, 297958, 297970,
+                np.array([[297910, 297918, 297946, 297946, 297958, 297970,
                               297970, 297984, 297992, 297992, 297997, 297997,
                               298005, 298016, 298016, 298019, 298023, 298024,
                               298031, 298032, 298039, 298049, 298049, 298056,
@@ -2189,11 +2189,11 @@ cigar: gi|296143771|ref|NM_001180731.1| 110 1230 + gi|330443681|ref|NC_001144.5|
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[183946, 183952, 183960, 183960, 183977, 183988,
+                np.array([[183946, 183952, 183960, 183960, 183977, 183988,
                               183995, 183995, 184002, 184031, 184039, 184039,
                               184044, 184055, 184059, 184059, 184060, 184060,
                               184063, 184063, 184064, 184064, 184066, 184066,
@@ -2283,8 +2283,8 @@ cigar: gi|296143771|ref|NM_001180731.1| 509 1192 + gi|330443520|ref|NC_001136.10
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         if check_operations:
@@ -2302,11 +2302,11 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[297910, 297917, 297946, 297946, 297957, 297970,
+                np.array([[297910, 297917, 297946, 297946, 297957, 297970,
                               297970, 297983, 297992, 297992, 297997, 297997,
                               298004, 298019, 298019, 298023, 298024, 298031,
                               298032, 298038, 298049, 298049, 298055, 298065,
@@ -2371,11 +2371,11 @@ vulgar: gi|296143771|ref|NM_001180731.1| 110 1230 + gi|330443681|ref|NC_001144.5
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[183946, 183951, 183977, 183977, 183987, 184002,
+                np.array([[183946, 183951, 183977, 183977, 183987, 184002,
                               184002, 184030, 184044, 184044, 184054, 184066,
                               184066, 184080, 184092, 184092, 184107, 184111,
                               184111, 184118, 184119, 184125, 184126, 184132,
@@ -2464,8 +2464,8 @@ class Exonerate_multiple(unittest.TestCase):
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[560077, 560974], [0, 897]])
+            np.array_equal(
+                alignment.coordinates, np.array([[560077, 560974], [0, 897]])
             )
         )
         self.assertEqual(
@@ -2481,11 +2481,11 @@ cigar: gi|296142823|ref|NM_001178508.1| 0 897 + gi|330443482|ref|NC_001134.8| 56
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[492933, 492929, 492929, 492908, 492908, 492857,
+                np.array([[492933, 492929, 492929, 492908, 492908, 492857,
                               492857, 492851, 492851, 492840, 492840, 492839,
                               492839, 492813, 492813, 492711, 492711, 492710,
                               492710, 492709, 492709, 492654, 492651, 492646,
@@ -2525,11 +2525,11 @@ cigar: gi|296142823|ref|NM_001178508.1| 2 896 + gi|330443753|ref|NC_001148.4| 49
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[267809, 267843, 267843, 267851, 267851, 267852,
+                np.array([[267809, 267843, 267843, 267851, 267851, 267852,
                               267852, 267859, 267863, 267867, 267867, 267870,
                               267870, 267880, 267880, 267908, 267908, 267942,
                               267942, 267948, 267950, 267960, 267961, 267975,
@@ -2571,8 +2571,8 @@ cigar: gi|296142823|ref|NM_001178508.1| 34 721 + gi|330443520|ref|NC_001136.10| 
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         self.assertEqual(
@@ -2588,11 +2588,11 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
+                np.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
                                85040,  85041,  85041,  85049,  85049,  85066,
                               253974, 253978, 253979, 253987, 253987, 253990,
                               253990, 254023, 254024, 254031, 254033, 254135,
@@ -2624,11 +2624,11 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 85
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[130198, 130184, 130183, 130179, 130179, 130154,
+                np.array([[130198, 130184, 130183, 130179, 130179, 130154,
                               130153, 130144, 130138, 130096, 130096, 130080,
                               130078, 130071, 130070, 130067, 130067, 130044,
                               130044, 130038, 120681, 120680, 120680, 120669,
@@ -2692,8 +2692,8 @@ cigar: gi|296143771|ref|NM_001180731.1| 25 406 + gi|330443688|ref|NC_001145.3| 1
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[560077, 560974], [0, 897]])
+            np.array_equal(
+                alignment.coordinates, np.array([[560077, 560974], [0, 897]])
             )
         )
         if check_operations:
@@ -2711,11 +2711,11 @@ vulgar: gi|296142823|ref|NM_001178508.1| 0 897 + gi|330443482|ref|NC_001134.8| 5
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[492933, 492929, 492929, 492908, 492908, 492857,
+                np.array([[492933, 492929, 492929, 492908, 492908, 492857,
                               492857, 492851, 492851, 492840, 492840, 492839,
                               492839, 492813, 492813, 492711, 492711, 492710,
                               492710, 492709, 492709, 492654, 492651, 492646,
@@ -2762,11 +2762,11 @@ vulgar: gi|296142823|ref|NM_001178508.1| 2 896 + gi|330443753|ref|NC_001148.4| 4
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[267809, 267843, 267843, 267851, 267851, 267852,
+                np.array([[267809, 267843, 267843, 267851, 267851, 267852,
                               267852, 267859, 267863, 267867, 267867, 267870,
                               267870, 267880, 267880, 267908, 267908, 267942,
                               267942, 267948, 267950, 267960, 267961, 267975,
@@ -2817,8 +2817,8 @@ vulgar: gi|296142823|ref|NM_001178508.1| 34 721 + gi|330443520|ref|NC_001136.10|
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318045], [0, 1230]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318045], [0, 1230]])
             )
         )
         if check_operations:
@@ -2836,11 +2836,11 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
+                np.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
                                85040,  85041,  85041,  85049,  85049,  85066,
                                85068, 253972, 253974, 253978, 253979, 253987,
                               253987, 253990, 253990, 254023, 254024, 254031,
@@ -2879,11 +2879,11 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 8
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[130198, 130184, 130183, 130179, 130179, 130154,
+                np.array([[130198, 130184, 130183, 130179, 130179, 130154,
                               130153, 130144, 130138, 130096, 130096, 130080,
                               130078, 130071, 130070, 130067, 130067, 130044,
                               130044, 130038, 130036, 120683, 120681, 120680,
@@ -2956,11 +2956,11 @@ class Exonerate_coding2coding_fshifts(unittest.TestCase):
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[465, 558, 558, 591, 593, 605, 609, 630],
+                np.array([[465, 558, 558, 591, 593, 605, 609, 630],
                              [  0,  93,  94, 127, 127, 139, 139, 160]])
                 # fmt: on
             )
@@ -2978,11 +2978,11 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 160 + gi|296143771|ref|NM_001180731.1|
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[628, 604, 598, 559, 559, 466],
+                np.array([[628, 604, 598, 559, 559, 466],
                              [158, 134, 134,  95,  94,   1]])
                 # fmt: on
             )
@@ -3030,11 +3030,11 @@ cigar: gi|296143771|ref|NM_001180731.1| 158 1 - gi|296143771|ref|NM_001180731.1|
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[465, 558, 558, 591, 593, 605, 609, 630],
+                np.array([[465, 558, 558, 591, 593, 605, 609, 630],
                              [  0,  93,  94, 127, 127, 139, 139, 160]])
                 # fmt: on
             )
@@ -3054,11 +3054,11 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 160 + gi|296143771|ref|NM_001180731.1
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertGreater(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[628, 604, 598, 559, 559, 466],
+                np.array([[628, 604, 598, 559, 559, 466],
                              [158, 134, 134,  95,  94,   1]])
                 # fmt: on
             )
@@ -3110,8 +3110,8 @@ class Exonerate_protein2dna(unittest.TestCase):
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318048], [0, 409]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318048], [0, 409]])
             )
         )
         self.assertEqual(
@@ -3127,9 +3127,9 @@ cigar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 13180
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[253991, 254027, 254030, 254270], [28, 40, 40, 120]]),
+                np.array([[253991, 254027, 254030, 254270], [28, 40, 40, 120]]),
             )
         )
         self.assertEqual(
@@ -3145,9 +3145,9 @@ cigar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 254270
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[255638, 255743, 255743, 255794], [355, 390, 391, 408]]),
+                np.array([[255638, 255743, 255743, 255794], [355, 390, 391, 408]]),
             )
         )
         self.assertEqual(
@@ -3193,8 +3193,8 @@ cigar: sp|P24813|YAP2_YEAST 355 408 . gi|330443688|ref|NC_001145.3| 255638 25579
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318048], [0, 409]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318048], [0, 409]])
             )
         )
         if check_operations:
@@ -3212,11 +3212,11 @@ vulgar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 1318
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[253991, 254027, 254030, 254270],
+                np.array([[253991, 254027, 254030, 254270],
                              [    28,     40,     40,    120]])
                 # fmt: on
             )
@@ -3236,11 +3236,11 @@ vulgar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 25427
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[255638, 255743, 255743, 255794],
+                np.array([[255638, 255743, 255743, 255794],
                              [   355,    390,    391,    408]])
                 # fmt: on
             )
@@ -3292,9 +3292,9 @@ class Exonerate_protein2dna_fshifts(unittest.TestCase):
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[216, 345, 347, 455], [330, 373, 373, 409]]),
+                np.array([[216, 345, 347, 455], [330, 373, 373, 409]]),
             )
         )
         self.assertEqual(
@@ -3310,7 +3310,7 @@ cigar: sp|P24813|YAP2_YEAST 330 409 . gi|296143771|ref|NM_001180731.1| 216 455 +
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[16, 208], [6, 70]]))
+            np.array_equal(alignment.coordinates, np.array([[16, 208], [6, 70]]))
         )
         self.assertEqual(
             alignment.format("exonerate", "cigar"),
@@ -3355,9 +3355,9 @@ cigar: sp|P24813|YAP2_YEAST 6 70 . gi|296143771|ref|NM_001180731.1| 16 208 + 322
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[216, 345, 347, 455], [330, 373, 373, 409]]),
+                np.array([[216, 345, 347, 455], [330, 373, 373, 409]]),
             )
         )
         if check_operations:
@@ -3375,7 +3375,7 @@ vulgar: sp|P24813|YAP2_YEAST 330 409 . gi|296143771|ref|NM_001180731.1| 216 455 
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[16, 208], [6, 70]]))
+            np.array_equal(alignment.coordinates, np.array([[16, 208], [6, 70]]))
         )
         if check_operations:
             self.assertEqual(alignment.operations, bytearray(b"M"))
@@ -3424,8 +3424,8 @@ class Exonerate_protein2genome(unittest.TestCase):
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318048], [0, 409]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318048], [0, 409]])
             )
         )
         self.assertEqual(
@@ -3441,11 +3441,11 @@ cigar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 13180
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[253991, 254027, 254030, 254270],
+                np.array([[253991, 254027, 254030, 254270],
                              [    28,     40,     40,    120]])
                 # fmt: on
             )
@@ -3463,11 +3463,11 @@ cigar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 254270
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[84646, 84535, 68601, 68450],
+                np.array([[84646, 84535, 68601, 68450],
                              [   37,    74,    74,   125]])
                 # fmt: on
             )
@@ -3506,8 +3506,8 @@ cigar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 254270
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates, numpy.array([[1319275, 1318048], [0, 409]])
+            np.array_equal(
+                alignment.coordinates, np.array([[1319275, 1318048], [0, 409]])
             )
         )
         if check_operations:
@@ -3525,11 +3525,11 @@ vulgar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 1318
         self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[253991, 254027, 254030, 254270],
+                np.array([[253991, 254027, 254030, 254270],
                              [    28,     40,     40,    120]])
                 # fmt: on
             )
@@ -3549,11 +3549,11 @@ vulgar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 25427
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[84646, 84535, 84533, 84531, 68603, 68601,
+                np.array([[84646, 84535, 84533, 84531, 68603, 68601,
                               68600, 68450],
                              [   37,    74,    74,    74,    74,    74,
                                  75,   125]])
@@ -3609,11 +3609,11 @@ class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[1416, 1380, 1374, 1125, 1125, 1047, 1047,  744,
+                np.array([[1416, 1380, 1374, 1125, 1125, 1047, 1047,  744,
                                744,  450,  450,  448,  331],
                              [  69,   81,   81,  164,  169,  195,  196,  297,
                                300,  398,  402,  402,  441]])
@@ -3665,11 +3665,11 @@ cigar: Morus-gene026 69 441 . NODE_2_length_1708_cov_48.590765 1416 331 - 1308 M
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[1416, 1380, 1374, 1125, 1125, 1047, 1047,  744,
+                np.array([[1416, 1380, 1374, 1125, 1125, 1047, 1047,  744,
                                744,  450,  450, 448,  331],
                              [  69,   81,   81,  164,  169,  195,  196,  297,
                                300,  398,  402, 402,  441]])
@@ -3725,11 +3725,11 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[2392, 2281, 2129, 2030, 1921, 1810, 1724, 1421,
+                np.array([[2392, 2281, 2129, 2030, 1921, 1810, 1724, 1421,
                               1198, 1058,  925,  388],
                              [  48,   85,   85,  118,  118,  155,  155,  256,
                                256,  303,  303,  482]])
@@ -3772,11 +3772,11 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
         self.assertGreater(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
         self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[2392, 2281, 2279, 2131, 2129, 2030, 2028, 1923,
+                np.array([[2392, 2281, 2279, 2131, 2129, 2030, 2028, 1923,
                               1921, 1810, 1808, 1726, 1724, 1421, 1420, 1418,
                               1200, 1198, 1196, 1058, 1056,  927,  925,  388],
                              [  48,   85,   85,   85,   85,  118,  118,  118,

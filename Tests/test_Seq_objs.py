@@ -22,7 +22,7 @@ from Bio.SeqRecord import SeqRecord
 try:
     import numpy as np
 except ImportError:
-    numpy = None
+    np = None
 
 # This is just the standard table with less stop codons
 # (replaced with coding for O as an artificial example)
@@ -87,9 +87,9 @@ class StringMethodTests(unittest.TestCase):
     for seq in _examples[:]:
         _examples.append(MutableSeq(seq))
     _start_end_values = [0, 1, 2, 1000, -1, -2, -999, None]
-    if numpy is not None:
-        # test with numpy integers (numpy.int32, numpy.int64 etc.)
-        _start_end_values.extend(numpy.array([3, 5]))
+    if np is not None:
+        # test with np integers (np.int32, np.int64 etc.)
+        _start_end_values.extend(np.array([3, 5]))
 
     def _test_method(self, method_name, start_end=False):
         """Check this method matches the plain string's method."""

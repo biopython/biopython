@@ -78,7 +78,7 @@ class StructureDecoder:
         # Atom_name is in twice - the full_name is with spaces
         self.structure_builder.init_atom(
             str(atom_name),
-            numpy.array((x, y, z), "f"),
+            np.array((x, y, z), "f"),
             temperature_factor,
             occupancy,
             alternative_location_id,

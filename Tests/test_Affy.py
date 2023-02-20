@@ -11,8 +11,8 @@ import os
 import sys
 
 try:
-    from numpy import array
-    import numpy.testing
+    from np import array
+    import np.testing
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -98,7 +98,7 @@ class AffyTest(unittest.TestCase):
 
             global message
             try:
-                numpy.testing.assert_allclose(
+                np.testing.assert_allclose(
                     record.intensities,
                     [
                         [234.0, 170.0, 22177.0, 164.0, 22104.0],
@@ -114,7 +114,7 @@ class AffyTest(unittest.TestCase):
             if message is not None:
                 self.fail(message)
             try:
-                numpy.testing.assert_allclose(
+                np.testing.assert_allclose(
                     record.stdevs,
                     [
                         [24.0, 34.5, 2669.0, 19.7, 3661.2],
@@ -130,7 +130,7 @@ class AffyTest(unittest.TestCase):
             if message is not None:
                 self.fail(message)
             try:
-                numpy.testing.assert_array_equal(
+                np.testing.assert_array_equal(
                     record.npix,
                     [
                         [25, 25, 25, 25, 25],
@@ -147,7 +147,7 @@ class AffyTest(unittest.TestCase):
                 self.fail(message)
             self.assertEqual(record.nmask, 3)
             try:
-                numpy.testing.assert_array_equal(
+                np.testing.assert_array_equal(
                     record.mask,
                     [
                         [False, False, False, False, False],
@@ -164,7 +164,7 @@ class AffyTest(unittest.TestCase):
                 self.fail(message)
             self.assertEqual(record.noutliers, 3)
             try:
-                numpy.testing.assert_array_equal(
+                np.testing.assert_array_equal(
                     record.outliers,
                     [
                         [False, False, False, False, False],
@@ -181,7 +181,7 @@ class AffyTest(unittest.TestCase):
                 self.fail(message)
             self.assertEqual(record.nmodified, 3)
             try:
-                numpy.testing.assert_allclose(
+                np.testing.assert_allclose(
                     record.modified,
                     [
                         [0.0, 0.0, 0.0, 0.0, 0.0],
@@ -207,7 +207,7 @@ class AffyTest(unittest.TestCase):
         self.assertEqual(record.nrows, 5)
         global message
         try:
-            numpy.testing.assert_allclose(
+            np.testing.assert_allclose(
                 record.intensities,
                 [
                     [0.0, 1.0, 2.0, 3.0, 4.0],
@@ -223,7 +223,7 @@ class AffyTest(unittest.TestCase):
         if message is not None:
             self.fail(message)
         try:
-            numpy.testing.assert_allclose(
+            np.testing.assert_allclose(
                 record.stdevs,
                 [
                     [0.0, -1.0, -2.0, -3.0, -4.0],
@@ -239,7 +239,7 @@ class AffyTest(unittest.TestCase):
         if message is not None:
             self.fail(message)
         try:
-            numpy.testing.assert_allclose(
+            np.testing.assert_allclose(
                 record.npix,
                 [
                     [9, 9, 9, 9, 9],

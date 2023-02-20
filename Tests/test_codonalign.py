@@ -449,9 +449,9 @@ class Test_dn_ds(unittest.TestCase):
 try:
     import numpy as np
 except ImportError:
-    numpy = None
+    np = None
 
-if numpy:
+if np:
 
     class Test_MK(unittest.TestCase):
         def test_mk(self):

@@ -448,11 +448,11 @@ GCTGGGGATGGAGAGGGAACAGAGTaG
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'C', 'T', 'G', 'G', 'G', 'G', 'A', 'T', 'G', 'G', 'A', 'G',
+np.array([['G', 'C', 'T', 'G', 'G', 'G', 'G', 'A', 'T', 'G', 'G', 'A', 'G',
               'A', 'G', 'G', 'G', 'A', 'A', 'C', 'A', 'G', 'A', 'G', 'T', '-',
               'T'],
              ['G', 'C', 'T', 'G', 'G', 'G', 'G', 'A', 'T', 'G', 'G', 'A', 'G',
@@ -558,11 +558,11 @@ VhMLNKGKDGAMVFEPASLKVAPGDTVTFIPTDK-GHNVETIKGMIPDG.AE.A-------FKSKINENYKVTFTA...P
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['D', '-', 'V', 'L', 'L', 'G', 'A', 'N', 'G', 'G', 'V', 'L', 'V',
+np.array([['D', '-', 'V', 'L', 'L', 'G', 'A', 'N', 'G', 'G', 'V', 'L', 'V',
               'F', 'E', 'P', 'N', 'D', 'F', 'S', 'V', 'K', 'A', 'G', 'E', 'T',
               'I', 'T', 'F', 'K', 'N', 'N', 'A', 'G', 'Y', 'P', 'H', 'N', 'V',
               'V', 'F', 'D', 'E', 'D', 'A', 'V', 'P', 'S', 'G', '-', 'V', 'D',

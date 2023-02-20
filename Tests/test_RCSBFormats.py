@@ -13,10 +13,10 @@ import warnings
 
 try:
     import numpy as np
-    from numpy import dot  # Missing on old PyPy's micronumpy
+    from np import dot  # Missing on old PyPy's micronp
 
     del dot
-    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
+    from np.linalg import svd, det  # Missing in PyPy 2.0 nppy
 except ImportError:
     from Bio import MissingPythonDependencyError
 

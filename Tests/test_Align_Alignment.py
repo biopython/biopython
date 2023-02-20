@@ -41,10 +41,10 @@ class TestPairwiseAlignment(unittest.TestCase):
     target = "AACCGGGACCG"
     query = "ACGGAAC"
     query_rc = reverse_complement(query)
-    forward_coordinates = numpy.array(
+    forward_coordinates = np.array(
         [[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11], [0, 1, 1, 2, 2, 4, 4, 5, 6, 7, 7]]
     )
-    reverse_coordinates = numpy.array(
+    reverse_coordinates = np.array(
         [[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11], [7, 6, 6, 5, 5, 3, 3, 2, 1, 0, 0]]
     )
 
@@ -582,9 +582,9 @@ query             0 -AG 2
             pass
         self.assertEqual(sequence, "AACCGGGACCG")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 subalignment.coordinates,
-                numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]]),
+                np.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]]),
             )
         )
         subalignment = alignment[:1, :]
@@ -597,9 +597,9 @@ query             0 -AG 2
             pass
         self.assertEqual(sequence, "AACCGGGACCG")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 subalignment.coordinates,
-                numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]]),
+                np.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]]),
             )
         )
         subalignment = alignment[:]
@@ -651,11 +651,11 @@ query             0 A-C-GG-AAC--  7
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.aligned,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[[0, 1],
+                np.array([[[0, 1],
                               [2, 3],
                               [4, 6],
                               [7, 8],
@@ -670,9 +670,9 @@ query             0 A-C-GG-AAC--  7
             )
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.indices,
-                numpy.array(
+                np.array(
                     [
                         # fmt: off
 # flake8: noqa
@@ -688,18 +688,18 @@ query             0 A-C-GG-AAC--  7
         self.assertTrue(
             # fmt: off
 # flake8: noqa
-            numpy.array_equal(
+            np.array_equal(
                 inverse_indices[0],
-                numpy.array([0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11])
+                np.array([0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11])
             )
             # fmt: on
         )
         self.assertTrue(
             # fmt: off
 # flake8: noqa
-            numpy.array_equal(
+            np.array_equal(
                 inverse_indices[1],
-                numpy.array([0, 2, 4, 5, 7, 8, 9])
+                np.array([0, 2, 4, 5, 7, 8, 9])
             )
             # fmt: on
         )
@@ -713,11 +713,11 @@ query             1 -C-GG-AAC--  7
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.aligned,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[[2, 3],
+                np.array([[[2, 3],
                               [4, 6],
                               [7, 8],
                               [8, 9]],
@@ -730,9 +730,9 @@ query             1 -C-GG-AAC--  7
             )
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.indices,
-                numpy.array(
+                np.array(
                     [
                         # fmt: off
 # flake8: noqa
@@ -748,18 +748,18 @@ query             1 -C-GG-AAC--  7
         self.assertTrue(
             # fmt: off
 # flake8: noqa
-            numpy.array_equal(
+            np.array_equal(
                 inverse_indices[0],
-                numpy.array([-1, 0, 1, 2, 3, 4, 5, 6, 8, 9, 10])
+                np.array([-1, 0, 1, 2, 3, 4, 5, 6, 8, 9, 10])
             )
             # fmt: on
         )
         self.assertTrue(
             # fmt: off
 # flake8: noqa
-            numpy.array_equal(
+            np.array_equal(
                 inverse_indices[1],
-                numpy.array([-1, 1, 3, 4, 6, 7, 8])
+                np.array([-1, 1, 3, 4, 6, 7, 8])
             )
             # fmt: on
         )
@@ -773,7 +773,7 @@ query             0 A-C-GG-AAC  7
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.aligned,
                 # fmt: off
 # flake8: noqa
@@ -872,27 +872,27 @@ query             1 -C-GG-AAC 7
 # flake8: noqa
             numpy.array_equal(
                 inverse_indices[0],
-                numpy.array([-1, 0, 1, 2, 3, 4, 5, 6, 8, -1, -1])
+                np.array([-1, 0, 1, 2, 3, 4, 5, 6, 8, -1, -1])
             )
             # fmt: on
         )
         self.assertTrue(
             # fmt: off
 # flake8: noqa
-            numpy.array_equal(
+            np.array_equal(
                 inverse_indices[1],
-                numpy.array([-1, 1, 3, 4, 6, 7, 8])
+                np.array([-1, 1, 3, 4, 6, 7, 8])
             )
             # fmt: on
         )
         sequences = (self.target, self.query_rc)
         alignment = Align.Alignment(sequences, self.reverse_coordinates)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.aligned,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[[0, 1],
+                np.array([[[0, 1],
                               [2, 3],
                               [4, 6],
                               [7, 8],
@@ -915,9 +915,9 @@ query             7 A-C-GG-AAC--  0
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.indices,
-                numpy.array(
+                np.array(
                     [
                         # fmt: off
 # flake8: noqa
@@ -933,28 +933,28 @@ query             7 A-C-GG-AAC--  0
         self.assertTrue(
             # fmt: off
 # flake8: noqa
-            numpy.array_equal(
+            np.array_equal(
                 inverse_indices[0],
-                numpy.array([0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11])
+                np.array([0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11])
             )
             # fmt: on
         )
         self.assertTrue(
             # fmt: off
 # flake8: noqa
-            numpy.array_equal(
+            np.array_equal(
                 inverse_indices[1],
-                numpy.array([9, 8, 7, 5, 4, 2, 0])
+                np.array([9, 8, 7, 5, 4, 2, 0])
             )
             # fmt: on
         )
         alignment = Align.Alignment(sequences, self.reverse_coordinates[:, 1:])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.aligned,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[[2, 3],
+                np.array([[[2, 3],
                               [4, 6],
                               [7, 8],
                               [8, 9]],
@@ -975,9 +975,9 @@ query             6 -C-GG-AAC--  0
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.indices,
-                numpy.array(
+                np.array(
                     [
                         # fmt: off
 # flake8: noqa
@@ -993,28 +993,28 @@ query             6 -C-GG-AAC--  0
         self.assertTrue(
             # fmt: off
 # flake8: noqa
-            numpy.array_equal(
+            np.array_equal(
                 inverse_indices[0],
-                numpy.array([-1, 0, 1, 2, 3, 4, 5, 6, 8, 9, 10])
+                np.array([-1, 0, 1, 2, 3, 4, 5, 6, 8, 9, 10])
             )
             # fmt: on
         )
         self.assertTrue(
             # fmt: off
 # flake8: noqa
-            numpy.array_equal(
+            np.array_equal(
                 inverse_indices[1],
-                numpy.array([8, 7, 6, 4, 3, 1, -1])
+                np.array([8, 7, 6, 4, 3, 1, -1])
             )
             # fmt: on
         )
         alignment = Align.Alignment(sequences, self.reverse_coordinates[:, :-1])
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.aligned,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[[0, 1],
+                np.array([[[0, 1],
                               [2, 3],
                               [4, 6],
                               [7, 8],
@@ -1037,9 +1037,9 @@ query             7 A-C-GG-AAC  0
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.indices,
-                numpy.array(
+                np.array(
                     [
                         # fmt: off
 # flake8: noqa
@@ -1055,18 +1055,18 @@ query             7 A-C-GG-AAC  0
         self.assertTrue(
             # fmt: off
 # flake8: noqa
-            numpy.array_equal(
+            np.array_equal(
                 inverse_indices[0],
-                numpy.array([0, 1, 2, 3, 4, 5, 6, 7, 9, -1, -1])
+                np.array([0, 1, 2, 3, 4, 5, 6, 7, 9, -1, -1])
             )
             # fmt: on
         )
         self.assertTrue(
             # fmt: off
 # flake8: noqa
-            numpy.array_equal(
+            np.array_equal(
                 inverse_indices[1],
-                numpy.array([9, 8, 7, 5, 4, 2, 0])
+                np.array([9, 8, 7, 5, 4, 2, 0])
             )
             # fmt: on
         )

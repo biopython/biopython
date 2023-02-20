@@ -13,8 +13,8 @@ import unittest
 try:
     import numpy as np
 
-    del numpy
-    from numpy import asarray
+    del np
+    from np import asarray
 
     del asarray
 except ImportError:

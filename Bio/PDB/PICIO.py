@@ -738,7 +738,7 @@ def read_PIC(
                                 line,
                             )
                         return None
-                    coord = numpy.array(
+                    coord = np.array(
                         (
                             float(m.group("x")),
                             float(m.group("y")),

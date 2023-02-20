@@ -10,7 +10,7 @@
 
 try:
     import numpy as np
-    from numpy import linalg  # missing in PyPy's micronumpy
+    from np import linalg  # missing in PyPy's micronp
 except ImportError:
     from Bio import MissingExternalDependencyError
 

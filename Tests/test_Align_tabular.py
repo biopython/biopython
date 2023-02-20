@@ -18,7 +18,7 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install numpy if you want to use Bio.Align.emboss."
+        "Install np if you want to use Bio.Align.emboss."
     ) from None
 
 
@@ -80,9 +80,9 @@ sp|P10649       180 ?????????????????????????????????????? 218
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[0, 218], [0, 218]]),
+                np.array([[0, 218], [0, 218]]),
             )
         )
         query = self.query
@@ -101,11 +101,11 @@ sp|P10649       180 ?????????????????????????????????????? 218
         )
         # sp|P10649|GSTM1_MOUSE   sp|P00502|GSTA1_RAT
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['M', 'P', 'M', 'I', 'L', 'G', 'Y', 'W', 'D', 'I', 'R', 'G', 'L',
+np.array([['M', 'P', 'M', 'I', 'L', 'G', 'Y', 'W', 'D', 'I', 'R', 'G', 'L',
               'A', 'H', 'A', 'I', 'R', 'L', 'L', 'L', 'E', 'Y', 'T', 'D', 'S',
               'S', 'Y', 'E', 'E', 'K', 'K', 'Y', 'T', 'M', 'G', 'D', 'A', 'P',
               'D', 'Y', 'D', 'R', 'S', 'Q', 'W', 'L', 'N', 'E', 'K', 'F', 'K',
@@ -176,11 +176,11 @@ sp|P10649       175 ??????????????????????????????????????????? 218
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 5,  33,  33,  46,  48,  58,  59,  62,
+                np.array([[ 5,  33,  33,  46,  48,  58,  59,  62,
                               62, 101, 102, 125, 127, 142, 144, 218],
                              [ 3,  31,  40,  53,  53,  63,  63,  66,
                               67, 106, 106, 129, 129, 144, 144, 218]])
@@ -203,11 +203,11 @@ sp|P10649       175 ??????????????????????????????????????????? 218
         )
         # sp|P10649|GSTM1_MOUSE   sp|P69905|HBA_HUMAN
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['V', 'L', 'H', 'Y', 'F', 'N', 'A', 'R', 'G', 'R', 'M', 'E', 'C',
+np.array([['V', 'L', 'H', 'Y', 'F', 'N', 'A', 'R', 'G', 'R', 'M', 'E', 'C',
               'I', 'R', 'W', 'L', 'L', 'A', 'A', 'A', 'G', 'V', 'E', 'F', 'D',
               'E', 'K', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'F', 'I',
               'Q', 'S', 'P', 'E', 'D', 'L', 'E', 'K', 'L', 'K', 'K', 'D', 'G',
@@ -268,11 +268,11 @@ sp|P10649       176 ????????????????????????-?????????????? 214
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 35,  48,  48,  58,  59,  73],
+                np.array([[ 35,  48,  48,  58,  59,  73],
                              [176, 189, 190, 200, 200, 214]]),
                 # fmt: on
             )
@@ -287,11 +287,11 @@ sp|P10649       176 ????????????????????????-?????????????? 214
         self.assertEqual(alignment[1], "AFPNLRDFLARFEGLKKISAYMKS-SRYIATPIFSKMAH")
         # sp|P10649|GSTM1_MOUSE   sp|P00517|KAPCA_BOVIN
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['S', 'F', 'P', 'T', 'T', 'K', 'T', 'Y', 'F', 'P', 'H', 'F', 'D',
+np.array([['S', 'F', 'P', 'T', 'T', 'K', 'T', 'Y', 'F', 'P', 'H', 'F', 'D',
               '-', 'L', 'S', 'H', 'G', 'S', 'A', 'Q', 'V', 'K', 'G', 'H', 'G',
               'K', 'K', 'V', 'A', 'D', 'A', 'L', 'T', 'N', 'A', 'V', 'A', 'H'],
              ['A', 'F', 'P', 'N', 'L', 'R', 'D', 'F', 'L', 'A', 'R', 'F', 'E',
@@ -327,11 +327,11 @@ sp|P10649       194 ???????????? 206
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[228, 274, 276, 300],
+                np.array([[228, 274, 276, 300],
                              [136, 182, 182, 206]])
                 # fmt: on
             )
@@ -352,11 +352,11 @@ sp|P10649       194 ???????????? 206
         )
         # sp|P10649|GSTM1_MOUSE   sp|P14960|RBS_GUITH
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'Y', 'E', 'M', 'A', 'A', 'G', 'Y', 'P', 'P', 'F', 'F', 'A',
+np.array([['I', 'Y', 'E', 'M', 'A', 'A', 'G', 'Y', 'P', 'P', 'F', 'F', 'A',
               'D', 'Q', 'P', 'I', 'Q', 'I', 'Y', 'E', 'K', 'I', 'V', 'S', 'G',
               'K', 'V', 'R', 'F', 'P', 'S', 'H', 'F', 'S', 'S', 'D', 'L', 'K',
               'D', 'L', 'L', 'R', 'N', 'L', 'L', 'Q', 'V', 'D', 'L', 'T', 'K',
@@ -393,7 +393,7 @@ sp|P10649         6 ??????? 13
 """,
         )
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[46, 53], [6, 13]]))
+            np.array_equal(alignment.coordinates, np.array([[46, 53], [6, 13]]))
         )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
@@ -405,11 +405,11 @@ sp|P10649         6 ??????? 13
         self.assertEqual(alignment[1], "YWNVRGL")
         # sp|P10649|GSTM1_MOUSE   sp|P01593|KV101_HUMAN
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['Y', 'W', 'D', 'L', 'W', 'G', 'L'],
+np.array([['Y', 'W', 'D', 'L', 'W', 'G', 'L'],
              ['Y', 'W', 'N', 'V', 'R', 'G', 'L']], dtype='U')
                 # fmt: on
             )
@@ -436,11 +436,11 @@ sp|P10649       149 ??????????????---????????---????--??????????-????? 190
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 15,  29,  32,  40,  43,  47,
+                np.array([[ 15,  29,  32,  40,  43,  47,
                                49,  51,  51,  58,  59,  64],
                              [149, 163, 163, 171, 171, 175,
                               175, 177, 178, 185, 185, 190]])
@@ -461,11 +461,11 @@ sp|P10649       149 ??????????????---????????---????--??????????-????? 190
         )
         # sp|P10649|GSTM1_MOUSE   sp|P99998|CYC_PANTR
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'D', 'R', 'V', 'T', 'I', 'T', 'C', 'Q', 'A', 'S', 'Q', 'D',
+np.array([['G', 'D', 'R', 'V', 'T', 'I', 'T', 'C', 'Q', 'A', 'S', 'Q', 'D',
               'I', 'N', 'H', 'Y', 'L', 'N', 'W', 'Y', 'Q', 'Q', 'G', 'P', 'K',
               'K', 'A', 'P', 'K', 'I', 'L', 'I', 'Y', 'D', 'A', '-', 'S', 'N',
               'L', 'E', 'T', 'G', 'V', 'P', 'S', 'R', 'F', 'S', 'G'],
@@ -503,11 +503,11 @@ sp|P10649       185 ???????? 193
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 27,  47,  50,  58,  58,  68,
+                np.array([[ 27,  47,  50,  58,  58,  68,
                                68,  73,  73,  82,  82,  88],
                              [128, 148, 148, 156, 157, 167,
                               168, 173, 175, 184, 187, 193]])
@@ -530,11 +530,11 @@ sp|P10649       185 ???????? 193
         )
         # sp|P10649|GSTM1_MOUSE   sp|P02585|TNNC2_HUMAN
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['K', 'T', 'G', 'P', 'N', 'L', 'H', 'G', 'L', 'F', 'G', 'R', 'K',
+np.array([['K', 'T', 'G', 'P', 'N', 'L', 'H', 'G', 'L', 'F', 'G', 'R', 'K',
               'T', 'G', 'Q', 'A', 'P', 'G', 'Y', 'S', 'Y', 'T', 'A', 'A', 'N',
               'K', 'N', 'K', 'G', 'I', '-', 'I', 'W', 'G', 'E', 'D', 'T', 'L',
               'M', 'E', 'Y', '-', 'L', 'E', 'N', 'P', 'K', '-', '-', 'K', 'Y',
@@ -571,11 +571,11 @@ sp|P10649        43 ????????????????????????????--???????????---?????????? 92
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array(
+                np.array(
                     [[12, 26, 26, 36, 38, 49, 52, 62],
                      [43, 57, 61, 71, 71, 82, 82, 92]])
                 # fmt: on
@@ -595,11 +595,11 @@ sp|P10649        43 ????????????????????????????--???????????---?????????? 92
         )
         # sp|P10649|GSTM1_MOUSE   sp|P60615|NXL1A_BUNMU
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['S', 'E', 'E', 'M', 'I', 'A', 'E', 'F', 'K', 'A', 'A', 'F', 'D',
+np.array([['S', 'E', 'E', 'M', 'I', 'A', 'E', 'F', 'K', 'A', 'A', 'F', 'D',
               'M', '-', '-', '-', '-', 'F', 'D', 'A', 'D', 'G', 'G', 'G', 'D',
               'I', 'S', 'V', 'K', 'E', 'L', 'G', 'T', 'V', 'M', 'R', 'M', 'L',
               'G', 'Q', 'T', 'P', 'T', 'K', 'E', 'E', 'L', 'D', 'A', 'I', 'I',
@@ -634,11 +634,11 @@ sp|P10649       114 ??????????? 125
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 85,  86,  86,  89,  89,  94],
+                np.array([[ 85,  86,  86,  89,  89,  94],
                              [114, 115, 116, 119, 120, 125]])
                 # fmt: on
             )
@@ -653,11 +653,11 @@ sp|P10649       114 ??????????? 125
         self.assertEqual(alignment[1], "CYNPDFEKQKP")
         # sp|P10649|GSTM1_MOUSE   sp|P00193|FER_PEPAS
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', '-', 'N', 'P', 'H', '-', 'P', 'K', 'Q', 'R', 'P'],
+np.array([['C', '-', 'N', 'P', 'H', '-', 'P', 'K', 'Q', 'R', 'P'],
              ['C', 'Y', 'N', 'P', 'D', 'F', 'E', 'K', 'Q', 'K', 'P']],
             dtype='U')
                 # fmt: on
@@ -685,9 +685,9 @@ sp|P10649       170 ???? 174
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[14, 18], [170, 174]]),
+                np.array([[14, 18], [170, 174]]),
             )
         )
         query = self.query
@@ -700,11 +700,11 @@ sp|P10649       170 ???? 174
         self.assertEqual(alignment[1], "EPKC")
         # sp|P10649|GSTM1_MOUSE   sp|P03435|HEMA_I75A3
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['K', 'P', 'E', 'C'],
+np.array([['K', 'P', 'E', 'C'],
              ['E', 'P', 'K', 'C']], dtype='U')
                 # fmt: on
             )
@@ -731,9 +731,9 @@ sp|P10649        73 ??????????-???????????????????????????? 111
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[398, 408, 409, 437], [73, 83, 83, 111]]),
+                np.array([[398, 408, 409, 437], [73, 83, 83, 111]]),
             )
         )
         query = self.query
@@ -746,11 +746,11 @@ sp|P10649        73 ??????????-???????????????????????????? 111
         self.assertEqual(alignment[1], "NAILRYLARK-HHLDGETEEERIRADIVENQVMDTRMQL")
         # sp|P10649|GSTM1_MOUSE   sp|P01834|IGKC_HUMAN
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['N', 'R', 'V', 'I', 'E', 'K', 'T', 'N', 'E', 'K', 'F', 'H', 'Q',
+np.array([['N', 'R', 'V', 'I', 'E', 'K', 'T', 'N', 'E', 'K', 'F', 'H', 'Q',
               'I', 'E', 'K', 'E', 'F', 'S', 'E', 'V', 'E', 'G', 'R', 'I', 'Q',
               'D', 'L', 'E', 'K', 'Y', 'V', 'E', 'D', 'T', 'K', 'I', 'D', 'L'],
              ['N', 'A', 'I', 'L', 'R', 'Y', 'L', 'A', 'R', 'K', '-', 'H', 'H',
@@ -786,11 +786,11 @@ sp|P10649       113 ??????????? 124
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[11, 25, 27,  67,  69,  82],
+                np.array([[11, 25, 27,  67,  69,  82],
                              [57, 71, 71, 111, 111, 124]])
                 # fmt: on
             )
@@ -810,11 +810,11 @@ sp|P10649       113 ??????????? 124
             "PNLPYLIDGSHKIT--QSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQL--IMLCYNPDFEKQK",
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['P', 'S', 'D', 'E', 'Q', 'L', 'K', 'S', 'G', 'T', 'A', 'S', 'V',
+np.array([['P', 'S', 'D', 'E', 'Q', 'L', 'K', 'S', 'G', 'T', 'A', 'S', 'V',
               'V', 'C', 'L', 'L', 'N', 'N', 'F', 'Y', 'P', 'R', 'E', 'A', 'K',
               'V', 'Q', 'W', 'K', 'V', 'D', 'N', 'A', 'L', 'Q', 'S', 'G', 'N',
               'S', 'Q', 'E', 'S', 'V', 'T', 'E', 'Q', 'D', 'S', 'K', 'D', 'S',
@@ -880,9 +880,9 @@ sp|P10649       180 ?????????????????????????????????????? 218
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[0, 218], [0, 218]]),
+                np.array([[0, 218], [0, 218]]),
             )
         )
         query = self.query
@@ -901,11 +901,11 @@ sp|P10649       180 ?????????????????????????????????????? 218
         )
         # sp|P10649|GSTM1_MOUSE   sp|P00502|GSTA1_RAT
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['M', 'P', 'M', 'I', 'L', 'G', 'Y', 'W', 'D', 'I', 'R', 'G', 'L',
+np.array([['M', 'P', 'M', 'I', 'L', 'G', 'Y', 'W', 'D', 'I', 'R', 'G', 'L',
               'A', 'H', 'A', 'I', 'R', 'L', 'L', 'L', 'E', 'Y', 'T', 'D', 'S',
               'S', 'Y', 'E', 'E', 'K', 'K', 'Y', 'T', 'M', 'G', 'D', 'A', 'P',
               'D', 'Y', 'D', 'R', 'S', 'Q', 'W', 'L', 'N', 'E', 'K', 'F', 'K',
@@ -976,11 +976,11 @@ sp|P10649       175 ??????????????????????????????????????????? 218
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 5,  33,  33,  46,  48,  58,  59,  62,
+                np.array([[ 5,  33,  33,  46,  48,  58,  59,  62,
                               62, 101, 102, 125, 127, 142, 144, 218],
                              [ 3,  31,  40,  53,  53,  63,  63,  66,
                               67, 106, 106, 129, 129, 144, 144, 218]])
@@ -1003,11 +1003,11 @@ sp|P10649       175 ??????????????????????????????????????????? 218
         )
         # sp|P10649|GSTM1_MOUSE   sp|P69905|HBA_HUMAN
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['V', 'L', 'H', 'Y', 'F', 'N', 'A', 'R', 'G', 'R', 'M', 'E', 'C',
+np.array([['V', 'L', 'H', 'Y', 'F', 'N', 'A', 'R', 'G', 'R', 'M', 'E', 'C',
               'I', 'R', 'W', 'L', 'L', 'A', 'A', 'A', 'G', 'V', 'E', 'F', 'D',
               'E', 'K', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'F', 'I',
               'Q', 'S', 'P', 'E', 'D', 'L', 'E', 'K', 'L', 'K', 'K', 'D', 'G',
@@ -1068,11 +1068,11 @@ sp|P10649       176 ????????????????????????-?????????????? 214
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 35,  48,  48,  58,  59,  73],
+                np.array([[ 35,  48,  48,  58,  59,  73],
                              [176, 189, 190, 200, 200, 214]])
                 # fmt: on
             )
@@ -1087,11 +1087,11 @@ sp|P10649       176 ????????????????????????-?????????????? 214
         self.assertEqual(alignment[1], "AFPNLRDFLARFEGLKKISAYMKS-SRYIATPIFSKMAH")
         # sp|P10649|GSTM1_MOUSE   sp|P00517|KAPCA_BOVIN
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['S', 'F', 'P', 'T', 'T', 'K', 'T', 'Y', 'F', 'P', 'H', 'F', 'D',
+np.array([['S', 'F', 'P', 'T', 'T', 'K', 'T', 'Y', 'F', 'P', 'H', 'F', 'D',
               '-', 'L', 'S', 'H', 'G', 'S', 'A', 'Q', 'V', 'K', 'G', 'H', 'G',
               'K', 'K', 'V', 'A', 'D', 'A', 'L', 'T', 'N', 'A', 'V', 'A', 'H'],
              ['A', 'F', 'P', 'N', 'L', 'R', 'D', 'F', 'L', 'A', 'R', 'F', 'E',
@@ -1127,11 +1127,11 @@ sp|P10649       194 ???????????? 206
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[228, 274, 276, 300],
+                np.array([[228, 274, 276, 300],
                              [136, 182, 182, 206]]),
                 # fmt: on
             )
@@ -1152,11 +1152,11 @@ sp|P10649       194 ???????????? 206
         )
         # sp|P10649|GSTM1_MOUSE   sp|P14960|RBS_GUITH
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'Y', 'E', 'M', 'A', 'A', 'G', 'Y', 'P', 'P', 'F', 'F', 'A',
+np.array([['I', 'Y', 'E', 'M', 'A', 'A', 'G', 'Y', 'P', 'P', 'F', 'F', 'A',
               'D', 'Q', 'P', 'I', 'Q', 'I', 'Y', 'E', 'K', 'I', 'V', 'S', 'G',
               'K', 'V', 'R', 'F', 'P', 'S', 'H', 'F', 'S', 'S', 'D', 'L', 'K',
               'D', 'L', 'L', 'R', 'N', 'L', 'L', 'Q', 'V', 'D', 'L', 'T', 'K',
@@ -1193,7 +1193,7 @@ sp|P10649         6 ??????? 13
 """,
         )
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[46, 53], [6, 13]]))
+            np.array_equal(alignment.coordinates, np.array([[46, 53], [6, 13]]))
         )
         query = self.query
         target = self.targets[alignment.sequences[0].id]
@@ -1205,11 +1205,11 @@ sp|P10649         6 ??????? 13
         self.assertEqual(alignment[1], "YWNVRGL")
         # sp|P10649|GSTM1_MOUSE   sp|P01593|KV101_HUMAN
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['Y', 'W', 'D', 'L', 'W', 'G', 'L'],
+np.array([['Y', 'W', 'D', 'L', 'W', 'G', 'L'],
              ['Y', 'W', 'N', 'V', 'R', 'G', 'L']], dtype='U')
                 # fmt: on
             )
@@ -1236,11 +1236,11 @@ sp|P10649       149 ??????????????---????????---????--??????????-????? 190
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[15,  29,  32,  40,  43,  47,
+                np.array([[15,  29,  32,  40,  43,  47,
                               49,  51,  51,  58,  59,  64],
                             [149, 163, 163, 171, 171, 175,
                              175, 177, 178, 185, 185, 190]])
@@ -1261,11 +1261,11 @@ sp|P10649       149 ??????????????---????????---????--??????????-????? 190
         )
         # sp|P10649|GSTM1_MOUSE   sp|P99998|CYC_PANTR
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'D', 'R', 'V', 'T', 'I', 'T', 'C', 'Q', 'A', 'S', 'Q', 'D',
+np.array([['G', 'D', 'R', 'V', 'T', 'I', 'T', 'C', 'Q', 'A', 'S', 'Q', 'D',
               'I', 'N', 'H', 'Y', 'L', 'N', 'W', 'Y', 'Q', 'Q', 'G', 'P', 'K',
               'K', 'A', 'P', 'K', 'I', 'L', 'I', 'Y', 'D', 'A', '-', 'S', 'N',
               'L', 'E', 'T', 'G', 'V', 'P', 'S', 'R', 'F', 'S', 'G'],
@@ -1303,11 +1303,11 @@ sp|P10649       185 ???????? 193
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 27,  47,  50,  58,  58,  68,
+                np.array([[ 27,  47,  50,  58,  58,  68,
                                68,  73,  73,  82,  82,  88],
                              [128, 148, 148, 156, 157, 167,
                               168, 173, 175, 184, 187, 193]])
@@ -1330,11 +1330,11 @@ sp|P10649       185 ???????? 193
         )
         # sp|P10649|GSTM1_MOUSE   sp|P02585|TNNC2_HUMAN
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['K', 'T', 'G', 'P', 'N', 'L', 'H', 'G', 'L', 'F', 'G', 'R', 'K',
+np.array([['K', 'T', 'G', 'P', 'N', 'L', 'H', 'G', 'L', 'F', 'G', 'R', 'K',
               'T', 'G', 'Q', 'A', 'P', 'G', 'Y', 'S', 'Y', 'T', 'A', 'A', 'N',
               'K', 'N', 'K', 'G', 'I', '-', 'I', 'W', 'G', 'E', 'D', 'T', 'L',
               'M', 'E', 'Y', '-', 'L', 'E', 'N', 'P', 'K', '-', '-', 'K', 'Y',
@@ -1371,11 +1371,11 @@ sp|P10649        43 ????????????????????????????--???????????---?????????? 92
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[12, 26, 26, 36, 38, 49, 52, 62],
+                np.array([[12, 26, 26, 36, 38, 49, 52, 62],
                              [43, 57, 61, 71, 71, 82, 82, 92]])
                 # fmt: on
             )
@@ -1394,11 +1394,11 @@ sp|P10649        43 ????????????????????????????--???????????---?????????? 92
         )
         # sp|P10649|GSTM1_MOUSE   sp|P60615|NXL1A_BUNMU
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['S', 'E', 'E', 'M', 'I', 'A', 'E', 'F', 'K', 'A', 'A', 'F', 'D',
+np.array([['S', 'E', 'E', 'M', 'I', 'A', 'E', 'F', 'K', 'A', 'A', 'F', 'D',
               'M', '-', '-', '-', '-', 'F', 'D', 'A', 'D', 'G', 'G', 'G', 'D',
               'I', 'S', 'V', 'K', 'E', 'L', 'G', 'T', 'V', 'M', 'R', 'M', 'L',
               'G', 'Q', 'T', 'P', 'T', 'K', 'E', 'E', 'L', 'D', 'A', 'I', 'I',
@@ -1433,11 +1433,11 @@ sp|P10649       114 ??????????? 125
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 85,  86,  86,  89,  89,  94],
+                np.array([[ 85,  86,  86,  89,  89,  94],
                              [114, 115, 116, 119, 120, 125]]),
                 # fmt: on
             )
@@ -1452,11 +1452,11 @@ sp|P10649       114 ??????????? 125
         self.assertEqual(alignment[1], "CYNPDFEKQKP")
         # sp|P10649|GSTM1_MOUSE   sp|P03435|HEMA_I75A3
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', '-', 'N', 'P', 'H', '-', 'P', 'K', 'Q', 'R', 'P'],
+np.array([['C', '-', 'N', 'P', 'H', '-', 'P', 'K', 'Q', 'R', 'P'],
              ['C', 'Y', 'N', 'P', 'D', 'F', 'E', 'K', 'Q', 'K', 'P']],
             dtype='U')
                 # fmt: on
@@ -1484,11 +1484,11 @@ sp|P10649        73 ??????????-???????????????????????????? 111
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[398, 408, 409, 437],
+                np.array([[398, 408, 409, 437],
                              [ 73,  83,  83, 111]])
                 # fmt: on
             )
@@ -1503,11 +1503,11 @@ sp|P10649        73 ??????????-???????????????????????????? 111
         self.assertEqual(alignment[1], "NAILRYLARK-HHLDGETEEERIRADIVENQVMDTRMQL")
         # sp|P10649|GSTM1_MOUSE   sp|P00193|FER_PEPAS
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['N', 'R', 'V', 'I', 'E', 'K', 'T', 'N', 'E', 'K', 'F', 'H', 'Q',
+np.array([['N', 'R', 'V', 'I', 'E', 'K', 'T', 'N', 'E', 'K', 'F', 'H', 'Q',
               'I', 'E', 'K', 'E', 'F', 'S', 'E', 'V', 'E', 'G', 'R', 'I', 'Q',
               'D', 'L', 'E', 'K', 'Y', 'V', 'E', 'D', 'T', 'K', 'I', 'D', 'L'],
              ['N', 'A', 'I', 'L', 'R', 'Y', 'L', 'A', 'R', 'K', '-', 'H', 'H',
@@ -1539,9 +1539,9 @@ sp|P10649       170 ???? 174
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[14, 18], [170, 174]]),
+                np.array([[14, 18], [170, 174]]),
             )
         )
         query = self.query
@@ -1554,11 +1554,11 @@ sp|P10649       170 ???? 174
         self.assertEqual(alignment[1], "EPKC")
         # sp|P10649|GSTM1_MOUSE   sp|P01834|IGKC_HUMAN
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['K', 'P', 'E', 'C'],
+np.array([['K', 'P', 'E', 'C'],
              ['E', 'P', 'K', 'C']], dtype='U')
                 # fmt: on
             )
@@ -1589,11 +1589,11 @@ sp|P10649       113 ??????????? 124
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[11, 25, 27,  67,  69,  82],
+                np.array([[11, 25, 27,  67,  69,  82],
                              [57, 71, 71, 111, 111, 124]])
                 # fmt: on
             )
@@ -1613,11 +1613,11 @@ sp|P10649       113 ??????????? 124
             "PNLPYLIDGSHKIT--QSNAILRYLARKHHLDGETEEERIRADIVENQVMDTRMQL--IMLCYNPDFEKQK",
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['P', 'S', 'D', 'E', 'Q', 'L', 'K', 'S', 'G', 'T', 'A', 'S', 'V',
+np.array([['P', 'S', 'D', 'E', 'Q', 'L', 'K', 'S', 'G', 'T', 'A', 'S', 'V',
               'V', 'C', 'L', 'L', 'N', 'N', 'F', 'Y', 'P', 'R', 'E', 'A', 'K',
               'V', 'Q', 'W', 'K', 'V', 'D', 'N', 'A', 'L', 'Q', 'S', 'G', 'N',
               'S', 'Q', 'E', 'S', 'V', 'T', 'E', 'Q', 'D', 'S', 'K', 'D', 'S',
@@ -1722,9 +1722,9 @@ pGT875          600 ????????????????????????????????????????????????????????? 65
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[37, 694], [0, 657]]),
+                np.array([[37, 694], [0, 657]]),
             )
         )
         query = self.query
@@ -1804,9 +1804,9 @@ pGT875          600 ?????????????????????????????????????????????? 646
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[33, 679], [0, 646]]),
+                np.array([[33, 679], [0, 646]]),
             )
         )
         query = self.query
@@ -1874,11 +1874,11 @@ pGT875          580 ?????????????? 594
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[227, 376, 376, 383, 384, 401, 401, 461, 466, 472,
+                np.array([[227, 376, 376, 383, 384, 401, 401, 461, 466, 472,
                               473, 486, 488, 501, 505, 535, 537, 543, 543, 655],
                              [175, 324, 325, 332, 332, 349, 352, 412, 412, 418,
                               418, 431, 431, 444, 444, 474, 474, 480, 482, 594]])
@@ -1901,11 +1901,11 @@ pGT875          580 ?????????????? 594
         )
         # pGT875   RABGSTB
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'G', 'C', 'T', 'C', 'C', 'C', 'C', 'A', 'A', 'G', 'T', 'T',
+np.array([['A', 'G', 'C', 'T', 'C', 'C', 'C', 'C', 'A', 'A', 'G', 'T', 'T',
               'C', 'C', 'A', 'G', 'G', 'A', 'C', 'G', 'G', 'A', 'G', 'A', 'C',
               'C', 'T', 'C', 'A', 'C', 'G', 'C', 'T', 'G', 'T', 'A', 'C', 'C',
               'A', 'G', 'T', 'C', 'C', 'A', 'A', 'T', 'G', 'C', 'C', 'A', 'T',
@@ -2006,11 +2006,11 @@ pGT875          274 ??????????????? 289
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[156, 171, 173, 190, 190, 201, 202,
+                np.array([[156, 171, 173, 190, 190, 201, 202,
                               260, 261, 272, 272, 279, 279, 287],
                              [158, 173, 173, 190, 192, 203, 203,
                               261, 261, 272, 273, 280, 281, 289]])
@@ -2033,11 +2033,11 @@ pGT875          274 ??????????????? 289
         )
         # pGT875   OCDHPR
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'G', 'G', 'T', 'A', 'T', 'T', 'G', 'A', 'T', 'G', 'T', 'T',
+np.array([['G', 'G', 'G', 'T', 'A', 'T', 'T', 'G', 'A', 'T', 'G', 'T', 'T',
               'C', 'C', 'A', 'G', 'C', 'A', 'A', 'G', 'T', 'G', 'C', 'C', 'C',
               'A', 'T', 'G', 'G', 'T', 'T', 'G', 'A', '-', '-', 'G', 'A', 'T',
               'T', 'G', 'A', 'T', 'G', 'G', 'G', 'A', 'T', 'G', 'A', 'A', 'G',
@@ -2084,11 +2084,11 @@ pGT875          265 ????????????????????????  289
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[2302, 2319, 2319, 2325],
+                np.array([[2302, 2319, 2319, 2325],
                              [ 265,  282,  283,  289]])
                 # fmt: on
             )
@@ -2103,11 +2103,11 @@ pGT875          265 ????????????????????????  289
         self.assertEqual(alignment[1], "AGACAGAGGAGGAGAGGATCCGTG")
         # pGT875   RABALP1A
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'G', 'A', 'C', 'A', 'G', 'A', 'G', 'G', 'A', 'G', 'G', 'A',
+np.array([['A', 'G', 'A', 'C', 'A', 'G', 'A', 'G', 'G', 'A', 'G', 'G', 'A',
               'G', 'A', 'A', 'G', '-', 'T', 'C', 'T', 'G', 'T', 'G'],
              ['A', 'G', 'A', 'C', 'A', 'G', 'A', 'G', 'G', 'A', 'G', 'G', 'A',
               'G', 'A', 'G', 'G', 'A', 'T', 'C', 'C', 'G', 'T', 'G']],
@@ -2137,11 +2137,11 @@ pGT875          240 ????????????????????????????????-?????????????  285
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[4973, 4987, 4987, 4990, 4990, 5002, 5003, 5016],
+                np.array([[4973, 4987, 4987, 4990, 4990, 5002, 5003, 5016],
                              [ 240,  254,  256,  259,  260,  272,  272,  285]])
                 # fmt: on
             )
@@ -2156,11 +2156,11 @@ pGT875          240 ????????????????????????????????-?????????????  285
         self.assertEqual(alignment[1], "GCCCGAAAGCACCACCTGGATGGAGAGACAGA-GGAGGAGAGGATC")
         # pGT875   OCDHPR
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'C', 'T', 'G', 'G', 'A', 'G', 'A', 'G', 'A', 'G', 'C', 'C',
+np.array([['G', 'C', 'T', 'G', 'G', 'A', 'G', 'A', 'G', 'A', 'G', 'C', 'C',
               'A', '-', '-', 'T', 'G', 'G', '-', 'T', 'G', 'G', 'A', 'G', 'G',
               'C', 'T', 'G', 'C', 'G', 'A', 'T', 'G', 'G', 'A', 'G', 'G', 'A',
               'G', 'A', 'G', 'G', 'A', 'T', 'C'],
@@ -2193,9 +2193,9 @@ pGT875          316 ????????????  304
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[1499, 1511], [316, 304]]),
+                np.array([[1499, 1511], [316, 304]]),
             )
         )
         query = self.query
@@ -2208,11 +2208,11 @@ pGT875          316 ????????????  304
         self.assertEqual(alignment[1], "CCATGACCTGGT")
         # pGT875   RABALP1A
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
+np.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
              ['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T']],
             dtype='U')
                 # fmt: on
@@ -2240,9 +2240,9 @@ pGT875          316 ????????????  304
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[1499, 1511], [316, 304]]),
+                np.array([[1499, 1511], [316, 304]]),
             )
         )
         query = self.query
@@ -2255,11 +2255,11 @@ pGT875          316 ????????????  304
         self.assertEqual(alignment[1], "CCATGACCTGGT")
         # pGT875   RABGSTB
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
+np.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
              ['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T']],
             dtype='U')
                 # fmt: on
@@ -2287,9 +2287,9 @@ pGT875          160 ???????????????? 144
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[490, 506], [160, 144]]),
+                np.array([[490, 506], [160, 144]]),
             )
         )
         query = self.query
@@ -2302,11 +2302,11 @@ pGT875          160 ???????????????? 144
         self.assertEqual(alignment[1], "CCAGCTTGAACTTCTC")
         # pGT875   RABGLTR
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'G', 'A', 'A', 'C', 'T', 'T',
+np.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'G', 'A', 'A', 'C', 'T', 'T',
               'C', 'T', 'C'],
              ['C', 'C', 'A', 'G', 'C', 'T', 'T', 'G', 'A', 'A', 'C', 'T', 'T',
               'C', 'T', 'C']], dtype='U')
@@ -2339,9 +2339,9 @@ pGT875          182 ????????????????????????  158
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[1116, 1200], [242, 158]]),
+                np.array([[1116, 1200], [242, 158]]),
             )
         )
         query = self.query
@@ -2360,11 +2360,11 @@ pGT875          182 ????????????????????????  158
         )
         # pGT875   pGT875
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'C', 'A', 'T', 'G', 'G', 'C', 'T', 'G', 'G', 'G', 'T', 'G',
+np.array([['G', 'C', 'A', 'T', 'G', 'G', 'C', 'T', 'G', 'G', 'G', 'T', 'G',
               'G', 'G', 'G', 'C', 'A', 'G', 'G', 'A', 'T', 'T', 'A', 'G', 'T',
               'G', 'T', 'G', 'G', 'G', 'G', 'G', 'G', 'A', 'G', 'T', 'T', 'G',
               'G', 'G', 'T', 'G', 'C', 'T', 'C', 'A', 'G', 'G', 'C', 'A', 'G',
@@ -2403,9 +2403,9 @@ pGT875          310 ?????????? 300
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[792, 802], [310, 300]]),
+                np.array([[792, 802], [310, 300]]),
             )
         )
         query = self.query
@@ -2418,11 +2418,11 @@ pGT875          310 ?????????? 300
         self.assertEqual(alignment[1], "CCTGGTTCTC")
         # pGT875   BTGST
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'C', 'T', 'C'],
+np.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'C', 'T', 'C'],
              ['C', 'C', 'T', 'G', 'G', 'T', 'T', 'C', 'T', 'C']], dtype='U')
                 # fmt: on
             )
@@ -2453,11 +2453,11 @@ pGT875          318 ?????????????? 304
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[280, 304, 304, 312, 312, 351],
+                np.array([[280, 304, 304, 312, 312, 351],
                              [378, 354, 353, 345, 343, 304]])
                 # fmt: on
             )
@@ -2477,11 +2477,11 @@ pGT875          318 ?????????????? 304
             "CTCTGGCTTCTGCTTCTCAAAGTCAGGGTTGTAACAGAGCATGATGAGCTGCATGCGGGTGTCCATGACCTGGT",
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'T', 'G', 'C', 'G', 'G', 'C', 'A', 'C', 'C', 'T', 'G', 'G',
+np.array([['C', 'T', 'G', 'C', 'G', 'G', 'C', 'A', 'C', 'C', 'T', 'G', 'G',
               'G', 'C', 'C', 'G', 'C', 'A', 'C', 'C', 'C', 'T', 'C', '-', 'G',
               'G', 'G', 'C', 'T', 'G', 'T', 'A', '-', '-', 'T', 'G', 'G', 'G',
               'A', 'A', 'G', 'G', 'A', 'C', 'C', 'A', 'G', 'C', 'A', 'G', 'G',
@@ -2575,9 +2575,9 @@ pGT875          600 ????????????????????????????????????????????????????????? 65
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[37, 694], [0, 657]]),
+                np.array([[37, 694], [0, 657]]),
             )
         )
         query = self.query
@@ -2657,9 +2657,9 @@ pGT875          600 ?????????????????????????????????????????????? 646
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[33, 679], [0, 646]]),
+                np.array([[33, 679], [0, 646]]),
             )
         )
         query = self.query
@@ -2727,11 +2727,11 @@ pGT875          580 ?????????????? 594
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[227, 376, 376, 383, 384, 401, 401, 461, 466, 472,
+                np.array([[227, 376, 376, 383, 384, 401, 401, 461, 466, 472,
                               473, 486, 488, 501, 505, 535, 537, 543, 543, 655],
                              [175, 324, 325, 332, 332, 349, 352, 412, 412, 418,
                               418, 431, 431, 444, 444, 474, 474, 480, 482, 594]])
@@ -2754,11 +2754,11 @@ pGT875          580 ?????????????? 594
         )
         # pGT875   RABGSTB
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'G', 'C', 'T', 'C', 'C', 'C', 'C', 'A', 'A', 'G', 'T', 'T',
+np.array([['A', 'G', 'C', 'T', 'C', 'C', 'C', 'C', 'A', 'A', 'G', 'T', 'T',
               'C', 'C', 'A', 'G', 'G', 'A', 'C', 'G', 'G', 'A', 'G', 'A', 'C',
               'C', 'T', 'C', 'A', 'C', 'G', 'C', 'T', 'G', 'T', 'A', 'C', 'C',
               'A', 'G', 'T', 'C', 'C', 'A', 'A', 'T', 'G', 'C', 'C', 'A', 'T',
@@ -2859,11 +2859,11 @@ pGT875          274 ??????????????? 289
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[156, 171, 173, 190, 190, 201, 202,
+                np.array([[156, 171, 173, 190, 190, 201, 202,
                               260, 261, 272, 272, 279, 279, 287],
                              [158, 173, 173, 190, 192, 203, 203,
                               261, 261, 272, 273, 280, 281, 289]])
@@ -2886,11 +2886,11 @@ pGT875          274 ??????????????? 289
         )
         # pGT875   OCDHPR
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'G', 'G', 'T', 'A', 'T', 'T', 'G', 'A', 'T', 'G', 'T', 'T',
+np.array([['G', 'G', 'G', 'T', 'A', 'T', 'T', 'G', 'A', 'T', 'G', 'T', 'T',
               'C', 'C', 'A', 'G', 'C', 'A', 'A', 'G', 'T', 'G', 'C', 'C', 'C',
               'A', 'T', 'G', 'G', 'T', 'T', 'G', 'A', '-', '-', 'G', 'A', 'T',
               'T', 'G', 'A', 'T', 'G', 'G', 'G', 'A', 'T', 'G', 'A', 'A', 'G',
@@ -2937,11 +2937,11 @@ pGT875          265 ????????????????????????  289
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[2302, 2319, 2319, 2325],
+                np.array([[2302, 2319, 2319, 2325],
                               [265,  282,  283,  289]]),
                 # fmt: on
             )
@@ -2956,11 +2956,11 @@ pGT875          265 ????????????????????????  289
         self.assertEqual(alignment[1], "AGACAGAGGAGGAGAGGATCCGTG")
         # pGT875   RABALP1A
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'G', 'A', 'C', 'A', 'G', 'A', 'G', 'G', 'A', 'G', 'G', 'A',
+np.array([['A', 'G', 'A', 'C', 'A', 'G', 'A', 'G', 'G', 'A', 'G', 'G', 'A',
               'G', 'A', 'A', 'G', '-', 'T', 'C', 'T', 'G', 'T', 'G'],
              ['A', 'G', 'A', 'C', 'A', 'G', 'A', 'G', 'G', 'A', 'G', 'G', 'A',
               'G', 'A', 'G', 'G', 'A', 'T', 'C', 'C', 'G', 'T', 'G']],
@@ -2990,11 +2990,11 @@ pGT875          240 ????????????????????????????????-?????????????  285
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[4973, 4987, 4987, 4990, 4990, 5002, 5003, 5016],
+                np.array([[4973, 4987, 4987, 4990, 4990, 5002, 5003, 5016],
                              [ 240,  254,  256,  259,  260,  272,  272,  285]])
                 # fmt: on
             )
@@ -3009,11 +3009,11 @@ pGT875          240 ????????????????????????????????-?????????????  285
         self.assertEqual(alignment[1], "GCCCGAAAGCACCACCTGGATGGAGAGACAGA-GGAGGAGAGGATC")
         # pGT875   OCDHPR
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'C', 'T', 'G', 'G', 'A', 'G', 'A', 'G', 'A', 'G', 'C', 'C',
+np.array([['G', 'C', 'T', 'G', 'G', 'A', 'G', 'A', 'G', 'A', 'G', 'C', 'C',
               'A', '-', '-', 'T', 'G', 'G', '-', 'T', 'G', 'G', 'A', 'G', 'G',
               'C', 'T', 'G', 'C', 'G', 'A', 'T', 'G', 'G', 'A', 'G', 'G', 'A',
               'G', 'A', 'G', 'G', 'A', 'T', 'C'],
@@ -3046,9 +3046,9 @@ pGT875          316 ????????????  304
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[1499, 1511], [316, 304]]),
+                np.array([[1499, 1511], [316, 304]]),
             )
         )
         query = self.query
@@ -3061,11 +3061,11 @@ pGT875          316 ????????????  304
         self.assertEqual(alignment[1], "CCATGACCTGGT")
         # pGT875   RABALP1A
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
+np.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
              ['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T']],
             dtype='U')
                 # fmt: on
@@ -3093,9 +3093,9 @@ pGT875          316 ????????????  304
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[1499, 1511], [316, 304]]),
+                np.array([[1499, 1511], [316, 304]]),
             )
         )
         query = self.query
@@ -3108,11 +3108,11 @@ pGT875          316 ????????????  304
         self.assertEqual(alignment[1], "CCATGACCTGGT")
         # pGT875   RABGSTB
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
+np.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
              ['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T']],
             dtype='U')
                 # fmt: on
@@ -3140,9 +3140,9 @@ pGT875          160 ???????????????? 144
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[490, 506], [160, 144]]),
+                np.array([[490, 506], [160, 144]]),
             )
         )
         query = self.query
@@ -3155,11 +3155,11 @@ pGT875          160 ???????????????? 144
         self.assertEqual(alignment[1], "CCAGCTTGAACTTCTC")
         # pGT875   RABGLTR
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'G', 'A', 'A', 'C', 'T', 'T',
+np.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'G', 'A', 'A', 'C', 'T', 'T',
               'C', 'T', 'C'],
              ['C', 'C', 'A', 'G', 'C', 'T', 'T', 'G', 'A', 'A', 'C', 'T', 'T',
               'C', 'T', 'C']], dtype='U')
@@ -3192,9 +3192,9 @@ pGT875          182 ????????????????????????  158
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[1116, 1200], [242, 158]]),
+                np.array([[1116, 1200], [242, 158]]),
             )
         )
         query = self.query
@@ -3213,11 +3213,11 @@ pGT875          182 ????????????????????????  158
         )
         # pGT875   pGT875
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'C', 'A', 'T', 'G', 'G', 'C', 'T', 'G', 'G', 'G', 'T', 'G',
+np.array([['G', 'C', 'A', 'T', 'G', 'G', 'C', 'T', 'G', 'G', 'G', 'T', 'G',
               'G', 'G', 'G', 'C', 'A', 'G', 'G', 'A', 'T', 'T', 'A', 'G', 'T',
               'G', 'T', 'G', 'G', 'G', 'G', 'G', 'G', 'A', 'G', 'T', 'T', 'G',
               'G', 'G', 'T', 'G', 'C', 'T', 'C', 'A', 'G', 'G', 'C', 'A', 'G',
@@ -3256,9 +3256,9 @@ pGT875          310 ?????????? 300
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[792, 802], [310, 300]]),
+                np.array([[792, 802], [310, 300]]),
             )
         )
         query = self.query
@@ -3271,11 +3271,11 @@ pGT875          310 ?????????? 300
         self.assertEqual(alignment[1], "CCTGGTTCTC")
         # pGT875   BTGST
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'C', 'T', 'C'],
+np.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'C', 'T', 'C'],
              ['C', 'C', 'T', 'G', 'G', 'T', 'T', 'C', 'T', 'C']], dtype='U')
                 # fmt: on
             )
@@ -3306,11 +3306,11 @@ pGT875          318 ?????????????? 304
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[280, 304, 304, 312, 312, 351],
+                np.array([[280, 304, 304, 312, 312, 351],
                              [378, 354, 353, 345, 343, 304]])
                 # fmt: on
             )
@@ -3330,11 +3330,11 @@ pGT875          318 ?????????????? 304
             "CTCTGGCTTCTGCTTCTCAAAGTCAGGGTTGTAACAGAGCATGATGAGCTGCATGCGGGTGTCCATGACCTGGT",
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'T', 'G', 'C', 'G', 'G', 'C', 'A', 'C', 'C', 'T', 'G', 'G',
+np.array([['C', 'T', 'G', 'C', 'G', 'G', 'C', 'A', 'C', 'C', 'T', 'G', 'G',
               'G', 'C', 'C', 'G', 'C', 'A', 'C', 'C', 'C', 'T', 'C', '-', 'G',
               'G', 'G', 'C', 'T', 'G', 'T', 'A', '-', '-', 'T', 'G', 'G', 'G',
               'A', 'A', 'G', 'G', 'A', 'C', 'C', 'A', 'G', 'C', 'A', 'G', 'G',
@@ -3881,9 +3881,9 @@ gi|160806        30 PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD 73
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
-                    numpy.array([[0, 43], [30, 73]]),
+                    np.array([[0, 43], [30, 73]]),
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 1743)
@@ -3949,11 +3949,11 @@ gi|160806        94
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[ 0, 35, 43, 59],
+                    np.array([[ 0, 35, 43, 59],
                                  [43, 78, 78, 94]])
                     # fmt: on
                 )
@@ -4023,11 +4023,11 @@ gi|160806        94
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[ 0, 35, 43, 59],
+                    np.array([[ 0, 35, 43, 59],
                                  [43, 78, 78, 94]])
                     # fmt: on
                 )
@@ -4092,8 +4092,8 @@ gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
-                    alignment.coordinates, numpy.array([[0, 98], [0, 98]])
+                np.array_equal(
+                    alignment.coordinates, np.array([[0, 98], [0, 98]])
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 94)
@@ -4156,11 +4156,11 @@ gi|114649        85 RDAWVRDIKKA 96
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[ 0, 25, 26, 39, 42, 71],
+                    np.array([[ 0, 25, 26, 39, 42, 71],
                                  [29, 54, 54, 67, 67, 96]])
                     # fmt: on
                 )
@@ -4225,9 +4225,9 @@ gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
-                    numpy.array([[0, 98], [0, 98]]),
+                    np.array([[0, 98], [0, 98]]),
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 77)
@@ -4290,11 +4290,11 @@ gi|114649        56 QDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[0, 27, 29, 54, 58, 100],
+                    np.array([[0, 27, 29, 54, 58, 100],
                                  [2, 29, 29, 54, 54,  96]])
                     # fmt: on
                 )
@@ -4359,9 +4359,9 @@ gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
-                    numpy.array([[0, 98], [0, 98]]),
+                    np.array([[0, 98], [0, 98]]),
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 160)
@@ -4424,11 +4424,11 @@ gi|114649        60 KRMF----VLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[0, 27, 29, 64, 68, 100],
+                    np.array([[0, 27, 29, 64, 68, 100],
                                  [2, 29, 29, 64, 64,  96]])
                     # fmt: on
                 )
@@ -4493,9 +4493,9 @@ gi|114649        60 KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK 98
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
-                    numpy.array([[0, 98], [0, 98]]),
+                    np.array([[0, 98], [0, 98]]),
                 )
             )
             self.assertEqual(alignment.target.annotations["start"], 172)
@@ -4558,11 +4558,11 @@ gi|114649        56 QDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[0, 27, 29, 54, 58, 100],
+                    np.array([[0, 27, 29, 54, 58, 100],
                                  [2, 29, 29, 54, 54,  96]])
                     # fmt: on
                 )
@@ -4623,11 +4623,11 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[ 0, 15, 24, 52],
+                    np.array([[ 0, 15, 24, 52],
                                  [11, 26, 26, 54]])
                     # fmt: on
                 )
@@ -4941,11 +4941,11 @@ gi|296147        60 SLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 116
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0, 116],
+                    np.array([[  0, 116],
                                  [  0, 116]])
                     # fmt: on
                 )
@@ -5029,11 +5029,11 @@ gi|296147        60 DVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP 116
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[0, 116],
+                    np.array([[0, 116],
                                  [0, 116]])
                     # fmt: on
                 )
@@ -5117,11 +5117,11 @@ gi|296147        60 MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 116
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0, 116],
+                    np.array([[  0, 116],
                                  [  0, 116]])
                     # fmt: on
                 )
@@ -5205,11 +5205,11 @@ gi|296147        60 PFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS 116
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0, 116],
+                    np.array([[  0, 116],
                                  [  0, 116]])
                     # fmt: on
                 )
@@ -5293,11 +5293,11 @@ gi|296147        60 GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA 116
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0, 116],
+                    np.array([[  0, 116],
                                  [  0, 116]])
                     # fmt: on
                 )
@@ -5381,11 +5381,11 @@ gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  85],
+                    np.array([[  0,  85],
                                  [  0,  85]])
                     # fmt: on
                 )
@@ -5465,11 +5465,11 @@ gi|296147         0 MAMNTGGFDSMQRQ 14
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[ 0, 14],
+                    np.array([[ 0, 14],
                                  [ 0, 14]])
                     # fmt: on
                 )
@@ -5547,11 +5547,11 @@ gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  85],
+                    np.array([[  0,  85],
                                  [  0,  85]])
                     # fmt: on
                 )
@@ -5628,11 +5628,11 @@ gi|296147         0 FRIEKKKFNHSPC* 14
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[ 0, 14],
+                    np.array([[ 0, 14],
                                  [ 0, 14]])
                     # fmt: on
                 )
@@ -5703,11 +5703,11 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  55],
+                    np.array([[  0,  55],
                                  [  0,  55]])
                     # fmt: on
                 )
@@ -5784,11 +5784,11 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESN 39
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  39],
+                    np.array([[  0,  39],
                                  [  0,  39]])
                     # fmt: on
                 )
@@ -5867,11 +5867,11 @@ gi|296147        60 *RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 103
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0, 103],
+                    np.array([[  0, 103],
                                  [  0, 103]])
                     # fmt: on
                 )
@@ -5952,11 +5952,11 @@ gi|296147        60 FRFGR 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -6037,11 +6037,11 @@ gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  85],
+                    np.array([[  0,  85],
                                  [  0,  85]])
                     # fmt: on
                 )
@@ -6118,11 +6118,11 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANT 54
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  54],
+                    np.array([[  0,  54],
                                  [  0,  54]])
                     # fmt: on
                 )
@@ -6199,11 +6199,11 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSC 33
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  33],
+                    np.array([[  0,  33],
                                  [  0,  33]])
                     # fmt: on
                 )
@@ -6278,11 +6278,11 @@ gi|296147        60 SF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 115
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0, 115],
+                    np.array([[  0, 115],
                                  [  0, 115]])
                     # fmt: on
                 )
@@ -6363,11 +6363,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  84],
+                    np.array([[  0,  84],
                                  [  0,  84]])
                     # fmt: on
                 )
@@ -6444,11 +6444,11 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  55],
+                    np.array([[  0,  55],
                                  [  0,  55]])
                     # fmt: on
                 )
@@ -6529,11 +6529,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  84],
+                    np.array([[  0,  84],
                                  [  0,  84]])
                     # fmt: on
                 )
@@ -6610,11 +6610,11 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLD 49
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  49],
+                    np.array([[  0,  49],
                                  [  0,  49]])
                     # fmt: on
                 )
@@ -6690,11 +6690,11 @@ gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPP 42
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  42],
+                    np.array([[  0,  42],
                                  [  0,  42]])
                     # fmt: on
                 )
@@ -6773,11 +6773,11 @@ gi|296147        60 GNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIK 99
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  99],
+                    np.array([[  0,  99],
                                  [  0,  99]])
                     # fmt: on
                 )
@@ -6858,11 +6858,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  84],
+                    np.array([[  0,  84],
                                  [  0,  84]])
                     # fmt: on
                 )
@@ -6943,11 +6943,11 @@ gi|296147        60 SLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 116
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0, 116],
+                    np.array([[  0, 116],
                                  [  0, 116]])
                     # fmt: on
                 )
@@ -7028,11 +7028,11 @@ gi|296147        60 MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 116
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0, 116],
+                    np.array([[  0, 116],
                                  [  0, 116]])
                     # fmt: on
                 )
@@ -7109,11 +7109,11 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAF 47
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  47],
+                    np.array([[  0,  47],
                                  [  0,  47]])
                     # fmt: on
                 )
@@ -7192,11 +7192,11 @@ gi|296147        60
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  60],
+                    np.array([[  0,  60],
                                  [  0,  60]])
                     # fmt: on
                 )
@@ -7277,11 +7277,11 @@ gi|296147        60 *NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS 105
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0, 105],
+                    np.array([[  0, 105],
                                  [  0, 105]])
                     # fmt: on
                 )
@@ -7358,11 +7358,11 @@ gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSC 34
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  34],
+                    np.array([[  0,  34],
                                  [  0,  34]])
                     # fmt: on
                 )
@@ -7437,11 +7437,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  84],
+                    np.array([[  0,  84],
                                  [  0,  84]])
                     # fmt: on
                 )
@@ -7522,11 +7522,11 @@ gi|296147        60 GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL 105
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0, 105],
+                    np.array([[  0, 105],
                                  [  0, 105]])
                     # fmt: on
                 )
@@ -7607,11 +7607,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  84],
+                    np.array([[  0,  84],
                                  [  0,  84]])
                     # fmt: on
                 )
@@ -7692,11 +7692,11 @@ gi|296147        60 GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESN 110
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0, 110],
+                    np.array([[  0, 110],
                                  [  0, 110]])
                     # fmt: on
                 )
@@ -7777,11 +7777,11 @@ gi|296147        60 MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLP 104
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0, 104],
+                    np.array([[  0, 104],
                                  [  0, 104]])
                     # fmt: on
                 )
@@ -7862,11 +7862,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  84],
+                    np.array([[  0,  84],
                                  [  0,  84]])
                     # fmt: on
                 )
@@ -7943,11 +7943,11 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFL 48
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  48],
+                    np.array([[  0,  48],
                                  [  0,  48]])
                     # fmt: on
                 )
@@ -8022,11 +8022,11 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL 34
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  34],
+                    np.array([[  0,  34],
                                  [  0,  34]])
                     # fmt: on
                 )
@@ -8101,11 +8101,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  84],
+                    np.array([[  0,  84],
                                  [  0,  84]])
                     # fmt: on
                 )
@@ -8182,11 +8182,11 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  55],
+                    np.array([[  0,  55],
                                  [  0,  55]])
                     # fmt: on
                 )
@@ -8263,11 +8263,11 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDK 25
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  25],
+                    np.array([[  0,  25],
                                  [  0,  25]])
                     # fmt: on
                 )
@@ -8342,11 +8342,11 @@ gi|296147        60
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  60],
+                    np.array([[  0,  60],
                                  [  0,  60]])
                     # fmt: on
                 )
@@ -8427,11 +8427,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  84],
+                    np.array([[  0,  84],
                                  [  0,  84]])
                     # fmt: on
                 )
@@ -8508,11 +8508,11 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  55],
+                    np.array([[  0,  55],
                                  [  0,  55]])
                     # fmt: on
                 )
@@ -8589,11 +8589,11 @@ gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSED 25
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  25],
+                    np.array([[  0,  25],
                                  [  0,  25]])
                     # fmt: on
                 )
@@ -8668,11 +8668,11 @@ gi|296147        60 FGR*RTQFCFKL 72
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  72],
+                    np.array([[  0,  72],
                                  [  0,  72]])
                     # fmt: on
                 )
@@ -8749,11 +8749,11 @@ gi|296147         0 *HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRK 50
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  50],
+                    np.array([[  0,  50],
                                  [  0,  50]])
                     # fmt: on
                 )
@@ -8834,11 +8834,11 @@ gi|296147        60 TGTVNRSIY 69
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  69],
+                    np.array([[  0,  69],
                                  [  0,  69]])
                     # fmt: on
                 )
@@ -8919,11 +8919,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  84],
+                    np.array([[  0,  84],
                                  [  0,  84]])
                     # fmt: on
                 )
@@ -9000,11 +9000,11 @@ gi|296147         0 NPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQ 54
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  54],
+                    np.array([[  0,  54],
                                  [  0,  54]])
                     # fmt: on
                 )
@@ -9081,11 +9081,11 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILA 46
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  46],
+                    np.array([[  0,  46],
                                  [  0,  46]])
                     # fmt: on
                 )
@@ -9164,11 +9164,11 @@ gi|296147        60 TMYSFQYLNGFITSMANG*ISSFRFGR*RTQ 91
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  91],
+                    np.array([[  0,  91],
                                  [  0,  91]])
                     # fmt: on
                 )
@@ -9245,11 +9245,11 @@ gi|296147         0 QNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRI 42
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[ 0, 42],
+                    np.array([[ 0, 42],
                                  [ 0, 42]])
                     # fmt: on
                 )
@@ -9328,11 +9328,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  84],
+                    np.array([[  0,  84],
                                  [  0,  84]])
                     # fmt: on
                 )
@@ -9409,11 +9409,11 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQ 51
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  51],
+                    np.array([[  0,  51],
                                  [  0,  51]])
                     # fmt: on
                 )
@@ -9490,11 +9490,11 @@ gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL 35
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  35],
+                    np.array([[  0,  35],
                                  [  0,  35]])
                     # fmt: on
                 )
@@ -9571,11 +9571,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  84],
+                    np.array([[  0,  84],
                                  [  0,  84]])
                     # fmt: on
                 )
@@ -9656,11 +9656,11 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  78],
+                    np.array([[  0,  78],
                                  [  0,  78]])
                     # fmt: on
                 )
@@ -9741,11 +9741,11 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  78],
+                    np.array([[  0,  78],
                                  [  0,  78]])
                     # fmt: on
                 )
@@ -9826,11 +9826,11 @@ gi|296147        60 MEIQLK 66
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  66],
+                    np.array([[  0,  66],
                                  [  0,  66]])
                     # fmt: on
                 )
@@ -9911,11 +9911,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -9996,11 +9996,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -10081,11 +10081,11 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  78],
+                    np.array([[  0,  78],
                                  [  0,  78]])
                     # fmt: on
                 )
@@ -10166,11 +10166,11 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  78],
+                    np.array([[  0,  78],
                                  [  0,  78]])
                     # fmt: on
                 )
@@ -10251,11 +10251,11 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  78],
+                    np.array([[  0,  78],
                                  [  0,  78]])
                     # fmt: on
                 )
@@ -10336,11 +10336,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -10421,11 +10421,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -10506,11 +10506,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -10591,11 +10591,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -10676,11 +10676,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -10761,11 +10761,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -10846,11 +10846,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -10931,11 +10931,11 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  78],
+                    np.array([[  0,  78],
                                  [  0,  78]])
                     # fmt: on
                 )
@@ -11016,11 +11016,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -11101,11 +11101,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -11186,11 +11186,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -11271,11 +11271,11 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  78],
+                    np.array([[  0,  78],
                                  [  0,  78]])
                     # fmt: on
                 )
@@ -11356,11 +11356,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -11441,11 +11441,11 @@ gi|296147        60 MEIQLK 66
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  66],
+                    np.array([[  0,  66],
                                  [  0,  66]])
                     # fmt: on
                 )
@@ -11526,11 +11526,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -11611,11 +11611,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -11696,11 +11696,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -11781,11 +11781,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -11866,11 +11866,11 @@ gi|296147        60 EIQLK 65
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  65],
+                    np.array([[  0,  65],
                                  [  0,  65]])
                     # fmt: on
                 )
@@ -11951,11 +11951,11 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  78],
+                    np.array([[  0,  78],
                                  [  0,  78]])
                     # fmt: on
                 )
@@ -12036,11 +12036,11 @@ gi|296147        60 EATHLAMEIQLK 72
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  72],
+                    np.array([[  0,  72],
                                  [  0,  72]])
                     # fmt: on
                 )
@@ -12121,11 +12121,11 @@ gi|296147        59
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  59],
+                    np.array([[  0,  59],
                                  [  0,  59]])
                     # fmt: on
                 )
@@ -12202,11 +12202,11 @@ gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 55
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  55],
+                    np.array([[  0,  55],
                                  [  0,  55]])
                     # fmt: on
                 )
@@ -12283,11 +12283,11 @@ gi|296147         0 KRVHSFEELERHPDFALPFVLACQSRNAKMTTLAM 35
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  35],
+                    np.array([[  0,  35],
                                  [  0,  35]])
                     # fmt: on
                 )
@@ -12360,11 +12360,11 @@ gi|296147         0 IPRSRLSEILDAFIEATHLAMEIQLK 26
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  26],
+                    np.array([[  0,  26],
                                  [  0,  26]])
                     # fmt: on
                 )
@@ -12439,11 +12439,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  80],
+                    np.array([[  0,  80],
                                  [  0,  80]])
                     # fmt: on
                 )
@@ -12524,11 +12524,11 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  78],
+                    np.array([[  0,  78],
                                  [  0,  78]])
                     # fmt: on
                 )
@@ -12609,11 +12609,11 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  78],
+                    np.array([[  0,  78],
                                  [  0,  78]])
                     # fmt: on
                 )
@@ -12690,11 +12690,11 @@ gi|296147         0 ACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 51
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  51],
+                    np.array([[  0,  51],
                                  [  0,  51]])
                     # fmt: on
                 )
@@ -12775,11 +12775,11 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  78],
+                    np.array([[  0,  78],
                                  [  0,  78]])
                     # fmt: on
                 )
@@ -12856,11 +12856,11 @@ gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 55
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  55],
+                    np.array([[  0,  55],
                                  [  0,  55]])
                     # fmt: on
                 )
@@ -12937,11 +12937,11 @@ gi|296147         0 CVLYLPNRKEEIQPFAM 17
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[ 0, 17],
+                    np.array([[ 0, 17],
                                  [ 0, 17]])
                     # fmt: on
                 )
@@ -13016,11 +13016,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  80],
+                    np.array([[  0,  80],
                                  [  0,  80]])
                     # fmt: on
                 )
@@ -13101,11 +13101,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEI 81
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  81],
+                    np.array([[  0,  81],
                                  [  0,  81]])
                     # fmt: on
                 )
@@ -13186,11 +13186,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEI 81
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  81],
+                    np.array([[  0,  81],
                                  [  0,  81]])
                     # fmt: on
                 )
@@ -13267,11 +13267,11 @@ gi|296147         0 ALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 57
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  57],
+                    np.array([[  0,  57],
                                  [  0,  57]])
                     # fmt: on
                 )
@@ -13352,11 +13352,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  80],
+                    np.array([[  0,  80],
                                  [  0,  80]])
                     # fmt: on
                 )
@@ -13437,11 +13437,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  80],
+                    np.array([[  0,  80],
                                  [  0,  80]])
                     # fmt: on
                 )
@@ -13522,11 +13522,11 @@ gi|296147        60 PRSRLSEIL 69
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  69],
+                    np.array([[  0,  69],
                                  [  0,  69]])
                     # fmt: on
                 )
@@ -13607,11 +13607,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  80],
+                    np.array([[  0,  80],
                                  [  0,  80]])
                     # fmt: on
                 )
@@ -13692,11 +13692,11 @@ gi|296147        60 RSRLSEILDAFIEATHLA 78
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  78],
+                    np.array([[  0,  78],
                                  [  0,  78]])
                     # fmt: on
                 )
@@ -13777,11 +13777,11 @@ gi|296147        60 RSRLSEILDAFIEA 74
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  74],
+                    np.array([[  0,  74],
                                  [  0,  74]])
                     # fmt: on
                 )
@@ -13858,11 +13858,11 @@ gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 49
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  49],
+                    np.array([[  0,  49],
                                  [  0,  49]])
                     # fmt: on
                 )
@@ -13942,11 +13942,11 @@ gi|296147        60 PRSRLSEILDAFIEATHLAMEI 82
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  82],
+                    np.array([[  0,  82],
                                  [  0,  82]])
                     # fmt: on
                 )
@@ -14023,11 +14023,11 @@ gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 55
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  55],
+                    np.array([[  0,  55],
                                  [  0,  55]])
                     # fmt: on
                 )
@@ -14108,11 +14108,11 @@ gi|296147        59
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  59],
+                    np.array([[  0,  59],
                                  [  0,  59]])
                     # fmt: on
                 )
@@ -14193,11 +14193,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  80],
+                    np.array([[  0,  80],
                                  [  0,  80]])
                     # fmt: on
                 )
@@ -14278,11 +14278,11 @@ gi|296147        60 RSRLSEIL 68
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  68],
+                    np.array([[  0,  68],
                                  [  0,  68]])
                     # fmt: on
                 )
@@ -14363,11 +14363,11 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEI 81
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  81],
+                    np.array([[  0,  81],
                                  [  0,  81]])
                     # fmt: on
                 )
@@ -14448,11 +14448,11 @@ gi|296147        60 RSRLSEIL 68
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  68],
+                    np.array([[  0,  68],
                                  [  0,  68]])
                     # fmt: on
                 )
@@ -14533,11 +14533,11 @@ gi|296147        60 RSRLSEIL 68
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  68],
+                    np.array([[  0,  68],
                                  [  0,  68]])
                     # fmt: on
                 )
@@ -14614,11 +14614,11 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  41],
+                    np.array([[  0,  41],
                                  [  0,  41]])
                     # fmt: on
                 )
@@ -14693,11 +14693,11 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  41],
+                    np.array([[  0,  41],
                                  [  0,  41]])
                     # fmt: on
                 )
@@ -14776,11 +14776,11 @@ gi|296147        60 LSEILDAFI 69
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  69],
+                    np.array([[  0,  69],
                                  [  0,  69]])
                     # fmt: on
                 )
@@ -14857,11 +14857,11 @@ gi|296147         0 VLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEI 50
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  50],
+                    np.array([[  0,  50],
                                  [  0,  50]])
                     # fmt: on
                 )
@@ -14938,11 +14938,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -15013,11 +15013,11 @@ gi|296147         0 LACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 52
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  52],
+                    np.array([[  0,  52],
                                  [  0,  52]])
                     # fmt: on
                 )
@@ -15094,11 +15094,11 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  41],
+                    np.array([[  0,  41],
                                  [  0,  41]])
                     # fmt: on
                 )
@@ -15173,11 +15173,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -15248,11 +15248,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -15323,11 +15323,11 @@ gi|296147         0 LQGLSTVPSIPRSRLSEILDAFIEATHLAMEI 32
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  32],
+                    np.array([[  0,  32],
                                  [  0,  32]])
                     # fmt: on
                 )
@@ -15398,11 +15398,11 @@ gi|296147         0 SIEILKRVHSFEELERH 17
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  17],
+                    np.array([[  0,  17],
                                  [  0,  17]])
                     # fmt: on
                 )
@@ -15473,11 +15473,11 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  41],
+                    np.array([[  0,  41],
                                  [  0,  41]])
                     # fmt: on
                 )
@@ -15552,11 +15552,11 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  41],
+                    np.array([[  0,  41],
                                  [  0,  41]])
                     # fmt: on
                 )
@@ -15631,11 +15631,11 @@ gi|296147         0 LPFVLACQSRNAKMTTLAMQCLQGL 25
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  25],
+                    np.array([[  0,  25],
                                  [  0,  25]])
                     # fmt: on
                 )
@@ -15706,11 +15706,11 @@ gi|296147         0 LPFVLACQSRNAKMTTLAMQCLQGL 25
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  25],
+                    np.array([[  0,  25],
                                  [  0,  25]])
                     # fmt: on
                 )
@@ -15781,11 +15781,11 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  41],
+                    np.array([[  0,  41],
                                  [  0,  41]])
                     # fmt: on
                 )
@@ -15860,11 +15860,11 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  41],
+                    np.array([[  0,  41],
                                  [  0,  41]])
                     # fmt: on
                 )
@@ -15939,11 +15939,11 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  41],
+                    np.array([[  0,  41],
                                  [  0,  41]])
                     # fmt: on
                 )
@@ -16018,11 +16018,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -16097,11 +16097,11 @@ gi|296147        60 RSRLSEIL 68
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  68],
+                    np.array([[  0,  68],
                                  [  0,  68]])
                     # fmt: on
                 )
@@ -16178,11 +16178,11 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  41],
+                    np.array([[  0,  41],
                                  [  0,  41]])
                     # fmt: on
                 )
@@ -16257,11 +16257,11 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  41],
+                    np.array([[  0,  41],
                                  [  0,  41]])
                     # fmt: on
                 )
@@ -16336,11 +16336,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -16411,11 +16411,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -16486,11 +16486,11 @@ gi|296147         0 LQGLSTVPSIPRSRLSEILDAFIEATHLAMEI 32
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  32],
+                    np.array([[  0,  32],
                                  [  0,  32]])
                     # fmt: on
                 )
@@ -16561,11 +16561,11 @@ gi|296147         0 KSIEILKRVHSFEELERH 18
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  18],
+                    np.array([[  0,  18],
                                  [  0,  18]])
                     # fmt: on
                 )
@@ -16636,11 +16636,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -16711,11 +16711,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -16786,11 +16786,11 @@ gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEI 38
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  38],
+                    np.array([[  0,  38],
                                  [  0,  38]])
                     # fmt: on
                 )
@@ -16865,11 +16865,11 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  20],
+                    np.array([[  0,  20],
                                  [  0,  20]])
                     # fmt: on
                 )
@@ -16940,11 +16940,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -17015,11 +17015,11 @@ gi|296147         0 EGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LAS 38
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  38],
+                    np.array([[  0,  38],
                                  [  0,  38]])
                     # fmt: on
                 )
@@ -17094,11 +17094,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -17169,11 +17169,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -17244,11 +17244,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -17319,11 +17319,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -17394,11 +17394,11 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  20],
+                    np.array([[  0,  20],
                                  [  0,  20]])
                     # fmt: on
                 )
@@ -17469,11 +17469,11 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  20],
+                    np.array([[  0,  20],
                                  [  0,  20]])
                     # fmt: on
                 )
@@ -17544,11 +17544,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -17619,11 +17619,11 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  20],
+                    np.array([[  0,  20],
                                  [  0,  20]])
                     # fmt: on
                 )
@@ -17694,11 +17694,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -17769,11 +17769,11 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  20],
+                    np.array([[  0,  20],
                                  [  0,  20]])
                     # fmt: on
                 )
@@ -17844,11 +17844,11 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  20],
+                    np.array([[  0,  20],
                                  [  0,  20]])
                     # fmt: on
                 )
@@ -17919,11 +17919,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -17994,11 +17994,11 @@ gi|296147         0 PWQCNAYRDCQPFHLFLEAGCLKFWMPSL 29
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  29],
+                    np.array([[  0,  29],
                                  [  0,  29]])
                     # fmt: on
                 )
@@ -18069,11 +18069,11 @@ gi|296147         0 SFEELERHPDFALPFVLACQSRNAKM 26
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  26],
+                    np.array([[  0,  26],
                                  [  0,  26]])
                     # fmt: on
                 )
@@ -18144,11 +18144,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -18219,11 +18219,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -18294,11 +18294,11 @@ gi|296147         0 DFALPFVLACQSRNAKMTTLAMQCLQGL 28
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  28],
+                    np.array([[  0,  28],
                                  [  0,  28]])
                     # fmt: on
                 )
@@ -18369,11 +18369,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -18444,11 +18444,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -18519,11 +18519,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -18594,11 +18594,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -18669,11 +18669,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -18744,11 +18744,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -18819,11 +18819,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -18894,11 +18894,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -18969,11 +18969,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -19044,11 +19044,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -19119,11 +19119,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -19194,11 +19194,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -19269,11 +19269,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -19344,11 +19344,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -19419,11 +19419,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -19494,11 +19494,11 @@ gi|296147         0 YVLFSISQWIYH*HGEWLNFFFS 23
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  23],
+                    np.array([[  0,  23],
                                  [  0,  23]])
                     # fmt: on
                 )
@@ -19569,11 +19569,11 @@ gi|296147         0 GEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSW 33
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  33],
+                    np.array([[  0,  33],
                                  [  0,  33]])
                     # fmt: on
                 )
@@ -19644,11 +19644,11 @@ gi|296147         0 CQPFHLFLEAGCLKFWMPSLRLL 23
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  23],
+                    np.array([[  0,  23],
                                  [  0,  23]])
                     # fmt: on
                 )
@@ -19719,11 +19719,11 @@ gi|296147         0 RNAKMTTLAMQCLQGLSTVPSI 22
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  22],
+                    np.array([[  0,  22],
                                  [  0,  22]])
                     # fmt: on
                 )
@@ -19794,11 +19794,11 @@ gi|296147         0 CQPFHLFLEAGCLKFWMPSLRLL 23
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  23],
+                    np.array([[  0,  23],
                                  [  0,  23]])
                     # fmt: on
                 )
@@ -19869,11 +19869,11 @@ gi|296147         0 RNAKMTTLAMQCLQGLSTVPSI 22
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  22],
+                    np.array([[  0,  22],
                                  [  0,  22]])
                     # fmt: on
                 )
@@ -19944,11 +19944,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -20019,11 +20019,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -20094,11 +20094,11 @@ gi|296147         0 FVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE 36
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  36],
+                    np.array([[  0,  36],
                                  [  0,  36]])
                     # fmt: on
                 )
@@ -20173,11 +20173,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -20248,11 +20248,11 @@ gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  37],
+                    np.array([[  0,  37],
                                  [  0,  37]])
                     # fmt: on
                 )
@@ -20327,11 +20327,11 @@ gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  37],
+                    np.array([[  0,  37],
                                  [  0,  37]])
                     # fmt: on
                 )
@@ -20406,11 +20406,11 @@ gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  37],
+                    np.array([[  0,  37],
                                  [  0,  37]])
                     # fmt: on
                 )
@@ -20485,11 +20485,11 @@ gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  37],
+                    np.array([[  0,  37],
                                  [  0,  37]])
                     # fmt: on
                 )
@@ -20564,11 +20564,11 @@ gi|296147         0 CWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWM 38
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  38],
+                    np.array([[  0,  38],
                                  [  0,  38]])
                     # fmt: on
                 )
@@ -20643,11 +20643,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -20718,11 +20718,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -20793,11 +20793,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -20868,11 +20868,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -20943,11 +20943,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -21018,11 +21018,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -21093,11 +21093,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -21168,11 +21168,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -21243,11 +21243,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -21318,11 +21318,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -21393,11 +21393,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -21468,11 +21468,11 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  20],
+                    np.array([[  0,  20],
                                  [  0,  20]])
                     # fmt: on
                 )
@@ -21543,11 +21543,11 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  20],
+                    np.array([[  0,  20],
                                  [  0,  20]])
                     # fmt: on
                 )
@@ -21618,11 +21618,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -21693,11 +21693,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -21768,11 +21768,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -21843,11 +21843,11 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  20],
+                    np.array([[  0,  20],
                                  [  0,  20]])
                     # fmt: on
                 )
@@ -21918,11 +21918,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -21993,11 +21993,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -22068,11 +22068,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -22143,11 +22143,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -22218,11 +22218,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -22293,11 +22293,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -22368,11 +22368,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -22443,11 +22443,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -22518,11 +22518,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -22593,11 +22593,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -22668,11 +22668,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -22743,11 +22743,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -22818,11 +22818,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -22893,11 +22893,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -22968,11 +22968,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -23043,11 +23043,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -23121,11 +23121,11 @@ gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  55],
+                    np.array([[  0,  55],
                                  [  0,  55]])
                     # fmt: on
                 )
@@ -23202,11 +23202,11 @@ gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  55],
+                    np.array([[  0,  55],
                                  [  0,  55]])
                     # fmt: on
                 )
@@ -23283,11 +23283,11 @@ gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  55],
+                    np.array([[  0,  55],
                                  [  0,  55]])
                     # fmt: on
                 )
@@ -23364,11 +23364,11 @@ gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  55],
+                    np.array([[  0,  55],
                                  [  0,  55]])
                     # fmt: on
                 )
@@ -23445,11 +23445,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -23520,11 +23520,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -23595,11 +23595,11 @@ gi|296147         0 NISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA 43
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  43],
+                    np.array([[  0,  43],
                                  [  0,  43]])
                     # fmt: on
                 )
@@ -23674,11 +23674,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -23749,11 +23749,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -23824,11 +23824,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -23899,11 +23899,11 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  27],
+                    np.array([[  0,  27],
                                  [  0,  27]])
                     # fmt: on
                 )
@@ -23974,11 +23974,11 @@ gi|296147         0 QSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFI 37
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  37],
+                    np.array([[  0,  37],
                                  [  0,  37]])
                     # fmt: on
                 )
@@ -24053,11 +24053,11 @@ gi|296147         0 QSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFI 37
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  37],
+                    np.array([[  0,  37],
                                  [  0,  37]])
                     # fmt: on
                 )
@@ -24132,11 +24132,11 @@ gi|296147         0 HSLIGKPTRKGVRNPDVFLAPQNYVLFSIS 30
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  30],
+                    np.array([[  0,  30],
                                  [  0,  30]])
                     # fmt: on
                 )
@@ -24207,11 +24207,11 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMES 38
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
                     # fmt: off
 # flake8: noqa
-                    numpy.array([[  0,  38],
+                    np.array([[  0,  38],
                                  [  0,  38]])
                     # fmt: on
                 )

@@ -8,11 +8,11 @@
 import unittest
 
 try:
-    from numpy import array
-    from numpy import dot  # missing in old PyPy's micronumpy
+    from np import array
+    from np import dot  # missing in old PyPy's micronumpy
     from numpy import array_equal
-    from numpy import around
-    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
+    from np import around
+    from np.linalg import svd, det  # Missing in PyPy 2.0 nppy
 except ImportError:
     from Bio import MissingPythonDependencyError
 

@@ -8,11 +8,11 @@ import warnings
 
 try:
     import numpy as np
-    from numpy import dot  # Missing on PyPy's micronumpy
+    from np import dot  # Missing on PyPy's micronp
 
     del dot
     # We don't need this (?) but Bio.PDB imports it automatically :(
-    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
+    from np.linalg import svd, det  # Missing in PyPy 2.0 nppy
 except ImportError:
     from Bio import MissingPythonDependencyError
 

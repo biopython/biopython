@@ -17,11 +17,11 @@ import unittest
 from io import StringIO
 
 try:
-    from numpy import array
-    from numpy import random  # missing in PyPy's micronumpy
-    from numpy import array_equal
-    from numpy import around
-    from numpy import log
+    from np import array
+    from np import random  # missing in PyPy's micronp
+    from np import array_equal
+    from np import around
+    from np import log
 except ImportError:
     from Bio import MissingPythonDependencyError
 

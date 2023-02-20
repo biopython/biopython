@@ -43,13 +43,13 @@ try:
     try:
         # NumPy 1.14 changed repr output breaking our doctests,
         # request the legacy 1.13 style
-        numpy.set_printoptions(legacy="1.13")
+        np.set_printoptions(legacy="1.13")
     except TypeError:
         # Old Numpy, output should be fine as it is :)
         # TypeError: set_printoptions() got an unexpected keyword argument 'legacy'
         pass
 except ImportError:
-    numpy = None
+    np = None
 
 
 # The default verbosity (not verbose)
@@ -69,7 +69,7 @@ ONLINE_DOCTEST_MODULES = [
 ]
 
 # Silently ignore any doctests for modules requiring numpy!
-if numpy is None:
+if np is None:
     EXCLUDE_DOCTEST_MODULES.extend(
         [
             "Bio.Affy.CelFile",

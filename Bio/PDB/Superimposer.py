@@ -35,8 +35,8 @@ class Superimposer:
         if not len(fixed) == len(moving):
             raise PDBException("Fixed and moving atom lists differ in size")
         length = len(fixed)
-        fixed_coord = numpy.zeros((length, 3))
-        moving_coord = numpy.zeros((length, 3))
+        fixed_coord = np.zeros((length, 3))
+        moving_coord = np.zeros((length, 3))
         for i in range(0, length):
             fixed_coord[i] = fixed[i].get_coord()
             moving_coord[i] = moving[i].get_coord()

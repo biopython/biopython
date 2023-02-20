@@ -42,7 +42,7 @@ class TestNexusReading(unittest.TestCase):
             self.assertEqual(sequence.annotations, saved_sequence.annotations)
             self.assertEqual(alignment[i], saved_alignment[i])
             self.assertTrue(
-                numpy.array_equal(alignment.coordinates, saved_alignment.coordinates)
+                np.array_equal(alignment.coordinates, saved_alignment.coordinates)
             )
 
     def test_nexus1(self):
@@ -107,11 +107,11 @@ t9                0 cccccccccccccccccccNc-ccccccccccccccccccccNc-c 44
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 0,  1,  1,  2,  2,  3,  3,  4,  5,  6,  8, 12,
+                np.array([[ 0,  1,  1,  2,  2,  3,  3,  4,  5,  6,  8, 12,
                               13, 14, 16, 16, 17, 17, 18, 18, 18, 18, 19, 20,
                               21, 23, 27, 28, 29, 31, 31, 32, 32, 33],
                              [ 0,  1,  1,  2,  2,  3,  4,  5,  6,  7,  9,  9,
@@ -178,11 +178,11 @@ end;
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', '-', 'C', '-', 'G', '-', 'T', 'c', 'g', 't', 'g', 't', 'g',
+np.array([['A', '-', 'C', '-', 'G', '-', 'T', 'c', 'g', 't', 'g', 't', 'g',
               't', 'g', 'c', 't', 'c', 't', '-', 't', '-', 't', '-', '-', '-',
               '-', '-', '-', 'a', 'c', 'g', 't', 'g', 't', 'g', 't', 'g', 'c',
               't', 'c', 't', '-', 't', '-', 't'],
@@ -238,7 +238,7 @@ numpy.array([['A', '-', 'C', '-', 'G', '-', 'T', 'c', 'g', 't', 'g', 't', 'g',
         self.assertEqual(alignment.sequences[0].seq, "AAAAAGGCATTGTGGTGGGAAT")
         self.assertEqual(alignment.sequences[1].seq, "?????????TTGTGGTGGGAAT")
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[0, 22], [0, 22]]))
+            np.array_equal(alignment.coordinates, np.array([[0, 22], [0, 22]]))
         )
         self.assertEqual(alignment[0], "AAAAAGGCATTGTGGTGGGAAT")
         self.assertEqual(alignment[1], "?????????TTGTGGTGGGAAT")
@@ -265,11 +265,11 @@ end;
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'A', 'A', 'A', 'A', 'G', 'G', 'C', 'A', 'T', 'T', 'G', 'T',
+np.array([['A', 'A', 'A', 'A', 'A', 'G', 'G', 'C', 'A', 'T', 'T', 'G', 'T',
               'G', 'G', 'T', 'G', 'G', 'G', 'A', 'A', 'T'],
              ['?', '?', '?', '?', '?', '?', '?', '?', '?', 'T', 'T', 'G', 'T',
               'G', 'G', 'T', 'G', 'G', 'G', 'A', 'A', 'T']], dtype='U')

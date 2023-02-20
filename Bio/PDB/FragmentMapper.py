@@ -91,7 +91,7 @@ def _read_fragments(size, length, dir="."):
                 fid += 1
                 continue
             # Add CA coord to Fragment
-            coord = numpy.array([float(x) for x in sl[0:3]])
+            coord = np.array([float(x) for x in sl[0:3]])
             # XXX= dummy residue name
             f.add_residue("XXX", coord)
     return flist
@@ -115,7 +115,7 @@ class Fragment:
         self.counter = 0
         self.resname_list = []
         # CA coordinate matrix
-        self.coords_ca = numpy.zeros((length, 3), "d")
+        self.coords_ca = np.zeros((length, 3), "d")
         self.fid = fid
 
     def get_resname_list(self):

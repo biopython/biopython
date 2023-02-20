@@ -44,7 +44,7 @@ class TestSimple(unittest.TestCase):
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertTrue(
-            numpy.array_equal(alignment1.coordinates, numpy.array([[12, 31], [0, 19]]))
+            np.array_equal(alignment1.coordinates, np.array([[12, 31], [0, 19]]))
         )
         self.assertEqual(
             str(alignment1),
@@ -58,7 +58,7 @@ transcrip         0 GGGGGGGCCCCCGGGGGGA 19
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
         self.assertTrue(
-            numpy.array_equal(alignment2.coordinates, numpy.array([[5, 15], [0, 10]]))
+            np.array_equal(alignment2.coordinates, np.array([[5, 15], [0, 10]]))
         )
         self.assertEqual(
             str(alignment2),
@@ -70,7 +70,7 @@ sequence          0 GGCCCCCGGG 10
         )
         alignment = alignment1.map(alignment2)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[17, 27], [0, 10]]))
+            np.array_equal(alignment.coordinates, np.array([[17, 27], [0, 10]]))
         )
         self.assertEqual(
             str(alignment),
@@ -120,7 +120,7 @@ sequence          0 GGGGGCCCCCGGG 13
         )
         alignment = alignment1.map(alignment2)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[0, 11], [2, 13]]))
+            np.array_equal(alignment.coordinates, np.array([[0, 11], [2, 13]]))
         )
         self.assertEqual(
             str(alignment),
@@ -170,7 +170,7 @@ sequence          0 GGCCCCCGGGGG 12
         )
         alignment = alignment1.map(alignment2)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[17, 27], [0, 10]]))
+            np.array_equal(alignment.coordinates, np.array([[17, 27], [0, 10]]))
         )
         self.assertEqual(
             str(alignment),
@@ -200,7 +200,7 @@ sequence          0 GGCCCCCGGG 10
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertTrue(
-            numpy.array_equal(alignment1.coordinates, numpy.array([[12, 31], [19, 0]]))
+            np.array_equal(alignment1.coordinates, np.array([[12, 31], [19, 0]]))
         )
         self.assertEqual(
             str(alignment1),
@@ -214,7 +214,7 @@ transcrip        19 GGGGGGGCCCCCGGGGGGA  0
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
         self.assertTrue(
-            numpy.array_equal(alignment2.coordinates, numpy.array([[4, 14], [10, 0]]))
+            np.array_equal(alignment2.coordinates, np.array([[4, 14], [10, 0]]))
         )
         self.assertEqual(
             str(alignment2),
@@ -226,7 +226,7 @@ sequence         10 CCCGGGGGCC  0
         )
         alignment = alignment1.map(alignment2)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[17, 27], [0, 10]]))
+            np.array_equal(alignment.coordinates, np.array([[17, 27], [0, 10]]))
         )
         self.assertEqual(
             str(alignment),
@@ -256,7 +256,7 @@ sequence          0 GGCCCCCGGG 10
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertTrue(
-            numpy.array_equal(alignment1.coordinates, numpy.array([[12, 31], [0, 19]]))
+            np.array_equal(alignment1.coordinates, np.array([[12, 31], [0, 19]]))
         )
         self.assertEqual(
             str(alignment1),
@@ -270,7 +270,7 @@ transcrip         0 GGGGGGGCCCCCGGGGGGA 19
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
         self.assertTrue(
-            numpy.array_equal(alignment2.coordinates, numpy.array([[5, 15], [10, 0]]))
+            np.array_equal(alignment2.coordinates, np.array([[5, 15], [10, 0]]))
         )
         self.assertEqual(
             str(alignment2),
@@ -282,7 +282,7 @@ sequence         10 GGCCCCCGGG  0
         )
         alignment = alignment1.map(alignment2)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[17, 27], [10, 0]]))
+            np.array_equal(alignment.coordinates, np.array([[17, 27], [10, 0]]))
         )
         self.assertEqual(
             str(alignment),
@@ -312,7 +312,7 @@ sequence         10 GGCCCCCGGG  0
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertTrue(
-            numpy.array_equal(alignment1.coordinates, numpy.array([[12, 31], [19, 0]]))
+            np.array_equal(alignment1.coordinates, np.array([[12, 31], [19, 0]]))
         )
         self.assertEqual(
             str(alignment1),
@@ -326,7 +326,7 @@ transcrip        19 GGGGGGGCCCCCGGGGGGA  0
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
         self.assertTrue(
-            numpy.array_equal(alignment2.coordinates, numpy.array([[4, 14], [0, 10]]))
+            np.array_equal(alignment2.coordinates, np.array([[4, 14], [0, 10]]))
         )
         self.assertEqual(
             str(alignment2),
@@ -338,7 +338,7 @@ sequence          0 CCCGGGGGCC 10
         )
         alignment = alignment1.map(alignment2)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[17, 27], [10, 0]]))
+            np.array_equal(alignment.coordinates, np.array([[17, 27], [10, 0]]))
         )
         self.assertEqual(
             str(alignment),
