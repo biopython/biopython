@@ -2534,10 +2534,11 @@ class TestAlignment_pairwise_format(unittest.TestCase):
         self.assertEqual(len(alignments), 2)
         self.seq_alignments = list(alignments)
         alignments = aligner.align(seqA, seqB)
+        alignments = list(alignments)
         for alignment in alignments:
             alignment.sequences[0] = SeqRecord(seqA, id="A", description="sequence A")
             alignment.sequences[1] = SeqRecord(seqB, id="B", description="sequence B")
-        self.seqrecord_alignments = list(alignments)
+        self.seqrecord_alignments = alignments
 
     def test_a2m(self):
         for alignment in self.plain_alignments:
