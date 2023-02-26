@@ -1290,6 +1290,7 @@ class Alignment:
             "containing the same values as the path attributes, after "
             "transposition.",
             BiopythonDeprecationWarning,
+            stacklevel=2,
         )
         return tuple(tuple(row) for row in self.coordinates.transpose())
 
@@ -1301,6 +1302,7 @@ class Alignment:
             "containing the same values as the path attributes, after "
             "transposition.",
             BiopythonDeprecationWarning,
+            stacklevel=2,
         )
         self.coordinates = numpy.array(value).transpose()
 
@@ -3176,8 +3178,6 @@ class PairwiseAlignments:
         return alignment
 
     def __iter__(self):
-        self._paths.reset()
-        self._index = -1
         return self
 
     def __next__(self):
@@ -3188,6 +3188,11 @@ class PairwiseAlignments:
         alignment.score = self.score
         self._alignment = alignment
         return alignment
+
+    def rewind(self):
+        """Rewind the iterator to let it loop over the alignments from the beginning.."""
+        self._paths.reset()
+        self._index = -1
 
 
 class PairwiseAligner(_aligners.PairwiseAligner):
@@ -3481,6 +3486,7 @@ class PairwiseAlignment(Alignment):
             "an Alignment object is a numpy array and the transpose of the "
             "path attribute of a PairwiseAlignment object.",
             BiopythonDeprecationWarning,
+            stacklevel=2,
         )
         sequences = [target, query]
         coordinates = numpy.array(path).transpose()
