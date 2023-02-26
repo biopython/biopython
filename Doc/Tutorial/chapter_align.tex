@@ -1943,7 +1943,7 @@ query             0 AA- 2
 ...     print(alignment)
 ...
 \end{minted}
-Note that \verb+alignments+ can be reused, i.e. you can iterate over alignments multiple times:
+By calling \verb+alignments.rewind+, you can rewind the \verb+alignments+ iterator to the first alignment and iterate over the alignments from the beginning:
 
 %doctest
 \begin{minted}{pycon}
@@ -1965,6 +1965,7 @@ target            0 AAA 3
                   0 -|| 3
 query             0 -AA 2
 <BLANKLINE>
+>>> alignments.rewind()
 >>> for alignment in alignments:
 ...     print(alignment)
 ...

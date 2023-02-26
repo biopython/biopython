@@ -11,6 +11,12 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.82
 ===============================================
 
+Calling ``iter`` on a ``PairwiseAlignments`` object returned by a
+``PairwiseAigner`` previously reset the iterator such that it will start from
+the first alignment when iterating. As a side effect, this will cause all other
+iterators of the alignments to reset as well, which is bug prone. Instead,
+calling ``iter`` on a ``PairwiseAlignments`` object will now return itself. The
+iterator can be reset by calling the ``rewind`` method.
 
 12 February 2023: Biopython 1.81
 ===============================================
