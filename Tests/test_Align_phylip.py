@@ -49,9 +49,15 @@ class TestPhylipReading(unittest.TestCase):
         path = "Phylip/one.dat"
         with open(path) as stream:
             alignments = Align.parse(stream, "phylip")
-            alignment = next(alignments)
-            with self.assertRaises(StopIteration):
-                next(alignments)
+            self.check_one(alignments)
+            alignments.rewind()
+            self.check_one(alignments)
+        self.check_reading_writing(path)
+
+    def check_one(self, alignments):
+        alignment = next(alignments)
+        with self.assertRaises(StopIteration):
+            next(alignments)
         self.assertEqual(
             repr(alignment),
             "<Alignment object (8 rows x 286 columns) at 0x%x>" % id(alignment),
@@ -241,7 +247,6 @@ Deinococcu-MKKSLLSLKLSGLLVPSVLALS--------LSACSSPSSTLNQGTLKIAMEGTYPPFTSKNE-QGELVG
 HISJ_E_COLMKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIGTDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPSLKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLVVAKNSDIQP-TVESLKGKRVGVLQGTTQETFGNEHWAPKGIEIVSYQGQDNIYSDLTAGRIDAAFQDEVAASEGFLKQPVGKDYKFGGPSVKDEKLFGVGTGMGLRKED--NELREALNKAFAEMRADGTYEKLAKKYFDFDVYGG---
 """,
         )
-        self.check_reading_writing(path)
 
     def test_two_and_three(self):
         paths = ("Phylip/two.dat", "Phylip/three.dat")

@@ -17,6 +17,11 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
 
     def test_reading(self):
         alignments = Align.parse(self.path, "hhr")
+        self.check_alignments(alignments)
+        alignments.rewind()
+        self.check_alignments(alignments)
+
+    def check_alignments(self, alignments):
         self.assertEqual(alignments.metadata["No_of_seqs"], (1560, 4005))
         self.assertAlmostEqual(alignments.metadata["Neff"], 8.3)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 34)

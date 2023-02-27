@@ -41,6 +41,15 @@ class TestA2MReadingWriting(unittest.TestCase):
             alignment = next(alignments)
             with self.assertRaises(StopIteration):
                 next(alignments)
+            self.check_clustalw(alignment)
+            alignments.rewind()
+            alignment = next(alignments)
+            with self.assertRaises(StopIteration):
+                next(alignments)
+            self.check_clustalw(alignment)
+        self.check_reading_writing(path)
+
+    def check_clustalw(self, alignment):
         self.assertEqual(
             repr(alignment),
             "<Alignment object (2 rows x 601 columns) at 0x%x>" % id(alignment),
@@ -125,7 +134,6 @@ MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPD
 ---------MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPG-----------------VPPEEAGAAVAAESSTGT---------WTTVWTDGLTSLDRYKG-----RCYHIEPVPG-------------------EKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAG-----------------------TCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASG-----------------------------GIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVA-----------VEACVKARNEG---RDLAAEGNAIIREACKWSPElAAACEVWKEIKFEFPAMD---
 """,
         )
-        self.check_reading_writing(path)
 
     def test_msaprobs(self):
         path = "Clustalw/msaprobs.a2m"

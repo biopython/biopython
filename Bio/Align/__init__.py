@@ -3190,7 +3190,7 @@ class PairwiseAlignments:
         return alignment
 
     def rewind(self):
-        """Rewind the iterator to let it loop over the alignments from the beginning.."""
+        """Rewind the iterator to let it loop over the alignments from the beginning."""
         self._paths.reset()
         self._index = -1
 

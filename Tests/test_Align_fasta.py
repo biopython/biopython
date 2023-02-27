@@ -38,9 +38,15 @@ class TestFASTAReadingWriting(unittest.TestCase):
         path = "Clustalw/clustalw.fa"
         with open(path) as stream:
             alignments = Align.parse(stream, "fasta")
-            alignment = next(alignments)
-            with self.assertRaises(StopIteration):
-                next(alignments)
+            self.check_clustalw(alignments)
+            alignments.rewind()
+            self.check_clustalw(alignments)
+        self.check_reading_writing(path)
+
+    def check_clustalw(self, alignments):
+        alignment = next(alignments)
+        with self.assertRaises(StopIteration):
+            next(alignments)
         self.assertEqual(
             repr(alignment),
             "<Alignment object (2 rows x 601 columns) at 0x%x>" % id(alignment),
@@ -121,7 +127,6 @@ MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPD
 ---------MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPG-----------------VPPEEAGAAVAAESSTGT---------WTTVWTDGLTSLDRYKG-----RCYHIEPVPG-------------------EKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAG-----------------------TCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASG-----------------------------GIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVA-----------VEACVKARNEG---RDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD---
 """,
         )
-        self.check_reading_writing(path)
 
     def test_msaprobs(self):
         path = "Clustalw/msaprobs.fa"

@@ -189,5 +189,4 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         ]
         coordinates = Alignment.infer_coordinates(aligned_seqs)
         alignment = Alignment(records, coordinates)
-        self._close()
         return alignment

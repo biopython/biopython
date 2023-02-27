@@ -247,6 +247,11 @@ numpy.array([['G', 'P', 'P', 'P', 'Q', 'S', 'P', 'D', 'E', 'N', 'R', 'A', 'G',
     def test_matcher_pair(self):
         path = "Emboss/matcher_pair.txt"
         alignments = Align.parse(path, "emboss")
+        self.check_matcher_pair(alignments)
+        alignments.rewind()
+        self.check_matcher_pair(alignments)
+
+    def check_matcher_pair(self, alignments):
         self.assertEqual(alignments.metadata["Program"], "matcher")
         self.assertEqual(alignments.metadata["Rundate"], "Tue  8 Dec 2009 12:01:34")
         self.assertEqual(

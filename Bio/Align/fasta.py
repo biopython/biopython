@@ -50,7 +50,18 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     fmt = "FASTA"
 
+    def __init__(self, source):
+        """Create an AlignmentIterator object.
+
+        Arguments:
+        - source - input file stream, or path to input file
+        """
+        super().__init__(source)
+        self._done = False
+
     def _read_next_alignment(self, stream):
+        if self._done is True:
+            return
         names = []
         descriptions = []
         lines = []
@@ -80,5 +91,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             record = SeqRecord(sequence, id=name, description=description)
             records.append(record)
         alignment = Alignment(records, coordinates)
-        self._close()
+        self._done = True
         return alignment
+
+    def rewind(self):
+        """Rewind the file and loop over the alignments from the beginning."""
+        super().rewind()
+        self._done = False

@@ -38,6 +38,11 @@ class TestFastaProtein(unittest.TestCase):
         # in the fasta36 source distribution
         path = "Fasta/protein_m8CB.txt"
         alignments = Align.parse(path, "tabular")
+        self.check_m8CB(alignments)
+        alignments.rewind()
+        self.check_m8CB(alignments)
+
+    def check_m8CB(self, alignments):
         self.assertEqual(
             alignments.metadata["Command line"],
             "fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg",

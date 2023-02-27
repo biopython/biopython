@@ -28,6 +28,8 @@ class Exonerate_est2genome(unittest.TestCase):
         exn_file = os.path.join("Exonerate", "exn_22_m_est2genome_cigar.exn")
         alignments = Align.parse(exn_file, "exonerate")
         self.check_cigar(alignments)
+        alignments.rewind()
+        self.check_cigar(alignments)
         alignments = Align.parse(exn_file, "exonerate")
         stream = io.StringIO()
         n = Align.write(alignments, stream, "exonerate", "cigar")
@@ -3810,6 +3812,8 @@ class Exonerate_none(unittest.TestCase):
             "exonerate -m est2genome none.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar yes --showvulgar yes",
         )
         self.assertEqual(alignments.metadata["Hostname"], "blackbriar")
+        self.assertRaises(StopIteration, next, alignments)
+        alignments.rewind()
         self.assertRaises(StopIteration, next, alignments)
 
 

@@ -35,79 +35,84 @@ class TestCombinedFile(unittest.TestCase):
 
     def test_parse(self):
         path = os.path.join("Mauve", "combined.xmfa")
-        saved_alignments = []
         with open(path) as stream:
             alignments = Align.parse(stream, "mauve")
-            metadata = alignments.metadata
-            self.assertEqual(len(metadata), 3)
-            self.assertEqual(metadata["FormatVersion"], "Mauve1")
-            self.assertEqual(metadata["File"], "combined.fa")
-            self.assertEqual(metadata["BackboneFile"], "combined.xmfa.bbcols")
-            identifiers = alignments.identifiers
-            alignment = next(alignments)
-            saved_alignments.append(alignment)
-            self.assertEqual(len(alignment), 3)
-            self.assertEqual(len(alignment.sequences), 3)
-            self.assertEqual(alignment.sequences[0].id, "0")
-            self.assertEqual(
-                repr(alignment.sequences[0].seq),
-                "Seq({1: 'AAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTT'}, length=49)",
+            self.check_alignments(alignments)
+            alignments.rewind()
+            self.check_alignments(alignments)
+
+    def check_alignments(self, alignments):
+        saved_alignments = []
+        metadata = alignments.metadata
+        self.assertEqual(len(metadata), 3)
+        self.assertEqual(metadata["FormatVersion"], "Mauve1")
+        self.assertEqual(metadata["File"], "combined.fa")
+        self.assertEqual(metadata["BackboneFile"], "combined.xmfa.bbcols")
+        identifiers = alignments.identifiers
+        alignment = next(alignments)
+        saved_alignments.append(alignment)
+        self.assertEqual(len(alignment), 3)
+        self.assertEqual(len(alignment.sequences), 3)
+        self.assertEqual(alignment.sequences[0].id, "0")
+        self.assertEqual(
+            repr(alignment.sequences[0].seq),
+            "Seq({1: 'AAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTT'}, length=49)",
+        )
+        sequence = self.sequences[alignment.sequences[0].id]
+        start = len(sequence) - alignment.coordinates[0, 0]
+        end = len(sequence) - alignment.coordinates[0, -1]
+        self.assertEqual(start, 1)
+        self.assertEqual(end, 49)
+        self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
+        self.assertEqual(alignment.sequences[1].id, "1")
+        self.assertEqual(alignment.sequences[1].seq, "")
+        start = alignment.coordinates[1, 0]
+        end = alignment.coordinates[1, -1]
+        self.assertEqual(start, 0)
+        self.assertEqual(end, 0)
+        self.assertEqual(alignment.sequences[2].id, "2")
+        self.assertEqual(
+            repr(alignment.sequences[2].seq),
+            "Seq({1: 'AAGCCCTGCGCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT'}, length=48)",
+        )
+        start = alignment.coordinates[2, 0]
+        end = alignment.coordinates[2, -1]
+        self.assertEqual(start, 1)
+        self.assertEqual(end, 48)
+        sequence = self.sequences[alignment.sequences[2].id][start:end]
+        self.assertEqual(alignment.sequences[2].seq[start:end], sequence)
+        self.assertEqual(
+            alignment[0], "AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT"
+        )
+        self.assertEqual(
+            alignment[1], "-------------------------------------------------"
+        )
+        self.assertEqual(
+            alignment[2], "AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT"
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array(
+                    [
+                        [49, 40, 38, 21, 21, 1],
+                        [0, 0, 0, 0, 0, 0],
+                        [1, 10, 10, 27, 28, 48],
+                    ]
+                ),
             )
-            sequence = self.sequences[alignment.sequences[0].id]
-            start = len(sequence) - alignment.coordinates[0, 0]
-            end = len(sequence) - alignment.coordinates[0, -1]
-            self.assertEqual(start, 1)
-            self.assertEqual(end, 49)
-            self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
-            self.assertEqual(alignment.sequences[1].id, "1")
-            self.assertEqual(alignment.sequences[1].seq, "")
-            start = alignment.coordinates[1, 0]
-            end = alignment.coordinates[1, -1]
-            self.assertEqual(start, 0)
-            self.assertEqual(end, 0)
-            self.assertEqual(alignment.sequences[2].id, "2")
-            self.assertEqual(
-                repr(alignment.sequences[2].seq),
-                "Seq({1: 'AAGCCCTGCGCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT'}, length=48)",
-            )
-            start = alignment.coordinates[2, 0]
-            end = alignment.coordinates[2, -1]
-            self.assertEqual(start, 1)
-            self.assertEqual(end, 48)
-            sequence = self.sequences[alignment.sequences[2].id][start:end]
-            self.assertEqual(alignment.sequences[2].seq[start:end], sequence)
-            self.assertEqual(
-                alignment[0], "AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT"
-            )
-            self.assertEqual(
-                alignment[1], "-------------------------------------------------"
-            )
-            self.assertEqual(
-                alignment[2], "AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT"
-            )
-            self.assertTrue(
-                numpy.array_equal(
-                    alignment.coordinates,
-                    numpy.array(
-                        [
-                            [49, 40, 38, 21, 21, 1],
-                            [0, 0, 0, 0, 0, 0],
-                            [1, 10, 10, 27, 28, 48],
-                        ]
-                    ),
-                )
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 0                49 AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT  1
 1                 0 -------------------------------------------------  0
 2                 1 AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT 48
 """,
-            )
-            self.assertEqual(
-                alignment.format("mauve", metadata, identifiers),
-                """\
+        )
+        self.assertEqual(
+            alignment.format("mauve", metadata, identifiers),
+            """\
 > 1:2-49 - combined.fa
 AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT
 > 2:0-0 + combined.fa
@@ -116,11 +121,11 @@ AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT
 AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT
 =
 """,
-            )
-            self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
-                    # fmt: off
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
 # flake8: noqa
 numpy.array([['A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G', 'C',
               'A', 'C', 'A', 'C', 'A', 'C', 'C', 'C', 'G', 'G', 'A', 'G', 'T',
@@ -134,204 +139,196 @@ numpy.array([['A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G', 'C',
               'G', 'C', 'T', 'C', 'A', 'G', 'C', 'C', 'G', 'G', 'A', 'G', 'T',
               'G', 'T', 'C', 'C', 'C', 'G', 'G', 'G', 'C', 'C', 'C', 'T', 'G',
               'C', 'T', 'T', 'T', 'C', 'C', 'T', 'T', 'T', 'T']], dtype='U')
-                    # fmt: on
-                )
+                # fmt: on
             )
-            alignment = next(alignments)
-            saved_alignments.append(alignment)
-            self.assertEqual(len(alignment), 1)
-            self.assertEqual(len(alignment.sequences), 1)
-            self.assertEqual(alignment.sequences[0].id, "0")
-            self.assertEqual(alignment.sequences[0].seq, "G")
-            sequence = self.sequences[alignment.sequences[0].id]
-            start = alignment.coordinates[0, 0]
-            end = alignment.coordinates[0, -1]
-            self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
-            self.assertEqual(alignment[0], "G")
-            self.assertTrue(
-                numpy.array_equal(alignment.coordinates, numpy.array([[0, 1]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        alignment = next(alignments)
+        saved_alignments.append(alignment)
+        self.assertEqual(len(alignment), 1)
+        self.assertEqual(len(alignment.sequences), 1)
+        self.assertEqual(alignment.sequences[0].id, "0")
+        self.assertEqual(alignment.sequences[0].seq, "G")
+        sequence = self.sequences[alignment.sequences[0].id]
+        start = alignment.coordinates[0, 0]
+        end = alignment.coordinates[0, -1]
+        self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
+        self.assertEqual(alignment[0], "G")
+        self.assertTrue(numpy.array_equal(alignment.coordinates, numpy.array([[0, 1]])))
+        self.assertEqual(
+            str(alignment),
+            """\
 0                 0 G 1
 """,
-            )
-            self.assertEqual(
-                alignment.format("mauve", metadata, identifiers),
-                """\
+        )
+        self.assertEqual(
+            alignment.format("mauve", metadata, identifiers),
+            """\
 > 1:1-1 + combined.fa
 G
 =
 """,
-            )
-            self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
-                    # fmt: off
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
 # flake8: noqa
 numpy.array([['G']], dtype='U')
-                    # fmt: on
-                )
+                # fmt: on
             )
-            alignment = next(alignments)
-            saved_alignments.append(alignment)
-            self.assertEqual(len(alignment), 1)
-            self.assertEqual(len(alignment.sequences), 1)
-            self.assertEqual(alignment.sequences[0].id, "0")
-            self.assertEqual(
-                repr(alignment.sequences[0].seq), "Seq({49: 'A'}, length=50)"
-            )
-            sequence = self.sequences[alignment.sequences[0].id]
-            start = alignment.coordinates[0, 0]
-            end = alignment.coordinates[0, -1]
-            self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
-            self.assertEqual(alignment[0], "A")
-            self.assertTrue(
-                numpy.array_equal(alignment.coordinates, numpy.array([[49, 50]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        alignment = next(alignments)
+        saved_alignments.append(alignment)
+        self.assertEqual(len(alignment), 1)
+        self.assertEqual(len(alignment.sequences), 1)
+        self.assertEqual(alignment.sequences[0].id, "0")
+        self.assertEqual(repr(alignment.sequences[0].seq), "Seq({49: 'A'}, length=50)")
+        sequence = self.sequences[alignment.sequences[0].id]
+        start = alignment.coordinates[0, 0]
+        end = alignment.coordinates[0, -1]
+        self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
+        self.assertEqual(alignment[0], "A")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[49, 50]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 0                49 A 50
 """,
-            )
-            self.assertEqual(
-                alignment.format("mauve", metadata, identifiers),
-                """\
+        )
+        self.assertEqual(
+            alignment.format("mauve", metadata, identifiers),
+            """\
 > 1:50-50 + combined.fa
 A
 =
 """,
-            )
-            self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
-                    # fmt: off
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
 # flake8: noqa
 numpy.array([['A']], dtype='U')
-                    # fmt: on
-                )
+                # fmt: on
             )
-            alignment = next(alignments)
-            saved_alignments.append(alignment)
-            self.assertEqual(len(alignment), 1)
-            self.assertEqual(len(alignment.sequences), 1)
-            self.assertEqual(alignment.sequences[0].id, "1")
-            self.assertEqual(
-                alignment.sequences[0].seq, "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT"
-            )
-            sequence = self.sequences[alignment.sequences[0].id]
-            start = alignment.coordinates[0, 0]
-            end = alignment.coordinates[0, -1]
-            self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
-            self.assertEqual(alignment[0], "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT")
-            self.assertTrue(
-                numpy.array_equal(alignment.coordinates, numpy.array([[0, 41]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        alignment = next(alignments)
+        saved_alignments.append(alignment)
+        self.assertEqual(len(alignment), 1)
+        self.assertEqual(len(alignment.sequences), 1)
+        self.assertEqual(alignment.sequences[0].id, "1")
+        self.assertEqual(
+            alignment.sequences[0].seq, "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT"
+        )
+        sequence = self.sequences[alignment.sequences[0].id]
+        start = alignment.coordinates[0, 0]
+        end = alignment.coordinates[0, -1]
+        self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
+        self.assertEqual(alignment[0], "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[0, 41]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 1                 0 GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT 41
 """,
-            )
-            self.assertEqual(
-                alignment.format("mauve", metadata, identifiers),
-                """\
+        )
+        self.assertEqual(
+            alignment.format("mauve", metadata, identifiers),
+            """\
 > 2:1-41 + combined.fa
 GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT
 =
 """,
-            )
-            self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
-                    # fmt: off
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
 # flake8: noqa
 numpy.array([['G', 'A', 'A', 'G', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'G', 'T',
               'A', 'G', 'A', 'T', 'C', 'C', 'C', 'T', 'G', 'G', 'C', 'G', 'T',
               'C', 'C', 'G', 'G', 'A', 'G', 'C', 'T', 'G', 'G', 'G', 'A', 'C',
               'G', 'T']], dtype='U')
-                    # fmt: on
-                )
+                # fmt: on
             )
-            alignment = next(alignments)
-            saved_alignments.append(alignment)
-            self.assertEqual(len(alignment), 1)
-            self.assertEqual(len(alignment.sequences), 1)
-            self.assertEqual(alignment.sequences[0].id, "2")
-            self.assertEqual(alignment.sequences[0].seq, "C")
-            sequence = self.sequences[alignment.sequences[0].id]
-            start = alignment.coordinates[0, 0]
-            end = alignment.coordinates[0, -1]
-            self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
-            self.assertEqual(alignment[0], "C")
-            self.assertTrue(
-                numpy.array_equal(alignment.coordinates, numpy.array([[0, 1]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        alignment = next(alignments)
+        saved_alignments.append(alignment)
+        self.assertEqual(len(alignment), 1)
+        self.assertEqual(len(alignment.sequences), 1)
+        self.assertEqual(alignment.sequences[0].id, "2")
+        self.assertEqual(alignment.sequences[0].seq, "C")
+        sequence = self.sequences[alignment.sequences[0].id]
+        start = alignment.coordinates[0, 0]
+        end = alignment.coordinates[0, -1]
+        self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
+        self.assertEqual(alignment[0], "C")
+        self.assertTrue(numpy.array_equal(alignment.coordinates, numpy.array([[0, 1]])))
+        self.assertEqual(
+            str(alignment),
+            """\
 2                 0 C 1
 """,
-            )
-            self.assertEqual(
-                alignment.format("mauve", metadata, identifiers),
-                """\
+        )
+        self.assertEqual(
+            alignment.format("mauve", metadata, identifiers),
+            """\
 > 3:1-1 + combined.fa
 C
 =
 """,
-            )
-            self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
-                    # fmt: off
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
 # flake8: noqa
 numpy.array([['C']], dtype='U')
-                    # fmt: on
-                )
+                # fmt: on
             )
-            alignment = next(alignments)
-            saved_alignments.append(alignment)
-            self.assertEqual(len(alignment), 1)
-            self.assertEqual(len(alignment.sequences), 1)
-            self.assertEqual(alignment.sequences[0].id, "2")
-            self.assertEqual(
-                repr(alignment.sequences[0].seq), "Seq({48: 'C'}, length=49)"
-            )
-            sequence = self.sequences[alignment.sequences[0].id]
-            start = alignment.coordinates[0, 0]
-            end = alignment.coordinates[0, -1]
-            self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
-            self.assertEqual(alignment[0], "C")
-            self.assertTrue(
-                numpy.array_equal(alignment.coordinates, numpy.array([[48, 49]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        alignment = next(alignments)
+        saved_alignments.append(alignment)
+        self.assertEqual(len(alignment), 1)
+        self.assertEqual(len(alignment.sequences), 1)
+        self.assertEqual(alignment.sequences[0].id, "2")
+        self.assertEqual(repr(alignment.sequences[0].seq), "Seq({48: 'C'}, length=49)")
+        sequence = self.sequences[alignment.sequences[0].id]
+        start = alignment.coordinates[0, 0]
+        end = alignment.coordinates[0, -1]
+        self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
+        self.assertEqual(alignment[0], "C")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[48, 49]]))
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 2                48 C 49
 """,
-            )
-            self.assertEqual(
-                alignment.format("mauve", metadata, identifiers),
-                """\
+        )
+        self.assertEqual(
+            alignment.format("mauve", metadata, identifiers),
+            """\
 > 3:49-49 + combined.fa
 C
 =
 """,
-            )
-            self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
-                    # fmt: off
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
 # flake8: noqa
 numpy.array([['C']], dtype='U')
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertRaises(StopIteration, next, alignments)
+        )
+        self.assertRaises(StopIteration, next, alignments)
         # As each nucleotide in each sequence is stored exactly once in an XMFA
         # file, we can reconstitute the full sequences:
         self.assertEqual(len(saved_alignments), 6)

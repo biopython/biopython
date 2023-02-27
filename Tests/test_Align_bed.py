@@ -40,10 +40,7 @@ class TestAlign_dna_rna(unittest.TestCase):
         records = SeqIO.parse("Blat/rna.fa", "fasta")
         self.rna = {record.id: record.seq for record in records}
 
-    def test_reading(self):
-        """Test parsing dna_rna.bed."""
-        path = "Blat/dna_rna.bed"
-        alignments = Align.parse(path, "bed")
+    def check_alignments(self, alignments):
         alignment = next(alignments)
         self.assertEqual(alignment.score, 1000)
         self.assertEqual(alignment.shape, (2, 5407))
@@ -1173,6 +1170,14 @@ chr3	42530895	42532606	NR_046654.1_modified	978	-	42530895	42532606	0	5	27,36,17
 """,
         )
         self.assertRaises(StopIteration, next, alignments)
+
+    def test_reading(self):
+        """Test parsing dna_rna.bed."""
+        path = "Blat/dna_rna.bed"
+        alignments = Align.parse(path, "bed")
+        self.check_alignments(alignments)
+        alignments.rewind()
+        self.check_alignments(alignments)
 
     def test_writing(self):
         """Test writing the alignments in dna_rna.bed."""
