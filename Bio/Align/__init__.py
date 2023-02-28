@@ -648,8 +648,8 @@ class MultipleSeqAlignment:
         """Access part of the alignment.
 
         Depending on the indices, you can get a SeqRecord object
-        (representing a single row), a Seq object (for a single columns),
-        a string (for a single characters) or another alignment
+        (representing a single row), a Seq object (for a single column),
+        a string (for a single character) or another alignment
         (representing some part or all of the alignment).
 
         align[r,c] gives a single character as a string

@@ -18,6 +18,9 @@ iterators of the alignments to reset as well, which is bug prone. Instead,
 calling ``iter`` on a ``PairwiseAlignments`` object will now return itself. The
 iterator can be reset by calling the ``rewind`` method.
 
+Typo fixes:
+- Cam McMenamie
+
 12 February 2023: Biopython 1.81
 ===============================================
 
