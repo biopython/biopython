@@ -191,6 +191,100 @@ class MultipleSeqAlignment:
         # Handle this via the property set function which will validate it
         self.column_annotations = column_annotations
 
+    def _map_from_seq(self, index, pos, include_letter=False):
+        """Map a position in a sequence to the alignment column.
+
+        Indexing by row number (int), or the sequence id (string) is supported.
+
+        Returns an integer column number (0 based).
+
+        TODO: 
+        support indexing starting from 1 when given as `pos`?
+
+        - if index is a slice, return a list of integers (i.e. 
+        each is a position for that specific sequence)
+        """
+        if isinstance(index, int):
+            # Assume it's a row number
+            if index < 0:
+                index += len(self._records)
+            if index < 0 or index >= len(self._records):
+                raise IndexError("Row index out of range")
+            record = self._records[index]
+        elif isinstance(index, str):
+            # Assume it's a record id
+            for record in self._records:
+                if record.id == index:
+                    break
+            else:
+                raise KeyError(f"No such record id {index}")
+        else:
+            raise TypeError(f"Invalid index type: {type(index)}")
+        
+        if pos < 0:
+            raise ValueError("Negative indexing not supported")
+        if pos >= len(self._records[0].seq):
+            raise IndexError("Sequence index out of range") 
+            
+            # TODO: check that pos is in range for FROM sequence (after removing gaps)
+        
+        seq = str(record.seq)
+
+        verbose = False
+        #verbose = True
+        if verbose:
+            print(f"type(record.seq): {type(record.seq)}") 
+            print(f"seq: {seq}")
+
+        for i, c in enumerate(seq):
+            if c != "-":
+                pos -= 1
+            if pos < 0:
+                return i 
+        raise IndexError("Sequence index out of range")
+
+    def _map_to_seq(self, index, pos):
+        """Map a position in the alignment to a sequence.
+
+        The sequence is indexed by row number (int), or the sequence id (string). 
+
+        Returns an integer position in the sequence (0 based).
+
+        If the sequence has a gap at the specified alignment position, the previous 
+        non-gap position is returned. # TODO: should this just be -1 instead?
+        """
+        if isinstance(index, int):
+            # Assume it's a row number
+            if index < 0:
+                index += len(self._records)
+            if index < 0 or index >= len(self._records):
+                raise IndexError("Row index out of range")
+            record = self._records[index]
+        elif isinstance(index, str):
+            # Assume it's a record id
+            for record in self._records:
+                if record.id == index:
+                    break
+            else:
+                raise KeyError(f"No such record id {index}")
+        else:
+            raise TypeError(f"Invalid index type: {type(index)}")
+        
+        if pos < 0:
+            raise ValueError("Negative indexing not supported") 
+            # TODO: use the alignment slicing method to get positions in reverse order; 
+            # or support multiple positions supplied as an array  
+        if pos >= len(self._records[0].seq):
+            raise IndexError("Sequence index out of range")
+        
+        seq = str(record.seq)[0:pos+1]
+        result = 0
+        for i, c in enumerate(seq):
+            if c != "-":
+                result += 1
+        return result - 1
+        raise IndexError("Sequence index out of range")
+
     def _set_per_column_annotations(self, value):
         if not isinstance(value, dict):
             raise TypeError(
