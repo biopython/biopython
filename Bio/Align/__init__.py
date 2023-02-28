@@ -335,7 +335,45 @@ class MultipleSeqAlignment:
         to_pos = self._map_to_seq(to_, from_pos)    # position in the other sequence
         return to_pos
     
-    
+    def map_letter(self, pos, from_=None, to_=None):
+        """Map a position in one sequence to another sequence in the alignment.
+
+        This is useful for identifying a particular residue in a sequence that 
+        aligned to another. 
+
+        Arguments:
+         - from_ - The sequence to map from (integer index, or sequence id). 
+         - to_ - The sequence to map to (integer index, or sequence id).
+         - pos - The position in the from_ sequence to map. 
+
+        Returns an integer position in the to_ sequence.
+
+        If from_ is None, then the position is assumed to be the alignment column. 
+        If to_ is None, then the returned position is the alignment column. 
+
+        >>> from Bio import AlignIO
+        >>> align = AlignIO.read("Clustalw/opuntia.aln", "clustal")
+        >>> print(align)
+        Alignment with 3 rows and 9 columns
+        KTLK-E-ME Alpha
+        KTLK---ME Beta
+        KT-----LE Gamma
+        
+        """
+        # TODO: can retrieve letter from alignment column (i.e. might return '-' character)
+        # TODO: use func for all methods that converts index (string, whatever) to a slice
+        if from_ is None and to_ is None:
+            raise ValueError(
+                "from_ and to_ cannot both be None")
+        
+        if from_ is None: index = self._map_to_seq(to_, pos)
+        if to_ is None: index = self._map_from_seq(from_, pos)
+
+        index = self._map_to_seq(to_, self._map_from_seq(from_, pos))
+        row_idx = self._get_row_index(to_)
+        seq = str(self._records[row_idx].seq).replace("-", "") # remove gaps
+        
+        return (seq[index], index+1) # letter at the position in the other sequence
 
     def _set_per_column_annotations(self, value):
         if not isinstance(value, dict):
