@@ -904,13 +904,13 @@ class MultipleSeqAlignment:
 
         Any weights associated with the sequences are taken into account when
         calculating the substitution matrix.  For example, given the following
-        multiple sequence alignment::
+        multiple sequence alignment:
 
             GTATC  0.5
             AT--C  0.8
             CTGTC  1.0
 
-        For the first column we have::
+        For the first column we have:
 
             ('A', 'G') : 0.5 * 0.8 = 0.4
             ('C', 'G') : 0.5 * 1.0 = 0.5
