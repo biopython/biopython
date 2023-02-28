@@ -191,6 +191,27 @@ class MultipleSeqAlignment:
         # Handle this via the property set function which will validate it
         self.column_annotations = column_annotations
 
+    def _get_row_index(self, index):
+        """Return the row number for the given index.
+        """
+        if isinstance(index, int):
+            # Assume it's a row number
+            if index < 0:
+                index += len(self._records)
+            if index < 0 or index >= len(self._records):
+                raise IndexError("Row index out of range")
+            return index
+        elif isinstance(index, str):
+            # Assume it's a record id
+            for i, record in enumerate(self._records):
+                if record.id == index:
+                    return i
+            else:
+                raise KeyError("No record with id %r" % index)
+        else:
+            raise TypeError("Invalid index type %r" % type(index))
+        
+
     def _map_from_seq(self, index, pos, include_letter=False):
         """Map a position in a sequence to the alignment column.
 
@@ -229,13 +250,6 @@ class MultipleSeqAlignment:
             # TODO: check that pos is in range for FROM sequence (after removing gaps)
         
         seq = str(record.seq)
-
-        verbose = False
-        #verbose = True
-        if verbose:
-            print(f"type(record.seq): {type(record.seq)}") 
-            print(f"seq: {seq}")
-
         for i, c in enumerate(seq):
             if c != "-":
                 pos -= 1
@@ -285,7 +299,7 @@ class MultipleSeqAlignment:
         return result - 1
         raise IndexError("Sequence index out of range")
     
-    def map_position(self, from_, to_, pos):
+    def map_position(self, pos, from_=None, to_=None):
         """Map a position in one sequence to another sequence in the alignment.
 
         This is useful for identifying a particular residue in a sequence that 
@@ -298,9 +312,8 @@ class MultipleSeqAlignment:
 
         Returns an integer position in the to_ sequence.
 
-        For example, if you have an alignment of a protein sequence and its
-        corresponding amino acid sequence, you can map a position in the protein
-        sequence to the corresponding position in the DNA sequence:
+        If from_ is None, then the position is assumed to be the alignment column. 
+        If to_ is None, then the returned position is the alignment column. 
 
         >>> from Bio import AlignIO
         >>> align = AlignIO.read("Clustalw/opuntia.aln", "clustal")
@@ -311,11 +324,18 @@ class MultipleSeqAlignment:
         KT-----LE Gamma
         
         """
+        if from_ is None and to_ is None:
+            raise ValueError(
+                "from_ and to_ cannot both be None")
+        
+        if from_ is None: return self._map_to_seq(to_, pos)
+        if to_ is None: return self._map_from_seq(from_, pos)
 
-        # if from_ is None, map from the alignment itself (i.e. the alignment object index)
-        from_pos = self._map_from_seq(from_, pos)
-        to_pos = self._map_to_seq(to_, from_pos)
+        from_pos = self._map_from_seq(from_, pos)   # position in the alignment 
+        to_pos = self._map_to_seq(to_, from_pos)    # position in the other sequence
         return to_pos
+    
+    
 
     def _set_per_column_annotations(self, value):
         if not isinstance(value, dict):
