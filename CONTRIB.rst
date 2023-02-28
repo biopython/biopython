@@ -69,6 +69,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Brian Osborne <https://github.com/bosborne>
 - Bryan Lunt <https://github.com/bryan-lunt>
 - Caio Fontes <https://github.com/Caiofcas>
+- Cam McMenamie <https://github.com/kamurani>
 - Carlos Pena <https://github.com/carlosp420>
 - Carlos Ríos <https://github.com/Crosvera>
 - Catherine Lesuisse <https://github.com/kaskales>
