@@ -815,7 +815,7 @@ class MultipleSeqAlignment:
         ...              SeqRecord(Seq("CGCT"), id="Chicken"),
         ...          ])
 
-        If you simple try and add these without sorting, you get this:
+        If you simply try and add these without sorting, you get this:
 
         >>> print(align1 + align2)
         Alignment with 3 rows and 8 columns
