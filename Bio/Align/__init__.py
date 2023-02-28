@@ -284,6 +284,38 @@ class MultipleSeqAlignment:
                 result += 1
         return result - 1
         raise IndexError("Sequence index out of range")
+    
+    def map_position(self, from_, to_, pos):
+        """Map a position in one sequence to another sequence in the alignment.
+
+        This is useful for identifying a particular residue in a sequence that 
+        aligned to another. 
+
+        Arguments:
+         - from_ - The sequence to map from (integer index, or sequence id). 
+         - to_ - The sequence to map to (integer index, or sequence id).
+         - pos - The position in the from_ sequence to map. 
+
+        Returns an integer position in the to_ sequence.
+
+        For example, if you have an alignment of a protein sequence and its
+        corresponding amino acid sequence, you can map a position in the protein
+        sequence to the corresponding position in the DNA sequence:
+
+        >>> from Bio import AlignIO
+        >>> align = AlignIO.read("Clustalw/opuntia.aln", "clustal")
+        >>> print(align)
+        Alignment with 3 rows and 9 columns
+        KTLK-E-ME Alpha
+        KTLK---ME Beta
+        KT-----LE Gamma
+        
+        """
+
+        # if from_ is None, map from the alignment itself (i.e. the alignment object index)
+        from_pos = self._map_from_seq(from_, pos)
+        to_pos = self._map_to_seq(to_, from_pos)
+        return to_pos
 
     def _set_per_column_annotations(self, value):
         if not isinstance(value, dict):
