@@ -655,7 +655,7 @@ class MultipleSeqAlignment:
         align[r,c] gives a single character as a string
         align[r] gives a row as a SeqRecord
         align[r,:] gives a row as a SeqRecord
-        align[:,c] gives a column as a Seq
+        align[:,c] gives a column as a string
 
         align[:] and align[:,:] give a copy of the alignment
 
