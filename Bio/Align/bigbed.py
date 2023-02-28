@@ -564,7 +564,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     break
 
     def _read_next_alignment(self, stream):
-        chunk = next(self._data)
+        try:
+            chunk = next(self._data)
+        except StopIteration:
+            return
         return self._create_alignment(chunk)
 
     def _create_alignment(self, chunk):

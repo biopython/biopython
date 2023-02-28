@@ -74,19 +74,17 @@ class AlignmentIterator(ABC):
             raise StopIteration from None
         try:
             alignment = self._read_next_alignment(stream)
-            if alignment is None:
-                raise StopIteration
         except Exception:
             self._close()
             raise
+        if alignment is None:
+            raise StopIteration
         return alignment
 
     def __iter__(self):
         """Iterate over the entries as Alignment objects.
 
-        This method SHOULD NOT be overridden by any subclass. It should be
-        left as is, which will call the subclass implementation of __next__
-        to actually parse the file.
+        This method SHOULD NOT be overridden by any subclass.
         """
         return self
 
@@ -106,6 +104,11 @@ class AlignmentIterator(ABC):
         if stream is not self.source:
             stream.close()
         del self._stream
+
+    def rewind(self):
+        """Rewind the file and loop over the alignments from the beginning."""
+        self._stream.seek(0)
+        self._read_header(self._stream)
 
 
 class AlignmentWriter(ABC):

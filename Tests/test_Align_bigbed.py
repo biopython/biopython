@@ -57,6 +57,11 @@ class TestAlign_dna_rna(unittest.TestCase):
         """Test parsing dna_rna.bb."""
         path = "Blat/dna_rna.bb"
         alignments = Align.parse(path, "bigbed")
+        self.check_alignments(alignments)
+        alignments.rewind()
+        self.check_alignments(alignments)
+
+    def check_alignments(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\

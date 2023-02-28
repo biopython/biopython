@@ -76,8 +76,6 @@ numpy.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
             )
         )
         self.assertRaises(StopIteration, next, alignments)
-        with self.assertRaises(AttributeError):
-            alignments._stream
         self.assertAlmostEqual(alignment.score, 6441)
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(alignment.sequences[0].id, "mm8.chr10")
@@ -9695,8 +9693,6 @@ numpy.array([['T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'A', 'C', 'C', '-', '-',
             )
         )
         self.assertRaises(StopIteration, next, alignments)
-        with self.assertRaises(AttributeError):
-            alignments._stream
 
     def test_reading_ucsc_test(self):
         """Test parsing ucsc_test.bb."""
@@ -9707,6 +9703,11 @@ numpy.array([['T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'A', 'C', 'C', '-', '-',
 
         path = "MAF/ucsc_test.bb"
         alignments = Align.parse(path, "bigmaf")
+        self.check_reading_ucsc_test(alignments)
+        alignments.rewind()
+        self.check_reading_ucsc_test(alignments)
+
+    def check_reading_ucsc_test(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -9943,8 +9944,6 @@ numpy.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
             )
         )
         self.assertRaises(StopIteration, next, alignments)
-        with self.assertRaises(AttributeError):
-            alignments._stream
 
 
 class TestAlign_searching(unittest.TestCase):

@@ -39,11 +39,17 @@ class TestClustalReadingWriting(unittest.TestCase):
         # includes the sequence length on the right hand side of each line
         with open(path) as stream:
             alignments = Align.parse(stream, "clustal")
-            self.assertEqual(alignments.metadata["Program"], "CLUSTAL")
-            self.assertEqual(alignments.metadata["Version"], "1.81")
-            alignment = next(alignments)
-            with self.assertRaises(StopIteration):
-                next(alignments)
+            self.check_clustalw(alignments)
+            alignments.rewind()
+            self.check_clustalw(alignments)
+        self.check_reading_writing(path)
+
+    def check_clustalw(self, alignments):
+        self.assertEqual(alignments.metadata["Program"], "CLUSTAL")
+        self.assertEqual(alignments.metadata["Version"], "1.81")
+        alignment = next(alignments)
+        with self.assertRaises(StopIteration):
+            next(alignments)
         self.assertEqual(
             repr(alignment),
             "<Alignment object (2 rows x 601 columns) at 0x%x>" % id(alignment),
@@ -173,7 +179,6 @@ gi|671626|emb|CAA85685.1|           -
 
 """,
         )
-        self.check_reading_writing(path)
 
     def test_msaprobs(self):
         path = "Clustalw/msaprobs.aln"

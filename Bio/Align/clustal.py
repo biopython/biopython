@@ -185,7 +185,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if index:
                     break
         else:
-            raise StopIteration
+            return
 
         assert index is not None
 
@@ -253,5 +253,4 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 )
             alignment.column_annotations = {}
             alignment.column_annotations["clustal_consensus"] = consensus
-        self._close()
         return alignment

@@ -228,10 +228,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         alignment = create_alignment()
         length = self._length
         counter = self._counter
-        if length == counter:
-            self._close()
-            del self._counter
-        if alignment is None and length > 0:
+        if alignment is None and counter != length:
             raise ValueError("Expected %d alignments, found %d" % (length, counter))
         return alignment
 

@@ -26,6 +26,11 @@ class TestMSF(unittest.TestCase):
     def test_protein1(self):
         path = "msf/W_prot.msf"
         alignments = Align.parse(path, "msf")
+        self.check_alignments(alignments)
+        alignments.rewind()
+        self.check_alignments(alignments)
+
+    def check_alignments(self, alignments):
         alignment = next(alignments)
         self.assertEqual(len(alignment), 11)
         self.assertEqual(alignment.shape, (11, 99))

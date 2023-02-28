@@ -48,6 +48,12 @@ class TestNexusReading(unittest.TestCase):
     def test_nexus1(self):
         path = "Nexus/test_Nexus_input.nex"
         alignments = Align.parse(path, "nexus")
+        self.check_nexus1(alignments)
+        alignments.rewind()
+        self.check_nexus1(alignments)
+        self.check_reading_writing(path)
+
+    def check_nexus1(self, alignments):
         alignment = next(alignments)
         self.assertEqual(len(alignment), 9)
         self.assertEqual(alignment.shape, (9, 46))
@@ -223,7 +229,6 @@ numpy.array([['A', '-', 'C', '-', 'G', '-', 'T', 'c', 'g', 't', 'g', 't', 'g',
         )
         with self.assertRaises(StopIteration):
             next(alignments)
-        self.check_reading_writing(path)
 
     def test_nexus2(self):
         path = "Nexus/codonposset.nex"

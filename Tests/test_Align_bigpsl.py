@@ -50,6 +50,11 @@ class TestAlign_dna_rna(unittest.TestCase):
         """Test parsing dna_rna.psl.bb."""
         path = "Blat/dna_rna.psl.bb"
         alignments = Align.parse(path, "bigpsl")
+        self.check_alignments(alignments)
+        alignments.rewind()
+        self.check_alignments(alignments)
+
+    def check_alignments(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\

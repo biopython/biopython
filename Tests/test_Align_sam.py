@@ -1510,6 +1510,8 @@ NR_046654.1_modified	16	chr3	42530896	0	5S27M3I36M1062N17M2D56M468N43M3S	*	0	0	A
         path = "Blat/dna_rna.sam"
         alignments = Align.parse(path, "sam")
         self.check_alignments(alignments)
+        alignments.rewind()
+        self.check_alignments(alignments)
 
     def test_reading_psl_comparison(self):
         """Test parsing dna_rna.sam and comparing to dna_rna.psl."""

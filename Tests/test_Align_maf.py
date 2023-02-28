@@ -64,8 +64,6 @@ numpy.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
             )
         )
         self.assertRaises(StopIteration, next, alignments)
-        with self.assertRaises(AttributeError):
-            alignments._stream
         self.assertEqual(alignment.score, 6441)
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(alignment.sequences[0].id, "mm8.chr10")
@@ -10895,8 +10893,6 @@ numpy.array([['T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'A', 'C', 'C', '-', '-',
             )
         )
         self.assertRaises(StopIteration, next, alignments)
-        with self.assertRaises(AttributeError):
-            alignments._stream
 
     def test_reading_missing_signature(self):
         """Test parsing MAF file ucsc_mm9_chr10_big.maf with missing signature."""
@@ -10998,12 +10994,19 @@ i oryCun1.scaffold_133159 N 0 N 0
         path = "MAF/bug2453.maf"
         alignments = Align.parse(path, "maf")
         self.assertEqual(len(alignments.metadata), 3)
-        self.check_ucsc_test(alignments)
+        self.check_alignments(alignments)
 
     def test_reading_ucsc_test(self):
         """Test parsing ucsc_test.maf."""
         path = "MAF/ucsc_test.maf"
         alignments = Align.parse(path, "maf")
+        self.check_header(alignments)
+        self.check_alignments(alignments)
+        alignments.rewind()
+        self.check_header(alignments)
+        self.check_alignments(alignments)
+
+    def check_header(self, alignments):
         self.assertEqual(len(alignments.metadata), 9)
         self.assertEqual(alignments.metadata["name"], "euArc")
         self.assertEqual(alignments.metadata["visibility"], "pack")
@@ -11014,9 +11017,8 @@ i oryCun1.scaffold_133159 N 0 N 0
             ["hg16", "panTro1", "baboon", "mm4", "rn3"],
         )
         self.assertEqual(alignments.metadata["description"], "A sample alignment")
-        self.check_ucsc_test(alignments)
 
-    def check_ucsc_test(self, alignments):
+    def check_alignments(self, alignments):
         self.assertEqual(alignments.metadata["MAF Version"], "1")
         self.assertEqual(alignments.metadata["Scoring"], "tba.v8")
         self.assertEqual(
@@ -11282,8 +11284,6 @@ numpy.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
             )
         )
         self.assertRaises(StopIteration, next, alignments)
-        with self.assertRaises(AttributeError):
-            alignments._stream
 
 
 class TestAlign_writing(unittest.TestCase):

@@ -27,7 +27,18 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     fmt = "MSF"
 
+    def __init__(self, source):
+        """Create an AlignmentIterator object.
+
+        Arguments:
+        - source - input file stream, or path to input file
+        """
+        super().__init__(source)
+        self._done = False
+
     def _read_next_alignment(self, stream):
+        if self._done is True:
+            return
         try:
             line = next(stream)
         except StopIteration:
@@ -205,6 +216,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 "GCG MSF headers said alignment length %i, but found %i"
                 % (aln_length, length),
                 BiopythonParserWarning,
+                stacklevel=2,
             )
             aln_length = length
 
@@ -236,5 +248,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 "GCG MSF headers said alignment length %i, but found %i"
                 % (aln_length, columns)
             )
-        self._close()
+        self._done = True
         return alignment
+
+    def rewind(self):
+        """Rewind the file and loop over the alignments from the beginning."""
+        super().rewind()
+        self._done = False

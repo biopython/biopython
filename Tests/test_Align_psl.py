@@ -50,6 +50,11 @@ class TestAlign_dna_rna(unittest.TestCase):
         """Test parsing dna_rna.psl."""
         path = "Blat/dna_rna.psl"
         alignments = Align.parse(path, "psl")
+        self.check_alignments(alignments)
+        alignments.rewind()
+        self.check_alignments(alignments)
+
+    def check_alignments(self, alignments):
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 165)
