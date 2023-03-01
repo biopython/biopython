@@ -11005,6 +11005,15 @@ i oryCun1.scaffold_133159 N 0 N 0
         alignments.rewind()
         self.check_header(alignments)
         self.check_alignments(alignments)
+        with Align.parse(path, "maf") as alignments:
+            self.check_header(alignments)
+            self.check_alignments(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "maf") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
     def check_header(self, alignments):
         self.assertEqual(len(alignments.metadata), 9)

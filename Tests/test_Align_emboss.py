@@ -250,6 +250,14 @@ numpy.array([['G', 'P', 'P', 'P', 'Q', 'S', 'P', 'D', 'E', 'N', 'R', 'A', 'G',
         self.check_matcher_pair(alignments)
         alignments.rewind()
         self.check_matcher_pair(alignments)
+        with Align.parse(path, "emboss") as alignments:
+            self.check_matcher_pair(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "emboss") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
     def check_matcher_pair(self, alignments):
         self.assertEqual(alignments.metadata["Program"], "matcher")

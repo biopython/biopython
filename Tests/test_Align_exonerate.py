@@ -44,6 +44,14 @@ class Exonerate_est2genome(unittest.TestCase):
         stream.seek(0)
         alignments = Align.parse(stream, "exonerate")
         self.check_cigar(alignments)
+        with Align.parse(exn_file, "exonerate") as alignments:
+            self.check_cigar(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(exn_file, "exonerate") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
     def check_cigar(self, alignments):
         self.assertEqual(alignments.metadata["Program"], "exonerate")
@@ -3815,6 +3823,14 @@ class Exonerate_none(unittest.TestCase):
         self.assertRaises(StopIteration, next, alignments)
         alignments.rewind()
         self.assertRaises(StopIteration, next, alignments)
+        with Align.parse(exn_file, "exonerate") as alignments:
+            self.assertRaises(StopIteration, next, alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(exn_file, "exonerate") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
 
 if __name__ == "__main__":

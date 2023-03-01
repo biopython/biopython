@@ -41,6 +41,14 @@ class TestFastaProtein(unittest.TestCase):
         self.check_m8CB(alignments)
         alignments.rewind()
         self.check_m8CB(alignments)
+        with Align.parse(path, "tabular") as alignments:
+            self.check_m8CB(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "tabular") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
     def check_m8CB(self, alignments):
         self.assertEqual(

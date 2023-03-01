@@ -20,6 +20,14 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
         self.check_alignments(alignments)
         alignments.rewind()
         self.check_alignments(alignments)
+        with Align.parse(self.path, "hhr") as alignments:
+            self.check_alignments(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(self.path, "hhr") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
     def check_alignments(self, alignments):
         self.assertEqual(alignments.metadata["No_of_seqs"], (1560, 4005))

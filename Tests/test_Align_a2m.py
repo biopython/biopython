@@ -47,6 +47,15 @@ class TestA2MReadingWriting(unittest.TestCase):
             with self.assertRaises(StopIteration):
                 next(alignments)
             self.check_clustalw(alignment)
+        with Align.parse(path, "a2m") as alignments:
+            alignment = next(alignments)
+            self.check_clustalw(alignment)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "a2m") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
         self.check_reading_writing(path)
 
     def check_clustalw(self, alignment):

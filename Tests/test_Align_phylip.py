@@ -52,6 +52,14 @@ class TestPhylipReading(unittest.TestCase):
             self.check_one(alignments)
             alignments.rewind()
             self.check_one(alignments)
+        with Align.parse(path, "phylip") as alignments:
+            self.check_one(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "phylip") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
         self.check_reading_writing(path)
 
     def check_one(self, alignments):

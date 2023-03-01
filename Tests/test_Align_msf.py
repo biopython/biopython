@@ -29,6 +29,14 @@ class TestMSF(unittest.TestCase):
         self.check_alignments(alignments)
         alignments.rewind()
         self.check_alignments(alignments)
+        with Align.parse(path, "msf") as alignments:
+            self.check_alignments(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "msf") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
     def check_alignments(self, alignments):
         alignment = next(alignments)

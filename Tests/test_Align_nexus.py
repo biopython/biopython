@@ -51,6 +51,14 @@ class TestNexusReading(unittest.TestCase):
         self.check_nexus1(alignments)
         alignments.rewind()
         self.check_nexus1(alignments)
+        with Align.parse(path, "nexus") as alignments:
+            self.check_nexus1(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "nexus") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
         self.check_reading_writing(path)
 
     def check_nexus1(self, alignments):
