@@ -267,6 +267,8 @@ class MultipleSeqAlignment:
         If the sequence has a gap at the specified alignment position, the previous 
         non-gap position is returned. # TODO: should this just be -1 instead?
         """
+        if isinstance(pos, str):
+            raise TypeError("Invalid pos type: %r" % type(pos))
         if isinstance(index, int):
             # Assume it's a row number
             if index < 0:
@@ -284,6 +286,7 @@ class MultipleSeqAlignment:
         else:
             raise TypeError(f"Invalid index type: {type(index)}")
         
+        # TODO: if pos is slice
         if pos < 0:
             raise ValueError("Negative indexing not supported") 
             # TODO: use the alignment slicing method to get positions in reverse order; 
@@ -292,13 +295,9 @@ class MultipleSeqAlignment:
             raise IndexError("Sequence index out of range")
         
         seq = str(record.seq)[0:pos+1]
-        result = 0
-        for i, c in enumerate(seq):
-            if c != "-":
-                result += 1
-        return result - 1
-        raise IndexError("Sequence index out of range")
-    
+        
+        return len(seq.replace("-", "")) - 1
+       
     def map_position(self, pos, from_=None, to_=None):
         """Map a position in one sequence to another sequence in the alignment.
 
