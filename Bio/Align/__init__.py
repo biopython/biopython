@@ -295,7 +295,6 @@ class MultipleSeqAlignment:
             raise IndexError("Sequence index out of range")
         
         seq = str(record.seq)[0:pos+1]
-        
         return len(seq.replace("-", "")) - 1
        
     def map_position(self, pos, from_=None, to_=None):
@@ -321,7 +320,12 @@ class MultipleSeqAlignment:
         KTLK-E-ME Alpha
         KTLK---ME Beta
         KT-----LE Gamma
-        
+        >>> align.map_position(3, "Gamma") # if no second sequence provided, returns the alignment column
+        8 
+        >>> align.map_position(pos=4, from_="Alpha", to_="Beta") # 'E' in Alpha is aligned to '-' in Beta; returns the previous position
+        3
+        >>> align.map_letter(2, "Gamma", "Alpha") # returns tuple of letter and position in Alpha; 'L' -> 'M'
+        ('M', 6)
         """
         if from_ is None and to_ is None:
             raise ValueError(
@@ -345,7 +349,7 @@ class MultipleSeqAlignment:
          - to_ - The sequence to map to (integer index, or sequence id).
          - pos - The position in the from_ sequence to map. 
 
-        Returns an integer position in the to_ sequence.
+        Returns a tuple of the letter and the position (1-based) in the to_ sequence.
 
         If from_ is None, then the position is assumed to be the alignment column. 
         If to_ is None, then the returned position is the alignment column. 
@@ -357,6 +361,8 @@ class MultipleSeqAlignment:
         KTLK-E-ME Alpha
         KTLK---ME Beta
         KT-----LE Gamma
+        >>> align.map_letter(2, "Gamma", "Alpha") # returns tuple of letter and position in Alpha
+        ('M', 6)
         
         """
         # TODO: can retrieve letter from alignment column (i.e. might return '-' character)
