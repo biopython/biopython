@@ -596,8 +596,9 @@ VHMLNKGKDGAMVFEPASLKVAPGDTVTFIPTDK-GHNVETIKGMIPDG-AE-A-------FKSKINENYKVTFTA---P
         """Checking empty file."""
         stream = StringIO()
         alignments = Align.parse(stream, "fasta")
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as cm:
             next(alignments)
+        self.assertEqual(str(cm.exception), "Empty file.")
 
 
 if __name__ == "__main__":

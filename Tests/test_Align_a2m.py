@@ -619,8 +619,9 @@ numpy.array([['D', '-', 'V', 'L', 'L', 'G', 'A', 'N', 'G', 'G', 'V', 'L', 'V',
         """Checking empty file."""
         stream = StringIO()
         alignments = Align.parse(stream, "a2m")
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as cm:
             next(alignments)
+        self.assertEqual(str(cm.exception), "Empty file.")
 
 
 if __name__ == "__main__":

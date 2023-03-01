@@ -75,15 +75,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     fmt = "PHYLIP"
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-        - source - input file stream, or path to input file
-        """
-        super().__init__(source)
-        self._done = False
-
     def _read_header(self, stream):
         try:
             line = next(stream)
@@ -162,7 +153,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         return names, seqs
 
     def _read_next_alignment(self, stream):
-        if self._done is True:
+        try:
+            self._number_of_seqs
+        except AttributeError:
             return
         names, seqs = self._read_file(stream)
 
@@ -190,10 +183,4 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         alignment = Alignment(records, coordinates)
         del self._number_of_seqs
         del self._length_of_seqs
-        self._done = True
         return alignment
-
-    def rewind(self):
-        """Rewind the file and loop over the alignments from the beginning."""
-        super().rewind()
-        self._done = False

@@ -6,7 +6,7 @@
 """Tests for Bio.Align.msf module."""
 import unittest
 import warnings
-
+from io import StringIO
 
 from Bio import BiopythonParserWarning
 from Bio import Align
@@ -397,6 +397,14 @@ DOA*01:04        62 ----------  62
         )
         with self.assertRaises(StopIteration):
             next(alignments)
+
+    def test_empty(self):
+        """Checking empty file."""
+        stream = StringIO()
+        alignments = Align.parse(stream, "msf")
+        with self.assertRaises(ValueError) as cm:
+            next(alignments)
+        self.assertEqual(str(cm.exception), "Empty file.")
 
 
 if __name__ == "__main__":

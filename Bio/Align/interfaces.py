@@ -88,6 +88,12 @@ class AlignmentIterator(ABC):
         """
         return self
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        self._close()
+
     def _read_header(self, stream):
         """Read the file header and store it in metadata."""
         return
