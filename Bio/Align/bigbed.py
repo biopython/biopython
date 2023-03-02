@@ -1449,6 +1449,7 @@ def writeBlocks(
         bounds.append(bbiBoundsArray(blockStartOffset, chromId, startPos, endPos))
         return sectionStartIx, size
 
+    alignments.rewind()
     for alignment in alignments:
         bed = loadAndValidateBed(alignment, bedN, fieldCount, declaration)
         chrom, start, end, row = bed
@@ -1840,6 +1841,7 @@ def rangeTreeAddToCoverageDepth(tree, start, end):
 
 def rangeTreeGenerator(alignments):
     name = None
+    alignments.rewind()
     for alignment in alignments:
         chrom = alignment.target.id
         if name != chrom:
@@ -2255,7 +2257,6 @@ def bbFileCreate(
         eim = bbExIndexMaker(extraIndexList, declaration)
     else:
         eim = []
-    alignments = list(alignments)
     uncompressBufSize = 0
     usageList, minDiff, aveSize, bedCount = bbiChromUsageFromBedFile(
         alignments, targets, eim
@@ -2317,7 +2318,7 @@ def bbFileCreate(
     zoomLevels = 0
     if bedCount > 0:
         zoomLevels, totalSum = bbiWriteZoomLevels(
-            iter(alignments),
+            alignments,
             output,
             blockSize,
             itemsPerSlot,
