@@ -255,7 +255,7 @@ class TestAlign_dna(unittest.TestCase):
     # twoBitInfo hg19.2bit hg19.chrom.sizes
     # bedToBigBed psl_34_005.sorted.bed hg19.chrom.sizes psl_34_005.bb
 
-    def check_reading_psl_34_001(self):
+    def check_alignments_psl_34_001(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -1822,7 +1822,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
 
     path = "Blat/psl_35_001.bb"
 
-    def check_alignments_psl_35_001(self):
+    def check_alignments(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
