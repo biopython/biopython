@@ -4,8 +4,8 @@
 # as part of this package.
 """Tests for Align.bigbed module."""
 import unittest
+import tempfile
 import os
-import warnings
 from io import StringIO
 
 
@@ -13,12 +13,7 @@ from Bio import Align
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
-from Bio import BiopythonExperimentalWarning
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
-    from Bio.Align import bigbed
-
+from Bio.Align import bigbed
 
 try:
     import numpy
@@ -36,6 +31,8 @@ class TestAlign_dna_rna(unittest.TestCase):
     # sort -k1,1 -k2,2n dna_rna.bed > dna_rna.sorted.bed
     # twoBitInfo hg38.2bit hg38.chrom.sizes
     # bedToBigBed dna_rna.sorted.bed hg38.chrom.sizes dna_rna.bb
+
+    path = "Blat/dna_rna.bb"
 
     def setUp(self):
         data = {}
@@ -68,6 +65,16 @@ class TestAlign_dna_rna(unittest.TestCase):
             pass
         with self.assertRaises(AttributeError):
             alignments._stream
+
+    def test_writing(self):
+        """Test writing dna_rna.bb."""
+        alignments = Align.parse(self.path, "bigbed")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigbed")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigbed")
+            self.check_alignments(alignments)
 
     def check_alignments(self, alignments):
         self.assertEqual(
@@ -227,16 +234,28 @@ table bed
 
 
 class TestAlign_dna(unittest.TestCase):
-    def test_reading_psl_34_001(self):
-        """Test parsing psl_34_001.bb."""
 
-        # The bigBed file psl_34_001.bb was generated using the commands
-        # sort -k1,1 -k2,2n psl_34_001.bed > psl_34_001.sorted.bed
-        # twoBitInfo hg19.2bit hg19.chrom.sizes
-        # bedToBigBed psl_34_001.sorted.bed hg19.chrom.sizes psl_34_001.bb
+    # The bigBed file psl_34_001.bb was generated using the commands
+    # sort -k1,1 -k2,2n psl_34_001.bed > psl_34_001.sorted.bed
+    # twoBitInfo hg19.2bit hg19.chrom.sizes
+    # bedToBigBed psl_34_001.sorted.bed hg19.chrom.sizes psl_34_001.bb
 
-        path = "Blat/psl_34_001.bb"
-        alignments = Align.parse(path, "bigbed")
+    # The bigBed file psl_34_003.bb was generated using the commands
+    # sort -k1,1 -k2,2n psl_34_003.bed > psl_34_003.sorted.bed
+    # twoBitInfo hg19.2bit hg19.chrom.sizes
+    # bedToBigBed psl_34_003.sorted.bed hg19.chrom.sizes psl_34_003.bb
+
+    # The bigBed file psl_34_004.bb was generated using the commands
+    # sort -k1,1 -k2,2n psl_34_004.bed > psl_34_004.sorted.bed
+    # twoBitInfo hg19.2bit hg19.chrom.sizes
+    # bedToBigBed psl_34_004.sorted.bed hg19.chrom.sizes psl_34_004.bb
+
+    # The bigBed file psl_34_005.bb was generated using the commands
+    # sort -k1,1 -k2,2n psl_34_005.bed > psl_34_005.sorted.bed
+    # twoBitInfo hg19.2bit hg19.chrom.sizes
+    # bedToBigBed psl_34_005.sorted.bed hg19.chrom.sizes psl_34_005.bb
+
+    def check_reading_psl_34_001(self):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -722,16 +741,24 @@ table bed
         )
         self.assertRaises(StopIteration, next, alignments)
 
-    def test_reading_psl_34_003(self):
-        """Test parsing psl_34_003.bb."""
-
-        # The bigBed file psl_34_003.bb was generated using the commands
-        # sort -k1,1 -k2,2n psl_34_003.bed > psl_34_003.sorted.bed
-        # twoBitInfo hg19.2bit hg19.chrom.sizes
-        # bedToBigBed psl_34_003.sorted.bed hg19.chrom.sizes psl_34_003.bb
-
-        path = "Blat/psl_34_003.bb"
+    def test_reading_psl_34_001(self):
+        """Test reading psl_34_001.bb."""
+        path = "Blat/psl_34_001.bb"
         alignments = Align.parse(path, "bigbed")
+        self.check_alignments_psl_34_001(alignments)
+
+    def test_writing_psl_34_001(self):
+        """Test writing psl_34_001.bb."""
+        path = "Blat/psl_34_001.bb"
+        alignments = Align.parse(path, "bigbed")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigbed")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigbed")
+            self.check_alignments_psl_34_001(alignments)
+
+    def check_alignments_psl_34_003(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -823,16 +850,24 @@ table bed
         )
         self.assertRaises(StopIteration, next, alignments)
 
-    def test_reading_psl_34_004(self):
-        """Test parsing psl_34_004.bb."""
-
-        # The bigBed file psl_34_004.bb was generated using the commands
-        # sort -k1,1 -k2,2n psl_34_004.bed > psl_34_004.sorted.bed
-        # twoBitInfo hg19.2bit hg19.chrom.sizes
-        # bedToBigBed psl_34_004.sorted.bed hg19.chrom.sizes psl_34_004.bb
-
-        path = "Blat/psl_34_004.bb"
+    def test_reading_psl_34_003(self):
+        """Test reading psl_34_003.bb."""
+        path = "Blat/psl_34_003.bb"
         alignments = Align.parse(path, "bigbed")
+        self.check_alignments_psl_34_003(alignments)
+
+    def test_writing_psl_34_003(self):
+        """Test writing psl_34_003.bb."""
+        path = "Blat/psl_34_003.bb"
+        alignments = Align.parse(path, "bigbed")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigbed")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigbed")
+            self.check_alignments_psl_34_003(alignments)
+
+    def check_alignments_psl_34_004(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -1258,10 +1293,24 @@ table bed
         )
         self.assertRaises(StopIteration, next, alignments)
 
-    def test_reading_psl_34_005(self):
-        """Test parsing psl_34_005.bb."""
-        path = "Blat/psl_34_005.bb"
+    def test_reading_psl_34_004(self):
+        """Test reading psl_34_004.bb."""
+        path = "Blat/psl_34_004.bb"
         alignments = Align.parse(path, "bigbed")
+        self.check_alignments_psl_34_004(alignments)
+
+    def test_writing_psl_34_004(self):
+        """Test writing psl_34_004.bb."""
+        path = "Blat/psl_34_004.bb"
+        alignments = Align.parse(path, "bigbed")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigbed")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigbed")
+            self.check_alignments_psl_34_004(alignments)
+
+    def check_alignments_psl_34_005(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -1746,18 +1795,34 @@ table bed
         )
         self.assertRaises(StopIteration, next, alignments)
 
+    def test_reading_psl_34_005(self):
+        """Test reading psl_34_005.bb."""
+        path = "Blat/psl_34_005.bb"
+        alignments = Align.parse(path, "bigbed")
+        self.check_alignments_psl_34_005(alignments)
+
+    def test_writing_psl_34_005(self):
+        """Test writing psl_34_005.bb."""
+        path = "Blat/psl_34_005.bb"
+        alignments = Align.parse(path, "bigbed")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigbed")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigbed")
+            self.check_alignments_psl_34_005(alignments)
+
 
 class TestAlign_dnax_prot(unittest.TestCase):
-    def test_reading_psl_35_001(self):
-        """Test parsing psl_35_001.bb."""
 
-        # The bigBed file psl_35_001.bb was generated using the commands
-        # sort -k1,1 -k2,2n psl_35_001.bed > psl_35_001.sorted.bed
-        # twoBitInfo hg38.2bit hg38.chrom.sizes
-        # bedToBigBed psl_35_001.sorted.bed hg38.chrom.sizes psl_35_001.bb
+    # The bigBed file psl_35_001.bb was generated using the commands
+    # sort -k1,1 -k2,2n psl_35_001.bed > psl_35_001.sorted.bed
+    # twoBitInfo hg38.2bit hg38.chrom.sizes
+    # bedToBigBed psl_35_001.sorted.bed hg38.chrom.sizes psl_35_001.bb
 
-        path = "Blat/psl_35_001.bb"
-        alignments = Align.parse(path, "bigbed")
+    path = "Blat/psl_35_001.bb"
+
+    def check_alignments_psl_35_001(self):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -1939,11 +2004,28 @@ table bed
         )
         self.assertRaises(StopIteration, next, alignments)
 
+    def test_reading_psl_35_001(self):
+        """Test parsing psl_35_001.bb."""
+
+        alignments = Align.parse(self.path, "bigbed")
+        self.check_alignments(alignments)
+
+    def test_writing_psl_35_001(self):
+        """Test writing psl_35_001.bb."""
+        alignments = Align.parse(self.path, "bigbed")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigbed")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigbed")
+            self.check_alignments(alignments)
+
 
 class TestAlign_bed12(unittest.TestCase):
 
     # The bigBed files were generated using the commands
     # twoBitInfo hg19.2bit hg19.chrom.sizes
+    # bedToBigBed bed3.bed hg19.chrom.sizes bed3.bb
     # bedToBigBed bed4.bed hg19.chrom.sizes bed4.bb
     # bedToBigBed bed5.bed hg19.chrom.sizes bed5.bb
     # bedToBigBed bed6.bed hg19.chrom.sizes bed6.bb
@@ -1952,7 +2034,7 @@ class TestAlign_bed12(unittest.TestCase):
     # bedToBigBed bed9.bed hg19.chrom.sizes bed9.bb
     # bedToBigBed bed12.bed hg19.chrom.sizes bed12.bb
 
-    def check_autosql(self, declaration, bedN):
+    def check_autosql(self, declaration, bedN, msg):
         if bedN == 3:
             self.assertEqual(
                 str(declaration),
@@ -1965,6 +2047,7 @@ table bed
    uint   chromEnd;      "End position in chromosome"
 )
 """,
+                msg=msg,
             )
         elif bedN == 4:
             self.assertEqual(
@@ -1979,6 +2062,7 @@ table bed
    string name;          "Name of item."
 )
 """,
+                msg=msg,
             )
         elif bedN == 5:
             self.assertEqual(
@@ -1994,6 +2078,7 @@ table bed
    uint   score;         "Score (0-1000)"
 )
 """,
+                msg=msg,
             )
         elif bedN == 6:
             self.assertEqual(
@@ -2010,6 +2095,7 @@ table bed
    char[1] strand;        "+ or - for strand"
 )
 """,
+                msg=msg,
             )
         elif bedN == 7:
             self.assertEqual(
@@ -2027,6 +2113,7 @@ table bed
    uint    thickStart;    "Start of where display should be thick (start codon)"
 )
 """,
+                msg=msg,
             )
         elif bedN == 8:
             self.assertEqual(
@@ -2045,6 +2132,7 @@ table bed
    uint    thickEnd;      "End of where display should be thick (stop codon)"
 )
 """,
+                msg=msg,
             )
         elif bedN == 9:
             self.assertEqual(
@@ -2064,6 +2152,7 @@ table bed
    uint    reserved;      "Used as itemRgb as of 2004-11-22"
 )
 """,
+                msg=msg,
             )
         elif bedN == 12:
             self.assertEqual(
@@ -2086,7 +2175,119 @@ table bed
    int[blockCount] chromStarts;    "Start positions relative to chromStart"
 )
 """,
+                msg=msg,
             )
+
+    def check_alignments(self, alignments, bedN, msg):
+        self.assertEqual(len(alignments), 2)
+        alignment = next(alignments)
+        if bedN >= 5:
+            self.assertEqual(alignment.score, 960, msg=msg)
+        self.assertEqual(alignment.shape, (2, 4000), msg=msg)
+        self.assertLess(
+            alignment.coordinates[0, 0], alignment.coordinates[0, -1], msg=msg
+        )
+        self.assertLess(
+            alignment.coordinates[1, 0], alignment.coordinates[1, -1], msg=msg
+        )
+        self.assertEqual(len(alignment), 2, msg=msg)
+        self.assertIs(alignment.sequences[0], alignment.target, msg=msg)
+        self.assertIs(alignment.sequences[1], alignment.query, msg=msg)
+        self.assertEqual(alignment.target.id, "chr22", msg=msg)
+        if bedN >= 4:
+            self.assertEqual(alignment.query.id, "mRNA1", msg=msg)
+        else:
+            self.assertIsNone(alignment.query.id, msg=msg)
+        if bedN == 12:
+            self.assertTrue(
+                numpy.array_equal(
+                    alignment.coordinates,
+                    # fmt: off
+# flake8: noqa
+                    numpy.array([[1000, 1567, 4512, 5000],
+                                 [   0,  567,  567, 1055]]),
+                    # fmt: on
+                ),
+                msg=msg,
+            )
+        else:
+            self.assertTrue(
+                numpy.array_equal(
+                    alignment.coordinates,
+                    numpy.array([[1000, 5000], [0, 4000]]),
+                ),
+                msg=msg,
+            )
+        if bedN >= 7:
+            self.assertEqual(alignment.thickStart, 1200, msg=msg)
+        if bedN >= 8:
+            self.assertEqual(alignment.thickEnd, 4900, msg=msg)
+        if bedN >= 9:
+            self.assertEqual(alignment.itemRgb, "255,0,0", msg=msg)
+        alignment = next(alignments)
+        if bedN >= 5:
+            self.assertEqual(alignment.score, 900, msg=msg)
+        self.assertEqual(alignment.shape, (2, 4000), msg=msg)
+        self.assertLess(
+            alignment.coordinates[0, 0], alignment.coordinates[0, -1], msg=msg
+        )
+        if bedN >= 6:
+            self.assertGreater(
+                alignment.coordinates[1, 0],
+                alignment.coordinates[1, -1],
+                msg=msg,
+            )
+        else:
+            self.assertLess(
+                alignment.coordinates[1, 0],
+                alignment.coordinates[1, -1],
+                msg=msg,
+            )
+        self.assertEqual(len(alignment), 2, msg=msg)
+        self.assertIs(alignment.sequences[0], alignment.target, msg=msg)
+        self.assertIs(alignment.sequences[1], alignment.query, msg=msg)
+        self.assertEqual(alignment.target.id, "chr22", msg=msg)
+        if bedN >= 4:
+            self.assertEqual(alignment.query.id, "mRNA2", msg=msg)
+        else:
+            self.assertIsNone(alignment.query.id, msg=msg)
+        if bedN == 12:
+            self.assertTrue(
+                numpy.array_equal(
+                    alignment.coordinates,
+                    # fmt: off
+# flake8: noqa
+                    numpy.array([[2000, 2433, 5601, 6000],
+                                 [ 832,  399,  399,    0]])
+                    # fmt: on
+                ),
+                msg=msg,
+            )
+        elif bedN >= 6:
+            self.assertTrue(
+                numpy.array_equal(
+                    alignment.coordinates,
+                    numpy.array([[2000, 6000], [4000, 0]]),
+                ),
+                msg=msg,
+            )
+        else:
+            self.assertTrue(
+                numpy.array_equal(
+                    alignment.coordinates,
+                    numpy.array([[2000, 6000], [0, 4000]]),
+                ),
+                msg=msg,
+            )
+        if bedN >= 7:
+            self.assertEqual(alignment.thickStart, 2300, msg=msg)
+        if bedN >= 8:
+            self.assertEqual(alignment.thickEnd, 5960, msg=msg)
+        if bedN >= 9:
+            self.assertEqual(alignment.itemRgb, "0,255,0", msg=msg)
+        with self.assertRaises(StopIteration) as cm:
+            next(alignments)
+            self.fail(f"More than two alignments reported in {filename}")
 
     def test_reading(self):
         """Test parsing alignments in file formats BED3 through BED12."""
@@ -2094,116 +2295,24 @@ table bed
             filename = "bed%d.bb" % bedN
             path = os.path.join("Blat", filename)
             alignments = Align.parse(path, "bigbed")
-            self.check_autosql(alignments.declaration, bedN)
-            self.assertEqual(len(alignments), 2)
-            alignment = next(alignments)
-            if bedN >= 5:
-                self.assertEqual(alignment.score, 960, msg=filename)
-            self.assertEqual(alignment.shape, (2, 4000), msg=filename)
-            self.assertLess(
-                alignment.coordinates[0, 0], alignment.coordinates[0, -1], msg=filename
-            )
-            self.assertLess(
-                alignment.coordinates[1, 0], alignment.coordinates[1, -1], msg=filename
-            )
-            self.assertEqual(len(alignment), 2, msg=filename)
-            self.assertIs(alignment.sequences[0], alignment.target, msg=filename)
-            self.assertIs(alignment.sequences[1], alignment.query, msg=filename)
-            self.assertEqual(alignment.target.id, "chr22", msg=filename)
-            if bedN >= 4:
-                self.assertEqual(alignment.query.id, "mRNA1", msg=filename)
-            else:
-                self.assertIsNone(alignment.query.id, msg=filename)
-            if bedN == 12:
-                self.assertTrue(
-                    numpy.array_equal(
-                        alignment.coordinates,
-                        # fmt: off
-# flake8: noqa
-                        numpy.array([[1000, 1567, 4512, 5000],
-                                     [   0,  567,  567, 1055]]),
-                        # fmt: on
-                    ),
-                    msg=filename,
-                )
-            else:
-                self.assertTrue(
-                    numpy.array_equal(
-                        alignment.coordinates,
-                        numpy.array([[1000, 5000], [0, 4000]]),
-                    ),
-                    msg=filename,
-                )
-            if bedN >= 7:
-                self.assertEqual(alignment.thickStart, 1200, msg=filename)
-            if bedN >= 8:
-                self.assertEqual(alignment.thickEnd, 4900, msg=filename)
-            if bedN >= 9:
-                self.assertEqual(alignment.itemRgb, "255,0,0", msg=filename)
-            alignment = next(alignments)
-            if bedN >= 5:
-                self.assertEqual(alignment.score, 900, msg=filename)
-            self.assertEqual(alignment.shape, (2, 4000), msg=filename)
-            self.assertLess(
-                alignment.coordinates[0, 0], alignment.coordinates[0, -1], msg=filename
-            )
-            if bedN >= 6:
-                self.assertGreater(
-                    alignment.coordinates[1, 0],
-                    alignment.coordinates[1, -1],
-                    msg=filename,
-                )
-            else:
-                self.assertLess(
-                    alignment.coordinates[1, 0],
-                    alignment.coordinates[1, -1],
-                    msg=filename,
-                )
-            self.assertEqual(len(alignment), 2, msg=filename)
-            self.assertIs(alignment.sequences[0], alignment.target, msg=filename)
-            self.assertIs(alignment.sequences[1], alignment.query, msg=filename)
-            self.assertEqual(alignment.target.id, "chr22", msg=filename)
-            if bedN >= 4:
-                self.assertEqual(alignment.query.id, "mRNA2", msg=filename)
-            else:
-                self.assertIsNone(alignment.query.id, msg=filename)
-            if bedN == 12:
-                self.assertTrue(
-                    numpy.array_equal(
-                        alignment.coordinates,
-                        # fmt: off
-# flake8: noqa
-                        numpy.array([[2000, 2433, 5601, 6000],
-                                     [ 832,  399,  399,    0]])
-                        # fmt: on
-                    ),
-                    msg=filename,
-                )
-            elif bedN >= 6:
-                self.assertTrue(
-                    numpy.array_equal(
-                        alignment.coordinates,
-                        numpy.array([[2000, 6000], [4000, 0]]),
-                    ),
-                    msg=filename,
-                )
-            else:
-                self.assertTrue(
-                    numpy.array_equal(
-                        alignment.coordinates,
-                        numpy.array([[2000, 6000], [0, 4000]]),
-                    ),
-                    msg=filename,
-                )
-            if bedN >= 7:
-                self.assertEqual(alignment.thickStart, 2300, msg=filename)
-            if bedN >= 8:
-                self.assertEqual(alignment.thickEnd, 5960, msg=filename)
-            if bedN >= 9:
-                self.assertEqual(alignment.itemRgb, "0,255,0", msg=filename)
-            with self.assertRaises(StopIteration) as cm:
-                next(alignments)
-                self.fail(f"More than two alignments reported in {filename}")
+            msg = "bed%d" % bedN
+            self.check_autosql(alignments.declaration, bedN, msg)
+            self.check_alignments(alignments, bedN, msg)
+
+    def test_writing(self):
+        """Test Writing alignments in file formats BED3 through BED12."""
+        for bedN in (3, 4, 5, 6, 7, 8, 9, 12):
+            filename = "bed%d.bb" % bedN
+            path = os.path.join("Blat", filename)
+            alignments = Align.parse(path, "bigbed")
+            with tempfile.TemporaryFile() as output:
+                Align.write(alignments, output, "bigbed", bedN=bedN)
+                output.flush()
+                output.seek(0)
+                alignments = Align.parse(output, "bigbed")
+                msg = "bed%d" % bedN
+                self.check_autosql(alignments.declaration, bedN, msg)
+                self.check_alignments(alignments, bedN, msg)
 
 
 class TestAlign_extended_bed(unittest.TestCase):
@@ -2214,13 +2323,17 @@ class TestAlign_extended_bed(unittest.TestCase):
     # bedToBigBed -as=bedExample2.as -type=bed9+2 -extraIndex=name,geneSymbol bedExample2.bed hg18.chrom.sizes bigbed_extended.bb
     #
     # where bedExample2.bed contains 10 lines selected from the example BED9+2
-    # file bedExample2.bed, and bedExample2.as the associated autoSql file from
-    # UCSC declaring the nine predefined BED fields and the two extra fields.
+    # file bedExample2.bed downloaded from UCSC
+    # (https://genome.ucsc.edu/goldenPath/help/examples/bedExample2.bed)
+    # and bedExample2.as the associated AutoSQL file, also downloaded from UCSC
+    # (https://genome.ucsc.edu/goldenPath/help/examples/bedExample2.as)
+    # declaring the nine predefined BED fields and the two extra fields
+
+    path = "Blat/bigbed_extended.bb"
 
     def test_reading(self):
         """Test parsing bigbed_extended.bb."""
-        path = "Blat/bigbed_extended.bb"
-        alignments = Align.parse(path, "bigbed")
+        alignments = Align.parse(self.path, "bigbed")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -2446,8 +2559,48 @@ table hg18KGchr7
         self.assertEqual(alignment.annotations["geneSymbol"], "HEATR2")
         self.assertEqual(alignment.annotations["spID"], "Q86Y56")
 
+    def test_writing(self):
+        """Test writing bigbed_extended.bb."""
+        with open(self.path, "rb") as stream:
+            correct = stream.read()
+        alignments = Align.parse(self.path, "bigbed")
+        with open("Blat/bedExample2.as") as stream:
+            autosql_data = stream.read()
+        declaration = bigbed.AutoSQLTable.from_string(autosql_data)
+        with tempfile.TemporaryFile() as output:
+            Align.write(
+                alignments,
+                output,
+                "bigbed",
+                bedN=9,
+                declaration=declaration,
+                extraIndex=["name", "geneSymbol"],
+            )
+            output.flush()
+            output.seek(0)
+            data = output.read()
+        self.assertEqual(correct, data)
+        alignments = Align.parse(self.path, "bigbed")
+        targets = alignments.targets
+        with tempfile.TemporaryFile() as output:
+            Align.write(
+                alignments,
+                output,
+                "bigbed",
+                bedN=9,
+                declaration=declaration,
+                targets=targets,
+                extraIndex=["name", "geneSymbol"],
+            )
+            output.flush()
+            output.seek(0)
+            data = output.read()
+        self.assertEqual(correct, data)
+
 
 class TestAlign_searching(unittest.TestCase):
+
+    path = "Blat/bigbedtest.bb"
 
     # The bigBed file bigbedtest.bb contains the following data:
     # chr1     10     100     name1   1       +
@@ -2459,9 +2612,138 @@ class TestAlign_searching(unittest.TestCase):
     # chr2    220     220     name7   6       +
     # chr3      0       0     name8   7       -
 
+    def check_alignments(self, alignments):
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table bed
+"Browser Extensible Data"
+(
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position in chromosome"
+   uint    chromEnd;      "End position in chromosome"
+   string  name;          "Name of item."
+   uint    score;         "Score (0-1000)"
+   char[1] strand;        "+ or - for strand"
+)
+""",
+        )
+        self.assertEqual(len(alignments.targets), 3)
+        self.assertEqual(alignments.targets[0].id, "chr1")
+        self.assertEqual(len(alignments.targets[0]), 1000)
+        self.assertEqual(alignments.targets[1].id, "chr2")
+        self.assertEqual(len(alignments.targets[1]), 2000)
+        self.assertEqual(alignments.targets[2].id, "chr3")
+        self.assertEqual(len(alignments.targets[2]), 1000)
+        self.assertEqual(len(alignments), 8)
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 1)
+        self.assertEqual(alignment.shape, (2, 90))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr1")
+        self.assertEqual(alignment.query.id, "name1")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[10, 100], [0, 90]]))
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 2)
+        self.assertEqual(alignment.shape, (2, 10))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr1")
+        self.assertEqual(alignment.query.id, "name2")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[29, 39], [10, 0]]))
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 3)
+        self.assertEqual(alignment.shape, (2, 100))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr1")
+        self.assertEqual(alignment.query.id, "name3")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[200, 300], [0, 100]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 6)
+        self.assertEqual(alignment.shape, (2, 0))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr2")
+        self.assertEqual(alignment.query.id, "name4")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[50, 50], [0, 0]]))
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 4)
+        self.assertEqual(alignment.shape, (2, 10))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr2")
+        self.assertEqual(alignment.query.id, "name5")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[100, 110], [0, 10]]))
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 5)
+        self.assertEqual(alignment.shape, (2, 10))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr2")
+        self.assertEqual(alignment.query.id, "name6")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[200, 210], [0, 10]]))
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 6)
+        self.assertEqual(alignment.shape, (2, 0))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr2")
+        self.assertEqual(alignment.query.id, "name7")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[220, 220], [0, 0]]))
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 7)
+        self.assertEqual(alignment.shape, (2, 0))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr3")
+        self.assertEqual(alignment.query.id, "name8")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[0, 0], [0, 0]]))
+        )
+
+    def test_reading(self):
+        """Test reading bigbedtest.bb."""
+        alignments = Align.parse(self.path, "bigbed")
+        self.check_alignments(alignments)
+
+    def test_writing(self):
+        """Test writing bigbedtest.bb."""
+        alignments = Align.parse(self.path, "bigbed")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigbed", bedN=6)
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigbed")
+            self.check_alignments(alignments)
+
     def test_search_chromosome(self):
-        path = "Blat/bigbedtest.bb"
-        alignments = Align.parse(path, "bigbed")
+        alignments = Align.parse(self.path, "bigbed")
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -2482,8 +2764,7 @@ table bed
         self.assertEqual(names, ["name4", "name5", "name6", "name7"])
 
     def test_search_region(self):
-        path = "Blat/bigbedtest.bb"
-        alignments = Align.parse(path, "bigbed")
+        alignments = Align.parse(self.path, "bigbed")
         selected_alignments = alignments.search("chr2", 105, 1000)
         names = [alignment.query.id for alignment in selected_alignments]
         self.assertEqual(names, ["name5", "name6", "name7"])
@@ -2507,16 +2788,14 @@ table bed
         self.assertEqual(names, ["name7"])
 
     def test_search_position(self):
-        path = "Blat/bigbedtest.bb"
-        alignments = Align.parse(path, "bigbed")
+        alignments = Align.parse(self.path, "bigbed")
         selected_alignments = alignments.search("chr1", 250)
         names = [alignment.query.id for alignment in selected_alignments]
         self.assertEqual(names, ["name3"])
 
     def test_three_iterators(self):
         """Create three iterators and use them concurrently."""
-        path = "Blat/bigbedtest.bb"
-        alignments1 = Align.parse(path, "bigbed")
+        alignments1 = Align.parse(self.path, "bigbed")
         alignments2 = alignments1.search("chr2")
         alignments3 = alignments1.search("chr2", 110, 1000)
         alignment1 = next(alignments1)
