@@ -68,7 +68,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         else:
             if chrom is None:
                 chrom = "target"
-        assert coordinates[0, 0] < coordinates[0, -1]
+        assert coordinates[0, 0] <= coordinates[0, -1]
         if coordinates[1, 0] > coordinates[1, -1]:
             # DNA/RNA mapped to reverse strand of DNA/RNA
             strand = "-"
@@ -90,8 +90,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 blockSizes.append(blockSize)
                 tStart = tEnd
                 qStart = qEnd
-        chromStart = blockStarts[0]  # start of alignment in target
-        chromEnd = blockStarts[-1] + blockSize  # end of alignment in target
+        try:
+            chromStart = blockStarts[0]  # start of alignment in target
+            chromEnd = blockStarts[-1] + blockSize  # end of alignment in target
+        except IndexError:  # no aligned blocks
+            chromStart = chromEnd = tStart
         fields = [chrom, str(chromStart), str(chromEnd)]
         if bedN == 3:
             return "\t".join(fields) + "\n"

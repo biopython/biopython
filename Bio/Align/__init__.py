@@ -1931,11 +1931,11 @@ class Alignment:
         if fmt == "":
             return self._format_pretty()
         module = _load(fmt)
+        if module.AlignmentIterator.mode == "b":
+            raise ValueError(f"{fmt} is a binary file format")
         try:
             writer = module.AlignmentWriter(None, *args, **kwargs)
         except AttributeError:
-            if module.AlignmentIterator.mode == "b":
-                raise ValueError(f"{fmt} is a binary file format")
             raise ValueError(
                 f"Formatting alignments has not yet been implemented for the {fmt} format"
             ) from None
