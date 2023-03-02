@@ -1178,6 +1178,14 @@ chr3	42530895	42532606	NR_046654.1_modified	978	-	42530895	42532606	0	5	27,36,17
         self.check_alignments(alignments)
         alignments.rewind()
         self.check_alignments(alignments)
+        with Align.parse(path, "bed") as alignments:
+            self.check_alignments(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "bed") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
     def test_writing(self):
         """Test writing the alignments in dna_rna.bed."""

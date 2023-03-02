@@ -1512,6 +1512,14 @@ NR_046654.1_modified	16	chr3	42530896	0	5S27M3I36M1062N17M2D56M468N43M3S	*	0	0	A
         self.check_alignments(alignments)
         alignments.rewind()
         self.check_alignments(alignments)
+        with Align.parse(path, "sam") as alignments:
+            self.check_alignments(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "sam") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
     def test_reading_psl_comparison(self):
         """Test parsing dna_rna.sam and comparing to dna_rna.psl."""

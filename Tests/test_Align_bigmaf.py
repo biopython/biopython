@@ -9706,6 +9706,14 @@ numpy.array([['T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'A', 'C', 'C', '-', '-',
         self.check_reading_ucsc_test(alignments)
         alignments.rewind()
         self.check_reading_ucsc_test(alignments)
+        with Align.parse(path, "bigmaf") as alignments:
+            self.check_reading_ucsc_test(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "bigmaf") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
     def check_reading_ucsc_test(self, alignments):
         self.assertEqual(

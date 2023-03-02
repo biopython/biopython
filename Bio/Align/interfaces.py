@@ -60,11 +60,7 @@ class AlignmentIterator(ABC):
             else:
                 raise ValueError(f"Unknown mode '{self.mode}'") from None
             self._stream = source
-        try:
-            self._read_header(self._stream)
-        except Exception:
-            self._close()
-            raise
+        self._read_header(self._stream)
 
     def __next__(self):
         """Return the next entry."""
@@ -72,11 +68,7 @@ class AlignmentIterator(ABC):
             stream = self._stream
         except AttributeError:
             raise StopIteration from None
-        try:
-            alignment = self._read_next_alignment(stream)
-        except Exception:
-            self._close()
-            raise
+        alignment = self._read_next_alignment(stream)
         if alignment is None:
             raise StopIteration
         return alignment
@@ -88,15 +80,10 @@ class AlignmentIterator(ABC):
         """
         return self
 
-    def _read_header(self, stream):
-        """Read the file header and store it in metadata."""
-        return
+    def __enter__(self):
+        return self
 
-    @abstractmethod
-    def _read_next_alignment(self, stream):
-        """Read one Alignment from the stream, and return it."""
-
-    def _close(self):
+    def __exit__(self, exc_type, exc_value, exc_traceback):
         try:
             stream = self._stream
         except AttributeError:
@@ -104,6 +91,14 @@ class AlignmentIterator(ABC):
         if stream is not self.source:
             stream.close()
         del self._stream
+
+    def _read_header(self, stream):
+        """Read the file header and store it in metadata."""
+        return
+
+    @abstractmethod
+    def _read_next_alignment(self, stream):
+        """Read one Alignment from the stream, and return it."""
 
     def rewind(self):
         """Rewind the file and loop over the alignments from the beginning."""

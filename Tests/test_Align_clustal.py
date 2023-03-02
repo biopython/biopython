@@ -42,6 +42,14 @@ class TestClustalReadingWriting(unittest.TestCase):
             self.check_clustalw(alignments)
             alignments.rewind()
             self.check_clustalw(alignments)
+        with Align.parse(path, "clustal") as alignments:
+            self.check_clustalw(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "clustal") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
         self.check_reading_writing(path)
 
     def check_clustalw(self, alignments):

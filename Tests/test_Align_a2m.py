@@ -47,6 +47,15 @@ class TestA2MReadingWriting(unittest.TestCase):
             with self.assertRaises(StopIteration):
                 next(alignments)
             self.check_clustalw(alignment)
+        with Align.parse(path, "a2m") as alignments:
+            alignment = next(alignments)
+            self.check_clustalw(alignment)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "a2m") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
         self.check_reading_writing(path)
 
     def check_clustalw(self, alignment):
@@ -619,8 +628,9 @@ numpy.array([['D', '-', 'V', 'L', 'L', 'G', 'A', 'N', 'G', 'G', 'V', 'L', 'V',
         """Checking empty file."""
         stream = StringIO()
         alignments = Align.parse(stream, "a2m")
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as cm:
             next(alignments)
+        self.assertEqual(str(cm.exception), "Empty file.")
 
 
 if __name__ == "__main__":

@@ -5913,6 +5913,15 @@ G4FEQ2/2-92                     VERYSLSPMKDLWTEEAKYRRWLEVELAVTRAYEELGMIPKGVTERIR
         alignments.rewind()
         alignment = next(alignments)
         self.assertRaises(StopIteration, next, alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
+            self.check_alignment_globins45(alignment)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "stockholm") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
         self.check_alignment_globins45(alignment)
         stream = StringIO()
         n = Align.write(alignment, stream, "stockholm")

@@ -41,6 +41,14 @@ class TestFASTAReadingWriting(unittest.TestCase):
             self.check_clustalw(alignments)
             alignments.rewind()
             self.check_clustalw(alignments)
+        with Align.parse(path, "fasta") as alignments:
+            self.check_clustalw(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "fasta") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
         self.check_reading_writing(path)
 
     def check_clustalw(self, alignments):
@@ -596,8 +604,9 @@ VHMLNKGKDGAMVFEPASLKVAPGDTVTFIPTDK-GHNVETIKGMIPDG-AE-A-------FKSKINENYKVTFTA---P
         """Checking empty file."""
         stream = StringIO()
         alignments = Align.parse(stream, "fasta")
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as cm:
             next(alignments)
+        self.assertEqual(str(cm.exception), "Empty file.")
 
 
 if __name__ == "__main__":

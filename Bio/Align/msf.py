@@ -27,22 +27,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     fmt = "MSF"
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-        - source - input file stream, or path to input file
-        """
-        super().__init__(source)
-        self._done = False
-
     def _read_next_alignment(self, stream):
-        if self._done is True:
-            return
         try:
             line = next(stream)
         except StopIteration:
-            raise ValueError("Empty file.") from None
+            if stream.tell() == 0:
+                raise ValueError("Empty file.") from None
+            return
         # Whitelisted headers we know about.
         known_headers = ["!!NA_MULTIPLE_ALIGNMENT", "!!AA_MULTIPLE_ALIGNMENT", "PileUp"]
         # Examples in "Molecular Biology Software Training Manual GCG version 10"
@@ -210,6 +201,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         else:
             raise ValueError("End of file where expecting sequence data.")
 
+        # skip any remaining empty lines
+        for line in stream:
+            assert line.strip() == ""
+
         length = max(len(seq) for seq in seqs)
         if length != aln_length:
             warnings.warn(
@@ -248,10 +243,4 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 "GCG MSF headers said alignment length %i, but found %i"
                 % (aln_length, columns)
             )
-        self._done = True
         return alignment
-
-    def rewind(self):
-        """Rewind the file and loop over the alignments from the beginning."""
-        super().rewind()
-        self._done = False

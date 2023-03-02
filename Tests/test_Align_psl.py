@@ -53,6 +53,14 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.check_alignments(alignments)
         alignments.rewind()
         self.check_alignments(alignments)
+        with Align.parse(path, "psl") as alignments:
+            self.check_alignments(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "psl") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
 
     def check_alignments(self, alignments):
         self.assertEqual(alignments.metadata["psLayout version"], "3")
