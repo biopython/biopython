@@ -47,6 +47,11 @@ ignore =
     B007,
     # Loop control variable not used within the loop body.
     # If this is intended, start the name with an underscore
+    B028,
+    # No explicit stacklevel keyword argument found.
+    # The warn method from the warnings module uses a stacklevel of 1
+    # by default... It is therefore recommended to use a stacklevel of
+    # 2 or greater to provide more information to the user
     B902,
     # blind except Exception: statement
     # =========================================
