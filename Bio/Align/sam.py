@@ -57,7 +57,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         super().__init__(target)
         self.md = md
 
-    def write_header(self, alignments):
+    def write_header(self, stream, alignments):
         """Write the SAM header."""
         try:
             metadata = alignments.metadata
@@ -76,7 +76,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     continue
                 fields.append("%s:%s" % (key, value))
             line = "\t".join(fields) + "\n"
-            self.stream.write(line)
+            stream.write(line)
         for record in targets:
             fields = ["@SQ"]
             fields.append("SN:%s" % record.id)
@@ -108,7 +108,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 if description != "<unknown description>":
                     fields.append("DS:%s" % description)
             line = "\t".join(fields) + "\n"
-            self.stream.write(line)
+            stream.write(line)
         for tag, rows in metadata.items():
             if tag == "HD":  # already written
                 continue
@@ -117,7 +117,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 for key, value in row.items():
                     fields.append("%s:%s" % (key, value))
                 line = "\t".join(fields) + "\n"
-                self.stream.write(line)
+                stream.write(line)
 
     def format_alignment(self, alignment, md=None):
         """Return a string with a single alignment formatted as one SAM line."""

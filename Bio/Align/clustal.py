@@ -21,9 +21,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
     fmt = "Clustal"
 
-    def write_header(self, alignments):
+    def write_header(self, stream, alignments):
         """Use this to write the file header."""
-        stream = self.stream
         try:
             metadata = alignments.metadata
             program = metadata["Program"]

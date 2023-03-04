@@ -23,6 +23,33 @@ You are expected to use this module via the Bio.Align functions.
 # in particular the tables in the supplemental materials listing the contents
 # of a bigBed file byte-by-byte.
 
+# The writer is based on the following files of the bedToBigBed program
+# bedToBigBed.c
+
+# These program files are provided by the University of California Santa Cruz
+# under the following license:
+
+# ------------------------------------------------------------------------------
+# Copyright (C) 2001 UC Regents
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of
+# this software and associated documentation files (the "Software"), to deal in
+# the Software without restriction, including without limitation the rights to
+# use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+# the Software, and to permit persons to whom the Software is furnished to do so,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+# FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+# IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+# ------------------------------------------------------------------------------
+
 
 import sys
 import copy
@@ -232,7 +259,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self.compress = compress
         self.extraIndex = extraIndex
 
-    def write_file(self, alignments):
+    def write_file(self, stream, alignments):
+        blockSize = 256
+        itemsPerSlot = 512
+        byteorder = sys.byteorder
         if self.targets is None:
             targets = alignments.targets
         else:
@@ -245,15 +275,148 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 declaration = AutoSQLTable.default[:bedN]
         else:
             declaration = self.declaration
-        bbFileCreate(
-            alignments,
-            self.stream,
-            targets,
-            declaration,
-            bedN,
-            doCompress=self.compress,
-            extraIndexList=self.extraIndex,
+        extraIndex = self.extraIndex
+        compress = self.compress
+        # see bbFileCreate in bedToBigBed.c
+        fieldCount = len(declaration)
+        extraIndexCount = len(extraIndex)
+        if extraIndex:
+            eim = bbExIndexMaker(extraIndex, declaration)
+        else:
+            eim = []
+        uncompressBufSize = 0
+        usageList, minDiff, aveSize, bedCount = bbiChromUsageFromBedFile(
+            alignments, targets, eim
         )
+        if byteorder == "little":  # little-endian
+            signature = "ebf28987"
+        elif byteorder == "big":  # big-endian
+            signature = "8789f2eb"
+        else:
+            raise RuntimeError(f"unexpected system byte order {byteorder}")
+        bbiCurrentVersion = 4
+        stream.write(bytes(64))  # bbiWriteDummyHeader
+        stream.write(bytes(bbiMaxZoomLevels * 24))  # bbiWriteDummyZooms
+        asOffset = stream.tell()
+        stream.write(bytes(declaration))  # asText
+        totalSummaryOffset = stream.tell()
+        stream.write(bytes(5 * 8))  # bbiSummaryElementWrite
+        extHeaderOffset = stream.tell()
+        extHeaderSize = 64
+        stream.write(bytes(extHeaderSize))  # extHeaderSize
+        if extraIndex:
+            extraIndexListOffset = stream.tell()
+            extraIndexSize = 16 + 4 * 1
+            stream.write(bytes(extraIndexSize * extraIndexCount))
+            extraIndexListEndOffset = stream.tell()
+        else:
+            extraIndexListOffset = 0
+            extraIndexListEndOffset = 0
+        chromTreeOffset = stream.tell()
+        bbiWriteChromInfo(usageList, blockSize, stream)
+        dataOffset = stream.tell()
+        resTryCount, resScales, resSizes = bbiCalcResScalesAndSizes(aveSize)
+        blockCount = 0
+        maxBlockSize = 0
+        stream.write(bedCount.to_bytes(8, byteorder))
+        if bedCount > 0:
+            if eim:
+                eim.allocChunkArrays(bedCount)
+            maxBlockSize, boundsArray = writeBlocks(
+                alignments,
+                declaration,
+                itemsPerSlot,
+                compress,
+                stream,
+                resTryCount,
+                resScales,
+                resSizes,
+                eim,
+                bedCount,
+                fieldCount,
+                bedN,
+            )
+        else:
+            boundsArray = []
+        indexOffset = stream.tell()
+        cirTreeFileBulkIndexToOpenFile(boundsArray, blockSize, 1, indexOffset, stream)
+        zoomAmounts = numpy.empty(bbiMaxZoomLevels, numpy.int32)
+        zoomDataOffsets = numpy.empty(bbiMaxZoomLevels, numpy.int64)
+        zoomIndexOffsets = numpy.empty(bbiMaxZoomLevels, numpy.int64)
+        zoomLevels = 0
+        if bedCount > 0:
+            zoomLevels, totalSum = bbiWriteZoomLevels(
+                alignments,
+                stream,
+                blockSize,
+                itemsPerSlot,
+                fieldCount,
+                compress,
+                indexOffset - dataOffset,
+                usageList,
+                resTryCount,
+                resScales,
+                resSizes,
+                zoomAmounts,
+                zoomDataOffsets,
+                zoomIndexOffsets,
+            )
+        if eim:
+            for i in range(len(eim.extraIndexList)):
+                eim.fileOffsets[i] = stream.tell()
+                maxBedNameSize = eim.maxFieldSize[i]
+                eim.chunkArrayArray[i].sort(key=attrgetter("name"))
+                bptFileBulkIndexToOpenFile(
+                    eim.chunkArrayArray[i],
+                    bedCount,
+                    blockSize,
+                    maxBedNameSize,
+                    stream,
+                )
+        if compress:
+            uncompressBufSize = max(
+                maxBlockSize, itemsPerSlot * 32
+            )  # sizeof(struct bbiSummaryOnDisk)
+        stream.seek(0)
+        stream.write(bytes.fromhex(signature))
+        stream.write(bbiCurrentVersion.to_bytes(2, byteorder))
+        stream.write(zoomLevels.to_bytes(2, byteorder))
+        stream.write(chromTreeOffset.to_bytes(8, byteorder))
+        stream.write(dataOffset.to_bytes(8, byteorder))
+        stream.write(indexOffset.to_bytes(8, byteorder))
+        stream.write(fieldCount.to_bytes(2, byteorder))
+        stream.write(bedN.to_bytes(2, byteorder))
+        stream.write(asOffset.to_bytes(8, byteorder))
+        stream.write(totalSummaryOffset.to_bytes(8, byteorder))
+        stream.write(uncompressBufSize.to_bytes(4, byteorder))
+        stream.write(extHeaderOffset.to_bytes(8, byteorder))
+        for i in range(zoomLevels):
+            data = struct.pack(
+                "ixxxxqq", zoomAmounts[i], zoomDataOffsets[i], zoomIndexOffsets[i]
+            )
+            stream.write(data)
+        stream.write(bytes(24 * (bbiMaxZoomLevels - zoomLevels)))
+        stream.seek(totalSummaryOffset)
+        bbiSummaryElementWrite(stream, totalSum)
+        stream.seek(extHeaderOffset)
+        stream.write(extHeaderSize.to_bytes(2, byteorder))
+        stream.write(extraIndexCount.to_bytes(2, byteorder))
+        stream.write(extraIndexListOffset.to_bytes(8, byteorder))
+        stream.write(bytes(52))
+        assert stream.tell() - extHeaderOffset == extHeaderSize
+        if extraIndexCount != 0:
+            stream.seek(extraIndexListOffset)
+            indexFieldCount = 1
+            for i in range(extraIndexCount):
+                stream.write(bytes(2))  # type
+                stream.write(indexFieldCount.to_bytes(2, byteorder))
+                stream.write(eim.fileOffsets[i].to_bytes(8, byteorder))
+                stream.write(bytes(4))
+                stream.write(eim.indexFields[i].to_bytes(2, byteorder))
+                stream.write(bytes(2))
+            assert stream.tell() == extraIndexListEndOffset
+        stream.seek(0, 2)
+        stream.write(bytes.fromhex(signature))
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
@@ -857,8 +1020,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             yield alignment
 
 
-byteorder = sys.byteorder
-
 bbiMaxZoomLevels = 10
 bbiResIncrement = 4
 
@@ -997,6 +1158,7 @@ class rTree:
         self, blockSize, childNodeSize, curLevel, destLevel, offset, output
     ):
         # in cirTree.c
+        byteorder = sys.byteorder
         if curLevel == destLevel:
             countOne = len(self.children)
             output.write(b"\x00")  # isLeaf = False
@@ -1189,6 +1351,7 @@ def bbiWriteChromInfo(usageList, blockSize, output):
     keySize = maxChromNameSize
     valSize = 8
 
+    byteorder = sys.byteorder
     if byteorder == "little":  # little-endian
         signature = "918cca78"
     elif byteorder == "big":  # big-endian
@@ -1589,6 +1752,7 @@ def calcLevelSizes(tree, levelSizes, level, maxLevel):
 
 
 def rWriteLeaves(itemsPerSlot, lNodeSize, tree, curLevel, leafLevel, output):
+    byteorder = sys.byteorder
     if curLevel == leafLevel:
         reserved = 0
         isLeaf = True
@@ -1640,6 +1804,7 @@ def cirTreeFileBulkIndexToOpenFile(
 ):
     levelCount = 0
     tree, levelCount = rTreeFromChromRangeArray(blockSize, itemArray, endFileOffset)
+    byteorder = sys.byteorder
     if byteorder == "little":  # little-endian
         signature = "e0ac6824"
     elif byteorder == "big":  # big-endian
@@ -1903,6 +2068,7 @@ def bedWriteReducedOnceReturnReducedTwice(
     doCompress,
     output,
 ):
+    byteorder = sys.byteorder
     twiceReducedList = []
     doubleReductionSize = initialReduction * zoomIncrement
     usage = usageList
@@ -1974,6 +2140,7 @@ def bedWriteReducedOnceReturnReducedTwice(
 
 
 def bbiWriteSummaryAndIndexUnc(summaryList, blockSize, itemsPerSlot, output):
+    byteorder = sys.byteorder
     count = len(summaryList)
     summaryArray = []
     output.write(count.to_bytes(4, byteorder))
@@ -2000,6 +2167,7 @@ def bbiWriteSummaryAndIndexUnc(summaryList, blockSize, itemsPerSlot, output):
 
 
 def bbiWriteSummaryAndIndexComp(summaryList, blockSize, itemsPerSlot, output):
+    byteorder = sys.byteorder
     count = len(summaryList)
     summaryArray = []
     output.write(count.to_bytes(4, byteorder))
@@ -2167,6 +2335,7 @@ def writeIndexLevel(
     blockSize, chunkArray, itemCount, indexOffset, level, keySize, valSize, output
 ):
     # in bPlusTree.c
+    byteorder = sys.byteorder
     slotSizePer = pow(blockSize, level)
     nodeSizePer = slotSizePer * blockSize
     nodeCount = (itemCount + nodeSizePer - 1) // nodeSizePer
@@ -2197,6 +2366,7 @@ def writeIndexLevel(
 
 
 def writeLeafLevel(blockSize, chunkArray, itemCount, keySize, valSize, output):
+    byteorder = sys.byteorder
     countLeft = itemCount
     i = 0
     while i < itemCount:
@@ -2216,6 +2386,7 @@ def writeLeafLevel(blockSize, chunkArray, itemCount, keySize, valSize, output):
 
 
 def bptFileBulkIndexToOpenFile(chunkArray, itemCount, blockSize, keySize, output):
+    byteorder = sys.byteorder
     if byteorder == "little":  # little-endian
         signature = "918cca78"
     elif byteorder == "big":  # big-endian
@@ -2238,154 +2409,3 @@ def bptFileBulkIndexToOpenFile(chunkArray, itemCount, blockSize, keySize, output
         indexOffset = output.tell()
         assert endLevelOffset == indexOffset
     writeLeafLevel(blockSize, chunkArray, itemCount, keySize, valSize, output)
-
-
-def bbFileCreate(
-    alignments,
-    output,
-    targets=None,
-    declaration=None,
-    bedN=3,
-    extraIndexList=[],
-    blockSize=256,
-    itemsPerSlot=512,
-    doCompress=False,
-):
-    fieldCount = len(declaration)
-    extraIndexCount = len(extraIndexList)
-    if extraIndexList:
-        eim = bbExIndexMaker(extraIndexList, declaration)
-    else:
-        eim = []
-    uncompressBufSize = 0
-    usageList, minDiff, aveSize, bedCount = bbiChromUsageFromBedFile(
-        alignments, targets, eim
-    )
-    if byteorder == "little":  # little-endian
-        signature = "ebf28987"
-    elif byteorder == "big":  # big-endian
-        signature = "8789f2eb"
-    else:
-        raise RuntimeError(f"unexpected system byte order {byteorder}")
-    bbiCurrentVersion = 4
-    output.write(bytes(64))  # bbiWriteDummyHeader
-    output.write(bytes(bbiMaxZoomLevels * 24))  # bbiWriteDummyZooms
-    asOffset = output.tell()
-    output.write(bytes(declaration))  # asText
-    totalSummaryOffset = output.tell()
-    output.write(bytes(5 * 8))  # bbiSummaryElementWrite
-    extHeaderOffset = output.tell()
-    extHeaderSize = 64
-    output.write(bytes(extHeaderSize))  # extHeaderSize
-    extraIndexListOffset = 0
-    extraIndexListEndOffset = 0
-    if extraIndexList:
-        extraIndexListOffset = output.tell()
-        extraIndexSize = 16 + 4 * 1
-        output.write(bytes(extraIndexSize * extraIndexCount))
-        extraIndexListEndOffset = output.tell()
-    chromTreeOffset = output.tell()
-    bbiWriteChromInfo(usageList, blockSize, output)
-    dataOffset = output.tell()
-    resTryCount, resScales, resSizes = bbiCalcResScalesAndSizes(aveSize)
-    blockCount = 0
-    maxBlockSize = 0
-    output.write(bedCount.to_bytes(8, byteorder))
-    if bedCount > 0:
-        if eim:
-            eim.allocChunkArrays(bedCount)
-        maxBlockSize, boundsArray = writeBlocks(
-            alignments,
-            declaration,
-            itemsPerSlot,
-            doCompress,
-            output,
-            resTryCount,
-            resScales,
-            resSizes,
-            eim,
-            bedCount,
-            fieldCount,
-            bedN,
-        )
-    else:
-        boundsArray = []
-    indexOffset = output.tell()
-    cirTreeFileBulkIndexToOpenFile(boundsArray, blockSize, 1, indexOffset, output)
-    zoomAmounts = numpy.empty(bbiMaxZoomLevels, numpy.int32)
-    zoomDataOffsets = numpy.empty(bbiMaxZoomLevels, numpy.int64)
-    zoomIndexOffsets = numpy.empty(bbiMaxZoomLevels, numpy.int64)
-    zoomLevels = 0
-    if bedCount > 0:
-        zoomLevels, totalSum = bbiWriteZoomLevels(
-            alignments,
-            output,
-            blockSize,
-            itemsPerSlot,
-            fieldCount,
-            doCompress,
-            indexOffset - dataOffset,
-            usageList,
-            resTryCount,
-            resScales,
-            resSizes,
-            zoomAmounts,
-            zoomDataOffsets,
-            zoomIndexOffsets,
-        )
-    if eim:
-        for i in range(len(eim.extraIndexList)):
-            eim.fileOffsets[i] = output.tell()
-            maxBedNameSize = eim.maxFieldSize[i]
-            eim.chunkArrayArray[i].sort(key=attrgetter("name"))
-            bptFileBulkIndexToOpenFile(
-                eim.chunkArrayArray[i],
-                bedCount,
-                blockSize,
-                maxBedNameSize,
-                output,
-            )
-    if doCompress:
-        uncompressBufSize = max(
-            maxBlockSize, itemsPerSlot * 32
-        )  # sizeof(struct bbiSummaryOnDisk)
-    output.seek(0)
-    output.write(bytes.fromhex(signature))
-    output.write(bbiCurrentVersion.to_bytes(2, byteorder))
-    output.write(zoomLevels.to_bytes(2, byteorder))
-    output.write(chromTreeOffset.to_bytes(8, byteorder))
-    output.write(dataOffset.to_bytes(8, byteorder))
-    output.write(indexOffset.to_bytes(8, byteorder))
-    output.write(fieldCount.to_bytes(2, byteorder))
-    output.write(bedN.to_bytes(2, byteorder))
-    output.write(asOffset.to_bytes(8, byteorder))
-    output.write(totalSummaryOffset.to_bytes(8, byteorder))
-    output.write(uncompressBufSize.to_bytes(4, byteorder))
-    output.write(extHeaderOffset.to_bytes(8, byteorder))
-    for i in range(zoomLevels):
-        data = struct.pack(
-            "ixxxxqq", zoomAmounts[i], zoomDataOffsets[i], zoomIndexOffsets[i]
-        )
-        output.write(data)
-    output.write(bytes(24 * (bbiMaxZoomLevels - zoomLevels)))
-    output.seek(totalSummaryOffset)
-    bbiSummaryElementWrite(output, totalSum)
-    output.seek(extHeaderOffset)
-    output.write(extHeaderSize.to_bytes(2, byteorder))
-    output.write(extraIndexCount.to_bytes(2, byteorder))
-    output.write(extraIndexListOffset.to_bytes(8, byteorder))
-    output.write(bytes(52))
-    assert output.tell() - extHeaderOffset == extHeaderSize
-    if extraIndexCount != 0:
-        output.seek(extraIndexListOffset)
-        indexFieldCount = 1
-        for i in range(extraIndexCount):
-            output.write(bytes(2))  # type
-            output.write(indexFieldCount.to_bytes(2, byteorder))
-            output.write(eim.fileOffsets[i].to_bytes(8, byteorder))
-            output.write(bytes(4))
-            output.write(eim.indexFields[i].to_bytes(2, byteorder))
-            output.write(bytes(2))
-        assert output.tell() == extraIndexListEndOffset
-    output.seek(0, 2)
-    output.write(bytes.fromhex(signature))

@@ -38,9 +38,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self._metadata = metadata
         self._identifiers = identifiers
 
-    def write_header(self, alignments):
+    def write_header(self, stream, alignments):
         """Write the file header to the output file."""
-        stream = self.stream
         metadata = self._metadata
         format_version = metadata.get("FormatVersion", "Mauve1")
         line = f"#FormatVersion {format_version}\n"
@@ -71,7 +70,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             line = f"#BackboneFile\t{backbone_file}\n"
             stream.write(line)
 
-    def write_file(self, alignments):
+    def write_file(self, stream, alignments):
         """Write a file with the alignments, and return the number of alignments.
 
         alignments - A Bio.Align.mauve.AlignmentIterator object.
@@ -92,7 +91,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 raise ValueError("alignments do not have an attribute `identifiers`")
             else:
                 self._identifiers = identifiers
-        count = interfaces.AlignmentWriter.write_file(self, alignments)
+        count = interfaces.AlignmentWriter.write_file(self, stream, alignments)
         return count
 
     def format_alignment(self, alignment):

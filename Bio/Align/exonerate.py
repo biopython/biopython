@@ -62,7 +62,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 "argument fmt should be 'vulgar' or 'cigar' (received %s)" % fmt
             )
 
-    def write_header(self, alignments):
+    def write_header(self, stream, alignments):
         """Write the header."""
         try:
             metadata = alignments.metadata
@@ -72,12 +72,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         else:
             commandline = metadata.get("Command line", "")
             hostname = metadata.get("Hostname", "")
-        self.stream.write(f"Command line: [{commandline}]\n")
-        self.stream.write(f"Hostname: [{hostname}]\n")
+        stream.write(f"Command line: [{commandline}]\n")
+        stream.write(f"Hostname: [{hostname}]\n")
 
-    def write_footer(self):
+    def write_footer(self, stream):
         """Write the footer."""
-        self.stream.write("-- completed exonerate analysis\n")
+        stream.write("-- completed exonerate analysis\n")
 
     def _format_alignment_cigar(self, alignment):
         """Return a string with a single alignment formatted as a cigar line."""
