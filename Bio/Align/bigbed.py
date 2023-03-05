@@ -72,6 +72,54 @@ from Bio.SeqRecord import SeqRecord
 # flake8: noqa
 
 
+class bbiSummaryElement:
+
+    # See bbiSummaryElementWrite in bbiWrite.c
+    __slots__ = ["validCount", "minVal", "maxVal", "sumData", "sumSquares"]
+
+    formatter = struct.Struct("Qdddd")
+    size = formatter.size
+
+    def __init__(self):
+        self.validCount = 0
+        self.minVal = sys.maxsize
+        self.maxVal = -sys.maxsize
+        self.sumData = 0.0
+        self.sumSquares = 0.0
+
+    def update(self, size, val):
+        self.validCount += size
+        if val < self.minVal:
+            self.minVal = val
+        if val > self.maxVal:
+            self.maxVal = val
+        self.sumData += val * size
+        self.sumSquares += val * val * size
+
+    def __bytes__(self):
+        return self.formatter.pack(
+            self.validCount,
+            self.minVal,
+            self.maxVal,
+            self.sumData,
+            self.sumSquares,
+        )
+
+
+class ExtHeader:
+
+    # See bbFileCreate in bedToBigBed.c
+    __slots__ = ("extraIndexCount", "extraIndexListOffset")
+
+    formatter = struct.Struct("=HHQ52x")
+    size = formatter.size
+
+    def __bytes__(self):
+        return self.formatter.pack(
+            self.size, self.extraIndexCount, self.extraIndexListOffset
+        )
+
+
 Field = namedtuple("Field", ("as_type", "name", "comment"))
 
 
@@ -280,7 +328,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         compress = self.compress
         # see bbFileCreate in bedToBigBed.c
         fieldCount = len(declaration)
-        extraIndexCount = len(extraIndex)
+        extHeader = ExtHeader()
+        extHeader.extraIndexCount = len(extraIndex)
         if extraIndex:
             eim = bbExIndexMaker(extraIndex, declaration)
         else:
@@ -297,15 +346,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         totalSummaryOffset = stream.tell()
         stream.write(bytes(bbiSummaryElement.size))
         extHeaderOffset = stream.tell()
-        extHeaderSize = 64
-        stream.write(bytes(extHeaderSize))  # extHeaderSize
+        stream.write(bytes(extHeader.size))
         if extraIndex:
-            extraIndexListOffset = stream.tell()
+            extHeader.extraIndexListOffset = stream.tell()
             extraIndexSize = 16 + 4 * 1
-            stream.write(bytes(extraIndexSize * extraIndexCount))
+            stream.write(bytes(extraIndexSize * extHeader.extraIndexCount))
             extraIndexListEndOffset = stream.tell()
         else:
-            extraIndexListOffset = 0
+            extHeader.extraIndexListOffset = 0
             extraIndexListEndOffset = 0
         chromTreeOffset = stream.tell()
         bbiWriteChromInfo(usageList, blockSize, stream)
@@ -399,15 +447,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream.seek(totalSummaryOffset)
         stream.write(bytes(totalSum))
         stream.seek(extHeaderOffset)
-        stream.write(extHeaderSize.to_bytes(2, byteorder))
-        stream.write(extraIndexCount.to_bytes(2, byteorder))
-        stream.write(extraIndexListOffset.to_bytes(8, byteorder))
-        stream.write(bytes(52))
-        assert stream.tell() - extHeaderOffset == extHeaderSize
-        if extraIndexCount != 0:
-            stream.seek(extraIndexListOffset)
+        stream.write(bytes(extHeader))
+        if extraIndex:
+            stream.seek(extHeader.extraIndexListOffset)
             indexFieldCount = 1
-            for i in range(extraIndexCount):
+            for i in range(extHeader.extraIndexCount):
                 stream.write(bytes(2))  # type
                 stream.write(indexFieldCount.to_bytes(2, byteorder))
                 stream.write(eim.fileOffsets[i].to_bytes(8, byteorder))
@@ -1099,40 +1143,6 @@ class bbiSumOutStream:
         else:
             assert self.elCount == 0
         self.elCount = 0
-
-
-class bbiSummaryElement:
-
-    # See bbiSummaryElementWrite in bbiWrite.c
-    __slots__ = ["validCount", "minVal", "maxVal", "sumData", "sumSquares"]
-
-    formatter = struct.Struct("Qdddd")
-    size = formatter.size
-
-    def __init__(self):
-        self.validCount = 0
-        self.minVal = sys.maxsize
-        self.maxVal = -sys.maxsize
-        self.sumData = 0.0
-        self.sumSquares = 0.0
-
-    def update(self, size, val):
-        self.validCount += size
-        if val < self.minVal:
-            self.minVal = val
-        if val > self.maxVal:
-            self.maxVal = val
-        self.sumData += val * size
-        self.sumSquares += val * val * size
-
-    def __bytes__(self):
-        return self.formatter.pack(
-            self.validCount,
-            self.minVal,
-            self.maxVal,
-            self.sumData,
-            self.sumSquares,
-        )
 
 
 class rTree:
