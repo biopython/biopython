@@ -288,12 +288,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         usageList, minDiff, aveSize, bedCount = bbiChromUsageFromBedFile(
             alignments, targets, eim
         )
-        if byteorder == "little":  # little-endian
-            signature = "ebf28987"
-        elif byteorder == "big":  # big-endian
-            signature = "8789f2eb"
-        else:
-            raise RuntimeError(f"unexpected system byte order {byteorder}")
         bbiCurrentVersion = 4
         stream.write(bytes(64))  # bbiWriteDummyHeader
         stream.write(bytes(bbiMaxZoomLevels * 24))  # bbiWriteDummyZooms
@@ -378,21 +372,26 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 maxBlockSize, itemsPerSlot * 32
             )  # sizeof(struct bbiSummaryOnDisk)
         stream.seek(0)
-        stream.write(bytes.fromhex(signature))
-        stream.write(bbiCurrentVersion.to_bytes(2, byteorder))
-        stream.write(zoomLevels.to_bytes(2, byteorder))
-        stream.write(chromTreeOffset.to_bytes(8, byteorder))
-        stream.write(dataOffset.to_bytes(8, byteorder))
-        stream.write(indexOffset.to_bytes(8, byteorder))
-        stream.write(fieldCount.to_bytes(2, byteorder))
-        stream.write(bedN.to_bytes(2, byteorder))
-        stream.write(asOffset.to_bytes(8, byteorder))
-        stream.write(totalSummaryOffset.to_bytes(8, byteorder))
-        stream.write(uncompressBufSize.to_bytes(4, byteorder))
-        stream.write(extHeaderOffset.to_bytes(8, byteorder))
+        signature = 0x8789F2EB
+        data = struct.pack(
+            "=IHHQQQHHQQIQ",
+            signature,
+            bbiCurrentVersion,
+            zoomLevels,
+            chromTreeOffset,
+            dataOffset,
+            indexOffset,
+            fieldCount,
+            bedN,
+            asOffset,
+            totalSummaryOffset,
+            uncompressBufSize,
+            extHeaderOffset,
+        )
+        stream.write(data)
         for i in range(zoomLevels):
             data = struct.pack(
-                "ixxxxqq", zoomAmounts[i], zoomDataOffsets[i], zoomIndexOffsets[i]
+                "IxxxxQQ", zoomAmounts[i], zoomDataOffsets[i], zoomIndexOffsets[i]
             )
             stream.write(data)
         stream.write(bytes(24 * (bbiMaxZoomLevels - zoomLevels)))
@@ -416,7 +415,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 stream.write(bytes(2))
             assert stream.tell() == extraIndexListEndOffset
         stream.seek(0, 2)
-        stream.write(bytes.fromhex(signature))
+        data = struct.pack("I", signature)
+        stream.write(data)
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
