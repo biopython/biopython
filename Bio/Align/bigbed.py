@@ -23,8 +23,9 @@ You are expected to use this module via the Bio.Align functions.
 # in particular the tables in the supplemental materials listing the contents
 # of a bigBed file byte-by-byte.
 
-# The writer is based on the following files of the bedToBigBed program
+# The writer is based on the following files of the bedToBigBed program:
 # bedToBigBed.c
+# bbiWrite.c
 
 # These program files are provided by the University of California Santa Cruz
 # under the following license:
@@ -294,7 +295,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         asOffset = stream.tell()
         stream.write(bytes(declaration))  # asText
         totalSummaryOffset = stream.tell()
-        stream.write(bytes(5 * 8))  # bbiSummaryElementWrite
+        stream.write(bytes(bbiSummaryElement.size))
         extHeaderOffset = stream.tell()
         extHeaderSize = 64
         stream.write(bytes(extHeaderSize))  # extHeaderSize
@@ -396,7 +397,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             stream.write(data)
         stream.write(bytes(24 * (bbiMaxZoomLevels - zoomLevels)))
         stream.seek(totalSummaryOffset)
-        bbiSummaryElementWrite(stream, totalSum)
+        stream.write(bytes(totalSum))
         stream.seek(extHeaderOffset)
         stream.write(extHeaderSize.to_bytes(2, byteorder))
         stream.write(extraIndexCount.to_bytes(2, byteorder))
@@ -1101,7 +1102,12 @@ class bbiSumOutStream:
 
 
 class bbiSummaryElement:
+
+    # See bbiSummaryElementWrite in bbiWrite.c
     __slots__ = ["validCount", "minVal", "maxVal", "sumData", "sumSquares"]
+
+    formatter = struct.Struct("Qdddd")
+    size = formatter.size
 
     def __init__(self):
         self.validCount = 0
@@ -1118,6 +1124,15 @@ class bbiSummaryElement:
             self.maxVal = val
         self.sumData += val * size
         self.sumSquares += val * val * size
+
+    def __bytes__(self):
+        return self.formatter.pack(
+            self.validCount,
+            self.minVal,
+            self.maxVal,
+            self.sumData,
+            self.sumSquares,
+        )
 
 
 class rTree:
@@ -2309,18 +2324,6 @@ def bbiWriteZoomLevels(
         reduction *= zoomIncrement
         rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction)
     return zoomLevels, totalSum
-
-
-def bbiSummaryElementWrite(output, summary):
-    data = struct.pack(
-        "qdddd",
-        summary.validCount,
-        summary.minVal,
-        summary.maxVal,
-        summary.sumData,
-        summary.sumSquares,
-    )
-    output.write(data)
 
 
 def bptCountLevels(maxBlockSize, itemCount):
