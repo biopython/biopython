@@ -18,8 +18,15 @@ iterators of the alignments to reset as well, which is bug prone. Instead,
 calling ``iter`` on a ``PairwiseAlignments`` object will now return itself. The
 iterator can be reset by calling the ``rewind`` method.
 
-Typo fixes:
+Additionally, a number of small bugs and typos have been fixed with additions
+to the test suite.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
 - Cam McMenamie
+- Ricardas Ralys
+- Vladislav Kuznetsov
 
 12 February 2023: Biopython 1.81
 ===============================================
@@ -37,20 +44,18 @@ objects as input.
 Several improvements and bug fixes to the snapgene parser contributes by
 Damien Goutte-Gattat.
 
-Many thanks to the Biopython developers and community for making this release
-possible, especially the following contributors:
-
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
 
 - Adam Vandergriff
 - Damien Goutte-Gattat
 - Joe Greener
 - Michiel de Hoon
 - Peter Cock
-- Ricardas Ralys
 - Robert Miller
-- Vladislav Kuznetsov
 
 18 November 2022: Biopython 1.80
 ================================
