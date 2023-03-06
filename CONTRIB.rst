@@ -264,6 +264,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Ralf Stephan <https://github.com/rwst>
 - Rasmus Fonseca <https://github.com/RasmusFonseca>
 - rht <https://github.com/rht>
+- Ricardas Ralys
 - Richard Neher <https://github.com/rneher>
 - Rob Miller <https://github.com/rob-miller>
 - Robert Ernst <https://github.com/rernst>
@@ -318,6 +319,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Victor Lin <https://github.com/victorlin>
 - Vini Salazar <https://github.com/vinisalazar>
 - Vishesh Soni <https://github.com/vishesh2802>
+- Vladislav Kuznetsov <https://github.com/vladkuz-vk>
 - Walter Gillett <https://github.com/wgillett>
 - Wayne Decatur <https://github.com/fomightez>
 - Wibowo Arindrarto <https://github.com/bow>
