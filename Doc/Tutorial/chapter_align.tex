@@ -2091,7 +2091,7 @@ query             0 GA-C 3
 
 Use the \verb+aligned+ property to find the start and end indices of subsequences in the target and query sequence that were aligned to each other.
 Generally, if the alignment between target (t) and query (q) consists of $N$
-chunks, you get a numpy array with dimensions $2 \times N \times 2$:
+chunks, you get a Numpy array with dimensions $2 \times N \times 2$:
 
 \begin{minted}{python}
 (
@@ -2839,11 +2839,11 @@ Internally, the first step when performing an alignment is to replace the two se
 
 %doctest . lib:numpy
 \begin{minted}{pycon}
->>> import numpy
+>>> import numpy as np
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
->>> s1 = numpy.array([2, 10, 10, 13], numpy.int32)
->>> s2 = numpy.array([2, 10, 13], numpy.int32)
+>>> s1 = np.array([2, 10, 10, 13], np.int32)
+>>> s2 = np.array([2, 10, 13], np.int32)
 >>> aligner.match = +6
 >>> aligner.mismatch = -1
 >>> alignments = aligner.align(s1, s2)
@@ -2862,7 +2862,7 @@ Internally, the first step when performing an alignment is to replace the two se
 >>> print(alignments.score)
 18.0
 \end{minted}
-Note that the indices should consist of 32-bit integers, as specified in this example by \verb+numpy.int32+.
+Note that the indices should consist of 32-bit integers, as specified in this example by \verb+ np.int32+.
 
 Unknown letters can again be included by defining a wildcard character, and using the corresponding Unicode code point number as the index:
 
@@ -2871,7 +2871,7 @@ Unknown letters can again be included by defining a wildcard character, and usin
 >>> aligner.wildcard = "?"
 >>> ord(aligner.wildcard)
 63
->>> s2 = numpy.array([2, 63, 13], numpy.int32)
+>>> s2 = np.array([2, 63, 13], np.int32)
 >>> aligner.gap_score = -3
 >>> alignments = aligner.align(s1, s2)
 >>> print(len(alignments))
@@ -2892,14 +2892,14 @@ Unknown letters can again be included by defining a wildcard character, and usin
 
 \paragraph*{Generalized pairwise alignments using a substitution matrix and integer sequences}
 
-Integer sequences can also be aligned using a substitution matrix, in this case a numpy square array without an alphabet associated with it. In this case, all index values must be non-negative, and smaller than the size of the substitution matrix:
+Integer sequences can also be aligned using a substitution matrix, in this case a Numpy square array without an alphabet associated with it. In this case, all index values must be non-negative, and smaller than the size of the substitution matrix:
 
 %doctest . lib:numpy
 \begin{minted}{pycon}
 >>> from Bio import Align
->>> import numpy
+>>> import numpy as np
 >>> aligner = Align.PairwiseAligner()
->>> m = numpy.eye(5)
+>>> m = np.eye(5)
 >>> m[0, 1:] = m[1:, 0] = -2
 >>> m[2, 2] = 3
 >>> print(m)
@@ -2910,8 +2910,8 @@ Integer sequences can also be aligned using a substitution matrix, in this case 
  [-2.  0.  0.  0.  1.]]
 >>> aligner.substitution_matrix = m
 >>> aligner.gap_score = -1
->>> s1 = numpy.array([0, 2, 3, 4], numpy.int32)
->>> s2 = numpy.array([0, 3, 2, 1], numpy.int32)
+>>> s1 = np.array([0, 2, 3, 4], np.int32)
+>>> s2 = np.array([0, 3, 2, 1], np.int32)
 >>> alignments = aligner.align(s1, s2)
 >>> print(len(alignments))
 2
@@ -2932,7 +2932,7 @@ Integer sequences can also be aligned using a substitution matrix, in this case 
 \section{Substitution matrices}
 \label{sec:substitution_matrices}
 
-The \verb+Array+ class in \verb+Bio.Align.substitution_matrices+ is a subclass of numpy arrays that supports indexing both by integers and by specific strings. An \verb+Array+ instance can either be a one-dimensional array or a square two-dimensional arrays. A one-dimensional \verb+Array+ object can for example be used to store the nucleotide frequency of a DNA sequence, while a two-dimensional \verb+Array+ object can be used to represent a scoring matrix for sequence alignments.
+The \verb+Array+ class in \verb+Bio.Align.substitution_matrices+ is a subclass of Numpy arrays that supports indexing both by integers and by specific strings. An \verb+Array+ instance can either be a one-dimensional array or a square two-dimensional arrays. A one-dimensional \verb+Array+ object can for example be used to store the nucleotide frequency of a DNA sequence, while a two-dimensional \verb+Array+ object can be used to represent a scoring matrix for sequence alignments.
 
 \subsection{Creating an Array object}
 
@@ -3047,11 +3047,11 @@ Array([12.,  0.,  5.,  0.],
       alphabet='ACGT')
 \end{minted}
 
-\verb+Array+ objects can thus be used as an array and as a dictionary. They can be converted to plain numpy arrays or plain dictionary objects:
+\verb+Array+ objects can thus be used as an array and as a dictionary. They can be converted to plain Numpy arrays or plain dictionary objects:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> import numpy
+>>> import np
 >>> x = Array("ACGT")
 >>> x["C"] = 5
 \end{minted}
@@ -3060,7 +3060,7 @@ Array([12.,  0.,  5.,  0.],
 >>> x
 Array([0., 5., 0., 0.],
       alphabet='ACGT')
->>> a = numpy.array(x)  # create a plain numpy array
+>>> a = np.array(x)  # create a plain np array
 >>> a
 array([0., 5., 0., 0.])
 >>> d = dict(x)  # create a plain dictionary
@@ -3073,7 +3073,7 @@ While the alphabet of an \verb+Array+ is usually a string, you may also use a tu
 While the \verb+alphabet+ property of an \verb+Array+ is immutable, you can create a new \verb+Array+ object by selecting the letters you are interested in from the alphabet. For example,
 %cont-doctest
 \begin{minted}{pycon}
->>> a = Array("ABCD", dims=2, data=numpy.arange(16).reshape(4, 4))
+>>> a = Array("ABCD", dims=2, data= np.arange(16).reshape(4, 4))
 >>> print(a)
      A    B    C    D
 A  0.0  1.0  2.0  3.0
@@ -3105,7 +3105,7 @@ C 11.0 0.0 10.0
 
 \subsection{Calculating a substitution matrix from a pairwise sequence alignment}
 
-As \verb+Array+ is a subclass of a numpy array, you can apply mathematical operations on an \verb+Array+ object in much the same way. Here, we illustrate this by calculating a scoring matrix from the alignment of the 16S ribosomal RNA gene sequences of {\it Escherichia coli} and {\it Bacillus subtilis}. First, we create a \verb+PairwiseAligner+ and initialize it with the default scores used by \verb+blastn+:
+As \verb+Array+ is a subclass of a Numpy array, you can apply mathematical operations on an \verb+Array+ object in much the same way. Here, we illustrate this by calculating a scoring matrix from the alignment of the 16S ribosomal RNA gene sequences of {\it Escherichia coli} and {\it Bacillus subtilis}. First, we create a \verb+PairwiseAligner+ and initialize it with the default scores used by \verb+blastn+:
 
 %doctest ../Tests/Align lib:numpy
 \begin{minted}{pycon}
@@ -3158,8 +3158,8 @@ We normalize against the total number to find the probability of each substituti
 
 %cont-doctest
 \begin{minted}{pycon}
->>> import numpy
->>> probabilities = frequency / numpy.sum(frequency)
+>>> import numpy as np
+>>> probabilities = frequency / np.sum(frequency)
 >>> probabilities = (probabilities + probabilities.transpose()) / 2.0
 >>> print(probabilities.format("%.4f"))
        A      C      G      T
@@ -3173,7 +3173,7 @@ The background probability is the probability of finding an A, C, G, or T nucleo
 
 %cont-doctest
 \begin{minted}{pycon}
->>> background = numpy.sum(probabilities, 0)
+>>> background = np.sum(probabilities, 0)
 >>> print(background.format("%.4f"))
 A 0.2505
 C 0.2337
@@ -3185,7 +3185,7 @@ The number of substitutions expected at random is simply the product of the back
 
 %cont-doctest
 \begin{minted}{pycon}
->>> expected = numpy.dot(background[:, None], background[None, :])
+>>> expected = np.dot(background[:, None], background[None, :])
 >>> print(expected.format("%.4f"))
        A      C      G      T
 A 0.0627 0.0585 0.0793 0.0499
@@ -3199,7 +3199,7 @@ The scoring matrix can then be calculated as the logarithm of the odds-ratio of 
 %cont-doctest
 \begin{minted}{pycon}
 >>> oddsratios = probabilities / expected
->>> scoring_matrix = numpy.log2(oddsratios)
+>>> scoring_matrix = np.log2(oddsratios)
 >>> print(scoring_matrix)
      A    C    G    T
 A  1.7 -2.4 -1.8 -1.8
