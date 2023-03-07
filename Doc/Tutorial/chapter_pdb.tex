@@ -1251,7 +1251,7 @@ A benefit of the \texttt{atomArray} is that generating a distance plot from it
 is a single line of \texttt{Numpy} code:
 
 \begin{minted}{python}
-numpy.linalg.norm(atomArray[:, None, :] - atomArray[None, :, :], axis=-1)
+np.linalg.norm(atomArray[:, None, :] - atomArray[None, :, :], axis=-1)
 \end{minted}
 
 Despite its briefness, the idiom cam be difficult to remember and in the form
