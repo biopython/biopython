@@ -1665,8 +1665,8 @@ Rows and columns for other amino acids were removed from the matrix.
 Next, we normalize the matrix:
 %cont-doctest
 \begin{minted}{pycon}
->>> import numpy
->>> observed_frequencies /= numpy.sum(observed_frequencies)
+>>> import numpy as np
+>>> observed_frequencies /= np.sum(observed_frequencies)
 \end{minted}
 
 Summing over rows or columns gives the relative frequency of occurrence of
@@ -1681,14 +1681,14 @@ H 0.0976
 K 0.2569
 R 0.1697
 <BLANKLINE>
->>> numpy.sum(residue_frequencies)
+>>> np.sum(residue_frequencies)
 1.0
 \end{minted}
 
 The expected frequency of residue pairs is then
 %cont-doctest
 \begin{minted}{pycon}
->>> expected_frequencies = numpy.dot(
+>>> expected_frequencies = np.dot(
 ...     residue_frequencies[:, None], residue_frequencies[None, :]
 ... )
 >>> print(expected_frequencies.format("%.4f"))
@@ -1705,7 +1705,7 @@ Here, \verb+residue_frequencies[:, None]+ creates a 2D array consisting of a sin
 We can now calculate the log-odds matrix by dividing the observed frequencies by the expected frequencies and taking the logarithm:
 %cont-doctest
 \begin{minted}{pycon}
->>> m = numpy.log2(observed_frequencies / expected_frequencies)
+>>> m = np.log2(observed_frequencies / expected_frequencies)
 >>> print(m)
       D    E    H     K    R
 D   2.1 -1.5 -5.1 -10.4 -4.2
