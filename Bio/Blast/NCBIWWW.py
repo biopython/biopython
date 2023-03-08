@@ -316,7 +316,8 @@ def _sanitize_qblast_xml(xml_data):
     """
     # Code contributed by Joao Rodrigues (joao.rodrigues@schrodinger.com)
     #
-    with tempfile.NamedTemporaryFile(mode="wb") as xmlfile:
+    # Use delete=False to avoid permission errors on Windows
+    with tempfile.NamedTemporaryFile(mode="wb", delete=False) as xmlfile:
         for line in xml_data:
             _line = line.strip()
             if _line == b"CREATE_VIEW" or not _line:
@@ -330,10 +331,16 @@ def _sanitize_qblast_xml(xml_data):
         del xml_data
         gc.collect()
 
-        # Read xmlfile back in as a StringIO object
-        with open(xmlfile.name, "rt") as handle:
-            xml_data = StringIO(handle.read())
-        xml_data.seek(0)
+    # Read xmlfile back in as a StringIO object
+    with open(xmlfile.name, "rt") as handle:
+        xml_data = StringIO(handle.read())
+    xml_data.seek(0)
+
+    # Try removing the file explicitly, but don't crash if we fail.
+    try:
+        os.unlink(xmlfile.name)
+    except Exception:
+        pass
     return xml_data
 
 
