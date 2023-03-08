@@ -314,25 +314,24 @@ def _sanitize_qblast_xml(xml_data):
     parser. Since the lines always appear in between or after <Hit> tags,
     they are safe to remove.
     """
-
     # Code contributed by Joao Rodrigues (joao.rodrigues@schrodinger.com)
     #
-    with tempfile.NamedTemporaryFile(mode="wb", dir=os.curdir) as _xmlfile:
+    with tempfile.NamedTemporaryFile(mode="wb", dir=os.curdir) as xmlfile:
         for line in xml_data:
             _line = line.strip()
-            if _line == b'CREATE_VIEW' or not _line:
+            if _line == b"CREATE_VIEW" or not _line:
                 continue
-            _xmlfile.write(line)  # keep original whitespace
+            xmlfile.write(line)  # keep original whitespace
 
-        _xmlfile.seek(0)  # rewind
+        xmlfile.seek(0)  # rewind
 
         # Forcefully delete and collect the old data, to avoid
         # double memory usage.
         del xml_data
         gc.collect()
 
-        # Read _xmlfile back in as a StringIO object
-        with open(_xmlfile.name, "rt") as handle:
+        # Read xmlfile back in as a StringIO object
+        with open(xmlfile.name, "rt") as handle:
             xml_data = StringIO(handle.read())
         xml_data.seek(0)
     return xml_data
