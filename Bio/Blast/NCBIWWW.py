@@ -21,11 +21,13 @@ Variables:
 """
 
 
+import gc
+import os
+import tempfile
+import time
 import warnings
 
 from io import StringIO
-import time
-
 from urllib.parse import urlencode
 from urllib.request import build_opener, install_opener
 from urllib.request import urlopen, urlretrieve, urlparse, urlcleanup
@@ -276,24 +278,64 @@ def qblast(
 
         request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
         handle = urlopen(request)
-        results = handle.read().decode()
+        results = handle.readlines()
 
         # Can see an "\n\n" page while results are in progress,
         # if so just wait a bit longer...
-        if results == "\n\n":
+        if results == [b"\n\n"]:
             continue
-        # XML results don't have the Status tag when finished
-        if "Status=" not in results:
+
+        # Iterate over the results to know if the request is complete.
+        is_done = False
+        for line_no, line in enumerate(results):
+            # Has a Status tag and Status is READY
+            if b"Status=" in line:
+                status = results[line_no + 1].strip()
+                if status.upper() == "READY":
+                    is_done = True
+                    break
+        # Or, XML results don't have the Status tag when finished
+        else:
+            is_done = True
+
+        if is_done:
             break
-        i = results.index("Status=")
-        j = results.index("\n", i)
-        status = results[i + len("Status=") : j].strip()
-        if status.upper() == "READY":
-            break
-    return StringIO(results)
+    return _sanitize_qblast_xml(results)
 
 
 qblast._previous = 0
+
+
+def _sanitize_qblast_xml(xml_data):
+    """Remove CREATE_VIEW lines from Blast XML output data.
+
+    These lines are often included when a large number of hits are requested
+    and returned. They will break parsing with NCBIXML or any other XML
+    parser. Since the lines always appear in between or after <Hit> tags,
+    they are safe to remove.
+    """
+
+    # Code contributed by Joao Rodrigues (joao.rodrigues@schrodinger.com)
+    #
+    with tempfile.NamedTemporaryFile(mode="wb", dir=os.curdir) as _xmlfile:
+        for line in xml_data:
+            _line = line.strip()
+            if _line == b'CREATE_VIEW' or not _line:
+                continue
+            _xmlfile.write(line)  # keep original whitespace
+
+        _xmlfile.seek(0)  # rewind
+
+        # Forcefully delete and collect the old data, to avoid
+        # double memory usage.
+        del xml_data
+        gc.collect()
+
+        # Read _xmlfile back in as a StringIO object
+        with open(_xmlfile.name, "rt") as handle:
+            xml_data = StringIO(handle.read())
+        xml_data.seek(0)
+    return xml_data
 
 
 def _parse_qblast_ref_page(handle):

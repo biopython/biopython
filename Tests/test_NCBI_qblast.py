@@ -29,7 +29,7 @@ from unittest import mock
 import warnings
 
 from urllib.error import HTTPError
-from io import BytesIO
+from io import BytesIO, StringIO
 
 from Bio import MissingExternalDependencyError
 from Bio import BiopythonWarning
@@ -70,9 +70,11 @@ if not requires_internet.check.available:
             "Blast/mock_disco.xml",  # result for test_discomegalast
             "Blast/mock_orchid.xml",  # result for test_orchid_est
             "Blast/mock_pcr.xml",  # result for test_pcr_primers
+            "Blast/xml_qblast_create_view.xml",  # result for test_sanitize_qblast_xml #1
+            "Blast/xml_qblast_create_view.xml",  # result for test_sanitize_qblast_xml #2
             "Blast/mock_short_empty.xml",  # result for test_short_query # 1
             "Blast/mock_short_result.xml",  # result for test_short_query # 2
-            "Blast/mock_short_result.xml",  # result for test_short_query # 3
+#            "Blast/mock_short_result.xml",  # result for test_short_query # 3
         ]
 
         # Generate a list of responses with the structure wait|result|wait|result...
@@ -373,6 +375,52 @@ class TestQblast(unittest.TestCase):
         #     my_hits = NCBIXML.read(my_search)
         #     my_search.close()
         #     self.assertNotEqual(len(my_hits.alignments), 0)
+
+    def test_sanitize_qblast_xml(self):
+        """Test _sanitize_qblast_xml method to fix corrupted XML files."""
+
+        my_seq = \
+            'MAAVILESIFLKRSQQKKKTSPLNFKKRLFLLTVHKLSYYEYDFERGRRGSKKGSIDVEK' \
+            'ITCVETVVPEKNPPPERQIPRRGEESSEMEQISIIERFPYPFQVVYDEGPLYVFSPTEEL' \
+            'RKRWIHQLKNVIRYNSDLVQKYHPCFWIDGQYLCCSQTAKNAMGCQILENRNGSLKPGSS' \
+            'HRKTKKPLPPTPEEDQILKKPLPPEPAAAPVSTSELKKVVALYDYMPMNANDLQLRKGDE' \
+            'YFILEESNLPWWRARDKNGQEGYIPSNYVTEAEDSIEMYEWYSKHMTRSQAEQLLKQEGK' \
+            'EGGFIVRDSSKAGKYTVSVFAKSTGDPQGVIRHYVVCSTPQSQYYLAEKHLFSTIPELIN' \
+            'YHQHNSAGLISRLKYPVSQQNKNAPSTAGLGYGSWEIDPKDLTFLKELGTGQFGVVKYGK' \
+            'WRGQYDVAIKMIKEGSMSEDEFIEEAKVMMNLSHEKLVQLYGVCTKQRPIFIITEYMANG' \
+            'CLLNYLREMRHRFQTQQLLEMCKDVCEAMEYLESKQFLHRDLAARNCLVNDQGVVKVSDF' \
+            'GLSRYVLDDEYTSSVGSKFPVRWSPPEVLMYSKFSSKSDIWAFGVLMWEIYSLGKMPYER' \
+            'FTNSETAEHIAQGLRLYRPHLASEKVYTIMYSCWHEKADERPTFKILLSNILDVMDEES'
+
+        kwargs = {
+            'hitlist_size': 10000,
+            'expect': 10.0,
+            'word_size': 3,
+            'gapcosts': '10 1',
+            'matrix_name': 'BLOSUM80',
+            'i_thresh': 0.005,
+            'alignments': 400
+        }
+        my_search = NCBIWWW.qblast("blastp", "nr", my_seq, **kwargs)
+        my_hits = NCBIXML.read(my_search)
+        my_search.close()
+        self.assertEqual(len(my_hits.alignments), 10000)
+
+        # Mock _sanitize_qblast_xml function to check that the file
+        # would indeed trigger the error.
+        def _mock_response(dummy_input):
+            with open("Blast/xml_qblast_create_view.xml", "rt") as handle:
+                return StringIO(handle.read())
+
+        with mock.patch.object(NCBIWWW, "_sanitize_qblast_xml", side_effect=_mock_response):
+            my_search = NCBIWWW.qblast("blastp", "nr", my_seq, **kwargs)
+            self.assertRaisesRegex(
+                ValueError,
+                "What should we do with",
+                NCBIXML.read,
+                my_search,
+            )
+            my_search.close()
 
     def test_error_conditions(self):
         """Test if exceptions were properly handled."""
