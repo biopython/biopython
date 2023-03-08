@@ -72,7 +72,7 @@ if not requires_internet.check.available:
             "Blast/mock_pcr.xml",  # result for test_pcr_primers
             "Blast/mock_short_empty.xml",  # result for test_short_query # 1
             "Blast/mock_short_result.xml",  # result for test_short_query # 2
-#            "Blast/mock_short_result.xml",  # result for test_short_query # 3
+            # "Blast/mock_short_result.xml",  # result for test_short_query # 3
         ]
 
         # Generate a list of responses with the structure wait|result|wait|result...
@@ -376,28 +376,28 @@ class TestQblast(unittest.TestCase):
 
     def test_sanitize_qblast_xml(self):
         """Test _sanitize_qblast_xml method to fix corrupted XML files."""
-
-        my_seq = \
-            'MAAVILESIFLKRSQQKKKTSPLNFKKRLFLLTVHKLSYYEYDFERGRRGSKKGSIDVEK' \
-            'ITCVETVVPEKNPPPERQIPRRGEESSEMEQISIIERFPYPFQVVYDEGPLYVFSPTEEL' \
-            'RKRWIHQLKNVIRYNSDLVQKYHPCFWIDGQYLCCSQTAKNAMGCQILENRNGSLKPGSS' \
-            'HRKTKKPLPPTPEEDQILKKPLPPEPAAAPVSTSELKKVVALYDYMPMNANDLQLRKGDE' \
-            'YFILEESNLPWWRARDKNGQEGYIPSNYVTEAEDSIEMYEWYSKHMTRSQAEQLLKQEGK' \
-            'EGGFIVRDSSKAGKYTVSVFAKSTGDPQGVIRHYVVCSTPQSQYYLAEKHLFSTIPELIN' \
-            'YHQHNSAGLISRLKYPVSQQNKNAPSTAGLGYGSWEIDPKDLTFLKELGTGQFGVVKYGK' \
-            'WRGQYDVAIKMIKEGSMSEDEFIEEAKVMMNLSHEKLVQLYGVCTKQRPIFIITEYMANG' \
-            'CLLNYLREMRHRFQTQQLLEMCKDVCEAMEYLESKQFLHRDLAARNCLVNDQGVVKVSDF' \
-            'GLSRYVLDDEYTSSVGSKFPVRWSPPEVLMYSKFSSKSDIWAFGVLMWEIYSLGKMPYER' \
-            'FTNSETAEHIAQGLRLYRPHLASEKVYTIMYSCWHEKADERPTFKILLSNILDVMDEES'
+        my_seq = (
+            "MAAVILESIFLKRSQQKKKTSPLNFKKRLFLLTVHKLSYYEYDFERGRRGSKKGSIDVEK"
+            "ITCVETVVPEKNPPPERQIPRRGEESSEMEQISIIERFPYPFQVVYDEGPLYVFSPTEEL"
+            "RKRWIHQLKNVIRYNSDLVQKYHPCFWIDGQYLCCSQTAKNAMGCQILENRNGSLKPGSS"
+            "HRKTKKPLPPTPEEDQILKKPLPPEPAAAPVSTSELKKVVALYDYMPMNANDLQLRKGDE"
+            "YFILEESNLPWWRARDKNGQEGYIPSNYVTEAEDSIEMYEWYSKHMTRSQAEQLLKQEGK"
+            "EGGFIVRDSSKAGKYTVSVFAKSTGDPQGVIRHYVVCSTPQSQYYLAEKHLFSTIPELIN"
+            "YHQHNSAGLISRLKYPVSQQNKNAPSTAGLGYGSWEIDPKDLTFLKELGTGQFGVVKYGK"
+            "WRGQYDVAIKMIKEGSMSEDEFIEEAKVMMNLSHEKLVQLYGVCTKQRPIFIITEYMANG"
+            "CLLNYLREMRHRFQTQQLLEMCKDVCEAMEYLESKQFLHRDLAARNCLVNDQGVVKVSDF"
+            "GLSRYVLDDEYTSSVGSKFPVRWSPPEVLMYSKFSSKSDIWAFGVLMWEIYSLGKMPYER"
+            "FTNSETAEHIAQGLRLYRPHLASEKVYTIMYSCWHEKADERPTFKILLSNILDVMDEES"
+        )
 
         kwargs = {
-            'hitlist_size': 10000,
-            'expect': 10.0,
-            'word_size': 3,
-            'gapcosts': '10 1',
-            'matrix_name': 'BLOSUM80',
-            'i_thresh': 0.005,
-            'alignments': 400
+            "hitlist_size": 10000,
+            "expect": 10.0,
+            "word_size": 3,
+            "gapcosts": "10 1",
+            "matrix_name": "BLOSUM80",
+            "i_thresh": 0.005,
+            "alignments": 400,
         }
 
         # Permanently mock the urlopen response since the error is
@@ -407,9 +407,9 @@ class TestQblast(unittest.TestCase):
         def _mock_response():
             filelist = [
                 "Blast/mock_wait.html",  # This mimics the 'wait' page
-                "Blast/xml_qblast_create_view.xml"
+                "Blast/xml_qblast_create_view.xml",
             ]
-            return (BytesIO(open(a, "rb").read()) for a in filelist*2)
+            return (BytesIO(open(a, "rb").read()) for a in filelist * 2)
 
         with mock.patch.object(NCBIWWW, "urlopen", side_effect=_mock_response()):
             my_search = NCBIWWW.qblast("blastp", "nr", my_seq, **kwargs)
@@ -423,7 +423,9 @@ class TestQblast(unittest.TestCase):
                 with open("Blast/xml_qblast_create_view.xml", "rt") as handle:
                     return StringIO(handle.read())
 
-            with mock.patch.object(NCBIWWW, "_sanitize_qblast_xml", side_effect=_mock_response):
+            with mock.patch.object(
+                NCBIWWW, "_sanitize_qblast_xml", side_effect=_mock_response
+            ):
                 my_search = NCBIWWW.qblast("blastp", "nr", my_seq, **kwargs)
                 self.assertRaisesRegex(
                     ValueError,
