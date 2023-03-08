@@ -2839,11 +2839,11 @@ Internally, the first step when performing an alignment is to replace the two se
 
 %doctest . lib:numpy
 \begin{minted}{pycon}
->>> import numpy
+>>> import numpy as np
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
->>> s1 = numpy.array([2, 10, 10, 13], numpy.int32)
->>> s2 = numpy.array([2, 10, 13], numpy.int32)
+>>> s1 = np.array([2, 10, 10, 13], numpy.int32)
+>>> s2 = np.array([2, 10, 13], numpy.int32)
 >>> aligner.match = +6
 >>> aligner.mismatch = -1
 >>> alignments = aligner.align(s1, s2)
