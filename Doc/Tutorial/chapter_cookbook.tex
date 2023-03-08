@@ -1673,7 +1673,7 @@ Summing over rows or columns gives the relative frequency of occurrence of
 each residue:
 %cont-doctest
 \begin{minted}{pycon}
->>> residue_frequencies = numpy.sum(observed_frequencies, 0)
+>>> residue_frequencies = np.sum(observed_frequencies, 0)
 >>> print(residue_frequencies.format("%.4f"))
 D 0.2015
 E 0.2743
