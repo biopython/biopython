@@ -316,7 +316,7 @@ def _sanitize_qblast_xml(xml_data):
     """
     # Code contributed by Joao Rodrigues (joao.rodrigues@schrodinger.com)
     #
-    with tempfile.NamedTemporaryFile(mode="wb", dir=os.curdir) as xmlfile:
+    with tempfile.NamedTemporaryFile(mode="wb") as xmlfile:
         for line in xml_data:
             _line = line.strip()
             if _line == b"CREATE_VIEW" or not _line:
