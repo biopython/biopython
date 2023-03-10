@@ -25,7 +25,7 @@ from itertools import chain
 import copy
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -158,7 +158,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         else:  # mapped to reverse strand
             flag = 16
             query = reverse_complement(query, inplace=False)
-            coordinates = numpy.array(coordinates)
+            coordinates = np.array(coordinates)
             coordinates[:, 1] = qSize - coordinates[:, 1]
             hard_clip_left, hard_clip_right = hard_clip_right, hard_clip_left
         try:
@@ -338,11 +338,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 elif isinstance(value, bytes):
                     datatype = "H"
                     value = "".join(map(str, value))
-                elif isinstance(value, numpy.array):
+                elif isinstance(value, np.array):
                     datatype = "B"
-                    if numpy.issubdtype(value.dtype, numpy.integer):
+                    if np.issubdtype(value.dtype, np.integer):
                         pass
-                    elif numpy.issubdtype(value.dtype, float):
+                    elif np.issubdtype(value.dtype, float):
                         pass
                     else:
                         raise ValueError(
@@ -501,7 +501,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                             raise ValueError(
                                 f"Unknown number type '{letter}' in tag '{field}'"
                             )
-                        value = numpy.array(value, dtype)
+                        value = np.array(value, dtype)
                     annotations[tag] = value
             if flag & 0x10:
                 strand = "-"
@@ -694,7 +694,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     index += size
                 target.seq = Seq(data, length=length)
             if coordinates is not None:
-                coordinates = numpy.array(coordinates).transpose()
+                coordinates = np.array(coordinates).transpose()
                 if strand == "-":
                     coordinates[1, :] = query_pos - coordinates[1, :]
             if query == "*":
