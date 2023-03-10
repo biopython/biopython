@@ -14,7 +14,8 @@ value decomposition, which is used in the algorithm.
 
 
 try:
-    from numpy import dot, transpose, sqrt
+    # from numpy import np.dot, np.transpose, np.sqrt
+    import numpy as np
     from numpy.linalg import svd, det
 except ImportError:
     from Bio import MissingPythonDependencyError
@@ -116,7 +117,7 @@ class SVDSuperimposer:
     def _rms(self, coords1, coords2):
         """Return rms deviations between coords1 and coords2 (PRIVATE)."""
         diff = coords1 - coords2
-        return sqrt(sum(sum(diff * diff)) / coords1.shape[0])
+        return np.sqrt(sum(sum(diff * diff)) / coords1.shape[0])
 
     # Public methods
 
@@ -154,14 +155,14 @@ class SVDSuperimposer:
         coords = coords - av1
         reference_coords = reference_coords - av2
         # correlation matrix
-        a = dot(transpose(coords), reference_coords)
+        a = np.dot(np.transpose(coords), reference_coords)
         u, d, vt = svd(a)
-        self.rot = transpose(dot(transpose(vt), transpose(u)))
+        self.rot = np.transpose(np.dot(np.transpose(vt), np.transpose(u)))
         # check if we have found a reflection
         if det(self.rot) < 0:
             vt[2] = -vt[2]
-            self.rot = transpose(dot(transpose(vt), transpose(u)))
-        self.tran = av2 - dot(av1, self.rot)
+            self.rot = np.transpose(np.dot(np.transpose(vt), np.transpose(u)))
+        self.tran = av2 - np.dot(av1, self.rot)
 
     def get_transformed(self):
         """Get the transformed coordinate set."""
@@ -170,7 +171,7 @@ class SVDSuperimposer:
         if self.rot is None:
             raise Exception("Nothing superimposed yet.")
         if self.transformed_coords is None:
-            self.transformed_coords = dot(self.coords, self.rot) + self.tran
+            self.transformed_coords = np.dot(self.coords, self.rot) + self.tran
         return self.transformed_coords
 
     def get_rotran(self):

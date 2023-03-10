@@ -11,12 +11,12 @@ from datetime import date
 from io import StringIO
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install NumPy to build proteins from internal coordinates."
+        "Install numpy to build proteins from internal coordinates."
     )
 
 from Bio.File import as_handle
@@ -738,7 +738,7 @@ def read_PIC(
                                 line,
                             )
                         return None
-                    coord = numpy.array(
+                    coord = np.array(
                         (
                             float(m.group("x")),
                             float(m.group("y")),

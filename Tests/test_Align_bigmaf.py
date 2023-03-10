@@ -10,7 +10,7 @@ from io import StringIO
 
 from Bio import Align
 
-import numpy
+import numpy as np
 
 
 class TestAlign_reading(unittest.TestCase):
@@ -42,11 +42,11 @@ table bedMaf
         self.assertEqual(len(alignments), 1)
         alignment = next(alignments)
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
+np.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
               'T', 'T', 'T', 'T', 'T', 'A', 'A', 'A', 'T', 'A', 'T', 'G', 'G',
               'T', 'T', 'T', 'G', 'C', 'T', 'T', 'T', 'A', 'T', 'G', 'G', 'C',
               'T', 'A', 'G', 'A', 'A', 'C', 'A', 'C', 'A', 'C', 'C', 'G', 'A',
@@ -123,11 +123,11 @@ oryCun1.s     11207 TGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT   11251
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[3009319, 3009392, 3009392, 3009481],
+                np.array([[3009319, 3009392, 3009392, 3009481],
                              [  11087,   11160,   11162,   11251],
                             ])
                 # fmt: on
@@ -209,21 +209,21 @@ oryCun1.s     11207 TGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT   11251
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-                numpy.array([[3009319, 3009392, 3009392, 3009481],
+                np.array([[3009319, 3009392, 3009392, 3009481],
                              [  11087,   11160,   11162,   11251],
                             ])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
+np.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
               'T', 'T', 'T', 'T', 'T', 'A', 'A', 'A', 'T', 'A', 'T', 'G', 'G',
               'T', 'T', 'T', 'G', 'C', 'T', 'T', 'T', 'A', 'T', 'G', 'G', 'C',
               'T', 'A', 'G', 'A', 'A', 'C', 'A', 'C', 'A', 'C', 'C', 'G', 'A',
@@ -357,9 +357,9 @@ hg18.chr6 155039139 GGCCTCCAACGCCTAACATGGTTGAAAAGGCCATGGACTTGTGTTC 155039093
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3012076,   3012116,   3012116,   3012141,   3012141,   3012183,
                 3012183,   3012211,   3012211,   3012231,   3012235,   3012286,
@@ -495,9 +495,9 @@ otoGar1.s    178845 GGGAAGC    178838
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3012441,   3012464,   3012466,   3012497,   3012508,   3012508,
                 3012520,   3012530,   3012539,   3012540,   3012566],
@@ -515,11 +515,11 @@ otoGar1.s    178845 GGGAAGC    178838
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'G', 'G', 'G', 'T', 'C', 'C', 'C', 'C', 'T', 'T', 'G', 'G',
+np.array([['T', 'G', 'G', 'G', 'T', 'C', 'C', 'C', 'C', 'T', 'T', 'G', 'G',
               'C', 'A', 'C', 'A', 'T', 'C', 'C', 'A', 'G', 'A', 'T', 'C', 'T',
               'C', 'C', 'C', 'C', 'A', 'G', 'T', 'T', 'A', 'A', 'C', 'C', 'T',
               'G', 'T', 'C', 'C', 'T', 'G', 'C', 'T', 'T', 'A', 'G', 'A', 'C',
@@ -708,9 +708,9 @@ cavPor2.s     39417 --------------------------------------     39417
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3012566,   3012566,   3012587,   3012587,   3012626,   3012627,
                 3012675,   3012676,   3012695,   3012695,   3012695,   3012695,
@@ -898,9 +898,9 @@ echTel1.s     87661
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3012828,   3012833,   3012902,   3012903,   3012904,   3012908,
                 3012911,   3012915,   3012915,   3012915,   3012921,   3012922,
@@ -1100,9 +1100,9 @@ tupBel1.s    331078 --------------    331078
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3012996,   3013014,   3013014,   3013014,   3013028,   3013028,
                 3013028,   3013031,   3013031,   3013034,   3013036,   3013036,
@@ -1221,14 +1221,14 @@ mm9.chr10   3013398 AAAATAAAAAACCCAACCTAAACCAAATAACAAAACACT 3013437
 """,
         )
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3013218, 3013437]]))
+            np.array_equal(alignment.coordinates, np.array([[3013218, 3013437]]))
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['a', 'g', 'c', 'c', 'a', 'g', 'g', 'c', 'g', 't', 'g', 'g', 't',
+np.array([['a', 'g', 'c', 'c', 'a', 'g', 'g', 'c', 'g', 't', 'g', 'g', 't',
               'g', 'g', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'c', 't', 't', 't',
               'a', 'c', 't', 'c', 'c', 'c', 'a', 'g', 'c', 'a', 't', 't', 't',
               'g', 'g', 'g', 'g', 'g', 'g', 'c', 'a', 'g', 'a', 'g', 'g', 'c',
@@ -1347,9 +1347,9 @@ ponAbe2.c 158049029 TCCTATTTTATGGGTGTATCGTTTTGCATTCATGGGCTGTTTGATA 158048983
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3013437,   3013458,   3013509,   3013545,   3013603],
              [157528493, 157528472, 157528421, 157528421, 157528363],
@@ -1361,11 +1361,11 @@ ponAbe2.c 158049029 TCCTATTTTATGGGTGTATCGTTTTGCATTCATGGGCTGTTTGATA 158048983
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'C', 'C', 'A', 'A', 'A', 'A', 'T', 'G', 'G', 'T', 'T', 'A',
+np.array([['T', 'C', 'C', 'A', 'A', 'A', 'A', 'T', 'G', 'G', 'T', 'T', 'A',
               'G', 'C', 'T', 'A', 'T', 'G', 'C', 'C', 'C', 'A', 'A', 'C', 'T',
               'C', 'C', 'T', 'T', 'T', 'C', 'A', 'C', 'T', 'C', 'C', 'A', 'A',
               'G', 'A', 'A', 'A', 'A', 'T', 'A', 'T', 'C', 'C', 'T', 'A', 'A',
@@ -1511,7 +1511,7 @@ mm9.chr10   3014623 TGTTTGTTTTGGTCAATGCAG 3014644
 """,
         )
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3013603, 3014644]]))
+            np.array_equal(alignment.coordinates, np.array([[3013603, 3014644]]))
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 19159)
@@ -1621,9 +1621,9 @@ loxAfr1.s      9407 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC      9373
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3014644,   3014652,   3014652,   3014653,   3014664,   3014665,
                 3014684,   3014685,   3014689],
@@ -1641,11 +1641,11 @@ loxAfr1.s      9407 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC      9373
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'C', 'T', 'G', 'T', 'A', 'C', 'C', '-', '-', '-', 'C', 'T',
+np.array([['C', 'C', 'T', 'G', 'T', 'A', 'C', 'C', '-', '-', '-', 'C', 'T',
               'T', 'T', 'G', 'G', 'T', 'G', 'A', 'G', 'A', 'A', 'T', 'T', 'T',
               'T', 'T', 'G', 'T', 'T', 'T', 'C', 'A', 'G', 'T', 'G', 'T', 'T',
               'A', 'A', 'A', 'A', 'G', 'T', 'T', 'T', 'G'],
@@ -1795,9 +1795,9 @@ loxAfr1.s      9319
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3014689,   3014702,   3014703,   3014729,   3014729,   3014742],
              [155029160, 155029147, 155029146, 155029120, 155029120, 155029107],
@@ -1811,11 +1811,11 @@ loxAfr1.s      9319
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'G', 'G', 'A', 'G', 'C', 'A', 'T', 'A', 'A', 'A', 'A', 'C',
+np.array([['G', 'G', 'G', 'A', 'G', 'C', 'A', 'T', 'A', 'A', 'A', 'A', 'C',
               'T', 'C', 'T', 'A', 'A', 'A', 'T', 'C', 'T', 'G', 'C', 'T', 'A',
               'A', 'A', 'T', 'G', 'T', 'C', 'T', 'T', 'G', 'T', 'C', 'C', 'C',
               'T', '-', 'T', 'T', 'G', 'G', 'A', 'A', 'A', 'G', 'A', 'G', 'T',
@@ -1937,9 +1937,9 @@ loxAfr1.s      9317 AGGCTTA-----TG----CCACCCCCCACCCCCACA    9290
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[3014742, 3014749, 3014754, 3014756, 3014760, 3014775, 3014778],
              [   6283,    6290,    6290,    6292,    6296,    6311,    6311],
@@ -1951,11 +1951,11 @@ loxAfr1.s      9317 AGGCTTA-----TG----CCACCCCCCACCCCCACA    9290
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'A', 'G', 'T', 'T', 'C', 'C', 'C', 'T', 'C', 'C', 'A', 'T',
+np.array([['A', 'A', 'G', 'T', 'T', 'C', 'C', 'C', 'T', 'C', 'C', 'A', 'T',
               'A', 'A', 'T', 'T', 'C', 'C', 'T', 'T', 'C', 'C', 'T', 'C', 'C',
               'C', 'A', 'C', 'C', 'C', 'C', 'C', 'A', 'C', 'A'],
              ['A', 'A', 'A', 'T', 'G', 'T', 'A', '-', '-', '-', '-', '-', 'T',
@@ -2035,14 +2035,14 @@ mm9.chr10   3014778 TCCCATGTCCACCCTGA 3014795
 """,
         )
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3014778, 3014795]]))
+            np.array_equal(alignment.coordinates, np.array([[3014778, 3014795]]))
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'C', 'C', 'C', 'A', 'T', 'G', 'T', 'C', 'C', 'A', 'C', 'C',
+np.array([['T', 'C', 'C', 'C', 'A', 'T', 'G', 'T', 'C', 'C', 'A', 'C', 'C',
               'C', 'T', 'G', 'A']], dtype='U')
                 # fmt: on
             )
@@ -2220,9 +2220,9 @@ loxAfr1.s      9207 CTCt      9203
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3014795,   3014798,   3014799,   3014814,   3014815,   3014815,
                 3014815,   3014815,   3014815,   3014821,   3014822,   3014822,
@@ -2257,11 +2257,11 @@ loxAfr1.s      9207 CTCt      9203
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'T', 'T', 'T', 'C', 'A', 'G', 'G', 'G', 'G', 'C', 'A', 'G',
+np.array([['G', 'T', 'T', 'T', 'C', 'A', 'G', 'G', 'G', 'G', 'C', 'A', 'G',
               'C', 'T', 'C', 'G', 'C', 'T', 'G', '-', '-', '-', '-', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'T', 'A',
               'G', 'C', 'A', 'G', '-', 'C', 'T', 'A', 'A', 'G', 'G', 'C', 'A',
@@ -2536,9 +2536,9 @@ ornAna1.c  40046122 -------------  40046122
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3014842,   3014843,   3014843,   3014843,   3014849,   3014849,
                 3014849,   3014851,   3014852,   3014874,   3014874,   3014875,
@@ -2770,9 +2770,9 @@ otoGar1.s    174889 ------------    174889
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3015028,   3015029,   3015035,   3015035,   3015035,   3015035,
                 3015035,   3015036,   3015040,   3015041,   3015066,   3015075,
@@ -2801,11 +2801,11 @@ otoGar1.s    174889 ------------    174889
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['c', 'c', 'a', 't', 't', 't', 't', '-', '-', '-', '-', '-', '-',
+np.array([['c', 'c', 'a', 't', 't', 't', 't', '-', '-', '-', '-', '-', '-',
               '-', '-', '-', '-', 't', 't', 'a', 't', 't', 'a', 'g', 'g', 't',
               'a', 't', 't', 't', 'a', 'g', 'c', 't', 'c', 'a', 't', 't', 't',
               'a', 'c', 'a', 't', 't', 't', 'c', 'c', 'a', 'a', 't', 'g', 'c',
@@ -3009,7 +3009,7 @@ mm9.chr10   3017606 ctactggtttgctgtagattgcttttatcatgtttaggtatgggTGTTCTCG 3017658
 """,
         )
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3015086, 3017658]]))
+            np.array_equal(alignment.coordinates, np.array([[3015086, 3017658]]))
         )
         alignment = next(alignments)
         self.assertAlmostEqual(alignment.score, 12170)
@@ -3112,9 +3112,9 @@ panTro2.c 157518516 TTGCCTTTTCCCAAATCTCCACTTCCACC 157518487
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3017658,   3017681,   3017681,   3017699,   3017705,   3017743],
              [155028517, 155028494, 155028490, 155028472, 155028472, 155028434],
@@ -3125,11 +3125,11 @@ panTro2.c 157518516 TTGCCTTTTCCCAAATCTCCACTTCCACC 157518487
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'T', 'T', 'T', 'T', 'A', 'T', 'T', 'T', 'G', 'C', 'A', 'G',
+np.array([['T', 'T', 'T', 'T', 'T', 'A', 'T', 'T', 'T', 'G', 'C', 'A', 'G',
               'G', 'T', 'T', 'T', 'C', 'T', 'T', 'T', 'A', 'C', '-', '-', '-',
               '-', 'A', 'G', 'T', 'T', 'C', 'T', 'C', 'T', 'T', 'T', 'C', 'A',
               'T', 'T', 'C', 'T', 'T', 'C', 'T', 'C', 'C', 'T', 'C', 'T', 'T',
@@ -3243,14 +3243,14 @@ mm9.chr10   3018161
 """,
         )
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3017743, 3018161]]))
+            np.array_equal(alignment.coordinates, np.array([[3017743, 3018161]]))
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'C', 'C', 'A', 'C', 'A', 'G', 'A', 'C', 'C', 'T', 'T', 'C',
+np.array([['A', 'C', 'C', 'A', 'C', 'A', 'G', 'A', 'C', 'C', 'T', 'T', 'C',
               'T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'C', 'C', 'A', 'A', 'A',
               'G', 'G', 'A', 'C', 'G', 'C', 'A', 'A', 'A', 'T', 'T', 'A', 'T',
               'G', 'T', 'A', 'T', 'C', 'C', 'A', 'C', 'T', 'T', 't', 'a', 'g',
@@ -3397,9 +3397,9 @@ ponAbe2.c 158040566 TTTTATTTTATTGA 158040552
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3018161,   3018172,   3018174,   3018176,   3018176,   3018230],
              [157518434, 157518423, 157518423, 157518423, 157518423, 157518369],
@@ -3411,11 +3411,11 @@ ponAbe2.c 158040566 TTTTATTTTATTGA 158040552
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'T', 'C', 'C', 'A', 'C', 'A', 'A', 'A', 'A', 'G', 'A', 'G',
+np.array([['A', 'T', 'C', 'C', 'A', 'C', 'A', 'A', 'A', 'A', 'G', 'A', 'G',
               'A', 'C', '-', '-', '-', '-', '-', 'A', 'A', 'A', 'G', 'A', 'A',
               'G', 'A', 'A', 'A', 'A', 'C', 'C', 'A', 'A', 'A', 'A', 'G', 'A',
               'A', 'A', 'A', 'G', 'A', 'T', 'T', 'G', 'T', 'A', 'G', 'C', 'T',
@@ -3547,9 +3547,9 @@ panTro2.c 157518285 ttaggtatatg 157518274
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3018230,   3018234,   3018234,   3018249,   3018270,   3018289,
                 3018294,   3018313,   3018323,   3018349,   3018349,   3018359],
@@ -3563,11 +3563,11 @@ panTro2.c 157518285 ttaggtatatg 157518274
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'G', 'G', 'A', '-', 'C', 'A', 'A', 'A', 'A', 'T', 'A', 'A',
+np.array([['A', 'G', 'G', 'A', '-', 'C', 'A', 'A', 'A', 'A', 'T', 'A', 'A',
               'T', 'A', 'C', 'A', 'G', 'A', 't', 't', 't', 't', 't', 't', 't',
               't', 't', 't', 't', 't', 't', 't', 't', 't', 't', 't', 't', 't',
               't', 'G', 'C', 'A', 'G', 'T', 'A', 'C', 'T', 'G', 'G', 'A', 'A',
@@ -3734,9 +3734,9 @@ ponAbe2.c 158040338 ATCCTTTTCTTT-- 158040326
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3018359,   3018360,   3018361,   3018361,   3018393,   3018393,
                 3018405,   3018405,   3018447,   3018447,   3018447,   3018464,
@@ -3759,11 +3759,11 @@ ponAbe2.c 158040338 ATCCTTTTCTTT-- 158040326
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'T', '-', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A',
+np.array([['T', 'T', '-', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A',
               'T', 'A', 'C', 'A', 'T', 'G', 'C', 'A', 'T', 'T', 'C', 'A', 'T',
               'G', 'T', 'C', 'T', 'C', 'A', 'T', 'A', 'A', '-', 'T', 'A', 'A',
               'T', 'T', 'A', 'T', 'T', 'A', 'A', 'C', 'A', '-', 'T', 'T', 'G',
@@ -3900,14 +3900,14 @@ mm9.chr10   3018602 agaggaggaaaggaggagaggggaggagaggaggggagGTAT 3018644
 """,
         )
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3018482, 3018644]]))
+            np.array_equal(alignment.coordinates, np.array([[3018482, 3018644]]))
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['t', 'c', 't', 't', 'c', 'a', 't', 'c', 't', 'c', 'c', 't', 'c',
+np.array([['t', 'c', 't', 't', 'c', 'a', 't', 'c', 't', 'c', 'c', 't', 'c',
               't', 't', 't', 't', 'c', 'c', 't', 'c', 'c', 't', 't', 't', 't',
               't', 't', 't', 't', 't', 't', 'c', 't', 'c', 'a', 't', 't', 't',
               'c', 't', 'c', 't', 't', 't', 'c', 't', 'c', 't', 't', 't', 'c',
@@ -4030,9 +4030,9 @@ canFam2.c  47545665 TATGAAATATAAAATTTCCCTATTGAAGAATTT 47545632
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[ 3018644,  3018671,  3018676,  3018687,  3018689,  3018697,
                3018697,  3018716,  3018716,  3018729,  3018731,  3018739,
@@ -4046,11 +4046,11 @@ canFam2.c  47545665 TATGAAATATAAAATTTCCCTATTGAAGAATTT 47545632
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'G', 'G', 'G', 'T', 'A', 'G', 'G', 'C', 'C', 'A', 'A', 'G',
+np.array([['A', 'G', 'G', 'G', 'T', 'A', 'G', 'G', 'C', 'C', 'A', 'A', 'G',
               'T', 'G', 'C', 'C', 'T', 'T', 'G', 'G', 'G', 'A', 'A', 'G', 'T',
               'A', 'G', 'T', 'T', 'G', 'T', 'T', 'G', 'G', 'T', 'A', 'G', 'A',
               'C', 'T', 'G', 'A', 'A', 'A', 'G', 'T', 'G', 'T', 'G', 'T', 'T',
@@ -4190,9 +4190,9 @@ canFam2.c  47545353
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[ 3018822,  3018862,  3018863,  3018866,  3018866,  3018883,
                3018883,  3018913,  3018913,  3018932],
@@ -4204,11 +4204,11 @@ canFam2.c  47545353
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'T', 'G', 'C', 'C', 'T', 'T', 'C', 'C', 'A', 'T', 'T', 'A',
+np.array([['C', 'T', 'G', 'C', 'C', 'T', 'T', 'C', 'C', 'A', 'T', 'T', 'A',
               'C', 'G', 'A', 'T', 'T', 'T', 'A', 'C', 'T', 'G', 'A', 'T', 'C',
               'A', 'C', 'T', 'T', 'A', 'C', 'A', 'A', 'C', 'C', 'C', 'T', 'C',
               'C', 'C', 'A', 'C', 'A', '-', '-', '-', '-', 'G', 'A', 'A', 'G',
@@ -4322,14 +4322,14 @@ mm9.chr10   3019232 tggcaccactcctggtccaagaatatacaaaccatgaca 3019271
 """,
         )
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3018932, 3019271]]))
+            np.array_equal(alignment.coordinates, np.array([[3018932, 3019271]]))
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['g', 't', 'c', 't', 'g', 'a', 'g', 't', 't', 'a', 'g', 'g', 'g',
+np.array([['g', 't', 'c', 't', 'g', 'a', 'g', 't', 't', 'a', 'g', 'g', 'g',
               't', 't', 't', 't', 'a', 'c', 't', 'g', 'c', 't', 'g', 't', 'g',
               'a', 'a', 'c', 'a', 'g', 'a', 'c', 'a', 'c', 'c', 'a', 't', 'g',
               'a', 'c', 'c', 'a', 'a', 'g', 'g', 'c', 'a', 't', 'g', 't', 'c',
@@ -4462,9 +4462,9 @@ canFam2.c  47545247
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[ 3019271,  3019276,  3019277,  3019282,  3019282,  3019293,
                3019293,  3019308,  3019310,  3019324,  3019334,  3019377],
@@ -4476,11 +4476,11 @@ canFam2.c  47545247
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'A', 'G', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', '-', '-',
+np.array([['G', 'A', 'G', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'G', 'G',
               'C', 'G', 'C', 'T', 'C', 'A', 'C', 'G', '-', 'T', 'G', 'A', 'G',
               'G', 'C', 'C', 'A', 'G', 'G', 'A', 'G', 'T', 'A', 'A', 'A', 'T',
@@ -4620,9 +4620,9 @@ canFam2.c  47545187 tgacctagaatctcagaggatg---ggactc 47545159
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[ 3019377,  3019402,  3019402,  3019434,  3019434,  3019443,
                3019443,  3019456,  3019459,  3019465],
@@ -4636,11 +4636,11 @@ canFam2.c  47545187 tgacctagaatctcagaggatg---ggactc 47545159
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'C', 'C', 'C', 'A', 'G', 'C', 'A', 'T', 'T', 'C', 'T', 'G',
+np.array([['C', 'C', 'C', 'C', 'A', 'G', 'C', 'A', 'T', 'T', 'C', 'T', 'G',
               'G', 'C', 'A', 'G', 'A', 'C', 'A', 'C', 'A', 'G', 'T', 'G', '-',
               'A', 'A', 'A', 'A', 'G', 'A', 'G', 'A', 'C', 'A', 'G', 'A', 'T',
               'G', 'G', 'T', 'C', 'A', 'C', 'T', 'A', 'A', 'T', 'A', 'A', 'A',
@@ -4803,9 +4803,9 @@ felCat3.s     46757 ---ACGTGTTTTTAAAAATAG-TTTTCATGTTGTTCTGATGTGTGTT     46714
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3019465,   3019468,   3019472,   3019486,   3019487,   3019512],
              [    10128,     10131,     10135,     10149,     10150,     10175],
@@ -4819,11 +4819,11 @@ felCat3.s     46757 ---ACGTGTTTTTAAAAATAG-TTTTCATGTTGTTCTGATGTGTGTT     46714
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'A', 'G', 'A', 'T', 'A', 'G', 'A', 'T', 'A', 'T', 'T', 'T',
+np.array([['A', 'A', 'G', 'A', 'T', 'A', 'G', 'A', 'T', 'A', 'T', 'T', 'T',
               'A', 'G', 'A', 'A', 'G', 'T', 'A', 'G', 'C', 'T', 'T', 'T', 'T',
               'T', 'A', 'T', 'G', 'T', 'T', 'T', 'T', 'T', 'C', 'T', 'G', 'A',
               'T', 'G', 'T', 'G', 'T', 'G', 'T', 'T'],
@@ -4993,9 +4993,9 @@ canFam2.c  47545018
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3019512,   3019514,   3019536,   3019536,   3019536,   3019536,
                 3019545,   3019545,   3019555,   3019555,   3019555,   3019582,
@@ -5018,11 +5018,11 @@ canFam2.c  47545018
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'G', 'C', 'A', 'T', 'C', 'A', 'T', 'T', 'A', 'A', 'G', 'A',
+np.array([['T', 'G', 'C', 'A', 'T', 'C', 'A', 'T', 'T', 'A', 'A', 'G', 'A',
               'C', 'T', 'A', 'G', 'A', 'G', 'T', 'T', 'C', 'C', 'T', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
               'T', 'T', 'C', 'T', 'G', 'T', 'C', 'T', 'T', '-', '-', '-', 'T',
@@ -5164,14 +5164,14 @@ mm9.chr10   3019664 actcactttgtagaccagactggccttgaactcagaaa 3019702
 """,
         )
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3019604, 3019702]]))
+            np.array_equal(alignment.coordinates, np.array([[3019604, 3019702]]))
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['t', 't', 't', 'g', 'g', 't', 't', 't', 'g', 'g', 't', 't', 't',
+np.array([['t', 't', 't', 'g', 'g', 't', 't', 't', 'g', 'g', 't', 't', 't',
               'g', 'g', 't', 't', 't', 't', 't', 't', 'c', 'a', 'a', 'g', 'a',
               'c', 'a', 'g', 'g', 'g', 't', 't', 't', 'c', 't', 't', 't', 'g',
               't', 'a', 't', 'a', 'g', 't', 'c', 'c', 't', 'a', 'g', 'c', 't',
@@ -5287,21 +5287,21 @@ felCat3.s     46461 TTCTTAAAGGTTTA   46447
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-                numpy.array([[3019702, 3019725, 3019725, 3019744],
+                np.array([[3019702, 3019725, 3019725, 3019744],
                              [  46521,   46498,   46466,   46447],
                             ])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['t', 'c', 't', 'g', 'c', 'c', 't', 'g', 'c', 'c', 't', 'c', 't',
+np.array([['t', 'c', 't', 'g', 'c', 'c', 't', 'g', 'c', 'c', 't', 'c', 't',
               'g', 'c', 'c', 't', 'c', 'c', 'c', 'a', 'a', 'g', '-', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
@@ -5476,9 +5476,9 @@ felCat3.s     46387 GA     46385
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3019744,   3019744,   3019747,   3019757,   3019763,   3019763,
                 3019763,   3019763,   3019764,   3019766,   3019773,   3019777],
@@ -5500,11 +5500,11 @@ felCat3.s     46387 GA     46385
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+np.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
               '-', '-', '-', '-', 'c', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c',
               't', 'g', 'c', 'c', 'c', 't', 'g', 'c', 'C', 'T', '-', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'A', 'A', 'A',
@@ -5773,9 +5773,9 @@ canFam2.c  47544870 TATTGTTTCCCTTACTTCTAAGAGttaaataatttaaaatttaat  47544825
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3019777,   3019783,   3019786,   3019787,   3019787,   3019789,
                 3019790,   3019793,   3019797,   3019797,   3019802,   3019806,
@@ -5969,14 +5969,14 @@ mm9.chr10   3020680 gaacatttgaaatgtaaataaataaaataataaaaaa 3020717
 """,
         )
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3019960, 3020717]]))
+            np.array_equal(alignment.coordinates, np.array([[3019960, 3020717]]))
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['a', 'c', 't', 'a', 'g', 'g', 'g', 'a', 't', 'g', 'g', 'g', 'a',
+np.array([['a', 'c', 't', 'a', 'g', 'g', 'g', 'a', 't', 'g', 'g', 'g', 'a',
               'g', 'a', 'g', 'g', 'c', 't', 'c', 'c', 'c', 'a', 'g', 'a', 'a',
               'c', 'c', 'c', 'a', 'g', 't', 'a', 'a', 't', 'g', 'a', 't', 'g',
               'a', 'c', 'a', 't', 't', 'a', 'a', 'g', 'a', 'a', 'a', 't', 'a',
@@ -6154,9 +6154,9 @@ hg18.chr6 155025365 ----AAAAAT---TTTAAATATACTAGAGGGGTCCATGAATTTTA 155025327
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3020717,   3020721,   3020727,   3020730,   3020733,   3020742,
                 3020742,   3020761],
@@ -6172,11 +6172,11 @@ hg18.chr6 155025365 ----AAAAAT---TTTAAATATACTAGAGGGGTCCATGAATTTTA 155025327
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'G', 'T', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A',
+np.array([['T', 'G', 'T', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A',
               'T', 'A', 'A', 'A', 'G', 'A', 'T', 'A', 'T', 'A', 'C', 'T', '-',
               'G', 'A', 'G', 'G', 'A', 'G', 'C', 'C', 'C', 'A', 'T', 'G', 'A',
               'A', 'T', 'T', 'T', 'T', 'A'],
@@ -6292,14 +6292,14 @@ mm9.chr10   3020881 gtgctgagatcatacctctgcaccatcctgcccACCT 3020918
 """,
         )
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[3020761, 3020918]]))
+            np.array_equal(alignment.coordinates, np.array([[3020761, 3020918]]))
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'A', 'T', 'A', 'T', 'A', 'T', 'G', 'C', 'T', 'A', 'T', 'C',
+np.array([['T', 'A', 'T', 'A', 'T', 'A', 'T', 'G', 'C', 'T', 'A', 'T', 'C',
               'C', 'G', 'T', 'G', 'T', 'G', 'C', 'T', 'G', 'T', 'G', 'A', 'T',
               'T', 'T', 'T', 'T', 'G', 'T', 'T', 'T', 'T', 'A', 'A', 'A', 'T',
               'G', 'T', 'T', 'A', 'T', 'T', 'T', 'T', 'A', 'T', 'G', 'T', 'A',
@@ -6510,9 +6510,9 @@ ponAbe2.c 158037510 AGCTTTTAAGGAAAAACGTGTTTGACTTATTAATTATTTAGGACAA 158037464
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3020918,   3020919,   3020921,   3020938,   3020938,   3020938,
                 3020938,   3020938,   3020941,   3020959,   3020971,   3020972,
@@ -6547,11 +6547,11 @@ ponAbe2.c 158037510 AGCTTTTAAGGAAAAACGTGTTTGACTTATTAATTATTTAGGACAA 158037464
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'A', 'G', 'G', 'T', 'T', 'T', 'G', 'T', 'G', 'A', 'C', 'T',
+np.array([['G', 'A', 'G', 'G', 'T', 'T', 'T', 'G', 'T', 'G', 'A', 'C', 'T',
               'T', 'T', 'T', 'A', 'A', 'T', 'A', '-', '-', '-', '-', '-', '-',
               '-', '-', '-', '-', 'C', 'T', 'G', 'A', 'T', 'T', 'G', 'T', 'T',
               'A', 'T', 'C', 'T', 'A', 'A', 'C', 'A', 'T', 'C', 'A', 'C', 'A',
@@ -6809,9 +6809,9 @@ dasNov1.s      7354 ACATCAGTGAAATCATTCCGACTCGTATGACTGAGCGATG      7314
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 # fmt: off
-                alignment.coordinates, numpy.array([[  3021014,   3021054],
+                alignment.coordinates, np.array([[  3021014,   3021054],
                                                     [     4161,      4121],
                                                     [   171328,    171288],
                                                     [    10582,     10622],
@@ -6826,11 +6826,11 @@ dasNov1.s      7354 ACATCAGTGAAATCATTCCGACTCGTATGACTGAGCGATG      7314
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'C', 'C', 'T', 'T', 'G', 'G', 'T', 'G', 'A', 'C', 'G', 'C',
+np.array([['A', 'C', 'C', 'T', 'T', 'G', 'G', 'T', 'G', 'A', 'C', 'G', 'C',
               'C', 'A', 'C', 'T', 'G', 'G', 'A', 'T', 'T', 'T', 'T', 'G', 'T',
               'A', 'T', 'G', 'A', 'C', 'T', 'G', 'A', 'A', 'T', 'A', 'C', 'T',
               'G'],
@@ -7102,9 +7102,9 @@ dasNov1.s      7254 CTATAAGTAT      7244
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021054,   3021072,   3021073,   3021075,   3021083,   3021091,
                 3021091,   3021091,   3021091,   3021100,   3021104],
@@ -7134,11 +7134,11 @@ dasNov1.s      7254 CTATAAGTAT      7244
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'T', 'C', 'A', 'T', 'T', 'T', 'G', 'G', 'G', 'A', 'A', 'C',
+np.array([['C', 'T', 'C', 'A', 'T', 'T', 'T', 'G', 'G', 'G', 'A', 'A', 'C',
               'T', 'T', 'A', 'C', 'A', 'G', 'G', 'T', 'C', 'A', 'G', 'C', 'A',
               'A', 'A', 'G', 'G', 'C', 'T', 'T', 'C', 'C', 'A', 'G', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
@@ -7394,9 +7394,9 @@ echTel1.s     95225 CTGTTAATG--CTCTG------------TTTTATG     95246
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021104,   3021109,   3021113,   3021115,   3021120,   3021120,
                 3021129,   3021136],
@@ -7428,11 +7428,11 @@ echTel1.s     95225 CTGTTAATG--CTCTG------------TTTTATG     95246
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'T', 'G', 'T', 'T', 'A', 'G', 'T', 'G', 'C', 'T', 'G', 'T',
+np.array([['C', 'T', 'G', 'T', 'T', 'A', 'G', 'T', 'G', 'C', 'T', 'G', 'T',
               'T', 'T', 'T', '-', '-', '-', 'A', 'A', 'T', 'G', 'T', 'A', 'C',
               'C', 'T', 'C', 'G', 'C', 'A', 'G', 'T', 'A'],
              ['-', '-', '-', '-', '-', 'A', 'T', 'T', 'A', 'C', 'T', 'T', 'T',
@@ -7734,9 +7734,9 @@ echTel1.s     95296 -------G--     95297
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021136,   3021138,   3021139,   3021152,   3021153,   3021154,
                 3021156,   3021156,   3021158,   3021163,   3021163,   3021165,
@@ -7796,11 +7796,11 @@ echTel1.s     95296 -------G--     95297
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'G', 'G', 'C', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'G', 'T',
+np.array([['A', 'G', 'G', 'C', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'G', 'T',
               'G', 'A', 'T', 'A', 'A', 'G', 'A', '-', '-', '-', '-', '-', '-',
               '-', 'T', 'T', 'G', 'T', 'G', 'T', 'T', '-', '-', '-', '-', '-',
               'T', 'A', 'C', '-', '-', '-', '-', 'T', 'C', 'C', 'C', 'T', 'C',
@@ -8133,9 +8133,9 @@ echTel1.s     95345
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021180,   3021180,   3021180,   3021180,   3021184,   3021184,
                 3021184,   3021195,   3021195,   3021198,   3021199,   3021204],
@@ -8171,11 +8171,11 @@ echTel1.s     95345
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+np.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
               '-', '-', '-', '-', '-', '-', 'T', 'C', 'C', 'C', '-', '-', '-',
               '-', '-', '-', '-', 'A', 'G', 'A', 'G', 'A', 'G', 'T', 'C', 'T',
               'G', 'A', '-', 'T', 'A', 'G', 'G', 'A', 'G', 'G', 'A', 'G'],
@@ -8532,9 +8532,9 @@ cavPor2.s       298 ATGGTTTTGGCCA       285
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021204,   3021205,   3021206,   3021210,   3021218,   3021218,
                 3021233,   3021236,   3021246,   3021246,   3021264,   3021265,
@@ -8895,9 +8895,9 @@ ornAna1.c  40040313 TTCACCTTAGGGGAAATCCTGTCAAGCCATCATTTCCTTCCATATCTTCA  40040263
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021275,   3021308,   3021308,   3021333,   3021334,   3021344,
                 3021357,   3021358,   3021359,   3021369,   3021369,   3021369,
@@ -9228,9 +9228,9 @@ ornAna1.c  40040218 ------------  40040218
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021421,   3021421,   3021424,   3021425,   3021435,   3021435,
                 3021435,   3021435,   3021438,   3021439,   3021440,   3021443,
@@ -9451,9 +9451,9 @@ ornAna1.c  40040173
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021465,   3021469,   3021469,   3021470,   3021473,   3021476,
                 3021477,   3021477,   3021494,   3021494],
@@ -9475,11 +9475,11 @@ ornAna1.c  40040173
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'C', 'C', 'T', '-', '-', 'A', 'C', 'A', 'C', 'T', 'G', 'T',
+np.array([['C', 'C', 'C', 'T', '-', '-', 'A', 'C', 'A', 'C', 'T', 'G', 'T',
               'C', '-', '-', '-', '-', 'A', 'A', 'G', 'T', 'G', 'G', 'G', 'A',
               'G', 'G', 'A', 'G', 'A', 'C', 'A', 'G', 'T', '-', '-', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
@@ -9639,9 +9639,9 @@ ornAna1.c  40040173 TGTTTAAAATG----ATTGCTAGAACTTCTA--CTCACTGGA----  40040137
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     # fmt: off
             [[  3021494,   3021505,   3021505,   3021521,   3021523,   3021532,
                 3021536],
@@ -9661,11 +9661,11 @@ ornAna1.c  40040173 TGTTTAAAATG----ATTGCTAGAACTTCTA--CTCACTGGA----  40040137
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'A', 'C', 'C', '-', '-',
+np.array([['T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'A', 'C', 'C', '-', '-',
               '-', '-', 'A', 'T', 'G', 'C', 'T', 'T', 'A', 'G', 'G', 'A', 'A',
               'T', 'G', 'A', 'T', 'A', 'A', 'A', 'C', 'T', 'C', 'A', 'C', 'T',
               'T', 'A', 'G', 'T', 'G', 't', 't'],
@@ -9782,9 +9782,9 @@ rn3.chr4   81344243 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG 81344283
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     [
                         # fmt: off
         [27578828, 27578829, 27578831, 27578831, 27578850, 27578850, 27578866],
@@ -9798,11 +9798,11 @@ rn3.chr4   81344243 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG 81344283
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
+np.array([['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
               'A', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', 'A', '-', '-', '-',
               'A', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'T', 'A', 'C', 'G',
               'G', 'T', 'G'],
@@ -9859,9 +9859,9 @@ rn3.chr4   81444246 taagga 81444252
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     [
                         # fmt: off
                              [27699739, 27699745],
@@ -9875,11 +9875,11 @@ rn3.chr4   81444246 taagga 81444252
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'A', 'A', 'A', 'G', 'A'],
+np.array([['T', 'A', 'A', 'A', 'G', 'A'],
              ['T', 'A', 'A', 'A', 'G', 'A'],
              ['T', 'A', 'A', 'A', 'G', 'A'],
              ['T', 'A', 'A', 'A', 'G', 'A'],
@@ -9924,9 +9924,9 @@ mm4.chr6   53310102 ACAGCTGAAAATA 53310115
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     [
                         # fmt: off
                     [27707221, 27707234],
@@ -9939,11 +9939,11 @@ mm4.chr6   53310102 ACAGCTGAAAATA 53310115
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
+np.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
              ['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
              ['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
              ['A', 'C', 'A', 'G', 'C', 'T', 'G', 'A', 'A', 'A', 'A', 'T', 'A']],
@@ -10001,11 +10001,11 @@ mm4.chr6   53310102 ACAGCTGAAAATA 53310115
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
+np.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
              ['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
              ['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
              ['A', 'C', 'A', 'G', 'C', 'T', 'G', 'A', 'A', 'A', 'A', 'T', 'A']],

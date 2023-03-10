@@ -26,7 +26,7 @@ zero-based end position. We can therefore manipulate ``start`` and
 ``start + size`` as python list slice boundaries.
 """
 from itertools import chain
-import numpy
+import numpy as np
 
 
 from Bio.Align import Alignment
@@ -361,9 +361,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     "Inconsistent number of target start positions (%d found, expected %d)"
                     % (len(tStarts), blockCount)
                 )
-            qStarts = numpy.array(qStarts)
-            tStarts = numpy.array(tStarts)
-            qBlockSizes = numpy.array(blockSizes)
+            qStarts = np.array(qStarts)
+            tStarts = np.array(tStarts)
+            qBlockSizes = np.array(blockSizes)
             if strand in ("++", "+-"):
                 # protein sequence aligned against translated DNA sequence
                 tBlockSizes = 3 * qBlockSizes
@@ -384,7 +384,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 tPosition += tBlockSize
                 qPosition += qBlockSize
                 coordinates.append([tPosition, qPosition])
-            coordinates = numpy.array(coordinates).transpose()
+            coordinates = np.array(coordinates).transpose()
             qNumInsert = 0
             qBaseInsert = 0
             tNumInsert = 0

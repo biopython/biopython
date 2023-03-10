@@ -11,12 +11,12 @@
 import struct
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.Affy.CelFile"
+        "Install Numpy if you want to use Bio.Affy.CelFile"
     ) from None
 
 
@@ -251,9 +251,9 @@ def _read_v4(f):
     structSize = 10
 
     # We initialize the most important: intensities, stdevs and npixs.
-    record.intensities = numpy.empty(record.NumberCells, dtype=float)
-    record.stdevs = numpy.empty(record.NumberCells, dtype=float)
-    record.npix = numpy.empty(record.NumberCells, dtype=int)
+    record.intensities = np.empty(record.NumberCells, dtype=float)
+    record.stdevs = np.empty(record.NumberCells, dtype=float)
+    record.npix = np.empty(record.NumberCells, dtype=int)
 
     b = f.read(structSize * record.NumberCells)
     for i in range(record.NumberCells):
@@ -293,18 +293,18 @@ def _read_v3(handle):
             section = "HEADER"
         elif line.startswith("[INTENSITY]"):
             section = "INTENSITY"
-            record.intensities = numpy.zeros((record.nrows, record.ncols))
-            record.stdevs = numpy.zeros((record.nrows, record.ncols))
-            record.npix = numpy.zeros((record.nrows, record.ncols), int)
+            record.intensities = np.zeros((record.nrows, record.ncols))
+            record.stdevs = np.zeros((record.nrows, record.ncols))
+            record.npix = np.zeros((record.nrows, record.ncols), int)
         elif line.startswith("[MASKS]"):
             section = "MASKS"
-            record.mask = numpy.zeros((record.nrows, record.ncols), bool)
+            record.mask = np.zeros((record.nrows, record.ncols), bool)
         elif line.startswith("[OUTLIERS]"):
             section = "OUTLIERS"
-            record.outliers = numpy.zeros((record.nrows, record.ncols), bool)
+            record.outliers = np.zeros((record.nrows, record.ncols), bool)
         elif line.startswith("[MODIFIED]"):
             section = "MODIFIED"
-            record.modified = numpy.zeros((record.nrows, record.ncols))
+            record.modified = np.zeros((record.nrows, record.ncols))
         elif line.startswith("["):
             raise ParserError("Unknown section found in version 3 CEL file")
         else:  # read the data in a section

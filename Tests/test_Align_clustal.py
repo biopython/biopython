@@ -9,7 +9,7 @@ from io import StringIO
 
 from Bio import Align
 
-import numpy
+import numpy as np
 
 
 class TestClustalReadingWriting(unittest.TestCase):
@@ -594,11 +594,11 @@ AT3G20900.1-CDS                     CAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAG
             with self.assertRaises(StopIteration):
                 next(alignments)
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'C', 'T', 'G', 'G', 'G', 'G', 'A', 'T', 'G', 'G', 'A', 'G',
+np.array([['G', 'C', 'T', 'G', 'G', 'G', 'G', 'A', 'T', 'G', 'G', 'A', 'G',
               'A', 'G', 'G', 'G', 'A', 'A', 'C', 'A', 'G', 'A', 'G', 'T', '-',
               'T'],
              ['G', 'C', 'T', 'G', 'G', 'G', 'G', 'A', 'T', 'G', 'G', 'A', 'G',
@@ -648,11 +648,11 @@ AT3G20900                           GCTGGGGATGGAGAGGGAACAGAGTAG
             with self.assertRaises(StopIteration):
                 next(alignments)
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['D', '-', 'V', 'L', 'L', 'G', 'A', 'N', 'G', 'G', 'V', 'L', 'V',
+np.array([['D', '-', 'V', 'L', 'L', 'G', 'A', 'N', 'G', 'G', 'V', 'L', 'V',
               'F', 'E', 'P', 'N', 'D', 'F', 'S', 'V', 'K', 'A', 'G', 'E', 'T',
               'I', 'T', 'F', 'K', 'N', 'N', 'A', 'G', 'Y', 'P', 'H', 'N', 'V',
               'V', 'F', 'D', 'E', 'D', 'A', 'V', 'P', 'S', 'G', '-', 'V', 'D',

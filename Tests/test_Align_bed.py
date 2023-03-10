@@ -16,7 +16,7 @@ from Bio import SeqIO
 from Bio import BiopythonExperimentalWarning
 
 
-import numpy
+import numpy as np
 
 
 class TestAlign_dna_rna(unittest.TestCase):
@@ -52,11 +52,11 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_111921.1")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[48663767, 48663813, 48665640,
+                np.array([[48663767, 48663813, 48665640,
                               48665722, 48669098, 48669174],
                              [       0,       46,       46,
                                    128,      128,      204]])
@@ -66,11 +66,11 @@ class TestAlign_dna_rna(unittest.TestCase):
         alignment.target.seq = self.dna
         alignment.query.seq = self.rna[alignment.query.id]
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.substitutions,
                 # fmt: off
 # flake8: noqa
-            numpy.array([[53.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+            np.array([[53.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0., 35.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0.,  0., 50.,  0.,  0.,  0.,  0.,  0.],
                          [ 0.,  0.,  0., 27.,  0.,  0.,  0.,  0.],
@@ -467,11 +467,11 @@ chr3	48663767	48669174	NR_111921.1	1000	+	48663767	48669174	0	3	46,82,76,	0,1873
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_046654.1")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[42530895, 42530958, 42532020,
+                np.array([[42530895, 42530958, 42532020,
                               42532095, 42532563, 42532606],
                              [     181,      118,      118,
                                     43,       43,        0]])
@@ -481,11 +481,11 @@ chr3	48663767	48669174	NR_111921.1	1000	+	48663767	48669174	0	3	46,82,76,	0,1873
         alignment.target.seq = self.dna
         alignment.query.seq = self.rna[alignment.query.id]
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.substitutions,
                 # fmt: off
 # flake8: noqa
-            numpy.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+            np.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
                          [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
                          [ 0.,  0.,  0., 42.,  0.,  0.,  0.,  0.],
@@ -634,11 +634,11 @@ chr3	42530895	42532606	NR_046654.1	1000	-	42530895	42532606	0	3	63,75,43,	0,1125
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_111921.1_modified")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[48663767, 48663795, 48663796, 48663813, 48665640,
+                np.array([[48663767, 48663795, 48663796, 48663813, 48665640,
                               48665716, 48665722, 48669098, 48669174],
                              [       0,       28,       28,       45,       45,
                                    121,      127,      127,      203]])
@@ -1032,11 +1032,11 @@ chr3	48663767	48669174	NR_111921.1_modified	972	+	48663767	48669174	0	5	28,17,76
         self.assertEqual(alignment.target.id, "chr3")
         self.assertEqual(alignment.query.id, "NR_046654.1_modified")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[42530895, 42530922, 42530958, 42532020, 42532037,
+                np.array([[42530895, 42530922, 42530958, 42532020, 42532037,
                               42532039, 42532095, 42532563, 42532606],
                              [     179,      152,      116,      116,       99,
                                     99,       43,       43,        0]])
@@ -1218,11 +1218,11 @@ class TestAlign_dna(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[61646095, 61646111],
+                np.array([[61646095, 61646111],
                              [       0,       16]]),
                 # fmt: on
             )
@@ -1252,11 +1252,11 @@ chr4	61646095	61646111	hg19_dna	1000	+	61646095	61646111	0	1	16,	0,
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[10271783, 10271816],
+                np.array([[10271783, 10271816],
                              [       0,       33]]),
                 # fmt: on
             )
@@ -1286,11 +1286,11 @@ chr1	10271783	10271816	hg19_dna	1000	+	10271783	10271816	0	1	33,	0,
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[53575980, 53575997],
+                np.array([[53575980, 53575997],
                              [      17,        0]]),
                 # fmt: on
             )
@@ -1320,11 +1320,11 @@ chr2	53575980	53575997	hg19_dna	1000	-	53575980	53575997	0	1	17,	0,
         self.assertEqual(alignment.target.id, "chr9")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[85737865, 85737906],
+                np.array([[85737865, 85737906],
                              [       0,       41]]),
                 # fmt: on
             )
@@ -1354,11 +1354,11 @@ chr9	85737865	85737906	hg19_dna	854	+	85737865	85737906	0	1	41,	0,
         self.assertEqual(alignment.target.id, "chr8")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[95160479, 95160520],
+                np.array([[95160479, 95160520],
                              [       0,       41]]),
                 # fmt: on
             )
@@ -1388,11 +1388,11 @@ chr8	95160479	95160520	hg19_dna	1000	+	95160479	95160520	0	1	41,	0,
         self.assertEqual(alignment.target.id, "chr22")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[42144400, 42144436],
+                np.array([[42144400, 42144436],
                              [       0,       36]]),
                 # fmt: on
             )
@@ -1422,11 +1422,11 @@ chr22	42144400	42144436	hg19_dna	834	+	42144400	42144436	0	1	36,	0,
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[183925984, 183925990, 183926028],
+                np.array([[183925984, 183925990, 183926028],
                              [        0,         6,        44]]),
                 # fmt: on
             )
@@ -1456,11 +1456,11 @@ chr2	183925984	183926028	hg19_dna	682	+	183925984	183926028	0	2	6,38,	0,6,
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[35483340, 35483365, 35483499, 35483510],
+                np.array([[35483340, 35483365, 35483499, 35483510],
                              [       0,       25,       25,       36]]),
                 # fmt: on
             )
@@ -1498,11 +1498,11 @@ chr19	35483340	35483510	hg19_dna	890	+	35483340	35483510	0	2	25,11,	0,159,
         self.assertEqual(alignment.target.id, "chr18")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[23891310, 23891349],
+                np.array([[23891310, 23891349],
                              [       0,       39]]),
                 # fmt: on
             )
@@ -1532,11 +1532,11 @@ chr18	23891310	23891349	hg19_dna	1000	+	23891310	23891349	0	1	39,	0,
         self.assertEqual(alignment.target.id, "chr18")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[43252217, 43252245],
+                np.array([[43252217, 43252245],
                              [       0,       28]]),
                 # fmt: on
             )
@@ -1566,11 +1566,11 @@ chr18	43252217	43252245	hg19_dna	930	+	43252217	43252245	0	1	28,	0,
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[52759147, 52759154, 52759160, 52759198],
+                np.array([[52759147, 52759154, 52759160, 52759198],
                              [       0,        7,        7,       45]]),
                 # fmt: on
             )
@@ -1600,11 +1600,11 @@ chr13	52759147	52759198	hg19_dna	912	+	52759147	52759198	0	2	7,38,	0,13,
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[1207056, 1207106],
+                np.array([[1207056, 1207106],
                              [      0,      50]]),
                 # fmt: on
             )
@@ -1634,11 +1634,11 @@ chr1	1207056	1207106	hg19_dna	1000	+	1207056	1207106	0	1	50,	0,
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[61700837, 61700871],
+                np.array([[61700837, 61700871],
                              [       0,       34]]),
                 # fmt: on
             )
@@ -1668,11 +1668,11 @@ chr1	61700837	61700871	hg19_dna	824	+	61700837	61700871	0	1	34,	0,
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[37558157, 37558167, 37558173, 37558191],
+                np.array([[37558157, 37558167, 37558173, 37558191],
                              [      28,       18,       18,        0]]),
                 # fmt: on
             )
@@ -1702,11 +1702,11 @@ chr4	37558157	37558191	hg19_dna	572	-	37558157	37558191	0	2	10,18,	0,16,
         self.assertEqual(alignment.target.id, "chr22")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[48997405, 48997442],
+                np.array([[48997405, 48997442],
                              [      37,        0]]),
                 # fmt: on
             )
@@ -1736,11 +1736,11 @@ chr22	48997405	48997442	hg19_dna	892	-	48997405	48997442	0	1	37,	0,
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[120641740, 120641776],
+                np.array([[120641740, 120641776],
                              [       36,         0]]),
                 # fmt: on
             )
@@ -1770,11 +1770,11 @@ chr2	120641740	120641776	hg19_dna	946	-	120641740	120641776	0	1	36,	0,
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[54017130, 54017169],
+                np.array([[54017130, 54017169],
                              [      39,        0]]),
                 # fmt: on
             )
@@ -1804,11 +1804,11 @@ chr19	54017130	54017169	hg19_dna	1000	-	54017130	54017169	0	1	39,	0,
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[553742, 553781],
+                np.array([[553742, 553781],
                              [    39,      0]]),
                 # fmt: on
             )
@@ -1838,11 +1838,11 @@ chr19	553742	553781	hg19_dna	848	-	553742	553781	0	1	39,	0,
         self.assertEqual(alignment.target.id, "chr10")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[99388555, 99388591],
+                np.array([[99388555, 99388591],
                              [      36,        0]]),
                 # fmt: on
             )
@@ -1872,11 +1872,11 @@ chr10	99388555	99388591	hg19_dna	834	-	99388555	99388591	0	1	36,	0,
         self.assertEqual(alignment.target.id, "chr10")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[112178171, 112178196],
+                np.array([[112178171, 112178196],
                              [       25,         0]]),
                 # fmt: on
             )
@@ -1906,11 +1906,11 @@ chr10	112178171	112178196	hg19_dna	920	-	112178171	112178196	0	1	25,	0,
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[39368490, 39368526],
+                np.array([[39368490, 39368526],
                              [      36,        0]]),
                 # fmt: on
             )
@@ -1940,11 +1940,11 @@ chr1	39368490	39368526	hg19_dna	946	-	39368490	39368526	0	1	36,	0,
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[220325687, 220325721],
+                np.array([[220325687, 220325721],
                              [       34,         0]]),
                 # fmt: on
             )
@@ -1994,11 +1994,11 @@ chr1	220325687	220325721	hg19_dna	942	-	220325687	220325721	0	1	34,	0,
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[61646095, 61646111],
+                np.array([[61646095, 61646111],
                              [       0,       16]]),
                 # fmt: on
             )
@@ -2028,11 +2028,11 @@ chr4	61646095	61646111	hg18_dna	1000	+	61646095	61646111	0	1	16,	0,
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[10271783, 10271816],
+                np.array([[10271783, 10271816],
                              [       0,       33]]),
                 # fmt: on
             )
@@ -2062,11 +2062,11 @@ chr1	10271783	10271816	hg18_dna	1000	+	10271783	10271816	0	1	33,	0,
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg18_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[53575980, 53575997],
+                np.array([[53575980, 53575997],
                              [      17,        0]]),
                 # fmt: on
             )
@@ -2116,11 +2116,11 @@ chr2	53575980	53575997	hg18_dna	1000	-	53575980	53575997	0	1	17,	0,
         self.assertEqual(alignment.target.id, "chr9")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[85737865, 85737906],
+                np.array([[85737865, 85737906],
                              [       0,       41]]),
                 # fmt: on
             )
@@ -2150,11 +2150,11 @@ chr9	85737865	85737906	hg19_dna	854	+	85737865	85737906	0	1	41,	0,
         self.assertEqual(alignment.target.id, "chr8")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[95160479, 95160520],
+                np.array([[95160479, 95160520],
                              [       0,       41]]),
                 # fmt: on
             )
@@ -2184,11 +2184,11 @@ chr8	95160479	95160520	hg19_dna	1000	+	95160479	95160520	0	1	41,	0,
         self.assertEqual(alignment.target.id, "chr22")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[42144400, 42144436],
+                np.array([[42144400, 42144436],
                              [       0,       36]]),
                 # fmt: on
             )
@@ -2218,11 +2218,11 @@ chr22	42144400	42144436	hg19_dna	834	+	42144400	42144436	0	1	36,	0,
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[183925984, 183925990, 183926028],
+                np.array([[183925984, 183925990, 183926028],
                              [        0,         6,        44]]),
                 # fmt: on
             )
@@ -2252,11 +2252,11 @@ chr2	183925984	183926028	hg19_dna	682	+	183925984	183926028	0	2	6,38,	0,6,
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[35483340, 35483365, 35483499, 35483510],
+                np.array([[35483340, 35483365, 35483499, 35483510],
                              [       0,       25,       25,       36]]),
                 # fmt: on
             )
@@ -2294,11 +2294,11 @@ chr19	35483340	35483510	hg19_dna	890	+	35483340	35483510	0	2	25,11,	0,159,
         self.assertEqual(alignment.target.id, "chr18")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[23891310, 23891349],
+                np.array([[23891310, 23891349],
                              [       0,       39]]),
                 # fmt: on
             )
@@ -2328,11 +2328,11 @@ chr18	23891310	23891349	hg19_dna	1000	+	23891310	23891349	0	1	39,	0,
         self.assertEqual(alignment.target.id, "chr18")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[43252217, 43252245],
+                np.array([[43252217, 43252245],
                              [       0,       28]]),
                 # fmt: on
             )
@@ -2362,11 +2362,11 @@ chr18	43252217	43252245	hg19_dna	930	+	43252217	43252245	0	1	28,	0,
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[52759147, 52759154, 52759160, 52759198],
+                np.array([[52759147, 52759154, 52759160, 52759198],
                              [       0,        7,        7,       45]]),
                 # fmt: on
             )
@@ -2396,11 +2396,11 @@ chr13	52759147	52759198	hg19_dna	912	+	52759147	52759198	0	2	7,38,	0,13,
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[1207056, 1207106],
+                np.array([[1207056, 1207106],
                              [      0,      50]]),
                 # fmt: on
             )
@@ -2430,11 +2430,11 @@ chr1	1207056	1207106	hg19_dna	1000	+	1207056	1207106	0	1	50,	0,
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[61700837, 61700871],
+                np.array([[61700837, 61700871],
                              [       0,       34]]),
                 # fmt: on
             )
@@ -2464,11 +2464,11 @@ chr1	61700837	61700871	hg19_dna	824	+	61700837	61700871	0	1	34,	0,
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[37558157, 37558167, 37558173, 37558191],
+                np.array([[37558157, 37558167, 37558173, 37558191],
                              [      28,       18,       18,        0]]),
                 # fmt: on
             )
@@ -2498,11 +2498,11 @@ chr4	37558157	37558191	hg19_dna	572	-	37558157	37558191	0	2	10,18,	0,16,
         self.assertEqual(alignment.target.id, "chr22")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[48997405, 48997442],
+                np.array([[48997405, 48997442],
                              [      37,        0]]),
                 # fmt: on
             )
@@ -2532,11 +2532,11 @@ chr22	48997405	48997442	hg19_dna	892	-	48997405	48997442	0	1	37,	0,
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[120641740, 120641776],
+                np.array([[120641740, 120641776],
                              [       36,         0]]),
                 # fmt: on
             )
@@ -2566,11 +2566,11 @@ chr2	120641740	120641776	hg19_dna	946	-	120641740	120641776	0	1	36,	0,
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[54017130, 54017169],
+                np.array([[54017130, 54017169],
                              [      39,        0]]),
                 # fmt: on
             )
@@ -2600,11 +2600,11 @@ chr19	54017130	54017169	hg19_dna	1000	-	54017130	54017169	0	1	39,	0,
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[553742, 553781],
+                np.array([[553742, 553781],
                              [    39,      0]]),
                 # fmt: on
             )
@@ -2634,11 +2634,11 @@ chr19	553742	553781	hg19_dna	848	-	553742	553781	0	1	39,	0,
         self.assertEqual(alignment.target.id, "chr10")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[99388555, 99388591],
+                np.array([[99388555, 99388591],
                              [      36,        0]]),
                 # fmt: on
             )
@@ -2668,11 +2668,11 @@ chr10	99388555	99388591	hg19_dna	834	-	99388555	99388591	0	1	36,	0,
         self.assertEqual(alignment.target.id, "chr10")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[112178171, 112178196],
+                np.array([[112178171, 112178196],
                              [       25,         0]]),
                 # fmt: on
             )
@@ -2702,11 +2702,11 @@ chr10	112178171	112178196	hg19_dna	920	-	112178171	112178196	0	1	25,	0,
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[39368490, 39368526],
+                np.array([[39368490, 39368526],
                              [      36,        0]]),
                 # fmt: on
             )
@@ -2736,11 +2736,11 @@ chr1	39368490	39368526	hg19_dna	946	-	39368490	39368526	0	1	36,	0,
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[220325687, 220325721],
+                np.array([[220325687, 220325721],
                              [       34,         0]]),
                 # fmt: on
             )
@@ -2790,11 +2790,11 @@ chr1	220325687	220325721	hg19_dna	942	-	220325687	220325721	0	1	34,	0,
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[61646095, 61646111],
+                np.array([[61646095, 61646111],
                              [       0,       16]]),
                 # fmt: on
             )
@@ -2824,11 +2824,11 @@ chr4	61646095	61646111	hg19_dna	1000	+	61646095	61646111	0	1	16,	0,
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[10271783, 10271816],
+                np.array([[10271783, 10271816],
                              [       0,       33]]),
                 # fmt: on
             )
@@ -2858,11 +2858,11 @@ chr1	10271783	10271816	hg19_dna	1000	+	10271783	10271816	0	1	33,	0,
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[53575980, 53575997],
+                np.array([[53575980, 53575997],
                              [      17,        0]]),
                 # fmt: on
             )
@@ -2892,11 +2892,11 @@ chr2	53575980	53575997	hg19_dna	1000	-	53575980	53575997	0	1	17,	0,
         self.assertEqual(alignment.target.id, "chr9")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[85737865, 85737906],
+                np.array([[85737865, 85737906],
                              [       0,       41]]),
                 # fmt: on
             )
@@ -2926,11 +2926,11 @@ chr9	85737865	85737906	hg19_dna	854	+	85737865	85737906	0	1	41,	0,
         self.assertEqual(alignment.target.id, "chr8")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[95160479, 95160520],
+                np.array([[95160479, 95160520],
                              [       0,       41]]),
                 # fmt: on
             )
@@ -2960,11 +2960,11 @@ chr8	95160479	95160520	hg19_dna	1000	+	95160479	95160520	0	1	41,	0,
         self.assertEqual(alignment.target.id, "chr22")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[42144400, 42144436],
+                np.array([[42144400, 42144436],
                              [       0,       36]]),
                 # fmt: on
             )
@@ -2994,11 +2994,11 @@ chr22	42144400	42144436	hg19_dna	834	+	42144400	42144436	0	1	36,	0,
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[183925984, 183925990, 183926028],
+                np.array([[183925984, 183925990, 183926028],
                              [        0,         6,        44]]),
                 # fmt: on
             )
@@ -3028,11 +3028,11 @@ chr2	183925984	183926028	hg19_dna	682	+	183925984	183926028	0	2	6,38,	0,6,
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[35483340, 35483365, 35483499, 35483510],
+                np.array([[35483340, 35483365, 35483499, 35483510],
                              [       0,       25,       25,       36]]),
                 # fmt: on
             )
@@ -3070,11 +3070,11 @@ chr19	35483340	35483510	hg19_dna	890	+	35483340	35483510	0	2	25,11,	0,159,
         self.assertEqual(alignment.target.id, "chr18")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[23891310, 23891349],
+                np.array([[23891310, 23891349],
                              [       0,       39]]),
                 # fmt: on
             )
@@ -3104,11 +3104,11 @@ chr18	23891310	23891349	hg19_dna	1000	+	23891310	23891349	0	1	39,	0,
         self.assertEqual(alignment.target.id, "chr18")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[43252217, 43252245],
+                np.array([[43252217, 43252245],
                              [       0,       28]]),
                 # fmt: on
             )
@@ -3138,11 +3138,11 @@ chr18	43252217	43252245	hg19_dna	930	+	43252217	43252245	0	1	28,	0,
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[52759147, 52759154, 52759160, 52759198],
+                np.array([[52759147, 52759154, 52759160, 52759198],
                              [       0,        7,        7,       45]]),
                 # fmt: on
             )
@@ -3172,11 +3172,11 @@ chr13	52759147	52759198	hg19_dna	912	+	52759147	52759198	0	2	7,38,	0,13,
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[1207056, 1207106],
+                np.array([[1207056, 1207106],
                              [      0,      50]]),
                 # fmt: on
             )
@@ -3206,11 +3206,11 @@ chr1	1207056	1207106	hg19_dna	1000	+	1207056	1207106	0	1	50,	0,
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[61700837, 61700871],
+                np.array([[61700837, 61700871],
                              [       0,       34]]),
                 # fmt: on
             )
@@ -3240,11 +3240,11 @@ chr1	61700837	61700871	hg19_dna	824	+	61700837	61700871	0	1	34,	0,
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[37558157, 37558167, 37558173, 37558191],
+                np.array([[37558157, 37558167, 37558173, 37558191],
                              [      28,       18,       18,        0]]),
                 # fmt: on
             )
@@ -3274,11 +3274,11 @@ chr4	37558157	37558191	hg19_dna	572	-	37558157	37558191	0	2	10,18,	0,16,
         self.assertEqual(alignment.target.id, "chr22")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[48997405, 48997442],
+                np.array([[48997405, 48997442],
                              [      37,        0]]),
                 # fmt: on
             )
@@ -3308,11 +3308,11 @@ chr22	48997405	48997442	hg19_dna	892	-	48997405	48997442	0	1	37,	0,
         self.assertEqual(alignment.target.id, "chr2")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[120641740, 120641776],
+                np.array([[120641740, 120641776],
                              [       36,         0]]),
                 # fmt: on
             )
@@ -3342,11 +3342,11 @@ chr2	120641740	120641776	hg19_dna	946	-	120641740	120641776	0	1	36,	0,
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[54017130, 54017169],
+                np.array([[54017130, 54017169],
                              [      39,        0]]),
                 # fmt: on
             )
@@ -3376,11 +3376,11 @@ chr19	54017130	54017169	hg19_dna	1000	-	54017130	54017169	0	1	39,	0,
         self.assertEqual(alignment.target.id, "chr19")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[553742, 553781],
+                np.array([[553742, 553781],
                              [    39,      0]]),
                 # fmt: on
             )
@@ -3410,11 +3410,11 @@ chr19	553742	553781	hg19_dna	848	-	553742	553781	0	1	39,	0,
         self.assertEqual(alignment.target.id, "chr10")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[99388555, 99388591],
+                np.array([[99388555, 99388591],
                              [      36,        0]]),
                 # fmt: on
             )
@@ -3444,11 +3444,11 @@ chr10	99388555	99388591	hg19_dna	834	-	99388555	99388591	0	1	36,	0,
         self.assertEqual(alignment.target.id, "chr10")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[112178171, 112178196],
+                np.array([[112178171, 112178196],
                              [       25,         0]]),
                 # fmt: on
             )
@@ -3478,10 +3478,10 @@ chr10	112178171	112178196	hg19_dna	920	-	112178171	112178196	0	1	25,	0,
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-                numpy.array([[39368490, 39368526],
+                np.array([[39368490, 39368526],
                              [      36,        0]]),
                 # fmt: on
             )
@@ -3511,11 +3511,11 @@ chr1	39368490	39368526	hg19_dna	946	-	39368490	39368526	0	1	36,	0,
         self.assertEqual(alignment.target.id, "chr1")
         self.assertEqual(alignment.query.id, "hg19_dna")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[220325687, 220325721],
+                np.array([[220325687, 220325721],
                              [       34,         0]]),
                 # fmt: on
             )
@@ -3566,11 +3566,11 @@ class TestAlign_dnax_prot(unittest.TestCase):
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[75566694, 75566850],
+                np.array([[75566694, 75566850],
                              [       0,      156]]),
                 # fmt: on
             )
@@ -3607,11 +3607,11 @@ chr13	75566694	75566850	CAG33136.1	1000	+	75566694	75566850	0	1	156,	0,
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[75560749, 75560881],
+                np.array([[75560749, 75560881],
                              [       0,      132]]),
                 # fmt: on
             )
@@ -3648,11 +3648,11 @@ chr13	75560749	75560881	CAG33136.1	1000	+	75560749	75560881	0	1	132,	0,
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[75549820, 75549865, 75567225, 75567312],
+                np.array([[75549820, 75549865, 75567225, 75567312],
                              [       0,       45,       45,      132]]),
                 # fmt: on
             )
@@ -4845,11 +4845,11 @@ chr13	75549820	75567312	CAG33136.1	986	+	75549820	75567312	0	2	45,87,	0,17405,
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[75604767, 75604827, 75605728, 75605809],
+                np.array([[75604767, 75604827, 75605728, 75605809],
                              [       0,       60,       60,      141]]),
                 # fmt: on
             )
@@ -4946,11 +4946,11 @@ chr13	75604767	75605809	CAG33136.1	1000	+	75604767	75605809	0	2	60,81,	0,961,
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[75594914, 75594989],
+                np.array([[75594914, 75594989],
                              [       0,       75]]),
                 # fmt: on
             )
@@ -4983,11 +4983,11 @@ chr13	75594914	75594989	CAG33136.1	1000	+	75594914	75594989	0	1	75,	0,
         self.assertEqual(alignment.target.id, "chr13")
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[75569459, 75569507],
+                np.array([[75569459, 75569507],
                              [       0,       48]]),
                 # fmt: on
             )
@@ -5016,11 +5016,11 @@ chr13	75569459	75569507	CAG33136.1	1000	+	75569459	75569507	0	1	48,	0,
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[41260685, 41260787],
+                np.array([[41260685, 41260787],
                              [       0,      102]]),
                 # fmt: on
             )
@@ -5053,11 +5053,11 @@ chr4	41260685	41260787	CAG33136.1	530	+	41260685	41260787	0	1	102,	0,
         self.assertEqual(alignment.target.id, "chr4")
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[41257605, 41257731, 41263227, 41263290],
+                np.array([[41257605, 41257731, 41263227, 41263290],
                              [       0,      126,      126,      189]]),
                 # fmt: on
             )
@@ -5482,11 +5482,11 @@ chr4	41257605	41263290	CAG33136.1	166	+	41257605	41263290	0	2	126,63,	0,5622,
         self.assertEqual(alignment.target.id, "KI537979")
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[9712654, 9712786, 9715941, 9716097, 9716445, 9716532, 9718374,
+                np.array([[9712654, 9712786, 9715941, 9716097, 9716445, 9716532, 9718374,
                               9718422, 9739264, 9739339, 9743706, 9743766, 9744511, 9744592],
                              [      0,     132,     132,     288,     288,     375,     375,
                                   423,     423,     498,     498,     558,     558,     639]]),
@@ -7645,11 +7645,11 @@ KI537979	9712654	9744592	CAG33136.1	972	+	9712654	9744592	0	7	132,156,87,48,75,6
         self.assertEqual(alignment.target.id, "KI538594")
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[2103463, 2103523, 2103522, 2104149],
+                np.array([[2103463, 2103523, 2103522, 2104149],
                              [      0,      60,      60,     687]]),
                 # fmt: on
             )
@@ -7726,11 +7726,11 @@ KI538594	2103463	2104149	CAG33136.1	792	+	2103463	2104149	0	2	60,627,	0,59,
         self.assertEqual(alignment.target.id, "KI537194")
         self.assertEqual(alignment.query.id, "CAG33136.1")
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[20872390, 20872471, 20872472, 20873021],
+                np.array([[20872390, 20872471, 20872472, 20873021],
                              [     630,      549,      549,        0]]),
                 # fmt: on
             )
@@ -7833,11 +7833,11 @@ class TestAlign_bed12(unittest.TestCase):
                 self.assertIsNone(alignment.query.id, msg=filename)
             if bedN == 12:
                 self.assertTrue(
-                    numpy.array_equal(
+                    np.array_equal(
                         alignment.coordinates,
                         # fmt: off
 # flake8: noqa
-                        numpy.array([[1000, 1567, 4512, 5000],
+                        np.array([[1000, 1567, 4512, 5000],
                                      [   0,  567,  567, 1055]]),
                         # fmt: on
                     ),
@@ -7845,9 +7845,9 @@ class TestAlign_bed12(unittest.TestCase):
                 )
             else:
                 self.assertTrue(
-                    numpy.array_equal(
+                    np.array_equal(
                         alignment.coordinates,
-                        numpy.array([[1000, 5000], [0, 4000]]),
+                        np.array([[1000, 5000], [0, 4000]]),
                     ),
                     msg=filename,
                 )
@@ -7903,11 +7903,11 @@ class TestAlign_bed12(unittest.TestCase):
                 self.assertIsNone(alignment.query.id, msg=filename)
             if bedN == 12:
                 self.assertTrue(
-                    numpy.array_equal(
+                    np.array_equal(
                         alignment.coordinates,
                         # fmt: off
 # flake8: noqa
-                        numpy.array([[2000, 2433, 5601, 6000],
+                        np.array([[2000, 2433, 5601, 6000],
                                      [ 832,  399,  399,    0]])
                         # fmt: on
                     ),
@@ -7915,17 +7915,17 @@ class TestAlign_bed12(unittest.TestCase):
                 )
             elif bedN >= 6:
                 self.assertTrue(
-                    numpy.array_equal(
+                    np.array_equal(
                         alignment.coordinates,
-                        numpy.array([[2000, 6000], [4000, 0]]),
+                        np.array([[2000, 6000], [4000, 0]]),
                     ),
                     msg=filename,
                 )
             else:
                 self.assertTrue(
-                    numpy.array_equal(
+                    np.array_equal(
                         alignment.coordinates,
-                        numpy.array([[2000, 6000], [0, 4000]]),
+                        np.array([[2000, 6000], [0, 4000]]),
                     ),
                     msg=filename,
                 )

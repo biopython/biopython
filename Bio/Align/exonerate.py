@@ -26,7 +26,7 @@ unparsable file.
 
 You are expected to use this module via the Bio.Align functions.
 """
-import numpy
+import numpy as np
 
 
 from Bio.Align import Alignment
@@ -88,7 +88,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         target_end = coordinates[0, -1]
         query_start = coordinates[1, 0]
         query_end = coordinates[1, -1]
-        steps = numpy.diff(coordinates)
+        steps = np.diff(coordinates)
         query = alignment.query
         target = alignment.target
         try:
@@ -280,7 +280,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         target_end = coordinates[0, -1]
         query_start = coordinates[1, 0]
         query_end = coordinates[1, -1]
-        steps = numpy.diff(coordinates)
+        steps = np.diff(coordinates)
         query = alignment.query
         target = alignment.target
         try:
@@ -463,7 +463,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         qs = 0
         ts = 0
         n = (len(words) - 8) // 2
-        coordinates = numpy.empty((2, n + 1), int)
+        coordinates = np.empty((2, n + 1), int)
         coordinates[0, 0] = ts
         coordinates[1, 0] = qs
         for i, (operation, step) in enumerate(zip(words[9::2], words[10::2])):
@@ -528,7 +528,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         qs = 0
         ts = 0
         n = (len(words) - 8) // 3 + ops.count("N")
-        coordinates = numpy.empty((2, n + 1), int)
+        coordinates = np.empty((2, n + 1), int)
         coordinates[0, 0] = ts
         coordinates[1, 0] = qs
         operations = bytearray(n)
