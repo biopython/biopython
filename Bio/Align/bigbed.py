@@ -456,7 +456,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 stream.write(indexFieldCount.to_bytes(2, byteorder))
                 stream.write(eim[i].fileOffset.to_bytes(8, byteorder))
                 stream.write(bytes(4))
-                stream.write(eim.indexFields[i].to_bytes(2, byteorder))
+                stream.write(eim[i].indexField.to_bytes(2, byteorder))
                 stream.write(bytes(2))
             assert stream.tell() == extraIndexListEndOffset
         stream.seek(0, 2)
@@ -1241,9 +1241,6 @@ class bbExIndexMakerElement:
 class bbExIndexMaker(list):
     def __init__(self, extraIndexList, declaration):
         self.recordCount = 0  # int
-        # Kind of wish next four fields,  all of which are arrays indexed
-        # by the same thing,  were a single array of a structure instead.
-        self.indexFields = []  # bits16*
         self.extraIndexList = extraIndexList  # needed?
         for name in extraIndexList:
             for index, field in enumerate(declaration):
@@ -1256,7 +1253,6 @@ class bbExIndexMaker(list):
                 ) from None
             if field.as_type != "string":
                 raise ValueError("Sorry for now can only index string fields.")
-            self.indexFields.append(index)
             self.append(bbExIndexMakerElement(index))
 
     def updateMaxFieldSize(self, alignment):
@@ -1306,7 +1302,7 @@ def bbiChromUsageFromBedFile(alignments, targets, eim):
     usage = []
     minDiff = sys.maxsize
     if eim:
-        maxRowSize = max(eim.indexFields) + 1
+        maxRowSize = max([element.indexField for element in eim]) + 1
     else:
         maxRowSize = 3
     for alignment in alignments:
