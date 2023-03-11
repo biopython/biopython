@@ -406,8 +406,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             )
         if eim:
             for i in range(len(eim.extraIndexList)):
-                eim.fileOffsets[i] = stream.tell()
-                maxBedNameSize = eim.maxFieldSize[i]
+                eim[i].fileOffset = stream.tell()
+                maxBedNameSize = eim[i].maxFieldSize
                 eim.chunkArrayArray[i].sort(key=attrgetter("name"))
                 bptFileBulkIndexToOpenFile(
                     eim.chunkArrayArray[i],
@@ -454,7 +454,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             for i in range(extHeader.extraIndexCount):
                 stream.write(bytes(2))  # type
                 stream.write(indexFieldCount.to_bytes(2, byteorder))
-                stream.write(eim.fileOffsets[i].to_bytes(8, byteorder))
+                stream.write(eim[i].fileOffset.to_bytes(8, byteorder))
                 stream.write(bytes(4))
                 stream.write(eim.indexFields[i].to_bytes(2, byteorder))
                 stream.write(bytes(2))
@@ -1229,14 +1229,21 @@ class bbNamedFileChunk:
     __slots__ = ("name", "offset", "size")
 
 
-class bbExIndexMaker:
+class bbExIndexMakerElement:
+    __slots__ = ("indexField", "maxFieldSize", "fileOffset")
+
+    def __init__(self, index):
+        self.indexField = index
+        self.maxFieldSize = 0
+        self.fileOffset = None
+
+
+class bbExIndexMaker(list):
     def __init__(self, extraIndexList, declaration):
         self.recordCount = 0  # int
         # Kind of wish next four fields,  all of which are arrays indexed
         # by the same thing,  were a single array of a structure instead.
         self.indexFields = []  # bits16*
-        self.maxFieldSize = []  # int*
-        self.fileOffsets = []  # bits64*
         self.extraIndexList = extraIndexList  # needed?
         for name in extraIndexList:
             for index, field in enumerate(declaration):
@@ -1250,8 +1257,7 @@ class bbExIndexMaker:
             if field.as_type != "string":
                 raise ValueError("Sorry for now can only index string fields.")
             self.indexFields.append(index)
-            self.maxFieldSize.append(0)
-            self.fileOffsets.append(None)
+            self.append(bbExIndexMakerElement(index))
 
     def updateMaxFieldSize(self, alignment):
         for i, name in enumerate(self.extraIndexList):
@@ -1262,8 +1268,8 @@ class bbExIndexMaker:
             else:
                 value = alignment.annotations[name]
             size = len(value)
-            if size > self.maxFieldSize[i]:
-                self.maxFieldSize[i] = size
+            if size > self[i].maxFieldSize:
+                self[i].maxFieldSize = size
 
     def allocChunkArrays(self, recordCount):
         self.recordCount = recordCount
