@@ -1230,12 +1230,34 @@ class bbNamedFileChunk:
 
 
 class bbExIndexMakerElement:
-    __slots__ = ("indexField", "maxFieldSize", "fileOffset")
+    __slots__ = ("indexField", "maxFieldSize", "fileOffset", "get_value")
 
-    def __init__(self, index):
-        self.indexField = index
+    def __init__(self, name, declaration):
         self.maxFieldSize = 0
         self.fileOffset = None
+        for index, field in enumerate(declaration):
+            if field.name == name:
+                break
+        else:
+            raise ValueError(
+                "extraIndex field %s not a standard bed field or found in 'as' file.",
+                name,
+            ) from None
+        if field.as_type != "string":
+            raise ValueError("Sorry for now can only index string fields.")
+        self.indexField = index
+        if name == "chrom":
+            self.get_value = lambda alignment: alignment.target.id
+        elif name == "name":
+            self.get_value = lambda alignment: alignment.query.id
+        else:
+            self.get_value = lambda alignment: alignment.annotations[name]
+
+    def updateMaxFieldSize(self, alignment):
+        value = self.get_value(alignment)
+        size = len(value)
+        if size > self.maxFieldSize:
+            self.maxFieldSize = size
 
 
 class bbExIndexMaker(list):
@@ -1243,29 +1265,7 @@ class bbExIndexMaker(list):
         self.recordCount = 0  # int
         self.extraIndexList = extraIndexList  # needed?
         for name in extraIndexList:
-            for index, field in enumerate(declaration):
-                if field.name == name:
-                    break
-            else:
-                raise ValueError(
-                    "extraIndex field %s not a standard bed field or found in 'as' file.",
-                    name,
-                ) from None
-            if field.as_type != "string":
-                raise ValueError("Sorry for now can only index string fields.")
-            self.append(bbExIndexMakerElement(index))
-
-    def updateMaxFieldSize(self, alignment):
-        for i, name in enumerate(self.extraIndexList):
-            if name == "chrom":
-                value = alignment.target.id
-            elif name == "name":
-                value = alignment.query.id
-            else:
-                value = alignment.annotations[name]
-            size = len(value)
-            if size > self[i].maxFieldSize:
-                self[i].maxFieldSize = size
+            self.append(bbExIndexMakerElement(name, declaration))
 
     def allocChunkArrays(self, recordCount):
         self.recordCount = recordCount
@@ -1282,6 +1282,7 @@ class bbExIndexMaker(list):
                 value = alignment.query.id
             else:
                 value = alignment.annotations[name]
+            assert value == self[i].get_value(alignment)
             self.chunkArrayArray[i][recordIx].name = value.encode()
 
     def addOffsetSize(self, offset, size, startIx, endIx):
@@ -1309,8 +1310,8 @@ def bbiChromUsageFromBedFile(alignments, targets, eim):
         chrom = alignment.target.id
         start = alignment.coordinates[0, 0]
         end = alignment.coordinates[0, -1]
-        if eim:
-            eim.updateMaxFieldSize(alignment)
+        for element in eim:
+            element.updateMaxFieldSize(alignment)
         if start > end:
             raise ValueError(
                 f"end ({end}) before start ({start}) in alignment [{bedCount}]"
