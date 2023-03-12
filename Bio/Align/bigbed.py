@@ -363,8 +363,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         maxBlockSize = 0
         stream.write(bedCount.to_bytes(8, byteorder))
         if bedCount > 0:
-            if eim:
-                eim.allocChunkArrays(bedCount)
+            for element in eim:
+                element.chunks = [bbNamedFileChunk() for j in range(bedCount)]
             maxBlockSize, boundsArray = writeBlocks(
                 alignments,
                 declaration,
@@ -408,9 +408,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             for i in range(len(eim.extraIndexList)):
                 eim[i].fileOffset = stream.tell()
                 maxBedNameSize = eim[i].maxFieldSize
-                eim.chunkArrayArray[i].sort(key=attrgetter("name"))
+                eim[i].chunks.sort(key=attrgetter("name"))
                 bptFileBulkIndexToOpenFile(
-                    eim.chunkArrayArray[i],
+                    eim[i].chunks,
                     bedCount,
                     blockSize,
                     maxBedNameSize,
@@ -1230,7 +1230,7 @@ class bbNamedFileChunk:
 
 
 class bbExIndexMakerElement:
-    __slots__ = ("indexField", "maxFieldSize", "fileOffset", "get_value")
+    __slots__ = ("indexField", "maxFieldSize", "fileOffset", "chunks", "get_value")
 
     def __init__(self, name, declaration):
         self.maxFieldSize = 0
@@ -1262,32 +1262,18 @@ class bbExIndexMakerElement:
 
 class bbExIndexMaker(list):
     def __init__(self, extraIndexList, declaration):
-        self.recordCount = 0  # int
         self.extraIndexList = extraIndexList  # needed?
         for name in extraIndexList:
             self.append(bbExIndexMakerElement(name, declaration))
 
-    def allocChunkArrays(self, recordCount):
-        self.recordCount = recordCount
-        self.chunkArrayArray = [
-            [bbNamedFileChunk() for j in range(recordCount)]
-            for i in range(len(self.extraIndexList))
-        ]
-
     def addKeysFromRow(self, alignment, recordIx):
         for i, name in enumerate(self.extraIndexList):
-            if name == "chrom":
-                value = alignment.target.id
-            elif name == "name":
-                value = alignment.query.id
-            else:
-                value = alignment.annotations[name]
-            assert value == self[i].get_value(alignment)
-            self.chunkArrayArray[i][recordIx].name = value.encode()
+            value = self[i].get_value(alignment)
+            self[i].chunks[recordIx].name = value.encode()
 
     def addOffsetSize(self, offset, size, startIx, endIx):
         for i, name in enumerate(self.extraIndexList):
-            chunks = self.chunkArrayArray[i]
+            chunks = self[i].chunks
             for j in range(startIx, endIx):
                 chunk = chunks[j]
                 chunk.offset = offset
