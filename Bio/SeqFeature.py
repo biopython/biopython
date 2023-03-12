@@ -1846,8 +1846,7 @@ class CompoundLocation(Location):
         position.
 
         For the special case of a CompoundLocation wrapping the origin of
-        a circular genome this will match the genome length (minus one
-        given how Python counts from zero).
+        a circular genome this will match the genome length.
         """
         return max(loc.end for loc in self.parts)
 
