@@ -1259,6 +1259,15 @@ class bbExIndexMakerElement:
         if size > self.maxFieldSize:
             self.maxFieldSize = size
 
+    def addKeysFromRow(self, alignment, recordIx):
+        value = self.get_value(alignment)
+        self.chunks[recordIx].name = value.encode()
+
+    def addOffsetSize(self, offset, size, startIx, endIx):
+        for chunk in self.chunks[startIx:endIx]:
+            chunk.offset = offset
+            chunk.size = size
+
 
 class bbExIndexMaker(list):
     def __init__(self, extraIndexList, declaration):
@@ -1266,18 +1275,9 @@ class bbExIndexMaker(list):
         for name in extraIndexList:
             self.append(bbExIndexMakerElement(name, declaration))
 
-    def addKeysFromRow(self, alignment, recordIx):
-        for i, name in enumerate(self.extraIndexList):
-            value = self[i].get_value(alignment)
-            self[i].chunks[recordIx].name = value.encode()
-
     def addOffsetSize(self, offset, size, startIx, endIx):
         for i, name in enumerate(self.extraIndexList):
-            chunks = self[i].chunks
-            for j in range(startIx, endIx):
-                chunk = chunks[j]
-                chunk.offset = offset
-                chunk.size = size
+            self[i].addOffsetSize(offset, size, startIx, endIx)
 
 
 def bbiChromUsageFromBedFile(alignments, targets, eim):
@@ -1288,10 +1288,6 @@ def bbiChromUsageFromBedFile(alignments, targets, eim):
     usageName = ""
     usage = []
     minDiff = sys.maxsize
-    if eim:
-        maxRowSize = max([element.indexField for element in eim]) + 1
-    else:
-        maxRowSize = 3
     for alignment in alignments:
         chrom = alignment.target.id
         start = alignment.coordinates[0, 0]
@@ -1650,7 +1646,8 @@ def writeBlocks(
             endPos = max(endPos, end)
 
         if eim:
-            eim.addKeysFromRow(alignment, sectionEndIx)
+            for element in eim:
+                element.addKeysFromRow(alignment, sectionEndIx)
             sectionEndIx += 1
 
         data = struct.pack("iii", chromId, start, end)
