@@ -74,9 +74,15 @@ class _XMLparser(ContentHandler):
         # We don't care about white space in parent tags like Hsp,
         # but that white space doesn't belong to child tags like Hsp_midline
         if self._value.strip():
-            raise ValueError(
-                f"What should we do with {self._value} before the {name!r} tag?"
-            )
+            # Specifically ignore CREATE_VIEW statements that sometimes
+            # exist between <Hit> tags, as a result of very large remote
+            # BLAST searches.
+            if self._value.strip() == "CREATE_VIEW":
+                print(f"NCBIXML: Ignored: {self._value.strip()} before {name!r} tag.")
+            else:
+                raise ValueError(
+                    f"What should we do with {self._value} before the {name!r} tag?"
+                )
         self._value = ""
 
     def characters(self, ch):
