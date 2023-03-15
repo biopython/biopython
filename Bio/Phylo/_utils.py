@@ -105,7 +105,7 @@ def to_igraph(tree):
     # NOTE: In igraph, adding all edges at once is much faster, so we prepare
     # an edgelist and related attributes
     def add_subtree(node, nvertices, edges, attributes, edge_attributes):
-        '''Add edges from this subtree, breath-first'''
+        """Add edges from this subtree, breath-first."""
         n_node = nvertices[0]
         for child in node:
             nvertices[0] += 1
