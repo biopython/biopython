@@ -82,6 +82,60 @@ def to_networkx(tree):
     return G
 
 
+def to_igraph(tree):
+    """Convert a Tree object to an igraph Graph.
+
+    The result is useful for graph-oriented analysis and interactive plotting
+    with matplotlib, Cairo, and plotly.
+
+    Requires python-igraph version 0.10.0 or later.
+    """
+    try:
+        import igraph as ig
+    except ImportError:
+        raise MissingPythonDependencyError(
+            "Install igraph if you want to use to_igraph."
+        ) from None
+
+    if ig.__version__ < "0.10":
+        raise MissingPythonDependencyError(
+            "Update igraph to 0.10 or later if you want to use to_igraph."
+        ) from None
+
+    # NOTE: In igraph, adding all edges at once is much faster, so we prepare
+    # an edgelist and related attributes
+    def add_subtree(node, nvertices, edges, attributes, edge_attributes):
+        '''Add edges from this subtree, breath-first'''
+        n_node = nvertices[0]
+        for child in node:
+            nvertices[0] += 1
+            n_child = nvertices[0]
+            edges.append((n_node, n_child))
+            for attrname in attributes:
+                if hasattr(child, attrname):
+                    edge_attributes[attrname].append(getattr(child, attrname))
+
+        for child in node:
+            add_subtree(child, nvertices, edges, attributes, edge_attributes)
+
+    nvertices = [0]
+    edges = []
+    attributes = ["color", "width"]
+    edge_attributes = {attrname: [] for attrname in attributes}
+    add_subtree(tree.root, nvertices, edges, attributes, edge_attributes)
+
+    for attrname in attributes:
+        if len(edge_attributes[attrname]) == 0:
+            del edge_attributes[attrname]
+
+    graph = ig.Graph(
+        edges=edges,
+        edge_attrs=edge_attributes,
+        directed=bool(tree.rooted),
+    )
+    return graph
+
+
 def draw_ascii(tree, file=None, column_width=80):
     """Draw an ascii-art phylogram of the given tree.
 
