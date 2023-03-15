@@ -116,6 +116,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Erik Weßels <https://github.com/BioNij>
 - Erik Whiting <https://github.com/erik-whiting>
 - Fabian Egli <https://github.com/fabianegli>
+- Fabio Zanini <https://github.com/iosonofabio>
 - Fei Qi <https://github.com/qifei9>
 - Foen Peng <https://github.com/foenpeng>
 - Francesco Gastaldello <https://github.com/Gasta88>
