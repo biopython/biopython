@@ -18,6 +18,10 @@ iterators of the alignments to reset as well, which is bug prone. Instead,
 calling ``iter`` on a ``PairwiseAlignments`` object will now return itself. The
 iterator can be reset by calling the ``rewind`` method.
 
+A function called ``Bio.Phylo.to_igraph`` has been added to convert a
+``Bio.Phylo.Tree`` into an ``igraph.Graph`` graph, in parallel to the existing
+function to convert the same object into a ``networkx`` graph.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
@@ -27,6 +31,7 @@ possible, especially the following contributors:
 - Cam McMenamie
 - Ricardas Ralys
 - Vladislav Kuznetsov
+- Fabio Zanini
 
 12 February 2023: Biopython 1.81
 ===============================================
