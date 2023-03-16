@@ -1,4 +1,4 @@
-# Copyright (C) 2009 by Eric Talevich (eric.talevich@gmail.com)
+# Copyright (C) 2023 by Fabio Zanini (fabio.zanini@unsw.edu.au)
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
