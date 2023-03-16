@@ -12,7 +12,7 @@ from Bio import Align
 
 
 try:
-    import numpy as np
+    import numpy
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -30,11 +30,11 @@ class TestAlign_reading(unittest.TestCase):
         self.assertEqual(alignments.metadata["Scoring"], "autoMZ.v1")
         alignment = next(alignments)
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
+numpy.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
               'T', 'T', 'T', 'T', 'T', 'A', 'A', 'A', 'T', 'A', 'T', 'G', 'G',
               'T', 'T', 'T', 'G', 'C', 'T', 'T', 'T', 'A', 'T', 'G', 'G', 'C',
               'T', 'A', 'G', 'A', 'A', 'C', 'A', 'C', 'A', 'C', 'C', 'G', 'A',
@@ -95,11 +95,11 @@ np.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
         self.assertEqual(alignment.sequences[1].annotations["rightStatus"], "N")
         self.assertEqual(alignment.sequences[1].annotations["rightCount"], 0)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                np.array([[3009319, 3009392, 3009392, 3009481],
+                numpy.array([[3009319, 3009392, 3009392, 3009481],
                              [  11087,   11160,   11162,   11251],
                             ])
                 # fmt: on
@@ -172,10 +172,10 @@ i oryCun1.scaffold_133159 N 0 N 0
         self.assertEqual(len(alignment.sequences), 2)
         self.assertNotIn("empty", alignment.annotations)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
-                np.array([[3009319, 3009392, 3009392, 3009481],
+                numpy.array([[3009319, 3009392, 3009392, 3009481],
                              [  11087,   11160,   11162,   11251],
                             ])
                 # fmt: on
@@ -209,11 +209,11 @@ i oryCun1.scaffold_133159 N 0 N 0
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
+numpy.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
               'T', 'T', 'T', 'T', 'T', 'A', 'A', 'A', 'T', 'A', 'T', 'G', 'G',
               'T', 'T', 'T', 'G', 'C', 'T', 'T', 'T', 'A', 'T', 'G', 'G', 'C',
               'T', 'A', 'G', 'A', 'A', 'C', 'A', 'C', 'A', 'C', 'C', 'G', 'A',
@@ -303,9 +303,9 @@ np.array([['T', 'C', 'A', 'T', 'A', 'G', 'G', 'T', 'A', 'T', 'T', 'T', 'A',
         self.assertEqual(len(alignment.sequences), 4)
         self.assertNotIn("empty", alignment.annotations)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3012076,   3012116,   3012116,   3012141,   3012141,   3012183,
                 3012183,   3012211,   3012211,   3012231,   3012235,   3012286,
@@ -478,9 +478,9 @@ i hg18.chr6    N 0 C 0
         self.assertEqual(len(alignment.sequences), 5)
         self.assertNotIn("empty", alignment.annotations)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3012441,   3012464,   3012466,   3012497,   3012508,   3012508,
                 3012520,   3012530,   3012539,   3012540,   3012566],
@@ -538,11 +538,11 @@ i otoGar1.scaffold_334.1-359464 N 0 C 0
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['T', 'G', 'G', 'G', 'T', 'C', 'C', 'C', 'C', 'T', 'T', 'G', 'G',
+numpy.array([['T', 'G', 'G', 'G', 'T', 'C', 'C', 'C', 'C', 'T', 'T', 'G', 'G',
               'C', 'A', 'C', 'A', 'T', 'C', 'C', 'A', 'G', 'A', 'T', 'C', 'T',
               'C', 'C', 'C', 'C', 'A', 'G', 'T', 'T', 'A', 'A', 'C', 'C', 'T',
               'G', 'T', 'C', 'C', 'T', 'G', 'C', 'T', 'T', 'A', 'G', 'A', 'C',
@@ -692,9 +692,9 @@ np.array([['T', 'G', 'G', 'G', 'T', 'C', 'C', 'C', 'C', 'T', 'T', 'G', 'G',
         self.assertEqual(len(alignment.sequences), 6)
         self.assertNotIn("empty", alignment.annotations)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3012566,   3012566,   3012587,   3012587,   3012626,   3012627,
                 3012675,   3012676,   3012695,   3012695,   3012695,   3012695,
@@ -906,9 +906,9 @@ i cavPor2.scaffold_290371       N 0 C 0
         self.assertEqual(len(alignment.sequences), 7)
         self.assertNotIn("empty", alignment.annotations)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3012828,   3012833,   3012902,   3012903,   3012904,   3012908,
                 3012911,   3012915,   3012915,   3012915,   3012921,   3012922,
@@ -1124,9 +1124,9 @@ i echTel1.scaffold_288249       N 0 I 7564
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3012996,   3013014,   3013014,   3013014,   3013028,   3013028,
                 3013028,   3013031,   3013031,   3013034,   3013036,   3013036,
@@ -1302,7 +1302,7 @@ e echTel1.scaffold_288249             87661 7564 +    100002 I
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
         self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[3013218, 3013437]]))
+            numpy.array_equal(alignment.coordinates, numpy.array([[3013218, 3013437]]))
         )
         self.assertEqual(
             str(alignment),
@@ -1331,11 +1331,11 @@ e ponAbe2.chr6                     16161337    2 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['a', 'g', 'c', 'c', 'a', 'g', 'g', 'c', 'g', 't', 'g', 'g', 't',
+numpy.array([['a', 'g', 'c', 'c', 'a', 'g', 'g', 'c', 'g', 't', 'g', 'g', 't',
               'g', 'g', 'c', 'a', 'c', 'a', 'c', 'a', 'c', 'c', 't', 't', 't',
               'a', 'c', 't', 'c', 'c', 'c', 'a', 'g', 'c', 'a', 't', 't', 't',
               'g', 'g', 'g', 'g', 'g', 'g', 'c', 'a', 'g', 'a', 'g', 'g', 'c',
@@ -1435,9 +1435,9 @@ np.array([['a', 'g', 'c', 'c', 'a', 'g', 'g', 'c', 'g', 't', 'g', 'g', 't',
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3013437,   3013458,   3013509,   3013545,   3013603],
              [157528493, 157528472, 157528421, 157528421, 157528363],
@@ -1486,11 +1486,11 @@ e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['T', 'C', 'C', 'A', 'A', 'A', 'A', 'T', 'G', 'G', 'T', 'T', 'A',
+numpy.array([['T', 'C', 'C', 'A', 'A', 'A', 'A', 'T', 'G', 'G', 'T', 'T', 'A',
               'G', 'C', 'T', 'A', 'T', 'G', 'C', 'C', 'C', 'A', 'A', 'C', 'T',
               'C', 'C', 'T', 'T', 'T', 'C', 'A', 'C', 'T', 'C', 'C', 'A', 'A',
               'G', 'A', 'A', 'A', 'A', 'T', 'A', 'T', 'C', 'C', 'T', 'A', 'A',
@@ -1596,7 +1596,7 @@ np.array([['T', 'C', 'C', 'A', 'A', 'A', 'A', 'T', 'G', 'G', 'T', 'T', 'A',
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
         self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[3013603, 3014644]]))
+            numpy.array_equal(alignment.coordinates, numpy.array([[3013603, 3014644]]))
         )
         self.assertEqual(
             str(alignment),
@@ -1750,9 +1750,9 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3014644,   3014652,   3014652,   3014653,   3014664,   3014665,
                 3014684,   3014685,   3014689],
@@ -1802,11 +1802,11 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['C', 'C', 'T', 'G', 'T', 'A', 'C', 'C', '-', '-', '-', 'C', 'T',
+numpy.array([['C', 'C', 'T', 'G', 'T', 'A', 'C', 'C', '-', '-', '-', 'C', 'T',
               'T', 'T', 'G', 'G', 'T', 'G', 'A', 'G', 'A', 'A', 'T', 'T', 'T',
               'T', 'T', 'G', 'T', 'T', 'T', 'C', 'A', 'G', 'T', 'G', 'T', 'T',
               'A', 'A', 'A', 'A', 'G', 'T', 'T', 'T', 'G'],
@@ -1938,9 +1938,9 @@ np.array([['C', 'C', 'T', 'G', 'T', 'A', 'C', 'C', '-', '-', '-', 'C', 'T',
         self.assertEqual(len(alignment.sequences), 6)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3014689,   3014702,   3014703,   3014729,   3014729,   3014742],
              [155029160, 155029147, 155029146, 155029120, 155029120, 155029107],
@@ -1996,11 +1996,11 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['G', 'G', 'G', 'A', 'G', 'C', 'A', 'T', 'A', 'A', 'A', 'A', 'C',
+numpy.array([['G', 'G', 'G', 'A', 'G', 'C', 'A', 'T', 'A', 'A', 'A', 'A', 'C',
               'T', 'C', 'T', 'A', 'A', 'A', 'T', 'C', 'T', 'G', 'C', 'T', 'A',
               'A', 'A', 'T', 'G', 'T', 'C', 'T', 'T', 'G', 'T', 'C', 'C', 'C',
               'T', '-', 'T', 'T', 'G', 'G', 'A', 'A', 'A', 'G', 'A', 'G', 'T',
@@ -2113,9 +2113,9 @@ np.array([['G', 'G', 'G', 'A', 'G', 'C', 'A', 'T', 'A', 'A', 'A', 'A', 'C',
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 5)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[3014742, 3014749, 3014754, 3014756, 3014760, 3014775, 3014778],
              [   6283,    6290,    6290,    6292,    6296,    6311,    6311],
@@ -2157,11 +2157,11 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['A', 'A', 'G', 'T', 'T', 'C', 'C', 'C', 'T', 'C', 'C', 'A', 'T',
+numpy.array([['A', 'A', 'G', 'T', 'T', 'C', 'C', 'C', 'T', 'C', 'C', 'A', 'T',
               'A', 'A', 'T', 'T', 'C', 'C', 'T', 'T', 'C', 'C', 'T', 'C', 'C',
               'C', 'A', 'C', 'C', 'C', 'C', 'C', 'A', 'C', 'A'],
              ['A', 'A', 'A', 'T', 'G', 'T', 'A', '-', '-', '-', '-', '-', 'T',
@@ -2235,7 +2235,7 @@ np.array([['A', 'A', 'G', 'T', 'T', 'C', 'C', 'C', 'T', 'C', 'C', 'A', 'T',
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 8)
         self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[3014778, 3014795]]))
+            numpy.array_equal(alignment.coordinates, numpy.array([[3014778, 3014795]]))
         )
         self.assertEqual(
             str(alignment),
@@ -2260,11 +2260,11 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['T', 'C', 'C', 'C', 'A', 'T', 'G', 'T', 'C', 'C', 'A', 'C', 'C',
+numpy.array([['T', 'C', 'C', 'C', 'A', 'T', 'G', 'T', 'C', 'C', 'A', 'C', 'C',
               'C', 'T', 'G', 'A']], dtype='U')
                 # fmt: on
             )
@@ -2418,9 +2418,9 @@ np.array([['T', 'C', 'C', 'C', 'A', 'T', 'G', 'T', 'C', 'C', 'A', 'C', 'C',
         self.assertEqual(len(alignment.sequences), 9)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3014795,   3014798,   3014799,   3014814,   3014815,   3014815,
                 3014815,   3014815,   3014815,   3014821,   3014822,   3014822,
@@ -2509,11 +2509,11 @@ e echTel1.scaffold_288249             87661 7564 +    100002 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['G', 'T', 'T', 'T', 'C', 'A', 'G', 'G', 'G', 'G', 'C', 'A', 'G',
+numpy.array([['G', 'T', 'T', 'T', 'C', 'A', 'G', 'G', 'G', 'G', 'C', 'A', 'G',
               'C', 'T', 'C', 'G', 'C', 'T', 'G', '-', '-', '-', '-', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'T', 'A',
               'G', 'C', 'A', 'G', '-', 'C', 'T', 'A', 'A', 'G', 'G', 'C', 'A',
@@ -2729,9 +2729,9 @@ np.array([['G', 'T', 'T', 'T', 'C', 'A', 'G', 'G', 'G', 'G', 'C', 'A', 'G',
         self.assertEqual(len(alignment.sequences), 10)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3014842,   3014843,   3014843,   3014843,   3014849,   3014849,
                 3014849,   3014851,   3014852,   3014874,   3014874,   3014875,
@@ -3034,9 +3034,9 @@ e echTel1.scaffold_288249             87661 7564 +    100002 I
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3015028,   3015029,   3015035,   3015035,   3015035,   3015035,
                 3015035,   3015036,   3015040,   3015041,   3015066,   3015075,
@@ -3113,11 +3113,11 @@ e panTro2.chr6                     157518570    0 + 173908612 C
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['c', 'c', 'a', 't', 't', 't', 't', '-', '-', '-', '-', '-', '-',
+numpy.array([['c', 'c', 'a', 't', 't', 't', 't', '-', '-', '-', '-', '-', '-',
               '-', '-', '-', '-', 't', 't', 'a', 't', 't', 'a', 'g', 'g', 't',
               'a', 't', 't', 't', 'a', 'g', 'c', 't', 'c', 'a', 't', 't', 't',
               'a', 'c', 'a', 't', 't', 't', 'c', 'c', 'a', 'a', 't', 'g', 'c',
@@ -3231,7 +3231,7 @@ np.array([['c', 'c', 'a', 't', 't', 't', 't', '-', '-', '-', '-', '-', '-',
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[3015086, 3017658]]))
+            numpy.array_equal(alignment.coordinates, numpy.array([[3015086, 3017658]]))
         )
         self.assertEqual(
             str(alignment),
@@ -3429,9 +3429,9 @@ e ponAbe2.chr6                      16169743   75 - 174210431 I
         self.assertEqual(len(alignment.sequences), 3)
         self.assertEqual(len(alignment.annotations["empty"]), 7)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3017658,   3017681,   3017681,   3017699,   3017705,   3017743],
              [155028517, 155028494, 155028490, 155028472, 155028472, 155028434],
@@ -3474,11 +3474,11 @@ e ponAbe2.chr6                     16169743   75 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['T', 'T', 'T', 'T', 'T', 'A', 'T', 'T', 'T', 'G', 'C', 'A', 'G',
+numpy.array([['T', 'T', 'T', 'T', 'T', 'A', 'T', 'T', 'T', 'G', 'C', 'A', 'G',
               'G', 'T', 'T', 'T', 'C', 'T', 'T', 'T', 'A', 'C', '-', '-', '-',
               '-', 'A', 'G', 'T', 'T', 'C', 'T', 'C', 'T', 'T', 'T', 'C', 'A',
               'T', 'T', 'C', 'T', 'T', 'C', 'T', 'C', 'C', 'T', 'C', 'T', 'T',
@@ -3572,7 +3572,7 @@ np.array([['T', 'T', 'T', 'T', 'T', 'A', 'T', 'T', 'T', 'G', 'C', 'A', 'G',
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[3017743, 3018161]]))
+            numpy.array_equal(alignment.coordinates, numpy.array([[3017743, 3018161]]))
         )
         self.assertEqual(
             str(alignment),
@@ -3612,11 +3612,11 @@ e ponAbe2.chr6                     16169743   75 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['A', 'C', 'C', 'A', 'C', 'A', 'G', 'A', 'C', 'C', 'T', 'T', 'C',
+numpy.array([['A', 'C', 'C', 'A', 'C', 'A', 'G', 'A', 'C', 'C', 'T', 'T', 'C',
               'T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'C', 'C', 'A', 'A', 'A',
               'G', 'G', 'A', 'C', 'G', 'C', 'A', 'A', 'A', 'T', 'T', 'A', 'T',
               'G', 'T', 'A', 'T', 'C', 'C', 'A', 'C', 'T', 'T', 't', 'a', 'g',
@@ -3749,9 +3749,9 @@ np.array([['A', 'C', 'C', 'A', 'C', 'A', 'G', 'A', 'C', 'C', 'T', 'T', 'C',
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3018161,   3018172,   3018174,   3018176,   3018176,   3018230],
              [157518434, 157518423, 157518423, 157518423, 157518423, 157518369],
@@ -3798,11 +3798,11 @@ e otoGar1.scaffold_334.1-359464      184575  137 -    359464 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['A', 'T', 'C', 'C', 'A', 'C', 'A', 'A', 'A', 'A', 'G', 'A', 'G',
+numpy.array([['A', 'T', 'C', 'C', 'A', 'C', 'A', 'A', 'A', 'A', 'G', 'A', 'G',
               'A', 'C', '-', '-', '-', '-', '-', 'A', 'A', 'A', 'G', 'A', 'A',
               'G', 'A', 'A', 'A', 'A', 'C', 'C', 'A', 'A', 'A', 'A', 'G', 'A',
               'A', 'A', 'A', 'G', 'A', 'T', 'T', 'G', 'T', 'A', 'G', 'C', 'T',
@@ -3918,9 +3918,9 @@ np.array([['A', 'T', 'C', 'C', 'A', 'C', 'A', 'A', 'A', 'A', 'G', 'A', 'G',
         self.assertEqual(len(alignment.sequences), 3)
         self.assertEqual(len(alignment.annotations["empty"]), 7)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3018230,   3018234,   3018234,   3018249,   3018270,   3018289,
                 3018294,   3018313,   3018323,   3018349,   3018349,   3018359],
@@ -3970,11 +3970,11 @@ e ponAbe2.chr6                     16169879   97 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['A', 'G', 'G', 'A', '-', 'C', 'A', 'A', 'A', 'A', 'T', 'A', 'A',
+numpy.array([['A', 'G', 'G', 'A', '-', 'C', 'A', 'A', 'A', 'A', 'T', 'A', 'A',
               'T', 'A', 'C', 'A', 'G', 'A', 't', 't', 't', 't', 't', 't', 't',
               't', 't', 't', 't', 't', 't', 't', 't', 't', 't', 't', 't', 't',
               't', 'G', 'C', 'A', 'G', 'T', 'A', 'C', 'T', 'G', 'G', 'A', 'A',
@@ -4119,9 +4119,9 @@ np.array([['A', 'G', 'G', 'A', '-', 'C', 'A', 'A', 'A', 'A', 'T', 'A', 'A',
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(len(alignment.annotations["empty"]), 5)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3018359,   3018360,   3018361,   3018361,   3018393,   3018393,
                 3018405,   3018405,   3018447,   3018447,   3018447,   3018464,
@@ -4189,11 +4189,11 @@ e cavPor2.scaffold_216473              8048 1372 -     10026 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['T', 'T', '-', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A',
+numpy.array([['T', 'T', '-', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A',
               'T', 'A', 'C', 'A', 'T', 'G', 'C', 'A', 'T', 'T', 'C', 'A', 'T',
               'G', 'T', 'C', 'T', 'C', 'A', 'T', 'A', 'A', '-', 'T', 'A', 'A',
               'T', 'T', 'A', 'T', 'T', 'A', 'A', 'C', 'A', '-', 'T', 'T', 'G',
@@ -4320,7 +4320,7 @@ np.array([['T', 'T', '-', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A',
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[3018482, 3018644]]))
+            numpy.array_equal(alignment.coordinates, numpy.array([[3018482, 3018644]]))
         )
         self.assertEqual(
             str(alignment),
@@ -4350,11 +4350,11 @@ e ponAbe2.chr6                     16170105 2523 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['t', 'c', 't', 't', 'c', 'a', 't', 'c', 't', 'c', 'c', 't', 'c',
+numpy.array([['t', 'c', 't', 't', 'c', 'a', 't', 'c', 't', 'c', 'c', 't', 'c',
               't', 't', 't', 't', 'c', 'c', 't', 'c', 'c', 't', 't', 't', 't',
               't', 't', 't', 't', 't', 't', 'c', 't', 'c', 'a', 't', 't', 't',
               'c', 't', 'c', 't', 't', 't', 'c', 't', 'c', 't', 't', 't', 'c',
@@ -4457,9 +4457,9 @@ np.array([['t', 'c', 't', 't', 'c', 'a', 't', 'c', 't', 'c', 'c', 't', 'c',
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[ 3018644,  3018671,  3018676,  3018687,  3018689,  3018697,
                3018697,  3018716,  3018716,  3018729,  3018731,  3018739,
@@ -4513,11 +4513,11 @@ e ponAbe2.chr6                     16170105 2523 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['A', 'G', 'G', 'G', 'T', 'A', 'G', 'G', 'C', 'C', 'A', 'A', 'G',
+numpy.array([['A', 'G', 'G', 'G', 'T', 'A', 'G', 'G', 'C', 'C', 'A', 'A', 'G',
               'T', 'G', 'C', 'C', 'T', 'T', 'G', 'G', 'G', 'A', 'A', 'G', 'T',
               'A', 'G', 'T', 'T', 'G', 'T', 'T', 'G', 'G', 'T', 'A', 'G', 'A',
               'C', 'T', 'G', 'A', 'A', 'A', 'G', 'T', 'G', 'T', 'G', 'T', 'T',
@@ -4641,9 +4641,9 @@ np.array([['A', 'G', 'G', 'G', 'T', 'A', 'G', 'G', 'C', 'C', 'A', 'A', 'G',
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[ 3018822,  3018862,  3018863,  3018866,  3018866,  3018883,
                3018883,  3018913,  3018913,  3018932],
@@ -4691,11 +4691,11 @@ e ponAbe2.chr6                     16170105 2523 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['C', 'T', 'G', 'C', 'C', 'T', 'T', 'C', 'C', 'A', 'T', 'T', 'A',
+numpy.array([['C', 'T', 'G', 'C', 'C', 'T', 'T', 'C', 'C', 'A', 'T', 'T', 'A',
               'C', 'G', 'A', 'T', 'T', 'T', 'A', 'C', 'T', 'G', 'A', 'T', 'C',
               'A', 'C', 'T', 'T', 'A', 'C', 'A', 'A', 'C', 'C', 'C', 'T', 'C',
               'C', 'C', 'A', 'C', 'A', '-', '-', '-', '-', 'G', 'A', 'A', 'G',
@@ -4793,7 +4793,7 @@ np.array([['C', 'T', 'G', 'C', 'C', 'T', 'T', 'C', 'C', 'A', 'T', 'T', 'A',
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 10)
         self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[3018932, 3019271]]))
+            numpy.array_equal(alignment.coordinates, numpy.array([[3018932, 3019271]]))
         )
         self.assertEqual(
             str(alignment),
@@ -4830,11 +4830,11 @@ e ponAbe2.chr6                     16170105 2523 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['g', 't', 'c', 't', 'g', 'a', 'g', 't', 't', 'a', 'g', 'g', 'g',
+numpy.array([['g', 't', 'c', 't', 'g', 'a', 'g', 't', 't', 'a', 'g', 'g', 'g',
               't', 't', 't', 't', 'a', 'c', 't', 'g', 'c', 't', 'g', 't', 'g',
               'a', 'a', 'c', 'a', 'g', 'a', 'c', 'a', 'c', 'c', 'a', 't', 'g',
               'a', 'c', 'c', 'a', 'a', 'g', 'g', 'c', 'a', 't', 'g', 't', 'c',
@@ -4951,9 +4951,9 @@ np.array([['g', 't', 'c', 't', 'g', 'a', 'g', 't', 't', 'a', 'g', 'g', 'g',
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[ 3019271,  3019276,  3019277,  3019282,  3019282,  3019293,
                3019293,  3019308,  3019310,  3019324,  3019334,  3019377],
@@ -5001,11 +5001,11 @@ e ponAbe2.chr6                     16170105 2523 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['G', 'A', 'G', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', '-', '-',
+numpy.array([['G', 'A', 'G', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'G', 'G',
               'C', 'G', 'C', 'T', 'C', 'A', 'C', 'G', '-', 'T', 'G', 'A', 'G',
               'G', 'C', 'C', 'A', 'G', 'G', 'A', 'G', 'T', 'A', 'A', 'A', 'T',
@@ -5133,9 +5133,9 @@ np.array([['G', 'A', 'G', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', '-', '-',
         self.assertEqual(len(alignment.sequences), 3)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[ 3019377,  3019402,  3019402,  3019434,  3019434,  3019443,
                3019443,  3019456,  3019459,  3019465],
@@ -5184,11 +5184,11 @@ e ponAbe2.chr6                     16170105 2523 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['C', 'C', 'C', 'C', 'A', 'G', 'C', 'A', 'T', 'T', 'C', 'T', 'G',
+numpy.array([['C', 'C', 'C', 'C', 'A', 'G', 'C', 'A', 'T', 'T', 'C', 'T', 'G',
               'G', 'C', 'A', 'G', 'A', 'C', 'A', 'C', 'A', 'G', 'T', 'G', '-',
               'A', 'A', 'A', 'A', 'G', 'A', 'G', 'A', 'C', 'A', 'G', 'A', 'T',
               'G', 'G', 'T', 'C', 'A', 'C', 'T', 'A', 'A', 'T', 'A', 'A', 'A',
@@ -5340,9 +5340,9 @@ np.array([['C', 'C', 'C', 'C', 'A', 'G', 'C', 'A', 'T', 'T', 'C', 'T', 'G',
         self.assertEqual(len(alignment.sequences), 6)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3019465,   3019468,   3019472,   3019486,   3019487,   3019512],
              [    10128,     10131,     10135,     10149,     10150,     10175],
@@ -5394,11 +5394,11 @@ e ponAbe2.chr6                     16170105 2523 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['A', 'A', 'G', 'A', 'T', 'A', 'G', 'A', 'T', 'A', 'T', 'T', 'T',
+numpy.array([['A', 'A', 'G', 'A', 'T', 'A', 'G', 'A', 'T', 'A', 'T', 'T', 'T',
               'A', 'G', 'A', 'A', 'G', 'T', 'A', 'G', 'C', 'T', 'T', 'T', 'T',
               'T', 'A', 'T', 'G', 'T', 'T', 'T', 'T', 'T', 'C', 'T', 'G', 'A',
               'T', 'G', 'T', 'G', 'T', 'G', 'T', 'T'],
@@ -5546,9 +5546,9 @@ np.array([['A', 'A', 'G', 'A', 'T', 'A', 'G', 'A', 'T', 'A', 'T', 'T', 'T',
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(len(alignment.annotations["empty"]), 7)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3019512,   3019514,   3019536,   3019536,   3019536,   3019536,
                 3019545,   3019545,   3019555,   3019555,   3019555,   3019582,
@@ -5618,11 +5618,11 @@ e ponAbe2.chr6                     16170105 2523 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['T', 'G', 'C', 'A', 'T', 'C', 'A', 'T', 'T', 'A', 'A', 'G', 'A',
+numpy.array([['T', 'G', 'C', 'A', 'T', 'C', 'A', 'T', 'T', 'A', 'A', 'G', 'A',
               'C', 'T', 'A', 'G', 'A', 'G', 'T', 'T', 'C', 'C', 'T', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
               'T', 'T', 'C', 'T', 'G', 'T', 'C', 'T', 'T', '-', '-', '-', 'T',
@@ -5756,7 +5756,7 @@ np.array([['T', 'G', 'C', 'A', 'T', 'C', 'A', 'T', 'T', 'A', 'A', 'G', 'A',
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 11)
         self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[3019604, 3019702]]))
+            numpy.array_equal(alignment.coordinates, numpy.array([[3019604, 3019702]]))
         )
         self.assertEqual(
             str(alignment),
@@ -5786,11 +5786,11 @@ e ponAbe2.chr6                      16170105 2523 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['t', 't', 't', 'g', 'g', 't', 't', 't', 'g', 'g', 't', 't', 't',
+numpy.array([['t', 't', 't', 'g', 'g', 't', 't', 't', 'g', 'g', 't', 't', 't',
               'g', 'g', 't', 't', 't', 't', 't', 't', 'c', 'a', 'a', 'g', 'a',
               'c', 'a', 'g', 'g', 'g', 't', 't', 't', 'c', 't', 't', 't', 'g',
               't', 'a', 't', 'a', 'g', 't', 'c', 'c', 't', 'a', 'g', 'c', 't',
@@ -5894,10 +5894,10 @@ np.array([['t', 't', 't', 'g', 'g', 't', 't', 't', 'g', 'g', 't', 't', 't',
         self.assertEqual(len(alignment.sequences), 2)
         self.assertEqual(len(alignment.annotations["empty"]), 10)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
-                np.array([[3019702, 3019725, 3019725, 3019744],
+                numpy.array([[3019702, 3019725, 3019725, 3019744],
                              [  46521,   46498,   46466,   46447],
                             ])
                 # fmt: on
@@ -5937,11 +5937,11 @@ e ponAbe2.chr6                      16170105 2523 - 174210431 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['t', 'c', 't', 'g', 'c', 'c', 't', 'g', 'c', 'c', 't', 'c', 't',
+numpy.array([['t', 'c', 't', 'g', 'c', 'c', 't', 'g', 'c', 'c', 't', 'c', 't',
               'g', 'c', 'c', 't', 'c', 'c', 'c', 'a', 'a', 'g', '-', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
@@ -6096,9 +6096,9 @@ np.array([['t', 'c', 't', 'g', 'c', 'c', 't', 'g', 'c', 'c', 't', 'c', 't',
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3019744,   3019744,   3019747,   3019757,   3019763,   3019763,
                 3019763,   3019763,   3019764,   3019766,   3019773,   3019777],
@@ -6170,11 +6170,11 @@ e panTro2.chr6                     157515610    0 + 173908612 C
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
               '-', '-', '-', '-', 'c', 'g', 'c', 'c', 'a', 'c', 'c', 'a', 'c',
               't', 'g', 'c', 'c', 'c', 't', 'g', 'c', 'C', 'T', '-', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', 'T', 'A', 'A', 'A',
@@ -6395,9 +6395,9 @@ np.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
         self.assertEqual(len(alignment.sequences), 10)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3019777,   3019783,   3019786,   3019787,   3019787,   3019789,
                 3019790,   3019793,   3019797,   3019797,   3019802,   3019806,
@@ -6644,7 +6644,7 @@ e cavPor2.scaffold_216473              8048 1372 -     10026 I
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 12)
         self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[3019960, 3020717]]))
+            numpy.array_equal(alignment.coordinates, numpy.array([[3019960, 3020717]]))
         )
         self.assertEqual(
             str(alignment),
@@ -6697,11 +6697,11 @@ e oryCun1.scaffold_156751                426   37 -      4726 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['a', 'c', 't', 'a', 'g', 'g', 'g', 'a', 't', 'g', 'g', 'g', 'a',
+numpy.array([['a', 'c', 't', 'a', 'g', 'g', 'g', 'a', 't', 'g', 'g', 'g', 'a',
               'g', 'a', 'g', 'g', 'c', 't', 'c', 'c', 'c', 'a', 'g', 'a', 'a',
               'c', 'c', 'c', 'a', 'g', 't', 'a', 'a', 't', 'g', 'a', 't', 'g',
               'a', 'c', 'a', 't', 't', 'a', 'a', 'g', 'a', 'a', 'a', 't', 'a',
@@ -6870,9 +6870,9 @@ np.array([['a', 'c', 't', 'a', 'g', 'g', 'g', 'a', 't', 'g', 'g', 'g', 'a',
         self.assertEqual(len(alignment.sequences), 4)
         self.assertEqual(len(alignment.annotations["empty"]), 9)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3020717,   3020721,   3020727,   3020730,   3020733,   3020742,
                 3020742,   3020761],
@@ -6922,11 +6922,11 @@ e oryCun1.scaffold_156751               426   37 -      4726 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['T', 'G', 'T', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A',
+numpy.array([['T', 'G', 'T', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A',
               'T', 'A', 'A', 'A', 'G', 'A', 'T', 'A', 'T', 'A', 'C', 'T', '-',
               'G', 'A', 'G', 'G', 'A', 'G', 'C', 'C', 'C', 'A', 'T', 'G', 'A',
               'A', 'T', 'T', 'T', 'T', 'A'],
@@ -7032,7 +7032,7 @@ np.array([['T', 'G', 'T', 'C', 'A', 'A', 'A', 'C', 'A', 'T', 'G', 'C', 'A',
         self.assertEqual(len(alignment.sequences), 1)
         self.assertEqual(len(alignment.annotations["empty"]), 12)
         self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[3020761, 3020918]]))
+            numpy.array_equal(alignment.coordinates, numpy.array([[3020761, 3020918]]))
         )
         self.assertEqual(
             str(alignment),
@@ -7065,11 +7065,11 @@ e oryCun1.scaffold_156751               426   37 -      4726 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['T', 'A', 'T', 'A', 'T', 'A', 'T', 'G', 'C', 'T', 'A', 'T', 'C',
+numpy.array([['T', 'A', 'T', 'A', 'T', 'A', 'T', 'G', 'C', 'T', 'A', 'T', 'C',
               'C', 'G', 'T', 'G', 'T', 'G', 'C', 'T', 'G', 'T', 'G', 'A', 'T',
               'T', 'T', 'T', 'T', 'G', 'T', 'T', 'T', 'T', 'A', 'A', 'A', 'T',
               'G', 'T', 'T', 'A', 'T', 'T', 'T', 'T', 'A', 'T', 'G', 'T', 'A',
@@ -7256,9 +7256,9 @@ np.array([['T', 'A', 'T', 'A', 'T', 'A', 'T', 'G', 'C', 'T', 'A', 'T', 'C',
         self.assertEqual(len(alignment.sequences), 9)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3020918,   3020919,   3020921,   3020938,   3020938,   3020938,
                 3020938,   3020938,   3020941,   3020959,   3020971,   3020972,
@@ -7350,11 +7350,11 @@ e otoGar1.scaffold_334.1-359464      187778  358 -    359464 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['G', 'A', 'G', 'G', 'T', 'T', 'T', 'G', 'T', 'G', 'A', 'C', 'T',
+numpy.array([['G', 'A', 'G', 'G', 'T', 'T', 'T', 'G', 'T', 'G', 'A', 'C', 'T',
               'T', 'T', 'T', 'A', 'A', 'T', 'A', '-', '-', '-', '-', '-', '-',
               '-', '-', '-', '-', 'C', 'T', 'G', 'A', 'T', 'T', 'G', 'T', 'T',
               'A', 'T', 'C', 'T', 'A', 'A', 'C', 'A', 'T', 'C', 'A', 'C', 'A',
@@ -7597,9 +7597,9 @@ np.array([['G', 'A', 'G', 'G', 'T', 'T', 'T', 'G', 'T', 'G', 'A', 'C', 'T',
         self.assertEqual(len(alignment.sequences), 10)
         self.assertEqual(len(alignment.annotations["empty"]), 4)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 # fmt: off
-                alignment.coordinates, np.array([[  3021014,   3021054],
+                alignment.coordinates, numpy.array([[  3021014,   3021054],
                                                     [     4161,      4121],
                                                     [   171328,    171288],
                                                     [    10582,     10622],
@@ -7665,11 +7665,11 @@ e cavPor2.scaffold_216473              9502   28 -     10026 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['A', 'C', 'C', 'T', 'T', 'G', 'G', 'T', 'G', 'A', 'C', 'G', 'C',
+numpy.array([['A', 'C', 'C', 'T', 'T', 'G', 'G', 'T', 'G', 'A', 'C', 'G', 'C',
               'C', 'A', 'C', 'T', 'G', 'G', 'A', 'T', 'T', 'T', 'T', 'G', 'T',
               'A', 'T', 'G', 'A', 'C', 'T', 'G', 'A', 'A', 'T', 'A', 'C', 'T',
               'G'],
@@ -7913,9 +7913,9 @@ np.array([['A', 'C', 'C', 'T', 'T', 'G', 'G', 'T', 'G', 'A', 'C', 'G', 'C',
         self.assertEqual(len(alignment.sequences), 11)
         self.assertEqual(len(alignment.annotations["empty"]), 3)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3021054,   3021072,   3021073,   3021075,   3021083,   3021091,
                 3021091,   3021091,   3021091,   3021100,   3021104],
@@ -8011,11 +8011,11 @@ e echTel1.scaffold_288249             87661 7564 +    100002 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['C', 'T', 'C', 'A', 'T', 'T', 'T', 'G', 'G', 'G', 'A', 'A', 'C',
+numpy.array([['C', 'T', 'C', 'A', 'T', 'T', 'T', 'G', 'G', 'G', 'A', 'A', 'C',
               'T', 'T', 'A', 'C', 'A', 'G', 'G', 'T', 'C', 'A', 'G', 'C', 'A',
               'A', 'A', 'G', 'G', 'C', 'T', 'T', 'C', 'C', 'A', 'G', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
@@ -8254,9 +8254,9 @@ np.array([['C', 'T', 'C', 'A', 'T', 'T', 'T', 'G', 'G', 'G', 'A', 'A', 'C',
         self.assertEqual(len(alignment.sequences), 12)
         self.assertEqual(len(alignment.annotations["empty"]), 2)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3021104,   3021109,   3021113,   3021115,   3021120,   3021120,
                 3021129,   3021136],
@@ -8345,11 +8345,11 @@ e tupBel1.scaffold_114895.1-498454   174338  623 -    498454 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['C', 'T', 'G', 'T', 'T', 'A', 'G', 'T', 'G', 'C', 'T', 'G', 'T',
+numpy.array([['C', 'T', 'G', 'T', 'T', 'A', 'G', 'T', 'G', 'C', 'T', 'G', 'T',
               'T', 'T', 'T', '-', '-', '-', 'A', 'A', 'T', 'G', 'T', 'A', 'C',
               'C', 'T', 'C', 'G', 'C', 'A', 'G', 'T', 'A'],
              ['-', '-', '-', '-', '-', 'A', 'T', 'T', 'A', 'C', 'T', 'T', 'T',
@@ -8619,9 +8619,9 @@ np.array([['C', 'T', 'G', 'T', 'T', 'A', 'G', 'T', 'G', 'C', 'T', 'G', 'T',
         self.assertEqual(len(alignment.sequences), 13)
         self.assertEqual(len(alignment.annotations["empty"]), 2)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3021136,   3021138,   3021139,   3021152,   3021153,   3021154,
                 3021156,   3021156,   3021158,   3021163,   3021163,   3021165,
@@ -8756,11 +8756,11 @@ e tupBel1.scaffold_114895.1-498454   174338  623 -    498454 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['A', 'G', 'G', 'C', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'G', 'T',
+numpy.array([['A', 'G', 'G', 'C', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'G', 'T',
               'G', 'A', 'T', 'A', 'A', 'G', 'A', '-', '-', '-', '-', '-', '-',
               '-', 'T', 'T', 'G', 'T', 'G', 'T', 'T', '-', '-', '-', '-', '-',
               'T', 'A', 'C', '-', '-', '-', '-', 'T', 'C', 'C', 'C', 'T', 'C',
@@ -9059,9 +9059,9 @@ np.array([['A', 'G', 'G', 'C', 'A', 'A', 'A', 'T', 'G', 'A', 'G', 'G', 'T',
         self.assertEqual(len(alignment.sequences), 14)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3021180,   3021180,   3021180,   3021180,   3021184,   3021184,
                 3021184,   3021195,   3021195,   3021198,   3021199,   3021204],
@@ -9176,11 +9176,11 @@ e ornAna1.chr2                     14751195 5690 -  54797317 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
               '-', '-', '-', '-', '-', '-', 'T', 'C', 'C', 'C', '-', '-', '-',
               '-', '-', '-', '-', 'A', 'G', 'A', 'G', 'A', 'G', 'T', 'C', 'T',
               'G', 'A', '-', 'T', 'A', 'G', 'G', 'A', 'G', 'G', 'A', 'G'],
@@ -9501,9 +9501,9 @@ np.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
         self.assertEqual(len(alignment.sequences), 15)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3021204,   3021205,   3021206,   3021210,   3021218,   3021218,
                 3021233,   3021236,   3021246,   3021246,   3021264,   3021265,
@@ -9896,9 +9896,9 @@ e ornAna1.chr2                     14751195 5690 -  54797317 I
         self.assertEqual(len(alignment.sequences), 15)
         self.assertEqual(len(alignment.annotations["empty"]), 1)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3021275,   3021308,   3021308,   3021333,   3021334,   3021344,
                 3021357,   3021358,   3021359,   3021369,   3021369,   3021369,
@@ -10294,9 +10294,9 @@ e otoGar1.scaffold_334.1-359464      188429 6280 -    359464 I
         self.assertEqual(len(alignment.sequences), 14)
         self.assertEqual(len(alignment.annotations["empty"]), 2)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3021421,   3021421,   3021424,   3021425,   3021435,   3021435,
                 3021435,   3021435,   3021438,   3021439,   3021440,   3021443,
@@ -10576,9 +10576,9 @@ e otoGar1.scaffold_334.1-359464      188429  6280 -    359464 I
         self.assertEqual(len(alignment.sequences), 7)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3021465,   3021469,   3021469,   3021470,   3021473,   3021476,
                 3021477,   3021477,   3021494,   3021494],
@@ -10649,11 +10649,11 @@ e oryCun1.scaffold_156751              1033  2345 -      4726 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['C', 'C', 'C', 'T', '-', '-', 'A', 'C', 'A', 'C', 'T', 'G', 'T',
+numpy.array([['C', 'C', 'C', 'T', '-', '-', 'A', 'C', 'A', 'C', 'T', 'G', 'T',
               'C', '-', '-', '-', '-', 'A', 'A', 'G', 'T', 'G', 'G', 'G', 'A',
               'G', 'G', 'A', 'G', 'A', 'C', 'A', 'G', 'T', '-', '-', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
@@ -10802,9 +10802,9 @@ np.array([['C', 'C', 'C', 'T', '-', '-', 'A', 'C', 'A', 'C', 'T', 'G', 'T',
         self.assertEqual(len(alignment.sequences), 6)
         self.assertEqual(len(alignment.annotations["empty"]), 6)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     # fmt: off
             [[  3021494,   3021505,   3021505,   3021521,   3021523,   3021532,
                 3021536],
@@ -10861,11 +10861,11 @@ e oryCun1.scaffold_156751              1033  2345 -      4726 I
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'A', 'C', 'C', '-', '-',
+numpy.array([['T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'A', 'C', 'C', '-', '-',
               '-', '-', 'A', 'T', 'G', 'C', 'T', 'T', 'A', 'G', 'G', 'A', 'A',
               'T', 'G', 'A', 'T', 'A', 'A', 'A', 'C', 'T', 'C', 'A', 'C', 'T',
               'T', 'A', 'G', 'T', 'G', 't', 't'],
@@ -11078,9 +11078,9 @@ i oryCun1.scaffold_133159 N 0 N 0
         )
         self.assertEqual(alignment[4], "-AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG")
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     [
                         # fmt: off
         [27578828, 27578829, 27578831, 27578831, 27578850, 27578850, 27578866],
@@ -11116,11 +11116,11 @@ s rn3.chr4     81344243 40 + 187371129 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGT
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
+numpy.array([['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
               'A', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', 'A', '-', '-', '-',
               'A', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'T', 'A', 'C', 'G',
               'G', 'T', 'G'],
@@ -11167,9 +11167,9 @@ np.array([['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
         self.assertEqual(alignment.sequences[4].seq[81444246 : 81444246 + 6], "taagga")
         self.assertEqual(alignment[4], "taagga")
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     [
                         # fmt: off
                              [27699739, 27699745],
@@ -11205,11 +11205,11 @@ s rn3.chr4     81444246 6 + 187371129 taagga
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['T', 'A', 'A', 'A', 'G', 'A'],
+numpy.array([['T', 'A', 'A', 'A', 'G', 'A'],
              ['T', 'A', 'A', 'A', 'G', 'A'],
              ['T', 'A', 'A', 'A', 'G', 'A'],
              ['T', 'A', 'A', 'A', 'G', 'A'],
@@ -11245,9 +11245,9 @@ np.array([['T', 'A', 'A', 'A', 'G', 'A'],
         )
         self.assertEqual(alignment[3], "ACAGCTGAAAATA")
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     [
                         # fmt: off
                     [27707221, 27707234],
@@ -11280,11 +11280,11 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
+numpy.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
              ['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
              ['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
              ['A', 'C', 'A', 'G', 'C', 'T', 'G', 'A', 'A', 'A', 'A', 'T', 'A']],

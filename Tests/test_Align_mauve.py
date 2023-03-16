@@ -15,7 +15,7 @@ from Bio import Align
 
 
 try:
-    import numpy as np
+    import numpy
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -99,9 +99,9 @@ class TestCombinedFile(unittest.TestCase):
             alignment[2], "AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT"
         )
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     [
                         [49, 40, 38, 21, 21, 1],
                         [0, 0, 0, 0, 0, 0],
@@ -131,11 +131,11 @@ AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G', 'C',
+numpy.array([['A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G', 'C',
               'A', 'C', 'A', 'C', 'A', 'C', 'C', 'C', 'G', 'G', 'A', 'G', 'T',
               'G', 'G', '-', 'C', 'C', 'G', 'G', 'G', 'C', 'C', 'G', 'T', 'A',
               'C', 'T', 'T', 'T', 'C', 'C', 'T', 'T', 'T', 'T'],
@@ -161,7 +161,7 @@ np.array([['A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G', 'C',
         end = alignment.coordinates[0, -1]
         self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
         self.assertEqual(alignment[0], "G")
-        self.assertTrue(np.array_equal(alignment.coordinates, np.array([[0, 1]])))
+        self.assertTrue(numpy.array_equal(alignment.coordinates, numpy.array([[0, 1]])))
         self.assertEqual(
             str(alignment),
             """\
@@ -177,11 +177,11 @@ G
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['G']], dtype='U')
+numpy.array([['G']], dtype='U')
                 # fmt: on
             )
         )
@@ -196,7 +196,9 @@ np.array([['G']], dtype='U')
         end = alignment.coordinates[0, -1]
         self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
         self.assertEqual(alignment[0], "A")
-        self.assertTrue(np.array_equal(alignment.coordinates, np.array([[49, 50]])))
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[49, 50]]))
+        )
         self.assertEqual(
             str(alignment),
             """\
@@ -212,11 +214,11 @@ A
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['A']], dtype='U')
+numpy.array([['A']], dtype='U')
                 # fmt: on
             )
         )
@@ -233,7 +235,9 @@ np.array([['A']], dtype='U')
         end = alignment.coordinates[0, -1]
         self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
         self.assertEqual(alignment[0], "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT")
-        self.assertTrue(np.array_equal(alignment.coordinates, np.array([[0, 41]])))
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[0, 41]]))
+        )
         self.assertEqual(
             str(alignment),
             """\
@@ -249,11 +253,11 @@ GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['G', 'A', 'A', 'G', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'G', 'T',
+numpy.array([['G', 'A', 'A', 'G', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'G', 'T',
               'A', 'G', 'A', 'T', 'C', 'C', 'C', 'T', 'G', 'G', 'C', 'G', 'T',
               'C', 'C', 'G', 'G', 'A', 'G', 'C', 'T', 'G', 'G', 'G', 'A', 'C',
               'G', 'T']], dtype='U')
@@ -271,7 +275,7 @@ np.array([['G', 'A', 'A', 'G', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'G', 'T',
         end = alignment.coordinates[0, -1]
         self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
         self.assertEqual(alignment[0], "C")
-        self.assertTrue(np.array_equal(alignment.coordinates, np.array([[0, 1]])))
+        self.assertTrue(numpy.array_equal(alignment.coordinates, numpy.array([[0, 1]])))
         self.assertEqual(
             str(alignment),
             """\
@@ -287,11 +291,11 @@ C
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['C']], dtype='U')
+numpy.array([['C']], dtype='U')
                 # fmt: on
             )
         )
@@ -306,7 +310,9 @@ np.array([['C']], dtype='U')
         end = alignment.coordinates[0, -1]
         self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
         self.assertEqual(alignment[0], "C")
-        self.assertTrue(np.array_equal(alignment.coordinates, np.array([[48, 49]])))
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[48, 49]]))
+        )
         self.assertEqual(
             str(alignment),
             """\
@@ -322,11 +328,11 @@ C
 """,
         )
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['C']], dtype='U')
+numpy.array([['C']], dtype='U')
                 # fmt: on
             )
         )
@@ -487,9 +493,9 @@ mm9.fa           24 GCCAGGGATCTACTTTTCCTCTTC  0
 """,
             )
             self.assertTrue(
-                np.array_equal(
+                numpy.array_equal(
                     alignment.coordinates,
-                    np.array([[0, 0], [25, 49], [24, 0]]),
+                    numpy.array([[0, 0], [25, 49], [24, 0]]),
                 )
             )
             self.assertEqual(
@@ -505,11 +511,11 @@ GCCAGGGATCTACTTTTCCTCTTC
 """,
             )
             self.assertTrue(
-                np.array_equal(
-                    np.array(alignment, "U"),
+                numpy.array_equal(
+                    numpy.array(alignment, "U"),
                     # fmt: off
 # flake8: noqa
-np.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
              ['G', 'T', 'C', 'C', 'C', 'G', 'G', 'G', 'C', 'C', 'C', 'T', 'G',
               'C', 'T', 'T', 'T', 'C', 'C', 'T', 'T', 'T', 'T', 'C'],
@@ -535,7 +541,9 @@ np.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
             self.assertEqual(
                 alignment[0], "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA"
             )
-            self.assertTrue(np.array_equal(alignment.coordinates, np.array([[0, 50]])))
+            self.assertTrue(
+                numpy.array_equal(alignment.coordinates, numpy.array([[0, 50]]))
+            )
             self.assertEqual(
                 str(alignment),
                 """\
@@ -551,11 +559,11 @@ GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA
 """,
             )
             self.assertTrue(
-                np.array_equal(
-                    np.array(alignment, "U"),
+                numpy.array_equal(
+                    numpy.array(alignment, "U"),
                     # fmt: off
 # flake8: noqa
-np.array([['G', 'A', 'A', 'A', 'A', 'G', 'G', 'A', 'A', 'A', 'G', 'T', 'A',
+numpy.array([['G', 'A', 'A', 'A', 'A', 'G', 'G', 'A', 'A', 'A', 'G', 'T', 'A',
               'C', 'G', 'G', 'C', 'C', 'C', 'G', 'G', 'C', 'C', 'A', 'C', 'T',
               'C', 'C', 'G', 'G', 'G', 'T', 'G', 'T', 'G', 'T', 'G', 'C', 'T',
               'A', 'G', 'G', 'A', 'G', 'G', 'G', 'C', 'T', 'T', 'A']],
@@ -574,7 +582,9 @@ np.array([['G', 'A', 'A', 'A', 'A', 'G', 'G', 'A', 'A', 'A', 'G', 'T', 'A',
             end = alignment.coordinates[0, -1]
             self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
             self.assertEqual(alignment[0], "CAAGCCCTGCGCGCTCAGCCGGAGT")
-            self.assertTrue(np.array_equal(alignment.coordinates, np.array([[0, 25]])))
+            self.assertTrue(
+                numpy.array_equal(alignment.coordinates, numpy.array([[0, 25]]))
+            )
             self.assertEqual(
                 str(alignment),
                 """\
@@ -590,11 +600,11 @@ CAAGCCCTGCGCGCTCAGCCGGAGT
 """,
             )
             self.assertTrue(
-                np.array_equal(
-                    np.array(alignment, "U"),
+                numpy.array_equal(
+                    numpy.array(alignment, "U"),
                     # fmt: off
 # flake8: noqa
-np.array([['C', 'A', 'A', 'G', 'C', 'C', 'C', 'T', 'G', 'C', 'G', 'C', 'G',
+numpy.array([['C', 'A', 'A', 'G', 'C', 'C', 'C', 'T', 'G', 'C', 'G', 'C', 'G',
               'C', 'T', 'C', 'A', 'G', 'C', 'C', 'G', 'G', 'A', 'G', 'T']],
             dtype='U')
                     # fmt: on
@@ -622,7 +632,9 @@ np.array([['C', 'A', 'A', 'G', 'C', 'C', 'C', 'T', 'G', 'C', 'G', 'C', 'G',
 mm9.fa           24 GTCCGGAGCTGGGACGT 41
 """,
             )
-            self.assertTrue(np.array_equal(alignment.coordinates, np.array([[24, 41]])))
+            self.assertTrue(
+                numpy.array_equal(alignment.coordinates, numpy.array([[24, 41]]))
+            )
             self.assertEqual(
                 alignment.format("mauve", metadata, identifiers),
                 """\
@@ -632,11 +644,11 @@ GTCCGGAGCTGGGACGT
 """,
             )
             self.assertTrue(
-                np.array_equal(
-                    np.array(alignment, "U"),
+                numpy.array_equal(
+                    numpy.array(alignment, "U"),
                     # fmt: off
 # flake8: noqa
-np.array([['G', 'T', 'C', 'C', 'G', 'G', 'A', 'G', 'C', 'T', 'G', 'G', 'G',
+numpy.array([['G', 'T', 'C', 'C', 'G', 'G', 'A', 'G', 'C', 'T', 'G', 'G', 'G',
               'A', 'C', 'G', 'T']], dtype='U')
                     # fmt: on
                 )

@@ -10,7 +10,7 @@ from io import StringIO
 
 from Bio import Align
 
-import numpy as np
+import numpy
 
 
 class TestFASTAReadingWriting(unittest.TestCase):
@@ -417,11 +417,11 @@ ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGTGAACAAAAAAAAAACTCAATCCACATCAAAGTTACAATAACTGA
             with self.assertRaises(StopIteration):
                 next(alignments)
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['G', 'C', 'T', 'G', 'G', 'G', 'G', 'A', 'T', 'G', 'G', 'A', 'G',
+numpy.array([['G', 'C', 'T', 'G', 'G', 'G', 'G', 'A', 'T', 'G', 'G', 'A', 'G',
               'A', 'G', 'G', 'G', 'A', 'A', 'C', 'A', 'G', 'A', 'G', 'T', '-',
               'T'],
              ['G', 'C', 'T', 'G', 'G', 'G', 'G', 'A', 'T', 'G', 'G', 'A', 'G',
@@ -470,11 +470,11 @@ GCTGGGGATGGAGAGGGAACAGAGTAG
             with self.assertRaises(StopIteration):
                 next(alignments)
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['D', '-', 'V', 'L', 'L', 'G', 'A', 'N', 'G', 'G', 'V', 'L', 'V',
+numpy.array([['D', '-', 'V', 'L', 'L', 'G', 'A', 'N', 'G', 'G', 'V', 'L', 'V',
               'F', 'E', 'P', 'N', 'D', 'F', 'S', 'V', 'K', 'A', 'G', 'E', 'T',
               'I', 'T', 'F', 'K', 'N', 'N', 'A', 'G', 'Y', 'P', 'H', 'N', 'V',
               'V', 'F', 'D', 'E', 'D', 'A', 'V', 'P', 'S', 'G', '-', 'V', 'D',

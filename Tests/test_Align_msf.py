@@ -13,7 +13,7 @@ from Bio import Align
 
 
 try:
-    import numpy as np
+    import numpy
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -126,9 +126,9 @@ W*05:01          60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
 """,
         )
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     [
                         [0, 93, 99],
                         [0, 93, 99],
@@ -335,9 +335,9 @@ DOA*01:04        62 ----------  62
 """,
         )
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array(
+                numpy.array(
                     [
                         [0, 28, 62, 250],
                         [0, 28, 62, 250],

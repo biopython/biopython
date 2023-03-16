@@ -12,7 +12,7 @@ from Bio import Align
 
 
 try:
-    import numpy as np
+    import numpy
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -42,7 +42,7 @@ class TestPhylipReading(unittest.TestCase):
             self.assertEqual(sequence.seq, saved_sequence.seq)
             self.assertEqual(alignment[i], saved_alignment[i])
         self.assertTrue(
-            np.array_equal(alignment.coordinates, saved_alignment.coordinates)
+            numpy.array_equal(alignment.coordinates, saved_alignment.coordinates)
         )
 
     def test_one(self):
@@ -193,11 +193,11 @@ HISJ_E_CO       219 GLRKED--NELREALNKAFAEMRADGTYEKLAKKYFDFDVYGG--- 260
 """,
         )
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                np.array(
+                numpy.array(
                     [[  0,   0,   0,  13,  13,  16,  17,  17,  17,  17,  17,
                        17,  17,  17,  17,  18,  41,  41,  41,  90,  91, 109,
                       109, 121, 122, 146, 147, 148, 149, 150, 151, 160, 160,
@@ -317,9 +317,9 @@ HISJ_E_COLMKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIGTDPTYAPFESKNS-QGELVG
             )
             self.check_reading_writing(path)
             self.assertTrue(
-                np.array_equal(
+                numpy.array_equal(
                     alignment.coordinates,
-                    np.array([[0, 60], [0, 60], [0, 60], [0, 60], [0, 60]]),
+                    numpy.array([[0, 60], [0, 60], [0, 60], [0, 60], [0, 60]]),
                 )
             )
             self.assertEqual(
@@ -361,11 +361,11 @@ Tax5      CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT
             with self.assertRaises(StopIteration):
                 next(alignments)
         self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-np.array([['A', 'A', 'G', 'C', 'T', 'N', 'G', 'G', 'G', 'C', 'A', 'T', 'T',
+numpy.array([['A', 'A', 'G', 'C', 'T', 'N', 'G', 'G', 'G', 'C', 'A', 'T', 'T',
               'T', 'C', 'A', 'G', 'G', 'G', 'T', 'G', 'A', 'G', 'C', 'C', 'C',
               'G', 'G', 'G', 'C', 'A', 'A', 'T', 'A', 'C', 'A', 'G', 'G', 'G',
               'T', 'A', 'T'],
@@ -420,9 +420,9 @@ np.array([['A', 'A', 'G', 'C', 'T', 'N', 'G', 'G', 'G', 'C', 'A', 'T', 'T',
         self.assertEqual(alignment[4], "AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA")
         self.check_reading_writing(path)
         self.assertTrue(
-            np.array_equal(
+            numpy.array_equal(
                 alignment.coordinates,
-                np.array([[0, 42], [0, 42], [0, 42], [0, 42], [0, 42]]),
+                numpy.array([[0, 42], [0, 42], [0, 42], [0, 42], [0, 42]]),
             )
         )
         self.assertEqual(
@@ -497,9 +497,9 @@ Gorilla           0 AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA 42
 """,
             )
             self.assertTrue(
-                np.array_equal(
+                numpy.array_equal(
                     alignment.coordinates,
-                    np.array([[0, 42], [0, 42], [0, 42], [0, 42], [0, 42]]),
+                    numpy.array([[0, 42], [0, 42], [0, 42], [0, 42], [0, 42]]),
                 )
             )
             self.assertEqual(
