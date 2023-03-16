@@ -514,6 +514,12 @@ class BlastParser(_XMLparser):
         self._hit = self._blast.alignments[-1]
 
         self._descr.num_alignments = 0
+        # Specifically ignore CREATE_VIEW statements that sometimes
+        # exist between <Hit> tags, as a result of very large remote
+        # BLAST searches.
+        if self._value.strip() == "CREATE_VIEW":
+            print(f"NCBIXML: Ignored: {self._value!r}")
+            self._value = ""
 
     def _end_hit(self):
         """Clear variables (PRIVATE)."""
