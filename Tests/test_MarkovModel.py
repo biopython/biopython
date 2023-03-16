@@ -28,7 +28,7 @@ except ImportError:
 
 with warnings.catch_warnings():
     # Silence this warning:
-    # For optimal speed, please update to Numpy version 1.3 or later
+    # For optimal speed, please update to NumPy version 1.3 or later
     warnings.simplefilter("ignore", UserWarning)
     from Bio import MarkovModel
 

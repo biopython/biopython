@@ -11,7 +11,7 @@ import unittest
 from Bio import NaiveBayes
 
 # Importing NaiveBayes will itself raise MissingPythonDependencyError
-# if Numpy is unavailable.
+# if NumPy is unavailable.
 import numpy as np
 
 try:
@@ -22,7 +22,7 @@ except TypeError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Please update Numpy if you want to use Bio.NaiveBayes "
+        "Please update NumPy if you want to use Bio.NaiveBayes "
         "(under this version np.float64 is unhashable)."
     ) from None
 del np

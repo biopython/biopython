@@ -16,7 +16,7 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install numpy to build proteins from internal coordinates."
+        "Install NumPy to build proteins from internal coordinates."
     )
 
 from Bio.File import as_handle

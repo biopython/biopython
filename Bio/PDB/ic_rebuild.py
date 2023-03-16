@@ -16,7 +16,7 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install Numpy to build proteins from internal coordinates."
+        "Install NumPy to build proteins from internal coordinates."
     )
 
 from Bio.PDB.PDBExceptions import PDBException
@@ -366,7 +366,7 @@ def compare_residues(
     :param bool quick: default False.
         Only check atomArrays are identical, aCoordMatchCount=0 if different
     :param float rtol, atol: default 1e-03, 1e-03 or round to 3 places.
-        Numpy allclose parameters; default is to round atom coordinates to 3
+        NumPy allclose parameters; default is to round atom coordinates to 3
         places and test equal.  For 'quick' will use defaults above for
         comparing atomArrays
     :returns dict:

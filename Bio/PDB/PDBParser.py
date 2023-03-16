@@ -14,7 +14,7 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install Numpy if you want to use the PDB parser."
+        "Install NumPy if you want to use the PDB parser."
     ) from None
 
 from Bio.File import as_handle

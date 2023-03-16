@@ -90,7 +90,7 @@ class NeighborSearch:
             raise PDBException(f"{level}: Unknown level")
         center = np.require(center, dtype="d", requirements="C")
         if center.shape != (3,):
-            raise Exception("Expected a 3-dimensional Numpy array")
+            raise Exception("Expected a 3-dimensional NumPy array")
         points = self.kdt.search(center, radius)
         atom_list = [self.atom_list[point.index] for point in points]
         if level == "A":

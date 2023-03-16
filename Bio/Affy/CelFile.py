@@ -16,7 +16,7 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install Numpy if you want to use Bio.Affy.CelFile"
+        "Install NumPy if you want to use Bio.Affy.CelFile"
     ) from None
 
 

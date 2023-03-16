@@ -389,7 +389,7 @@ Robert T. Miller 2019
 
 
 def homog_rot_mtx(angle_rads: float, axis: str) -> np.array:
-    """Generate a 4x4 single-axis numpy rotation matrix.
+    """Generate a 4x4 single-axis NumPy rotation matrix.
 
     :param float angle_rads: the desired rotation angle in radians
     :param char axis: character specifying the rotation axis
@@ -460,7 +460,7 @@ def set_X_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
 
 
 def homog_trans_mtx(x: float, y: float, z: float) -> np.array:
-    """Generate a 4x4 numpy translation matrix.
+    """Generate a 4x4 NumPy translation matrix.
 
     :param x, y, z: translation in each axis
     """
@@ -533,10 +533,10 @@ def coord_space(
         acs[1] origin
         acs[2] on +Z axis
 
-    :param numpy column array x3 acs: X,Y,Z column input coordinates x3
+    :param NumPy column array x3 acs: X,Y,Z column input coordinates x3
     :param bool rev: if True, also return reverse transformation matrix
         (to return from coord_space)
-    :returns: 4x4 numpy array, x2 if rev=True
+    :returns: 4x4 NumPy array, x2 if rev=True
     """
     # dbg = False
     # if dbg:
@@ -635,10 +635,10 @@ def coord_space(
 
 
 def multi_rot_Z(angle_rads: np.ndarray) -> np.ndarray:
-    """Create [entries] numpy Z rotation matrices for [entries] angles.
+    """Create [entries] NumPy Z rotation matrices for [entries] angles.
 
     :param entries: int number of matrices generated.
-    :param angle_rads: numpy array of angles
+    :param angle_rads: NumPy array of angles
     :returns: entries x 4 x 4 homogeneous rotation matrices
     """
     rz = np.empty((angle_rads.shape[0], 4, 4))
@@ -650,10 +650,10 @@ def multi_rot_Z(angle_rads: np.ndarray) -> np.ndarray:
 
 
 def multi_rot_Y(angle_rads: np.ndarray) -> np.ndarray:
-    """Create [entries] numpy Y rotation matrices for [entries] angles.
+    """Create [entries] NumPy Y rotation matrices for [entries] angles.
 
     :param entries: int number of matrices generated.
-    :param angle_rads: numpy array of angles
+    :param angle_rads: NumPy array of angles
     :returns: entries x 4 x 4 homogeneous rotation matrices
     """
     ry = np.empty((angle_rads.shape[0], 4, 4))
@@ -673,10 +673,10 @@ def multi_coord_space(a3: np.ndarray, dLen: int, rev: bool = False) -> np.ndarra
         acs[1] origin
         acs[2] on +Z axis
 
-    :param numpy array [entries]x3x3 [entries] XYZ coords for 3 atoms
+    :param NumPy array [entries]x3x3 [entries] XYZ coords for 3 atoms
     :param bool rev: if True, also return reverse transformation matrix
     (to return from coord_space)
-    :returns: [entries] 4x4 numpy arrays, x2 if rev=True
+    :returns: [entries] 4x4 NumPy arrays, x2 if rev=True
 
     """
     # build tm translation matrix: atom1 to origin

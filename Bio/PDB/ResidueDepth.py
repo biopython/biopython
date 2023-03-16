@@ -509,7 +509,7 @@ def _read_vertex_array(filename):
 def get_surface(model, MSMS="msms"):
     """Represent molecular surface as a vertex list array.
 
-    Return a numpy array that represents the vertex list of the
+    Return a NumPy array that represents the vertex list of the
     molecular surface.
 
     Arguments:

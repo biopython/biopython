@@ -35,7 +35,7 @@ except AttributeError:
     import warnings
 
     warnings.warn(
-        "For optimal speed, please update to np version 1.3 or later (current version is %s)"
+        "For optimal speed, please update to NumPy version 1.3 or later (current version is %s)"
         % numpy.__version__
     )
 

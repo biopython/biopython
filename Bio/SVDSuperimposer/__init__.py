@@ -14,7 +14,6 @@ value decomposition, which is used in the algorithm.
 
 
 try:
-    # from numpy import np.dot, np.transpose, np.sqrt
     import numpy as np
     from numpy.linalg import svd, det
 except ImportError:

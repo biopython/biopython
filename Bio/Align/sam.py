@@ -30,7 +30,7 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Please install Numpy if you want to use Bio.Align. "
+        "Please install NumPy if you want to use Bio.Align. "
         "See http://www.numpy.org/"
     ) from None
 
