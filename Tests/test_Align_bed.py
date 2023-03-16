@@ -20,7 +20,6 @@ import numpy as np
 
 
 class TestAlign_dna_rna(unittest.TestCase):
-
     # The BED file dna_rna.bed was generated using this command:
     # pslToBed dna_rna.psl dna_rna.bed
 

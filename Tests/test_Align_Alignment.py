@@ -2607,12 +2607,9 @@ class TestAlignment_pairwise_format(unittest.TestCase):
 
 
 class TestAlign_out_of_order(unittest.TestCase):
-
     seq1 = "AACCCAAAACCAAAAATTTAAATTTTAAA"
     seq2 = "TGTTTTTCCCCC"
-    coordinates = np.array(
-        [[16, 19, 22, 26, 2, 5, 9, 11], [0, 3, 3, 7, 7, 10, 10, 12]]
-    )
+    coordinates = np.array([[16, 19, 22, 26, 2, 5, 9, 11], [0, 3, 3, 7, 7, 10, 10, 12]])
     forward_alignment = Align.Alignment([seq1, seq2], coordinates)
     coordinates = np.array(
         [[13, 10, 7, 3, 27, 24, 20, 18], [0, 3, 3, 7, 7, 10, 10, 12]]
@@ -3051,7 +3048,6 @@ query             7 CCC----CC 12
 
 
 class TestAlign_nucleotide_protein_str(unittest.TestCase):
-
     s1 = "ATGCGGAGCTTTCGAGCGACGTTTGGCTTTGACGACGGA" * 6
     s2 = "ATGCGGAGCCGAGCGACGTTTACGGCTTTGACGACGGA" * 6
     t1 = translate(s1)

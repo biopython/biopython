@@ -31,7 +31,6 @@ except ImportError:
 
 
 class TestAlign_dna_rna(unittest.TestCase):
-
     # The bigBed file dna_rna.bb was generated using the commands
     # sort -k1,1 -k2,2n dna_rna.bed > dna_rna.sorted.bed
     # twoBitInfo hg38.2bit hg38.chrom.sizes
@@ -1941,7 +1940,6 @@ table bed
 
 
 class TestAlign_bed12(unittest.TestCase):
-
     # The bigBed files were generated using the commands
     # twoBitInfo hg19.2bit hg19.chrom.sizes
     # bedToBigBed bed4.bed hg19.chrom.sizes bed4.bb
@@ -2207,7 +2205,6 @@ table bed
 
 
 class TestAlign_extended_bed(unittest.TestCase):
-
     # The bigBed file bigbed_extended.bb is a BED9+2 file, with nine predefined
     # BED fields and 2 extra (custom) fields. It was created by running
     #
@@ -2259,9 +2256,7 @@ table hg18KGchr7
         self.assertEqual(alignment.target.id, "chr7")
         self.assertEqual(alignment.query.id, "uc010krx.1")
         self.assertTrue(
-            np.array_equal(
-                alignment.coordinates, np.array([[60328, 61569], [1241, 0]])
-            )
+            np.array_equal(alignment.coordinates, np.array([[60328, 61569], [1241, 0]]))
         )
         self.assertEqual(alignment.annotations["geneSymbol"], ".")
         self.assertEqual(alignment.annotations["spID"], "PDGFA")
@@ -2448,7 +2443,6 @@ table hg18KGchr7
 
 
 class TestAlign_searching(unittest.TestCase):
-
     # The bigBed file bigbedtest.bb contains the following data:
     # chr1     10     100     name1   1       +
     # chr1     29      39     name2   2       -

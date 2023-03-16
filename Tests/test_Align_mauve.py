@@ -196,9 +196,7 @@ np.array([['G']], dtype='U')
         end = alignment.coordinates[0, -1]
         self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
         self.assertEqual(alignment[0], "A")
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[49, 50]]))
-        )
+        self.assertTrue(np.array_equal(alignment.coordinates, np.array([[49, 50]])))
         self.assertEqual(
             str(alignment),
             """\
@@ -235,9 +233,7 @@ np.array([['A']], dtype='U')
         end = alignment.coordinates[0, -1]
         self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
         self.assertEqual(alignment[0], "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT")
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 41]]))
-        )
+        self.assertTrue(np.array_equal(alignment.coordinates, np.array([[0, 41]])))
         self.assertEqual(
             str(alignment),
             """\
@@ -310,9 +306,7 @@ np.array([['C']], dtype='U')
         end = alignment.coordinates[0, -1]
         self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
         self.assertEqual(alignment[0], "C")
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[48, 49]]))
-        )
+        self.assertTrue(np.array_equal(alignment.coordinates, np.array([[48, 49]])))
         self.assertEqual(
             str(alignment),
             """\
@@ -541,9 +535,7 @@ np.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
             self.assertEqual(
                 alignment[0], "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA"
             )
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 50]]))
-            )
+            self.assertTrue(np.array_equal(alignment.coordinates, np.array([[0, 50]])))
             self.assertEqual(
                 str(alignment),
                 """\
@@ -582,9 +574,7 @@ np.array([['G', 'A', 'A', 'A', 'A', 'G', 'G', 'A', 'A', 'A', 'G', 'T', 'A',
             end = alignment.coordinates[0, -1]
             self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
             self.assertEqual(alignment[0], "CAAGCCCTGCGCGCTCAGCCGGAGT")
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[0, 25]]))
-            )
+            self.assertTrue(np.array_equal(alignment.coordinates, np.array([[0, 25]])))
             self.assertEqual(
                 str(alignment),
                 """\
@@ -632,9 +622,7 @@ np.array([['C', 'A', 'A', 'G', 'C', 'C', 'C', 'T', 'G', 'C', 'G', 'C', 'G',
 mm9.fa           24 GTCCGGAGCTGGGACGT 41
 """,
             )
-            self.assertTrue(
-                np.array_equal(alignment.coordinates, np.array([[24, 41]]))
-            )
+            self.assertTrue(np.array_equal(alignment.coordinates, np.array([[24, 41]])))
             self.assertEqual(
                 alignment.format("mauve", metadata, identifiers),
                 """\

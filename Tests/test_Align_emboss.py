@@ -387,9 +387,7 @@ np.array([['L', 'S', 'P', 'A', 'D', 'K', 'T', 'N', 'V', 'K', 'A', 'A', 'W',
         self.assertEqual(alignment.sequences[0].seq[60:73], "KKVADALTNAVAH")
         self.assertEqual(alignment.sequences[1].seq[131:144], "QKVVAGVANALAH")
         self.assertTrue(
-            np.array_equal(
-                alignment.coordinates, np.array([[60, 73], [131, 144]])
-            )
+            np.array_equal(alignment.coordinates, np.array([[60, 73], [131, 144]]))
         )
         self.assertEqual(alignment[0], "KKVADALTNAVAH")
         self.assertEqual(alignment[1], "QKVVAGVANALAH")
@@ -534,9 +532,7 @@ np.array([['L', 'S', 'A', 'L', 'S', 'D', 'L', 'H', 'A', 'H'],
         self.assertEqual(alignment.sequences[0].seq[10:20], "VKAAWGKVGA")
         self.assertEqual(alignment.sequences[1].seq[126:136], "VQAAYQKVVA")
         self.assertTrue(
-            np.array_equal(
-                alignment.coordinates, np.array([[10, 20], [126, 136]])
-            )
+            np.array_equal(alignment.coordinates, np.array([[10, 20], [126, 136]]))
         )
         self.assertEqual(alignment[0], "VKAAWGKVGA")
         self.assertEqual(alignment[1], "VQAAYQKVVA")

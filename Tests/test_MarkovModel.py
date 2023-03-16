@@ -443,7 +443,8 @@ class TestMarkovModel(unittest.TestCase):
         )
         self.assertTrue(
             np.array_equal(
-                np.around(p_transition_out, decimals=3), np.around(p_transition, decimals=3)
+                np.around(p_transition_out, decimals=3),
+                np.around(p_transition, decimals=3),
             )
         )
         self.assertTrue(

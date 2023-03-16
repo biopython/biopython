@@ -26,7 +26,6 @@ except ImportError:
 
 
 class TestAlign_dna_rna(unittest.TestCase):
-
     # The SAM file dna_rna.sam was generated using these commands:
     # twoBitToFa hg38.2bit stdout | samtools dict -a hg38 -s "Homo sapiens" | grep -v chrUn | grep -v alt | grep -v random > dna_rna.sam
     # psl2sam.pl dna_rna.psl >> dna_rna.sam
@@ -1548,7 +1547,6 @@ NR_046654.1_modified	16	chr3	42530896	0	5S27M3I36M1062N17M2D56M468N43M3S	*	0	0	A
 
 
 class TestAlign_dna(unittest.TestCase):
-
     # The SAM files were generated using these commands:
     # twoBitInfo hg19.2bit stdout | grep -v chrUn | grep -v _random | grep -v _hap |  sort -n -k 2 -r > hg19.chrom.sizes
 
@@ -4249,9 +4247,7 @@ class TestAlign_sambam(unittest.TestCase):
         self.assertEqual(alignment.flag, 83)
         self.assertEqual(alignment.mapq, 68)
         self.assertTrue(
-            np.array_equal(
-                alignment.coordinates, np.array([[1532, 1567], [35, 0]])
-            )
+            np.array_equal(alignment.coordinates, np.array([[1532, 1567], [35, 0]]))
         )
         self.assertEqual(alignment.rnext, "chr2")
         self.assertEqual(alignment.pnext, 1348)
@@ -4289,9 +4285,7 @@ class TestAlign_sambam(unittest.TestCase):
         self.assertEqual(alignment.flag, 83)
         self.assertEqual(alignment.mapq, 68)
         self.assertTrue(
-            np.array_equal(
-                alignment.coordinates, np.array([[1532, 1567], [35, 0]])
-            )
+            np.array_equal(alignment.coordinates, np.array([[1532, 1567], [35, 0]]))
         )
         self.assertEqual(alignment.rnext, "chr2")
         self.assertEqual(alignment.pnext, 1348)
