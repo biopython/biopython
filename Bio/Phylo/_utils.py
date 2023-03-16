@@ -82,7 +82,7 @@ def to_networkx(tree):
     return G
 
 
-def to_igraph(tree):
+def to_igraph(tree, vertex_attributes=None):
     """Convert a Tree object to an igraph Graph.
 
     The result is useful for graph-oriented analysis and interactive plotting
@@ -102,35 +102,68 @@ def to_igraph(tree):
             "Update igraph to 0.10 or later if you want to use to_igraph."
         ) from None
 
+    # Count the leaves, thereby the total number of nodes in the tree
+    n_terminals = tree.count_terminals()
+    n_nodes = sum(1 for x in tree.find_elements())
+    n_edges = n_nodes - 1
+
+    # Empty tree
+    if n_terminals == 0:
+        return ig.Graph()
+
     # NOTE: In igraph, adding all edges at once is much faster, so we prepare
     # an edgelist and related attributes
-    def add_subtree(node, nvertices, edges, attributes, edge_attributes):
+    def add_subtree(node, nvertices, edges, edge_attrs, vertex_attrs):
         """Add edges from this subtree, breath-first."""
         n_node = nvertices[0]
+
+        # NOTE: Bio.Phylo stores both vertex and edge attributes in the
+        # same place as "clade" attributes. However, the root node can have
+        # a vertex attribute but no edge attribute, hence the code blocks are
+        # in different places
+        for attrname in vertex_attrs:
+            if hasattr(node, attrname):
+                # Sometimes, only some tree nodes (e.g. leaves) have
+                # a certain attribute, e.g. a name
+                if len(vertex_attrs[attrname]) == 0:
+                    vertex_attrs[attrname] = [None for x in range(n_nodes)]
+                vertex_attrs[attrname][n_node] = getattr(node, attrname)
+
         for child in node:
             nvertices[0] += 1
             n_child = nvertices[0]
             edges.append((n_node, n_child))
-            for attrname in attributes:
+
+            # NOTE: The root cannot have an edge attribute, therefore to have
+            # an edge attribute you must be child of some other node.
+            for attrname in edge_attrs:
                 if hasattr(child, attrname):
-                    edge_attributes[attrname].append(getattr(child, attrname))
+                    # Sometimes, only some tree edges (i.e. branches) have
+                    # a certain attribute, e.g. a name
+                    if len(edge_attrs[attrname]) == 0:
+                        edge_attrs[attrname] = [None for x in range(n_edges)]
+                    edge_attrs[attrname][n_child] = getattr(child, attrname)
 
         for child in node:
-            add_subtree(child, nvertices, edges, attributes, edge_attributes)
+            add_subtree(child, nvertices, edges, edge_attrs, vertex_attrs)
 
     nvertices = [0]
     edges = []
-    attributes = ["color", "width"]
-    edge_attributes = {attrname: [] for attrname in attributes}
-    add_subtree(tree.root, nvertices, edges, attributes, edge_attributes)
+    edge_attributes = ["color", "width"]
+    if vertex_attributes is None:
+        vertex_attributes = []
+    edge_attrs = {attrname: [] for attrname in edge_attributes}
+    vertex_attrs = {attrname: [] for attrname in vertex_attributes}
+    add_subtree(tree.root, nvertices, edges, edge_attrs, vertex_attrs)
 
-    for attrname in attributes:
-        if len(edge_attributes[attrname]) == 0:
-            del edge_attributes[attrname]
+    # Remove unused default edge attributes
+    for attrname in edge_attributes:
+        if len(edge_attrs[attrname]) == 0:
+            del edge_attrs[attrname]
 
     graph = ig.Graph(
         edges=edges,
-        edge_attrs=edge_attributes,
+        edge_attrs=edge_attrs,
         directed=bool(tree.rooted),
     )
     return graph

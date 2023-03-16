@@ -34,6 +34,13 @@ class UtilTests(unittest.TestCase):
         tree = Phylo.read(EX_DOLLO, "phyloxml")
         graph = Phylo.to_igraph(tree)
         self.assertEqual(graph.vcount(), 659)
+        self.assertEqual(graph.ecount(), graph.vcount() - 1)
+
+    def test_to_igraph_with_attributes(self):
+        tree = Phylo.read(EX_DOLLO, "phyloxml")
+        graph = Phylo.to_igraph(tree, vertex_attributes=['name'])
+        self.assertEqual(graph.vcount(), 659)
+        self.assertEqual(graph.ecount(), graph.vcount() - 1)
 
 
 if __name__ == "__main__":
