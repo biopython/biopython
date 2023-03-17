@@ -82,7 +82,7 @@ def to_networkx(tree):
     return G
 
 
-def to_igraph(tree, vertex_attributes=None, edge_attributes=('color', 'width')):
+def to_igraph(tree, vertex_attributes=None, edge_attributes=("color", "width")):
     """Convert a Tree object to an igraph Graph.
 
     The result is useful for graph-oriented analysis and interactive plotting
@@ -163,7 +163,7 @@ def to_igraph(tree, vertex_attributes=None, edge_attributes=('color', 'width')):
 
     edges = []
     if vertex_attributes is None:
-        vertex_attributes = tuple()
+        vertex_attributes = ()
     edge_attrs = {attrname: [] for attrname in edge_attributes}
     vertex_attrs = {attrname: [] for attrname in vertex_attributes}
 

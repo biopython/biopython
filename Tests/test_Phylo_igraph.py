@@ -30,7 +30,7 @@ class UtilTests(unittest.TestCase):
     """Tests for various utility functions."""
 
     def test_to_igraph_simple(self):
-        """Tree to Graph conversion, simple tree"""
+        """Tree to Graph conversion, simple tree."""
         tree = Phylo.read(StringIO("()()"), format="newick")
         for i, elem in enumerate(tree.find_clades()):
             elem.name = f"elem_{i+1}"
