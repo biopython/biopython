@@ -82,13 +82,23 @@ def to_networkx(tree):
     return G
 
 
-def to_igraph(tree, vertex_attributes=None):
+def to_igraph(tree, vertex_attributes=None, edge_attributes=('color', 'width')):
     """Convert a Tree object to an igraph Graph.
 
     The result is useful for graph-oriented analysis and interactive plotting
     with matplotlib, Cairo, and plotly.
 
     Requires python-igraph version 0.10.0 or later.
+
+    :Parameters:
+        vertex_attributes : sequence of strings
+            A sequence of strings containing the Clade properties that are to
+            be stored as vertex attributes, e.g. "name".
+        edge_attributes : sequence of strings
+            A sequence of strings containing the Clade properties that are to
+            be stored as edge attributes, e.g. "color" and "width".
+
+    In both cases, if a property is not found it will be ignored.
     """
     try:
         import igraph as ig
@@ -152,9 +162,8 @@ def to_igraph(tree, vertex_attributes=None):
         return counter
 
     edges = []
-    edge_attributes = ["color", "width"]
     if vertex_attributes is None:
-        vertex_attributes = []
+        vertex_attributes = tuple()
     edge_attrs = {attrname: [] for attrname in edge_attributes}
     vertex_attrs = {attrname: [] for attrname in vertex_attributes}
 
