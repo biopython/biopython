@@ -17,8 +17,11 @@ import unittest
 from io import StringIO
 
 try:
-    import numpy as np
-
+    from numpy import array
+    from numpy import random  # missing in PyPy's micronumpy
+    from numpy import array_equal
+    from numpy import around
+    from numpy import log
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -28,7 +31,7 @@ except ImportError:
 
 with warnings.catch_warnings():
     # Silence this warning:
-    # For optimal speed, please update to NumPy version 1.3 or later
+    # For optimal speed, please update to Numpy version 1.3 or later
     warnings.simplefilter("ignore", UserWarning)
     from Bio import MarkovModel
 
@@ -147,9 +150,9 @@ class TestMarkovModel(unittest.TestCase):
         # NNNN
         states = "NR"
         alphabet = "AGTC"
-        p_initial = np.array([1.0, 0.0])
-        p_transition = np.array([[0.90, 0.10], [0.20, 0.80]])
-        p_emission = np.array([[0.30, 0.20, 0.30, 0.20], [0.10, 0.40, 0.10, 0.40]])
+        p_initial = array([1.0, 0.0])
+        p_transition = array([[0.90, 0.10], [0.20, 0.80]])
+        p_emission = array([[0.30, 0.20, 0.30, 0.20], [0.10, 0.40, 0.10, 0.40]])
         markov_model = MarkovModel.MarkovModel(
             states, alphabet, p_initial, p_transition, p_emission
         )
@@ -162,9 +165,9 @@ class TestMarkovModel(unittest.TestCase):
         # NNNRRRNNRRNRRN
         states = "NR"
         alphabet = "AGTC"
-        p_initial = np.array([1.0, 0.0])
-        p_transition = np.array([[0.56, 0.44], [0.25, 0.75]])
-        p_emission = np.array([[0.04, 0.14, 0.62, 0.20], [0.39, 0.15, 0.04, 0.42]])
+        p_initial = array([1.0, 0.0])
+        p_transition = array([[0.56, 0.44], [0.25, 0.75]])
+        p_emission = array([[0.04, 0.14, 0.62, 0.20], [0.39, 0.15, 0.04, 0.42]])
         markov_model = MarkovModel.MarkovModel(
             states, alphabet, p_initial, p_transition, p_emission
         )
@@ -180,9 +183,9 @@ class TestMarkovModel(unittest.TestCase):
         # NRRRRRRRRRRRNNNNRRRRRRRRR
         states = "NR"
         alphabet = "AGTC"
-        p_initial = np.array([1.0, 0.0])
-        p_transition = np.array([[0.75, 0.25], [0.25, 0.75]])
-        p_emission = np.array([[0.45, 0.36, 0.06, 0.13], [0.24, 0.18, 0.12, 0.46]])
+        p_initial = array([1.0, 0.0])
+        p_transition = array([[0.75, 0.25], [0.25, 0.75]])
+        p_emission = array([[0.45, 0.36, 0.06, 0.13], [0.24, 0.18, 0.12, 0.46]])
         markov_model = MarkovModel.MarkovModel(
             states, alphabet, p_initial, p_transition, p_emission
         )
@@ -224,9 +227,9 @@ class TestMarkovModel(unittest.TestCase):
         # NRRRRRRRRRR
         states = "NR"
         alphabet = "AGTC"
-        p_initial = np.array([1.0, 0.0])
-        p_transition = np.array([[0.55, 0.45], [0.15, 0.85]])
-        p_emission = np.array([[0.75, 0.03, 0.01, 0.21], [0.34, 0.11, 0.39, 0.16]])
+        p_initial = array([1.0, 0.0])
+        p_transition = array([[0.55, 0.45], [0.15, 0.85]])
+        p_emission = array([[0.75, 0.03, 0.01, 0.21], [0.34, 0.11, 0.39, 0.16]])
         markov_model = MarkovModel.MarkovModel(
             states, alphabet, p_initial, p_transition, p_emission
         )
@@ -241,9 +244,9 @@ class TestMarkovModel(unittest.TestCase):
         # N
         states = "NR"
         alphabet = "AGTC"
-        p_initial = np.array([1.0, 0.0])
-        p_transition = np.array([[0.84, 0.16], [0.25, 0.75]])
-        p_emission = np.array([[0.26, 0.37, 0.08, 0.29], [0.31, 0.13, 0.33, 0.23]])
+        p_initial = array([1.0, 0.0])
+        p_transition = array([[0.84, 0.16], [0.25, 0.75]])
+        p_emission = array([[0.26, 0.37, 0.08, 0.29], [0.31, 0.13, 0.33, 0.23]])
         markov_model = MarkovModel.MarkovModel(
             states, alphabet, p_initial, p_transition, p_emission
         )
@@ -265,9 +268,9 @@ class TestMarkovModel(unittest.TestCase):
     def test_save_and_load(self):
         states = "NR"
         alphabet = "AGTC"
-        p_initial = np.array([1.0, 0.0])
-        p_transition = np.array([[0.75, 0.25], [0.25, 0.75]])
-        p_emission = np.array([[0.45, 0.36, 0.06, 0.13], [0.24, 0.18, 0.12, 0.46]])
+        p_initial = array([1.0, 0.0])
+        p_transition = array([[0.75, 0.25], [0.25, 0.75]])
+        p_emission = array([[0.45, 0.36, 0.06, 0.13], [0.24, 0.18, 0.12, 0.46]])
         markov_model_save = MarkovModel.MarkovModel(
             states, alphabet, p_initial, p_transition, p_emission
         )
@@ -279,12 +282,12 @@ class TestMarkovModel(unittest.TestCase):
 
         self.assertEqual("".join(markov_model_load.states), states)
         self.assertEqual("".join(markov_model_load.alphabet), alphabet)
-        self.assertTrue(np.array_equal(markov_model_load.p_initial, p_initial))
-        self.assertTrue(np.array_equal(markov_model_load.p_transition, p_transition))
-        self.assertTrue(np.array_equal(markov_model_load.p_emission, p_emission))
+        self.assertTrue(array_equal(markov_model_load.p_initial, p_initial))
+        self.assertTrue(array_equal(markov_model_load.p_transition, p_transition))
+        self.assertTrue(array_equal(markov_model_load.p_emission, p_emission))
 
     def test_train_bw(self):
-        np.random.seed(0)
+        random.seed(0)
         states = ["0", "1", "2", "3"]
         alphabet = ["A", "C", "G", "T"]
         training_data = [
@@ -294,8 +297,8 @@ class TestMarkovModel(unittest.TestCase):
             "ACCGTTTTTTTT",
         ]
 
-        output_p_initial = np.array([0.2275677, 0.29655611, 0.24993822, 0.22593797])
-        output_p_transition = np.array(
+        output_p_initial = array([0.2275677, 0.29655611, 0.24993822, 0.22593797])
+        output_p_transition = array(
             [
                 [5.16919807e-001, 3.65825814e-033, 4.83080193e-001, 9.23220689e-042],
                 [3.65130247e-001, 1.00000000e-300, 6.34869753e-001, 1.00000000e-300],
@@ -303,7 +306,7 @@ class TestMarkovModel(unittest.TestCase):
                 [3.33333333e-301, 3.33333333e-001, 3.33333333e-301, 6.66666667e-001],
             ]
         )
-        output_p_emission = np.array(
+        output_p_emission = array(
             [
                 [2.02593570e-301, 2.02593570e-301, 2.02593570e-301, 1.00000000e000],
                 [1.00000000e-300, 1.00000000e-300, 1.00000000e000, 1.09629016e-259],
@@ -316,40 +319,40 @@ class TestMarkovModel(unittest.TestCase):
         self.assertEqual("".join(markov_model.states), "".join(states))
         self.assertEqual("".join(markov_model.alphabet), "".join(alphabet))
         self.assertTrue(
-            np.array_equal(
-                np.around(markov_model.p_initial, decimals=3),
-                np.around(output_p_initial, decimals=3),
+            array_equal(
+                around(markov_model.p_initial, decimals=3),
+                around(output_p_initial, decimals=3),
             )
         )
         self.assertTrue(
-            np.array_equal(
-                np.around(markov_model.p_transition, decimals=3),
-                np.around(output_p_transition, decimals=3),
+            array_equal(
+                around(markov_model.p_transition, decimals=3),
+                around(output_p_transition, decimals=3),
             )
         )
         self.assertTrue(
-            np.array_equal(
-                np.around(markov_model.p_emission, decimals=3),
-                np.around(output_p_emission, decimals=3),
+            array_equal(
+                around(markov_model.p_emission, decimals=3),
+                around(output_p_emission, decimals=3),
             )
         )
 
     def test_forward(self):
         states = ["CP", "IP"]
         outputs = [2, 1, 0]
-        lp_initial = np.log([1.0, 0.0000001])
-        lp_transition = np.log([[0.7, 0.3], [0.5, 0.5]])
-        lp_emission = np.log([[0.6, 0.1, 0.3], [0.1, 0.7, 0.2]])
+        lp_initial = log([1.0, 0.0000001])
+        lp_transition = log([[0.7, 0.3], [0.5, 0.5]])
+        lp_emission = log([[0.6, 0.1, 0.3], [0.1, 0.7, 0.2]])
 
-        matrix = np.array(
+        matrix = array(
             [
                 [0.0, -1.5606477, -3.07477539, -3.84932984],
                 [-16.11809565, -2.4079455, -3.27544608, -4.5847794],
             ]
         )
         self.assertTrue(
-            np.array_equal(
-                np.around(
+            array_equal(
+                around(
                     MarkovModel._forward(
                         len(states),
                         len(outputs),
@@ -360,31 +363,31 @@ class TestMarkovModel(unittest.TestCase):
                     ),
                     decimals=3,
                 ),
-                np.around(matrix, decimals=3),
+                around(matrix, decimals=3),
             )
         )
 
     def test_backward(self):
         states = ["CP", "IP"]
         outputs = [2, 1, 0]
-        lp_transition = np.log([[0.7, 0.3], [0.5, 0.5]])
-        lp_emission = np.log([[0.6, 0.1, 0.3], [0.1, 0.7, 0.2]])
+        lp_transition = log([[0.7, 0.3], [0.5, 0.5]])
+        lp_emission = log([[0.6, 0.1, 0.3], [0.1, 0.7, 0.2]])
 
-        matrix = np.array(
+        matrix = array(
             [
                 [-3.45776773, -3.10109279, -0.51082562, 0.0],
                 [-3.54045945, -1.40649707, -2.30258509, 0.0],
             ]
         )
         self.assertTrue(
-            np.array_equal(
-                np.around(
+            array_equal(
+                around(
                     MarkovModel._backward(
                         len(states), len(outputs), lp_transition, lp_emission, outputs
                     ),
                     decimals=3,
                 ),
-                np.around(matrix, decimals=3),
+                around(matrix, decimals=3),
             )
         )
 
@@ -410,8 +413,8 @@ class TestMarkovModel(unittest.TestCase):
             [0, 1, 1, 2, 3, 3, 3, 3, 3, 3, 3, 3],
         ]
 
-        p_initial = np.array([1.0, 0.0, 0.0, 0.0])
-        p_transition = np.array(
+        p_initial = array([1.0, 0.0, 0.0, 0.0])
+        p_transition = array(
             [
                 [0.2, 0.8, 0.0, 0.0],
                 [0.0, 0.5, 0.5, 0.0],
@@ -419,7 +422,7 @@ class TestMarkovModel(unittest.TestCase):
                 [0.0, 0.0, 0.0, 1.0],
             ]
         )
-        p_emission = np.array(
+        p_emission = array(
             [
                 [0.66666667, 0.11111111, 0.11111111, 0.11111111],
                 [0.08333333, 0.75, 0.08333333, 0.08333333],
@@ -437,24 +440,23 @@ class TestMarkovModel(unittest.TestCase):
             None,
         )
         self.assertTrue(
-            np.array_equal(
-                np.around(p_initial_out, decimals=3), np.around(p_initial, decimals=3)
+            array_equal(
+                around(p_initial_out, decimals=3), around(p_initial, decimals=3)
             )
         )
         self.assertTrue(
-            np.array_equal(
-                np.around(p_transition_out, decimals=3),
-                np.around(p_transition, decimals=3),
+            array_equal(
+                around(p_transition_out, decimals=3), around(p_transition, decimals=3)
             )
         )
         self.assertTrue(
-            np.array_equal(
-                np.around(p_emission_out, decimals=3), np.around(p_emission, decimals=3)
+            array_equal(
+                around(p_emission_out, decimals=3), around(p_emission, decimals=3)
             )
         )
 
     def test_argmaxes(self):
-        matrix = np.array([[4, 5, 6], [9, 7, 8], [1, 2, 3]])
+        matrix = array([[4, 5, 6], [9, 7, 8], [1, 2, 3]])
         output = [3]
         self.assertEqual(len(MarkovModel._argmaxes(matrix)), len(output))
         self.assertEqual(MarkovModel._argmaxes(matrix)[0], output[0])
@@ -462,9 +464,9 @@ class TestMarkovModel(unittest.TestCase):
     def test_viterbi(self):
         states = ["CP", "IP"]
         outputs = [2, 1, 0]
-        lp_initial = np.log([1.0, 0.0000001])
-        lp_transition = np.log([[0.7, 0.3], [0.5, 0.5]])
-        lp_emission = np.log([[0.6, 0.1, 0.3], [0.1, 0.7, 0.2]])
+        lp_initial = log([1.0, 0.0000001])
+        lp_transition = log([[0.7, 0.3], [0.5, 0.5]])
+        lp_emission = log([[0.6, 0.1, 0.3], [0.1, 0.7, 0.2]])
 
         viterbi_output = MarkovModel._viterbi(
             len(states), lp_initial, lp_transition, lp_emission, outputs
@@ -476,48 +478,48 @@ class TestMarkovModel(unittest.TestCase):
         self.assertAlmostEqual(viterbi_output[0][1], -3.968593356916541)
 
     def test_normalize_and_copy_and_check(self):
-        matrix_in1 = np.array([[1.1, 2.2, 3.3], [4.4, 5.5, 6.6], [7.7, 8.8, 9.9]])
-        matrix_in2 = np.array([1, 2, 3])
+        matrix_in1 = array([[1.1, 2.2, 3.3], [4.4, 5.5, 6.6], [7.7, 8.8, 9.9]])
+        matrix_in2 = array([1, 2, 3])
 
-        matrix_out1 = np.array(
+        matrix_out1 = array(
             [
                 [0.16666667, 0.33333333, 0.5],
                 [0.26666667, 0.33333333, 0.4],
                 [0.29166667, 0.33333333, 0.375],
             ]
         )
-        matrix_out2 = np.array([0.16666667, 0.33333333, 0.5])
+        matrix_out2 = array([0.16666667, 0.33333333, 0.5])
         self.assertTrue(
-            np.array_equal(
-                np.around(MarkovModel._normalize(matrix_in1), decimals=3),
-                np.around(matrix_out1, decimals=3),
+            array_equal(
+                around(MarkovModel._normalize(matrix_in1), decimals=3),
+                around(matrix_out1, decimals=3),
             )
         )
         self.assertTrue(
-            np.array_equal(
-                np.around(MarkovModel._normalize(matrix_in2), decimals=3),
-                np.around(matrix_out2, decimals=3),
+            array_equal(
+                around(MarkovModel._normalize(matrix_in2), decimals=3),
+                around(matrix_out2, decimals=3),
             )
         )
 
         shape1 = (3, 3)
         shape2 = (3,)
         self.assertTrue(
-            np.array_equal(
-                np.around(MarkovModel._copy_and_check(matrix_out1, shape1), decimals=3),
-                np.around(matrix_out1, decimals=3),
+            array_equal(
+                around(MarkovModel._copy_and_check(matrix_out1, shape1), decimals=3),
+                around(matrix_out1, decimals=3),
             )
         )
         self.assertTrue(
-            np.array_equal(
-                np.around(MarkovModel._copy_and_check(matrix_out2, shape2), decimals=3),
-                np.around(matrix_out2, decimals=3),
+            array_equal(
+                around(MarkovModel._copy_and_check(matrix_out2, shape2), decimals=3),
+                around(matrix_out2, decimals=3),
             )
         )
 
     def test_uniform_norm(self):
         shape = (4, 3)
-        matrix = np.array(
+        matrix = array(
             [
                 [0.33333333, 0.33333333, 0.33333333],
                 [0.33333333, 0.33333333, 0.33333333],
@@ -526,16 +528,16 @@ class TestMarkovModel(unittest.TestCase):
             ]
         )
         self.assertTrue(
-            np.array_equal(
-                np.around(MarkovModel._uniform_norm(shape), decimals=3),
-                np.around(matrix, decimals=3),
+            array_equal(
+                around(MarkovModel._uniform_norm(shape), decimals=3),
+                around(matrix, decimals=3),
             )
         )
 
     def test_random_norm(self):
-        np.random.seed(0)
+        random.seed(0)
         shape = (4, 3)
-        matrix = np.array(
+        matrix = array(
             [
                 [0.29399155, 0.38311672, 0.32289173],
                 [0.33750765, 0.26241723, 0.40007512],
@@ -544,15 +546,15 @@ class TestMarkovModel(unittest.TestCase):
             ]
         )
         self.assertTrue(
-            np.array_equal(
-                np.around(MarkovModel._random_norm(shape), decimals=3),
-                np.around(matrix, decimals=3),
+            array_equal(
+                around(MarkovModel._random_norm(shape), decimals=3),
+                around(matrix, decimals=3),
             )
         )
 
     def test_logsum_and_exp_logsum(self):
-        matrix = np.array([[1.1, 2.2, 3.3], [4.4, 5.5, 6.6], [7.7, 8.8, 9.9]])
-        matrix1 = np.array([1, 2, 3])
+        matrix = array([[1.1, 2.2, 3.3], [4.4, 5.5, 6.6], [7.7, 8.8, 9.9]])
+        matrix1 = array([1, 2, 3])
 
         self.assertAlmostEqual(MarkovModel._logsum(matrix), 10.304721798)
         self.assertAlmostEqual(MarkovModel._logsum(matrix1), 3.40760596444)
@@ -560,14 +562,14 @@ class TestMarkovModel(unittest.TestCase):
         self.assertAlmostEqual(MarkovModel._exp_logsum(matrix1), 30.1928748506)
 
     def test_logvecadd(self):
-        vec1 = np.log(np.array([1, 2, 3, 4]))
-        vec2 = np.log(np.array([5, 6, 7, 8]))
+        vec1 = log(array([1, 2, 3, 4]))
+        vec2 = log(array([5, 6, 7, 8]))
 
-        sumvec = np.array([1.79175947, 2.07944154, 2.30258509, 2.48490665])
+        sumvec = array([1.79175947, 2.07944154, 2.30258509, 2.48490665])
         self.assertTrue(
-            np.array_equal(
-                np.around(MarkovModel._logvecadd(vec1, vec2), decimals=3),
-                np.around(sumvec, decimals=3),
+            array_equal(
+                around(MarkovModel._logvecadd(vec1, vec2), decimals=3),
+                around(sumvec, decimals=3),
             )
         )
 

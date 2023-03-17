@@ -478,7 +478,7 @@ def set_homog_trans_mtx(x: float, y: float, z: float, mtx: np.ndarray):
 
 
 def homog_scale_mtx(scale: float) -> np.array:
-    """Generate a 4x4 np scaling matrix.
+    """Generate a 4x4 NumPy scaling matrix.
 
     :param float scale: scale multiplier
     """
@@ -505,7 +505,7 @@ def _get_azimuth(x: float, y: float) -> float:
 def get_spherical_coordinates(xyz: np.array) -> Tuple[float, float, float]:
     """Compute spherical coordinates (r, azimuth, polar_angle) for X,Y,Z point.
 
-    :param array xyz: column vector (3 row x 1 column np array)
+    :param array xyz: column vector (3 row x 1 column NumPy array)
     :return: tuple of r, azimuth, polar_angle for input coordinate
     """
     r = np.linalg.norm(xyz)

@@ -29,7 +29,7 @@ try:
     logaddexp = np.logaddexp
 except AttributeError:
     # Numpy versions older than 1.3 do not contain logaddexp.
-    # Once we require np version 1.3 or later, we should revisit this
+    # Once we require Numpy version 1.3 or later, we should revisit this
     # module to see if we can simplify some of the other functions in
     # this module.
     import warnings
@@ -40,7 +40,7 @@ except AttributeError:
     )
 
     def logaddexp(logx, logy):
-        """Implement logaddexp method if np version is older than 1.3."""
+        """Implement logaddexp method if NumPy version is older than 1.3."""
         if logy - logx > 100:
             return logy
         elif logx - logy > 100:

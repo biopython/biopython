@@ -19,7 +19,7 @@ Functions:
 
 import numpy as np
 
-# import np.linalg
+import numpy.linalg
 
 
 class LogisticRegression:
@@ -98,7 +98,7 @@ def train(xs, ys, update_fn=None, typecode=None):
         W = np.identity(N) * p
         Xtyp = np.dot(Xt, y - p)  # Calculate the first derivative.
         XtWX = np.dot(np.dot(Xt, W), X)  # Calculate the second derivative.
-        delta = np.linalg.solve(XtWX, Xtyp)
+        delta = numpy.linalg.solve(XtWX, Xtyp)
         if np.fabs(stepsize - 1.0) > 0.001:
             delta *= stepsize
         beta += delta  # Update beta.
