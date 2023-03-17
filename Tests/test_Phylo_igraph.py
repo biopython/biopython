@@ -38,7 +38,7 @@ class UtilTests(unittest.TestCase):
 
     def test_to_igraph_with_attributes(self):
         tree = Phylo.read(EX_DOLLO, "phyloxml")
-        graph = Phylo.to_igraph(tree, vertex_attributes=['name'])
+        graph = Phylo.to_igraph(tree, vertex_attributes=["name"])
         self.assertEqual(graph.vcount(), 659)
         self.assertEqual(graph.ecount(), graph.vcount() - 1)
 
