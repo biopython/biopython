@@ -36,7 +36,7 @@ except AttributeError:
 
     warnings.warn(
         "For optimal speed, please update to NumPy version 1.3 or later (current version is %s)"
-        % numpy.__version__
+        % np.__version__
     )
 
     def logaddexp(logx, logy):
