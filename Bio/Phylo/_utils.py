@@ -110,15 +110,13 @@ def to_igraph(tree, vertex_attributes=None, edge_attributes=("color", "width")):
     if ig.__version__ < "0.10":
         raise MissingPythonDependencyError(
             "Update igraph to 0.10 or later if you want to use to_igraph."
-        ) from None
+        )
 
     # Count the leaves, thereby the total number of nodes in the tree
-    n_terminals = tree.count_terminals()
     n_nodes = sum(1 for x in tree.find_clades())
-    n_edges = n_nodes - 1
 
     # Empty tree
-    if n_terminals == 0:
+    if n_nodes == 0:
         return ig.Graph()
 
     # NOTE: In igraph, adding all edges at once is much faster, so we prepare
@@ -134,7 +132,7 @@ def to_igraph(tree, vertex_attributes=None, edge_attributes=("color", "width")):
                 # Sometimes, only some tree nodes (e.g. leaves) have
                 # a certain attribute, e.g. a name
                 if len(vertex_attrs[attrname]) == 0:
-                    vertex_attrs[attrname] = [None for x in range(n_nodes)]
+                    vertex_attrs[attrname] = [None] * n_nodes
                 vertex_attrs[attrname][n_node] = getattr(node, attrname)
 
         delta_counter = 0
@@ -169,7 +167,10 @@ def to_igraph(tree, vertex_attributes=None, edge_attributes=("color", "width")):
 
     add_subtree(tree.root, 0, 0, edges, edge_attrs, vertex_attrs)
 
-    # Remove unused default edge attributes
+    # Remove unused attributes
+    for attrname in vertex_attributes:
+        if len(vertex_attrs[attrname]) == 0:
+            del vertex_attrs[attrname]
     for attrname in edge_attributes:
         if len(edge_attrs[attrname]) == 0:
             del edge_attrs[attrname]
