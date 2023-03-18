@@ -73,7 +73,6 @@ from Bio.SeqRecord import SeqRecord
 
 
 class bbiSummaryElement:
-
     # See bbiSummaryElementWrite in bbiWrite.c
     __slots__ = ["validCount", "minVal", "maxVal", "sumData", "sumSquares"]
 
@@ -107,7 +106,6 @@ class bbiSummaryElement:
 
 
 class ExtHeader:
-
     # See bbFileCreate in bedToBigBed.c
     __slots__ = ("extraIndexCount", "extraIndexListOffset")
 
@@ -330,10 +328,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         fieldCount = len(declaration)
         extHeader = ExtHeader()
         extHeader.extraIndexCount = len(extraIndex)
-        if extraIndex:
-            eim = bbExIndexMaker(extraIndex, declaration)
-        else:
-            eim = []
+        eim = []
+        for name in extraIndex:
+            eim.append(bbExIndexMakerElement(name, declaration))
         uncompressBufSize = 0
         usageList, minDiff, aveSize, bedCount = bbiChromUsageFromBedFile(
             alignments, targets, eim
@@ -405,12 +402,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 zoomIndexOffsets,
             )
         if eim:
-            for i in range(len(eim.extraIndexList)):
-                eim[i].fileOffset = stream.tell()
-                maxBedNameSize = eim[i].maxFieldSize
-                eim[i].chunks.sort(key=attrgetter("name"))
+            for element in eim:
+                element.fileOffset = stream.tell()
+                maxBedNameSize = element.maxFieldSize
+                element.chunks.sort(key=attrgetter("name"))
                 bptFileBulkIndexToOpenFile(
-                    eim[i].chunks,
+                    element.chunks,
                     bedCount,
                     blockSize,
                     maxBedNameSize,
@@ -451,12 +448,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if extraIndex:
             stream.seek(extHeader.extraIndexListOffset)
             indexFieldCount = 1
-            for i in range(extHeader.extraIndexCount):
+            for element in eim:
                 stream.write(bytes(2))  # type
                 stream.write(indexFieldCount.to_bytes(2, byteorder))
-                stream.write(eim[i].fileOffset.to_bytes(8, byteorder))
+                stream.write(element.fileOffset.to_bytes(8, byteorder))
                 stream.write(bytes(4))
-                stream.write(eim[i].indexField.to_bytes(2, byteorder))
+                stream.write(element.indexField.to_bytes(2, byteorder))
                 stream.write(bytes(2))
             assert stream.tell() == extraIndexListEndOffset
         stream.seek(0, 2)
@@ -476,7 +473,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     mode = "b"
 
     def _read_header(self, stream):
-
         # Supplemental Table 5: Common header
         # magic                  4 bytes
         # version                2 bytes
@@ -1269,17 +1265,6 @@ class bbExIndexMakerElement:
             chunk.size = size
 
 
-class bbExIndexMaker(list):
-    def __init__(self, extraIndexList, declaration):
-        self.extraIndexList = extraIndexList  # needed?
-        for name in extraIndexList:
-            self.append(bbExIndexMakerElement(name, declaration))
-
-    def addOffsetSize(self, offset, size, startIx, endIx):
-        for i, name in enumerate(self.extraIndexList):
-            self[i].addOffsetSize(offset, size, startIx, endIx)
-
-
 def bbiChromUsageFromBedFile(alignments, targets, eim):
     aveSize = 0
     chromId = 0
@@ -1612,12 +1597,13 @@ def writeBlocks(
         output.write(data)
         if eim:
             blockEndOffset = output.tell()
-            eim.addOffsetSize(
-                blockStartOffset,
-                blockEndOffset - blockStartOffset,
-                sectionStartIx,
-                sectionEndIx,
-            )
+            for element in eim:
+                element.addOffsetSize(
+                    blockStartOffset,
+                    blockEndOffset - blockStartOffset,
+                    sectionStartIx,
+                    sectionEndIx,
+                )
             sectionStartIx = sectionEndIx
         bounds.append(bbiBoundsArray(blockStartOffset, chromId, startPos, endPos))
         return sectionStartIx, size
