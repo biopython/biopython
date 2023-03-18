@@ -188,9 +188,9 @@ def kmedoids(distance, nclusters=2, npass=1, initialid=None):
     Keyword arguments:
      - distance: The distance matrix between the items. There are three
        ways in which you can pass a distance matrix:
-       1. a 2D Numpy array (in which only the left-lower part of the array
+       1. a 2D NumPy array (in which only the left-lower part of the array
        will be accessed);
-       2. a 1D Numpy array containing the distances consecutively;
+       2. a 1D NumPy array containing the distances consecutively;
        3. a list of rows containing the lower-triangular part of
        the distance matrix.
 
@@ -278,9 +278,9 @@ def treecluster(
        - method == 'a': Average pairwise linkage
      - distancematrix:  The distance matrix between the items. There are
        three ways in which you can pass a distance matrix:
-       1. a 2D Numpy array (in which only the left-lower part of the array
+       1. a 2D NumPy array (in which only the left-lower part of the array
        will be accessed);
-       2. a 1D Numpy array containing the distances consecutively;
+       2. a 1D NumPy array containing the distances consecutively;
        3. a list of rows containing the lower-triangular part of
        the distance matrix.
 
