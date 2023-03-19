@@ -328,9 +328,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         fieldCount = len(declaration)
         extHeader = ExtHeader()
         extHeader.extraIndexCount = len(extraIndex)
-        eim = []
-        for name in extraIndex:
-            eim.append(bbExIndexMakerElement(name, declaration))
+        eim = [ExtraIndex(name, declaration) for name in extraIndex]
         uncompressBufSize = 0
         usageList, minDiff, aveSize, bedCount = bbiChromUsageFromBedFile(
             alignments, targets, eim
@@ -447,14 +445,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream.write(bytes(extHeader))
         if extraIndex:
             stream.seek(extHeader.extraIndexListOffset)
-            indexFieldCount = 1
             for element in eim:
-                stream.write(bytes(2))  # type
-                stream.write(indexFieldCount.to_bytes(2, byteorder))
-                stream.write(element.fileOffset.to_bytes(8, byteorder))
-                stream.write(bytes(4))
-                stream.write(element.indexField.to_bytes(2, byteorder))
-                stream.write(bytes(2))
+                stream.write(bytes(element))
             assert stream.tell() == extraIndexListEndOffset
         stream.seek(0, 2)
         data = struct.pack("I", signature)
@@ -1225,8 +1217,10 @@ class bbNamedFileChunk:
     __slots__ = ("name", "offset", "size")
 
 
-class bbExIndexMakerElement:
+class ExtraIndex:
     __slots__ = ("indexField", "maxFieldSize", "fileOffset", "chunks", "get_value")
+
+    formatter = struct.Struct("=xxHQxxxxHxx")
 
     def __init__(self, name, declaration):
         self.maxFieldSize = 0
@@ -1263,6 +1257,10 @@ class bbExIndexMakerElement:
         for chunk in self.chunks[startIx:endIx]:
             chunk.offset = offset
             chunk.size = size
+
+    def __bytes__(self):
+        indexFieldCount = 1
+        return self.formatter.pack(indexFieldCount, self.fileOffset, self.indexField)
 
 
 def bbiChromUsageFromBedFile(alignments, targets, eim):
@@ -1597,10 +1595,11 @@ def writeBlocks(
         output.write(data)
         if eim:
             blockEndOffset = output.tell()
+            blockSize = blockEndOffset - blockStartOffset
             for element in eim:
                 element.addOffsetSize(
                     blockStartOffset,
-                    blockEndOffset - blockStartOffset,
+                    blockSize,
                     sectionStartIx,
                     sectionEndIx,
                 )
