@@ -118,6 +118,52 @@ class ExtHeader:
         )
 
 
+class ExtraIndex:
+    __slots__ = ("indexField", "maxFieldSize", "fileOffset", "chunks", "get_value")
+
+    formatter = struct.Struct("=xxHQxxxxHxx")
+
+    def __init__(self, name, declaration):
+        self.maxFieldSize = 0
+        self.fileOffset = None
+        for index, field in enumerate(declaration):
+            if field.name == name:
+                break
+        else:
+            raise ValueError(
+                "extraIndex field %s not a standard bed field or found in 'as' file.",
+                name,
+            ) from None
+        if field.as_type != "string":
+            raise ValueError("Sorry for now can only index string fields.")
+        self.indexField = index
+        if name == "chrom":
+            self.get_value = lambda alignment: alignment.target.id
+        elif name == "name":
+            self.get_value = lambda alignment: alignment.query.id
+        else:
+            self.get_value = lambda alignment: alignment.annotations[name]
+
+    def updateMaxFieldSize(self, alignment):
+        value = self.get_value(alignment)
+        size = len(value)
+        if size > self.maxFieldSize:
+            self.maxFieldSize = size
+
+    def addKeysFromRow(self, alignment, recordIx):
+        value = self.get_value(alignment)
+        self.chunks[recordIx].name = value.encode()
+
+    def addOffsetSize(self, offset, size, startIx, endIx):
+        for chunk in self.chunks[startIx:endIx]:
+            chunk.offset = offset
+            chunk.size = size
+
+    def __bytes__(self):
+        indexFieldCount = 1
+        return self.formatter.pack(indexFieldCount, self.fileOffset, self.indexField)
+
+
 Field = namedtuple("Field", ("as_type", "name", "comment"))
 
 
@@ -354,9 +400,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         bbiWriteChromInfo(usageList, blockSize, stream)
         dataOffset = stream.tell()
         resTryCount, resScales, resSizes = bbiCalcResScalesAndSizes(aveSize)
-        blockCount = 0
-        maxBlockSize = 0
-        stream.write(bedCount.to_bytes(8, byteorder))
+        stream.write(struct.pack("Q", bedCount))
         if bedCount > 0:
             for element in eim:
                 element.chunks = [bbNamedFileChunk() for j in range(bedCount)]
@@ -375,6 +419,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 bedN,
             )
         else:
+            maxBlockSize = 0
             boundsArray = []
         indexOffset = stream.tell()
         cirTreeFileBulkIndexToOpenFile(boundsArray, blockSize, 1, indexOffset, stream)
@@ -399,18 +444,17 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 zoomDataOffsets,
                 zoomIndexOffsets,
             )
-        if eim:
-            for element in eim:
-                element.fileOffset = stream.tell()
-                maxBedNameSize = element.maxFieldSize
-                element.chunks.sort(key=attrgetter("name"))
-                bptFileBulkIndexToOpenFile(
-                    element.chunks,
-                    bedCount,
-                    blockSize,
-                    maxBedNameSize,
-                    stream,
-                )
+        for element in eim:
+            element.fileOffset = stream.tell()
+            maxBedNameSize = element.maxFieldSize
+            element.chunks.sort()
+            bptFileBulkIndexToOpenFile(
+                element.chunks,
+                bedCount,
+                blockSize,
+                maxBedNameSize,
+                stream,
+            )
         if compress:
             uncompressBufSize = max(
                 maxBlockSize, itemsPerSlot * 32
@@ -1067,6 +1111,8 @@ bbiChromUsage = namedtuple("bbiChromUsage", ["name", "itemCount", "id", "size"])
 
 
 class bbiSummary:
+    formatter = struct.Struct("=IIIIffff")
+
     def __init__(self, chromId, start, end, value):
         self.chromId = chromId
         self.start = start
@@ -1091,6 +1137,18 @@ class bbiSummary:
             self.values["maxVal"] = val
         self.values["sumData"] += val * overlap
         self.values["sumSquares"] += val * val * overlap
+
+    def __bytes__(self):
+        return self.formatter.pack(
+            self.chromId,
+            self.start,
+            self.end,
+            self.validCount,
+            self.values["minVal"],
+            self.values["maxVal"],
+            self.values["sumData"],
+            self.values["sumSquares"],
+        )
 
 
 class bbiSumOutStream:
@@ -1174,9 +1232,8 @@ class rTree:
         byteorder = sys.byteorder
         if curLevel == destLevel:
             countOne = len(self.children)
-            output.write(b"\x00")  # isLeaf = False
-            output.write(b"\x00")  # reserved
-            output.write(countOne.to_bytes(2, byteorder))
+            isLeaf = False
+            output.write(struct.pack("?xH", isLeaf, countOne))
             for child in self.children:
                 output.write(child.startChromId.to_bytes(4, byteorder))
                 output.write(int(child.startBase).to_bytes(4, byteorder))
@@ -1216,51 +1273,8 @@ class rbTreeNode:
 class bbNamedFileChunk:
     __slots__ = ("name", "offset", "size")
 
-
-class ExtraIndex:
-    __slots__ = ("indexField", "maxFieldSize", "fileOffset", "chunks", "get_value")
-
-    formatter = struct.Struct("=xxHQxxxxHxx")
-
-    def __init__(self, name, declaration):
-        self.maxFieldSize = 0
-        self.fileOffset = None
-        for index, field in enumerate(declaration):
-            if field.name == name:
-                break
-        else:
-            raise ValueError(
-                "extraIndex field %s not a standard bed field or found in 'as' file.",
-                name,
-            ) from None
-        if field.as_type != "string":
-            raise ValueError("Sorry for now can only index string fields.")
-        self.indexField = index
-        if name == "chrom":
-            self.get_value = lambda alignment: alignment.target.id
-        elif name == "name":
-            self.get_value = lambda alignment: alignment.query.id
-        else:
-            self.get_value = lambda alignment: alignment.annotations[name]
-
-    def updateMaxFieldSize(self, alignment):
-        value = self.get_value(alignment)
-        size = len(value)
-        if size > self.maxFieldSize:
-            self.maxFieldSize = size
-
-    def addKeysFromRow(self, alignment, recordIx):
-        value = self.get_value(alignment)
-        self.chunks[recordIx].name = value.encode()
-
-    def addOffsetSize(self, offset, size, startIx, endIx):
-        for chunk in self.chunks[startIx:endIx]:
-            chunk.offset = offset
-            chunk.size = size
-
-    def __bytes__(self):
-        indexFieldCount = 1
-        return self.formatter.pack(indexFieldCount, self.fileOffset, self.indexField)
+    def __lt__(self, other):
+        return self.name < other.name
 
 
 def bbiChromUsageFromBedFile(alignments, targets, eim):
@@ -1351,12 +1365,10 @@ def bbiWriteChromInfo(usageList, blockSize, output):
         signature = "78ca8c91"
     else:
         raise RuntimeError(f"unexpected system byte order {byteorder}")
-    output.write(bytes.fromhex(signature))
-    output.write(blockSize.to_bytes(4, byteorder))
-    output.write(keySize.to_bytes(4, byteorder))
-    output.write(valSize.to_bytes(4, byteorder))
-    output.write(itemCount.to_bytes(8, byteorder))
-    output.write(bytes(8))
+    signature = 0x78CA8C91
+    formatter = struct.Struct("=IIIIQxxxxxxxx")
+    data = formatter.pack(signature, blockSize, keySize, valSize, itemCount)
+    output.write(data)
     indexOffset = output.tell()
     levels = 1
     while itemCount > blockSize:
@@ -1798,18 +1810,11 @@ def writeTreeToOpenFile(tree, blockSize, levelCount, output):
 def cirTreeFileBulkIndexToOpenFile(
     itemArray, blockSize, itemsPerSlot, endFileOffset, output
 ):
-    levelCount = 0
     tree, levelCount = rTreeFromChromRangeArray(blockSize, itemArray, endFileOffset)
     byteorder = sys.byteorder
-    if byteorder == "little":  # little-endian
-        signature = "e0ac6824"
-    elif byteorder == "big":  # big-endian
-        signature = "2468ace0"
-    else:
-        raise RuntimeError(f"unexpected system byte order {byteorder}")
-    output.write(bytes.fromhex(signature))
-    output.write(blockSize.to_bytes(4, byteorder))
-    output.write(len(itemArray).to_bytes(8, byteorder))
+    signature = 0x2468ACE0
+    data = struct.pack("=IIQ", signature, blockSize, len(itemArray))
+    output.write(data)
     output.write(bytes(tree))
     data = struct.pack("qixxxx", endFileOffset, itemsPerSlot)
     output.write(data)
@@ -2124,84 +2129,12 @@ def bedWriteReducedOnceReturnReducedTwice(
     stream.flush()
 
     indexOffset = output.tell()
-    assert len(boundsArray) == initialReductionCount, (
-        len(boundsArray),
-        initialReduction,
-    )
+    assert len(boundsArray) == initialReductionCount
     cirTreeFileBulkIndexToOpenFile(
         boundsArray, blockSize, itemsPerSlot, indexOffset, output
     )
 
     return twiceReducedList, dataStart, indexOffset, totalSum
-
-
-def bbiWriteSummaryAndIndexUnc(summaryList, blockSize, itemsPerSlot, output):
-    byteorder = sys.byteorder
-    count = len(summaryList)
-    summaryArray = []
-    output.write(count.to_bytes(4, byteorder))
-    for i, summary in enumerate(summaryList):
-        summary.offset = output.tell()
-        summaryArray.append(summary)
-        data = struct.pack(
-            "iiiiffff",
-            summary.chromId,
-            summary.start,
-            summary.end,
-            summary.validCount,
-            summary.values["minVal"],
-            summary.values["maxVal"],
-            summary.values["sumData"],
-            summary.values["sumSquares"],
-        )
-        output.write(data)
-    indexOffset = output.tell()
-    cirTreeFileBulkIndexToOpenFile(
-        summaryArray, blockSize, itemsPerSlot, indexOffset, output
-    )
-    return indexOffset
-
-
-def bbiWriteSummaryAndIndexComp(summaryList, blockSize, itemsPerSlot, output):
-    byteorder = sys.byteorder
-    count = len(summaryList)
-    summaryArray = []
-    output.write(count.to_bytes(4, byteorder))
-    summaryList = iter(summaryList)
-    itemsLeft = count
-    while itemsLeft > 0:
-        itemsInSlot = itemsLeft
-        if itemsInSlot > itemsPerSlot:
-            itemsInSlot = itemsPerSlot
-        buffer = BytesIO()
-        filePos = output.tell()
-        for i in range(itemsInSlot):
-            try:
-                summary = next(summaryList)
-            except StopIteration:
-                break
-            summaryArray.append(summary)
-            data = struct.pack(
-                "iiiiffff",
-                summary.chromId,
-                summary.start,
-                summary.end,
-                summary.validCount,
-                summary.values["minVal"],
-                summary.values["maxVal"],
-                summary.values["sumData"],
-                summary.values["sumSquares"],
-            )
-            buffer.write(data)
-            summary.offset = filePos
-        data = zlib.compress(buffer.getvalue())
-        output.write(data)
-        itemsLeft -= itemsInSlot
-    indexOffset = output.tell()
-    cirTreeFileBulkIndexToOpenFile(
-        summaryArray, blockSize, itemsPerSlot, indexOffset, output
-    )
-    return indexOffset
 
 
 def bbiSummarySimpleReduce(summaries, reduction):
@@ -2229,11 +2162,24 @@ def bbiSummarySimpleReduce(summaries, reduction):
     return newSummaries
 
 
-def bbiWriteSummaryAndIndex(summaryList, blockSize, itemsPerSlot, doCompress, output):
+def bbiWriteSummary(summaryList, itemsPerSlot, doCompress, output):
+    # See bbiWriteSummaryAndIndexUnc, bbiWriteSummaryAndIndexComp in bbiWrite.c
+    count = len(summaryList)
+    data = struct.pack("I", count)
+    output.write(data)
     if doCompress:
-        return bbiWriteSummaryAndIndexComp(summaryList, blockSize, itemsPerSlot, output)
+        for start in range(0, count, itemsPerSlot):
+            buffer = BytesIO()
+            filePos = output.tell()
+            for summary in summaryList[start : start + itemsPerSlot]:
+                buffer.write(bytes(summary))
+                summary.offset = filePos
+            data = zlib.compress(buffer.getvalue())
+            output.write(data)
     else:
-        return bbiWriteSummaryAndIndexUnc(summaryList, blockSize, itemsPerSlot, output)
+        for summary in summaryList:
+            summary.offset = output.tell()
+            output.write(bytes(summary))
 
 
 def bbiWriteZoomLevels(
@@ -2297,9 +2243,12 @@ def bbiWriteZoomLevels(
             break
         zoomCount = rezoomCount
         zoomDataOffsets[zoomLevels] = output.tell()
-        zoomIndexOffsets[zoomLevels] = bbiWriteSummaryAndIndex(
-            rezoomedList, blockSize, itemsPerSlot, doCompress, output
+        bbiWriteSummary(rezoomedList, itemsPerSlot, doCompress, output)
+        indexOffset = output.tell()
+        cirTreeFileBulkIndexToOpenFile(
+            rezoomedList, blockSize, itemsPerSlot, indexOffset, output
         )
+        zoomIndexOffsets[zoomLevels] = indexOffset
         zoomAmounts[zoomLevels] = reduction
         zoomLevels += 1
         reduction *= zoomIncrement
@@ -2370,20 +2319,11 @@ def writeLeafLevel(blockSize, chunkArray, itemCount, keySize, valSize, output):
 
 
 def bptFileBulkIndexToOpenFile(chunkArray, itemCount, blockSize, keySize, output):
-    byteorder = sys.byteorder
-    if byteorder == "little":  # little-endian
-        signature = "918cca78"
-    elif byteorder == "big":  # big-endian
-        signature = "78ca8c91"
-    else:
-        raise RuntimeError(f"unexpected system byte order {byteorder}")
+    signature = 0x78CA8C91
     valSize = 16
-    output.write(bytes.fromhex(signature))
-    output.write(blockSize.to_bytes(4, byteorder))
-    output.write(keySize.to_bytes(4, byteorder))
-    output.write(valSize.to_bytes(4, byteorder))
-    output.write(itemCount.to_bytes(8, byteorder))
-    output.write(bytes(8))
+    formatter = struct.Struct("=IIIIQxxxxxxxx")
+    data = formatter.pack(signature, blockSize, keySize, valSize, itemCount)
+    output.write(data)
     indexOffset = output.tell()
     levels = bptCountLevels(blockSize, itemCount)
     for i in range(levels - 1, 0, -1):
