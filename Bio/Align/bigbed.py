@@ -375,7 +375,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         extHeader = ExtHeader()
         extHeader.extraIndexCount = len(extraIndex)
         eim = [ExtraIndex(name, declaration) for name in extraIndex]
-        uncompressBufSize = 0
         usageList, minDiff, aveSize, bedCount = bbiChromUsageFromBedFile(
             alignments, targets, eim
         )
@@ -456,9 +455,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 stream,
             )
         if compress:
-            uncompressBufSize = max(
-                maxBlockSize, itemsPerSlot * 32
-            )  # sizeof(struct bbiSummaryOnDisk)
+            uncompressBufSize = max(maxBlockSize, itemsPerSlot * bbiSummary.size)
+        else:
+            uncompressBufSize = 0
         stream.seek(0)
         signature = 0x8789F2EB
         data = struct.pack(
@@ -510,18 +509,18 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     def _read_header(self, stream):
         # Supplemental Table 5: Common header
-        # magic                  4 bytes
-        # version                2 bytes
-        # zoomLevels             2 bytes
-        # chromosomeTreeOffset   8 bytes
-        # fullDataOffset         8 bytes; points to dataCount
-        # fullIndexOffset        8 bytes
-        # fieldCount             2 bytes
-        # definedFieldCount      2 bytes
-        # autoSqlOffset          8 bytes
-        # totalSummaryOffset     8 bytes
-        # uncompressBufSize      4 bytes
-        # reserved               8 bytes
+        # magic                  4 bytes, unsigned
+        # version                2 bytes, unsigned
+        # zoomLevels             2 bytes, unsigned
+        # chromosomeTreeOffset   8 bytes, unsigned
+        # fullDataOffset         8 bytes, unsigned; points to dataCount
+        # fullIndexOffset        8 bytes, unsigned
+        # fieldCount             2 bytes, unsigned
+        # definedFieldCount      2 bytes, unsigned
+        # autoSqlOffset          8 bytes, unsigned
+        # totalSummaryOffset     8 bytes, unsigned
+        # uncompressBufSize      4 bytes, unsigned
+        # reserved               8 bytes, unsigned
         signature = 0x8789F2EB
         magic = stream.read(4)
         for byteorder in ("little", "big"):
@@ -548,7 +547,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             autoSqlOffset,
             totalSummaryOffset,
             uncompressBufSize,
-        ) = struct.unpack(byteorder_char + "hhqqqhhqqixxxxxxxx", stream.read(60))
+        ) = struct.unpack(byteorder_char + "HHQQQHHQQIxxxxxxxx", stream.read(60))
 
         autoSqlSize = totalSummaryOffset - autoSqlOffset
         self.declaration = self._read_autosql(
@@ -1111,7 +1110,9 @@ bbiChromUsage = namedtuple("bbiChromUsage", ["name", "itemCount", "id", "size"])
 
 
 class bbiSummary:
+
     formatter = struct.Struct("=IIIIffff")
+    size = formatter.size
 
     def __init__(self, chromId, start, end, value):
         self.chromId = chromId
@@ -2204,8 +2205,7 @@ def bbiWriteZoomLevels(
     initialReducedCount = 0
 
     for resTry in range(resTryCount):
-        reducedSize = resSizes[resTry] * 32  # sizeof(struct bbiSummaryOnDisk)
-
+        reducedSize = resSizes[resTry] * bbiSummary.size
         if doCompress:
             reducedSize /= 2
         if reducedSize <= maxReducedSize:
