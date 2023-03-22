@@ -1360,12 +1360,6 @@ def bbiWriteChromInfo(usageList, blockSize, output):
     valSize = 8
 
     byteorder = sys.byteorder
-    if byteorder == "little":  # little-endian
-        signature = "918cca78"
-    elif byteorder == "big":  # big-endian
-        signature = "78ca8c91"
-    else:
-        raise RuntimeError(f"unexpected system byte order {byteorder}")
     signature = 0x78CA8C91
     formatter = struct.Struct("=IIIIQxxxxxxxx")
     data = formatter.pack(signature, blockSize, keySize, valSize, itemCount)
@@ -1393,16 +1387,13 @@ def bbiWriteChromInfo(usageList, blockSize, output):
         isLeaf = False
         for i in range(0, itemCount, nodeSizePer):
             countOne = min((itemCount - i + slotSizePer - 1) // slotSizePer, blockSize)
-            shortCountOne = countOne
-            output.write(isLeaf.to_bytes(1, byteorder))
-            output.write(bytes(1))
-            output.write(shortCountOne.to_bytes(2, byteorder))
+            output.write(struct.pack("?xH", isLeaf, countOne))
             slotsUsed = 0
             endIx = min(i + nodeSizePer, itemCount)
-            for j in range(i, endIx, slotSizePer):
-                item = itemArray[j]
-                output.write(item[0].encode().ljust(keySize, b"0"))
-                output.write(nextChild.to_bytes(8, byteorder))
+            for item in itemArray[i:endIx:slotSizePer]:
+                s = item[0].encode().ljust(keySize, b"0")
+                data = struct.pack(f"={len(s)}sQ", s, nextChild)
+                output.write(data)
                 nextChild += bytesInNextLevelBlock
                 slotsUsed += 1
             assert slotsUsed == shortCountOne
