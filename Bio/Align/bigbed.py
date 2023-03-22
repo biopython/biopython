@@ -355,7 +355,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
     def write_file(self, stream, alignments):
         blockSize = 256
         itemsPerSlot = 512
-        byteorder = sys.byteorder
         if self.targets is None:
             targets = alignments.targets
         else:
@@ -641,18 +640,18 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         else:
             raise ValueError("Unexpected byteorder '%s'" % byteorder)
         # Supplemental Table 8: Chromosome B+ tree header
-        # magic     4 bytes
-        # blockSize 4 bytes
-        # keySize   4 bytes
-        # valSize   4 bytes
-        # itemCount 8 bytes
-        # reserved  8 bytes
+        # magic     4 bytes, unsigned
+        # blockSize 4 bytes, unsigned
+        # keySize   4 bytes, unsigned
+        # valSize   4 bytes, unsigned
+        # itemCount 8 bytes, unsigned
+        # reserved  8 bytes, unsigned
         stream.seek(pos)
         signature = 0x78CA8C91
         magic = int.from_bytes(stream.read(4), byteorder=byteorder)
         assert magic == signature
         blockSize, keySize, valSize, itemCount = struct.unpack(
-            byteorder_char + "iiiqxxxxxxxx", stream.read(28)
+            byteorder_char + "IIIQxxxxxxxx", stream.read(28)
         )
         assert valSize == 8
 
@@ -1110,7 +1109,6 @@ bbiChromUsage = namedtuple("bbiChromUsage", ["name", "itemCount", "id", "size"])
 
 
 class bbiSummary:
-
     formatter = struct.Struct("=IIIIffff")
     size = formatter.size
 
@@ -1196,22 +1194,24 @@ class rTree:
     __slots__ = [
         "children",  # rTree*
         "parent",  # rTree*
-        "startChromId",  # bits32
-        "startBase",  # bits32
-        "endChromId",  # bits32
-        "endBase",  # bits32
+        "startChromId",  # bits32, unsigned
+        "startBase",  # bits32, unsigned
+        "endChromId",  # bits32, unsigned
+        "endBase",  # bits32, unsigned
         "startFileOffset",  # bits64
         "endFileOffset",  # bits64
     ]
+
+    formatter = struct.Struct("=IIII")
+    size = formatter.size
 
     def __init__(self):
         self.parent = None
         self.children = None
 
     def __bytes__(self):
-        size = self.endFileOffset - self.startFileOffset
-        return struct.pack(
-            "iiii", self.startChromId, self.startBase, self.endChromId, self.endBase
+        return self.formatter.pack(
+            self.startChromId, self.startBase, self.endChromId, self.endBase
         )
 
     def clone(self):
@@ -1230,17 +1230,15 @@ class rTree:
         self, blockSize, childNodeSize, curLevel, destLevel, offset, output
     ):
         # in cirTree.c
-        byteorder = sys.byteorder
         if curLevel == destLevel:
+            byteorder = sys.byteorder
             countOne = len(self.children)
             isLeaf = False
             output.write(struct.pack("?xH", isLeaf, countOne))
             for child in self.children:
-                output.write(child.startChromId.to_bytes(4, byteorder))
-                output.write(int(child.startBase).to_bytes(4, byteorder))
-                output.write(child.endChromId.to_bytes(4, byteorder))
-                output.write(int(child.endBase).to_bytes(4, byteorder))
-                output.write(int(offset).to_bytes(8, byteorder))
+                data = bytes(child) + struct.pack("Q", offset)  # FIXME
+                assert len(data) == indexSlotSize
+                output.write(data)
                 offset += childNodeSize
             output.write(bytes((blockSize - countOne) * indexSlotSize))
         else:
@@ -1766,13 +1764,11 @@ def rWriteLeaves(itemsPerSlot, lNodeSize, tree, curLevel, leafLevel, output):
         reserved = 0
         isLeaf = True
         countOne = len(tree.children)
-        output.write(isLeaf.to_bytes(1, byteorder))
-        output.write(reserved.to_bytes(1, byteorder))
-        output.write(countOne.to_bytes(2, byteorder))
+        output.write(struct.pack("?xH", isLeaf, countOne))
         for el in tree.children:
-            output.write(bytes(el))
+            output.write(bytes(el))  # FIXME
             data = struct.pack(
-                "qq", el.startFileOffset, el.endFileOffset - el.startFileOffset
+                "QQ", el.startFileOffset, el.endFileOffset - el.startFileOffset
             )
             output.write(data)
         output.write(bytes((itemsPerSlot - countOne) * indexSlotSize))
@@ -1812,12 +1808,11 @@ def cirTreeFileBulkIndexToOpenFile(
     itemArray, blockSize, itemsPerSlot, endFileOffset, output
 ):
     tree, levelCount = rTreeFromChromRangeArray(blockSize, itemArray, endFileOffset)
-    byteorder = sys.byteorder
     signature = 0x2468ACE0
     data = struct.pack("=IIQ", signature, blockSize, len(itemArray))
     output.write(data)
-    output.write(bytes(tree))
-    data = struct.pack("qixxxx", endFileOffset, itemsPerSlot)
+    output.write(bytes(tree))  # FIXME
+    data = struct.pack("QIxxxx", endFileOffset, itemsPerSlot)
     output.write(data)
     if tree is not None:
         writeTreeToOpenFile(tree, blockSize, levelCount, output)
@@ -2129,8 +2124,8 @@ def bedWriteReducedOnceReturnReducedTwice(
             )
     stream.flush()
 
-    indexOffset = output.tell()
     assert len(boundsArray) == initialReductionCount
+    indexOffset = output.tell()
     cirTreeFileBulkIndexToOpenFile(
         boundsArray, blockSize, itemsPerSlot, indexOffset, output
     )
