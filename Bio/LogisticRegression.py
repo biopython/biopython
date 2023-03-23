@@ -17,7 +17,8 @@ Functions:
 """
 
 
-import numpy
+import numpy as np
+
 import numpy.linalg
 
 
@@ -57,13 +58,13 @@ def train(xs, ys, update_fn=None, typecode=None):
         raise ValueError("No observations or observation of 0 dimension.")
 
     # Make an X array, with a constant first dimension.
-    X = numpy.ones((N, ndims), typecode)
+    X = np.ones((N, ndims), typecode)
     X[:, 1:] = xs
-    Xt = numpy.transpose(X)
-    y = numpy.asarray(ys, typecode)
+    Xt = np.transpose(X)
+    y = np.asarray(ys, typecode)
 
     # Initialize the beta parameter to 0.
-    beta = numpy.zeros(ndims, typecode)
+    beta = np.zeros(ndims, typecode)
 
     MAX_ITERATIONS = 500
     CONVERGE_THRESHOLD = 0.01
@@ -74,11 +75,11 @@ def train(xs, ys, update_fn=None, typecode=None):
     old_beta = old_llik = None
     while i < MAX_ITERATIONS:
         # Calculate the probabilities.  p = e^(beta X) / (1+e^(beta X))
-        ebetaX = numpy.exp(numpy.dot(beta, Xt))
+        ebetaX = np.exp(np.dot(beta, Xt))
         p = ebetaX / (1 + ebetaX)
 
         # Find the log likelihood score and see if I've converged.
-        logp = y * numpy.log(p) + (1 - y) * numpy.log(1 - p)
+        logp = y * np.log(p) + (1 - y) * np.log(1 - p)
         llik = sum(logp)
         if update_fn is not None:
             update_fn(iter, llik)
@@ -89,16 +90,16 @@ def train(xs, ys, update_fn=None, typecode=None):
                 stepsize /= 2.0
                 beta = old_beta
             # If I've converged, then stop.
-            if numpy.fabs(llik - old_llik) <= CONVERGE_THRESHOLD:
+            if np.fabs(llik - old_llik) <= CONVERGE_THRESHOLD:
                 break
         old_llik, old_beta = llik, beta
         i += 1
 
-        W = numpy.identity(N) * p
-        Xtyp = numpy.dot(Xt, y - p)  # Calculate the first derivative.
-        XtWX = numpy.dot(numpy.dot(Xt, W), X)  # Calculate the second derivative.
+        W = np.identity(N) * p
+        Xtyp = np.dot(Xt, y - p)  # Calculate the first derivative.
+        XtWX = np.dot(np.dot(Xt, W), X)  # Calculate the second derivative.
         delta = numpy.linalg.solve(XtWX, Xtyp)
-        if numpy.fabs(stepsize - 1.0) > 0.001:
+        if np.fabs(stepsize - 1.0) > 0.001:
             delta *= stepsize
         beta += delta  # Update beta.
     else:
@@ -119,9 +120,9 @@ def calculate(lr, x):
     Returns a list of the probability that it fits each class.
     """
     # Insert a constant term for x.
-    x = numpy.asarray([1.0] + x)
+    x = np.asarray([1.0] + x)
     # Calculate the probability.  p = e^(beta X) / (1+e^(beta X))
-    ebetaX = numpy.exp(numpy.dot(lr.beta, x))
+    ebetaX = np.exp(np.dot(lr.beta, x))
     p = ebetaX / (1 + ebetaX)
     return [1 - p, p]
 

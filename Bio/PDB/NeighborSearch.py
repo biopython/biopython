@@ -9,7 +9,7 @@
 """Fast atom neighbor lookup using a KD tree (implemented in C)."""
 
 
-import numpy
+import numpy as np
 
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Selection import unfold_entities, entity_levels, uniqueify
@@ -44,7 +44,7 @@ class NeighborSearch:
         # get the coordinates
         coord_list = [a.get_coord() for a in atom_list]
         # to Nx3 array of type float
-        self.coords = numpy.array(coord_list, dtype="d")
+        self.coords = np.array(coord_list, dtype="d")
         assert bucket_size > 1
         assert self.coords.shape[1] == 3
         self.kdt = KDTree(self.coords, bucket_size)
@@ -88,7 +88,7 @@ class NeighborSearch:
         """
         if level not in entity_levels:
             raise PDBException(f"{level}: Unknown level")
-        center = numpy.require(center, dtype="d", requirements="C")
+        center = np.require(center, dtype="d", requirements="C")
         if center.shape != (3,):
             raise Exception("Expected a 3-dimensional NumPy array")
         points = self.kdt.search(center, radius)

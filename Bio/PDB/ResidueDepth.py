@@ -55,7 +55,7 @@ import subprocess
 import tempfile
 import warnings
 
-import numpy
+import numpy as np
 
 from Bio.PDB import PDBParser
 from Bio.PDB import Selection
@@ -503,13 +503,13 @@ def _read_vertex_array(filename):
                 continue
             vl = [float(x) for x in sl[0:3]]
             vertex_list.append(vl)
-    return numpy.array(vertex_list)
+    return np.array(vertex_list)
 
 
 def get_surface(model, MSMS="msms"):
     """Represent molecular surface as a vertex list array.
 
-    Return a Numpy array that represents the vertex list of the
+    Return a NumPy array that represents the vertex list of the
     molecular surface.
 
     Arguments:
@@ -557,8 +557,8 @@ def get_surface(model, MSMS="msms"):
 def min_dist(coord, surface):
     """Return minimum distance between coord and surface."""
     d = surface - coord
-    d2 = numpy.sum(d * d, 1)
-    return numpy.sqrt(min(d2))
+    d2 = np.sum(d * d, 1)
+    return np.sqrt(min(d2))
 
 
 def residue_depth(residue, surface):

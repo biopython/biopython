@@ -335,3 +335,4 @@ please open an issue on GitHub or mention it on the mailing list.
 - Zachary Sailer <https://github.com/Zsailer>
 - Zaid Ur-Rehman <https://github.com/zaidurrehman>
 - Zheng Ruan <https://github.com/zruan>
+- Farhan Khan <https://github.com/BabaYaga1221>
