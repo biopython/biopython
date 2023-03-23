@@ -1369,9 +1369,9 @@ def bbiWriteChromInfo(usageList, blockSize, output):
     while itemCount > blockSize:
         itemCount = (itemCount + blockSize - 1) // blockSize
         levels += 1
+    itemCount = chromCount
     level = levels - 1
     while level > 0:
-        level -= 1
         slotSizePer = blockSize**level
         nodeSizePer = slotSizePer * blockSize
         nodeCount = (itemCount + nodeSizePer - 1) // nodeSizePer
@@ -1396,13 +1396,14 @@ def bbiWriteChromInfo(usageList, blockSize, output):
                 output.write(data)
                 nextChild += bytesInNextLevelBlock
                 slotsUsed += 1
-            assert slotsUsed == shortCountOne
+            assert slotsUsed == countOne
             slotSize = keySize + 8
             for j in range(countOne, blockSize):
                 output.write(bytes(slotSize))
         endLevelOffset = endLevel
         indexOffset = output.tell()
         assert endLevelOffset == indexOffset
+        level -= 1
     isLeaf = True
     countLeft = itemCount
     i = 0
@@ -1977,7 +1978,6 @@ def rangeTreeAddToCoverageDepth(tree, start, end):
         else:
             existingList = rangeTreeAllOverlapping(tree, start, end)
             s = start
-            e = end
             for existing in existingList:
                 if s < existing.start:
                     r = Range(s, existing.start, 1)
@@ -1987,10 +1987,14 @@ def rangeTreeAddToCoverageDepth(tree, start, end):
                     r = Range(existing.start, s, existing.val)
                     existing.start = s
                     rbTreeAdd(tree, r)
+                if existing.start < end and existing.end > end:
+                    r = Range(end, existing.end, existing.val)
+                    existing.end = end
+                    rbTreeAdd(tree, r)
                 existing.val += 1
                 s = existing.end
-            if s < e:
-                r = Range(s, e, 1)
+            if s < end:
+                r = Range(s, end, 1)
                 rbTreeAdd(tree, r)
 
 
@@ -2080,6 +2084,8 @@ def bedWriteReducedOnceReturnReducedTwice(
             start = range.start
             end = range.end
             size = end - start
+            if size == 0:
+                size = 1
 
             totalSum.update(size, val)
 

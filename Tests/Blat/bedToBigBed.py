@@ -17,7 +17,7 @@ except ImportError:
     ) from None
 
 
-if False:
+if True:
     # bedToBigBed -as=bed12.as anoGam3.bed anoGam3.chrom.sizes anoGam3.bb
     bigBedFileName = "anoGam3.bb"
     alignments = Align.parse(bigBedFileName, "bigbed")
@@ -40,6 +40,7 @@ if False:
     assert data == correct
     print("test 11 ok")
     # return len(data)
+    sys.exit(1)
 
 
 if False:
