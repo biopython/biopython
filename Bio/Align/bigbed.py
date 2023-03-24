@@ -76,7 +76,7 @@ class bbiSummaryElement:
     # See bbiSummaryElementWrite in bbiWrite.c
     __slots__ = ["validCount", "minVal", "maxVal", "sumData", "sumSquares"]
 
-    formatter = struct.Struct("Qdddd")
+    formatter = struct.Struct("=Qdddd")
     size = formatter.size
 
     def __init__(self):
@@ -234,10 +234,10 @@ class AutoSQLTable(list):
         for field in self:
             name = field.name + ";"
             lines.append(
-                '   %s %s    "%s"\n'
+                f'   %-{type_width}s %-{name_width}s    "%s"\n'
                 % (
-                    field.as_type.ljust(type_width),
-                    name.ljust(name_width),
+                    field.as_type,
+                    name,
                     field.comment,
                 )
             )
@@ -477,7 +477,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream.write(data)
         for i in range(zoomLevels):
             data = struct.pack(
-                "IxxxxQQ", zoomAmounts[i], zoomDataOffsets[i], zoomIndexOffsets[i]
+                "=IxxxxQQ", zoomAmounts[i], zoomDataOffsets[i], zoomIndexOffsets[i]
             )
             stream.write(data)
         stream.write(bytes(24 * (bbiMaxZoomLevels - zoomLevels)))
@@ -491,7 +491,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 stream.write(bytes(element))
             assert stream.tell() == extraIndexListEndOffset
         stream.seek(0, 2)
-        data = struct.pack("I", signature)
+        data = struct.pack("=I", signature)
         stream.write(data)
 
 
@@ -1164,7 +1164,7 @@ class bbiSumOutStream:
 
     def write(self, summary):
         data = struct.pack(
-            "IIIIffff",
+            "=IIIIffff",
             summary.chromId,
             summary.start,
             summary.end,
@@ -1236,7 +1236,7 @@ class rTree:
             byteorder = sys.byteorder
             countOne = len(self.children)
             isLeaf = False
-            output.write(struct.pack("?xH", isLeaf, countOne))
+            output.write(struct.pack("=?xH", isLeaf, countOne))
             for child in self.children:
                 data = bytes(child) + struct.pack("Q", offset)  # FIXME
                 assert len(data) == indexSlotSize
@@ -1359,7 +1359,6 @@ def bbiWriteChromInfo(usageList, blockSize, output):
     keySize = maxChromNameSize
     valSize = 8
 
-    byteorder = sys.byteorder
     signature = 0x78CA8C91
     formatter = struct.Struct("=IIIIQxxxxxxxx")
     data = formatter.pack(signature, blockSize, keySize, valSize, itemCount)
@@ -1387,12 +1386,11 @@ def bbiWriteChromInfo(usageList, blockSize, output):
         isLeaf = False
         for i in range(0, itemCount, nodeSizePer):
             countOne = min((itemCount - i + slotSizePer - 1) // slotSizePer, blockSize)
-            output.write(struct.pack("?xH", isLeaf, countOne))
+            output.write(struct.pack("=?xH", isLeaf, countOne))
             slotsUsed = 0
             endIx = min(i + nodeSizePer, itemCount)
             for item in itemArray[i:endIx:slotSizePer]:
-                s = item[0].encode().ljust(keySize, b"\x00")
-                data = struct.pack(f"={len(s)}sQ", s, nextChild)
+                data = struct.pack(f"={keySize}sQ", item[0].encode(), nextChild)
                 output.write(data)
                 nextChild += bytesInNextLevelBlock
                 slotsUsed += 1
@@ -1412,15 +1410,13 @@ def bbiWriteChromInfo(usageList, blockSize, output):
             countOne = blockSize
         else:
             countOne = countLeft
-        output.write(isLeaf.to_bytes(1, byteorder))
-        output.write(bytes(1))
-        output.write(countOne.to_bytes(2, byteorder))
+        output.write(struct.pack("=?xH", isLeaf, countOne))
         for j in range(countOne):
             assert i + j < itemCount
             item = itemArray[i + j]
-            output.write(item[0].encode().ljust(keySize, b"\0"))
-            output.write(item[1].to_bytes(4, byteorder))
-            output.write(item[2].to_bytes(4, byteorder))
+            output.write(
+                struct.pack(f"={keySize}sII", item[0].encode(), item[1], item[2])
+            )
         slotSize = keySize + valSize
         for j in range(countOne, blockSize):
             output.write(bytes(slotSize))
@@ -1640,7 +1636,7 @@ def writeBlocks(
                 element.addKeysFromRow(alignment, sectionEndIx)
             sectionEndIx += 1
 
-        data = struct.pack("III", chromId, start, end)
+        data = struct.pack("=III", chromId, start, end)
         stream.write(data)
         if fieldCount > 3:
             rest = "\t".join(row)
@@ -1758,11 +1754,11 @@ def rWriteLeaves(itemsPerSlot, lNodeSize, tree, curLevel, leafLevel, output):
         reserved = 0
         isLeaf = True
         countOne = len(tree.children)
-        output.write(struct.pack("?xH", isLeaf, countOne))
+        output.write(struct.pack("=?xH", isLeaf, countOne))
         for el in tree.children:
             output.write(bytes(el))  # FIXME
             data = struct.pack(
-                "QQ", el.startFileOffset, el.endFileOffset - el.startFileOffset
+                "=QQ", el.startFileOffset, el.endFileOffset - el.startFileOffset
             )
             output.write(data)
         output.write(bytes((itemsPerSlot - countOne) * indexSlotSize))
@@ -1806,7 +1802,7 @@ def cirTreeFileBulkIndexToOpenFile(
     data = struct.pack("=IIQ", signature, blockSize, len(itemArray))
     output.write(data)
     output.write(bytes(tree))  # FIXME
-    data = struct.pack("QIxxxx", endFileOffset, itemsPerSlot)
+    data = struct.pack("=QIxxxx", endFileOffset, itemsPerSlot)
     output.write(data)
     if tree is not None:
         writeTreeToOpenFile(tree, blockSize, levelCount, output)
@@ -2157,7 +2153,7 @@ def bbiSummarySimpleReduce(summaries, reduction):
 def bbiWriteSummary(summaryList, itemsPerSlot, doCompress, output):
     # See bbiWriteSummaryAndIndexUnc, bbiWriteSummaryAndIndexComp in bbiWrite.c
     count = len(summaryList)
-    data = struct.pack("I", count)
+    data = struct.pack("=I", count)
     output.write(data)
     if doCompress:
         for start in range(0, count, itemsPerSlot):
@@ -2272,39 +2268,38 @@ def writeIndexLevel(
     levelSize = nodeCount * bytesInIndexBlock
     endLevel = indexOffset + levelSize
     nextChild = endLevel
+    formatter = struct.Struct(f"={keySize}sQ")
+    isLeaf = False
     for i in range(0, itemCount, nodeSizePer):
         countOne = min((itemCount - i + slotSizePer - 1) // slotSizePer, blockSize)
-        output.write(b"\0")  # isLeaf = False
-        output.write(b"\0")  # reserved
-        output.write(countOne.to_bytes(2, byteorder))
+        output.write(struct.pack("=?xH", isLeaf, countOne))
         slotsUsed = 0
         endIx = min(i + nodeSizePer, itemCount)
         for chunk in chunkArray[i:endIx:slotSizePer]:  # bbNamedFileChunk
-            output.write(chunk.name.ljust(keySize, b"\0"))
-            output.write(nextChild.to_bytes(8, byteorder))
+            data = formatter.pack(chunk.name, nextChild)
+            output.write(data)
             nextChild += bytesInNextLevelBlock
             slotsUsed += 1
         assert slotsUsed == countOne
-        output.write(bytes((keySize + 8) * (blockSize - countOne)))
+        output.write(bytes(formatter.size * (blockSize - countOne)))
     return endLevel
 
 
 def writeLeafLevel(blockSize, chunkArray, itemCount, keySize, valSize, output):
-    byteorder = sys.byteorder
+    isLeaf = True
     countLeft = itemCount
+    formatter = struct.Struct(f"={keySize}sQQ")
     i = 0
     while i < itemCount:
         countOne = min(blockSize, countLeft)
-        output.write(b"\1")  # isLeaf = True
-        output.write(b"\0")  # reserved
-        output.write(countOne.to_bytes(2, byteorder))
+        output.write(struct.pack("=?xH", isLeaf, countOne))
         for j in range(countOne):
             assert i + j < itemCount
             chunk = chunkArray[i + j]
-            output.write(chunk.name.ljust(keySize, b"\0"))
-            output.write(chunk.offset.to_bytes(8, byteorder))
-            output.write(chunk.size.to_bytes(8, byteorder))
-        output.write(bytes((keySize + valSize) * (blockSize - countOne)))
+            data = formatter.pack(chunk.name, chunk.offset, chunk.size)
+            output.write(data)
+        data = bytes((keySize + valSize) * (blockSize - countOne))
+        output.write(data)
         countLeft -= countOne
         i += countOne
 
