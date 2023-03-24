@@ -17,82 +17,6 @@ except ImportError:
     ) from None
 
 
-if False:
-    # bedToBigBed -as=bed12.as anoGam3.bed anoGam3.chrom.sizes anoGam3.bb
-    bigBedFileName = "anoGam3.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed12.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        declaration=declaration,
-        compress=True,
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open(bigBedFileName, "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 11 ok")
-    # return len(data)
-    sys.exit(1)
-
-
-if False:
-    # bedToBigBed -as=bed12.as ailMel1.bed ailMel1.chrom.sizes ailMel1.bb
-    bigBedFileName = "ailMel1.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed12.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        declaration=declaration,
-        compress=True,
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open(bigBedFileName, "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 12 ok")
-    # return len(data)
-
-
-if False:
-    # bedToBigBed -as=bed12.as bisBis1.bed bisBis1.chrom.sizes bisBis1.bb
-    bigBedFileName = "bisBis1.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed12.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        declaration=declaration,
-        compress=True,
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open(bigBedFileName, "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 13 ok")
-    # return len(data)
-
-
 def test1():
     # bedToBigBed -as=bed12.as ucsc.bed hg38.chrom.sizes ucsc.bb
     bigBedFileName = "ucsc.bb"
@@ -357,6 +281,81 @@ def test10():
     return len(data)
 
 
+def test11():
+    # bedToBigBed -as=bed12.as anoGam3.bed anoGam3.chrom.sizes anoGam3.bb
+    bigBedFileName = "anoGam3.bb"
+    alignments = Align.parse(bigBedFileName, "bigbed")
+    data = open("bed12.as").read()
+    declaration = bigbed.AutoSQLTable.from_string(data)
+    output = open("test.bb", "wb")
+    Align.write(
+        alignments,
+        output,
+        "bigbed",
+        declaration=declaration,
+        compress=True,
+    )
+    output.close()
+    stream = open("test.bb", "rb")
+    data = stream.read()
+    stream.close()
+    stream = open(bigBedFileName, "rb")
+    correct = stream.read()
+    assert data == correct
+    print("test 11 ok")
+    return len(data)
+
+
+def test12():
+    # bedToBigBed -as=bed12.as ailMel1.bed ailMel1.chrom.sizes ailMel1.bb
+    bigBedFileName = "ailMel1.bb"
+    alignments = Align.parse(bigBedFileName, "bigbed")
+    data = open("bed12.as").read()
+    declaration = bigbed.AutoSQLTable.from_string(data)
+    output = open("test.bb", "wb")
+    Align.write(
+        alignments,
+        output,
+        "bigbed",
+        declaration=declaration,
+        compress=True,
+    )
+    output.close()
+    stream = open("test.bb", "rb")
+    data = stream.read()
+    stream.close()
+    stream = open(bigBedFileName, "rb")
+    correct = stream.read()
+    assert data == correct
+    print("test 12 ok")
+    return len(data)
+
+
+def test13():
+    # bedToBigBed -as=bed12.as bisBis1.bed bisBis1.chrom.sizes bisBis1.bb
+    bigBedFileName = "bisBis1.bb"
+    alignments = Align.parse(bigBedFileName, "bigbed")
+    data = open("bed12.as").read()
+    declaration = bigbed.AutoSQLTable.from_string(data)
+    output = open("test.bb", "wb")
+    Align.write(
+        alignments,
+        output,
+        "bigbed",
+        declaration=declaration,
+        compress=True,
+    )
+    output.close()
+    stream = open("test.bb", "rb")
+    data = stream.read()
+    stream.close()
+    stream = open(bigBedFileName, "rb")
+    correct = stream.read()
+    assert data == correct
+    print("test 13 ok")
+    return len(data)
+
+
 size1 = test1()
 size2 = test2()
 size3 = test3()
@@ -367,3 +366,6 @@ size7 = test7()
 size8 = test8()
 size9 = test9()
 size10 = test10()
+size11 = test11()
+size12 = test12()
+size13 = test13()

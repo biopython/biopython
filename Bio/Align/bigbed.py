@@ -1391,7 +1391,7 @@ def bbiWriteChromInfo(usageList, blockSize, output):
             slotsUsed = 0
             endIx = min(i + nodeSizePer, itemCount)
             for item in itemArray[i:endIx:slotSizePer]:
-                s = item[0].encode().ljust(keySize, b"0")
+                s = item[0].encode().ljust(keySize, b"\x00")
                 data = struct.pack(f"={len(s)}sQ", s, nextChild)
                 output.write(data)
                 nextChild += bytesInNextLevelBlock
