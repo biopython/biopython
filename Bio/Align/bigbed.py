@@ -1978,6 +1978,7 @@ def rangeTreeAddToCoverageDepth(tree, start, end):
         else:
             existingList = rangeTreeAllOverlapping(tree, start, end)
             s = start
+            e = end
             for existing in existingList:
                 if s < existing.start:
                     r = Range(s, existing.start, 1)
@@ -1987,14 +1988,10 @@ def rangeTreeAddToCoverageDepth(tree, start, end):
                     r = Range(existing.start, s, existing.val)
                     existing.start = s
                     rbTreeAdd(tree, r)
-                if existing.start < end and existing.end > end:
-                    r = Range(end, existing.end, existing.val)
-                    existing.end = end
-                    rbTreeAdd(tree, r)
                 existing.val += 1
                 s = existing.end
-            if s < end:
-                r = Range(s, end, 1)
+            if s < e:
+                r = Range(s, e, 1)
                 rbTreeAdd(tree, r)
 
 
