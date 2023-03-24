@@ -1344,7 +1344,7 @@ def bbiWriteChromInfo(usageList, blockSize, output):
     chromInfoList = []
     maxChromNameSize = 0
     for chromId, usage in enumerate(usageList):
-        name = usage.name
+        name = usage.name.encode()
         maxChromNameSize = max(maxChromNameSize, len(name))
         itemCount = usage.itemCount
         assert usage.id == chromId
@@ -1370,6 +1370,7 @@ def bbiWriteChromInfo(usageList, blockSize, output):
         levels += 1
     itemCount = chromCount
     level = levels - 1
+    formatter = struct.Struct(f"={keySize}sQ")
     while level > 0:
         slotSizePer = blockSize**level
         nodeSizePer = slotSizePer * blockSize
@@ -1390,14 +1391,12 @@ def bbiWriteChromInfo(usageList, blockSize, output):
             slotsUsed = 0
             endIx = min(i + nodeSizePer, itemCount)
             for item in itemArray[i:endIx:slotSizePer]:
-                data = struct.pack(f"={keySize}sQ", item[0].encode(), nextChild)
+                data = formatter.pack(item[0], nextChild)
                 output.write(data)
                 nextChild += bytesInNextLevelBlock
                 slotsUsed += 1
             assert slotsUsed == countOne
-            slotSize = keySize + 8
-            for j in range(countOne, blockSize):
-                output.write(bytes(slotSize))
+            output.write(bytes((blockSize - countOne) * formatter.size))
         endLevelOffset = endLevel
         indexOffset = output.tell()
         assert endLevelOffset == indexOffset
@@ -1405,6 +1404,7 @@ def bbiWriteChromInfo(usageList, blockSize, output):
     isLeaf = True
     countLeft = itemCount
     i = 0
+    formatter = struct.Struct(f"={keySize}sII")
     while i < itemCount:
         if countLeft > blockSize:
             countOne = blockSize
@@ -1414,12 +1414,8 @@ def bbiWriteChromInfo(usageList, blockSize, output):
         for j in range(countOne):
             assert i + j < itemCount
             item = itemArray[i + j]
-            output.write(
-                struct.pack(f"={keySize}sII", item[0].encode(), item[1], item[2])
-            )
-        slotSize = keySize + valSize
-        for j in range(countOne, blockSize):
-            output.write(bytes(slotSize))
+            output.write(formatter.pack(*item))
+        output.write(bytes((blockSize - countOne) * formatter.size))
         countLeft -= countOne
         i += countOne
 
