@@ -55,12 +55,13 @@ You are expected to use this module via the Bio.Align functions.
 import sys
 import copy
 import array
+import itertools
 import struct
 import zlib
 from collections import namedtuple
 from io import BytesIO
 from operator import attrgetter
-import numpy
+import numpy as np
 
 
 from Bio.Align import Alignment
@@ -421,9 +422,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             boundsArray = []
         indexOffset = stream.tell()
         cirTreeFileBulkIndexToOpenFile(boundsArray, blockSize, 1, indexOffset, stream)
-        zoomAmounts = numpy.empty(bbiMaxZoomLevels, numpy.int32)
-        zoomDataOffsets = numpy.empty(bbiMaxZoomLevels, numpy.int64)
-        zoomIndexOffsets = numpy.empty(bbiMaxZoomLevels, numpy.int64)
+        zoomAmounts = np.empty(bbiMaxZoomLevels, np.int32)
+        zoomDataOffsets = np.empty(bbiMaxZoomLevels, np.int64)
+        zoomIndexOffsets = np.empty(bbiMaxZoomLevels, np.int64)
         zoomLevels = 0
         if bedCount > 0:
             zoomLevels, totalSum = bbiWriteZoomLevels(
@@ -974,12 +975,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             strand = "+"
         if self.bedN > 9:
             blockCount = int(words[6])
-            blockSizes = [
-                int(blockSize) for blockSize in words[7].rstrip(",").split(",")
-            ]
-            blockStarts = [
-                int(blockStart) for blockStart in words[8].rstrip(",").split(",")
-            ]
+            blockSizes = np.fromiter(words[7].rstrip(",").split(","), int)
+            blockStarts = np.fromiter(words[8].rstrip(",").split(","), int)
             if len(blockSizes) != blockCount:
                 raise ValueError(
                     "Inconsistent number of block sizes (%d found, expected %d)"
@@ -990,8 +987,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     "Inconsistent number of block start positions (%d found, expected %d)"
                     % (len(blockStarts), blockCount)
                 )
-            blockSizes = numpy.array(blockSizes)
-            blockStarts = numpy.array(blockStarts)
             tPosition = 0
             qPosition = 0
             coordinates = [[tPosition, qPosition]]
@@ -1002,11 +997,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 tPosition += blockSize
                 qPosition += blockSize
                 coordinates.append([tPosition, qPosition])
-            coordinates = numpy.array(coordinates).transpose()
+            coordinates = np.array(coordinates).transpose()
             qSize = sum(blockSizes)
         else:
             blockSize = chromEnd - chromStart
-            coordinates = numpy.array([[0, blockSize], [0, blockSize]])
+            coordinates = np.array([[0, blockSize], [0, blockSize]])
             qSize = blockSize
         coordinates[0, :] += chromStart
         query_sequence = Seq(None, length=qSize)
@@ -1119,7 +1114,7 @@ class bbiSummary:
         self.start = start
         self.end = end
         self.validCount = 0
-        self.values = numpy.array(
+        self.values = np.array(
             (value, value, 0.0, 0.0),
             dtype=[
                 ("minVal", "f4"),
@@ -1402,26 +1397,21 @@ def bbiWriteChromInfo(usageList, blockSize, output):
         assert endLevelOffset == indexOffset
         level -= 1
     isLeaf = True
-    countLeft = itemCount
-    i = 0
     formatter = struct.Struct(f"={keySize}sII")
-    while i < itemCount:
-        if countLeft > blockSize:
-            countOne = blockSize
-        else:
-            countOne = countLeft
-        output.write(struct.pack("=?xH", isLeaf, countOne))
-        for j in range(countOne):
-            assert i + j < itemCount
-            item = itemArray[i + j]
-            output.write(formatter.pack(*item))
-        output.write(bytes((blockSize - countOne) * formatter.size))
-        countLeft -= countOne
-        i += countOne
+    for index in itertools.count(0, blockSize):
+        items = itemArray[index : index + blockSize]
+        if not items:
+            break
+        output.write(struct.pack("=?xH", isLeaf, len(items)))
+        for item in items:
+            data = formatter.pack(*item)
+            output.write(data)
+        data = bytes((blockSize - len(items)) * formatter.size)
+        output.write(data)
 
 
 def bbiCalcResScalesAndSizes(aveSize):
-    resScales = numpy.zeros(bbiMaxZoomLevels, int)
+    resScales = np.zeros(bbiMaxZoomLevels, int)
     resSizes = array.array("i", [0] * bbiMaxZoomLevels)
     resTryCount = bbiMaxZoomLevels
     resIncrement = bbiResIncrement
@@ -1518,7 +1508,7 @@ def loadAndValidateBed(alignment, bedFieldCount, fieldCount, declaration):
                 )
         row.append(itemRgb)
     if bedFieldCount > 9:
-        steps = numpy.diff(alignment.coordinates)
+        steps = np.diff(alignment.coordinates)
         aligned = sum(steps != 0, 0) == 2
         blockSizes = steps.max(0)[aligned]
         blockCount = len(blockSizes)
@@ -1574,7 +1564,7 @@ def writeBlocks(
     startPos = 0
     endPos = 0
     chromId = -1
-    resEnds = numpy.zeros(resTryCount, int)
+    resEnds = np.zeros(resTryCount, int)
     atEnd = False
     start = 0
     end = 0
@@ -1765,12 +1755,12 @@ def rWriteLeaves(itemsPerSlot, lNodeSize, tree, curLevel, leafLevel, output):
 
 def writeTreeToOpenFile(tree, blockSize, levelCount, output):
     level = 0
-    levelSizes = numpy.zeros(levelCount, int)
+    levelSizes = np.zeros(levelCount, int)
     calcLevelSizes(tree, levelSizes, level, levelCount - 1)
     iNodeSize = nodeHeaderSize + indexSlotSize * blockSize
     lNodeSize = nodeHeaderSize + leafSlotSize * blockSize
-    levelOffsets = numpy.zeros(levelCount, numpy.int64) + output.tell()
-    levelOffsets[1:] += numpy.cumsum(levelSizes[:-1]) * iNodeSize
+    levelOffsets = np.zeros(levelCount, np.int64) + output.tell()
+    levelOffsets[1:] += np.cumsum(levelSizes[:-1]) * iNodeSize
     finalLevel = levelCount - 3
     for i in range(finalLevel + 1):
         if i == finalLevel:
@@ -2251,7 +2241,6 @@ def writeIndexLevel(
     blockSize, chunkArray, itemCount, indexOffset, level, keySize, valSize, output
 ):
     # in bPlusTree.c
-    byteorder = sys.byteorder
     slotSizePer = pow(blockSize, level)
     nodeSizePer = slotSizePer * blockSize
     nodeCount = (itemCount + nodeSizePer - 1) // nodeSizePer
@@ -2281,23 +2270,19 @@ def writeIndexLevel(
     return endLevel
 
 
-def writeLeafLevel(blockSize, chunkArray, itemCount, keySize, valSize, output):
+def writeLeafLevel(blockSize, chunkArray, keySize, output):
     isLeaf = True
-    countLeft = itemCount
     formatter = struct.Struct(f"={keySize}sQQ")
-    i = 0
-    while i < itemCount:
-        countOne = min(blockSize, countLeft)
-        output.write(struct.pack("=?xH", isLeaf, countOne))
-        for j in range(countOne):
-            assert i + j < itemCount
-            chunk = chunkArray[i + j]
+    for index in itertools.count(0, blockSize):
+        chunks = chunkArray[index : index + blockSize]
+        if not chunks:
+            break
+        output.write(struct.pack("=?xH", isLeaf, len(chunks)))
+        for chunk in chunks:
             data = formatter.pack(chunk.name, chunk.offset, chunk.size)
             output.write(data)
-        data = bytes((keySize + valSize) * (blockSize - countOne))
+        data = bytes((blockSize - len(chunks)) * formatter.size)
         output.write(data)
-        countLeft -= countOne
-        i += countOne
 
 
 def bptFileBulkIndexToOpenFile(chunkArray, itemCount, blockSize, keySize, output):
@@ -2314,4 +2299,4 @@ def bptFileBulkIndexToOpenFile(chunkArray, itemCount, blockSize, keySize, output
         )  # in bPlusTree.c
         indexOffset = output.tell()
         assert endLevelOffset == indexOffset
-    writeLeafLevel(blockSize, chunkArray, itemCount, keySize, valSize, output)
+    writeLeafLevel(blockSize, chunkArray, keySize, output)
