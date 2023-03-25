@@ -1341,72 +1341,62 @@ def bbiWriteChromInfo(usageList, blockSize, output):
     for chromId, usage in enumerate(usageList):
         name = usage.name.encode()
         maxChromNameSize = max(maxChromNameSize, len(name))
-        itemCount = usage.itemCount
         assert usage.id == chromId
         chromSize = usage.size
         chromInfoList.append([name, chromId, chromSize])
     chromInfoList.sort()
     chromBlockSize = min(blockSize, chromCount)
 
-    itemArray = chromInfoList
-    itemCount = chromCount
     blockSize = chromBlockSize
     keySize = maxChromNameSize
     valSize = 8
 
     signature = 0x78CA8C91
     formatter = struct.Struct("=IIIIQxxxxxxxx")
-    data = formatter.pack(signature, blockSize, keySize, valSize, itemCount)
+    data = formatter.pack(signature, blockSize, keySize, valSize, chromCount)
     output.write(data)
     indexOffset = output.tell()
     levels = 1
+    itemCount = chromCount
     while itemCount > blockSize:
         itemCount = (itemCount + blockSize - 1) // blockSize
         levels += 1
-    itemCount = chromCount
     level = levels - 1
-    formatter = struct.Struct(f"={keySize}sQ")
+    formatter_header = struct.Struct("=?xH")
+    formatter_index = struct.Struct(f"={keySize}sQ")
+    formatter_leaf = struct.Struct(f"={keySize}sII")
+    itemSize = formatter_index.size
+    assert itemSize == formatter_leaf.size
     while level > 0:
         slotSizePer = blockSize**level
         nodeSizePer = slotSizePer * blockSize
-        nodeCount = (itemCount + nodeSizePer - 1) // nodeSizePer
-        bytesInIndexBlock = bptBlockHeaderSize + blockSize * (keySize + 8)
-        bytesInLeafBlock = bptBlockHeaderSize + blockSize * (keySize + valSize)
-        if level == 1:
-            bytesInNextLevelBlock = bytesInLeafBlock
-        else:
-            bytesInNextLevelBlock = bytesInIndexBlock
-        levelSize = nodeCount * bytesInIndexBlock
+        nodeCount = (chromCount + nodeSizePer - 1) // nodeSizePer
+        bytesInNextLevelBlock = formatter_header.size + blockSize * itemSize
+        levelSize = nodeCount * bytesInNextLevelBlock
         endLevel = indexOffset + levelSize
         nextChild = endLevel
         isLeaf = False
-        for i in range(0, itemCount, nodeSizePer):
-            countOne = min((itemCount - i + slotSizePer - 1) // slotSizePer, blockSize)
-            output.write(struct.pack("=?xH", isLeaf, countOne))
-            slotsUsed = 0
-            endIx = min(i + nodeSizePer, itemCount)
-            for item in itemArray[i:endIx:slotSizePer]:
-                data = formatter.pack(item[0], nextChild)
+        for i in range(0, chromCount, nodeSizePer):
+            items = chromInfoList[i::slotSizePer]
+            output.write(formatter_header.pack(isLeaf, len(items)))
+            for item in items:
+                data = formatter_index.pack(item[0], nextChild)
                 output.write(data)
                 nextChild += bytesInNextLevelBlock
-                slotsUsed += 1
-            assert slotsUsed == countOne
-            output.write(bytes((blockSize - countOne) * formatter.size))
-        endLevelOffset = endLevel
+            output.write(bytes((blockSize - len(items)) * formatter_index.size))
         indexOffset = output.tell()
-        assert endLevelOffset == indexOffset
+        assert endLevel == indexOffset
         level -= 1
     isLeaf = True
-    formatter = struct.Struct(f"={keySize}sII")
     for index in itertools.count(0, blockSize):
-        items = itemArray[index : index + blockSize]
+        items = chromInfoList[index : index + blockSize]
         if not items:
             break
-        output.write(struct.pack("=?xH", isLeaf, len(items)))
+        output.write(formatter_header.pack(isLeaf, len(items)))
         for item in items:
-            data = formatter.pack(*item)
+            data = formatter_leaf.pack(*item)
             output.write(data)
-        data = bytes((blockSize - len(items)) * formatter.size)
+        data = bytes((blockSize - len(items)) * formatter_leaf.size)
         output.write(data)
 
 
