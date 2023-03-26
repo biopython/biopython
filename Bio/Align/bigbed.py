@@ -574,19 +574,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         # reserved               8 bytes, unsigned
         signature = 0x8789F2EB
         magic = stream.read(4)
-        for byteorder in ("little", "big"):
-            if int.from_bytes(magic, byteorder=byteorder) == signature:
-                break
+        if int.from_bytes(magic, byteorder="little") == signature:
+            self.byteorder = "<"
+        elif int.from_bytes(magic, byteorder="big") == signature:
+            self.byteorder = ">"
         else:
             raise ValueError("not a bigBed file")
-        self.byteorder = byteorder
-        if byteorder == "little":
-            byteorder_char = "<"
-        elif byteorder == "big":
-            byteorder_char = ">"
-        else:
-            raise ValueError("Unexpected byteorder '%s'" % byteorder)
-
+        formatter = struct.Struct(self.byteorder + "HHQQQHHQQIxxxxxxxx")
+        size = formatter.size
+        data = stream.read(size)
         (
             version,
             zoomLevels,
@@ -598,7 +594,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             autoSqlOffset,
             totalSummaryOffset,
             uncompressBufSize,
-        ) = struct.unpack(byteorder_char + "HHQQQHHQQIxxxxxxxx", stream.read(60))
+        ) = formatter.unpack(data)
 
         autoSqlSize = totalSummaryOffset - autoSqlOffset
         self.declaration = self._read_autosql(
@@ -606,7 +602,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         )
 
         stream.seek(fullDataOffset)
-        dataCount = int.from_bytes(stream.read(8), byteorder=byteorder)
+        (dataCount,) = struct.unpack(self.byteorder + "Q", stream.read(8))
         self._length = dataCount
 
         if uncompressBufSize > 0:
@@ -684,13 +680,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             self._custom_fields.append([field_name, converter])
 
     def _read_chromosomes(self, stream, pos):
-        byteorder = self.byteorder
-        if byteorder == "little":
-            byteorder_char = "<"
-        elif byteorder == "big":
-            byteorder_char = ">"
-        else:
-            raise ValueError("Unexpected byteorder '%s'" % byteorder)
         # Supplemental Table 8: Chromosome B+ tree header
         # magic     4 bytes, unsigned
         # blockSize 4 bytes, unsigned
@@ -698,35 +687,48 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         # valSize   4 bytes, unsigned
         # itemCount 8 bytes, unsigned
         # reserved  8 bytes, unsigned
+        formatter_header = struct.Struct(self.byteorder + "IIIIQxxxxxxxx")
+        size_header = formatter_header.size
+
+        # Supplemental Table 9: Chromosome B+ tree node
+        # isLeaf    1 byte
+        # reserved  1 byte
+        # count     2 bytes, unsigned
+        formatter_node = struct.Struct(f"{self.byteorder}?xH")
+        size_node = formatter_node.size
+
         stream.seek(pos)
         signature = 0x78CA8C91
-        magic = int.from_bytes(stream.read(4), byteorder=byteorder)
+        data = stream.read(size_header)
+        magic, blockSize, keySize, valSize, itemCount = formatter_header.unpack(data)
         assert magic == signature
-        blockSize, keySize, valSize, itemCount = struct.unpack(
-            byteorder_char + "IIIQxxxxxxxx", stream.read(28)
-        )
         assert valSize == 8
 
+        # Supplemental Table 10: Chromosome B+ tree leaf item format
+        # key        keySize bytes
+        # chromId    4 bytes, unsigned
+        # chromSize  4 bytes, unsigned
+        formatter_leaf = struct.Struct(f"{self.byteorder}{keySize}sII")
+        size_leaf = formatter_leaf.size
+
+        # Supplemental Table 11: Chromosome B+ tree non-leaf item
+        # key          keySize bytes
+        # childOffset  8 bytes, unsigned
+        formatter_nonleaf = struct.Struct(f"{self.byteorder}{keySize}sQ")
+        size_nonleaf = formatter_nonleaf.size
+
         Node = namedtuple("Node", ["parent", "children"])
+
         targets = []
         node = None
         while True:
-            # Supplemental Table 9: Chromosome B+ tree node
-            # isLeaf    1 byte
-            # reserved  1 byte
-            # count     2 bytes, unsigned
-            isLeaf, count = struct.unpack(byteorder_char + "?xH", stream.read(4))
+            data = stream.read(size_node)
+            isLeaf, count = formatter_node.unpack(data)
             if isLeaf:
                 for i in range(count):
-                    # Supplemental Table 10: Chromosome B+ tree leaf item format
-                    # key        keySize bytes
-                    # chromId    4 bytes, unsigned
-                    # chromSize  4 bytes, unsigned
-                    key = stream.read(keySize)
+                    data = stream.read(size_leaf)
+                    key, chromId, chromSize = formatter_leaf.unpack(data)
                     name = key.rstrip(b"\x00").decode()
-                    chromId, chromSize = struct.unpack(
-                        byteorder_char + "II", stream.read(valSize)
-                    )
                     assert chromId == len(targets)
                     sequence = Seq(None, length=chromSize)
                     record = SeqRecord(sequence, id=name)
@@ -734,11 +736,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 children = []
                 for i in range(count):
-                    # Supplemental Table 11: Chromosome B+ tree non-leaf item
-                    # key          keySize bytes
-                    # childOffset  8 bytes, unsigned
-                    key = stream.read(keySize)
-                    pos = int.from_bytes(stream.read(8), byteorder)
+                    data = stream.read(size_nonleaf)
+                    key, pos = formatter_nonleaf.unpack(data)
                     children.append(pos)
                 parent = node
                 node = Node(parent, children)
@@ -756,24 +755,36 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             stream.seek(pos)
 
     def _read_index(self, stream, pos):
-        byteorder = self.byteorder
-        if byteorder == "little":
-            byteorder_char = "<"
-        elif byteorder == "big":
-            byteorder_char = ">"
-        else:
-            raise ValueError("Unexpected byteorder '%s'" % byteorder)
-        Node = namedtuple(
-            "Node",
-            [
-                "parent",
-                "children",
-                "startChromIx",
-                "startBase",
-                "endChromIx",
-                "endBase",
-            ],
-        )
+        # Supplemental Table 14: R tree index header
+        # magic          4 bytes, unsigned
+        # blockSize      4 bytes, unsigned
+        # itemCount      8 bytes, unsigned
+        # startChromIx   4 bytes, unsigned
+        # startBase      4 bytes, unsigned
+        # endChromIx     4 bytes, unsigned
+        # endBase        4 bytes, unsigned
+        # endFileOffset  8 bytes, unsigned
+        # itemsPerSlot   4 bytes, unsigned
+        # reserved       4 bytes, unsigned
+        formatter_header = struct.Struct(self.byteorder + "IIQIIIIQIxxxx")
+        size_header = formatter_header.size
+
+        # Supplemental Table 15: R tree node format
+        # isLeaf    1 byte
+        # reserved  1 byte
+        # count     2 bytes, unsigned
+        formatter_node = struct.Struct(self.byteorder + "?xH")
+        size_node = formatter_node.size
+
+        # Supplemental Table 16: R tree leaf format
+        # startChromIx   4 bytes, unsigned
+        # startBase      4 bytes, unsigned
+        # endChromIx     4 bytes, unsigned
+        # endBase        4 bytes, unsigned
+        # dataOffset     8 bytes, unsigned
+        # dataSize       8 bytes, unsigned
+        formatter_leaf = struct.Struct(self.byteorder + "IIIIQQ")
+        size_leaf = formatter_leaf.size
         Leaf = namedtuple(
             "Leaf",
             [
@@ -786,22 +797,32 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 "dataSize",
             ],
         )
-        # Supplemental Table 14: R tree index header
-        # magic          4 bytes, unsigned
-        # blockSize      4 bytes, unsigned
-        # itemCount      8 bytes, unsigned
+
+        # Supplemental Table 17: R tree non-leaf format
         # startChromIx   4 bytes, unsigned
         # startBase      4 bytes, unsigned
         # endChromIx     4 bytes, unsigned
         # endBase        4 bytes, unsigned
-        # endFileOffset  8 bytes, unsigned
-        # itemsPerSlot   4 bytes, unsigned
-        # reserved       4 bytes, unsigned
+        # dataOffset     8 bytes, unsigned
+        formatter_nonleaf = struct.Struct(self.byteorder + "IIIIQ")
+        size_nonleaf = formatter_nonleaf.size
+        NonLeaf = namedtuple(
+            "NonLeaf",
+            [
+                "parent",
+                "children",
+                "startChromIx",
+                "startBase",
+                "endChromIx",
+                "endBase",
+            ],
+        )
+
         stream.seek(pos)
         signature = 0x2468ACE0
-        magic = int.from_bytes(stream.read(4), byteorder=byteorder)
-        assert magic == signature
+        data = stream.read(size_header)
         (
+            magic,
             blockSize,
             itemCount,
             startChromIx,
@@ -810,27 +831,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             endBase,
             endFileOffset,
             itemsPerSlot,
-        ) = struct.unpack(byteorder_char + "IQIIIIQIxxxx", stream.read(44))
-        root = Node(None, [], startChromIx, startBase, endChromIx, endBase)
+        ) = formatter_header.unpack(data)
+        assert magic == signature
+
+        root = NonLeaf(None, [], startChromIx, startBase, endChromIx, endBase)
         node = root
         itemsCounted = 0
         dataOffsets = {}
         while True:
-            # Supplemental Table 15: R tree node format
-            # isLeaf    1 byte
-            # reserved  1 byte
-            # count     2 bytes, unsigned
-            isLeaf, count = struct.unpack(byteorder_char + "?xH", stream.read(4))
+            data = stream.read(size_node)
+            isLeaf, count = formatter_node.unpack(data)
             if isLeaf:
                 children = node.children
                 for i in range(count):
-                    # Supplemental Table 16: R tree leaf format
-                    # startChromIx   4 bytes, unsigned
-                    # startBase      4 bytes, unsigned
-                    # endChromIx     4 bytes, unsigned
-                    # endBase        4 bytes, unsigned
-                    # dataOffset     8 bytes, unsigned
-                    # dataSize       8 bytes, unsigned
+                    data = stream.read(size_leaf)
                     (
                         startChromIx,
                         startBase,
@@ -838,7 +852,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         endBase,
                         dataOffset,
                         dataSize,
-                    ) = struct.unpack(byteorder_char + "IIIIQQ", stream.read(32))
+                    ) = formatter_leaf.unpack(data)
                     child = Leaf(
                         node,
                         startChromIx,
@@ -870,20 +884,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 children = node.children
                 for i in range(count):
-                    # Supplemental Table 17: R tree non-leaf format
-                    # startChromIx   4 bytes, unsigned
-                    # startBase      4 bytes, unsigned
-                    # endChromIx     4 bytes, unsigned
-                    # endBase        4 bytes, unsigned
-                    # dataOffset     8 bytes, unsigned
+                    data = stream.read(size_nonleaf)
                     (
                         startChromIx,
                         startBase,
                         endChromIx,
                         endBase,
                         dataOffset,
-                    ) = struct.unpack(byteorder_char + "IIIIQ", stream.read(24))
-                    child = Node(node, [], startChromIx, startBase, endChromIx, endBase)
+                    ) = formatter_nonleaf.unpack(data)
+                    child = NonLeaf(
+                        node, [], startChromIx, startBase, endChromIx, endBase
+                    )
                     dataOffsets[id(child)] = dataOffset
                     children.append(child)
                 parent = node
@@ -892,13 +903,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             stream.seek(pos)
 
     def _iterate_index(self, stream):
-        byteorder = self.byteorder
-        if byteorder == "little":
-            byteorder_char = "<"
-        elif byteorder == "big":
-            byteorder_char = ">"
-        else:
-            raise ValueError("Unexpected byteorder '%s'" % byteorder)
+        # Supplemental Table 12: Binary BED-data format
+        # chromId     4 bytes, unsigned
+        # chromStart  4 bytes, unsigned
+        # chromEnd    4 bytes, unsigned
+        # rest        zero-terminated string in tab-separated format
+        formatter = struct.Struct(self.byteorder + "III")
+        size = formatter.size
         node = self.tree
         while True:
             try:
@@ -909,15 +920,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if self._compressed > 0:
                     data = zlib.decompress(data)
                 while data:
-                    # Supplemental Table 12: Binary BED-data format
-                    # chromId     4 bytes, unsigned
-                    # chromStart  4 bytes, unsigned
-                    # chromEnd    4 bytes, unsigned
-                    # rest        zero-terminated string in tab-separated format
-                    chromId, chromStart, chromEnd = struct.unpack(
-                        byteorder_char + "III", data[:12]
-                    )
-                    rest, data = data[12:].split(b"\00", 1)
+                    chromId, chromStart, chromEnd = formatter.unpack(data[:size])
+                    rest, data = data[size:].split(b"\00", 1)
                     yield (chromId, chromStart, chromEnd, rest)
                 while True:
                     parent = node.parent
@@ -938,13 +942,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 node = children[0]
 
     def _search_index(self, stream, chromIx, start, end):
-        byteorder = self.byteorder
-        if byteorder == "little":
-            byteorder_char = "<"
-        elif byteorder == "big":
-            byteorder_char = ">"
-        else:
-            raise ValueError("Unexpected byteorder '%s'" % byteorder)
+        # Supplemental Table 12: Binary BED-data format
+        # chromId     4 bytes, unsigned
+        # chromStart  4 bytes, unsigned
+        # chromEnd    4 bytes, unsigned
+        # rest        zero-terminated string in tab-separated format
+        formatter = struct.Struct(self.byteorder + "III")
+        size = formatter.size
         padded_start = start - 1
         padded_end = end + 1
         node = self.tree
@@ -957,15 +961,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if self._compressed > 0:
                     data = zlib.decompress(data)
                 while data:
-                    # Supplemental Table 12: Binary BED-data format
-                    # chromId     4 bytes, unsigned
-                    # chromStart  4 bytes, unsigned
-                    # chromEnd    4 bytes, unsigned
-                    # rest        zero-terminated string in tab-separated format
-                    child_chromIx, child_chromStart, child_chromEnd = struct.unpack(
-                        byteorder_char + "III", data[:12]
+                    child_chromIx, child_chromStart, child_chromEnd = formatter.unpack(
+                        data[:size]
                     )
-                    rest, data = data[12:].split(b"\00", 1)
+                    rest, data = data[size:].split(b"\00", 1)
                     if child_chromIx != chromIx:
                         continue
                     if end <= child_chromStart or child_chromEnd <= start:
@@ -1146,10 +1145,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 bbiMaxZoomLevels = 10
 bbiResIncrement = 4
 
-nodeHeaderSize = 4
 indexSlotSize = 24
 leafSlotSize = 32
-bptBlockHeaderSize = 4
 
 bbiBoundsArray = namedtuple("bbiBoundsArray", ["offset", "chromId", "start", "end"])
 
@@ -1279,7 +1276,6 @@ class rTree:
     ):
         # in cirTree.c
         if curLevel == destLevel:
-            byteorder = sys.byteorder
             countOne = len(self.children)
             isLeaf = False
             output.write(struct.pack("=?xH", isLeaf, countOne))
@@ -1729,6 +1725,7 @@ def rWriteLeaves(itemsPerSlot, lNodeSize, tree, curLevel, leafLevel, output):
 
 
 def writeTreeToOpenFile(tree, blockSize, levelCount, output):
+    nodeHeaderSize = 4
     level = 0
     levelSizes = np.zeros(levelCount, int)
     calcLevelSizes(tree, levelSizes, level, levelCount - 1)
@@ -2216,6 +2213,7 @@ def writeIndexLevel(
     blockSize, chunkArray, itemCount, indexOffset, level, keySize, valSize, output
 ):
     # in bPlusTree.c
+    bptBlockHeaderSize = 4
     slotSizePer = pow(blockSize, level)
     nodeSizePer = slotSizePer * blockSize
     nodeCount = (itemCount + nodeSizePer - 1) // nodeSizePer
