@@ -353,13 +353,13 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self.compress = compress
         self.extraIndex = extraIndex
 
-    def write_chrom_info(self, chromUsageList, blockSize, output):
+    def write_chrom_info(self, chromUsageList, blockSize, keySize, output):
         # See bbiWriteChromInfo in bbiWrite.c
         chromCount = len(chromUsageList)
         blockSize = min(blockSize, chromCount)
-        keySize = max([len(chromUsage.name.encode()) for chromUsage in chromUsageList])
         valSize = 8
         signature = 0x78CA8C91
+        chromCount = len(chromUsageList)
         formatter = struct.Struct("=IIIIQxxxxxxxx")
         data = formatter.pack(signature, blockSize, keySize, valSize, chromCount)
         output.write(data)
@@ -447,7 +447,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             extHeader.extraIndexListOffset = 0
             extraIndexListEndOffset = 0
         chromTreeOffset = stream.tell()
-        self.write_chrom_info(chromUsageList, blockSize, stream)
+        keySize = max([len(chromUsage.name.encode()) for chromUsage in chromUsageList])
+        self.write_chrom_info(chromUsageList, blockSize, keySize, stream)
         dataOffset = stream.tell()
         resTryCount, resScales, resSizes = bbiCalcResScalesAndSizes(aveSize)
         stream.write(struct.pack("Q", bedCount))
@@ -500,7 +501,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             element.chunks.sort()
             bptFileBulkIndexToOpenFile(
                 element.chunks,
-                bedCount,
                 blockSize,
                 maxBedNameSize,
                 stream,
@@ -2201,49 +2201,51 @@ def bbiWriteZoomLevels(
     return zoomLevels, totalSum
 
 
-def bptCountLevels(maxBlockSize, itemCount):
+def bptFileBulkIndexToOpenFile(chunkArray, blockSize, keySize, output):
+    valSize = 16
+    signature = 0x78CA8C91
+    itemCount = len(chunkArray)
+    formatter = struct.Struct("=IIIIQxxxxxxxx")
+    data = formatter.pack(signature, blockSize, keySize, valSize, itemCount)
+    output.write(data)
     levels = 1
-    while itemCount > maxBlockSize:
-        itemCount = (itemCount + maxBlockSize - 1) / maxBlockSize
+    while itemCount > blockSize:
+        itemCount = len(range(0, itemCount, blockSize))
         levels += 1
-    return levels
-
-
-def writeIndexLevel(
-    blockSize, chunkArray, itemCount, indexOffset, level, keySize, valSize, output
-):
-    # in bPlusTree.c
-    bptBlockHeaderSize = 4
-    slotSizePer = pow(blockSize, level)
-    nodeSizePer = slotSizePer * blockSize
-    nodeCount = (itemCount + nodeSizePer - 1) // nodeSizePer
-    bytesInIndexBlock = bptBlockHeaderSize + blockSize * (keySize + 8)
-    bytesInLeafBlock = bptBlockHeaderSize + blockSize * (keySize + valSize)
-    if level == 1:
-        bytesInNextLevelBlock = bytesInLeafBlock
-    else:
-        bytesInNextLevelBlock = bytesInIndexBlock
-    levelSize = nodeCount * bytesInIndexBlock
-    endLevel = indexOffset + levelSize
-    nextChild = endLevel
-    formatter = struct.Struct(f"={keySize}sQ")
-    isLeaf = False
-    for i in range(0, itemCount, nodeSizePer):
-        countOne = min((itemCount - i + slotSizePer - 1) // slotSizePer, blockSize)
-        output.write(struct.pack("=?xH", isLeaf, countOne))
-        slotsUsed = 0
-        endIx = min(i + nodeSizePer, itemCount)
-        for chunk in chunkArray[i:endIx:slotSizePer]:  # bbNamedFileChunk
-            data = formatter.pack(chunk.name, nextChild)
-            output.write(data)
-            nextChild += bytesInNextLevelBlock
-            slotsUsed += 1
-        assert slotsUsed == countOne
-        output.write(bytes(formatter.size * (blockSize - countOne)))
-    return endLevel
-
-
-def writeLeafLevel(blockSize, chunkArray, keySize, output):
+    itemCount = len(chunkArray)
+    indexOffset = output.tell()
+    for level in range(levels - 1, 0, -1):
+        itemCount = len(chunkArray)
+        bptBlockHeaderSize = 4
+        slotSizePer = pow(blockSize, level)
+        nodeSizePer = slotSizePer * blockSize
+        nodeCount = (itemCount + nodeSizePer - 1) // nodeSizePer
+        bytesInIndexBlock = bptBlockHeaderSize + blockSize * (keySize + 8)
+        bytesInLeafBlock = bptBlockHeaderSize + blockSize * (keySize + valSize)
+        if level == 1:
+            bytesInNextLevelBlock = bytesInLeafBlock
+        else:
+            bytesInNextLevelBlock = bytesInIndexBlock
+        levelSize = nodeCount * bytesInIndexBlock
+        endLevel = indexOffset + levelSize
+        nextChild = endLevel
+        formatter = struct.Struct(f"={keySize}sQ")
+        isLeaf = False
+        for i in range(0, itemCount, nodeSizePer):
+            countOne = min((itemCount - i + slotSizePer - 1) // slotSizePer, blockSize)
+            output.write(struct.pack("=?xH", isLeaf, countOne))
+            slotsUsed = 0
+            endIx = min(i + nodeSizePer, itemCount)
+            for chunk in chunkArray[i:endIx:slotSizePer]:  # bbNamedFileChunk
+                data = formatter.pack(chunk.name, nextChild)
+                output.write(data)
+                nextChild += bytesInNextLevelBlock
+                slotsUsed += 1
+            assert slotsUsed == countOne
+            output.write(bytes(formatter.size * (blockSize - countOne)))
+        endLevelOffset = endLevel
+        indexOffset = output.tell()
+        assert endLevelOffset == indexOffset
     isLeaf = True
     formatter = struct.Struct(f"={keySize}sQQ")
     for index in itertools.count(0, blockSize):
@@ -2256,20 +2258,3 @@ def writeLeafLevel(blockSize, chunkArray, keySize, output):
             output.write(data)
         data = bytes((blockSize - len(chunks)) * formatter.size)
         output.write(data)
-
-
-def bptFileBulkIndexToOpenFile(chunkArray, itemCount, blockSize, keySize, output):
-    signature = 0x78CA8C91
-    valSize = 16
-    formatter = struct.Struct("=IIIIQxxxxxxxx")
-    data = formatter.pack(signature, blockSize, keySize, valSize, itemCount)
-    output.write(data)
-    indexOffset = output.tell()
-    levels = bptCountLevels(blockSize, itemCount)
-    for i in range(levels - 1, 0, -1):
-        endLevelOffset = writeIndexLevel(
-            blockSize, chunkArray, itemCount, indexOffset, i, keySize, valSize, output
-        )  # in bPlusTree.c
-        indexOffset = output.tell()
-        assert endLevelOffset == indexOffset
-    writeLeafLevel(blockSize, chunkArray, keySize, output)
