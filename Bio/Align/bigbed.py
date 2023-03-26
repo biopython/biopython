@@ -353,6 +353,57 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self.compress = compress
         self.extraIndex = extraIndex
 
+    def write_chrom_info(self, chromUsageList, blockSize, output):
+        # See bbiWriteChromInfo in bbiWrite.c
+        chromCount = len(chromUsageList)
+        blockSize = min(blockSize, chromCount)
+        keySize = max([len(chromUsage.name.encode()) for chromUsage in chromUsageList])
+        valSize = 8
+        signature = 0x78CA8C91
+        formatter = struct.Struct("=IIIIQxxxxxxxx")
+        data = formatter.pack(signature, blockSize, keySize, valSize, chromCount)
+        output.write(data)
+        levels = 1
+        itemCount = chromCount
+        while itemCount > blockSize:
+            itemCount = len(range(0, itemCount, blockSize))
+            levels += 1
+        formatter_header = struct.Struct("=?xH")
+        formatter_index = struct.Struct(f"={keySize}sQ")
+        formatter_leaf = struct.Struct(f"={keySize}sII")
+        itemSize = formatter_index.size
+        assert itemSize == formatter_leaf.size
+        bytesInNextLevelBlock = formatter_header.size + blockSize * itemSize
+        isLeaf = False
+        indexOffset = output.tell()
+        for level in range(levels - 1, 0, -1):
+            slotSizePer = blockSize**level
+            nodeSizePer = slotSizePer * blockSize
+            nodes = range(0, chromCount, nodeSizePer)
+            levelSize = len(nodes) * bytesInNextLevelBlock
+            endLevel = indexOffset + levelSize
+            nextChild = endLevel
+            for i in nodes:
+                items = chromUsageList[i::slotSizePer]
+                output.write(formatter_header.pack(isLeaf, len(items)))
+                for item in items:
+                    data = formatter_index.pack(item.name.encode(), nextChild)
+                    output.write(data)
+                    nextChild += bytesInNextLevelBlock
+                output.write(bytes((blockSize - len(items)) * formatter_index.size))
+            indexOffset = endLevel
+        isLeaf = True
+        for index in itertools.count(0, blockSize):
+            items = chromUsageList[index : index + blockSize]
+            if not items:
+                break
+            output.write(formatter_header.pack(isLeaf, len(items)))
+            for item in items:
+                data = formatter_leaf.pack(item.name.encode(), item.id, item.size)
+                output.write(data)
+            data = bytes((blockSize - len(items)) * formatter_leaf.size)
+            output.write(data)
+
     def write_file(self, stream, alignments):
         blockSize = 256
         itemsPerSlot = 512
@@ -375,7 +426,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         extHeader = ExtHeader()
         extHeader.extraIndexCount = len(extraIndex)
         eim = [ExtraIndex(name, declaration) for name in extraIndex]
-        usageList, minDiff, aveSize, bedCount = bbiChromUsageFromBedFile(
+        chromUsageList, minDiff, aveSize, bedCount = bbiChromUsageFromBedFile(
             alignments, targets, eim
         )
         bbiCurrentVersion = 4
@@ -396,7 +447,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             extHeader.extraIndexListOffset = 0
             extraIndexListEndOffset = 0
         chromTreeOffset = stream.tell()
-        bbiWriteChromInfo(usageList, blockSize, stream)
+        self.write_chrom_info(chromUsageList, blockSize, stream)
         dataOffset = stream.tell()
         resTryCount, resScales, resSizes = bbiCalcResScalesAndSizes(aveSize)
         stream.write(struct.pack("Q", bedCount))
@@ -435,7 +486,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 fieldCount,
                 compress,
                 indexOffset - dataOffset,
-                usageList,
+                chromUsageList,
                 resTryCount,
                 resScales,
                 resSizes,
@@ -1332,68 +1383,6 @@ def bbiChromUsageFromBedFile(alignments, targets, eim):
     if bedCount > 0:
         aveSize = totalBases / bedCount
     return usage, minDiff, aveSize, bedCount
-
-
-def bbiWriteChromInfo(usageList, blockSize, output):
-    chromCount = len(usageList)
-    chromInfoList = []
-    maxChromNameSize = 0
-    for chromId, usage in enumerate(usageList):
-        name = usage.name.encode()
-        maxChromNameSize = max(maxChromNameSize, len(name))
-        assert usage.id == chromId
-        chromSize = usage.size
-        chromInfoList.append([name, chromId, chromSize])
-    chromInfoList.sort()
-
-    blockSize = min(blockSize, chromCount)
-    keySize = maxChromNameSize
-    valSize = 8
-
-    signature = 0x78CA8C91
-    formatter = struct.Struct("=IIIIQxxxxxxxx")
-    data = formatter.pack(signature, blockSize, keySize, valSize, chromCount)
-    output.write(data)
-    levels = 1
-    itemCount = chromCount
-    while itemCount > blockSize:
-        itemCount = len(range(0, itemCount, blockSize))
-        levels += 1
-    formatter_header = struct.Struct("=?xH")
-    formatter_index = struct.Struct(f"={keySize}sQ")
-    formatter_leaf = struct.Struct(f"={keySize}sII")
-    itemSize = formatter_index.size
-    assert itemSize == formatter_leaf.size
-    bytesInNextLevelBlock = formatter_header.size + blockSize * itemSize
-    isLeaf = False
-    indexOffset = output.tell()
-    for level in range(levels - 1, 0, -1):
-        slotSizePer = blockSize**level
-        nodeSizePer = slotSizePer * blockSize
-        nodes = range(0, chromCount, nodeSizePer)
-        levelSize = len(nodes) * bytesInNextLevelBlock
-        endLevel = indexOffset + levelSize
-        nextChild = endLevel
-        for i in nodes:
-            items = chromInfoList[i::slotSizePer]
-            output.write(formatter_header.pack(isLeaf, len(items)))
-            for item in items:
-                data = formatter_index.pack(item[0], nextChild)
-                output.write(data)
-                nextChild += bytesInNextLevelBlock
-            output.write(bytes((blockSize - len(items)) * formatter_index.size))
-        indexOffset = endLevel
-    isLeaf = True
-    for index in itertools.count(0, blockSize):
-        items = chromInfoList[index : index + blockSize]
-        if not items:
-            break
-        output.write(formatter_header.pack(isLeaf, len(items)))
-        for item in items:
-            data = formatter_leaf.pack(*item)
-            output.write(data)
-        data = bytes((blockSize - len(items)) * formatter_leaf.size)
-        output.write(data)
 
 
 def bbiCalcResScalesAndSizes(aveSize):
