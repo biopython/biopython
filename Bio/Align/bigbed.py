@@ -379,18 +379,19 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         for level in range(levels - 1, 0, -1):
             slotSizePer = blockSize**level
             nodeSizePer = slotSizePer * blockSize
-            nodes = range(0, chromCount, nodeSizePer)
-            levelSize = len(nodes) * bytesInNextLevelBlock
+            ii = range(0, chromCount, nodeSizePer)
+            levelSize = len(ii) * bytesInNextLevelBlock
             endLevel = indexOffset + levelSize
             nextChild = endLevel
-            for i in nodes:
-                items = chromUsageList[i::slotSizePer]
-                output.write(formatter_header.pack(isLeaf, len(items)))
-                for item in items:
+            for i in ii:
+                jj = range(i, len(chromUsageList), slotSizePer)
+                output.write(formatter_header.pack(isLeaf, len(jj)))
+                for j in jj:
+                    item = chromUsageList[j]
                     data = formatter_index.pack(item.name.encode(), nextChild)
                     output.write(data)
                     nextChild += bytesInNextLevelBlock
-                output.write(bytes((blockSize - len(items)) * formatter_index.size))
+                output.write(bytes((blockSize - len(jj)) * itemSize))
             indexOffset = endLevel
         isLeaf = True
         for index in itertools.count(0, blockSize):
@@ -2213,48 +2214,43 @@ def bptFileBulkIndexToOpenFile(chunkArray, blockSize, keySize, output):
         itemCount = len(range(0, itemCount, blockSize))
         levels += 1
     itemCount = len(chunkArray)
+    formatter_header = struct.Struct("=?xH")
+    formatter_index = struct.Struct(f"={keySize}sQ")
+    formatter_leaf = struct.Struct(f"={keySize}sQQ")
+    bytesInIndexBlock = formatter_header.size + blockSize * formatter_index.size
+    bytesInLeafBlock = formatter_header.size + blockSize * formatter_leaf.size
+    isLeaf = False
     indexOffset = output.tell()
     for level in range(levels - 1, 0, -1):
-        itemCount = len(chunkArray)
-        bptBlockHeaderSize = 4
-        slotSizePer = pow(blockSize, level)
+        slotSizePer = blockSize**level
         nodeSizePer = slotSizePer * blockSize
-        nodeCount = (itemCount + nodeSizePer - 1) // nodeSizePer
-        bytesInIndexBlock = bptBlockHeaderSize + blockSize * (keySize + 8)
-        bytesInLeafBlock = bptBlockHeaderSize + blockSize * (keySize + valSize)
+        ii = range(0, itemCount, nodeSizePer)
         if level == 1:
             bytesInNextLevelBlock = bytesInLeafBlock
         else:
             bytesInNextLevelBlock = bytesInIndexBlock
-        levelSize = nodeCount * bytesInIndexBlock
+        levelSize = len(ii) * bytesInIndexBlock
         endLevel = indexOffset + levelSize
         nextChild = endLevel
-        formatter = struct.Struct(f"={keySize}sQ")
-        isLeaf = False
-        for i in range(0, itemCount, nodeSizePer):
-            countOne = min((itemCount - i + slotSizePer - 1) // slotSizePer, blockSize)
-            output.write(struct.pack("=?xH", isLeaf, countOne))
-            slotsUsed = 0
+        for i in ii:
             endIx = min(i + nodeSizePer, itemCount)
-            for chunk in chunkArray[i:endIx:slotSizePer]:  # bbNamedFileChunk
-                data = formatter.pack(chunk.name, nextChild)
+            jj = range(i, endIx, slotSizePer)
+            output.write(formatter_header.pack(isLeaf, len(jj)))
+            for j in jj:  # bbNamedFileChunk
+                chunk = chunkArray[j]
+                data = formatter_index.pack(chunk.name, nextChild)
                 output.write(data)
                 nextChild += bytesInNextLevelBlock
-                slotsUsed += 1
-            assert slotsUsed == countOne
-            output.write(bytes(formatter.size * (blockSize - countOne)))
-        endLevelOffset = endLevel
-        indexOffset = output.tell()
-        assert endLevelOffset == indexOffset
+            output.write(bytes((blockSize - len(jj)) * formatter_index.size))
+        indexOffset = endLevel
     isLeaf = True
-    formatter = struct.Struct(f"={keySize}sQQ")
     for index in itertools.count(0, blockSize):
         chunks = chunkArray[index : index + blockSize]
         if not chunks:
             break
         output.write(struct.pack("=?xH", isLeaf, len(chunks)))
         for chunk in chunks:
-            data = formatter.pack(chunk.name, chunk.offset, chunk.size)
+            data = formatter_leaf.pack(chunk.name, chunk.offset, chunk.size)
             output.write(data)
-        data = bytes((blockSize - len(chunks)) * formatter.size)
+        data = bytes((blockSize - len(chunks)) * formatter_leaf.size)
         output.write(data)
