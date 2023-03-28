@@ -153,16 +153,24 @@ class ExtraIndex:
 
     def addKeysFromRow(self, alignment, recordIx):
         value = self.get_value(alignment)
-        self.chunks[recordIx].name = value.encode()
+        self.chunks[recordIx]["name"] = value.encode()
 
     def addOffsetSize(self, offset, size, startIx, endIx):
-        for chunk in self.chunks[startIx:endIx]:
-            chunk.offset = offset
-            chunk.size = size
+        self.chunks[startIx:endIx]["offset"] = offset
+        self.chunks[startIx:endIx]["size"] = size
 
     def __bytes__(self):
         indexFieldCount = 1
         return self.formatter.pack(indexFieldCount, self.fileOffset, self.indexField)
+
+    def initialize_chunks(self, bedCount):
+        keySize = self.maxFieldSize
+        # bbiFile.h: bbNamedFileChunk
+        # name    keySize bytes
+        # offset  8 bytes, unsigned
+        # size    8 bytes, unsigned
+        dtype = np.dtype([("name", f"=S{keySize}"), ("offset", "=i8"), ("size", "=i8")])
+        self.chunks = np.zeros(bedCount, dtype=dtype)
 
 
 Field = namedtuple("Field", ("as_type", "name", "comment"))
@@ -353,13 +361,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self.compress = compress
         self.extraIndex = extraIndex
 
-    def write_chrom_info(self, chromUsageList, blockSize, keySize, output):
+    def write_chrom_info(self, items, blockSize, keySize, output):
         # See bbiWriteChromInfo in bbiWrite.c
-        chromCount = len(chromUsageList)
-        blockSize = min(blockSize, chromCount)
+        itemCount = len(items)
         valSize = 8
         signature = 0x78CA8C91
-        chromCount = len(chromUsageList)
+        chromCount = len(items)
         formatter = struct.Struct("=IIIIQxxxxxxxx")
         data = formatter.pack(signature, blockSize, keySize, valSize, chromCount)
         output.write(data)
@@ -384,25 +391,26 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             endLevel = indexOffset + levelSize
             nextChild = endLevel
             for i in ii:
-                jj = range(i, len(chromUsageList), slotSizePer)
+                jj = range(i, len(items), slotSizePer)
                 output.write(formatter_header.pack(isLeaf, len(jj)))
                 for j in jj:
-                    item = chromUsageList[j]
-                    data = formatter_index.pack(item.name.encode(), nextChild)
+                    item = items[j]
+                    data = formatter_index.pack(item["name"], nextChild)
                     output.write(data)
                     nextChild += bytesInNextLevelBlock
                 output.write(bytes((blockSize - len(jj)) * itemSize))
             indexOffset = endLevel
         isLeaf = True
         for index in itertools.count(0, blockSize):
-            items = chromUsageList[index : index + blockSize]
-            if not items:
+            current_items = items[index : index + blockSize]
+            n = len(current_items)
+            if n == 0:
                 break
-            output.write(formatter_header.pack(isLeaf, len(items)))
-            for item in items:
-                data = formatter_leaf.pack(item.name.encode(), item.id, item.size)
+            output.write(formatter_header.pack(isLeaf, n))
+            for item in current_items:
+                data = formatter_leaf.pack(item["name"], item["id"], item["size"])
                 output.write(data)
-            data = bytes((blockSize - len(items)) * formatter_leaf.size)
+            data = bytes((blockSize - len(current_items)) * formatter_leaf.size)
             output.write(data)
 
     def write_file(self, stream, alignments):
@@ -449,13 +457,19 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             extraIndexListEndOffset = 0
         chromTreeOffset = stream.tell()
         keySize = max([len(chromUsage.name.encode()) for chromUsage in chromUsageList])
-        self.write_chrom_info(chromUsageList, blockSize, keySize, stream)
+        chromUsageList = np.array(
+            chromUsageList,
+            dtype=[("name", f"S{keySize}"), ("id", "=i4"), ("size", "=i4")],
+        )
+        self.write_chrom_info(
+            chromUsageList, min(blockSize, len(chromUsageList)), keySize, stream
+        )
         dataOffset = stream.tell()
         resTryCount, resScales, resSizes = bbiCalcResScalesAndSizes(aveSize)
         stream.write(struct.pack("Q", bedCount))
         if bedCount > 0:
             for element in eim:
-                element.chunks = [bbNamedFileChunk() for j in range(bedCount)]
+                element.initialize_chunks(bedCount)
             maxBlockSize, boundsArray = writeBlocks(
                 alignments,
                 declaration,
@@ -498,14 +512,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             )
         for element in eim:
             element.fileOffset = stream.tell()
-            maxBedNameSize = element.maxFieldSize
             element.chunks.sort()
-            bptFileBulkIndexToOpenFile(
-                element.chunks,
-                blockSize,
-                maxBedNameSize,
-                stream,
-            )
+            bptFileBulkIndexToOpenFile(element.chunks, blockSize, stream)
         if compress:
             uncompressBufSize = max(maxBlockSize, itemsPerSlot * bbiSummary.size)
         else:
@@ -1004,13 +1012,13 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     def _read_next_alignment(self, stream):
         try:
-            chunk = next(self._data)
+            row = next(self._data)
         except StopIteration:
             return
-        return self._create_alignment(chunk)
+        return self._create_alignment(row)
 
-    def _create_alignment(self, chunk):
-        chromId, chromStart, chromEnd, rest = chunk
+    def _create_alignment(self, row):
+        chromId, chromStart, chromEnd, rest = row
         if rest:
             words = rest.decode().split("\t")
         else:
@@ -1138,8 +1146,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif end is None:
                 end = start + 1
         data = self._search_index(stream, chromIx, start, end)
-        for chunk in data:
-            alignment = self._create_alignment(chunk)
+        for row in data:
+            alignment = self._create_alignment(row)
             yield alignment
 
 
@@ -1151,7 +1159,7 @@ leafSlotSize = 32
 
 bbiBoundsArray = namedtuple("bbiBoundsArray", ["offset", "chromId", "start", "end"])
 
-bbiChromUsage = namedtuple("bbiChromUsage", ["name", "itemCount", "id", "size"])
+bbiChromUsage = namedtuple("bbiChromUsage", ["name", "id", "size"])
 
 
 class bbiSummary:
@@ -1347,7 +1355,7 @@ def bbiChromUsageFromBedFile(alignments, targets, eim):
                     f"alignments are not sorted by target name at alignment [{counter}]"
                 )
             if usageName:
-                usage.append(bbiChromUsage(usageName, itemCount, chromId, chromSize))
+                usage.append(bbiChromUsage(usageName, chromId, chromSize))
                 chromId += 1
             for target in targets:
                 if target.id == chrom:
@@ -1358,10 +1366,7 @@ def bbiChromUsageFromBedFile(alignments, targets, eim):
                 )
             usageName = chrom
             chromSize = len(target)
-            itemCount = 1
             lastStart = -1
-        else:
-            itemCount += 1
         if end > chromSize:
             raise ValueError(
                 f"end coordinate {end} bigger than {chrom} size of {chromSize} at alignment [{counter}]'"
@@ -1376,7 +1381,7 @@ def bbiChromUsageFromBedFile(alignments, targets, eim):
                 minDiff = diff
         lastStart = start
     if usageName:
-        usage.append(bbiChromUsage(usageName, itemCount, chromId, chromSize))
+        usage.append(bbiChromUsage(usageName, chromId, chromSize))
     if bedCount > 0:
         aveSize = totalBases / bedCount
     return usage, minDiff, aveSize, bedCount
@@ -2017,7 +2022,6 @@ def bedWriteReducedOnceReturnReducedTwice(
     byteorder = sys.byteorder
     twiceReducedList = []
     doubleReductionSize = initialReduction * zoomIncrement
-    usage = usageList
     boundsArray = []
 
     dataStart = output.tell()
@@ -2029,7 +2033,7 @@ def bedWriteReducedOnceReturnReducedTwice(
     for usage in usageList:
         summary = None
         name, rangeTree = next(rangeTrees)
-        assert name == usage.name
+        assert name == usage["name"].decode()
         rangeList = rangeTreeList(rangeTree)
         for range in rangeList:
             val = range.val
@@ -2044,7 +2048,7 @@ def bedWriteReducedOnceReturnReducedTwice(
             if (
                 summary is not None
                 and summary.end <= start
-                and summary.end < usage.size
+                and summary.end < usage["size"]
             ):
                 bbiOutputOneSummaryFurtherReduce(
                     summary, twiceReducedList, doubleReductionSize, boundsArray, stream
@@ -2052,7 +2056,10 @@ def bedWriteReducedOnceReturnReducedTwice(
                 summary = None
             if summary is None:
                 summary = bbiSummary(
-                    usage.id, start, min(start + initialReduction, usage.size), val
+                    usage["id"],
+                    start,
+                    min(start + initialReduction, usage["size"]),
+                    val,
                 )
             while end > summary.end:
                 overlap = min(end, summary.end) - max(start, summary.start)
@@ -2063,7 +2070,7 @@ def bedWriteReducedOnceReturnReducedTwice(
                 )
                 size -= overlap
                 summary.start = start = summary.end
-                summary.end = min(start + initialReduction, usage.size)
+                summary.end = min(start + initialReduction, usage["size"])
                 summary.values["minVal"] = summary.values["maxVal"] = val
                 summary.values["sumData"] = summary.values["sumSquares"] = 0.0
                 summary.validCount = 0
@@ -2202,10 +2209,18 @@ def bbiWriteZoomLevels(
     return zoomLevels, totalSum
 
 
-def bptFileBulkIndexToOpenFile(chunkArray, blockSize, keySize, output):
-    valSize = 16
+def bptFileBulkIndexToOpenFile(items, blockSize, output):
     signature = 0x78CA8C91
-    itemCount = len(chunkArray)
+    keySize = items.dtype["name"].itemsize
+    valSize = items.itemsize - keySize
+    itemCount = len(items)
+    # Supplemental Table 8: Chromosome B+ tree header
+    # magic     4 bytes, unsigned
+    # blockSize 4 bytes, unsigned
+    # keySize   4 bytes, unsigned
+    # valSize   4 bytes, unsigned
+    # itemCount 8 bytes, unsigned
+    # reserved  8 bytes, unsigned
     formatter = struct.Struct("=IIIIQxxxxxxxx")
     data = formatter.pack(signature, blockSize, keySize, valSize, itemCount)
     output.write(data)
@@ -2213,44 +2228,49 @@ def bptFileBulkIndexToOpenFile(chunkArray, blockSize, keySize, output):
     while itemCount > blockSize:
         itemCount = len(range(0, itemCount, blockSize))
         levels += 1
-    itemCount = len(chunkArray)
-    formatter_header = struct.Struct("=?xH")
-    formatter_index = struct.Struct(f"={keySize}sQ")
-    formatter_leaf = struct.Struct(f"={keySize}sQQ")
-    bytesInIndexBlock = formatter_header.size + blockSize * formatter_index.size
-    bytesInLeafBlock = formatter_header.size + blockSize * formatter_leaf.size
+    itemCount = len(items)
+    # Supplemental Table 9: Chromosome B+ tree node
+    # isLeaf    1 byte
+    # reserved  1 byte
+    # count     2 bytes, unsigned
+    formatter_node = struct.Struct("=?xH")
+    # Supplemental Table 11: Chromosome B+ tree non-leaf item
+    # key          keySize bytes
+    # childOffset  8 bytes, unsigned
+    formatter_nonleaf = struct.Struct(f"={keySize}sQ")
+    bytesInIndexBlock = formatter_node.size + blockSize * formatter_nonleaf.size
+    bytesInLeafBlock = formatter_node.size + blockSize * items.itemsize
     isLeaf = False
     indexOffset = output.tell()
     for level in range(levels - 1, 0, -1):
         slotSizePer = blockSize**level
         nodeSizePer = slotSizePer * blockSize
-        ii = range(0, itemCount, nodeSizePer)
+        indices = range(0, itemCount, nodeSizePer)
         if level == 1:
             bytesInNextLevelBlock = bytesInLeafBlock
         else:
             bytesInNextLevelBlock = bytesInIndexBlock
-        levelSize = len(ii) * bytesInIndexBlock
+        levelSize = len(indices) * bytesInIndexBlock
         endLevel = indexOffset + levelSize
         nextChild = endLevel
-        for i in ii:
-            endIx = min(i + nodeSizePer, itemCount)
-            jj = range(i, endIx, slotSizePer)
-            output.write(formatter_header.pack(isLeaf, len(jj)))
-            for j in jj:  # bbNamedFileChunk
-                chunk = chunkArray[j]
-                data = formatter_index.pack(chunk.name, nextChild)
+        for index in indices:
+            block = items[index : index + nodeSizePer : slotSizePer]
+            n = len(block)
+            output.write(formatter_node.pack(isLeaf, n))
+            for item in block:
+                data = formatter_nonleaf.pack(item["name"], nextChild)
                 output.write(data)
                 nextChild += bytesInNextLevelBlock
-            output.write(bytes((blockSize - len(jj)) * formatter_index.size))
+            data = bytes((blockSize - n) * formatter_nonleaf.size)
+            output.write(data)
         indexOffset = endLevel
     isLeaf = True
     for index in itertools.count(0, blockSize):
-        chunks = chunkArray[index : index + blockSize]
-        if not chunks:
+        block = items[index : index + blockSize]
+        n = len(block)
+        if n == 0:
             break
-        output.write(struct.pack("=?xH", isLeaf, len(chunks)))
-        for chunk in chunks:
-            data = formatter_leaf.pack(chunk.name, chunk.offset, chunk.size)
-            output.write(data)
-        data = bytes((blockSize - len(chunks)) * formatter_leaf.size)
+        output.write(formatter_node.pack(isLeaf, n))
+        block.tofile(output)
+        data = bytes((blockSize - n) * items.itemsize)
         output.write(data)
