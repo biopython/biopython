@@ -363,54 +363,69 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
     def write_chrom_info(self, items, blockSize, keySize, output):
         # See bbiWriteChromInfo in bbiWrite.c
-        itemCount = len(items)
-        valSize = 8
         signature = 0x78CA8C91
-        chromCount = len(items)
+        keySize = items.dtype["name"].itemsize
+        valSize = items.itemsize - keySize
+        itemCount = len(items)
+        # Supplemental Table 8: Chromosome B+ tree header
+        # magic     4 bytes, unsigned
+        # blockSize 4 bytes, unsigned
+        # keySize   4 bytes, unsigned
+        # valSize   4 bytes, unsigned
+        # itemCount 8 bytes, unsigned
+        # reserved  8 bytes, unsigned
         formatter = struct.Struct("=IIIIQxxxxxxxx")
-        data = formatter.pack(signature, blockSize, keySize, valSize, chromCount)
+        data = formatter.pack(signature, blockSize, keySize, valSize, itemCount)
         output.write(data)
         levels = 1
-        itemCount = chromCount
         while itemCount > blockSize:
             itemCount = len(range(0, itemCount, blockSize))
             levels += 1
-        formatter_header = struct.Struct("=?xH")
-        formatter_index = struct.Struct(f"={keySize}sQ")
+        itemCount = len(items)
+        # Supplemental Table 9: Chromosome B+ tree node
+        # isLeaf    1 byte
+        # reserved  1 byte
+        # count     2 bytes, unsigned
+        formatter_node = struct.Struct("=?xH")
+        # Supplemental Table 11: Chromosome B+ tree non-leaf item
+        # key          keySize bytes
+        # childOffset  8 bytes, unsigned
+        formatter_nonleaf = struct.Struct(f"={keySize}sQ")
+        bytesInIndexBlock = formatter_node.size + blockSize * formatter_nonleaf.size
+        bytesInLeafBlock = formatter_node.size + blockSize * items.itemsize
         formatter_leaf = struct.Struct(f"={keySize}sII")
-        itemSize = formatter_index.size
-        assert itemSize == formatter_leaf.size
-        bytesInNextLevelBlock = formatter_header.size + blockSize * itemSize
         isLeaf = False
         indexOffset = output.tell()
         for level in range(levels - 1, 0, -1):
             slotSizePer = blockSize**level
             nodeSizePer = slotSizePer * blockSize
-            ii = range(0, chromCount, nodeSizePer)
+            ii = range(0, itemCount, nodeSizePer)
+            if level == 1:
+                bytesInNextLevelBlock = bytesInLeafBlock
+            else:
+                bytesInNextLevelBlock = bytesInIndexBlock
             levelSize = len(ii) * bytesInNextLevelBlock
             endLevel = indexOffset + levelSize
             nextChild = endLevel
             for i in ii:
                 jj = range(i, len(items), slotSizePer)
-                output.write(formatter_header.pack(isLeaf, len(jj)))
+                output.write(formatter_node.pack(isLeaf, len(jj)))
                 for j in jj:
                     item = items[j]
-                    data = formatter_index.pack(item["name"], nextChild)
+                    data = formatter_nonleaf.pack(item["name"], nextChild)
                     output.write(data)
                     nextChild += bytesInNextLevelBlock
-                output.write(bytes((blockSize - len(jj)) * itemSize))
+                output.write(bytes((blockSize - len(jj)) * items.itemsize))
             indexOffset = endLevel
         isLeaf = True
         for index in itertools.count(0, blockSize):
-            current_items = items[index : index + blockSize]
-            n = len(current_items)
+            block = items[index : index + blockSize]
+            n = len(block)
             if n == 0:
                 break
-            output.write(formatter_header.pack(isLeaf, n))
-            for item in current_items:
-                data = formatter_leaf.pack(item["name"], item["id"], item["size"])
-                output.write(data)
-            data = bytes((blockSize - len(current_items)) * formatter_leaf.size)
+            output.write(formatter_node.pack(isLeaf, n))
+            block.tofile(output)
+            data = bytes((blockSize - n) * items.itemsize)
             output.write(data)
 
     def write_file(self, stream, alignments):
