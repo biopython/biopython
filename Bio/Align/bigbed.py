@@ -404,11 +404,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             extHeader.extraIndexListOffset = 0
             extraIndexListEndOffset = 0
         chromTreeOffset = stream.tell()
-        keySize = max([len(chromUsage.name.encode()) for chromUsage in chromUsageList])
-        chromUsageList = np.array(
-            chromUsageList,
-            dtype=[("name", f"S{keySize}"), ("id", "=i4"), ("size", "=i4")],
-        )
         bptFileBulkIndexToOpenFile(
             chromUsageList, min(blockSize, len(chromUsageList)), stream
         )
@@ -1282,8 +1277,9 @@ def bbiChromUsageFromBedFile(alignments, targets, eim):
     chromId = 0
     totalBases = 0
     bedCount = 0
-    usageName = ""
-    usage = []
+    name = ""
+    chromUsageList = []
+    keySize = 0
     minDiff = sys.maxsize
     for alignment in alignments:
         chrom = alignment.target.id
@@ -1297,13 +1293,13 @@ def bbiChromUsageFromBedFile(alignments, targets, eim):
             )
         bedCount += 1
         totalBases += end - start
-        if usageName != chrom:
-            if usageName > chrom:
+        if name != chrom:
+            if name > chrom:
                 raise ValueError(
                     f"alignments are not sorted by target name at alignment [{counter}]"
                 )
-            if usageName:
-                usage.append(bbiChromUsage(usageName, chromId, chromSize))
+            if name:
+                chromUsageList.append((name, chromId, chromSize))
                 chromId += 1
             for target in targets:
                 if target.id == chrom:
@@ -1312,7 +1308,8 @@ def bbiChromUsageFromBedFile(alignments, targets, eim):
                 raise ValueError(
                     f"failed to find target '{target.name}' in target list at alignment [{counter}]"
                 )
-            usageName = chrom
+            name = chrom
+            keySize = max(keySize, len(chrom))
             chromSize = len(target)
             lastStart = -1
         if end > chromSize:
@@ -1328,11 +1325,15 @@ def bbiChromUsageFromBedFile(alignments, targets, eim):
                     )
                 minDiff = diff
         lastStart = start
-    if usageName:
-        usage.append(bbiChromUsage(usageName, chromId, chromSize))
+    if name:
+        chromUsageList.append((name, chromId, chromSize))
+    chromUsageList = np.array(
+        chromUsageList,
+        dtype=[("name", f"S{keySize}"), ("id", "=i4"), ("size", "=i4")],
+    )
     if bedCount > 0:
         aveSize = totalBases / bedCount
-    return usage, minDiff, aveSize, bedCount
+    return chromUsageList, minDiff, aveSize, bedCount
 
 
 def bbiCalcResScalesAndSizes(aveSize):
@@ -1956,7 +1957,7 @@ def bbiOutputOneSummaryFurtherReduce(
 
 
 def bedWriteReducedOnceReturnReducedTwice(
-    usageList,
+    chromUsageList,
     fieldCount,
     alignments,
     initialReduction,
@@ -1978,10 +1979,10 @@ def bedWriteReducedOnceReturnReducedTwice(
     stream = bbiSumOutStream(itemsPerSlot, output, doCompress)
     totalSum = bbiSummaryElement()
     rangeTrees = rangeTreeGenerator(alignments)
-    for usage in usageList:
+    for chromName, chromId, chromSize in chromUsageList:
         summary = None
         name, rangeTree = next(rangeTrees)
-        assert name == usage["name"].decode()
+        assert name == chromName.decode()
         rangeList = rangeTreeList(rangeTree)
         for range in rangeList:
             val = range.val
@@ -1993,20 +1994,16 @@ def bedWriteReducedOnceReturnReducedTwice(
 
             totalSum.update(size, val)
 
-            if (
-                summary is not None
-                and summary.end <= start
-                and summary.end < usage["size"]
-            ):
+            if summary is not None and summary.end <= start and summary.end < chromSize:
                 bbiOutputOneSummaryFurtherReduce(
                     summary, twiceReducedList, doubleReductionSize, boundsArray, stream
                 )
                 summary = None
             if summary is None:
                 summary = bbiSummary(
-                    usage["id"],
+                    chromId,
                     start,
-                    min(start + initialReduction, usage["size"]),
+                    min(start + initialReduction, chromSize),
                     val,
                 )
             while end > summary.end:
@@ -2018,7 +2015,7 @@ def bedWriteReducedOnceReturnReducedTwice(
                 )
                 size -= overlap
                 summary.start = start = summary.end
-                summary.end = min(start + initialReduction, usage["size"])
+                summary.end = min(start + initialReduction, chromSize)
                 summary.values["minVal"] = summary.values["maxVal"] = val
                 summary.values["sumData"] = summary.values["sumSquares"] = 0.0
                 summary.validCount = 0
