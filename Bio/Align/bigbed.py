@@ -383,7 +383,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         extHeader = ExtHeader()
         extHeader.extraIndexCount = len(extraIndex)
         eim = [ExtraIndex(name, declaration) for name in extraIndex]
-        chromUsageList, minDiff, aveSize, bedCount = bbiChromUsageFromBedFile(
+        chromUsageList, aveSize, bedCount = bbiChromUsageFromBedFile(
             alignments, targets, eim
         )
         bbiCurrentVersion = 4
@@ -404,9 +404,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             extHeader.extraIndexListOffset = 0
             extraIndexListEndOffset = 0
         chromTreeOffset = stream.tell()
-        bptFileBulkIndexToOpenFile(
-            chromUsageList, min(blockSize, len(chromUsageList)), stream
-        )
+        BPlusTree().write(chromUsageList, min(blockSize, len(chromUsageList)), stream)
         dataOffset = stream.tell()
         resTryCount, resScales, resSizes = bbiCalcResScalesAndSizes(aveSize)
         stream.write(struct.pack("Q", bedCount))
@@ -456,7 +454,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         for element in eim:
             element.fileOffset = stream.tell()
             element.chunks.sort()
-            bptFileBulkIndexToOpenFile(element.chunks, blockSize, stream)
+            BPlusTree().write(element.chunks, blockSize, stream)
         if compress:
             uncompressBufSize = max(maxBlockSize, itemsPerSlot * bbiSummary.size)
         else:
@@ -562,7 +560,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         else:
             self._compressed = False
 
-        self.targets = self._read_chromosomes(stream, chromosomeTreeOffset)
+        stream.seek(chromosomeTreeOffset)
+        self.targets = BPlusTree(self.byteorder).read(stream)
 
         self.tree = self._read_index(stream, fullIndexOffset)
 
@@ -630,81 +629,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     return [item_converter(value) for value in values]
 
             self._custom_fields.append([field_name, converter])
-
-    def _read_chromosomes(self, stream, pos):
-        # Supplemental Table 8: Chromosome B+ tree header
-        # magic     4 bytes, unsigned
-        # blockSize 4 bytes, unsigned
-        # keySize   4 bytes, unsigned
-        # valSize   4 bytes, unsigned
-        # itemCount 8 bytes, unsigned
-        # reserved  8 bytes, unsigned
-        formatter_header = struct.Struct(self.byteorder + "IIIIQxxxxxxxx")
-        size_header = formatter_header.size
-
-        # Supplemental Table 9: Chromosome B+ tree node
-        # isLeaf    1 byte
-        # reserved  1 byte
-        # count     2 bytes, unsigned
-        formatter_node = struct.Struct(f"{self.byteorder}?xH")
-        size_node = formatter_node.size
-
-        stream.seek(pos)
-        signature = 0x78CA8C91
-        data = stream.read(size_header)
-        magic, blockSize, keySize, valSize, itemCount = formatter_header.unpack(data)
-        assert magic == signature
-        assert valSize == 8
-
-        # Supplemental Table 10: Chromosome B+ tree leaf item format
-        # key        keySize bytes
-        # chromId    4 bytes, unsigned
-        # chromSize  4 bytes, unsigned
-        formatter_leaf = struct.Struct(f"{self.byteorder}{keySize}sII")
-        size_leaf = formatter_leaf.size
-
-        # Supplemental Table 11: Chromosome B+ tree non-leaf item
-        # key          keySize bytes
-        # childOffset  8 bytes, unsigned
-        formatter_nonleaf = struct.Struct(f"{self.byteorder}{keySize}sQ")
-        size_nonleaf = formatter_nonleaf.size
-
-        Node = namedtuple("Node", ["parent", "children"])
-
-        targets = []
-        node = None
-        while True:
-            data = stream.read(size_node)
-            isLeaf, count = formatter_node.unpack(data)
-            if isLeaf:
-                for i in range(count):
-                    data = stream.read(size_leaf)
-                    key, chromId, chromSize = formatter_leaf.unpack(data)
-                    name = key.rstrip(b"\x00").decode()
-                    assert chromId == len(targets)
-                    sequence = Seq(None, length=chromSize)
-                    record = SeqRecord(sequence, id=name)
-                    targets.append(record)
-            else:
-                children = []
-                for i in range(count):
-                    data = stream.read(size_nonleaf)
-                    key, pos = formatter_nonleaf.unpack(data)
-                    children.append(pos)
-                parent = node
-                node = Node(parent, children)
-            while True:
-                if node is None:
-                    assert len(targets) == itemCount
-                    return targets
-                children = node.children
-                try:
-                    pos = children.pop(0)
-                except IndexError:
-                    node = node.parent
-                else:
-                    break
-            stream.seek(pos)
 
     def _read_index(self, stream, pos):
         # Supplemental Table 14: R tree index header
@@ -1102,8 +1026,6 @@ leafSlotSize = 32
 
 bbiBoundsArray = namedtuple("bbiBoundsArray", ["offset", "chromId", "start", "end"])
 
-bbiChromUsage = namedtuple("bbiChromUsage", ["name", "id", "size"])
-
 
 class bbiSummary:
     formatter = struct.Struct("=IIIIffff")
@@ -1333,7 +1255,7 @@ def bbiChromUsageFromBedFile(alignments, targets, eim):
     )
     if bedCount > 0:
         aveSize = totalBases / bedCount
-    return chromUsageList, minDiff, aveSize, bedCount
+    return chromUsageList, aveSize, bedCount
 
 
 def bbiCalcResScalesAndSizes(aveSize):
@@ -2154,69 +2076,142 @@ def bbiWriteZoomLevels(
     return zoomLevels, totalSum
 
 
-def bptFileBulkIndexToOpenFile(items, blockSize, output):
-    # See bbiWriteChromInfo in bbiWrite.c
+class BPlusTree:
+
     signature = 0x78CA8C91
-    keySize = items.dtype["name"].itemsize
-    valSize = items.itemsize - keySize
-    itemCount = len(items)
-    # Supplemental Table 8: Chromosome B+ tree header
-    # magic     4 bytes, unsigned
-    # blockSize 4 bytes, unsigned
-    # keySize   4 bytes, unsigned
-    # valSize   4 bytes, unsigned
-    # itemCount 8 bytes, unsigned
-    # reserved  8 bytes, unsigned
-    formatter = struct.Struct("=IIIIQxxxxxxxx")
-    data = formatter.pack(signature, blockSize, keySize, valSize, itemCount)
-    output.write(data)
-    levels = 1
-    while itemCount > blockSize:
-        itemCount = len(range(0, itemCount, blockSize))
-        levels += 1
-    itemCount = len(items)
-    # Supplemental Table 9: Chromosome B+ tree node
-    # isLeaf    1 byte
-    # reserved  1 byte
-    # count     2 bytes, unsigned
-    formatter_node = struct.Struct("=?xH")
-    # Supplemental Table 11: Chromosome B+ tree non-leaf item
-    # key          keySize bytes
-    # childOffset  8 bytes, unsigned
-    formatter_nonleaf = struct.Struct(f"={keySize}sQ")
-    bytesInIndexBlock = formatter_node.size + blockSize * formatter_nonleaf.size
-    bytesInLeafBlock = formatter_node.size + blockSize * items.itemsize
-    isLeaf = False
-    indexOffset = output.tell()
-    for level in range(levels - 1, 0, -1):
-        slotSizePer = blockSize**level
-        nodeSizePer = slotSizePer * blockSize
-        indices = range(0, itemCount, nodeSizePer)
-        if level == 1:
-            bytesInNextLevelBlock = bytesInLeafBlock
-        else:
-            bytesInNextLevelBlock = bytesInIndexBlock
-        levelSize = len(indices) * bytesInIndexBlock
-        endLevel = indexOffset + levelSize
-        nextChild = endLevel
-        for index in indices:
-            block = items[index : index + nodeSizePer : slotSizePer]
-            n = len(block)
-            output.write(formatter_node.pack(isLeaf, n))
-            for item in block:
-                data = formatter_nonleaf.pack(item["name"], nextChild)
-                output.write(data)
-                nextChild += bytesInNextLevelBlock
-            data = bytes((blockSize - n) * formatter_nonleaf.size)
-            output.write(data)
-        indexOffset = endLevel
-    isLeaf = True
-    for index in itertools.count(0, blockSize):
-        block = items[index : index + blockSize]
-        n = len(block)
-        if n == 0:
-            break
-        output.write(formatter_node.pack(isLeaf, n))
-        block.tofile(output)
-        data = bytes((blockSize - n) * items.itemsize)
+
+    def __init__(self, byteorder="="):
+
+        # Supplemental Table 8: Chromosome B+ tree header
+        # magic     4 bytes, unsigned
+        # blockSize 4 bytes, unsigned
+        # keySize   4 bytes, unsigned
+        # valSize   4 bytes, unsigned
+        # itemCount 8 bytes, unsigned
+        # reserved  8 bytes, unsigned
+        self.formatter_header = struct.Struct(byteorder + "IIIIQxxxxxxxx")
+
+        # Supplemental Table 9: Chromosome B+ tree node
+        # isLeaf    1 byte
+        # reserved  1 byte
+        # count     2 bytes, unsigned
+        self.formatter_node = struct.Struct(byteorder + "?xH")
+
+        # Supplemental Table 11: Chromosome B+ tree non-leaf item
+        # key          keySize bytes
+        # childOffset  8 bytes, unsigned
+        self.fmt_nonleaf = byteorder + "{keySize}sQ"
+
+        self.byteorder = byteorder
+
+    def read(self, stream):
+        byteorder = self.byteorder
+
+        formatter = self.formatter_header
+        data = stream.read(formatter.size)
+        magic, blockSize, keySize, valSize, itemCount = formatter.unpack(data)
+        assert magic == BPlusTree.signature
+
+        formatter_node = self.formatter_node
+        formatter_nonleaf = struct.Struct(self.fmt_nonleaf.format(keySize=keySize))
+
+        # Supplemental Table 10: Chromosome B+ tree leaf item format
+        # key        keySize bytes
+        # chromId    4 bytes, unsigned
+        # chromSize  4 bytes, unsigned
+        formatter_leaf = struct.Struct(f"{byteorder}{keySize}sII")
+        assert keySize == formatter_leaf.size - valSize
+        assert valSize == 8
+
+        Node = namedtuple("Node", ["parent", "children"])
+
+        targets = []
+        node = None
+        while True:
+            data = stream.read(formatter_node.size)
+            isLeaf, count = formatter_node.unpack(data)
+            if isLeaf:
+                for i in range(count):
+                    data = stream.read(formatter_leaf.size)
+                    key, chromId, chromSize = formatter_leaf.unpack(data)
+                    name = key.rstrip(b"\x00").decode()
+                    assert chromId == len(targets)
+                    sequence = Seq(None, length=chromSize)
+                    record = SeqRecord(sequence, id=name)
+                    targets.append(record)
+            else:
+                children = []
+                for i in range(count):
+                    data = stream.read(formatter_nonleaf.size)
+                    key, pos = formatter_nonleaf.unpack(data)
+                    children.append(pos)
+                parent = node
+                node = Node(parent, children)
+            while True:
+                if node is None:
+                    assert len(targets) == itemCount
+                    return targets
+                children = node.children
+                try:
+                    pos = children.pop(0)
+                except IndexError:
+                    node = node.parent
+                else:
+                    break
+            stream.seek(pos)
+
+    def write(self, items, blockSize, output):
+        # See bbiWriteChromInfo in bbiWrite.c
+
+        signature = BPlusTree.signature
+        keySize = items.dtype["name"].itemsize
+        valSize = items.itemsize - keySize
+        itemCount = len(items)
+        formatter = self.formatter_header
+        data = formatter.pack(signature, blockSize, keySize, valSize, itemCount)
         output.write(data)
+
+        formatter_node = self.formatter_node
+        formatter_nonleaf = struct.Struct(self.fmt_nonleaf.format(keySize=keySize))
+
+        levels = 1
+        while itemCount > blockSize:
+            itemCount = len(range(0, itemCount, blockSize))
+            levels += 1
+        itemCount = len(items)
+        bytesInIndexBlock = formatter_node.size + blockSize * formatter_nonleaf.size
+        bytesInLeafBlock = formatter_node.size + blockSize * items.itemsize
+        isLeaf = False
+        indexOffset = output.tell()
+        for level in range(levels - 1, 0, -1):
+            slotSizePer = blockSize**level
+            nodeSizePer = slotSizePer * blockSize
+            indices = range(0, itemCount, nodeSizePer)
+            if level == 1:
+                bytesInNextLevelBlock = bytesInLeafBlock
+            else:
+                bytesInNextLevelBlock = bytesInIndexBlock
+            levelSize = len(indices) * bytesInIndexBlock
+            endLevel = indexOffset + levelSize
+            nextChild = endLevel
+            for index in indices:
+                block = items[index : index + nodeSizePer : slotSizePer]
+                n = len(block)
+                output.write(formatter_node.pack(isLeaf, n))
+                for item in block:
+                    data = formatter_nonleaf.pack(item["name"], nextChild)
+                    output.write(data)
+                    nextChild += bytesInNextLevelBlock
+                data = bytes((blockSize - n) * formatter_nonleaf.size)
+                output.write(data)
+            indexOffset = endLevel
+        isLeaf = True
+        for index in itertools.count(0, blockSize):
+            block = items[index : index + blockSize]
+            n = len(block)
+            if n == 0:
+                break
+            output.write(formatter_node.pack(isLeaf, n))
+            block.tofile(output)
+            data = bytes((blockSize - n) * items.itemsize)
+            output.write(data)
