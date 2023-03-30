@@ -1354,10 +1354,10 @@ def calcLevelSizes(tree, levelSizes, level, maxLevel):
 
 
 class RTreeFormatter:
-    def __init__(self, byteorder="="):
-        self.byteorder = byteorder
 
-    def read(self, stream):
+    signature = 0x2468ACE0
+
+    def __init__(self, byteorder="="):
         # Supplemental Table 14: R tree index header
         # magic          4 bytes, unsigned
         # blockSize      4 bytes, unsigned
@@ -1369,9 +1369,10 @@ class RTreeFormatter:
         # endFileOffset  8 bytes, unsigned
         # itemsPerSlot   4 bytes, unsigned
         # reserved       4 bytes, unsigned
-        formatter_header = struct.Struct(self.byteorder + "IIQIIIIQIxxxx")
-        size_header = formatter_header.size
+        self.formatter_header = struct.Struct(byteorder + "IIQIIIIQIxxxx")
+        self.byteorder = byteorder
 
+    def read(self, stream):
         # Supplemental Table 15: R tree node format
         # isLeaf    1 byte
         # reserved  1 byte
@@ -1421,8 +1422,7 @@ class RTreeFormatter:
             ],
         )
 
-        signature = 0x2468ACE0
-        data = stream.read(size_header)
+        data = stream.read(self.formatter_header.size)
         (
             magic,
             blockSize,
@@ -1433,8 +1433,8 @@ class RTreeFormatter:
             endBase,
             endFileOffset,
             itemsPerSlot,
-        ) = formatter_header.unpack(data)
-        assert magic == signature
+        ) = self.formatter_header.unpack(data)
+        assert magic == RTreeFormatter.signature
 
         root = NonLeaf(None, [], startChromIx, startBase, endChromIx, endBase)
         node = root
@@ -1606,12 +1606,21 @@ class RTreeFormatter:
         root, levelCount = self.rTreeFromChromRangeArray(
             blockSize, items, endFileOffset
         )
-        signature = 0x2468ACE0
-        data = struct.pack("=IIQ", signature, blockSize, len(items))
+
+        itemCount = len(items)
+        data = self.formatter_header.pack(
+            RTreeFormatter.signature,
+            blockSize,
+            itemCount,
+            root.startChromId,
+            root.startBase,
+            root.endChromId,
+            root.endBase,
+            endFileOffset,
+            itemsPerSlot,
+        )
         output.write(data)
-        output.write(bytes(root))  # FIXME
-        data = struct.pack("=QIxxxx", endFileOffset, itemsPerSlot)
-        output.write(data)
+
         if root is not None:
             nodeHeaderSize = 4
             level = 0
