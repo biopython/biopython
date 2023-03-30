@@ -1013,27 +1013,6 @@ class RTreeNode:
         node.endFileOffset = self.endFileOffset
         return node
 
-    def rWriteIndexLevel(
-        self, blockSize, childNodeSize, curLevel, destLevel, offset, output
-    ):
-        # in cirTree.c
-        if curLevel == destLevel:
-            countOne = len(self.children)
-            isLeaf = False
-            output.write(struct.pack("=?xH", isLeaf, countOne))
-            for child in self.children:
-                data = bytes(child) + struct.pack("Q", offset)  # FIXME
-                assert len(data) == indexSlotSize
-                output.write(data)
-                offset += childNodeSize
-            output.write(bytes((blockSize - countOne) * indexSlotSize))
-        else:
-            for child in self.children:
-                offset = child.rWriteIndexLevel(
-                    blockSize, childNodeSize, curLevel + 1, destLevel, offset, stream
-                )
-        return offset
-
 
 class RangeTree:
     def __init__(self):
@@ -1602,6 +1581,33 @@ class RTreeFormatter:
                     itemsPerSlot, lNodeSize, el, curLevel + 1, leafLevel, output
                 )
 
+    def rWriteIndexLevel(
+        self, parent, blockSize, childNodeSize, curLevel, destLevel, offset, output
+    ):
+        # in cirTree.c
+        if curLevel == destLevel:
+            countOne = len(parent.children)
+            isLeaf = False
+            output.write(struct.pack("=?xH", isLeaf, countOne))
+            for child in parent.children:
+                data = bytes(child) + struct.pack("Q", offset)  # FIXME
+                assert len(data) == indexSlotSize
+                output.write(data)
+                offset += childNodeSize
+            output.write(bytes((blockSize - countOne) * indexSlotSize))
+        else:
+            for child in parent.children:
+                offset = self.rWriteIndexLevel(
+                    child,
+                    blockSize,
+                    childNodeSize,
+                    curLevel + 1,
+                    destLevel,
+                    offset,
+                    stream,
+                )
+        return offset
+
     def write(self, items, blockSize, itemsPerSlot, endFileOffset, output):
         root, levelCount = self.rTreeFromChromRangeArray(
             blockSize, items, endFileOffset
@@ -1636,8 +1642,8 @@ class RTreeFormatter:
                     childNodeSize = lNodeSize
                 else:
                     childNodeSize = iNodeSize
-                root.rWriteIndexLevel(
-                    blockSize, childNodeSize, 0, i, levelOffsets[i + 1], output
+                self.rWriteIndexLevel(
+                    root, blockSize, childNodeSize, 0, i, levelOffsets[i + 1], output
                 )
                 if output.tell() != levelOffsets[i + 1]:
                     raise RuntimeError(
