@@ -250,6 +250,7 @@ binary mode, and decode the appropriate fragments yourself.
 import struct
 import sys
 import zlib
+import io
 
 from builtins import open as _open
 
@@ -491,6 +492,20 @@ def _load_bgzf_block(handle, text_mode=False):
         return block_size, data
 
 
+def _is_binary(fileobj):
+    """Determine whether a file was opened in binary mode."""
+    try:
+        fileobj.mode
+    except AttributeError:
+        # io.BytesIO instances do not have a 'mode' in Python 3.10
+        # and there doesn't seem to be an equivalent attribute. The following
+        # is taken from https://stackoverflow.com/questions/44584829/
+        # how-to-determine-if-file-is-opened-in-binary-or-text-mode
+        return isinstance(fileobj, (io.RawIOBase, io.BufferedIOBase)):
+    else:
+        return "b" in fileobj.mode.lower()
+
+
 class BgzfReader:
     r"""BGZF reader, acts like a read only handle but seek/tell differ.
 
@@ -598,7 +613,7 @@ class BgzfReader:
                 "Must use a read mode like 'r' (default), 'rt', or 'rb' for binary"
             )
         if fileobj:
-            if "b" not in fileobj.mode.lower():
+            if not _is_binary(fileobj):
                 raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
@@ -799,7 +814,7 @@ class BgzfWriter:
         if filename and fileobj:
             raise ValueError("Supply either filename or fileobj, not both")
         if fileobj:
-            if "b" not in fileobj.mode.lower():
+            if not _is_binary(fileobj):
                 raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
