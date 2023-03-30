@@ -989,17 +989,9 @@ class RTreeNode:
         "endFileOffset",  # bits64
     ]
 
-    formatter = struct.Struct("=IIII")
-    size = formatter.size
-
     def __init__(self):
         self.parent = None
         self.children = None
-
-    def __bytes__(self):
-        return self.formatter.pack(
-            self.startChromId, self.startBase, self.endChromId, self.endBase
-        )
 
     def clone(self):
         node = RTreeNode()
@@ -1349,15 +1341,20 @@ class RTreeFormatter:
         # itemsPerSlot   4 bytes, unsigned
         # reserved       4 bytes, unsigned
         self.formatter_header = struct.Struct(byteorder + "IIQIIIIQIxxxx")
-        self.byteorder = byteorder
 
-    def read(self, stream):
         # Supplemental Table 15: R tree node format
         # isLeaf    1 byte
         # reserved  1 byte
         # count     2 bytes, unsigned
-        formatter_node = struct.Struct(self.byteorder + "?xH")
-        size_node = formatter_node.size
+        self.formatter_node = struct.Struct(byteorder + "?xH")
+
+        # Supplemental Table 17: R tree non-leaf format
+        # startChromIx   4 bytes, unsigned
+        # startBase      4 bytes, unsigned
+        # endChromIx     4 bytes, unsigned
+        # endBase        4 bytes, unsigned
+        # dataOffset     8 bytes, unsigned
+        self.formatter_nonleaf = struct.Struct(byteorder + "IIIIQ")
 
         # Supplemental Table 16: R tree leaf format
         # startChromIx   4 bytes, unsigned
@@ -1366,8 +1363,22 @@ class RTreeFormatter:
         # endBase        4 bytes, unsigned
         # dataOffset     8 bytes, unsigned
         # dataSize       8 bytes, unsigned
-        formatter_leaf = struct.Struct(self.byteorder + "IIIIQQ")
-        size_leaf = formatter_leaf.size
+        self.formatter_leaf = struct.Struct(byteorder + "IIIIQQ")
+
+    def read(self, stream):
+        NonLeaf = namedtuple(
+            "NonLeaf",
+            [
+                "parent",
+                "children",
+                "startChromIx",
+                "startBase",
+                "endChromIx",
+                "endBase",
+                "dataOffset",
+            ],
+        )
+
         Leaf = namedtuple(
             "Leaf",
             [
@@ -1378,26 +1389,6 @@ class RTreeFormatter:
                 "endBase",
                 "dataOffset",
                 "dataSize",
-            ],
-        )
-
-        # Supplemental Table 17: R tree non-leaf format
-        # startChromIx   4 bytes, unsigned
-        # startBase      4 bytes, unsigned
-        # endChromIx     4 bytes, unsigned
-        # endBase        4 bytes, unsigned
-        # dataOffset     8 bytes, unsigned
-        formatter_nonleaf = struct.Struct(self.byteorder + "IIIIQ")
-        size_nonleaf = formatter_nonleaf.size
-        NonLeaf = namedtuple(
-            "NonLeaf",
-            [
-                "parent",
-                "children",
-                "startChromIx",
-                "startBase",
-                "endChromIx",
-                "endBase",
             ],
         )
 
@@ -1415,17 +1406,20 @@ class RTreeFormatter:
         ) = self.formatter_header.unpack(data)
         assert magic == RTreeFormatter.signature
 
-        root = NonLeaf(None, [], startChromIx, startBase, endChromIx, endBase)
+        formatter_node = self.formatter_node
+        formatter_nonleaf = self.formatter_nonleaf
+        formatter_leaf = self.formatter_leaf
+
+        root = NonLeaf(None, [], startChromIx, startBase, endChromIx, endBase, None)
         node = root
         itemsCounted = 0
-        dataOffsets = {}
         while True:
-            data = stream.read(size_node)
+            data = stream.read(formatter_node.size)
             isLeaf, count = formatter_node.unpack(data)
             if isLeaf:
                 children = node.children
                 for i in range(count):
-                    data = stream.read(size_leaf)
+                    data = stream.read(formatter_leaf.size)
                     (
                         startChromIx,
                         startBase,
@@ -1449,7 +1443,6 @@ class RTreeFormatter:
                     parent = node.parent
                     if parent is None:
                         assert itemsCounted == itemCount
-                        assert not dataOffsets
                         return node
                     for index, child in enumerate(parent.children):
                         if id(node) == id(child):
@@ -1465,7 +1458,7 @@ class RTreeFormatter:
             else:
                 children = node.children
                 for i in range(count):
-                    data = stream.read(size_nonleaf)
+                    data = stream.read(formatter_nonleaf.size)
                     (
                         startChromIx,
                         startBase,
@@ -1474,14 +1467,18 @@ class RTreeFormatter:
                         dataOffset,
                     ) = formatter_nonleaf.unpack(data)
                     child = NonLeaf(
-                        node, [], startChromIx, startBase, endChromIx, endBase
+                        node,
+                        [],
+                        startChromIx,
+                        startBase,
+                        endChromIx,
+                        endBase,
+                        dataOffset,
                     )
-                    dataOffsets[id(child)] = dataOffset
                     children.append(child)
                 parent = node
                 node = children[0]
-            pos = dataOffsets.pop(id(node))
-            stream.seek(pos)
+            stream.seek(node.dataOffset)
 
     def rTreeFromChromRangeArray(self, blockSize, items, endFileOffset):
         itemCount = len(items)
@@ -1563,18 +1560,22 @@ class RTreeFormatter:
 
     def rWriteLeaves(self, itemsPerSlot, lNodeSize, tree, curLevel, leafLevel, output):
         byteorder = sys.byteorder
+        formatter_leaf = self.formatter_leaf
         if curLevel == leafLevel:
-            reserved = 0
             isLeaf = True
-            countOne = len(tree.children)
-            output.write(struct.pack("=?xH", isLeaf, countOne))
+            data = self.formatter_node.pack(isLeaf, len(tree.children))
+            output.write(data)
             for el in tree.children:
-                output.write(bytes(el))  # FIXME
-                data = struct.pack(
-                    "=QQ", el.startFileOffset, el.endFileOffset - el.startFileOffset
+                data = formatter_leaf.pack(
+                    el.startChromId,
+                    el.startBase,
+                    el.endChromId,
+                    el.endBase,
+                    el.startFileOffset,
+                    el.endFileOffset - el.startFileOffset,
                 )
                 output.write(data)
-            output.write(bytes((itemsPerSlot - countOne) * indexSlotSize))
+            output.write(bytes((itemsPerSlot - len(tree.children)) * indexSlotSize))
         else:
             for el in tree.children:
                 self.rWriteLeaves(
@@ -1585,16 +1586,24 @@ class RTreeFormatter:
         self, parent, blockSize, childNodeSize, curLevel, destLevel, offset, output
     ):
         # in cirTree.c
+        formatter_nonleaf = self.formatter_nonleaf
         if curLevel == destLevel:
-            countOne = len(parent.children)
             isLeaf = False
-            output.write(struct.pack("=?xH", isLeaf, countOne))
+            data = self.formatter_node.pack(isLeaf, len(parent.children))
+            output.write(data)
             for child in parent.children:
-                data = bytes(child) + struct.pack("Q", offset)  # FIXME
-                assert len(data) == indexSlotSize
+                data = formatter_nonleaf.pack(
+                    child.startChromId,
+                    child.startBase,
+                    child.endChromId,
+                    child.endBase,
+                    offset,
+                )
                 output.write(data)
                 offset += childNodeSize
-            output.write(bytes((blockSize - countOne) * indexSlotSize))
+            output.write(
+                bytes((blockSize - len(parent.children)) * self.formatter_nonleaf.size)
+            )
         else:
             for child in parent.children:
                 offset = self.rWriteIndexLevel(
