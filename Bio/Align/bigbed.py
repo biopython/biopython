@@ -387,8 +387,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             alignments, targets, eim
         )
         bbiCurrentVersion = 4
+        formatter_zoomlevel = struct.Struct("=IxxxxQQ")
         stream.write(bytes(64))  # bbiWriteDummyHeader
-        stream.write(bytes(bbiMaxZoomLevels * 24))  # bbiWriteDummyZooms
+        stream.write(bytes(bbiMaxZoomLevels * formatter_zoomlevel.size))
         asOffset = stream.tell()
         stream.write(bytes(declaration))  # asText
         totalSummaryOffset = stream.tell()
@@ -406,7 +407,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         chromTreeOffset = stream.tell()
         BPlusTree().write(chromUsageList, min(blockSize, len(chromUsageList)), stream)
         dataOffset = stream.tell()
-        resTryCount, resScales, resSizes = bbiCalcResScalesAndSizes(aveSize)
+        resScales, resSizes = self.bbiCalcResScalesAndSizes(aveSize)
         stream.write(struct.pack("Q", bedCount))
         if bedCount > 0:
             for element in eim:
@@ -417,7 +418,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 itemsPerSlot,
                 compress,
                 stream,
-                resTryCount,
                 resScales,
                 resSizes,
                 eim,
@@ -444,7 +444,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 compress,
                 indexOffset - dataOffset,
                 chromUsageList,
-                resTryCount,
                 resScales,
                 resSizes,
                 zoomAmounts,
@@ -478,11 +477,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         )
         stream.write(data)
         for i in range(zoomLevels):
-            data = struct.pack(
-                "=IxxxxQQ", zoomAmounts[i], zoomDataOffsets[i], zoomIndexOffsets[i]
+            data = formatter_zoomlevel.pack(
+                zoomAmounts[i], zoomDataOffsets[i], zoomIndexOffsets[i]
             )
             stream.write(data)
-        stream.write(bytes(24 * (bbiMaxZoomLevels - zoomLevels)))
+        stream.write(bytes(formatter_zoomlevel.size * (bbiMaxZoomLevels - zoomLevels)))
         stream.seek(totalSummaryOffset)
         stream.write(bytes(totalSum))
         stream.seek(extHeaderOffset)
@@ -495,6 +494,20 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream.seek(0, 2)
         data = struct.pack("=I", signature)
         stream.write(data)
+
+    def bbiCalcResScalesAndSizes(self, aveSize):
+        # See bbiCalcResScalesAndSizes in bbiWrite.c
+        resScales = np.zeros(bbiMaxZoomLevels, int)
+        minZoom = 10
+        res = max(int(aveSize), minZoom)
+        for resTry in range(bbiMaxZoomLevels):
+            resScales[resTry] = res
+            if res > sys.maxsize // bbiResIncrement:
+                break
+            res *= bbiResIncrement
+        resScales = resScales[: resTry + 1]
+        resSizes = np.zeros(resTry + 1, dtype="=i4")
+        return resScales, resSizes
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
@@ -1258,22 +1271,6 @@ def bbiChromUsageFromBedFile(alignments, targets, eim):
     return chromUsageList, aveSize, bedCount
 
 
-def bbiCalcResScalesAndSizes(aveSize):
-    resScales = np.zeros(bbiMaxZoomLevels, int)
-    resSizes = array.array("i", [0] * bbiMaxZoomLevels)
-    resTryCount = bbiMaxZoomLevels
-    resIncrement = bbiResIncrement
-    minZoom = 10
-    res = max(int(aveSize), minZoom)
-    for resTry in range(resTryCount):
-        resScales[resTry] = res
-        if res > sys.maxsize // bbiResIncrement:
-            resTryCount = resTry + 1
-            break
-        res *= resIncrement
-    return resTryCount, resScales, resSizes
-
-
 def loadAndValidateBed(alignment, bedFieldCount, fieldCount, declaration):
     row = []
     BB_MAX_CHROM_STRING = 255
@@ -1397,7 +1394,6 @@ def writeBlocks(
     itemsPerSlot,
     doCompress,
     output,
-    resTryCount,
     resScales,
     resSizes,
     eim,
@@ -1412,7 +1408,7 @@ def writeBlocks(
     startPos = 0
     endPos = 0
     chromId = -1
-    resEnds = np.zeros(resTryCount, int)
+    resEnds = np.zeros(len(resScales), int)
     atEnd = False
     start = 0
     end = 0
@@ -1478,14 +1474,13 @@ def writeBlocks(
         stream.write(b"\0")
 
         itemIx += 1
-        for resTry in range(resTryCount):
-            resEnd = resEnds[resTry]
+        for resTry, (resEnd, resScale) in enumerate(zip(resEnds, resScales)):
             if start >= resEnd:
                 resSizes[resTry] += 1
-                resEnd = start + resScales[resTry]
+                resEnd = start + resScale
             while end > resEnd:
                 resSizes[resTry] += 1
-                resEnd += resScales[resTry]
+                resEnd += resScale
             resEnds[resTry] = resEnd
 
     sectionStartIx, size = write_data(sectionStartIx)
@@ -1896,7 +1891,7 @@ def bedWriteReducedOnceReturnReducedTwice(
     boundsArray = []
 
     dataStart = output.tell()
-    output.write(initialReductionCount.to_bytes(4, byteorder))
+    output.write(initialReductionCount.tobytes())
 
     stream = bbiSumOutStream(itemsPerSlot, output, doCompress)
     totalSum = bbiSummaryElement()
@@ -2011,26 +2006,22 @@ def bbiWriteZoomLevels(
     fieldCount,  # int fieldCount,         /* Number of fields in bed (4 for bedGraph) */
     doCompress,  # boolean doCompress,     /* Do we compress.  Answer really should be yes! */
     dataSize,  # bits64 dataSize,        /* Size of data on disk (after compression if any). */
-    usageList,  # struct bbiChromUsage *usageList, /* Result from bbiChromUsageFromBedFile */
-    resTryCount,
+    chromUsageList,  # struct bbiChromUsage *usageList, /* Result from bbiChromUsageFromBedFile */
     resScales,
     resSizes,  # int resTryCount, int resScales[], int resSizes[],   /* How much to zoom at each level */
     zoomAmounts,  # bits32 zoomAmounts[bbiMaxZoomLevels],      /* Fills in amount zoomed at each level. */
     zoomDataOffsets,  # bits64 zoomDataOffsets[bbiMaxZoomLevels],  /* Fills in where data starts for each zoom level. */
     zoomIndexOffsets,  # bits64 zoomIndexOffsets[bbiMaxZoomLevels], /* Fills in where index starts for each level. */
 ):
-    assert resTryCount > 0
     maxReducedSize = dataSize / 2
-    initialReduction = 0
-    initialReducedCount = 0
 
-    for resTry in range(resTryCount):
-        reducedSize = resSizes[resTry] * bbiSummary.size
+    for resScale, resSize in zip(resScales, resSizes):
+        reducedSize = resSize * bbiSummary.size
         if doCompress:
             reducedSize /= 2
         if reducedSize <= maxReducedSize:
-            initialReduction = resScales[resTry]
-            initialReducedCount = resSizes[resTry]
+            initialReduction = resScale
+            initialReducedCount = resSize
             break
     else:
         initialReduction = resScales[0]
@@ -2042,7 +2033,7 @@ def bbiWriteZoomLevels(
         zoomIndexOffsets[0],
         totalSum,
     ) = bedWriteReducedOnceReturnReducedTwice(
-        usageList,
+        chromUsageList,
         fieldCount,
         alignments,
         initialReduction,
