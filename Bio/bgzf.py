@@ -501,7 +501,7 @@ def _is_binary(fileobj):
         # and there doesn't seem to be an equivalent attribute. The following
         # is taken from https://stackoverflow.com/questions/44584829/
         # how-to-determine-if-file-is-opened-in-binary-or-text-mode
-        return isinstance(fileobj, (io.RawIOBase, io.BufferedIOBase)):
+        return isinstance(fileobj, (io.RawIOBase, io.BufferedIOBase))
     else:
         return "b" in fileobj.mode.lower()
 
