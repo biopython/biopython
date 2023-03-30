@@ -405,7 +405,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             extHeader.extraIndexListOffset = 0
             extraIndexListEndOffset = 0
         chromTreeOffset = stream.tell()
-        BPlusTree().write(chromUsageList, min(blockSize, len(chromUsageList)), stream)
+        BPlusTreeFormatter().write(
+            chromUsageList, min(blockSize, len(chromUsageList)), stream
+        )
         dataOffset = stream.tell()
         resScales, resSizes = self.bbiCalcResScalesAndSizes(aveSize)
         stream.write(struct.pack("Q", bedCount))
@@ -429,7 +431,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             maxBlockSize = 0
             boundsArray = []
         indexOffset = stream.tell()
-        cirTreeFileBulkIndexToOpenFile(boundsArray, blockSize, 1, indexOffset, stream)
+        RTreeFormatter().write(boundsArray, blockSize, 1, indexOffset, stream)
         zoomAmounts = np.empty(bbiMaxZoomLevels, np.int32)
         zoomDataOffsets = np.empty(bbiMaxZoomLevels, np.int64)
         zoomIndexOffsets = np.empty(bbiMaxZoomLevels, np.int64)
@@ -453,7 +455,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         for element in eim:
             element.fileOffset = stream.tell()
             element.chunks.sort()
-            BPlusTree().write(element.chunks, blockSize, stream)
+            BPlusTreeFormatter().write(element.chunks, blockSize, stream)
         if compress:
             uncompressBufSize = max(maxBlockSize, itemsPerSlot * bbiSummary.size)
         else:
@@ -574,9 +576,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             self._compressed = False
 
         stream.seek(chromosomeTreeOffset)
-        self.targets = BPlusTree(self.byteorder).read(stream)
+        self.targets = BPlusTreeFormatter(self.byteorder).read(stream)
 
-        self.tree = self._read_index(stream, fullIndexOffset)
+        stream.seek(fullIndexOffset)
+        self.tree = RTreeFormatter(self.byteorder).read(stream)
 
         self._data = self._iterate_index(stream)
 
@@ -642,154 +645,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     return [item_converter(value) for value in values]
 
             self._custom_fields.append([field_name, converter])
-
-    def _read_index(self, stream, pos):
-        # Supplemental Table 14: R tree index header
-        # magic          4 bytes, unsigned
-        # blockSize      4 bytes, unsigned
-        # itemCount      8 bytes, unsigned
-        # startChromIx   4 bytes, unsigned
-        # startBase      4 bytes, unsigned
-        # endChromIx     4 bytes, unsigned
-        # endBase        4 bytes, unsigned
-        # endFileOffset  8 bytes, unsigned
-        # itemsPerSlot   4 bytes, unsigned
-        # reserved       4 bytes, unsigned
-        formatter_header = struct.Struct(self.byteorder + "IIQIIIIQIxxxx")
-        size_header = formatter_header.size
-
-        # Supplemental Table 15: R tree node format
-        # isLeaf    1 byte
-        # reserved  1 byte
-        # count     2 bytes, unsigned
-        formatter_node = struct.Struct(self.byteorder + "?xH")
-        size_node = formatter_node.size
-
-        # Supplemental Table 16: R tree leaf format
-        # startChromIx   4 bytes, unsigned
-        # startBase      4 bytes, unsigned
-        # endChromIx     4 bytes, unsigned
-        # endBase        4 bytes, unsigned
-        # dataOffset     8 bytes, unsigned
-        # dataSize       8 bytes, unsigned
-        formatter_leaf = struct.Struct(self.byteorder + "IIIIQQ")
-        size_leaf = formatter_leaf.size
-        Leaf = namedtuple(
-            "Leaf",
-            [
-                "parent",
-                "startChromIx",
-                "startBase",
-                "endChromIx",
-                "endBase",
-                "dataOffset",
-                "dataSize",
-            ],
-        )
-
-        # Supplemental Table 17: R tree non-leaf format
-        # startChromIx   4 bytes, unsigned
-        # startBase      4 bytes, unsigned
-        # endChromIx     4 bytes, unsigned
-        # endBase        4 bytes, unsigned
-        # dataOffset     8 bytes, unsigned
-        formatter_nonleaf = struct.Struct(self.byteorder + "IIIIQ")
-        size_nonleaf = formatter_nonleaf.size
-        NonLeaf = namedtuple(
-            "NonLeaf",
-            [
-                "parent",
-                "children",
-                "startChromIx",
-                "startBase",
-                "endChromIx",
-                "endBase",
-            ],
-        )
-
-        stream.seek(pos)
-        signature = 0x2468ACE0
-        data = stream.read(size_header)
-        (
-            magic,
-            blockSize,
-            itemCount,
-            startChromIx,
-            startBase,
-            endChromIx,
-            endBase,
-            endFileOffset,
-            itemsPerSlot,
-        ) = formatter_header.unpack(data)
-        assert magic == signature
-
-        root = NonLeaf(None, [], startChromIx, startBase, endChromIx, endBase)
-        node = root
-        itemsCounted = 0
-        dataOffsets = {}
-        while True:
-            data = stream.read(size_node)
-            isLeaf, count = formatter_node.unpack(data)
-            if isLeaf:
-                children = node.children
-                for i in range(count):
-                    data = stream.read(size_leaf)
-                    (
-                        startChromIx,
-                        startBase,
-                        endChromIx,
-                        endBase,
-                        dataOffset,
-                        dataSize,
-                    ) = formatter_leaf.unpack(data)
-                    child = Leaf(
-                        node,
-                        startChromIx,
-                        startBase,
-                        endChromIx,
-                        endBase,
-                        dataOffset,
-                        dataSize,
-                    )
-                    children.append(child)
-                itemsCounted += count
-                while True:
-                    parent = node.parent
-                    if parent is None:
-                        assert itemsCounted == itemCount
-                        assert not dataOffsets
-                        return node
-                    for index, child in enumerate(parent.children):
-                        if id(node) == id(child):
-                            break
-                    else:
-                        raise RuntimeError("Failed to find child node")
-                    try:
-                        node = parent.children[index + 1]
-                    except IndexError:
-                        node = parent
-                    else:
-                        break
-            else:
-                children = node.children
-                for i in range(count):
-                    data = stream.read(size_nonleaf)
-                    (
-                        startChromIx,
-                        startBase,
-                        endChromIx,
-                        endBase,
-                        dataOffset,
-                    ) = formatter_nonleaf.unpack(data)
-                    child = NonLeaf(
-                        node, [], startChromIx, startBase, endChromIx, endBase
-                    )
-                    dataOffsets[id(child)] = dataOffset
-                    children.append(child)
-                parent = node
-                node = children[0]
-            pos = dataOffsets.pop(id(node))
-            stream.seek(pos)
 
     def _iterate_index(self, stream):
         # Supplemental Table 12: Binary BED-data format
@@ -1122,7 +977,7 @@ class bbiSumOutStream:
         self.elCount = 0
 
 
-class rTree:
+class RTreeNode:
     __slots__ = [
         "children",  # rTree*
         "parent",  # rTree*
@@ -1147,16 +1002,16 @@ class rTree:
         )
 
     def clone(self):
-        tree = rTree()
-        tree.children = self.children
-        tree.parent = self.parent
-        tree.startChromId = self.startChromId
-        tree.startBase = self.startBase
-        tree.endChromId = self.endChromId
-        tree.endBase = self.endBase
-        tree.startFileOffset = self.startFileOffset
-        tree.endFileOffset = self.endFileOffset
-        return tree
+        node = RTreeNode()
+        node.children = self.children
+        node.parent = self.parent
+        node.startChromId = self.startChromId
+        node.startBase = self.startBase
+        node.endChromId = self.endChromId
+        node.endBase = self.endBase
+        node.startFileOffset = self.startFileOffset
+        node.endFileOffset = self.endFileOffset
+        return node
 
     def rWriteIndexLevel(
         self, blockSize, childNodeSize, curLevel, destLevel, offset, output
@@ -1490,85 +1345,6 @@ def writeBlocks(
     return maxBlockSize, bounds
 
 
-def rTreeFromChromRangeArray(blockSize, items, endFileOffset):
-    itemCount = len(items)
-    if itemCount == 0:
-        return
-    children = []
-    nextOffset = items[0].offset
-    oneSize = 0
-    i = 0
-    while i < itemCount:
-        child = rTree()
-        children.append(child)
-        startItem = items[i]
-        child.startChromId = child.endChromId = startItem.chromId
-        child.startBase = startItem.start
-        child.endBase = startItem.end
-        child.startFileOffset = nextOffset
-        oneSize = 1
-        endItem = startItem
-        for j in range(i + 1, itemCount):
-            endItem = items[j]
-            nextOffset = endItem.offset
-            if nextOffset != child.startFileOffset:
-                break
-            oneSize += 1
-        else:
-            nextOffset = endFileOffset
-        child.endFileOffset = nextOffset
-        for j in range(1, oneSize):
-            item = items[i + j]
-            if item.chromId < child.startChromId:
-                child.startChromId = item.chromId
-                child.startBase = item.start
-            elif item.chromId == child.startChromId and item.start < child.startBase:
-                child.startBase = item.start
-            if item.chromId > child.endChromId:
-                child.endChromId = item.chromId
-                child.endBase = item.end
-            elif item.chromId == child.endChromId and item.end > child.endBase:
-                child.endBase = item.end
-        i += oneSize
-    levelCount = 1
-    while True:
-        parents = []
-        slotsUsed = blockSize
-        for child in children:
-            if slotsUsed >= blockSize:
-                slotsUsed = 1
-                parent = child.clone()
-                parent.children = [child]
-                child.parent = parent
-                parents.append(parent)
-            else:
-                slotsUsed += 1
-                parent.children.append(child)
-                child.parent = parent
-                if child.startChromId < parent.startChromId:
-                    parent.startChromId = child.startChromId
-                    parent.startBase = child.startBase
-                elif (
-                    child.startChromId == parent.startChromId
-                    and child.startBase < parent.startBase
-                ):
-                    parent.startBase = child.startBase
-                if child.endChromId > parent.endChromId:
-                    parent.endChromId = child.endChromId
-                    parent.endBase = child.endBase
-                elif (
-                    child.endChromId == parent.endChromId
-                    and child.endBase > parent.endBase
-                ):
-                    parent.endBase = child.endBase
-        levelCount += 1
-        if len(parents) == 1:
-            break
-        children = parents
-
-    return parent, levelCount
-
-
 def calcLevelSizes(tree, levelSizes, level, maxLevel):
     levelSizes[level] += 1
     if level < maxLevel:
@@ -1577,65 +1353,290 @@ def calcLevelSizes(tree, levelSizes, level, maxLevel):
             calcLevelSizes(el, levelSizes, level, maxLevel)
 
 
-def rWriteLeaves(itemsPerSlot, lNodeSize, tree, curLevel, leafLevel, output):
-    byteorder = sys.byteorder
-    if curLevel == leafLevel:
-        reserved = 0
-        isLeaf = True
-        countOne = len(tree.children)
-        output.write(struct.pack("=?xH", isLeaf, countOne))
-        for el in tree.children:
-            output.write(bytes(el))  # FIXME
-            data = struct.pack(
-                "=QQ", el.startFileOffset, el.endFileOffset - el.startFileOffset
-            )
-            output.write(data)
-        output.write(bytes((itemsPerSlot - countOne) * indexSlotSize))
-    else:
-        for el in tree.children:
-            rWriteLeaves(itemsPerSlot, lNodeSize, el, curLevel + 1, leafLevel, output)
+class RTreeFormatter:
+    def __init__(self, byteorder="="):
+        self.byteorder = byteorder
 
+    def read(self, stream):
+        # Supplemental Table 14: R tree index header
+        # magic          4 bytes, unsigned
+        # blockSize      4 bytes, unsigned
+        # itemCount      8 bytes, unsigned
+        # startChromIx   4 bytes, unsigned
+        # startBase      4 bytes, unsigned
+        # endChromIx     4 bytes, unsigned
+        # endBase        4 bytes, unsigned
+        # endFileOffset  8 bytes, unsigned
+        # itemsPerSlot   4 bytes, unsigned
+        # reserved       4 bytes, unsigned
+        formatter_header = struct.Struct(self.byteorder + "IIQIIIIQIxxxx")
+        size_header = formatter_header.size
 
-def writeTreeToOpenFile(tree, blockSize, levelCount, output):
-    nodeHeaderSize = 4
-    level = 0
-    levelSizes = np.zeros(levelCount, int)
-    calcLevelSizes(tree, levelSizes, level, levelCount - 1)
-    iNodeSize = nodeHeaderSize + indexSlotSize * blockSize
-    lNodeSize = nodeHeaderSize + leafSlotSize * blockSize
-    levelOffsets = np.zeros(levelCount, np.int64) + output.tell()
-    levelOffsets[1:] += np.cumsum(levelSizes[:-1]) * iNodeSize
-    finalLevel = levelCount - 3
-    for i in range(finalLevel + 1):
-        if i == finalLevel:
-            childNodeSize = lNodeSize
-        else:
-            childNodeSize = iNodeSize
-        tree.rWriteIndexLevel(
-            blockSize, childNodeSize, 0, i, levelOffsets[i + 1], output
+        # Supplemental Table 15: R tree node format
+        # isLeaf    1 byte
+        # reserved  1 byte
+        # count     2 bytes, unsigned
+        formatter_node = struct.Struct(self.byteorder + "?xH")
+        size_node = formatter_node.size
+
+        # Supplemental Table 16: R tree leaf format
+        # startChromIx   4 bytes, unsigned
+        # startBase      4 bytes, unsigned
+        # endChromIx     4 bytes, unsigned
+        # endBase        4 bytes, unsigned
+        # dataOffset     8 bytes, unsigned
+        # dataSize       8 bytes, unsigned
+        formatter_leaf = struct.Struct(self.byteorder + "IIIIQQ")
+        size_leaf = formatter_leaf.size
+        Leaf = namedtuple(
+            "Leaf",
+            [
+                "parent",
+                "startChromIx",
+                "startBase",
+                "endChromIx",
+                "endBase",
+                "dataOffset",
+                "dataSize",
+            ],
         )
-        if output.tell() != levelOffsets[i + 1]:
-            raise RuntimeError(
-                "Internal error: offset mismatch (%d vs %d)"
-                % (output.tell(), levelOffsets[i + 1])
-            )
 
-    leafLevel = levelCount - 2
-    rWriteLeaves(blockSize, lNodeSize, tree, 0, leafLevel, output)
+        # Supplemental Table 17: R tree non-leaf format
+        # startChromIx   4 bytes, unsigned
+        # startBase      4 bytes, unsigned
+        # endChromIx     4 bytes, unsigned
+        # endBase        4 bytes, unsigned
+        # dataOffset     8 bytes, unsigned
+        formatter_nonleaf = struct.Struct(self.byteorder + "IIIIQ")
+        size_nonleaf = formatter_nonleaf.size
+        NonLeaf = namedtuple(
+            "NonLeaf",
+            [
+                "parent",
+                "children",
+                "startChromIx",
+                "startBase",
+                "endChromIx",
+                "endBase",
+            ],
+        )
 
+        signature = 0x2468ACE0
+        data = stream.read(size_header)
+        (
+            magic,
+            blockSize,
+            itemCount,
+            startChromIx,
+            startBase,
+            endChromIx,
+            endBase,
+            endFileOffset,
+            itemsPerSlot,
+        ) = formatter_header.unpack(data)
+        assert magic == signature
 
-def cirTreeFileBulkIndexToOpenFile(
-    itemArray, blockSize, itemsPerSlot, endFileOffset, output
-):
-    tree, levelCount = rTreeFromChromRangeArray(blockSize, itemArray, endFileOffset)
-    signature = 0x2468ACE0
-    data = struct.pack("=IIQ", signature, blockSize, len(itemArray))
-    output.write(data)
-    output.write(bytes(tree))  # FIXME
-    data = struct.pack("=QIxxxx", endFileOffset, itemsPerSlot)
-    output.write(data)
-    if tree is not None:
-        writeTreeToOpenFile(tree, blockSize, levelCount, output)
+        root = NonLeaf(None, [], startChromIx, startBase, endChromIx, endBase)
+        node = root
+        itemsCounted = 0
+        dataOffsets = {}
+        while True:
+            data = stream.read(size_node)
+            isLeaf, count = formatter_node.unpack(data)
+            if isLeaf:
+                children = node.children
+                for i in range(count):
+                    data = stream.read(size_leaf)
+                    (
+                        startChromIx,
+                        startBase,
+                        endChromIx,
+                        endBase,
+                        dataOffset,
+                        dataSize,
+                    ) = formatter_leaf.unpack(data)
+                    child = Leaf(
+                        node,
+                        startChromIx,
+                        startBase,
+                        endChromIx,
+                        endBase,
+                        dataOffset,
+                        dataSize,
+                    )
+                    children.append(child)
+                itemsCounted += count
+                while True:
+                    parent = node.parent
+                    if parent is None:
+                        assert itemsCounted == itemCount
+                        assert not dataOffsets
+                        return node
+                    for index, child in enumerate(parent.children):
+                        if id(node) == id(child):
+                            break
+                    else:
+                        raise RuntimeError("Failed to find child node")
+                    try:
+                        node = parent.children[index + 1]
+                    except IndexError:
+                        node = parent
+                    else:
+                        break
+            else:
+                children = node.children
+                for i in range(count):
+                    data = stream.read(size_nonleaf)
+                    (
+                        startChromIx,
+                        startBase,
+                        endChromIx,
+                        endBase,
+                        dataOffset,
+                    ) = formatter_nonleaf.unpack(data)
+                    child = NonLeaf(
+                        node, [], startChromIx, startBase, endChromIx, endBase
+                    )
+                    dataOffsets[id(child)] = dataOffset
+                    children.append(child)
+                parent = node
+                node = children[0]
+            pos = dataOffsets.pop(id(node))
+            stream.seek(pos)
+
+    def rTreeFromChromRangeArray(self, blockSize, items, endFileOffset):
+        itemCount = len(items)
+        if itemCount == 0:
+            return
+        children = []
+        nextOffset = items[0].offset
+        oneSize = 0
+        i = 0
+        while i < itemCount:
+            child = RTreeNode()
+            children.append(child)
+            startItem = items[i]
+            child.startChromId = child.endChromId = startItem.chromId
+            child.startBase = startItem.start
+            child.endBase = startItem.end
+            child.startFileOffset = nextOffset
+            oneSize = 1
+            endItem = startItem
+            for j in range(i + 1, itemCount):
+                endItem = items[j]
+                nextOffset = endItem.offset
+                if nextOffset != child.startFileOffset:
+                    break
+                oneSize += 1
+            else:
+                nextOffset = endFileOffset
+            child.endFileOffset = nextOffset
+            for item in items[i + 1 : i + oneSize]:
+                if item.chromId < child.startChromId:
+                    child.startChromId = item.chromId
+                    child.startBase = item.start
+                elif (
+                    item.chromId == child.startChromId and item.start < child.startBase
+                ):
+                    child.startBase = item.start
+                if item.chromId > child.endChromId:
+                    child.endChromId = item.chromId
+                    child.endBase = item.end
+                elif item.chromId == child.endChromId and item.end > child.endBase:
+                    child.endBase = item.end
+            i += oneSize
+        levelCount = 1
+        while True:
+            parents = []
+            slotsUsed = blockSize
+            for child in children:
+                if slotsUsed >= blockSize:
+                    slotsUsed = 1
+                    parent = child.clone()
+                    parent.children = [child]
+                    child.parent = parent
+                    parents.append(parent)
+                else:
+                    slotsUsed += 1
+                    parent.children.append(child)
+                    child.parent = parent
+                    if child.startChromId < parent.startChromId:
+                        parent.startChromId = child.startChromId
+                        parent.startBase = child.startBase
+                    elif (
+                        child.startChromId == parent.startChromId
+                        and child.startBase < parent.startBase
+                    ):
+                        parent.startBase = child.startBase
+                    if child.endChromId > parent.endChromId:
+                        parent.endChromId = child.endChromId
+                        parent.endBase = child.endBase
+                    elif (
+                        child.endChromId == parent.endChromId
+                        and child.endBase > parent.endBase
+                    ):
+                        parent.endBase = child.endBase
+            levelCount += 1
+            if len(parents) == 1:
+                break
+            children = parents
+        return parent, levelCount
+
+    def rWriteLeaves(self, itemsPerSlot, lNodeSize, tree, curLevel, leafLevel, output):
+        byteorder = sys.byteorder
+        if curLevel == leafLevel:
+            reserved = 0
+            isLeaf = True
+            countOne = len(tree.children)
+            output.write(struct.pack("=?xH", isLeaf, countOne))
+            for el in tree.children:
+                output.write(bytes(el))  # FIXME
+                data = struct.pack(
+                    "=QQ", el.startFileOffset, el.endFileOffset - el.startFileOffset
+                )
+                output.write(data)
+            output.write(bytes((itemsPerSlot - countOne) * indexSlotSize))
+        else:
+            for el in tree.children:
+                self.rWriteLeaves(
+                    itemsPerSlot, lNodeSize, el, curLevel + 1, leafLevel, output
+                )
+
+    def write(self, items, blockSize, itemsPerSlot, endFileOffset, output):
+        root, levelCount = self.rTreeFromChromRangeArray(
+            blockSize, items, endFileOffset
+        )
+        signature = 0x2468ACE0
+        data = struct.pack("=IIQ", signature, blockSize, len(items))
+        output.write(data)
+        output.write(bytes(root))  # FIXME
+        data = struct.pack("=QIxxxx", endFileOffset, itemsPerSlot)
+        output.write(data)
+        if root is not None:
+            nodeHeaderSize = 4
+            level = 0
+            levelSizes = np.zeros(levelCount, int)
+            calcLevelSizes(root, levelSizes, level, levelCount - 1)
+            iNodeSize = nodeHeaderSize + indexSlotSize * blockSize
+            lNodeSize = nodeHeaderSize + leafSlotSize * blockSize
+            levelOffsets = np.zeros(levelCount, np.int64) + output.tell()
+            levelOffsets[1:] += np.cumsum(levelSizes[:-1]) * iNodeSize
+            finalLevel = levelCount - 3
+            for i in range(finalLevel + 1):
+                if i == finalLevel:
+                    childNodeSize = lNodeSize
+                else:
+                    childNodeSize = iNodeSize
+                root.rWriteIndexLevel(
+                    blockSize, childNodeSize, 0, i, levelOffsets[i + 1], output
+                )
+                if output.tell() != levelOffsets[i + 1]:
+                    raise RuntimeError(
+                        "Internal error: offset mismatch (%d vs %d)"
+                        % (output.tell(), levelOffsets[i + 1])
+                    )
+            leafLevel = levelCount - 2
+            self.rWriteLeaves(blockSize, lNodeSize, root, 0, leafLevel, output)
 
 
 def rbTreeFind(tree, start, end):
@@ -1946,9 +1947,7 @@ def bedWriteReducedOnceReturnReducedTwice(
 
     assert len(boundsArray) == initialReductionCount
     indexOffset = output.tell()
-    cirTreeFileBulkIndexToOpenFile(
-        boundsArray, blockSize, itemsPerSlot, indexOffset, output
-    )
+    RTreeFormatter().write(boundsArray, blockSize, itemsPerSlot, indexOffset, output)
 
     return twiceReducedList, dataStart, indexOffset, totalSum
 
@@ -2056,7 +2055,7 @@ def bbiWriteZoomLevels(
         zoomDataOffsets[zoomLevels] = output.tell()
         bbiWriteSummary(rezoomedList, itemsPerSlot, doCompress, output)
         indexOffset = output.tell()
-        cirTreeFileBulkIndexToOpenFile(
+        RTreeFormatter().write(
             rezoomedList, blockSize, itemsPerSlot, indexOffset, output
         )
         zoomIndexOffsets[zoomLevels] = indexOffset
@@ -2067,7 +2066,7 @@ def bbiWriteZoomLevels(
     return zoomLevels, totalSum
 
 
-class BPlusTree:
+class BPlusTreeFormatter:
 
     signature = 0x78CA8C91
 
@@ -2101,7 +2100,7 @@ class BPlusTree:
         formatter = self.formatter_header
         data = stream.read(formatter.size)
         magic, blockSize, keySize, valSize, itemCount = formatter.unpack(data)
-        assert magic == BPlusTree.signature
+        assert magic == BPlusTreeFormatter.signature
 
         formatter_node = self.formatter_node
         formatter_nonleaf = struct.Struct(self.fmt_nonleaf.format(keySize=keySize))
@@ -2154,7 +2153,7 @@ class BPlusTree:
     def write(self, items, blockSize, output):
         # See bbiWriteChromInfo in bbiWrite.c
 
-        signature = BPlusTree.signature
+        signature = BPlusTreeFormatter.signature
         keySize = items.dtype["name"].itemsize
         valSize = items.itemsize - keySize
         itemCount = len(items)
