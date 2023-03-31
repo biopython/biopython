@@ -890,7 +890,6 @@ bbiMaxZoomLevels = 10
 bbiResIncrement = 4
 
 indexSlotSize = 24
-leafSlotSize = 32
 
 bbiBoundsArray = namedtuple("bbiBoundsArray", ["offset", "chromId", "start", "end"])
 
@@ -979,31 +978,27 @@ class bbiSumOutStream:
 
 class RTreeNode:
     __slots__ = [
-        "children",  # rTree*
-        "parent",  # rTree*
-        "startChromId",  # bits32, unsigned
-        "startBase",  # bits32, unsigned
-        "endChromId",  # bits32, unsigned
-        "endBase",  # bits32, unsigned
-        "startFileOffset",  # bits64
-        "endFileOffset",  # bits64
+        "children",
+        "parent",
+        "startChromId",
+        "startBase",
+        "endChromId",
+        "endBase",
+        "startFileOffset",
+        "endFileOffset",
     ]
 
     def __init__(self):
         self.parent = None
-        self.children = None
+        self.children = []
 
-    def clone(self):
-        node = RTreeNode()
-        node.children = self.children
-        node.parent = self.parent
-        node.startChromId = self.startChromId
-        node.startBase = self.startBase
-        node.endChromId = self.endChromId
-        node.endBase = self.endBase
-        node.startFileOffset = self.startFileOffset
-        node.endFileOffset = self.endFileOffset
-        return node
+    def calcLevelSizes(self, levelSizes, level):
+        levelSizes[level] += 1
+        if level == len(levelSizes) - 1:
+            return
+        level += 1
+        for el in self.children:
+            el.calcLevelSizes(levelSizes, level)
 
 
 class RangeTree:
@@ -1316,14 +1311,6 @@ def writeBlocks(
     return maxBlockSize, bounds
 
 
-def calcLevelSizes(tree, levelSizes, level, maxLevel):
-    levelSizes[level] += 1
-    if level < maxLevel:
-        level += 1
-        for el in tree.children:
-            calcLevelSizes(el, levelSizes, level, maxLevel)
-
-
 class RTreeFormatter:
 
     signature = 0x2468ACE0
@@ -1528,14 +1515,17 @@ class RTreeFormatter:
             for child in children:
                 if slotsUsed >= blockSize:
                     slotsUsed = 1
-                    parent = child.clone()
-                    parent.children = [child]
-                    child.parent = parent
+                    parent = RTreeNode()
+                    parent.parent = child.parent
+                    parent.startChromId = child.startChromId
+                    parent.startBase = child.startBase
+                    parent.endChromId = child.endChromId
+                    parent.endBase = child.endBase
+                    parent.startFileOffset = child.startFileOffset
+                    parent.endFileOffset = child.endFileOffset
                     parents.append(parent)
                 else:
                     slotsUsed += 1
-                    parent.children.append(child)
-                    child.parent = parent
                     if child.startChromId < parent.startChromId:
                         parent.startChromId = child.startChromId
                         parent.startBase = child.startBase
@@ -1552,6 +1542,8 @@ class RTreeFormatter:
                         and child.endBase > parent.endBase
                     ):
                         parent.endBase = child.endBase
+                parent.children.append(child)
+                child.parent = parent
             levelCount += 1
             if len(parents) == 1:
                 break
@@ -1622,11 +1614,10 @@ class RTreeFormatter:
             blockSize, items, endFileOffset
         )
 
-        itemCount = len(items)
         data = self.formatter_header.pack(
             RTreeFormatter.signature,
             blockSize,
-            itemCount,
+            len(items),
             root.startChromId,
             root.startBase,
             root.endChromId,
@@ -1636,31 +1627,31 @@ class RTreeFormatter:
         )
         output.write(data)
 
-        if root is not None:
-            nodeHeaderSize = 4
-            level = 0
-            levelSizes = np.zeros(levelCount, int)
-            calcLevelSizes(root, levelSizes, level, levelCount - 1)
-            iNodeSize = nodeHeaderSize + indexSlotSize * blockSize
-            lNodeSize = nodeHeaderSize + leafSlotSize * blockSize
-            levelOffsets = np.zeros(levelCount, np.int64) + output.tell()
-            levelOffsets[1:] += np.cumsum(levelSizes[:-1]) * iNodeSize
-            finalLevel = levelCount - 3
-            for i in range(finalLevel + 1):
-                if i == finalLevel:
-                    childNodeSize = lNodeSize
-                else:
-                    childNodeSize = iNodeSize
-                self.rWriteIndexLevel(
-                    root, blockSize, childNodeSize, 0, i, levelOffsets[i + 1], output
+        if root is None:
+            return
+
+        levelSizes = np.zeros(levelCount, int)
+        root.calcLevelSizes(levelSizes, level=0)
+        iNodeSize = self.formatter_node.size + indexSlotSize * blockSize
+        lNodeSize = self.formatter_node.size + self.formatter_leaf.size * blockSize
+        levelOffsets = np.zeros(levelCount, np.int64) + output.tell()
+        levelOffsets[1:] += np.cumsum(levelSizes[:-1]) * iNodeSize
+        finalLevel = levelCount - 3
+        for i in range(finalLevel + 1):
+            if i == finalLevel:
+                childNodeSize = lNodeSize
+            else:
+                childNodeSize = iNodeSize
+            self.rWriteIndexLevel(
+                root, blockSize, childNodeSize, 0, i, levelOffsets[i + 1], output
+            )
+            if output.tell() != levelOffsets[i + 1]:
+                raise RuntimeError(
+                    "Internal error: offset mismatch (%d vs %d)"
+                    % (output.tell(), levelOffsets[i + 1])
                 )
-                if output.tell() != levelOffsets[i + 1]:
-                    raise RuntimeError(
-                        "Internal error: offset mismatch (%d vs %d)"
-                        % (output.tell(), levelOffsets[i + 1])
-                    )
-            leafLevel = levelCount - 2
-            self.rWriteLeaves(blockSize, lNodeSize, root, 0, leafLevel, output)
+        leafLevel = levelCount - 2
+        self.rWriteLeaves(blockSize, lNodeSize, root, 0, leafLevel, output)
 
 
 def rbTreeFind(tree, start, end):
