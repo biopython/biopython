@@ -317,7 +317,7 @@ class ProteinAnalysis:
 
         Amino acids in helix: E, M, A, L, K, Q, R.
         Amino acids in Turn: N, P, G, S, D.
-        Amino acids in sheet: V, I, Y, F, W, C, T.
+        Amino acids in sheet: V, I, Y, F, W, L, C, T.
 
         Returns a tuple of three floats (Helix, Turn, Sheet).
         """
@@ -325,7 +325,7 @@ class ProteinAnalysis:
 
         helix = sum(aa_percentages[r] for r in "EMALKQR")
         turn = sum(aa_percentages[r] for r in "NPGSD")
-        sheet = sum(aa_percentages[r] for r in "VIYFWCT")
+        sheet = sum(aa_percentages[r] for r in "VIYFWLCT")
 
         return helix, turn, sheet
 
