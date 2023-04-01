@@ -371,15 +371,13 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         bedN = self.bedN
         if self.declaration is None:
             try:
-                declaration = alignments.declaration[:bedN]
+                self.declaration = alignments.declaration[:bedN]
             except AttributeError:
-                declaration = AutoSQLTable.default[:bedN]
-        else:
-            declaration = self.declaration
+                self.declaration = AutoSQLTable.default[:bedN]
+        declaration = self.declaration
         extraIndex = self.extraIndex
         compress = self.compress
         # see bbFileCreate in bedToBigBed.c
-        fieldCount = len(declaration)
         extHeader = ExtHeader()
         extHeader.extraIndexCount = len(extraIndex)
         eim = [ExtraIndex(name, declaration) for name in extraIndex]
@@ -414,9 +412,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if bedCount > 0:
             for element in eim:
                 element.initialize_chunks(bedCount)
-            maxBlockSize, boundsArray = writeBlocks(
+            maxBlockSize, boundsArray = self.writeBlocks(
                 alignments,
-                declaration,
                 itemsPerSlot,
                 compress,
                 stream,
@@ -424,8 +421,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 resSizes,
                 eim,
                 bedCount,
-                fieldCount,
-                bedN,
             )
         else:
             maxBlockSize = 0
@@ -436,6 +431,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         zoomDataOffsets = np.empty(bbiMaxZoomLevels, np.int64)
         zoomIndexOffsets = np.empty(bbiMaxZoomLevels, np.int64)
         zoomLevels = 0
+        fieldCount = len(declaration)
         if bedCount > 0:
             zoomLevels, totalSum = bbiWriteZoomLevels(
                 alignments,
@@ -510,6 +506,215 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         resScales = resScales[: resTry + 1]
         resSizes = np.zeros(resTry + 1, dtype="=i4")
         return resScales, resSizes
+
+    def extract_fields(self, alignment):
+        bedN = self.bedN
+        row = []
+        chrom = alignment.target.id
+        if len(chrom) >= 255:
+            raise ValueError(
+                f"alignment target name '{chrom}' is too long (must not exceed 254 characters)"
+            )
+        if len(chrom) < 1:
+            raise ValueError("alignment target name cannot be blank or empty")
+        chromStart = alignment.coordinates[0, 0]
+        chromEnd = alignment.coordinates[0, -1]
+        if chromEnd < chromStart:
+            raise ValueError(f"chromStart after chromEnd ({chromEnd} > {chromStart})")
+        if bedN > 3:
+            name = alignment.query.id
+            if name == "":
+                name = "."
+            elif len(name) > 255:
+                raise ValueError(
+                    f"alignment query name '{name}' is too long (must not exceed 255 characters"
+                )
+            row.append(name)
+        if bedN > 4:
+            try:
+                score = alignment.score
+            except AttributeError:
+                score = "."
+            else:
+                if score < 0 or score > 1000:
+                    raise ValueError(f"score ({score}) must be between 0 and 1000")
+                score = str(score)
+            row.append(score)
+        if bedN > 5:
+            if alignment.coordinates[1, 0] <= alignment.coordinates[1, -1]:
+                strand = "+"
+            else:
+                strand = "-"
+            row.append(strand)
+        if bedN > 6:
+            try:
+                thickStart = alignment.thickStart
+            except AttributeError:
+                thickStart = chromStart
+            row.append(str(thickStart))
+        if bedN > 7:
+            try:
+                thickEnd = alignment.thickEnd
+            except AttributeError:
+                thickEnd = chromEnd
+            else:
+                if thickEnd < thickStart:
+                    raise ValueError(
+                        f"thickStart ({thickStart}) after thickEnd ({thickEnd})"
+                    )
+                if thickStart != 0 and (
+                    thickStart < chromStart or thickStart > chromEnd
+                ):
+                    raise ValueError(
+                        f"thickStart out of range for {name}:{chromStart}-{chromEnd}, thick:{thickStart}-{thickEnd}"
+                    )
+                if thickEnd != 0 and (thickEnd < chromStart or thickEnd > chromEnd):
+                    raise ValueError(
+                        f"thickEnd out of range for {name}:{chromStart}-{chromEnd}, thick:{thickStart}-{thickEnd}"
+                    )
+            row.append(str(thickEnd))
+        if bedN > 8:
+            try:
+                itemRgb = alignment.itemRgb
+            except AttributeError:
+                itemRgb = "."
+            else:
+                colors = itemRgb.rstrip(",").split(",")
+                if len(colors) == 3 and all(0 <= int(color) < 256 for color in colors):
+                    pass
+                elif 0 <= int(itemRgb) < (2 << 32):
+                    pass
+                else:
+                    raise ValueError(
+                        f"Expecting color to consist of r,g,b values from 0 to 255. Got '{itemRgb}'"
+                    )
+            row.append(itemRgb)
+        if bedN > 9:
+            steps = np.diff(alignment.coordinates)
+            aligned = sum(steps != 0, 0) == 2
+            blockSizes = steps.max(0)[aligned]
+            blockCount = len(blockSizes)
+            row.append(str(blockCount))
+        if bedN > 10:
+            row.append(",".join(str(blockSize) for blockSize in blockSizes) + ",")
+        if bedN > 11:
+            chromStarts = alignment.coordinates[0, :-1][aligned] - chromStart
+            row.append(",".join(str(chromStart) for chromStart in chromStarts) + ",")
+        if bedN > 12:
+            if bedN != 15:
+                raise ValueError(f"Unexpected value {bedN} for bedN in extract_fields")
+            expIds = alignment.annotations["expIds"]
+            expScores = alignment.annotations["expScores"]
+            expCount = len(expIds)
+            assert expCount == len(expScores)
+            row.append(str(expCount))
+            row.append(",".join(expIds))
+            row.append(",".join(str(expScore) for expScore in expScores))
+        # parse the declaration
+        for field in self.declaration[bedN:]:
+            value = alignment.annotations[field.name]
+            if isinstance(value, str):
+                row.append(value)
+            elif isinstance(value, (int, float)):
+                row.append(str(value))
+            else:
+                row.append(",".join(map(str, value)))
+        rest = "\t".join(row).encode()
+        return chrom, chromStart, chromEnd, rest
+
+    def writeBlocks(
+        self,
+        alignments,
+        itemsPerSlot,
+        doCompress,
+        output,
+        resScales,
+        resSizes,
+        eim,
+        bedCount,
+    ):
+        maxBlockSize = 0
+        itemIx = 0
+        blockStartOffset = 0
+        startPos = 0
+        endPos = 0
+        chromId = -1
+        resEnds = np.zeros(len(resScales), int)
+        atEnd = False
+        start = 0
+        end = 0
+        sectionStartIx = 0
+        sectionEndIx = 0
+        bounds = []
+        currentChrom = None
+        stream = BytesIO()
+
+        def write_data(sectionStartIx):
+            data = stream.getvalue()
+            size = len(data)
+            if doCompress:
+                data = zlib.compress(data)
+            output.write(data)
+            if eim:
+                blockEndOffset = output.tell()
+                blockSize = blockEndOffset - blockStartOffset
+                for element in eim:
+                    element.addOffsetSize(
+                        blockStartOffset,
+                        blockSize,
+                        sectionStartIx,
+                        sectionEndIx,
+                    )
+                sectionStartIx = sectionEndIx
+            bounds.append(bbiBoundsArray(blockStartOffset, chromId, startPos, endPos))
+            return sectionStartIx, size
+
+        fieldCount = len(self.declaration)
+        alignments.rewind()
+        for alignment in alignments:
+            chrom, start, end, rest = self.extract_fields(alignment)
+            if currentChrom is not None:
+                if chrom != currentChrom or itemIx >= itemsPerSlot:
+                    sectionStartIx, size = write_data(sectionStartIx)
+                    if size > maxBlockSize:
+                        maxBlockSize = size
+                    itemIx = 0
+                    stream = BytesIO()
+            if chrom != currentChrom:
+                currentChrom = chrom
+                resEnds[:] = 0
+                chromId += 1
+
+            if itemIx == 0:
+                blockStartOffset = output.tell()
+                startPos = start
+                endPos = end
+            else:
+                endPos = max(endPos, end)
+
+            if eim:
+                for element in eim:
+                    element.addKeysFromRow(alignment, sectionEndIx)
+                sectionEndIx += 1
+
+            data = struct.pack(f"=III{len(rest)}sx", chromId, start, end, rest)
+            stream.write(data)
+
+            itemIx += 1
+            for resTry, (resEnd, resScale) in enumerate(zip(resEnds, resScales)):
+                if start >= resEnd:
+                    resSizes[resTry] += 1
+                    resEnd = start + resScale
+                while end > resEnd:
+                    resSizes[resTry] += 1
+                    resEnd += resScale
+                resEnds[resTry] = resEnd
+
+        sectionStartIx, size = write_data(sectionStartIx)
+        if size > maxBlockSize:
+            maxBlockSize = size
+
+        return maxBlockSize, bounds
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
@@ -1090,225 +1295,6 @@ def bbiChromUsageFromBedFile(alignments, targets, eim):
     if bedCount > 0:
         aveSize = totalBases / bedCount
     return chromUsageList, aveSize, bedCount
-
-
-def loadAndValidateBed(alignment, bedFieldCount, fieldCount, declaration):
-    row = []
-    BB_MAX_CHROM_STRING = 255
-    chrom = alignment.target.id
-    if len(chrom) >= BB_MAX_CHROM_STRING:
-        raise ValueError(
-            f"alignment target name '{chrom}' is too long (must not exceed {BB_MAX_CHROM_STRING-1} characters)"
-        )
-    if len(chrom) < 1:
-        raise ValueError("alignment target name cannot be blank or empty")
-    chromStart = alignment.coordinates[0, 0]
-    chromEnd = alignment.coordinates[0, -1]
-    if chromEnd < chromStart:
-        raise ValueError(f"chromStart after chromEnd ({chromEnd} > {chromStart})")
-    bed = (chrom, chromStart, chromEnd, row)
-    if bedFieldCount > 3:
-        name = alignment.query.id
-        if name == "":
-            name = "."
-        elif len(name) > 255:
-            raise ValueError(
-                f"alignment query name '{name}' is too long (must not exceed 255 characters"
-            )
-        row.append(name)
-    if bedFieldCount > 4:
-        try:
-            score = alignment.score
-        except AttributeError:
-            score = "."
-        else:
-            if score < 0 or score > 1000:
-                raise ValueError(f"score ({score}) must be between 0 and 1000")
-            score = str(score)
-        row.append(score)
-    if bedFieldCount > 5:
-        if alignment.coordinates[1, 0] <= alignment.coordinates[1, -1]:
-            strand = "+"
-        else:
-            strand = "-"
-        row.append(strand)
-    if bedFieldCount > 6:
-        try:
-            thickStart = alignment.thickStart
-        except AttributeError:
-            thickStart = chromStart
-        row.append(str(thickStart))
-    if bedFieldCount > 7:
-        try:
-            thickEnd = alignment.thickEnd
-        except AttributeError:
-            thickEnd = chromEnd
-        else:
-            if thickEnd < thickStart:
-                raise ValueError(
-                    f"thickStart ({thickStart}) after thickEnd ({thickEnd})"
-                )
-            if thickStart != 0 and (thickStart < chromStart or thickStart > chromEnd):
-                raise ValueError(
-                    f"thickStart out of range for {name}:{chromStart}-{chromEnd}, thick:{thickStart}-{thickEnd}"
-                )
-            if thickEnd != 0 and (thickEnd < chromStart or thickEnd > chromEnd):
-                raise ValueError(
-                    f"thickEnd out of range for {name}:{chromStart}-{chromEnd}, thick:{thickStart}-{thickEnd}"
-                )
-        row.append(str(thickEnd))
-    if bedFieldCount > 8:
-        try:
-            itemRgb = alignment.itemRgb
-        except AttributeError:
-            itemRgb = "."
-        else:
-            colors = itemRgb.rstrip(",").split(",")
-            if len(colors) == 3 and all(0 <= int(color) < 256 for color in colors):
-                pass
-            elif 0 <= int(itemRgb) < (2 << 32):
-                pass
-            else:
-                raise ValueError(
-                    f"Expecting color to consist of r,g,b values from 0 to 255. Got '{itemRgb}'"
-                )
-        row.append(itemRgb)
-    if bedFieldCount > 9:
-        steps = np.diff(alignment.coordinates)
-        aligned = sum(steps != 0, 0) == 2
-        blockSizes = steps.max(0)[aligned]
-        blockCount = len(blockSizes)
-        row.append(str(blockCount))
-    if bedFieldCount > 10:
-        row.append(",".join(str(blockSize) for blockSize in blockSizes) + ",")
-    if bedFieldCount > 11:
-        chromStarts = alignment.coordinates[0, :-1][aligned] - chromStart
-        row.append(",".join(str(chromStart) for chromStart in chromStarts) + ",")
-    if bedFieldCount > 12:
-        if bedFieldCount != 15:
-            raise ValueError(
-                f"Unexpected value {bedFieldCount} for bedFieldCount in loadAndValidateBed"
-            )
-        expIds = alignment.annotations["expIds"]
-        expScores = alignment.annotations["expScores"]
-        expCount = len(expIds)
-        assert expCount == len(expScores)
-        row.append(str(expCount))
-        row.append(",".join(expIds))
-        row.append(",".join(str(expScore) for expScore in expScores))
-    # parse the declaration
-    for i in range(bedFieldCount, fieldCount):
-        name = declaration[i].name
-        value = alignment.annotations[name]
-        if isinstance(value, str):
-            row.append(value)
-        elif isinstance(value, (int, float)):
-            row.append(str(value))
-        else:
-            row.append(",".join(map(str, value)))
-    return bed
-
-
-def writeBlocks(
-    alignments,
-    declaration,
-    itemsPerSlot,
-    doCompress,
-    output,
-    resScales,
-    resSizes,
-    eim,
-    bedCount,
-    fieldCount,
-    bedN,
-):
-    maxBlockSize = 0
-    lastField = fieldCount - 1
-    itemIx = 0
-    blockStartOffset = 0
-    startPos = 0
-    endPos = 0
-    chromId = -1
-    resEnds = np.zeros(len(resScales), int)
-    atEnd = False
-    start = 0
-    end = 0
-    sectionStartIx = 0
-    sectionEndIx = 0
-    bounds = []
-    currentChrom = None
-    stream = BytesIO()
-
-    def write_data(sectionStartIx):
-        data = stream.getvalue()
-        size = len(data)
-        if doCompress:
-            data = zlib.compress(data)
-        output.write(data)
-        if eim:
-            blockEndOffset = output.tell()
-            blockSize = blockEndOffset - blockStartOffset
-            for element in eim:
-                element.addOffsetSize(
-                    blockStartOffset,
-                    blockSize,
-                    sectionStartIx,
-                    sectionEndIx,
-                )
-            sectionStartIx = sectionEndIx
-        bounds.append(bbiBoundsArray(blockStartOffset, chromId, startPos, endPos))
-        return sectionStartIx, size
-
-    alignments.rewind()
-    for alignment in alignments:
-        bed = loadAndValidateBed(alignment, bedN, fieldCount, declaration)
-        chrom, start, end, row = bed
-        if currentChrom is not None:
-            if chrom != currentChrom or itemIx >= itemsPerSlot:
-                sectionStartIx, size = write_data(sectionStartIx)
-                if size > maxBlockSize:
-                    maxBlockSize = size
-                itemIx = 0
-                stream = BytesIO()
-        if chrom != currentChrom:
-            currentChrom = chrom
-            resEnds[:] = 0
-            chromId += 1
-
-        if itemIx == 0:
-            blockStartOffset = output.tell()
-            startPos = start
-            endPos = end
-        else:
-            endPos = max(endPos, end)
-
-        if eim:
-            for element in eim:
-                element.addKeysFromRow(alignment, sectionEndIx)
-            sectionEndIx += 1
-
-        data = struct.pack("=III", chromId, start, end)
-        stream.write(data)
-        if fieldCount > 3:
-            rest = "\t".join(row)
-            stream.write(rest.encode())
-        stream.write(b"\0")
-
-        itemIx += 1
-        for resTry, (resEnd, resScale) in enumerate(zip(resEnds, resScales)):
-            if start >= resEnd:
-                resSizes[resTry] += 1
-                resEnd = start + resScale
-            while end > resEnd:
-                resSizes[resTry] += 1
-                resEnd += resScale
-            resEnds[resTry] = resEnd
-
-    sectionStartIx, size = write_data(sectionStartIx)
-    if size > maxBlockSize:
-        maxBlockSize = size
-
-    return maxBlockSize, bounds
 
 
 class RTreeFormatter:
