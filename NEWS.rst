@@ -24,6 +24,7 @@ to the test suite.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Arpan Sahoo
 - Cam McMenamie
 - Ricardas Ralys
 - Vladislav Kuznetsov
