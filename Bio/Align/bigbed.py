@@ -408,19 +408,17 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         )
         dataOffset = stream.tell()
         resScales, resSizes = self.bbiCalcResScalesAndSizes(aveSize)
-        stream.write(struct.pack("Q", bedCount))
+        stream.write(bedCount.to_bytes(8, sys.byteorder))
         if bedCount > 0:
             for element in eim:
                 element.initialize_chunks(bedCount)
             maxBlockSize, boundsArray = self.writeBlocks(
                 alignments,
                 itemsPerSlot,
-                compress,
                 stream,
                 resScales,
                 resSizes,
                 eim,
-                bedCount,
             )
         else:
             maxBlockSize = 0
@@ -490,7 +488,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 stream.write(bytes(element))
             assert stream.tell() == extraIndexListEndOffset
         stream.seek(0, 2)
-        data = struct.pack("=I", signature)
+        data = signature.to_bytes(4, sys.byteorder)
         stream.write(data)
 
     def bbiCalcResScalesAndSizes(self, aveSize):
@@ -626,12 +624,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self,
         alignments,
         itemsPerSlot,
-        doCompress,
         output,
         resScales,
         resSizes,
         eim,
-        bedCount,
     ):
         maxBlockSize = 0
         itemIx = 0
@@ -647,6 +643,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         sectionEndIx = 0
         bounds = []
         currentChrom = None
+        doCompress = self.compress
         stream = BytesIO()
 
         def write_data(sectionStartIx):
@@ -1981,7 +1978,7 @@ def bbiSummarySimpleReduce(summaries, reduction):
 def bbiWriteSummary(summaryList, itemsPerSlot, doCompress, output):
     # See bbiWriteSummaryAndIndexUnc, bbiWriteSummaryAndIndexComp in bbiWrite.c
     count = len(summaryList)
-    data = struct.pack("=I", count)
+    data = count.to_bytes(4, sys.byteorder)
     output.write(data)
     if doCompress:
         for start in range(0, count, itemsPerSlot):
