@@ -42,6 +42,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Antony Lee <https://github.com/anntzer>
 - Anuj Sharma <https://github.com/xulesc>
 - Ariel Aptekmann <https://github.com/aralap>
+- Arpan Sahoo <https://github.com/arpansahoo>
 - Artemi Bendandi <https://github.com/artbendandi>
 - Arup Ghosh <https://github.com/arupgsh>
 - Austin Varela <https://github.com/austinv11>
