@@ -250,7 +250,6 @@ binary mode, and decode the appropriate fragments yourself.
 import struct
 import sys
 import zlib
-import io
 
 from builtins import open as _open
 
@@ -492,20 +491,6 @@ def _load_bgzf_block(handle, text_mode=False):
         return block_size, data
 
 
-def _is_binary(fileobj):
-    """Determine whether a file was opened in binary mode."""
-    try:
-        fileobj.mode
-    except AttributeError:
-        # io.BytesIO instances do not have a 'mode' in Python 3.10
-        # and there doesn't seem to be an equivalent attribute. The following
-        # is taken from https://stackoverflow.com/questions/44584829/
-        # how-to-determine-if-file-is-opened-in-binary-or-text-mode
-        return isinstance(fileobj, (io.RawIOBase, io.BufferedIOBase))
-    else:
-        return "b" in fileobj.mode.lower()
-
-
 class BgzfReader:
     r"""BGZF reader, acts like a read only handle but seek/tell differ.
 
@@ -612,8 +597,9 @@ class BgzfReader:
             raise ValueError(
                 "Must use a read mode like 'r' (default), 'rt', or 'rb' for binary"
             )
+        # If an open file was passed, make sure it was opened in binary mode.
         if fileobj:
-            if not _is_binary(fileobj):
+            if fileobj.read(0) != b"":
                 raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
@@ -813,8 +799,9 @@ class BgzfWriter:
         """Initilize the class."""
         if filename and fileobj:
             raise ValueError("Supply either filename or fileobj, not both")
+        # If an open file was passed, make sure it was opened in binary mode.
         if fileobj:
-            if not _is_binary(fileobj):
+            if fileobj.read(0) != b"":
                 raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
@@ -832,7 +819,6 @@ class BgzfWriter:
     def _write_block(self, block):
         """Write provided data to file as a single BGZF compressed block (PRIVATE)."""
         # print("Saving %i bytes" % len(block))
-        start_offset = self._handle.tell()
         if len(block) > 65536:
             raise ValueError(f"{len(block)} Block length > 65536")
         # Giving a negative window bits means no gzip/zlib headers,
