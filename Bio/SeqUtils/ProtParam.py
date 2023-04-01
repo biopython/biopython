@@ -315,17 +315,17 @@ class ProteinAnalysis:
         Returns a list of the fraction of amino acids which tend
         to be in Helix, Turn or Sheet.
 
-        Amino acids in helix: V, I, Y, F, W, L.
-        Amino acids in Turn: N, P, G, S.
-        Amino acids in sheet: E, M, A, L.
+        Amino acids in helix: E, M, A, L, K.
+        Amino acids in Turn: N, P, G, S, D.
+        Amino acids in sheet: V, I, Y, F, W, L, T.
 
         Returns a tuple of three floats (Helix, Turn, Sheet).
         """
         aa_percentages = self.get_amino_acids_percent()
 
-        helix = sum(aa_percentages[r] for r in "VIYFWL")
-        turn = sum(aa_percentages[r] for r in "NPGS")
-        sheet = sum(aa_percentages[r] for r in "EMAL")
+        helix = sum(aa_percentages[r] for r in "EMALK")
+        turn = sum(aa_percentages[r] for r in "NPGSD")
+        sheet = sum(aa_percentages[r] for r in "VIYFWLT")
 
         return helix, turn, sheet
 
