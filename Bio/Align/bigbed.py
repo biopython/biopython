@@ -1105,25 +1105,29 @@ class bbiSummary:
         self.start = start
         self.end = end
         self.validCount = 0
-        self.values = np.array(
-            (value, value, 0.0, 0.0),
-            dtype=[
-                ("minVal", "f4"),
-                ("maxVal", "f4"),
-                ("sumData", "f4"),
-                ("sumSquares", "f4"),
-            ],
-        )
+        self.minVal = np.float32(value)
+        self.maxVal = np.float32(value)
+        self.sumData = np.float32(0.0)
+        self.sumSquares = np.float32(0.0)
         self.offset = 0
+
+    def __iadd__(self, other):
+        self.end = other.end
+        self.validCount += other.validCount
+        self.minVal = min(self.minVal, other.minVal)
+        self.maxVal = max(self.maxVal, other.maxVal)
+        self.sumData = np.float32(self.sumData + other.sumData)
+        self.sumSquares = np.float32(self.sumSquares + other.sumSquares)
+        return self
 
     def update(self, overlap, val):
         self.validCount += overlap
-        if self.values["minVal"] > val:
-            self.values["minVal"] = val
-        if self.values["maxVal"] < val:
-            self.values["maxVal"] = val
-        self.values["sumData"] += val * overlap
-        self.values["sumSquares"] += val * val * overlap
+        if self.minVal > val:
+            self.minVal = np.float32(val)
+        if self.maxVal < val:
+            self.maxVal = np.float32(val)
+        self.sumData = np.float32(self.sumData + val * overlap)
+        self.sumSquares = np.float32(self.sumSquares + val * val * overlap)
 
     def __bytes__(self):
         return self.formatter.pack(
@@ -1131,10 +1135,10 @@ class bbiSummary:
             self.start,
             self.end,
             self.validCount,
-            self.values["minVal"],
-            self.values["maxVal"],
-            self.values["sumData"],
-            self.values["sumSquares"],
+            self.minVal,
+            self.maxVal,
+            self.sumData,
+            self.sumSquares,
         )
 
 
@@ -1149,17 +1153,7 @@ class bbiSumOutStream:
         self.doCompress = doCompress
 
     def write(self, summary):
-        data = struct.pack(
-            "=IIIIffff",
-            summary.chromId,
-            summary.start,
-            summary.end,
-            summary.validCount,
-            summary.values["minVal"],
-            summary.values["maxVal"],
-            summary.values["sumData"],
-            summary.values["sumSquares"],
-        )
+        data = bytes(summary)
         self.buffer.write(data)
         self.elCount += 1
         if self.elCount >= self.allocCount:
@@ -1856,19 +1850,9 @@ def bbiOutputOneSummaryFurtherReduce(
             twiceReduced.chromId == summary.chromId
             and twiceReduced.start + doubleReductionSize >= summary.end
         ):
-            twiceReduced.end = summary.end
-            twiceReduced.validCount += summary.validCount
-            twiceReduced.values["minVal"] = min(
-                twiceReduced.values["minVal"], summary.values["minVal"]
-            )
-            twiceReduced.values["maxVal"] = max(
-                twiceReduced.values["maxVal"], summary.values["maxVal"]
-            )
-            twiceReduced.values["sumData"] += summary.values["sumData"]
-            twiceReduced.values["sumSquares"] += summary.values["sumSquares"]
+            twiceReduced += summary
             return
     twiceReduced = copy.copy(summary)
-    twiceReduced.values = summary.values.copy()
     twiceReducedList.append(twiceReduced)
 
 
@@ -1930,12 +1914,14 @@ def bedWriteReducedOnceReturnReducedTwice(
                     summary, twiceReducedList, doubleReductionSize, boundsArray, stream
                 )
                 size -= overlap
+                # start = summary.end
+                # end = min(start + initialReduction, chromSize)
                 summary.start = start = summary.end
                 summary.end = min(start + initialReduction, chromSize)
-                summary.values["minVal"] = summary.values["maxVal"] = val
-                summary.values["sumData"] = summary.values["sumSquares"] = 0.0
+                summary.minVal = summary.maxVal = np.float32(val)
+                summary.sumData = summary.sumSquares = np.float32(0.0)
                 summary.validCount = 0
-
+                # summary = bbiSummary(chromId, start, end, val)
             summary.update(size, val)
         if summary is not None:
             bbiOutputOneSummaryFurtherReduce(
@@ -1960,18 +1946,9 @@ def bbiSummarySimpleReduce(summaries, reduction):
             or summary.end > newSummary.start + reduction
         ):
             newSummary = copy.copy(summary)
-            newSummary.values = summary.values.copy()
             newSummaries.append(newSummary)
         else:
-            assert newSummary.end < summary.end
-            newSummary.end = summary.end
-            newSummary.validCount += summary.validCount
-            if newSummary.values["minVal"] > summary.values["minVal"]:
-                newSummary.values["minVal"] = summary.values["minVal"]
-            if newSummary.values["maxVal"] < summary.values["maxVal"]:
-                newSummary.values["maxVal"] = summary.values["maxVal"]
-            newSummary.values["sumData"] += summary.values["sumData"]
-            newSummary.values["sumSquares"] += summary.values["sumSquares"]
+            newSummary += summary
     return newSummaries
 
 
