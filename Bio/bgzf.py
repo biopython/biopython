@@ -494,7 +494,7 @@ def _load_bgzf_block(handle, text_mode=False):
 class BgzfReader:
     r"""BGZF reader, acts like a read only handle but seek/tell differ.
 
-    Let's use the BgzfBlocks function to have a peak at the BGZF blocks
+    Let's use the BgzfBlocks function to have a peek at the BGZF blocks
     in an example BAM file,
 
     >>> from builtins import open
