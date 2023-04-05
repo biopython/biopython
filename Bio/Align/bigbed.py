@@ -74,7 +74,52 @@ from Bio.SeqRecord import SeqRecord
 
 
 class Summary:
-    # See bbiSummaryElementWrite in bbiWrite.c
+    formatter = struct.Struct("=IIIIffff")
+    size = formatter.size
+
+    def __init__(self, chromId, start, end, value):
+        self.chromId = chromId
+        self.start = start
+        self.end = end
+        self.validCount = 0
+        self.minVal = np.float32(value)
+        self.maxVal = np.float32(value)
+        self.sumData = np.float32(0.0)
+        self.sumSquares = np.float32(0.0)
+        self.offset = 0
+
+    def __iadd__(self, other):
+        self.end = other.end
+        self.validCount += other.validCount
+        self.minVal = min(self.minVal, other.minVal)
+        self.maxVal = max(self.maxVal, other.maxVal)
+        self.sumData = np.float32(self.sumData + other.sumData)
+        self.sumSquares = np.float32(self.sumSquares + other.sumSquares)
+        return self
+
+    def update(self, overlap, val):
+        self.validCount += overlap
+        if self.minVal > val:
+            self.minVal = np.float32(val)
+        if self.maxVal < val:
+            self.maxVal = np.float32(val)
+        self.sumData = np.float32(self.sumData + val * overlap)
+        self.sumSquares = np.float32(self.sumSquares + val * val * overlap)
+
+    def __bytes__(self):
+        return self.formatter.pack(
+            self.chromId,
+            self.start,
+            self.end,
+            self.validCount,
+            self.minVal,
+            self.maxVal,
+            self.sumData,
+            self.sumSquares,
+        )
+
+
+class TotalSummary:
     __slots__ = ["validCount", "minVal", "maxVal", "sumData", "sumSquares"]
 
     formatter = struct.Struct("=Qdddd")
@@ -391,7 +436,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         asOffset = stream.tell()
         stream.write(bytes(declaration))  # asText
         totalSummaryOffset = stream.tell()
-        stream.write(bytes(Summary.size))
+        stream.write(bytes(TotalSummary.size))
         extHeaderOffset = stream.tell()
         stream.write(bytes(extHeader.size))
         if extraIndex:
@@ -451,7 +496,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             element.chunks.sort()
             BPlusTreeFormatter().write(element.chunks, blockSize, stream)
         if compress:
-            uncompressBufSize = max(maxBlockSize, itemsPerSlot * TotalSummary.size)
+            uncompressBufSize = max(maxBlockSize, itemsPerSlot * Summary.size)
         else:
             uncompressBufSize = 0
         stream.seek(0)
@@ -1091,55 +1136,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 bbiMaxZoomLevels = 10
 bbiResIncrement = 4
 
-indexSlotSize = 24
-
 bbiBoundsArray = namedtuple("bbiBoundsArray", ["offset", "chromId", "start", "end"])
-
-
-class TotalSummary:
-    formatter = struct.Struct("=IIIIffff")
-    size = formatter.size
-
-    def __init__(self, chromId, start, end, value):
-        self.chromId = chromId
-        self.start = start
-        self.end = end
-        self.validCount = 0
-        self.minVal = np.float32(value)
-        self.maxVal = np.float32(value)
-        self.sumData = np.float32(0.0)
-        self.sumSquares = np.float32(0.0)
-        self.offset = 0
-
-    def __iadd__(self, other):
-        self.end = other.end
-        self.validCount += other.validCount
-        self.minVal = min(self.minVal, other.minVal)
-        self.maxVal = max(self.maxVal, other.maxVal)
-        self.sumData = np.float32(self.sumData + other.sumData)
-        self.sumSquares = np.float32(self.sumSquares + other.sumSquares)
-        return self
-
-    def update(self, overlap, val):
-        self.validCount += overlap
-        if self.minVal > val:
-            self.minVal = np.float32(val)
-        if self.maxVal < val:
-            self.maxVal = np.float32(val)
-        self.sumData = np.float32(self.sumData + val * overlap)
-        self.sumSquares = np.float32(self.sumSquares + val * val * overlap)
-
-    def __bytes__(self):
-        return self.formatter.pack(
-            self.chromId,
-            self.start,
-            self.end,
-            self.validCount,
-            self.minVal,
-            self.maxVal,
-            self.sumData,
-            self.sumSquares,
-        )
 
 
 class bbiSumOutStream:
@@ -1544,7 +1541,11 @@ class RTreeFormatter:
                     el.endFileOffset - el.startFileOffset,
                 )
                 output.write(data)
-            output.write(bytes((itemsPerSlot - len(tree.children)) * indexSlotSize))
+            output.write(
+                bytes((itemsPerSlot - len(tree.children)) * self.formatter_nonleaf.size)
+            )
+            # self.formatter_leaf.size seems more reasonable here, but this is
+            # what bedToBigBed has here.
         else:
             for el in tree.children:
                 self.rWriteLeaves(
@@ -1609,7 +1610,7 @@ class RTreeFormatter:
 
         levelSizes = np.zeros(levelCount, int)
         root.calcLevelSizes(levelSizes, level=0)
-        iNodeSize = self.formatter_node.size + indexSlotSize * blockSize
+        iNodeSize = self.formatter_node.size + self.formatter_nonleaf.size * blockSize
         lNodeSize = self.formatter_node.size + self.formatter_leaf.size * blockSize
         levelOffsets = np.zeros(levelCount, np.int64) + output.tell()
         levelOffsets[1:] += np.cumsum(levelSizes[:-1]) * iNodeSize
@@ -1877,7 +1878,7 @@ def bedWriteReducedOnceReturnReducedTwice(
     output.write(initialReductionCount.tobytes())
 
     stream = bbiSumOutStream(itemsPerSlot, output, doCompress)
-    totalSum = Summary()
+    totalSum = TotalSummary()
     rangeTrees = rangeTreeGenerator(alignments)
     for chromName, chromId, chromSize in chromUsageList:
         summary = None
@@ -1900,7 +1901,7 @@ def bedWriteReducedOnceReturnReducedTwice(
                 )
                 summary = None
             if summary is None:
-                summary = TotalSummary(
+                summary = Summary(
                     chromId,
                     start,
                     min(start + initialReduction, chromSize),
@@ -1915,7 +1916,7 @@ def bedWriteReducedOnceReturnReducedTwice(
                 )
                 size -= overlap
                 start = summary.end
-                summary = TotalSummary(
+                summary = Summary(
                     chromId, start, min(start + initialReduction, chromSize), val
                 )
             summary.update(size, val)
@@ -1986,7 +1987,7 @@ def bbiWriteZoomLevels(
     maxReducedSize = dataSize / 2
 
     for resScale, resSize in zip(resScales, resSizes):
-        reducedSize = resSize * TotalSummary.size
+        reducedSize = resSize * Summary.size
         if doCompress:
             reducedSize /= 2
         if reducedSize <= maxReducedSize:
