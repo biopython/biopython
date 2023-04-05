@@ -27,6 +27,7 @@ possible, especially the following contributors:
 - Cam McMenamie
 - Ricardas Ralys
 - Vladislav Kuznetsov
+- Joe Greener
 
 12 February 2023: Biopython 1.81
 ===============================================
