@@ -73,7 +73,7 @@ from Bio.SeqRecord import SeqRecord
 # flake8: noqa
 
 
-class bbiSummaryElement:
+class Summary:
     # See bbiSummaryElementWrite in bbiWrite.c
     __slots__ = ["validCount", "minVal", "maxVal", "sumData", "sumSquares"]
 
@@ -391,7 +391,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         asOffset = stream.tell()
         stream.write(bytes(declaration))  # asText
         totalSummaryOffset = stream.tell()
-        stream.write(bytes(bbiSummaryElement.size))
+        stream.write(bytes(Summary.size))
         extHeaderOffset = stream.tell()
         stream.write(bytes(extHeader.size))
         if extraIndex:
@@ -451,7 +451,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             element.chunks.sort()
             BPlusTreeFormatter().write(element.chunks, blockSize, stream)
         if compress:
-            uncompressBufSize = max(maxBlockSize, itemsPerSlot * bbiSummary.size)
+            uncompressBufSize = max(maxBlockSize, itemsPerSlot * TotalSummary.size)
         else:
             uncompressBufSize = 0
         stream.seek(0)
@@ -1096,7 +1096,7 @@ indexSlotSize = 24
 bbiBoundsArray = namedtuple("bbiBoundsArray", ["offset", "chromId", "start", "end"])
 
 
-class bbiSummary:
+class TotalSummary:
     formatter = struct.Struct("=IIIIffff")
     size = formatter.size
 
@@ -1877,7 +1877,7 @@ def bedWriteReducedOnceReturnReducedTwice(
     output.write(initialReductionCount.tobytes())
 
     stream = bbiSumOutStream(itemsPerSlot, output, doCompress)
-    totalSum = bbiSummaryElement()
+    totalSum = Summary()
     rangeTrees = rangeTreeGenerator(alignments)
     for chromName, chromId, chromSize in chromUsageList:
         summary = None
@@ -1900,7 +1900,7 @@ def bedWriteReducedOnceReturnReducedTwice(
                 )
                 summary = None
             if summary is None:
-                summary = bbiSummary(
+                summary = TotalSummary(
                     chromId,
                     start,
                     min(start + initialReduction, chromSize),
@@ -1915,7 +1915,7 @@ def bedWriteReducedOnceReturnReducedTwice(
                 )
                 size -= overlap
                 start = summary.end
-                summary = bbiSummary(
+                summary = TotalSummary(
                     chromId, start, min(start + initialReduction, chromSize), val
                 )
             summary.update(size, val)
@@ -1986,7 +1986,7 @@ def bbiWriteZoomLevels(
     maxReducedSize = dataSize / 2
 
     for resScale, resSize in zip(resScales, resSizes):
-        reducedSize = resSize * bbiSummary.size
+        reducedSize = resSize * TotalSummary.size
         if doCompress:
             reducedSize /= 2
         if reducedSize <= maxReducedSize:
