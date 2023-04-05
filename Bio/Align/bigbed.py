@@ -1914,14 +1914,10 @@ def bedWriteReducedOnceReturnReducedTwice(
                     summary, twiceReducedList, doubleReductionSize, boundsArray, stream
                 )
                 size -= overlap
-                # start = summary.end
-                # end = min(start + initialReduction, chromSize)
-                summary.start = start = summary.end
-                summary.end = min(start + initialReduction, chromSize)
-                summary.minVal = summary.maxVal = np.float32(val)
-                summary.sumData = summary.sumSquares = np.float32(0.0)
-                summary.validCount = 0
-                # summary = bbiSummary(chromId, start, end, val)
+                start = summary.end
+                summary = bbiSummary(
+                    chromId, start, min(start + initialReduction, chromSize), val
+                )
             summary.update(size, val)
         if summary is not None:
             bbiOutputOneSummaryFurtherReduce(
