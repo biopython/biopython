@@ -54,15 +54,15 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(len(structure), 1)
         self.assertEqual(len(f_structure), 1)
 
-        parser_label_res = MMCIFParser(auth_residues=False, QUIET=True)
-        fast_parser_label_res = FastMMCIFParser(auth_residues=False, QUIET=True)
-        parser_label_chain = MMCIFParser(auth_chains=False, QUIET=True)
-        fast_parser_label_chain = FastMMCIFParser(auth_chains=False, QUIET=True)
+        parser_lab_res = MMCIFParser(auth_residues=False, QUIET=True)
+        fast_parser_lab_res = FastMMCIFParser(auth_residues=False, QUIET=True)
+        parser_lab_chain = MMCIFParser(auth_chains=False, QUIET=True)
+        fast_parser_lab_chain = FastMMCIFParser(auth_chains=False, QUIET=True)
 
-        structure_lr = parser_label_res.get_structure("example", "PDB/1A8O.cif")
-        f_structure_lr = fast_parser_label_res.get_structure("example", "PDB/1A8O.cif")
-        structure_lc = parser_label_chain.get_structure("example", "PDB/1A8O.cif")
-        f_structure_lc = fast_parser_label_chain.get_structure("example", "PDB/1A8O.cif")
+        structure_lr = parser_lab_res.get_structure("example", "PDB/1A8O.cif")
+        f_structure_lr = fast_parser_lab_res.get_structure("example", "PDB/1A8O.cif")
+        structure_lc = parser_lab_chain.get_structure("example", "PDB/1A8O.cif")
+        f_structure_lc = fast_parser_lab_chain.get_structure("example", "PDB/1A8O.cif")
 
         self.assertEqual(len(list(structure_lr.get_atoms())), 556)
         self.assertEqual(len(list(f_structure_lr.get_atoms())), 556)
