@@ -467,24 +467,24 @@ class BgzfTests(unittest.TestCase):
                     list(bgzf.BgzfBlocks(decompressed))
 
     def test_reader_with_binary_fileobj(self):
-        """BgzfReader must accept a binary mode file object"""
+        """A BgzfReader must accept a binary mode file object."""
         reader = bgzf.BgzfReader(fileobj=io.BytesIO())
         self.assertEqual(0, reader.tell())
 
     def test_reader_with_non_binary_fileobj(self):
-        """BgzfReader must raise ValueError on a non-binary mode file object"""
-        error = r"^fileobj not opened in binary mode$"
+        """A BgzfReader must raise ValueError on a non-binary file object."""
+        error = "^fileobj not opened in binary mode$"
         with self.assertRaisesRegex(ValueError, error):
             bgzf.BgzfReader(fileobj=io.StringIO())
 
     def test_writer_with_binary_fileobj(self):
-        """BgzfWriter must accept a binary mode file object"""
+        """A BgzfWriter must accept a binary mode file object."""
         writer = bgzf.BgzfWriter(fileobj=io.BytesIO())
         self.assertEqual(0, writer.tell())
 
     def test_writer_with_non_binary_fileobj(self):
-        """BgzfWriter must raise ValueError on a non-binary mode file object"""
-        error = r"^fileobj not opened in binary mode$"
+        """A BgzfWriter must raise ValueError on a non-binary file object."""
+        error = "^fileobj not opened in binary mode$"
         with self.assertRaisesRegex(ValueError, error):
             bgzf.BgzfWriter(fileobj=io.StringIO())
 
