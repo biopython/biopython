@@ -494,7 +494,7 @@ def _load_bgzf_block(handle, text_mode=False):
 class BgzfReader:
     r"""BGZF reader, acts like a read only handle but seek/tell differ.
 
-    Let's use the BgzfBlocks function to have a peak at the BGZF blocks
+    Let's use the BgzfBlocks function to have a peek at the BGZF blocks
     in an example BAM file,
 
     >>> from builtins import open
@@ -597,8 +597,9 @@ class BgzfReader:
             raise ValueError(
                 "Must use a read mode like 'r' (default), 'rt', or 'rb' for binary"
             )
+        # If an open file was passed, make sure it was opened in binary mode.
         if fileobj:
-            if "b" not in fileobj.mode.lower():
+            if fileobj.read(0) != b"":
                 raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
@@ -798,8 +799,9 @@ class BgzfWriter:
         """Initilize the class."""
         if filename and fileobj:
             raise ValueError("Supply either filename or fileobj, not both")
+        # If an open file was passed, make sure it was opened in binary mode.
         if fileobj:
-            if "b" not in fileobj.mode.lower():
+            if fileobj.read(0) != b"":
                 raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
@@ -817,7 +819,6 @@ class BgzfWriter:
     def _write_block(self, block):
         """Write provided data to file as a single BGZF compressed block (PRIVATE)."""
         # print("Saving %i bytes" % len(block))
-        start_offset = self._handle.tell()
         if len(block) > 65536:
             raise ValueError(f"{len(block)} Block length > 65536")
         # Giving a negative window bits means no gzip/zlib headers,
