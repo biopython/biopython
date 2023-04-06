@@ -79,7 +79,7 @@ Local Testing
 Please always run the full test suite locally before submitting a pull
 request, e.g.::
 
-    $ python setup.py build
+    $ pip install -e .
     $ python setup.py test
     $ git commit ...
 
