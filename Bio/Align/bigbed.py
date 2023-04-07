@@ -156,11 +156,10 @@ class ExtHeader:
     __slots__ = ("extraIndexCount", "extraIndexListOffset")
 
     formatter = struct.Struct("=HHQ52x")
-    size = formatter.size
 
     def __bytes__(self):
         return self.formatter.pack(
-            self.size, self.extraIndexCount, self.extraIndexListOffset
+            self.formatter.size, self.extraIndexCount, self.extraIndexListOffset
         )
 
 
@@ -214,8 +213,32 @@ class ExtraIndex:
         # name    keySize bytes
         # offset  8 bytes, unsigned
         # size    8 bytes, unsigned
-        dtype = np.dtype([("name", f"=S{keySize}"), ("offset", "=i8"), ("size", "=i8")])
+        dtype = np.dtype([("name", f"=S{keySize}"), ("offset", "=u8"), ("size", "=u8")])
         self.chunks = np.zeros(bedCount, dtype=dtype)
+
+
+class ExtraIndices(list):
+
+    formatter = struct.Struct("=HHQ52x")
+
+    def __init__(self, names, declaration):
+        self[:] = [ExtraIndex(name, declaration) for name in names]
+
+    @property
+    def size(self):
+        return self.formatter.size + ExtraIndex.formatter.size * len(self)
+
+    def tofile(self, stream):
+        size = self.formatter.size
+        if len(self) > 0:
+            offset = stream.tell() + size
+            data = self.formatter.pack(size, len(self), offset)
+            stream.write(data)
+            for element in self:
+                stream.write(bytes(element))
+        else:
+            data = self.formatter.pack(size, 0, 0)
+            stream.write(data)
 
 
 Field = namedtuple("Field", ("as_type", "name", "comment"))
@@ -404,7 +427,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self.declaration = declaration
         self.targets = targets
         self.compress = compress
-        self.extraIndex = extraIndex
+        self.extraIndexNames = extraIndex
 
     def write_file(self, stream, alignments):
         blockSize = 256
@@ -420,12 +443,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             except AttributeError:
                 self.declaration = AutoSQLTable.default[:bedN]
         declaration = self.declaration
-        extraIndex = self.extraIndex
         compress = self.compress
         # see bbFileCreate in bedToBigBed.c
-        extHeader = ExtHeader()
-        extHeader.extraIndexCount = len(extraIndex)
-        eim = [ExtraIndex(name, declaration) for name in extraIndex]
+        eim = ExtraIndices(self.extraIndexNames, declaration)
         chromUsageList, aveSize, bedCount = bbiChromUsageFromBedFile(
             alignments, targets, eim
         )
@@ -436,16 +456,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream.write(bytes(declaration))  # asText
         totalSummaryOffset = stream.tell()
         stream.write(bytes(TotalSummary.size))
-        extHeaderOffset = stream.tell()
-        stream.write(bytes(extHeader.size))
-        if extraIndex:
-            extHeader.extraIndexListOffset = stream.tell()
-            extraIndexSize = 16 + 4 * 1
-            stream.write(bytes(extraIndexSize * extHeader.extraIndexCount))
-            extraIndexListEndOffset = stream.tell()
-        else:
-            extHeader.extraIndexListOffset = 0
-            extraIndexListEndOffset = 0
+        extraIndicesOffset = stream.tell()
+        stream.write(bytes(eim.size))
         chromTreeOffset = stream.tell()
         BPlusTreeFormatter().write(
             chromUsageList, min(blockSize, len(chromUsageList)), stream
@@ -469,15 +481,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             boundsArray = []
         indexOffset = stream.tell()
         RTreeFormatter().write(boundsArray, blockSize, 1, indexOffset, stream)
-        fieldCount = len(declaration)
         if bedCount > 0:
-            zoomList, totalSum = bbiWriteZoomLevels(
+            zoomList, totalSum = self.bbiWriteZoomLevels(
                 alignments,
                 stream,
                 blockSize,
                 itemsPerSlot,
-                fieldCount,
-                compress,
                 indexOffset - dataOffset,
                 chromUsageList,
                 resScales,
@@ -500,34 +509,97 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             chromTreeOffset,
             dataOffset,
             indexOffset,
-            fieldCount,
+            len(declaration),
             bedN,
             asOffset,
             totalSummaryOffset,
             max(maxBlockSize, itemsPerSlot * Summary.size) if compress else 0,
-            extHeaderOffset,
+            extraIndicesOffset,
         )
         stream.write(data)
         for row in zoomList:
-            data = formatter_zoomlevel.pack(
-                row["amount"], row["dataOffset"], row["indexOffset"]
-            )
+            data = formatter_zoomlevel.pack(*row)
             stream.write(data)
         stream.write(
             bytes(formatter_zoomlevel.size * (bbiMaxZoomLevels - len(zoomList)))
         )
         stream.seek(totalSummaryOffset)
         stream.write(bytes(totalSum))
-        stream.seek(extHeaderOffset)
-        stream.write(bytes(extHeader))
-        if extraIndex:
-            stream.seek(extHeader.extraIndexListOffset)
-            for element in eim:
-                stream.write(bytes(element))
-            assert stream.tell() == extraIndexListEndOffset
+        assert extraIndicesOffset == stream.tell()
+        stream.seek(extraIndicesOffset)
+        eim.tofile(stream)
         stream.seek(0, 2)
         data = signature.to_bytes(4, sys.byteorder)
         stream.write(data)
+
+    def bbiWriteZoomLevels(
+        self,
+        alignments,  # struct lineFile *lf,    /* Input file. */
+        output,  # FILE *f,                /* Output. */
+        blockSize,  # int blockSize,          /* Size of index block */
+        itemsPerSlot,  # int itemsPerSlot,       /* Number of data points bundled at lowest level. */
+        dataSize,  # bits64 dataSize,        /* Size of data on disk (after compression if any). */
+        chromUsageList,  # struct bbiChromUsage *usageList, /* Result from bbiChromUsageFromBedFile */
+        resScales,
+        resSizes,  # int resTryCount, int resScales[], int resSizes[],   /* How much to zoom at each level */
+    ):
+        doCompress = self.compress
+        maxReducedSize = dataSize / 2
+        zoomList = np.empty(
+            bbiMaxZoomLevels,
+            dtype=[("amount", "=i4"), ("dataOffset", "=i8"), ("indexOffset", "=i8")],
+        )
+
+        for resScale, resSize in zip(resScales, resSizes):
+            reducedSize = resSize * Summary.size
+            if doCompress:
+                reducedSize /= 2
+            if reducedSize <= maxReducedSize:
+                initialReduction = resScale
+                initialReducedCount = resSize
+                break
+        else:
+            initialReduction = resScales[0]
+            initialReducedCount = resSizes[0]
+        zoomIncrement = bbiResIncrement
+        (
+            rezoomedList,
+            zoomList[0]["dataOffset"],
+            zoomList[0]["indexOffset"],
+            totalSum,
+        ) = bedWriteReducedOnceReturnReducedTwice(
+            chromUsageList,
+            len(self.declaration),
+            alignments,
+            initialReduction,
+            initialReducedCount,
+            zoomIncrement,
+            blockSize,
+            itemsPerSlot,
+            doCompress,
+            output,
+        )
+        zoomList[0]["amount"] = initialReduction
+        zoomLevels = 1
+        zoomCount = initialReducedCount
+        reduction = initialReduction * zoomIncrement
+        while zoomLevels < bbiMaxZoomLevels:
+            rezoomCount = len(rezoomedList)
+            if rezoomCount >= zoomCount:
+                break
+            zoomCount = rezoomCount
+            zoomList[zoomLevels]["dataOffset"] = output.tell()
+            bbiWriteSummary(rezoomedList, itemsPerSlot, doCompress, output)
+            indexOffset = output.tell()
+            RTreeFormatter().write(
+                rezoomedList, blockSize, itemsPerSlot, indexOffset, output
+            )
+            zoomList[zoomLevels]["indexOffset"] = indexOffset
+            zoomList[zoomLevels]["amount"] = reduction
+            zoomLevels += 1
+            reduction *= zoomIncrement
+            rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction)
+        return zoomList[:zoomLevels], totalSum
 
     def bbiCalcResScalesAndSizes(self, aveSize):
         # See bbiCalcResScalesAndSizes in bbiWrite.c
@@ -1960,76 +2032,6 @@ def bbiWriteSummary(summaryList, itemsPerSlot, doCompress, output):
         for summary in summaryList:
             summary.offset = output.tell()
             output.write(bytes(summary))
-
-
-def bbiWriteZoomLevels(
-    alignments,  # struct lineFile *lf,    /* Input file. */
-    output,  # FILE *f,                /* Output. */
-    blockSize,  # int blockSize,          /* Size of index block */
-    itemsPerSlot,  # int itemsPerSlot,       /* Number of data points bundled at lowest level. */
-    fieldCount,  # int fieldCount,         /* Number of fields in bed (4 for bedGraph) */
-    doCompress,  # boolean doCompress,     /* Do we compress.  Answer really should be yes! */
-    dataSize,  # bits64 dataSize,        /* Size of data on disk (after compression if any). */
-    chromUsageList,  # struct bbiChromUsage *usageList, /* Result from bbiChromUsageFromBedFile */
-    resScales,
-    resSizes,  # int resTryCount, int resScales[], int resSizes[],   /* How much to zoom at each level */
-):
-    maxReducedSize = dataSize / 2
-    zoomList = np.empty(
-        bbiMaxZoomLevels,
-        dtype=[("amount", "=i4"), ("dataOffset", "=i8"), ("indexOffset", "=i8")],
-    )
-
-    for resScale, resSize in zip(resScales, resSizes):
-        reducedSize = resSize * Summary.size
-        if doCompress:
-            reducedSize /= 2
-        if reducedSize <= maxReducedSize:
-            initialReduction = resScale
-            initialReducedCount = resSize
-            break
-    else:
-        initialReduction = resScales[0]
-        initialReducedCount = resSizes[0]
-    zoomIncrement = bbiResIncrement
-    (
-        rezoomedList,
-        zoomList[0]["dataOffset"],
-        zoomList[0]["indexOffset"],
-        totalSum,
-    ) = bedWriteReducedOnceReturnReducedTwice(
-        chromUsageList,
-        fieldCount,
-        alignments,
-        initialReduction,
-        initialReducedCount,
-        zoomIncrement,
-        blockSize,
-        itemsPerSlot,
-        doCompress,
-        output,
-    )
-    zoomList[0]["amount"] = initialReduction
-    zoomLevels = 1
-    zoomCount = initialReducedCount
-    reduction = initialReduction * zoomIncrement
-    while zoomLevels < bbiMaxZoomLevels:
-        rezoomCount = len(rezoomedList)
-        if rezoomCount >= zoomCount:
-            break
-        zoomCount = rezoomCount
-        zoomList[zoomLevels]["dataOffset"] = output.tell()
-        bbiWriteSummary(rezoomedList, itemsPerSlot, doCompress, output)
-        indexOffset = output.tell()
-        RTreeFormatter().write(
-            rezoomedList, blockSize, itemsPerSlot, indexOffset, output
-        )
-        zoomList[zoomLevels]["indexOffset"] = indexOffset
-        zoomList[zoomLevels]["amount"] = reduction
-        zoomLevels += 1
-        reduction *= zoomIncrement
-        rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction)
-    return zoomList[:zoomLevels], totalSum
 
 
 class BPlusTreeFormatter:
