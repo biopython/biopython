@@ -234,8 +234,8 @@ class ExtraIndices(list):
             offset = stream.tell() + size
             data = self.formatter.pack(size, len(self), offset)
             stream.write(data)
-            for element in self:
-                stream.write(bytes(element))
+            for extra_index in self:
+                stream.write(bytes(extra_index))
         else:
             data = self.formatter.pack(size, 0, 0)
             stream.write(data)
@@ -445,9 +445,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         declaration = self.declaration
         compress = self.compress
         # see bbFileCreate in bedToBigBed.c
-        eim = ExtraIndices(self.extraIndexNames, declaration)
+        extra_indices = ExtraIndices(self.extraIndexNames, declaration)
         chromUsageList, aveSize, bedCount = bbiChromUsageFromBedFile(
-            alignments, targets, eim
+            alignments, targets, extra_indices
         )
         formatter_zoomlevel = struct.Struct("=IxxxxQQ")
         stream.write(bytes(64))  # bbiWriteDummyHeader
@@ -457,24 +457,23 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         totalSummaryOffset = stream.tell()
         stream.write(bytes(TotalSummary.size))
         extraIndicesOffset = stream.tell()
-        stream.write(bytes(eim.size))
+        stream.write(bytes(extra_indices.size))
         chromTreeOffset = stream.tell()
         BPlusTreeFormatter().write(
             chromUsageList, min(blockSize, len(chromUsageList)), stream
         )
         dataOffset = stream.tell()
-        resScales, resSizes = self.bbiCalcResScalesAndSizes(aveSize)
+        reductions = self.bbiCalcResScalesAndSizes(aveSize)
         stream.write(bedCount.to_bytes(8, sys.byteorder))
         if bedCount > 0:
-            for element in eim:
-                element.initialize_chunks(bedCount)
+            for extra_index in extra_indices:
+                extra_index.initialize_chunks(bedCount)
             maxBlockSize, boundsArray = self.writeBlocks(
                 alignments,
                 itemsPerSlot,
                 stream,
-                resScales,
-                resSizes,
-                eim,
+                reductions,
+                extra_indices,
             )
         else:
             maxBlockSize = 0
@@ -489,15 +488,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 itemsPerSlot,
                 indexOffset - dataOffset,
                 chromUsageList,
-                resScales,
-                resSizes,
+                reductions,
             )
         else:
             zoomList = []
-        for element in eim:
-            element.fileOffset = stream.tell()
-            element.chunks.sort()
-            BPlusTreeFormatter().write(element.chunks, blockSize, stream)
+        for extra_index in extra_indices:
+            extra_index.fileOffset = stream.tell()
+            extra_index.chunks.sort()
+            BPlusTreeFormatter().write(extra_index.chunks, blockSize, stream)
         stream.seek(0)
         signature = 0x8789F2EB
         bbiCurrentVersion = 4
@@ -527,7 +525,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream.write(bytes(totalSum))
         assert extraIndicesOffset == stream.tell()
         stream.seek(extraIndicesOffset)
-        eim.tofile(stream)
+        extra_indices.tofile(stream)
         stream.seek(0, 2)
         data = signature.to_bytes(4, sys.byteorder)
         stream.write(data)
@@ -540,8 +538,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         itemsPerSlot,  # int itemsPerSlot,       /* Number of data points bundled at lowest level. */
         dataSize,  # bits64 dataSize,        /* Size of data on disk (after compression if any). */
         chromUsageList,  # struct bbiChromUsage *usageList, /* Result from bbiChromUsageFromBedFile */
-        resScales,
-        resSizes,  # int resTryCount, int resScales[], int resSizes[],   /* How much to zoom at each level */
+        reductions,
     ):
         doCompress = self.compress
         maxReducedSize = dataSize / 2
@@ -550,17 +547,17 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             dtype=[("amount", "=i4"), ("dataOffset", "=i8"), ("indexOffset", "=i8")],
         )
 
-        for resScale, resSize in zip(resScales, resSizes):
-            reducedSize = resSize * Summary.size
+        for row in reductions:
+            reducedSize = row["size"] * Summary.size
             if doCompress:
                 reducedSize /= 2
             if reducedSize <= maxReducedSize:
-                initialReduction = resScale
-                initialReducedCount = resSize
+                initialReduction = row["scale"]
+                initialReducedCount = row["size"]
                 break
         else:
-            initialReduction = resScales[0]
-            initialReducedCount = resSizes[0]
+            initialReducion = reductions[0]["scale"]
+            initialCount = reductions[0]["size"]
         zoomIncrement = bbiResIncrement
         (
             rezoomedList,
@@ -603,17 +600,21 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
     def bbiCalcResScalesAndSizes(self, aveSize):
         # See bbiCalcResScalesAndSizes in bbiWrite.c
-        resScales = np.zeros(bbiMaxZoomLevels, int)
+        reductions = np.empty(
+            bbiMaxZoomLevels,
+            dtype=[("scale", "=i4"), ("size", "=i4"), ("end", "=i4")],
+        )
         minZoom = 10
         res = max(int(aveSize), minZoom)
+        maxInt = np.iinfo(reductions.dtype["scale"]).max
         for resTry in range(bbiMaxZoomLevels):
-            resScales[resTry] = res
-            if res > sys.maxsize // bbiResIncrement:
+            if res > maxInt:
                 break
+            reductions[resTry]["scale"] = res
             res *= bbiResIncrement
-        resScales = resScales[: resTry + 1]
-        resSizes = np.zeros(resTry + 1, dtype="=i4")
-        return resScales, resSizes
+        reductions = reductions[:resTry]
+        reductions["size"] = 0
+        return reductions
 
     def extract_fields(self, alignment):
         bedN = self.bedN
@@ -735,9 +736,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         alignments,
         itemsPerSlot,
         output,
-        resScales,
-        resSizes,
-        eim,
+        reductions,
+        extra_indices,
     ):
         maxBlockSize = 0
         itemIx = 0
@@ -745,7 +745,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         startPos = 0
         endPos = 0
         chromId = -1
-        resEnds = np.zeros(len(resScales), int)
+        reductions["end"] = 0
         atEnd = False
         start = 0
         end = 0
@@ -762,11 +762,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             if doCompress:
                 data = zlib.compress(data)
             output.write(data)
-            if eim:
+            if extra_indices:
                 blockEndOffset = output.tell()
                 blockSize = blockEndOffset - blockStartOffset
-                for element in eim:
-                    element.addOffsetSize(
+                for extra_index in extra_indices:
+                    extra_index.addOffsetSize(
                         blockStartOffset,
                         blockSize,
                         sectionStartIx,
@@ -789,7 +789,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     stream = BytesIO()
             if chrom != currentChrom:
                 currentChrom = chrom
-                resEnds[:] = 0
+                reductions["end"] = 0
                 chromId += 1
 
             if itemIx == 0:
@@ -799,23 +799,22 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             else:
                 endPos = max(endPos, end)
 
-            if eim:
-                for element in eim:
-                    element.addKeysFromRow(alignment, sectionEndIx)
+            if extra_indices:
+                for extra_index in extra_indices:
+                    extra_index.addKeysFromRow(alignment, sectionEndIx)
                 sectionEndIx += 1
 
             data = struct.pack(f"=III{len(rest)}sx", chromId, start, end, rest)
             stream.write(data)
 
             itemIx += 1
-            for resTry, (resEnd, resScale) in enumerate(zip(resEnds, resScales)):
-                if start >= resEnd:
-                    resSizes[resTry] += 1
-                    resEnd = start + resScale
-                while end > resEnd:
-                    resSizes[resTry] += 1
-                    resEnd += resScale
-                resEnds[resTry] = resEnd
+            for row in reductions:
+                if start >= row["end"]:
+                    row["size"] += 1
+                    row["end"] = start + row["scale"]
+                while end > row["end"]:
+                    row["size"] += 1
+                    row["end"] += row["scale"]
 
         sectionStartIx, size = write_data(sectionStartIx)
         if size > maxBlockSize:
@@ -1286,7 +1285,7 @@ class bbNamedFileChunk:
         return self.name < other.name
 
 
-def bbiChromUsageFromBedFile(alignments, targets, eim):
+def bbiChromUsageFromBedFile(alignments, targets, extra_indices):
     aveSize = 0
     chromId = 0
     totalBases = 0
@@ -1299,8 +1298,8 @@ def bbiChromUsageFromBedFile(alignments, targets, eim):
         chrom = alignment.target.id
         start = alignment.coordinates[0, 0]
         end = alignment.coordinates[0, -1]
-        for element in eim:
-            element.updateMaxFieldSize(alignment)
+        for extra_index in extra_indices:
+            extra_index.updateMaxFieldSize(alignment)
         if start > end:
             raise ValueError(
                 f"end ({end}) before start ({start}) in alignment [{bedCount}]"
