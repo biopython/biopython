@@ -547,17 +547,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             dtype=[("amount", "=i4"), ("dataOffset", "=i8"), ("indexOffset", "=i8")],
         )
 
-        for row in reductions:
-            reducedSize = row["size"] * Summary.size
+        for initialReduction in reductions:
+            reducedSize = initialReduction["size"] * Summary.size
             if doCompress:
                 reducedSize /= 2
             if reducedSize <= maxReducedSize:
-                initialReduction = row["scale"]
-                initialReducedCount = row["size"]
                 break
         else:
-            initialReducion = reductions[0]["scale"]
-            initialCount = reductions[0]["size"]
+            initialReduction = reductions[0]
         zoomIncrement = bbiResIncrement
         (
             rezoomedList,
@@ -569,17 +566,16 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             len(self.declaration),
             alignments,
             initialReduction,
-            initialReducedCount,
             zoomIncrement,
             blockSize,
             itemsPerSlot,
             doCompress,
             output,
         )
-        zoomList[0]["amount"] = initialReduction
+        zoomList[0]["amount"] = initialReduction["scale"]
         zoomLevels = 1
-        zoomCount = initialReducedCount
-        reduction = initialReduction * zoomIncrement
+        zoomCount = initialReduction["size"]
+        reduction = initialReduction["scale"] * zoomIncrement
         while zoomLevels < bbiMaxZoomLevels:
             rezoomCount = len(rezoomedList)
             if rezoomCount >= zoomCount:
@@ -600,7 +596,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
     def bbiCalcResScalesAndSizes(self, aveSize):
         # See bbiCalcResScalesAndSizes in bbiWrite.c
-        reductions = np.empty(
+        reductions = np.zeros(
             bbiMaxZoomLevels,
             dtype=[("scale", "=i4"), ("size", "=i4"), ("end", "=i4")],
         )
@@ -612,9 +608,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 break
             reductions[resTry]["scale"] = res
             res *= bbiResIncrement
-        reductions = reductions[:resTry]
-        reductions["size"] = 0
-        return reductions
+        return reductions[:resTry]
 
     def extract_fields(self, alignment):
         bedN = self.bedN
@@ -1926,20 +1920,18 @@ def bedWriteReducedOnceReturnReducedTwice(
     fieldCount,
     alignments,
     initialReduction,
-    initialReductionCount,
     zoomIncrement,
     blockSize,
     itemsPerSlot,
     doCompress,
     output,
 ):
-    byteorder = sys.byteorder
     twiceReducedList = []
-    doubleReductionSize = initialReduction * zoomIncrement
+    doubleReductionSize = initialReduction["scale"] * zoomIncrement
     boundsArray = []
 
     dataStart = output.tell()
-    output.write(initialReductionCount.tobytes())
+    initialReduction["size"].tofile(output)
 
     stream = bbiSumOutStream(itemsPerSlot, output, doCompress)
     totalSum = TotalSummary()
@@ -1968,7 +1960,7 @@ def bedWriteReducedOnceReturnReducedTwice(
                 summary = Summary(
                     chromId,
                     start,
-                    min(start + initialReduction, chromSize),
+                    min(start + initialReduction["scale"], chromSize),
                     val,
                 )
             while end > summary.end:
@@ -1981,7 +1973,10 @@ def bedWriteReducedOnceReturnReducedTwice(
                 size -= overlap
                 start = summary.end
                 summary = Summary(
-                    chromId, start, min(start + initialReduction, chromSize), val
+                    chromId,
+                    start,
+                    min(start + initialReduction["scale"], chromSize),
+                    val,
                 )
             summary.update(size, val)
         if summary is not None:
@@ -1990,7 +1985,7 @@ def bedWriteReducedOnceReturnReducedTwice(
             )
     stream.flush()
 
-    assert len(boundsArray) == initialReductionCount
+    assert len(boundsArray) == initialReduction["size"]
     indexOffset = output.tell()
     RTreeFormatter().write(boundsArray, blockSize, itemsPerSlot, indexOffset, output)
 
