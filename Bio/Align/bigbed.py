@@ -53,6 +53,7 @@ You are expected to use this module via the Bio.Align functions.
 
 
 import sys
+import io
 import copy
 import array
 import itertools
@@ -71,6 +72,21 @@ from Bio.SeqRecord import SeqRecord
 
 
 # flake8: noqa
+
+
+class CompressedStream(io.IOBase):
+    def __init__(self, stream):
+        self._stream = stream
+
+    def write(self, data):
+        self._stream.write(zlib.compress(data))
+        return len(data)
+
+    def writable(self):
+        return self._stream.writable()
+
+    def tell(self):
+        return self._stream.tell()
 
 
 class Summary:
@@ -1198,7 +1214,14 @@ bbiBoundsArray = namedtuple("bbiBoundsArray", ["offset", "chromId", "start", "en
 
 
 class bbiSumOutStream:
-    __slots__ = ["buffer", "elCount", "allocCount", "output", "doCompress"]
+    __slots__ = [
+        "buffer",
+        "elCount",
+        "allocCount",
+        "output",
+        "doCompress",
+        "buffer_new",
+    ]
 
     def __init__(self, allocCount, output, doCompress):
         self.buffer = BytesIO()
@@ -1206,6 +1229,9 @@ class bbiSumOutStream:
         self.allocCount = allocCount
         self.output = output
         self.doCompress = doCompress
+        if doCompress:
+            output = CompressedStream(output)
+        # self.buffer_new = io.BufferedWriter(output, allocCount * Summary.size)
 
     def write(self, summary):
         data = bytes(summary)
@@ -1589,14 +1615,14 @@ class RTreeFormatter:
             isLeaf = True
             data = self.formatter_node.pack(isLeaf, len(tree.children))
             output.write(data)
-            for el in tree.children:
+            for child in tree.children:
                 data = formatter_leaf.pack(
-                    el.startChromId,
-                    el.startBase,
-                    el.endChromId,
-                    el.endBase,
-                    el.startFileOffset,
-                    el.endFileOffset - el.startFileOffset,
+                    child.startChromId,
+                    child.startBase,
+                    child.endChromId,
+                    child.endBase,
+                    child.startFileOffset,
+                    child.endFileOffset - child.startFileOffset,
                 )
                 output.write(data)
             output.write(
@@ -1605,9 +1631,9 @@ class RTreeFormatter:
             # self.formatter_leaf.size seems more reasonable here, but this is
             # what bedToBigBed has here.
         else:
-            for el in tree.children:
+            for child in tree.children:
                 self.rWriteLeaves(
-                    itemsPerSlot, lNodeSize, el, curLevel + 1, leafLevel, output
+                    itemsPerSlot, lNodeSize, child, curLevel + 1, leafLevel, output
                 )
 
     def rWriteIndexLevel(
@@ -1983,6 +2009,8 @@ def bedWriteReducedOnceReturnReducedTwice(
             bbiOutputOneSummaryFurtherReduce(
                 summary, twiceReducedList, doubleReductionSize, boundsArray, stream
             )
+    # stream.buffer_new.flush()
+    # stream.buffer_new.detach()
     stream.flush()
 
     assert len(boundsArray) == initialReduction["size"]
