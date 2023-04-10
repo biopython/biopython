@@ -110,7 +110,52 @@ class ZippedBufferedStream:
         self.index = 0
 
 
+class Region:
+    __slots__ = ("chromId", "start", "end", "offset")
+
+    def __init__(self, chromId, start, end, offset):
+        self.chromId = chromId
+        self.start = start
+        self.end = end
+        self.offset = offset
+
+
 class Summary:
+    __slots__ = ("validCount", "minVal", "maxVal", "sumData", "sumSquares")
+
+    formatter = struct.Struct("=Qdddd")
+    size = formatter.size
+
+    def __init__(self):
+        self.validCount = 0
+        self.minVal = sys.maxsize
+        self.maxVal = -sys.maxsize
+        self.sumData = 0.0
+        self.sumSquares = 0.0
+
+    def update(self, size, val):
+        self.validCount += size
+        if val < self.minVal:
+            self.minVal = val
+        if val > self.maxVal:
+            self.maxVal = val
+        self.sumData += val * size
+        self.sumSquares += val * val * size
+
+    def __bytes__(self):
+        return self.formatter.pack(
+            self.validCount,
+            self.minVal,
+            self.maxVal,
+            self.sumData,
+            self.sumSquares,
+        )
+
+
+class RegionSummary(Summary):
+
+    __slots__ = Region.__slots__ + Summary.__slots__
+
     formatter = struct.Struct("=IIIIffff")
     size = formatter.size
 
@@ -123,7 +168,7 @@ class Summary:
         self.maxVal = np.float32(value)
         self.sumData = np.float32(0.0)
         self.sumSquares = np.float32(0.0)
-        self.offset = 0
+        self.offset = None
 
     def __iadd__(self, other):
         self.end = other.end
@@ -148,38 +193,6 @@ class Summary:
             self.chromId,
             self.start,
             self.end,
-            self.validCount,
-            self.minVal,
-            self.maxVal,
-            self.sumData,
-            self.sumSquares,
-        )
-
-
-class TotalSummary:
-    __slots__ = ["validCount", "minVal", "maxVal", "sumData", "sumSquares"]
-
-    formatter = struct.Struct("=Qdddd")
-    size = formatter.size
-
-    def __init__(self):
-        self.validCount = 0
-        self.minVal = sys.maxsize
-        self.maxVal = -sys.maxsize
-        self.sumData = 0.0
-        self.sumSquares = 0.0
-
-    def update(self, size, val):
-        self.validCount += size
-        if val < self.minVal:
-            self.minVal = val
-        if val > self.maxVal:
-            self.maxVal = val
-        self.sumData += val * size
-        self.sumSquares += val * val * size
-
-    def __bytes__(self):
-        return self.formatter.pack(
             self.validCount,
             self.minVal,
             self.maxVal,
@@ -492,7 +505,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         asOffset = stream.tell()
         stream.write(bytes(declaration))  # asText
         totalSummaryOffset = stream.tell()
-        stream.write(bytes(TotalSummary.size))
+        stream.write(bytes(Summary.size))
         extraIndicesOffset = stream.tell()
         stream.write(bytes(extra_indices.size))
         chromTreeOffset = stream.tell()
@@ -505,7 +518,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if bedCount > 0:
             for extra_index in extra_indices:
                 extra_index.initialize_chunks(bedCount)
-            maxBlockSize, boundsArray = self.writeBlocks(
+            maxBlockSize, regions = self.writeBlocks(
                 alignments,
                 itemsPerSlot,
                 stream,
@@ -514,9 +527,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             )
         else:
             maxBlockSize = 0
-            boundsArray = []
+            regions = []
         indexOffset = stream.tell()
-        RTreeFormatter().write(boundsArray, blockSize, 1, indexOffset, stream)
+        RTreeFormatter().write(regions, blockSize, 1, indexOffset, stream)
         if bedCount > 0:
             zoomList, totalSum = self.bbiWriteZoomLevels(
                 alignments,
@@ -548,7 +561,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             bedN,
             asOffset,
             totalSummaryOffset,
-            max(maxBlockSize, itemsPerSlot * Summary.size) if compress else 0,
+            max(maxBlockSize, itemsPerSlot * RegionSummary.size) if compress else 0,
             extraIndicesOffset,
         )
         stream.write(data)
@@ -585,7 +598,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         )
 
         for initialReduction in reductions:
-            reducedSize = initialReduction["size"] * Summary.size
+            reducedSize = initialReduction["size"] * RegionSummary.size
             if doCompress:
                 reducedSize /= 2
             if reducedSize <= maxReducedSize:
@@ -782,7 +795,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         end = 0
         sectionStartIx = 0
         sectionEndIx = 0
-        bounds = []
+        regions = []
         currentChrom = None
         doCompress = self.compress
         stream = BytesIO()
@@ -804,7 +817,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         sectionEndIx,
                     )
                 sectionStartIx = sectionEndIx
-            bounds.append(bbiBoundsArray(blockStartOffset, chromId, startPos, endPos))
+            regions.append(Region(chromId, startPos, endPos, blockStartOffset))
             return sectionStartIx, size
 
         fieldCount = len(self.declaration)
@@ -851,7 +864,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if size > maxBlockSize:
             maxBlockSize = size
 
-        return maxBlockSize, bounds
+        return maxBlockSize, regions
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
@@ -1230,8 +1243,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
 bbiMaxZoomLevels = 10
 bbiResIncrement = 4
-
-bbiBoundsArray = namedtuple("bbiBoundsArray", ["offset", "chromId", "start", "end"])
 
 
 class RTreeNode:
@@ -1927,17 +1938,17 @@ def bedWriteReducedOnceReturnReducedTwice(
 ):
     twiceReducedList = []
     doubleReductionSize = initialReduction["scale"] * zoomIncrement
-    boundsArray = []
+    regions = []
 
     dataStart = output.tell()
     initialReduction["size"].tofile(output)
 
-    size = itemsPerSlot * Summary.size
+    size = itemsPerSlot * RegionSummary.size
     if doCompress:
         buffer = ZippedBufferedStream(output, size)
     else:
         buffer = BufferedStream(output, size)
-    totalSum = TotalSummary()
+    totalSum = Summary()
     rangeTrees = rangeTreeGenerator(alignments)
     for chromName, chromId, chromSize in chromUsageList:
         summary = None
@@ -1956,12 +1967,12 @@ def bedWriteReducedOnceReturnReducedTwice(
 
             if summary is not None and summary.end <= start and summary.end < chromSize:
                 summary.offset = output.tell()
-                boundsArray.append(summary)
+                regions.append(summary)
                 buffer.write(bytes(summary))
                 bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
                 summary = None
             if summary is None:
-                summary = Summary(
+                summary = RegionSummary(
                     chromId,
                     start,
                     min(start + initialReduction["scale"], chromSize),
@@ -1972,12 +1983,12 @@ def bedWriteReducedOnceReturnReducedTwice(
                 assert overlap > 0
                 summary.update(overlap, val)
                 summary.offset = output.tell()
-                boundsArray.append(summary)
+                regions.append(summary)
                 buffer.write(bytes(summary))
                 bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
                 size -= overlap
                 start = summary.end
-                summary = Summary(
+                summary = RegionSummary(
                     chromId,
                     start,
                     min(start + initialReduction["scale"], chromSize),
@@ -1986,14 +1997,14 @@ def bedWriteReducedOnceReturnReducedTwice(
             summary.update(size, val)
         if summary is not None:
             summary.offset = output.tell()
-            boundsArray.append(summary)
+            regions.append(summary)
             buffer.write(bytes(summary))
             bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
     buffer.flush()
 
-    assert len(boundsArray) == initialReduction["size"]
+    assert len(regions) == initialReduction["size"]
     indexOffset = output.tell()
-    RTreeFormatter().write(boundsArray, blockSize, itemsPerSlot, indexOffset, output)
+    RTreeFormatter().write(regions, blockSize, itemsPerSlot, indexOffset, output)
 
     return twiceReducedList, dataStart, indexOffset, totalSum
 
