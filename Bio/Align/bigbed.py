@@ -1234,22 +1234,6 @@ bbiResIncrement = 4
 bbiBoundsArray = namedtuple("bbiBoundsArray", ["offset", "chromId", "start", "end"])
 
 
-class bbiSumOutStream:
-    __slots__ = ["buffer", "output"]
-
-    def __init__(self, allocCount, output, doCompress):
-        size = allocCount * Summary.size
-        self.output = output
-        if doCompress:
-            self.buffer = ZippedBufferedStream(output, size)
-        else:
-            self.buffer = BufferedStream(output, size)
-
-    def write(self, summary):
-        data = bytes(summary)
-        self.buffer.write(data)
-
-
 class RTreeNode:
     __slots__ = [
         "children",
@@ -1915,13 +1899,13 @@ def rangeTreeGenerator(alignments):
 
 
 def bbiOutputOneSummaryFurtherReduce(
-    summary, twiceReducedList, doubleReductionSize, boundsArray, stream
+    summary, twiceReducedList, doubleReductionSize, boundsArray, buffer
 ):
-    offset = stream.output.tell()
+    offset = buffer.output.tell()
     bounds = bbiBoundsArray(offset, summary.chromId, summary.start, summary.end)
     boundsArray.append(bounds)
 
-    stream.write(summary)
+    buffer.write(bytes(summary))
     try:
         twiceReduced = twiceReducedList[-1]
     except IndexError:
@@ -1955,7 +1939,11 @@ def bedWriteReducedOnceReturnReducedTwice(
     dataStart = output.tell()
     initialReduction["size"].tofile(output)
 
-    stream = bbiSumOutStream(itemsPerSlot, output, doCompress)
+    size = itemsPerSlot * Summary.size
+    if doCompress:
+        buffer = ZippedBufferedStream(output, size)
+    else:
+        buffer = BufferedStream(output, size)
     totalSum = TotalSummary()
     rangeTrees = rangeTreeGenerator(alignments)
     for chromName, chromId, chromSize in chromUsageList:
@@ -1975,7 +1963,7 @@ def bedWriteReducedOnceReturnReducedTwice(
 
             if summary is not None and summary.end <= start and summary.end < chromSize:
                 bbiOutputOneSummaryFurtherReduce(
-                    summary, twiceReducedList, doubleReductionSize, boundsArray, stream
+                    summary, twiceReducedList, doubleReductionSize, boundsArray, buffer
                 )
                 summary = None
             if summary is None:
@@ -1990,7 +1978,7 @@ def bedWriteReducedOnceReturnReducedTwice(
                 assert overlap > 0
                 summary.update(overlap, val)
                 bbiOutputOneSummaryFurtherReduce(
-                    summary, twiceReducedList, doubleReductionSize, boundsArray, stream
+                    summary, twiceReducedList, doubleReductionSize, boundsArray, buffer
                 )
                 size -= overlap
                 start = summary.end
@@ -2003,9 +1991,9 @@ def bedWriteReducedOnceReturnReducedTwice(
             summary.update(size, val)
         if summary is not None:
             bbiOutputOneSummaryFurtherReduce(
-                summary, twiceReducedList, doubleReductionSize, boundsArray, stream
+                summary, twiceReducedList, doubleReductionSize, boundsArray, buffer
             )
-    stream.buffer.flush()
+    buffer.flush()
 
     assert len(boundsArray) == initialReduction["size"]
     indexOffset = output.tell()
