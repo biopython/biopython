@@ -1898,14 +1898,7 @@ def rangeTreeGenerator(alignments):
         yield name, tree
 
 
-def bbiOutputOneSummaryFurtherReduce(
-    summary, twiceReducedList, doubleReductionSize, boundsArray, buffer
-):
-    offset = buffer.output.tell()
-    bounds = bbiBoundsArray(offset, summary.chromId, summary.start, summary.end)
-    boundsArray.append(bounds)
-
-    buffer.write(bytes(summary))
+def bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize):
     try:
         twiceReduced = twiceReducedList[-1]
     except IndexError:
@@ -1962,9 +1955,10 @@ def bedWriteReducedOnceReturnReducedTwice(
             totalSum.update(size, val)
 
             if summary is not None and summary.end <= start and summary.end < chromSize:
-                bbiOutputOneSummaryFurtherReduce(
-                    summary, twiceReducedList, doubleReductionSize, boundsArray, buffer
-                )
+                summary.offset = output.tell()
+                boundsArray.append(summary)
+                buffer.write(bytes(summary))
+                bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
                 summary = None
             if summary is None:
                 summary = Summary(
@@ -1977,9 +1971,10 @@ def bedWriteReducedOnceReturnReducedTwice(
                 overlap = min(end, summary.end) - max(start, summary.start)
                 assert overlap > 0
                 summary.update(overlap, val)
-                bbiOutputOneSummaryFurtherReduce(
-                    summary, twiceReducedList, doubleReductionSize, boundsArray, buffer
-                )
+                summary.offset = output.tell()
+                boundsArray.append(summary)
+                buffer.write(bytes(summary))
+                bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
                 size -= overlap
                 start = summary.end
                 summary = Summary(
@@ -1990,9 +1985,10 @@ def bedWriteReducedOnceReturnReducedTwice(
                 )
             summary.update(size, val)
         if summary is not None:
-            bbiOutputOneSummaryFurtherReduce(
-                summary, twiceReducedList, doubleReductionSize, boundsArray, buffer
-            )
+            summary.offset = output.tell()
+            boundsArray.append(summary)
+            buffer.write(bytes(summary))
+            bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
     buffer.flush()
 
     assert len(boundsArray) == initialReduction["size"]
