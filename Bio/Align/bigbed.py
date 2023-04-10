@@ -74,19 +74,40 @@ from Bio.SeqRecord import SeqRecord
 # flake8: noqa
 
 
-class CompressedStream(io.IOBase):
-    def __init__(self, stream):
-        self._stream = stream
+class BufferedStream:
+    def __init__(self, output, size):
+        self.buffer = bytearray(size)
+        self.output = output
+        self.index = 0
 
     def write(self, data):
-        self._stream.write(zlib.compress(data))
-        return len(data)
+        self.buffer[self.index : self.index + len(data)] = data
+        self.index += len(data)
+        if self.index == len(self.buffer):
+            self.output.write(self.buffer)
+            self.index = 0
 
-    def writable(self):
-        return self._stream.writable()
+    def flush(self):
+        self.output.write(self.buffer[: self.index])
+        self.index = 0
 
-    def tell(self):
-        return self._stream.tell()
+
+class ZippedBufferedStream:
+    def __init__(self, output, size):
+        self.buffer = bytearray(size)
+        self.output = output
+        self.index = 0
+
+    def write(self, data):
+        self.buffer[self.index : self.index + len(data)] = data
+        self.index += len(data)
+        if self.index == len(self.buffer):
+            self.output.write(zlib.compress(self.buffer))
+            self.index = 0
+
+    def flush(self):
+        self.output.write(zlib.compress(self.buffer[: self.index]))
+        self.index = 0
 
 
 class Summary:
@@ -1214,43 +1235,19 @@ bbiBoundsArray = namedtuple("bbiBoundsArray", ["offset", "chromId", "start", "en
 
 
 class bbiSumOutStream:
-    __slots__ = [
-        "buffer",
-        "elCount",
-        "allocCount",
-        "output",
-        "doCompress",
-        "buffer_new",
-    ]
+    __slots__ = ["buffer", "output"]
 
     def __init__(self, allocCount, output, doCompress):
-        self.buffer = BytesIO()
-        self.elCount = 0
-        self.allocCount = allocCount
+        size = allocCount * Summary.size
         self.output = output
-        self.doCompress = doCompress
         if doCompress:
-            output = CompressedStream(output)
-        # self.buffer_new = io.BufferedWriter(output, allocCount * Summary.size)
+            self.buffer = ZippedBufferedStream(output, size)
+        else:
+            self.buffer = BufferedStream(output, size)
 
     def write(self, summary):
         data = bytes(summary)
         self.buffer.write(data)
-        self.elCount += 1
-        if self.elCount >= self.allocCount:
-            self.flush()
-
-    def flush(self):
-        data = self.buffer.getvalue()
-        if data:
-            assert self.elCount > 0
-            if self.doCompress:
-                data = zlib.compress(data)
-            self.output.write(data)
-            self.buffer = BytesIO()
-        else:
-            assert self.elCount == 0
-        self.elCount = 0
 
 
 class RTreeNode:
@@ -1609,7 +1606,6 @@ class RTreeFormatter:
         return parent, levelCount
 
     def rWriteLeaves(self, itemsPerSlot, lNodeSize, tree, curLevel, leafLevel, output):
-        byteorder = sys.byteorder
         formatter_leaf = self.formatter_leaf
         if curLevel == leafLevel:
             isLeaf = True
@@ -2009,9 +2005,7 @@ def bedWriteReducedOnceReturnReducedTwice(
             bbiOutputOneSummaryFurtherReduce(
                 summary, twiceReducedList, doubleReductionSize, boundsArray, stream
             )
-    # stream.buffer_new.flush()
-    # stream.buffer_new.detach()
-    stream.flush()
+    stream.buffer.flush()
 
     assert len(boundsArray) == initialReduction["size"]
     indexOffset = output.tell()
