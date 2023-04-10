@@ -43,7 +43,7 @@ class SequenceIterator(ABC):
             raise ValueError("The alphabet argument is no longer supported")
         try:
             self.stream = open(source, "r" + mode)
-            self.should_close_stream = True
+            # self.should_close_stream = True
         except TypeError:  # not a path, assume we received a stream
             if mode == "t":
                 if source.read(0) != "":
@@ -58,12 +58,11 @@ class SequenceIterator(ABC):
             else:
                 raise ValueError(f"Unknown mode '{mode}'") from None
             self.stream = source
-            self.should_close_stream = False
+            # self.should_close_stream = False
         try:
             self.records = self.parse(self.stream)
         except Exception:
-            if self.should_close_stream:
-                self.stream.close()
+            self.stream.close()
             raise
 
     def __next__(self):
@@ -71,8 +70,7 @@ class SequenceIterator(ABC):
         try:
             return next(self.records)
         except Exception:
-            if self.should_close_stream:
-                self.stream.close()
+            self.stream.close()
             raise
 
     def __iter__(self):
@@ -91,6 +89,18 @@ class SequenceIterator(ABC):
         to actually parse the file.
         """
         return self
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        try:
+            stream = self.stream
+        except AttributeError:
+            return
+        if stream is not self.source:
+            stream.close()
+        del self.stream
 
     @abstractmethod
     def parse(self, handle):
