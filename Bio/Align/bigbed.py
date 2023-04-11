@@ -80,7 +80,9 @@ class BufferedStream:
         self.output = output
         self.index = 0
 
-    def write(self, data):
+    def write(self, item):
+        item.offset = self.output.tell()
+        data = bytes(item)
         self.buffer[self.index : self.index + len(data)] = data
         self.index += len(data)
         if self.index == len(self.buffer):
@@ -98,7 +100,9 @@ class ZippedBufferedStream:
         self.output = output
         self.index = 0
 
-    def write(self, data):
+    def write(self, item):
+        item.offset = self.output.tell()
+        data = bytes(item)
         self.buffer[self.index : self.index + len(data)] = data
         self.index += len(data)
         if self.index == len(self.buffer):
@@ -1967,9 +1971,8 @@ def bedWriteReducedOnceReturnReducedTwice(
 
             if summary.end <= start:
                 if summary.chromId is not None:
-                    summary.offset = output.tell()
+                    buffer.write(summary)
                     regions.append(summary)
-                    buffer.write(bytes(summary))
                     bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
                 summary = RegionSummary(
                     chromId,
@@ -1981,9 +1984,8 @@ def bedWriteReducedOnceReturnReducedTwice(
                 overlap = min(end, summary.end) - max(start, summary.start)
                 assert overlap > 0
                 summary.update(overlap, val)
-                summary.offset = output.tell()
+                buffer.write(summary)
                 regions.append(summary)
-                buffer.write(bytes(summary))
                 bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
                 size -= overlap
                 start = summary.end
@@ -1995,9 +1997,8 @@ def bedWriteReducedOnceReturnReducedTwice(
                 )
             summary.update(size, val)
         if summary is not None:
-            summary.offset = output.tell()
+            buffer.write(summary)
             regions.append(summary)
-            buffer.write(bytes(summary))
             bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
     buffer.flush()
 
@@ -2030,14 +2031,12 @@ def bbiWriteSummary(summaryList, itemsPerSlot, doCompress, output):
     data = count.to_bytes(4, sys.byteorder)
     output.write(data)
     if doCompress:
+        size = itemsPerSlot * RegionSummary.size
+        buffer = ZippedBufferedStream(output, size)
         for start in range(0, count, itemsPerSlot):
-            buffer = BytesIO()
-            filePos = output.tell()
             for summary in summaryList[start : start + itemsPerSlot]:
-                buffer.write(bytes(summary))
-                summary.offset = filePos
-            data = zlib.compress(buffer.getvalue())
-            output.write(data)
+                buffer.write(summary)
+        buffer.flush()
     else:
         for summary in summaryList:
             summary.offset = output.tell()
