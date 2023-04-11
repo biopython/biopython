@@ -1951,7 +1951,7 @@ def bedWriteReducedOnceReturnReducedTwice(
     totalSum = Summary()
     rangeTrees = rangeTreeGenerator(alignments)
     for chromName, chromId, chromSize in chromUsageList:
-        summary = None
+        summary = Region(None, -1, -1, 0)
         name, rangeTree = next(rangeTrees)
         assert name == chromName.decode()
         rangeList = rangeTreeList(rangeTree)
@@ -1965,13 +1965,12 @@ def bedWriteReducedOnceReturnReducedTwice(
 
             totalSum.update(size, val)
 
-            if summary is not None and summary.end <= start and summary.end < chromSize:
-                summary.offset = output.tell()
-                regions.append(summary)
-                buffer.write(bytes(summary))
-                bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
-                summary = None
-            if summary is None:
+            if summary.end <= start:
+                if summary.chromId is not None:
+                    summary.offset = output.tell()
+                    regions.append(summary)
+                    buffer.write(bytes(summary))
+                    bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
                 summary = RegionSummary(
                     chromId,
                     start,
