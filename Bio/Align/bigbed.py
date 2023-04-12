@@ -1272,11 +1272,11 @@ class RTreeNode:
 
     def calcLevelSizes(self, levelSizes, level):
         levelSizes[level] += 1
-        if level == len(levelSizes) - 1:
-            return
         level += 1
-        for el in self.children:
-            el.calcLevelSizes(levelSizes, level)
+        if level == len(levelSizes):
+            return
+        for child in self.children:
+            child.calcLevelSizes(levelSizes, level)
 
 
 class RangeTree:
@@ -1700,21 +1700,30 @@ class RTreeFormatter:
 
         levelSizes = np.zeros(levelCount, int)
         root.calcLevelSizes(levelSizes, level=0)
-        iNodeSize = self.formatter_node.size + self.formatter_nonleaf.size * blockSize
-        lNodeSize = self.formatter_node.size + self.formatter_leaf.size * blockSize
+        size = self.formatter_node.size + self.formatter_nonleaf.size * blockSize
         levelOffsets = np.zeros(levelCount, np.int64) + output.tell()
-        levelOffsets[1:] += np.cumsum(levelSizes[:-1]) * iNodeSize
-        finalLevel = levelCount - 3
-        for i in range(finalLevel + 1):
-            if i == finalLevel:
-                childNodeSize = lNodeSize
-            else:
-                childNodeSize = iNodeSize
+        levelOffsets[1:] += np.cumsum(levelSizes[:-1]) * size
+        levelOffset = levelOffsets[0]
+        for i in range(levelCount - 2):
+            assert levelOffset == levelOffsets[i]
+            levelOffset += levelSizes[i] * size
+        for i in range(levelCount - 3):
             self.rWriteIndexLevel(
-                root, blockSize, childNodeSize, 0, i, levelOffsets[i + 1], output
+                root, blockSize, size, 0, i, levelOffsets[i + 1], output
             )
+        assert levelOffsets[levelCount - 3 + 1] == levelOffset
+        size = self.formatter_node.size + self.formatter_leaf.size * blockSize
+        self.rWriteIndexLevel(
+            root,
+            blockSize,
+            size,
+            0,
+            levelCount - 3,
+            levelOffsets[levelCount - 3 + 1],
+            output,
+        )
         leafLevel = levelCount - 2
-        self.rWriteLeaves(blockSize, lNodeSize, root, 0, leafLevel, output)
+        self.rWriteLeaves(blockSize, size, root, 0, leafLevel, output)
 
 
 def rbTreeFind(tree, start, end):
