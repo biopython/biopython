@@ -829,7 +829,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             regions.append(Region(chromId, startPos, endPos, blockStartOffset))
             return sectionStartIx, size
 
-        fieldCount = len(self.declaration)
         alignments.rewind()
         for alignment in alignments:
             chrom, start, end, rest = self.extract_fields(alignment)
