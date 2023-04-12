@@ -630,6 +630,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             buffer = ZippedBufferedStream(output, itemsPerSlot * RegionSummary.size)
         else:
             buffer = BufferedStream(output, RegionSummary.size)
+        formatter = RTreeFormatter()
         zoomList[0]["amount"] = initialReduction["scale"]
         zoomCount = initialReduction["size"]
         reduction = initialReduction["scale"] * zoomIncrement
@@ -645,9 +646,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 buffer.write(summary)
             buffer.flush()
             indexOffset = output.tell()
-            RTreeFormatter().write(
-                rezoomedList, blockSize, itemsPerSlot, indexOffset, output
-            )
+            formatter.write(rezoomedList, blockSize, itemsPerSlot, indexOffset, output)
             zoomList[zoomLevels]["indexOffset"] = indexOffset
             zoomList[zoomLevels]["amount"] = reduction
             reduction *= zoomIncrement
@@ -1641,6 +1640,7 @@ class RTreeFormatter:
         self, parent, blockSize, childNodeSize, curLevel, destLevel, offset, output
     ):
         # in cirTree.c
+        previous_offset = offset
         formatter_nonleaf = self.formatter_nonleaf
         if curLevel == destLevel:
             isLeaf = False
@@ -1668,8 +1668,13 @@ class RTreeFormatter:
                     curLevel + 1,
                     destLevel,
                     offset,
-                    stream,
+                    output,
                 )
+        position = output.tell()
+        if position != previous_offset:
+            raise RuntimeError(
+                f"Internal error: offset mismatch ({position} vs {previous_offset})"
+            )
         return offset
 
     def write(self, items, blockSize, itemsPerSlot, endFileOffset, output):
@@ -1708,11 +1713,6 @@ class RTreeFormatter:
             self.rWriteIndexLevel(
                 root, blockSize, childNodeSize, 0, i, levelOffsets[i + 1], output
             )
-            if output.tell() != levelOffsets[i + 1]:
-                raise RuntimeError(
-                    "Internal error: offset mismatch (%d vs %d)"
-                    % (output.tell(), levelOffsets[i + 1])
-                )
         leafLevel = levelCount - 2
         self.rWriteLeaves(blockSize, lNodeSize, root, 0, leafLevel, output)
 
