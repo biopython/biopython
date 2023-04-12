@@ -1701,27 +1701,12 @@ class RTreeFormatter:
         levelSizes = np.zeros(levelCount, int)
         root.calcLevelSizes(levelSizes, level=0)
         size = self.formatter_node.size + self.formatter_nonleaf.size * blockSize
-        levelOffsets = np.zeros(levelCount, np.int64) + output.tell()
-        levelOffsets[1:] += np.cumsum(levelSizes[:-1]) * size
-        levelOffset = levelOffsets[0]
+        levelOffset = output.tell()
         for i in range(levelCount - 2):
-            assert levelOffset == levelOffsets[i]
             levelOffset += levelSizes[i] * size
-        for i in range(levelCount - 3):
-            self.rWriteIndexLevel(
-                root, blockSize, size, 0, i, levelOffsets[i + 1], output
-            )
-        assert levelOffsets[levelCount - 3 + 1] == levelOffset
-        size = self.formatter_node.size + self.formatter_leaf.size * blockSize
-        self.rWriteIndexLevel(
-            root,
-            blockSize,
-            size,
-            0,
-            levelCount - 3,
-            levelOffsets[levelCount - 3 + 1],
-            output,
-        )
+            if i == levelCount - 3:
+                size = self.formatter_node.size + self.formatter_leaf.size * blockSize
+            self.rWriteIndexLevel(root, blockSize, size, 0, i, levelOffset, output)
         leafLevel = levelCount - 2
         self.rWriteLeaves(blockSize, size, root, 0, leafLevel, output)
 
