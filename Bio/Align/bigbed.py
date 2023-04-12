@@ -626,24 +626,30 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             doCompress,
             output,
         )
+        if doCompress:
+            buffer = ZippedBufferedStream(output, itemsPerSlot * RegionSummary.size)
+        else:
+            buffer = BufferedStream(output, RegionSummary.size)
         zoomList[0]["amount"] = initialReduction["scale"]
-        zoomLevels = 1
         zoomCount = initialReduction["size"]
         reduction = initialReduction["scale"] * zoomIncrement
-        while zoomLevels < bbiMaxZoomLevels:
+        for zoomLevels in range(1, bbiMaxZoomLevels):
             rezoomCount = len(rezoomedList)
             if rezoomCount >= zoomCount:
                 break
             zoomCount = rezoomCount
             zoomList[zoomLevels]["dataOffset"] = output.tell()
-            bbiWriteSummary(rezoomedList, itemsPerSlot, doCompress, output)
+            data = zoomCount.to_bytes(4, sys.byteorder)
+            output.write(data)
+            for summary in rezoomedList:
+                buffer.write(summary)
+            buffer.flush()
             indexOffset = output.tell()
             RTreeFormatter().write(
                 rezoomedList, blockSize, itemsPerSlot, indexOffset, output
             )
             zoomList[zoomLevels]["indexOffset"] = indexOffset
             zoomList[zoomLevels]["amount"] = reduction
-            zoomLevels += 1
             reduction *= zoomIncrement
             rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction)
         return zoomList[:zoomLevels], totalSum
@@ -2023,22 +2029,6 @@ def bbiSummarySimpleReduce(summaries, reduction):
         else:
             newSummary += summary
     return newSummaries
-
-
-def bbiWriteSummary(summaryList, itemsPerSlot, doCompress, output):
-    # See bbiWriteSummaryAndIndexUnc, bbiWriteSummaryAndIndexComp in bbiWrite.c
-    count = len(summaryList)
-    data = count.to_bytes(4, sys.byteorder)
-    output.write(data)
-    if doCompress:
-        size = itemsPerSlot * RegionSummary.size
-        buffer = ZippedBufferedStream(output, size)
-    else:
-        size = RegionSummary.size
-        buffer = BufferedStream(output, size)
-    for summary in summaryList:
-        buffer.write(summary)
-    buffer.flush()
 
 
 class BPlusTreeFormatter:
