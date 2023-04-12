@@ -2033,14 +2033,12 @@ def bbiWriteSummary(summaryList, itemsPerSlot, doCompress, output):
     if doCompress:
         size = itemsPerSlot * RegionSummary.size
         buffer = ZippedBufferedStream(output, size)
-        for start in range(0, count, itemsPerSlot):
-            for summary in summaryList[start : start + itemsPerSlot]:
-                buffer.write(summary)
-        buffer.flush()
     else:
-        for summary in summaryList:
-            summary.offset = output.tell()
-            output.write(bytes(summary))
+        size = RegionSummary.size
+        buffer = BufferedStream(output, size)
+    for summary in summaryList:
+        buffer.write(summary)
+    buffer.flush()
 
 
 class BPlusTreeFormatter:
