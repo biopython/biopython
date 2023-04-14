@@ -806,14 +806,13 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         rest = "\t".join(row).encode()
         return chrom, chromStart, chromEnd, rest
 
-    def writeBlocks(
+    def write_alignments(
         self,
         alignments,
         itemsPerSlot,
         output,
         reductions,
         extra_indices,
-        regions=[],
     ):
         blockStartOffset = 0
         startPos = 0
@@ -826,23 +825,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         sectionStartIx = 0
         sectionEndIx = 0
         currentChrom = None
-        doCompress = self.compress
-        stream = NewBufferedStream(output, doCompress)
 
-        def write_data(sectionStartIx):
-            if extra_indices:
-                blockEndOffset = output.tell()
-                blockSize = blockEndOffset - blockStartOffset
-                for extra_index in extra_indices:
-                    extra_index.addOffsetSize(
-                        blockStartOffset,
-                        blockSize,
-                        sectionStartIx,
-                        sectionEndIx,
-                    )
-                sectionStartIx = sectionEndIx
-            regions.append(Region(chromId, startPos, endPos, blockStartOffset))
-            return sectionStartIx
+        regions = []
+        stream = NewBufferedStream(output, self.compress)
 
         alignments.rewind()
         for alignment in alignments:
@@ -850,7 +835,18 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             if chrom != currentChrom:
                 if currentChrom is not None:
                     stream.flush()
-                    sectionStartIx = write_data(sectionStartIx)
+                    if extra_indices:
+                        blockEndOffset = output.tell()
+                        blockSize = blockEndOffset - blockStartOffset
+                        for extra_index in extra_indices:
+                            extra_index.addOffsetSize(
+                                blockStartOffset,
+                                blockSize,
+                                sectionStartIx,
+                                sectionEndIx,
+                            )
+                        sectionStartIx = sectionEndIx
+                    regions.append(Region(chromId, startPos, endPos, blockStartOffset))
                 currentChrom = chrom
                 reductions["end"] = 0
                 chromId += 1
@@ -871,7 +867,18 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             stream.write(data)
             if stream.itemIx >= itemsPerSlot:
                 stream.flush()
-                sectionStartIx = write_data(sectionStartIx)
+                if extra_indices:
+                    blockEndOffset = output.tell()
+                    blockSize = blockEndOffset - blockStartOffset
+                    for extra_index in extra_indices:
+                        extra_index.addOffsetSize(
+                            blockStartOffset,
+                            blockSize,
+                            sectionStartIx,
+                            sectionEndIx,
+                        )
+                    sectionStartIx = sectionEndIx
+                regions.append(Region(chromId, startPos, endPos, blockStartOffset))
 
             for row in reductions:
                 if start >= row["end"]:
@@ -882,27 +889,20 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     row["end"] += row["scale"]
 
         stream.flush()
-        sectionStartIx = write_data(sectionStartIx)
-        return stream.maxBlockSize
+        if extra_indices:
+            blockEndOffset = output.tell()
+            blockSize = blockEndOffset - blockStartOffset
+            for extra_index in extra_indices:
+                extra_index.addOffsetSize(
+                    blockStartOffset,
+                    blockSize,
+                    sectionStartIx,
+                    sectionEndIx,
+                )
+            sectionStartIx = sectionEndIx
+        regions.append(Region(chromId, startPos, endPos, blockStartOffset))
 
-    def write_alignments(
-        self,
-        alignments,
-        itemsPerSlot,
-        output,
-        reductions,
-        extra_indices,
-    ):
-        regions = []
-        maxBlockSize = self.writeBlocks(
-            alignments,
-            itemsPerSlot,
-            output,
-            reductions,
-            extra_indices,
-            regions,
-        )
-        return maxBlockSize, regions
+        return stream.maxBlockSize, regions
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
