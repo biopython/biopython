@@ -80,6 +80,10 @@ class NewBufferedStream:
         self.output = output
         self.doCompress = doCompress
         self.maxBlockSize = 0
+        self.itemIx = 0
+
+    def write(self, data):
+        self.buffer.write(data)
 
     def flush(self):
         data = self.buffer.getvalue()
@@ -91,6 +95,7 @@ class NewBufferedStream:
         self.output.write(data)
         self.buffer.seek(0)
         self.buffer.truncate(0)
+        self.itemIx = 0
 
 
 class BufferedStream:
@@ -809,7 +814,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         extra_indices,
         regions=[],
     ):
-        itemIx = 0
         blockStartOffset = 0
         startPos = 0
         endPos = 0
@@ -843,21 +847,20 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         for alignment in alignments:
             chrom, start, end, rest = self.extract_fields(alignment)
             if currentChrom is not None:
-                if chrom != currentChrom or itemIx >= itemsPerSlot:
+                if chrom != currentChrom or stream.itemIx >= itemsPerSlot:
                     stream.flush()
                     sectionStartIx = write_data(sectionStartIx)
-                    itemIx = 0
             if chrom != currentChrom:
                 currentChrom = chrom
                 reductions["end"] = 0
                 chromId += 1
 
-            if itemIx == 0:
+            if stream.itemIx == 0:
                 blockStartOffset = output.tell()
                 startPos = start
                 endPos = end
-            else:
-                endPos = max(endPos, end)
+            elif end > endPos:
+                endPos = end
 
             if extra_indices:
                 for extra_index in extra_indices:
@@ -865,9 +868,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 sectionEndIx += 1
 
             data = struct.pack(f"=III{len(rest)}sx", chromId, start, end, rest)
-            stream.buffer.write(data)
+            stream.write(data)
 
-            itemIx += 1
+            stream.itemIx += 1
             for row in reductions:
                 if start >= row["end"]:
                     row["size"] += 1
