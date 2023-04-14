@@ -84,6 +84,7 @@ class NewBufferedStream:
 
     def write(self, data):
         self.buffer.write(data)
+        self.itemIx += 1
 
     def flush(self):
         data = self.buffer.getvalue()
@@ -846,11 +847,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         alignments.rewind()
         for alignment in alignments:
             chrom, start, end, rest = self.extract_fields(alignment)
-            if currentChrom is not None:
-                if chrom != currentChrom or stream.itemIx >= itemsPerSlot:
+            if chrom != currentChrom:
+                if currentChrom is not None:
                     stream.flush()
                     sectionStartIx = write_data(sectionStartIx)
-            if chrom != currentChrom:
                 currentChrom = chrom
                 reductions["end"] = 0
                 chromId += 1
@@ -869,8 +869,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
             data = struct.pack(f"=III{len(rest)}sx", chromId, start, end, rest)
             stream.write(data)
+            if stream.itemIx >= itemsPerSlot:
+                stream.flush()
+                sectionStartIx = write_data(sectionStartIx)
 
-            stream.itemIx += 1
             for row in reductions:
                 if start >= row["end"]:
                     row["size"] += 1
