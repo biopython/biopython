@@ -62,7 +62,8 @@ class SequenceIterator(ABC):
         try:
             self.records = self.parse(self.stream)
         except Exception:
-            self.stream.close()
+            if self.stream is not self.source:
+                self.stream.close()
             raise
 
     def __next__(self):
@@ -70,7 +71,8 @@ class SequenceIterator(ABC):
         try:
             return next(self.records)
         except Exception:
-            self.stream.close()
+            if self.stream is not self.source:
+                self.stream.close()
             raise
 
     def __iter__(self):
