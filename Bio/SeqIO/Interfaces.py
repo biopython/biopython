@@ -101,6 +101,7 @@ class SequenceIterator(ABC):
         if self.stream is not self.source:
             self.stream.close()
         del self.stream
+        return False
 
     @abstractmethod
     def parse(self, handle):
