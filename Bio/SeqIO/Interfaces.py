@@ -98,8 +98,8 @@ class SequenceIterator(ABC):
             stream = self.stream
         except AttributeError:
             return
-        if stream is not self.source:
-            stream.close()
+        if self.stream is not self.source:
+            self.stream.close()
         del self.stream
 
     @abstractmethod
