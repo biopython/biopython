@@ -75,16 +75,14 @@ from Bio.SeqRecord import SeqRecord
 
 
 class NewBufferedStream:
-    def __init__(self, output, extra_indices, doCompress):
+    def __init__(self, output, doCompress):
         self.buffer = BytesIO()
         self.output = output
         self.doCompress = doCompress
-        self.extra_indices = extra_indices
         self.maxBlockSize = 0
         self.itemIx = 0
 
-    def write(self, chromId, start, end, rest):
-        data = struct.pack(f"=III{len(rest)}sx", chromId, start, end, rest)
+    def write(self, data):
         self.buffer.write(data)
         self.itemIx += 1
 
@@ -99,17 +97,6 @@ class NewBufferedStream:
         self.buffer.seek(0)
         self.buffer.truncate(0)
         self.itemIx = 0
-        if self.extra_indices:
-            blockEndOffset = self.output.tell()
-            blockSize = blockEndOffset - self.blockStartOffset
-            for extra_index in self.extra_indices:
-                extra_index.addOffsetSize(
-                    self.blockStartOffset,
-                    blockSize,
-                    self.sectionStartIx,
-                    self.sectionEndIx,
-                )
-            self.sectionStartIx = self.sectionEndIx
 
 
 class BufferedStream:
@@ -827,72 +814,101 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         reductions,
         extra_indices,
     ):
+        blockStartOffset = 0
+        startPos = 0
+        endPos = 0
         chromId = -1
         reductions["end"] = 0
         atEnd = False
         start = 0
         end = 0
+        sectionStartIx = 0
+        sectionEndIx = 0
         currentChrom = None
 
         regions = []
-        stream = NewBufferedStream(output, extra_indices, self.compress)
-        stream.blockStartOffset = 0
-        stream.startPos = 0
-        stream.endPos = 0
-        stream.sectionStartIx = 0
-        stream.sectionEndIx = 0
+        stream = NewBufferedStream(output, self.compress)
 
+        done = False
         alignments.rewind()
-        for alignment in alignments:
-            chrom, start, end, rest = self.extract_fields(alignment)
-            if chrom != currentChrom:
-                if currentChrom is not None:
-                    stream.flush()
-                    regions.append(
-                        Region(
-                            chromId,
-                            stream.startPos,
-                            stream.endPos,
-                            stream.blockStartOffset,
+        while done is False:
+            try:
+                alignment = next(alignments)
+            except StopIteration:
+                done = True
+            else:
+                chrom, start, end, rest = self.extract_fields(alignment)
+                if chrom != currentChrom:
+                    if currentChrom is not None:
+                        stream.flush()
+                        if extra_indices:
+                            blockEndOffset = output.tell()
+                            blockSize = blockEndOffset - blockStartOffset
+                            for extra_index in extra_indices:
+                                extra_index.addOffsetSize(
+                                    blockStartOffset,
+                                    blockSize,
+                                    sectionStartIx,
+                                    sectionEndIx,
+                                )
+                            sectionStartIx = sectionEndIx
+                        regions.append(
+                            Region(chromId, startPos, endPos, blockStartOffset)
                         )
-                    )
-                currentChrom = chrom
-                reductions["end"] = 0
-                chromId += 1
+                    currentChrom = chrom
+                    reductions["end"] = 0
+                    chromId += 1
 
-            if stream.itemIx == 0:
-                stream.blockStartOffset = output.tell()
-                stream.startPos = start
-                stream.endPos = end
-            elif end > stream.endPos:
-                stream.endPos = end
+                for row in reductions:
+                    if start >= row["end"]:
+                        row["size"] += 1
+                        row["end"] = start + row["scale"]
+                    while end > row["end"]:
+                        row["size"] += 1
+                        row["end"] += row["scale"]
 
-            if extra_indices:
-                for extra_index in extra_indices:
-                    extra_index.addKeysFromRow(alignment, stream.sectionEndIx)
-                stream.sectionEndIx += 1
+                if stream.itemIx == 0:
+                    blockStartOffset = output.tell()
+                    startPos = start
+                    endPos = end
+                elif end > endPos:
+                    endPos = end
 
-            stream.write(chromId, start, end, rest)
-            if stream.itemIx >= itemsPerSlot:
-                stream.flush()
-                regions.append(
-                    Region(
-                        chromId, stream.startPos, stream.endPos, stream.blockStartOffset
-                    )
-                )
+                if extra_indices:
+                    for extra_index in extra_indices:
+                        extra_index.addKeysFromRow(alignment, sectionEndIx)
+                    sectionEndIx += 1
 
-            for row in reductions:
-                if start >= row["end"]:
-                    row["size"] += 1
-                    row["end"] = start + row["scale"]
-                while end > row["end"]:
-                    row["size"] += 1
-                    row["end"] += row["scale"]
+                data = struct.pack(f"=III{len(rest)}sx", chromId, start, end, rest)
+                stream.write(data)
+                if stream.itemIx >= itemsPerSlot:
+                    stream.flush()
+                    if extra_indices:
+                        blockEndOffset = output.tell()
+                        blockSize = blockEndOffset - blockStartOffset
+                        for extra_index in extra_indices:
+                            extra_index.addOffsetSize(
+                                blockStartOffset,
+                                blockSize,
+                                sectionStartIx,
+                                sectionEndIx,
+                            )
+                        sectionStartIx = sectionEndIx
+                    regions.append(Region(chromId, startPos, endPos, blockStartOffset))
 
         stream.flush()
-        regions.append(
-            Region(chromId, stream.startPos, stream.endPos, stream.blockStartOffset)
-        )
+        if extra_indices:
+            blockEndOffset = output.tell()
+            blockSize = blockEndOffset - blockStartOffset
+            for extra_index in extra_indices:
+                extra_index.addOffsetSize(
+                    blockStartOffset,
+                    blockSize,
+                    sectionStartIx,
+                    sectionEndIx,
+                )
+            sectionStartIx = sectionEndIx
+        regions.append(Region(chromId, startPos, endPos, blockStartOffset))
 
         return stream.maxBlockSize, regions
 
