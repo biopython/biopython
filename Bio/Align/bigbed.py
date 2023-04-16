@@ -881,34 +881,22 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
                 data = struct.pack(f"=III{len(rest)}sx", chromId, start, end, rest)
                 stream.write(data)
-                if stream.itemIx >= itemsPerSlot:
-                    stream.flush()
-                    if extra_indices:
-                        blockEndOffset = output.tell()
-                        blockSize = blockEndOffset - blockStartOffset
-                        for extra_index in extra_indices:
-                            extra_index.addOffsetSize(
-                                blockStartOffset,
-                                blockSize,
-                                sectionStartIx,
-                                sectionEndIx,
-                            )
-                        sectionStartIx = sectionEndIx
-                    regions.append(Region(chromId, startPos, endPos, blockStartOffset))
+                if stream.itemIx < itemsPerSlot:
+                    continue
 
-        stream.flush()
-        if extra_indices:
-            blockEndOffset = output.tell()
-            blockSize = blockEndOffset - blockStartOffset
-            for extra_index in extra_indices:
-                extra_index.addOffsetSize(
-                    blockStartOffset,
-                    blockSize,
-                    sectionStartIx,
-                    sectionEndIx,
-                )
-            sectionStartIx = sectionEndIx
-        regions.append(Region(chromId, startPos, endPos, blockStartOffset))
+            stream.flush()
+            if extra_indices:
+                blockEndOffset = output.tell()
+                blockSize = blockEndOffset - blockStartOffset
+                for extra_index in extra_indices:
+                    extra_index.addOffsetSize(
+                        blockStartOffset,
+                        blockSize,
+                        sectionStartIx,
+                        sectionEndIx,
+                    )
+                sectionStartIx = sectionEndIx
+            regions.append(Region(chromId, startPos, endPos, blockStartOffset))
 
         return stream.maxBlockSize, regions
 
