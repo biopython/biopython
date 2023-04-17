@@ -30,7 +30,11 @@ Examples
 7.72
 >>> sec_struc = X.secondary_structure_fraction()  # [helix, turn, sheet]
 >>> print("%0.2f" % sec_struc[0])  # helix
-0.28
+0.33
+>>> print("%0.2f" % sec_struc[1])  # turn
+0.29
+>>> print("%0.2f" % sec_struc[2])  # sheet
+0.37
 >>> epsilon_prot = X.molar_extinction_coefficient()  # [reduced, oxidized]
 >>> print(epsilon_prot[0])  # with reduced cysteines
 17420
@@ -318,6 +322,9 @@ class ProteinAnalysis:
         Amino acids in helix: E, M, A, L, K.
         Amino acids in Turn: N, P, G, S, D.
         Amino acids in sheet: V, I, Y, F, W, L, T.
+
+        Note that, prior to v1.8.2, this method wrongly returned
+        (Sheet, Turn, Helix) while claiming to return (Helix, Turn, Sheet).
 
         Returns a tuple of three floats (Helix, Turn, Sheet).
         """
