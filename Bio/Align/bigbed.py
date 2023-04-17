@@ -74,31 +74,6 @@ from Bio.SeqRecord import SeqRecord
 # flake8: noqa
 
 
-class NewBufferedStream:
-    def __init__(self, output, doCompress):
-        self.buffer = BytesIO()
-        self.output = output
-        self.doCompress = doCompress
-        self.maxBlockSize = 0
-        self.itemIx = 0
-
-    def write(self, data):
-        self.buffer.write(data)
-        self.itemIx += 1
-
-    def flush(self):
-        data = self.buffer.getvalue()
-        size = len(data)
-        if size > self.maxBlockSize:
-            self.maxBlockSize = size
-        if self.doCompress:
-            data = zlib.compress(data)
-        self.output.write(data)
-        self.buffer.seek(0)
-        self.buffer.truncate(0)
-        self.itemIx = 0
-
-
 class BufferedStream:
     def __init__(self, output, size):
         self.buffer = bytearray(size)
@@ -825,9 +800,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         sectionStartIx = 0
         sectionEndIx = 0
         currentChrom = None
+        doCompress = self.compress
 
         regions = []
-        stream = NewBufferedStream(output, self.compress)
+        buffer = BytesIO()
+        maxBlockSize = 0
+        itemIx = 0
 
         done = False
         alignments.rewind()
@@ -840,7 +818,16 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 chrom, start, end, rest = self.extract_fields(alignment)
                 if chrom != currentChrom:
                     if currentChrom is not None:
-                        stream.flush()
+                        data = buffer.getvalue()
+                        size = len(data)
+                        if size > maxBlockSize:
+                            maxBlockSize = size
+                        if doCompress:
+                            data = zlib.compress(data)
+                        output.write(data)
+                        buffer.seek(0)
+                        buffer.truncate(0)
+                        itemIx = 0
                         if extra_indices:
                             blockEndOffset = output.tell()
                             blockSize = blockEndOffset - blockStartOffset
@@ -867,7 +854,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         row["size"] += 1
                         row["end"] += row["scale"]
 
-                if stream.itemIx == 0:
+                if itemIx == 0:
                     blockStartOffset = output.tell()
                     startPos = start
                     endPos = end
@@ -880,11 +867,21 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     sectionEndIx += 1
 
                 data = struct.pack(f"=III{len(rest)}sx", chromId, start, end, rest)
-                stream.write(data)
-                if stream.itemIx < itemsPerSlot:
+                buffer.write(data)
+                itemIx += 1
+                if itemIx < itemsPerSlot:
                     continue
 
-            stream.flush()
+            data = buffer.getvalue()
+            size = len(data)
+            if size > maxBlockSize:
+                maxBlockSize = size
+            if doCompress:
+                data = zlib.compress(data)
+            output.write(data)
+            buffer.seek(0)
+            buffer.truncate(0)
+            itemIx = 0
             if extra_indices:
                 blockEndOffset = output.tell()
                 blockSize = blockEndOffset - blockStartOffset
@@ -898,7 +895,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 sectionStartIx = sectionEndIx
             regions.append(Region(chromId, startPos, endPos, blockStartOffset))
 
-        return stream.maxBlockSize, regions
+        return maxBlockSize, regions
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
