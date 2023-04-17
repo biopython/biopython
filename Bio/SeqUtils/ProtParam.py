@@ -323,7 +323,7 @@ class ProteinAnalysis:
         Amino acids in Turn: N, P, G, S, D.
         Amino acids in sheet: V, I, Y, F, W, L, T.
 
-        Note that, prior to v1.8.2, this method wrongly returned
+        Note that, prior to v1.82, this method wrongly returned
         (Sheet, Turn, Helix) while claiming to return (Helix, Turn, Sheet).
 
         Returns a tuple of three floats (Helix, Turn, Sheet).
