@@ -50,5 +50,5 @@ jobs:
             coverage run run_tests.py --offline
             echo "Tests run"
             coverage xml
-      #- codecov/upload:
-      #    file: biopython-*/Tests/coverage.xml
+      - codecov/upload:
+          file: biopython-*/Tests/coverage.xml
