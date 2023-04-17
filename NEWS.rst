@@ -30,6 +30,8 @@ possible, especially the following contributors:
 
 - Arpan Sahoo
 - Cam McMenamie
+- Joe Greener
+- Peter Cock
 - Ricardas Ralys
 - Vladislav Kuznetsov
 

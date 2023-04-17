@@ -1077,7 +1077,7 @@ class SimpleLocation(Location):
             ref = None
         m = _re_location_category.match(text)
         if m is None:
-            return None
+            raise LocationParserError(f"Could not parse feature location '{text}'")
         for key, value in m.groupdict().items():
             if value is not None:
                 break
