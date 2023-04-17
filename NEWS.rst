@@ -25,9 +25,10 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Cam McMenamie
+- Joe Greener
+- Peter Cock
 - Ricardas Ralys
 - Vladislav Kuznetsov
-- Joe Greener
 
 12 February 2023: Biopython 1.81
 ===============================================
