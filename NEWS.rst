@@ -21,6 +21,7 @@ iterator can be reset by calling the ``rewind`` method.
 Calling `secondary_structure_fraction` on a ``ProtParam.ProteinAnalysis``
 object historically returned (sheet, turn, helix) while claiming to return
 (helix, turn, sheet). This was fixed to correctly return (helix, turn, sheet).
+Additionally, the amino acids considered were revised as per recent literature.
 
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
