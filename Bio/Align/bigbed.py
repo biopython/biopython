@@ -807,71 +807,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         maxBlockSize = 0
         itemIx = 0
 
-        done = False
-        alignments.rewind()
-        while done is False:
-            try:
-                alignment = next(alignments)
-            except StopIteration:
-                done = True
-            else:
-                chrom, start, end, rest = self.extract_fields(alignment)
-                if chrom != currentChrom:
-                    if currentChrom is not None:
-                        data = buffer.getvalue()
-                        size = len(data)
-                        if size > maxBlockSize:
-                            maxBlockSize = size
-                        if doCompress:
-                            data = zlib.compress(data)
-                        output.write(data)
-                        buffer.seek(0)
-                        buffer.truncate(0)
-                        itemIx = 0
-                        if extra_indices:
-                            blockEndOffset = output.tell()
-                            blockSize = blockEndOffset - blockStartOffset
-                            for extra_index in extra_indices:
-                                extra_index.addOffsetSize(
-                                    blockStartOffset,
-                                    blockSize,
-                                    sectionStartIx,
-                                    sectionEndIx,
-                                )
-                            sectionStartIx = sectionEndIx
-                        regions.append(
-                            Region(chromId, startPos, endPos, blockStartOffset)
-                        )
-                    currentChrom = chrom
-                    reductions["end"] = 0
-                    chromId += 1
-
-                for row in reductions:
-                    if start >= row["end"]:
-                        row["size"] += 1
-                        row["end"] = start + row["scale"]
-                    while end > row["end"]:
-                        row["size"] += 1
-                        row["end"] += row["scale"]
-
-                if itemIx == 0:
-                    blockStartOffset = output.tell()
-                    startPos = start
-                    endPos = end
-                elif end > endPos:
-                    endPos = end
-
-                if extra_indices:
-                    for extra_index in extra_indices:
-                        extra_index.addKeysFromRow(alignment, sectionEndIx)
-                    sectionEndIx += 1
-
-                data = struct.pack(f"=III{len(rest)}sx", chromId, start, end, rest)
-                buffer.write(data)
-                itemIx += 1
-                if itemIx < itemsPerSlot:
-                    continue
-
+        def a(sectionStartIx, maxBlockSize):
             data = buffer.getvalue()
             size = len(data)
             if size > maxBlockSize:
@@ -881,7 +817,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             output.write(data)
             buffer.seek(0)
             buffer.truncate(0)
-            itemIx = 0
             if extra_indices:
                 blockEndOffset = output.tell()
                 blockSize = blockEndOffset - blockStartOffset
@@ -894,6 +829,52 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     )
                 sectionStartIx = sectionEndIx
             regions.append(Region(chromId, startPos, endPos, blockStartOffset))
+            return sectionStartIx, maxBlockSize
+
+        def b(sectionEndIx):
+            for row in reductions:
+                if start >= row["end"]:
+                    row["size"] += 1
+                    row["end"] = start + row["scale"]
+                while end > row["end"]:
+                    row["size"] += 1
+                    row["end"] += row["scale"]
+            if extra_indices:
+                for extra_index in extra_indices:
+                    extra_index.addKeysFromRow(alignment, sectionEndIx)
+                sectionEndIx += 1
+            data = struct.pack(f"=III{len(rest)}sx", chromId, start, end, rest)
+            buffer.write(data)
+            return sectionEndIx
+
+        done = False
+        alignments.rewind()
+        while done is False:
+            try:
+                alignment = next(alignments)
+            except StopIteration:
+                done = True
+            else:
+                chrom, start, end, rest = self.extract_fields(alignment)
+                if chrom != currentChrom:
+                    if currentChrom is not None:
+                        sectionStartIx, maxBlockSize = a(sectionStartIx, maxBlockSize)
+                        itemIx = 0
+                    currentChrom = chrom
+                    reductions["end"] = 0
+                    chromId += 1
+                sectionEndIx = b(sectionEndIx)
+                if itemIx == 0:
+                    blockStartOffset = output.tell()
+                    startPos = start
+                    endPos = end
+                elif end > endPos:
+                    endPos = end
+                itemIx += 1
+                if itemIx < itemsPerSlot:
+                    continue
+            sectionStartIx, maxBlockSize = a(sectionStartIx, maxBlockSize)
+            itemIx = 0
 
         return maxBlockSize, regions
 
