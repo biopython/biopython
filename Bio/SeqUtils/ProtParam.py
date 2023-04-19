@@ -317,10 +317,11 @@ class ProteinAnalysis:
         """Calculate fraction of helix, turn and sheet.
 
         Returns a list of the fraction of amino acids which tend
-        to be in Helix, Turn or Sheet.
+        to be in Helix, Turn or Sheet, according to Haimov and Srebnik, 2016;
+        Hutchinson and Thornton, 1994; and Kim and Berg, 1993, respectively.
 
         Amino acids in helix: E, M, A, L, K.
-        Amino acids in Turn: N, P, G, S, D.
+        Amino acids in turn: N, P, G, S, D.
         Amino acids in sheet: V, I, Y, F, W, L, T.
 
         Note that, prior to v1.82, this method wrongly returned
