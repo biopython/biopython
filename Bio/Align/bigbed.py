@@ -805,9 +805,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         regions = []
         buffer = BytesIO()
         maxBlockSize = 0
-        itemIx = 0
 
         def a(sectionStartIx, maxBlockSize):
+            blockStartOffset = output.tell()
             data = buffer.getvalue()
             size = len(data)
             if size > maxBlockSize:
@@ -850,29 +850,26 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         done = False
         alignments.rewind()
         while done is False:
-            try:
-                alignment = next(alignments)
-            except StopIteration:
-                done = True
-            else:
+            for alignment in alignments:
                 chrom, start, end, rest = self.extract_fields(alignment)
                 if chrom != currentChrom:
                     if currentChrom is not None:
                         sectionStartIx, maxBlockSize = a(sectionStartIx, maxBlockSize)
-                        itemIx = 0
+                    itemIx = 0
                     currentChrom = chrom
                     reductions["end"] = 0
                     chromId += 1
                 sectionEndIx = b(sectionEndIx)
                 if itemIx == 0:
-                    blockStartOffset = output.tell()
                     startPos = start
                     endPos = end
                 elif end > endPos:
                     endPos = end
                 itemIx += 1
-                if itemIx < itemsPerSlot:
-                    continue
+                if itemIx == itemsPerSlot:
+                    break
+            else:
+                done = True
             sectionStartIx, maxBlockSize = a(sectionStartIx, maxBlockSize)
             itemIx = 0
 
