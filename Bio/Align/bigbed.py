@@ -797,6 +797,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         atEnd = False
         start = 0
         end = 0
+        itemIx = 0
         sectionStartIx = 0
         sectionEndIx = 0
         currentChrom = None
@@ -849,29 +850,33 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
         done = False
         alignments.rewind()
-        while done is False:
-            for alignment in alignments:
-                chrom, start, end, rest = self.extract_fields(alignment)
-                if chrom != currentChrom:
-                    if currentChrom is not None:
-                        sectionStartIx, maxBlockSize = a(sectionStartIx, maxBlockSize)
-                    itemIx = 0
-                    currentChrom = chrom
-                    reductions["end"] = 0
-                    chromId += 1
-                sectionEndIx = b(sectionEndIx)
-                if itemIx == 0:
-                    startPos = start
-                    endPos = end
-                elif end > endPos:
-                    endPos = end
-                itemIx += 1
-                if itemIx == itemsPerSlot:
+        while True:
+            if itemIx == itemsPerSlot:
+                sectionStartIx, maxBlockSize = a(sectionStartIx, maxBlockSize)
+                itemIx = 0
+            try:
+                alignment = next(alignments)
+            except StopIteration:
+                if done is True:
                     break
-            else:
+                itemIx = itemsPerSlot
                 done = True
-            sectionStartIx, maxBlockSize = a(sectionStartIx, maxBlockSize)
-            itemIx = 0
+                continue
+            chrom, start, end, rest = self.extract_fields(alignment)
+            if chrom != currentChrom:
+                if itemIx > 0:
+                    sectionStartIx, maxBlockSize = a(sectionStartIx, maxBlockSize)
+                itemIx = 0
+                currentChrom = chrom
+                reductions["end"] = 0
+                chromId += 1
+            sectionEndIx = b(sectionEndIx)
+            if itemIx == 0:
+                startPos = start
+                endPos = end
+            elif end > endPos:
+                endPos = end
+            itemIx += 1
 
         return maxBlockSize, regions
 
