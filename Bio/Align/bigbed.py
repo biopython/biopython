@@ -117,11 +117,10 @@ class ZippedBufferedStream:
 class Region:
     __slots__ = ("chromId", "start", "end", "offset")
 
-    def __init__(self, chromId, start, end, offset):
+    def __init__(self, chromId, start, end):
         self.chromId = chromId
         self.start = start
         self.end = end
-        self.offset = offset
 
 
 class Summary:
@@ -791,7 +790,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
     ):
         chromId = -1
         reductions["end"] = 0
-        atEnd = False
         start = 0
         end = 0
         itemIx = 0
@@ -804,32 +802,54 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         buffer = BytesIO()
         maxBlockSize = 0
 
-        def a(sectionStartIx, maxBlockSize):
-            blockStartOffset = output.tell()
-            data = buffer.getvalue()
-            size = len(data)
-            if size > maxBlockSize:
-                maxBlockSize = size
-            if doCompress:
-                data = zlib.compress(data)
-            output.write(data)
-            buffer.seek(0)
-            buffer.truncate(0)
-            if extra_indices:
-                blockEndOffset = output.tell()
-                blockSize = blockEndOffset - blockStartOffset
-                for extra_index in extra_indices:
-                    extra_index.addOffsetSize(
-                        blockStartOffset,
-                        blockSize,
-                        sectionStartIx,
-                        sectionEndIx,
-                    )
-                sectionStartIx = sectionEndIx
-            region.offset = blockStartOffset
-            return sectionStartIx, maxBlockSize
-
-        def b(sectionEndIx):
+        done = False
+        alignments.rewind()
+        while True:
+            try:
+                alignment = next(alignments)
+            except StopIteration:
+                itemIx = itemsPerSlot
+                done = True
+            else:
+                chrom, start, end, rest = self.extract_fields(alignment)
+                if chrom != currentChrom:
+                    currentChrom = chrom
+                    chromId += 1
+                    reductions["end"] = 0
+                    if itemIx > 0:
+                        itemIx = itemsPerSlot
+            if itemIx == itemsPerSlot:
+                blockStartOffset = output.tell()
+                data = buffer.getvalue()
+                size = len(data)
+                if size > maxBlockSize:
+                    maxBlockSize = size
+                if doCompress:
+                    data = zlib.compress(data)
+                output.write(data)
+                buffer.seek(0)
+                buffer.truncate(0)
+                if extra_indices:
+                    blockEndOffset = output.tell()
+                    blockSize = blockEndOffset - blockStartOffset
+                    for extra_index in extra_indices:
+                        extra_index.addOffsetSize(
+                            blockStartOffset,
+                            blockSize,
+                            sectionStartIx,
+                            sectionEndIx,
+                        )
+                    sectionStartIx = sectionEndIx
+                region.offset = blockStartOffset
+                if done is True:
+                    break
+                itemIx = 0
+            if itemIx == 0:
+                region = Region(chromId, start, end)
+                regions.append(region)
+            elif end > region.end:
+                region.end = end
+            itemIx += 1
             for row in reductions:
                 if start >= row["end"]:
                     row["size"] += 1
@@ -843,37 +863,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 sectionEndIx += 1
             data = struct.pack(f"=III{len(rest)}sx", chromId, start, end, rest)
             buffer.write(data)
-            return sectionEndIx
-
-        done = False
-        alignments.rewind()
-        while True:
-            try:
-                alignment = next(alignments)
-            except StopIteration:
-                itemIx = itemsPerSlot
-                done = True
-            else:
-                chrom, start, end, rest = self.extract_fields(alignment)
-            if chrom != currentChrom:
-                currentChrom = chrom
-                if itemIx > 0:
-                    sectionStartIx, maxBlockSize = a(sectionStartIx, maxBlockSize)
-                    itemIx = 0
-                chromId += 1
-                reductions["end"] = 0
-            if itemIx == itemsPerSlot:
-                sectionStartIx, maxBlockSize = a(sectionStartIx, maxBlockSize)
-                if done is True:
-                    break
-                itemIx = 0
-            sectionEndIx = b(sectionEndIx)
-            if itemIx == 0:
-                region = Region(chromId, start, end, 0)
-                regions.append(region)
-            elif end > region.end:
-                region.end = end
-            itemIx += 1
         return maxBlockSize, regions
 
 
@@ -1956,7 +1945,7 @@ def bedWriteReducedOnceReturnReducedTwice(
     totalSum = Summary()
     rangeTrees = rangeTreeGenerator(alignments)
     for chromName, chromId, chromSize in chromUsageList:
-        summary = Region(None, -1, -1, 0)
+        summary = Region(None, -1, -1)
         name, rangeTree = next(rangeTrees)
         assert name == chromName.decode()
         rangeList = rangeTreeList(rangeTree)
