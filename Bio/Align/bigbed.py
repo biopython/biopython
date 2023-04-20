@@ -851,25 +851,25 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         done = False
         alignments.rewind()
         while True:
-            if itemIx == itemsPerSlot:
-                sectionStartIx, maxBlockSize = a(sectionStartIx, maxBlockSize)
-                itemIx = 0
             try:
                 alignment = next(alignments)
             except StopIteration:
-                if done is True:
-                    break
                 itemIx = itemsPerSlot
                 done = True
-                continue
-            chrom, start, end, rest = self.extract_fields(alignment)
+            else:
+                chrom, start, end, rest = self.extract_fields(alignment)
             if chrom != currentChrom:
+                currentChrom = chrom
                 if itemIx > 0:
                     sectionStartIx, maxBlockSize = a(sectionStartIx, maxBlockSize)
-                itemIx = 0
-                currentChrom = chrom
-                reductions["end"] = 0
+                    itemIx = 0
                 chromId += 1
+                reductions["end"] = 0
+            if itemIx == itemsPerSlot:
+                sectionStartIx, maxBlockSize = a(sectionStartIx, maxBlockSize)
+                if done is True:
+                    break
+                itemIx = 0
             sectionEndIx = b(sectionEndIx)
             if itemIx == 0:
                 startPos = start
