@@ -789,9 +789,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         reductions,
         extra_indices,
     ):
-        blockStartOffset = 0
-        startPos = 0
-        endPos = 0
         chromId = -1
         reductions["end"] = 0
         atEnd = False
@@ -829,7 +826,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         sectionEndIx,
                     )
                 sectionStartIx = sectionEndIx
-            regions.append(Region(chromId, startPos, endPos, blockStartOffset))
+            region.offset = blockStartOffset
             return sectionStartIx, maxBlockSize
 
         def b(sectionEndIx):
@@ -872,12 +869,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 itemIx = 0
             sectionEndIx = b(sectionEndIx)
             if itemIx == 0:
-                startPos = start
-                endPos = end
-            elif end > endPos:
-                endPos = end
+                region = Region(chromId, start, end, 0)
+                regions.append(region)
+            elif end > region.end:
+                region.end = end
             itemIx += 1
-
         return maxBlockSize, regions
 
 
