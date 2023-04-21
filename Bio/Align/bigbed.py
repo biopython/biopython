@@ -61,7 +61,6 @@ import struct
 import zlib
 from collections import namedtuple
 from io import BytesIO
-from operator import attrgetter
 import numpy as np
 
 
@@ -82,42 +81,39 @@ class ZippedStream(io.BytesIO):
 
 class BufferedStream:
     def __init__(self, output, size):
-        self.buffer = bytearray(size)
+        self.buffer = BytesIO()
         self.output = output
-        self.index = 0
+        self.size = size
 
     def write(self, item):
         item.offset = self.output.tell()
         data = bytes(item)
-        self.buffer[self.index : self.index + len(data)] = data
-        self.index += len(data)
-        if self.index == len(self.buffer):
-            self.output.write(self.buffer)
-            self.index = 0
+        self.buffer.write(data)
+        if self.buffer.tell() == self.size:
+            self.output.write(self.buffer.getvalue())
+            self.buffer.seek(0)
+            self.buffer.truncate(0)
 
     def flush(self):
-        self.output.write(self.buffer[: self.index])
-        self.index = 0
+        self.output.write(self.buffer.getvalue())
+        self.buffer.seek(0)
+        self.buffer.truncate(0)
 
 
-class ZippedBufferedStream:
-    def __init__(self, output, size):
-        self.buffer = bytearray(size)
-        self.output = output
-        self.index = 0
-
+class ZippedBufferedStream(BufferedStream):
     def write(self, item):
         item.offset = self.output.tell()
         data = bytes(item)
-        self.buffer[self.index : self.index + len(data)] = data
-        self.index += len(data)
-        if self.index == len(self.buffer):
-            self.output.write(zlib.compress(self.buffer))
-            self.index = 0
+        self.buffer.write(data)
+        if self.buffer.tell() == self.size:
+            self.output.write(zlib.compress(self.buffer.getvalue()))
+            self.buffer.seek(0)
+            self.buffer.truncate(0)
 
     def flush(self):
-        self.output.write(zlib.compress(self.buffer[: self.index]))
-        self.index = 0
+        self.output.write(zlib.compress(self.buffer.getvalue()))
+        self.buffer.seek(0)
+        self.buffer.truncate(0)
 
 
 class Region:
