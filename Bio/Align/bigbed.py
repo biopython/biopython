@@ -74,6 +74,12 @@ from Bio.SeqRecord import SeqRecord
 # flake8: noqa
 
 
+class ZippedStream(io.BytesIO):
+    def getvalue(self):
+        data = super().getvalue()
+        return zlib.compress(data)
+
+
 class BufferedStream:
     def __init__(self, output, size):
         self.buffer = bytearray(size)
@@ -502,8 +508,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         chromUsageList, aveSize, bedCount = bbiChromUsageFromBedFile(
             alignments, targets, extra_indices
         )
-        formatter_zoomlevel = struct.Struct("=IxxxxQQ")
         stream.write(bytes(64))  # bbiWriteDummyHeader
+        formatter_zoomlevel = struct.Struct("=IxxxxQQ")
         stream.write(bytes(bbiMaxZoomLevels * formatter_zoomlevel.size))
         asOffset = stream.tell()
         stream.write(bytes(declaration))  # asText
@@ -574,7 +580,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream.seek(totalSummaryOffset)
         stream.write(bytes(totalSum))
         assert extraIndicesOffset == stream.tell()
-        stream.seek(extraIndicesOffset)
         extra_indices.tofile(stream)
         stream.seek(0, 2)
         data = signature.to_bytes(4, sys.byteorder)
@@ -789,17 +794,16 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         extra_indices,
     ):
         chromId = -1
-        reductions["end"] = 0
-        start = 0
-        end = 0
         itemIx = 0
         sectionStartIx = 0
         sectionEndIx = 0
         currentChrom = None
-        doCompress = self.compress
 
         regions = []
-        buffer = BytesIO()
+        if self.compress is True:
+            buffer = ZippedStream()
+        else:
+            buffer = BytesIO()
         maxBlockSize = 0
 
         done = False
@@ -813,19 +817,17 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             else:
                 chrom, start, end, rest = self.extract_fields(alignment)
                 if chrom != currentChrom:
+                    if currentChrom is not None:
+                        itemIx = itemsPerSlot
                     currentChrom = chrom
                     chromId += 1
                     reductions["end"] = 0
-                    if itemIx > 0:
-                        itemIx = itemsPerSlot
             if itemIx == itemsPerSlot:
                 blockStartOffset = output.tell()
-                data = buffer.getvalue()
-                size = len(data)
+                size = buffer.tell()
                 if size > maxBlockSize:
                     maxBlockSize = size
-                if doCompress:
-                    data = zlib.compress(data)
+                data = buffer.getvalue()
                 output.write(data)
                 buffer.seek(0)
                 buffer.truncate(0)
