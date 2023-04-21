@@ -73,6 +73,92 @@ from Bio.SeqRecord import SeqRecord
 # flake8: noqa
 
 
+class Header:
+    __slots__ = (
+        "byteorder",
+        "zoomLevels",
+        "chromosomeTreeOffset",
+        "fullDataOffset",
+        "fullIndexOffset",
+        "fieldCount",
+        "definedFieldCount",
+        "autoSqlOffset",
+        "totalSummaryOffset",
+        "uncompressBufSize",
+        "extraIndicesOffset",
+    )
+
+    # Supplemental Table 5: Common header
+    # magic                  4 bytes, unsigned
+    # version                2 bytes, unsigned
+    # zoomLevels             2 bytes, unsigned
+    # chromosomeTreeOffset   8 bytes, unsigned
+    # fullDataOffset         8 bytes, unsigned
+    # fullIndexOffset        8 bytes, unsigned
+    # fieldCount             2 bytes, unsigned
+    # definedFieldCount      2 bytes, unsigned
+    # autoSqlOffset          8 bytes, unsigned
+    # totalSummaryOffset     8 bytes, unsigned
+    # uncompressBufSize      4 bytes, unsigned
+    # reserved               8 bytes, unsigned
+
+    formatter = struct.Struct("=IHHQQQHHQQIQ")
+    size = formatter.size
+    signature = 0x8789F2EB
+    bbiCurrentVersion = 4
+
+    @classmethod
+    def from_file(cls, stream):
+        magic = stream.read(4)
+        if int.from_bytes(magic, byteorder="little") == Header.signature:
+            byteorder = "<"
+        elif int.from_bytes(magic, byteorder="big") == Header.signature:
+            byteorder = ">"
+        else:
+            raise ValueError("not a bigBed file")
+        formatter = struct.Struct(byteorder + "HHQQQHHQQIQ")
+        header = Header()
+        header.byteorder = byteorder
+        size = formatter.size
+        data = stream.read(size)
+        (
+            version,
+            header.zoomLevels,
+            header.chromosomeTreeOffset,
+            header.fullDataOffset,
+            header.fullIndexOffset,
+            header.fieldCount,
+            header.definedFieldCount,
+            header.autoSqlOffset,
+            header.totalSummaryOffset,
+            header.uncompressBufSize,
+            header.extraIndicesOffset,
+        ) = formatter.unpack(data)
+        assert version == Header.bbiCurrentVersion
+        definedFieldCount = header.definedFieldCount
+        if definedFieldCount < 3 or definedFieldCount > 12:
+            raise ValueError(
+                "expected between 3 and 12 columns, found %d" % definedFieldCount
+            )
+        return header
+
+    def __bytes__(self):
+        return Header.formatter.pack(
+            Header.signature,
+            Header.bbiCurrentVersion,
+            self.zoomLevels,
+            self.chromosomeTreeOffset,
+            self.fullDataOffset,
+            self.fullIndexOffset,
+            self.fieldCount,
+            self.definedFieldCount,
+            self.autoSqlOffset,
+            self.totalSummaryOffset,
+            self.uncompressBufSize,
+            self.extraIndicesOffset,
+        )
+
+
 class ZippedStream(io.BytesIO):
     def getvalue(self):
         data = super().getvalue()
@@ -491,33 +577,34 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             targets = alignments.targets
         else:
             targets = self.targets
-        bedN = self.bedN
+        header = Header()
+        header.definedFieldCount = self.bedN
         if self.declaration is None:
             try:
-                self.declaration = alignments.declaration[:bedN]
+                self.declaration = alignments.declaration[: self.bedN]
             except AttributeError:
-                self.declaration = AutoSQLTable.default[:bedN]
+                self.declaration = AutoSQLTable.default[: self.bedN]
         declaration = self.declaration
-        compress = self.compress
+        header.fieldCount = len(declaration)
         # see bbFileCreate in bedToBigBed.c
         extra_indices = ExtraIndices(self.extraIndexNames, declaration)
         chromUsageList, aveSize, bedCount = bbiChromUsageFromBedFile(
             alignments, targets, extra_indices
         )
-        stream.write(bytes(64))  # bbiWriteDummyHeader
+        stream.write(bytes(header.size))
         formatter_zoomlevel = struct.Struct("=IxxxxQQ")
         stream.write(bytes(bbiMaxZoomLevels * formatter_zoomlevel.size))
-        asOffset = stream.tell()
+        header.autoSqlOffset = stream.tell()
         stream.write(bytes(declaration))  # asText
-        totalSummaryOffset = stream.tell()
+        header.totalSummaryOffset = stream.tell()
         stream.write(bytes(Summary.size))
-        extraIndicesOffset = stream.tell()
+        header.extraIndicesOffset = stream.tell()
         stream.write(bytes(extra_indices.size))
-        chromTreeOffset = stream.tell()
+        header.chromosomeTreeOffset = stream.tell()
         BPlusTreeFormatter().write(
             chromUsageList, min(self.blockSize, len(chromUsageList)), stream
         )
-        dataOffset = stream.tell()
+        header.fullDataOffset = stream.tell()
         reductions = self.bbiCalcResScalesAndSizes(aveSize)
         stream.write(bedCount.to_bytes(8, sys.byteorder))
         if bedCount > 0:
@@ -529,55 +616,45 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             reductions,
             extra_indices,
         )
-        indexOffset = stream.tell()
-        RTreeFormatter().write(regions, self.blockSize, 1, indexOffset, stream)
+        if self.compress:
+            header.uncompressBufSize = max(
+                maxBlockSize, self.itemsPerSlot * RegionSummary.size
+            )
+        else:
+            header.uncompressBufSize = 0
+        header.fullIndexOffset = stream.tell()
+        RTreeFormatter().write(
+            regions, self.blockSize, 1, header.fullIndexOffset, stream
+        )
         if bedCount > 0:
             zoomList, totalSum = self.bbiWriteZoomLevels(
                 alignments,
                 stream,
-                indexOffset - dataOffset,
+                header.fullIndexOffset - header.fullDataOffset,
                 chromUsageList,
                 reductions,
             )
         else:
             zoomList = []
+        header.zoomLevels = len(zoomList)
         for extra_index in extra_indices:
             extra_index.fileOffset = stream.tell()
             extra_index.chunks.sort()
             BPlusTreeFormatter().write(extra_index.chunks, self.blockSize, stream)
         stream.seek(0)
-        signature = 0x8789F2EB
-        bbiCurrentVersion = 4
-        data = struct.pack(
-            "=IHHQQQHHQQIQ",
-            signature,
-            bbiCurrentVersion,
-            len(zoomList),
-            chromTreeOffset,
-            dataOffset,
-            indexOffset,
-            len(declaration),
-            bedN,
-            asOffset,
-            totalSummaryOffset,
-            max(maxBlockSize, self.itemsPerSlot * RegionSummary.size)
-            if compress
-            else 0,
-            extraIndicesOffset,
-        )
-        stream.write(data)
+        stream.write(bytes(header))
         for row in zoomList:
             data = formatter_zoomlevel.pack(*row)
             stream.write(data)
         stream.write(
             bytes(formatter_zoomlevel.size * (bbiMaxZoomLevels - len(zoomList)))
         )
-        stream.seek(totalSummaryOffset)
+        stream.seek(header.totalSummaryOffset)
         stream.write(bytes(totalSum))
-        assert extraIndicesOffset == stream.tell()
+        assert header.extraIndicesOffset == stream.tell()
         extra_indices.tofile(stream)
-        stream.seek(0, 2)
-        data = signature.to_bytes(4, sys.byteorder)
+        stream.seek(0, io.SEEK_END)
+        data = header.signature.to_bytes(4, sys.byteorder)
         stream.write(data)
 
     def bbiWriteZoomLevels(
@@ -876,75 +953,39 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     mode = "b"
 
     def _read_header(self, stream):
-        # Supplemental Table 5: Common header
-        # magic                  4 bytes, unsigned
-        # version                2 bytes, unsigned
-        # zoomLevels             2 bytes, unsigned
-        # chromosomeTreeOffset   8 bytes, unsigned
-        # fullDataOffset         8 bytes, unsigned; points to dataCount
-        # fullIndexOffset        8 bytes, unsigned
-        # fieldCount             2 bytes, unsigned
-        # definedFieldCount      2 bytes, unsigned
-        # autoSqlOffset          8 bytes, unsigned
-        # totalSummaryOffset     8 bytes, unsigned
-        # uncompressBufSize      4 bytes, unsigned
-        # reserved               8 bytes, unsigned
-        signature = 0x8789F2EB
-        magic = stream.read(4)
-        if int.from_bytes(magic, byteorder="little") == signature:
-            self.byteorder = "<"
-        elif int.from_bytes(magic, byteorder="big") == signature:
-            self.byteorder = ">"
-        else:
-            raise ValueError("not a bigBed file")
-        formatter = struct.Struct(self.byteorder + "HHQQQHHQQIxxxxxxxx")
-        size = formatter.size
-        data = stream.read(size)
-        (
-            version,
-            zoomLevels,
-            chromosomeTreeOffset,
-            fullDataOffset,
-            fullIndexOffset,
-            fieldCount,
-            definedFieldCount,
-            autoSqlOffset,
-            totalSummaryOffset,
-            uncompressBufSize,
-        ) = formatter.unpack(data)
-
-        autoSqlSize = totalSummaryOffset - autoSqlOffset
-        self.declaration = self._read_autosql(
-            stream, autoSqlOffset, autoSqlSize, fieldCount, definedFieldCount
-        )
-
+        header = Header.from_file(stream)
+        byteorder = header.byteorder
+        autoSqlOffset = header.autoSqlOffset
+        self.byteorder = byteorder
+        fieldCount = header.fieldCount
+        definedFieldCount = header.definedFieldCount
+        fullDataOffset = header.fullDataOffset
+        self.declaration = self._read_autosql(stream, header)
         stream.seek(fullDataOffset)
-        (dataCount,) = struct.unpack(self.byteorder + "Q", stream.read(8))
+        (dataCount,) = struct.unpack(byteorder + "Q", stream.read(8))
         self._length = dataCount
 
-        if uncompressBufSize > 0:
+        if header.uncompressBufSize > 0:
             self._compressed = True
         else:
             self._compressed = False
 
-        stream.seek(chromosomeTreeOffset)
-        self.targets = BPlusTreeFormatter(self.byteorder).read(stream)
+        stream.seek(header.chromosomeTreeOffset)
+        self.targets = BPlusTreeFormatter(byteorder).read(stream)
 
-        stream.seek(fullIndexOffset)
-        self.tree = RTreeFormatter(self.byteorder).read(stream)
+        stream.seek(header.fullIndexOffset)
+        self.tree = RTreeFormatter(byteorder).read(stream)
 
         self._data = self._iterate_index(stream)
 
-    def _read_autosql(self, stream, pos, size, fieldCount, definedFieldCount):
-        if definedFieldCount < 3 or definedFieldCount > 12:
-            raise ValueError(
-                "expected between 3 and 12 columns, found %d" % definedFieldCount
-            )
-        self.bedN = definedFieldCount
-        stream.seek(pos)
-        data = stream.read(size)
+    def _read_autosql(self, stream, header):
+        autoSqlSize = header.totalSummaryOffset - header.autoSqlOffset
+        fieldCount = header.fieldCount
+        self.bedN = header.definedFieldCount
+        stream.seek(header.autoSqlOffset)
+        data = stream.read(autoSqlSize)
         declaration = AutoSQLTable.from_bytes(data)
-        self._analyze_fields(declaration, fieldCount, definedFieldCount)
+        self._analyze_fields(declaration, fieldCount, self.bedN)
         return declaration
 
     def _analyze_fields(self, fields, fieldCount, definedFieldCount):
