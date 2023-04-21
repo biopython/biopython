@@ -487,10 +487,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self.targets = targets
         self.compress = compress
         self.extraIndexNames = extraIndex
+        self.itemsPerSlot = 512
+        self.blockSize = 256
 
     def write_file(self, stream, alignments):
-        blockSize = 256
-        itemsPerSlot = 512
         if self.targets is None:
             targets = alignments.targets
         else:
@@ -519,7 +519,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream.write(bytes(extra_indices.size))
         chromTreeOffset = stream.tell()
         BPlusTreeFormatter().write(
-            chromUsageList, min(blockSize, len(chromUsageList)), stream
+            chromUsageList, min(self.blockSize, len(chromUsageList)), stream
         )
         dataOffset = stream.tell()
         reductions = self.bbiCalcResScalesAndSizes(aveSize)
@@ -529,19 +529,16 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 extra_index.initialize_chunks(bedCount)
         maxBlockSize, regions = self.write_alignments(
             alignments,
-            itemsPerSlot,
             stream,
             reductions,
             extra_indices,
         )
         indexOffset = stream.tell()
-        RTreeFormatter().write(regions, blockSize, 1, indexOffset, stream)
+        RTreeFormatter().write(regions, self.blockSize, 1, indexOffset, stream)
         if bedCount > 0:
             zoomList, totalSum = self.bbiWriteZoomLevels(
                 alignments,
                 stream,
-                blockSize,
-                itemsPerSlot,
                 indexOffset - dataOffset,
                 chromUsageList,
                 reductions,
@@ -551,7 +548,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         for extra_index in extra_indices:
             extra_index.fileOffset = stream.tell()
             extra_index.chunks.sort()
-            BPlusTreeFormatter().write(extra_index.chunks, blockSize, stream)
+            BPlusTreeFormatter().write(extra_index.chunks, self.blockSize, stream)
         stream.seek(0)
         signature = 0x8789F2EB
         bbiCurrentVersion = 4
@@ -567,7 +564,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             bedN,
             asOffset,
             totalSummaryOffset,
-            max(maxBlockSize, itemsPerSlot * RegionSummary.size) if compress else 0,
+            max(maxBlockSize, self.itemsPerSlot * RegionSummary.size)
+            if compress
+            else 0,
             extraIndicesOffset,
         )
         stream.write(data)
@@ -589,13 +588,13 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self,
         alignments,  # struct lineFile *lf,    /* Input file. */
         output,  # FILE *f,                /* Output. */
-        blockSize,  # int blockSize,          /* Size of index block */
-        itemsPerSlot,  # int itemsPerSlot,       /* Number of data points bundled at lowest level. */
         dataSize,  # bits64 dataSize,        /* Size of data on disk (after compression if any). */
         chromUsageList,  # struct bbiChromUsage *usageList, /* Result from bbiChromUsageFromBedFile */
         reductions,
     ):
+        blockSize = self.blockSize
         doCompress = self.compress
+        itemsPerSlot = self.itemsPerSlot
         maxReducedSize = dataSize / 2
         zoomList = np.empty(
             bbiMaxZoomLevels,
@@ -785,14 +784,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         rest = "\t".join(row).encode()
         return chrom, chromStart, chromEnd, rest
 
-    def write_alignments(
-        self,
-        alignments,
-        itemsPerSlot,
-        output,
-        reductions,
-        extra_indices,
-    ):
+    def write_alignments(self, alignments, output, reductions, extra_indices):
+        itemsPerSlot = self.itemsPerSlot
         chromId = -1
         itemIx = 0
         sectionStartIx = 0
@@ -805,6 +798,13 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         else:
             buffer = BytesIO()
         maxBlockSize = 0
+
+        # Supplemental Table 12: Binary BED-data format
+        # chromId     4 bytes, unsigned
+        # chromStart  4 bytes, unsigned
+        # chromEnd    4 bytes, unsigned
+        # rest        zero-terminated string in tab-separated format
+        formatter = struct.Struct("=III")
 
         done = False
         alignments.rewind()
@@ -863,8 +863,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 for extra_index in extra_indices:
                     extra_index.addKeysFromRow(alignment, sectionEndIx)
                 sectionEndIx += 1
-            data = struct.pack(f"=III{len(rest)}sx", chromId, start, end, rest)
-            buffer.write(data)
+            data = formatter.pack(chromId, start, end)
+            buffer.write(data + rest + b"\0")
         return maxBlockSize, regions
 
 
