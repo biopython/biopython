@@ -159,6 +159,21 @@ class Header:
         )
 
 
+class ZoomLevel:
+    __slots__ = ["amount", "dataOffset", "indexOffset"]
+
+    # Supplemental Table 6: The zoom header
+    # reductionLevel   4 bytes, unsigned
+    # reserved         4 bytes, unsigned
+    # dataOffset       8 bytes, unsigned
+    # indexOffset      8 bytes, unsigned
+
+    formatter = struct.Struct("=IxxxxQQ")
+
+    def __bytes__(self):
+        return self.formatter.pack(self.amount, self.dataOffset, self.indexOffset)
+
+
 class ZippedStream(io.BytesIO):
     def getvalue(self):
         data = super().getvalue()
@@ -592,8 +607,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             alignments, targets, extra_indices
         )
         stream.write(bytes(header.size))
-        formatter_zoomlevel = struct.Struct("=IxxxxQQ")
-        stream.write(bytes(bbiMaxZoomLevels * formatter_zoomlevel.size))
+        stream.write(bytes(bbiMaxZoomLevels * ZoomLevel.formatter.size))
         header.autoSqlOffset = stream.tell()
         stream.write(bytes(declaration))  # asText
         header.totalSummaryOffset = stream.tell()
@@ -644,10 +658,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream.seek(0)
         stream.write(bytes(header))
         for row in zoomList:
-            data = formatter_zoomlevel.pack(*row)
+            data = bytes(row)
             stream.write(data)
         stream.write(
-            bytes(formatter_zoomlevel.size * (bbiMaxZoomLevels - len(zoomList)))
+            bytes(ZoomLevel.formatter.size * (bbiMaxZoomLevels - len(zoomList)))
         )
         stream.seek(header.totalSummaryOffset)
         stream.write(bytes(totalSum))
@@ -669,10 +683,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         doCompress = self.compress
         itemsPerSlot = self.itemsPerSlot
         maxReducedSize = dataSize / 2
-        zoomList = np.empty(
-            bbiMaxZoomLevels,
-            dtype=[("amount", "=i4"), ("dataOffset", "=i8"), ("indexOffset", "=i8")],
-        )
+        zoomList = [ZoomLevel() for i in range(bbiMaxZoomLevels)]
 
         for initialReduction in reductions:
             reducedSize = initialReduction["size"] * RegionSummary.size
@@ -685,8 +696,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         zoomIncrement = bbiResIncrement
         (
             rezoomedList,
-            zoomList[0]["dataOffset"],
-            zoomList[0]["indexOffset"],
+            zoomList[0].dataOffset,
+            zoomList[0].indexOffset,
             totalSum,
         ) = bedWriteReducedOnceReturnReducedTwice(
             chromUsageList,
@@ -704,7 +715,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         else:
             buffer = BufferedStream(output, RegionSummary.size)
         formatter = RTreeFormatter()
-        zoomList[0]["amount"] = initialReduction["scale"]
+        zoomList[0].amount = initialReduction["scale"]
         zoomCount = initialReduction["size"]
         reduction = initialReduction["scale"] * zoomIncrement
         for zoomLevels in range(1, bbiMaxZoomLevels):
@@ -712,7 +723,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             if rezoomCount >= zoomCount:
                 break
             zoomCount = rezoomCount
-            zoomList[zoomLevels]["dataOffset"] = output.tell()
+            zoomList[zoomLevels].dataOffset = output.tell()
             data = zoomCount.to_bytes(4, sys.byteorder)
             output.write(data)
             for summary in rezoomedList:
@@ -720,8 +731,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             buffer.flush()
             indexOffset = output.tell()
             formatter.write(rezoomedList, blockSize, itemsPerSlot, indexOffset, output)
-            zoomList[zoomLevels]["indexOffset"] = indexOffset
-            zoomList[zoomLevels]["amount"] = reduction
+            zoomList[zoomLevels].indexOffset = indexOffset
+            zoomList[zoomLevels].amount = reduction
             reduction *= zoomIncrement
             rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction)
         return zoomList[:zoomLevels], totalSum
