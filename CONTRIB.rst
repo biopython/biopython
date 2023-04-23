@@ -38,6 +38,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Andrey Raspopov <https://github.com/Andrey-Raspopov>
 - Andrius Merkys <https://github.com/merkys>
 - Anne Pajon <ap one two at sanger ac uk>
+- Antonio Jesús Gálvez Muñoz <https://github.com/PyCreatine>
 - Anthony Bradley <https://github.com/abradle>
 - Antony Lee <https://github.com/anntzer>
 - Anuj Sharma <https://github.com/xulesc>
