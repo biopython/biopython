@@ -77,3 +77,6 @@ ci:
     autoupdate_commit_msg: '[pre-commit.ci] autoupdate'
     # Default is weekly
     autoupdate_schedule: quarterly
+    # Currently pre-commit.ci checks all files, and flake8 takes too long
+    # and causes a timeout - so as a short-term workaround, skip it:
+    skip: [flake8]
