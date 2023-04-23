@@ -42,8 +42,8 @@ class TestBasics(unittest.TestCase):
             test_line = test_handle.readline()
             if not good_line and not test_line:
                 break
-            self.assertTrue(good_line, "Extra info in Test: %r" % test_line)
-            self.assertTrue(test_line, "Extra info in Expected: %r" % good_line)
+            self.assertTrue(good_line, f"Extra info in Test: {test_line!r}")
+            self.assertTrue(test_line, f"Extra info in Expected: {good_line!r}")
             test_normalized = " ".join(x for x in test_line.split() if x)
             good_normalized = " ".join(x for x in good_line.split() if x)
             self.assertEqual(test_normalized, good_normalized)
@@ -7376,6 +7376,42 @@ qualifiers:
             dbxrefs,
         )
 
+    def test_features_spanning_origin(self):
+        """Test that features that span the origin on circular DNA are included correctly for different ways of specifying the topology."""
+        # This first one should fail (location of the feature should be set to none), because
+        # the file says the sequence is linear, but there is a feature that spans the origin.
+        file_fails = "GenBank/addgene-plasmid-11664-sequence-180430.gbk"
+
+        # The right warning is raised
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            record = SeqIO.read(file_fails, "gb")
+            self.assertEqual(len(caught), 1)
+            self.assertEqual(caught[0].category, BiopythonParserWarning)
+            self.assertEqual(
+                str(caught[0].message),
+                "it appears that '8569..276' is a feature that spans the origin, but the sequence topology is undefined; setting feature location to None.",
+            )
+
+        # The last feature location is None
+        self.assertIsNone(record.features[-1].location)
+
+        # This one is circular and should include the features that span the origin
+        file_succeeds = "GenBank/addgene-plasmid-39296-sequence-49545.gbk"
+
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            record = SeqIO.read(file_succeeds, "gb")
+            # This gives the same error for features that span the origin
+            self.assertEqual(len(caught), 2)
+            for c in caught:
+                self.assertEqual(c.category, BiopythonParserWarning)
+                self.assertTrue("unintended behavior" in str(c.message))
+
+        # The last two features should not be none
+        self.assertIsNotNone(record.features[-1].location)
+        self.assertIsNotNone(record.features[-2].location)
+
 
 class GenBankTests(unittest.TestCase):
     """GenBank tests."""
@@ -7434,7 +7470,8 @@ class GenBankTests(unittest.TestCase):
             with self.assertRaises(BiopythonParserWarning) as cm:
                 record = SeqIO.read(path, "genbank")
             self.assertEqual(
-                "Couldn't parse feature location: '-2..492'", str(cm.exception)
+                "negative starting position in feature location '-2..492'; setting feature location to None.",
+                str(cm.exception),
             )
 
     def test_001_genbank_bad_origin_wrapping_location(self):
@@ -7444,8 +7481,8 @@ class GenBankTests(unittest.TestCase):
             warnings.simplefilter("error", BiopythonParserWarning)
             with self.assertRaises(BiopythonParserWarning) as cm:
                 record = SeqIO.read(path, "genbank")
-            self.assertIn(
-                "It appears that '6801..100' is a feature that spans the origin",
+            self.assertEqual(
+                "it appears that '6801..100' is a feature that spans the origin, but the sequence topology is undefined; setting feature location to None.",
                 str(cm.exception),
             )
 
@@ -7830,7 +7867,7 @@ KEYWORDS    """,
                 self.assertEqual(1, SeqIO.write(record, handle, "gb"))
             handle.seek(0)
             line = handle.readline()
-            self.assertIn(" %s " % name, line)
+            self.assertIn(f" {name} ", line)
             self.assertIn(" %i bp " % seq_len, line)
             # Splitting based on whitespace rather than position due to
             # updated GenBank specification
@@ -8103,17 +8140,17 @@ class LineOneTests(unittest.TestCase):
                 scanner._feed_first_line(consumer, line)
                 t = consumer.data.annotations.get("topology", None)
                 self.assertEqual(
-                    t, topo, "Wrong topology %r not %r from %r" % (t, topo, line)
+                    t, topo, f"Wrong topology {t!r} not {topo!r} from {line!r}"
                 )
                 mt = consumer.data.annotations.get("molecule_type", None)
                 self.assertEqual(
                     mt,
                     mol_type,
-                    "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
+                    f"Wrong molecule_type {mt!r} not {mol_type!r} from {line!r}",
                 )
                 d = consumer.data.annotations.get("data_file_division", None)
                 self.assertEqual(
-                    d, div, "Wrong division %r not %r from %r" % (d, div, line)
+                    d, div, f"Wrong division {d!r} not {div!r} from {line!r}"
                 )
                 if warning_list is None:
                     self.assertEqual(len(caught), 0)
@@ -8175,18 +8212,16 @@ class LineOneTests(unittest.TestCase):
             scanner._feed_first_line(consumer, line)
             t = consumer.data.annotations.get("topology", None)
             self.assertEqual(
-                t, topo, "Wrong topology %r not %r from %r" % (t, topo, line)
+                t, topo, f"Wrong topology {t!r} not {topo!r} from {line!r}"
             )
             mt = consumer.data.annotations.get("molecule_type", None)
             self.assertEqual(
                 mt,
                 mol_type,
-                "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
+                f"Wrong molecule_type {mt!r} not {mol_type!r} from {line!r}",
             )
             d = consumer.data.annotations.get("data_file_division", None)
-            self.assertEqual(
-                d, div, "Wrong division %r not %r from %r" % (d, div, line)
-            )
+            self.assertEqual(d, div, f"Wrong division {d!r} not {div!r} from {line!r}")
 
     def test_first_line_imgt(self):
         """Check IMGT ID line parsing."""
@@ -8201,18 +8236,16 @@ class LineOneTests(unittest.TestCase):
             scanner._feed_first_line(consumer, line)
             t = consumer.data.annotations.get("topology", None)
             self.assertEqual(
-                t, topo, "Wrong topology %r not %r from %r" % (t, topo, line)
+                t, topo, f"Wrong topology {t!r} not {topo!r} from {line!r}"
             )
             mt = consumer.data.annotations.get("molecule_type", None)
             self.assertEqual(
                 mt,
                 mol_type,
-                "Wrong molecule_type %r not %r from %r" % (mt, mol_type, line),
+                f"Wrong molecule_type {mt!r} not {mol_type!r} from {line!r}",
             )
             d = consumer.data.annotations.get("data_file_division", None)
-            self.assertEqual(
-                d, div, "Wrong division %r not %r from %r" % (d, div, line)
-            )
+            self.assertEqual(d, div, f"Wrong division {d!r} not {div!r} from {line!r}")
 
 
 class OutputTests(unittest.TestCase):

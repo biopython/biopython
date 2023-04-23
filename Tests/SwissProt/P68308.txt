@@ -1,0 +1,83 @@
+ID   NU3M_BALPH              Reviewed;         115 AA.
+AC   P68308; P24973;
+DT   25-OCT-2004, integrated into UniProtKB/Swiss-Prot.
+DT   25-OCT-2004, sequence version 1.
+DT   25-MAY-2022, entry version 57.
+DE   RecName: Full=NADH-ubiquinone oxidoreductase chain 3 {ECO:0000250|UniProtKB:P03897};
+DE            EC=7.1.1.2 {ECO:0000250|UniProtKB:P03897};
+DE   AltName: Full=NADH dehydrogenase subunit 3;
+GN   Name=MT-ND3 {ECO:0000250|UniProtKB:P03897};
+GN   Synonyms=MTND3, NADH3, ND3;
+OS   Balaenoptera physalus (Fin whale) (Balaena physalus).
+OG   Mitochondrion.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Laurasiatheria; Artiodactyla; Whippomorpha; Cetacea; Mysticeti;
+OC   Balaenopteridae; Balaenoptera.
+OX   NCBI_TaxID=9770;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RC   STRAIN=Isolate No. 27 / Anno 1987; TISSUE=Liver;
+RX   PubMed=1779436; DOI=10.1007/bf02102808;
+RA   Arnason U., Gullberg A., Widegren B.;
+RT   "The complete nucleotide sequence of the mitochondrial DNA of the fin
+RT   whale, Balaenoptera physalus.";
+RL   J. Mol. Evol. 33:556-568(1991).
+CC   -!- FUNCTION: Core subunit of the mitochondrial membrane respiratory chain
+CC       NADH dehydrogenase (Complex I) which catalyzes electron transfer from
+CC       NADH through the respiratory chain, using ubiquinone as an electron
+CC       acceptor. Essential for the catalytic activity of complex I.
+CC       {ECO:0000250|UniProtKB:P03897}.
+CC   -!- CATALYTIC ACTIVITY:
+CC       Reaction=a ubiquinone + 5 H(+)(in) + NADH = a ubiquinol + 4 H(+)(out) +
+CC         NAD(+); Xref=Rhea:RHEA:29091, Rhea:RHEA-COMP:9565, Rhea:RHEA-
+CC         COMP:9566, ChEBI:CHEBI:15378, ChEBI:CHEBI:16389, ChEBI:CHEBI:17976,
+CC         ChEBI:CHEBI:57540, ChEBI:CHEBI:57945; EC=7.1.1.2;
+CC         Evidence={ECO:0000250|UniProtKB:P03897};
+CC   -!- SUBUNIT: Core subunit of respiratory chain NADH dehydrogenase (Complex
+CC       I) which is composed of 45 different subunits. Interacts with TMEM186.
+CC       Interacts with TMEM242 (By similarity). {ECO:0000250|UniProtKB:P03897}.
+CC   -!- SUBCELLULAR LOCATION: Mitochondrion inner membrane
+CC       {ECO:0000250|UniProtKB:P03898}; Multi-pass membrane protein
+CC       {ECO:0000255}.
+CC   -!- SIMILARITY: Belongs to the complex I subunit 3 family. {ECO:0000305}.
+CC   ---------------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see https://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution (CC BY 4.0) License
+CC   ---------------------------------------------------------------------------
+DR   EMBL; X61145; CAA43446.1; -; Genomic_DNA.
+DR   PIR; H58850; H58850.
+DR   RefSeq; NP_006896.1; NC_001321.1.
+DR   AlphaFoldDB; P68308; -.
+DR   SMR; P68308; -.
+DR   GeneID; 807610; -.
+DR   CTD; 4537; -.
+DR   GO; GO:0016021; C:integral component of membrane; IEA:UniProtKB-KW.
+DR   GO; GO:0005743; C:mitochondrial inner membrane; ISS:UniProtKB.
+DR   GO; GO:0070469; C:respirasome; IEA:UniProtKB-KW.
+DR   GO; GO:0008137; F:NADH dehydrogenase (ubiquinone) activity; ISS:UniProtKB.
+DR   GO; GO:0006120; P:mitochondrial electron transport, NADH to ubiquinone; ISS:UniProtKB.
+DR   Gene3D; 1.20.58.1610; -; 1.
+DR   InterPro; IPR000440; NADH_UbQ/plastoQ_OxRdtase_su3.
+DR   InterPro; IPR038430; NDAH_ubi_oxred_su3_sf.
+DR   PANTHER; PTHR11058; PTHR11058; 1.
+DR   Pfam; PF00507; Oxidored_q4; 1.
+PE   3: Inferred from homology;
+KW   Electron transport; Membrane; Mitochondrion; Mitochondrion inner membrane;
+KW   NAD; Respiratory chain; Translocase; Transmembrane; Transmembrane helix;
+KW   Transport; Ubiquinone.
+FT   CHAIN           1..115
+FT                   /note="NADH-ubiquinone oxidoreductase chain 3"
+FT                   /id="PRO_0000117714"
+FT   TRANSMEM        3..23
+FT                   /note="Helical"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        55..75
+FT                   /note="Helical"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        84..104
+FT                   /note="Helical"
+FT                   /evidence="ECO:0000255"
+SQ   SEQUENCE   115 AA;  13022 MW;  405197D2F5D0AC4B CRC64;
+     MNLLLTLLTN TTLALLLVFI AFWLPQLNVY AEKTSPYECG FDPMGSARLP FSMKFFLVAI
+     TFLLFDLEIA LLLPLPWAIQ SNNLNTMLTM ALFLISLLAA SLAYEWTQEG LEWAE
+//

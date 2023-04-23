@@ -244,7 +244,7 @@ class Atom:
 
     def __repr__(self):
         """Print Atom object as <Atom atom_name>."""
-        return "<Atom %s>" % self.get_id()
+        return f"<Atom {self.get_id()}>"
 
     def __sub__(self, other):
         """Calculate distance between two atoms.
@@ -494,9 +494,9 @@ class DisorderedAtom(DisorderedEntityWrapper):
     def __repr__(self):
         """Return disordered atom identifier."""
         if self.child_dict:
-            return "<DisorderedAtom %s>" % self.get_id()
+            return f"<DisorderedAtom {self.get_id()}>"
         else:
-            return "<Empty DisorderedAtom %s>" % self.get_id()
+            return f"<Empty DisorderedAtom {self.get_id()}>"
 
     # This is a separate method from Entity.center_of_mass since DisorderedAtoms
     # will be unpacked by Residue.get_unpacked_list(). Here we allow for a very

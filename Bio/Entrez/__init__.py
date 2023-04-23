@@ -36,6 +36,16 @@ which has a ``.name`` attribute giving the filename, the handles from
 ``Bio.Entrez`` all have a ``.url`` attribute instead giving the URL
 used to connect to the NCBI Entrez API.
 
+The ``epost``, ``efetch``, and ``esummary`` tools take an "id" parameter
+which corresponds to one or more database UIDs (or accession.version
+identifiers in the case of sequence databases such as "nuccore" or
+"protein"). The Python value of the "id" keyword passed to these functions
+may be either a single ID as a string or integer or multiple IDs as an
+iterable of strings/integers. You may also pass a single string containing
+multiple IDs delimited by commas. The ``elink`` tool also accepts multiple
+IDs but the argument is handled differently than the other three. See that
+function's docstring for more information.
+
 All the functions that send requests to the NCBI Entrez API will
 automatically respect the NCBI rate limit (of 3 requests per second
 without an API key, or 10 requests per second with an API key) and
@@ -122,7 +132,7 @@ import warnings
 import io
 from urllib.error import URLError, HTTPError
 from urllib.parse import urlencode
-from urllib.request import urlopen
+from urllib.request import urlopen, Request
 
 
 email = None
@@ -142,14 +152,14 @@ def epost(db, **keywds):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EPost
 
-    Return a handle to the results.
-
-    Raises an IOError exception if there's a network error.
+    :returns: Handle to the results.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi"
     variables = {"db": db}
     variables.update(keywds)
-    return _open(cgi, variables, post=True)
+    request = _build_request(cgi, variables, post=True)
+    return _open(request)
 
 
 def efetch(db, **keywords):
@@ -160,10 +170,6 @@ def efetch(db, **keywords):
 
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch
-
-    Return a handle to the results.
-
-    Raises an IOError exception if there's a network error.
 
     Short example:
 
@@ -179,32 +185,15 @@ def efetch(db, **keywords):
 
     **Warning:** The NCBI changed the default retmode in Feb 2012, so many
     databases which previously returned text output now give XML.
+
+    :returns: Handle to the results.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
     variables = {"db": db}
     variables.update(keywords)
-    post = False
-    try:
-        ids = variables["id"]
-    except KeyError:
-        pass
-    else:
-        try:
-            # ids is a single integer or a string representing a single integer
-            ids = str(int(ids))
-        except TypeError:
-            # ids was not a string; try an iterable:
-            ids = ",".join(map(str, ids))
-        except ValueError:
-            # string with commas or string not representing an integer
-            ids = ",".join(map(str, (id.strip() for id in ids.split(","))))
-
-        variables["id"] = ids
-        if ids.count(",") >= 200:
-            # NCBI prefers an HTTP POST instead of an HTTP GET if there are
-            # more than about 200 IDs
-            post = True
-    return _open(cgi, variables, post=post)
+    request = _build_request(cgi, variables)
+    return _open(request)
 
 
 def esearch(db, term, **keywds):
@@ -216,10 +205,6 @@ def esearch(db, term, **keywds):
 
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch
-
-    Return a handle to the results which are always in XML format.
-
-    Raises an IOError exception if there's a network error.
 
     Short example:
 
@@ -235,11 +220,14 @@ def esearch(db, term, **keywds):
     >>> "EF590892.1" in record["IdList"]
     True
 
+    :returns: Handle to the results, which are always in XML format.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
     variables = {"db": db, "term": term}
     variables.update(keywds)
-    return _open(cgi, variables)
+    request = _build_request(cgi, variables)
+    return _open(request)
 
 
 def elink(**keywds):
@@ -254,9 +242,12 @@ def elink(**keywds):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ELink
 
-    Return a handle to the results, by default in XML format.
-
-    Raises an IOError exception if there's a network error.
+    Note that ELink treats the "id" parameter differently than the other
+    tools when multiple values are given. You should generally pass multiple
+    UIDs as a list of strings or integers. This will provide a "one-to-one"
+    mapping from source database UIDs to destination database UIDs in the
+    result. If multiple source UIDs are passed as a single comma-delimited
+    string all destination UIDs will be mixed together in the result.
 
     This example finds articles related to the Biopython application
     note's entry in the PubMed database:
@@ -270,15 +261,19 @@ def elink(**keywds):
     >>> print(record[0]["LinkSetDb"][0]["LinkName"])
     pubmed_pubmed
     >>> linked = [link["Id"] for link in record[0]["LinkSetDb"][0]["Link"]]
-    >>> "17121776" in linked
+    >>> "14630660" in linked
     True
 
     This is explained in much more detail in the Biopython Tutorial.
+
+    :returns: Handle to the results, by default in XML format.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi"
     variables = {}
     variables.update(keywds)
-    return _open(cgi, variables)
+    request = _build_request(cgi, variables, join_ids=False)
+    return _open(request)
 
 
 def einfo(**keywds):
@@ -290,10 +285,6 @@ def einfo(**keywds):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EInfo
 
-    Return a handle to the results, by default in XML format.
-
-    Raises an IOError exception if there's a network error.
-
     Short example:
 
     >>> from Bio import Entrez
@@ -302,11 +293,14 @@ def einfo(**keywds):
     >>> 'pubmed' in record['DbList']
     True
 
+    :returns: Handle to the results, by default in XML format.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi"
     variables = {}
     variables.update(keywds)
-    return _open(cgi, variables)
+    request = _build_request(cgi, variables)
+    return _open(request)
 
 
 def esummary(**keywds):
@@ -317,10 +311,6 @@ def esummary(**keywds):
 
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESummary
-
-    Return a handle to the results, by default in XML format.
-
-    Raises an IOError exception if there's a network error.
 
     This example discovers more about entry 19923 in the structure
     database:
@@ -335,11 +325,15 @@ def esummary(**keywds):
     >>> print(record[0]["PdbDescr"])
     Crystal Structure Of E. Coli Aconitase B
 
+
+    :returns: Handle to the results, by default in XML format.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
     variables = {}
     variables.update(keywds)
-    return _open(cgi, variables)
+    request = _build_request(cgi, variables)
+    return _open(request)
 
 
 def egquery(**keywds):
@@ -350,10 +344,6 @@ def egquery(**keywds):
 
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EGQuery
-
-    Return a handle to the results in XML format.
-
-    Raises an IOError exception if there's a network error.
 
     This quick example based on a longer version from the Biopython
     Tutorial just checks there are over 60 matches for 'Biopython'
@@ -369,11 +359,14 @@ def egquery(**keywds):
     ...         print(int(row["Count"]) > 60)
     True
 
+    :returns: Handle to the results, by default in XML format.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi"
     variables = {}
     variables.update(keywds)
-    return _open(cgi, variables)
+    request = _build_request(cgi, variables)
+    return _open(request)
 
 
 def espell(**keywds):
@@ -383,10 +376,6 @@ def espell(**keywds):
 
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESpell
-
-    Return a handle to the results, by default in XML format.
-
-    Raises an IOError exception if there's a network error.
 
     Short example:
 
@@ -398,11 +387,14 @@ def espell(**keywds):
     >>> print(record["CorrectedQuery"])
     biopython
 
+    :returns: Handle to the results, by default in XML format.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi"
     variables = {}
     variables.update(keywds)
-    return _open(cgi, variables)
+    request = _build_request(cgi, variables)
+    return _open(request)
 
 
 def _update_ecitmatch_variables(keywds):
@@ -442,10 +434,6 @@ def ecitmatch(**keywds):
     See the online documentation for an explanation of the parameters:
     http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ECitMatch
 
-    Return a handle to the results, by default in plain text
-
-    Raises an IOError exception if there's a network error.
-
     Short example:
 
     >>> from Bio import Entrez
@@ -458,13 +446,16 @@ def ecitmatch(**keywds):
     ['proc natl acad sci u s a', '1991', '88', '3248', 'mann bj', 'citation_1', '2014248']
     >>> handle.close()
 
+    :returns: Handle to the results, by default in plain text.
+    :raises urllib.error.URLError: If there's a network error.
     """
     cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi"
     variables = _update_ecitmatch_variables(keywds)
-    return _open(cgi, variables, ecitmatch=True)
+    request = _build_request(cgi, variables, ecitmatch=True)
+    return _open(request)
 
 
-def read(handle, validate=True, escape=False):
+def read(handle, validate=True, escape=False, ignore_errors=False):
     """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
@@ -496,6 +487,10 @@ def read(handle, validate=True, escape=False):
     valid HTML fragments. For example, a less-than sign (<) is replaced by
     &lt;. If escape is False (default), the string is returned as is.
 
+    If ignore_errors is False (default), any error messages in the XML file
+    will raise a RuntimeError. If ignore_errors is True, error messages will
+    be stored as ErrorElement items, without raising an exception.
+
     Whereas the data structure seems to consist of generic Python lists,
     dictionaries, strings, and so on, each of these is actually a class
     derived from the base type. This allows us to store the attributes
@@ -504,12 +499,12 @@ def read(handle, validate=True, escape=False):
     """
     from .Parser import DataHandler
 
-    handler = DataHandler(validate, escape)
+    handler = DataHandler(validate, escape, ignore_errors)
     record = handler.read(handle)
     return record
 
 
-def parse(handle, validate=True, escape=False):
+def parse(handle, validate=True, escape=False, ignore_errors=False):
     """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
@@ -550,6 +545,10 @@ def parse(handle, validate=True, escape=False):
     valid HTML fragments. For example, a less-than sign (<) is replaced by
     &lt;. If escape is False (default), the string is returned as is.
 
+    If ignore_errors is False (default), any error messages in the XML file
+    will raise a RuntimeError. If ignore_errors is True, error messages will
+    be stored as ErrorElement items, without raising an exception.
+
     Whereas the data structure seems to consist of generic Python lists,
     dictionaries, strings, and so on, each of these is actually a class
     derived from the base type. This allows us to store the attributes
@@ -558,33 +557,30 @@ def parse(handle, validate=True, escape=False):
     """
     from .Parser import DataHandler
 
-    handler = DataHandler(validate, escape)
+    handler = DataHandler(validate, escape, ignore_errors)
     records = handler.parse(handle)
     return records
 
 
-def _open(cgi, params=None, post=None, ecitmatch=False):
-    """Build the URL and open a handle to it (PRIVATE).
+def _open(request):
+    """Make an HTTP request to Entrez, handling errors and enforcing rate limiting (PRIVATE).
 
-    Open a handle to Entrez.  cgi is the URL for the cgi script to access.
-    params is a dictionary with the options to pass to it.  Does some
-    simple error checking, and will raise an IOError if it encounters one.
+    Does some simple error checking and will try again after certain types of errors, up to
+    ``max_retries`` times. This function also enforces the "up to three queries per second
+    rule" to avoid abusing the NCBI servers (this limit is increased to 10 if using an API key).
 
-    The argument post should be a boolean to explicitly control if an HTTP
-    POST should be used rather an HTTP GET based on the query length.
-    By default (post=None), POST is used if the URL encoded parameters would
-    be over 1000 characters long.
-
-    This function also enforces the "up to three queries per second rule"
-    to avoid abusing the NCBI servers.
+    :param req_or_cgi: A Request object returned by ``_build_request``.
+    :type req_or_cgi: urllib.request.Request
+    :returns: Handle to HTTP response as returned by ``urllib.request.urlopen``. Will be wrapped in
+        an ``io.TextIOWrapper`` if its content type is plain text.
+    :rtype: http.client.HTTPResponse or io.TextIOWrapper
+    :raises urllib.error.URLError: Errors raised by ``urlopen`` past the maximum number of retries.
     """
     # NCBI requirement: At most three queries per second if no API key is provided.
     # Equivalently, at least a third of second between queries
-    params = _construct_params(params)
-    options = _encode_options(ecitmatch, params)
     # Using just 0.333333334 seconds sometimes hit the NCBI rate limit,
     # the slightly longer pause of 0.37 seconds has been more reliable.
-    delay = 0.1 if api_key else 0.37
+    delay = 0.1 if _has_api_key(request) else 0.37
     current = time.time()
     wait = _open.previous + delay - current
     if wait > 0:
@@ -593,17 +589,9 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
     else:
         _open.previous = current
 
-    # By default, post is None. Set to a boolean to over-ride length choice:
-    if post is None and len(options) > 1000:
-        post = True
-    cgi = _construct_cgi(cgi, post, options)
-
     for i in range(max_tries):
         try:
-            if post:
-                handle = urlopen(cgi, data=options.encode("utf8"))
-            else:
-                handle = urlopen(cgi)
+            handle = urlopen(request)
         except HTTPError as exception:
             # Reraise if the final try fails
             if i >= max_tries - 1:
@@ -638,56 +626,120 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
 _open.previous = 0
 
 
-def _construct_params(params):
+def _build_request(cgi, params=None, post=None, ecitmatch=False, join_ids=True):
+    """Build a Request object for an E-utility.
+
+    :param str cgi: base URL for the CGI script to access.
+    :param params: Mapping containing options to pass to the CGI script. Keys must be strings.
+    :type params: dict or None
+    :param bool post: Whether to use the HTTP POST method rather than GET. By default (``post=None``),
+        POST is used if the URL encoded parameters would be over 1000 characters long, as is
+        suggested in the E-Utilities documentation.
+    :param bool ecitmatch: Don't URL-encode pipe ("|") characters, this is expected by the ecitmatch
+        tool.
+    :param bool join_ids: Passed to ``_construct_params``.
+    :returns: A request object ready to be passed to ``_open``.
+    :rtype: urllib.request.Request
+    """
+    params = _construct_params(params, join_ids=join_ids)
+
+    params_str = urlencode(params, doseq=True)
+    if ecitmatch:
+        params_str = params_str.replace("%7C", "|")
+
+    # By default, post is None. Set to a boolean to over-ride length choice:
+    if post is None and len(params_str) > 1000:
+        post = True
+
+    # NCBI prefers an HTTP POST instead of an HTTP GET if there are more than about 200 IDs
+    if post is None and "id" in params:
+        idcount = params["id"].count(",") + 1
+        if idcount >= 200:
+            post = True
+
+    if post:
+        return Request(cgi, data=params_str.encode("utf8"), method="POST")
+    else:
+        return Request(cgi + "?" + params_str, method="GET")
+
+
+def _construct_params(params, join_ids=True):
+    """Construct/format parameter dict for an Entrez request.
+
+    :param params: User-supplied parameters.
+    :type params: dict or None
+    :param bool join_ids: If True and the "id" key of ``params`` is a list
+        containing multiple UIDs, join them into a single comma-delimited string.
+    :returns: Parameters with defaults added and keys with None values removed.
+    :rtype: dict
+    """
     if params is None:
         params = {}
+
+    # Tell Entrez that we are using Biopython (or whatever the user has
+    # specified explicitly in the parameters or by changing the default)
+    params.setdefault("tool", tool)
+
+    # Tell Entrez who we are
+    params.setdefault("email", email)
+    params.setdefault("api_key", api_key)
 
     # Remove None values from the parameters
     for key, value in list(params.items()):
         if value is None:
             del params[key]
-    # Tell Entrez that we are using Biopython (or whatever the user has
-    # specified explicitly in the parameters or by changing the default)
-    if "tool" not in params:
-        params["tool"] = tool
-    # Tell Entrez who we are
-    if "email" not in params:
-        if email is not None:
-            params["email"] = email
-        else:
-            warnings.warn(
-                """
-Email address is not specified.
 
-To make use of NCBI's E-utilities, NCBI requires you to specify your
-email address with each request.  As an example, if your email address
-is A.N.Other@example.com, you can specify it as follows:
-   from Bio import Entrez
-   Entrez.email = 'A.N.Other@example.com'
-In case of excessive usage of the E-utilities, NCBI will attempt to contact
-a user at the email address provided before blocking access to the
-E-utilities.""",
-                UserWarning,
-            )
-    if api_key and "api_key" not in params:
-        params["api_key"] = api_key
+    # Warn if email not set
+    if "email" not in params:
+        warnings.warn(
+            """
+            Email address is not specified.
+
+            To make use of NCBI's E-utilities, NCBI requires you to specify your
+            email address with each request.  As an example, if your email address
+            is A.N.Other@example.com, you can specify it as follows:
+               from Bio import Entrez
+               Entrez.email = 'A.N.Other@example.com'
+            In case of excessive usage of the E-utilities, NCBI will attempt to contact
+            a user at the email address provided before blocking access to the
+            E-utilities.""",
+            UserWarning,
+        )
+
+    # Format "id" parameter properly
+    if join_ids and "id" in params:
+        params["id"] = _format_ids(params["id"])
+
     return params
 
 
-def _encode_options(ecitmatch, params):
-    # Open a handle to Entrez.
-    options = urlencode(params, doseq=True)
-    # urlencode encodes pipes, which NCBI expects in ECitMatch
-    if ecitmatch:
-        options = options.replace("%7C", "|")
-    return options
+def _format_ids(ids):
+    """Convert one or more UIDs to a single comma-delimited string.
+
+    Input may be a single ID as an integer or string, an iterable of strings/ints,
+    or a string of IDs already separated by commas.
+    """
+    if isinstance(ids, int):
+        # Single integer, just convert to str
+        return str(ids)
+
+    if isinstance(ids, str):
+        # String which represents one or more IDs joined by commas
+        # Remove any whitespace around commas if they are present
+        return ",".join(id.strip() for id in ids.split(","))
+
+    # Not a string or integer, assume iterable
+    return ",".join(map(str, ids))
 
 
-def _construct_cgi(cgi, post, options):
-    if not post:
-        # HTTP GET
-        cgi += "?" + options
-    return cgi
+def _has_api_key(request):
+    """Check if a Request has the api_key parameter set, to set the rate limit.
+
+    Works with GET or POST requests.
+    """
+    if request.method == "POST":
+        return b"api_key=" in request.data
+    return "api_key=" in request.full_url
 
 
 if __name__ == "__main__":

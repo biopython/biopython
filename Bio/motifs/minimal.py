@@ -191,3 +191,9 @@ def _read_motif_name(handle):
     words = line.split()
     name = " ".join(words[0:2])
     return name
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()

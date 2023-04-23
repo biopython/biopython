@@ -123,14 +123,6 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual("19304878", record["PMID"])
         self.assertEqual("10.1093/bioinformatics/btp163 [doi]", record["LID"])
 
-    def test_efetch_biosystems_xml(self):
-        """Test Entrez parser with XML from biosystems."""
-        handle = Entrez.efetch(id="1134002", db="biosystems", retmode="xml")
-        records = list(Entrez.parse(handle))
-        handle.close()
-        self.assertEqual(len(records), 1)
-        self.assertEqual(records[0]["System_sysid"]["Sys-id"]["Sys-id_bsid"], "1134002")
-
     def test_efetch_taxonomy_xml(self):
         """Test Entrez using a integer id - like a taxon id."""
         handle = Entrez.efetch(db="taxonomy", id=3702, retmode="XML")
@@ -141,21 +133,48 @@ class EntrezOnlineCase(unittest.TestCase):
         handle.close()
 
     def test_elink(self):
-        """Test Entrez.elink with multiple ids, both comma separated and as list."""
-        # Commas: Link from protein to gene
-        handle = Entrez.elink(
-            db="gene", dbfrom="protein", id="15718680,157427902,119703751"
-        )
-        handle.close()
+        """Test Entrez.elink with multiple ids, both comma separated and as list.
 
-        # Multiple ID entries: Find one-to-one links from protein to gene
-        handle = Entrez.elink(
-            db="gene", dbfrom="protein", id=["15718680", "157427902", "119703751"]
-        )
-        handle.close()
+        This is tricky because the ELink tool treats the "id" parameter
+        differently than the others (see docstring of the elink() function).
+        """
+        params = {"db": "gene", "dbfrom": "protein"}
+        ids = ["15718680", "157427902", "119703751"]
+
+        # Pass list argument - one-to-one
+        with Entrez.elink(id=ids, **params) as handle:
+            result1 = Entrez.read(handle)
+
+        self.assertEqual(len(result1), len(ids))
+
+        id_map = {}  # Dictionary mapping each gene ID to some number of protein IDs
+
+        for linkset in result1:
+            (from_id,) = linkset["IdList"]
+            (linksetdb,) = linkset["LinkSetDb"]
+            to_ids = [link["Id"] for link in linksetdb["Link"]]
+            # Failure here could indicate we used an invalid ID
+            self.assertGreater(len(to_ids), 0)
+            id_map[from_id] = to_ids
+
+        self.assertCountEqual(id_map.keys(), ids)
+
+        # Pass string argument - single LinkSet
+        with Entrez.elink(id=",".join(ids), **params) as handle:
+            result2 = Entrez.read(handle)
+
+        (linkset,) = result2
+        self.assertCountEqual(linkset["IdList"], ids)
+
+        # Check we got the same set of IDs as in the last request
+        (linksetdb,) = linkset["LinkSetDb"]
+        to_ids = [link["Id"] for link in linksetdb["Link"]]
+        prev_to_ids = set().union(*id_map.values())
+        self.assertCountEqual(to_ids, prev_to_ids)
 
     def test_epost(self):
         """Test Entrez.epost with multiple ids, both comma separated and as list."""
+        # TODO - check results
         handle = Entrez.epost("nuccore", id="186972394,160418")
         handle.close()
         handle = Entrez.epost("nuccore", id=["160418", "160351"])

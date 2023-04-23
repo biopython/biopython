@@ -85,7 +85,7 @@ class NoneElement:
             attributes = self.attributes
         except AttributeError:
             return "NoneElement"
-        return f"NoneElement(attributes={attributes!r})"
+        return "NoneElement(attributes=%r)" % attributes
 
 
 class IntegerElement(int):
@@ -158,7 +158,8 @@ class ListElement(list):
         """Append an element to the list, checking tags."""
         key = value.key
         if self.allowed_tags is not None and key not in self.allowed_tags:
-            raise ValueError(f"Unexpected item '{key}' in list")
+            raise ValueError("Unexpected item '%s' in list" % key)
+        del value.key
         self.append(value)
 
 
@@ -192,11 +193,67 @@ class DictionaryElement(dict):
         key = value.key
         tag = value.tag
         if self.allowed_tags is not None and tag not in self.allowed_tags:
-            raise ValueError(f"Unexpected item '{key}' in dictionary")
+            raise ValueError("Unexpected item '%s' in dictionary" % key)
+        del value.key
         if self.repeated_tags and key in self.repeated_tags:
             self[key].append(value)
         else:
             self[key] = value
+
+
+class OrderedListElement(list):
+    """NCBI Entrez XML element mapped to a list of lists.
+
+    OrderedListElement is used to describe a list of repeating elements such as
+    A, B, C, A, B, C, A, B, C ... where each set of A, B, C forms a group. This
+    is then stored as [[A, B, C], [A, B, C], [A, B, C], ...]
+    """
+
+    def __init__(self, tag, attributes, allowed_tags, first_tag, key=None):
+        """Create an OrderedListElement."""
+        self.tag = tag
+        if key is None:
+            self.key = tag
+        else:
+            self.key = key
+        self.attributes = attributes
+        self.allowed_tags = allowed_tags
+        self.first_tag = first_tag
+
+    def __repr__(self):
+        """Return a string representation of the object."""
+        text = list.__repr__(self)
+        attributes = self.attributes
+        if not attributes:
+            return text
+        return f"OrderedListElement({text}, attributes={attributes!r})"
+
+    def store(self, value):
+        """Append an element to the list, checking tags."""
+        key = value.key
+        if self.allowed_tags is not None and key not in self.allowed_tags:
+            raise ValueError("Unexpected item '%s' in list" % key)
+        if key == self.first_tag:
+            self.append([])
+        self[-1].append(value)
+
+
+class ErrorElement(str):
+    """NCBI Entrez XML element containing an error message."""
+
+    def __new__(cls, value, *args, **kwargs):
+        """Create an ErrorElement."""
+        return str.__new__(cls, value)
+
+    def __init__(self, value, tag):
+        """Initialize an ErrorElement."""
+        self.tag = tag
+        self.key = tag
+
+    def __repr__(self):
+        """Return the error message as a string."""
+        text = str.__repr__(self)
+        return f"ErrorElement({text})"
 
 
 class NotXMLError(ValueError):
@@ -256,7 +313,10 @@ class DataHandlerMeta(type):
 
     def __init__(cls, *args, **kwargs):
         """Initialize the class."""
-        cls._directory = None
+        try:
+            cls.directory = None  # use default directory for local cache
+        except PermissionError:
+            cls._directory = None  # no local cache
 
     @property
     def directory(cls):
@@ -274,13 +334,15 @@ class DataHandlerMeta(type):
             else:  # Unix/Linux/Mac
                 home = os.path.expanduser("~")
                 value = os.path.join(home, ".config", "biopython")
-        cls._directory = value
         # Create DTD local directory
-        cls.local_dtd_dir = os.path.join(cls._directory, "Bio", "Entrez", "DTDs")
+        cls.local_dtd_dir = os.path.join(value, "Bio", "Entrez", "DTDs")
         os.makedirs(cls.local_dtd_dir, exist_ok=True)
         # Create XSD local directory
-        cls.local_xsd_dir = os.path.join(cls._directory, "Bio", "Entrez", "XSDs")
+        cls.local_xsd_dir = os.path.join(value, "Bio", "Entrez", "XSDs")
         os.makedirs(cls.local_xsd_dir, exist_ok=True)
+        # Save the directory name after creating the DTD and XSD local
+        # directories to ensure there was no PermissionError.
+        cls._directory = value
 
 
 class DataHandler(metaclass=DataHandlerMeta):
@@ -290,12 +352,12 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     global_dtd_dir = os.path.join(Entrez.__path__[0], "DTDs")
     global_xsd_dir = os.path.join(Entrez.__path__[0], "XSDs")
-    local_dtd_dir = ""
-    local_xsd_dir = ""
+    local_dtd_dir = None
+    local_xsd_dir = None
 
     del Entrez
 
-    def __init__(self, validate, escape):
+    def __init__(self, validate, escape, ignore_errors):
         """Create a DataHandler object."""
         self.dtd_urls = []
         self.element = None
@@ -303,12 +365,12 @@ class DataHandler(metaclass=DataHandlerMeta):
         self.data = []
         self.attributes = None
         self.allowed_tags = None
+        self.constructors = {}
         self.strings = {}
-        self.lists = {}
-        self.dictionaries = {}
         self.items = set()
         self.errors = set()
         self.validating = validate
+        self.ignore_errors = ignore_errors
         self.parser = expat.ParserCreate(namespace_separator=" ")
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         self.parser.XmlDeclHandler = self.xmlDeclHandler
@@ -339,7 +401,7 @@ class DataHandler(metaclass=DataHandlerMeta):
                 # the input data is not in XML format.
                 raise NotXMLError(e) from None
         try:
-            return self.record
+            record = self.record
         except AttributeError:
             if self.parser.StartElementHandler:
                 # We saw the initial <!xml declaration, and expat didn't notice
@@ -354,6 +416,9 @@ class DataHandler(metaclass=DataHandlerMeta):
                 # We did not see the initial <!xml declaration, so probably
                 # the input data is not in XML format.
                 raise NotXMLError("XML declaration not found") from None
+        else:
+            del record.key
+            return record
 
     def parse(self, handle):
         """Parse the XML in the given file handle."""
@@ -462,6 +527,8 @@ class DataHandler(metaclass=DataHandlerMeta):
                 assert uri == "http://www.w3.org/1998/Math/MathML"
             elif prefix == "xlink":
                 assert uri == "http://www.w3.org/1999/xlink"
+            elif prefix == "ali":
+                assert uri.rstrip("/") == "http://www.niso.org/schemas/ali/1.0"
             else:
                 raise ValueError(f"Unknown prefix '{prefix}' with uri '{uri}'")
             self.namespace_level[prefix] += 1
@@ -481,7 +548,7 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     def schemaHandler(self, name, attrs):
         """Process the XML schema (before processing the element)."""
-        key = f"{self.schema_namespace} noNamespaceSchemaLocation"
+        key = "%s noNamespaceSchemaLocation" % self.schema_namespace
         schema = attrs[key]
         handle = self.open_xsd_file(os.path.basename(schema))
         # if there is no local xsd file grab the url and parse the file
@@ -501,6 +568,15 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     def startElementHandler(self, tag, attrs):
         """Handle start of an XML element."""
+        prefix = None
+        if self.namespace_prefix:
+            try:
+                uri, name = tag.split()
+            except ValueError:
+                pass
+            else:
+                prefix = self.namespace_prefix[uri]
+                tag = f"{prefix}:{name}"
         if tag in self.items:
             assert tag == "Item"
             name = attrs["Name"]
@@ -567,7 +643,7 @@ class DataHandler(metaclass=DataHandlerMeta):
                 self.parser.EndElementHandler = self.endStringElementHandler
                 self.parser.CharacterDataHandler = self.characterDataHandler
             else:
-                raise ValueError(f"Unknown item type {name}")
+                raise ValueError("Unknown item type %s" % name)
         elif tag in self.errors:
             self.parser.EndElementHandler = self.endErrorElementHandler
             self.parser.CharacterDataHandler = self.characterDataHandler
@@ -579,22 +655,9 @@ class DataHandler(metaclass=DataHandlerMeta):
             self.allowed_tags = self.strings[tag]
             assert self.attributes is None
             self.attributes = attrs
-        elif tag in self.dictionaries:
-            allowed_tags, repeated_tags = self.dictionaries[tag]
-            element = DictionaryElement(tag, attrs, allowed_tags, repeated_tags)
-            parent = self.element
-            element.parent = parent
-            # For consistency with lists below, store the element here
-            if parent is None:
-                self.record = element
-            else:
-                parent.store(element)
-            self.element = element
-            self.parser.EndElementHandler = self.endElementHandler
-            self.parser.CharacterDataHandler = self.skipCharacterDataHandler
-        elif tag in self.lists:
-            allowed_tags = self.lists[tag]
-            element = ListElement(tag, attrs, allowed_tags)
+        elif tag in self.constructors:
+            cls, allowed_tags = self.constructors[tag]
+            element = cls(tag, attrs, *allowed_tags)
             parent = self.element
             element.parent = parent
             if parent is None:
@@ -607,14 +670,28 @@ class DataHandler(metaclass=DataHandlerMeta):
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
         else:
             # Element not found in DTD
-            if self.validating:
+            if tag == "processing-meta":
+                terms = []
+                dtd_version = "1.3"
+                if attrs["tagset-family"] == "jats":
+                    terms.append("JATS")
+                if attrs["base-tagset"] == "archiving":
+                    term = "archivearticle" + dtd_version.replace(".", "-")
+                    terms.append(term)
+                if attrs.get("mathml-version") == "3.0":
+                    terms.append("mathml3")
+                basename = "-".join(terms)
+                url = f"https://{attrs['tagset-family']}.nlm.nih.gov/{attrs['base-tagset']}/{dtd_version}/{basename}.dtd"
+                self.xmlDeclHandler(None, None, None)
+                self.externalEntityRefHandler(None, None, url, None)
+                # remainder will be ignored and will not be stored in the record
+            elif self.validating:
                 raise ValidationError(tag)
-            else:
-                # this will not be stored in the record
-                self.parser.StartElementHandler = self.startSkipElementHandler
-                self.parser.EndElementHandler = self.endSkipElementHandler
-                self.parser.CharacterDataHandler = self.skipCharacterDataHandler
-                self.level = 1
+            # this will not be stored in the record
+            self.parser.StartElementHandler = self.startSkipElementHandler
+            self.parser.EndElementHandler = self.endSkipElementHandler
+            self.parser.CharacterDataHandler = self.skipCharacterDataHandler
+            self.level = 1
 
     def startRawElementHandler(self, name, attrs):
         """Handle start of an XML raw element."""
@@ -635,7 +712,7 @@ class DataHandler(metaclass=DataHandlerMeta):
             key = name
         # self.allowed_tags is ignored for now. Anyway we know what to do
         # with this tag.
-        tag = f"<{name}"
+        tag = "<%s" % name
         for key, value in attrs.items():
             tag += f' {key}="{value}"'
         tag += ">"
@@ -658,6 +735,14 @@ class DataHandler(metaclass=DataHandlerMeta):
         self.data = []
         attributes = self.attributes
         self.attributes = None
+        if self.namespace_prefix:
+            try:
+                uri, name = tag.split()
+            except ValueError:
+                pass
+            else:
+                prefix = self.namespace_prefix[uri]
+                tag = f"{prefix}:{name}"
         if tag in self.items:
             assert tag == "Item"
             key = attributes["Name"]
@@ -672,7 +757,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         self.allowed_tags = None
 
     def endRawElementHandler(self, name):
-        """Handle start of an XML raw element."""
+        """Handle end of an XML raw element."""
         self.level -= 1
         if self.level == 0:
             self.parser.EndElementHandler = self.endStringElementHandler
@@ -681,26 +766,34 @@ class DataHandler(metaclass=DataHandlerMeta):
                 uri, name = name.split()
             except ValueError:
                 pass
-        tag = f"</{name}>"
+        tag = "</%s>" % name
         self.data.append(tag)
 
     def endSkipElementHandler(self, name):
-        """Handle start of an XML skip element."""
+        """Handle end of an XML skip element."""
         self.level -= 1
         if self.level == 0:
             self.parser.StartElementHandler = self.startElementHandler
             self.parser.EndElementHandler = self.endElementHandler
 
-    def endErrorElementHandler(self, name):
-        """Handle start of an XML error element."""
-        if self.data:
-            # error found:
-            value = "".join(self.data)
-            raise RuntimeError(value)
-        # no error found:
-        if self.element is not None:
+    def endErrorElementHandler(self, tag):
+        """Handle end of an XML error element."""
+        element = self.element
+        if element is not None:
+            self.parser.StartElementHandler = self.startElementHandler
             self.parser.EndElementHandler = self.endElementHandler
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
+        data = "".join(self.data)
+        if data == "":
+            return
+        if self.ignore_errors is False:
+            raise RuntimeError(data)
+        self.data = []
+        value = ErrorElement(data, tag)
+        if element is None:
+            self.record = element
+        else:
+            element.store(value)
 
     def endElementHandler(self, name):
         """Handle end of an XML element."""
@@ -782,11 +875,13 @@ class DataHandler(metaclass=DataHandlerMeta):
             allowed_tags = frozenset(keys)
             if len(keys) == 1 and keys == multiple:
                 assert not isSimpleContent
-                self.lists[name] = allowed_tags
+                args = (allowed_tags,)
+                self.constructors[name] = (ListElement, args)
             elif len(keys) >= 1:
                 assert not isSimpleContent
                 repeated_tags = frozenset(multiple)
-                self.dictionaries[name] = (allowed_tags, repeated_tags)
+                args = (allowed_tags, repeated_tags)
+                self.constructors[name] = (DictionaryElement, args)
             else:
                 self.strings[name] = allowed_tags
 
@@ -830,20 +925,31 @@ class DataHandler(metaclass=DataHandlerMeta):
                 allowed_tags = frozenset()
             self.strings[name] = allowed_tags
             return
+        # Children can be anything; use a dictionary-type element
+        if model == (expat.model.XML_CTYPE_ANY, expat.model.XML_CQUANT_NONE, None, ()):
+            allowed_tags = None
+            repeated_tags = None
+            args = (allowed_tags, repeated_tags)
+            self.constructors[name] = (DictionaryElement, args)
+            return
         # List-type elements
-        if (
-            model[0]
-            in (
-                expat.model.XML_CTYPE_CHOICE,
-                expat.model.XML_CTYPE_SEQ,
-            )
-            and model[1] in (expat.model.XML_CQUANT_PLUS, expat.model.XML_CQUANT_REP)
-        ):
+        if model[0] in (
+            expat.model.XML_CTYPE_CHOICE,
+            expat.model.XML_CTYPE_SEQ,
+        ) and model[1] in (expat.model.XML_CQUANT_PLUS, expat.model.XML_CQUANT_REP):
             children = model[3]
-            if model[0] == expat.model.XML_CTYPE_SEQ:
-                assert len(children) == 1
             allowed_tags = frozenset(child[2] for child in children)
-            self.lists[name] = allowed_tags
+            if model[0] == expat.model.XML_CTYPE_SEQ:
+                if len(children) > 1:
+                    assert model[1] == expat.model.XML_CQUANT_PLUS
+                    first_child = children[0]
+                    assert first_child[1] == expat.model.XML_CQUANT_NONE
+                    first_tag = first_child[2]
+                    args = allowed_tags, first_tag
+                    self.constructors[name] = (OrderedListElement, args)
+                    return
+                assert len(children) == 1
+            self.constructors[name] = (ListElement, (allowed_tags,))
             return
         # This is the tricky case. Check which keys can occur multiple
         # times. If only one key is possible, and it can occur multiple
@@ -854,9 +960,9 @@ class DataHandler(metaclass=DataHandlerMeta):
         # only once, and which can occur multiple times.
         single = []
         multiple = []
+        errors = []
         # The 'count' function is called recursively to make sure all the
-        # children in this model are counted. Error keys are ignored;
-        # they raise an exception in Python.
+        # children in this model are counted.
 
         def count(model):
             quantifier, key, children = model[1:]
@@ -870,7 +976,9 @@ class DataHandler(metaclass=DataHandlerMeta):
                 else:
                     for child in children:
                         count(child)
-            elif key.upper() != "ERROR":
+            elif key.upper() == "ERROR":
+                errors.append(key)
+            else:
                 if quantifier in (
                     expat.model.XML_CQUANT_NONE,
                     expat.model.XML_CQUANT_OPT,
@@ -884,22 +992,24 @@ class DataHandler(metaclass=DataHandlerMeta):
 
         count(model)
         if len(single) == 0 and len(multiple) == 1:
-            allowed_tags = frozenset(multiple)
-            self.lists[name] = allowed_tags
+            allowed_tags = frozenset(multiple + errors)
+            self.constructors[name] = (ListElement, (allowed_tags,))
         else:
-            allowed_tags = frozenset(single + multiple)
+            allowed_tags = frozenset(single + multiple + errors)
             repeated_tags = frozenset(multiple)
-            self.dictionaries[name] = (allowed_tags, repeated_tags)
+            args = (allowed_tags, repeated_tags)
+            self.constructors[name] = (DictionaryElement, args)
 
     def open_dtd_file(self, filename):
         """Open specified DTD file."""
-        path = os.path.join(DataHandler.local_dtd_dir, filename)
-        try:
-            handle = open(path, "rb")
-        except FileNotFoundError:
-            pass
-        else:
-            return handle
+        if DataHandler.local_dtd_dir is not None:
+            path = os.path.join(DataHandler.local_dtd_dir, filename)
+            try:
+                handle = open(path, "rb")
+            except FileNotFoundError:
+                pass
+            else:
+                return handle
         path = os.path.join(DataHandler.global_dtd_dir, filename)
         try:
             handle = open(path, "rb")
@@ -911,13 +1021,14 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     def open_xsd_file(self, filename):
         """Open specified XSD file."""
-        path = os.path.join(DataHandler.local_xsd_dir, filename)
-        try:
-            handle = open(path, "rb")
-        except FileNotFoundError:
-            pass
-        else:
-            return handle
+        if DataHandler.local_xsd_dir is not None:
+            path = os.path.join(DataHandler.local_xsd_dir, filename)
+            try:
+                handle = open(path, "rb")
+            except FileNotFoundError:
+                pass
+            else:
+                return handle
         path = os.path.join(DataHandler.global_xsd_dir, filename)
         try:
             handle = open(path, "rb")
@@ -929,6 +1040,8 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     def save_dtd_file(self, filename, text):
         """Save DTD file to cache."""
+        if DataHandler.local_dtd_dir is None:
+            return
         path = os.path.join(DataHandler.local_dtd_dir, filename)
         try:
             handle = open(path, "wb")
@@ -940,6 +1053,8 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     def save_xsd_file(self, filename, text):
         """Save XSD file to cache."""
+        if DataHandler.local_xsd_dir is None:
+            return
         path = os.path.join(DataHandler.local_xsd_dir, filename)
         try:
             handle = open(path, "wb")
@@ -976,7 +1091,7 @@ class DataHandler(metaclass=DataHandlerMeta):
             # urls always have a forward slash, don't use os.path.join
             url = source.rstrip("/") + "/" + systemId
         else:
-            raise ValueError(f"Unexpected URL scheme {urlinfo.scheme!r}")
+            raise ValueError("Unexpected URL scheme %r" % urlinfo.scheme)
         self.dtd_urls.append(url)
         # First, try to load the local version of the DTD file
         location, filename = os.path.split(systemId)

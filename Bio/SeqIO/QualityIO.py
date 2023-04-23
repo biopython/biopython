@@ -363,6 +363,7 @@ from math import log
 
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
+from Bio import BiopythonDeprecationWarning
 from Bio import StreamModeError
 from Bio.File import as_handle
 from Bio.Seq import Seq
@@ -1000,13 +1001,13 @@ class FastqPhredIterator(SequenceIterator):
         Arguments:
          - source - input stream opened in text mode, or a path to a file
          - alphabet - optional alphabet, no longer used. Leave as None.
-         - title2ids - A function that, when given the title line from the FASTQ
-           file (without the beginning >), will return the id, name and
-           description (in that order) for the record as a tuple of strings.
-           If this is not given, then the entire title line will be used as
-           the description, and the first word as the id and name.
+         - title2ids (DEPRECATED) - A function that, when given the title line
+           from the FASTQ file (without the beginning >), will return the id,
+           name and description (in that order) for the record as a tuple of
+           strings.  If this is not given, then the entire title line will be
+           used as the description, and the first word as the id and name.
 
-        Note that use of title2ids matches that of Bio.SeqIO.FastaIO.
+        The use of title2ids matches that of Bio.SeqIO.FastaIO.
 
         For each sequence in a (Sanger style) FASTQ file there is a matching string
         encoding the PHRED qualities (integers between 0 and about 90) using ASCII
@@ -1057,9 +1058,46 @@ class FastqPhredIterator(SequenceIterator):
         >>> print(record.letter_annotations["phred_quality"])
         [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
+        The title2ids argument is deprecated. Instead, please use a generator
+        function to modify the records returned by the parser. For example, to
+        store the mean PHRED quality in the record description, use
+
+        >>> from statistics import mean
+        >>> def modify_records(records):
+        ...     for record in records:
+        ...         record.description = mean(record.letter_annotations['phred_quality'])
+        ...         yield record
+        ...
+        >>> with open('Quality/example.fastq') as handle:
+        ...     for record in modify_records(FastqPhredIterator(handle)):
+        ...         print(record.id, record.description)
+        ...
+        EAS54_6_R1_2_1_413_324 25.28
+        EAS54_6_R1_2_1_540_792 24.52
+        EAS54_6_R1_2_1_443_348 23.4
+
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
+        if title2ids is not None:
+            warnings.warn(
+                "The title2ids argument is deprecated. Instead, please use a "
+                "generator function to modify records returned by the parser. "
+                "For example, to change the record description to a counter, "
+                "use\n"
+                "\n"
+                ">>> from statistics import mean\n"
+                ">>> def modify_records(records):\n"
+                "...     for record in records:\n"
+                "...         record.description = mean(record.letter_annotations['phred_quality'])\n"
+                "...         yield record\n"
+                "...\n"
+                ">>> with open('Quality/example.fastq') as handle:\n"
+                "...     for record in modify_records(FastqPhredIterator(handle)):\n"
+                "...         print(record.id, record.description)\n"
+                "\n",
+                BiopythonDeprecationWarning,
+            )
         self.title2ids = title2ids
         super().__init__(source, mode="t", fmt="Fastq")
 

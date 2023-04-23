@@ -6,13 +6,15 @@
 """Unit tests for the PhyloXML and PhyloXMLIO modules."""
 
 import os
+import platform  # for Windows hack, see issue #3944
+import sys  # for Windows hack
 import tempfile
 import unittest
 from itertools import chain
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
+from Bio.Align import Alignment, MultipleSeqAlignment
 from Bio.Phylo import PhyloXML as PX, PhyloXMLIO
 
 # Example PhyloXML files
@@ -23,7 +25,7 @@ EX_PHYLO = "PhyloXML/phyloxml_examples.xml"
 EX_DOLLO = "PhyloXML/o_tol_332_d_dollo.xml"
 
 # Temporary file name for Writer tests below
-DUMMY = tempfile.mktemp()
+DUMMY = tempfile.NamedTemporaryFile(delete=False).name
 
 
 # ---------------------------------------------------------
@@ -45,7 +47,7 @@ def _test_read_factory(source, count):
         self.assertEqual(len(phx), count[0])
         self.assertEqual(len(phx.other), count[1])
 
-    test_read.__doc__ = "Read %s to produce a phyloXML object." % fname
+    test_read.__doc__ = f"Read {fname} to produce a phyloXML object."
     return test_read
 
 
@@ -61,7 +63,7 @@ def _test_parse_factory(source, count):
         trees = PhyloXMLIO.parse(source)
         self.assertEqual(len(list(trees)), count)
 
-    test_parse.__doc__ = "Parse the phylogenies in %s." % fname
+    test_parse.__doc__ = f"Parse the phylogenies in {fname}."
     return test_parse
 
 
@@ -82,7 +84,7 @@ def _test_shape_factory(source, shapes):
                 for subclade, len_expect in zip(clade, sub_expect[1]):
                     self.assertEqual(len(subclade), len_expect)
 
-    test_shape.__doc__ = "Check the branching structure of %s." % fname
+    test_shape.__doc__ = f"Check the branching structure of {fname}."
     return test_shape
 
 
@@ -509,6 +511,12 @@ class WriterTests(unittest.TestCase):
         for cls, tests in test_cases:
             inst = cls("setUp")
             for test in tests:
+                if (
+                    test == "test_Distribution"
+                    and platform.system() == "Windows"
+                    and sys.version_info.minor > 8
+                ):
+                    continue  # Skip, see issue #3944
                 getattr(inst, test)()
 
     def test_apaf(self):
@@ -695,6 +703,41 @@ class MethodTests(unittest.TestCase):
         self.assertIsInstance(aln, MultipleSeqAlignment)
         self.assertEqual(len(aln), 3)
         self.assertEqual(aln.get_alignment_length(), 7)
+
+    def test_alignment(self):
+        tree = self.phyloxml.phylogenies[0]
+        aln = tree.alignment
+        self.assertIsInstance(aln, Alignment)
+        self.assertEqual(len(aln), 0)
+        self.assertEqual(aln.shape, (0, 0))
+        # Add sequences to the terminals
+        for tip, seqstr in zip(tree.get_terminals(), ("AA--TTA", "AA--TTG", "AACCTTC")):
+            tip.sequences.append(
+                PX.Sequence.from_seqrecord(
+                    SeqRecord(Seq(seqstr), id=str(tip)), is_aligned=True
+                )
+            )
+        # Check the alignment
+        aln = tree.alignment
+        self.assertIsInstance(aln, Alignment)
+        self.assertEqual(aln.shape, (3, 7))
+        self.assertEqual(aln.sequences[0].id, ":A")
+        self.assertEqual(aln.sequences[1].id, ":B")
+        self.assertEqual(aln.sequences[2].id, ":C")
+        self.assertEqual(aln.sequences[0].seq, "AATTA")
+        self.assertEqual(aln.sequences[1].seq, "AATTG")
+        self.assertEqual(aln.sequences[2].seq, "AACCTTC")
+        self.assertEqual(aln[0], "AA--TTA")
+        self.assertEqual(aln[1], "AA--TTG")
+        self.assertEqual(aln[2], "AACCTTC")
+        self.assertEqual(
+            str(aln),
+            """\
+:A                0 AA--TTA 5
+:B                0 AA--TTG 5
+:C                0 AACCTTC 7
+""",
+        )
 
     # Syntax sugar
 

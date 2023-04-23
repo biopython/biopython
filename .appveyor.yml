@@ -36,8 +36,8 @@ build_script:
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
   - conda config --set always_yes yes
   - conda update conda
-  - conda install coverage setuptools numpy
-  - python setup.py build
+  - python -m pip install --upgrade coverage setuptools numpy
+  - python -m pip install .
 
 test_script:
   - python -c "import sys; print(sys.version)"

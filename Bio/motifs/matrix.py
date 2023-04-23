@@ -196,7 +196,7 @@ class GenericPositionMatrix(dict):
         for i in range(self.length):
 
             def get(nucleotide):
-                return self[nucleotide][i]
+                return self[nucleotide][i]  # noqa: B023
 
             nucleotides = sorted(self, key=get, reverse=True)
             counts = [self[c][i] for c in nucleotides]
@@ -280,7 +280,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
         """Initialize the class."""
         GenericPositionMatrix.__init__(self, alphabet, counts)
         for i in range(self.length):
-            total = sum(float(self[letter][i]) for letter in alphabet)
+            total = sum(self[letter][i] for letter in alphabet)
             for letter in alphabet:
                 self[letter][i] /= total
         for letter in alphabet:
@@ -380,7 +380,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         else:
             return scores
 
-    def search(self, sequence, threshold=0.0, both=True, chunksize=10 ** 6):
+    def search(self, sequence, threshold=0.0, both=True, chunksize=10**6):
         """Find hits with PWM score above given threshold.
 
         A generator function, returning found hits in the given sequence
@@ -537,7 +537,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         denominator = math.sqrt((sxx - sx * sx) * (syy - sy * sy))
         return numerator / denominator
 
-    def distribution(self, background=None, precision=10 ** 3):
+    def distribution(self, background=None, precision=10**3):
         """Calculate the distribution of the scores at the given precision."""
         from .thresholds import ScoreDistribution
 

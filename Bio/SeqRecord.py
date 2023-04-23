@@ -366,13 +366,13 @@ class SeqRecord:
 
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
-        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+        >>> from Bio.SeqFeature import SeqFeature, SimpleLocation
         >>> rec = SeqRecord(Seq("MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLAT"
         ...                     "EMMSEQDGYLAESINKDIEECNAIIEQFIDYLR"),
         ...                 id="1JOY", name="EnvZ",
         ...                 description="Homodimeric domain of EnvZ from E. coli")
         >>> rec.letter_annotations["secondary_structure"] = "  S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  "
-        >>> rec.features.append(SeqFeature(FeatureLocation(20, 21),
+        >>> rec.features.append(SeqFeature(SimpleLocation(20, 21),
         ...                     type = "Site"))
 
         Now let's have a quick look at the full record,
@@ -505,11 +505,12 @@ class SeqRecord:
                             "from segmented GenBank records) are ignored."
                         )
                         continue
-                    if (
-                        start <= f.location.nofuzzy_start
-                        and f.location.nofuzzy_end <= stop
-                    ):
-                        answer.features.append(f._shift(-start))
+                    try:
+                        if start <= f.location.start and f.location.end <= stop:
+                            answer.features.append(f._shift(-start))
+                    except TypeError:
+                        # Will fail on UnknownPosition
+                        pass
 
             # Slice all the values to match the sliced sequence
             # (this should also work with strides, even negative strides):
@@ -601,6 +602,9 @@ class SeqRecord:
         See also the Seq object's __contains__ method.
         """
         return char in self.seq
+
+    def __bytes__(self):
+        return bytes(self.seq)
 
     def __str__(self):
         """Return a human readable summary of the record and its annotation (string).
@@ -721,7 +725,6 @@ class SeqRecord:
         and binary formats are not supported).
         """
         # See also the __format__ method
-        # See also the Bio.Align.Generic.Alignment class and its format()
         return self.__format__(format)
 
     def __format__(self, format_spec):
@@ -969,6 +972,14 @@ class SeqRecord:
             dbxrefs=self.dbxrefs[:],
         )
 
+    def count(self, sub, start=None, end=None):
+        """Return the number of non-overlapping occurrences of sub in seq[start:end].
+
+        Optional arguments start and end are interpreted as in slice notation.
+        This method behaves as the count method of Python strings.
+        """
+        return self.seq.count(sub, start, end)
+
     def upper(self):
         """Return a copy of the record with an upper case sequence.
 
@@ -1048,6 +1059,20 @@ class SeqRecord:
             annotations=self.annotations.copy(),
             letter_annotations=self.letter_annotations.copy(),
         )
+
+    def isupper(self):
+        """Return True if all ASCII characters in the record's sequence are uppercase.
+
+        If there are no cased characters, the method returns False.
+        """
+        return self.seq.isupper()
+
+    def islower(self):
+        """Return True if all ASCII characters in the record's sequence are lowercase.
+
+        If there are no cased characters, the method returns False.
+        """
+        return self.seq.islower()
 
     def reverse_complement(
         self,
@@ -1244,7 +1269,15 @@ class SeqRecord:
             # so we need to resort in case of overlapping features.
             # NOTE - In the common case of gene before CDS (and similar) with
             # the exact same locations, this will still maintain gene before CDS
-            answer.features.sort(key=lambda x: x.location.start.position)
+
+            def key_fun(f):
+                """Sort on start position."""
+                try:
+                    return int(f.location.start)
+                except TypeError:  # Expected for UnknownPosition
+                    return None
+
+            answer.features.sort(key=key_fun)
         if isinstance(annotations, dict):
             answer.annotations = annotations
         elif annotations:

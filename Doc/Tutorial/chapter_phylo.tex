@@ -95,8 +95,11 @@ _|                                                 |________________________ D
 If you have \textbf{matplotlib} or \textbf{pylab} installed, you can create a graphic
 using the \verb|draw| function (see Fig. \ref{fig:phylo-simple-draw}):
 
+%cont-doctest
 \begin{minted}{pycon}
 >>> tree.rooted = True
+\end{minted}
+\begin{minted}{pycon}
 >>> Phylo.draw(tree)
 \end{minted}
 
@@ -131,6 +134,7 @@ object called Phylogeny, from the Bio.Phylo.PhyloXML module.
 
 In Biopython 1.55 and later, this is a convenient tree method:
 
+%cont-doctest
 \begin{minted}{pycon}
 >>> tree = tree.as_phyloxml()
 \end{minted}
@@ -152,18 +156,21 @@ First, we'll color the root clade gray.  We can do that by assigning the 24-bit 
 value as an RGB triple, an HTML-style hex string, or the name of one of the predefined
 colors.
 
+%cont-doctest
 \begin{minted}{pycon}
 >>> tree.root.color = (128, 128, 128)
 \end{minted}
 
 Or:
 
+%cont-doctest
 \begin{minted}{pycon}
 >>> tree.root.color = "#808080"
 \end{minted}
 
 Or:
 
+%cont-doctest
 \begin{minted}{pycon}
 >>> tree.root.color = "gray"
 \end{minted}
@@ -176,6 +183,7 @@ Let's target the most recent common ancestor (MRCA) of the nodes named ``E'' and
 \verb|common_ancestor| method returns a reference to that clade in the original tree, so when
 we color that clade ``salmon'', the color will show up in the original tree.
 
+%cont-doctest
 \begin{minted}{pycon}
 >>> mrca = tree.common_ancestor({"name": "E"}, {"name": "F"})
 >>> mrca.color = "salmon"
@@ -185,6 +193,7 @@ If we happened to know exactly where a certain clade is in the tree, in terms of
 entries, we can jump directly to that position in the tree by indexing it.  Here, the index
 \verb|[0,1]| refers to the second child of the first child of the root.
 
+%cont-doctest
 \begin{minted}{pycon}
 >>> tree.clade[0, 1].color = "blue"
 \end{minted}
@@ -219,26 +228,42 @@ would be written --- and the format \texttt{phyloxml}.  PhyloXML saves the color
 so you can open this phyloXML file in another tree viewer like Archaeopteryx, and the colors
 will show up there, too.
 
+%cont-doctest
 \begin{minted}{pycon}
 >>> import sys
->>> Phylo.write(tree, sys.stdout, "phyloxml")
-
-<phy:phyloxml xmlns:phy="http://www.phyloxml.org">
-  <phy:phylogeny rooted="true">
-    <phy:clade>
-      <phy:branch_length>1.0</phy:branch_length>
-      <phy:color>
-        <phy:red>128</phy:red>
-        <phy:green>128</phy:green>
-        <phy:blue>128</phy:blue>
-      </phy:color>
-      <phy:clade>
-        <phy:branch_length>1.0</phy:branch_length>
-        <phy:clade>
-          <phy:branch_length>1.0</phy:branch_length>
-          <phy:clade>
-            <phy:name>A</phy:name>
-            ...
+>>> n = Phylo.write(tree, sys.stdout, "phyloxml")  # doctest:+ELLIPSIS
+<phyloxml ...>
+  <phylogeny rooted="true">
+    <clade>
+      <color>
+        <red>128</red>
+        <green>128</green>
+        <blue>128</blue>
+      </color>
+      <clade>
+        <clade>
+          <clade>
+            <name>A</name>
+          </clade>
+          <clade>
+            <name>B</name>
+          </clade>
+        </clade>
+        <clade>
+          <color>
+            <red>0</red>
+            <green>0</green>
+            <blue>255</blue>
+          </color>
+          <clade>
+            <name>C</name>
+          </clade>
+          ...
+    </clade>
+  </phylogeny>
+</phyloxml>
+>>> n
+1
 \end{minted}
 
 The rest of this chapter covers the core functionality of Bio.Phylo in greater detail. For more
@@ -256,10 +281,19 @@ well as the Comparative Data Analysis Ontology (CDAO).
 The \verb|read| function parses a single tree in the given file and returns it. Careful; it
 will raise an error if the file contains more than one tree, or no trees.
 
+%doctest ..
 \begin{minted}{pycon}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("Tests/Nexus/int_node_labels.nwk", "newick")
->>> print(tree)
+>>> print(tree)  # doctest:+ELLIPSIS
+Tree(rooted=False, weight=1.0)
+    Clade(branch_length=75.0, name='gymnosperm')
+        Clade(branch_length=25.0, name='Coniferales')
+            Clade(branch_length=25.0)
+                Clade(branch_length=10.0, name='Tax+nonSci')
+                    Clade(branch_length=90.0, name='Taxaceae')
+                        Clade(branch_length=125.0, name='Cephalotaxus')
+                        ...
 \end{minted}
 
 (Example files are available in the \texttt{Tests/Nexus/} and \texttt{Tests/PhyloXML/}
@@ -268,30 +302,37 @@ directories of the Biopython distribution.)
 To handle multiple (or an unknown number of) trees, use the \verb|parse| function iterates
 through each of the trees in the given file:
 
+%cont-doctest
 \begin{minted}{pycon}
->>> trees = Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml")
+>>> trees = Phylo.parse("Tests/PhyloXML/phyloxml_examples.xml", "phyloxml")
 >>> for tree in trees:
-...     print(tree)
+...     print(tree)  # doctest:+ELLIPSIS
+...
+Phylogeny(description='phyloXML allows to use either a "branch_length" attribute...', name='example from Prof. Joe Felsenstein's book "Inferring Phyl...', rooted=True)
+    Clade()
+        Clade(branch_length=0.06)
+            Clade(branch_length=0.102, name='A')
+            ...
 \end{minted}
 
 Write a tree or iterable of trees back to file with the \verb|write| function:
 
-%the files tree1.nwk and other_trees.nwk are created and then deleted during the
+%the files tree1.nwk and other_trees.xml are created and then deleted during the
 %run of test_Tutorial.py
 
 %cont-doctest
 \begin{minted}{pycon}
->>> trees = list(Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml"))
->>> tree1 = trees[0]
->>> others = trees[1:]
+>>> trees = Phylo.parse("Tests/PhyloXML/phyloxml_examples.xml", "phyloxml")
+>>> tree1 = next(trees)
 >>> Phylo.write(tree1, "tree1.nwk", "newick")
 1
->>> Phylo.write(others, "other_trees.nwk", "newick")
+>>> Phylo.write(trees, "other_trees.xml", "phyloxml")  # write the remaining trees
 12
 \end{minted}
 
 Convert files between any of the supported formats with the \verb|convert| function:
 
+%cont-doctest
 \begin{minted}{pycon}
 >>> Phylo.convert("tree1.nwk", "newick", "tree1.xml", "nexml")
 1
@@ -336,15 +377,16 @@ rooted phylogram) to standard output, or an open file handle if given. Not all o
 available information about the tree is shown, but it provides a way to quickly view the
 tree without relying on any external dependencies.
 
+%cont-doctest
 \begin{minted}{pycon}
->>> tree = Phylo.read("example.xml", "phyloxml")
+>>> tree = Phylo.read("PhyloXML/example.xml", "phyloxml")
 >>> Phylo.draw_ascii(tree)
              __________________ A
   __________|
 _|          |___________________________________________ B
  |
  |___________________________________________________________________________ C
-
+<BLANKLINE>
 \end{minted}
 
 The \verb|draw| function draws a more attractive image using the matplotlib
@@ -352,7 +394,6 @@ library. See the API documentation for details on the arguments it accepts to
 customize the output.
 
 \begin{minted}{pycon}
->>> tree = Phylo.read("example.xml", "phyloxml")
 >>> Phylo.draw(tree, branch_labels=lambda c: c.branch_length)
 \end{minted}
 
@@ -652,26 +693,6 @@ visual cues.
 See the PhyloXML page on the Biopython wiki (\url{http://biopython.org/wiki/PhyloXML}) for
 descriptions and examples of using the additional annotation features provided by PhyloXML.
 
-
-% The object hierarchy still looks and behaves similarly:
-
-% \begin{minted}{pycon}
-% >>> print(tree)
-% Phylogeny(rooted=True, name="")
-%     Clade(branch_length=1.0)
-%         Clade(branch_length=1.0)
-%             Clade(branch_length=1.0)
-%                 Clade(branch_length=1.0, name="A")
-%                 Clade(branch_length=1.0, name="B")
-%             Clade(branch_length=1.0)
-%                 Clade(branch_length=1.0, name="C")
-%                 Clade(branch_length=1.0, name="D")
-%         Clade(branch_length=1.0)
-%             Clade(branch_length=1.0, name="E")
-%             Clade(branch_length=1.0, name="F")
-%             Clade(branch_length=1.0, name="G")
-% \end{minted}
-
 \section{Running external applications}
 \label{sec:PhyloApps}
 
@@ -702,6 +723,26 @@ This generates a tree file and a stats file with the names
 >>> from Bio import Phylo
 >>> tree = Phylo.read("Tests/Phylip/random.phy_phyml_tree.txt", "newick")
 >>> Phylo.draw_ascii(tree)
+  __________________ F
+ |
+ | I
+ |
+_|                     ________ C
+ |            ________|
+ |           |        |        , J
+ |           |        |________|
+ |           |                 |          , H
+ |___________|                 |__________|
+             |                            |______________ D
+             |
+             , G
+             |
+             |                , E
+             |________________|
+                              |                 ___________________________ A
+                              |________________|
+                                               |_________ B
+<BLANKLINE>
 \end{minted}
 
 The \verb|subprocess| module can also be used  for interacting with any other programs
@@ -730,20 +771,22 @@ Here is an example of typical usage of codeml:
 \begin{minted}{pycon}
 >>> from Bio.Phylo.PAML import codeml
 >>> cml = codeml.Codeml()
->>> cml.alignment = "Tests/PAML/alignment.phylip"
->>> cml.tree = "Tests/PAML/species.tree"
+>>> cml.alignment = "Tests/PAML/Alignments/alignment.phylip"
+>>> cml.tree = "Tests/PAML/Trees/species.tree"
 >>> cml.out_file = "results.out"
 >>> cml.working_dir = "./scratch"
->>> cml.set_options(seqtype=1,
-...         verbose=0,
-...         noisy=0,
-...         RateAncestor=0,
-...         model=0,
-...         NSsites=[0, 1, 2],
-...         CodonFreq=2,
-...         cleandata=1,
-...         fix_alpha=1,
-...         kappa=4.54006)
+>>> cml.set_options(
+...     seqtype=1,
+...     verbose=0,
+...     noisy=0,
+...     RateAncestor=0,
+...     model=0,
+...     NSsites=[0, 1, 2],
+...     CodonFreq=2,
+...     cleandata=1,
+...     fix_alpha=1,
+...     kappa=4.54006,
+... )
 >>> results = cml.run()
 >>> ns_sites = results.get("NSsites")
 >>> m0 = ns_sites.get(0)

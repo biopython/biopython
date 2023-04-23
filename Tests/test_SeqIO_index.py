@@ -373,8 +373,8 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
         ("NBRF/B_nuc.pir", "pir"),
         ("NBRF/Cw_prot.pir", "pir"),
         ("NBRF/clustalw.pir", "pir"),
-        ("SwissProt/sp001", "swiss"),
-        ("SwissProt/sp010", "swiss"),
+        ("SwissProt/Q13454.txt", "swiss"),
+        ("SwissProt/Q13639.txt", "swiss"),
         ("SwissProt/sp016", "swiss"),
         ("SwissProt/multi_ex.txt", "swiss"),
         ("SwissProt/multi_ex.xml", "uniprot-xml"),
@@ -432,7 +432,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
 
     def simple_check(self, filename, fmt, comp):
         """Check indexing (without a key function)."""
-        msg = "Test failure parsing file %s with format %s" % (filename, fmt)
+        msg = f"Test failure parsing file {filename} with format {fmt}"
         if comp:
             mode = "r" + self.get_mode(fmt)
             with gzip.open(filename, mode) as handle:
@@ -505,7 +505,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
 
     def key_check(self, filename, fmt, comp):
         """Check indexing with a key function."""
-        msg = "Test failure parsing file %s with format %s" % (filename, fmt)
+        msg = f"Test failure parsing file {filename} with format {fmt}"
         if comp:
             mode = "r" + self.get_mode(fmt)
             with gzip.open(filename, mode) as handle:
@@ -572,7 +572,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
 
     def get_raw_check(self, filename, fmt, comp):
         # Also checking the key_function here
-        msg = "Test failure parsing file %s with format %s" % (filename, fmt)
+        msg = f"Test failure parsing file {filename} with format {fmt}"
         if comp:
             with gzip.open(filename, "rb") as handle:
                 raw_file = handle.read()
@@ -626,7 +626,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             elif mode == "t":
                 handle = StringIO(raw.decode())
             else:
-                raise RuntimeError("Unexpected mode %s" % mode)
+                raise RuntimeError(f"Unexpected mode {mode}")
             if fmt == "sff":
                 rec2 = SeqIO.SffIO._sff_read_seq_record(
                     handle,

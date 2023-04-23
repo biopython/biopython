@@ -50,13 +50,12 @@ in a residue)::
 
 """
 
-
 import os
+import subprocess
 import tempfile
 import warnings
-import subprocess
 
-import numpy
+import numpy as np
 
 from Bio.PDB import PDBParser
 from Bio.PDB import Selection
@@ -124,7 +123,7 @@ def _get_atom_radius(atom, rtype="united"):
         typekey = 2
     else:
         raise ValueError(
-            "Radius type (%r) not understood. Must be 'explicit' or 'united'" % rtype
+            f"Radius type ({rtype!r}) not understood. Must be 'explicit' or 'united'"
         )
 
     resname = atom.parent.resname
@@ -497,23 +496,24 @@ def _read_vertex_array(filename):
     """Read the vertex list into a Numeric array (PRIVATE)."""
     with open(filename) as fp:
         vertex_list = []
-        for l in fp:
-            sl = l.split()
+        for line in fp:
+            sl = line.split()
             if len(sl) != 9:
                 # skip header
                 continue
             vl = [float(x) for x in sl[0:3]]
             vertex_list.append(vl)
-    return numpy.array(vertex_list)
+    return np.array(vertex_list)
 
 
 def get_surface(model, MSMS="msms"):
     """Represent molecular surface as a vertex list array.
 
-    Return a Numpy array that represents the vertex list of the
+    Return a NumPy array that represents the vertex list of the
     molecular surface.
 
     Arguments:
+     - model - BioPython PDB model object (used to get atoms for input model)
      - MSMS - msms executable (used as argument to subprocess.call)
 
     """
@@ -521,34 +521,44 @@ def get_surface(model, MSMS="msms"):
     # Make x,y,z,radius file
     atom_list = Selection.unfold_entities(model, "A")
 
-    xyz_tmp = tempfile.mktemp()
+    xyz_tmp = tempfile.NamedTemporaryFile(delete=False).name
     with open(xyz_tmp, "w") as pdb_to_xyzr:
         for atom in atom_list:
             x, y, z = atom.coord
             radius = _get_atom_radius(atom, rtype="united")
             pdb_to_xyzr.write(f"{x:6.3f}\t{y:6.3f}\t{z:6.3f}\t{radius:1.2f}\n")
 
-    # make surface
-    surface_tmp = tempfile.mktemp()
-    MSMS = MSMS + " -probe_radius 1.5 -if %s -of %s > " + tempfile.mktemp()
+    # Make surface
+    surface_tmp = tempfile.NamedTemporaryFile(delete=False).name
+    msms_tmp = tempfile.NamedTemporaryFile(delete=False).name
+    MSMS = MSMS + " -probe_radius 1.5 -if %s -of %s > " + msms_tmp
     make_surface = MSMS % (xyz_tmp, surface_tmp)
     subprocess.call(make_surface, shell=True)
+    face_file = surface_tmp + ".face"
     surface_file = surface_tmp + ".vert"
     if not os.path.isfile(surface_file):
         raise RuntimeError(
-            "Failed to generate surface file using command:\n%s" % make_surface
+            f"Failed to generate surface file using command:\n{make_surface}"
         )
 
-    # read surface vertices from vertex file
+    # Read surface vertices from vertex file
     surface = _read_vertex_array(surface_file)
+
+    # Remove temporary files
+    for fn in [xyz_tmp, surface_tmp, msms_tmp, face_file, surface_file]:
+        try:
+            os.remove(fn)
+        except OSError:
+            pass
+
     return surface
 
 
 def min_dist(coord, surface):
     """Return minimum distance between coord and surface."""
     d = surface - coord
-    d2 = numpy.sum(d * d, 1)
-    return numpy.sqrt(min(d2))
+    d2 = np.sum(d * d, 1)
+    return np.sqrt(min(d2))
 
 
 def residue_depth(residue, surface):

@@ -101,7 +101,7 @@ class JASPAR5:
 
     def __str__(self):
         """Return a string represention of the JASPAR5 DB connection."""
-        return fr"{self.user}\@{self.host}:{self.name}"
+        return rf"{self.user}\@{self.host}:{self.name}"
 
     def fetch_motif_by_id(self, id):
         """Fetch a single JASPAR motif from the DB by its JASPAR matrix ID.
@@ -736,8 +736,6 @@ class JASPAR5:
 
         if where_clauses:
             sql = "".join([sql, " where ", " and ".join(where_clauses)])
-
-        # print("sql = %s" % sql)
 
         cur.execute(sql)
         rows = cur.fetchall()

@@ -164,12 +164,12 @@ class SortingTests(unittest.TestCase):
             self.assertEqual(
                 new[0:special_len],
                 special,
-                "Sorted residue did not place N, CA, C, O first: %s" % new,
+                f"Sorted residue did not place N, CA, C, O first: {new}",
             )
             self.assertEqual(
                 new[special_len:],
                 sorted(new[special_len:]),
-                "After N, CA, C, O should be alphabet: %s" % new,
+                f"After N, CA, C, O should be alphabet: {new}",
             )
 
     # Tests for sorting methods
@@ -200,13 +200,13 @@ class SortingTests(unittest.TestCase):
             self.assertEqual(
                 new[:len_special],
                 special,
-                "Sorted residue did not place N, CA, C, O first: %s" % new,
+                f"Sorted residue did not place N, CA, C, O first: {new}",
             )
             # Placed everyone else alphabetically?
             self.assertEqual(
                 new[len_special:],
                 sorted(new[len_special:]),
-                "After N, CA, C, O order Should be alphabetical: %s" % new,
+                f"After N, CA, C, O order Should be alphabetical: {new}",
             )
         # DisorderedResidue
         residues = [r.id[1] for r in sorted(struct[1]["A"])][79:81]
@@ -427,7 +427,7 @@ class TransformTests(unittest.TestCase):
     def get_pos(self, o):
         """Average atom position in an entity."""
         pos, count = self.get_total_pos(o)
-        return 1.0 * pos / count
+        return pos / count
 
     def test_transform(self):
         """Transform entities (rotation and translation)."""

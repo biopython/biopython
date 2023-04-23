@@ -544,7 +544,7 @@ class StockholmIterator(AlignmentIterator):
         return identifier, None, None
 
     def _get_meta_data(self, identifier, meta_dict):
-        """Take an itentifier and returns dict of all meta-data matching it (PRIVATE).
+        """Take an identifier and returns dict of all meta-data matching it (PRIVATE).
 
         For example, given "Q9PN73_CAMJE/149-220" will return all matches to
         this or "Q9PN73_CAMJE" which the identifier without its /start-end

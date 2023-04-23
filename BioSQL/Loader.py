@@ -23,7 +23,7 @@ from time import gmtime, strftime
 # biopython
 from Bio.SeqUtils.CheckSum import crc64
 from Bio import Entrez
-from Bio.Seq import UnknownSeq, UndefinedSequenceError
+from Bio.Seq import UndefinedSequenceError
 from Bio.SeqFeature import UnknownPosition
 
 
@@ -323,7 +323,10 @@ class DatabaseLoader:
                 return letter
 
         answer = "".join(add_space(letter) for letter in entrez_name).strip()
-        assert answer == answer.lower()
+        if answer != answer.lower():
+            raise ValueError(
+                f"Expected processed entrez_name, '{answer}' to only have lower case letters."
+            )
         return answer
 
     def _update_left_right_taxon_values(self, left_value):
@@ -398,7 +401,8 @@ class DatabaseLoader:
         Returns the taxon id (database key for the taxon table, not
         an NCBI taxon ID).
         """
-        assert ncbi_taxon_id
+        if not ncbi_taxon_id:
+            raise ValueError("Expected a non-empty value for ncbi_taxon_id.")
 
         taxon_id = self.adaptor.execute_and_fetch_col0(
             "SELECT taxon_id FROM taxon WHERE ncbi_taxon_id = %s", (int(ncbi_taxon_id),)
@@ -429,9 +433,10 @@ class DatabaseLoader:
             handle = Entrez.efetch(db="taxonomy", id=ncbi_taxon_id, retmode="XML")
             taxonomic_record = Entrez.read(handle)
             if len(taxonomic_record) == 1:
-                assert taxonomic_record[0]["TaxId"] == str(
-                    ncbi_taxon_id
-                ), "%s versus %s" % (taxonomic_record[0]["TaxId"], ncbi_taxon_id)
+                if taxonomic_record[0]["TaxId"] != str(ncbi_taxon_id):
+                    raise ValueError(
+                        f"ncbi_taxon_id different from parent taxon id. {ncbi_taxon_id} versus {taxonomic_record[0]['TaxId']}"
+                    )
 
                 (
                     parent_taxon_id,
@@ -539,7 +544,8 @@ class DatabaseLoader:
         if rows:
             # we could verify that the Scientific Name etc in the database
             # is the same and update it or print a warning if not...
-            assert len(rows) == 1
+            if len(rows) != 1:
+                raise ValueError(f"Expected 1 reponse, got {len(rows)}")
             return rows[0]
 
         # We have to record this.
@@ -553,7 +559,10 @@ class DatabaseLoader:
             ) = self._get_taxon_id_from_ncbi_lineage(taxonomic_lineage[:-1])
             left_value = parent_right_value
             right_value = parent_right_value + 1
-            assert isinstance(parent_taxon_id, int), repr(parent_taxon_id)
+            if not isinstance(parent_taxon_id, int):
+                raise ValueError(
+                    f"Expected parent_taxon_id to be an int, got {parent_taxon_id}"
+                )
         else:
             # we have reached the top of the lineage but no current taxonomy
             # id has been found
@@ -711,13 +720,10 @@ class DatabaseLoader:
         else:
             alphabet = "unknown"
 
-        if isinstance(record.seq, UnknownSeq):
+        try:
+            seq_str = str(record.seq)
+        except UndefinedSequenceError:
             seq_str = None
-        else:
-            try:
-                seq_str = str(record.seq)
-            except UndefinedSequenceError:
-                seq_str = None
 
         sql = (
             "INSERT INTO biosequence (bioentry_id, version, "
@@ -937,7 +943,7 @@ class DatabaseLoader:
                 % feature.location_operator,
                 BiopythonWarning,
             )
-        # This will be a list of length one for simple FeatureLocation:
+        # This will be a list of length one for a SimpleLocation:
         parts = feature.location.parts
         if parts and {loc.strand for loc in parts} == {-1}:
             # To mimic prior behaviour of Biopython+BioSQL, reverse order
@@ -947,7 +953,7 @@ class DatabaseLoader:
             self._insert_location(loc, rank + 1, seqfeature_id)
 
     def _insert_location(self, location, rank, seqfeature_id):
-        """Add SeqFeatue location to seqfeature_location table (PRIVATE).
+        """Add SeqFeature location to seqfeature_location table (PRIVATE).
 
         TODO - Add location operator to location_qualifier_value?
         """
@@ -1173,7 +1179,11 @@ class DatabaseLoader:
             #
             # Annoyingly I have seen the NCBI use both the style
             # "GO:GO:123" and "GO:123" in different vintages.
-            assert value.count("\n") == 0
+            newline_escape_count = value.count("\n")
+            if newline_escape_count != 0:
+                raise ValueError(
+                    "Expected a single line in value, got {newline_escape_count}"
+                )
             try:
                 db, accession = value.split(":", 1)
                 db = db.strip()

@@ -17,10 +17,13 @@ import copy
 import math
 import random
 import sys
+import warnings
 
 from Bio import File
 from Bio.Data import IUPACData
 from Bio.Seq import Seq
+from Bio import BiopythonDeprecationWarning
+
 
 from Bio.Nexus.StandardData import StandardData
 from Bio.Nexus.Trees import Tree
@@ -217,7 +220,7 @@ class StepMatrix:
         total = self.sum()
         if total != 0:
             for k in self.data:
-                self.data[k] = self.data[k] / float(total)
+                self.data[k] /= total
         return self
 
     def weighting(self):
@@ -309,9 +312,9 @@ def _sort_keys_by_values(p):
     return sorted((pn for pn in p if p[pn]), key=lambda pn: p[pn])
 
 
-def _make_unique(l):
+def _make_unique(values):
     """Check all values in list are unique and return a pruned and sorted list (PRIVATE)."""
-    return sorted(set(l))
+    return sorted(set(values))
 
 
 def _unique_label(previous_labels, label):
@@ -667,10 +670,24 @@ class Nexus:
 
     def get_original_taxon_order(self):
         """Included for backwards compatibility (DEPRECATED)."""
+        warnings.warn(
+            "The get_original_taxon_order method has been deprecated "
+            "and will likely be removed from Biopython in the near "
+            "future. Please use the original_taxon_order attribute "
+            "instead.",
+            BiopythonDeprecationWarning,
+        )
         return self.taxlabels
 
     def set_original_taxon_order(self, value):
         """Included for backwards compatibility (DEPRECATED)."""
+        warnings.warn(
+            "The set_original_taxon_order method has been deprecated "
+            "and will likely be removed from Biopython in the near "
+            "future. Please use the original_taxon_order attribute "
+            "instead.",
+            BiopythonDeprecationWarning,
+        )
         self.taxlabels = value
 
     original_taxon_order = property(get_original_taxon_order, set_original_taxon_order)
@@ -690,7 +707,6 @@ class Nexus:
                 file_contents = input
                 self.filename = "input_string"
             else:
-                print(input.strip()[:50])
                 raise NexusError(f"Unrecognized input: {input[:100]} ...") from None
         file_contents = file_contents.strip()
         if file_contents.startswith("#NEXUS"):
@@ -864,9 +880,6 @@ class Nexus:
             self.matchchar = options["matchchar"][0]
         if "labels" in options:
             self.labels = options["labels"]
-        if "transpose" in options:
-            # self.transpose = True
-            raise NexusError("TRANSPOSE is not supported!")
         if "interleave" in options:
             if options["interleave"] is None or options["interleave"].lower() == "yes":
                 self.interleave = True
@@ -2127,7 +2140,6 @@ except ImportError:
         lines = _kill_comments_and_break_lines(file_contents)
         commandlines = _adjust_lines(lines)
         return commandlines
-
 
 else:
 

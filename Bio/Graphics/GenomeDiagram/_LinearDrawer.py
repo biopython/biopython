@@ -231,12 +231,10 @@ class LinearDrawer(AbstractDrawer):
     def init_fragments(self):
         """Initialize useful values for positioning diagram elements."""
         # Set basic heights, lengths etc
-        self.fragment_height = (
-            1.0 * self.pageheight / self.fragments
-        )  # total fragment height in pixels
-        self.fragment_bases = ceil(
-            1.0 * self.length / self.fragments
-        )  # fragment length in bases
+        self.fragment_height = self.pageheight / self.fragments
+        # total fragment height in pixels
+        self.fragment_bases = ceil(self.length / self.fragments)
+        # fragment length in bases
 
         # Key fragment base and top lines by fragment number
         # Holds bottom and top line locations of fragments, keyed by fragment number
@@ -282,9 +280,7 @@ class LinearDrawer(AbstractDrawer):
             trackunit_sum += trackheight  # increment total track unit height
             trackunits[track] = (heightholder, heightholder + trackheight)
             heightholder += trackheight  # move to next height
-        trackunit_height = (
-            1.0 * self.fragment_height * self.fragment_size / trackunit_sum
-        )
+        trackunit_height = self.fragment_height * self.fragment_size / trackunit_sum
 
         # Calculate top and bottom offsets for each track, relative to fragment
         # base
@@ -538,16 +534,16 @@ class LinearDrawer(AbstractDrawer):
                         minval, maxval = quartiles[0], quartiles[4]
                         if graph.center is None:
                             midval = (maxval + minval) / 2.0
-                            graph_label_min.append("%.3f" % minval)
-                            graph_label_max.append("%.3f" % maxval)
+                            graph_label_min.append(f"{minval:.3f}")
+                            graph_label_max.append(f"{maxval:.3f}")
                         else:
                             diff = max((graph.center - minval), (maxval - graph.center))
                             minval = graph.center - diff
                             maxval = graph.center + diff
                             midval = graph.center
-                            graph_label_mid.append("%.3f" % midval)
-                            graph_label_min.append("%.3f" % minval)
-                            graph_label_max.append("%.3f" % maxval)
+                            graph_label_mid.append(f"{midval:.3f}")
+                            graph_label_min.append(f"{minval:.3f}")
+                            graph_label_max.append(f"{maxval:.3f}")
                     for fragment in range(
                         start_f, end_f + 1
                     ):  # Add to all used fragment axes
@@ -1071,7 +1067,7 @@ class LinearDrawer(AbstractDrawer):
             for locstart, locend in feature.locations:
                 print(self.canvas_location(locstart))
                 print(self.canvas_location(locend))
-            print("FEATURE\n%s" % feature)
+            print(f"FEATURE\n{feature}")
             raise
 
         # Distribution dictionary for various ways of drawing the feature
@@ -1465,7 +1461,7 @@ class LinearDrawer(AbstractDrawer):
             self.fragment_bases,
         )
         # Calculate number of pixels from start of fragment
-        x_offset = 1.0 * self.pagewidth * base_offset / self.fragment_bases
+        x_offset = self.pagewidth * base_offset / self.fragment_bases
         return fragment, x_offset
 
     def _draw_sigil_box(self, bottom, center, top, x1, x2, strand, **kwargs):

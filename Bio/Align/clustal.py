@@ -19,33 +19,32 @@ from Bio.SeqRecord import SeqRecord
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Clustalw alignment writer."""
 
+    fmt = "Clustal"
+
     def write_header(self, alignments):
         """Use this to write the file header."""
         stream = self.stream
         try:
-            program = alignments.program
-        except AttributeError:
+            metadata = alignments.metadata
+            program = metadata["Program"]
+        except (AttributeError, KeyError):
             program = "Biopython"
             version = Bio.__version__
         else:
-            try:
-                version = alignments.version
-            except AttributeError:
-                version = ""
+            version = metadata.get("Version", "")
         line = f"{program} {version} multiple sequence alignment\n"
         stream.write(line)
         stream.write("\n")
         stream.write("\n")
 
-    def write_alignment(self, alignment):
-        """Use this to write (another) single alignment to an open file."""
+    def format_alignment(self, alignment):
+        """Return a string with a single alignment in the Clustal format."""
         nseqs, length = alignment.shape
         if nseqs == 0:
             raise ValueError("Must have at least one sequence")
         if length == 0:
             raise ValueError("Non-empty sequences are required")
 
-        stream = self.stream
         try:
             column_annotations = alignment.column_annotations
         except AttributeError:
@@ -59,7 +58,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             try:
                 name = sequence.id
             except AttributeError:
-                name = "sequence_%d" % i
+                name = "sequence_%d" % i  # Clustal format doesn't allow an empty string
             else:
                 # when we output, we do a nice 80 column output, although
                 # this may result in truncation of the ids.  Also, make sure
@@ -69,6 +68,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             name = name.ljust(36)
             names.append(name)
 
+        lines = []
         start = 0
         while start != length:
             # calculate the number of letters to show, which will
@@ -79,34 +79,31 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
             for name, gapped_sequence in zip(names, gapped_sequences):
                 line = f"{name}{gapped_sequence[start:stop]}\n"
-                stream.write(line)
+                lines.append(line)
 
             # now we need to print out the star info, if we've got it
             if consensus is not None:
                 line = " " * 36 + consensus[start:stop] + "\n"
-                stream.write(line)
+                lines.append(line)
 
-            stream.write("\n")
+            lines.append("\n")
             start = stop
+        lines.append("\n")
+        return "".join(lines)
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Clustalw alignment iterator."""
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
+    fmt = "Clustal"
 
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="Clustal")
-        stream = self.stream
+    def _read_header(self, stream):
         try:
             line = next(stream)
         except StopIteration:
             raise ValueError("Empty file.") from None
 
+        self.metadata = {}
         # Whitelisted programs we know about
         words = line.split()
         known_programs = [
@@ -123,23 +120,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 "%s is not known to generate CLUSTAL files: %s"
                 % (program, ", ".join(known_programs))
             )
-        self.program = program
+        self.metadata["Program"] = program
 
         # find the clustal version in the header line
         for word in words:
             if word[0] == "(" and word[-1] == ")":
                 word = word[1:-1]
-            if word[0] in "0123456789":
-                self.version = word
+            if word[0].isdigit():
+                self.metadata["Version"] = word
                 break
-        else:
-            self.version = None
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream."""
-        if stream is None:
-            raise StopIteration
-
+    def _read_next_alignment(self, stream):
         # If the alignment contains entries with the same sequence
         # identifier (not a good idea - but seems possible), then this
         # dictionary based parser will merge their sequences.  Fix this?
@@ -194,7 +185,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if index:
                     break
         else:
-            raise StopIteration
+            return
 
         assert index is not None
 
@@ -248,22 +239,18 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     i = 0
 
         records = [
-            SeqRecord(Seq(seq), id=seqid, description=seqid)
+            SeqRecord(Seq(seq), id=seqid, description="")
             for (seqid, seq) in zip(ids, seqs)
         ]
         coordinates = Alignment.infer_coordinates(aligned_seqs)
         alignment = Alignment(records, coordinates)
-        # TODO - Handle alignment annotation better, for now
-        # mimic the old parser in Bio.Clustalw
         if consensus:
             rows, columns = alignment.shape
             if len(consensus) != columns:
-                for aligned_seq in aligned_seqs:
-                    print(aligned_seq, len(aligned_seq))
                 raise ValueError(
                     "Alignment has %i columns, consensus length is %i, '%s'"
                     % (columns, len(consensus), consensus)
                 )
             alignment.column_annotations = {}
             alignment.column_annotations["clustal_consensus"] = consensus
-        yield alignment
+        return alignment

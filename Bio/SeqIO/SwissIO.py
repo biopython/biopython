@@ -20,38 +20,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
-def _make_position(location_string, offset=0):
-    """Turn a Swiss location position into a SeqFeature position object (PRIVATE).
-
-    An offset of -1 is used with a start location to make it pythonic.
-    """
-    if location_string == "?":
-        return SeqFeature.UnknownPosition()
-    # Hack so that feature from 0 to 0 becomes 0 to 0, not -1 to 0.
-    try:
-        return SeqFeature.ExactPosition(max(0, offset + int(location_string)))
-    except ValueError:
-        pass
-    if location_string.startswith("<"):
-        try:
-            return SeqFeature.BeforePosition(max(0, offset + int(location_string[1:])))
-        except ValueError:
-            pass
-    elif location_string.startswith(">"):  # e.g. ">13"
-        try:
-            return SeqFeature.AfterPosition(max(0, offset + int(location_string[1:])))
-        except ValueError:
-            pass
-    elif location_string.startswith("?"):  # e.g. "?22"
-        try:
-            return SeqFeature.UncertainPosition(
-                max(0, offset + int(location_string[1:]))
-            )
-        except ValueError:
-            pass
-    raise NotImplementedError(f"Cannot parse location '{location_string}'")
-
-
 def SwissIterator(source):
     """Break up a Swiss-Prot/UniProt file into SeqRecord objects.
 

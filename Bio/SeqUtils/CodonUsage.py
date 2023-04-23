@@ -6,8 +6,23 @@
 """Methods for codon usage calculations."""
 
 import math
+import warnings
 from .CodonUsageIndices import SharpEcoliIndex
 from Bio import SeqIO  # To parse a FASTA file
+from Bio import BiopythonDeprecationWarning
+
+
+warnings.warn(
+    "This module has been DEPRECATED. Please use the CodonAdaptationIndex "
+    "class in Bio.SeqUtils instead. Note that this class has been updated to "
+    "use modern Python, and may give slightly different results from the "
+    "CodonAdaptationIndex class in Bio.SeqUtils.CodonUsage, as the code was "
+    "changed to be consistent with the published paper by Sharp and Li. The "
+    "code in the old CodonAdaptationIndex class in Bio.SeqUtils.CodonUsage was "
+    "not changed.",
+    BiopythonDeprecationWarning,
+)
+
 
 # Turn black code style off
 # fmt: off
@@ -90,8 +105,6 @@ class CodonAdaptationIndex:
         Takes a location of a Fasta file containing CDS sequences
         (which must all have a whole number of codons) and generates a codon
         usage index.
-
-        RCSU values
         """
         # first make sure we're not overwriting an existing index:
         if self.index != {} or self.codon_count != {}:
@@ -106,24 +119,16 @@ class CodonAdaptationIndex:
         # now to calculate the index we first need to sum the number of times
         # synonymous codons were used all together.
         for aa in SynonymousCodons:
-            total = 0.0
-            # RCSU values are CodonCount/((1/num of synonymous codons) * sum of
-            # all synonymous codons)
-            rcsu = []
             codons = SynonymousCodons[aa]
-
-            for codon in codons:
-                total += self.codon_count[codon]
-
-            # calculate the RSCU value for each of the codons
-            for codon in codons:
-                denominator = float(total) / len(codons)
-                rcsu.append(self.codon_count[codon] / denominator)
-
-            # now generate the index W=RCSUi/RCSUmax:
-            rcsu_max = max(rcsu)
-            for codon_index, codon in enumerate(codons):
-                self.index[codon] = rcsu[codon_index] / rcsu_max
+            count_max = max(self.codon_count[codon] for codon in codons)
+            if count_max == 0:  # the residue does not occur at all
+                for codon in codons:
+                    self.index[codon] = None
+            else:
+                # now generate the index W=RCSUi/RCSUmax = COUNTi/COUNTmax:
+                # see equation 2 in Sharp & Li 1987 NAR
+                for codon in codons:
+                    self.index[codon] = self.codon_count[codon] / count_max
 
     def cai_for_gene(self, dna_sequence):
         """Calculate the CAI (float) for the provided DNA sequence (string).
@@ -138,8 +143,7 @@ class CodonAdaptationIndex:
         if self.index == {}:
             self.set_cai_index(SharpEcoliIndex)
 
-        if dna_sequence.islower():
-            dna_sequence = dna_sequence.upper()
+        dna_sequence = dna_sequence.upper()
 
         for i in range(0, len(dna_sequence), 3):
             codon = dna_sequence[i : i + 3]
@@ -161,25 +165,32 @@ class CodonAdaptationIndex:
             self.codon_count = CodonsDict.copy()
 
             # iterate over sequence and count all the codons in the FastaFile.
-            for cur_record in SeqIO.parse(handle, "fasta"):
-                # make sure the sequence is lower case
-                if str(cur_record.seq).islower():
-                    dna_sequence = str(cur_record.seq).upper()
-                else:
-                    dna_sequence = str(cur_record.seq)
-                for i in range(0, len(dna_sequence), 3):
-                    codon = dna_sequence[i : i + 3]
-                    if codon in self.codon_count:
+            for record in SeqIO.parse(handle, "fasta"):
+                sequence = record.seq.upper()
+                for i in range(0, len(sequence), 3):
+                    codon = sequence[i : i + 3]
+                    try:
                         self.codon_count[codon] += 1
-                    else:
-                        raise TypeError(
-                            f"illegal codon {codon} in gene: {cur_record.id}"
-                        )
+                    except KeyError:
+                        raise ValueError(
+                            f"illegal codon '{codon}' in gene: {record.id}"
+                        ) from None
+
+    def __str__(self):
+        lines = []
+        for i in sorted(self.index):
+            line = f"{i}\t{self.index[i]:.3f}"
+            lines.append(line)
+        return "\n".join(lines) + "\n"
 
     def print_index(self):
         """Print out the index used.
 
         This just gives the index when the objects is printed.
         """
-        for i in sorted(self.index):
-            print(f"{i}\t{self.index[i]:.3f}")
+        warnings.warn(
+            "The print_index method is deprecated; instead of "
+            "self.print_index(), please use print(self).",
+            BiopythonDeprecationWarning,
+        )
+        print(self)

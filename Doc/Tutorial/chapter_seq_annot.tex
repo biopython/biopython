@@ -12,7 +12,6 @@ While this chapter should cover most things to do with the \verb|SeqRecord| and 
 \begin{minted}{pycon}
 >>> from Bio.SeqRecord import SeqRecord
 >>> help(SeqRecord)
-...
 \end{minted}
 
 \section{The SeqRecord object}
@@ -334,11 +333,11 @@ clarify the terminology we're using:
 
 I just mention this because sometimes I get confused between the two.
 
-\subsubsection{FeatureLocation object}
+\subsubsection{SimpleLocation object}
 
 Unless you work with eukaryotic genes, most \verb|SeqFeature| locations are
 extremely simple - you just need start and end coordinates and a strand.
-That's essentially all the basic \verb|FeatureLocation| object does.
+That's essentially all the basic \verb|SimpleLocation| object does.
 
 %TODO -- add example here
 
@@ -388,13 +387,7 @@ of fuzzy positions, so we have five classes do deal with them:
   this class models a position which occurs somewhere between two
   specified nucleotides. In GenBank/EMBL notation, this would be
   represented as `(1.5)', to represent that the position is somewhere
-  within the range 1 to 5. To get the information in this class you
-  have to look at two attributes. The \verb|position| attribute
-  specifies the lower boundary of the range we are looking at, so in
-  our example case this would be one. The \verb|extension| attribute
-  specifies the range to the higher boundary, so in this case it
-  would be 4. So \verb|object.position| is the lower boundary and
-  \verb|object.position + object.extension| is the upper boundary.
+  within the range 1 to 5.
 
   \item[OneOfPosition] -- Occasionally used for GenBank/EMBL locations,
   this class deals with a position where several possible values exist,
@@ -415,7 +408,7 @@ Here's an example where we create a location with fuzzy end points:
 >>> from Bio import SeqFeature
 >>> start_pos = SeqFeature.AfterPosition(5)
 >>> end_pos = SeqFeature.BetweenPosition(9, left=8, right=9)
->>> my_location = SeqFeature.FeatureLocation(start_pos, end_pos)
+>>> my_location = SeqFeature.SimpleLocation(start_pos, end_pos)
 \end{minted}
 
 Note that the details of some of the fuzzy-locations changed in Biopython 1.59,
@@ -424,7 +417,7 @@ which integer position should be used for slicing etc. For a start position this
 is generally the lower (left) value, while for an end position this would generally
 be the higher (right) value.
 
-If you print out a \verb|FeatureLocation| object, you can get a nice representation of the information:
+If you print out a \verb|SimpleLocation| object, you can get a nice representation of the information:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -457,32 +450,16 @@ they are actually subclasses of integers so should work like integers:
 9
 \end{minted}
 
-For compatibility with older versions of Biopython you can ask for the
-\verb|nofuzzy_start| and \verb|nofuzzy_end| attributes of the location
-which are plain integers:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> my_location.nofuzzy_start
-5
->>> my_location.nofuzzy_end
-9
-\end{minted}
-
-Notice that this just gives you back the position attributes of the fuzzy locations.
-
 Similarly, to make it easy to create a position without worrying about fuzzy positions, you can just pass in numbers to the \verb|FeaturePosition| constructors, and you'll get back out \verb|ExactPosition| objects:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> exact_location = SeqFeature.FeatureLocation(5, 9)
+>>> exact_location = SeqFeature.SimpleLocation(5, 9)
 >>> print(exact_location)
 [5:9]
 >>> exact_location.start
 ExactPosition(5)
 >>> int(exact_location.start)
-5
->>> exact_location.nofuzzy_start
 5
 \end{minted}
 
@@ -527,17 +504,17 @@ A \verb|SeqFeature| or location object doesn't directly contain a sequence, inst
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+>>> from Bio.SeqFeature import SeqFeature, SimpleLocation
 >>> seq = Seq("ACCGAGACGGCAAAGGCTAGCATAGGTATGAGACTTCCTTCCTGCCAGTGCTGAGGAACTGGGAGCCTAC")
->>> feature = SeqFeature(FeatureLocation(5, 18), type="gene", strand=-1)
+>>> feature = SeqFeature(SimpleLocation(5, 18, strand=-1), type="gene")
 \end{minted}
 
 You could take the parent sequence, slice it to extract 5:18, and then take the reverse complement.
-If you are using Biopython 1.59 or later, the feature location's start and end are integer like so this works:
+The feature location's start and end are integer-like so this works:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> feature_seq = seq[feature.location.start:feature.location.end].reverse_complement()
+>>> feature_seq = seq[feature.location.start : feature.location.end].reverse_complement()
 >>> print(feature_seq)
 AGCCTTTGCCGTC
 \end{minted}
@@ -564,10 +541,7 @@ that of the region of sequence it describes.
 13
 \end{minted}
 
-For simple \verb|FeatureLocation| objects the length is just
-the difference between the start and end positions. However,
-for a \verb|CompoundLocation| the length is the sum of the
-constituent regions.
+For \verb|SimpleLocation| objects the length is just the difference between the start and end positions. However, for a \verb|CompoundLocation| the length is the sum of the constituent regions.
 
 \section{Comparison}
 
@@ -586,7 +560,6 @@ What happens when you try to compare these ``identical'' records?
 %this is not a doctest:
 \begin{minted}{pycon}
 >>> record1 == record2
-...
 \end{minted}
 
 Perhaps surprisingly older versions of Biopython would use Python's default object
@@ -798,7 +771,7 @@ longer circular DNA - it is now linear:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> sub_record.annotations['topology'] = 'linear'
+>>> sub_record.annotations["topology"] = "linear"
 \end{minted}
 
 The same point could be made about the record \texttt{id}, \texttt{name}

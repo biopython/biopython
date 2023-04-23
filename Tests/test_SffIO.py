@@ -116,7 +116,7 @@ class TestErrors(unittest.TestCase):
             records = list(SeqIO.parse(BytesIO(header), "sff"))
         err = str(cm.exception)
         if isinstance(msg, (tuple, list)):
-            self.assertIn(err, msg, "Unexpected error: %s" % err)
+            self.assertIn(err, msg, f"Unexpected error: {err}")
         else:
             self.assertEqual(err, msg)
 
@@ -459,7 +459,6 @@ class TestSelf(unittest.TestCase):
 
             def fileiter(handle):
                 for record in SffIterator(handle):
-                    # print(record.id)
                     i = record.id
 
             self.assertRaises(ValueError, fileiter, handle)

@@ -650,19 +650,18 @@ class QueryResult(_BaseSearchObject):
             hit = self._items.pop(hit_key)
             # remove all alternative IDs of the popped hit
             for alt_id in hit.id_all[1:]:
-                try:
-                    del self.__alt_hit_ids[alt_id]
-                except KeyError:
-                    pass
-            return hit
+                self.__alt_hit_ids.pop(alt_id, None)
         except KeyError:
-            if hit_key in self.__alt_hit_ids:
-                return self.pop(self.__alt_hit_ids[hit_key], default)
-            # if key doesn't exist and no default is set, raise a KeyError
-            if default is self.__marker:
-                raise KeyError(hit_key) from None
-        # if key doesn't exist but a default is set, return the default value
-        return default
+            try:
+                hit = self.pop(self.__alt_hit_ids[hit_key])
+            except KeyError:
+                # hit_key is not a valid id
+                # use the default if it has been set
+                if default is not self.__marker:
+                    hit = default
+                else:
+                    raise KeyError(hit_key) from None
+        return hit
 
     def index(self, hit_key):
         """Return the index of a given hit key, zero-based.

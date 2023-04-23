@@ -22,7 +22,6 @@ from Bio.AlignIO import PhylipIO
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.Seq import Seq
 from Bio.Seq import UndefinedSequenceError
-from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
 
 
@@ -72,7 +71,7 @@ class SeqIOTestBaseClass(unittest.TestCase):
                 pass
             cls.modes[fmt] = mode
             return mode
-        raise RuntimeError("Failed to find file mode for %s" % fmt)
+        raise RuntimeError(f"Failed to find file mode for {fmt}")
 
     def compare_record(self, old, new, *args, msg=None, **kwargs):
         """Compare old SeqRecord to new SeqRecord."""
@@ -82,27 +81,24 @@ class SeqIOTestBaseClass(unittest.TestCase):
             or (old.id + " " + old.description).strip() == new.description
             or new.description == "<unknown description>"
             or new.description == "",
-            msg="'%s' vs '%s' " % (old.description, new.description),
+            msg=f"'{old.description}' vs '{new.description}' ",
         )
         self.assertEqual(len(old.seq), len(new.seq))
-        if isinstance(old.seq, UnknownSeq) or isinstance(new.seq, UnknownSeq):
-            pass
-        elif len(old.seq) == 0:
-            pass
+        if len(old.seq) == 0:
+            return
+        try:
+            bytes(old.seq)
+            bytes(new.seq)
+        except UndefinedSequenceError:
+            return
         else:
-            try:
-                bytes(old.seq)
-                bytes(new.seq)
-            except UndefinedSequenceError:
-                pass
+            if len(old.seq) < 200:
+                err_msg = f"'{old.seq}' vs '{new.seq}'"
             else:
-                if len(old.seq) < 200:
-                    err_msg = "'%s' vs '%s'" % (old.seq, new.seq)
-                else:
-                    err_msg = "'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100])
-                if msg is not None:
-                    err_msg = "%s: %s" % (msg, err_msg)
-                self.assertEqual(old.seq, new.seq, msg=err_msg)
+                err_msg = f"'{old.seq[:100]}...' vs '{new.seq[:100]}...'"
+            if msg is not None:
+                err_msg = f"{msg}: {err_msg}"
+            self.assertEqual(old.seq, new.seq, msg=err_msg)
 
     def compare_records(self, old_list, new_list, *args, **kwargs):
         """Check if two lists of SeqRecords are equal."""
@@ -118,7 +114,7 @@ class SeqIOConverterTestBaseClass(SeqIOTestBaseClass):
 
     def check_conversion(self, filename, in_format, out_format):
         """Test format conversion by SeqIO.write/SeqIO.parse and SeqIO.convert."""
-        msg = "Convert %s from %s to %s" % (filename, in_format, out_format)
+        msg = f"Convert {filename} from {in_format} to {out_format}"
         records = list(SeqIO.parse(filename, in_format))
         # Write it out...
         handle = StringIO()
@@ -155,7 +151,7 @@ class SeqIOConverterTestBaseClass(SeqIOTestBaseClass):
             SeqIO.convert(filename, in_format, handle, out_format)
         err2 = str(cm.exception)
         # Verify that parse/write and convert give the same failure
-        err_msg = "%s: parse/write and convert gave different failures" % msg
+        err_msg = f"{msg}: parse/write and convert gave different failures"
         self.assertEqual(err1, err2, msg=err_msg)
 
 
@@ -339,7 +335,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                     except (ValueError, TypeError) as e:
                         messages[fmt] = str(e)
                 else:
-                    message = "%s -> %s" % (t_format, fmt)
+                    message = f"{t_format} -> {fmt}"
                     with self.assertRaises(Exception, msg=message) as cm:
                         with warnings.catch_warnings():
                             # e.g. data loss
@@ -370,7 +366,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # I want to see the output when called from the test harness,
                 # run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
-                message = "%s\n\n%r\n\n%r" % (str(e), handle.read(), records1)
+                message = f"{str(e)}\n\n{handle.read()!r}\n\n{records1!r}"
                 self.fail(message)
 
             self.assertEqual(len(records2), t_count)
@@ -397,19 +393,19 @@ class TestSeqIO(SeqIOTestBaseClass):
                     self.assertEqual(
                         PhylipIO.sanitize_name(r1.id, 10),
                         r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id),
+                        f"'{r1.id}' vs '{r2.id}'",
                     )
                 elif fmt == "phylip-relaxed":
                     self.assertEqual(
                         PhylipIO.sanitize_name(r1.id),
                         r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id),
+                        f"'{r1.id}' vs '{r2.id}'",
                     )
                 elif fmt == "clustal":
                     self.assertEqual(
                         r1.id.replace(" ", "_")[:30],
                         r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id),
+                        f"'{r1.id}' vs '{r2.id}'",
                     )
                 elif fmt == "stockholm":
                     r1_id = r1.id.replace(" ", "_")
@@ -421,17 +417,17 @@ class TestSeqIO(SeqIOTestBaseClass):
                         if not r1_id.endswith(suffix):
                             r1_id += suffix
 
-                    self.assertEqual(r1_id, r2.id, "'%s' vs '%s'" % (r1.id, r2.id))
+                    self.assertEqual(r1_id, r2.id, f"'{r1.id}' vs '{r2.id}'")
                 elif fmt == "maf":
                     self.assertEqual(
-                        r1.id.replace(" ", "_"), r2.id, "'%s' vs '%s'" % (r1.id, r2.id)
+                        r1.id.replace(" ", "_"), r2.id, f"'{r1.id}' vs '{r2.id}'"
                     )
                 elif fmt in ["fasta", "fasta-2line"]:
                     self.assertEqual(r1.id.split()[0], r2.id)
                 elif fmt == "nib":
                     self.assertEqual(r2.id, "<unknown id>")
                 else:
-                    self.assertEqual(r1.id, r2.id, "'%s' vs '%s'" % (r1.id, r2.id))
+                    self.assertEqual(r1.id, r2.id, f"'{r1.id}' vs '{r2.id}'")
 
             if len(records1) > 1:
                 # Try writing just one record (passing a SeqRecord, not a list)
@@ -446,7 +442,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                         self.assertEqual(handle.getvalue(), records1[0].format(fmt))
         if debug:
             self.fail(
-                "Update %s test to use this dict:\nmessages = %r" % (t_format, messages)
+                f"Update {t_format} test to use this dict:\nmessages = {messages!r}"
             )
 
     def perform_test(
@@ -545,8 +541,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                 self.assertIsInstance(record, SeqRecord)
                 if t_format in possible_unknown_seq_formats:
                     if not isinstance(record.seq, Seq):
-                        # UnknownSeq is a subclass of Seq
-                        self.failureException("Expected a Seq or UnknownSeq object")
+                        self.failureException("Expected a Seq object")
                 else:
                     self.assertIsInstance(record.seq, Seq)
                 self.assertIsInstance(record.id, str)
@@ -558,24 +553,24 @@ class TestSeqIO(SeqIOTestBaseClass):
                     accs = record.annotations["accessions"]
                     # Check for blanks, or entries with leading/trailing spaces
                     for acc in accs:
-                        self.assertTrue(acc, "Bad accession in annotations: %r" % acc)
+                        self.assertTrue(acc, f"Bad accession in annotations: {acc!r}")
                         self.assertEqual(
-                            acc, acc.strip(), "Bad accession in annotations: %r" % acc
+                            acc, acc.strip(), f"Bad accession in annotations: {acc!r}"
                         )
                     self.assertEqual(
                         len(set(accs)),
                         len(accs),
-                        "Repeated accession in annotations: %r" % accs,
+                        f"Repeated accession in annotations: {accs!r}",
                     )
                 for ref in record.dbxrefs:
-                    self.assertTrue(ref, "Bad cross reference in dbxrefs: %r" % ref)
+                    self.assertTrue(ref, f"Bad cross reference in dbxrefs: {ref!r}")
                     self.assertEqual(
-                        ref, ref.strip(), "Bad cross reference in dbxrefs: %r" % ref
+                        ref, ref.strip(), f"Bad cross reference in dbxrefs: {ref!r}"
                     )
                 self.assertEqual(
                     len(set(record.dbxrefs)),
                     len(record.dbxrefs),
-                    "Repeated cross reference in dbxrefs: %r" % record.dbxrefs,
+                    f"Repeated cross reference in dbxrefs: {record.dbxrefs!r}",
                 )
 
                 # Check the lists obtained by the different methods agree
@@ -1898,7 +1893,7 @@ class TestSeqIO(SeqIOTestBaseClass):
     def test_swiss1(self):
         sequences = ["MGARGAPSRRRQAGRRLRYLPTGSFPFLLLLLLLCIQLGG...YSDLDFE"]
         ids = ["Q13454"]
-        names = ["N33_HUMAN"]
+        names = ["TUSC3_HUMAN"]
         lengths = [348]
         alignment = None
         messages = {
@@ -1913,7 +1908,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         self.perform_test(
             "swiss",
             False,
-            "SwissProt/sp001",
+            "SwissProt/Q13454.txt",
             1,
             ids,
             names,
@@ -1925,23 +1920,23 @@ class TestSeqIO(SeqIOTestBaseClass):
 
     def test_swiss2(self):
         sequences = ["MADQRQRSLSTSGESLYHVLGLDKNATSDDIKKSYRKLAL...YHTDGFN"]
-        ids = ["P54101"]
-        names = ["CSP_MOUSE"]
+        ids = ["P60904"]
+        names = ["DNJC5_MOUSE"]
         lengths = [198]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P54101).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P54101).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P54101).",
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60904).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60904).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60904).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P54101).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P54101).",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60904).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P60904).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
             "swiss",
             False,
-            "SwissProt/sp002",
+            "SwissProt/P60904.txt",
             1,
             ids,
             names,
@@ -1953,23 +1948,23 @@ class TestSeqIO(SeqIOTestBaseClass):
 
     def test_swiss3(self):
         sequences = ["MDDREDLVYQAKLAEQAERYDEMVESMKKVAGMDVELTVE...DVEDENQ"]
-        ids = ["P42655"]
-        names = ["143E_HUMAN"]
+        ids = ["P62258"]
+        names = ["1433E_HUMAN"]
         lengths = [255]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P42655).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P42655).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P42655).",
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P62258).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P62258).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P62258).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P42655).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P42655).",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P62258).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P62258).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
             "swiss",
             False,
-            "SwissProt/sp003",
+            "SwissProt/P62258.txt",
             1,
             ids,
             names,
@@ -2009,23 +2004,23 @@ class TestSeqIO(SeqIOTestBaseClass):
 
     def test_swiss5(self):
         sequences = ["MNLLLTLLTNTTLALLLVFIAFWLPQLNVYAEKTSPYECG...EGLEWAE"]
-        ids = ["P24973"]
+        ids = ["P68308"]
         names = ["NU3M_BALPH"]
         lengths = [115]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P24973).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P24973).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P24973).",
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P68308).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P68308).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P68308).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P24973).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P24973).",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P68308).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P68308).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
             "swiss",
             False,
-            "SwissProt/sp005",
+            "SwissProt/P68308.txt",
             1,
             ids,
             names,
@@ -2053,7 +2048,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         self.perform_test(
             "swiss",
             False,
-            "SwissProt/sp006",
+            "SwissProt/P39896.txt",
             1,
             ids,
             names,
@@ -2081,7 +2076,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         self.perform_test(
             "swiss",
             False,
-            "SwissProt/sp007",
+            "SwissProt/O95832.txt",
             1,
             ids,
             names,
@@ -2092,24 +2087,24 @@ class TestSeqIO(SeqIOTestBaseClass):
         )
 
     def test_swiss8(self):
-        sequences = ["MAVMAPRTLVLLLSGALALTQTWAGSHSMRYFFTSVSRPG...SLTACKV"]
-        ids = ["P01892"]
-        names = ["1A02_HUMAN"]
+        sequences = ["MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPG...SLTACKV"]
+        ids = ["P04439"]
+        names = ["HLAA_HUMAN"]
         lengths = [365]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01892).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01892).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01892).",
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=P04439).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=P04439).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=P04439).",
             "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01892).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P01892).",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=P04439).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=P04439).",
             "sff": "Missing SFF flow information",
         }
         self.perform_test(
             "swiss",
             False,
-            "SwissProt/sp008",
+            "SwissProt/P04439.txt",
             1,
             ids,
             names,
@@ -2137,35 +2132,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         self.perform_test(
             "swiss",
             False,
-            "SwissProt/sp009",
-            1,
-            ids,
-            names,
-            sequences,
-            lengths,
-            alignment,
-            messages,
-        )
-
-    def test_swiss10(self):
-        sequences = ["MDKLDANVSSEEGFGSVEKVVLLTFLSTVILMAILGNLLV...AAQPSDT"]
-        ids = ["Q13639"]
-        names = ["5H4_HUMAN"]
-        lengths = [388]
-        alignment = None
-        messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
-            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).",
-            "sff": "Missing SFF flow information",
-        }
-        self.perform_test(
-            "swiss",
-            False,
-            "SwissProt/sp010",
+            "SwissProt/O23729.txt",
             1,
             ids,
             names,
@@ -2193,7 +2160,7 @@ class TestSeqIO(SeqIOTestBaseClass):
         self.perform_test(
             "swiss",
             False,
-            "SwissProt/sp011",
+            "SwissProt/P16235.txt",
             1,
             ids,
             names,
@@ -2345,10 +2312,10 @@ class TestSeqIO(SeqIOTestBaseClass):
         )
 
     def test_swiss17(self):
-        sequences = ["ARRERMTAREEASLRTLEGRRRATLLSARQGMMSARGDFL...TKNFGFV"]
+        sequences = ["MNKQAVKRLHMLREVSEKLNKYNLNSHPPLNVLEQATIKQ...TKNFGFV"]
         ids = ["Q62671"]
-        names = ["EDD_RAT"]
-        lengths = [920]
+        names = ["UBR5_RAT"]
+        lengths = [2788]
         alignment = None
         messages = {
             "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=Q62671).",
@@ -3202,6 +3169,26 @@ class TestSeqIO(SeqIOTestBaseClass):
         read_db_source = read_record.annotations.get("db_source")
 
         self.assertEqual(db_source, read_db_source)
+
+    def test_genbank23(self):
+        """Test that peptide genbank files can be written with long names."""
+        record = SeqRecord(
+            Seq("MAGICCATS"), id="REALLYREALLYREALLYREALLYLONGID", description=""
+        )
+        record.annotations["molecule_type"] = "protein"
+        record.annotations["topology"] = "linear"
+
+        handle = StringIO()
+        with warnings.catch_warnings():
+            # ignore the warning about line length
+            warnings.simplefilter("ignore", BiopythonWarning)
+            SeqIO.write(record, handle, "genbank")
+
+        handle.seek(0)
+        read_record = SeqIO.read(handle, "genbank")
+        self.assertEqual(str(read_record.seq), str(record.seq))
+        self.assertEqual(read_record.id, record.id)
+        self.assertEqual(read_record.description, record.description)
 
     def test_embl1(self):
         sequences = [None]
@@ -5528,6 +5515,38 @@ class TestSeqIO(SeqIOTestBaseClass):
             False,
             "PDB/2BEG.pdb",
             5,
+            ids,
+            names,
+            sequences,
+            lengths,
+            alignment,
+            messages,
+        )
+
+    def test_pdb_seqres3(self):
+        sequences = [
+            "STIEEQAKTFLDKFNHEAEDLFYQSSLASWNYNTNITEEN...DWSPYAD",
+            "RVQPTESIVRFPNITNLCPFGEVFNATTFASVYAWNRKRI...PATVCGP",
+        ]
+        ids = ["7DDO:A", "7DDO:C"]
+        names = ["7DDO:A", "7DDO:C"]
+        lengths = [597, 209]
+        alignment = None
+        messages = {
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=7DDO:C).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=7DDO:C).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=7DDO:C).",
+            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=7DDO:C).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=7DDO:C).",
+            "sff": "Missing SFF flow information",
+            "xdna": "More than one sequence found",
+        }
+        self.perform_test(
+            "pdb-seqres",
+            False,
+            "PDB/7DDO.pdb",
+            2,
             ids,
             names,
             sequences,

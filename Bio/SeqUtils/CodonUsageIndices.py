@@ -8,6 +8,23 @@
 Currently this module only defines a single codon adaption index from
 Sharp & Li, Nucleic Acids Res. 1987.
 """
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+
+
+warnings.warn(
+    "This module has been DEPRECATED. Please use the CodonAdaptationIndex "
+    "class in Bio.SeqUtils instead. Note that this class has been updated to "
+    "use modern Python, and may give slightly different results from the "
+    "CodonAdaptationIndex class in Bio.SeqUtils.CodonUsage, as the code was "
+    "changed to be consistent with the published paper by Sharp and Li. The "
+    "code in the old CodonAdaptationIndex class in Bio.SeqUtils.CodonUsage was "
+    "not changed.",
+    BiopythonDeprecationWarning,
+)
+
+
 # Turn black code style off
 # fmt: off
 

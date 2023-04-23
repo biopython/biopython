@@ -5,23 +5,21 @@
 #
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v4.4.0
     hooks:
     -   id: check-executables-have-shebangs
         files: \.(py|sh)$
     -   id: check-json
-    -   id: debug-statements
     -   id: end-of-file-fixer
         files: \.py$
     -   id: mixed-line-ending
 -   repo: https://github.com/psf/black
-    rev: 21.7b0
+    rev: 22.12.0
     hooks:
     -   id: black
-        args: [--check]
-        exclude: ^(Bio/Restriction/Restriction_Dictionary\.py|Tests/test_NCBITextParser\.py)$
--   repo: https://gitlab.com/pycqa/flake8
-    rev: 3.9.2
+        args: [--check,--target-version,py37]
+-   repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
     hooks:
     -   id: flake8
         additional_dependencies: [
@@ -35,24 +33,28 @@ repos:
         ]
         exclude: ^(Bio/Restriction/Restriction_Dictionary\.py|Tests/test_NCBITextParser\.py)$
 -   repo: https://github.com/asottile/blacken-docs
-    rev: v1.10.0
+    rev: v1.12.1
     hooks:
     -   id: blacken-docs
-        additional_dependencies: [black==21.7b0]
+        additional_dependencies: [black==22.12.0]
         exclude: ^.github/
 -   repo: https://github.com/myint/rstcheck
-    rev: 3f92957478422df87bd730abde66f089cc1ee19b
+    rev: v6.1.1
     hooks:
     -   id: rstcheck
-        args: [--report=warning]
+        args: [
+            --ignore-roles=ref,
+            --ignore-directives=toctree,
+            --report-level=warning
+        ]
 -   repo: https://github.com/PyCQA/doc8
-    rev: 0.9.0
+    rev: v1.1.1
     hooks:
     -   id: doc8
         additional_dependencies: [pygments]
         args: [--quiet,--ignore-path=Doc/examples/ec_*.txt, --ignore=D004]
 -   repo: https://github.com/codespell-project/codespell
-    rev: v2.1.0
+    rev: v2.2.2
     hooks:
     -   id: codespell
         files: \.(rst|md|tex)$
@@ -77,6 +79,14 @@ ci:
     autoupdate_commit_msg: '[pre-commit.ci] autoupdate'
     # Default is weekly
     autoupdate_schedule: quarterly
-    # Currently pre-commit.ci checks all files, and flake8 takes too long
-    # and causes a timeout - so as a short-term workaround, skip it:
-    skip: [flake8]
+    # Currently pre-commit.ci checks all files, and all hooks takes too long
+    # and causes a timeout - so as a short-term workaround, skip flake8 etc:
+    skip: [
+        check-json,
+        mixed-line-ending,
+        flake8,
+        rstcheck,
+        doc8,
+        codespell,
+        doi-link-style
+    ]

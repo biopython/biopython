@@ -12,7 +12,7 @@ from Textco BioSoftware, Inc.
 from struct import unpack
 
 from Bio.Seq import Seq
-from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import SeqFeature
 from Bio.SeqRecord import SeqRecord
 
@@ -118,7 +118,7 @@ def _parse(handle):
             # 2 (forward strand), and 3 (both strands). All are
             # treated as a forward strand.
             strand = 1
-        location = FeatureLocation(start, end, strand=strand)
+        location = SimpleLocation(start, end, strand=strand)
 
         # It looks like any value > 0 indicates a CDS...
         if type > 0:

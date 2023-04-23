@@ -70,7 +70,7 @@ class Record:
 
     def _name(self):
         return _write_kegg(
-            "NAME", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.name]
+            "NAME", [_wrap_kegg(line, wrap_rule=name_wrap) for line in self.name]
         )
 
     def _formula(self):
@@ -83,11 +83,13 @@ class Record:
         s = []
         for entry in self.pathway:
             s.append(entry[0] + "  " + entry[1])
-        return _write_kegg("PATHWAY", [_wrap_kegg(l, wrap_rule=id_wrap(16)) for l in s])
+        return _write_kegg(
+            "PATHWAY", [_wrap_kegg(line, wrap_rule=id_wrap(16)) for line in s]
+        )
 
     def _enzyme(self):
         return _write_kegg(
-            "ENZYME", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.enzyme]
+            "ENZYME", [_wrap_kegg(line, wrap_rule=name_wrap) for line in self.enzyme]
         )
 
     def _structures(self):
@@ -95,14 +97,16 @@ class Record:
         for entry in self.structures:
             s.append(entry[0] + ": " + "  ".join(entry[1]) + "  ")
         return _write_kegg(
-            "STRUCTURES", [_wrap_kegg(l, wrap_rule=struct_wrap(5)) for l in s]
+            "STRUCTURES", [_wrap_kegg(line, wrap_rule=struct_wrap(5)) for line in s]
         )
 
     def _dblinks(self):
         s = []
         for entry in self.dblinks:
             s.append(entry[0] + ": " + " ".join(entry[1]))
-        return _write_kegg("DBLINKS", [_wrap_kegg(l, wrap_rule=id_wrap(9)) for l in s])
+        return _write_kegg(
+            "DBLINKS", [_wrap_kegg(line, wrap_rule=id_wrap(9)) for line in s]
+        )
 
 
 def parse(handle):
@@ -153,7 +157,7 @@ def parse(handle):
             record.pathway.append(pathway)
         elif keyword == "FORMULA     ":
             record.formula = data
-        elif keyword == "MASS        ":
+        elif keyword in ("MASS        ", "EXACT_MASS  "):
             record.mass = data
         elif keyword == "DBLINKS     ":
             if ":" in data:

@@ -18,8 +18,6 @@ import random
 import re
 import warnings
 
-from Bio import BiopythonDeprecationWarning
-
 
 # General tree-traversal algorithms
 
@@ -139,7 +137,7 @@ def _attribute_matcher(kwargs):
                 return pattern == target
             if pattern is None:
                 return target is None
-            raise TypeError("invalid query type: %s" % type(pattern))
+            raise TypeError(f"invalid query type: {type(pattern)}")
         return True
 
     return match
@@ -442,7 +440,7 @@ class TreeMixin:
         # Validation -- otherwise izip throws a spooky error below
         for p, t in zip(paths, targets):
             if p is None:
-                raise ValueError("target %r is not in this tree" % t)
+                raise ValueError(f"target {t!r} is not in this tree")
         mrca = self.root
         for level in zip(*paths):
             ref = level[0]
@@ -773,7 +771,7 @@ class Tree(TreeElement, TreeMixin):
 
         """
         if isinstance(taxa, int):
-            taxa = ["taxon%s" % (i + 1) for i in range(taxa)]
+            taxa = [f"taxon{i + 1}" for i in range(taxa)]
         elif hasattr(taxa, "__iter__"):
             taxa = list(taxa)
         else:
@@ -972,21 +970,13 @@ class Tree(TreeElement, TreeMixin):
             # Follow python convention and default to using __str__
             return str(self)
 
-    def format(self, fmt=None, format=None):
+    def format(self, fmt=None):
         """Serialize the tree as a string in the specified file format.
 
         :param fmt: a lower-case string supported by ``Bio.Phylo.write``
             as an output file format.
 
         """
-        if format is not None:
-            if fmt is not None:
-                raise ValueError("The ``format`` argument has been renamed to ``fmt``.")
-            warnings.warn(
-                "The ``format`` argument has been renamed to ``fmt``.",
-                BiopythonDeprecationWarning,
-            )
-            fmt = format
         return self.__format__(fmt)
 
     # Pretty-printer for the entire tree hierarchy
@@ -1119,12 +1109,12 @@ class Clade(TreeElement, TreeMixin):
                 # HTML-style hex string
                 self._color = BranchColor.from_hex(arg)
             else:
-                raise ValueError("invalid color string %s" % arg)
+                raise ValueError(f"invalid color string {arg}")
         elif hasattr(arg, "__iter__") and len(arg) == 3:
             # RGB triplet
             self._color = BranchColor(*arg)
         else:
-            raise ValueError("invalid color value %s" % arg)
+            raise ValueError(f"invalid color value {arg}")
 
     color = property(_get_color, _set_color, doc="Branch color.")
 

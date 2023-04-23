@@ -330,20 +330,20 @@ class Scop:
     def write_hie(self, handle):
         """Build an HIE SCOP parsable file from this object."""
         # We order nodes to ease comparison with original file
-        for n in sorted(self._sunidDict.values(), key=lambda n: n.sunid):
+        for n in sorted(self._sunidDict.values(), key=lambda x: x.sunid):
             handle.write(str(n.toHieRecord()))
 
     def write_des(self, handle):
         """Build a DES SCOP parsable file from this object."""
         # Original SCOP file is not ordered?
-        for n in sorted(self._sunidDict.values(), key=lambda n: n.sunid):
+        for n in sorted(self._sunidDict.values(), key=lambda x: x.sunid):
             if n != self.root:
                 handle.write(str(n.toDesRecord()))
 
     def write_cla(self, handle):
         """Build a CLA SCOP parsable file from this object."""
         # We order nodes to ease comparison with original file
-        for n in sorted(self._sidDict.values(), key=lambda n: n.sunid):
+        for n in sorted(self._sidDict.values(), key=lambda x: x.sunid):
             handle.write(str(n.toClaRecord()))
 
     def getDomainFromSQL(self, sunid=None, sid=None):
@@ -899,7 +899,7 @@ class Astral:
         for dom in self.fasta_dict:
             cur.execute(
                 "INSERT INTO astral (sid,seq) values (%s,%s)",
-                (dom, self.fasta_dict[dom].seq.data),
+                (dom, self.fasta_dict[dom].seq),
             )
 
         for i in astralBibIds:

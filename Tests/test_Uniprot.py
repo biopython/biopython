@@ -45,7 +45,7 @@ class TestUniprot(SeqRecordTestBaseClass):
         self.assertEqual(len(seq_record.features), 1)
         self.assertEqual(
             repr(seq_record.features[0]),
-            "SeqFeature(FeatureLocation(ExactPosition(0), ExactPosition(116)), type='chain', id='PRO_0000377969', qualifiers=...)",
+            "SeqFeature(SimpleLocation(ExactPosition(0), ExactPosition(116)), type='chain', id='PRO_0000377969', qualifiers=...)",
         )
 
         self.assertEqual(
@@ -434,7 +434,7 @@ class TestUniprot(SeqRecordTestBaseClass):
 
         self.assertEqual(
             repr(seq_record.features[1]),
-            "SeqFeature(FeatureLocation(ExactPosition(17), ExactPosition(43)), type='propeptide', id='PRO_0000009556', qualifiers=...)",
+            "SeqFeature(SimpleLocation(ExactPosition(17), ExactPosition(43)), type='propeptide', id='PRO_0000009556', qualifiers=...)",
         )
 
         self.assertEqual(
@@ -473,9 +473,9 @@ class TestUniprot(SeqRecordTestBaseClass):
         # test Entry version
         self.assertEqual(seq_record.annotations["entry_version"], 93)
 
-    def test_sp002(self):
-        """Parsing SwissProt file sp002."""
-        filename = "sp002"
+    def test_P60904(self):
+        """Parsing SwissProt file P60904.txt."""
+        filename = "P60904.txt"
         # test the record parser
 
         datafile = os.path.join("SwissProt", filename)
@@ -486,9 +486,9 @@ class TestUniprot(SeqRecordTestBaseClass):
         self.assertIsInstance(seq_record, SeqRecord)
 
         # test Sequence version
-        self.assertEqual(seq_record.annotations["sequence_version"], 34)
+        self.assertEqual(seq_record.annotations["sequence_version"], 1)
         # test Entry version
-        self.assertEqual(seq_record.annotations["entry_version"], 36)
+        self.assertEqual(seq_record.annotations["entry_version"], 158)
 
     def compare_txt_xml(self, old, new):
         """Compare text and XML based parser output."""
@@ -501,7 +501,7 @@ class TestUniprot(SeqRecordTestBaseClass):
                 # TODO - Why is this a list vs str?
                 continue
             self.assertIsInstance(
-                old.annotations[key], type(new.annotations[key]), msg="key=%s" % key
+                old.annotations[key], type(new.annotations[key]), msg=f"key={key}"
             )
             if key == "references":
                 self.assertEqual(len(old.annotations[key]), len(new.annotations[key]))
@@ -528,7 +528,7 @@ class TestUniprot(SeqRecordTestBaseClass):
                 )
             else:
                 self.assertEqual(
-                    old.annotations[key], new.annotations[key], msg="key=%s" % key
+                    old.annotations[key], new.annotations[key], msg=f"key={key}"
                 )
         self.assertEqual(
             len(old.features),
@@ -536,18 +536,10 @@ class TestUniprot(SeqRecordTestBaseClass):
             "Features in %s, %i vs %i" % (old.id, len(old.features), len(new.features)),
         )
         for f1, f2 in zip(old.features, new.features):
-            """
-            self.assertEqual(f1.location.nofuzzy_start, f2.location.nofuzzy_start,
-                             "%s %s vs %s %s" %
-                             (f1.location, f1.type, f2.location, f2.type))
-            self.assertEqual(f1.location.nofuzzy_end, f2.location.nofuzzy_end,
-                             "%s %s vs %s %s" %
-                             (f1.location, f1.type, f2.location, f2.type))
-            """
             self.assertEqual(
                 repr(f1.location),
                 repr(f2.location),
-                "%s %s vs %s %s" % (f1.location, f1.type, f2.location, f2.type),
+                f"{f1.location} {f1.type} vs {f2.location} {f2.type}",
             )
 
     def test_Q13639(self):
@@ -573,7 +565,8 @@ class TestUniprot(SeqRecordTestBaseClass):
         # TODO - Why the mismatch gene_name vs gene_name_primary?
         # TODO - Handle evidence codes on GN line (see GitHub isse #416)
         self.assertEqual(
-            old.annotations["gene_name"], "Name=HvPIP2;8 {ECO:0000313|EMBL:BAN04711.1};"
+            old.annotations["gene_name"],
+            [{"Name": "HvPIP2;8 {ECO:0000313|EMBL:BAN04711.1}"}],
         )
         self.assertEqual(new.annotations["gene_name_primary"], "HvPIP2;8")
         self.assertEqual(old.name, "F2CXE6_HORVD")

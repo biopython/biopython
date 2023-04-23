@@ -70,7 +70,7 @@ class ParserTest(unittest.TestCase):
                     "136257636\n"
                     "Pop\n"
                 ),
-                "Did not expect this:\n%s" % rec,
+                f"Did not expect this:\n{rec}",
             )
             self.assertIsInstance(rec, GenePop.Record)
             self.assertEqual(len(rec.loci_list), self.num_loci[index])
@@ -125,7 +125,7 @@ class FileParserTest(unittest.TestCase):
                     "136257636\n"
                     "Pop\n"
                 ),
-                "Did not expect this:\n%s" % rec,
+                f"Did not expect this:\n{rec}",
             )
             self.assertEqual(len(rec.loci_list), self.num_loci[index])
             for skip in range(self.pops_indivs[index][0]):

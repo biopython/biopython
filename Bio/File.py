@@ -179,8 +179,12 @@ class _IndexedSeqFileDict(collections.abc.Mapping):
         self._key_function = key_function
         self._repr = repr
         self._obj_repr = obj_repr
+        self._cached_prev_record = (None, None)  # (key, record)
         if key_function:
-            offset_iter = ((key_function(k), o, l) for (k, o, l) in random_access_proxy)
+            offset_iter = (
+                (key_function(key), offset, length)
+                for (key, offset, length) in random_access_proxy
+            )
         else:
             offset_iter = random_access_proxy
         offsets = {}
@@ -222,7 +226,14 @@ class _IndexedSeqFileDict(collections.abc.Mapping):
         return iter(self._offsets)
 
     def __getitem__(self, key):
-        """Return record for the specified key."""
+        """Return record for the specified key.
+
+        As an optimization when repeatedly asked to look up the same record,
+        the key and record are cached so that if the *same* record is
+        requested next time, it can be returned without going to disk.
+        """
+        if key == self._cached_prev_record[0]:
+            return self._cached_prev_record[1]
         # Pass the offset to the proxy
         record = self._proxy.get(self._offsets[key])
         if self._key_function:
@@ -231,6 +242,7 @@ class _IndexedSeqFileDict(collections.abc.Mapping):
             key2 = record.id
         if key != key2:
             raise ValueError(f"Key did not match ({key} vs {key2})")
+        self._cached_prev_record = (key, record)
         return record
 
     def get_raw(self, key):
@@ -455,7 +467,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             "file_number INTEGER, offset INTEGER, length INTEGER);"
         )
         count = 0
-        for i, filename in enumerate(filenames):
+        for file_index, filename in enumerate(filenames):
             # Default to storing as an absolute path,
             f = os.path.abspath(filename)
             if not os.path.isabs(filename) and not os.path.isabs(index_filename):
@@ -474,15 +486,20 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 assert not f.startswith("../"), f
             # print("DEBUG - storing %r as [%r] %r" % (filename, relative_path, f))
             con.execute(
-                "INSERT INTO file_data (file_number, name) VALUES (?,?);", (i, f)
+                "INSERT INTO file_data (file_number, name) VALUES (?,?);",
+                (file_index, f),
             )
             random_access_proxy = proxy_factory(fmt, filename)
             if key_function:
                 offset_iter = (
-                    (key_function(k), i, o, l) for (k, o, l) in random_access_proxy
+                    (key_function(key), file_index, offset, length)
+                    for (key, offset, length) in random_access_proxy
                 )
             else:
-                offset_iter = ((k, i, o, l) for (k, o, l) in random_access_proxy)
+                offset_iter = (
+                    (key, file_index, offset, length)
+                    for (key, offset, length) in random_access_proxy
+                )
             while True:
                 batch = list(itertools.islice(offset_iter, 100))
                 if not batch:
@@ -496,7 +513,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 con.commit()
                 count += len(batch)
             if len(random_access_proxies) < max_open:
-                random_access_proxies[i] = random_access_proxy
+                random_access_proxies[file_index] = random_access_proxy
             else:
                 random_access_proxy._handle.close()
         self._length = count

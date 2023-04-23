@@ -138,18 +138,17 @@ PathGenerator_create_path(PathGenerator* self, int i, int j) {
                 }
                 break;
             case '-': {
-                l = n - 1;
+                const int nB = self->nB;
                 while (1) {
                     path = M[i][j].path;
                     if (path != direction) {
                         value = PyLong_FromLong(i);
                         if (!value) break;
                         PyTuple_SET_ITEM(target_row, k, value);
-                        value = PyLong_FromLong(j);
+                        value = PyLong_FromLong(nB-j);
                         if (!value) break;
-                        PyTuple_SET_ITEM(query_row, l, value);
+                        PyTuple_SET_ITEM(query_row, k, value);
                         k++;
-                        l--;
                         direction = path;
                     }
                     switch (path) {
@@ -1772,7 +1771,6 @@ set_alphabet(Aligner* self, PyObject* alphabet)
                                 * is 0x10ffff = 1114111 */
                 break;
             }
-            case PyUnicode_WCHAR_KIND:
             default:
                 PyErr_SetString(PyExc_ValueError, "could not interpret alphabet");
                 return -1;
@@ -5032,6 +5030,9 @@ exit: \
     if (M_row[nB] < score - epsilon) M[nA][nB].trace = 0; \
     if (Ix_row[nB] < score - epsilon) gaps[nA][nB].Ix = 0; \
     if (Iy_row[nB] < score - epsilon) gaps[nA][nB].Iy = 0; \
+    PyMem_Free(M_row); \
+    PyMem_Free(Ix_row); \
+    PyMem_Free(Iy_row); \
     return Py_BuildValue("fN", score, paths); \
 exit: \
     Py_DECREF(paths); \
@@ -5755,7 +5756,7 @@ exit: \
 /* -------------- allocation & deallocation ------------- */
 
 static PathGenerator*
-PathGenerator_create_NWSW(Py_ssize_t nA, Py_ssize_t nB, Mode mode, unsigned char strand)
+PathGenerator_create_NWSW(int nA, int nB, Mode mode, unsigned char strand)
 {
     int i;
     unsigned char trace = 0;
@@ -5803,7 +5804,7 @@ exit:
 }
 
 static PathGenerator*
-PathGenerator_create_Gotoh(Py_ssize_t nA, Py_ssize_t nB, Mode mode, unsigned char strand)
+PathGenerator_create_Gotoh(int nA, int nB, Mode mode, unsigned char strand)
 {
     int i;
     unsigned char trace;
@@ -5891,7 +5892,7 @@ exit:
 }
 
 static PathGenerator*
-PathGenerator_create_WSB(Py_ssize_t nA, Py_ssize_t nB, Mode mode, unsigned char strand)
+PathGenerator_create_WSB(int nA, int nB, Mode mode, unsigned char strand)
 {
     int i, j;
     int* trace;
@@ -5987,8 +5988,8 @@ exit:
 
 static PyObject*
 Aligner_needlemanwunsch_score_compare(Aligner* self,
-                                      const int* sA, Py_ssize_t nA,
-                                      const int* sB, Py_ssize_t nB,
+                                      const int* sA, int nA,
+                                      const int* sB, int nB,
                                       unsigned char strand)
 {
     const double match = self->match;
@@ -5999,8 +6000,8 @@ Aligner_needlemanwunsch_score_compare(Aligner* self,
 
 static PyObject*
 Aligner_needlemanwunsch_score_matrix(Aligner* self,
-                                     const int* sA, Py_ssize_t nA,
-                                     const int* sB, Py_ssize_t nB,
+                                     const int* sA, int nA,
+                                     const int* sB, int nB,
                                      unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
@@ -6010,8 +6011,8 @@ Aligner_needlemanwunsch_score_matrix(Aligner* self,
 
 static PyObject*
 Aligner_smithwaterman_score_compare(Aligner* self,
-                                    const int* sA, Py_ssize_t nA,
-                                    const int* sB, Py_ssize_t nB)
+                                    const int* sA, int nA,
+                                    const int* sB, int nB)
 {
     const double match = self->match;
     const double mismatch = self->mismatch;
@@ -6021,8 +6022,8 @@ Aligner_smithwaterman_score_compare(Aligner* self,
 
 static PyObject*
 Aligner_smithwaterman_score_matrix(Aligner* self,
-                                   const int* sA, Py_ssize_t nA,
-                                   const int* sB, Py_ssize_t nB)
+                                   const int* sA, int nA,
+                                   const int* sB, int nB)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
     const double* scores = self->substitution_matrix.buf;
@@ -6031,8 +6032,8 @@ Aligner_smithwaterman_score_matrix(Aligner* self,
 
 static PyObject*
 Aligner_needlemanwunsch_align_compare(Aligner* self,
-                                      const int* sA, Py_ssize_t nA,
-                                      const int* sB, Py_ssize_t nB,
+                                      const int* sA, int nA,
+                                      const int* sB, int nB,
                                       unsigned char strand)
 {
     const double match = self->match;
@@ -6043,8 +6044,8 @@ Aligner_needlemanwunsch_align_compare(Aligner* self,
 
 static PyObject*
 Aligner_needlemanwunsch_align_matrix(Aligner* self,
-                                     const int* sA, Py_ssize_t nA,
-                                     const int* sB, Py_ssize_t nB,
+                                     const int* sA, int nA,
+                                     const int* sB, int nB,
                                      unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
@@ -6054,8 +6055,8 @@ Aligner_needlemanwunsch_align_matrix(Aligner* self,
 
 static PyObject*
 Aligner_smithwaterman_align_compare(Aligner* self,
-                                    const int* sA, Py_ssize_t nA,
-                                    const int* sB, Py_ssize_t nB,
+                                    const int* sA, int nA,
+                                    const int* sB, int nB,
                                     unsigned char strand)
 {
     const double match = self->match;
@@ -6066,8 +6067,8 @@ Aligner_smithwaterman_align_compare(Aligner* self,
 
 static PyObject*
 Aligner_smithwaterman_align_matrix(Aligner* self,
-                                   const int* sA, Py_ssize_t nA,
-                                   const int* sB, Py_ssize_t nB,
+                                   const int* sA, int nA,
+                                   const int* sB, int nB,
                                    unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
@@ -6077,8 +6078,8 @@ Aligner_smithwaterman_align_matrix(Aligner* self,
 
 static PyObject*
 Aligner_gotoh_global_score_compare(Aligner* self,
-                                   const int* sA, Py_ssize_t nA,
-                                   const int* sB, Py_ssize_t nB,
+                                   const int* sA, int nA,
+                                   const int* sB, int nB,
                                    unsigned char strand)
 {
     const double match = self->match;
@@ -6089,8 +6090,8 @@ Aligner_gotoh_global_score_compare(Aligner* self,
 
 static PyObject*
 Aligner_gotoh_global_score_matrix(Aligner* self,
-                                  const int* sA, Py_ssize_t nA,
-                                  const int* sB, Py_ssize_t nB,
+                                  const int* sA, int nA,
+                                  const int* sB, int nB,
                                   unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
@@ -6100,8 +6101,8 @@ Aligner_gotoh_global_score_matrix(Aligner* self,
 
 static PyObject*
 Aligner_gotoh_local_score_compare(Aligner* self,
-                                  const int* sA, Py_ssize_t nA,
-                                  const int* sB, Py_ssize_t nB)
+                                  const int* sA, int nA,
+                                  const int* sB, int nB)
 {
     const double match = self->match;
     const double mismatch = self->mismatch;
@@ -6111,8 +6112,8 @@ Aligner_gotoh_local_score_compare(Aligner* self,
 
 static PyObject*
 Aligner_gotoh_local_score_matrix(Aligner* self,
-                                 const int* sA, Py_ssize_t nA,
-                                 const int* sB, Py_ssize_t nB)
+                                 const int* sA, int nA,
+                                 const int* sB, int nB)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
     const double* scores = self->substitution_matrix.buf;
@@ -6121,8 +6122,8 @@ Aligner_gotoh_local_score_matrix(Aligner* self,
 
 static PyObject*
 Aligner_gotoh_global_align_compare(Aligner* self,
-                                   const int* sA, Py_ssize_t nA,
-                                   const int* sB, Py_ssize_t nB,
+                                   const int* sA, int nA,
+                                   const int* sB, int nB,
                                    unsigned char strand)
 {
     const double match = self->match;
@@ -6133,8 +6134,8 @@ Aligner_gotoh_global_align_compare(Aligner* self,
 
 static PyObject*
 Aligner_gotoh_global_align_matrix(Aligner* self,
-                                  const int* sA, Py_ssize_t nA,
-                                  const int* sB, Py_ssize_t nB,
+                                  const int* sA, int nA,
+                                  const int* sB, int nB,
                                   unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
@@ -6144,8 +6145,8 @@ Aligner_gotoh_global_align_matrix(Aligner* self,
 
 static PyObject*
 Aligner_gotoh_local_align_compare(Aligner* self,
-                                  const int* sA, Py_ssize_t nA,
-                                  const int* sB, Py_ssize_t nB,
+                                  const int* sA, int nA,
+                                  const int* sB, int nB,
                                   unsigned char strand)
 {
     const double match = self->match;
@@ -6156,8 +6157,8 @@ Aligner_gotoh_local_align_compare(Aligner* self,
 
 static PyObject*
 Aligner_gotoh_local_align_matrix(Aligner* self,
-                                 const int* sA, Py_ssize_t nA,
-                                 const int* sB, Py_ssize_t nB,
+                                 const int* sA, int nA,
+                                 const int* sB, int nB,
                                  unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
@@ -6207,8 +6208,8 @@ _call_target_gap_function(Aligner* aligner, int i, int j, double* score)
 
 static PyObject*
 Aligner_watermansmithbeyer_global_score_compare(Aligner* self,
-                                                const int* sA, Py_ssize_t nA,
-                                                const int* sB, Py_ssize_t nB,
+                                                const int* sA, int nA,
+                                                const int* sB, int nB,
                                                 unsigned char strand)
 {
     const double match = self->match;
@@ -6230,8 +6231,8 @@ Aligner_watermansmithbeyer_global_score_compare(Aligner* self,
 
 static PyObject*
 Aligner_watermansmithbeyer_global_score_matrix(Aligner* self,
-                                               const int* sA, Py_ssize_t nA,
-                                               const int* sB, Py_ssize_t nB,
+                                               const int* sA, int nA,
+                                               const int* sB, int nB,
                                                unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
@@ -6250,8 +6251,8 @@ Aligner_watermansmithbeyer_global_score_matrix(Aligner* self,
 
 static PyObject*
 Aligner_watermansmithbeyer_local_score_compare(Aligner* self,
-                                               const int* sA, Py_ssize_t nA,
-                                               const int* sB, Py_ssize_t nB,
+                                               const int* sA, int nA,
+                                               const int* sB, int nB,
                                                unsigned char strand)
 {
     const double match = self->match;
@@ -6274,8 +6275,8 @@ Aligner_watermansmithbeyer_local_score_compare(Aligner* self,
 
 static PyObject*
 Aligner_watermansmithbeyer_local_score_matrix(Aligner* self,
-                                              const int* sA, Py_ssize_t nA,
-                                              const int* sB, Py_ssize_t nB,
+                                              const int* sA, int nA,
+                                              const int* sB, int nB,
                                               unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
@@ -6297,8 +6298,8 @@ Aligner_watermansmithbeyer_local_score_matrix(Aligner* self,
 
 static PyObject*
 Aligner_watermansmithbeyer_global_align_compare(Aligner* self,
-                                                const int* sA, Py_ssize_t nA,
-                                                const int* sB, Py_ssize_t nB,
+                                                const int* sA, int nA,
+                                                const int* sB, int nB,
                                                 unsigned char strand)
 {
     const double match = self->match;
@@ -6320,8 +6321,8 @@ Aligner_watermansmithbeyer_global_align_compare(Aligner* self,
 
 static PyObject*
 Aligner_watermansmithbeyer_global_align_matrix(Aligner* self,
-                                               const int* sA, Py_ssize_t nA,
-                                               const int* sB, Py_ssize_t nB,
+                                               const int* sA, int nA,
+                                               const int* sB, int nB,
                                                unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
@@ -6342,8 +6343,8 @@ Aligner_watermansmithbeyer_global_align_matrix(Aligner* self,
 
 static PyObject*
 Aligner_watermansmithbeyer_local_align_compare(Aligner* self,
-                                               const int* sA, Py_ssize_t nA,
-                                               const int* sB, Py_ssize_t nB,
+                                               const int* sA, int nA,
+                                               const int* sB, int nB,
                                                unsigned char strand)
 {
     const double match = self->match;
@@ -6368,8 +6369,8 @@ Aligner_watermansmithbeyer_local_align_compare(Aligner* self,
 
 static PyObject*
 Aligner_watermansmithbeyer_local_align_matrix(Aligner* self,
-                                              const int* sA, Py_ssize_t nA,
-                                              const int* sB, Py_ssize_t nB,
+                                              const int* sA, int nA,
+                                              const int* sB, int nB,
                                               unsigned char strand)
 {
     const Py_ssize_t n = self->substitution_matrix.shape[0];
@@ -6427,7 +6428,7 @@ convert_1bytes_to_ints(const int mapping[], Py_ssize_t n, const unsigned char s[
 static int*
 convert_2bytes_to_ints(const int mapping[], Py_ssize_t n, const Py_UCS2 s[])
 {
-    unsigned char c;
+    Py_UCS2 c;
     Py_ssize_t i;
     int index;
     int* indices;
@@ -6512,6 +6513,10 @@ convert_objects_to_ints(Py_buffer* view, PyObject* alphabet, PyObject* sequence)
     alphabet = PySequence_Fast(alphabet, NULL); /* should never fail */
     n = PySequence_Size(sequence);
     m = PySequence_Size(alphabet);
+    if (m != (int)m) {
+        PyErr_SetString(PyExc_ValueError, "alphabet is too long");
+        goto exit;
+    }
     indices = PyMem_Malloc(n*sizeof(int));
     if (!indices) {
         PyErr_NoMemory();
@@ -6523,7 +6528,7 @@ convert_objects_to_ints(Py_buffer* view, PyObject* alphabet, PyObject* sequence)
             obj2 = PySequence_Fast_GET_ITEM(alphabet, j);
             equal = PyObject_RichCompareBool(obj1, obj2, Py_EQ);
             if (equal == 1) /* obj1 == obj2 */ {
-                indices[i] = j;
+                indices[i] = (int)j;
                 break;
             }
             else if (equal == -1) /* error */ {
@@ -6650,7 +6655,6 @@ sequence_converter(PyObject* argument, void* pointer)
                 indices = convert_4bytes_to_ints(mapping, n, s);
                 break;
             }
-            case PyUnicode_WCHAR_KIND:
             default:
                 PyErr_SetString(PyExc_ValueError, "could not interpret unicode data");
                 return 0;
@@ -6698,8 +6702,8 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
 {
     const int* sA;
     const int* sB;
-    Py_ssize_t nA;
-    Py_ssize_t nB;
+    int nA;
+    int nB;
     Py_buffer bA = {0};
     Py_buffer bB = {0};
     const Mode mode = self->mode;
@@ -6718,10 +6722,16 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
                                     strand_converter, &strand))
         return NULL;
 
+    nA = (int) (bA.len / bA.itemsize);
+    nB = (int) (bB.len / bB.itemsize);
+    if (nA != bA.len / bA.itemsize || nB != bB.len / bB.itemsize) {
+        sequence_converter(NULL, &bA);
+        sequence_converter(NULL, &bB);
+        PyErr_SetString(PyExc_ValueError, "sequences too long");
+        return 0;
+    }
     sA = bA.buf;
-    nA = bA.len / bA.itemsize;
     sB = bB.buf;
-    nB = bB.len / bB.itemsize;
 
     switch (algorithm) {
         case NeedlemanWunschSmithWaterman:
@@ -6791,8 +6801,8 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
 {
     const int* sA;
     const int* sB;
-    Py_ssize_t nA;
-    Py_ssize_t nB;
+    int nA;
+    int nB;
     Py_buffer bA = {0};
     Py_buffer bB = {0};
     const Mode mode = self->mode;
@@ -6811,10 +6821,16 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
                                     strand_converter, &strand))
         return NULL;
 
+    nA = (int) (bA.len / bA.itemsize);
+    nB = (int) (bB.len / bB.itemsize);
+    if (nA != bA.len / bA.itemsize || nB != bB.len / bB.itemsize) {
+        sequence_converter(NULL, &bA);
+        sequence_converter(NULL, &bB);
+        PyErr_SetString(PyExc_ValueError, "sequences too long");
+        return 0;
+    }
     sA = bA.buf;
-    nA = bA.len / bA.itemsize;
     sB = bB.buf;
-    nB = bB.len / bB.itemsize;
 
     switch (algorithm) {
         case NeedlemanWunschSmithWaterman:

@@ -309,7 +309,7 @@ class CircularDrawer(AbstractDrawer):
 
         startangle, startcos, startsin = self.canvas_angle(locstart)
         endangle, endcos, endsin = self.canvas_angle(locend)
-        midangle, midcos, midsin = self.canvas_angle(float(locend + locstart) / 2)
+        midangle, midcos, midsin = self.canvas_angle((locend + locstart) / 2)
 
         # Distribution dictionary for various ways of drawing the feature
         # Each method takes the inner and outer radii, the start and end angle
@@ -342,7 +342,7 @@ class CircularDrawer(AbstractDrawer):
             feature.strand,
             color=feature.color,
             border=feature.border,
-            **kwargs
+            **kwargs,
         )
 
         if feature.label:  # Feature needs a label
@@ -351,7 +351,7 @@ class CircularDrawer(AbstractDrawer):
             label = String(
                 0,
                 0,
-                " %s " % feature.name.strip(),
+                f" {feature.name.strip()} ",
                 fontName=feature.label_font,
                 fontSize=feature.label_size,
                 fillColor=feature.label_color,
@@ -852,9 +852,9 @@ class CircularDrawer(AbstractDrawer):
                             minval, maxval = quartiles[0], quartiles[4]
                             if graph.center is None:
                                 midval = (maxval + minval) / 2.0
-                                graph_label_min.append("%.3f" % minval)
-                                graph_label_max.append("%.3f" % maxval)
-                                graph_label_mid.append("%.3f" % midval)
+                                graph_label_min.append(f"{minval:.3f}")
+                                graph_label_max.append(f"{maxval:.3f}")
+                                graph_label_mid.append(f"{midval:.3f}")
                             else:
                                 diff = max(
                                     (graph.center - minval), (maxval - graph.center)
@@ -862,9 +862,9 @@ class CircularDrawer(AbstractDrawer):
                                 minval = graph.center - diff
                                 maxval = graph.center + diff
                                 midval = graph.center
-                                graph_label_mid.append("%.3f" % midval)
-                                graph_label_min.append("%.3f" % minval)
-                                graph_label_max.append("%.3f" % maxval)
+                                graph_label_mid.append(f"{midval:.3f}")
+                                graph_label_min.append(f"{minval:.3f}")
+                                graph_label_max.append(f"{maxval:.3f}")
                         xmid, ymid = (x0 + x1) / 2.0, (y0 + y1) / 2.0
                         for limit, x, y in [
                             (graph_label_min, x0, y0),
@@ -1090,7 +1090,7 @@ class CircularDrawer(AbstractDrawer):
         color,
         border=None,
         colour=None,
-        **kwargs
+        **kwargs,
     ):
         """Return closed path describing an arc box (PRIVATE).
 
@@ -1114,7 +1114,7 @@ class CircularDrawer(AbstractDrawer):
 
         strokecolor, color = _stroke_and_fill_colors(color, border)
 
-        if abs(float(endangle - startangle)) > 0.01:
+        if abs(endangle - startangle) > 0.01:
             # Wide arc, must use full curves
             p = ArcPath(strokeColor=strokecolor, fillColor=color, strokewidth=0)
             # Note reportlab counts angles anti-clockwise from the horizontal
@@ -1193,7 +1193,7 @@ class CircularDrawer(AbstractDrawer):
         color,
         border=None,
         flip=False,
-        **kwargs
+        **kwargs,
     ):
         """Return polygon path describing an arc."""
         strokecolor, color = _stroke_and_fill_colors(color, border)
@@ -1282,7 +1282,7 @@ class CircularDrawer(AbstractDrawer):
         color,
         border=None,
         corner=0.5,
-        **kwargs
+        **kwargs,
     ):
         """Draw OCTO sigil, box with corners cut off (PRIVATE)."""
         if strand == 1:
@@ -1298,7 +1298,7 @@ class CircularDrawer(AbstractDrawer):
         strokecolor, color = _stroke_and_fill_colors(color, border)
 
         startangle, endangle = min(startangle, endangle), max(startangle, endangle)
-        angle = float(endangle - startangle)
+        angle = endangle - startangle
 
         middle_radius = 0.5 * (inner_radius + outer_radius)
         boxheight = outer_radius - inner_radius
@@ -1322,7 +1322,7 @@ class CircularDrawer(AbstractDrawer):
             fillColor=color,
             strokeLineJoin=1,  # 1=round
             strokewidth=0,
-            **kwargs
+            **kwargs,
         )
         # Inner curved edge
         p.addArc(
@@ -1374,7 +1374,7 @@ class CircularDrawer(AbstractDrawer):
             startangle,
             endangle,
             orientation=orientation,
-            **kwargs
+            **kwargs,
         )
 
     def _draw_sigil_big_arrow(
@@ -1401,7 +1401,7 @@ class CircularDrawer(AbstractDrawer):
         head_length_ratio=0.5,
         orientation="right",
         colour=None,
-        **kwargs
+        **kwargs,
     ):
         """Draw an arrow along an arc (PRIVATE)."""
         # Let the UK spelling (colour) override the USA spelling (color)
@@ -1418,10 +1418,10 @@ class CircularDrawer(AbstractDrawer):
         startangle, endangle = min(startangle, endangle), max(startangle, endangle)
         if orientation != "left" and orientation != "right":
             raise ValueError(
-                "Invalid orientation %r, should be 'left' or 'right'" % orientation
+                f"Invalid orientation {orientation!r}, should be 'left' or 'right'"
             )
 
-        angle = float(endangle - startangle)  # angle subtended by arc
+        angle = endangle - startangle  # angle subtended by arc
         middle_radius = 0.5 * (inner_radius + outer_radius)
         boxheight = outer_radius - inner_radius
         shaft_height = boxheight * shaft_height_ratio
@@ -1481,7 +1481,7 @@ class CircularDrawer(AbstractDrawer):
                 # default is mitre/miter which can stick out too much:
                 strokeLineJoin=1,  # 1=round
                 strokewidth=0,
-                **kwargs
+                **kwargs,
             )
             # Note reportlab counts angles anti-clockwise from the horizontal
             # (as in mathematics, e.g. complex numbers and polar coordinates)
@@ -1531,7 +1531,7 @@ class CircularDrawer(AbstractDrawer):
                 # default is mitre/miter which can stick out too much:
                 strokeLineJoin=1,  # 1=round
                 strokewidth=0,
-                **kwargs
+                **kwargs,
             )
             # Note reportlab counts angles anti-clockwise from the horizontal
             # (as in mathematics, e.g. complex numbers and polar coordinates)
@@ -1588,7 +1588,7 @@ class CircularDrawer(AbstractDrawer):
         strand,
         color,
         border=None,
-        **kwargs
+        **kwargs,
     ):
         """Draw JAGGY sigil (PRIVATE).
 
@@ -1615,7 +1615,7 @@ class CircularDrawer(AbstractDrawer):
         strokecolor, color = _stroke_and_fill_colors(color, border)
 
         startangle, endangle = min(startangle, endangle), max(startangle, endangle)
-        angle = float(endangle - startangle)  # angle subtended by arc
+        angle = endangle - startangle  # angle subtended by arc
         height = outer_radius - inner_radius
 
         assert startangle <= endangle and angle >= 0
@@ -1666,7 +1666,7 @@ class CircularDrawer(AbstractDrawer):
             # default is mitre/miter which can stick out too much:
             strokeLineJoin=1,  # 1=round
             strokewidth=0,
-            **kwargs
+            **kwargs,
         )
         # Note reportlab counts angles anti-clockwise from the horizontal
         # (as in mathematics, e.g. complex numbers and polar coordinates)

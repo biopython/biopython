@@ -116,7 +116,7 @@ def get_sprot_raw(id):
     try:
         handle = _open(f"http://www.uniprot.org/uniprot/{id}.txt")
     except HTTPError as exception:
-        if exception.code == 404:
+        if exception.code in (400, 404):
             raise ValueError(f"Failed to find SwissProt entry '{id}'") from None
         else:
             raise

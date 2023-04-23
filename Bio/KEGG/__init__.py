@@ -90,8 +90,8 @@ def _write_kegg(item, info, indent=KEGG_ITEM_LENGTH):
     s = ""
     for line in info:
         partial_lines = line.splitlines()
-        for l in partial_lines:
-            s += item.ljust(indent) + l + "\n"
+        for partial in partial_lines:
+            s += item.ljust(indent) + partial + "\n"
             if item:  # ensure item is only written on first line
                 item = ""
     return s

@@ -8,15 +8,94 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released): Biopython 1.80
+(In progress, not yet released): Biopython 1.82
 ===============================================
 
-This release of Biopython supports Python 3.7, 3.8 and 3.9. It has also been
-tested on PyPy3.7 v7.3.5.
+Calling ``iter`` on a ``PairwiseAlignments`` object returned by a
+``PairwiseAigner`` previously reset the iterator such that it will start from
+the first alignment when iterating. As a side effect, this will cause all other
+iterators of the alignments to reset as well, which is bug prone. Instead,
+calling ``iter`` on a ``PairwiseAlignments`` object will now return itself. The
+iterator can be reset by calling the ``rewind`` method.
+
+Calling `secondary_structure_fraction` on a ``ProtParam.ProteinAnalysis``
+object historically returned (sheet, turn, helix) while claiming to return
+(helix, turn, sheet). This was fixed to correctly return (helix, turn, sheet).
+Additionally, the amino acids considered were revised as per recent literature.
+
+Additionally, a number of small bugs and typos have been fixed with additions
+to the test suite.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Arpan Sahoo
+- Cam McMenamie
+- Joe Greener
+- Peter Cock
+- Ricardas Ralys
+- Vladislav Kuznetsov
+
+12 February 2023: Biopython 1.81
+===============================================
+
+This release of Biopython supports Python 3.7, 3.8, 3.9, 3.10, 3.11. It has
+also been tested on PyPy3.7 v7.3.5. We intend to drop Python 3.7 support.
+
+The API documentation and the `Biopython Tutorial and Cookbook` have
+been updated to better annotate use and application of the
+``Bio.PDB.internal_coords`` module.
+
+``Bio.Phylo`` now supports ``Alignment`` and ``MultipleSeqAlignment``
+objects as input.
+
+Several improvements and bug fixes to the snapgene parser contributes by
+Damien Goutte-Gattat.
+
+Additionally, a number of small bugs and typos have been fixed with additions
+to the test suite.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Adam Vandergriff
+- Damien Goutte-Gattat
+- Joe Greener
+- Michiel de Hoon
+- Peter Cock
+- Robert Miller
+- Farhan Khan
+
+18 November 2022: Biopython 1.80
+================================
+
+This release of Biopython supports Python 3.7, 3.8, 3.9, 3.10, 3.11. It has
+also been tested on PyPy3.7 v7.3.5.
+
+Functions ``read``, ``parse``, and ``write`` were added to ``Bio.Align`` to
+read and write ``Alignment`` objects.  String formatting and printing output
+of ``Alignment`` objects from ``Bio.Align`` were changed to support these new
+functions. To obtain a string showing the aligned sequence with the appropriate
+gap characters (as previously shown when calling ``format`` on an alignment),
+use ``alignment[i]``, where ``alignment`` is an ``Alignment`` object and ``i``
+is the index of the aligned sequence.
 
 Because dict retains the item order by default since Python3.6, all instances
 of ``collections.OrderedDict`` have been replaced by either standard ``dict``
 or where appropriate by ``collections.defaultsdict``.
+
+Robert Miller has updated the ``Bio.PDB.internal_coords`` module  to
+make better use of Numpy for lossless structure assembly from dihedral
+angles and related internal coordinates.  In addition to speeding the
+assembly step by ~30%, this adds distance plot support (including
+re-generating structures from distance plot data), coordinate space
+transforms for superimposing residues and their environments, a
+per-chain all-atom array for Atom coordinates, and optional default
+values for all internal coordinates.  The internal coordinates module
+continues to support extracting dihedral angle, bond angle and bond
+length (internal coordinates) data, reading/writing structure files of
+internal coordinates, and OpenSCAD output of structures for 3D CAD/3D
+printing work.
 
 The ``Bio.motifs.jaspar.db`` now returns ``tf_family`` and ``tf_class`` as a
 string array since the JASPAR 2018 release.
@@ -25,8 +104,42 @@ The Local Composition Complexity functions from ``Bio.SeqUtils`` now uses
 base 4 log instead of 2 as stated in the original reference Konopka (2005),
 Sequence Complexity and Composition. https://doi.org/10.1038/npg.els.0005260
 
+Append mode is now supported in ``Bio.bgzf`` (and a bug parsing blocked GZIP
+files with an internal empty block fixed).
+
 The experimental warning was dropped from ``Bio.phenotype`` (which was new in
 Biopython 1.67).
+
+Sequences now have a ``defined`` attribute that returns a boolean indicating
+if the underlying data is defined or not.
+
+The ``Bio.PDB`` module now includes a structural alignment module, using the
+combinatorial extension algorithm of Shindyalov and Bourne, commonly known as
+CEAlign. The module allows for two structures to be aligned based solely on
+their 3D conformation, ie. in a sequence-independent manner. The method is
+particularly powerful when the structures shared a very low degree of sequence
+similarity. The new module is available in ``Bio.PDB.CEAligner`` with an
+interface similar to other 3D superimposition modules.
+
+A new module ``Bio.PDB.qcprot`` implements the QCP superposition algorithm in
+pure Python, deprecating the existing C implementation. This leads to a slight
+performance improvement and to much better maintainability. The refactored
+``qcprot.QCPSuperimposer`` class has small changes to its API, to better mirror
+that of ``Bio.PDB.Superimposer``.
+
+The ``Bio.PDB.PDBList`` module now allows downloading biological assemblies,
+for one or more entries of the wwPDB.
+
+In the ``Bio.Restriction`` module, each restriction enzyme now includes an `id`
+property giving the numerical identifier for the REBASE database identifier
+from which the enzyme object was created, and a `uri` property with a canonical
+`identifiers.org` link to the database, for use in linked-data representations.
+
+Add new ``gc_fraction`` function in ``SeqUtils`` and marks ``GC`` for future
+deprecation.
+
+Support for the old format (dating back to 2004) of the GN line in SwissProt
+files was dropped in ``Bio.SwissProt``.
 
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
@@ -34,13 +147,40 @@ to the test suite.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Andrius Merkys
+- Arup Ghosh (first contribution)
+- Alessio Quercia
 - Aziz Khan
+- Alex Morehead
+- Caio Fontes
 - Chenghao Zhu
+- Christian Brueffer
 - Damien Goutte-Gattat
+- Erik Weßels (first contribution)
+- Erik  Whiting
 - Fabian Egli
-- Sebastian Bassi
+- Fredric Johansson
+- Hongbo Zhu
+- Hussein Faara (first contribution)
+- Manuel Lera Ramirez
+- Jacob Beal (first contribution)
+- Jarrod Millman
+- João Rodrigues
+- Josha Inglis
+- Markus Piotrowski
 - Michiel de Hoon
+- Neil P. (first contribution)
 - Peter Cock
+- Robert Miller
+- Robert Sawicki (first contribution)
+- Sebastian Bassi
+- Sean Aubin
+- Sean Workman (first contribution)
+- Soroush Saffari (first contribution)
+- Tim Burke
+- Valentin Vareškić (first contribution)
+- Robert Miller
+
 
 3 June 2021: Biopython 1.79
 ===========================
@@ -105,7 +245,7 @@ fast access to genome-size DNA sequence files by not having to read the full
 genome sequence. The new ``_UndefinedSequenceData`` class in ``Bio.Seq``  also
 inherits from ``SequenceDataAbstractBaseClass`` to represent sequences of known
 length but unknown sequence contents. This provides an alternative to
-``UnknownSeq``, which is now deprecated as its definition was ambiguous. For
+``UnknownSeq``, which has now been removed as its definition was ambiguous. For
 example, in these examples the ``UnknownSeq`` is interpreted as a sequence with
 a well-defined sequence contents::
 
@@ -170,10 +310,12 @@ possible, especially the following contributors:
 - Gert Hulselmans
 - João Rodrigues
 - Markus Piotrowski
+- Pascal Schläpfer (first contribution)
 - Leighton Pritchard
 - Sergio Valqui
 - Suyash Gupta
 - Vini Salazar (first contribution)
+
 
 4 September 2020: Biopython 1.78
 ================================

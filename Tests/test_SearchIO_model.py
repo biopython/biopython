@@ -647,6 +647,18 @@ class QueryResultCases(SearchTestBaseClass):
         self.assertEqual(1102, mapped.seq_len)
         self.assertEqual("refseq_rna", mapped.target)
 
+    def test_pop_nonexistent_with_default(self):
+        """Test QueryResult.pop with default for nonexistent key."""
+        default = "An arbitrary default return value for this test only."
+        nonexistent_key = "neither a standard nor alternative key"
+        hit = self.qresult.pop(nonexistent_key, default)
+        self.assertEqual(hit, default)
+
+    def test_pop_nonexistent_key(self):
+        """Test QueryResult.pop with default for nonexistent key."""
+        nonexistent_key = "neither a standard nor alternative key"
+        self.assertRaises(KeyError, self.qresult.pop, nonexistent_key)
+
     def test_pop_ok(self):
         """Test QueryResult.pop."""
         self.assertEqual(3, len(self.qresult))
@@ -1114,7 +1126,7 @@ class HSPSingleFragmentCases(unittest.TestCase):
             self.assertRaises(AttributeError, setattr, self.hsp, seq_type, "A")
             for attr in read_onlies:
                 self.assertRaises(
-                    AttributeError, setattr, self.hsp, "%s_%s" % (seq_type, attr), 5
+                    AttributeError, setattr, self.hsp, f"{seq_type}_{attr}", 5
                 )
         self.assertRaises(AttributeError, setattr, self.hsp, "aln", None)
 
@@ -1195,7 +1207,7 @@ class HSPMultipleFragmentCases(SearchTestBaseClass):
         """Test HSP query and hit id and description setters."""
         for seq_type in ("query", "hit"):
             for attr in ("id", "description"):
-                attr_name = "%s_%s" % (seq_type, attr)
+                attr_name = f"{seq_type}_{attr}"
                 value = getattr(self.hsp, attr_name)
                 if attr == "id":
                     # because we happen to have the same value for
@@ -1257,7 +1269,7 @@ class HSPMultipleFragmentCases(SearchTestBaseClass):
         for seq_type in ("query", "hit"):
             for attr in read_onlies:
                 self.assertRaises(
-                    AttributeError, setattr, self.hsp, "%s_%s" % (seq_type, attr), 5
+                    AttributeError, setattr, self.hsp, f"{seq_type}_{attr}", 5
                 )
         self.assertRaises(AttributeError, setattr, self.hsp, "aln_all", None)
         self.assertRaises(AttributeError, setattr, self.hsp, "hit_all", None)
@@ -1274,7 +1286,7 @@ class HSPFragmentWithoutSeqCases(unittest.TestCase):
         for seq_type in ("query", "hit"):
             self.assertIsNone(getattr(fragment, seq_type))
             for attr in ("strand", "frame", "start", "end"):
-                attr_name = "%s_%s" % (seq_type, attr)
+                attr_name = f"{seq_type}_{attr}"
                 self.assertIsNone(getattr(fragment, attr_name))
         self.assertIsNone(fragment.aln)
         self.assertIsNone(fragment.molecule_type)
@@ -1477,7 +1489,7 @@ class HSPFragmentCases(SearchTestBaseClass):
         """Test HSPFragment query and hit id and description setters."""
         for seq_type in ("query", "hit"):
             for attr in ("id", "description"):
-                attr_name = "%s_%s" % (seq_type, attr)
+                attr_name = f"{seq_type}_{attr}"
                 value = getattr(self.fragment, attr_name)
                 if attr == "id":
                     # because we happen to have the same value for
@@ -1494,7 +1506,7 @@ class HSPFragmentCases(SearchTestBaseClass):
         """Test HSPFragment query and hit frame setters."""
         attr = "frame"
         for seq_type in ("query", "hit"):
-            attr_name = "%s_%s" % (seq_type, attr)
+            attr_name = f"{seq_type}_{attr}"
             for value in (-3, -2, -1, 0, 1, 2, 3, None):
                 setattr(self.fragment, attr_name, value)
                 self.assertEqual(value, getattr(self.fragment, attr_name))
@@ -1503,7 +1515,7 @@ class HSPFragmentCases(SearchTestBaseClass):
         """Test HSPFragment query and hit frame setters, invalid values."""
         attr = "frame"
         for seq_type in ("query", "hit"):
-            func_name = "_%s_%s_set" % (seq_type, attr)
+            func_name = f"_{seq_type}_{attr}_set"
             func = getattr(self.fragment, func_name)
             for value in ("3", "+3", "-2", "plus"):
                 self.assertRaises(ValueError, func, value)
@@ -1512,7 +1524,7 @@ class HSPFragmentCases(SearchTestBaseClass):
         """Test HSPFragment query and hit strand setters."""
         attr = "strand"
         for seq_type in ("query", "hit"):
-            attr_name = "%s_%s" % (seq_type, attr)
+            attr_name = f"{seq_type}_{attr}"
             for value in (-1, 0, 1, None):
                 setattr(self.fragment, attr_name, value)
                 self.assertEqual(value, getattr(self.fragment, attr_name))
@@ -1521,7 +1533,7 @@ class HSPFragmentCases(SearchTestBaseClass):
         """Test HSPFragment query and hit strand setters, invalid values."""
         attr = "strand"
         for seq_type in ("query", "hit"):
-            func_name = "_%s_%s_set" % (seq_type, attr)
+            func_name = f"_{seq_type}_{attr}_set"
             func = getattr(self.fragment, func_name)
             for value in (3, "plus", "minus", "-", "+"):
                 self.assertRaises(ValueError, func, value)
@@ -1529,39 +1541,39 @@ class HSPFragmentCases(SearchTestBaseClass):
     def test_strand_set_from_plus_frame(self):
         """Test HSPFragment query and hit strand getters, from plus frame."""
         for seq_type in ("query", "hit"):
-            attr_name = "%s_strand" % seq_type
+            attr_name = f"{seq_type}_strand"
             self.assertIsNone(getattr(self.fragment, attr_name))
-            setattr(self.fragment, "%s_frame" % seq_type, 3)
+            setattr(self.fragment, f"{seq_type}_frame", 3)
             self.assertEqual(1, getattr(self.fragment, attr_name))
 
     def test_strand_set_from_minus_frame(self):
         """Test HSPFragment query and hit strand getters, from minus frame."""
         for seq_type in ("query", "hit"):
-            attr_name = "%s_strand" % seq_type
+            attr_name = f"{seq_type}_strand"
             self.assertIsNone(getattr(self.fragment, attr_name))
-            setattr(self.fragment, "%s_frame" % seq_type, -2)
+            setattr(self.fragment, f"{seq_type}_frame", -2)
             self.assertEqual(-1, getattr(self.fragment, attr_name))
 
     def test_strand_set_from_zero_frame(self):
         """Test HSPFragment query and hit strand getters, from zero frame."""
         for seq_type in ("query", "hit"):
-            attr_name = "%s_strand" % seq_type
+            attr_name = f"{seq_type}_strand"
             self.assertIsNone(getattr(self.fragment, attr_name))
-            setattr(self.fragment, "%s_frame" % seq_type, 0)
+            setattr(self.fragment, f"{seq_type}_frame", 0)
             self.assertEqual(0, getattr(self.fragment, attr_name))
 
     def test_coords_setters_getters(self):
         """Test HSPFragment query and hit coordinate-related setters and getters."""
         for seq_type in ("query", "hit"):
-            attr_start = "%s_%s" % (seq_type, "start")
-            attr_end = "%s_%s" % (seq_type, "end")
+            attr_start = f"{seq_type}_{'start'}"
+            attr_end = f"{seq_type}_{'end'}"
             setattr(self.fragment, attr_start, 9)
             setattr(self.fragment, attr_end, 99)
             # check for span value
-            span = getattr(self.fragment, "%s_span" % seq_type)
+            span = getattr(self.fragment, f"{seq_type}_span")
             self.assertEqual(90, span)
             # and range as well
-            range = getattr(self.fragment, "%s_range" % seq_type)
+            range = getattr(self.fragment, f"{seq_type}_range")
             self.assertEqual((9, 99), range)
 
     def test_coords_setters_readonly(self):
@@ -1573,7 +1585,7 @@ class HSPFragmentCases(SearchTestBaseClass):
                     AttributeError,
                     setattr,
                     self.fragment,
-                    "%s_%s" % (seq_type, attr),
+                    f"{seq_type}_{attr}",
                     5,
                 )
 

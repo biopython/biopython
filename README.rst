@@ -13,7 +13,7 @@
 .. image:: https://img.shields.io/appveyor/ci/biopython/biopython/master.svg?logo=appveyor
    :alt: Windows testing with AppVeyor
    :target: https://ci.appveyor.com/project/biopython/biopython/history
-.. image:: https://img.shields.io/github/workflow/status/biopython/biopython/Basic%20Checks?logo=github-actions
+.. image:: https://img.shields.io/github/actions/workflow/status/biopython/biopython/ci.yml?logo=github-actions
    :alt: GitHub workflow status
    :target: https://github.com/biopython/biopython/actions
 .. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg?logo=codecov
@@ -33,11 +33,11 @@ Biopython README file
 The Biopython Project is an international association of developers of freely
 available Python tools for computational molecular biology.
 
-Our user-centric documentation is hosted on http://biopython.org including
-the main Biopython Tutorial and Cookbook:
-
-* HTML - http://biopython.org/DIST/docs/tutorial/Tutorial.html
-* PDF - http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
+Our user-centric documentation is hosted on https://biopython.org including
+our `API Documentation <https://biopython.org/docs/latest/api/>`_ and the main
+`Biopython Tutorial and Cookbook
+<http://biopython.org/DIST/docs/tutorial/Tutorial.html>`_
+(`PDF <http://biopython.org/DIST/docs/tutorial/Tutorial.pdf>`_).
 
 This README file is intended primarily for people interested in working
 with the Biopython source code, either one of the releases from the
@@ -83,12 +83,12 @@ install Biopython yourself. This is described below.
 Python Requirements
 ===================
 
-We currently recommend using Python 3.9 from http://www.python.org
+We currently recommend using Python 3.10 from http://www.python.org
 
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 3.7, 3.8, 3.9 -- see http://www.python.org
+- Python 3.7, 3.8, 3.9, 3.10 and 3.11 -- see http://www.python.org
 
 - PyPy3.7 v7.3.5 -- or later, see http://www.pypy.org
 
@@ -161,7 +161,7 @@ at compile time:
 Then either download and decompress our source code, or fetch it using git.
 Now change directory to the Biopython source code folder and run::
 
-    python setup.py build
+    pip install -e .
     python setup.py test
     sudo python setup.py install
 
@@ -184,7 +184,7 @@ Biopython includes a suite of regression tests to check if everything is
 running correctly. To run the tests, go to the biopython source code
 directory and type::
 
-    python setup.py build
+    pip install -e .
     python setup.py test
 
 If you want to skip the online tests (which is recommended when doing repeated

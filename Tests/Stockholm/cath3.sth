@@ -1,0 +1,40 @@
+# STOCKHOLM 1.0
+#=GF ID 1.10.275.10/FF/000026
+#=GF DE Adenylosuccinate lyase
+#=GF AC 1.10.275.10/FF/000026
+#=GF TP FunFam
+#=GF DR CATH: v4.3
+#=GF DR DOPS: 0.000
+#=GS 1c3cB01/1-91 AC Q9X0I0
+#=GS 1c3cB01/1-91 OS Thermotoga maritima MSB8
+#=GS 1c3cB01/1-91 DE Adenylosuccinate lyase
+#=GS 1c3cB01/1-91 DR CATH; 1c3c; B:2-92; 
+#=GS 1c3cB01/1-91 DR ORG; Bacteria; Thermotogae; Thermotogae; Thermotogales; Thermotogaceae; Thermotoga; Thermotoga maritima; 
+#=GS 1c3cB01/1-91 DR EC; 4.3.2.2; 
+#=GS 1c3cA01/1-91 AC Q9X0I0
+#=GS 1c3cA01/1-91 OS Thermotoga maritima MSB8
+#=GS 1c3cA01/1-91 DE Adenylosuccinate lyase
+#=GS 1c3cA01/1-91 DR CATH; 1c3c; A:2-92; 
+#=GS 1c3cA01/1-91 DR ORG; Bacteria; Thermotogae; Thermotogae; Thermotogales; Thermotogaceae; Thermotoga; Thermotoga maritima; 
+#=GS 1c3cA01/1-91 DR EC; 4.3.2.2; 
+#=GS Q9X0I0/2-92  AC Q9X0I0
+#=GS Q9X0I0/2-92  OS Thermotoga maritima MSB8
+#=GS Q9X0I0/2-92  DE Adenylosuccinate lyase
+#=GS Q9X0I0/2-92  DR ORG; Bacteria; Thermotogae; Thermotogae; Thermotogales; Thermotogaceae; Thermotoga; Thermotoga maritima; 
+#=GS Q9X0I0/2-92  DR EC; 4.3.2.2; 
+#=GS G4FEQ2/2-92  AC G4FEQ2
+#=GS G4FEQ2/2-92  OS Thermotoga maritima MSB8
+#=GS G4FEQ2/2-92  DE Adenylosuccinate lyase
+#=GS G4FEQ2/2-92  DR ORG; Bacteria; Thermotogae; Thermotogae; Thermotogales; Thermotogaceae; Thermotoga; Thermotoga maritima; 
+#=GS G4FEQ2/2-92  DR EC; 4.3.2.2; 
+#=GF SQ 4
+1c3cB01/1-91         VERYSLSPMKDLWTEEAKYRRWLEVELAVTRAYEELGMIPKGVTERIRNNAKIDVELFKKIEEKTNHDVVAFVEGIGSMIGEDSRFFHYGL
+#=GR 1c3cB01/1-91 CSA __________________________________________________________________0________________________
+1c3cA01/1-91         VERYSLSPMKDLWTEEAKYRRWLEVELAVTRAYEELGMIPKGVTERIRNNAKIDVELFKKIEEKTNHDVVAFVEGIGSMIGEDSRFFHYGL
+Q9X0I0/2-92          VERYSLSPMKDLWTEEAKYRRWLEVELAVTRAYEELGMIPKGVTERIRNNAKIDVELFKKIEEKTNHDVVAFVEGIGSMIGEDSRFFHYGL
+G4FEQ2/2-92          VERYSLSPMKDLWTEEAKYRRWLEVELAVTRAYEELGMIPKGVTERIRNNAKIDVELFKKIEEKTNHDVVAFVEGIGSMIGEDSRFFHYGL
+#=GC scorecons       0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+#=GC scorecons_70    ___________________________________________________________________________________________
+#=GC scorecons_80    ___________________________________________________________________________________________
+#=GC scorecons_90    ___________________________________________________________________________________________
+//

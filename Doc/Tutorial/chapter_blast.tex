@@ -35,14 +35,29 @@ available at \url{https://blast.ncbi.nlm.nih.gov/Blast.cgi}.
 Currently \verb|qblast| only works with blastn, blastp, blastx, tblast
 and tblastx.
 \item The second argument specifies the databases to search against. Again,
-the options for this are available on the NCBI Guide to BLAST 
+the options for this are available on the NCBI Guide to BLAST
 \url{ftp://ftp.ncbi.nlm.nih.gov/pub/factsheets/HowTo_BLASTGuide.pdf}.
 \item The third argument is a string containing your query sequence.  This
 can either be the sequence itself, the sequence in fasta format,
 or an identifier like a GI number.
 \end{itemize}
 
-The \verb|qblast| function also take a number of other option arguments
+NCBI guidelines, from \url{https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=DeveloperInfo} state:
+\begin{enumerate}
+\item Do not contact the server more often than once every 10 seconds.
+\item Do not poll for any single RID more often than once a minute.
+\item Use the URL parameter email and tool, so that the NCBI can contact you if there is a problem.
+\item Run scripts weekends or between 9 pm and 5 am Eastern time on weekdays if more than 50 searches will be submitted.
+\end{enumerate}
+
+To fulfill the third point, one can set the \verb|NCBIWWW.email| variable.
+%doctest
+\begin{minted}{pycon}
+>>> from Bio.Blast import NCBIWWW
+>>> NCBIWWW.email = "A.N.Other@example.com"
+\end{minted}
+
+The \verb|qblast| function also takes a number of other option arguments,
 which are basically analogous to the different parameters you can set
 on the BLAST web page.  We'll just highlight a few of them here:
 
@@ -65,7 +80,6 @@ documentation, or that built into Biopython:
 \begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> help(NCBIWWW.qblast)
-...
 \end{minted}
 
 Note that the default settings on the NCBI BLAST website are not quite
@@ -355,7 +369,8 @@ StopIteration
 Or, you can use a \verb|for|-loop:
 \begin{minted}{pycon}
 >>> for blast_record in blast_records:
-...     # Do something with blast_record
+...     pass  # Do something with blast_record
+...
 \end{minted}
 
 Note though that you can step through the BLAST records only once.
@@ -411,6 +426,7 @@ threshold. The following code does this:
 ...             print(hsp.query[0:75] + "...")
 ...             print(hsp.match[0:75] + "...")
 ...             print(hsp.sbjct[0:75] + "...")
+...
 \end{minted}
 
 This will print out summary reports like the following:

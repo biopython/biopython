@@ -20,7 +20,7 @@ from Bio.Seq import Seq
 from Bio.SeqFeature import AfterPosition
 from Bio.SeqFeature import BeforePosition
 from Bio.SeqFeature import ExactPosition
-from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import OneOfPosition
 from Bio.SeqFeature import SeqFeature
 from Bio.SeqFeature import WithinPosition
@@ -134,16 +134,16 @@ class SeqRecordMethods(unittest.TestCase):
 
     def setUp(self):
         f0 = SeqFeature(
-            FeatureLocation(0, 26),
+            SimpleLocation(0, 26),
             type="source",
             qualifiers={"mol_type": ["fake protein"]},
         )
-        f1 = SeqFeature(FeatureLocation(0, ExactPosition(10)))
+        f1 = SeqFeature(SimpleLocation(0, ExactPosition(10)))
         f2 = SeqFeature(
-            FeatureLocation(WithinPosition(12, left=12, right=15), BeforePosition(22))
+            SimpleLocation(WithinPosition(12, left=12, right=15), BeforePosition(22))
         )
         f3 = SeqFeature(
-            FeatureLocation(
+            SimpleLocation(
                 AfterPosition(16),
                 OneOfPosition(26, [ExactPosition(25), AfterPosition(26)]),
             )
@@ -166,6 +166,9 @@ class SeqRecordMethods(unittest.TestCase):
 
     def test_contains(self):
         self.assertIn(Seq("ABC"), self.record)
+
+    def test_bytes(self):
+        self.assertEqual(b"ABCDEFGHIJKLMNOPQRSTUVWZYX", bytes(self.record))
 
     def test_str(self):
         expected = """
@@ -211,11 +214,24 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
         expected = ">TestID TestDescr     with5spaces\nABCDEFGHIJKLMNOPQRSTUVWZYX\n"
         self.assertEqual(expected, rec.format("fasta"))
 
+    def test_count(self):
+        self.assertEqual(self.record.count("HIJK"), 1)
+        self.assertRaises(TypeError, SeqRecord(Seq("AC777GT")).count, 7)
+        self.assertRaises(TypeError, SeqRecord(Seq("AC777GT")).count, None)
+
     def test_upper(self):
         self.assertEqual("ABCDEFGHIJKLMNOPQRSTUVWZYX", self.record.lower().upper().seq)
 
     def test_lower(self):
         self.assertEqual("abcdefghijklmnopqrstuvwzyx", self.record.lower().seq)
+
+    def test_isupper(self):
+        self.assertTrue(self.record.isupper())
+        self.assertFalse(self.record.lower().isupper())
+
+    def test_islower(self):
+        self.assertFalse(self.record.islower())
+        self.assertTrue(self.record.lower().islower())
 
     def test_slicing(self):
         self.assertEqual("B", self.record[1])
@@ -297,8 +313,8 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
             self.assertEqual(rec.letter_annotations, {})
             self.assertEqual(len(rec.features), len(self.record.features))
             self.assertEqual(rec.features[0].type, "source")
-            self.assertEqual(rec.features[0].location.nofuzzy_start, 0)
-            self.assertEqual(rec.features[0].location.nofuzzy_end, 26)  # not +3
+            self.assertEqual(rec.features[0].location.start, 0)
+            self.assertEqual(rec.features[0].location.end, 26)  # not +3
 
     def test_add_seqrecord(self):
         """Simple left addition of SeqRecord from genbank file."""
@@ -317,14 +333,12 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
             len(rec.features), len(self.record.features) + len(other.features)
         )
         self.assertEqual(rec.features[0].type, "source")
-        self.assertEqual(rec.features[0].location.nofuzzy_start, 0)
-        self.assertEqual(
-            rec.features[0].location.nofuzzy_end, len(self.record)
-        )  # not +3
+        self.assertEqual(rec.features[0].location.start, 0)
+        self.assertEqual(rec.features[0].location.end, len(self.record))  # not +3
         i = len(self.record.features)
         self.assertEqual(rec.features[i].type, "source")
-        self.assertEqual(rec.features[i].location.nofuzzy_start, len(self.record))
-        self.assertEqual(rec.features[i].location.nofuzzy_end, len(rec))
+        self.assertEqual(rec.features[i].location.start, len(self.record))
+        self.assertEqual(rec.features[i].location.end, len(rec))
 
     def test_add_seq_left(self):
         """Simple left addition of Seq or string."""
@@ -340,8 +354,8 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
             self.assertEqual(rec.letter_annotations, {})
             self.assertEqual(len(rec.features), len(self.record.features))
             self.assertEqual(rec.features[0].type, "source")
-            self.assertEqual(rec.features[0].location.nofuzzy_start, 3)
-            self.assertEqual(rec.features[0].location.nofuzzy_end, 26 + 3)
+            self.assertEqual(rec.features[0].location.start, 3)
+            self.assertEqual(rec.features[0].location.end, 26 + 3)
 
     def test_slice_add_simple(self):
         """Simple slice and add."""
@@ -384,7 +398,7 @@ class SeqRecordMethodsMore(unittest.TestCase):
             name="TestName",
             description="TestDescription",
             dbxrefs=["TestDbxrefs"],
-            features=[SeqFeature(FeatureLocation(0, 3), type="Site")],
+            features=[SeqFeature(SimpleLocation(0, 3), type="Site")],
             annotations={"organism": "bombyx"},
             letter_annotations={"test": "abcd"},
         )
@@ -417,14 +431,14 @@ class SeqRecordMethodsMore(unittest.TestCase):
         )
 
         self.assertEqual(
-            "[SeqFeature(FeatureLocation(ExactPosition(1), ExactPosition(4)), type='Site')]",
+            "[SeqFeature(SimpleLocation(ExactPosition(1), ExactPosition(4)), type='Site')]",
             repr(rc.features),
         )
         rc2 = s.reverse_complement(
-            features=[SeqFeature(FeatureLocation(1, 4), type="Site")]
+            features=[SeqFeature(SimpleLocation(1, 4), type="Site")]
         )
         self.assertEqual(
-            "[SeqFeature(FeatureLocation(ExactPosition(1), ExactPosition(4)), type='Site')]",
+            "[SeqFeature(SimpleLocation(ExactPosition(1), ExactPosition(4)), type='Site')]",
             repr(rc2.features),
         )
 
@@ -453,7 +467,7 @@ class SeqRecordMethodsMore(unittest.TestCase):
             name="TestName",
             description="TestDescription",
             dbxrefs=["TestDbxrefs"],
-            features=[SeqFeature(FeatureLocation(0, 3), type="Site")],
+            features=[SeqFeature(SimpleLocation(0, 3), type="Site")],
             annotations={"organism": "bombyx"},
             letter_annotations={"test": "abcdefghi"},
         )
@@ -543,7 +557,7 @@ class TestTranslation(unittest.TestCase):
             name="TestName",
             description="TestDescription",
             dbxrefs=["TestDbxrefs"],
-            features=[SeqFeature(FeatureLocation(0, 3), type="Site")],
+            features=[SeqFeature(SimpleLocation(0, 3), type="Site")],
             annotations={"organism": "bombyx"},
             letter_annotations={"test": "abcdefghi"},
         )
@@ -592,7 +606,7 @@ class TestTranslation(unittest.TestCase):
             name="Bar",
             description="Baz",
             dbxrefs=["Nope"],
-            features=[SeqFeature(FeatureLocation(0, 3), type="Site")],
+            features=[SeqFeature(SimpleLocation(0, 3), type="Site")],
             annotations={"a": "team"},
             letter_annotations={"aa": ["Met", "Val"]},
         )

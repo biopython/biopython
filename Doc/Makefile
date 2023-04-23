@@ -38,6 +38,7 @@ clean: clean-subdirs
 	rm -f biopdb_faq.log
 	rm -f biopdb_faq.out
 	rm -f Tutorial/*.aux
+	rm -rf _minted-Tutorial
 
 distclean-subdirs: $(subdirs)
 	( for f in $^ ; do $(MAKE) distclean -C $$f ; done )

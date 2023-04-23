@@ -9,6 +9,7 @@ CodonAlignment class is inherited from MultipleSeqAlignment class. This is
 the core class to deal with codon alignment in biopython.
 """
 
+from math import sqrt, erfc
 import warnings
 
 from Bio.Align import MultipleSeqAlignment
@@ -18,7 +19,6 @@ from Bio import BiopythonWarning
 
 
 from Bio.codonalign.codonseq import _get_codon_list, CodonSeq, cal_dn_ds
-from Bio.codonalign.chisq import chisqprob
 
 
 class CodonAlignment(MultipleSeqAlignment):
@@ -487,7 +487,6 @@ def _G_test(site_counts):
     #   Apply continuity correction for Chi-square test.
     from math import log
 
-    # from scipy.stats import chi2
     G = 0
     tot = sum(site_counts)
     tot_syn = site_counts[0] + site_counts[2]
@@ -502,9 +501,9 @@ def _G_test(site_counts):
     ]
     for obs, ex in zip(site_counts, exp):
         G += obs * log(obs / ex)
-    G *= 2
-    # return 1-chi2.cdf(G, 1) # only 1 dof for 2x2 table
-    return chisqprob(G, 1)
+    # with only 1 degree of freedom for a 2x2 table,
+    # the cumulative chi-square distribution reduces to a simple form:
+    return erfc(sqrt(G))
 
 
 if __name__ == "__main__":

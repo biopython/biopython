@@ -15,7 +15,7 @@ from struct import unpack
 from xml.dom.minidom import parseString
 
 from Bio.Seq import Seq
-from Bio.SeqFeature import FeatureLocation
+from Bio.SeqFeature import SimpleLocation
 from Bio.SeqFeature import SeqFeature
 from Bio.SeqRecord import SeqRecord
 
@@ -109,17 +109,22 @@ def _parse_cookie_packet(length, data, record):
         raise ValueError("The file is not a valid SnapGene file")
 
 
-def _parse_location(rangespec, strand, record):
+def _parse_location(rangespec, strand, record, is_primer=False):
     start, end = (int(x) for x in rangespec.split("-"))
     # Account for SnapGene's 1-based coordinates
     start = start - 1
+    if is_primer:
+        # Primers' coordinates in SnapGene files are shifted by -1
+        # for some reasons
+        start += 1
+        end += 1
     if start > end:
         # Range wrapping the end of the sequence
-        l1 = FeatureLocation(start, len(record), strand=strand)
-        l2 = FeatureLocation(0, end, strand=strand)
+        l1 = SimpleLocation(start, len(record), strand=strand)
+        l2 = SimpleLocation(0, end, strand=strand)
         location = l1 + l2
     else:
-        location = FeatureLocation(start, end, strand=strand)
+        location = SimpleLocation(start, end, strand=strand)
     return location
 
 
@@ -217,6 +222,7 @@ def _parse_primers_packet(length, data, record):
         if name:
             quals["label"] = [name]
 
+        locations = []
         for site in primer.getElementsByTagName("BindingSite"):
             rng = _get_attribute_value(
                 site, "location", error="Missing binding site location"
@@ -227,8 +233,15 @@ def _parse_primers_packet(length, data, record):
             else:
                 strand = +1
 
+            location = _parse_location(rng, strand, record, is_primer=True)
+            simplified = int(_get_attribute_value(site, "simplified", default="0")) == 1
+            if simplified and location in locations:
+                # Duplicate "simplified" binding site, ignore
+                continue
+
+            locations.append(location)
             feature = SeqFeature(
-                _parse_location(rng, strand, record),
+                location,
                 type="primer_bind",
                 qualifiers=quals,
             )

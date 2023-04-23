@@ -10,19 +10,17 @@ import unittest
 import warnings
 
 from Bio.SearchIO import parse
-from Bio import BiopythonWarning
+from Bio import BiopythonDeprecationWarning
+
+# Hide the deprecation warning
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+    from Bio.SearchIO import _legacy
+
 
 # test case files are in the Blast directory
 TEST_DIR = "Blast"
 FMT = "blast-text"
-
-# This prevents the NCBIStandalone usage warning from
-# printing to screen when running the test suite
-warnings.filterwarnings(
-    "ignore",
-    r"Parsing BLAST plain text output file is not a well supported.*",
-    BiopythonWarning,
-)
 
 
 def get_file(filename):

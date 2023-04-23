@@ -6,10 +6,10 @@
 
 import unittest
 
-from Bio.Seq import UnknownSeq, UndefinedSequenceError
+from Bio.Seq import UndefinedSequenceError
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqFeature import ExactPosition, UnknownPosition
-from Bio.SeqFeature import FeatureLocation, CompoundLocation, SeqFeature
+from Bio.SeqFeature import SimpleLocation, CompoundLocation, SeqFeature
 from Bio.SeqRecord import SeqRecord
 
 from test_SeqIO import SeqIOTestBaseClass
@@ -50,8 +50,8 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         else:
             # BioSQL can only store ONE location!
             # TODO - Check BioPerl with a GenBank file with multiple ref locations
-            self.assertIsInstance(r1.location[0], FeatureLocation)
-            self.assertIsInstance(r2.location[0], FeatureLocation)
+            self.assertIsInstance(r1.location[0], SimpleLocation)
+            self.assertIsInstance(r2.location[0], SimpleLocation)
             self.assertEqual(r1.location[0].start, r2.location[0].start)
             self.assertEqual(r1.location[0].end, r2.location[0].end)
 
@@ -99,9 +99,16 @@ class SeqRecordTestBaseClass(unittest.TestCase):
 
         self.assertEqual(len(old_f.location.parts), len(new_f.location.parts))
         for old_sub, new_sub in zip(old_f.location.parts, new_f.location.parts):
-            # These are FeatureLocation objects
-            self.assertEqual(old_sub.nofuzzy_start, new_sub.nofuzzy_start)
-            self.assertEqual(old_sub.nofuzzy_end, new_sub.nofuzzy_end)
+            # These are SimpleLocation objects
+            # Note UnknownPosition != UnknownPosition (just like NaN != NaN)
+            if isinstance(old_sub.start, UnknownPosition):
+                self.assertIsInstance(new_sub.start, UnknownPosition)
+            else:
+                self.assertEqual(old_sub.start, new_sub.start)
+            if isinstance(old_sub.end, UnknownPosition):
+                self.assertIsInstance(new_sub.end, UnknownPosition)
+            else:
+                self.assertEqual(old_sub.end, new_sub.end)
             self.assertEqual(old_sub.strand, new_sub.strand)
 
         self.assertCountEqual(old_f.qualifiers, new_f.qualifiers)
@@ -113,7 +120,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
                     # Maybe a string turning into a list of strings?
                     self.assertEqual([old_f.qualifiers[key]], new_f.qualifiers[key])
                 else:
-                    self.fail("Problem with feature's '%s' qualifier" % key)
+                    self.fail(f"Problem with feature's '{key}' qualifier")
             else:
                 # Should both be lists of strings...
                 self.assertEqual(old_f.qualifiers[key], new_f.qualifiers[key])
@@ -129,11 +136,6 @@ class SeqRecordTestBaseClass(unittest.TestCase):
     def compare_sequence(self, old, new):
         """Compare two Seq objects."""
         self.assertEqual(len(old), len(new))
-
-        if isinstance(old, UnknownSeq):
-            self.assertIsInstance(new, UnknownSeq)
-        else:
-            self.assertNotIsInstance(new, UnknownSeq)
 
         self.assertEqual(len(old), len(new))
         try:
@@ -216,16 +218,16 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         self.assertEqual(
             len(new_keys),
             0,
-            msg="Unexpected new annotation keys: %s" % ", ".join(new_keys),
+            msg=f"Unexpected new annotation keys: {', '.join(new_keys)}",
         )
         missing_keys = set(old.annotations).difference(new.annotations)
         missing_keys = missing_keys.difference(
-            ["ncbi_taxid", "structured_comment"]  # Can't store chimeras
+            ["gene_name", "ncbi_taxid", "structured_comment"]  # Can't store chimeras
         )
         self.assertEqual(
             len(missing_keys),
             0,
-            msg="Unexpectedly missing annotation keys: %s" % ", ".join(missing_keys),
+            msg=f"Unexpectedly missing annotation keys: {', '.join(missing_keys)}",
         )
 
         # In the short term, just compare any shared keys:
@@ -265,7 +267,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
                 self.assertEqual(
                     old.annotations[key],
                     new.annotations[key],
-                    msg="Annotation '%s' changed by load/retrieve" % key,
+                    msg=f"Annotation '{key}' changed by load/retrieve",
                 )
             elif isinstance(old.annotations[key], str) and isinstance(
                 new.annotations[key], list
@@ -275,7 +277,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
                 self.assertEqual(
                     [old.annotations[key]],
                     new.annotations[key],
-                    msg="Annotation '%s' changed by load/retrieve" % key,
+                    msg=f"Annotation '{key}' changed by load/retrieve",
                 )
             elif isinstance(old.annotations[key], list) and isinstance(
                 new.annotations[key], str
@@ -283,7 +285,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
                 self.assertEqual(
                     old.annotations[key],
                     [new.annotations[key]],
-                    msg="Annotation '%s' changed by load/retrieve" % key,
+                    msg=f"Annotation '{key}' changed by load/retrieve",
                 )
 
     def compare_records(self, old_list, new_list):

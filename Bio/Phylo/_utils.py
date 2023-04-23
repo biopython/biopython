@@ -123,9 +123,7 @@ def draw_ascii(tree, file=None, column_width=80):
             depths = tree.depths(unit_branch_lengths=True)
         # Potential drawing overflow due to rounding -- 1 char per tree layer
         fudge_margin = int(math.ceil(math.log(len(taxa), 2)))
-        cols_per_branch_unit = (drawing_width - fudge_margin) / float(
-            max(depths.values())
-        )
+        cols_per_branch_unit = (drawing_width - fudge_margin) / max(depths.values())
         return {
             clade: int(blen * cols_per_branch_unit + 1.0)
             for clade, blen in depths.items()
@@ -189,7 +187,7 @@ def draw(
     branch_labels=None,
     label_colors=None,
     *args,
-    **kwargs
+    **kwargs,
 ):
     """Plot the given tree using matplotlib (or pylab).
 
@@ -363,7 +361,7 @@ def draw(
         fig = plt.figure()
         axes = fig.add_subplot(1, 1, 1)
     elif not isinstance(axes, plt.matplotlib.axes.Axes):
-        raise ValueError("Invalid argument for axes: %s" % axes)
+        raise ValueError(f"Invalid argument for axes: {axes}")
 
     def draw_clade_lines(
         use_linecollection=False,
@@ -423,7 +421,7 @@ def draw(
             axes.text(
                 x_here,
                 y_here,
-                " %s" % label,
+                f" {label}",
                 verticalalignment="center",
                 color=get_label_color(label),
             )

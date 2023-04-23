@@ -438,7 +438,6 @@ def _sff_do_slow_index(handle):
                     "byte padding region contained data" % padding,
                     BiopythonParserWarning,
                 )
-        # print("%s %s %i" % (read, name, record_offset))
         yield name, record_offset
     if handle.tell() % 8 != 0:
         raise ValueError("After scanning reads, did not end on a multiple of 8")
@@ -783,7 +782,7 @@ def _sff_read_seq_record(
     return record
 
 
-_powers_of_36 = [36 ** i for i in range(6)]
+_powers_of_36 = [36**i for i in range(6)]
 
 
 def _string_as_base_36(string):

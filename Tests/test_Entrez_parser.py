@@ -77,14 +77,16 @@ class GeneralTests(unittest.TestCase):
                 "biosample.xml",  # DTD not specified in XML file
                 "einfo3.xml",  # DTD incomplete
                 "einfo4.xml",  # XML corrupted
-                "epost2.xml",  # XML returned by EPost with incorrect arguments
-                "esummary8.xml",  # XML returned by ESummary with incorrect arguments
                 "journals.xml",  # Missing XML declaration
             ):
                 continue
             path = os.path.join(directory, filename)
             with open(path, "rb") as stream:
-                record = Entrez.read(stream)
+                if filename in ("epost2.xml", "esummary8.xml", "esummary10.xml"):
+                    # these include an ErrorElement
+                    record = Entrez.read(stream, ignore_errors=True)
+                else:
+                    record = Entrez.read(stream)
             with BytesIO() as stream:
                 pickle.dump(record, stream)
                 stream.seek(0)
@@ -1770,6 +1772,12 @@ class EPostTest(unittest.TestCase):
         # >>> Bio.Entrez.epost(db="nothing")
         with open("Entrez/epost2.xml", "rb") as handle:
             self.assertRaises(RuntimeError, Entrez.read, handle)
+        with open("Entrez/epost2.xml", "rb") as handle:
+            record = Entrez.read(handle, ignore_errors=True)
+        self.assertEqual(len(record), 1)
+        self.assertEqual(len(record.attributes), 0)
+        self.assertEqual(record["ERROR"], "Wrong DB name")
+        self.assertEqual(record["ERROR"].tag, "ERROR")
 
     def test_invalid(self):
         """Test parsing XML returned by EPost with invalid id (overflow tag)."""
@@ -2180,6 +2188,12 @@ class ESummaryTest(unittest.TestCase):
         # >>> Bio.Entrez.esummary()
         with open("Entrez/esummary8.xml", "rb") as handle:
             self.assertRaises(RuntimeError, Entrez.read, handle)
+        with open("Entrez/esummary8.xml", "rb") as handle:
+            record = Entrez.read(handle, ignore_errors=True)
+        self.assertEqual(len(record), 1)
+        self.assertEqual(len(record.attributes), 0)
+        self.assertEqual(record[0], "Neither query_key nor id specified")
+        self.assertEqual(record[0].tag, "ERROR")
 
     def test_integer_none(self):
         """Test parsing ESummary XML where an Integer is not defined."""
@@ -10107,6 +10121,306 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
         self.assertEqual(
             references[48]["ArticleIdList"][0].attributes["IdType"], "pubmed"
         )
+
+    def test_pmc(self):
+        """Test parsing XML returned by EFetch from PubMed Central."""
+        # To create the XML file, use
+        # >>> Bio.Entrez.efetch(db='pmc', id="8435807")
+        with open("Entrez/efetch_pmc.xml", "rb") as stream:
+            records = Entrez.parse(stream)
+            records = list(records)
+        self.assertEqual(len(records), 1)
+        record = records[0]
+        self.assertEqual(len(record), 2)
+        self.assertEqual(len(record["front"]), 9)
+        self.assertEqual(len(record["front"]["journal-meta"]), 10)
+        self.assertEqual(len(record["front"]["journal-meta"]["journal-id"]), 4)
+        self.assertEqual(
+            record["front"]["journal-meta"]["journal-id"][0], "ERJ Open Res"
+        )
+        self.assertEqual(
+            record["front"]["journal-meta"]["journal-id"][0].attributes,
+            {"journal-id-type": "nlm-ta"},
+        )
+        self.assertEqual(
+            record["front"]["journal-meta"]["journal-id"][1], "ERJ Open Res"
+        )
+        self.assertEqual(
+            record["front"]["journal-meta"]["journal-id"][1].attributes,
+            {"journal-id-type": "iso-abbrev"},
+        )
+        self.assertEqual(record["front"]["journal-meta"]["journal-id"][2], "ERJOR")
+        self.assertEqual(
+            record["front"]["journal-meta"]["journal-id"][2].attributes,
+            {"journal-id-type": "publisher-id"},
+        )
+        self.assertEqual(record["front"]["journal-meta"]["journal-id"][3], "erjor")
+        self.assertEqual(
+            record["front"]["journal-meta"]["journal-id"][3].attributes,
+            {"journal-id-type": "hwp"},
+        )
+        self.assertEqual(len(record["front"]["journal-meta"]["journal-title-group"]), 1)
+        journal_title_group = record["front"]["journal-meta"]["journal-title-group"][0]
+        self.assertEqual(len(journal_title_group), 4)
+        self.assertEqual(journal_title_group["journal-title"], ["ERJ Open Research"])
+        self.assertEqual(journal_title_group["journal-subtitle"], [])
+        self.assertEqual(journal_title_group["abbrev-journal-title"], [])
+        self.assertEqual(journal_title_group["trans-title-group"], [])
+        self.assertEqual(len(record["front"]["journal-meta"]["issn"]), 1)
+        self.assertEqual(record["front"]["journal-meta"]["issn"][0], "2312-0541")
+        self.assertEqual(
+            record["front"]["journal-meta"]["issn"][0].attributes, {"pub-type": "epub"}
+        )
+        self.assertEqual(len(record["front"]["journal-meta"]["publisher"]), 1)
+        self.assertEqual(len(record["front"]["journal-meta"]["publisher"][0]), 1)
+        self.assertEqual(
+            record["front"]["journal-meta"]["publisher"][0][0],
+            "European Respiratory Society",
+        )
+        self.assertEqual(
+            record["front"]["journal-meta"]["publisher"][0][0].tag, "publisher-name"
+        )
+        self.assertEqual(record["front"]["journal-meta"]["contrib-group"], [])
+        self.assertEqual(record["front"]["journal-meta"]["notes"], [])
+        self.assertEqual(record["front"]["journal-meta"]["aff"], [])
+        self.assertEqual(record["front"]["journal-meta"]["aff-alternatives"], [])
+        self.assertEqual(record["front"]["journal-meta"]["self-uri"], [])
+        self.assertEqual(record["front"]["journal-meta"]["isbn"], [])
+        self.assertEqual(len(record["front"]["article-meta"]), 34)
+        self.assertEqual(record["front"]["article-meta"]["abstract"], [])
+        self.assertEqual(record["front"]["article-meta"]["funding-group"], [])
+        self.assertEqual(record["front"]["article-meta"]["aff"], [])
+        self.assertEqual(record["front"]["article-meta"]["issue-title"], [])
+        self.assertEqual(len(record["front"]["article-meta"]["pub-date"]), 3)
+        self.assertEqual(record["front"]["article-meta"]["pub-date"][0], ["7", "2021"])
+        self.assertEqual(
+            record["front"]["article-meta"]["pub-date"][0].attributes,
+            {"pub-type": "collection"},
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["pub-date"][1], ["13", "9", "2021"]
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["pub-date"][1].attributes,
+            {"pub-type": "epub"},
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["pub-date"][2], ["13", "9", "2021"]
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["pub-date"][2].attributes,
+            {"pub-type": "pmc-release"},
+        )
+        self.assertEqual(record["front"]["article-meta"]["conference"], [])
+        self.assertEqual(record["front"]["article-meta"]["supplementary-material"], [])
+        self.assertEqual(len(record["front"]["article-meta"]["related-article"]), 1)
+        self.assertEqual(record["front"]["article-meta"]["related-article"][0], "")
+        self.assertEqual(
+            record["front"]["article-meta"]["related-article"][0].attributes,
+            {
+                "related-article-type": "corrected-article",
+                "id": "d31e52",
+                "ext-link-type": "doi",
+                "http://www.w3.org/1999/xlink href": "10.1183/23120541.00193-2021",
+            },
+        )
+        self.assertEqual(record["front"]["article-meta"]["kwd-group"], [])
+        self.assertEqual(record["front"]["article-meta"]["contrib-group"], [])
+        self.assertEqual(record["front"]["article-meta"]["issue-sponsor"], [])
+        self.assertEqual(record["front"]["article-meta"]["self-uri"], [])
+        self.assertEqual(record["front"]["article-meta"]["product"], [])
+        self.assertEqual(record["front"]["article-meta"]["issue"], ["3"])
+        self.assertEqual(record["front"]["article-meta"]["ext-link"], [])
+        self.assertEqual(record["front"]["article-meta"]["support-group"], [])
+        self.assertEqual(len(record["front"]["article-meta"]["article-id"]), 4)
+        self.assertEqual(record["front"]["article-meta"]["article-id"][0], "34527728")
+        self.assertEqual(
+            record["front"]["article-meta"]["article-id"][0].attributes,
+            {"pub-id-type": "pmid"},
+        )
+        self.assertEqual(record["front"]["article-meta"]["article-id"][1], "8435807")
+        self.assertEqual(
+            record["front"]["article-meta"]["article-id"][1].attributes,
+            {"pub-id-type": "pmc"},
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["article-id"][2],
+            "10.1183/23120541.50193-2021",
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["article-id"][2].attributes,
+            {"pub-id-type": "doi"},
+        )
+        self.assertEqual(record["front"]["article-meta"]["article-id"][3], "50193-2021")
+        self.assertEqual(
+            record["front"]["article-meta"]["article-id"][3].attributes,
+            {"pub-id-type": "publisher-id"},
+        )
+        self.assertEqual(record["front"]["article-meta"]["issue-title-group"], [])
+        self.assertEqual(record["front"]["article-meta"]["x"], [])
+        self.assertEqual(record["front"]["article-meta"]["uri"], [])
+        self.assertEqual(record["front"]["article-meta"]["email"], [])
+        self.assertEqual(record["front"]["article-meta"]["volume-id"], [])
+        self.assertEqual(record["front"]["article-meta"]["issue-id"], [])
+        self.assertEqual(record["front"]["article-meta"]["trans-abstract"], [])
+        self.assertEqual(record["front"]["article-meta"]["volume-issue-group"], [])
+        self.assertEqual(record["front"]["article-meta"]["related-object"], [])
+        self.assertEqual(record["front"]["article-meta"]["isbn"], [])
+        self.assertEqual(record["front"]["article-meta"]["volume"], ["7"])
+        self.assertEqual(record["front"]["article-meta"]["aff-alternatives"], [])
+        self.assertEqual(
+            record["front"]["article-meta"]["article-version"], "Version of Record"
+        )
+        self.assertEqual(
+            len(record["front"]["article-meta"]["article-version"].attributes), 3
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["article-version"].attributes["vocab"],
+            "JAV",
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["article-version"].attributes[
+                "vocab-identifier"
+            ],
+            "http://www.niso.org/publications/rp/RP-8-2008.pdf",
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["article-version"].attributes[
+                "article-version-type"
+            ],
+            "VoR",
+        )
+        self.assertEqual(len(record["front"]["article-meta"]["article-categories"]), 3)
+        self.assertEqual(
+            record["front"]["article-meta"]["article-categories"]["series-text"], []
+        )
+        self.assertEqual(
+            len(record["front"]["article-meta"]["article-categories"]["subj-group"]), 1
+        )
+        self.assertEqual(
+            len(record["front"]["article-meta"]["article-categories"]["subj-group"][0]),
+            3,
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["article-categories"]["subj-group"][0][
+                "subject"
+            ],
+            ["Author Correction"],
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["article-categories"]["subj-group"][0][
+                "subj-group"
+            ],
+            [],
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["article-categories"]["subj-group"][0][
+                "compound-subject"
+            ],
+            [],
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["article-categories"]["subj-group"][
+                0
+            ].attributes,
+            {"subj-group-type": "heading"},
+        )
+        self.assertEqual(len(record["front"]["article-meta"]["title-group"]), 4)
+        self.assertEqual(
+            record["front"]["article-meta"]["title-group"]["trans-title-group"], []
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["title-group"]["alt-title"], []
+        )
+        self.assertEqual(record["front"]["article-meta"]["title-group"]["subtitle"], [])
+        self.assertEqual(
+            record["front"]["article-meta"]["title-group"]["article-title"],
+            '“Lung diffusing capacity for nitric oxide measured by two commercial devices: a randomised crossover comparison in healthy adults”. Thomas Radtke, Quintin de Groot, Sarah R. Haile, Marion Maggi, Connie C.W. Hsia and Holger Dressel. <italic toggle="yes">ERJ Open Res</italic> 2021; 7: 00193-2021.',
+        )
+        self.assertEqual(record["front"]["article-meta"]["elocation-id"], "50193-2021")
+        self.assertEqual(len(record["front"]["article-meta"]["permissions"]), 5)
+        self.assertEqual(
+            record["front"]["article-meta"]["permissions"]["copyright-year"], ["2021"]
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["permissions"]["copyright-holder"], []
+        )
+        self.assertEqual(
+            len(record["front"]["article-meta"]["permissions"]["license"]), 1
+        )
+        self.assertEqual(
+            len(record["front"]["article-meta"]["permissions"]["license"][0]), 2
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["permissions"]["license"][0][0],
+            "https://creativecommons.org/licenses/by-nc/4.0/",
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["permissions"]["license"][0][0].attributes,
+            {"specific-use": "textmining", "content-type": "ccbynclicense"},
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["permissions"]["license"][0][1],
+            'This version is distributed under the terms of the Creative Commons Attribution Non-Commercial Licence 4.0. For commercial reproduction rights and permissions contact <ext-link ext-link-type="uri" http://www.w3.org/1999/xlink href="mailto:permissions@ersnet.org">permissions@ersnet.org</ext-link>',
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["permissions"]["copyright-statement"],
+            ["Copyright ©The authors 2021"],
+        )
+        self.assertEqual(
+            record["front"]["article-meta"]["permissions"]["ali:free_to_read"], []
+        )
+        self.assertEqual(record["front"]["glossary"], [])
+        self.assertEqual(record["front"]["fn-group"], [])
+        self.assertEqual(record["front"]["notes"], [])
+        self.assertEqual(record["front"]["bio"], [])
+        self.assertEqual(record["front"]["list"], [])
+        self.assertEqual(record["front"]["def-list"], [])
+        self.assertEqual(record["front"]["ack"], [])
+        self.assertEqual(len(record["body"]), 37)
+
+        self.assertEqual(record["body"]["table-wrap-group"], [])
+        self.assertEqual(record["body"]["disp-formula"], [])
+        self.assertEqual(record["body"]["answer-set"], [])
+        self.assertEqual(record["body"]["graphic"], [])
+        self.assertEqual(record["body"]["statement"], [])
+        self.assertEqual(record["body"]["fig-group"], [])
+        self.assertEqual(record["body"]["verse-group"], [])
+        self.assertEqual(record["body"]["supplementary-material"], [])
+        self.assertEqual(record["body"]["related-article"], [])
+        self.assertEqual(record["body"]["code"], [])
+        self.assertEqual(record["body"]["question"], [])
+        self.assertEqual(record["body"]["preformat"], [])
+        self.assertEqual(record["body"]["tex-math"], [])
+        self.assertEqual(record["body"]["mml:math"], [])
+        self.assertEqual(record["body"]["speech"], [])
+        self.assertEqual(record["body"]["block-alternatives"], [])
+        self.assertEqual(record["body"]["explanation"], [])
+        self.assertEqual(record["body"]["array"], [])
+        self.assertEqual(record["body"]["question-wrap-group"], [])
+        self.assertEqual(record["body"]["alternatives"], [])
+        self.assertEqual(record["body"]["media"], [])
+        self.assertEqual(record["body"]["x"], [])
+        self.assertEqual(record["body"]["sec"], [])
+        self.assertEqual(record["body"]["address"], [])
+        self.assertEqual(record["body"]["disp-quote"], [])
+        self.assertEqual(record["body"]["table-wrap"], [])
+        self.assertEqual(record["body"]["ack"], [])
+        self.assertEqual(record["body"]["chem-struct-wrap"], [])
+        self.assertEqual(record["body"]["related-object"], [])
+        self.assertEqual(record["body"]["list"], [])
+        self.assertEqual(record["body"]["def-list"], [])
+        self.assertEqual(
+            record["body"]["p"],
+            [
+                "This article was originally published with an error in table 2. The upper 95% confidence limit of the per cent difference in the primary end-point (diffusing capacity of the lung for nitric oxide) was incorrectly given as 15.1% and has now been corrected to −15.1% in the published article.\n"
+            ],
+        )
+        self.assertEqual(record["body"]["fig"], [])
+        self.assertEqual(record["body"]["answer"], [])
+        self.assertEqual(record["body"]["boxed-text"], [])
+        self.assertEqual(record["body"]["disp-formula-group"], [])
+        self.assertEqual(record["body"]["question-wrap"], [])
 
     def test_omim(self):
         """Test parsing XML returned by EFetch, OMIM database."""

@@ -9,8 +9,8 @@ import collections
 import warnings
 
 from Bio import BiopythonParserWarning
-from Bio.Data.IUPACData import protein_letters_3to1_extended as iupac_3to1_ext
-from Bio.Data.SCOPData import protein_letters_3to1 as scop_3to1
+from Bio.Data.PDBData import protein_letters_3to1
+from Bio.Data.PDBData import protein_letters_3to1_extended
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -18,8 +18,8 @@ from .Interfaces import SequenceIterator
 
 
 _aa3to1_dict = {}
-_aa3to1_dict.update(iupac_3to1_ext)
-_aa3to1_dict.update(scop_3to1)
+_aa3to1_dict.update(protein_letters_3to1)
+_aa3to1_dict.update(protein_letters_3to1_extended)
 
 
 def _res2aacode(residue, undef_code="X"):
@@ -122,7 +122,7 @@ class PdbSeqresIterator(SequenceIterator):
         The sequences are derived from the SEQRES lines in the
         PDB file header, not the atoms of the 3D structure.
 
-        Specifically, these PDB records are handled: DBREF, SEQADV, SEQRES, MODRES
+        Specifically, these PDB records are handled: DBREF, DBREF1, DBREF2, SEQADV, SEQRES, MODRES
 
         See: http://www.wwpdb.org/documentation/format23/sect3.html
 
@@ -208,6 +208,29 @@ class PdbSeqresIterator(SequenceIterator):
                 # Insertion code of the ending residue of the segment, if PDB is the
                 # reference.
                 # db_icode_end = line[67]
+                metadata[chn_id].append(
+                    {
+                        "pdb_id": pdb_id,
+                        "database": database,
+                        "db_acc": db_acc,
+                        "db_id_code": db_id_code,
+                    }
+                )
+            elif rec_name == "DBREF1":
+                # ID code of this entry (PDB ID)
+                pdb_id = line[7:11]
+                # Chain identifier.
+                chn_id = line[12]
+                # Sequence database name.
+                database = line[26:32].strip()
+                # Sequence database identification code.
+                db_id_code = line[47:67].strip()
+            elif rec_name == "DBREF2":
+                # Ensure ID code and chain are consistent:
+                if pdb_id != line[7:11] or chn_id != line[12]:
+                    raise ValueError("DBREF2 identifiers do not match")
+                # Sequence database accession code.
+                db_acc = line[18:40].strip()
                 metadata[chn_id].append(
                     {
                         "pdb_id": pdb_id,

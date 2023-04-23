@@ -537,7 +537,7 @@ class Tree(Nodes.Chain):
         """
         for n in self._walk():
             if self.node(n).data.support:
-                self.node(n).data.support /= float(nrep)
+                self.node(n).data.support /= nrep
 
     def has_support(self, node=None):
         """Return True if any of the nodes has data.support != None."""
@@ -630,7 +630,9 @@ class Tree(Nodes.Chain):
                         comment,
                     )
                 )
-        print("\n".join("%3s %32s %15s %15s %8s %10s %8s %20s" % l for l in table))
+        print(
+            "\n".join("%3s %32s %15s %15s %8s %10s %8s %20s" % line for line in table)
+        )
         print(f"\nRoot:  {self.root}")
 
     def to_string(
@@ -697,7 +699,7 @@ class Tree(Nodes.Chain):
                 if ladderize == "right" or ladderize == "RIGHT":
                     succnode_terminals.reverse()
                 if succnode_terminals:
-                    succnodes = zip(*succnode_terminals)[1]
+                    succnodes = list(zip(*succnode_terminals))[1]
                 else:
                     succnodes = []
             else:
@@ -915,9 +917,9 @@ def consensus(trees, threshold=0.5, outgroup=None):
             subclade_taxa = sorted(t.get_taxa(st_node))
             subclade_taxa = str(subclade_taxa)  # lists are not hashable
             if subclade_taxa in clades:
-                clades[subclade_taxa] += float(t.weight) / total
+                clades[subclade_taxa] += t.weight / total
             else:
-                clades[subclade_taxa] = float(t.weight) / total
+                clades[subclade_taxa] = t.weight / total
             # if subclade_taxa in countclades:
             #    countclades[subclade_taxa]+=t.weight
             # else:

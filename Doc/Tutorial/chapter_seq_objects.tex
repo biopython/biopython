@@ -19,6 +19,7 @@ In most ways, we can deal with Seq objects as if they were normal Python strings
 >>> my_seq = Seq("GATCG")
 >>> for index, letter in enumerate(my_seq):
 ...     print("%i %s" % (index, letter))
+...
 0 G
 1 A
 2 T
@@ -32,11 +33,11 @@ You can access elements of the sequence in the same way as for strings (but reme
 
 %cont-doctest
 \begin{minted}{pycon}
->>> print(my_seq[0]) #first letter
+>>> print(my_seq[0])  # first letter
 G
->>> print(my_seq[2]) #third letter
+>>> print(my_seq[2])  # third letter
 T
->>> print(my_seq[-1]) #last letter
+>>> print(my_seq[-1])  # last letter
 G
 \end{minted}
 
@@ -65,7 +66,7 @@ makes no difference:
 32
 >>> my_seq.count("G")
 9
->>> 100 * float(my_seq.count("G") + my_seq.count("C")) / len(my_seq)
+>>> 100 * (my_seq.count("G") + my_seq.count("C")) / len(my_seq)
 46.875
 \end{minted}
 
@@ -74,13 +75,13 @@ While you could use the above snippet of code to calculate a GC\%, note that  th
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> from Bio.SeqUtils import GC
+>>> from Bio.SeqUtils import gc_fraction
 >>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC")
->>> GC(my_seq)
-46.875
+>>> gc_fraction(my_seq)
+0.46875
 \end{minted}
 
-\noindent Note that using the \verb|Bio.SeqUtils.GC()| function should automatically cope with mixed case sequences and the ambiguous nucleotide S which means G or C.
+\noindent Note that using the \verb|Bio.SeqUtils.gc_fraction()| function should automatically cope with mixed case sequences and the ambiguous nucleotide S which means G or C.
 
 Also note that just like a normal Python string, the \verb|Seq| object is in some ways ``read-only''.  If you need to edit your sequence, for example simulating a point mutation, look at the Section~\ref{sec:mutable-seq} below which talks about the \verb|MutableSeq| object.
 
@@ -187,7 +188,7 @@ You may often have many sequences to add together, which can be done with a for 
 >>> list_of_seqs = [Seq("ACGT"), Seq("AACC"), Seq("GGTT")]
 >>> concatenated = Seq("")
 >>> for s in list_of_seqs:
-...      concatenated += s
+...     concatenated += s
 ...
 >>> concatenated
 Seq('ACGTAACCGGTT')
@@ -199,7 +200,7 @@ Like Python strings, Biopython \verb|Seq| also has a \verb|.join| method:
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> contigs = [Seq("ATG"), Seq("ATCCCG"), Seq("TTGCA")]
->>> spacer = Seq("N"*10)
+>>> spacer = Seq("N" * 10)
 >>> spacer.join(contigs)
 Seq('ATGNNNNNNNNNNATCCCGNNNNNNNNNNTTGCA')
 \end{minted}
@@ -436,11 +437,13 @@ for example the gene yaaX in \texttt{E. coli} K12:
 %TODO - handle line wrapping in doctest?
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
->>> gene = Seq("GTGAAAAAGATGCAATCTATCGTACTCGCACTTTCCCTGGTTCTGGTCGCTCCCATGGCA"
-...            "GCACAGGCTGCGGAAATTACGTTAGTCCCGTCAGTAAAATTACAGATAGGCGATCGTGAT"
-...            "AATCGTGGCTATTACTGGGATGGAGGTCACTGGCGCGACCACGGCTGGTGGAAACAACAT"
-...            "TATGAATGGCGAGGCAATCGCTGGCACCTACACGGACCGCCGCCACCGCCGCGCCACCAT"
-...            "AAGAAAGCTCCTCATGATCATCACGGCGGTCATGGTCCAGGCAAACATCACCGCTAA")
+>>> gene = Seq(
+...     "GTGAAAAAGATGCAATCTATCGTACTCGCACTTTCCCTGGTTCTGGTCGCTCCCATGGCA"
+...     "GCACAGGCTGCGGAAATTACGTTAGTCCCGTCAGTAAAATTACAGATAGGCGATCGTGAT"
+...     "AATCGTGGCTATTACTGGGATGGAGGTCACTGGCGCGACCACGGCTGGTGGAAACAACAT"
+...     "TATGAATGGCGAGGCAATCGCTGGCACCTACACGGACCGCCGCCACCGCCGCGCCACCAT"
+...     "AAGAAAGCTCCTCATGATCATCACGGCGGTCATGGTCCAGGCAAACATCACCGCTAA"
+... )
 >>> gene.translate(table="Bacterial")
 Seq('VKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HR*',
 ProteinAlpabet())

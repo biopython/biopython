@@ -1,0 +1,34 @@
+# STOCKHOLM 1.0
+#=GF ID   SH3_11
+#=GF AC   PF18103.3
+#=GF DE   Retroviral integrase C-terminal SH3 domain
+#=GF AU   El-Gebali S;0000-0003-1378-5495
+#=GF SE   ECOD:EUF00899
+#=GF GA   25.00 25.00;
+#=GF TC   25.20 78.10;
+#=GF NC   24.90 24.20;
+#=GF BM   hmmbuild HMM.ann SEED.ann
+#=GF SM   hmmsearch -Z 57096847 -E 1000 --cpu 4 HMM pfamseq
+#=GF TP   Domain
+#=GF WK   Integrase
+#=GF WK   SH3_domain
+#=GF CL   CL0010
+#=GF RN   [1]
+#=GF RM   20118915
+#=GF RT   Retroviral intasome assembly and inhibition of DNA strand
+#=GF RT   transfer.
+#=GF RA   Hare S, Gupta SS, Valkov E, Engelman A, Cherepanov P;
+#=GF RL   Nature. 2010;464:232-236.
+#=GF DR   INTERPRO; IPR040903;
+#=GF DR   SO; 0000417; polypeptide_domain;
+#=GF CC   This is the carboxy-terminal domain (CTD) found in retroviral
+#=GF CC   integrase, an essential retroviral enzyme that binds both
+#=GF CC   termini of linear viral DNA and inserts them into a host cell
+#=GF CC   chromosome. The CTD adopts an SH3-like fold. Each CTD makes
+#=GF CC   contact with the phosphodiester backbone of both viral DNA
+#=GF CC   molecules, essentially crosslinking the structure [1].
+#=GF SQ   1
+#=GS POL_SFVCP/1064-1126  AC Q87040.1
+POL_SFVCP/1064-1126             RSWSPVVGQLVQERVARPASLRPRWHKPSTVLEVLNPRTVVILDHLGNNRTVSIDNLKPTSHQ
+#=GC seq_cons                   RSWSPVVGQLVQERVARPASLRPRWHKPSTVLEVLNPRTVVILDHLGNNRTVSIDNLKPTSHQ
+//

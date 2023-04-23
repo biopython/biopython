@@ -94,7 +94,8 @@ def _retrieve_seq_len(adaptor, primary_id):
     )
     if not seqs:
         return None
-    assert len(seqs) == 1
+    if len(seqs) != 1:
+        raise ValueError(f"Expected 1 response, got {len(seqs)}.")
     (given_length,) = seqs[0]
     return int(given_length)
 
@@ -112,23 +113,30 @@ def _retrieve_seq(adaptor, primary_id):
     )
     if not seqs:
         return
-    assert len(seqs) == 1
+    if len(seqs) != 1:
+        raise ValueError(f"Expected 1 response, got {len(seqs)}.")
     moltype, given_length, length = seqs[0]
 
     try:
         length = int(length)
         given_length = int(given_length)
-        assert length == given_length
+        if length != given_length:
+            raise ValueError(
+                f"'length' differs from sequence length, {given_length}, {length}"
+            )
         have_seq = True
     except TypeError:
-        assert length is None
+        if length is not None:
+            raise ValueError(f"Expected 'length' to be 'None', got {length}.")
         seqs = adaptor.execute_and_fetchall(
             "SELECT alphabet, length, seq FROM biosequence WHERE bioentry_id = %s",
             (primary_id,),
         )
-        assert len(seqs) == 1
+        if len(seqs) != 1:
+            raise ValueError(f"Expected 1 response, got {len(seqs)}.")
         moltype, given_length, seq = seqs[0]
-        assert seq is None or seq == ""
+        if seq:
+            raise ValueError(f"Expected 'seq' to have a falsy value, got {seq}.")
         length = int(given_length)
         have_seq = False
         del seq
@@ -267,7 +275,7 @@ def _retrieve_features(adaptor, primary_id):
                 adaptor, location_id
             )
             dbname, version = lookup.get(location_id, (None, None))
-            feature.location = SeqFeature.FeatureLocation(start, end)
+            feature.location = SeqFeature.SimpleLocation(start, end)
             feature.strand = strand
             feature.ref_db = dbname
             feature.ref = version
@@ -277,14 +285,14 @@ def _retrieve_features(adaptor, primary_id):
                 location_id, start, end, strand = location
                 dbname, version = lookup.get(location_id, (None, None))
                 locs.append(
-                    SeqFeature.FeatureLocation(
+                    SeqFeature.SimpleLocation(
                         start, end, strand=strand, ref=version, ref_db=dbname
                     )
                 )
             # Locations are typically in biological in order (see negative
             # strands below), but because of remote locations for
             # sub-features they are not necessarily in numerical order:
-            strands = {l.strand for l in locs}
+            strands = {_.strand for _ in locs}
             if len(strands) == 1 and -1 in strands:
                 # Evil hack time for backwards compatibility
                 # TODO - Check if BioPerl and (old) Biopython did the same,
@@ -323,9 +331,11 @@ def _retrieve_alphabet(adaptor, primary_id):
     results = adaptor.execute_and_fetchall(
         "SELECT alphabet FROM biosequence WHERE bioentry_id = %s", (primary_id,)
     )
-    assert len(results) == 1
+    if len(results) != 1:
+        raise ValueError(f"Expected 1 response, got {len(results)}.")
     alphabets = results[0]
-    assert len(alphabets) == 1
+    if len(alphabets) != 1:
+        raise ValueError(f"Expected 1 alphabet in response, got {len(alphabets)}.")
     alphabet = alphabets[0]
     if alphabet == "dna":
         molecule_type = "DNA"
@@ -383,7 +393,7 @@ def _retrieve_reference(adaptor, primary_id):
         if (start is not None) or (end is not None):
             if start is not None:
                 start -= 1  # python counting
-            reference.location = [SeqFeature.FeatureLocation(start, end)]
+            reference.location = [SeqFeature.SimpleLocation(start, end)]
         # Don't replace the default "" with None.
         if authors:
             reference.authors = authors

@@ -7,7 +7,6 @@ import unittest
 import warnings
 import array
 
-from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio.Data.CodonTable import CodonTable
@@ -18,7 +17,6 @@ from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.Seq import translate
 from Bio.Seq import UndefinedSequenceError, _UndefinedSequenceData
-from Bio.Seq import UnknownSeq
 from Bio.SeqRecord import SeqRecord
 
 try:
@@ -86,21 +84,8 @@ class StringMethodTests(unittest.TestCase):
         Seq("GG"),
         Seq("A"),
     ]
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-        _examples.extend(
-            [
-                UnknownSeq(1),
-                UnknownSeq(1, character="n"),
-                UnknownSeq(1, character="N"),
-                UnknownSeq(12, character="N"),
-                UnknownSeq(12, character="X"),
-                UnknownSeq(12),
-            ]
-        )
     for seq in _examples[:]:
-        if not isinstance(seq, UnknownSeq):
-            _examples.append(MutableSeq(seq))
+        _examples.append(MutableSeq(seq))
     _start_end_values = [0, 1, 2, 1000, -1, -2, -999, None]
     if numpy is not None:
         # test with numpy integers (numpy.int32, numpy.int64 etc.)
@@ -129,7 +114,7 @@ class StringMethodTests(unittest.TestCase):
                     j = getattr(str1, method_name)(str2)
                 except ValueError:
                     j = ValueError
-                self.assertEqual(i, j, "%r.%s(%r)" % (example1, method_name, str2))
+                self.assertEqual(i, j, f"{example1!r}.{method_name}({str2!r})")
                 try:
                     i = getattr(example1, method_name)(example2)
                 except ValueError:
@@ -138,7 +123,7 @@ class StringMethodTests(unittest.TestCase):
                     j = getattr(str1, method_name)(str2)
                 except ValueError:
                     j = ValueError
-                self.assertEqual(i, j, "%r.%s(%r)" % (example1, method_name, example2))
+                self.assertEqual(i, j, f"{example1!r}.{method_name}({example2!r})")
 
                 if start_end:
                     for start in self._start_end_values:
@@ -151,7 +136,7 @@ class StringMethodTests(unittest.TestCase):
                         except ValueError:
                             j = ValueError
                         self.assertEqual(
-                            i, j, "%r.%s(%r, %s)" % (example1, method_name, str2, start)
+                            i, j, f"{example1!r}.{method_name}({str2!r}, {start})"
                         )
 
                         for end in self._start_end_values:
@@ -166,8 +151,7 @@ class StringMethodTests(unittest.TestCase):
                             self.assertEqual(
                                 i,
                                 j,
-                                "%r.%s(%r, %s, %s)"
-                                % (example1, method_name, str2, start, end),
+                                f"{example1!r}.{method_name}({str2!r}, {start}, {end})",
                             )
 
     def test_str_count(self):
@@ -193,12 +177,6 @@ class StringMethodTests(unittest.TestCase):
             3,
             1,
             0,  # Seq() Tests
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,  # UnknownSeq() Tests
             3,
             3,
             1,
@@ -254,77 +232,15 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(MutableSeq("GGGTGGTAGGG").count_overlap("GG", 7, 2), 0)
         self.assertEqual(Seq("GGGTGGTAGGG").count_overlap("GG", -2, -10), 0)
 
-        # Testing UnknownSeq() with variable start and end arguments
-        char_start_end_exp = [
-            ("N", 1, 7, 0),
-            ("N", 1, 7, 0),
-            ("N", -4, None, 0),
-            ("N", -4, None, 0),
-            ("X", 1, 7, 0),
-        ]
-
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-            for char, start, end, exp in char_start_end_exp:
-                self.assertEqual(
-                    UnknownSeq(12, character=char).count_overlap("GG", start, end), exp
-                )
-            self.assertEqual(UnknownSeq(12, character="X").count_overlap("GG", 1, 7), 0)
-
-        # Testing UnknownSeq() with some more cases including unusual edge cases
-        substr_start_end_exp = [
-            ("G", 100, 105, 0),
-            ("G", -1, 4, 0),
-            ("G", 4, -1, 0),
-            ("G", -8, -2, 0),
-            ("G", -2, -8, 0),
-            ("G", 8, 2, 0),
-            ("G", 2, 8, 0),
-            ("GG", 8, 2, 0),
-            ("GG", 2, 8, 0),
-            ("GG", -5, -1, 0),
-            ("GG", 1, 5, 0),
-            ("GGG", None, None, 0),
-            ("GGGGGGGGG", None, None, 0),
-            ("GGG", 1, 2, 0),
-        ]
-
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-            for substr, start, end, exp in substr_start_end_exp:
-                self.assertEqual(
-                    UnknownSeq(7, character="N").count_overlap(substr, start, end), exp
-                )
-            self.assertEqual(UnknownSeq(7, character="N").count_overlap("GG", 1), 0)
-
     def test_str_count_overlap_NN(self):
         """Check our count_overlap method using NN."""
         # Testing with self._examples
-        expected = [
-            0,
-            0,
-            0,
-            0,  # Seq() Tests
-            0,
-            0,
-            0,
-            11,
-            0,
-            0,  # UnknownSeq() Tests
-            0,
-            0,
-            0,
-            0,  # MutableSeq() Tests
-        ]
-
-        assert len(self._examples) == len(expected)
-
-        for seq, exp in zip(self._examples, expected):
+        for seq in self._examples:
             # Using search term NN as a string
-            self.assertEqual(seq.count_overlap("NN"), exp)
+            self.assertEqual(seq.count_overlap("NN"), 0)
             self.assertEqual(seq.count_overlap("N" * 13), 0)
             # Using search term NN as a Seq
-            self.assertEqual(seq.count_overlap(Seq("NN")), exp)
+            self.assertEqual(seq.count_overlap(Seq("NN")), 0)
             self.assertEqual(seq.count_overlap(Seq("N" * 13)), 0)
 
     def test_count_overlap_start_end_NN(self):
@@ -362,49 +278,6 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(Seq("GGGTGGTAGGG").count_overlap("NN", 7, 2), 0)
         self.assertEqual(MutableSeq("GGGTGGTAGGG").count_overlap("NN", 7, 2), 0)
         self.assertEqual(Seq("GGGTGGTAGGG").count_overlap("NN", -10, -2), 0)
-
-        # Testing UnknownSeq() with variable start and end arguments
-        char_start_end_exp = [
-            ("N", 1, 7, 5),
-            ("N", 1, 7, 5),
-            ("N", -4, None, 3),
-            ("N", -4, None, 3),
-            ("X", 1, 7, 0),
-        ]
-
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-            for char, start, end, exp in char_start_end_exp:
-                self.assertEqual(
-                    UnknownSeq(12, character=char).count_overlap("NN", start, end), exp
-                )
-            self.assertEqual(UnknownSeq(12, character="X").count_overlap("NN", 1, 7), 0)
-
-        # Testing UnknownSeq() with some more cases including unusual edge cases
-        substr_start_end_exp = [
-            ("N", 100, 105, 0),
-            ("N", -1, 4, 0),
-            ("N", 4, -1, 2),
-            ("N", -8, -2, 5),
-            ("N", -2, -8, 0),
-            ("N", 8, 2, 0),
-            ("N", 2, 8, 5),
-            ("NN", 8, 2, 0),
-            ("NN", 2, 8, 4),
-            ("NN", -5, -1, 3),
-            ("NN", 1, 5, 3),
-            ("NNN", None, None, 5),
-            ("NNNNNNNNN", None, None, 0),
-            ("NNN", 1, 2, 0),
-        ]
-
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-            for substr, start, end, exp in substr_start_end_exp:
-                self.assertEqual(
-                    UnknownSeq(7, character="N").count_overlap(substr, start, end), exp
-                )
-            self.assertEqual(UnknownSeq(7, character="N").count_overlap("NN", 1), 5)
 
     def test_str_find(self):
         """Check matches the python string find method."""
@@ -449,17 +322,9 @@ class StringMethodTests(unittest.TestCase):
 
         # Now check with a tuple of sub sequences
         for example1 in self._examples:
-            if isinstance(example1, UnknownSeq) and len(example1) > 1:
-                with self.assertWarns(BiopythonDeprecationWarning):
-                    subs = tuple(
-                        example1[start : start + 2]
-                        for start in range(0, len(example1) - 2, 3)
-                    )
-            else:
-                subs = tuple(
-                    example1[start : start + 2]
-                    for start in range(0, len(example1) - 2, 3)
-                )
+            subs = tuple(
+                example1[start : start + 2] for start in range(0, len(example1) - 2, 3)
+            )
             subs_str = tuple(str(s) for s in subs)
 
             self.assertEqual(
@@ -484,17 +349,9 @@ class StringMethodTests(unittest.TestCase):
 
         # Now check with a tuple of sub sequences
         for example1 in self._examples:
-            if isinstance(example1, UnknownSeq) and len(example1) > 1:
-                with self.assertWarns(BiopythonDeprecationWarning):
-                    subs = tuple(
-                        example1[start : start + 2]
-                        for start in range(0, len(example1) - 2, 3)
-                    )
-            else:
-                subs = tuple(
-                    example1[start : start + 2]
-                    for start in range(0, len(example1) - 2, 3)
-                )
+            subs = tuple(
+                example1[start : start + 2] for start in range(0, len(example1) - 2, 3)
+            )
             subs_str = tuple(str(s) for s in subs)
 
             self.assertEqual(str(example1).endswith(subs_str), example1.endswith(subs))
@@ -585,11 +442,7 @@ class StringMethodTests(unittest.TestCase):
         """Check matches the python string upper method."""
         for example1 in self._examples:
             str1 = str(example1)
-            if isinstance(example1, UnknownSeq):
-                with self.assertWarns(BiopythonDeprecationWarning):
-                    example1 = example1.upper()
-            else:
-                example1 = example1.upper()
+            example1 = example1.upper()
             self.assertEqual(example1, str1.upper())
         with self.assertRaises(TypeError) as cm:
             Seq("abcd").upper(inplace=True)
@@ -599,15 +452,33 @@ class StringMethodTests(unittest.TestCase):
         """Check matches the python string lower method."""
         for example1 in self._examples:
             str1 = str(example1)
-            if isinstance(example1, UnknownSeq):
-                with self.assertWarns(BiopythonDeprecationWarning):
-                    example1 = example1.lower()
-            else:
-                example1 = example1.lower()
+            example1 = example1.lower()
             self.assertEqual(example1, str1.lower())
         with self.assertRaises(TypeError) as cm:
             Seq("ABCD").lower(inplace=True)
         self.assertEqual(str(cm.exception), "Sequence is immutable")
+
+    def test_str_isupper(self):
+        """Check matches the python string isupper method."""
+        for example1 in self._examples:
+            str1 = str(example1)
+            if isinstance(example1, _UndefinedSequenceData):
+                with self.assertRaises(UndefinedSequenceError):
+                    example1.isupper()
+            else:
+                example1 = example1.isupper()
+            self.assertEqual(example1, str1.isupper())
+
+    def test_str_islower(self):
+        """Check matches the python string islower method."""
+        for example1 in self._examples:
+            str1 = str(example1)
+            if isinstance(example1, _UndefinedSequenceData):
+                with self.assertRaises(UndefinedSequenceError):
+                    example1.islower()
+            else:
+                example1 = example1.islower()
+            self.assertEqual(example1, str1.islower())
 
     def test_str_replace(self):
         """Check matches the python string replace method."""
@@ -665,32 +536,32 @@ class StringMethodTests(unittest.TestCase):
                     self.assertEqual(
                         str(example1) == str(example2),
                         example1 == example2,
-                        "Checking %r == %r" % (example1, example2),
+                        f"Checking {example1!r} == {example2!r}",
                     )
                     self.assertEqual(
                         str(example1) != str(example2),
                         example1 != example2,
-                        "Checking %r != %r" % (example1, example2),
+                        f"Checking {example1!r} != {example2!r}",
                     )
                     self.assertEqual(
                         str(example1) < str(example2),
                         example1 < example2,
-                        "Checking %r < %r" % (example1, example2),
+                        f"Checking {example1!r} < {example2!r}",
                     )
                     self.assertEqual(
                         str(example1) <= str(example2),
                         example1 <= example2,
-                        "Checking %r <= %r" % (example1, example2),
+                        f"Checking {example1!r} <= {example2!r}",
                     )
                     self.assertEqual(
                         str(example1) > str(example2),
                         example1 > example2,
-                        "Checking %r > %r" % (example1, example2),
+                        f"Checking {example1!r} > {example2!r}",
                     )
                     self.assertEqual(
                         str(example1) >= str(example2),
                         example1 >= example2,
-                        "Checking %r >= %r" % (example1, example2),
+                        f"Checking {example1!r} >= {example2!r}",
                     )
 
     def test_str_getitem(self):
@@ -700,35 +571,19 @@ class StringMethodTests(unittest.TestCase):
             for i in self._start_end_values:
                 if i is not None and abs(i) < len(example1):
                     self.assertEqual(example1[i], str1[i])
-                if isinstance(example1, UnknownSeq):
-                    with self.assertWarns(BiopythonDeprecationWarning):
-                        self.assertEqual(example1[:i], str1[:i])
-                        self.assertEqual(example1[i:], str1[i:])
-                        for j in self._start_end_values:
-                            self.assertEqual(example1[i:j], str1[i:j])
-                            for step in range(-3, 4):
-                                if step == 0:
-                                    with self.assertRaises(ValueError) as cm:
-                                        example1[i:j:step]
-                                    self.assertEqual(
-                                        str(cm.exception), "slice step cannot be zero"
-                                    )
-                                else:
-                                    self.assertEqual(example1[i:j:step], str1[i:j:step])
-                else:
-                    self.assertEqual(example1[:i], str1[:i])
-                    self.assertEqual(example1[i:], str1[i:])
-                    for j in self._start_end_values:
-                        self.assertEqual(example1[i:j], str1[i:j])
-                        for step in range(-3, 4):
-                            if step == 0:
-                                with self.assertRaises(ValueError) as cm:
-                                    example1[i:j:step]
-                                self.assertEqual(
-                                    str(cm.exception), "slice step cannot be zero"
-                                )
-                            else:
-                                self.assertEqual(example1[i:j:step], str1[i:j:step])
+                self.assertEqual(example1[:i], str1[:i])
+                self.assertEqual(example1[i:], str1[i:])
+                for j in self._start_end_values:
+                    self.assertEqual(example1[i:j], str1[i:j])
+                    for step in range(-3, 4):
+                        if step == 0:
+                            with self.assertRaises(ValueError) as cm:
+                                example1[i:j:step]
+                            self.assertEqual(
+                                str(cm.exception), "slice step cannot be zero"
+                            )
+                        else:
+                            self.assertEqual(example1[i:j:step], str1[i:j:step])
         u = Seq(None, length=0)
         self.assertEqual(u, "")
 
@@ -780,10 +635,7 @@ class StringMethodTests(unittest.TestCase):
         for example1 in self._examples:
             if isinstance(example1, MutableSeq):
                 continue
-            if isinstance(example1, UnknownSeq):
-                with self.assertWarns(BiopythonDeprecationWarning):
-                    comp = example1.complement()
-            elif "u" in example1 or "U" in example1:
+            if "u" in example1 or "U" in example1:
                 comp = example1.complement_rna()
             else:
                 comp = example1.complement()
@@ -813,10 +665,7 @@ class StringMethodTests(unittest.TestCase):
         for example1 in self._examples:
             if isinstance(example1, MutableSeq):
                 continue
-            if isinstance(example1, UnknownSeq):
-                with self.assertWarns(BiopythonDeprecationWarning):
-                    comp = example1.reverse_complement()
-            elif "u" in example1 or "U" in example1:
+            if "u" in example1 or "U" in example1:
                 comp = example1.reverse_complement_rna()
             else:
                 comp = example1.reverse_complement()
@@ -846,11 +695,7 @@ class StringMethodTests(unittest.TestCase):
         for example1 in self._examples:
             if isinstance(example1, MutableSeq):
                 continue
-            if isinstance(example1, UnknownSeq):
-                with self.assertWarns(BiopythonDeprecationWarning):
-                    tran = example1.transcribe()
-            else:
-                tran = example1.transcribe()
+            tran = example1.transcribe()
             str1 = str(example1)
             if len(str1) % 3 != 0:
                 # TODO - Check for or silence the expected warning?
@@ -869,11 +714,7 @@ class StringMethodTests(unittest.TestCase):
         for example1 in self._examples:
             if isinstance(example1, MutableSeq):
                 continue
-            if isinstance(example1, UnknownSeq):
-                with self.assertWarns(BiopythonDeprecationWarning):
-                    tran = example1.back_transcribe()
-            else:
-                tran = example1.back_transcribe()
+            tran = example1.back_transcribe()
             str1 = str(example1)
             self.assertEqual(str1.replace("U", "T").replace("u", "t"), tran)
         with self.assertRaises(TypeError) as cm:
@@ -890,17 +731,9 @@ class StringMethodTests(unittest.TestCase):
             if len(example1) % 3 != 0:
                 # TODO - Check for or silence the expected warning?
                 continue
-            if isinstance(example1, UnknownSeq):
-                with self.assertWarns(BiopythonDeprecationWarning):
-                    tran = example1.translate()
-                    # Try with positional vs named argument:
-                    self.assertEqual(
-                        example1.translate(11), example1.translate(table=11)
-                    )
-            else:
-                tran = example1.translate()
-                # Try with positional vs named argument:
-                self.assertEqual(example1.translate(11), example1.translate(table=11))
+            tran = example1.translate()
+            # Try with positional vs named argument:
+            self.assertEqual(example1.translate(11), example1.translate(table=11))
 
             # TODO - check the actual translation, and all the optional args
         with self.assertRaises(ValueError):
@@ -973,7 +806,7 @@ class StringMethodTests(unittest.TestCase):
     def test_the_translation_of_invalid_codons(self):
         """Check obj.translate() method with invalid codons."""
         for codon in ["TA?", "N-N", "AC_", "Ac_"]:
-            msg = "Translating %s should fail" % codon
+            msg = f"Translating {codon} should fail"
             nuc = Seq(codon)
             with self.assertRaises(TranslationError, msg=msg):
                 nuc.translate()
@@ -1030,7 +863,7 @@ class StringMethodTests(unittest.TestCase):
         self.assertRaises(TypeError, MutableSeq, ["A", "C", "G", "T"])
         self.assertRaises(TypeError, MutableSeq, 1)
         self.assertRaises(TypeError, MutableSeq, 1.0)
-        self.assertRaises(ValueError, MutableSeq, array.array("i", [1, 2, 3, 4]))
+        self.assertRaises(TypeError, MutableSeq, array.array("i", [1, 2, 3, 4]))
 
     def test_join_Seq_TypeError(self):
         """Checks that a TypeError is thrown for all non-iterable types."""
@@ -1039,19 +872,6 @@ class StringMethodTests(unittest.TestCase):
         spacer = Seq("NNNNN")
         self.assertRaises(TypeError, spacer.join, 5)
         self.assertRaises(TypeError, spacer.join, SeqRecord(Seq("ATG")))
-        self.assertRaises(TypeError, spacer.join, ["ATG", "ATG", 5, "ATG"])
-
-    def test_join_UnknownSeq_TypeError_iter(self):
-        """Checks that a TypeError is thrown for all non-iterable types."""
-        # No iterable types which contain non-accepted types either.
-
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-            spacer = UnknownSeq(5, character="-")
-        self.assertRaises(TypeError, spacer.join, 5)
-        self.assertRaises(TypeError, spacer.join, ["ATG", "ATG", 5, "ATG"])
-        spacer = Seq(None, length=5)
-        self.assertRaises(TypeError, spacer.join, 5)
         self.assertRaises(TypeError, spacer.join, ["ATG", "ATG", 5, "ATG"])
 
     def test_join_MutableSeq_TypeError_iter(self):
@@ -1086,42 +906,6 @@ class StringMethodTests(unittest.TestCase):
                     str(spacer).join(str(target)), str(spacer.join(target))
                 )
 
-    def test_join_UnknownSeq(self):
-        """Checks if UnknownSeq join correctly concatenates sequence with the spacer."""
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-            spacer1 = UnknownSeq(5, character="-")
-            spacer2 = UnknownSeq(0, character="-")
-            spacers = [spacer1, spacer2]
-
-            self.assertEqual(
-                "-" * 15,
-                spacer1.join(
-                    [UnknownSeq(5, character="-"), UnknownSeq(5, character="-")]
-                ),
-            )
-            self.assertEqual(
-                "N" * 5 + "-" * 10,
-                spacer1.join([Seq("NNNNN"), UnknownSeq(5, character="-")]),
-            )
-
-        example_strings = ["ATG", "ATG", "ATG", "ATG"]
-        example_strings_seqs = ["ATG", "ATG", Seq("ATG"), "ATG"]
-
-        # strings with empty spacer
-        str_concatenated = spacer2.join(example_strings)
-
-        self.assertEqual(str_concatenated, "".join(example_strings))
-
-        for spacer in spacers:
-            seq_concatenated = spacer.join(example_strings_seqs)
-            self.assertEqual(seq_concatenated, str(spacer).join(example_strings))
-            # Now try single sequence arguments, should join the letters
-            for target in example_strings + example_strings_seqs:
-                self.assertEqual(
-                    str(spacer).join(str(target)), str(spacer.join(target))
-                )
-
     def test_join_MutableSeq_mixed(self):
         """Check MutableSeq objects can be joined."""
         spacer = MutableSeq("NNNNN")
@@ -1138,30 +922,6 @@ class StringMethodTests(unittest.TestCase):
 
         spacer = Seq("NNNNN")
         spacer1 = Seq("")
-        # seq objects with spacer
-        seq_concatenated = spacer.join(seqlist)
-        # seq objects with empty spacer
-        seq_concatenated1 = spacer1.join(seqlist)
-
-        ref_data = ref_data1 = ""
-        ref_data = str(spacer).join(seqlist_as_strings)
-        ref_data1 = str(spacer1).join(seqlist_as_strings)
-
-        self.assertEqual(seq_concatenated, ref_data)
-        self.assertEqual(seq_concatenated1, ref_data1)
-        with self.assertRaises(TypeError):
-            spacer.join(SeqIO.parse(filename, "fasta"))
-
-    def test_join_UnknownSeq_with_file(self):
-        """Checks if UnknownSeq join correctly concatenates sequence from a file with the spacer."""
-        filename = "Fasta/f003"
-        seqlist = [record.seq for record in SeqIO.parse(filename, "fasta")]
-        seqlist_as_strings = [str(_) for _ in seqlist]
-
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-            spacer = UnknownSeq(0, character="-")
-            spacer1 = UnknownSeq(5, character="-")
         # seq objects with spacer
         seq_concatenated = spacer.join(seqlist)
         # seq objects with empty spacer
@@ -1232,13 +992,6 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(MutableSeq("None"), "None")
         self.assertNotEqual(MutableSeq("None"), None)
 
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-            self.assertEqual(UnknownSeq(1, character="6"), "6")
-            self.assertNotEqual(UnknownSeq(1, character="6"), 6)
-            self.assertEqual(UnknownSeq(0), "")
-            self.assertNotEqual(UnknownSeq(0), None)
-
     # TODO - Addition...
 
 
@@ -1266,7 +1019,7 @@ class ComparisonTests(unittest.TestCase):
         s2 = "TTGATCAGTT"
         for seq1 in (Seq(s1), MutableSeq(s1)):
             for seq2 in (Seq(s2), MutableSeq(s2)):
-                msg = "%s vs %s" % (type(seq1), type(seq2))
+                msg = f"{type(seq1)} vs {type(seq2)}"
                 self.assertEqual(seq1[2:4], seq2[3:5], msg=msg)
                 self.assertEqual(seq1[2:4], "AT", msg=msg)
                 self.assertEqual(seq2[3:5], "AT", msg=msg)
@@ -1307,7 +1060,7 @@ class ComparisonTests(unittest.TestCase):
         s2 = "TTGATCAGTT"
         for seq1 in (Seq(s1), MutableSeq(s1)):
             for seq2 in (Seq(s2), MutableSeq(s2)):
-                msg = "%s vs %s" % (type(seq1), type(seq2))
+                msg = f"{type(seq1)} vs {type(seq2)}"
                 self.assertNotEqual(seq1, seq2, msg=msg)
                 self.assertNotEqual(seq1, "AT", msg=msg)
                 self.assertNotEqual(seq2, "AT", msg=msg)
@@ -1364,7 +1117,7 @@ class ComparisonTests(unittest.TestCase):
         s2 = "TTGATCAGTT"
         for seq1 in (Seq(s1), MutableSeq(s1)):
             for seq2 in (Seq(s2), MutableSeq(s2)):
-                msg = "%s vs %s" % (type(seq1), type(seq2))
+                msg = f"{type(seq1)} vs {type(seq2)}"
                 self.assertLess(seq1, seq2, msg=msg)
                 self.assertLess("AA", seq1, msg=msg)
                 self.assertLess(seq1, "TT", msg=msg)
@@ -1413,7 +1166,7 @@ class ComparisonTests(unittest.TestCase):
         s2 = "TTGATCAGTT"
         for seq1 in (Seq(s1), MutableSeq(s1)):
             for seq2 in (Seq(s2), MutableSeq(s2)):
-                msg = "%s vs %s" % (type(seq1), type(seq2))
+                msg = f"{type(seq1)} vs {type(seq2)}"
                 self.assertLessEqual(seq1, seq2, msg=msg)
                 self.assertLessEqual(seq1, "TT", msg=msg)
                 self.assertLessEqual("TT", seq2, msg=msg)
@@ -1471,7 +1224,7 @@ class ComparisonTests(unittest.TestCase):
         s2 = "TTGATCAGTT"
         for seq1 in (Seq(s1), MutableSeq(s1)):
             for seq2 in (Seq(s2), MutableSeq(s2)):
-                msg = "%s vs %s" % (type(seq1), type(seq2))
+                msg = f"{type(seq1)} vs {type(seq2)}"
                 self.assertGreater(seq2, seq1, msg=msg)
                 self.assertGreater("TT", seq1, msg=msg)
                 self.assertGreater(seq2, "TT", msg=msg)
@@ -1528,7 +1281,7 @@ class ComparisonTests(unittest.TestCase):
         s2 = "TTGATCAGTT"
         for seq1 in (Seq(s1), MutableSeq(s1)):
             for seq2 in (Seq(s2), MutableSeq(s2)):
-                msg = "%s vs %s" % (type(seq1), type(seq2))
+                msg = f"{type(seq1)} vs {type(seq2)}"
                 self.assertGreaterEqual(seq2, seq1, msg=msg)
                 self.assertGreaterEqual("TT", seq1, msg=msg)
                 self.assertGreaterEqual(seq2, "TT", msg=msg)
@@ -1590,7 +1343,7 @@ class PartialSequenceTests(unittest.TestCase):
         self.assertEqual(repr(seq), "Seq({5: 'ACGT'}, length=20)")
         with self.assertRaises(ValueError) as cm:
             Seq({5: "ACGT"}, length=-10)
-        self.assertEqual(str(cm.exception), "Length must not be negative.")
+        self.assertEqual(str(cm.exception), "length must not be negative.")
         with self.assertRaises(ValueError) as cm:
             Seq({5: 1.5}, length=10)
         self.assertEqual(str(cm.exception), "Expected bytes-like objects or strings")
@@ -1981,7 +1734,7 @@ class PartialSequenceTests(unittest.TestCase):
 
     def test_lower_upper(self):
         u = Seq({3: "KLM", 11: "XYZ"}, length=17)
-        l = Seq({0: "pqrst", 8: "hij"}, length=13)
+        l = Seq({0: "pqrst", 8: "hij"}, length=13)  # noqa: E741
         m = Seq({5: "ABCD", 10: "efgh"}, length=20)
         self.assertEqual(repr(u.upper()), "Seq({3: 'KLM', 11: 'XYZ'}, length=17)")
         self.assertEqual(repr(u.lower()), "Seq({3: 'klm', 11: 'xyz'}, length=17)")
