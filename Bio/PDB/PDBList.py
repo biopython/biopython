@@ -275,7 +275,7 @@ class PDBList:
         archive_fn = archive[file_format]
 
         if file_format not in archive.keys():
-            raise (
+            raise Exception(
                 f"Specified file_format {file_format} doesn't exists or is not supported. Maybe a "
                 "typo. Please, use one of the following: mmCif, pdb, xml, mmtf, bundle"
             )
@@ -384,14 +384,14 @@ class PDBList:
         # and index of which files we have efficiently (or glob them).
         for pdb_code in obsolete:
             if self.flat_tree:
-                old_file = os.path.join(self.local_pdb, f"pdb{pdb_code}.ent")
+                old_file = os.path.join(self.local_pdb, f"pdb{pdb_code}.{file_format}")
                 new_dir = self.obsolete_pdb
             else:
                 old_file = os.path.join(
-                    self.local_pdb, pdb_code[1:3], f"pdb{pdb_code}.ent"
+                    self.local_pdb, pdb_code[1:3], f"pdb{pdb_code}.{file_format}"
                 )
                 new_dir = os.path.join(self.obsolete_pdb, pdb_code[1:3])
-            new_file = os.path.join(new_dir, f"pdb{pdb_code}.ent")
+            new_file = os.path.join(new_dir, f"pdb{pdb_code}.{file_format}")
             if os.path.isfile(old_file):
                 if not os.path.isdir(new_dir):
                     os.mkdir(new_dir)
@@ -537,7 +537,7 @@ class PDBList:
         file_format = self._print_default_format_warning(file_format)
         file_format = file_format.lower()  # we should standardize this.
         if file_format not in archive:
-            raise (
+            raise Exception(
                 f"Specified file_format '{file_format}' is not supported. Use one of the "
                 "following: 'mmcif' or 'pdb'."
             )
