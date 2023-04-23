@@ -174,6 +174,38 @@ class ZoomLevel:
         return self.formatter.pack(self.amount, self.dataOffset, self.indexOffset)
 
 
+class ZoomLevels(list):
+
+    bbiMaxZoomLevels = 10
+    size = ZoomLevel.formatter.size * bbiMaxZoomLevels
+
+    def __init__(self):
+        self[:] = [ZoomLevel() for i in range(ZoomLevels.bbiMaxZoomLevels)]
+
+    def __bytes__(self):
+        data = b"".join(bytes(item) for item in self)
+        data += bytes(ZoomLevels.size - len(data))
+        return data
+
+    @classmethod
+    def bbiCalcResScalesAndSizes(self, aveSize):
+        # See bbiCalcResScalesAndSizes in bbiWrite.c
+        bbiMaxZoomLevels = ZoomLevels.bbiMaxZoomLevels
+        reductions = np.zeros(
+            bbiMaxZoomLevels,
+            dtype=[("scale", "=i4"), ("size", "=i4"), ("end", "=i4")],
+        )
+        minZoom = 10
+        res = max(int(aveSize), minZoom)
+        maxInt = np.iinfo(reductions.dtype["scale"]).max
+        for resTry in range(bbiMaxZoomLevels):
+            if res > maxInt:
+                break
+            reductions[resTry]["scale"] = res
+            res *= bbiResIncrement
+        return reductions[:resTry]
+
+
 class ZippedStream(io.BytesIO):
     def getvalue(self):
         data = super().getvalue()
@@ -607,7 +639,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             alignments, targets, extra_indices
         )
         stream.write(bytes(header.size))
-        stream.write(bytes(bbiMaxZoomLevels * ZoomLevel.formatter.size))
+        stream.write(bytes(ZoomLevels.size))
         header.autoSqlOffset = stream.tell()
         stream.write(bytes(declaration))  # asText
         header.totalSummaryOffset = stream.tell()
@@ -619,7 +651,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             chromUsageList, min(self.blockSize, len(chromUsageList)), stream
         )
         header.fullDataOffset = stream.tell()
-        reductions = self.bbiCalcResScalesAndSizes(aveSize)
+        reductions = ZoomLevels.bbiCalcResScalesAndSizes(aveSize)
         stream.write(bedCount.to_bytes(8, sys.byteorder))
         if bedCount > 0:
             for extra_index in extra_indices:
@@ -649,7 +681,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 reductions,
             )
         else:
-            zoomList = []
+            zoomList = ZoomLevels([])
         header.zoomLevels = len(zoomList)
         for extra_index in extra_indices:
             extra_index.fileOffset = stream.tell()
@@ -657,12 +689,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             BPlusTreeFormatter().write(extra_index.chunks, self.blockSize, stream)
         stream.seek(0)
         stream.write(bytes(header))
-        for row in zoomList:
-            data = bytes(row)
-            stream.write(data)
-        stream.write(
-            bytes(ZoomLevel.formatter.size * (bbiMaxZoomLevels - len(zoomList)))
-        )
+        stream.write(bytes(zoomList))
         stream.seek(header.totalSummaryOffset)
         stream.write(bytes(totalSum))
         assert header.extraIndicesOffset == stream.tell()
@@ -683,7 +710,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         doCompress = self.compress
         itemsPerSlot = self.itemsPerSlot
         maxReducedSize = dataSize / 2
-        zoomList = [ZoomLevel() for i in range(bbiMaxZoomLevels)]
+        zoomList = ZoomLevels()
 
         for initialReduction in reductions:
             reducedSize = initialReduction["size"] * RegionSummary.size
@@ -718,7 +745,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         zoomList[0].amount = initialReduction["scale"]
         zoomCount = initialReduction["size"]
         reduction = initialReduction["scale"] * zoomIncrement
-        for zoomLevels in range(1, bbiMaxZoomLevels):
+        for zoomLevels in range(1, ZoomLevels.bbiMaxZoomLevels):
             rezoomCount = len(rezoomedList)
             if rezoomCount >= zoomCount:
                 break
@@ -735,23 +762,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             zoomList[zoomLevels].amount = reduction
             reduction *= zoomIncrement
             rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction)
-        return zoomList[:zoomLevels], totalSum
-
-    def bbiCalcResScalesAndSizes(self, aveSize):
-        # See bbiCalcResScalesAndSizes in bbiWrite.c
-        reductions = np.zeros(
-            bbiMaxZoomLevels,
-            dtype=[("scale", "=i4"), ("size", "=i4"), ("end", "=i4")],
-        )
-        minZoom = 10
-        res = max(int(aveSize), minZoom)
-        maxInt = np.iinfo(reductions.dtype["scale"]).max
-        for resTry in range(bbiMaxZoomLevels):
-            if res > maxInt:
-                break
-            reductions[resTry]["scale"] = res
-            res *= bbiResIncrement
-        return reductions[:resTry]
+        zoomList[:] = zoomList[:zoomLevels]
+        return zoomList, totalSum
 
     def extract_fields(self, alignment):
         bedN = self.bedN
@@ -1290,7 +1302,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             yield alignment
 
 
-bbiMaxZoomLevels = 10
 bbiResIncrement = 4
 
 
