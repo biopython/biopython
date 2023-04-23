@@ -2359,8 +2359,8 @@ class Alignment:
         >>> from Bio.Align import Alignment
         >>> alignment = Alignment(("ACCGT", "ACGT"),
         ...                       coordinates = np.array([[0, 2, 3, 5],
-        ...                                                  [0, 2, 2, 4],
-        ...                                                 ]))
+        ...                                               [0, 2, 2, 4],
+        ...                                              ]))
         >>> print(alignment)
         target            0 ACCGT 5
                           0 ||-|| 5
