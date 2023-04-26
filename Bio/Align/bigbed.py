@@ -217,9 +217,6 @@ class ZoomLevels(list):
         doubleReductionSize = initialReduction["scale"] * ZoomLevels.bbiResIncrement
         regions = []
 
-        self[0].dataOffset = buffer.output.tell()
-        initialReduction["size"].tofile(buffer.output)
-
         totalSum = Summary()
         rangeTrees = rangeTreeGenerator(alignments)
         for chromName, chromId, chromSize in chromUsageList:
@@ -776,6 +773,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             )
         else:
             zoomList = ZoomLevels([])
+            totalSum = Summary()
+            totalSum.minVal = 0.0
+            totalSum.maxVal = 0.0
         header.zoomLevels = len(zoomList)
         for extra_index in extra_indices:
             extra_index.fileOffset = stream.tell()
@@ -798,6 +798,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         itemsPerSlot = self.itemsPerSlot
         maxReducedSize = dataSize / 2
         zoomList = ZoomLevels()
+        zoomList[0].dataOffset = output.tell()
 
         for initialReduction in reductions:
             reducedSize = initialReduction["size"] * RegionSummary.size
@@ -807,6 +808,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 break
         else:
             initialReduction = reductions[0]
+        initialReduction["size"].tofile(output)
 
         size = itemsPerSlot * RegionSummary.size
         if doCompress:
