@@ -205,6 +205,32 @@ class ZoomLevels(list):
             res *= bbiResIncrement
         return reductions[:resTry]
 
+    def reduce(self, rezoomedList, initialReduction, buffer, blockSize, itemsPerSlot):
+        zoomIncrement = bbiResIncrement
+        zoomCount = initialReduction["size"]
+        reduction = initialReduction["scale"] * zoomIncrement
+        output = buffer.output
+        formatter = RTreeFormatter()
+        zoomIncrement = bbiResIncrement
+        for zoomLevels in range(1, ZoomLevels.bbiMaxZoomLevels):
+            rezoomCount = len(rezoomedList)
+            if rezoomCount >= zoomCount:
+                break
+            zoomCount = rezoomCount
+            self[zoomLevels].dataOffset = output.tell()
+            data = zoomCount.to_bytes(4, sys.byteorder)
+            output.write(data)
+            for summary in rezoomedList:
+                buffer.write(summary)
+            buffer.flush()
+            indexOffset = output.tell()
+            formatter.write(rezoomedList, blockSize, itemsPerSlot, indexOffset, output)
+            self[zoomLevels].indexOffset = indexOffset
+            self[zoomLevels].amount = reduction
+            reduction *= zoomIncrement
+            rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction)
+        self[:] = self[:zoomLevels]
+
 
 class ZippedStream(io.BytesIO):
     def getvalue(self):
@@ -728,7 +754,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             totalSum,
         ) = bedWriteReducedOnceReturnReducedTwice(
             chromUsageList,
-            len(self.declaration),
             alignments,
             initialReduction,
             zoomIncrement,
@@ -741,28 +766,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             buffer = ZippedBufferedStream(output, itemsPerSlot * RegionSummary.size)
         else:
             buffer = BufferedStream(output, RegionSummary.size)
-        formatter = RTreeFormatter()
         zoomList[0].amount = initialReduction["scale"]
-        zoomCount = initialReduction["size"]
-        reduction = initialReduction["scale"] * zoomIncrement
-        for zoomLevels in range(1, ZoomLevels.bbiMaxZoomLevels):
-            rezoomCount = len(rezoomedList)
-            if rezoomCount >= zoomCount:
-                break
-            zoomCount = rezoomCount
-            zoomList[zoomLevels].dataOffset = output.tell()
-            data = zoomCount.to_bytes(4, sys.byteorder)
-            output.write(data)
-            for summary in rezoomedList:
-                buffer.write(summary)
-            buffer.flush()
-            indexOffset = output.tell()
-            formatter.write(rezoomedList, blockSize, itemsPerSlot, indexOffset, output)
-            zoomList[zoomLevels].indexOffset = indexOffset
-            zoomList[zoomLevels].amount = reduction
-            reduction *= zoomIncrement
-            rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction)
-        zoomList[:] = zoomList[:zoomLevels]
+        zoomList.reduce(rezoomedList, initialReduction, buffer, blockSize, itemsPerSlot)
         return zoomList, totalSum
 
     def extract_fields(self, alignment):
@@ -1982,7 +1987,6 @@ def bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize):
 
 def bedWriteReducedOnceReturnReducedTwice(
     chromUsageList,
-    fieldCount,
     alignments,
     initialReduction,
     zoomIncrement,
