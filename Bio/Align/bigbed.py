@@ -176,6 +176,7 @@ class ZoomLevel:
 
 class ZoomLevels(list):
 
+    bbiResIncrement = 4
     bbiMaxZoomLevels = 10
     size = ZoomLevel.formatter.size * bbiMaxZoomLevels
 
@@ -202,16 +203,83 @@ class ZoomLevels(list):
             if res > maxInt:
                 break
             reductions[resTry]["scale"] = res
-            res *= bbiResIncrement
+            res *= ZoomLevels.bbiResIncrement
         return reductions[:resTry]
 
+    def bedWriteReducedOnceReturnReducedTwice(
+        self,
+        chromUsageList,
+        alignments,
+        initialReduction,
+        buffer,
+    ):
+        twiceReducedList = []
+        doubleReductionSize = initialReduction["scale"] * ZoomLevels.bbiResIncrement
+        regions = []
+
+        self[0].dataOffset = buffer.output.tell()
+        initialReduction["size"].tofile(buffer.output)
+
+        totalSum = Summary()
+        rangeTrees = rangeTreeGenerator(alignments)
+        for chromName, chromId, chromSize in chromUsageList:
+            summary = Region(None, -1, -1)
+            name, rangeTree = next(rangeTrees)
+            assert name == chromName.decode()
+            rangeList = rangeTreeList(rangeTree)
+            for range in rangeList:
+                val = range.val
+                start = range.start
+                end = range.end
+                size = end - start
+                if size == 0:
+                    size = 1
+
+                totalSum.update(size, val)
+
+                if summary.end <= start:
+                    if summary.chromId is not None:
+                        buffer.write(summary)
+                        regions.append(summary)
+                        bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
+                    summary = RegionSummary(
+                        chromId,
+                        start,
+                        min(start + initialReduction["scale"], chromSize),
+                        val,
+                    )
+                while end > summary.end:
+                    overlap = min(end, summary.end) - max(start, summary.start)
+                    assert overlap > 0
+                    summary.update(overlap, val)
+                    buffer.write(summary)
+                    regions.append(summary)
+                    bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
+                    size -= overlap
+                    start = summary.end
+                    summary = RegionSummary(
+                        chromId,
+                        start,
+                        min(start + initialReduction["scale"], chromSize),
+                        val,
+                    )
+                summary.update(size, val)
+            if summary is not None:
+                buffer.write(summary)
+                regions.append(summary)
+                bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
+        buffer.flush()
+
+        assert len(regions) == initialReduction["size"]
+        self[0].amount = initialReduction["scale"]
+
+        return twiceReducedList, totalSum, regions
+
     def reduce(self, rezoomedList, initialReduction, buffer, blockSize, itemsPerSlot):
-        zoomIncrement = bbiResIncrement
         zoomCount = initialReduction["size"]
-        reduction = initialReduction["scale"] * zoomIncrement
+        reduction = initialReduction["scale"] * ZoomLevels.bbiResIncrement
         output = buffer.output
         formatter = RTreeFormatter()
-        zoomIncrement = bbiResIncrement
         for zoomLevels in range(1, ZoomLevels.bbiMaxZoomLevels):
             rezoomCount = len(rezoomedList)
             if rezoomCount >= zoomCount:
@@ -227,7 +295,7 @@ class ZoomLevels(list):
             formatter.write(rezoomedList, blockSize, itemsPerSlot, indexOffset, output)
             self[zoomLevels].indexOffset = indexOffset
             self[zoomLevels].amount = reduction
-            reduction *= zoomIncrement
+            reduction *= ZoomLevels.bbiResIncrement
             rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction)
         self[:] = self[:zoomLevels]
 
@@ -699,7 +767,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             regions, self.blockSize, 1, header.fullIndexOffset, stream
         )
         if bedCount > 0:
-            zoomList, totalSum = self.bbiWriteZoomLevels(
+            zoomList, totalSum = self.writeZoomLevels(
                 alignments,
                 stream,
                 header.fullIndexOffset - header.fullDataOffset,
@@ -724,14 +792,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         data = header.signature.to_bytes(4, sys.byteorder)
         stream.write(data)
 
-    def bbiWriteZoomLevels(
-        self,
-        alignments,  # struct lineFile *lf,    /* Input file. */
-        output,  # FILE *f,                /* Output. */
-        dataSize,  # bits64 dataSize,        /* Size of data on disk (after compression if any). */
-        chromUsageList,  # struct bbiChromUsage *usageList, /* Result from bbiChromUsageFromBedFile */
-        reductions,
-    ):
+    def writeZoomLevels(self, alignments, output, dataSize, chromUsageList, reductions):
         blockSize = self.blockSize
         doCompress = self.compress
         itemsPerSlot = self.itemsPerSlot
@@ -746,28 +807,30 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 break
         else:
             initialReduction = reductions[0]
-        zoomIncrement = bbiResIncrement
+
+        size = itemsPerSlot * RegionSummary.size
+        if doCompress:
+            buffer = ZippedBufferedStream(output, size)
+        else:
+            buffer = BufferedStream(output, size)
+
         (
             rezoomedList,
-            zoomList[0].dataOffset,
-            zoomList[0].indexOffset,
             totalSum,
-        ) = bedWriteReducedOnceReturnReducedTwice(
-            chromUsageList,
-            alignments,
-            initialReduction,
-            zoomIncrement,
-            blockSize,
-            itemsPerSlot,
-            doCompress,
-            output,
+            regions,
+        ) = zoomList.bedWriteReducedOnceReturnReducedTwice(
+            chromUsageList, alignments, initialReduction, buffer
         )
+
+        indexOffset = output.tell()
+        zoomList[0].indexOffset = indexOffset
+        RTreeFormatter().write(regions, blockSize, itemsPerSlot, indexOffset, output)
         if doCompress:
-            buffer = ZippedBufferedStream(output, itemsPerSlot * RegionSummary.size)
+            buffer = ZippedBufferedStream(output, size)
         else:
             buffer = BufferedStream(output, RegionSummary.size)
-        zoomList[0].amount = initialReduction["scale"]
         zoomList.reduce(rezoomedList, initialReduction, buffer, blockSize, itemsPerSlot)
+
         return zoomList, totalSum
 
     def extract_fields(self, alignment):
@@ -1305,9 +1368,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         for row in data:
             alignment = self._create_alignment(row)
             yield alignment
-
-
-bbiResIncrement = 4
 
 
 class RTreeNode:
@@ -1983,85 +2043,6 @@ def bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize):
             return
     twiceReduced = copy.copy(summary)
     twiceReducedList.append(twiceReduced)
-
-
-def bedWriteReducedOnceReturnReducedTwice(
-    chromUsageList,
-    alignments,
-    initialReduction,
-    zoomIncrement,
-    blockSize,
-    itemsPerSlot,
-    doCompress,
-    output,
-):
-    twiceReducedList = []
-    doubleReductionSize = initialReduction["scale"] * zoomIncrement
-    regions = []
-
-    dataStart = output.tell()
-    initialReduction["size"].tofile(output)
-
-    size = itemsPerSlot * RegionSummary.size
-    if doCompress:
-        buffer = ZippedBufferedStream(output, size)
-    else:
-        buffer = BufferedStream(output, size)
-    totalSum = Summary()
-    rangeTrees = rangeTreeGenerator(alignments)
-    for chromName, chromId, chromSize in chromUsageList:
-        summary = Region(None, -1, -1)
-        name, rangeTree = next(rangeTrees)
-        assert name == chromName.decode()
-        rangeList = rangeTreeList(rangeTree)
-        for range in rangeList:
-            val = range.val
-            start = range.start
-            end = range.end
-            size = end - start
-            if size == 0:
-                size = 1
-
-            totalSum.update(size, val)
-
-            if summary.end <= start:
-                if summary.chromId is not None:
-                    buffer.write(summary)
-                    regions.append(summary)
-                    bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
-                summary = RegionSummary(
-                    chromId,
-                    start,
-                    min(start + initialReduction["scale"], chromSize),
-                    val,
-                )
-            while end > summary.end:
-                overlap = min(end, summary.end) - max(start, summary.start)
-                assert overlap > 0
-                summary.update(overlap, val)
-                buffer.write(summary)
-                regions.append(summary)
-                bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
-                size -= overlap
-                start = summary.end
-                summary = RegionSummary(
-                    chromId,
-                    start,
-                    min(start + initialReduction["scale"], chromSize),
-                    val,
-                )
-            summary.update(size, val)
-        if summary is not None:
-            buffer.write(summary)
-            regions.append(summary)
-            bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
-    buffer.flush()
-
-    assert len(regions) == initialReduction["size"]
-    indexOffset = output.tell()
-    RTreeFormatter().write(regions, blockSize, itemsPerSlot, indexOffset, output)
-
-    return twiceReducedList, dataStart, indexOffset, totalSum
 
 
 def bbiSummarySimpleReduce(summaries, reduction):
