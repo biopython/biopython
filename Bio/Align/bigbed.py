@@ -1407,6 +1407,107 @@ class RangeTree:
         self.chromId = chromId
         self.chromSize = chromSize
 
+    def find(self, start, end):
+        p = self.root
+        while p is not None:
+            if end <= p.item.start:
+                p = p.left
+            elif p.item.end <= start:
+                p = p.right
+            else:
+                return p.item
+
+    def add(self, item):
+        self.stack = []
+        try:
+            x = self.freeList.pop()
+        except IndexError:
+            x = rbTreeNode()
+        else:
+            self.freeList = x.right
+        x.left = None
+        x.right = None
+        x.item = item
+        x.color = None
+        p = self.root
+        if p is not None:
+            while True:
+                self.stack.append(p)
+                if item.end <= p.item.start:
+                    p = p.left
+                    if p is None:
+                        p = self.stack.pop()
+                        p.left = x
+                        break
+                elif p.item.end <= item.start:
+                    p = p.right
+                    if p is None:
+                        p = self.stack.pop()
+                        p.right = x
+                        break
+                else:
+                    return p.item
+            col = "red"
+        else:
+            self.root = x
+            col = "black"
+        x.color = col
+        self.n += 1
+        if len(self.stack) > 0:
+            while p.color == "red":
+                m = self.stack.pop()
+                if p == m.left:
+                    q = m.right
+                else:
+                    q = m.left
+                if q is None or q.color == "black":
+                    m = restructure(self, len(self.stack), m, p, x)
+                    m.color = "black"
+                    m.left.color = m.right.color = "red"
+                    break
+                p.color = "black"
+                q.color = "black"
+                if len(self.stack) == 0:
+                    break
+                m.color = "red"
+                x = m
+                p = self.stack.pop()
+
+    def addToCoverageDepth(self, start, end):
+        existing = self.find(start, end)
+        if existing is None:
+            r = Range(start, end, val=1)
+            self.add(r)
+        else:
+            if existing.start <= start and existing.end >= end:
+                if existing.start < start:
+                    r = Range(existing.start, start, existing.val)
+                    existing.start = start
+                    self.add(r)
+                if existing.end > end:
+                    r = Range(end, existing.end, existing.val)
+                    existing.end = end
+                    self.add(r)
+                existing.val += 1
+            else:
+                existingList = rangeTreeAllOverlapping(self, start, end)
+                s = start
+                e = end
+                for existing in existingList:
+                    if s < existing.start:
+                        r = Range(s, existing.start, 1)
+                        s = existing.start
+                        self.add(r)
+                    elif s > existing.start:
+                        r = Range(existing.start, s, existing.val)
+                        existing.start = s
+                        self.add(r)
+                    existing.val += 1
+                    s = existing.end
+                if s < e:
+                    r = Range(s, e, 1)
+                    self.add(r)
+
 
 class Range:
     __slots__ = ("next", "start", "end", "val")
@@ -1833,17 +1934,6 @@ class RTreeFormatter:
         self.rWriteLeaves(blockSize, size, root, 0, leafLevel, output)
 
 
-def rbTreeFind(tree, start, end):
-    p = tree.root
-    while p is not None:
-        if end <= p.item.start:
-            p = p.left
-        elif p.item.end <= start:
-            p = p.right
-        else:
-            return p.item
-
-
 def rangeCmp(a, b):
     if a.end <= b.start:
         return -1
@@ -1921,101 +2011,6 @@ def restructure(t, tos, x, y, z):
     return midNode
 
 
-def rbTreeAdd(tree, item):
-    tree.stack = []
-    try:
-        x = tree.freeList.pop()
-    except IndexError:
-        x = rbTreeNode()
-    else:
-        tree.freeList = x.right
-    x.left = None
-    x.right = None
-    x.item = item
-    x.color = None
-    p = tree.root
-    if p is not None:
-        while True:
-            tree.stack.append(p)
-            if item.end <= p.item.start:
-                p = p.left
-                if p is None:
-                    p = tree.stack.pop()
-                    p.left = x
-                    break
-            elif p.item.end <= item.start:
-                p = p.right
-                if p is None:
-                    p = tree.stack.pop()
-                    p.right = x
-                    break
-            else:
-                return p.item
-        col = "red"
-    else:
-        tree.root = x
-        col = "black"
-
-    x.color = col
-
-    tree.n += 1
-    if len(tree.stack) > 0:
-        while p.color == "red":
-            m = tree.stack.pop()
-            if p == m.left:
-                q = m.right
-            else:
-                q = m.left
-            if q is None or q.color == "black":
-                m = restructure(tree, len(tree.stack), m, p, x)
-                m.color = "black"
-                m.left.color = m.right.color = "red"
-                break
-            p.color = "black"
-            q.color = "black"
-            if len(tree.stack) == 0:
-                break
-            m.color = "red"
-            x = m
-            p = tree.stack.pop()
-
-
-def rangeTreeAddToCoverageDepth(tree, start, end):
-    existing = rbTreeFind(tree, start, end)
-    if existing is None:
-        r = Range(start, end, val=1)
-        rbTreeAdd(tree, r)
-    else:
-        if existing.start <= start and existing.end >= end:
-            if existing.start < start:
-                r = Range(existing.start, start, existing.val)
-                existing.start = start
-                rbTreeAdd(tree, r)
-            if existing.end > end:
-                r = Range(end, existing.end, existing.val)
-                existing.end = end
-                rbTreeAdd(tree, r)
-            existing.val += 1
-        else:
-            existingList = rangeTreeAllOverlapping(tree, start, end)
-            s = start
-            e = end
-            for existing in existingList:
-                if s < existing.start:
-                    r = Range(s, existing.start, 1)
-                    s = existing.start
-                    rbTreeAdd(tree, r)
-                elif s > existing.start:
-                    r = Range(existing.start, s, existing.val)
-                    existing.start = s
-                    rbTreeAdd(tree, r)
-                existing.val += 1
-                s = existing.end
-            if s < e:
-                r = Range(s, e, 1)
-                rbTreeAdd(tree, r)
-
-
 def rangeTreeGenerator(alignments, chromUsageList):
     alignments.rewind()
     start = None
@@ -2023,7 +2018,7 @@ def rangeTreeGenerator(alignments, chromUsageList):
         chromName = chromName.decode()
         tree = RangeTree(chromId, chromSize)
         if start is not None:
-            rangeTreeAddToCoverageDepth(tree, start, end)
+            tree.addToCoverageDepth(start, end)
         for alignment in alignments:
             start = alignment.coordinates[0, 0]
             end = alignment.coordinates[0, -1]
@@ -2031,7 +2026,7 @@ def rangeTreeGenerator(alignments, chromUsageList):
                 start, end = end, start
             if alignment.target.id != chromName:
                 break
-            rangeTreeAddToCoverageDepth(tree, start, end)
+            tree.addToCoverageDepth(start, end)
         yield tree
 
 
