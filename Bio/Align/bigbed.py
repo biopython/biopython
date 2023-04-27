@@ -218,12 +218,12 @@ class ZoomLevels(list):
         regions = []
 
         totalSum = Summary()
-        rangeTrees = rangeTreeGenerator(alignments)
-        for chromName, chromId, chromSize in chromUsageList:
+        rangeTrees = rangeTreeGenerator(alignments, chromUsageList)
+        for rangeTree in rangeTrees:
             summary = Region(None, -1, -1)
-            name, rangeTree = next(rangeTrees)
-            assert name == chromName.decode()
             rangeList = rangeTreeList(rangeTree)
+            chromSize = rangeTree.chromSize
+            chromId = rangeTree.chromId
             for range in rangeList:
                 val = range.val
                 start = range.start
@@ -1398,10 +1398,14 @@ class RTreeNode:
 
 
 class RangeTree:
-    def __init__(self):
+    __slots__ = ("root", "n", "freeList", "stack", "chromId", "chromSize")
+
+    def __init__(self, chromId, chromSize):
         self.root = None
         self.n = 0
         self.freeList = []
+        self.chromId = chromId
+        self.chromSize = chromSize
 
 
 class Range:
@@ -2012,23 +2016,23 @@ def rangeTreeAddToCoverageDepth(tree, start, end):
                 rbTreeAdd(tree, r)
 
 
-def rangeTreeGenerator(alignments):
-    name = None
+def rangeTreeGenerator(alignments, chromUsageList):
     alignments.rewind()
-    for alignment in alignments:
-        chrom = alignment.target.id
-        if name != chrom:
-            if name is not None:
-                yield name, tree
-            name = chrom
-            tree = RangeTree()
-        start = alignment.coordinates[0, 0]
-        end = alignment.coordinates[0, -1]
-        if start > end:
-            start, end = end, start
-        rangeTreeAddToCoverageDepth(tree, start, end)
-    if name is not None:
-        yield name, tree
+    start = None
+    for chromName, chromId, chromSize in chromUsageList:
+        chromName = chromName.decode()
+        tree = RangeTree(chromId, chromSize)
+        if start is not None:
+            rangeTreeAddToCoverageDepth(tree, start, end)
+        for alignment in alignments:
+            start = alignment.coordinates[0, 0]
+            end = alignment.coordinates[0, -1]
+            if start > end:
+                start, end = end, start
+            if alignment.target.id != chromName:
+                break
+            rangeTreeAddToCoverageDepth(tree, start, end)
+        yield tree
 
 
 def bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize):
