@@ -1490,20 +1490,20 @@ class RangeTree:
                     self.add(r)
                 existing.val += 1
             else:
-                existingList = rangeTreeAllOverlapping(self, start, end)
+                items = list(self.root.traverse_range(start, end))
                 s = start
                 e = end
-                for existing in existingList:
-                    if s < existing.start:
-                        r = Range(s, existing.start, 1)
-                        s = existing.start
+                for item in items:
+                    if s < item.start:
+                        r = Range(s, item.start, 1)
+                        s = item.start
                         self.add(r)
-                    elif s > existing.start:
-                        r = Range(existing.start, s, existing.val)
-                        existing.start = s
+                    elif s > item.start:
+                        r = Range(item.start, s, item.val)
+                        item.start = s
                         self.add(r)
-                    existing.val += 1
-                    s = existing.end
+                    item.val += 1
+                    s = item.end
                 if s < e:
                     r = Range(s, e, 1)
                     self.add(r)
@@ -1521,12 +1521,19 @@ class Range:
 class rbTreeNode:
     __slots__ = ("left", "right", "color", "item")
 
-
-class bbNamedFileChunk:
-    __slots__ = ("name", "offset", "size")
-
-    def __lt__(self, other):
-        return self.name < other.name
+    def traverse_range(self, start, end):
+        if self.item.end <= start:
+            if self.right is not None:
+                yield from self.right.traverse_range(start, end)
+        elif end <= self.item.start:
+            if self.left is not None:
+                yield from self.left.traverse_range(start, end)
+        else:
+            if self.left is not None:
+                yield from self.left.traverse_range(start, end)
+            yield self.item
+            if self.right is not None:
+                yield from self.right.traverse_range(start, end)
 
 
 def bbiChromUsageFromBedFile(alignments, targets, extra_indices):
@@ -1932,25 +1939,6 @@ class RTreeFormatter:
             self.rWriteIndexLevel(root, blockSize, size, 0, i, levelOffset, output)
         leafLevel = levelCount - 2
         self.rWriteLeaves(blockSize, size, root, 0, leafLevel, output)
-
-
-def rTreeTraverseRangeWithContext(n, start, end, rangeList):
-    # n: struct rbTreeNode*
-    if n is not None:
-        if n.item.end <= start:
-            rTreeTraverseRangeWithContext(n.right, start, end, rangeList)
-        elif end <= n.item.start:
-            rTreeTraverseRangeWithContext(n.left, start, end, rangeList)
-        else:
-            rTreeTraverseRangeWithContext(n.left, start, end, rangeList)
-            rangeList.append(n.item)
-            rTreeTraverseRangeWithContext(n.right, start, end, rangeList)
-
-
-def rangeTreeAllOverlapping(tree, start, end):
-    rangeList = []
-    rTreeTraverseRangeWithContext(tree.root, start, end, rangeList)
-    return rangeList
 
 
 def rTreeTraverseWithContext(n, rangeList):
