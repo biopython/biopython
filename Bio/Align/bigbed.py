@@ -1934,31 +1934,22 @@ class RTreeFormatter:
         self.rWriteLeaves(blockSize, size, root, 0, leafLevel, output)
 
 
-def rangeCmp(a, b):
-    if a.end <= b.start:
-        return -1
-    if b.end <= a.start:
-        return +1
-    return 0
-
-
-def rTreeTraverseRangeWithContext(n, minIt, maxIt, rangeList):
+def rTreeTraverseRangeWithContext(n, start, end, rangeList):
     # n: struct rbTreeNode*
     if n is not None:
-        minCmp = rangeCmp(n.item, minIt)
-        maxCmp = rangeCmp(n.item, maxIt)
-        if minCmp >= 0:
-            rTreeTraverseRangeWithContext(n.left, minIt, maxIt, rangeList)
-        if minCmp >= 0 and maxCmp <= 0:
+        if n.item.end <= start:
+            rTreeTraverseRangeWithContext(n.right, start, end, rangeList)
+        elif end <= n.item.start:
+            rTreeTraverseRangeWithContext(n.left, start, end, rangeList)
+        else:
+            rTreeTraverseRangeWithContext(n.left, start, end, rangeList)
             rangeList.append(n.item)
-        if maxCmp <= 0:
-            rTreeTraverseRangeWithContext(n.right, minIt, maxIt, rangeList)
+            rTreeTraverseRangeWithContext(n.right, start, end, rangeList)
 
 
 def rangeTreeAllOverlapping(tree, start, end):
     rangeList = []
-    tempR = Range(start, end, None)
-    rTreeTraverseRangeWithContext(tree.root, tempR, tempR, rangeList)
+    rTreeTraverseRangeWithContext(tree.root, start, end, rangeList)
     return rangeList
 
 
