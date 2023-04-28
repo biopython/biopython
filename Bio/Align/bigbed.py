@@ -1482,29 +1482,30 @@ class RangeTree:
                         break
                 else:
                     return p.item
-            col = "red"
+            col = True
         else:
             self.root = x
-            col = "black"
+            col = False
         x.color = col
         self.n += 1
         if len(self.stack) > 0:
-            while p.color == "red":
+            while p.color is True:
                 m = self.stack.pop()
                 if p == m.left:
                     q = m.right
                 else:
                     q = m.left
-                if q is None or q.color == "black":
+                if q is None or q.color is False:
                     m = self.restructure(m, p, x)
-                    m.color = "black"
-                    m.left.color = m.right.color = "red"
+                    m.color = False
+                    m.left.color = True
+                    m.right.color = True
                     break
-                p.color = "black"
-                q.color = "black"
+                p.color = False
+                q.color = False
                 if len(self.stack) == 0:
                     break
-                m.color = "red"
+                m.color = True
                 x = m
                 p = self.stack.pop()
 
