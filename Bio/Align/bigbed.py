@@ -1416,6 +1416,42 @@ class RangeTree:
             else:
                 return p.item
 
+    def restructure(self, x, y, z):
+        tos = len(self.stack)
+        if y is x.left:
+            if z is y.left:
+                midNode = y
+                y.left = z
+                x.left = y.right
+                y.right = x
+            else:
+                midNode = z
+                y.right = z.left
+                z.left = y
+                x.left = z.right
+                z.right = x
+        else:
+            if z is y.left:
+                midNode = z
+                x.right = z.left
+                z.left = x
+                y.left = z.right
+                z.right = y
+            else:
+                midNode = y
+                x.right = y.left
+                y.left = x
+                y.right = z
+        if tos != 0:
+            parent = self.stack[tos - 1]
+            if x is parent.left:
+                parent.left = midNode
+            else:
+                parent.right = midNode
+        else:
+            self.root = midNode
+        return midNode
+
     def add(self, item):
         self.stack = []
         try:
@@ -1460,7 +1496,7 @@ class RangeTree:
                 else:
                     q = m.left
                 if q is None or q.color == "black":
-                    m = restructure(self, len(self.stack), m, p, x)
+                    m = self.restructure(m, p, x)
                     m.color = "black"
                     m.left.color = m.right.color = "red"
                     break
@@ -1945,42 +1981,6 @@ class RTreeFormatter:
             self.rWriteIndexLevel(root, blockSize, size, 0, i, levelOffset, output)
         leafLevel = levelCount - 2
         self.rWriteLeaves(blockSize, size, root, 0, leafLevel, output)
-
-
-def restructure(t, tos, x, y, z):
-    if y is x.left:
-        if z is y.left:
-            midNode = y
-            y.left = z
-            x.left = y.right
-            y.right = x
-        else:
-            midNode = z
-            y.right = z.left
-            z.left = y
-            x.left = z.right
-            z.right = x
-    else:
-        if z is y.left:
-            midNode = z
-            x.right = z.left
-            z.left = x
-            y.left = z.right
-            z.right = y
-        else:
-            midNode = y
-            x.right = y.left
-            y.left = x
-            y.right = z
-    if tos != 0:
-        parent = t.stack[tos - 1]
-        if x is parent.left:
-            parent.left = midNode
-        else:
-            parent.right = midNode
-    else:
-        t.root = midNode
-    return midNode
 
 
 def rangeTreeGenerator(alignments, chromUsageList):
