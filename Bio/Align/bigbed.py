@@ -221,10 +221,9 @@ class ZoomLevels(list):
         rangeTrees = rangeTreeGenerator(alignments, chromUsageList)
         for rangeTree in rangeTrees:
             summary = Region(None, -1, -1)
-            rangeList = rangeTreeList(rangeTree)
             chromSize = rangeTree.chromSize
             chromId = rangeTree.chromId
-            for range in rangeList:
+            for range in rangeTree.root.traverse():
                 val = range.val
                 start = range.start
                 end = range.end
@@ -1521,6 +1520,13 @@ class Range:
 class rbTreeNode:
     __slots__ = ("left", "right", "color", "item")
 
+    def traverse(self):
+        if self.left is not None:
+            yield from self.left.traverse()
+        yield self.item
+        if self.right is not None:
+            yield from self.right.traverse()
+
     def traverse_range(self, start, end):
         if self.item.end <= start:
             if self.right is not None:
@@ -1939,19 +1945,6 @@ class RTreeFormatter:
             self.rWriteIndexLevel(root, blockSize, size, 0, i, levelOffset, output)
         leafLevel = levelCount - 2
         self.rWriteLeaves(blockSize, size, root, 0, leafLevel, output)
-
-
-def rTreeTraverseWithContext(n, rangeList):
-    if n is not None:
-        rTreeTraverseWithContext(n.left, rangeList)
-        rangeList.append(n.item)
-        rTreeTraverseWithContext(n.right, rangeList)
-
-
-def rangeTreeList(tree):
-    rangeList = []
-    rTreeTraverseWithContext(tree.root, rangeList)
-    return rangeList
 
 
 def restructure(t, tos, x, y, z):
