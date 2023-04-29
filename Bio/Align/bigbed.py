@@ -70,7 +70,13 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
-class BufferedStream:
+class _ZippedStream(io.BytesIO):
+    def getvalue(self):
+        data = super().getvalue()
+        return zlib.compress(data)
+
+
+class _BufferedStream:
     def __init__(self, output, size):
         self.buffer = BytesIO()
         self.output = output
@@ -91,10 +97,23 @@ class BufferedStream:
         self.buffer.truncate(0)
 
 
-# flake8: noqa
+class _ZippedBufferedStream(_BufferedStream):
+    def write(self, item):
+        item.offset = self.output.tell()
+        data = bytes(item)
+        self.buffer.write(data)
+        if self.buffer.tell() == self.size:
+            self.output.write(zlib.compress(self.buffer.getvalue()))
+            self.buffer.seek(0)
+            self.buffer.truncate(0)
+
+    def flush(self):
+        self.output.write(zlib.compress(self.buffer.getvalue()))
+        self.buffer.seek(0)
+        self.buffer.truncate(0)
 
 
-class Header:
+class _Header:
     __slots__ = (
         "byteorder",
         "zoomLevels",
@@ -131,14 +150,14 @@ class Header:
     @classmethod
     def from_file(cls, stream):
         magic = stream.read(4)
-        if int.from_bytes(magic, byteorder="little") == Header.signature:
+        if int.from_bytes(magic, byteorder="little") == _Header.signature:
             byteorder = "<"
-        elif int.from_bytes(magic, byteorder="big") == Header.signature:
+        elif int.from_bytes(magic, byteorder="big") == _Header.signature:
             byteorder = ">"
         else:
             raise ValueError("not a bigBed file")
         formatter = struct.Struct(byteorder + "HHQQQHHQQIQ")
-        header = Header()
+        header = _Header()
         header.byteorder = byteorder
         size = formatter.size
         data = stream.read(size)
@@ -155,7 +174,7 @@ class Header:
             header.uncompressBufSize,
             header.extraIndicesOffset,
         ) = formatter.unpack(data)
-        assert version == Header.bbiCurrentVersion
+        assert version == _Header.bbiCurrentVersion
         definedFieldCount = header.definedFieldCount
         if definedFieldCount < 3 or definedFieldCount > 12:
             raise ValueError(
@@ -164,9 +183,9 @@ class Header:
         return header
 
     def __bytes__(self):
-        return Header.formatter.pack(
-            Header.signature,
-            Header.bbiCurrentVersion,
+        return _Header.formatter.pack(
+            _Header.signature,
+            _Header.bbiCurrentVersion,
             self.zoomLevels,
             self.chromosomeTreeOffset,
             self.fullDataOffset,
@@ -180,270 +199,7 @@ class Header:
         )
 
 
-class ZoomLevel:
-    __slots__ = ["amount", "dataOffset", "indexOffset"]
-
-    # Supplemental Table 6: The zoom header
-    # reductionLevel   4 bytes, unsigned
-    # reserved         4 bytes, unsigned
-    # dataOffset       8 bytes, unsigned
-    # indexOffset      8 bytes, unsigned
-
-    formatter = struct.Struct("=IxxxxQQ")
-
-    def __bytes__(self):
-        return self.formatter.pack(self.amount, self.dataOffset, self.indexOffset)
-
-
-class ZoomLevels(list):
-
-    bbiResIncrement = 4
-    bbiMaxZoomLevels = 10
-    size = ZoomLevel.formatter.size * bbiMaxZoomLevels
-
-    def __init__(self):
-        self[:] = [ZoomLevel() for i in range(ZoomLevels.bbiMaxZoomLevels)]
-
-    def __bytes__(self):
-        data = b"".join(bytes(item) for item in self)
-        data += bytes(ZoomLevels.size - len(data))
-        return data
-
-    @classmethod
-    def bbiCalcResScalesAndSizes(self, aveSize):
-        # See bbiCalcResScalesAndSizes in bbiWrite.c
-        bbiMaxZoomLevels = ZoomLevels.bbiMaxZoomLevels
-        reductions = np.zeros(
-            bbiMaxZoomLevels,
-            dtype=[("scale", "=i4"), ("size", "=i4"), ("end", "=i4")],
-        )
-        minZoom = 10
-        res = max(int(aveSize), minZoom)
-        maxInt = np.iinfo(reductions.dtype["scale"]).max
-        for resTry in range(bbiMaxZoomLevels):
-            if res > maxInt:
-                break
-            reductions[resTry]["scale"] = res
-            res *= ZoomLevels.bbiResIncrement
-        return reductions[:resTry]
-
-    def bedWriteReducedOnceReturnReducedTwice(
-        self,
-        chromUsageList,
-        alignments,
-        initialReduction,
-        buffer,
-    ):
-        twiceReducedList = []
-        doubleReductionSize = initialReduction["scale"] * ZoomLevels.bbiResIncrement
-        regions = []
-        totalSum = Summary()
-        alignments.rewind()
-        alignment = None
-        for chromName, chromId, chromSize in chromUsageList:
-            chromName = chromName.decode()
-            tree = RangeTree(chromId, chromSize)
-            if alignment is not None:
-                tree.addToCoverageDepth(alignment)
-            for alignment in alignments:
-                if alignment.target.id != chromName:
-                    break
-                tree.addToCoverageDepth(alignment)
-            summary = Region(None, -1, -1)
-            for range in tree.root.traverse():
-                val = range.val
-                start = range.start
-                end = range.end
-                size = end - start
-                if size == 0:
-                    size = 1
-                totalSum.update(size, val)
-                if summary.end <= start:
-                    if summary.chromId is not None:
-                        buffer.write(summary)
-                        regions.append(summary)
-                        bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
-                    summary = RegionSummary(
-                        chromId,
-                        start,
-                        min(start + initialReduction["scale"], chromSize),
-                        val,
-                    )
-                while end > summary.end:
-                    overlap = min(end, summary.end) - max(start, summary.start)
-                    assert overlap > 0
-                    summary.update(overlap, val)
-                    buffer.write(summary)
-                    regions.append(summary)
-                    bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
-                    size -= overlap
-                    start = summary.end
-                    summary = RegionSummary(
-                        chromId,
-                        start,
-                        min(start + initialReduction["scale"], chromSize),
-                        val,
-                    )
-                summary.update(size, val)
-            if summary is not None:
-                buffer.write(summary)
-                regions.append(summary)
-                bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
-        buffer.flush()
-        assert len(regions) == initialReduction["size"]
-        self[0].amount = initialReduction["scale"]
-        return twiceReducedList, totalSum, regions
-
-    def reduce(self, rezoomedList, initialReduction, buffer, blockSize, itemsPerSlot):
-        zoomCount = initialReduction["size"]
-        reduction = initialReduction["scale"] * ZoomLevels.bbiResIncrement
-        output = buffer.output
-        formatter = RTreeFormatter()
-        for zoomLevels in range(1, ZoomLevels.bbiMaxZoomLevels):
-            rezoomCount = len(rezoomedList)
-            if rezoomCount >= zoomCount:
-                break
-            zoomCount = rezoomCount
-            self[zoomLevels].dataOffset = output.tell()
-            data = zoomCount.to_bytes(4, sys.byteorder)
-            output.write(data)
-            for summary in rezoomedList:
-                buffer.write(summary)
-            buffer.flush()
-            indexOffset = output.tell()
-            formatter.write(rezoomedList, blockSize, itemsPerSlot, indexOffset, output)
-            self[zoomLevels].indexOffset = indexOffset
-            self[zoomLevels].amount = reduction
-            reduction *= ZoomLevels.bbiResIncrement
-            rezoomedList = bbiSummarySimpleReduce(rezoomedList, reduction)
-        self[:] = self[:zoomLevels]
-
-
-class ZippedStream(io.BytesIO):
-    def getvalue(self):
-        data = super().getvalue()
-        return zlib.compress(data)
-
-
-class ZippedBufferedStream(BufferedStream):
-    def write(self, item):
-        item.offset = self.output.tell()
-        data = bytes(item)
-        self.buffer.write(data)
-        if self.buffer.tell() == self.size:
-            self.output.write(zlib.compress(self.buffer.getvalue()))
-            self.buffer.seek(0)
-            self.buffer.truncate(0)
-
-    def flush(self):
-        self.output.write(zlib.compress(self.buffer.getvalue()))
-        self.buffer.seek(0)
-        self.buffer.truncate(0)
-
-
-class Region:
-    __slots__ = ("chromId", "start", "end", "offset")
-
-    def __init__(self, chromId, start, end):
-        self.chromId = chromId
-        self.start = start
-        self.end = end
-
-
-class Summary:
-    __slots__ = ("validCount", "minVal", "maxVal", "sumData", "sumSquares")
-
-    formatter = struct.Struct("=Qdddd")
-    size = formatter.size
-
-    def __init__(self):
-        self.validCount = 0
-        self.minVal = sys.maxsize
-        self.maxVal = -sys.maxsize
-        self.sumData = 0.0
-        self.sumSquares = 0.0
-
-    def update(self, size, val):
-        self.validCount += size
-        if val < self.minVal:
-            self.minVal = val
-        if val > self.maxVal:
-            self.maxVal = val
-        self.sumData += val * size
-        self.sumSquares += val * val * size
-
-    def __bytes__(self):
-        return self.formatter.pack(
-            self.validCount,
-            self.minVal,
-            self.maxVal,
-            self.sumData,
-            self.sumSquares,
-        )
-
-
-class RegionSummary(Summary):
-
-    __slots__ = Region.__slots__ + Summary.__slots__
-
-    formatter = struct.Struct("=IIIIffff")
-    size = formatter.size
-
-    def __init__(self, chromId, start, end, value):
-        self.chromId = chromId
-        self.start = start
-        self.end = end
-        self.validCount = 0
-        self.minVal = np.float32(value)
-        self.maxVal = np.float32(value)
-        self.sumData = np.float32(0.0)
-        self.sumSquares = np.float32(0.0)
-        self.offset = None
-
-    def __iadd__(self, other):
-        self.end = other.end
-        self.validCount += other.validCount
-        self.minVal = min(self.minVal, other.minVal)
-        self.maxVal = max(self.maxVal, other.maxVal)
-        self.sumData = np.float32(self.sumData + other.sumData)
-        self.sumSquares = np.float32(self.sumSquares + other.sumSquares)
-        return self
-
-    def update(self, overlap, val):
-        self.validCount += overlap
-        if self.minVal > val:
-            self.minVal = np.float32(val)
-        if self.maxVal < val:
-            self.maxVal = np.float32(val)
-        self.sumData = np.float32(self.sumData + val * overlap)
-        self.sumSquares = np.float32(self.sumSquares + val * val * overlap)
-
-    def __bytes__(self):
-        return self.formatter.pack(
-            self.chromId,
-            self.start,
-            self.end,
-            self.validCount,
-            self.minVal,
-            self.maxVal,
-            self.sumData,
-            self.sumSquares,
-        )
-
-
-class ExtHeader:
-    # See bbFileCreate in bedToBigBed.c
-    __slots__ = ("extraIndexCount", "extraIndexListOffset")
-
-    formatter = struct.Struct("=HHQ52x")
-
-    def __bytes__(self):
-        return self.formatter.pack(
-            self.formatter.size, self.extraIndexCount, self.extraIndexListOffset
-        )
-
-
-class ExtraIndex:
+class _ExtraIndex:
     __slots__ = ("indexField", "maxFieldSize", "fileOffset", "chunks", "get_value")
 
     formatter = struct.Struct("=xxHQxxxxHxx")
@@ -497,16 +253,16 @@ class ExtraIndex:
         self.chunks = np.zeros(bedCount, dtype=dtype)
 
 
-class ExtraIndices(list):
+class _ExtraIndices(list):
 
     formatter = struct.Struct("=HHQ52x")
 
     def __init__(self, names, declaration):
-        self[:] = [ExtraIndex(name, declaration) for name in names]
+        self[:] = [_ExtraIndex(name, declaration) for name in names]
 
     @property
     def size(self):
-        return self.formatter.size + ExtraIndex.formatter.size * len(self)
+        return self.formatter.size + _ExtraIndex.formatter.size * len(self)
 
     def tofile(self, stream):
         size = self.formatter.size
@@ -519,6 +275,237 @@ class ExtraIndices(list):
         else:
             data = self.formatter.pack(size, 0, 0)
             stream.write(data)
+
+
+class _ZoomLevel:
+    __slots__ = ["amount", "dataOffset", "indexOffset"]
+
+    # Supplemental Table 6: The zoom header
+    # reductionLevel   4 bytes, unsigned
+    # reserved         4 bytes, unsigned
+    # dataOffset       8 bytes, unsigned
+    # indexOffset      8 bytes, unsigned
+
+    formatter = struct.Struct("=IxxxxQQ")
+
+    def __bytes__(self):
+        return self.formatter.pack(self.amount, self.dataOffset, self.indexOffset)
+
+
+class _ZoomLevels(list):
+
+    bbiResIncrement = 4
+    bbiMaxZoomLevels = 10
+    size = _ZoomLevel.formatter.size * bbiMaxZoomLevels
+
+    def __init__(self):
+        self[:] = [_ZoomLevel() for i in range(_ZoomLevels.bbiMaxZoomLevels)]
+
+    def __bytes__(self):
+        data = b"".join(bytes(item) for item in self)
+        data += bytes(_ZoomLevels.size - len(data))
+        return data
+
+    @classmethod
+    def bbiCalcResScalesAndSizes(self, aveSize):
+        # See bbiCalcResScalesAndSizes in bbiWrite.c
+        bbiMaxZoomLevels = _ZoomLevels.bbiMaxZoomLevels
+        reductions = np.zeros(
+            bbiMaxZoomLevels,
+            dtype=[("scale", "=i4"), ("size", "=i4"), ("end", "=i4")],
+        )
+        minZoom = 10
+        res = max(int(aveSize), minZoom)
+        maxInt = np.iinfo(reductions.dtype["scale"]).max
+        for resTry in range(bbiMaxZoomLevels):
+            if res > maxInt:
+                break
+            reductions[resTry]["scale"] = res
+            res *= _ZoomLevels.bbiResIncrement
+        return reductions[:resTry]
+
+    def bedWriteReducedOnceReturnReducedTwice(
+        self,
+        chromUsageList,
+        alignments,
+        initialReduction,
+        buffer,
+    ):
+        twiceReducedList = []
+        doubleReductionSize = initialReduction["scale"] * _ZoomLevels.bbiResIncrement
+        regions = []
+        totalSum = _Summary()
+        alignments.rewind()
+        alignment = None
+        for chromName, chromId, chromSize in chromUsageList:
+            chromName = chromName.decode()
+            tree = _RangeTree(chromId, chromSize)
+            if alignment is not None:
+                tree.addToCoverageDepth(alignment)
+            for alignment in alignments:
+                if alignment.target.id != chromName:
+                    break
+                tree.addToCoverageDepth(alignment)
+            summary = _Region(None, -1, -1)
+            for range in tree.root.traverse():
+                val = range.val
+                start = range.start
+                end = range.end
+                size = end - start
+                if size == 0:
+                    size = 1
+                totalSum.update(size, val)
+                if summary.end <= start:
+                    if summary.chromId is not None:
+                        buffer.write(summary)
+                        regions.append(summary)
+                        _bbiFurtherReduce(
+                            summary, twiceReducedList, doubleReductionSize
+                        )
+                    summary = _RegionSummary(
+                        chromId,
+                        start,
+                        min(start + initialReduction["scale"], chromSize),
+                        val,
+                    )
+                while end > summary.end:
+                    overlap = min(end, summary.end) - max(start, summary.start)
+                    assert overlap > 0
+                    summary.update(overlap, val)
+                    buffer.write(summary)
+                    regions.append(summary)
+                    _bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
+                    size -= overlap
+                    start = summary.end
+                    summary = _RegionSummary(
+                        chromId,
+                        start,
+                        min(start + initialReduction["scale"], chromSize),
+                        val,
+                    )
+                summary.update(size, val)
+            if summary is not None:
+                buffer.write(summary)
+                regions.append(summary)
+                _bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
+        buffer.flush()
+        assert len(regions) == initialReduction["size"]
+        self[0].amount = initialReduction["scale"]
+        return twiceReducedList, totalSum, regions
+
+    def reduce(self, rezoomedList, initialReduction, buffer, blockSize, itemsPerSlot):
+        zoomCount = initialReduction["size"]
+        reduction = initialReduction["scale"] * _ZoomLevels.bbiResIncrement
+        output = buffer.output
+        formatter = _RTreeFormatter()
+        for zoomLevels in range(1, _ZoomLevels.bbiMaxZoomLevels):
+            rezoomCount = len(rezoomedList)
+            if rezoomCount >= zoomCount:
+                break
+            zoomCount = rezoomCount
+            self[zoomLevels].dataOffset = output.tell()
+            data = zoomCount.to_bytes(4, sys.byteorder)
+            output.write(data)
+            for summary in rezoomedList:
+                buffer.write(summary)
+            buffer.flush()
+            indexOffset = output.tell()
+            formatter.write(rezoomedList, blockSize, itemsPerSlot, indexOffset, output)
+            self[zoomLevels].indexOffset = indexOffset
+            self[zoomLevels].amount = reduction
+            reduction *= _ZoomLevels.bbiResIncrement
+            rezoomedList = _bbiSummarySimpleReduce(rezoomedList, reduction)
+        self[:] = self[:zoomLevels]
+
+
+class _Summary:
+    __slots__ = ("validCount", "minVal", "maxVal", "sumData", "sumSquares")
+
+    formatter = struct.Struct("=Qdddd")
+    size = formatter.size
+
+    def __init__(self):
+        self.validCount = 0
+        self.minVal = sys.maxsize
+        self.maxVal = -sys.maxsize
+        self.sumData = 0.0
+        self.sumSquares = 0.0
+
+    def update(self, size, val):
+        self.validCount += size
+        if val < self.minVal:
+            self.minVal = val
+        if val > self.maxVal:
+            self.maxVal = val
+        self.sumData += val * size
+        self.sumSquares += val * val * size
+
+    def __bytes__(self):
+        return self.formatter.pack(
+            self.validCount,
+            self.minVal,
+            self.maxVal,
+            self.sumData,
+            self.sumSquares,
+        )
+
+
+class _Region:
+    __slots__ = ("chromId", "start", "end", "offset")
+
+    def __init__(self, chromId, start, end):
+        self.chromId = chromId
+        self.start = start
+        self.end = end
+
+
+class _RegionSummary(_Summary):
+
+    __slots__ = _Region.__slots__ + _Summary.__slots__
+
+    formatter = struct.Struct("=IIIIffff")
+    size = formatter.size
+
+    def __init__(self, chromId, start, end, value):
+        self.chromId = chromId
+        self.start = start
+        self.end = end
+        self.validCount = 0
+        self.minVal = np.float32(value)
+        self.maxVal = np.float32(value)
+        self.sumData = np.float32(0.0)
+        self.sumSquares = np.float32(0.0)
+        self.offset = None
+
+    def __iadd__(self, other):
+        self.end = other.end
+        self.validCount += other.validCount
+        self.minVal = min(self.minVal, other.minVal)
+        self.maxVal = max(self.maxVal, other.maxVal)
+        self.sumData = np.float32(self.sumData + other.sumData)
+        self.sumSquares = np.float32(self.sumSquares + other.sumSquares)
+        return self
+
+    def update(self, overlap, val):
+        self.validCount += overlap
+        if self.minVal > val:
+            self.minVal = np.float32(val)
+        if self.maxVal < val:
+            self.maxVal = np.float32(val)
+        self.sumData = np.float32(self.sumData + val * overlap)
+        self.sumSquares = np.float32(self.sumSquares + val * val * overlap)
+
+    def __bytes__(self):
+        return self.formatter.pack(
+            self.chromId,
+            self.start,
+            self.end,
+            self.validCount,
+            self.minVal,
+            self.maxVal,
+            self.sumData,
+            self.sumSquares,
+        )
 
 
 Field = namedtuple("Field", ("as_type", "name", "comment"))
@@ -535,6 +522,7 @@ class AutoSQLTable(list):
 
     @classmethod
     def from_bytes(cls, data):
+        """Return an AutoSQLTable initialized using the bytes object data."""
         assert data.endswith(b"\0")  # NULL-terminated string
         text = data[:-1].decode()
         word, text = text.split(None, 1)
@@ -579,6 +567,7 @@ class AutoSQLTable(list):
 
     @classmethod
     def from_string(cls, data):
+        """Return an AutoSQLTable initialized using the string object data."""
         return cls.from_bytes(data.encode() + b"\0")
 
     def __str__(self):
@@ -677,11 +666,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         declaration=None,
         targets=None,
         compress=True,
-        extraIndex=[],
+        extraIndex=(),
     ):
         """Create an AlignmentWriter object.
+
         Arguments:
-         - target      - output stream or file name
+         - target      - output stream or file name.
          - bedN        - number of columns in the BED file.
                          This must be between 3 and 12; default value is 12.
          - declaration - an AutoSQLTable object declaring the fields in the BED file.
@@ -691,13 +681,16 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                          order as they appear in the alignments. The sequence
                          contents in each SeqRecord may be undefined, but the
                          sequence length must be defined, as in this example:
-                         SeqRecord(Seq(None, length=248956422), id="chr1").
+
+                         SeqRecord(Seq(None, length=248956422), id="chr1")
+
                          If targets is None (the default value), the alignments
                          must have an attribute .targets providing the list of
                          SeqRecord objects.
          - compress    - If True (default), compress data using zlib.
                          If False, do not compress data.
-         - extraIndex  - List of strings with the names of extra columns to be indexed.
+         - extraIndex  - List of strings with the names of extra columns to be
+                         indexed.
                          Default value is an empty list.
         """
         if bedN < 3 or bedN > 12:
@@ -712,11 +705,16 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self.blockSize = 256
 
     def write_file(self, stream, alignments):
+        """Write the alignments to the file strenm, and return the number of alignments.
+
+        alignments - A list or iterator returning Alignment objects
+        stream     - Output file stream.
+        """
         if self.targets is None:
             targets = alignments.targets
         else:
             targets = self.targets
-        header = Header()
+        header = _Header()
         header.definedFieldCount = self.bedN
         if self.declaration is None:
             try:
@@ -726,24 +724,24 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         declaration = self.declaration
         header.fieldCount = len(declaration)
         # see bbFileCreate in bedToBigBed.c
-        extra_indices = ExtraIndices(self.extraIndexNames, declaration)
-        chromUsageList, aveSize, bedCount = bbiChromUsageFromBedFile(
+        extra_indices = _ExtraIndices(self.extraIndexNames, declaration)
+        chromUsageList, aveSize, bedCount = _bbiChromUsageFromBedFile(
             alignments, targets, extra_indices
         )
         stream.write(bytes(header.size))
-        stream.write(bytes(ZoomLevels.size))
+        stream.write(bytes(_ZoomLevels.size))
         header.autoSqlOffset = stream.tell()
         stream.write(bytes(declaration))  # asText
         header.totalSummaryOffset = stream.tell()
-        stream.write(bytes(Summary.size))
+        stream.write(bytes(_Summary.size))
         header.extraIndicesOffset = stream.tell()
         stream.write(bytes(extra_indices.size))
         header.chromosomeTreeOffset = stream.tell()
-        BPlusTreeFormatter().write(
+        _BPlusTreeFormatter().write(
             chromUsageList, min(self.blockSize, len(chromUsageList)), stream
         )
         header.fullDataOffset = stream.tell()
-        reductions = ZoomLevels.bbiCalcResScalesAndSizes(aveSize)
+        reductions = _ZoomLevels.bbiCalcResScalesAndSizes(aveSize)
         stream.write(bedCount.to_bytes(8, sys.byteorder))
         if bedCount > 0:
             for extra_index in extra_indices:
@@ -756,16 +754,16 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         )
         if self.compress:
             header.uncompressBufSize = max(
-                maxBlockSize, self.itemsPerSlot * RegionSummary.size
+                maxBlockSize, self.itemsPerSlot * _RegionSummary.size
             )
         else:
             header.uncompressBufSize = 0
         header.fullIndexOffset = stream.tell()
-        RTreeFormatter().write(
+        _RTreeFormatter().write(
             regions, self.blockSize, 1, header.fullIndexOffset, stream
         )
         if bedCount > 0:
-            zoomList, totalSum = self.writeZoomLevels(
+            zoomList, totalSum = self._write_zoom_levels(
                 alignments,
                 stream,
                 header.fullIndexOffset - header.fullDataOffset,
@@ -773,15 +771,15 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 reductions,
             )
         else:
-            zoomList = ZoomLevels([])
-            totalSum = Summary()
+            zoomList = _ZoomLevels([])
+            totalSum = _Summary()
             totalSum.minVal = 0.0
             totalSum.maxVal = 0.0
         header.zoomLevels = len(zoomList)
         for extra_index in extra_indices:
             extra_index.fileOffset = stream.tell()
             extra_index.chunks.sort()
-            BPlusTreeFormatter().write(extra_index.chunks, self.blockSize, stream)
+            _BPlusTreeFormatter().write(extra_index.chunks, self.blockSize, stream)
         stream.seek(0)
         stream.write(bytes(header))
         stream.write(bytes(zoomList))
@@ -793,16 +791,18 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         data = header.signature.to_bytes(4, sys.byteorder)
         stream.write(data)
 
-    def writeZoomLevels(self, alignments, output, dataSize, chromUsageList, reductions):
+    def _write_zoom_levels(
+        self, alignments, output, dataSize, chromUsageList, reductions
+    ):
         blockSize = self.blockSize
         doCompress = self.compress
         itemsPerSlot = self.itemsPerSlot
         maxReducedSize = dataSize / 2
-        zoomList = ZoomLevels()
+        zoomList = _ZoomLevels()
         zoomList[0].dataOffset = output.tell()
 
         for initialReduction in reductions:
-            reducedSize = initialReduction["size"] * RegionSummary.size
+            reducedSize = initialReduction["size"] * _RegionSummary.size
             if doCompress:
                 reducedSize /= 2
             if reducedSize <= maxReducedSize:
@@ -811,11 +811,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             initialReduction = reductions[0]
         initialReduction["size"].tofile(output)
 
-        size = itemsPerSlot * RegionSummary.size
+        size = itemsPerSlot * _RegionSummary.size
         if doCompress:
-            buffer = ZippedBufferedStream(output, size)
+            buffer = _ZippedBufferedStream(output, size)
         else:
-            buffer = BufferedStream(output, size)
+            buffer = _BufferedStream(output, size)
 
         (
             rezoomedList,
@@ -827,16 +827,16 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
         indexOffset = output.tell()
         zoomList[0].indexOffset = indexOffset
-        RTreeFormatter().write(regions, blockSize, itemsPerSlot, indexOffset, output)
+        _RTreeFormatter().write(regions, blockSize, itemsPerSlot, indexOffset, output)
         if doCompress:
-            buffer = ZippedBufferedStream(output, size)
+            buffer = _ZippedBufferedStream(output, size)
         else:
-            buffer = BufferedStream(output, RegionSummary.size)
+            buffer = _BufferedStream(output, _RegionSummary.size)
         zoomList.reduce(rezoomedList, initialReduction, buffer, blockSize, itemsPerSlot)
 
         return zoomList, totalSum
 
-    def extract_fields(self, alignment):
+    def _extract_fields(self, alignment):
         bedN = self.bedN
         row = []
         chrom = alignment.target.id
@@ -931,7 +931,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             row.append(",".join(str(chromStart) for chromStart in chromStarts) + ",")
         if bedN > 12:
             if bedN != 15:
-                raise ValueError(f"Unexpected value {bedN} for bedN in extract_fields")
+                raise ValueError(f"Unexpected value {bedN} for bedN in _extract_fields")
             expIds = alignment.annotations["expIds"]
             expScores = alignment.annotations["expScores"]
             expCount = len(expIds)
@@ -952,6 +952,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         return chrom, chromStart, chromEnd, rest
 
     def write_alignments(self, alignments, output, reductions, extra_indices):
+        """Write alignments to the output file, and return the number of alignments.
+
+        alignments - A list or iterator returning Alignment objects
+        stream     - Output file stream.
+        """
         itemsPerSlot = self.itemsPerSlot
         chromId = -1
         itemIx = 0
@@ -961,7 +966,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 
         regions = []
         if self.compress is True:
-            buffer = ZippedStream()
+            buffer = _ZippedStream()
         else:
             buffer = BytesIO()
         maxBlockSize = 0
@@ -974,6 +979,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         formatter = struct.Struct("=III")
 
         done = False
+        region = None
         alignments.rewind()
         while True:
             try:
@@ -982,7 +988,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 itemIx = itemsPerSlot
                 done = True
             else:
-                chrom, start, end, rest = self.extract_fields(alignment)
+                chrom, start, end, rest = self._extract_fields(alignment)
                 if chrom != currentChrom:
                     if currentChrom is not None:
                         itemIx = itemsPerSlot
@@ -1014,7 +1020,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     break
                 itemIx = 0
             if itemIx == 0:
-                region = Region(chromId, start, end)
+                region = _Region(chromId, start, end)
                 regions.append(region)
             elif end > region.end:
                 region.end = end
@@ -1047,7 +1053,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     mode = "b"
 
     def _read_header(self, stream):
-        header = Header.from_file(stream)
+        header = _Header.from_file(stream)
         byteorder = header.byteorder
         autoSqlOffset = header.autoSqlOffset
         self.byteorder = byteorder
@@ -1065,10 +1071,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             self._compressed = False
 
         stream.seek(header.chromosomeTreeOffset)
-        self.targets = BPlusTreeFormatter(byteorder).read(stream)
+        self.targets = _BPlusTreeFormatter(byteorder).read(stream)
 
         stream.seek(header.fullIndexOffset)
-        self.tree = RTreeFormatter(byteorder).read(stream)
+        self.tree = _RTreeFormatter(byteorder).read(stream)
 
         self._data = self._iterate_index(stream)
 
@@ -1373,7 +1379,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             yield alignment
 
 
-class RTreeNode:
+class _RTreeNode:
     __slots__ = [
         "children",
         "parent",
@@ -1398,7 +1404,7 @@ class RTreeNode:
             child.calcLevelSizes(levelSizes, level)
 
 
-class RangeTree:
+class _RangeTree:
     __slots__ = ("root", "n", "freeList", "stack", "chromId", "chromSize")
 
     def __init__(self, chromId, chromSize):
@@ -1459,7 +1465,7 @@ class RangeTree:
         try:
             x = self.freeList.pop()
         except IndexError:
-            x = rbTreeNode()
+            x = _RedBlackTreeNode()
         else:
             self.freeList = x.right
         x.left = None
@@ -1518,16 +1524,16 @@ class RangeTree:
             start, end = end, start
         existing = self.find(start, end)
         if existing is None:
-            r = Range(start, end, val=1)
+            r = _Range(start, end, val=1)
             self.add(r)
         else:
             if existing.start <= start and existing.end >= end:
                 if existing.start < start:
-                    r = Range(existing.start, start, existing.val)
+                    r = _Range(existing.start, start, existing.val)
                     existing.start = start
                     self.add(r)
                 if existing.end > end:
-                    r = Range(end, existing.end, existing.val)
+                    r = _Range(end, existing.end, existing.val)
                     existing.end = end
                     self.add(r)
                 existing.val += 1
@@ -1537,21 +1543,21 @@ class RangeTree:
                 e = end
                 for item in items:
                     if s < item.start:
-                        r = Range(s, item.start, 1)
+                        r = _Range(s, item.start, 1)
                         s = item.start
                         self.add(r)
                     elif s > item.start:
-                        r = Range(item.start, s, item.val)
+                        r = _Range(item.start, s, item.val)
                         item.start = s
                         self.add(r)
                     item.val += 1
                     s = item.end
                 if s < e:
-                    r = Range(s, e, 1)
+                    r = _Range(s, e, 1)
                     self.add(r)
 
 
-class Range:
+class _Range:
     __slots__ = ("next", "start", "end", "val")
 
     def __init__(self, start, end, val):
@@ -1560,7 +1566,7 @@ class Range:
         self.val = val
 
 
-class rbTreeNode:
+class _RedBlackTreeNode:
     __slots__ = ("left", "right", "color", "item")
 
     def traverse(self):
@@ -1585,7 +1591,7 @@ class rbTreeNode:
                 yield from self.right.traverse_range(start, end)
 
 
-def bbiChromUsageFromBedFile(alignments, targets, extra_indices):
+def _bbiChromUsageFromBedFile(alignments, targets, extra_indices):
     aveSize = 0
     chromId = 0
     totalBases = 0
@@ -1593,6 +1599,7 @@ def bbiChromUsageFromBedFile(alignments, targets, extra_indices):
     name = ""
     chromUsageList = []
     keySize = 0
+    chromSize = -1
     minDiff = sys.maxsize
     for alignment in alignments:
         chrom = alignment.target.id
@@ -1609,7 +1616,7 @@ def bbiChromUsageFromBedFile(alignments, targets, extra_indices):
         if name != chrom:
             if name > chrom:
                 raise ValueError(
-                    f"alignments are not sorted by target name at alignment [{counter}]"
+                    f"alignments are not sorted by target name at alignment [{bedCount}]"
                 )
             if name:
                 chromUsageList.append((name, chromId, chromSize))
@@ -1619,7 +1626,7 @@ def bbiChromUsageFromBedFile(alignments, targets, extra_indices):
                     break
             else:
                 raise ValueError(
-                    f"failed to find target '{target.name}' in target list at alignment [{counter}]"
+                    f"failed to find target '{target.name}' in target list at alignment [{bedCount}]"
                 )
             name = chrom
             keySize = max(keySize, len(chrom))
@@ -1627,14 +1634,14 @@ def bbiChromUsageFromBedFile(alignments, targets, extra_indices):
             lastStart = -1
         if end > chromSize:
             raise ValueError(
-                f"end coordinate {end} bigger than {chrom} size of {chromSize} at alignment [{counter}]'"
+                f"end coordinate {end} bigger than {chrom} size of {chromSize} at alignment [{bedCount}]'"
             )
         if lastStart >= 0:
             diff = start - lastStart
             if diff < minDiff:
                 if diff < 0:
                     raise ValueError(
-                        f"alignments are not sorted at alignment [{counter}]"
+                        f"alignments are not sorted at alignment [{bedCount}]"
                     )
                 minDiff = diff
         lastStart = start
@@ -1649,7 +1656,7 @@ def bbiChromUsageFromBedFile(alignments, targets, extra_indices):
     return chromUsageList, aveSize, bedCount
 
 
-class RTreeFormatter:
+class _RTreeFormatter:
 
     signature = 0x2468ACE0
 
@@ -1729,7 +1736,7 @@ class RTreeFormatter:
             endFileOffset,
             itemsPerSlot,
         ) = self.formatter_header.unpack(data)
-        assert magic == RTreeFormatter.signature
+        assert magic == _RTreeFormatter.signature
 
         formatter_node = self.formatter_node
         formatter_nonleaf = self.formatter_nonleaf
@@ -1814,7 +1821,7 @@ class RTreeFormatter:
         oneSize = 0
         i = 0
         while i < itemCount:
-            child = RTreeNode()
+            child = _RTreeNode()
             children.append(child)
             startItem = items[i]
             child.startChromId = child.endChromId = startItem.chromId
@@ -1853,7 +1860,7 @@ class RTreeFormatter:
             for child in children:
                 if slotsUsed >= blockSize:
                     slotsUsed = 1
-                    parent = RTreeNode()
+                    parent = _RTreeNode()
                     parent.parent = child.parent
                     parent.startChromId = child.startChromId
                     parent.startBase = child.startBase
@@ -1962,7 +1969,7 @@ class RTreeFormatter:
         )
 
         data = self.formatter_header.pack(
-            RTreeFormatter.signature,
+            _RTreeFormatter.signature,
             blockSize,
             len(items),
             root.startChromId,
@@ -1990,7 +1997,7 @@ class RTreeFormatter:
         self.rWriteLeaves(blockSize, size, root, 0, leafLevel, output)
 
 
-def bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize):
+def _bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize):
     try:
         twiceReduced = twiceReducedList[-1]
     except IndexError:
@@ -2006,7 +2013,7 @@ def bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize):
     twiceReducedList.append(twiceReduced)
 
 
-def bbiSummarySimpleReduce(summaries, reduction):
+def _bbiSummarySimpleReduce(summaries, reduction):
     newSummaries = []
     newSummary = None
     for summary in summaries:
@@ -2022,7 +2029,7 @@ def bbiSummarySimpleReduce(summaries, reduction):
     return newSummaries
 
 
-class BPlusTreeFormatter:
+class _BPlusTreeFormatter:
 
     signature = 0x78CA8C91
 
@@ -2056,7 +2063,7 @@ class BPlusTreeFormatter:
         formatter = self.formatter_header
         data = stream.read(formatter.size)
         magic, blockSize, keySize, valSize, itemCount = formatter.unpack(data)
-        assert magic == BPlusTreeFormatter.signature
+        assert magic == _BPlusTreeFormatter.signature
 
         formatter_node = self.formatter_node
         formatter_nonleaf = struct.Struct(self.fmt_nonleaf.format(keySize=keySize))
@@ -2109,7 +2116,7 @@ class BPlusTreeFormatter:
     def write(self, items, blockSize, output):
         # See bbiWriteChromInfo in bbiWrite.c
 
-        signature = BPlusTreeFormatter.signature
+        signature = _BPlusTreeFormatter.signature
         keySize = items.dtype["name"].itemsize
         valSize = items.itemsize - keySize
         itemCount = len(items)
