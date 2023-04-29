@@ -276,32 +276,37 @@ class ZoomLevels(list):
         alignment = None
         chromUsageList = iter(chromUsageList)
         done = False
-        chromName = None
         while True:
+            if done is True:
+                try:
+                    chromName, chromId, chromSize = next(chromUsageList)
+                except StopIteration:
+                    pass
+                else:
+                    raise Exception
+                break
+            chromName, chromId, chromSize = next(chromUsageList)
+            chromName = chromName.decode()
+            tree = RangeTree(chromId, chromSize)
+            if alignment is not None:
+                tree.addToCoverageDepth(alignment)
             for alignment in alignments:
                 if alignment.target.id != chromName:
                     break
                 tree.addToCoverageDepth(alignment)
             else:
                 done = True
-            if chromName is not None:
-                self.write_stuff(
-                    tree,
-                    totalSum,
-                    chromId,
-                    initialReduction,
-                    chromSize,
-                    buffer,
-                    regions,
-                    twiceReducedList,
-                    doubleReductionSize,
-                )
-            if done is True:
-                break
-            chromName, chromId, chromSize = next(chromUsageList)
-            chromName = chromName.decode()
-            tree = RangeTree(chromId, chromSize)
-            tree.addToCoverageDepth(alignment)
+            self.write_stuff(
+                tree,
+                totalSum,
+                chromId,
+                initialReduction,
+                chromSize,
+                buffer,
+                regions,
+                twiceReducedList,
+                doubleReductionSize,
+            )
         buffer.flush()
         assert len(regions) == initialReduction["size"]
         self[0].amount = initialReduction["scale"]
