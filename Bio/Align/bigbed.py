@@ -70,6 +70,27 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
+class BufferedStream:
+    def __init__(self, output, size):
+        self.buffer = BytesIO()
+        self.output = output
+        self.size = size
+
+    def write(self, item):
+        item.offset = self.output.tell()
+        data = bytes(item)
+        self.buffer.write(data)
+        if self.buffer.tell() == self.size:
+            self.output.write(self.buffer.getvalue())
+            self.buffer.seek(0)
+            self.buffer.truncate(0)
+
+    def flush(self):
+        self.output.write(self.buffer.getvalue())
+        self.buffer.seek(0)
+        self.buffer.truncate(0)
+
+
 # flake8: noqa
 
 
@@ -302,27 +323,6 @@ class ZippedStream(io.BytesIO):
     def getvalue(self):
         data = super().getvalue()
         return zlib.compress(data)
-
-
-class BufferedStream:
-    def __init__(self, output, size):
-        self.buffer = BytesIO()
-        self.output = output
-        self.size = size
-
-    def write(self, item):
-        item.offset = self.output.tell()
-        data = bytes(item)
-        self.buffer.write(data)
-        if self.buffer.tell() == self.size:
-            self.output.write(self.buffer.getvalue())
-            self.buffer.seek(0)
-            self.buffer.truncate(0)
-
-    def flush(self):
-        self.output.write(self.buffer.getvalue())
-        self.buffer.seek(0)
-        self.buffer.truncate(0)
 
 
 class ZippedBufferedStream(BufferedStream):
