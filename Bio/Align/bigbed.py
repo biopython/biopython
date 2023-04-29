@@ -347,13 +347,8 @@ class _ZoomLevels(list):
                     break
                 tree.addToCoverageDepth(alignment)
             summary = _Region(None, -1, -1)
-            for range in tree.root.traverse():
-                val = range.val
-                start = range.start
-                end = range.end
-                size = end - start
-                if size == 0:
-                    size = 1
+            for start, end, val in tree.root.traverse():
+                size = max(end - start, 1)
                 totalSum.update(size, val)
                 if summary.end <= start:
                     if summary.chromId is not None:
@@ -1564,6 +1559,9 @@ class _Range:
         self.start = start
         self.end = end
         self.val = val
+
+    def __iter__(self):
+        return iter((self.start, self.end, self.val))
 
 
 class _RedBlackTreeNode:
