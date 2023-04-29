@@ -274,18 +274,7 @@ class ZoomLevels(list):
         totalSum = Summary()
         alignments.rewind()
         alignment = None
-        chromUsageList = iter(chromUsageList)
-        done = False
-        while True:
-            if done is True:
-                try:
-                    chromName, chromId, chromSize = next(chromUsageList)
-                except StopIteration:
-                    pass
-                else:
-                    raise Exception
-                break
-            chromName, chromId, chromSize = next(chromUsageList)
+        for chromName, chromId, chromSize in chromUsageList:
             chromName = chromName.decode()
             tree = RangeTree(chromId, chromSize)
             if alignment is not None:
@@ -294,8 +283,6 @@ class ZoomLevels(list):
                 if alignment.target.id != chromName:
                     break
                 tree.addToCoverageDepth(alignment)
-            else:
-                done = True
             self.write_stuff(
                 tree,
                 totalSum,
