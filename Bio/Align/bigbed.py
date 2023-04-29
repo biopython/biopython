@@ -271,48 +271,40 @@ class ZoomLevels(list):
         twiceReducedList = []
         doubleReductionSize = initialReduction["scale"] * ZoomLevels.bbiResIncrement
         regions = []
-
         totalSum = Summary()
         alignments.rewind()
         alignment = None
         chromUsageList = iter(chromUsageList)
+        done = False
+        chromName = None
         while True:
-            try:
-                chromName, chromId, chromSize = next(chromUsageList)
-            except StopIteration:
-                break
-            chromName = chromName.decode()
-            tree = RangeTree(chromId, chromSize)
-            if alignment is not None:
-                alignment_start = alignment.coordinates[0, 0]
-                alignment_end = alignment.coordinates[0, -1]
-                if alignment_start > alignment_end:
-                    alignment_start, alignment_end = alignment_end, alignment_start
-                tree.addToCoverageDepth(alignment_start, alignment_end)
             for alignment in alignments:
                 if alignment.target.id != chromName:
                     break
-                alignment_start = alignment.coordinates[0, 0]
-                alignment_end = alignment.coordinates[0, -1]
-                if alignment_start > alignment_end:
-                    alignment_start, alignment_end = alignment_end, alignment_start
-                tree.addToCoverageDepth(alignment_start, alignment_end)
-            self.write_stuff(
-                tree,
-                totalSum,
-                chromId,
-                initialReduction,
-                chromSize,
-                buffer,
-                regions,
-                twiceReducedList,
-                doubleReductionSize,
-            )
+                tree.addToCoverageDepth(alignment)
+            else:
+                done = True
+            if chromName is not None:
+                self.write_stuff(
+                    tree,
+                    totalSum,
+                    chromId,
+                    initialReduction,
+                    chromSize,
+                    buffer,
+                    regions,
+                    twiceReducedList,
+                    doubleReductionSize,
+                )
+            if done is True:
+                break
+            chromName, chromId, chromSize = next(chromUsageList)
+            chromName = chromName.decode()
+            tree = RangeTree(chromId, chromSize)
+            tree.addToCoverageDepth(alignment)
         buffer.flush()
-
         assert len(regions) == initialReduction["size"]
         self[0].amount = initialReduction["scale"]
-
         return twiceReducedList, totalSum, regions
 
     def reduce(self, rezoomedList, initialReduction, buffer, blockSize, itemsPerSlot):
@@ -1553,7 +1545,11 @@ class RangeTree:
                 x = m
                 p = self.stack.pop()
 
-    def addToCoverageDepth(self, start, end):
+    def addToCoverageDepth(self, alignment):
+        start = alignment.coordinates[0, 0]
+        end = alignment.coordinates[0, -1]
+        if start > end:
+            start, end = end, start
         existing = self.find(start, end)
         if existing is None:
             r = Range(start, end, val=1)
