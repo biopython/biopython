@@ -286,6 +286,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Shoichiro Kawauchi <https://github.com/lacrosse91>
 - Shuichiro MAKIGAKI <https://github.com/shuichiro-makigaki>
 - Shyam Saladi <https://github.com/smsaladi>
+- Siddharta Morion <https://github.com/siddhartasr10>
 - Siong Kong <https://github.com/siongkong>
 - Sjoerd de Vries <https://github.com/sjdv1982>
 - Soroush Saffari <https://github.com/sorsaffari>
