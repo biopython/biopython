@@ -206,61 +206,6 @@ class ZoomLevels(list):
             res *= ZoomLevels.bbiResIncrement
         return reductions[:resTry]
 
-    def write_stuff(
-        self,
-        tree,
-        totalSum,
-        chromId,
-        initialReduction,
-        chromSize,
-        buffer,
-        regions,
-        twiceReducedList,
-        doubleReductionSize,
-    ):
-        summary = Region(None, -1, -1)
-        for range in tree.root.traverse():
-            val = range.val
-            start = range.start
-            end = range.end
-            size = end - start
-            if size == 0:
-                size = 1
-
-            totalSum.update(size, val)
-
-            if summary.end <= start:
-                if summary.chromId is not None:
-                    buffer.write(summary)
-                    regions.append(summary)
-                    bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
-                summary = RegionSummary(
-                    chromId,
-                    start,
-                    min(start + initialReduction["scale"], chromSize),
-                    val,
-                )
-            while end > summary.end:
-                overlap = min(end, summary.end) - max(start, summary.start)
-                assert overlap > 0
-                summary.update(overlap, val)
-                buffer.write(summary)
-                regions.append(summary)
-                bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
-                size -= overlap
-                start = summary.end
-                summary = RegionSummary(
-                    chromId,
-                    start,
-                    min(start + initialReduction["scale"], chromSize),
-                    val,
-                )
-            summary.update(size, val)
-        if summary is not None:
-            buffer.write(summary)
-            regions.append(summary)
-            bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
-
     def bedWriteReducedOnceReturnReducedTwice(
         self,
         chromUsageList,
@@ -283,17 +228,46 @@ class ZoomLevels(list):
                 if alignment.target.id != chromName:
                     break
                 tree.addToCoverageDepth(alignment)
-            self.write_stuff(
-                tree,
-                totalSum,
-                chromId,
-                initialReduction,
-                chromSize,
-                buffer,
-                regions,
-                twiceReducedList,
-                doubleReductionSize,
-            )
+            summary = Region(None, -1, -1)
+            for range in tree.root.traverse():
+                val = range.val
+                start = range.start
+                end = range.end
+                size = end - start
+                if size == 0:
+                    size = 1
+                totalSum.update(size, val)
+                if summary.end <= start:
+                    if summary.chromId is not None:
+                        buffer.write(summary)
+                        regions.append(summary)
+                        bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
+                    summary = RegionSummary(
+                        chromId,
+                        start,
+                        min(start + initialReduction["scale"], chromSize),
+                        val,
+                    )
+                while end > summary.end:
+                    overlap = min(end, summary.end) - max(start, summary.start)
+                    assert overlap > 0
+                    summary.update(overlap, val)
+                    buffer.write(summary)
+                    regions.append(summary)
+                    bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
+                    size -= overlap
+                    start = summary.end
+                    summary = RegionSummary(
+                        chromId,
+                        start,
+                        min(start + initialReduction["scale"], chromSize),
+                        val,
+                    )
+                summary.update(size, val)
+            if summary is not None:
+                buffer.write(summary)
+                regions.append(summary)
+                bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
         buffer.flush()
         assert len(regions) == initialReduction["size"]
         self[0].amount = initialReduction["scale"]
