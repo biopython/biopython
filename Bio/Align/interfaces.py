@@ -80,6 +80,25 @@ class AlignmentIterator(ABC):
         """
         return self
 
+    def __len__(self):
+        """Return the number of alignments.
+
+        The number of alignments is cached. If not yet calculated, the iterator
+        is rewound to the beginning, and the number of alignments is calculated
+        by iterating over the alignments. Note that this leaves the iterator at
+        the end of the alignments; you can use the rewind method to set the
+        iterator to the beginning of the alignments.
+        """
+        try:
+            length = self._len
+        except AttributeError:
+            self.rewind()
+            length = 0
+            for alignment in self:
+                length += 1
+            self._len = length
+        return length
+
     def __enter__(self):
         return self
 

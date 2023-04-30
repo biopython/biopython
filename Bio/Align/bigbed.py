@@ -243,15 +243,6 @@ class _ExtraIndex:
         indexFieldCount = 1
         return self.formatter.pack(indexFieldCount, self.fileOffset, self.indexField)
 
-    def initialize_chunks(self, bedCount):
-        keySize = self.maxFieldSize
-        # bbiFile.h: bbNamedFileChunk
-        # name    keySize bytes
-        # offset  8 bytes, unsigned
-        # size    8 bytes, unsigned
-        dtype = np.dtype([("name", f"=S{keySize}"), ("offset", "=u8"), ("size", "=u8")])
-        self.chunks = np.zeros(bedCount, dtype=dtype)
-
 
 class _ExtraIndices(list):
 
@@ -263,6 +254,20 @@ class _ExtraIndices(list):
     @property
     def size(self):
         return self.formatter.size + _ExtraIndex.formatter.size * len(self)
+
+    def initialize(self, bedCount):
+        if bedCount == 0:
+            return
+        for extra_index in self:
+            keySize = extra_index.maxFieldSize
+            # bbiFile.h: bbNamedFileChunk
+            # name    keySize bytes
+            # offset  8 bytes, unsigned
+            # size    8 bytes, unsigned
+            dtype = np.dtype(
+                [("name", f"=S{keySize}"), ("offset", "=u8"), ("size", "=u8")]
+            )
+            extra_index.chunks = np.zeros(bedCount, dtype=dtype)
 
     def tofile(self, stream):
         size = self.formatter.size
@@ -325,16 +330,10 @@ class _ZoomLevels(list):
         return reductions[:resTry]
 
     def bedWriteReducedOnceReturnReducedTwice(
-        self,
-        chromUsageList,
-        alignments,
-        initialReduction,
-        buffer,
+        self, chromUsageList, alignments, initialReduction, buffer, totalSum, regions
     ):
         twiceReducedList = []
         doubleReductionSize = initialReduction["scale"] * _ZoomLevels.bbiResIncrement
-        regions = []
-        totalSum = _Summary()
         alignments.rewind()
         alignment = None
         for chromName, chromId, chromSize in chromUsageList:
@@ -386,7 +385,7 @@ class _ZoomLevels(list):
         buffer.flush()
         assert len(regions) == initialReduction["size"]
         self[0].amount = initialReduction["scale"]
-        return twiceReducedList, totalSum, regions
+        return twiceReducedList
 
     def reduce(self, rezoomedList, initialReduction, buffer, blockSize, itemsPerSlot):
         zoomCount = initialReduction["size"]
@@ -720,7 +719,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         header.fieldCount = len(declaration)
         # see bbFileCreate in bedToBigBed.c
         extra_indices = _ExtraIndices(self.extraIndexNames, declaration)
-        chromUsageList, aveSize, bedCount = _bbiChromUsageFromBedFile(
+        chromUsageList, aveSize = _bbiChromUsageFromBedFile(
             alignments, targets, extra_indices
         )
         stream.write(bytes(header.size))
@@ -737,10 +736,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         )
         header.fullDataOffset = stream.tell()
         reductions = _ZoomLevels.bbiCalcResScalesAndSizes(aveSize)
-        stream.write(bedCount.to_bytes(8, sys.byteorder))
-        if bedCount > 0:
-            for extra_index in extra_indices:
-                extra_index.initialize_chunks(bedCount)
+        stream.write(len(alignments).to_bytes(8, sys.byteorder))
+        extra_indices.initialize(len(alignments))
         maxBlockSize, regions = self.write_alignments(
             alignments,
             stream,
@@ -757,19 +754,13 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         _RTreeFormatter().write(
             regions, self.blockSize, 1, header.fullIndexOffset, stream
         )
-        if bedCount > 0:
-            zoomList, totalSum = self._write_zoom_levels(
-                alignments,
-                stream,
-                header.fullIndexOffset - header.fullDataOffset,
-                chromUsageList,
-                reductions,
-            )
-        else:
-            zoomList = _ZoomLevels([])
-            totalSum = _Summary()
-            totalSum.minVal = 0.0
-            totalSum.maxVal = 0.0
+        zoomList, totalSum = self._write_zoom_levels(
+            alignments,
+            stream,
+            header.fullIndexOffset - header.fullDataOffset,
+            chromUsageList,
+            reductions,
+        )
         header.zoomLevels = len(zoomList)
         for extra_index in extra_indices:
             extra_index.fileOffset = stream.tell()
@@ -789,46 +780,47 @@ class AlignmentWriter(interfaces.AlignmentWriter):
     def _write_zoom_levels(
         self, alignments, output, dataSize, chromUsageList, reductions
     ):
-        blockSize = self.blockSize
-        doCompress = self.compress
-        itemsPerSlot = self.itemsPerSlot
-        maxReducedSize = dataSize / 2
         zoomList = _ZoomLevels()
-        zoomList[0].dataOffset = output.tell()
-
-        for initialReduction in reductions:
-            reducedSize = initialReduction["size"] * _RegionSummary.size
+        totalSum = _Summary()
+        if len(alignments) == 0:
+            totalSum.minVal = 0.0
+            totalSum.maxVal = 0.0
+        else:
+            blockSize = self.blockSize
+            doCompress = self.compress
+            itemsPerSlot = self.itemsPerSlot
+            maxReducedSize = dataSize / 2
+            zoomList[0].dataOffset = output.tell()
+            for initialReduction in reductions:
+                reducedSize = initialReduction["size"] * _RegionSummary.size
+                if doCompress:
+                    reducedSize /= 2
+                if reducedSize <= maxReducedSize:
+                    break
+            else:
+                initialReduction = reductions[0]
+            initialReduction["size"].tofile(output)
+            size = itemsPerSlot * _RegionSummary.size
             if doCompress:
-                reducedSize /= 2
-            if reducedSize <= maxReducedSize:
-                break
-        else:
-            initialReduction = reductions[0]
-        initialReduction["size"].tofile(output)
-
-        size = itemsPerSlot * _RegionSummary.size
-        if doCompress:
-            buffer = _ZippedBufferedStream(output, size)
-        else:
-            buffer = _BufferedStream(output, size)
-
-        (
-            rezoomedList,
-            totalSum,
-            regions,
-        ) = zoomList.bedWriteReducedOnceReturnReducedTwice(
-            chromUsageList, alignments, initialReduction, buffer
-        )
-
-        indexOffset = output.tell()
-        zoomList[0].indexOffset = indexOffset
-        _RTreeFormatter().write(regions, blockSize, itemsPerSlot, indexOffset, output)
-        if doCompress:
-            buffer = _ZippedBufferedStream(output, size)
-        else:
-            buffer = _BufferedStream(output, _RegionSummary.size)
-        zoomList.reduce(rezoomedList, initialReduction, buffer, blockSize, itemsPerSlot)
-
+                buffer = _ZippedBufferedStream(output, size)
+            else:
+                buffer = _BufferedStream(output, size)
+            regions = []
+            rezoomedList = zoomList.bedWriteReducedOnceReturnReducedTwice(
+                chromUsageList, alignments, initialReduction, buffer, totalSum, regions
+            )
+            indexOffset = output.tell()
+            zoomList[0].indexOffset = indexOffset
+            _RTreeFormatter().write(
+                regions, blockSize, itemsPerSlot, indexOffset, output
+            )
+            if doCompress:
+                buffer = _ZippedBufferedStream(output, size)
+            else:
+                buffer = _BufferedStream(output, _RegionSummary.size)
+            zoomList.reduce(
+                rezoomedList, initialReduction, buffer, blockSize, itemsPerSlot
+            )
         return zoomList, totalSum
 
     def _extract_fields(self, alignment):
@@ -1651,7 +1643,8 @@ def _bbiChromUsageFromBedFile(alignments, targets, extra_indices):
     )
     if bedCount > 0:
         aveSize = totalBases / bedCount
-    return chromUsageList, aveSize, bedCount
+    alignments._len = bedCount
+    return chromUsageList, aveSize
 
 
 class _RTreeFormatter:
