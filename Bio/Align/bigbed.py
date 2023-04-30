@@ -346,16 +346,21 @@ class _ZoomLevels(list):
                     break
                 tree.addToCoverageDepth(alignment)
             summary = _Region(None, -1, -1)
-            for start, end, val in tree.root.traverse():
+            ranges = tree.root.traverse()
+            start, end, val = next(ranges)
+            summary = _RegionSummary(
+                chromId,
+                start,
+                min(start + scale, chromSize),
+                val,
+            )
+            while True:
                 size = max(end - start, 1)
                 totalSum.update(size, val)
                 if summary.end <= start:
-                    if summary.chromId is not None:
-                        buffer.write(summary)
-                        regions.append(summary)
-                        _bbiFurtherReduce(
-                            summary, twiceReducedList, doubleReductionSize
-                        )
+                    buffer.write(summary)
+                    regions.append(summary)
+                    _bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
                     summary = _RegionSummary(
                         chromId,
                         start,
@@ -378,6 +383,10 @@ class _ZoomLevels(list):
                         val,
                     )
                 summary.update(size, val)
+                try:
+                    start, end, val = next(ranges)
+                except StopIteration:
+                    break
             if summary is not None:
                 buffer.write(summary)
                 regions.append(summary)
