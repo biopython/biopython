@@ -330,10 +330,10 @@ class _ZoomLevels(list):
         return reductions[:resTry]
 
     def bedWriteReducedOnceReturnReducedTwice(
-        self, chromUsageList, alignments, initialReduction, buffer, totalSum, regions
+        self, chromUsageList, alignments, scale, buffer, totalSum, regions
     ):
         twiceReducedList = []
-        doubleReductionSize = initialReduction["scale"] * _ZoomLevels.bbiResIncrement
+        doubleReductionSize = scale * _ZoomLevels.bbiResIncrement
         alignments.rewind()
         alignment = None
         for chromName, chromId, chromSize in chromUsageList:
@@ -359,7 +359,7 @@ class _ZoomLevels(list):
                     summary = _RegionSummary(
                         chromId,
                         start,
-                        min(start + initialReduction["scale"], chromSize),
+                        min(start + scale, chromSize),
                         val,
                     )
                 while end > summary.end:
@@ -374,7 +374,7 @@ class _ZoomLevels(list):
                     summary = _RegionSummary(
                         chromId,
                         start,
-                        min(start + initialReduction["scale"], chromSize),
+                        min(start + scale, chromSize),
                         val,
                     )
                 summary.update(size, val)
@@ -383,8 +383,6 @@ class _ZoomLevels(list):
                 regions.append(summary)
                 _bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
         buffer.flush()
-        assert len(regions) == initialReduction["size"]
-        self[0].amount = initialReduction["scale"]
         return twiceReducedList
 
     def reduce(self, rezoomedList, initialReduction, buffer, blockSize, itemsPerSlot):
@@ -807,8 +805,15 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 buffer = _BufferedStream(output, size)
             regions = []
             rezoomedList = zoomList.bedWriteReducedOnceReturnReducedTwice(
-                chromUsageList, alignments, initialReduction, buffer, totalSum, regions
+                chromUsageList,
+                alignments,
+                initialReduction["scale"],
+                buffer,
+                totalSum,
+                regions,
             )
+            assert len(regions) == initialReduction["size"]
+            zoomList[0].amount = initialReduction["scale"]
             indexOffset = output.tell()
             zoomList[0].indexOffset = indexOffset
             _RTreeFormatter().write(
