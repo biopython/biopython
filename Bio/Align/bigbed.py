@@ -357,9 +357,6 @@ class _ZoomLevels(list):
                 size = max(end - start, 1)
                 totalSum.update(size, val)
                 if summary.end <= start:
-                    buffer.write(summary)
-                    regions.append(summary)
-                    _bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
                     summary = _RegionSummary(
                         chromId,
                         start,
@@ -386,6 +383,10 @@ class _ZoomLevels(list):
                     start, end, val = next(ranges)
                 except StopIteration:
                     break
+                if summary.end <= start:
+                    buffer.write(summary)
+                    regions.append(summary)
+                    _bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
             buffer.write(summary)
             regions.append(summary)
             _bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
