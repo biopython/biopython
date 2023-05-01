@@ -345,7 +345,6 @@ class _ZoomLevels(list):
                 if alignment.target.id != chromName:
                     break
                 tree.addToCoverageDepth(alignment)
-            summary = _Region(None, -1, -1)
             ranges = tree.root.traverse()
             start, end, val = next(ranges)
             summary = _RegionSummary(
@@ -371,11 +370,11 @@ class _ZoomLevels(list):
                     overlap = min(end, summary.end) - max(start, summary.start)
                     assert overlap > 0
                     summary.update(overlap, val)
+                    size -= overlap
+                    start = summary.end
                     buffer.write(summary)
                     regions.append(summary)
                     _bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
-                    size -= overlap
-                    start = summary.end
                     summary = _RegionSummary(
                         chromId,
                         start,
@@ -387,10 +386,9 @@ class _ZoomLevels(list):
                     start, end, val = next(ranges)
                 except StopIteration:
                     break
-            if summary is not None:
-                buffer.write(summary)
-                regions.append(summary)
-                _bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
+            buffer.write(summary)
+            regions.append(summary)
+            _bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
         buffer.flush()
         return twiceReducedList
 
