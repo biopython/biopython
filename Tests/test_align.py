@@ -176,6 +176,8 @@ class TestBasics(unittest.TestCase):
         alignment.append(SeqRecord(Seq(letters), id="mixed"))
         alignment.append(SeqRecord(Seq(letters.lower()), id="lower"))
         alignment.append(SeqRecord(Seq(letters.upper()), id="upper"))
+        alignment.append(SeqRecord(Seq(letters), id="duplicate"))
+        del alignment[3]
         self.assertEqual(alignment.get_alignment_length(), 26)
         self.assertEqual(len(alignment), 3)
         self.assertEqual(alignment[0].seq, letters)

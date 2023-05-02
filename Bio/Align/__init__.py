@@ -791,6 +791,13 @@ class MultipleSeqAlignment:
                     new.column_annotations[k] = v[col_index]
             return new
 
+    def __delitem__(self, index):
+        """Delete SeqRecord by index or multiple SeqRecords by slice."""
+        if not isinstance(index, int) and not isinstance(index, slice):
+            raise TypeError("Invalid index type.")
+
+        del self._records[index]
+
     def sort(self, key=None, reverse=False):
         """Sort the rows (SeqRecord objects) of the alignment in place.
 
