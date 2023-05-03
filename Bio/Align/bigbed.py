@@ -336,6 +336,7 @@ class _ZoomLevels(list):
         doubleReductionSize = scale * _ZoomLevels.bbiResIncrement
         alignments.rewind()
         alignment = None
+        twiceReduced = None
         for chromName, chromId, chromSize in chromUsageList:
             chromName = chromName.decode()
             tree = _RangeTree(chromId, chromSize)
@@ -345,6 +346,7 @@ class _ZoomLevels(list):
                 if alignment.target.id != chromName:
                     break
                 tree.addToCoverageDepth(alignment)
+            twiceReduced = None
             ranges = tree.root.traverse()
             start, end, val = next(ranges)
             summary = _RegionSummary(
@@ -371,7 +373,14 @@ class _ZoomLevels(list):
                     start = summary.end
                     buffer.write(summary)
                     regions.append(summary)
-                    _bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
+                    if (
+                        twiceReduced is not None
+                        and twiceReduced.start + doubleReductionSize >= summary.end
+                    ):
+                        twiceReduced += summary
+                    else:
+                        twiceReduced = copy.copy(summary)
+                        twiceReducedList.append(twiceReduced)
                     summary = _RegionSummary(
                         chromId,
                         start,
@@ -386,10 +395,24 @@ class _ZoomLevels(list):
                 if summary.end <= start:
                     buffer.write(summary)
                     regions.append(summary)
-                    _bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
+                    if (
+                        twiceReduced is not None
+                        and twiceReduced.start + doubleReductionSize >= summary.end
+                    ):
+                        twiceReduced += summary
+                    else:
+                        twiceReduced = copy.copy(summary)
+                        twiceReducedList.append(twiceReduced)
             buffer.write(summary)
             regions.append(summary)
-            _bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize)
+            if (
+                twiceReduced is not None
+                and twiceReduced.start + doubleReductionSize >= summary.end
+            ):
+                twiceReduced += summary
+            else:
+                twiceReduced = copy.copy(summary)
+                twiceReducedList.append(twiceReduced)
         buffer.flush()
         return twiceReducedList
 
@@ -1999,22 +2022,6 @@ class _RTreeFormatter:
             self.rWriteIndexLevel(root, blockSize, size, 0, i, levelOffset, output)
         leafLevel = levelCount - 2
         self.rWriteLeaves(blockSize, size, root, 0, leafLevel, output)
-
-
-def _bbiFurtherReduce(summary, twiceReducedList, doubleReductionSize):
-    try:
-        twiceReduced = twiceReducedList[-1]
-    except IndexError:
-        pass
-    else:
-        if (
-            twiceReduced.chromId == summary.chromId
-            and twiceReduced.start + doubleReductionSize >= summary.end
-        ):
-            twiceReduced += summary
-            return
-    twiceReduced = copy.copy(summary)
-    twiceReducedList.append(twiceReduced)
 
 
 def _bbiSummarySimpleReduce(summaries, reduction):
