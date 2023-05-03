@@ -330,13 +330,11 @@ class _ZoomLevels(list):
         return reductions[:resTry]
 
     def bedWriteReducedOnceReturnReducedTwice(
-        self, chromUsageList, alignments, scale, buffer, totalSum, regions
+        self, chromUsageList, alignments, scale, totalSum, twiceReducedList
     ):
-        twiceReducedList = []
         doubleReductionSize = scale * _ZoomLevels.bbiResIncrement
         alignments.rewind()
         alignment = None
-        twiceReduced = None
         for chromName, chromId, chromSize in chromUsageList:
             chromName = chromName.decode()
             tree = _RangeTree(chromId, chromSize)
@@ -371,8 +369,7 @@ class _ZoomLevels(list):
                     summary.update(overlap, val)
                     size -= overlap
                     start = summary.end
-                    buffer.write(summary)
-                    regions.append(summary)
+                    yield summary
                     if (
                         twiceReduced is not None
                         and twiceReduced.start + doubleReductionSize >= summary.end
@@ -393,8 +390,7 @@ class _ZoomLevels(list):
                 except StopIteration:
                     break
                 if summary.end <= start:
-                    buffer.write(summary)
-                    regions.append(summary)
+                    yield summary
                     if (
                         twiceReduced is not None
                         and twiceReduced.start + doubleReductionSize >= summary.end
@@ -403,8 +399,7 @@ class _ZoomLevels(list):
                     else:
                         twiceReduced = copy.copy(summary)
                         twiceReducedList.append(twiceReduced)
-            buffer.write(summary)
-            regions.append(summary)
+            yield summary
             if (
                 twiceReduced is not None
                 and twiceReduced.start + doubleReductionSize >= summary.end
@@ -413,8 +408,6 @@ class _ZoomLevels(list):
             else:
                 twiceReduced = copy.copy(summary)
                 twiceReducedList.append(twiceReduced)
-        buffer.flush()
-        return twiceReducedList
 
     def reduce(self, rezoomedList, initialReduction, buffer, blockSize, itemsPerSlot):
         zoomCount = initialReduction["size"]
@@ -835,14 +828,18 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             else:
                 buffer = _BufferedStream(output, size)
             regions = []
-            rezoomedList = zoomList.bedWriteReducedOnceReturnReducedTwice(
+            rezoomedList = []
+            summaries = zoomList.bedWriteReducedOnceReturnReducedTwice(
                 chromUsageList,
                 alignments,
                 initialReduction["scale"],
-                buffer,
                 totalSum,
-                regions,
+                rezoomedList,
             )
+            for summary in summaries:
+                buffer.write(summary)
+                regions.append(summary)
+            buffer.flush()
             assert len(regions) == initialReduction["size"]
             zoomList[0].amount = initialReduction["scale"]
             indexOffset = output.tell()
