@@ -70,391 +70,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
-class _ZippedStream(io.BytesIO):
-    def getvalue(self):
-        data = super().getvalue()
-        return zlib.compress(data)
-
-
-class _BufferedStream:
-    def __init__(self, output, size):
-        self.buffer = BytesIO()
-        self.output = output
-        self.size = size
-
-    def write(self, item):
-        item.offset = self.output.tell()
-        data = bytes(item)
-        self.buffer.write(data)
-        if self.buffer.tell() == self.size:
-            self.output.write(self.buffer.getvalue())
-            self.buffer.seek(0)
-            self.buffer.truncate(0)
-
-    def flush(self):
-        self.output.write(self.buffer.getvalue())
-        self.buffer.seek(0)
-        self.buffer.truncate(0)
-
-
-class _ZippedBufferedStream(_BufferedStream):
-    def write(self, item):
-        item.offset = self.output.tell()
-        data = bytes(item)
-        self.buffer.write(data)
-        if self.buffer.tell() == self.size:
-            self.output.write(zlib.compress(self.buffer.getvalue()))
-            self.buffer.seek(0)
-            self.buffer.truncate(0)
-
-    def flush(self):
-        self.output.write(zlib.compress(self.buffer.getvalue()))
-        self.buffer.seek(0)
-        self.buffer.truncate(0)
-
-
-class _Header:
-    __slots__ = (
-        "byteorder",
-        "zoomLevels",
-        "chromosomeTreeOffset",
-        "fullDataOffset",
-        "fullIndexOffset",
-        "fieldCount",
-        "definedFieldCount",
-        "autoSqlOffset",
-        "totalSummaryOffset",
-        "uncompressBufSize",
-        "extraIndicesOffset",
-    )
-
-    # Supplemental Table 5: Common header
-    # magic                  4 bytes, unsigned
-    # version                2 bytes, unsigned
-    # zoomLevels             2 bytes, unsigned
-    # chromosomeTreeOffset   8 bytes, unsigned
-    # fullDataOffset         8 bytes, unsigned
-    # fullIndexOffset        8 bytes, unsigned
-    # fieldCount             2 bytes, unsigned
-    # definedFieldCount      2 bytes, unsigned
-    # autoSqlOffset          8 bytes, unsigned
-    # totalSummaryOffset     8 bytes, unsigned
-    # uncompressBufSize      4 bytes, unsigned
-    # reserved               8 bytes, unsigned
-
-    formatter = struct.Struct("=IHHQQQHHQQIQ")
-    size = formatter.size
-    signature = 0x8789F2EB
-    bbiCurrentVersion = 4
-
-    @classmethod
-    def fromfile(cls, stream):
-        magic = stream.read(4)
-        if int.from_bytes(magic, byteorder="little") == _Header.signature:
-            byteorder = "<"
-        elif int.from_bytes(magic, byteorder="big") == _Header.signature:
-            byteorder = ">"
-        else:
-            raise ValueError("not a bigBed file")
-        formatter = struct.Struct(byteorder + "HHQQQHHQQIQ")
-        header = _Header()
-        header.byteorder = byteorder
-        size = formatter.size
-        data = stream.read(size)
-        (
-            version,
-            header.zoomLevels,
-            header.chromosomeTreeOffset,
-            header.fullDataOffset,
-            header.fullIndexOffset,
-            header.fieldCount,
-            header.definedFieldCount,
-            header.autoSqlOffset,
-            header.totalSummaryOffset,
-            header.uncompressBufSize,
-            header.extraIndicesOffset,
-        ) = formatter.unpack(data)
-        assert version == _Header.bbiCurrentVersion
-        definedFieldCount = header.definedFieldCount
-        if definedFieldCount < 3 or definedFieldCount > 12:
-            raise ValueError(
-                "expected between 3 and 12 columns, found %d" % definedFieldCount
-            )
-        return header
-
-    def __bytes__(self):
-        return _Header.formatter.pack(
-            _Header.signature,
-            _Header.bbiCurrentVersion,
-            self.zoomLevels,
-            self.chromosomeTreeOffset,
-            self.fullDataOffset,
-            self.fullIndexOffset,
-            self.fieldCount,
-            self.definedFieldCount,
-            self.autoSqlOffset,
-            self.totalSummaryOffset,
-            self.uncompressBufSize,
-            self.extraIndicesOffset,
-        )
-
-
-class _ExtraIndex:
-    __slots__ = ("indexField", "maxFieldSize", "fileOffset", "chunks", "get_value")
-
-    formatter = struct.Struct("=xxHQxxxxHxx")
-
-    def __init__(self, name, declaration):
-        self.maxFieldSize = 0
-        self.fileOffset = None
-        for index, field in enumerate(declaration):
-            if field.name == name:
-                break
-        else:
-            raise ValueError(
-                "extraIndex field %s not a standard bed field or found in 'as' file.",
-                name,
-            ) from None
-        if field.as_type != "string":
-            raise ValueError("Sorry for now can only index string fields.")
-        self.indexField = index
-        if name == "chrom":
-            self.get_value = lambda alignment: alignment.target.id
-        elif name == "name":
-            self.get_value = lambda alignment: alignment.query.id
-        else:
-            self.get_value = lambda alignment: alignment.annotations[name]
-
-    def updateMaxFieldSize(self, alignment):
-        value = self.get_value(alignment)
-        size = len(value)
-        if size > self.maxFieldSize:
-            self.maxFieldSize = size
-
-    def addKeysFromRow(self, alignment, recordIx):
-        value = self.get_value(alignment)
-        self.chunks[recordIx]["name"] = value.encode()
-
-    def addOffsetSize(self, offset, size, startIx, endIx):
-        self.chunks[startIx:endIx]["offset"] = offset
-        self.chunks[startIx:endIx]["size"] = size
-
-    def __bytes__(self):
-        indexFieldCount = 1
-        return self.formatter.pack(indexFieldCount, self.fileOffset, self.indexField)
-
-
-class _ExtraIndices(list):
-
-    formatter = struct.Struct("=HHQ52x")
-
-    def __init__(self, names, declaration):
-        self[:] = [_ExtraIndex(name, declaration) for name in names]
-
-    @property
-    def size(self):
-        return self.formatter.size + _ExtraIndex.formatter.size * len(self)
-
-    def initialize(self, bedCount):
-        if bedCount == 0:
-            return
-        for extra_index in self:
-            keySize = extra_index.maxFieldSize
-            # bbiFile.h: bbNamedFileChunk
-            # name    keySize bytes
-            # offset  8 bytes, unsigned
-            # size    8 bytes, unsigned
-            dtype = np.dtype(
-                [("name", f"=S{keySize}"), ("offset", "=u8"), ("size", "=u8")]
-            )
-            extra_index.chunks = np.zeros(bedCount, dtype=dtype)
-
-    def tofile(self, stream):
-        size = self.formatter.size
-        if len(self) > 0:
-            offset = stream.tell() + size
-            data = self.formatter.pack(size, len(self), offset)
-            stream.write(data)
-            for extra_index in self:
-                stream.write(bytes(extra_index))
-        else:
-            data = self.formatter.pack(size, 0, 0)
-            stream.write(data)
-
-
-class _ZoomLevel:
-    __slots__ = ["amount", "dataOffset", "indexOffset"]
-
-    # Supplemental Table 6: The zoom header
-    # reductionLevel   4 bytes, unsigned
-    # reserved         4 bytes, unsigned
-    # dataOffset       8 bytes, unsigned
-    # indexOffset      8 bytes, unsigned
-
-    formatter = struct.Struct("=IxxxxQQ")
-
-    def __bytes__(self):
-        return self.formatter.pack(self.amount, self.dataOffset, self.indexOffset)
-
-
-class _ZoomLevels(list):
-
-    bbiResIncrement = 4
-    bbiMaxZoomLevels = 10
-    size = _ZoomLevel.formatter.size * bbiMaxZoomLevels
-
-    def __init__(self):
-        self[:] = [_ZoomLevel() for i in range(_ZoomLevels.bbiMaxZoomLevels)]
-
-    def __bytes__(self):
-        data = b"".join(bytes(item) for item in self)
-        data += bytes(_ZoomLevels.size - len(data))
-        return data
-
-    @classmethod
-    def calculate_reductions(cls, aveSize):
-        # See bbiCalcResScalesAndSizes in bbiWrite.c
-        bbiMaxZoomLevels = _ZoomLevels.bbiMaxZoomLevels
-        reductions = np.zeros(
-            bbiMaxZoomLevels,
-            dtype=[("scale", "=i4"), ("size", "=i4"), ("end", "=i4")],
-        )
-        minZoom = 10
-        res = max(int(aveSize), minZoom)
-        maxInt = np.iinfo(reductions.dtype["scale"]).max
-        for resTry in range(bbiMaxZoomLevels):
-            if res > maxInt:
-                break
-            reductions[resTry]["scale"] = res
-            res *= _ZoomLevels.bbiResIncrement
-        return reductions[:resTry]
-
-    def reduce(self, summaries, initialReduction, buffer, blockSize, itemsPerSlot):
-        zoomCount = initialReduction["size"]
-        reduction = initialReduction["scale"] * _ZoomLevels.bbiResIncrement
-        output = buffer.output
-        formatter = _RTreeFormatter()
-        for zoomLevels in range(1, _ZoomLevels.bbiMaxZoomLevels):
-            rezoomCount = len(summaries)
-            if rezoomCount >= zoomCount:
-                break
-            zoomCount = rezoomCount
-            self[zoomLevels].dataOffset = output.tell()
-            data = zoomCount.to_bytes(4, sys.byteorder)
-            output.write(data)
-            for summary in summaries:
-                buffer.write(summary)
-            buffer.flush()
-            indexOffset = output.tell()
-            formatter.write(summaries, blockSize, itemsPerSlot, indexOffset, output)
-            self[zoomLevels].indexOffset = indexOffset
-            self[zoomLevels].amount = reduction
-            reduction *= _ZoomLevels.bbiResIncrement
-            i = 0
-            chromId = None
-            for summary in summaries:
-                if summary.chromId != chromId or summary.end > end:  # noqa: F821
-                    end = summary.start + reduction
-                    chromId = summary.chromId
-                    currentSummary = summary
-                    summaries[i] = currentSummary
-                    i += 1
-                else:
-                    currentSummary += summary
-            del summaries[i:]
-        del self[zoomLevels:]
-
-
-class _Summary:
-    __slots__ = ("validCount", "minVal", "maxVal", "sumData", "sumSquares")
-
-    formatter = struct.Struct("=Qdddd")
-    size = formatter.size
-
-    def __init__(self):
-        self.validCount = 0
-        self.minVal = sys.maxsize
-        self.maxVal = -sys.maxsize
-        self.sumData = 0.0
-        self.sumSquares = 0.0
-
-    def update(self, size, val):
-        self.validCount += size
-        if val < self.minVal:
-            self.minVal = val
-        if val > self.maxVal:
-            self.maxVal = val
-        self.sumData += val * size
-        self.sumSquares += val * val * size
-
-    def __bytes__(self):
-        return self.formatter.pack(
-            self.validCount,
-            self.minVal,
-            self.maxVal,
-            self.sumData,
-            self.sumSquares,
-        )
-
-
-class _Region:
-    __slots__ = ("chromId", "start", "end", "offset")
-
-    def __init__(self, chromId, start, end):
-        self.chromId = chromId
-        self.start = start
-        self.end = end
-
-
-class _RegionSummary(_Summary):
-
-    __slots__ = _Region.__slots__ + _Summary.__slots__
-
-    formatter = struct.Struct("=IIIIffff")
-    size = formatter.size
-
-    def __init__(self, chromId, start, end, value):
-        self.chromId = chromId
-        self.start = start
-        self.end = end
-        self.validCount = 0
-        self.minVal = np.float32(value)
-        self.maxVal = np.float32(value)
-        self.sumData = np.float32(0.0)
-        self.sumSquares = np.float32(0.0)
-        self.offset = None
-
-    def __iadd__(self, other):
-        self.end = other.end
-        self.validCount += other.validCount
-        self.minVal = min(self.minVal, other.minVal)
-        self.maxVal = max(self.maxVal, other.maxVal)
-        self.sumData = np.float32(self.sumData + other.sumData)
-        self.sumSquares = np.float32(self.sumSquares + other.sumSquares)
-        return self
-
-    def update(self, overlap, val):
-        self.validCount += overlap
-        if self.minVal > val:
-            self.minVal = np.float32(val)
-        if self.maxVal < val:
-            self.maxVal = np.float32(val)
-        self.sumData = np.float32(self.sumData + val * overlap)
-        self.sumSquares = np.float32(self.sumSquares + val * val * overlap)
-
-    def __bytes__(self):
-        return self.formatter.pack(
-            self.chromId,
-            self.start,
-            self.end,
-            self.validCount,
-            self.minVal,
-            self.maxVal,
-            self.sumData,
-            self.sumSquares,
-        )
-
-
 Field = namedtuple("Field", ("as_type", "name", "comment"))
 
 
@@ -1398,6 +1013,391 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         for row in data:
             alignment = self._create_alignment(row)
             yield alignment
+
+
+class _ZippedStream(io.BytesIO):
+    def getvalue(self):
+        data = super().getvalue()
+        return zlib.compress(data)
+
+
+class _BufferedStream:
+    def __init__(self, output, size):
+        self.buffer = BytesIO()
+        self.output = output
+        self.size = size
+
+    def write(self, item):
+        item.offset = self.output.tell()
+        data = bytes(item)
+        self.buffer.write(data)
+        if self.buffer.tell() == self.size:
+            self.output.write(self.buffer.getvalue())
+            self.buffer.seek(0)
+            self.buffer.truncate(0)
+
+    def flush(self):
+        self.output.write(self.buffer.getvalue())
+        self.buffer.seek(0)
+        self.buffer.truncate(0)
+
+
+class _ZippedBufferedStream(_BufferedStream):
+    def write(self, item):
+        item.offset = self.output.tell()
+        data = bytes(item)
+        self.buffer.write(data)
+        if self.buffer.tell() == self.size:
+            self.output.write(zlib.compress(self.buffer.getvalue()))
+            self.buffer.seek(0)
+            self.buffer.truncate(0)
+
+    def flush(self):
+        self.output.write(zlib.compress(self.buffer.getvalue()))
+        self.buffer.seek(0)
+        self.buffer.truncate(0)
+
+
+class _Header:
+    __slots__ = (
+        "byteorder",
+        "zoomLevels",
+        "chromosomeTreeOffset",
+        "fullDataOffset",
+        "fullIndexOffset",
+        "fieldCount",
+        "definedFieldCount",
+        "autoSqlOffset",
+        "totalSummaryOffset",
+        "uncompressBufSize",
+        "extraIndicesOffset",
+    )
+
+    # Supplemental Table 5: Common header
+    # magic                  4 bytes, unsigned
+    # version                2 bytes, unsigned
+    # zoomLevels             2 bytes, unsigned
+    # chromosomeTreeOffset   8 bytes, unsigned
+    # fullDataOffset         8 bytes, unsigned
+    # fullIndexOffset        8 bytes, unsigned
+    # fieldCount             2 bytes, unsigned
+    # definedFieldCount      2 bytes, unsigned
+    # autoSqlOffset          8 bytes, unsigned
+    # totalSummaryOffset     8 bytes, unsigned
+    # uncompressBufSize      4 bytes, unsigned
+    # reserved               8 bytes, unsigned
+
+    formatter = struct.Struct("=IHHQQQHHQQIQ")
+    size = formatter.size
+    signature = 0x8789F2EB
+    bbiCurrentVersion = 4
+
+    @classmethod
+    def fromfile(cls, stream):
+        magic = stream.read(4)
+        if int.from_bytes(magic, byteorder="little") == _Header.signature:
+            byteorder = "<"
+        elif int.from_bytes(magic, byteorder="big") == _Header.signature:
+            byteorder = ">"
+        else:
+            raise ValueError("not a bigBed file")
+        formatter = struct.Struct(byteorder + "HHQQQHHQQIQ")
+        header = _Header()
+        header.byteorder = byteorder
+        size = formatter.size
+        data = stream.read(size)
+        (
+            version,
+            header.zoomLevels,
+            header.chromosomeTreeOffset,
+            header.fullDataOffset,
+            header.fullIndexOffset,
+            header.fieldCount,
+            header.definedFieldCount,
+            header.autoSqlOffset,
+            header.totalSummaryOffset,
+            header.uncompressBufSize,
+            header.extraIndicesOffset,
+        ) = formatter.unpack(data)
+        assert version == _Header.bbiCurrentVersion
+        definedFieldCount = header.definedFieldCount
+        if definedFieldCount < 3 or definedFieldCount > 12:
+            raise ValueError(
+                "expected between 3 and 12 columns, found %d" % definedFieldCount
+            )
+        return header
+
+    def __bytes__(self):
+        return _Header.formatter.pack(
+            _Header.signature,
+            _Header.bbiCurrentVersion,
+            self.zoomLevels,
+            self.chromosomeTreeOffset,
+            self.fullDataOffset,
+            self.fullIndexOffset,
+            self.fieldCount,
+            self.definedFieldCount,
+            self.autoSqlOffset,
+            self.totalSummaryOffset,
+            self.uncompressBufSize,
+            self.extraIndicesOffset,
+        )
+
+
+class _ExtraIndex:
+    __slots__ = ("indexField", "maxFieldSize", "fileOffset", "chunks", "get_value")
+
+    formatter = struct.Struct("=xxHQxxxxHxx")
+
+    def __init__(self, name, declaration):
+        self.maxFieldSize = 0
+        self.fileOffset = None
+        for index, field in enumerate(declaration):
+            if field.name == name:
+                break
+        else:
+            raise ValueError(
+                "extraIndex field %s not a standard bed field or found in 'as' file.",
+                name,
+            ) from None
+        if field.as_type != "string":
+            raise ValueError("Sorry for now can only index string fields.")
+        self.indexField = index
+        if name == "chrom":
+            self.get_value = lambda alignment: alignment.target.id
+        elif name == "name":
+            self.get_value = lambda alignment: alignment.query.id
+        else:
+            self.get_value = lambda alignment: alignment.annotations[name]
+
+    def updateMaxFieldSize(self, alignment):
+        value = self.get_value(alignment)
+        size = len(value)
+        if size > self.maxFieldSize:
+            self.maxFieldSize = size
+
+    def addKeysFromRow(self, alignment, recordIx):
+        value = self.get_value(alignment)
+        self.chunks[recordIx]["name"] = value.encode()
+
+    def addOffsetSize(self, offset, size, startIx, endIx):
+        self.chunks[startIx:endIx]["offset"] = offset
+        self.chunks[startIx:endIx]["size"] = size
+
+    def __bytes__(self):
+        indexFieldCount = 1
+        return self.formatter.pack(indexFieldCount, self.fileOffset, self.indexField)
+
+
+class _ExtraIndices(list):
+
+    formatter = struct.Struct("=HHQ52x")
+
+    def __init__(self, names, declaration):
+        self[:] = [_ExtraIndex(name, declaration) for name in names]
+
+    @property
+    def size(self):
+        return self.formatter.size + _ExtraIndex.formatter.size * len(self)
+
+    def initialize(self, bedCount):
+        if bedCount == 0:
+            return
+        for extra_index in self:
+            keySize = extra_index.maxFieldSize
+            # bbiFile.h: bbNamedFileChunk
+            # name    keySize bytes
+            # offset  8 bytes, unsigned
+            # size    8 bytes, unsigned
+            dtype = np.dtype(
+                [("name", f"=S{keySize}"), ("offset", "=u8"), ("size", "=u8")]
+            )
+            extra_index.chunks = np.zeros(bedCount, dtype=dtype)
+
+    def tofile(self, stream):
+        size = self.formatter.size
+        if len(self) > 0:
+            offset = stream.tell() + size
+            data = self.formatter.pack(size, len(self), offset)
+            stream.write(data)
+            for extra_index in self:
+                stream.write(bytes(extra_index))
+        else:
+            data = self.formatter.pack(size, 0, 0)
+            stream.write(data)
+
+
+class _ZoomLevel:
+    __slots__ = ["amount", "dataOffset", "indexOffset"]
+
+    # Supplemental Table 6: The zoom header
+    # reductionLevel   4 bytes, unsigned
+    # reserved         4 bytes, unsigned
+    # dataOffset       8 bytes, unsigned
+    # indexOffset      8 bytes, unsigned
+
+    formatter = struct.Struct("=IxxxxQQ")
+
+    def __bytes__(self):
+        return self.formatter.pack(self.amount, self.dataOffset, self.indexOffset)
+
+
+class _ZoomLevels(list):
+
+    bbiResIncrement = 4
+    bbiMaxZoomLevels = 10
+    size = _ZoomLevel.formatter.size * bbiMaxZoomLevels
+
+    def __init__(self):
+        self[:] = [_ZoomLevel() for i in range(_ZoomLevels.bbiMaxZoomLevels)]
+
+    def __bytes__(self):
+        data = b"".join(bytes(item) for item in self)
+        data += bytes(_ZoomLevels.size - len(data))
+        return data
+
+    @classmethod
+    def calculate_reductions(cls, aveSize):
+        # See bbiCalcResScalesAndSizes in bbiWrite.c
+        bbiMaxZoomLevels = _ZoomLevels.bbiMaxZoomLevels
+        reductions = np.zeros(
+            bbiMaxZoomLevels,
+            dtype=[("scale", "=i4"), ("size", "=i4"), ("end", "=i4")],
+        )
+        minZoom = 10
+        res = max(int(aveSize), minZoom)
+        maxInt = np.iinfo(reductions.dtype["scale"]).max
+        for resTry in range(bbiMaxZoomLevels):
+            if res > maxInt:
+                break
+            reductions[resTry]["scale"] = res
+            res *= _ZoomLevels.bbiResIncrement
+        return reductions[:resTry]
+
+    def reduce(self, summaries, initialReduction, buffer, blockSize, itemsPerSlot):
+        zoomCount = initialReduction["size"]
+        reduction = initialReduction["scale"] * _ZoomLevels.bbiResIncrement
+        output = buffer.output
+        formatter = _RTreeFormatter()
+        for zoomLevels in range(1, _ZoomLevels.bbiMaxZoomLevels):
+            rezoomCount = len(summaries)
+            if rezoomCount >= zoomCount:
+                break
+            zoomCount = rezoomCount
+            self[zoomLevels].dataOffset = output.tell()
+            data = zoomCount.to_bytes(4, sys.byteorder)
+            output.write(data)
+            for summary in summaries:
+                buffer.write(summary)
+            buffer.flush()
+            indexOffset = output.tell()
+            formatter.write(summaries, blockSize, itemsPerSlot, indexOffset, output)
+            self[zoomLevels].indexOffset = indexOffset
+            self[zoomLevels].amount = reduction
+            reduction *= _ZoomLevels.bbiResIncrement
+            i = 0
+            chromId = None
+            for summary in summaries:
+                if summary.chromId != chromId or summary.end > end:  # noqa: F821
+                    end = summary.start + reduction
+                    chromId = summary.chromId
+                    currentSummary = summary
+                    summaries[i] = currentSummary
+                    i += 1
+                else:
+                    currentSummary += summary
+            del summaries[i:]
+        del self[zoomLevels:]
+
+
+class _Summary:
+    __slots__ = ("validCount", "minVal", "maxVal", "sumData", "sumSquares")
+
+    formatter = struct.Struct("=Qdddd")
+    size = formatter.size
+
+    def __init__(self):
+        self.validCount = 0
+        self.minVal = sys.maxsize
+        self.maxVal = -sys.maxsize
+        self.sumData = 0.0
+        self.sumSquares = 0.0
+
+    def update(self, size, val):
+        self.validCount += size
+        if val < self.minVal:
+            self.minVal = val
+        if val > self.maxVal:
+            self.maxVal = val
+        self.sumData += val * size
+        self.sumSquares += val * val * size
+
+    def __bytes__(self):
+        return self.formatter.pack(
+            self.validCount,
+            self.minVal,
+            self.maxVal,
+            self.sumData,
+            self.sumSquares,
+        )
+
+
+class _Region:
+    __slots__ = ("chromId", "start", "end", "offset")
+
+    def __init__(self, chromId, start, end):
+        self.chromId = chromId
+        self.start = start
+        self.end = end
+
+
+class _RegionSummary(_Summary):
+
+    __slots__ = _Region.__slots__ + _Summary.__slots__
+
+    formatter = struct.Struct("=IIIIffff")
+    size = formatter.size
+
+    def __init__(self, chromId, start, end, value):
+        self.chromId = chromId
+        self.start = start
+        self.end = end
+        self.validCount = 0
+        self.minVal = np.float32(value)
+        self.maxVal = np.float32(value)
+        self.sumData = np.float32(0.0)
+        self.sumSquares = np.float32(0.0)
+        self.offset = None
+
+    def __iadd__(self, other):
+        self.end = other.end
+        self.validCount += other.validCount
+        self.minVal = min(self.minVal, other.minVal)
+        self.maxVal = max(self.maxVal, other.maxVal)
+        self.sumData = np.float32(self.sumData + other.sumData)
+        self.sumSquares = np.float32(self.sumSquares + other.sumSquares)
+        return self
+
+    def update(self, overlap, val):
+        self.validCount += overlap
+        if self.minVal > val:
+            self.minVal = np.float32(val)
+        if self.maxVal < val:
+            self.maxVal = np.float32(val)
+        self.sumData = np.float32(self.sumData + val * overlap)
+        self.sumSquares = np.float32(self.sumSquares + val * val * overlap)
+
+    def __bytes__(self):
+        return self.formatter.pack(
+            self.chromId,
+            self.start,
+            self.end,
+            self.validCount,
+            self.minVal,
+            self.maxVal,
+            self.sumData,
+            self.sumSquares,
+        )
 
 
 class _RTreeNode:
