@@ -148,7 +148,7 @@ class _Header:
     bbiCurrentVersion = 4
 
     @classmethod
-    def from_file(cls, stream):
+    def fromfile(cls, stream):
         magic = stream.read(4)
         if int.from_bytes(magic, byteorder="little") == _Header.signature:
             byteorder = "<"
@@ -312,7 +312,7 @@ class _ZoomLevels(list):
         return data
 
     @classmethod
-    def bbiCalcResScalesAndSizes(self, aveSize):
+    def calculate_reductions(cls, aveSize):
         # See bbiCalcResScalesAndSizes in bbiWrite.c
         bbiMaxZoomLevels = _ZoomLevels.bbiMaxZoomLevels
         reductions = np.zeros(
@@ -672,7 +672,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         header.fieldCount = len(declaration)
         # see bbFileCreate in bedToBigBed.c
         extra_indices = _ExtraIndices(self.extraIndexNames, declaration)
-        chromUsageList, aveSize = _bbiChromUsageFromBedFile(
+        chromUsageList, aveSize = self._get_chrom_usage(
             alignments, targets, extra_indices
         )
         stream.write(bytes(header.size))
@@ -688,7 +688,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             chromUsageList, min(self.blockSize, len(chromUsageList)), stream
         )
         header.fullDataOffset = stream.tell()
-        reductions = _ZoomLevels.bbiCalcResScalesAndSizes(aveSize)
+        reductions = _ZoomLevels.calculate_reductions(aveSize)
         stream.write(len(alignments).to_bytes(8, sys.byteorder))
         extra_indices.initialize(len(alignments))
         maxBlockSize, regions = self.write_alignments(
@@ -729,6 +729,71 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream.seek(0, io.SEEK_END)
         data = header.signature.to_bytes(4, sys.byteorder)
         stream.write(data)
+
+    def _get_chrom_usage(cls, alignments, targets, extra_indices):
+        aveSize = 0
+        chromId = 0
+        totalBases = 0
+        bedCount = 0
+        name = ""
+        chromUsageList = []
+        keySize = 0
+        chromSize = -1
+        minDiff = sys.maxsize
+        for alignment in alignments:
+            chrom = alignment.target.id
+            start = alignment.coordinates[0, 0]
+            end = alignment.coordinates[0, -1]
+            for extra_index in extra_indices:
+                extra_index.updateMaxFieldSize(alignment)
+            if start > end:
+                raise ValueError(
+                    f"end ({end}) before start ({start}) in alignment [{bedCount}]"
+                )
+            bedCount += 1
+            totalBases += end - start
+            if name != chrom:
+                if name > chrom:
+                    raise ValueError(
+                        f"alignments are not sorted by target name at alignment [{bedCount}]"
+                    )
+                if name:
+                    chromUsageList.append((name, chromId, chromSize))
+                    chromId += 1
+                for target in targets:
+                    if target.id == chrom:
+                        break
+                else:
+                    raise ValueError(
+                        f"failed to find target '{target.name}' in target list at alignment [{bedCount}]"
+                    )
+                name = chrom
+                keySize = max(keySize, len(chrom))
+                chromSize = len(target)
+                lastStart = -1
+            if end > chromSize:
+                raise ValueError(
+                    f"end coordinate {end} bigger than {chrom} size of {chromSize} at alignment [{bedCount}]'"
+                )
+            if lastStart >= 0:
+                diff = start - lastStart
+                if diff < minDiff:
+                    if diff < 0:
+                        raise ValueError(
+                            f"alignments are not sorted at alignment [{bedCount}]"
+                        )
+                    minDiff = diff
+            lastStart = start
+        if name:
+            chromUsageList.append((name, chromId, chromSize))
+        chromUsageList = np.array(
+            chromUsageList,
+            dtype=[("name", f"S{keySize}"), ("id", "=i4"), ("size", "=i4")],
+        )
+        if bedCount > 0:
+            aveSize = totalBases / bedCount
+        alignments._len = bedCount
+        return chromUsageList, aveSize
 
     def _write_zoom_levels(
         self, alignments, output, dataSize, chromUsageList, reductions
@@ -1009,7 +1074,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     mode = "b"
 
     def _read_header(self, stream):
-        header = _Header.from_file(stream)
+        header = _Header.fromfile(stream)
         byteorder = header.byteorder
         autoSqlOffset = header.autoSqlOffset
         self.byteorder = byteorder
@@ -1606,72 +1671,6 @@ class _RedBlackTreeNode:
             yield self.item
             if self.right is not None:
                 yield from self.right.traverse_range(start, end)
-
-
-def _bbiChromUsageFromBedFile(alignments, targets, extra_indices):
-    aveSize = 0
-    chromId = 0
-    totalBases = 0
-    bedCount = 0
-    name = ""
-    chromUsageList = []
-    keySize = 0
-    chromSize = -1
-    minDiff = sys.maxsize
-    for alignment in alignments:
-        chrom = alignment.target.id
-        start = alignment.coordinates[0, 0]
-        end = alignment.coordinates[0, -1]
-        for extra_index in extra_indices:
-            extra_index.updateMaxFieldSize(alignment)
-        if start > end:
-            raise ValueError(
-                f"end ({end}) before start ({start}) in alignment [{bedCount}]"
-            )
-        bedCount += 1
-        totalBases += end - start
-        if name != chrom:
-            if name > chrom:
-                raise ValueError(
-                    f"alignments are not sorted by target name at alignment [{bedCount}]"
-                )
-            if name:
-                chromUsageList.append((name, chromId, chromSize))
-                chromId += 1
-            for target in targets:
-                if target.id == chrom:
-                    break
-            else:
-                raise ValueError(
-                    f"failed to find target '{target.name}' in target list at alignment [{bedCount}]"
-                )
-            name = chrom
-            keySize = max(keySize, len(chrom))
-            chromSize = len(target)
-            lastStart = -1
-        if end > chromSize:
-            raise ValueError(
-                f"end coordinate {end} bigger than {chrom} size of {chromSize} at alignment [{bedCount}]'"
-            )
-        if lastStart >= 0:
-            diff = start - lastStart
-            if diff < minDiff:
-                if diff < 0:
-                    raise ValueError(
-                        f"alignments are not sorted at alignment [{bedCount}]"
-                    )
-                minDiff = diff
-        lastStart = start
-    if name:
-        chromUsageList.append((name, chromId, chromSize))
-    chromUsageList = np.array(
-        chromUsageList,
-        dtype=[("name", f"S{keySize}"), ("id", "=i4"), ("size", "=i4")],
-    )
-    if bedCount > 0:
-        aveSize = totalBases / bedCount
-    alignments._len = bedCount
-    return chromUsageList, aveSize
 
 
 class _RTreeFormatter:
