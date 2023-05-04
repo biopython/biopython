@@ -350,7 +350,8 @@ class _ZoomLevels(list):
             self[zoomLevels].indexOffset = indexOffset
             self[zoomLevels].amount = reduction
             reduction *= _ZoomLevels.bbiResIncrement
-            rezoomedList = _bbiSummarySimpleReduce(rezoomedList, reduction)
+            newRezoomedList = _bbiSummarySimpleReduce(rezoomedList, reduction)
+            rezoomedList[:] = newRezoomedList[:]
         self[:] = self[:zoomLevels]
 
 
@@ -749,24 +750,21 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 buffer = _BufferedStream(output, size)
             regions = []
             rezoomedList = []
-            twiceReducedList = rezoomedList
             trees = _RangeTree.generate(chromUsageList, alignments)
             scale = initialReduction["scale"]
             doubleReductionSize = scale * _ZoomLevels.bbiResIncrement
             for tree in trees:
-                twiceReduced = None
+                start = -sys.maxsize
                 summaries = tree.generate_summaries(scale, totalSum)
                 for summary in summaries:
                     buffer.write(summary)
                     regions.append(summary)
-                    if (
-                        twiceReduced is not None
-                        and twiceReduced.start + doubleReductionSize >= summary.end
-                    ):
-                        twiceReduced += summary
+                    if start + doubleReductionSize < summary.end:
+                        rezoomed = copy.copy(summary)
+                        start = rezoomed.start
+                        rezoomedList.append(rezoomed)
                     else:
-                        twiceReduced = copy.copy(summary)
-                        twiceReducedList.append(twiceReduced)
+                        rezoomed += summary
             buffer.flush()
             assert len(regions) == initialReduction["size"]
             zoomList[0].amount = initialReduction["scale"]
@@ -2009,15 +2007,13 @@ class _RTreeFormatter:
 
 def _bbiSummarySimpleReduce(summaries, reduction):
     newSummaries = []
-    newSummary = None
+    chromId = None
     for summary in summaries:
-        if (
-            newSummary is None
-            or newSummary.chromId != summary.chromId
-            or summary.end > newSummary.start + reduction
-        ):
+        if summary.chromId != chromId or summary.end > end:  # noqa: F821
             newSummary = copy.copy(summary)
             newSummaries.append(newSummary)
+            end = newSummary.start + reduction
+            chromId = newSummary.chromId
         else:
             newSummary += summary
     return newSummaries
