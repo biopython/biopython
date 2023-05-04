@@ -329,78 +329,6 @@ class _ZoomLevels(list):
             res *= _ZoomLevels.bbiResIncrement
         return reductions[:resTry]
 
-    @classmethod
-    def bedWriteReducedOnceReturnReducedTwice(
-        cls, scale, totalSum, twiceReducedList, tree
-    ):
-        doubleReductionSize = scale * _ZoomLevels.bbiResIncrement
-        twiceReduced = None
-        ranges = tree.root.traverse()
-        start, end, val = next(ranges)
-        chromId = tree.chromId
-        chromSize = tree.chromSize
-        summary = _RegionSummary(
-            chromId,
-            start,
-            min(start + scale, chromSize),
-            val,
-        )
-        while True:
-            size = max(end - start, 1)
-            totalSum.update(size, val)
-            if summary.end <= start:
-                summary = _RegionSummary(
-                    chromId,
-                    start,
-                    min(start + scale, chromSize),
-                    val,
-                )
-            while end > summary.end:
-                overlap = min(end, summary.end) - max(start, summary.start)
-                assert overlap > 0
-                summary.update(overlap, val)
-                size -= overlap
-                start = summary.end
-                yield summary
-                if (
-                    twiceReduced is not None
-                    and twiceReduced.start + doubleReductionSize >= summary.end
-                ):
-                    twiceReduced += summary
-                else:
-                    twiceReduced = copy.copy(summary)
-                    twiceReducedList.append(twiceReduced)
-                summary = _RegionSummary(
-                    chromId,
-                    start,
-                    min(start + scale, chromSize),
-                    val,
-                )
-            summary.update(size, val)
-            try:
-                start, end, val = next(ranges)
-            except StopIteration:
-                break
-            if summary.end <= start:
-                yield summary
-                if (
-                    twiceReduced is not None
-                    and twiceReduced.start + doubleReductionSize >= summary.end
-                ):
-                    twiceReduced += summary
-                else:
-                    twiceReduced = copy.copy(summary)
-                    twiceReducedList.append(twiceReduced)
-        yield summary
-        if (
-            twiceReduced is not None
-            and twiceReduced.start + doubleReductionSize >= summary.end
-        ):
-            twiceReduced += summary
-        else:
-            twiceReduced = copy.copy(summary)
-            twiceReducedList.append(twiceReduced)
-
     def reduce(self, rezoomedList, initialReduction, buffer, blockSize, itemsPerSlot):
         zoomCount = initialReduction["size"]
         reduction = initialReduction["scale"] * _ZoomLevels.bbiResIncrement
@@ -821,18 +749,24 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 buffer = _BufferedStream(output, size)
             regions = []
             rezoomedList = []
+            twiceReducedList = rezoomedList
             trees = _RangeTree.generate(chromUsageList, alignments)
             scale = initialReduction["scale"]
+            doubleReductionSize = scale * _ZoomLevels.bbiResIncrement
             for tree in trees:
-                summaries = _ZoomLevels.bedWriteReducedOnceReturnReducedTwice(
-                    scale,
-                    totalSum,
-                    rezoomedList,
-                    tree,
-                )
+                twiceReduced = None
+                summaries = tree.generate_summaries(scale, totalSum)
                 for summary in summaries:
                     buffer.write(summary)
                     regions.append(summary)
+                    if (
+                        twiceReduced is not None
+                        and twiceReduced.start + doubleReductionSize >= summary.end
+                    ):
+                        twiceReduced += summary
+                    else:
+                        twiceReduced = copy.copy(summary)
+                        twiceReducedList.append(twiceReduced)
             buffer.flush()
             assert len(regions) == initialReduction["size"]
             zoomList[0].amount = initialReduction["scale"]
@@ -1442,6 +1376,49 @@ class _RangeTree:
                     break
                 tree.addToCoverageDepth(alignment)
             yield tree
+
+    def generate_summaries(self, scale, totalSum):
+        ranges = self.root.traverse()
+        start, end, val = next(ranges)
+        chromId = self.chromId
+        chromSize = self.chromSize
+        summary = _RegionSummary(
+            chromId,
+            start,
+            min(start + scale, chromSize),
+            val,
+        )
+        while True:
+            size = max(end - start, 1)
+            totalSum.update(size, val)
+            if summary.end <= start:
+                summary = _RegionSummary(
+                    chromId,
+                    start,
+                    min(start + scale, chromSize),
+                    val,
+                )
+            while end > summary.end:
+                overlap = min(end, summary.end) - max(start, summary.start)
+                assert overlap > 0
+                summary.update(overlap, val)
+                size -= overlap
+                start = summary.end
+                yield summary
+                summary = _RegionSummary(
+                    chromId,
+                    start,
+                    min(start + scale, chromSize),
+                    val,
+                )
+            summary.update(size, val)
+            try:
+                start, end, val = next(ranges)
+            except StopIteration:
+                break
+            if summary.end <= start:
+                yield summary
+        yield summary
 
     def find(self, start, end):
         p = self.root
