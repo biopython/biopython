@@ -350,7 +350,16 @@ class _ZoomLevels(list):
             self[zoomLevels].indexOffset = indexOffset
             self[zoomLevels].amount = reduction
             reduction *= _ZoomLevels.bbiResIncrement
-            newRezoomedList = _bbiSummarySimpleReduce(rezoomedList, reduction)
+            newRezoomedList = []
+            chromId = None
+            for summary in rezoomedList:
+                if summary.chromId != chromId or summary.end > end:  # noqa: F821
+                    newSummary = copy.copy(summary)
+                    newRezoomedList.append(newSummary)
+                    end = newSummary.start + reduction
+                    chromId = newSummary.chromId
+                else:
+                    newSummary += summary
             rezoomedList[:] = newRezoomedList[:]
         self[:] = self[:zoomLevels]
 
@@ -2003,20 +2012,6 @@ class _RTreeFormatter:
             self.rWriteIndexLevel(root, blockSize, size, 0, i, levelOffset, output)
         leafLevel = levelCount - 2
         self.rWriteLeaves(blockSize, size, root, 0, leafLevel, output)
-
-
-def _bbiSummarySimpleReduce(summaries, reduction):
-    newSummaries = []
-    chromId = None
-    for summary in summaries:
-        if summary.chromId != chromId or summary.end > end:  # noqa: F821
-            newSummary = copy.copy(summary)
-            newSummaries.append(newSummary)
-            end = newSummary.start + reduction
-            chromId = newSummary.chromId
-        else:
-            newSummary += summary
-    return newSummaries
 
 
 class _BPlusTreeFormatter:
