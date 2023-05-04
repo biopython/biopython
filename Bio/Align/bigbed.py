@@ -350,17 +350,18 @@ class _ZoomLevels(list):
             self[zoomLevels].indexOffset = indexOffset
             self[zoomLevels].amount = reduction
             reduction *= _ZoomLevels.bbiResIncrement
-            newRezoomedList = []
+            i = 0
             chromId = None
             for summary in rezoomedList:
                 if summary.chromId != chromId or summary.end > end:  # noqa: F821
-                    newSummary = copy.copy(summary)
-                    newRezoomedList.append(newSummary)
-                    end = newSummary.start + reduction
-                    chromId = newSummary.chromId
+                    end = summary.start + reduction
+                    chromId = summary.chromId
+                    currentSummary = summary
+                    rezoomedList[i] = currentSummary
+                    i += 1
                 else:
-                    newSummary += summary
-            rezoomedList[:] = newRezoomedList[:]
+                    currentSummary += summary
+            rezoomedList = rezoomedList[:i]
         self[:] = self[:zoomLevels]
 
 
