@@ -1,371 +1,318 @@
 """Hello."""
 
-import sys
 
+import sys
+import unittest
+import tempfile
 
 from Bio import Align
 from Bio.Align import bigbed
 
 
-try:
-    import numpy
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install numpy if you want to use Bio.Align.bigbed."
-    ) from None
-
-
-def test1():
-    # bedToBigBed -as=bed12.as ucsc.bed hg38.chrom.sizes ucsc.bb
-    bigBedFileName = "ucsc.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed12.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        declaration=declaration,
-        compress=True,
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open(bigBedFileName, "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 1 ok")
-    return len(data)
+for i, argument in enumerate(sys.argv):
+    if argument == "--large":
+        large = True
+        sys.argv.pop(i)
+        break
+else:
+    large = False
 
 
-def test2():
-    # bedToBigBed -as=bed12.as -unc ucsc.bed hg38.chrom.sizes ucsc.unc.bb
-    bigBedFileName = "ucsc.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed12.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        declaration=declaration,
-        compress=False,
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open("ucsc.unc.bb", "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 2 ok")
-    return len(data)
+class BinaryTestBaseClass(unittest.TestCase):
+    def assertBinaryEqual(self, file1, file2):
+        blocksize = 1024
+        n = 0
+        while True:
+            data1 = file1.read(blocksize)
+            data2 = file2.read(blocksize)
+            if data1 == b"" and data2 == b"":
+                return
+            if data1 == data2:
+                n += len(data1)
+                continue
+            n1 = n + len(data1)
+            n2 = n + len(data2)
+            if n1 < n2:
+                return self.fail(f"unequal file sizes: {n1} bytes vs >= {n2} bytes")
+            if n1 > n2:
+                return self.fail(f"unequal file sizes: >= {n1} bytes vs {n2} bytes")
+            for i, (c1, c2) in enumerate(zip(data1, data2)):
+                if c1 != c2:
+                    return self.fail(f"bytes at position {n1+i} differ: {c1} vs {c2}")
 
 
-def test3():
-    # cut -f 1-3 ucsc.bed > ucsc.bed3.bed
-    # bedToBigBed -as=bed3.as -type=bed3 ucsc.bed3.bed hg38.chrom.sizes ucsc.bed3.bb
-    bigBedFileName = "ucsc.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed3.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        bedN=3,
-        declaration=declaration,
-        compress=True,
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open("ucsc.bed3.bb", "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 3 ok")
-    return len(data)
+@unittest.skipUnless(large is True, "large file; use --large to run")
+class TestAlign_big(BinaryTestBaseClass):
+    def test_a_compressed(self):
+        # bedToBigBed -as=bed12.as ucsc.bed hg38.chrom.sizes ucsc.bb
+        with open("bed12.as") as stream:
+            data = stream.read()
+        declaration = bigbed.AutoSQLTable.from_string(data)
+        bigBedFileName = "ucsc.bb"
+        alignments = Align.parse(bigBedFileName, "bigbed")
+        with tempfile.TemporaryFile() as output, open(bigBedFileName, "rb") as stream:
+            Align.write(
+                alignments,
+                output,
+                "bigbed",
+                declaration=declaration,
+                compress=True,
+            )
+            output.flush()
+            output.seek(0)
+            self.assertBinaryEqual(output, stream)
+
+    def test_b_uncompressed(self):
+        # bedToBigBed -as=bed12.as -unc ucsc.bed hg38.chrom.sizes ucsc.unc.bb
+        with open("bed12.as") as stream:
+            data = stream.read()
+        declaration = bigbed.AutoSQLTable.from_string(data)
+        bigBedFileName = "ucsc.bb"
+        alignments = Align.parse(bigBedFileName, "bigbed")
+        bigBedFileName = "ucsc.unc.bb"
+        with tempfile.TemporaryFile() as output, open(bigBedFileName, "rb") as stream:
+            Align.write(
+                alignments,
+                output,
+                "bigbed",
+                declaration=declaration,
+                compress=False,
+            )
+            output.flush()
+            output.seek(0)
+            self.assertBinaryEqual(output, stream)
+
+    def test_c_bed3(self):
+        # cut -f 1-3 ucsc.bed > ucsc.bed3.bed
+        # bedToBigBed -as=bed3.as -type=bed3 ucsc.bed3.bed hg38.chrom.sizes ucsc.bed3.bb
+        with open("bed3.as") as stream:
+            data = stream.read()
+        declaration = bigbed.AutoSQLTable.from_string(data)
+        bigBedFileName = "ucsc.bb"
+        alignments = Align.parse(bigBedFileName, "bigbed")
+        bigBedFileName = "ucsc.bed3.bb"
+        with tempfile.TemporaryFile() as output, open(bigBedFileName, "rb") as stream:
+            Align.write(
+                alignments,
+                output,
+                "bigbed",
+                bedN=3,
+                declaration=declaration,
+                compress=True,
+            )
+            output.flush()
+            output.seek(0)
+            self.assertBinaryEqual(output, stream)
+
+    def test_d_bed4(self):
+        # cut -f 1-4 ucsc.bed > ucsc.bed4.bed
+        # bedToBigBed -as=bed4.as -type=bed4 ucsc.bed4.bed hg38.chrom.sizes ucsc.bed4.bb
+        with open("bed4.as") as stream:
+            data = stream.read()
+        declaration = bigbed.AutoSQLTable.from_string(data)
+        bigBedFileName = "ucsc.bb"
+        alignments = Align.parse(bigBedFileName, "bigbed")
+        bigBedFileName = "ucsc.bed4.bb"
+        with tempfile.TemporaryFile() as output, open(bigBedFileName, "rb") as stream:
+            Align.write(
+                alignments,
+                output,
+                "bigbed",
+                bedN=4,
+                declaration=declaration,
+                compress=True,
+            )
+            output.flush()
+            output.seek(0)
+            self.assertBinaryEqual(output, stream)
+
+    def test_e_bed5(self):
+        # cut -f 1-5 ucsc.bed > ucsc.bed5.bed
+        # bedToBigBed -as=bed5.as -type=bed5 ucsc.bed5.bed hg38.chrom.sizes ucsc.bed5.bb
+        with open("bed5.as") as stream:
+            data = stream.read()
+        declaration = bigbed.AutoSQLTable.from_string(data)
+        bigBedFileName = "ucsc.bb"
+        alignments = Align.parse(bigBedFileName, "bigbed")
+        bigBedFileName = "ucsc.bed5.bb"
+        with tempfile.TemporaryFile() as output, open(bigBedFileName, "rb") as stream:
+            Align.write(
+                alignments,
+                output,
+                "bigbed",
+                bedN=5,
+                declaration=declaration,
+                compress=True,
+            )
+            output.flush()
+            output.seek(0)
+            self.assertBinaryEqual(output, stream)
+
+    def test_f_bed6(self):
+        # cut -f 1-6 ucsc.bed > ucsc.bed6.bed
+        # bedToBigBed -as=bed6.as -type=bed6 ucsc.bed6.bed hg38.chrom.sizes ucsc.bed6.bb
+        with open("bed6.as") as stream:
+            data = stream.read()
+        declaration = bigbed.AutoSQLTable.from_string(data)
+        bigBedFileName = "ucsc.bb"
+        alignments = Align.parse(bigBedFileName, "bigbed")
+        bigBedFileName = "ucsc.bed6.bb"
+        with tempfile.TemporaryFile() as output, open(bigBedFileName, "rb") as stream:
+            Align.write(
+                alignments,
+                output,
+                "bigbed",
+                bedN=6,
+                declaration=declaration,
+                compress=True,
+            )
+            output.flush()
+            output.seek(0)
+            self.assertBinaryEqual(output, stream)
+
+    def test_g_bed7(self):
+        # cut -f 1-7 ucsc.bed > ucsc.bed7.bed
+        # bedToBigBed -as=bed7.as -type=bed7 ucsc.bed7.bed hg38.chrom.sizes ucsc.bed7.bb
+        with open("bed7.as") as stream:
+            data = stream.read()
+        declaration = bigbed.AutoSQLTable.from_string(data)
+        bigBedFileName = "ucsc.bb"
+        alignments = Align.parse(bigBedFileName, "bigbed")
+        bigBedFileName = "ucsc.bed7.bb"
+        with tempfile.TemporaryFile() as output, open(bigBedFileName, "rb") as stream:
+            Align.write(
+                alignments,
+                output,
+                "bigbed",
+                bedN=7,
+                declaration=declaration,
+                compress=True,
+            )
+            output.flush()
+            output.seek(0)
+            self.assertBinaryEqual(output, stream)
+
+    def test_h_bed8(self):
+        # cut -f 1-8 ucsc.bed > ucsc.bed8.bed
+        # bedToBigBed -as=bed8.as -type=bed8 ucsc.bed8.bed hg38.chrom.sizes ucsc.bed8.bb
+        with open("bed8.as") as stream:
+            data = stream.read()
+        declaration = bigbed.AutoSQLTable.from_string(data)
+        bigBedFileName = "ucsc.bb"
+        alignments = Align.parse(bigBedFileName, "bigbed")
+        bigBedFileName = "ucsc.bed8.bb"
+        with tempfile.TemporaryFile() as output, open(bigBedFileName, "rb") as stream:
+            Align.write(
+                alignments,
+                output,
+                "bigbed",
+                bedN=8,
+                declaration=declaration,
+                compress=True,
+            )
+            output.flush()
+            output.seek(0)
+            self.assertBinaryEqual(output, stream)
+
+    def test_i_bed9(self):
+        # cut -f 1-9 ucsc.bed > ucsc.bed9.bed
+        # bedToBigBed -as=bed9.as -type=bed9 ucsc.bed9.bed hg38.chrom.sizes ucsc.bed9.bb
+        with open("bed9.as") as stream:
+            data = stream.read()
+        declaration = bigbed.AutoSQLTable.from_string(data)
+        bigBedFileName = "ucsc.bb"
+        alignments = Align.parse(bigBedFileName, "bigbed")
+        bigBedFileName = "ucsc.bed9.bb"
+        with tempfile.TemporaryFile() as output, open(bigBedFileName, "rb") as stream:
+            Align.write(
+                alignments,
+                output,
+                "bigbed",
+                bedN=9,
+                declaration=declaration,
+                compress=True,
+            )
+            output.flush()
+            output.seek(0)
+            self.assertBinaryEqual(output, stream)
+
+    def test_j_extraindex(self):
+        # bedToBigBed -as=bed12.as -extraIndex=name ucsc.bed hg38.chrom.sizes ucsc.indexed.bb
+        with open("bed12.as") as stream:
+            data = stream.read()
+        declaration = bigbed.AutoSQLTable.from_string(data)
+        bigBedFileName = "ucsc.indexed.bb"
+        alignments = Align.parse(bigBedFileName, "bigbed")
+        with tempfile.TemporaryFile() as output, open(bigBedFileName, "rb") as stream:
+            Align.write(
+                alignments,
+                output,
+                "bigbed",
+                declaration=declaration,
+                extraIndex=["name"],
+            )
+            output.flush()
+            output.seek(0)
+            self.assertBinaryEqual(output, stream)
+
+    def test_k_anogam(self):
+        # bedToBigBed -as=bed12.as anoGam3.bed anoGam3.chrom.sizes anoGam3.bb
+        with open("bed12.as") as stream:
+            data = stream.read()
+        declaration = bigbed.AutoSQLTable.from_string(data)
+        bigBedFileName = "anoGam3.bb"
+        alignments = Align.parse(bigBedFileName, "bigbed")
+        with tempfile.TemporaryFile() as output, open(bigBedFileName, "rb") as stream:
+            Align.write(
+                alignments,
+                output,
+                "bigbed",
+                declaration=declaration,
+                compress=True,
+            )
+            output.flush()
+            output.seek(0)
+            self.assertBinaryEqual(output, stream)
+
+    def test_l_ailmel(self):
+        # bedToBigBed -as=bed12.as ailMel1.bed ailMel1.chrom.sizes ailMel1.bb
+        with open("bed12.as") as stream:
+            data = stream.read()
+        declaration = bigbed.AutoSQLTable.from_string(data)
+        bigBedFileName = "ailMel1.bb"
+        alignments = Align.parse(bigBedFileName, "bigbed")
+        with tempfile.TemporaryFile() as output, open(bigBedFileName, "rb") as stream:
+            Align.write(
+                alignments,
+                output,
+                "bigbed",
+                declaration=declaration,
+                compress=True,
+            )
+            output.flush()
+            output.seek(0)
+            self.assertBinaryEqual(output, stream)
+
+    def test_m_bisbis(self):
+        # bedToBigBed -as=bed12.as bisBis1.bed bisBis1.chrom.sizes bisBis1.bb
+        with open("bed12.as") as stream:
+            data = stream.read()
+        declaration = bigbed.AutoSQLTable.from_string(data)
+        bigBedFileName = "bisBis1.bb"
+        alignments = Align.parse(bigBedFileName, "bigbed")
+        with tempfile.TemporaryFile() as output, open(bigBedFileName, "rb") as stream:
+            Align.write(
+                alignments,
+                output,
+                "bigbed",
+                declaration=declaration,
+                compress=True,
+            )
+            output.flush()
+            output.seek(0)
+            self.assertBinaryEqual(output, stream)
 
 
-def test4():
-    # cut -f 1-4 ucsc.bed > ucsc.bed4.bed
-    # bedToBigBed -as=bed4.as -type=bed4 ucsc.bed4.bed hg38.chrom.sizes ucsc.bed4.bb
-    bigBedFileName = "ucsc.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed4.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        bedN=4,
-        declaration=declaration,
-        compress=True,
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open("ucsc.bed4.bb", "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 4 ok")
-    return len(data)
-
-
-def test5():
-    # cut -f 1-5 ucsc.bed > ucsc.bed5.bed
-    # bedToBigBed -as=bed5.as -type=bed5 ucsc.bed5.bed hg38.chrom.sizes ucsc.bed5.bb
-    bigBedFileName = "ucsc.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed5.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        bedN=5,
-        declaration=declaration,
-        compress=True,
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open("ucsc.bed5.bb", "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 5 ok")
-    return len(data)
-
-
-def test6():
-    # cut -f 1-6 ucsc.bed > ucsc.bed6.bed
-    # bedToBigBed -as=bed6.as -type=bed6 ucsc.bed6.bed hg38.chrom.sizes ucsc.bed6.bb
-    bigBedFileName = "ucsc.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed6.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        bedN=6,
-        declaration=declaration,
-        compress=True,
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open("ucsc.bed6.bb", "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 6 ok")
-    return len(data)
-
-
-def test7():
-    # cut -f 1-7 ucsc.bed > ucsc.bed7.bed
-    # bedToBigBed -as=bed7.as -type=bed7 ucsc.bed7.bed hg38.chrom.sizes ucsc.bed7.bb
-    bigBedFileName = "ucsc.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed7.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        bedN=7,
-        declaration=declaration,
-        compress=True,
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open("ucsc.bed7.bb", "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 7 ok")
-    return len(data)
-
-
-def test8():
-    # cut -f 1-8 ucsc.bed > ucsc.bed8.bed
-    # bedToBigBed -as=bed8.as -type=bed8 ucsc.bed8.bed hg38.chrom.sizes ucsc.bed8.bb
-    bigBedFileName = "ucsc.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed8.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        bedN=8,
-        declaration=declaration,
-        compress=True,
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open("ucsc.bed8.bb", "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 8 ok")
-    return len(data)
-
-
-def test9():
-    # cut -f 1-9 ucsc.bed > ucsc.bed9.bed
-    # bedToBigBed -as=bed9.as -type=bed9 ucsc.bed9.bed hg38.chrom.sizes ucsc.bed9.bb
-    bigBedFileName = "ucsc.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed9.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        bedN=9,
-        declaration=declaration,
-        compress=True,
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open("ucsc.bed9.bb", "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 9 ok")
-    return len(data)
-
-
-def test10():
-    # bedToBigBed -as=bed12.as -extraIndex=name ucsc.bed hg38.chrom.sizes ucsc.indexed.bb
-    bigBedFileName = "ucsc.indexed.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed12.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        declaration=declaration,
-        extraIndex=["name"],
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open(bigBedFileName, "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 10 ok")
-    return len(data)
-
-
-def test11():
-    # bedToBigBed -as=bed12.as anoGam3.bed anoGam3.chrom.sizes anoGam3.bb
-    bigBedFileName = "anoGam3.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed12.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        declaration=declaration,
-        compress=True,
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open(bigBedFileName, "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 11 ok")
-    return len(data)
-
-
-def test12():
-    # bedToBigBed -as=bed12.as ailMel1.bed ailMel1.chrom.sizes ailMel1.bb
-    bigBedFileName = "ailMel1.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed12.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        declaration=declaration,
-        compress=True,
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open(bigBedFileName, "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 12 ok")
-    return len(data)
-
-
-def test13():
-    # bedToBigBed -as=bed12.as bisBis1.bed bisBis1.chrom.sizes bisBis1.bb
-    bigBedFileName = "bisBis1.bb"
-    alignments = Align.parse(bigBedFileName, "bigbed")
-    data = open("bed12.as").read()
-    declaration = bigbed.AutoSQLTable.from_string(data)
-    output = open("test.bb", "wb")
-    Align.write(
-        alignments,
-        output,
-        "bigbed",
-        declaration=declaration,
-        compress=True,
-    )
-    output.close()
-    stream = open("test.bb", "rb")
-    data = stream.read()
-    stream.close()
-    stream = open(bigBedFileName, "rb")
-    correct = stream.read()
-    assert data == correct
-    print("test 13 ok")
-    return len(data)
-
-
-size1 = test1()
-size2 = test2()
-size3 = test3()
-size4 = test4()
-size5 = test5()
-size6 = test6()
-size7 = test7()
-size8 = test8()
-size9 = test9()
-size10 = test10()
-size11 = test11()
-size12 = test12()
-size13 = test13()
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
