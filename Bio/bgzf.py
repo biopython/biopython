@@ -923,35 +923,3 @@ class BgzfWriter:
         self.close()
 
 
-if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        print("Call this with no arguments and pipe uncompressed data in on stdin")
-        print("and it will produce BGZF compressed data on stdout. e.g.")
-        print("")
-        print("./bgzf.py < example.fastq > example.fastq.bgz")
-        print("")
-        print("The extension convention of *.bgz is to distinugish these from *.gz")
-        print("used for standard gzipped files without the block structure of BGZF.")
-        print("You can use the standard gunzip command to decompress BGZF files,")
-        print("if it complains about the extension try something like this:")
-        print("")
-        print("cat example.fastq.bgz | gunzip > example.fastq")
-        print("")
-        print("See also the tool bgzip that comes with samtools")
-        sys.exit(0)
-
-    # Ensure we have binary mode handles
-    # (leave stderr as default text mode)
-    stdin = sys.stdin.buffer
-    stdout = sys.stdout.buffer
-
-    sys.stderr.write("Producing BGZF output from stdin...\n")
-    w = BgzfWriter(fileobj=stdout)
-    while True:
-        data = stdin.read(65536)
-        w.write(data)
-        if not data:
-            break
-    # Doing close will write an empty BGZF block as EOF marker:
-    w.close()
-    sys.stderr.write("BGZF data produced\n")
