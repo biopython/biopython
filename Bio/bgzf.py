@@ -921,4 +921,3 @@ class BgzfWriter:
     def __exit__(self, type, value, traceback):
         """Close a file with WITH statement."""
         self.close()
-        
