@@ -2150,6 +2150,14 @@ class _BPlusTreeFormatter:
             if n == 0:
                 break
             output.write(formatter_node.pack(isLeaf, n))
+            if index == 8960:
+                print(block[-1])
+            if index == 9216:
+                position = output.tell()
+                for ii in range(blockSize):
+                    print(position)
+                    print(block[ii])
+                    position += len(block[ii].tobytes())
             block.tofile(output)
             data = bytes((blockSize - n) * items.itemsize)
             output.write(data)

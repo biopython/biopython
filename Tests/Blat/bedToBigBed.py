@@ -9,6 +9,9 @@ from Bio import Align
 from Bio.Align import bigbed
 
 
+# bed12.as bed3.as bed4.as bed5.as bed6.as bed7.as bed8.as bed9.as
+
+
 for i, argument in enumerate(sys.argv):
     if argument == "--large":
         large = True
@@ -27,22 +30,37 @@ class BinaryTestBaseClass(unittest.TestCase):
             data2 = file2.read(blocksize)
             if data1 == b"" and data2 == b"":
                 return
+            n1 = len(data1)
             if data1 == data2:
-                n += len(data1)
+                n += n1
                 continue
-            n1 = n + len(data1)
-            n2 = n + len(data2)
+            n2 = len(data2)
             if n1 < n2:
                 return self.fail(f"unequal file sizes: {n1} bytes vs >= {n2} bytes")
             if n1 > n2:
                 return self.fail(f"unequal file sizes: >= {n1} bytes vs {n2} bytes")
             for i, (c1, c2) in enumerate(zip(data1, data2)):
                 if c1 != c2:
-                    return self.fail(f"bytes at position {n1+i} differ: {c1} vs {c2}")
+                    return self.fail(f"bytes at position {n+i} differ: {c1} vs {c2}")
 
 
 @unittest.skipUnless(large is True, "large file; use --large to run")
 class TestAlign_big(BinaryTestBaseClass):
+
+    # BED files were downloaded from the UCSC table browser:
+    #
+    # ucsc.bed contains the GENCODE V43 gene annotations for human genome
+    # assembly hg38.
+    #
+    # anoGam3.bed contains the AUGUSTUS gene annotations for genome assembly
+    # anoGam3 of Anopheles gambiae (African malaria mosquito).
+    #
+    # ailMel1.bed contains the NCBI RefSeq gene annotations for genome assembly
+    # ailMel1 of Ailuropoda melanoleuca (giant panda).
+    #
+    # bisBis1.bed contains the AUGUSTUS gene annotations for genome assembly
+    # bisBis1 of Bison bison bison (American bison).
+
     def test_a_compressed(self):
         # bedToBigBed -as=bed12.as ucsc.bed hg38.chrom.sizes ucsc.bb
         with open("bed12.as") as stream:
