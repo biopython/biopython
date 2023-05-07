@@ -44,6 +44,7 @@ class SequenceIterator(ABC):
         try:
             self.stream = open(source, "r" + mode)
             # self.should_close_stream = True
+            self.source = source
         except TypeError:  # not a path, assume we received a stream
             if mode == "t":
                 if source.read(0) != "":
