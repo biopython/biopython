@@ -46,7 +46,7 @@ class SequenceIterator(ABC):
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
         try:
-            self._stream = open(source, "r" + self.mode)
+            self.stream = open(source, "r" + self.mode)
             # self.should_close_stream = True
         except TypeError:  # not a path, assume we received a stream
             if self.mode == "t":
@@ -61,12 +61,12 @@ class SequenceIterator(ABC):
                     ) from None
             else:
                 raise ValueError(f"Unknown mode '{self.mode}'") from None
-            self._stream = source
+            self.stream = source
             # self.should_close_stream = False
         try:
-            self.records = self.parse(self._stream)
+            self.records = self.parse(self.stream)
         except Exception:
-            self._stream.close()
+            self.stream.close()
         raise
 
     def __next__(self):
@@ -74,6 +74,8 @@ class SequenceIterator(ABC):
         try:
             return next(self.records)
         except Exception:
+            if self.stream is not self.source:
+                self.stream.close()
             raise
 
     def __iter__(self):
