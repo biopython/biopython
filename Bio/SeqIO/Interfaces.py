@@ -24,6 +24,8 @@ class SequenceIterator(ABC):
     You should write a parse method that returns a SeqRecord generator.  You
     may wish to redefine the __init__ method as well.
     """
+    mode = "t"
+    fmt = None
 
     def __init__(self, source, alphabet=None, mode="t", fmt=None):
         """Create a SequenceIterator object.
@@ -46,7 +48,7 @@ class SequenceIterator(ABC):
             self._stream = open(source, "r" + self.mode)
             # self.should_close_stream = True
         except TypeError:  # not a path, assume we received a stream
-            if mode == "t":
+            if self.mode == "t":
                 if source.read(0) != "":
                     raise StreamModeError(
                         f"{self.fmt} files must be opened in text mode."
@@ -64,15 +66,13 @@ class SequenceIterator(ABC):
             self.records = self.parse(self._stream)
         except Exception:
             self._stream.close()
-            raise
+        raise
 
     def __next__(self):
         """Return the next entry."""
         try:
             return next(self.records)
         except Exception:
-            if self._stream is not self.source:
-                self.stream.close()
             raise
 
     def __iter__(self):
@@ -97,7 +97,7 @@ class SequenceIterator(ABC):
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         try:
-            stream = self._stream
+            stream = self.stream
         except AttributeError:
             return
         if self.stream is not self.source:
