@@ -101,6 +101,7 @@ class SequenceIterator(ABC):
             return
         if self.stream is not self.source:
             self.stream.close()
+        self.stream.close()
         del self.stream
         return False
 
