@@ -24,6 +24,7 @@ class SequenceIterator(ABC):
     You should write a parse method that returns a SeqRecord generator.  You
     may wish to redefine the __init__ method as well.
     """
+
     mode = "t"
     fmt = None
 
