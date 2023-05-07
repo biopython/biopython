@@ -39,31 +39,31 @@ class SequenceIterator(ABC):
         - you do not have to require an alphabet.
         - you can add additional optional arguments.
         """
+        self.source = source
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
         try:
-            self.stream = open(source, "r" + mode)
+            self._stream = open(source, "r" + self.mode)
             # self.should_close_stream = True
-            self.source = source
         except TypeError:  # not a path, assume we received a stream
             if mode == "t":
                 if source.read(0) != "":
                     raise StreamModeError(
-                        f"{fmt} files must be opened in text mode."
+                        f"{self.fmt} files must be opened in text mode."
                     ) from None
             elif mode == "b":
                 if source.read(0) != b"":
                     raise StreamModeError(
-                        f"{fmt} files must be opened in binary mode."
+                        f"{self.fmt} files must be opened in binary mode."
                     ) from None
             else:
-                raise ValueError(f"Unknown mode '{mode}'") from None
-            self.stream = source
+                raise ValueError(f"Unknown mode '{self.mode}'") from None
+            self._stream = source
             # self.should_close_stream = False
         try:
-            self.records = self.parse(self.stream)
+            self.records = self.parse(self._stream)
         except Exception:
-            self.stream.close()
+            self._stream.close()
             raise
 
     def __next__(self):
@@ -71,7 +71,7 @@ class SequenceIterator(ABC):
         try:
             return next(self.records)
         except Exception:
-            if self.stream is not self.source:
+            if self._stream is not self.source:
                 self.stream.close()
             raise
 
@@ -97,12 +97,11 @@ class SequenceIterator(ABC):
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         try:
-            stream = self.stream
+            stream = self._stream
         except AttributeError:
             return
         if self.stream is not self.source:
             self.stream.close()
-        self.stream.close()
         del self.stream
         return False
 
