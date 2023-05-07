@@ -72,7 +72,7 @@ class SequenceIterator(ABC):
         except Exception:
             if self.stream is not self.source:
                 self.stream.close()
-                raise
+            raise
 
     def __iter__(self):
         """Iterate over the entries as a SeqRecord objects.
