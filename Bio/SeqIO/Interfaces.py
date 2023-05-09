@@ -25,9 +25,6 @@ class SequenceIterator(ABC):
     may wish to redefine the __init__ method as well.
     """
 
-    mode = "t"
-    fmt = None
-
     def __init__(self, source, alphabet=None, mode="t", fmt=None):
         """Create a SequenceIterator object.
 
@@ -46,21 +43,21 @@ class SequenceIterator(ABC):
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
         try:
-            self.stream = open(source, "r" + self.mode)
+            self.stream = open(source, "r" + mode)
             # self.should_close_stream = True
         except TypeError:  # not a path, assume we received a stream
-            if self.mode == "t":
+            if mode == "t":
                 if source.read(0) != "":
                     raise StreamModeError(
-                        f"{self.fmt} files must be opened in text mode."
+                        f"{fmt} files must be opened in text mode."
                     ) from None
             elif mode == "b":
                 if source.read(0) != b"":
                     raise StreamModeError(
-                        f"{self.fmt} files must be opened in binary mode."
+                        f"{fmt} files must be opened in binary mode."
                     ) from None
             else:
-                raise ValueError(f"Unknown mode '{self.mode}'") from None
+                raise ValueError(f"Unknown mode '{mode}'") from None
             self.stream = source
             # self.should_close_stream = False
         try:
