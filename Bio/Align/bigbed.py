@@ -1568,7 +1568,7 @@ class _RangeTree:
                         p.right = x
                         break
                 else:
-                    return p.item
+                    return
             col = True
         else:
             self.root = x
@@ -1628,6 +1628,10 @@ class _RangeTree:
                     elif s > item.start:
                         r = _Range(item.start, s, item.val)
                         item.start = s
+                        self.add(r)
+                    if item.start < end and item.end > end:
+                        r = _Range(end, item.end, item.val)
+                        item.end = end
                         self.add(r)
                     item.val += 1
                     s = item.end
@@ -2150,14 +2154,6 @@ class _BPlusTreeFormatter:
             if n == 0:
                 break
             output.write(formatter_node.pack(isLeaf, n))
-            if index == 8960:
-                print(block[-1])
-            if index == 9216:
-                position = output.tell()
-                for ii in range(blockSize):
-                    print(position)
-                    print(block[ii])
-                    position += len(block[ii].tobytes())
             block.tofile(output)
             data = bytes((blockSize - n) * items.itemsize)
             output.write(data)
