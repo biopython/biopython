@@ -61,15 +61,18 @@ class SequenceIterator(ABC):
         try:
             self.records = self.parse(self.stream)
         except Exception:
-            self.stream.close()
+            # self.stream.close()
             raise
 
     def __next__(self):
-        """Return the next entry."""
-        try:
-            return next(self.records)
-        except Exception:
-            raise
+        # """Return the next entry."""
+        # try:
+        #     return next(self.records)
+        # except Exception:
+        #     if self.stream is not self.source:
+        #         self.stream.close()
+        #     raise
+        return next(self.records)
 
     def __iter__(self):
         """Iterate over the entries as a SeqRecord objects.
