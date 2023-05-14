@@ -13,12 +13,12 @@ from Bio.Align import bigbed
 
 
 for i, argument in enumerate(sys.argv):
-    if argument == "--large":
-        large = True
+    if argument == "--big":
+        big = True
         sys.argv.pop(i)
         break
 else:
-    large = False
+    big = False
 
 
 class BinaryTestBaseClass(unittest.TestCase):
@@ -44,7 +44,7 @@ class BinaryTestBaseClass(unittest.TestCase):
                     return self.fail(f"bytes at position {n+i} differ: {c1} vs {c2}")
 
 
-@unittest.skipUnless(large is True, "large file; use --large to run")
+@unittest.skipUnless(big is True, "big file; use --big to run")
 class TestAlign_big(BinaryTestBaseClass):
 
     # BED files were downloaded from the UCSC table browser:
@@ -255,7 +255,15 @@ class TestAlign_big(BinaryTestBaseClass):
             self.assertBinaryEqual(output, stream)
 
     def test_j_extraindex(self):
-        # bedToBigBed -as=bed12.as -extraIndex=name ucsc.bed hg38.chrom.sizes ucsc.indexed.bb
+        # If the names in the BED file are not unique, the binary contents of
+        # the generated bigBed file will depend on the exact implementation of
+        # the quicksort algorithm in the Standard Library of C (used by
+        # bedToBigBed) and the quicksort algorithm in numpy (used by Biopython).
+        # To prevent spurious errors when comparing bigBed files created by
+        # bedToBigBed and by Biopython, we first remove lines with duplicated
+        # names from the BED file.
+        # sort -u -k4,4 ucsc.bed | sort -k1,1 -k2,2n > ucsc.unique.bed
+        # bedToBigBed -as=bed12.as -extraIndex=name ucsc.unique.bed hg38.chrom.sizes ucsc.indexed.bb
         with open("bed12.as") as stream:
             data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(data)
