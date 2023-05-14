@@ -23,9 +23,8 @@ You are expected to use this module via the Bio.Align functions.
 # in particular the tables in the supplemental materials listing the contents
 # of a bigBed file byte-by-byte.
 
-# The writer is based on the following files of the bedToBigBed program:
-# bedToBigBed.c
-# bbiWrite.c
+# The writer is based on files in the src/lib and src/utils/bedToBigBed
+# directories in Jim Kent's source code from UCSC.
 
 # These program files are provided by the University of California Santa Cruz
 # under the following license:
@@ -285,7 +284,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 self.declaration = AutoSQLTable.default[: self.bedN]
         declaration = self.declaration
         header.fieldCount = len(declaration)
-        # see bbFileCreate in bedToBigBed.c
         extra_indices = _ExtraIndices(self.extraIndexNames, declaration)
         chromUsageList, aveSize = self._get_chrom_usage(
             alignments, targets, extra_indices
@@ -293,7 +291,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         stream.write(bytes(header.size))
         stream.write(bytes(_ZoomLevels.size))
         header.autoSqlOffset = stream.tell()
-        stream.write(bytes(declaration))  # asText
+        stream.write(bytes(declaration))
         header.totalSummaryOffset = stream.tell()
         stream.write(bytes(_Summary.size))
         header.extraIndicesOffset = stream.tell()
@@ -575,7 +573,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             row.append(str(expCount))
             row.append(",".join(expIds))
             row.append(",".join(str(expScore) for expScore in expScores))
-        # parse the declaration
         for field in self.declaration[bedN:]:
             value = alignment.annotations[field.name]
             if isinstance(value, str):
@@ -1258,7 +1255,6 @@ class _ZoomLevels(list):
 
     @classmethod
     def calculate_reductions(cls, aveSize):
-        # See bbiCalcResScalesAndSizes in bbiWrite.c
         bbiMaxZoomLevels = _ZoomLevels.bbiMaxZoomLevels
         reductions = np.zeros(
             bbiMaxZoomLevels,
@@ -1936,7 +1932,8 @@ class _RTreeFormatter:
                 bytes((itemsPerSlot - len(tree.children)) * self.formatter_nonleaf.size)
             )
             # self.formatter_leaf.size seems more reasonable here, but this is
-            # what bedToBigBed has here.
+            # what bedToBigBed has here. See also
+            # https://github.com/ucscGenomeBrowser/kent/issues/76.
         else:
             for child in tree.children:
                 self.rWriteLeaves(
@@ -1946,7 +1943,6 @@ class _RTreeFormatter:
     def rWriteIndexLevel(
         self, parent, blockSize, childNodeSize, curLevel, destLevel, offset, output
     ):
-        # in cirTree.c
         previous_offset = offset
         formatter_nonleaf = self.formatter_nonleaf
         if curLevel == destLevel:
@@ -2103,8 +2099,6 @@ class _BPlusTreeFormatter:
             stream.seek(pos)
 
     def write(self, items, blockSize, output):
-        # See bbiWriteChromInfo in bbiWrite.c
-
         signature = _BPlusTreeFormatter.signature
         keySize = items.dtype["name"].itemsize
         valSize = items.itemsize - keySize
