@@ -1656,7 +1656,7 @@ Substitution scores define the value to be added to the total score when two let
 >>> print(score)
 1.0
 \end{minted}
-When using match and mismatch scores, you can specify a wildcard character (+None+ by default) for unknown letters. These will get a zero score in alignments, irrespective of the value of the match or mismatch score:
+When using match and mismatch scores, you can specify a wildcard character (\verb+None+ by default) for unknown letters. These will get a zero score in alignments, irrespective of the value of the match or mismatch score:
 %cont-doctest
 \begin{minted}{pycon}
 >>> aligner.wildcard = "?"
