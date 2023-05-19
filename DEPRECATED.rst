@@ -16,7 +16,7 @@ First supported in release 1.75.
 
 Python 3.7
 ----------
-First supported in release 1.73.
+No longer supported as of Release 1.82. First supported in release 1.73.
 
 Python 3.6
 ----------
