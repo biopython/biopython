@@ -29,12 +29,14 @@ to the test suite.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
-- Arpan Sahoo
-- Cam McMenamie
+- Arpan Sahoo (first contribution)
+- Cam McMenamie (first contribution)
+- João Rodrigues
 - Joe Greener
+- Michiel de Hoon
 - Peter Cock
-- Ricardas Ralys
-- Vladislav Kuznetsov
+- Ricardas Ralys (first contribution)
+- Vladislav Kuznetsov (first contribution)
 
 12 February 2023: Biopython 1.81
 ===============================================
@@ -58,13 +60,13 @@ to the test suite.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
-- Adam Vandergriff
-- Damien Goutte-Gattat
+- Adam Vandergriff (first contribution)
+- Damien Goutte-Gatta
 - Joe Greener
 - Michiel de Hoon
 - Peter Cock
 - Robert Miller
-- Farhan Khan
+- Farhan Khan (first contribution)
 
 18 November 2022: Biopython 1.80
 ================================
