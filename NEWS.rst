@@ -1,9 +1,11 @@
 News for the Biopython Project
 ==============================
 
-This file contains release notes and general news about the Biopython project.
-See also the DEPRECATED file which tracks the removal of obsolete modules or
-functions, and online https://biopython.org/wiki/News and
+This NEWS file contains release notes covering major additions or changes.
+Separately the DEPRECATED file tracks the removal of obsolete modules or
+functions (which are generally not covered here in the NEWS file).
+
+The news entries for each release are also usually repeated as a blog post at
 https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
