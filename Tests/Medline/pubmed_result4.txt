@@ -1,0 +1,65 @@
+PMID- 37195739
+OWN - NLM
+STAT- Publisher
+LR  - 20230517
+IS  - 1939-4586 (Electronic)
+IS  - 1059-1524 (Linking)
+DP  - 2023 May 17
+TI  - High extracellular glucose promotes cell motility by modulating cell 
+      deformability and contractility via cAMP-RhoA-ROCK axis in human breast cancer 
+      cells.
+PG  - mbcE22120560
+LID - 10.1091/mbc.E22-12-0560 [doi]
+AB  - The mechanical properties, or mechanotypes, of cells are largely determined by 
+      their deformability and contractility. The ability of cancer cells to deform and 
+      generate contractile force is critical in multiple steps of metastasis. 
+      Identifying soluble cues that regulate cancer cell mechanotypes and understanding 
+      the underlying molecular mechanisms regulating these cellular mechanotypes could 
+      provide novel therapeutic targets to prevent metastasis. Although a strong 
+      correlation between high glucose level and cancer metastasis has been 
+      demonstrated, the causality is not elucidated, and the underlying molecular 
+      mechanisms remain largely unknown. In this study, using novel high-throughput 
+      mechanotyping assays, we show that human breast cancer cells become less 
+      deformable and more contractile with increased extracellular glucose levels (>5 
+      mM). These altered cell mechanotypes are due to increased F-actin rearrangement 
+      and non-muscle myosin II (NMII) activity. We identify the cAMP-RhoA-ROCK-NMII 
+      axis to play a major role in regulating cell mechanotypes at high extracellular 
+      glucose levels, whereas calcium and myosin light chain kinase (MLCK) are not 
+      required. The altered mechanotypes are also associated with increased cell 
+      migration and invasion. Our study identifies key components in breast cancer 
+      cells that convert high extracellular glucose levels into changes in cellular 
+      mechanotype and behaviors relevant in cancer metastasis.
+FAU - Oh, Mijung
+AU  - Oh M
+AD  - Department of Pathology, School of Medicine.
+FAU - Batty, Skylar
+AU  - Batty S
+AD  - Undergraduate Pipeline Network Summer Research Program, University of New Mexico 
+      Health Sciences Center.
+AD  - Department of Molecular and Cellular Biology, University of Arizona, Tucson, AZ 
+      85721, USA.
+FAU - Banerjee, Nayan
+AU  - Banerjee N
+AD  - School of Chemical Sciences, Indian Association for the Cultivation of Science, 
+      2A & 2B Raja S. C. Mullick Road, Jadavpur, Kolkata 700032, West Bengal, India.
+FAU - Kim, Tae-Hyung
+AU  - Kim TH
+AD  - Department of Pathology, School of Medicine.
+AD  - University of New Mexico Comprehensive Cancer Center, Albuquerque, NM 87131, USA.
+LA  - eng
+PT  - Journal Article
+DEP - 20230517
+PL  - United States
+TA  - Mol Biol Cell
+JT  - Molecular biology of the cell
+JID - 9201390
+SB  - IM
+EDAT- 2023/05/17 13:10
+MHDA- 2023/05/17 13:10
+CRDT- 2023/05/17 11:53
+PHST- 2023/05/17 13:10 [medline]
+PHST- 2023/05/17 13:10 [pubmed]
+PHST- 2023/05/17 11:53 [entrez]
+AID - 10.1091/mbc.E22-12-0560 [doi]
+PST - aheadofprint
+SO  - Mol Biol Cell. 2023 May 17:mbcE22120560. doi: 10.1091/mbc.E22-12-0560.

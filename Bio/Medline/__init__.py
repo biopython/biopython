@@ -11,8 +11,9 @@ Classes:
  - Record           A dictionary holding Medline data.
 
 Functions:
- - read             Reads one Medline record
- - parse            Allows you to iterate over a bunch of Medline records
+ - read                         Reads one Medline record
+ - parse                        Allows you to iterate over a bunch of Medline records
+ - get_all_author_affiliations  Get dictionary of authors and all affiliations
 
 """
 
@@ -210,6 +211,45 @@ def read(handle):
     """
     records = parse(handle)
     return next(records)
+
+
+def get_all_author_affiliations(handle):
+    """Get mapping of authors and all their affiliations.
+
+    The handle is either a Medline file, a file-like object, or a list
+    of lines describing Medline record.
+
+    Typical usage:
+
+        >>> from Bio import Medline
+        >>> file = open("Medline/pubmed_result4.txt")
+        >>> affiliations = Medline.get_all_author_affiliations(file)
+        >>> batty = affiliations["Batty S"]
+        >>> for affiliation in batty:
+        ...     print(affiliation)
+        ...
+        Undergraduate Pipeline Network Summer Research Program, University of New Mexico Health Sciences Center.
+        Department of Molecular and Cellular Biology, University of Arizona, Tucson, AZ 85721, USA.
+    """
+    affiliations = Record()
+    author = ""
+    parsing_author = False
+    handle = iter(handle)
+    for line in handle:
+        line = line.rstrip()
+        key = line[:4].rstrip()
+        if key == "AU":
+            parsing_author = True
+            author = line[6:]
+            affiliations[author] = []
+        elif key == "AD" and parsing_author:
+            affiliations[author].append(line[6:])
+        elif line[:6] == "      " and parsing_author:
+            # Continuation line, append to last item
+            affiliations[author][-1] += line[5:]
+        elif key != "AD" and parsing_author:
+            parsing_author = False
+    return affiliations
 
 
 if __name__ == "__main__":

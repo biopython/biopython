@@ -62,6 +62,35 @@ class TestMedline(unittest.TestCase):
         self.assertEqual(record["PST"], "ppublish")
         self.assertEqual(record["SO"], "Brief Bioinform. 2002 Sep;3(3):296-302.")
 
+    def test_get_all_author_affiliations(self):
+        file = open("Medline/pubmed_result4.txt")
+        affiliations = Medline.get_all_author_affiliations(file)
+        authors = list(affiliations.keys())
+        self.assertEqual(authors, ["Oh M", "Batty S", "Banerjee N", "Kim TH"])
+        self.assertEqual(
+            affiliations["Oh M"], ["Department of Pathology, School of Medicine."]
+        )
+        self.assertEqual(
+            affiliations["Batty S"],
+            [
+                "Undergraduate Pipeline Network Summer Research Program, University of New Mexico Health Sciences Center.",
+                "'Department of Molecular and Cellular Biology, University of Arizona, Tucson, AZ 85721, USA.",
+            ],
+        )
+        self.assertEqual(
+            affiliations["Banerjee N"],
+            [
+                "School of Chemical Sciences, Indian Association for the Cultivation of Science, 2A & 2B Raja S. C. Mullick Road, Jadavpur, Kolkata 700032, West Bengal, India."
+            ],
+        )
+        self.assertEqual(
+            affiliations["Kim TH"],
+            [
+                "Department of Pathology, School of Medicine.",
+                "University of New Mexico Comprehensive Cancer Center, Albuquerque, NM 87131, USA.",
+            ],
+        )
+
     def test_parse(self):
         with open("Medline/pubmed_result2.txt") as handle:
             records = Medline.parse(handle)
