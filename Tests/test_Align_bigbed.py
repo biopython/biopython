@@ -3181,9 +3181,82 @@ class TestAlign_big(BinaryTestBaseClass):
             self.assertBinaryEqual(output, stream)
 
 
+class TestDeclarations(unittest.TestCase):
+
+    def test_declarations(self):
+        for length in (3, 4, 5, 6, 7, 8, 9, 12):
+            filename = "bed%d.as" % length
+            path = os.path.join("Blat", filename)
+            with open(path) as stream:
+                data = stream.read()
+            declaration = bigbed.AutoSQLTable.from_string(data)
+            self.assertEqual(declaration.name, "bed", msg=filename)
+            self.assertEqual(declaration.comment, "Browser Extensible Data", msg=filename)
+            self.assertEqual(len(declaration), length, msg=filename)
+            field = declaration[0]
+            self.assertEqual(field.as_type, "string", msg=filename)
+            self.assertEqual(field.name, "chrom", msg=filename)
+            self.assertEqual(field.comment, "Reference sequence chromosome or scaffold", msg=filename)
+            field = declaration[1]
+            self.assertEqual(field.as_type, "uint", msg=filename)
+            self.assertEqual(field.name, "chromStart", msg=filename)
+            self.assertEqual(field.comment, "Start position in chromosome", msg=filename)
+            field = declaration[2]
+            self.assertEqual(field.as_type, "uint", msg=filename)
+            self.assertEqual(field.name, "chromEnd", msg=filename)
+            self.assertEqual(field.comment, "End position in chromosome", msg=filename)
+            if length == 3:
+                return
+            field = declaration[3]
+            self.assertEqual(field.as_type, "string", msg=filename)
+            self.assertEqual(field.name, "name", msg=filename)
+            self.assertEqual(field.comment, "Name of item.", msg=filename)
+            if length == 4:
+                return
+            field = declaration[4]
+            self.assertEqual(field.as_type, "uint", msg=filename)
+            self.assertEqual(field.name, "score", msg=filename)
+            self.assertEqual(field.comment, "Score (0-1000)", msg=filename)
+            if length == 5:
+                return
+            field = declaration[5]
+            self.assertEqual(field.as_type, "char[1]", msg=filename)
+            self.assertEqual(field.name, "strand", msg=filename)
+            self.assertEqual(field.comment, "+ or - for strand", msg=filename)
+            if length == 6:
+                return
+            field = declaration[6]
+            self.assertEqual(field.as_type, "uint", msg=filename)
+            self.assertEqual(field.name, "thickStart", msg=filename)
+            self.assertEqual(field.comment, "Start of where display should be thick (start codon)", msg=filename)
+            if length == 7:
+                return
+            field = declaration[7]
+            self.assertEqual(field.as_type, "uint", msg=filename)
+            self.assertEqual(field.name, "thickEnd", msg=filename)
+            self.assertEqual(field.comment, "End of where display should be thick (stop codon)", msg=filename)
+            if length == 8:
+                return
+            field = declaration[8]
+            self.assertEqual(field.as_type, "uint", msg=filename)
+            self.assertEqual(field.name, "reserved", msg=filename)
+            self.assertEqual(field.comment, "Used as itemRgb as of 2004-11-22", msg=filename)
+            if length == 9:
+                return
+            field = declaration[9]
+            self.assertEqual(field.as_type, "int", msg=filename)
+            self.assertEqual(field.name, "blockCount", msg=filename)
+            self.assertEqual(field.comment, "Number of blocks", msg=filename)
+            field = declaration[10]
+            self.assertEqual(field.as_type, "int[blockCount]", msg=filename)
+            self.assertEqual(field.name, "blockSizes", msg=filename)
+            self.assertEqual(field.comment, "Comma separated list of block sizes", msg=filename)
+            field = declaration[11]
+            self.assertEqual(field.as_type, "int[blockCount]", msg=filename)
+            self.assertEqual(field.name, "chromStarts", msg=filename)
+            self.assertEqual(field.comment, "Start positions relative to chromStart", msg=filename)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
-
-
-# bed12.as bed3.as bed4.as bed5.as bed6.as bed7.as bed8.as bed9.as
