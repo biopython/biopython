@@ -8080,6 +8080,7 @@ class TestAlign_searching(unittest.TestCase):
         with tempfile.TemporaryFile("w+t") as output:
             Align.write(alignments, output, "bed", bedN=6)
             output.seek(0)
+            output = iter(output)
             alignments = Align.parse(output, "bed")
             self.check_alignments(alignments)
 
