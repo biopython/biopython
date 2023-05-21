@@ -2869,17 +2869,21 @@ class TestAlign_big(BinaryTestBaseClass):
 
     # BED files were downloaded from the UCSC table browser:
     #
-    # ucsc.bed contains the GENCODE V43 gene annotations for human genome
+    # ucsc.bed contains the GENCODE V43 Basic gene annotations for human genome
     # assembly hg38.
     #
     # anoGam3.bed contains the AUGUSTUS gene annotations for genome assembly
     # anoGam3 of Anopheles gambiae (African malaria mosquito).
     #
-    # ailMel1.bed contains the NCBI RefSeq gene annotations for genome assembly
-    # ailMel1 of Ailuropoda melanoleuca (giant panda).
+    # ailMel1.bed contains the NCBI RefSeq All gene annotations for genome
+    # assembly ailMel1 of Ailuropoda melanoleuca (giant panda).
     #
     # bisBis1.bed contains the AUGUSTUS gene annotations for genome assembly
     # bisBis1 of Bison bison bison (American bison).
+    #
+    # bigBed files were generated using bedToBigBed v. 2.9 found in
+    # jksrc.v445.zip of the 'kent' source tree provided by UCSC
+    # (http://hgdownload.cse.ucsc.edu/admin/).
 
     def test_a_compressed(self):
         # grep -E -v 'fix|alt' ucsc.bed > ucsc.clean.bed
@@ -3182,7 +3186,6 @@ class TestAlign_big(BinaryTestBaseClass):
 
 
 class TestDeclarations(unittest.TestCase):
-
     def test_declarations(self):
         for length in (3, 4, 5, 6, 7, 8, 9, 12):
             filename = "bed%d.as" % length
@@ -3191,16 +3194,22 @@ class TestDeclarations(unittest.TestCase):
                 data = stream.read()
             declaration = bigbed.AutoSQLTable.from_string(data)
             self.assertEqual(declaration.name, "bed", msg=filename)
-            self.assertEqual(declaration.comment, "Browser Extensible Data", msg=filename)
+            self.assertEqual(
+                declaration.comment, "Browser Extensible Data", msg=filename
+            )
             self.assertEqual(len(declaration), length, msg=filename)
             field = declaration[0]
             self.assertEqual(field.as_type, "string", msg=filename)
             self.assertEqual(field.name, "chrom", msg=filename)
-            self.assertEqual(field.comment, "Reference sequence chromosome or scaffold", msg=filename)
+            self.assertEqual(
+                field.comment, "Reference sequence chromosome or scaffold", msg=filename
+            )
             field = declaration[1]
             self.assertEqual(field.as_type, "uint", msg=filename)
             self.assertEqual(field.name, "chromStart", msg=filename)
-            self.assertEqual(field.comment, "Start position in chromosome", msg=filename)
+            self.assertEqual(
+                field.comment, "Start position in chromosome", msg=filename
+            )
             field = declaration[2]
             self.assertEqual(field.as_type, "uint", msg=filename)
             self.assertEqual(field.name, "chromEnd", msg=filename)
@@ -3228,19 +3237,29 @@ class TestDeclarations(unittest.TestCase):
             field = declaration[6]
             self.assertEqual(field.as_type, "uint", msg=filename)
             self.assertEqual(field.name, "thickStart", msg=filename)
-            self.assertEqual(field.comment, "Start of where display should be thick (start codon)", msg=filename)
+            self.assertEqual(
+                field.comment,
+                "Start of where display should be thick (start codon)",
+                msg=filename,
+            )
             if length == 7:
                 return
             field = declaration[7]
             self.assertEqual(field.as_type, "uint", msg=filename)
             self.assertEqual(field.name, "thickEnd", msg=filename)
-            self.assertEqual(field.comment, "End of where display should be thick (stop codon)", msg=filename)
+            self.assertEqual(
+                field.comment,
+                "End of where display should be thick (stop codon)",
+                msg=filename,
+            )
             if length == 8:
                 return
             field = declaration[8]
             self.assertEqual(field.as_type, "uint", msg=filename)
             self.assertEqual(field.name, "reserved", msg=filename)
-            self.assertEqual(field.comment, "Used as itemRgb as of 2004-11-22", msg=filename)
+            self.assertEqual(
+                field.comment, "Used as itemRgb as of 2004-11-22", msg=filename
+            )
             if length == 9:
                 return
             field = declaration[9]
@@ -3250,11 +3269,15 @@ class TestDeclarations(unittest.TestCase):
             field = declaration[10]
             self.assertEqual(field.as_type, "int[blockCount]", msg=filename)
             self.assertEqual(field.name, "blockSizes", msg=filename)
-            self.assertEqual(field.comment, "Comma separated list of block sizes", msg=filename)
+            self.assertEqual(
+                field.comment, "Comma separated list of block sizes", msg=filename
+            )
             field = declaration[11]
             self.assertEqual(field.as_type, "int[blockCount]", msg=filename)
             self.assertEqual(field.name, "chromStarts", msg=filename)
-            self.assertEqual(field.comment, "Start positions relative to chromStart", msg=filename)
+            self.assertEqual(
+                field.comment, "Start positions relative to chromStart", msg=filename
+            )
 
 
 if __name__ == "__main__":
