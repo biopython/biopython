@@ -742,7 +742,7 @@ usertype matrix_test stepmatrix=5
         a = Alignment(records)
 
         handle = StringIO()
-        AlignmentWriter(handle).write_file([a])
+        AlignmentWriter(handle).write([a])
         handle.seek(0)
         data = handle.read()
         self.assertEqual(
@@ -769,7 +769,7 @@ end;
         ]
         a = Alignment(records)
         handle = StringIO()
-        AlignmentWriter(handle).write_file([a])
+        AlignmentWriter(handle).write([a])
         handle.seek(0)
         data = handle.read()
         self.assertEqual(
@@ -858,7 +858,7 @@ end;
         ]
         a = Alignment(records)
         handle = StringIO()
-        AlignmentWriter(handle, interleave=True).write_file([a])
+        AlignmentWriter(handle, interleave=True).write([a])
         handle.seek(0)
         data = handle.read()
         self.assertEqual(
@@ -891,7 +891,7 @@ end;
         ]
         a = Alignment(records)
         handle = StringIO()
-        AlignmentWriter(handle, interleave=False).write_file([a])
+        AlignmentWriter(handle, interleave=False).write([a])
         handle.seek(0)
         data = handle.read()
         self.assertEqual(
@@ -1550,7 +1550,7 @@ MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTLESAVLG ALEU_HORVU
         a = Alignment(records)
 
         handle = StringIO()
-        AlignmentWriter(handle).write_file([a])
+        AlignmentWriter(handle).write([a])
         handle.seek(0)
         data = handle.read()
         self.assertEqual(
@@ -1570,7 +1570,7 @@ end;
         )
         handle = StringIO()
         with self.assertRaises(ValueError):
-            AlignmentWriter(handle).write_file([a, a])
+            AlignmentWriter(handle).write([a, a])
 
     def test_multiple_output_msa(self):
         records = [

@@ -1938,11 +1938,11 @@ class Alignment:
         if fmt == "":
             return self._format_pretty()
         module = _load(fmt)
+        if module.AlignmentIterator.mode == "b":
+            raise ValueError(f"{fmt} is a binary file format")
         try:
             writer = module.AlignmentWriter(None, *args, **kwargs)
         except AttributeError:
-            if module.AlignmentIterator.mode == "b":
-                raise ValueError(f"{fmt} is a binary file format")
             raise ValueError(
                 f"Formatting alignments has not yet been implemented for the {fmt} format"
             ) from None
@@ -3566,7 +3566,7 @@ def write(alignments, target, fmt, *args, **kwargs):
         raise ValueError(
             f"File writing has not yet been implemented for the {fmt} format"
         )
-    return writer(target, *args, **kwargs).write_file(alignments)
+    return writer(target, *args, **kwargs).write(alignments)
 
 
 def parse(source, fmt):

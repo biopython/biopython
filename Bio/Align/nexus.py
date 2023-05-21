@@ -45,12 +45,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         super().__init__(target)
         self.interleave = interleave
 
-    def write_file(self, alignments):
+    def write_file(self, stream, alignments):
         """Write a file with the alignments, and return the number of alignments.
 
         alignments - A list or iterator returning Alignment objects
         """
-        count = super().write_file(alignments)
+        count = super().write_file(stream, alignments)
         if count != 1:
             raise ValueError("Expected to write 1 alignment; wrote %d" % count)
         return count
@@ -109,14 +109,13 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             interleave = columns > 1000
         n.write_nexus_data(stream, interleave=interleave)
 
-    def write_alignments(self, alignments):
+    def write_alignments(self, stream, alignments):
         """Write alignments to the output file, and return the number of alignments.
 
         alignments - A list or iterator returning Alignment objects
         """
         count = 0
         interleave = self.interleave
-        stream = self.stream
         for alignment in alignments:
             self.write_alignment(alignment, stream, interleave=interleave)
             count += 1

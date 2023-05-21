@@ -80,6 +80,30 @@ class AlignmentIterator(ABC):
         """
         return self
 
+    def __len__(self):
+        """Return the number of alignments.
+
+        The number of alignments is cached. If not yet calculated, the iterator
+        is rewound to the beginning, and the number of alignments is calculated
+        by iterating over the alignments. The iterator is then returned to its
+        original position in the file.
+        """
+        try:
+            length = self._len
+        except AttributeError:
+            counter = 0
+            for alignment in self:
+                counter += 1
+            self.rewind()
+            length = 0
+            for alignment in self:
+                length += 1
+            self.rewind()
+            for i in range(length - counter):
+                next(self)
+            self._len = length
+        return length
+
     def __enter__(self):
         return self
 
@@ -167,11 +191,11 @@ class AlignmentWriter(ABC):
                     stream = target
             else:
                 raise RuntimeError("Unknown mode '%s'" % self.mode)
-            self.stream = stream
+            self._stream = stream
 
         self._target = target
 
-    def write_header(self, alignments):
+    def write_header(self, stream, alignments):
         """Write the file header to the output file."""
         return
         ##################################################
@@ -179,7 +203,7 @@ class AlignmentWriter(ABC):
         # if the file format defines a file header.      #
         ##################################################
 
-    def write_footer(self):
+    def write_footer(self, stream):
         """Write the file footer to the output file."""
         return
         ##################################################
@@ -197,10 +221,11 @@ class AlignmentWriter(ABC):
         # You MUST implement this method in the subclass. #
         ###################################################
 
-    def write_single_alignment(self, alignments):
+    def write_single_alignment(self, stream, alignments):
         """Write a single alignment to the output file, and return 1.
 
         alignments - A list or iterator returning Alignment objects
+        stream     - Output file stream.
         """
         count = 0
         for alignment in alignments:
@@ -209,34 +234,45 @@ class AlignmentWriter(ABC):
                     f"Alignment files in the {self.fmt} format can contain a single alignment only."
                 )
             line = self.format_alignment(alignment)
-            self.stream.write(line)
+            stream.write(line)
             count += 1
         return count
 
-    def write_multiple_alignments(self, alignments):
+    def write_multiple_alignments(self, stream, alignments):
         """Write alignments to the output file, and return the number of alignments.
 
         alignments - A list or iterator returning Alignment objects
+        stream     - Output file stream.
         """
         count = 0
         for alignment in alignments:
             line = self.format_alignment(alignment)
-            self.stream.write(line)
+            stream.write(line)
             count += 1
         return count
 
     write_alignments = write_multiple_alignments
 
-    def write_file(self, alignments):
+    def write_file(self, stream, alignments):
+        """Write the alignments to the file strenm, and return the number of alignments.
+
+        alignments - A list or iterator returning Alignment objects
+        stream     - Output file stream.
+        """
+        self.write_header(stream, alignments)
+        count = self.write_alignments(stream, alignments)
+        self.write_footer(stream)
+        return count
+
+    def write(self, alignments):
         """Write a file with the alignments, and return the number of alignments.
 
         alignments - A list or iterator returning Alignment objects
         """
+        stream = self._stream
         try:
-            self.write_header(alignments)
-            count = self.write_alignments(alignments)
-            self.write_footer()
+            count = self.write_file(stream, alignments)
         finally:
-            if self.stream is not self._target:
-                self.stream.close()
+            if stream is not self._target:
+                stream.close()
         return count

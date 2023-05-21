@@ -4,6 +4,7 @@
 # as part of this package.
 """Tests for Align.bed module."""
 import unittest
+import tempfile
 import os
 from io import StringIO
 
@@ -13,7 +14,6 @@ from Bio.Align import Alignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
-from Bio import BiopythonExperimentalWarning
 
 
 import numpy
@@ -7971,6 +7971,117 @@ class TestAlign_bed12(unittest.TestCase):
             written_data = stream.read()
             stream.close()
             self.assertEqual(original_data, written_data, msg=filename)
+
+
+class TestAlign_searching(unittest.TestCase):
+
+    path = "Blat/bigbedtest.bed"
+
+    def check_alignments(self, alignments):
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 1)
+        self.assertEqual(alignment.shape, (2, 90))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr1")
+        self.assertEqual(alignment.query.id, "name1")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[10, 100], [0, 90]]))
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 2)
+        self.assertEqual(alignment.shape, (2, 10))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr1")
+        self.assertEqual(alignment.query.id, "name2")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[29, 39], [10, 0]]))
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 3)
+        self.assertEqual(alignment.shape, (2, 100))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr1")
+        self.assertEqual(alignment.query.id, "name3")
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates, numpy.array([[200, 300], [0, 100]])
+            )
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 6)
+        self.assertEqual(alignment.shape, (2, 0))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr2")
+        self.assertEqual(alignment.query.id, "name4")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[50, 50], [0, 0]]))
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 4)
+        self.assertEqual(alignment.shape, (2, 10))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr2")
+        self.assertEqual(alignment.query.id, "name5")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[100, 110], [0, 10]]))
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 5)
+        self.assertEqual(alignment.shape, (2, 10))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr2")
+        self.assertEqual(alignment.query.id, "name6")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[200, 210], [0, 10]]))
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 6)
+        self.assertEqual(alignment.shape, (2, 0))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr2")
+        self.assertEqual(alignment.query.id, "name7")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[220, 220], [0, 0]]))
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.score, 7)
+        self.assertEqual(alignment.shape, (2, 0))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr3")
+        self.assertEqual(alignment.query.id, "name8")
+        self.assertTrue(
+            numpy.array_equal(alignment.coordinates, numpy.array([[0, 0], [0, 0]]))
+        )
+
+    def test_reading(self):
+        """Test reading bigbedtest.bed."""
+        alignments = Align.parse(self.path, "bed")
+        self.check_alignments(alignments)
+
+    def test_writing(self):
+        """Test writing bigbedtest.bed."""
+        alignments = Align.parse(self.path, "bed")
+        with tempfile.TemporaryFile("w+t") as output:
+            Align.write(alignments, output, "bed", bedN=6)
+            output.seek(0)
+            alignments = Align.parse(output, "bed")
+            self.check_alignments(alignments)
 
 
 if __name__ == "__main__":

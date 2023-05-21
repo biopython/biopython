@@ -68,7 +68,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         else:
             if chrom is None:
                 chrom = "target"
-        assert coordinates[0, 0] < coordinates[0, -1]
+        assert coordinates[0, 0] <= coordinates[0, -1]
         if coordinates[1, 0] > coordinates[1, -1]:
             # DNA/RNA mapped to reverse strand of DNA/RNA
             strand = "-"
@@ -90,8 +90,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 blockSizes.append(blockSize)
                 tStart = tEnd
                 qStart = qEnd
-        chromStart = blockStarts[0]  # start of alignment in target
-        chromEnd = blockStarts[-1] + blockSize  # end of alignment in target
+        try:
+            chromStart = blockStarts[0]  # start of alignment in target
+            chromEnd = blockStarts[-1] + blockSize  # end of alignment in target
+        except IndexError:  # no aligned blocks
+            chromStart = chromEnd = tStart
         fields = [chrom, str(chromStart), str(chromEnd)]
         if bedN == 3:
             return "\t".join(fields) + "\n"
@@ -159,98 +162,98 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     fmt = "BED"
 
     def _read_next_alignment(self, stream):
-        try:
-            line = next(stream)
-        except StopIteration:
-            return None
-        words = line.split()
-        bedN = len(words)
-        if bedN < 3 or bedN > 12:
-            raise ValueError("expected between 3 and 12 columns, found %d" % bedN)
-        chrom = words[0]
-        chromStart = int(words[1])
-        chromEnd = int(words[2])
-        if bedN > 3:
-            name = words[3]
-        else:
-            name = None
-        if bedN > 5:
-            strand = words[5]
-        else:
-            strand = "+"
-        if bedN > 9:
-            blockCount = int(words[9])
-            blockSizes = [
-                int(blockSize) for blockSize in words[10].rstrip(",").split(",")
-            ]
-            blockStarts = [
-                int(blockStart) for blockStart in words[11].rstrip(",").split(",")
-            ]
-            if len(blockSizes) != blockCount:
+        for line in stream:
+            # note that we cannot extract one line by calling next, as stream
+            # may be iterable but not an iterator (for example, TemporaryFile
+            # or NamedTemporaryFile objects in tempfile).
+            words = line.split()
+            bedN = len(words)
+            if bedN < 3 or bedN > 12:
+                raise ValueError("expected between 3 and 12 columns, found %d" % bedN)
+            chrom = words[0]
+            chromStart = int(words[1])
+            chromEnd = int(words[2])
+            if bedN > 3:
+                name = words[3]
+            else:
+                name = None
+            if bedN > 5:
+                strand = words[5]
+            else:
+                strand = "+"
+            if bedN > 9:
+                blockCount = int(words[9])
+                blockSizes = [
+                    int(blockSize) for blockSize in words[10].rstrip(",").split(",")
+                ]
+                blockStarts = [
+                    int(blockStart) for blockStart in words[11].rstrip(",").split(",")
+                ]
+                if len(blockSizes) != blockCount:
+                    raise ValueError(
+                        "Inconsistent number of block sizes (%d found, expected %d)"
+                        % (len(blockSizes), blockCount)
+                    )
+                if len(blockStarts) != blockCount:
+                    raise ValueError(
+                        "Inconsistent number of block start positions (%d found, expected %d)"
+                        % (len(blockStarts), blockCount)
+                    )
+                blockSizes = np.array(blockSizes)
+                blockStarts = np.array(blockStarts)
+                tPosition = 0
+                qPosition = 0
+                coordinates = [[tPosition, qPosition]]
+                for blockSize, blockStart in zip(blockSizes, blockStarts):
+                    if blockStart != tPosition:
+                        coordinates.append([blockStart, qPosition])
+                        tPosition = blockStart
+                    tPosition += blockSize
+                    qPosition += blockSize
+                    coordinates.append([tPosition, qPosition])
+                coordinates = np.array(coordinates).transpose()
+                qSize = sum(blockSizes)
+            else:
+                blockSize = chromEnd - chromStart
+                coordinates = np.array([[0, blockSize], [0, blockSize]])
+                qSize = blockSize
+            coordinates[0, :] += chromStart
+            query_sequence = Seq(None, length=qSize)
+            query_record = SeqRecord(query_sequence, id=name, description="")
+            target_sequence = Seq(None, length=sys.maxsize)
+            target_record = SeqRecord(target_sequence, id=chrom, description="")
+            records = [target_record, query_record]
+            if strand == "-":
+                coordinates[1, :] = qSize - coordinates[1, :]
+            if chromStart != coordinates[0, 0]:
                 raise ValueError(
-                    "Inconsistent number of block sizes (%d found, expected %d)"
-                    % (len(blockSizes), blockCount)
+                    "Inconsistent chromStart found (%d, expected %d)"
+                    % (chromStart, coordinates[0, 0])
                 )
-            if len(blockStarts) != blockCount:
+            if chromEnd != coordinates[0, -1]:
                 raise ValueError(
-                    "Inconsistent number of block start positions (%d found, expected %d)"
-                    % (len(blockStarts), blockCount)
+                    "Inconsistent chromEnd found (%d, expected %d)"
+                    % (chromEnd, coordinates[0, -1])
                 )
-            blockSizes = np.array(blockSizes)
-            blockStarts = np.array(blockStarts)
-            tPosition = 0
-            qPosition = 0
-            coordinates = [[tPosition, qPosition]]
-            for blockSize, blockStart in zip(blockSizes, blockStarts):
-                if blockStart != tPosition:
-                    coordinates.append([blockStart, qPosition])
-                    tPosition = blockStart
-                tPosition += blockSize
-                qPosition += blockSize
-                coordinates.append([tPosition, qPosition])
-            coordinates = np.array(coordinates).transpose()
-            qSize = sum(blockSizes)
-        else:
-            blockSize = chromEnd - chromStart
-            coordinates = np.array([[0, blockSize], [0, blockSize]])
-            qSize = blockSize
-        coordinates[0, :] += chromStart
-        query_sequence = Seq(None, length=qSize)
-        query_record = SeqRecord(query_sequence, id=name, description="")
-        target_sequence = Seq(None, length=sys.maxsize)
-        target_record = SeqRecord(target_sequence, id=chrom, description="")
-        records = [target_record, query_record]
-        if strand == "-":
-            coordinates[1, :] = qSize - coordinates[1, :]
-        if chromStart != coordinates[0, 0]:
-            raise ValueError(
-                "Inconsistent chromStart found (%d, expected %d)"
-                % (chromStart, coordinates[0, 0])
-            )
-        if chromEnd != coordinates[0, -1]:
-            raise ValueError(
-                "Inconsistent chromEnd found (%d, expected %d)"
-                % (chromEnd, coordinates[0, -1])
-            )
-        alignment = Alignment(records, coordinates)
-        if bedN <= 4:
+            alignment = Alignment(records, coordinates)
+            if bedN <= 4:
+                return alignment
+            score = words[4]
+            try:
+                score = float(score)
+            except ValueError:
+                pass
+            else:
+                if score.is_integer():
+                    score = int(score)
+            alignment.score = score
+            if bedN <= 6:
+                return alignment
+            alignment.thickStart = int(words[6])
+            if bedN <= 7:
+                return alignment
+            alignment.thickEnd = int(words[7])
+            if bedN <= 8:
+                return alignment
+            alignment.itemRgb = words[8]
             return alignment
-        score = words[4]
-        try:
-            score = float(score)
-        except ValueError:
-            pass
-        else:
-            if score.is_integer():
-                score = int(score)
-        alignment.score = score
-        if bedN <= 6:
-            return alignment
-        alignment.thickStart = int(words[6])
-        if bedN <= 7:
-            return alignment
-        alignment.thickEnd = int(words[7])
-        if bedN <= 8:
-            return alignment
-        alignment.itemRgb = words[8]
-        return alignment

@@ -75,7 +75,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self.wildcard = wildcard
         self.mask = mask
 
-    def write_header(self, alignments):
+    def write_header(self, stream, alignments):
         """Write the PSL header."""
         if not self.header:
             return
@@ -86,7 +86,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         else:
             version = metadata.get("psLayout version", "3")
         # fmt: off
-        self.stream.write(
+        stream.write(
             f"""\
 psLayout version {version}
 
