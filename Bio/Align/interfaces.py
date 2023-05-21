@@ -85,17 +85,22 @@ class AlignmentIterator(ABC):
 
         The number of alignments is cached. If not yet calculated, the iterator
         is rewound to the beginning, and the number of alignments is calculated
-        by iterating over the alignments. Note that this leaves the iterator at
-        the end of the alignments; you can use the rewind method to set the
-        iterator to the beginning of the alignments.
+        by iterating over the alignments. The iterator is then returned to its
+        original position in the file.
         """
         try:
             length = self._len
         except AttributeError:
+            counter = 0
+            for alignment in self:
+                counter += 1
             self.rewind()
             length = 0
             for alignment in self:
                 length += 1
+            self.rewind()
+            for i in range(length - counter):
+                next(self)
             self._len = length
         return length
 
