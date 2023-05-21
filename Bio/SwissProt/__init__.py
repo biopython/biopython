@@ -212,7 +212,7 @@ class FeatureTable(SeqFeature):
           frameshifting
         - ZN_FING:  zinc finger region
 
-     - qualifiers   A dictionary of additional information, which may include
+     - ``qualifiers``: a dictionary of additional information, which may include
        the feature evidence and free-text notes. While SwissProt includes the
        feature identifier code (FTId) as a qualifier, it is stored as the
        attribute ID of the FeatureTable object.

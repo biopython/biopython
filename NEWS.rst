@@ -18,8 +18,25 @@ iterators of the alignments to reset as well, which is bug prone. Instead,
 calling ``iter`` on a ``PairwiseAlignments`` object will now return itself. The
 iterator can be reset by calling the ``rewind`` method.
 
-Typo fixes:
-- Cam McMenamie
+Calling `secondary_structure_fraction` on a ``ProtParam.ProteinAnalysis``
+object historically returned (sheet, turn, helix) while claiming to return
+(helix, turn, sheet). This was fixed to correctly return (helix, turn, sheet).
+Additionally, the amino acids considered were revised as per recent literature.
+
+Additionally, a number of small bugs and typos have been fixed with additions
+to the test suite.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Arpan Sahoo (first contribution)
+- Cam McMenamie (first contribution)
+- João Rodrigues
+- Joe Greener
+- Michiel de Hoon
+- Peter Cock
+- Ricardas Ralys (first contribution)
+- Vladislav Kuznetsov (first contribution)
 
 12 February 2023: Biopython 1.81
 ===============================================
@@ -37,18 +54,19 @@ objects as input.
 Several improvements and bug fixes to the snapgene parser contributes by
 Damien Goutte-Gattat.
 
-Many thanks to the Biopython developers and community for making this release
-possible, especially the following contributors:
-
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
-- Adam Vandergriff
-- Damien Goutte-Gattat
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Adam Vandergriff (first contribution)
+- Damien Goutte-Gatta
+- Joe Greener
 - Michiel de Hoon
 - Peter Cock
-- Joe Greener
 - Robert Miller
+- Farhan Khan (first contribution)
 
 18 November 2022: Biopython 1.80
 ================================

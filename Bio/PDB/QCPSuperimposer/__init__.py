@@ -14,7 +14,7 @@ Quaternion Characteristic Polynomial, which is used in the algorithm.
 """
 
 
-from numpy import dot, sqrt, array, inner
+import numpy as np
 from .qcprotmodule import FastCalcRMSDAndRotation
 
 import warnings
@@ -63,12 +63,12 @@ class QCPSuperimposer:
     def _rms(self, coords1, coords2):
         """Return rms deviations between coords1 and coords2 (PRIVATE)."""
         diff = coords1 - coords2
-        return sqrt(sum(dot(diff, diff)) / coords1.shape[0])
+        return np.sqrt(sum(np.dot(diff, diff)) / coords1.shape[0])
 
     def _inner_product(self, coords1, coords2):
-        G1 = inner(coords1, coords1).diagonal().sum()
-        G2 = inner(coords2, coords2).diagonal().sum()
-        A = dot(coords1.T, coords2)
+        G1 = np.inner(coords1, coords1).diagonal().sum()
+        G2 = np.inner(coords2, coords2).diagonal().sum()
+        A = np.dot(coords1.T, coords2)
         return ((G1 + G2) / 2, A)
 
     def _align(self, centered_coords1, centered_coords2):
@@ -102,7 +102,7 @@ class QCPSuperimposer:
             len(centered_coords1),
             -1.0,
         )
-        rot = array([r0, r1, r2, r3, r4, r5, r6, r7, r8]).reshape(3, 3)
+        rot = np.array([r0, r1, r2, r3, r4, r5, r6, r7, r8]).reshape(3, 3)
         return (rmsd, rot, [q1, q2, q3, q4])
 
     # Public methods
@@ -141,7 +141,7 @@ class QCPSuperimposer:
         reference_coords = reference_coords - av2
         #
         (self.rms, self.rot, self.lquart) = self._align(coords, reference_coords)
-        self.tran = av2 - dot(av1, self.rot)
+        self.tran = av2 - np.dot(av1, self.rot)
 
     def get_transformed(self):
         """Get the transformed coordinate set."""
@@ -150,7 +150,7 @@ class QCPSuperimposer:
         if self.rot is None:
             raise Exception("Nothing superimposed yet.")
         if self.transformed_coords is None:
-            self.transformed_coords = dot(self.coords, self.rot) + self.tran
+            self.transformed_coords = np.dot(self.coords, self.rot) + self.tran
         return self.transformed_coords
 
     def get_rotran(self):

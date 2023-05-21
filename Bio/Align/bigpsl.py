@@ -18,7 +18,7 @@ See http://genome.ucsc.edu/goldenPath/help/bigPsl.html for more information.
 You are expected to use this module via the Bio.Align functions.
 """
 
-import numpy
+import numpy as np
 
 
 from Bio.Align import Alignment
@@ -108,9 +108,9 @@ class AlignmentIterator(bigbed.AlignmentIterator):
                 "Inconsistent number of target start positions (%d found, expected %d)"
                 % (len(qStarts), blockCount)
             )
-        qStarts = numpy.array(qStarts)
-        tStarts = numpy.array(tStarts)
-        tBlockSizes = numpy.array(blockSizes)
+        qStarts = np.array(qStarts)
+        tStarts = np.array(tStarts)
+        tBlockSizes = np.array(blockSizes)
         query_sequence = words[14]
         if query_sequence == "":
             query_sequence = Seq(None, length=qSize)
@@ -161,7 +161,7 @@ class AlignmentIterator(bigbed.AlignmentIterator):
             tPosition += tB
             qPosition += qB
             coordinates.append([tPosition, qPosition])
-        coordinates = numpy.array(coordinates).transpose()
+        coordinates = np.array(coordinates).transpose()
         qStart = int(words[9])
         qEnd = int(words[10])
         if strand == "-":
