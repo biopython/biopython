@@ -20,13 +20,13 @@ iterators of the alignments to reset as well, which is bug prone. Instead,
 calling ``iter`` on a ``PairwiseAlignments`` object will now return itself. The
 iterator can be reset by calling the ``rewind`` method.
 
-Calling `secondary_structure_fraction` on a ``ProtParam.ProteinAnalysis``
+Calling ``secondary_structure_fraction()`` on a ``ProtParam.ProteinAnalysis``
 object historically returned (sheet, turn, helix) while claiming to return
 (helix, turn, sheet). This was fixed to correctly return (helix, turn, sheet).
 Additionally, the amino acids considered were revised as per recent literature.
 
-The sequence objects now have ``.removeprefix()`` and ``removesuffix`` methods
-matching that added to strings in Python 3.9.
+The sequence objects now have ``.removeprefix()`` and ``.removesuffix()``
+methods matching that added to strings in Python 3.9.
 
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
@@ -45,7 +45,7 @@ possible, especially the following contributors:
 - Vladislav Kuznetsov (first contribution)
 
 12 February 2023: Biopython 1.81
-===============================================
+================================
 
 This release of Biopython supports Python 3.7, 3.8, 3.9, 3.10, 3.11. It has
 also been tested on PyPy3.7 v7.3.5. We intend to drop Python 3.7 support.
