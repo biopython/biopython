@@ -3,6 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Align.bigpsl module."""
+import tempfile
 import unittest
 
 
@@ -45,22 +46,32 @@ class TestAlign_dna_rna(unittest.TestCase):
         self.dna = data
         records = SeqIO.parse("Blat/rna.fa", "fasta")
         self.rna = {record.id: record.seq for record in records}
+        self.path = "Blat/dna_rna.psl.bb"
 
     def test_reading(self):
         """Test parsing dna_rna.psl.bb."""
-        path = "Blat/dna_rna.psl.bb"
-        alignments = Align.parse(path, "bigpsl")
+        alignments = Align.parse(self.path, "bigpsl")
         self.check_alignments(alignments)
         alignments.rewind()
         self.check_alignments(alignments)
-        with Align.parse(path, "bigpsl") as alignments:
+        with Align.parse(self.path, "bigpsl") as alignments:
             self.check_alignments(alignments)
         with self.assertRaises(AttributeError):
             alignments._stream
-        with Align.parse(path, "bigpsl") as alignments:
+        with Align.parse(self.path, "bigpsl") as alignments:
             pass
         with self.assertRaises(AttributeError):
             alignments._stream
+
+    def test_writing(self):
+        """Test writing dna_rna.bb."""
+        alignments = Align.parse(self.path, "bigpsl")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigpsl")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigpsl")
+            self.check_alignments(alignments)
 
     def check_alignments(self, alignments):
         self.assertEqual(
@@ -359,6 +370,20 @@ class TestAlign_dna(unittest.TestCase):
 
         path = "Blat/psl_34_001.psl.bb"
         alignments = Align.parse(path, "bigpsl")
+        self.check_psl_34_001(alignments)
+
+    def test_writing_psl_34_001(self):
+        """Test writing psl_34_001.psl.bb."""
+        path = "Blat/psl_34_001.psl.bb"
+        alignments = Align.parse(path, "bigpsl")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigpsl")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigpsl")
+            self.check_psl_34_001(alignments)
+
+    def check_psl_34_001(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -1086,6 +1111,20 @@ table bigPsl
 
         path = "Blat/psl_34_003.psl.bb"
         alignments = Align.parse(path, "bigpsl")
+        self.check_psl_34_003(alignments)
+
+    def test_writing_psl_34_003(self):
+        """Test writing psl_34_003.psl.bb."""
+        path = "Blat/psl_34_003.psl.bb"
+        alignments = Align.parse(path, "bigpsl")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigpsl")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigpsl")
+            self.check_psl_34_003(alignments)
+
+    def check_psl_34_003(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -1229,6 +1268,20 @@ table bigPsl
 
         path = "Blat/psl_34_004.psl.bb"
         alignments = Align.parse(path, "bigpsl")
+        self.check_psl_34_004(alignments)
+
+    def test_writing_psl_34_004(self):
+        """Test writing psl_34_004.psl.bb."""
+        path = "Blat/psl_34_004.psl.bb"
+        alignments = Align.parse(path, "bigpsl")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigpsl")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigpsl")
+            self.check_psl_34_004(alignments)
+
+    def check_psl_34_004(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -1866,6 +1919,20 @@ table bigPsl
 
         path = "Blat/psl_34_005.psl.bb"
         alignments = Align.parse(path, "bigpsl")
+        self.check_psl_34_005(alignments)
+
+    def test_writing_psl_34_005(self):
+        """Test writing psl_34_005.psl.bb."""
+        path = "Blat/psl_34_005.psl.bb"
+        alignments = Align.parse(path, "bigpsl")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigpsl")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigpsl")
+            self.check_psl_34_005(alignments)
+
+    def check_psl_34_005(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -2600,6 +2667,20 @@ class TestAlign_dnax_prot(unittest.TestCase):
 
         path = "Blat/psl_35_001.psl.bb"
         alignments = Align.parse(path, "bigpsl")
+        self.check_psl_35_001(alignments)
+
+    def test_writing_psl_35_001(self):
+        """Test writing psl_35_001.psl.bb."""
+        path = "Blat/psl_35_001.psl.bb"
+        alignments = Align.parse(path, "bigpsl")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigpsl")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigpsl")
+            self.check_psl_35_001(alignments)
+
+    def check_psl_35_001(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -2874,27 +2955,7 @@ table bigPsl
         )
         self.assertRaises(StopIteration, next, alignments)
 
-    def test_reading_psl_35_002(self):
-        """Test parsing psl_35_002.psl.bb."""
-
-        # The bigPsl file psl_35_002.psl.bb was generated using these commands:
-        # pslToBigPsl -fa=CAG33136.1.fasta psl_35_002.psl stdout | grep -v KI538594 | sort -k1,1 -k2,2n > psl_35_002.bigPslInput
-        # (where we excluded KI538594 because its alignment has a negative gap)
-        # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_35_002.bigPslInput balAcu1.chrom.sizes psl_35_002.psl.bb
-
-        # See below for a description of the file balAcu1.fa.
-        # We use this file here so we can check the SeqFeatures.
-        records = SeqIO.parse("Blat/balAcu1.fa", "fasta")
-        self.dna = {}
-        for record in records:
-            name, start_end = record.id.split(":")
-            start, end = start_end.split("-")
-            start = int(start)
-            end = int(end)
-            sequence = str(record.seq)
-            self.dna[name] = Seq({start: sequence}, length=end)
-        path = "Blat/psl_35_002.psl.bb"
-        alignments = Align.parse(path, "bigpsl")
+    def check_psl_35_002(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -2995,6 +3056,40 @@ table bigPsl
         )
         self.assertRaises(StopIteration, next, alignments)
 
+    def test_reading_psl_35_002(self):
+        """Test parsing psl_35_002.psl.bb."""
+
+        # The bigPsl file psl_35_002.psl.bb was generated using these commands:
+        # pslToBigPsl -fa=CAG33136.1.fasta psl_35_002.psl stdout | grep -v KI538594 | sort -k1,1 -k2,2n > psl_35_002.bigPslInput
+        # (where we excluded KI538594 because its alignment has a negative gap)
+        # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_35_002.bigPslInput balAcu1.chrom.sizes psl_35_002.psl.bb
+
+        # See below for a description of the file balAcu1.fa.
+        # We use this file here so we can check the SeqFeatures.
+        records = SeqIO.parse("Blat/balAcu1.fa", "fasta")
+        self.dna = {}
+        for record in records:
+            name, start_end = record.id.split(":")
+            start, end = start_end.split("-")
+            start = int(start)
+            end = int(end)
+            sequence = str(record.seq)
+            self.dna[name] = Seq({start: sequence}, length=end)
+        path = "Blat/psl_35_002.psl.bb"
+        alignments = Align.parse(path, "bigpsl")
+        self.check_psl_35_002(alignments)
+
+    def test_writing_psl_35_002(self):
+        """Test writing psl_35_002.psl.bb."""
+        path = "Blat/psl_35_002.psl.bb"
+        alignments = Align.parse(path, "bigpsl")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigpsl")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigpsl")
+            self.check_psl_35_002(alignments)
+
 
 class TestAlign_bigpsl(unittest.TestCase):
 
@@ -3003,10 +3098,24 @@ class TestAlign_bigpsl(unittest.TestCase):
     # bedToBigBed -as=bigPsl.as -type=bed12+13 -tab bigPsl.txt hg38.chrom.sizes bigPsl.bb
     # (see https://genome.ucsc.edu/goldenPath/help/bigPsl.html)
 
-    def test_reading_bigpsl(self):
+    def test_reading(self):
         """Test parsing bigPsl.bb."""
         path = "Blat/bigPsl.bb"
         alignments = Align.parse(path, "bigpsl")
+        self.check_alignments(alignments)
+
+    def test_writing(self):
+        """Test writing bigPsl.bb."""
+        path = "Blat/bigPsl.bb"
+        alignments = Align.parse(path, "bigpsl")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigpsl")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigpsl")
+            self.check_alignments(alignments)
+
+    def check_alignments(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\

@@ -22,10 +22,16 @@ import numpy as np
 
 
 from Bio.Align import Alignment
-from Bio.Align import bigbed
+from Bio.Align import bigbed, psl
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, Location
+
+
+class AlignmentWriter(psl.AlignmentWriter):
+    """Alignment file writer for the bigPsl file format."""
+
+    fmt = "bigPsl"
 
 
 class AlignmentIterator(bigbed.AlignmentIterator):
