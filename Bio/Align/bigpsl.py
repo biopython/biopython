@@ -231,7 +231,81 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             line = "\t".join(words) + "\n"
             output.write(line)
         output.close()
-        os.system("pslToBigPsl intermediate.psl stdout | sort -k1,1 -k2,2n > intermediate.bigPslInput")
+        input = open("intermediate.psl")
+        output = open("intermediate.unsorted.mine.bigPslInput", 'w')
+        for line in input:
+            words = line.split()
+            strand = words[8]
+            qName = words[9]
+            qSize = int(words[10])
+            qStart = int(words[11])
+            qEnd = int(words[12])
+            tName = words[13]
+            tSize = int(words[14])
+            tStart = int(words[15])
+            tEnd = int(words[16])
+            blockCount = int(words[17])
+            tStarts = np.array([int(t) for t in words[20].rstrip(",").split(",")])
+            qStarts = np.array([int(q) for q in words[19].rstrip(",").split(",")])
+            blockSizes = np.array([int(b) for b in words[18].rstrip(",").split(",")])
+            didRc = False
+            mult = 1
+            if len(strand) == 2:
+                if strand[1] == "-":
+                    didRc = True
+                    if tStart == tSize - (tStarts[-1] + 3 * blockSizes[-1]):
+                        mult = 3
+                    if strand[0] == "+":
+                        strand = "-"
+                    else:
+                        strand = "+"
+                    for i in range(blockCount):
+                        tStarts[i] = tSize - (tStarts[i] + mult * blockSizes[i])
+                        qStarts[i] = qSize - (qStarts[i] + blockSizes[i])
+                    tStarts = tStarts[::-1]
+                    qStarts = qStarts[::-1]
+                    blockSizes = blockSizes[::-1]
+                else:
+                    if tEnd == tStarts[-1] + 3 * blockSizes[-1]:
+                        mult = 3
+            chrom = tName
+            chromSize = tSize
+            match = int(words[0])
+            misMatch = int(words[1])
+            repMatch = int(words[2])
+            nCount = int(words[3])
+            oChromStart = qStart
+            oChromEnd = qEnd
+            oChromSize = qSize
+            chromStart = tStart
+            chromEnd = tEnd
+            thickStart = tStart
+            thickEnd = tEnd
+            name = qName
+            score = 1000
+            if didRc:
+                oStrand = "-"
+            else:
+                oStrand = "+"
+            reserved = 0
+            blockStarts = tStarts - chromStart
+            oBlockStarts = qStarts
+            chromStarts = blockStarts
+            oChromStarts = oBlockStarts
+            oSequence = ""
+            oCDS = ""
+            blockSizes *= mult
+            seqType = 0
+            # To be implemented: fastaHash, cdsHash
+            blockSizes = ",".join(str(b) for b in blockSizes)
+            chromStarts = ",".join(str(b) for b in chromStarts)
+            oChromStarts = ",".join(str(b) for b in oChromStarts)
+            line = f"{chrom}\t{chromStart}\t{chromEnd}\t{name}\t{score}\t{strand}\t{thickStart}\t{thickEnd}\t{reserved}\t{blockCount}\t{blockSizes},\t{chromStarts},\t{oChromStart}\t{oChromEnd}\t{oStrand}\t{oChromSize}\t{oChromStarts},\t{oSequence}\t{oCDS}\t{chromSize}\t{match}\t{misMatch}\t{repMatch}\t{nCount}\t{seqType}\n"
+            output.write(line)
+        output.close()
+
+        os.system("pslToBigPsl intermediate.psl intermediate.unsorted.bigPslInput")
+        os.system("sort -k1,1 -k2,2n intermediate.unsorted.bigPslInput > intermediate.bigPslInput")
         os.system("bedToBigBed -type=bed12+13 -tab -as=Blat/bigPsl.as intermediate.bigPslInput Align/hg38.chrom.sizes output.bb")
         input = open("output.bb", "rb")
         data = input.read()
