@@ -205,29 +205,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             blockCount = len(blockSizes)
             if dnax:
                 strand = "+" + strand
-            words = [
-                str(matches),
-                str(misMatches),
-                str(repMatches),
-                str(nCount),
-                str(qNumInsert),
-                str(qBaseInsert),
-                str(tNumInsert),
-                str(tBaseInsert),
-                strand,
-                qName,
-                str(qSize),
-                str(qStart),
-                str(qEnd),
-                tName,
-                str(tSize),
-                str(tStart),
-                str(tEnd),
-                str(blockCount),
-                blockSizes,
-                qStarts,
-                tStarts,
-            ]
             didRc = False
             mult = 1
             if len(strand) == 2:
@@ -250,10 +227,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                         mult = 3
             chrom = tName
             chromSize = tSize
-            match = int(words[0])
-            misMatch = int(words[1])
-            repMatch = int(words[2])
-            nCount = int(words[3])
             oChromStart = qStart
             oChromEnd = qEnd
             oChromSize = qSize
@@ -280,7 +253,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             blockSizes = ",".join(str(b) for b in blockSizes)
             chromStarts = ",".join(str(b) for b in chromStarts)
             oChromStarts = ",".join(str(b) for b in oChromStarts)
-            line = f"{chrom}\t{chromStart}\t{chromEnd}\t{name}\t{score}\t{strand}\t{thickStart}\t{thickEnd}\t{reserved}\t{blockCount}\t{blockSizes},\t{chromStarts},\t{oChromStart}\t{oChromEnd}\t{oStrand}\t{oChromSize}\t{oChromStarts},\t{oSequence}\t{oCDS}\t{chromSize}\t{match}\t{misMatch}\t{repMatch}\t{nCount}\t{seqType}\n"
+            line = f"{chrom}\t{chromStart}\t{chromEnd}\t{name}\t{score}\t{strand}\t{thickStart}\t{thickEnd}\t{reserved}\t{blockCount}\t{blockSizes},\t{chromStarts},\t{oChromStart}\t{oChromEnd}\t{oStrand}\t{oChromSize}\t{oChromStarts},\t{oSequence}\t{oCDS}\t{chromSize}\t{matches}\t{misMatches}\t{repMatches}\t{nCount}\t{seqType}\n"
             output.write(line)
         output.close()
         os.system("sort -k1,1 -k2,2n intermediate.unsorted.bigPslInput > intermediate.bigPslInput")
