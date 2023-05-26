@@ -203,22 +203,15 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                 else:
                     qStart, qEnd = qSize - qEnd, qSize - qStart
             blockCount = len(blockSizes)
-            if dnax:
-                strand = "+" + strand
             didRc = False
             mult = 1
-            if len(strand) == 2:
-                if strand[1] == "-":
+            if dnax:
+                if strand == "-":
                     didRc = True
                     if tStart == tSize - (tStarts[-1] + 3 * blockSizes[-1]):
                         mult = 3
-                    if strand[0] == "+":
-                        strand = "-"
-                    else:
-                        strand = "+"
-                    for i in range(blockCount):
-                        tStarts[i] = tSize - (tStarts[i] + mult * blockSizes[i])
-                        qStarts[i] = qSize - (qStarts[i] + blockSizes[i])
+                    tStarts = tSize - (tStarts + mult * blockSizes)
+                    qStarts = qSize - (qStarts + blockSizes)
                     tStarts = tStarts[::-1]
                     qStarts = qStarts[::-1]
                     blockSizes = blockSizes[::-1]
