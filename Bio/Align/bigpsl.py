@@ -36,7 +36,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
     def write_file(self, stream, alignments):
         import os
         from Bio.Seq import reverse_complement, UndefinedSequenceError
-        output = open("intermediate.psl", "w")
+        output = open("intermediate.unsorted.bigPslInput", 'w')
         for alignment in alignments:
             if not isinstance(alignment, Alignment):
                 raise TypeError("Expected an Alignment object")
@@ -228,13 +228,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                 qStarts,
                 tStarts,
             ]
-            line = "\t".join(words) + "\n"
-            output.write(line)
-        output.close()
-        input = open("intermediate.psl")
-        output = open("intermediate.unsorted.mine.bigPslInput", 'w')
-        for line in input:
-            words = line.split()
             strand = words[8]
             qName = words[9]
             qSize = int(words[10])
@@ -303,8 +296,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             line = f"{chrom}\t{chromStart}\t{chromEnd}\t{name}\t{score}\t{strand}\t{thickStart}\t{thickEnd}\t{reserved}\t{blockCount}\t{blockSizes},\t{chromStarts},\t{oChromStart}\t{oChromEnd}\t{oStrand}\t{oChromSize}\t{oChromStarts},\t{oSequence}\t{oCDS}\t{chromSize}\t{match}\t{misMatch}\t{repMatch}\t{nCount}\t{seqType}\n"
             output.write(line)
         output.close()
-
-        os.system("pslToBigPsl intermediate.psl intermediate.unsorted.bigPslInput")
         os.system("sort -k1,1 -k2,2n intermediate.unsorted.bigPslInput > intermediate.bigPslInput")
         os.system("bedToBigBed -type=bed12+13 -tab -as=Blat/bigPsl.as intermediate.bigPslInput Align/hg38.chrom.sizes output.bb")
         input = open("output.bb", "rb")
