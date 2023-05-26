@@ -174,6 +174,9 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                                     misMatches += 1
                     tStart = tEnd
                     qStart = qEnd
+            tStarts = np.array(tStarts)
+            qStarts = np.array(qStarts)
+            blockSizes = np.array(blockSizes)
             try:
                 matches = alignment.matches
             except AttributeError:
@@ -200,9 +203,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                 else:
                     qStart, qEnd = qSize - qEnd, qSize - qStart
             blockCount = len(blockSizes)
-            blockSizes = ",".join(map(str, blockSizes)) + ","
-            qStarts = ",".join(map(str, qStarts)) + ","
-            tStarts = ",".join(map(str, tStarts)) + ","
             if dnax:
                 strand = "+" + strand
             words = [
@@ -228,19 +228,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                 qStarts,
                 tStarts,
             ]
-            strand = words[8]
-            qName = words[9]
-            qSize = int(words[10])
-            qStart = int(words[11])
-            qEnd = int(words[12])
-            tName = words[13]
-            tSize = int(words[14])
-            tStart = int(words[15])
-            tEnd = int(words[16])
-            blockCount = int(words[17])
-            tStarts = np.array([int(t) for t in words[20].rstrip(",").split(",")])
-            qStarts = np.array([int(q) for q in words[19].rstrip(",").split(",")])
-            blockSizes = np.array([int(b) for b in words[18].rstrip(",").split(",")])
             didRc = False
             mult = 1
             if len(strand) == 2:
