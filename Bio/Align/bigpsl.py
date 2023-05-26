@@ -28,10 +28,23 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, Location
 
 
-class AlignmentWriter(psl.AlignmentWriter):
+class AlignmentWriter(bigbed.AlignmentWriter):
     """Alignment file writer for the bigPsl file format."""
 
     fmt = "bigPsl"
+
+    def write_file(self, stream, alignments):
+        from Bio import Align
+        import os
+        output = open("intermediate.psl", "w")
+        Align.write(alignments, output, "psl")
+        output.close()
+        os.system("pslToBigPsl intermediate.psl stdout | sort -k1,1 -k2,2n > intermediate.bigPslInput")
+        os.system("bedToBigBed -type=bed12+13 -tab -as=Blat/bigPsl.as intermediate.bigPslInput Align/hg38.chrom.sizes output.bb")
+        input = open("output.bb", "rb")
+        data = input.read()
+        input.close()
+        stream.write(data)
 
 
 class AlignmentIterator(bigbed.AlignmentIterator):
