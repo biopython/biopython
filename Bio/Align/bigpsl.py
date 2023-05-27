@@ -34,9 +34,11 @@ class AlignmentWriter(bigbed.AlignmentWriter):
     fmt = "bigPsl"
 
     def write_file(self, stream, alignments):
+        """Write the file."""
         import os
         from Bio.Seq import reverse_complement, UndefinedSequenceError
-        output = open("intermediate.unsorted.bigPslInput", 'w')
+
+        rows = []
         for alignment in alignments:
             if not isinstance(alignment, Alignment):
                 raise TypeError("Expected an Alignment object")
@@ -246,11 +248,56 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             blockSizes = ",".join(str(b) for b in blockSizes)
             chromStarts = ",".join(str(b) for b in chromStarts)
             oChromStarts = ",".join(str(b) for b in oChromStarts)
-            line = f"{chrom}\t{chromStart}\t{chromEnd}\t{name}\t{score}\t{strand}\t{thickStart}\t{thickEnd}\t{reserved}\t{blockCount}\t{blockSizes},\t{chromStarts},\t{oChromStart}\t{oChromEnd}\t{oStrand}\t{oChromSize}\t{oChromStarts},\t{oSequence}\t{oCDS}\t{chromSize}\t{matches}\t{misMatches}\t{repMatches}\t{nCount}\t{seqType}\n"
+            row = (
+                chrom,
+                str(chromStart),
+                str(chromEnd),
+                name,
+                str(score),
+                strand,
+                str(thickStart),
+                str(thickEnd),
+                str(reserved),
+                str(blockCount),
+                blockSizes,
+                chromStarts,
+                str(oChromStart),
+                str(oChromEnd),
+                oStrand,
+                str(oChromSize),
+                oChromStarts,
+                oSequence,
+                oCDS,
+                str(chromSize),
+                str(matches),
+                str(misMatches),
+                str(repMatches),
+                str(nCount),
+                str(seqType),
+            )
+            rows.append(row)
+            alignment.annotations["oChromStart"] = oChromStart
+            alignment.annotations["oChromEnd"] = oChromEnd
+            alignment.annotations["oStrand"] = oStrand
+            alignment.annotations["oChromSize"] = oChromSize
+            alignment.annotations["oChromStarts"] = oChromStarts
+            alignment.annotations["oSequence"] = oSequence
+            alignment.annotations["oCDS"] = oCDS
+            alignment.annotations["chromSize"] = chromSize
+            alignment.annotations["match"] = matches
+            alignment.annotations["misMatch"] = misMatches
+            alignment.annotations["repMatch"] = repMatches
+            alignment.annotations["nCount"] = nCount
+            alignment.annotations["seqType"] = seqType
+        output = open("intermediate.bigPslInput", "w")
+        rows.sort(key=lambda row: row[:2])
+        for row in rows:
+            line = "\t".join(row) + "\n"
             output.write(line)
         output.close()
-        os.system("sort -k1,1 -k2,2n intermediate.unsorted.bigPslInput > intermediate.bigPslInput")
-        os.system("bedToBigBed -type=bed12+13 -tab -as=Blat/bigPsl.as intermediate.bigPslInput Align/hg38.chrom.sizes output.bb")
+        os.system(
+            "bedToBigBed -type=bed12+13 -tab -as=Blat/bigPsl.as intermediate.bigPslInput Align/hg38.chrom.sizes output.bb"
+        )
         input = open("output.bb", "rb")
         data = input.read()
         input.close()
