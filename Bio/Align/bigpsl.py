@@ -28,6 +28,22 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, Location
 
 
+class TempAlignments(list):
+    def __init__(self, items):
+        super().__init__(items)
+        self.index = 0
+    def __iter__(self):
+        return self
+    def __next__(self):
+        try:
+            item = self[self.index]
+        except IndexError:
+            raise StopIteration
+        self.index += 1
+        return item
+    def rewind(self):
+        self.index = 0
+
 class AlignmentWriter(bigbed.AlignmentWriter):
     """Alignment file writer for the bigPsl file format."""
 
@@ -39,6 +55,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
         from Bio.Seq import reverse_complement, UndefinedSequenceError
 
         rows = []
+        fixed_alignments = TempAlignments([])
         for alignment in alignments:
             if not isinstance(alignment, Alignment):
                 raise TypeError("Expected an Alignment object")
@@ -276,32 +293,26 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                 str(seqType),
             )
             rows.append(row)
-            alignment.annotations["oChromStart"] = oChromStart
-            alignment.annotations["oChromEnd"] = oChromEnd
+            alignment.annotations["oChromStart"] = str(oChromStart)
+            alignment.annotations["oChromEnd"] = str(oChromEnd)
             alignment.annotations["oStrand"] = oStrand
-            alignment.annotations["oChromSize"] = oChromSize
-            alignment.annotations["oChromStarts"] = oChromStarts
+            alignment.annotations["oChromSize"] = str(oChromSize)
+            alignment.annotations["oChromStarts"] = oChromStarts.rstrip(",")
             alignment.annotations["oSequence"] = oSequence
             alignment.annotations["oCDS"] = oCDS
-            alignment.annotations["chromSize"] = chromSize
-            alignment.annotations["match"] = matches
-            alignment.annotations["misMatch"] = misMatches
-            alignment.annotations["repMatch"] = repMatches
-            alignment.annotations["nCount"] = nCount
-            alignment.annotations["seqType"] = seqType
-        output = open("intermediate.bigPslInput", "w")
-        rows.sort(key=lambda row: row[:2])
-        for row in rows:
-            line = "\t".join(row) + "\n"
-            output.write(line)
-        output.close()
-        os.system(
-            "bedToBigBed -type=bed12+13 -tab -as=Blat/bigPsl.as intermediate.bigPslInput Align/hg38.chrom.sizes output.bb"
-        )
-        input = open("output.bb", "rb")
-        data = input.read()
-        input.close()
-        stream.write(data)
+            alignment.annotations["chromSize"] = str(chromSize)
+            alignment.annotations["match"] = str(matches)
+            alignment.annotations["misMatch"] = str(misMatches)
+            alignment.annotations["repMatch"] = str(repMatches)
+            alignment.annotations["nCount"] = str(nCount)
+            alignment.annotations["seqType"] = str(seqType)
+            fixed_alignments.append(alignment)
+        fixed_alignments.sort(key=lambda alignment: (alignment.target.name, alignment.coordinates[0,0]))
+        fixed_alignments.targets = alignments.targets
+        autosql_data = open("Blat/bigPsl.as").read().encode() + b"\0"
+        declaration = bigbed.AutoSQLTable.from_bytes(autosql_data)
+        
+        bigbed.AlignmentWriter(stream, bedN=12, declaration=declaration).write(fixed_alignments)
 
 
 class AlignmentIterator(bigbed.AlignmentIterator):

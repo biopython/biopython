@@ -124,7 +124,9 @@ class AutoSQLTable(list):
             field = Field(field_type, field_name, field_comment)
             fields.append(field)
             text = text[j + 1 :].strip()
-        return AutoSQLTable(name, comment, fields)
+        table = AutoSQLTable(name, comment, fields)
+        table._bytes = data
+        return table
 
     @classmethod
     def from_string(cls, data):
@@ -152,7 +154,10 @@ class AutoSQLTable(list):
         return "".join(lines)
 
     def __bytes__(self):
-        return str(self).encode() + b"\0"
+        try:
+            return self._bytes
+        except AttributeError:
+            return str(self).encode() + b"\0"
 
     def __getitem__(self, i):
         if isinstance(i, slice):
@@ -559,10 +564,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             blockCount = len(blockSizes)
             row.append(str(blockCount))
         if bedN > 10:
-            row.append(",".join(str(blockSize) for blockSize in blockSizes) + ",")
+            row.append(",".join(str(blockSize) for blockSize in blockSizes))
         if bedN > 11:
             chromStarts = alignment.coordinates[0, :-1][aligned] - chromStart
-            row.append(",".join(str(chromStart) for chromStart in chromStarts) + ",")
+            row.append(",".join(str(chromStart) for chromStart in chromStarts))
         if bedN > 12:
             if bedN != 15:
                 raise ValueError(f"Unexpected value {bedN} for bedN in _extract_fields")
