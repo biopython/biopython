@@ -44,6 +44,7 @@ class TempAlignments(list):
     def rewind(self):
         self.index = 0
 
+
 class AlignmentWriter(bigbed.AlignmentWriter):
     """Alignment file writer for the bigPsl file format."""
 
@@ -307,7 +308,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             alignment.annotations["nCount"] = str(nCount)
             alignment.annotations["seqType"] = str(seqType)
             fixed_alignments.append(alignment)
-        fixed_alignments.sort(key=lambda alignment: (alignment.target.name, alignment.coordinates[0,0]))
+        fixed_alignments.sort(key=lambda alignment: (alignment.target.id, alignment.coordinates[0,0]))
         fixed_alignments.targets = alignments.targets
         autosql_data = open("Blat/bigPsl.as").read().encode() + b"\0"
         declaration = bigbed.AutoSQLTable.from_bytes(autosql_data)
