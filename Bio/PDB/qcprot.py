@@ -108,7 +108,9 @@ def qcp(coords1, coords2, natoms):
         x2 = mxEigenV * mxEigenV
         b = (x2 + C2) * mxEigenV
         a = b + C1
-        delta = (a * mxEigenV + C0) / (2.0 * x2 * mxEigenV + b + a)
+        # Add 1e6 to delta to avoid division by 0 and warnings in certain
+        # cases with coordinate sets that are very similar after transformation.
+        delta = (a * mxEigenV + C0) / ((2.0 * x2 * mxEigenV + b + a) + 1e6)
         mxEigenV -= delta
         if abs(mxEigenV - oldg) < abs(evalprec * mxEigenV):
             break
@@ -312,14 +314,14 @@ class QCPSuperimposer:
         coords_ref = self.reference_coords.copy()
 
         # Center Coordinates
-        com1 = np.mean(coords, axis=0)
-        com2 = np.mean(coords_ref, axis=0)
+        com_coords = np.mean(coords, axis=0)
+        com_ref = np.mean(coords_ref, axis=0)
 
-        coords -= com1
-        coords_ref -= com2
+        coords -= com_coords
+        coords_ref -= com_ref
 
         (self.rms, self.rot, _) = qcp(coords_ref, coords, self._natoms)
-        self.tran = com2 - np.dot(com1, self.rot)
+        self.tran = com_ref - np.dot(com_coords, self.rot)
 
     # Getters
     def get_transformed(self):
@@ -346,7 +348,7 @@ class QCPSuperimposer:
 
         if self.init_rms is None:
             diff = self.coords - self.reference_coords
-            self.init_rms = np.sqrt(np.sum(np.dot(diff, diff), axis=0) / self._natoms)
+            self.init_rms = np.sqrt(np.sum(np.sum(diff * diff, axis=1) / self._natoms))
         return self.init_rms
 
     def get_rms(self):

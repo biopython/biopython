@@ -19,6 +19,7 @@ except ImportError:
 
 from Bio.PDB import PDBParser, Selection
 from Bio.PDB.qcprot import QCPSuperimposer
+from Bio.SVDSuperimposer import SVDSuperimposer
 
 
 class QCPSuperimposerTest(unittest.TestCase):
@@ -41,50 +42,68 @@ class QCPSuperimposerTest(unittest.TestCase):
             ]
         )
 
-        self.sup = QCPSuperimposer()
-        self.sup.set(self.x, self.y)
-
-    def _arr_to_list(self, a):
-        """Return the array cast as a list, rounded to 3 decimals."""
-        return np.around(a, decimals=3).tolist()
-
     # Public methods
     def test_set(self):
         """Test setting of initial parameters."""
-        self.assertEqual(
-            self._arr_to_list(self.sup.reference_coords), self._arr_to_list(self.x)
-        )
-        self.assertEqual(self._arr_to_list(self.sup.coords), self._arr_to_list(self.y))
-        self.assertIsNone(self.sup.transformed_coords)
-        self.assertIsNone(self.sup.rot)
-        self.assertIsNone(self.sup.tran)
-        self.assertIsNone(self.sup.rms)
-        self.assertIsNone(self.sup.init_rms)
+        sup = QCPSuperimposer()
+        sup.set(self.x, self.y)
+
+        self.assertTrue(np.allclose(sup.reference_coords, self.x, atol=1e-6))
+        self.assertTrue(np.allclose(sup.coords, self.y, atol=1e-6))
+        self.assertIsNone(sup.transformed_coords)
+        self.assertIsNone(sup.rot)
+        self.assertIsNone(sup.tran)
+        self.assertIsNone(sup.rms)
+        self.assertIsNone(sup.init_rms)
 
     def test_run(self):
         """Test QCP on dummy data."""
-        self.sup.run()
-        self.assertEqual(
-            self._arr_to_list(self.sup.reference_coords), self._arr_to_list(self.x)
-        )
-        self.assertEqual(self._arr_to_list(self.sup.coords), self._arr_to_list(self.y))
-        self.assertIsNone(self.sup.transformed_coords)
+        sup = QCPSuperimposer()
+        sup.set(self.x, self.y)
+
+        sup.run()
+        self.assertTrue(np.allclose(sup.reference_coords, self.x, atol=1e-6))
+        self.assertTrue(np.allclose(sup.coords, self.y, atol=1e-6))
+        self.assertIsNone(sup.transformed_coords)
+
         calc_rot = [
             [0.683, 0.537, 0.495],
             [-0.523, 0.833, -0.181],
             [-0.510, -0.135, 0.849],
         ]
-        self.assertEqual(self._arr_to_list(self.sup.rot), calc_rot)
         calc_tran = [38.786, -20.655, -15.422]
-        self.assertEqual(self._arr_to_list(self.sup.tran), calc_tran)
+
+        self.assertTrue(np.allclose(np.array(calc_rot), sup.rot, atol=1e-3))
+        self.assertTrue(np.allclose(np.array(calc_tran), sup.tran, atol=1e-3))
+
         # We can reduce precision here since we do a similar calculation
         # for a full structure down below.
-        self.assertAlmostEqual(self.sup.rms, 0.003, places=2)
-        self.assertIsNone(self.sup.init_rms)
+        self.assertAlmostEqual(sup.rms, 0.003, places=2)
+        self.assertIsNone(sup.init_rms)
+
+    def test_compare_to_svd(self):
+        """Compare results of QCP to SVD."""
+        sup = QCPSuperimposer()
+        sup.set(self.x, self.y)
+        sup.run()
+
+        svd_sup = SVDSuperimposer()
+        svd_sup.set(self.x, self.y)
+        svd_sup.run()
+
+        self.assertAlmostEqual(svd_sup.get_rms(), sup.rms, places=2)
+        self.assertTrue(np.allclose(svd_sup.rot, sup.rot, atol=1e-3))
+        self.assertTrue(np.allclose(svd_sup.tran, sup.tran, atol=1e-3))
+        self.assertTrue(
+            np.allclose(svd_sup.get_transformed(), sup.get_transformed(), atol=1e-3)
+        )
 
     def test_get_transformed(self):
         """Test transformation of coordinates after QCP."""
-        self.sup.run()
+        sup = QCPSuperimposer()
+        sup.set(self.x, self.y)
+
+        sup.run()
         transformed_coords = [
             [51.652, -1.900, 50.071],
             [50.398, -1.229, 50.649],
@@ -92,21 +111,21 @@ class QCPSuperimposerTest(unittest.TestCase):
             [50.220, -0.019, 52.853],
         ]
 
-        self.assertEqual(
-            self._arr_to_list(self.sup.get_transformed()), transformed_coords
+        self.assertTrue(
+            np.allclose(sup.get_transformed(), np.array(transformed_coords), atol=1e-3)
         )
 
     def test_get_init_rms(self):
         """Test initial RMS calculation."""
-        x = np.array([[1.1, 1.2, 1.3], [1.4, 1.5, 1.6], [1.7, 1.8, 1.9]])
-        y = np.array([[1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0]])
-        self.sup.set(x, y)
-        self.assertIsNone(self.sup.init_rms)
-        init_rms = [0.812, 0.90, 0.98]
-        self.assertEqual(
-            self._arr_to_list(self.sup.get_init_rms()),
-            init_rms,
-        )
+        x = np.array([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])
+        y = np.array([[2.0, 0.0, 0.0], [1.0, 1.0, 0.0], [1.0, 0.0, 1.0]])
+
+        sup = QCPSuperimposer()
+        sup.set(x, y)
+        self.assertIsNone(sup.init_rms)
+
+        expected_init_rms = 1.0
+        self.assertAlmostEqual(sup.get_init_rms(), expected_init_rms, places=6)
 
     def test_on_pdb(self):
         """Align a PDB to itself."""
@@ -124,8 +143,8 @@ class QCPSuperimposerTest(unittest.TestCase):
 
         sup = QCPSuperimposer()
         sup.set_atoms(fixed, moving)
-        self.assertEqual(self._arr_to_list(sup.rotran[0]), self._arr_to_list(rot))
-        self.assertEqual(self._arr_to_list(sup.rotran[1]), self._arr_to_list(-tran))
+        self.assertTrue(np.allclose(sup.rotran[0], rot, atol=1e-3))
+        self.assertTrue(np.allclose(sup.rotran[1], -tran, atol=1e-3))
         self.assertAlmostEqual(sup.rms, 0.0, places=6)
 
 

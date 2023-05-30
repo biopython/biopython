@@ -63,7 +63,7 @@ class QCPSuperimposer:
     def _rms(self, coords1, coords2):
         """Return rms deviations between coords1 and coords2 (PRIVATE)."""
         diff = coords1 - coords2
-        return np.sqrt(sum(np.dot(diff, diff)) / coords1.shape[0])
+        return np.sqrt(sum(np.dot(diff, diff.T)) / coords1.shape[0])
 
     def _inner_product(self, coords1, coords2):
         G1 = np.inner(coords1, coords1).diagonal().sum()
