@@ -239,7 +239,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             if dnax is True:
                 if tEnd == tStarts[-1] + 3 * blockSizes[-1]:
                     mult = 3
-            qEnd = qStarts[-1] + mult * qCount  # end of alignment in query
+            qEnd = qStarts[-1] + qCount  # end of alignment in query
             if strand == "-":
                 if dnax is True:
                     didRc = True
@@ -286,6 +286,13 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                 oCDS = ""
             blockSizes *= mult
             seqType = 0
+            molecule_type = alignment.query.annotations.get("molecule_type")
+            if molecule_type == "DNA":
+                seqType = "1"
+            elif molecule_type == "protein":
+                seqType = "2"
+            else:
+                seqType = "0"
             blockSizes = ",".join(str(b) for b in blockSizes)
             chromStarts = ",".join(str(b) for b in chromStarts)
             oChromStarts = ",".join(str(b) for b in oChromStarts)
@@ -314,7 +321,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                 str(misMatches),
                 str(repMatches),
                 str(nCount),
-                str(seqType),
+                seqType
             )
             rows.append(row)
             alignment.annotations["oChromStart"] = str(oChromStart)
@@ -329,14 +336,14 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             alignment.annotations["misMatch"] = str(misMatches)
             alignment.annotations["repMatch"] = str(repMatches)
             alignment.annotations["nCount"] = str(nCount)
-            alignment.annotations["seqType"] = str(seqType)
+            alignment.annotations["seqType"] = seqType
             fixed_alignments.append(alignment)
         fixed_alignments.sort(key=lambda alignment: (alignment.target.id, alignment.coordinates[0,0]))
         fixed_alignments.targets = alignments.targets
         autosql_data = open("Blat/bigPsl.as").read().encode() + b"\0"
         declaration = bigbed.AutoSQLTable.from_bytes(autosql_data)
         
-        bigbed.AlignmentWriter(stream, bedN=12, declaration=declaration).write(fixed_alignments)
+        bigbed.AlignmentWriter(stream, bedN=12, declaration=declaration, compress=self.compress).write(fixed_alignments)
 
 
 class AlignmentIterator(bigbed.AlignmentIterator):
