@@ -50,6 +50,19 @@ class AlignmentWriter(bigbed.AlignmentWriter):
 
     fmt = "bigPsl"
 
+    def __init__(
+        self,
+        target,
+        bedN=12,
+        declaration=None,
+        targets=None,
+        compress=True,
+        extraIndex=(),
+        cds=False,
+    ):
+        super().__init__(target, bedN=bedN, declaration=declaration, targets=targets, compress=compress, extraIndex=extraIndex)
+        self.cds = cds
+
     def write_file(self, stream, alignments):
         """Write the file."""
         import os
@@ -259,7 +272,15 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             chromStarts = blockStarts
             oChromStarts = oBlockStarts
             oSequence = ""
-            oCDS = ""
+            if self.cds is True:
+                for feature in alignment.query.features:
+                    if feature.type == "CDS":
+                        oCDS = format(feature.location, "ncbi")
+                        break
+                else:
+                    oCDS = "n/a"
+            else:
+                oCDS = ""
             blockSizes *= mult
             seqType = 0
             # To be implemented: fastaHash, cdsHash

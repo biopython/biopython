@@ -3109,7 +3109,7 @@ class TestAlign_bigpsl(unittest.TestCase):
         path = "Blat/bigPsl.bb"
         alignments = Align.parse(path, "bigpsl")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigpsl")
+            Align.write(alignments, output, "bigpsl", cds=True)
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigpsl")

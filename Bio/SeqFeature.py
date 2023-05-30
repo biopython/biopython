@@ -1052,6 +1052,15 @@ class SimpleLocation(Location):
         self.ref = ref
         self.ref_db = ref_db
 
+    def __format__(self, format_spec):
+        if not format_spec:
+            return str(self)
+        if format_spec != "ncbi":
+            raise ValueError(f"Unknown format {format_spec}")
+        start = self.start
+        end = self.end
+        return f"{start+1}..{end}"
+
     @staticmethod
     def fromstring(text, length=None, circular=False):
         """Create a SimpleLocation object from a string."""
@@ -1587,6 +1596,13 @@ class CompoundLocation(Location):
     def __str__(self):
         """Return a representation of the CompoundLocation object (with python counting)."""
         return "%s{%s}" % (self.operator, ", ".join(str(loc) for loc in self.parts))
+
+    def __format__(self, format_spec):
+        if not format_spec:
+            return str(self)
+        if format_spec != "ncbi":
+            raise ValueError(f"Unknown format {format_spec}")
+        return "%s(%s)" % (self.operator, ",".join(format(loc, "ncbi") for loc in self.parts))
 
     def __repr__(self):
         """Represent the CompoundLocation object as string for debugging."""
