@@ -249,6 +249,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                     tStarts = tStarts[::-1]
                     qStarts = qStarts[::-1]
                     blockSizes = blockSizes[::-1]
+                    alignment.coordinates = alignment.coordinates[:, ::-1]
                 else:
                     qStart, qEnd = qSize - qEnd, qSize - qStart
             chrom = tName

@@ -3084,7 +3084,7 @@ table bigPsl
         path = "Blat/psl_35_002.psl.bb"
         alignments = Align.parse(path, "bigpsl")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigpsl")
+            Align.write(alignments, output, "bigpsl", fa=True)
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigpsl")
