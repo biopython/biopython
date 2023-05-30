@@ -230,31 +230,27 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                 nCount = alignment.nCount
             except AttributeError:
                 pass
-            tStart = tStarts[0]  # start of alignment in target
-            qStart = qStarts[0]  # start of alignment in query
-            tEnd = tStarts[-1] + tCount  # end of alignment in target
-            qEnd = qStarts[-1] + qCount  # end of alignment in query
-            if strand == "-":
-                if dnax is True:
-                    tStart, tEnd = tSize - tEnd, tSize - tStart
-                else:
-                    qStart, qEnd = qSize - qEnd, qSize - qStart
             blockCount = len(blockSizes)
             didRc = False
             mult = 1
-            if dnax:
-                if strand == "-":
+            tStart = tStarts[0]  # start of alignment in target
+            qStart = qStarts[0]  # start of alignment in query
+            tEnd = tStarts[-1] + tCount  # end of alignment in target
+            if dnax is True:
+                if tEnd == tStarts[-1] + 3 * blockSizes[-1]:
+                    mult = 3
+            qEnd = qStarts[-1] + mult * qCount  # end of alignment in query
+            if strand == "-":
+                if dnax is True:
                     didRc = True
-                    if tStart == tSize - (tStarts[-1] + 3 * blockSizes[-1]):
-                        mult = 3
+                    tStart, tEnd = tSize - tEnd, tSize - tStart
                     tStarts = tSize - (tStarts + mult * blockSizes)
                     qStarts = qSize - (qStarts + blockSizes)
                     tStarts = tStarts[::-1]
                     qStarts = qStarts[::-1]
                     blockSizes = blockSizes[::-1]
                 else:
-                    if tEnd == tStarts[-1] + 3 * blockSizes[-1]:
-                        mult = 3
+                    qStart, qEnd = qSize - qEnd, qSize - qStart
             chrom = tName
             chromSize = tSize
             oChromStart = qStart
