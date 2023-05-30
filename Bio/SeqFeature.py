@@ -1059,7 +1059,10 @@ class SimpleLocation(Location):
             raise ValueError(f"Unknown format {format_spec}")
         start = self.start
         end = self.end
-        return f"{start+1}..{end}"
+        text = f"{start+1}..{end}"
+        if self.strand == -1:
+            text = "complement(%s)" % text
+        return text
 
     @staticmethod
     def fromstring(text, length=None, circular=False):

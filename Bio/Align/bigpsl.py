@@ -59,9 +59,11 @@ class AlignmentWriter(bigbed.AlignmentWriter):
         compress=True,
         extraIndex=(),
         cds=False,
+        fa=False,
     ):
         super().__init__(target, bedN=bedN, declaration=declaration, targets=targets, compress=compress, extraIndex=extraIndex)
         self.cds = cds
+        self.fa = fa
 
     def write_file(self, stream, alignments):
         """Write the file."""
@@ -70,6 +72,8 @@ class AlignmentWriter(bigbed.AlignmentWriter):
 
         rows = []
         fixed_alignments = TempAlignments([])
+        cds = self.cds
+        fa = self.fa
         for alignment in alignments:
             if not isinstance(alignment, Alignment):
                 raise TypeError("Expected an Alignment object")
@@ -271,8 +275,11 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             oBlockStarts = qStarts
             chromStarts = blockStarts
             oChromStarts = oBlockStarts
-            oSequence = ""
-            if self.cds is True:
+            if fa is True:
+                oSequence = str(alignment.query.seq)
+            else:
+                oSequence = ""
+            if cds is True:
                 for feature in alignment.query.features:
                     if feature.type == "CDS":
                         oCDS = format(feature.location, "ncbi")
@@ -283,7 +290,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                 oCDS = ""
             blockSizes *= mult
             seqType = 0
-            # To be implemented: fastaHash, cdsHash
             blockSizes = ",".join(str(b) for b in blockSizes)
             chromStarts = ",".join(str(b) for b in chromStarts)
             oChromStarts = ",".join(str(b) for b in oChromStarts)

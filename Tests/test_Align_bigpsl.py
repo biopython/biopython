@@ -377,7 +377,7 @@ class TestAlign_dna(unittest.TestCase):
         path = "Blat/psl_34_001.psl.bb"
         alignments = Align.parse(path, "bigpsl")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigpsl")
+            Align.write(alignments, output, "bigpsl", fa=True)
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigpsl")
@@ -1118,7 +1118,7 @@ table bigPsl
         path = "Blat/psl_34_003.psl.bb"
         alignments = Align.parse(path, "bigpsl")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigpsl")
+            Align.write(alignments, output, "bigpsl", fa=True)
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigpsl")
@@ -1275,7 +1275,7 @@ table bigPsl
         path = "Blat/psl_34_004.psl.bb"
         alignments = Align.parse(path, "bigpsl")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigpsl")
+            Align.write(alignments, output, "bigpsl", fa=True)
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigpsl")
@@ -1926,7 +1926,7 @@ table bigPsl
         path = "Blat/psl_34_005.psl.bb"
         alignments = Align.parse(path, "bigpsl")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigpsl")
+            Align.write(alignments, output, "bigpsl", fa=True)
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigpsl")
