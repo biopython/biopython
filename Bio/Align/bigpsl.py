@@ -239,9 +239,10 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                 if tEnd == tStarts[-1] + 3 * blockSizes[-1]:
                     mult = 3
             qEnd = qStarts[-1] + qCount  # end of alignment in query
+            oStrand = "+"
             if strand == "-":
                 if dnax is True:
-                    didRc = True
+                    oStrand = "-"
                     tStart, tEnd = tSize - tEnd, tSize - tStart
                     tStarts = tSize - (tStarts + mult * blockSizes)
                     qStarts = qSize - (qStarts + blockSizes)
@@ -250,26 +251,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                     alignment.coordinates = alignment.coordinates[:, ::-1]
                 else:
                     qStart, qEnd = qSize - qEnd, qSize - qStart
-            chrom = tName
-            chromSize = tSize
-            oChromStart = qStart
-            oChromEnd = qEnd
-            oChromSize = qSize
-            chromStart = tStart
-            chromEnd = tEnd
-            thickStart = tStart
-            thickEnd = tEnd
-            name = qName
-            score = 1000
-            if didRc:
-                oStrand = "-"
-            else:
-                oStrand = "+"
-            reserved = 0
-            blockStarts = tStarts - chromStart
-            oBlockStarts = qStarts
-            chromStarts = blockStarts
-            oChromStarts = oBlockStarts
             if fa is True:
                 oSequence = str(alignment.query.seq)
             else:
@@ -291,16 +272,14 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                 seqType = "2"
             else:
                 seqType = "0"
-            chromStarts = ",".join(str(b) for b in chromStarts)
-            oChromStarts = ",".join(str(b) for b in oChromStarts)
-            alignment.annotations["oChromStart"] = str(oChromStart)
-            alignment.annotations["oChromEnd"] = str(oChromEnd)
+            alignment.annotations["oChromStart"] = str(qStart)
+            alignment.annotations["oChromEnd"] = str(qEnd)
             alignment.annotations["oStrand"] = oStrand
-            alignment.annotations["oChromSize"] = str(oChromSize)
-            alignment.annotations["oChromStarts"] = oChromStarts.rstrip(",")
+            alignment.annotations["oChromSize"] = str(qSize)
+            alignment.annotations["oChromStarts"] = ",".join(map(str, qStarts))
             alignment.annotations["oSequence"] = oSequence
             alignment.annotations["oCDS"] = oCDS
-            alignment.annotations["chromSize"] = str(chromSize)
+            alignment.annotations["chromSize"] = str(tSize)
             alignment.annotations["match"] = str(matches)
             alignment.annotations["misMatch"] = str(misMatches)
             alignment.annotations["repMatch"] = str(repMatches)
