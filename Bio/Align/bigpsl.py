@@ -70,7 +70,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
         import os
         from Bio.Seq import reverse_complement, UndefinedSequenceError
 
-        rows = []
         fixed_alignments = TempAlignments([])
         cds = self.cds
         fa = self.fa
@@ -248,7 +247,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                     qStarts = qSize - (qStarts + blockSizes)
                     tStarts = tStarts[::-1]
                     qStarts = qStarts[::-1]
-                    blockSizes = blockSizes[::-1]
                     alignment.coordinates = alignment.coordinates[:, ::-1]
                 else:
                     qStart, qEnd = qSize - qEnd, qSize - qStart
@@ -285,7 +283,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                     oCDS = "n/a"
             else:
                 oCDS = ""
-            blockSizes *= mult
             seqType = 0
             molecule_type = alignment.query.annotations.get("molecule_type")
             if molecule_type == "DNA":
@@ -294,37 +291,8 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                 seqType = "2"
             else:
                 seqType = "0"
-            blockSizes = ",".join(str(b) for b in blockSizes)
             chromStarts = ",".join(str(b) for b in chromStarts)
             oChromStarts = ",".join(str(b) for b in oChromStarts)
-            row = (
-                chrom,
-                str(chromStart),
-                str(chromEnd),
-                name,
-                str(score),
-                strand,
-                str(thickStart),
-                str(thickEnd),
-                str(reserved),
-                str(blockCount),
-                blockSizes,
-                chromStarts,
-                str(oChromStart),
-                str(oChromEnd),
-                oStrand,
-                str(oChromSize),
-                oChromStarts,
-                oSequence,
-                oCDS,
-                str(chromSize),
-                str(matches),
-                str(misMatches),
-                str(repMatches),
-                str(nCount),
-                seqType
-            )
-            rows.append(row)
             alignment.annotations["oChromStart"] = str(oChromStart)
             alignment.annotations["oChromEnd"] = str(oChromEnd)
             alignment.annotations["oStrand"] = oStrand
