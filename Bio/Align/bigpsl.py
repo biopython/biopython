@@ -23,7 +23,7 @@ import numpy as np
 
 from Bio.Align import Alignment
 from Bio.Align import bigbed, psl
-from Bio.Seq import Seq
+from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, Location
 
@@ -53,7 +53,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
     def __init__(
         self,
         target,
-        bedN=12,
         declaration=None,
         targets=None,
         compress=True,
@@ -85,7 +84,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                        `repMatches` fields.
                        Default value is 'N'.
     """
-        super().__init__(target, bedN=bedN, declaration=declaration, targets=targets, compress=compress, extraIndex=extraIndex)
+        super().__init__(target, bedN=12, declaration=declaration, targets=targets, compress=compress, extraIndex=extraIndex)
         self.cds = cds
         self.fa = fa
         self.mask = mask
@@ -93,9 +92,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
 
     def write_file(self, stream, alignments):
         """Write the file."""
-        import os
-        from Bio.Seq import reverse_complement, UndefinedSequenceError
-
         fixed_alignments = TempAlignments([])
         cds = self.cds
         fa = self.fa
