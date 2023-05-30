@@ -60,10 +60,36 @@ class AlignmentWriter(bigbed.AlignmentWriter):
         extraIndex=(),
         cds=False,
         fa=False,
+        mask=None,
+        wildcard="N",
     ):
+        """Create an AlignmentWriter object.
+
+        Arguments:
+         - target    - output stream or file name
+         - header    - If True (default), write the PSL header consisting of
+                       five lines containing the PSL format version and a
+                       header for each column.
+                       If False, suppress the PSL header, resulting in a simple
+                       tab-delimited file.
+         - mask      - Specify if repeat regions in the target sequence are
+                       masked and should be reported in the `repMatches` field
+                       of the PSL file instead of in the `matches` field.
+                       Acceptable values are
+                       None   : no masking (default);
+                       "lower": masking by lower-case characters;
+                       "upper": masking by upper-case characters.
+         - wildcard  - Report alignments to the wildcard character in the
+                       target or query sequence in the `nCount` field of the
+                       PSL file instead of in the `matches`, `misMatches`, or
+                       `repMatches` fields.
+                       Default value is 'N'.
+    """
         super().__init__(target, bedN=bedN, declaration=declaration, targets=targets, compress=compress, extraIndex=extraIndex)
         self.cds = cds
         self.fa = fa
+        self.mask = mask
+        self.wildcard = wildcard
 
     def write_file(self, stream, alignments):
         """Write the file."""
@@ -81,17 +107,9 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                 continue
             target, query = alignment.sequences
             try:
-                qName = query.id
-            except AttributeError:
-                qName = "query"
-            try:
                 query = query.seq
             except AttributeError:
                 pass
-            try:
-                tName = target.id
-            except AttributeError:
-                tName = "target"
             try:
                 target = target.seq
             except AttributeError:
@@ -101,6 +119,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             # fmt: off
             dnax = None  # set to True for translated DNA aligned to protein,
                          # and to False for DNA/RNA aligned to DNA/RNA  # noqa: E114, E116
+            # fmt: on
             if coordinates[1, 0] > coordinates[1, -1]:
                 # DNA/RNA mapped to reverse strand of DNA/RNA
                 strand = "-"
@@ -117,32 +136,21 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             else:
                 # mapped to forward strand
                 strand = "+"
-            # fmt: on
-            wildcard = None
-            mask = None
+            wildcard = self.wildcard
+            mask = self.mask
             # variable names follow those in the PSL file format specification
             matches = 0
             misMatches = 0
             repMatches = 0
             nCount = 0
-            qNumInsert = 0
-            qBaseInsert = 0
-            tNumInsert = 0
-            tBaseInsert = 0
             blockSizes = []
             qStarts = []
             tStarts = []
             tStart, qStart = coordinates[:, 0]
             for tEnd, qEnd in coordinates[:, 1:].transpose():
                 if tStart == tEnd:
-                    if qStart > 0 and qEnd < qSize:
-                        qNumInsert += 1
-                        qBaseInsert += qEnd - qStart
                     qStart = qEnd
                 elif qStart == qEnd:
-                    if tStart > 0 and tEnd < tSize:
-                        tNumInsert += 1
-                        tBaseInsert += tEnd - tStart
                     tStart = tEnd
                 else:
                     tCount = tEnd - tStart
@@ -229,24 +237,13 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                 nCount = alignment.nCount
             except AttributeError:
                 pass
-            blockCount = len(blockSizes)
-            didRc = False
-            mult = 1
-            tStart = tStarts[0]  # start of alignment in target
             qStart = qStarts[0]  # start of alignment in query
-            tEnd = tStarts[-1] + tCount  # end of alignment in target
-            if dnax is True:
-                if tEnd == tStarts[-1] + 3 * blockSizes[-1]:
-                    mult = 3
             qEnd = qStarts[-1] + qCount  # end of alignment in query
             oStrand = "+"
             if strand == "-":
                 if dnax is True:
                     oStrand = "-"
-                    tStart, tEnd = tSize - tEnd, tSize - tStart
-                    tStarts = tSize - (tStarts + mult * blockSizes)
                     qStarts = qSize - (qStarts + blockSizes)
-                    tStarts = tStarts[::-1]
                     qStarts = qStarts[::-1]
                     alignment.coordinates = alignment.coordinates[:, ::-1]
                 else:
