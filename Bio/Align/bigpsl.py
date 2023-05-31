@@ -23,10 +23,143 @@ import numpy as np
 
 from Bio.Align import Alignment
 from Bio.Align import bigbed, psl
+from Bio.Align.bigbed import AutoSQLTable, Field
 from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, Location
 
+
+declaration = AutoSQLTable(
+    "bigPsl",
+    "bigPsl pairwise alignment",
+    [
+        Field(
+            as_type="string",
+            name="chrom",
+            comment="Reference sequence chromosome or scaffold",
+        ),
+        Field(
+            as_type="uint",
+            name="chromStart",
+            comment="Start position in chromosome",
+        ),
+        Field(
+            as_type="uint",
+            name="chromEnd",
+            comment="End position in chromosome",
+        ),
+        Field(
+            as_type="string",
+            name="name",
+            comment="Name or ID of item, ideally both human readable and unique",
+        ),
+        Field(
+            as_type="uint",
+            name="score",
+            comment="Score (0-1000)",
+        ),
+        Field(
+            as_type="char[1]",
+            name="strand",
+            comment="+ or - indicates whether the query aligns to the + or - strand on the reference",
+        ),
+        Field(
+            as_type="uint",
+            name="thickStart",
+            comment="Start of where display should be thick (start codon)",
+        ),
+        Field(
+            as_type="uint",
+            name="thickEnd",
+            comment="End of where display should be thick (stop codon)",
+        ),
+        Field(
+            as_type="uint",
+            name="reserved",
+            comment="RGB value (use R,G,B string in input file)",
+        ),
+        Field(
+            as_type="int",
+            name="blockCount",
+            comment="Number of blocks",
+        ),
+        Field(
+            as_type="int[blockCount]",
+            name="blockSizes",
+            comment="Comma separated list of block sizes",
+        ),
+        Field(
+            as_type="int[blockCount]",
+            name="chromStarts",
+            comment="Start positions relative to chromStart",
+        ),
+        Field(
+            as_type="uint",
+            name="oChromStart",
+            comment="Start position in other chromosome",
+        ),
+        Field(
+            as_type="uint",
+            name="oChromEnd",
+            comment="End position in other chromosome",
+        ),
+        Field(
+            as_type="char[1]",
+            name="oStrand",
+            comment="+ or -, - means that psl was reversed into BED-compatible coordinates" ,
+        ),
+        Field(
+            as_type="uint",
+            name="oChromSize",
+            comment="Size of other chromosome.",
+        ),
+        Field(
+            as_type="int[blockCount]",
+            name="oChromStarts",
+            comment="Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand",
+        ),
+        Field(
+            as_type="lstring",
+            name="oSequence",
+            comment="Sequence on other chrom (or edit list, or empty)",
+        ),
+        Field(
+            as_type="string",
+            name="oCDS",
+            comment="CDS in NCBI format",
+        ),
+        Field(
+            as_type="uint",
+            name="chromSize",
+            comment="Size of target chromosome",
+        ),
+        Field(
+            as_type="uint",
+            name="match",
+            comment="Number of bases matched.",
+        ),
+        Field(
+            as_type="uint",
+            name="misMatch",
+            comment="Number of bases that don't match",
+        ),
+        Field(
+            as_type="uint",
+            name="repMatch",
+            comment="Number of bases that match but are part of repeats",
+        ),
+        Field(
+            as_type="uint",
+            name="nCount",
+            comment="Number of 'N' bases",
+        ),
+        Field(
+            as_type="uint",
+            name="seqType",
+            comment="0=empty, 1=nucleotide, 2=amino_acid",
+        ),
+    ],
+)
 
 class TempAlignments(list):
     def __init__(self, items):
@@ -281,9 +414,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             fixed_alignments.append(alignment)
         fixed_alignments.sort(key=lambda alignment: (alignment.target.id, alignment.coordinates[0,0]))
         fixed_alignments.targets = alignments.targets
-        autosql_data = open("Blat/bigPsl.as").read().encode() + b"\0"
-        declaration = bigbed.AutoSQLTable.from_bytes(autosql_data)
-        
         bigbed.AlignmentWriter(stream, bedN=12, declaration=declaration, compress=self.compress).write(fixed_alignments)
 
 

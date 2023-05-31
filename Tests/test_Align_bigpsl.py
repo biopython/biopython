@@ -64,7 +64,7 @@ class TestAlign_dna_rna(unittest.TestCase):
             alignments._stream
 
     def test_writing(self):
-        """Test writing dna_rna.bb."""
+        """Test writing dna_rna.psl.bb."""
         alignments = Align.parse(self.path, "bigpsl")
         with tempfile.TemporaryFile() as output:
             Align.write(alignments, output, "bigpsl")
@@ -101,9 +101,9 @@ table bigPsl
    string          oCDS;            "CDS in NCBI format"
    uint            chromSize;       "Size of target chromosome"
    uint            match;           "Number of bases matched."
-   uint            misMatch;        " Number of bases that don't match "
-   uint            repMatch;        " Number of bases that match but are part of repeats "
-   uint            nCount;          " Number of 'N' bases "
+   uint            misMatch;        "Number of bases that don't match"
+   uint            repMatch;        "Number of bases that match but are part of repeats"
+   uint            nCount;          "Number of 'N' bases"
    uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
 )
 """,
@@ -411,9 +411,9 @@ table bigPsl
    string          oCDS;            "CDS in NCBI format"
    uint            chromSize;       "Size of target chromosome"
    uint            match;           "Number of bases matched."
-   uint            misMatch;        " Number of bases that don't match "
-   uint            repMatch;        " Number of bases that match but are part of repeats "
-   uint            nCount;          " Number of 'N' bases "
+   uint            misMatch;        "Number of bases that don't match"
+   uint            repMatch;        "Number of bases that match but are part of repeats"
+   uint            nCount;          "Number of 'N' bases"
    uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
 )
 """,
@@ -1152,9 +1152,9 @@ table bigPsl
    string          oCDS;            "CDS in NCBI format"
    uint            chromSize;       "Size of target chromosome"
    uint            match;           "Number of bases matched."
-   uint            misMatch;        " Number of bases that don't match "
-   uint            repMatch;        " Number of bases that match but are part of repeats "
-   uint            nCount;          " Number of 'N' bases "
+   uint            misMatch;        "Number of bases that don't match"
+   uint            repMatch;        "Number of bases that match but are part of repeats"
+   uint            nCount;          "Number of 'N' bases"
    uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
 )
 """,
@@ -1309,9 +1309,9 @@ table bigPsl
    string          oCDS;            "CDS in NCBI format"
    uint            chromSize;       "Size of target chromosome"
    uint            match;           "Number of bases matched."
-   uint            misMatch;        " Number of bases that don't match "
-   uint            repMatch;        " Number of bases that match but are part of repeats "
-   uint            nCount;          " Number of 'N' bases "
+   uint            misMatch;        "Number of bases that don't match"
+   uint            repMatch;        "Number of bases that match but are part of repeats"
+   uint            nCount;          "Number of 'N' bases"
    uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
 )
 """,
@@ -1960,9 +1960,9 @@ table bigPsl
    string          oCDS;            "CDS in NCBI format"
    uint            chromSize;       "Size of target chromosome"
    uint            match;           "Number of bases matched."
-   uint            misMatch;        " Number of bases that don't match "
-   uint            repMatch;        " Number of bases that match but are part of repeats "
-   uint            nCount;          " Number of 'N' bases "
+   uint            misMatch;        "Number of bases that don't match"
+   uint            repMatch;        "Number of bases that match but are part of repeats"
+   uint            nCount;          "Number of 'N' bases"
    uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
 )
 """,
@@ -2708,9 +2708,9 @@ table bigPsl
    string          oCDS;            "CDS in NCBI format"
    uint            chromSize;       "Size of target chromosome"
    uint            match;           "Number of bases matched."
-   uint            misMatch;        " Number of bases that don't match "
-   uint            repMatch;        " Number of bases that match but are part of repeats "
-   uint            nCount;          " Number of 'N' bases "
+   uint            misMatch;        "Number of bases that don't match"
+   uint            repMatch;        "Number of bases that match but are part of repeats"
+   uint            nCount;          "Number of 'N' bases"
    uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
 )
 """,
@@ -2983,9 +2983,9 @@ table bigPsl
    string          oCDS;            "CDS in NCBI format"
    uint            chromSize;       "Size of target chromosome"
    uint            match;           "Number of bases matched."
-   uint            misMatch;        " Number of bases that don't match "
-   uint            repMatch;        " Number of bases that match but are part of repeats "
-   uint            nCount;          " Number of 'N' bases "
+   uint            misMatch;        "Number of bases that don't match"
+   uint            repMatch;        "Number of bases that match but are part of repeats"
+   uint            nCount;          "Number of 'N' bases"
    uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
 )
 """,
@@ -3143,9 +3143,9 @@ table bigPsl
    string          oCDS;            "CDS in NCBI format"
    uint            chromSize;       "Size of target chromosome"
    uint            match;           "Number of bases matched."
-   uint            misMatch;        " Number of bases that don't match "
-   uint            repMatch;        " Number of bases that match but are part of repeats "
-   uint            nCount;          " Number of 'N' bases "
+   uint            misMatch;        "Number of bases that don't match"
+   uint            repMatch;        "Number of bases that match but are part of repeats"
+   uint            nCount;          "Number of 'N' bases"
    uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
 )
 """,
@@ -4386,9 +4386,9 @@ table bigPsl
    string          oCDS;            "CDS in NCBI format"
    uint            chromSize;       "Size of target chromosome"
    uint            match;           "Number of bases matched."
-   uint            misMatch;        " Number of bases that don't match "
-   uint            repMatch;        " Number of bases that match but are part of repeats "
-   uint            nCount;          " Number of 'N' bases "
+   uint            misMatch;        "Number of bases that don't match"
+   uint            repMatch;        "Number of bases that match but are part of repeats"
+   uint            nCount;          "Number of 'N' bases"
    uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
 )
 """,
