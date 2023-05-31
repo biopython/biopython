@@ -124,9 +124,7 @@ class AutoSQLTable(list):
             field = Field(field_type, field_name, field_comment)
             fields.append(field)
             text = text[j + 1 :].strip()
-        table = AutoSQLTable(name, comment, fields)
-        table._bytes = data
-        return table
+        return AutoSQLTable(name, comment, fields)
 
     @classmethod
     def from_string(cls, data):
@@ -154,10 +152,7 @@ class AutoSQLTable(list):
         return "".join(lines)
 
     def __bytes__(self):
-        try:
-            return self._bytes
-        except AttributeError:
-            return str(self).encode() + b"\0"
+        return str(self).encode() + b"\0"
 
     def __getitem__(self, i):
         if isinstance(i, slice):
