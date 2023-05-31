@@ -78,7 +78,7 @@ class QCPSuperimposerTest(unittest.TestCase):
 
         # We can reduce precision here since we do a similar calculation
         # for a full structure down below.
-        self.assertAlmostEqual(sup.rms, 0.003, places=2)
+        self.assertAlmostEqual(sup.rms, 0.003, places=3)
         self.assertIsNone(sup.init_rms)
 
     def test_compare_to_svd(self):
@@ -91,7 +91,7 @@ class QCPSuperimposerTest(unittest.TestCase):
         svd_sup.set(self.x, self.y)
         svd_sup.run()
 
-        self.assertAlmostEqual(svd_sup.get_rms(), sup.rms, places=2)
+        self.assertAlmostEqual(svd_sup.get_rms(), sup.rms, places=3)
         self.assertTrue(np.allclose(svd_sup.rot, sup.rot, atol=1e-3))
         self.assertTrue(np.allclose(svd_sup.tran, sup.tran, atol=1e-3))
         self.assertTrue(

@@ -108,9 +108,9 @@ def qcp(coords1, coords2, natoms):
         x2 = mxEigenV * mxEigenV
         b = (x2 + C2) * mxEigenV
         a = b + C1
-        # Add 1e6 to delta to avoid division by 0 and warnings in certain
+        # Add tiny value to delta to avoid division by 0 and warnings in certain
         # cases with coordinate sets that are very similar after transformation.
-        delta = (a * mxEigenV + C0) / ((2.0 * x2 * mxEigenV + b + a) + 1e6)
+        delta = (a * mxEigenV + C0) / ((2.0 * x2 * mxEigenV + b + a) + evalprec)
         mxEigenV -= delta
         if abs(mxEigenV - oldg) < abs(evalprec * mxEigenV):
             break
