@@ -106,7 +106,7 @@ declaration = AutoSQLTable(
         Field(
             as_type="char[1]",
             name="oStrand",
-            comment="+ or -, - means that psl was reversed into BED-compatible coordinates" ,
+            comment="+ or -, - means that psl was reversed into BED-compatible coordinates",
         ),
         Field(
             as_type="uint",
@@ -235,7 +235,14 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                          `repMatches` fields.
                          Default value is 'N'.
         """
-        super().__init__(target, bedN=12, declaration=declaration, targets=targets, compress=compress, extraIndex=extraIndex)
+        super().__init__(
+            target,
+            bedN=12,
+            declaration=declaration,
+            targets=targets,
+            compress=compress,
+            extraIndex=extraIndex,
+        )
         self.cds = cds
         self.fa = fa
         self.mask = mask
@@ -265,7 +272,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             qSize = len(query)
             # fmt: off
             dnax = None  # set to True for translated DNA aligned to protein,
-                         # and to False for DNA/RNA aligned to DNA/RNA  # noqa: E114, E116
+            # and to False for DNA/RNA aligned to DNA/RNA  # noqa: E114, E116
             # fmt: on
             if coordinates[1, 0] > coordinates[1, -1]:
                 # DNA/RNA mapped to reverse strand of DNA/RNA
@@ -430,9 +437,13 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             alignment.annotations["nCount"] = str(nCount)
             alignment.annotations["seqType"] = seqType
             fixed_alignments.append(alignment)
-        fixed_alignments.sort(key=lambda alignment: (alignment.target.id, alignment.coordinates[0, 0]))
+        fixed_alignments.sort(
+            key=lambda alignment: (alignment.target.id, alignment.coordinates[0, 0])
+        )
         fixed_alignments.targets = alignments.targets
-        bigbed.AlignmentWriter(stream, bedN=12, declaration=declaration, compress=self.compress).write(fixed_alignments)
+        bigbed.AlignmentWriter(
+            stream, bedN=12, declaration=declaration, compress=self.compress
+        ).write(fixed_alignments)
 
 
 class AlignmentIterator(bigbed.AlignmentIterator):
