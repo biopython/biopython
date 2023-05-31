@@ -161,12 +161,15 @@ declaration = AutoSQLTable(
     ],
 )
 
+
 class _Alignments(list):
     def __init__(self):
         super().__init__()
         self.index = 0
+
     def __iter__(self):
         return self
+
     def __next__(self):
         try:
             item = self[self.index]
@@ -174,6 +177,7 @@ class _Alignments(list):
             raise StopIteration
         self.index += 1
         return item
+
     def rewind(self):
         self.index = 0
 
@@ -230,7 +234,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
                          PSL file instead of in the `matches`, `misMatches`, or
                          `repMatches` fields.
                          Default value is 'N'.
-    """
+        """
         super().__init__(target, bedN=12, declaration=declaration, targets=targets, compress=compress, extraIndex=extraIndex)
         self.cds = cds
         self.fa = fa

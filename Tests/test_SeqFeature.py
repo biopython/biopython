@@ -339,7 +339,7 @@ class TestExtract(unittest.TestCase):
         self.assertEqual(sequence, "ccaatgg")
 
 
-class TestLocations(unittest.TestCase):
+class TestLocationsStrings(unittest.TestCase):
     def test_locations(self):
         """Test if NCBI-style CDS locations are parsed and formatted correctly."""
         with open("Blat/bigPsl.cds") as stream:
