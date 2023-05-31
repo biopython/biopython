@@ -161,9 +161,9 @@ declaration = AutoSQLTable(
     ],
 )
 
-class TempAlignments(list):
-    def __init__(self, items):
-        super().__init__(items)
+class _Alignments(list):
+    def __init__(self):
+        super().__init__()
         self.index = 0
     def __iter__(self):
         return self
@@ -186,7 +186,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
     def __init__(
         self,
         target,
-        declaration=None,
         targets=None,
         compress=True,
         extraIndex=(),
@@ -198,24 +197,39 @@ class AlignmentWriter(bigbed.AlignmentWriter):
         """Create an AlignmentWriter object.
 
         Arguments:
-         - target    - output stream or file name
-         - header    - If True (default), write the PSL header consisting of
-                       five lines containing the PSL format version and a
-                       header for each column.
-                       If False, suppress the PSL header, resulting in a simple
-                       tab-delimited file.
-         - mask      - Specify if repeat regions in the target sequence are
-                       masked and should be reported in the `repMatches` field
-                       of the PSL file instead of in the `matches` field.
-                       Acceptable values are
-                       None   : no masking (default);
-                       "lower": masking by lower-case characters;
-                       "upper": masking by upper-case characters.
-         - wildcard  - Report alignments to the wildcard character in the
-                       target or query sequence in the `nCount` field of the
-                       PSL file instead of in the `matches`, `misMatches`, or
-                       `repMatches` fields.
-                       Default value is 'N'.
+         - target      - output stream or file name.
+         - targets     - A list of SeqRecord objects with the chromosomes in the
+                         order as they appear in the alignments. The sequence
+                         contents in each SeqRecord may be undefined, but the
+                         sequence length must be defined, as in this example:
+
+                         SeqRecord(Seq(None, length=248956422), id="chr1")
+
+                         If targets is None (the default value), the alignments
+                         must have an attribute .targets providing the list of
+                         SeqRecord objects.
+         - compress    - If True (default), compress data using zlib.
+                         If False, do not compress data.
+         - extraIndex  - List of strings with the names of extra columns to be
+                         indexed.
+                         Default value is an empty list.
+         - target      - output stream or file name
+         - cds         - If True, look for a query feature of type CDS and write
+                         it in NCBI style in the PSL file (default: False).
+         - fa          - If True, include the query sequence in the PSL file
+                         (default: False).
+         - mask        - Specify if repeat regions in the target sequence are
+                         masked and should be reported in the `repMatches` field
+                         of the PSL file instead of in the `matches` field.
+                         Acceptable values are
+                         None   : no masking (default);
+                         "lower": masking by lower-case characters;
+                         "upper": masking by upper-case characters.
+         - wildcard    - Report alignments to the wildcard character in the
+                         target or query sequence in the `nCount` field of the
+                         PSL file instead of in the `matches`, `misMatches`, or
+                         `repMatches` fields.
+                         Default value is 'N'.
     """
         super().__init__(target, bedN=12, declaration=declaration, targets=targets, compress=compress, extraIndex=extraIndex)
         self.cds = cds
@@ -225,7 +239,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
 
     def write_file(self, stream, alignments):
         """Write the file."""
-        fixed_alignments = TempAlignments([])
+        fixed_alignments = _Alignments()
         cds = self.cds
         fa = self.fa
         for alignment in alignments:

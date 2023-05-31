@@ -17,6 +17,7 @@ from Bio.Data.CodonTable import TranslationError
 from Bio.SeqFeature import AfterPosition
 from Bio.SeqFeature import BeforePosition
 from Bio.SeqFeature import BetweenPosition
+from Bio.SeqFeature import Location
 from Bio.SeqFeature import CompoundLocation
 from Bio.SeqFeature import ExactPosition
 from Bio.SeqFeature import SimpleLocation
@@ -336,6 +337,18 @@ class TestExtract(unittest.TestCase):
         )
         self.assertEqual(type(sequence), Seq.Seq)
         self.assertEqual(sequence, "ccaatgg")
+
+
+class TestLocations(unittest.TestCase):
+    def test_locations(self):
+        """Test if NCBI-style CDS locations are parsed and formatted correctly."""
+        with open("Blat/bigPsl.cds") as stream:
+            for line in stream:
+                name, cds = line.split()
+                if cds == "n/a":
+                    continue
+                location = Location.fromstring(cds)
+                self.assertEqual(format(location, "ncbi"), cds)
 
 
 if __name__ == "__main__":
