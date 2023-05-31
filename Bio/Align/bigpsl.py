@@ -430,7 +430,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             alignment.annotations["nCount"] = str(nCount)
             alignment.annotations["seqType"] = seqType
             fixed_alignments.append(alignment)
-        fixed_alignments.sort(key=lambda alignment: (alignment.target.id, alignment.coordinates[0,0]))
+        fixed_alignments.sort(key=lambda alignment: (alignment.target.id, alignment.coordinates[0, 0]))
         fixed_alignments.targets = alignments.targets
         bigbed.AlignmentWriter(stream, bedN=12, declaration=declaration, compress=self.compress).write(fixed_alignments)
 

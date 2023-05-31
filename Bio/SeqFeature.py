@@ -1605,7 +1605,10 @@ class CompoundLocation(Location):
             return str(self)
         if format_spec != "ncbi":
             raise ValueError(f"Unknown format {format_spec}")
-        return "%s(%s)" % (self.operator, ",".join(format(loc, "ncbi") for loc in self.parts))
+        return "%s(%s)" % (
+            self.operator,
+            ",".join(format(loc, "ncbi") for loc in self.parts),
+        )
 
     def __repr__(self):
         """Represent the CompoundLocation object as string for debugging."""
