@@ -409,7 +409,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             if cds is True:
                 for feature in alignment.query.features:
                     if feature.type == "CDS":
-                        oCDS = format(feature.location, "ncbi")
+                        oCDS = format(feature.location, "INSDC")
                         break
                 else:
                     oCDS = "n/a"

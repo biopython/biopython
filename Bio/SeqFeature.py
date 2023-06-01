@@ -1055,7 +1055,7 @@ class SimpleLocation(Location):
     def __format__(self, format_spec):
         if not format_spec:
             return str(self)
-        if format_spec != "ncbi":
+        if format_spec != "INSDC":
             raise ValueError(f"Unknown format {format_spec}")
         start = self.start
         end = self.end
@@ -1603,11 +1603,11 @@ class CompoundLocation(Location):
     def __format__(self, format_spec):
         if not format_spec:
             return str(self)
-        if format_spec != "ncbi":
+        if format_spec != "INSDC":
             raise ValueError(f"Unknown format {format_spec}")
         return "%s(%s)" % (
             self.operator,
-            ",".join(format(loc, "ncbi") for loc in self.parts),
+            ",".join(format(loc, "INSDC") for loc in self.parts),
         )
 
     def __repr__(self):

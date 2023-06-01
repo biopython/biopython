@@ -341,14 +341,14 @@ class TestExtract(unittest.TestCase):
 
 class TestLocationsStrings(unittest.TestCase):
     def test_locations(self):
-        """Test if NCBI-style CDS locations are parsed and formatted correctly."""
+        """Test if INSDC-style locations are parsed and formatted correctly."""
         with open("Blat/bigPsl.cds") as stream:
             for line in stream:
                 name, cds = line.split()
                 if cds == "n/a":
                     continue
                 location = Location.fromstring(cds)
-                self.assertEqual(format(location, "ncbi"), cds)
+                self.assertEqual(format(location, "INSDC"), cds)
 
 
 if __name__ == "__main__":
