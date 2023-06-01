@@ -96,24 +96,30 @@ def qcp(coords1, coords2, natoms):
         * (negSxymSyx * (SyzpSzy) + (SxzmSzx) * (SxxpSyy - Szz))
     )
 
-    # Newton-Rhapson
-    # Original paper mentions 5 iterations are sufficient (on average)
-    # for convergence up to 10^-6 precision but original code writes 50.
-    # I guess for robustness.
+    # Find largest root of the quaternion polynomial:
+    #   f(x) = x ** 4 + c2 * x ** 2 + c1 * x + c0 = 0 (eq. 8 of Theobald et al.)
+    #   f'(x) = 4 * x ** 3 + 2 * c2 * x + c1
+    #
+    # using Newton-Rhapson and E0 as initial guess. Liu et al. mentions 5
+    # iterations are sufficient (on average) for convergence up to 1e-6
+    # precision but original code writes 50, which we keep.
     nr_it = 50
-    mxEigenV = E0
-    evalprec = 1e-11
+    mxEigenV = E0  # starting guess (x in eqs above)
+    evalprec = 1e-11  # convergence criterion
     for _ in range(nr_it):
         oldg = mxEigenV
+
         x2 = mxEigenV * mxEigenV
         b = (x2 + C2) * mxEigenV
         a = b + C1
-        # Add tiny value to delta to avoid division by 0 and warnings in certain
-        # cases with coordinate sets that are very similar after transformation.
-        delta = (a * mxEigenV + C0) / ((2.0 * x2 * mxEigenV + b + a) + evalprec)
-        mxEigenV -= delta
-        if abs(mxEigenV - oldg) < abs(evalprec * mxEigenV):
-            break
+
+        f = a * mxEigenV + C0
+        f_prime = 2.0 * x2 * mxEigenV + b + a
+
+        delta = f / (f_prime + evalprec)  # avoid division by zero
+        mxEigenV = abs(mxEigenV - delta)
+        if (mxEigenV - oldg) < (evalprec * mxEigenV):
+            break  # convergence
     else:
         print(f"Newton-Rhapson did not converge after {nr_it} iterations")
 
