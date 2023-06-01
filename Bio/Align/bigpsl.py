@@ -27,6 +27,7 @@ from Bio.Align.bigbed import AutoSQLTable, Field
 from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, Location
+from Bio.SeqIO.InsdcIO import _insdc_location_string
 
 
 declaration = AutoSQLTable(
@@ -409,7 +410,9 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             if cds is True:
                 for feature in alignment.query.features:
                     if feature.type == "CDS":
-                        oCDS = format(feature.location, "INSDC")
+                        oCDS = _insdc_location_string(
+                            feature.location, len(alignment.query)
+                        )
                         break
                 else:
                     oCDS = "n/a"

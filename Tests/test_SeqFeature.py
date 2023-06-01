@@ -339,18 +339,6 @@ class TestExtract(unittest.TestCase):
         self.assertEqual(sequence, "ccaatgg")
 
 
-class TestLocationsStrings(unittest.TestCase):
-    def test_locations(self):
-        """Test if INSDC-style locations are parsed and formatted correctly."""
-        with open("Blat/bigPsl.cds") as stream:
-            for line in stream:
-                name, cds = line.split()
-                if cds == "n/a":
-                    continue
-                location = Location.fromstring(cds)
-                self.assertEqual(format(location, "INSDC"), cds)
-
-
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
