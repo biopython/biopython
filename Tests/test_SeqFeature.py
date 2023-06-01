@@ -17,7 +17,6 @@ from Bio.Data.CodonTable import TranslationError
 from Bio.SeqFeature import AfterPosition
 from Bio.SeqFeature import BeforePosition
 from Bio.SeqFeature import BetweenPosition
-from Bio.SeqFeature import Location
 from Bio.SeqFeature import CompoundLocation
 from Bio.SeqFeature import ExactPosition
 from Bio.SeqFeature import SimpleLocation
