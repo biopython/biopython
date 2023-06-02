@@ -25,6 +25,13 @@ except ImportError:
     ) from None
 
 
+class TestAlign_declaration(unittest.TestCase):
+    def test_declaration(self):
+        with open("Blat/bigPsl.as") as stream:
+            declaration = stream.read()
+        self.assertEqual(str(Align.bigpsl.declaration), declaration)
+
+
 class TestAlign_dna_rna(unittest.TestCase):
 
     # The bigPsl file dna_rna.psl.bb was generated using these commands:
@@ -74,40 +81,7 @@ class TestAlign_dna_rna(unittest.TestCase):
             self.check_alignments(alignments)
 
     def check_alignments(self, alignments):
-        self.assertEqual(
-            str(alignments.declaration),
-            """\
-table bigPsl
-"bigPsl pairwise alignment"
-(
-   string          chrom;           "Reference sequence chromosome or scaffold"
-   uint            chromStart;      "Start position in chromosome"
-   uint            chromEnd;        "End position in chromosome"
-   string          name;            "Name or ID of item, ideally both human readable and unique"
-   uint            score;           "Score (0-1000)"
-   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
-   uint            thickStart;      "Start of where display should be thick (start codon)"
-   uint            thickEnd;        "End of where display should be thick (stop codon)"
-   uint            reserved;        "RGB value (use R,G,B string in input file)"
-   int             blockCount;      "Number of blocks"
-   int[blockCount] blockSizes;      "Comma separated list of block sizes"
-   int[blockCount] chromStarts;     "Start positions relative to chromStart"
-   uint            oChromStart;     "Start position in other chromosome"
-   uint            oChromEnd;       "End position in other chromosome"
-   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
-   uint            oChromSize;      "Size of other chromosome."
-   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
-   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
-   string          oCDS;            "CDS in NCBI format"
-   uint            chromSize;       "Size of target chromosome"
-   uint            match;           "Number of bases matched."
-   uint            misMatch;        "Number of bases that don't match"
-   uint            repMatch;        "Number of bases that match but are part of repeats"
-   uint            nCount;          "Number of 'N' bases"
-   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
-)
-""",
-        )
+        self.assertEqual(alignments.declaration, Align.bigpsl.declaration)
         self.assertEqual(len(alignments.targets), 1)
         self.assertEqual(alignments.targets[0].id, "chr3")
         self.assertEqual(len(alignments.targets[0]), 198295559)
@@ -384,40 +358,7 @@ class TestAlign_dna(unittest.TestCase):
             self.check_psl_34_001(alignments)
 
     def check_psl_34_001(self, alignments):
-        self.assertEqual(
-            str(alignments.declaration),
-            """\
-table bigPsl
-"bigPsl pairwise alignment"
-(
-   string          chrom;           "Reference sequence chromosome or scaffold"
-   uint            chromStart;      "Start position in chromosome"
-   uint            chromEnd;        "End position in chromosome"
-   string          name;            "Name or ID of item, ideally both human readable and unique"
-   uint            score;           "Score (0-1000)"
-   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
-   uint            thickStart;      "Start of where display should be thick (start codon)"
-   uint            thickEnd;        "End of where display should be thick (stop codon)"
-   uint            reserved;        "RGB value (use R,G,B string in input file)"
-   int             blockCount;      "Number of blocks"
-   int[blockCount] blockSizes;      "Comma separated list of block sizes"
-   int[blockCount] chromStarts;     "Start positions relative to chromStart"
-   uint            oChromStart;     "Start position in other chromosome"
-   uint            oChromEnd;       "End position in other chromosome"
-   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
-   uint            oChromSize;      "Size of other chromosome."
-   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
-   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
-   string          oCDS;            "CDS in NCBI format"
-   uint            chromSize;       "Size of target chromosome"
-   uint            match;           "Number of bases matched."
-   uint            misMatch;        "Number of bases that don't match"
-   uint            repMatch;        "Number of bases that match but are part of repeats"
-   uint            nCount;          "Number of 'N' bases"
-   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
-)
-""",
-        )
+        self.assertEqual(alignments.declaration, Align.bigpsl.declaration)
         self.assertEqual(len(alignments.targets), 10)
         self.assertEqual(alignments.targets[0].id, "chr1")
         self.assertEqual(len(alignments.targets[0]), 249250621)
@@ -1125,40 +1066,7 @@ table bigPsl
             self.check_psl_34_003(alignments)
 
     def check_psl_34_003(self, alignments):
-        self.assertEqual(
-            str(alignments.declaration),
-            """\
-table bigPsl
-"bigPsl pairwise alignment"
-(
-   string          chrom;           "Reference sequence chromosome or scaffold"
-   uint            chromStart;      "Start position in chromosome"
-   uint            chromEnd;        "End position in chromosome"
-   string          name;            "Name or ID of item, ideally both human readable and unique"
-   uint            score;           "Score (0-1000)"
-   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
-   uint            thickStart;      "Start of where display should be thick (start codon)"
-   uint            thickEnd;        "End of where display should be thick (stop codon)"
-   uint            reserved;        "RGB value (use R,G,B string in input file)"
-   int             blockCount;      "Number of blocks"
-   int[blockCount] blockSizes;      "Comma separated list of block sizes"
-   int[blockCount] chromStarts;     "Start positions relative to chromStart"
-   uint            oChromStart;     "Start position in other chromosome"
-   uint            oChromEnd;       "End position in other chromosome"
-   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
-   uint            oChromSize;      "Size of other chromosome."
-   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
-   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
-   string          oCDS;            "CDS in NCBI format"
-   uint            chromSize;       "Size of target chromosome"
-   uint            match;           "Number of bases matched."
-   uint            misMatch;        "Number of bases that don't match"
-   uint            repMatch;        "Number of bases that match but are part of repeats"
-   uint            nCount;          "Number of 'N' bases"
-   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
-)
-""",
-        )
+        self.assertEqual(alignments.declaration, Align.bigpsl.declaration)
         self.assertEqual(len(alignments.targets), 3)
         self.assertEqual(alignments.targets[0].id, "chr1")
         self.assertEqual(len(alignments.targets[0]), 249250621)
@@ -1282,40 +1190,7 @@ table bigPsl
             self.check_psl_34_004(alignments)
 
     def check_psl_34_004(self, alignments):
-        self.assertEqual(
-            str(alignments.declaration),
-            """\
-table bigPsl
-"bigPsl pairwise alignment"
-(
-   string          chrom;           "Reference sequence chromosome or scaffold"
-   uint            chromStart;      "Start position in chromosome"
-   uint            chromEnd;        "End position in chromosome"
-   string          name;            "Name or ID of item, ideally both human readable and unique"
-   uint            score;           "Score (0-1000)"
-   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
-   uint            thickStart;      "Start of where display should be thick (start codon)"
-   uint            thickEnd;        "End of where display should be thick (stop codon)"
-   uint            reserved;        "RGB value (use R,G,B string in input file)"
-   int             blockCount;      "Number of blocks"
-   int[blockCount] blockSizes;      "Comma separated list of block sizes"
-   int[blockCount] chromStarts;     "Start positions relative to chromStart"
-   uint            oChromStart;     "Start position in other chromosome"
-   uint            oChromEnd;       "End position in other chromosome"
-   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
-   uint            oChromSize;      "Size of other chromosome."
-   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
-   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
-   string          oCDS;            "CDS in NCBI format"
-   uint            chromSize;       "Size of target chromosome"
-   uint            match;           "Number of bases matched."
-   uint            misMatch;        "Number of bases that don't match"
-   uint            repMatch;        "Number of bases that match but are part of repeats"
-   uint            nCount;          "Number of 'N' bases"
-   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
-)
-""",
-        )
+        self.assertEqual(alignments.declaration, Align.bigpsl.declaration)
         self.assertEqual(len(alignments.targets), 10)
         self.assertEqual(alignments.targets[0].id, "chr1")
         self.assertEqual(len(alignments.targets[0]), 249250621)
@@ -1933,40 +1808,7 @@ table bigPsl
             self.check_psl_34_005(alignments)
 
     def check_psl_34_005(self, alignments):
-        self.assertEqual(
-            str(alignments.declaration),
-            """\
-table bigPsl
-"bigPsl pairwise alignment"
-(
-   string          chrom;           "Reference sequence chromosome or scaffold"
-   uint            chromStart;      "Start position in chromosome"
-   uint            chromEnd;        "End position in chromosome"
-   string          name;            "Name or ID of item, ideally both human readable and unique"
-   uint            score;           "Score (0-1000)"
-   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
-   uint            thickStart;      "Start of where display should be thick (start codon)"
-   uint            thickEnd;        "End of where display should be thick (stop codon)"
-   uint            reserved;        "RGB value (use R,G,B string in input file)"
-   int             blockCount;      "Number of blocks"
-   int[blockCount] blockSizes;      "Comma separated list of block sizes"
-   int[blockCount] chromStarts;     "Start positions relative to chromStart"
-   uint            oChromStart;     "Start position in other chromosome"
-   uint            oChromEnd;       "End position in other chromosome"
-   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
-   uint            oChromSize;      "Size of other chromosome."
-   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
-   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
-   string          oCDS;            "CDS in NCBI format"
-   uint            chromSize;       "Size of target chromosome"
-   uint            match;           "Number of bases matched."
-   uint            misMatch;        "Number of bases that don't match"
-   uint            repMatch;        "Number of bases that match but are part of repeats"
-   uint            nCount;          "Number of 'N' bases"
-   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
-)
-""",
-        )
+        self.assertEqual(alignments.declaration, Align.bigpsl.declaration)
         self.assertEqual(len(alignments.targets), 10)
         self.assertEqual(alignments.targets[0].id, "chr1")
         self.assertEqual(len(alignments.targets[0]), 249250621)
@@ -2681,40 +2523,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
             self.check_psl_35_001(alignments)
 
     def check_psl_35_001(self, alignments):
-        self.assertEqual(
-            str(alignments.declaration),
-            """\
-table bigPsl
-"bigPsl pairwise alignment"
-(
-   string          chrom;           "Reference sequence chromosome or scaffold"
-   uint            chromStart;      "Start position in chromosome"
-   uint            chromEnd;        "End position in chromosome"
-   string          name;            "Name or ID of item, ideally both human readable and unique"
-   uint            score;           "Score (0-1000)"
-   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
-   uint            thickStart;      "Start of where display should be thick (start codon)"
-   uint            thickEnd;        "End of where display should be thick (stop codon)"
-   uint            reserved;        "RGB value (use R,G,B string in input file)"
-   int             blockCount;      "Number of blocks"
-   int[blockCount] blockSizes;      "Comma separated list of block sizes"
-   int[blockCount] chromStarts;     "Start positions relative to chromStart"
-   uint            oChromStart;     "Start position in other chromosome"
-   uint            oChromEnd;       "End position in other chromosome"
-   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
-   uint            oChromSize;      "Size of other chromosome."
-   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
-   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
-   string          oCDS;            "CDS in NCBI format"
-   uint            chromSize;       "Size of target chromosome"
-   uint            match;           "Number of bases matched."
-   uint            misMatch;        "Number of bases that don't match"
-   uint            repMatch;        "Number of bases that match but are part of repeats"
-   uint            nCount;          "Number of 'N' bases"
-   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
-)
-""",
-        )
+        self.assertEqual(alignments.declaration, Align.bigpsl.declaration)
         self.assertEqual(len(alignments.targets), 2)
         self.assertEqual(alignments.targets[0].id, "chr13")
         self.assertEqual(len(alignments.targets[0]), 114364328)
@@ -2956,40 +2765,7 @@ table bigPsl
         self.assertRaises(StopIteration, next, alignments)
 
     def check_psl_35_002(self, alignments):
-        self.assertEqual(
-            str(alignments.declaration),
-            """\
-table bigPsl
-"bigPsl pairwise alignment"
-(
-   string          chrom;           "Reference sequence chromosome or scaffold"
-   uint            chromStart;      "Start position in chromosome"
-   uint            chromEnd;        "End position in chromosome"
-   string          name;            "Name or ID of item, ideally both human readable and unique"
-   uint            score;           "Score (0-1000)"
-   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
-   uint            thickStart;      "Start of where display should be thick (start codon)"
-   uint            thickEnd;        "End of where display should be thick (stop codon)"
-   uint            reserved;        "RGB value (use R,G,B string in input file)"
-   int             blockCount;      "Number of blocks"
-   int[blockCount] blockSizes;      "Comma separated list of block sizes"
-   int[blockCount] chromStarts;     "Start positions relative to chromStart"
-   uint            oChromStart;     "Start position in other chromosome"
-   uint            oChromEnd;       "End position in other chromosome"
-   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
-   uint            oChromSize;      "Size of other chromosome."
-   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
-   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
-   string          oCDS;            "CDS in NCBI format"
-   uint            chromSize;       "Size of target chromosome"
-   uint            match;           "Number of bases matched."
-   uint            misMatch;        "Number of bases that don't match"
-   uint            repMatch;        "Number of bases that match but are part of repeats"
-   uint            nCount;          "Number of 'N' bases"
-   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
-)
-""",
-        )
+        self.assertEqual(alignments.declaration, Align.bigpsl.declaration)
         self.assertEqual(len(alignments.targets), 2)
         self.assertEqual(alignments.targets[0].id, "KI537194")
         self.assertEqual(len(alignments.targets[0]), 37111980)
@@ -3116,40 +2892,7 @@ class TestAlign_bigpsl(unittest.TestCase):
             self.check_alignments(alignments)
 
     def check_alignments(self, alignments):
-        self.assertEqual(
-            str(alignments.declaration),
-            """\
-table bigPsl
-"bigPsl pairwise alignment"
-(
-   string          chrom;           "Reference sequence chromosome or scaffold"
-   uint            chromStart;      "Start position in chromosome"
-   uint            chromEnd;        "End position in chromosome"
-   string          name;            "Name or ID of item, ideally both human readable and unique"
-   uint            score;           "Score (0-1000)"
-   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
-   uint            thickStart;      "Start of where display should be thick (start codon)"
-   uint            thickEnd;        "End of where display should be thick (stop codon)"
-   uint            reserved;        "RGB value (use R,G,B string in input file)"
-   int             blockCount;      "Number of blocks"
-   int[blockCount] blockSizes;      "Comma separated list of block sizes"
-   int[blockCount] chromStarts;     "Start positions relative to chromStart"
-   uint            oChromStart;     "Start position in other chromosome"
-   uint            oChromEnd;       "End position in other chromosome"
-   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
-   uint            oChromSize;      "Size of other chromosome."
-   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
-   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
-   string          oCDS;            "CDS in NCBI format"
-   uint            chromSize;       "Size of target chromosome"
-   uint            match;           "Number of bases matched."
-   uint            misMatch;        "Number of bases that don't match"
-   uint            repMatch;        "Number of bases that match but are part of repeats"
-   uint            nCount;          "Number of 'N' bases"
-   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
-)
-""",
-        )
+        self.assertEqual(alignments.declaration, Align.bigpsl.declaration)
         self.assertEqual(len(alignments.targets), 1)
         self.assertEqual(alignments.targets[0].id, "chr1")
         self.assertEqual(len(alignments.targets[0]), 248956422)
@@ -4359,40 +4102,7 @@ class TestAlign_searching(unittest.TestCase):
     def test_search_chromosome(self):
         path = "Blat/bigbedtest.psl.bb"
         alignments = Align.parse(path, "bigpsl")
-        self.assertEqual(
-            str(alignments.declaration),
-            """\
-table bigPsl
-"bigPsl pairwise alignment"
-(
-   string          chrom;           "Reference sequence chromosome or scaffold"
-   uint            chromStart;      "Start position in chromosome"
-   uint            chromEnd;        "End position in chromosome"
-   string          name;            "Name or ID of item, ideally both human readable and unique"
-   uint            score;           "Score (0-1000)"
-   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
-   uint            thickStart;      "Start of where display should be thick (start codon)"
-   uint            thickEnd;        "End of where display should be thick (stop codon)"
-   uint            reserved;        "RGB value (use R,G,B string in input file)"
-   int             blockCount;      "Number of blocks"
-   int[blockCount] blockSizes;      "Comma separated list of block sizes"
-   int[blockCount] chromStarts;     "Start positions relative to chromStart"
-   uint            oChromStart;     "Start position in other chromosome"
-   uint            oChromEnd;       "End position in other chromosome"
-   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
-   uint            oChromSize;      "Size of other chromosome."
-   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
-   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
-   string          oCDS;            "CDS in NCBI format"
-   uint            chromSize;       "Size of target chromosome"
-   uint            match;           "Number of bases matched."
-   uint            misMatch;        "Number of bases that don't match"
-   uint            repMatch;        "Number of bases that match but are part of repeats"
-   uint            nCount;          "Number of 'N' bases"
-   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
-)
-""",
-        )
+        self.assertEqual(alignments.declaration, Align.bigpsl.declaration)
         selected_alignments = alignments.search("chr2")
         names = [alignment.query.id for alignment in selected_alignments]
         self.assertEqual(names, ["name4", "name5", "name6", "name7"])
