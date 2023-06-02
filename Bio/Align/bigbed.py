@@ -559,10 +559,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             blockCount = len(blockSizes)
             row.append(str(blockCount))
         if bedN > 10:
-            row.append(",".join(str(blockSize) for blockSize in blockSizes) + ",")
+            row.append(",".join(str(blockSize) for blockSize in blockSizes))
         if bedN > 11:
             chromStarts = alignment.coordinates[0, :-1][aligned] - chromStart
-            row.append(",".join(str(chromStart) for chromStart in chromStarts) + ",")
+            row.append(",".join(str(chromStart) for chromStart in chromStarts))
         if bedN > 12:
             if bedN != 15:
                 raise ValueError(f"Unexpected value {bedN} for bedN in _extract_fields")
