@@ -181,7 +181,7 @@ def read_PIC(
         # akstr: full AtomKey string read from .pic file, includes residue info
         try:
             return akc[akstr]
-        except (KeyError):
+        except KeyError:
             ak = akc[akstr] = AtomKey(akstr)
             return ak
 
@@ -391,12 +391,15 @@ def read_PIC(
                 )
 
             if paKey in da:
+                angl = da[paKey] + dihedra_secondary_defaults[rdclass][1]
+                angl = angl if (angl <= 180.0) else angl - 360.0
+                angl = angl if (angl >= -180.0) else angl + 360.0
                 process_dihedron(
                     str(ek[0]),
                     str(ek[1]),
                     str(ek[2]),
                     str(ek[3]),
-                    da[paKey] + dihedra_secondary_defaults[rdclass][1],
+                    angl,
                     ric,
                 )
 
@@ -427,12 +430,15 @@ def read_PIC(
                     )
 
                 if paKey in da:
+                    angl = da[paKey] + offset
+                    angl = angl if (angl <= 180.0) else angl - 360.0
+                    angl = angl if (angl >= -180.0) else angl + 360.0
                     process_dihedron(
                         str(ek[0]),
                         str(ek[1]),
                         str(ek[2]),
                         str(ek[3]),
-                        da[paKey] + offset,
+                        angl,
                         ric,
                     )
 
@@ -588,7 +594,9 @@ def read_PIC(
             sha = {k: ha[k] for k in sorted(ha)}
             shl12 = {k: hl12[k] for k in sorted(hl12)}
             shl23 = {k: hl23[k] for k in sorted(hl23)}
-            sbcic._hedraDict2chain(shl12, sha, shl23, da, bfacs)
+            # da not in order if generated from seq
+            sda = {k: da[k] for k in sorted(da)}
+            sbcic._hedraDict2chain(shl12, sha, shl23, sda, bfacs)
 
     # read_PIC processing starts here:
     with as_handle(file, mode="r") as handle:
