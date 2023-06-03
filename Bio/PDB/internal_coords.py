@@ -450,6 +450,8 @@ class IC_Chain:
     distance_to_internal_coordinates:
         Compute internal coordinates from distance plot and array of dihedral
         angle signs.
+    make_extended:
+        Arbitrarily sets all psi and phi backbone angles to 123 and -104 degrees.
 
     """
 
@@ -1592,7 +1594,6 @@ class IC_Chain:
         #            )
 
         if IC_Chain.ParallelAssembleResidues and not (start or fin):
-
             self.propagate_changes()
             self.init_atom_coords()  # compute initial di/hedra coords
             # transform init di/hedra to chain coord space
@@ -2225,6 +2226,19 @@ class IC_Chain:
         self.atomArray[ndx] = other.atomArray[ndx]
         self.atomArrayValid[ndx] = True
 
+    def make_extended(self):
+        """Set psi and phi angles to extended conformation (123. -104)."""
+        for ric in self.ordered_aa_ic_list:
+            # ric.bond_set("psi", 123)
+            # ric.bond_set("phi", -104)
+            ric.set_angle("psi", 123)
+            ric.set_angle("phi", -104)
+        # for d in self.dihedra.values():
+        #    if d.e_class == "NCACN":  # psi
+        #        d.angle = 123
+        #    elif d.e_class == "CNCAC":  # phi
+        #        d.angle = -104
+
 
 class IC_Residue:
     """Class to extend Biopython Residue with internal coordinate data.
@@ -2654,7 +2668,7 @@ class IC_Residue:
         """Cache calls to AtomKey for this residue."""
         try:
             ak = self.akc[atm]
-        except (KeyError):
+        except KeyError:
             ak = self.akc[atm] = AtomKey(self, atm)
             if isinstance(atm, str):
                 ak.missing = True
@@ -3720,27 +3734,43 @@ class IC_Residue:
             return edron.angle
         return None
 
-    def set_angle(self, angle_key: Union[EKT, str], v: float):
+    def set_angle(self, angle_key: Union[EKT, str], v: float, related=True):
         """Set dihedron or hedron angle for specified key.
 
-        See :meth:`.pick_angle` for key specifications.
+        If angle is a `Dihedron` and related is True (default), overlapping
+        dihedra are also changed as appropriate.  The overlap is a result of
+        protein chain definitions in :mod:`.ic_data` and :meth:`_create_edra`
+        (e.g. psi overlaps N-CA-C-O) so this is probably what you want.
+
+        See :meth:`.pick_angle` for angle_key specifications.
+        See :meth:`.bond_rotate` to change a dihedral by a number of degrees
+
+        :param angle_key: angle identifier.
+        :param float v: new angle in degrees.
+        :param bool related: default True.
+            Modify overlapping dihedra as needed
         """
         edron = self.pick_angle(angle_key)
-        if edron is not None:
+        if edron is None:
+            return
+        elif isinstance(edron, Hedron) or not related:
             edron.angle = v
+        else:  # Dihedron, do related angles
+            delta = Dihedron.angle_dif(edron.angle, v)
+            self._do_bond_rotate(edron, delta)
 
     def _do_bond_rotate(self, base: "Dihedron", delta: float):
         """Find and modify related dihedra through id3_dh_index."""
         try:
             for dk in self.cic.id3_dh_index[base.id3]:
                 # change all diheds with same first hedron
-                dihed = self.dihedra[dk]
+                dihed = self.cic.dihedra[dk]
                 dihed.angle += delta  # +/- 180 handled in setter
                 # for changed dihed, change any with reverse key 2nd hedron
                 # so change N-Ca-C-N will change O-Ca-C-Cb
                 try:
                     for d2rk in self.cic.id3_dh_index[dihed.id32[::-1]]:
-                        self.dihedra[d2rk].angle += delta
+                        self.cic.dihedra[d2rk].angle += delta
                 except KeyError:
                     pass
         except AttributeError:
@@ -3749,19 +3779,31 @@ class IC_Residue:
     def bond_rotate(self, angle_key: Union[EKT, str], delta: float):
         """Rotate set of overlapping dihedrals by delta degrees.
 
+        Changes a dihedral angle by a given delta, i.e.
+        new_angle = current_angle + delta
+        Values are adjusted so new_angle iwll be within +/-180.
+
+        Changes overlapping dihedra as in :meth:`.set_angle`
+
         See :meth:`.pick_angle` for key specifications.
         """
         base = self.pick_angle(angle_key)
-        self._do_bond_rotate(base, delta)
+        if base is not None:
+            self._do_bond_rotate(base, delta)
 
     def bond_set(self, angle_key: Union[EKT, str], val: float):
         """Set dihedron to val, update overlapping dihedra by same amount.
 
+        Redundant to :meth:`.set_angle`, retained for compatibility and does
+        not check for Hedron angle_keys or offer option to not update overlapping
+        dihedra.
+
         See :meth:`.pick_angle` for key specifications.
         """
         base = self.pick_angle(angle_key)
-        delta = Dihedron.angle_dif(base.angle, val)
-        self._do_bond_rotate(base, delta)
+        if base is not None:
+            delta = Dihedron.angle_dif(base.angle, val)
+            self._do_bond_rotate(base, delta)
 
     def pick_length(
         self, ak_spec: Union[str, BKT]
@@ -4417,14 +4459,13 @@ class Dihedron(Edron):
 
         self._dihedral = dangle_deg
         self.needs_update = True
-        # rtm
-        if True:  # try:
-            cic = self.cic
-            dndx = self.ndx
-            cic.dihedraAngle[dndx] = dangle_deg
-            cic.dihedraAngleRads[dndx] = np.deg2rad(dangle_deg)
-            cic.dAtoms_needs_update[dndx] = True
-            cic.atomArrayValid[cic.atomArrayIndex[self.atomkeys[3]]] = False
+
+        cic = self.cic
+        dndx = self.ndx
+        cic.dihedraAngle[dndx] = dangle_deg
+        cic.dihedraAngleRads[dndx] = np.deg2rad(dangle_deg)
+        cic.dAtoms_needs_update[dndx] = True
+        cic.atomArrayValid[cic.atomArrayIndex[self.atomkeys[3]]] = False
 
     @staticmethod
     def angle_dif(a1: Union[float, np.ndarray], a2: Union[float, np.ndarray]):
@@ -4834,7 +4875,6 @@ class AtomKey:
                 s1d, o1d = s1.isdigit(), o1.isdigit()
                 # if "H" == s0 == o0: # breaks cython
                 if ("H" == s0) and ("H" == o0):
-
                     if (s1 == o1) or (s1d and o1d):
                         enmS = self._endnum_re.findall(s)
                         enmO = self._endnum_re.findall(o)
