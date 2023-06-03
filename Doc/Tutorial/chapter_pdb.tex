@@ -776,7 +776,7 @@ You can use this to go up in the hierarchy, e.g. to get a list of
 \end{minted}
 For more info, see the API documentation.
 
-\subsection*{Extract a hetero residue from a chain (e.g. a glucose (GLC) moiety with resseq 10)}
+\subsection*{Extract hetero residue from chain (e.g. glucose (GLC) moiety with resseq 10)}
 
 \begin{minted}{pycon}
 >>> residue_id = ("H_GLC", 10, " ")
@@ -794,7 +794,7 @@ For more info, see the API documentation.
 ...
 \end{minted}
 
-\subsection*{Print out the coordinates of all CA atoms in a structure with B factor greater than 50}
+\subsection*{Print out coordinates of all CA atoms in structure with B factor over 50}
 
 \begin{minted}{pycon}
 >>> for model in structure.get_list():
@@ -920,7 +920,7 @@ the \texttt{calc\_dihedral} function from the \texttt{Vector} module:
 >>> angle = calc_dihedral(vector1, vector2, vector3, vector4)
 \end{minted}
 
-\subsection{Internal coordinates module - distances, angles, torsion angles, distance plots and more}
+\subsection{Internal coordinates - distances, angles, torsion angles, distance plots, etc}
 \label{sec:internal_coordinates}
 
 Protein structures are normally supplied in 3D XYZ coordinates relative to a fixed origin, as in a PDB or mmCIF file.
