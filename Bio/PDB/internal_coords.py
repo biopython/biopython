@@ -50,6 +50,8 @@ internal coordinate data files.
 
     # rotate residue 1 chi2 angle by 120 degrees (loops w/in +/-180)
     r1.internal_coord.set_angle("chi2", r1chi2 + 120.0)
+    # or
+    r1.internal_coord.bond_rotate("chi2", 120.0)
     # update myChain XYZ coordinates with chi2 changed
     myChain.internal_to_atom_coordinates()
     # write new conformation with PDBIO
@@ -2227,17 +2229,10 @@ class IC_Chain:
         self.atomArrayValid[ndx] = True
 
     def make_extended(self):
-        """Set psi and phi angles to extended conformation (123. -104)."""
+        """Set all psi and phi angles to extended conformation (123, -104)."""
         for ric in self.ordered_aa_ic_list:
-            # ric.bond_set("psi", 123)
-            # ric.bond_set("phi", -104)
             ric.set_angle("psi", 123)
             ric.set_angle("phi", -104)
-        # for d in self.dihedra.values():
-        #    if d.e_class == "NCACN":  # psi
-        #        d.angle = 123
-        #    elif d.e_class == "CNCAC":  # phi
-        #        d.angle = -104
 
 
 class IC_Residue:
@@ -3734,28 +3729,30 @@ class IC_Residue:
             return edron.angle
         return None
 
-    def set_angle(self, angle_key: Union[EKT, str], v: float, related=True):
+    def set_angle(self, angle_key: Union[EKT, str], v: float, overlap=True):
         """Set dihedron or hedron angle for specified key.
 
-        If angle is a `Dihedron` and related is True (default), overlapping
+        If angle is a `Dihedron` and `overlap` is True (default), overlapping
         dihedra are also changed as appropriate.  The overlap is a result of
         protein chain definitions in :mod:`.ic_data` and :meth:`_create_edra`
         (e.g. psi overlaps N-CA-C-O) so this is probably what you want.
+
+        N.B. setting e.g. PRO chi2 is permitted without error or warning!
 
         See :meth:`.pick_angle` for angle_key specifications.
         See :meth:`.bond_rotate` to change a dihedral by a number of degrees
 
         :param angle_key: angle identifier.
-        :param float v: new angle in degrees.
-        :param bool related: default True.
+        :param float v: new angle in degrees (result adjusted to +/-180).
+        :param bool overlap: default True.
             Modify overlapping dihedra as needed
         """
         edron = self.pick_angle(angle_key)
         if edron is None:
             return
-        elif isinstance(edron, Hedron) or not related:
+        elif isinstance(edron, Hedron) or not overlap:
             edron.angle = v
-        else:  # Dihedron, do related angles
+        else:  # Dihedron, do overlap angles
             delta = Dihedron.angle_dif(edron.angle, v)
             self._do_bond_rotate(edron, delta)
 
@@ -3794,9 +3791,9 @@ class IC_Residue:
     def bond_set(self, angle_key: Union[EKT, str], val: float):
         """Set dihedron to val, update overlapping dihedra by same amount.
 
-        Redundant to :meth:`.set_angle`, retained for compatibility and does
-        not check for Hedron angle_keys or offer option to not update overlapping
-        dihedra.
+        Redundant to :meth:`.set_angle`, retained for compatibility.  Unlike
+        :meth:`.set_angle` this is for dihedra only and no option to not update
+        overlapping dihedra.
 
         See :meth:`.pick_angle` for key specifications.
         """
@@ -4438,15 +4435,17 @@ class Dihedron(Edron):
         Faster to modify IC_Chain level arrays directly.
 
         This is probably not the routine you are looking for.  See
-        :meth:`IC_Residue.bond_set` to change a dihedral angle along with its
-        neighbours, i.e. without clashing atoms.
+        :meth:`IC_Residue.set_angle` or :meth:`IC_Residue.bond_rotate` to change
+        a dihedral angle along with its overlapping dihedra, i.e. without
+        clashing atoms.
 
         N.B. dihedron (i-1)C-N-CA-CB is ignored if O exists.
         C-beta is by default placed using O-C-CA-CB, but O is missing
         in some PDB file residues, which means the sidechain cannot be
         placed.  The alternate CB path (i-1)C-N-CA-CB is provided to
         circumvent this, but if this is needed then it must be adjusted in
-        conjunction with PHI ((i-1)C-N-CA-C) as they overlap.
+        conjunction with PHI ((i-1)C-N-CA-C) as they overlap.  This is handled
+        by the `IC_Residue` routines above.
 
         :param float dangle_deg: new dihedral angle in degrees
         """
