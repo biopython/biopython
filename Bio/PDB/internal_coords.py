@@ -3735,7 +3735,14 @@ class IC_Residue:
         If angle is a `Dihedron` and `overlap` is True (default), overlapping
         dihedra are also changed as appropriate.  The overlap is a result of
         protein chain definitions in :mod:`.ic_data` and :meth:`_create_edra`
-        (e.g. psi overlaps N-CA-C-O) so this is probably what you want.
+        (e.g. psi overlaps N-CA-C-O).
+
+        Te default overlap=True is probably what you want for:
+        `set_angle("chi1", val)`
+
+        The default is probably NOT what you want when processing all dihedrals
+        in a chain or residue (such as copying from another structure), as the
+        overlaping dihedra will likely be in the set as well.
 
         N.B. setting e.g. PRO chi2 is permitted without error or warning!
 
