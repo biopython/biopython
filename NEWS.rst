@@ -37,6 +37,10 @@ Generating a structure with default internal coordinates, e.g. from a
 sequence with ``read_PIC_seq()``,  previously selected wrong default
 values in many cases.  This has been fixed.
 
+Added ``make_extended()`` to set a chain to an extended beta strand
+conformation, as the default backbone values reflect the more popular
+alpha helix in most cases.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
