@@ -2223,6 +2223,10 @@ class IC_Chain:
         chain breaks (otherwise each fragment will start at origin).
 
         Also useful if copying internal coordinates from another chain.
+
+        N.B. :meth:`IC_Residue.set_angle()` and :meth:`IC_Residue.set_length()`
+        invalidate their relevant atoms, so apply them before calling this
+        function.
         """
         ndx = [self.atomArrayIndex[ak] for iNCaC in other.initNCaCs for ak in iNCaC]
         self.atomArray[ndx] = other.atomArray[ndx]

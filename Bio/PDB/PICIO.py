@@ -305,6 +305,9 @@ def read_PIC(
         accpt = IC_Residue.accept_atoms
         if not all(ek[i].akl[atmNdx] in accpt for i in range(4)):
             return
+        dangle = float(dangle)
+        dangle = dangle if (dangle <= 180.0) else dangle - 360.0
+        dangle = dangle if (dangle >= -180.0) else dangle + 360.0
         da[ek] = float(dangle)
         sbcic.dihedra[ek] = ric.dihedra[ek] = d = Dihedron(ek)
         d.cic = sbcic
@@ -392,8 +395,6 @@ def read_PIC(
 
             if paKey in da:
                 angl = da[paKey] + dihedra_secondary_defaults[rdclass][1]
-                angl = angl if (angl <= 180.0) else angl - 360.0
-                angl = angl if (angl >= -180.0) else angl + 360.0
                 process_dihedron(
                     str(ek[0]),
                     str(ek[1]),
@@ -431,8 +432,6 @@ def read_PIC(
 
                 if paKey in da:
                     angl = da[paKey] + offset
-                    angl = angl if (angl <= 180.0) else angl - 360.0
-                    angl = angl if (angl >= -180.0) else angl + 360.0
                     process_dihedron(
                         str(ek[0]),
                         str(ek[1]),
