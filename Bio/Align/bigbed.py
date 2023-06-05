@@ -354,7 +354,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         chromSize = -1
         minDiff = sys.maxsize
         for alignment in alignments:
-            chrom = alignment.target.id
+            chrom = alignment.sequences[0].id
+            # Note that for MAF files, this may be a multiple alignment, so
+            # alignment.target.id won't necessarily work.
             start = alignment.coordinates[0, 0]
             end = alignment.coordinates[0, -1]
             for extra_index in extra_indices:
@@ -378,7 +380,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         break
                 else:
                     raise ValueError(
-                        f"failed to find target '{target.name}' in target list at alignment [{bedCount}]"
+                        f"failed to find target '{chrom}' in target list at alignment [{bedCount}]"
                     )
                 name = chrom
                 keySize = max(keySize, len(chrom))

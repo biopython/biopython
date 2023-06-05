@@ -1117,7 +1117,8 @@ class Alignment:
     def target(self):
         """Return self.sequences[0] for a pairwise alignment."""
         n = len(self.sequences)
-        if n != 2:
+        if n > 2:
+            # also allow alignments in which only the target alignment is defined
             raise ValueError(
                 "self.target is defined for pairwise alignments only (found alignment of %d sequences)"
                 % n
