@@ -17,6 +17,7 @@ for naming of individual atoms
 """
 
 # Backbone hedra and dihedra - within residue, no next or prev (no psi, phi, omg).
+# Core backbone angles like psi, omega, phi, tau defined in :meth:`_create_edra`.
 ic_data_backbone = (
     ("N", "CA", "C", "O"),  # locate backbone O
     ("O", "C", "CA", "CB"),  # locate CB

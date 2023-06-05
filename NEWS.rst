@@ -28,6 +28,19 @@ Additionally, the amino acids considered were revised as per recent literature.
 The sequence objects now have ``.removeprefix()`` and ``.removesuffix()``
 methods matching that added to strings in Python 3.9.
 
+Calling ``set_angle()`` on a residue dihedral angle previously set only
+the specified angle, now the default behavior is to update overlapping
+angles as well.  For example, setting Psi (N-CA-CN) now updates the
+overlapping angle N-CA-C-O. as most users would probably expect.
+
+Generating a structure with default internal coordinates, e.g. from a
+sequence with ``read_PIC_seq()``,  previously selected wrong default
+values in many cases.  This has been fixed.
+
+Added ``make_extended()`` to set a chain to an extended beta strand
+conformation, as the default backbone values reflect the more popular
+alpha helix in most cases.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
@@ -43,6 +56,7 @@ possible, especially the following contributors:
 - Peter Cock
 - Ricardas Ralys (first contribution)
 - Vladislav Kuznetsov (first contribution)
+- Rob Miller
 
 12 February 2023: Biopython 1.81
 ================================

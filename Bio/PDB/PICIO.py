@@ -181,7 +181,7 @@ def read_PIC(
         # akstr: full AtomKey string read from .pic file, includes residue info
         try:
             return akc[akstr]
-        except (KeyError):
+        except KeyError:
             ak = akc[akstr] = AtomKey(akstr)
             return ak
 
@@ -305,6 +305,9 @@ def read_PIC(
         accpt = IC_Residue.accept_atoms
         if not all(ek[i].akl[atmNdx] in accpt for i in range(4)):
             return
+        dangle = float(dangle)
+        dangle = dangle if (dangle <= 180.0) else dangle - 360.0
+        dangle = dangle if (dangle >= -180.0) else dangle + 360.0
         da[ek] = float(dangle)
         sbcic.dihedra[ek] = ric.dihedra[ek] = d = Dihedron(ek)
         d.cic = sbcic
@@ -391,12 +394,13 @@ def read_PIC(
                 )
 
             if paKey in da:
+                angl = da[paKey] + dihedra_secondary_defaults[rdclass][1]
                 process_dihedron(
                     str(ek[0]),
                     str(ek[1]),
                     str(ek[2]),
                     str(ek[3]),
-                    da[paKey] + dihedra_secondary_defaults[rdclass][1],
+                    angl,
                     ric,
                 )
 
@@ -427,12 +431,13 @@ def read_PIC(
                     )
 
                 if paKey in da:
+                    angl = da[paKey] + offset
                     process_dihedron(
                         str(ek[0]),
                         str(ek[1]),
                         str(ek[2]),
                         str(ek[3]),
-                        da[paKey] + offset,
+                        angl,
                         ric,
                     )
 
@@ -588,7 +593,9 @@ def read_PIC(
             sha = {k: ha[k] for k in sorted(ha)}
             shl12 = {k: hl12[k] for k in sorted(hl12)}
             shl23 = {k: hl23[k] for k in sorted(hl23)}
-            sbcic._hedraDict2chain(shl12, sha, shl23, da, bfacs)
+            # da not in order if generated from seq
+            sda = {k: da[k] for k in sorted(da)}
+            sbcic._hedraDict2chain(shl12, sha, shl23, sda, bfacs)
 
     # read_PIC processing starts here:
     with as_handle(file, mode="r") as handle:
