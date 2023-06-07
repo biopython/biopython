@@ -294,6 +294,8 @@ numpy.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
 
 
 class TestAlign_bundle_without_target(unittest.TestCase):
+    path = "MAF/bundle_without_target.bb"
+
     def test_reading(self):
         """Test parsing bundle_without_target.bb."""
 
@@ -301,8 +303,30 @@ class TestAlign_bundle_without_target(unittest.TestCase):
         # mafToBigMaf mm8 bundle_without_target.maf stdout | sort -k1,1 -k2,2n > bundle_without_target.txt
         # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bundle_without_target.txt mm8.chrom.sizes bundle_without_target.bb
 
-        path = "MAF/bundle_without_target.bb"
-        alignments = Align.parse(path, "bigmaf")
+        alignments = Align.parse(self.path, "bigmaf")
+        self.check_alignments(alignments)
+        alignments.rewind()
+        self.check_alignments(alignments)
+        with Align.parse(self.path, "bigmaf") as alignments:
+            self.check_alignments(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(self.path, "bigmaf") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
+
+    def test_writing(self):
+        """Test writing bundle_without_target.bb."""
+        alignments = Align.parse(self.path, "bigmaf")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigmaf", reference="mm8")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigmaf")
+            self.check_alignments(alignments)
+
+    def check_alignments(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
