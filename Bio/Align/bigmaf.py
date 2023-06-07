@@ -118,7 +118,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             alignment = alignment[:2]
             reference, chromosome = alignment.target.id.split(".", 1)
             alignment.target.id = chromosome
-            assert coordinates[0,0] < coordinates[0, -1]
+            assert coordinates[0, 0] < coordinates[0, -1]
             alignment.annotations = {}
             alignment.annotations["mafBlock"] = mafBlock
             fixed_alignments.append(alignment)
