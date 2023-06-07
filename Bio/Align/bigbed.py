@@ -354,7 +354,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         chromSize = -1
         minDiff = sys.maxsize
         for alignment in alignments:
-            chrom = alignment.target.id
+            chrom = alignment.sequences[0].id
+            # Note that for MAF files, this may be a multiple alignment, so
+            # alignment.target.id won't necessarily work.
             start = alignment.coordinates[0, 0]
             end = alignment.coordinates[0, -1]
             for extra_index in extra_indices:
@@ -378,7 +380,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         break
                 else:
                     raise ValueError(
-                        f"failed to find target '{target.name}' in target list at alignment [{bedCount}]"
+                        f"failed to find target '{chrom}' in target list at alignment [{bedCount}]"
                     )
                 name = chrom
                 keySize = max(keySize, len(chrom))
@@ -559,10 +561,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             blockCount = len(blockSizes)
             row.append(str(blockCount))
         if bedN > 10:
-            row.append(",".join(str(blockSize) for blockSize in blockSizes))
+            row.append(",".join(str(blockSize) for blockSize in blockSizes) + ",")
         if bedN > 11:
             chromStarts = alignment.coordinates[0, :-1][aligned] - chromStart
-            row.append(",".join(str(chromStart) for chromStart in chromStarts))
+            row.append(",".join(str(chromStart) for chromStart in chromStarts) + ",")
         if bedN > 12:
             if bedN != 15:
                 raise ValueError(f"Unexpected value {bedN} for bedN in _extract_fields")

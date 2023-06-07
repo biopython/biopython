@@ -4,6 +4,7 @@
 # as part of this package.
 """Tests for Align.bigmaf module."""
 import unittest
+import tempfile
 from io import StringIO
 
 
@@ -12,16 +13,47 @@ from Bio import Align
 import numpy
 
 
-class TestAlign_reading(unittest.TestCase):
-    def test_reading_bundle_without_target(self):
-        """Test parsing bundle_without_target.bb."""
+class TestAlign_declaration(unittest.TestCase):
+    def test_declaration(self):
+        with open("MAF/bigMaf.as") as stream:
+            declaration = stream.read()
+        self.assertEqual(str(Align.bigmaf.declaration), declaration)
 
-        # BigMaf file bundle_without_target.bb was created using the commands
-        # mafToBigMaf mm8 bundle_without_target.maf stdout | sort -k1,1 -k2,2n > bundle_without_target.txt
-        # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bundle_without_target.txt mm8.chrom.sizes bundle_without_target.bb
 
-        path = "MAF/bundle_without_target.bb"
-        alignments = Align.parse(path, "bigmaf")
+class TestAlign_ucsc_test(unittest.TestCase):
+    path = "MAF/ucsc_test.bb"
+
+    def test_reading(self):
+        """Test reading ucsc_test.bb."""
+
+        # BigMaf file ucsc_test.bb was created using the commands
+        # tail -n +2 ucsc_test.maf | mafToBigMaf hg16 stdin stdout | sort -k1,1 -k2,2n > ucsc_test.txt
+        # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab ucsc_test.txt hg16.chrom.sizes ucsc_test.bb
+
+        alignments = Align.parse(self.path, "bigmaf")
+        self.check_alignments(alignments)
+        alignments.rewind()
+        self.check_alignments(alignments)
+        with Align.parse(self.path, "bigmaf") as alignments:
+            self.check_alignments(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(self.path, "bigmaf") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
+
+    def test_writing(self):
+        """Test writing ucsc_test.bb."""
+        alignments = Align.parse(self.path, "bigmaf")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigmaf")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigmaf")
+            self.check_alignments(alignments)
+
+    def check_alignments(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -35,8 +67,282 @@ table bedMaf
 )
 """,
         )
+        self.assertEqual(alignments.reference, "hg16")
         self.assertEqual(len(alignments.targets), 1)
-        self.assertEqual(alignments.targets[0].id, "chr10")
+        self.assertEqual(alignments.targets[0].id, "hg16.chr7")
+        self.assertEqual(len(alignments.targets[0]), 158545518)
+        self.assertEqual(len(alignments), 3)
+        alignment = next(alignments)
+        self.assertAlmostEqual(alignment.score, 23262)
+        self.assertEqual(len(alignment.sequences), 5)
+        self.assertEqual(alignment.sequences[0].id, "hg16.chr7")
+        self.assertEqual(len(alignment.sequences[0]), 158545518)
+        self.assertEqual(
+            alignment.sequences[0].seq[27578828 : 27578828 + 38],
+            "AAAGGGAATGTTAACCAAATGAATTGTCTCTTACGGTG",
+        )
+        self.assertEqual(alignment[0], "AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG")
+        self.assertEqual(alignment.sequences[1].id, "panTro1.chr6")
+        self.assertEqual(len(alignment.sequences[1]), 161576975)
+        self.assertEqual(
+            alignment.sequences[1].seq[28741140 : 28741140 + 38],
+            "AAAGGGAATGTTAACCAAATGAATTGTCTCTTACGGTG",
+        )
+        self.assertEqual(alignment[1], "AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG")
+        self.assertEqual(alignment.sequences[2].id, "baboon")
+        self.assertEqual(len(alignment.sequences[2]), 4622798)
+        self.assertEqual(
+            alignment.sequences[2].seq[116834 : 116834 + 38],
+            "AAAGGGAATGTTAACCAAATGAGTTGTCTCTTATGGTG",
+        )
+        self.assertEqual(alignment[2], "AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG")
+        self.assertEqual(alignment.sequences[3].id, "mm4.chr6")
+        self.assertEqual(len(alignment.sequences[3]), 151104725)
+        self.assertEqual(
+            alignment.sequences[3].seq[53215344 : 53215344 + 38],
+            "AATGGGAATGTTAAGCAAACGAATTGTCTCTCAGTGTG",
+        )
+        self.assertEqual(alignment[3], "-AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG")
+        self.assertEqual(alignment.sequences[4].id, "rn3.chr4")
+        self.assertEqual(len(alignment.sequences[4]), 187371129)
+        self.assertEqual(
+            alignment.sequences[4].seq[81344243 : 81344243 + 40],
+            "AAGGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG",
+        )
+        self.assertEqual(alignment[4], "-AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG")
+        self.assertEqual(
+            str(alignment),
+            """\
+hg16.chr7  27578828 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 27578866
+panTro1.c  28741140 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 28741178
+baboon       116834 AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG   116872
+mm4.chr6   53215344 -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG 53215382
+rn3.chr4   81344243 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG 81344283
+""",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array(
+                    [
+                        # fmt: off
+        [27578828, 27578829, 27578831, 27578831, 27578850, 27578850, 27578866],
+        [28741140, 28741141, 28741143, 28741143, 28741162, 28741162, 28741178],
+        [  116834,   116835,   116837,   116837,   116856,   116856,   116872],
+        [53215344, 53215344, 53215346, 53215347, 53215366, 53215366, 53215382],
+        [81344243, 81344243, 81344245, 81344245, 81344264, 81344267, 81344283],
+                        # fmt: on
+                    ]
+                ),
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
+              'A', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', 'A', '-', '-', '-',
+              'A', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'T', 'A', 'C', 'G',
+              'G', 'T', 'G'],
+             ['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
+              'A', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', 'A', '-', '-', '-',
+              'A', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'T', 'A', 'C', 'G',
+              'G', 'T', 'G'],
+             ['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
+              'A', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', 'A', '-', '-', '-',
+              'G', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'T', 'A', 'T', 'G',
+              'G', 'T', 'G'],
+             ['-', 'A', 'A', 'T', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
+              'A', 'A', 'G', 'C', 'A', 'A', 'A', 'C', 'G', 'A', '-', '-', '-',
+              'A', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'C', 'A', 'G', 'T',
+              'G', 'T', 'G'],
+             ['-', 'A', 'A', '-', 'G', 'G', 'G', 'G', 'A', 'T', 'G', 'C', 'T',
+              'A', 'A', 'G', 'C', 'C', 'A', 'A', 'T', 'G', 'A', 'G', 'T', 'T',
+              'G', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'C', 'A', 'A', 'T',
+              'G', 'T', 'G']], dtype='U')
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertAlmostEqual(alignment.score, 5062.0)
+        self.assertEqual(len(alignment.sequences), 5)
+        self.assertEqual(alignment.sequences[0].id, "hg16.chr7")
+        self.assertEqual(len(alignment.sequences[0]), 158545518)
+        self.assertEqual(alignment.sequences[0].seq[27699739 : 27699739 + 6], "TAAAGA")
+        self.assertEqual(alignment[0], "TAAAGA")
+        self.assertEqual(alignment.sequences[1].id, "panTro1.chr6")
+        self.assertEqual(len(alignment.sequences[1]), 161576975)
+        self.assertEqual(alignment.sequences[1].seq[28862317 : 28862317 + 6], "TAAAGA")
+        self.assertEqual(alignment[1], "TAAAGA")
+        self.assertEqual(alignment.sequences[2].id, "baboon")
+        self.assertEqual(len(alignment.sequences[2]), 4622798)
+        self.assertEqual(alignment.sequences[2].seq[241163 : 241163 + 6], "TAAAGA")
+        self.assertEqual(alignment[2], "TAAAGA")
+        self.assertEqual(alignment.sequences[3].id, "mm4.chr6")
+        self.assertEqual(len(alignment.sequences[3]), 151104725)
+        self.assertEqual(alignment.sequences[3].seq[53303881 : 53303881 + 6], "TAAAGA")
+        self.assertEqual(alignment[3], "TAAAGA")
+        self.assertEqual(alignment.sequences[4].id, "rn3.chr4")
+        self.assertEqual(len(alignment.sequences[4]), 187371129)
+        self.assertEqual(alignment.sequences[4].seq[81444246 : 81444246 + 6], "taagga")
+        self.assertEqual(alignment[4], "taagga")
+        self.assertEqual(
+            str(alignment),
+            """\
+hg16.chr7  27699739 TAAAGA 27699745
+panTro1.c  28862317 TAAAGA 28862323
+baboon       241163 TAAAGA   241169
+mm4.chr6   53303881 TAAAGA 53303887
+rn3.chr4   81444246 taagga 81444252
+""",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array(
+                    [
+                        # fmt: off
+                             [27699739, 27699745],
+                             [28862317, 28862323],
+                             [  241163,   241169],
+                             [53303881, 53303887],
+                             [81444246, 81444252],
+                        # fmt: on
+                    ]
+                ),
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['T', 'A', 'A', 'A', 'G', 'A'],
+             ['T', 'A', 'A', 'A', 'G', 'A'],
+             ['T', 'A', 'A', 'A', 'G', 'A'],
+             ['T', 'A', 'A', 'A', 'G', 'A'],
+             ['t', 'a', 'a', 'g', 'g', 'a']], dtype='U')
+                # fmt: on
+            )
+        )
+        alignment = next(alignments)
+        self.assertAlmostEqual(alignment.score, 6636.0)
+        self.assertEqual(len(alignment.sequences), 4)
+        self.assertEqual(alignment.sequences[0].id, "hg16.chr7")
+        self.assertEqual(len(alignment.sequences[0]), 158545518)
+        self.assertEqual(
+            alignment.sequences[0].seq[27707221 : 27707221 + 13], "gcagctgaaaaca"
+        )
+        self.assertEqual(alignment[0], "gcagctgaaaaca")
+        self.assertEqual(alignment.sequences[1].id, "panTro1.chr6")
+        self.assertEqual(len(alignment.sequences[1]), 161576975)
+        self.assertEqual(
+            alignment.sequences[1].seq[28869787 : 28869787 + 13], "gcagctgaaaaca"
+        )
+        self.assertEqual(alignment[1], "gcagctgaaaaca")
+        self.assertEqual(alignment.sequences[2].id, "baboon")
+        self.assertEqual(len(alignment.sequences[2]), 4622798)
+        self.assertEqual(
+            alignment.sequences[2].seq[249182 : 249182 + 13], "gcagctgaaaaca"
+        )
+        self.assertEqual(alignment[2], "gcagctgaaaaca")
+        self.assertEqual(alignment.sequences[3].id, "mm4.chr6")
+        self.assertEqual(len(alignment.sequences[3]), 151104725)
+        self.assertEqual(
+            alignment.sequences[3].seq[53310102 : 53310102 + 13], "ACAGCTGAAAATA"
+        )
+        self.assertEqual(alignment[3], "ACAGCTGAAAATA")
+        self.assertEqual(
+            str(alignment),
+            """\
+hg16.chr7  27707221 gcagctgaaaaca 27707234
+panTro1.c  28869787 gcagctgaaaaca 28869800
+baboon       249182 gcagctgaaaaca   249195
+mm4.chr6   53310102 ACAGCTGAAAATA 53310115
+""",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array(
+                    [
+                        # fmt: off
+                    [27707221, 27707234],
+                    [28869787, 28869800],
+                    [  249182,   249195],
+                    [53310102, 53310115],
+                        # fmt: on
+                    ]
+                ),
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                # fmt: off
+# flake8: noqa
+numpy.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
+             ['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
+             ['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
+             ['A', 'C', 'A', 'G', 'C', 'T', 'G', 'A', 'A', 'A', 'A', 'T', 'A']],
+            dtype='U')
+                # fmt: on
+            )
+        )
+        self.assertRaises(StopIteration, next, alignments)
+
+
+class TestAlign_bundle_without_target(unittest.TestCase):
+    path = "MAF/bundle_without_target.bb"
+
+    def test_reading(self):
+        """Test parsing bundle_without_target.bb."""
+
+        # BigMaf file bundle_without_target.bb was created using the commands
+        # mafToBigMaf mm8 bundle_without_target.maf stdout | sort -k1,1 -k2,2n > bundle_without_target.txt
+        # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bundle_without_target.txt mm8.chrom.sizes bundle_without_target.bb
+
+        alignments = Align.parse(self.path, "bigmaf")
+        self.check_alignments(alignments)
+        alignments.rewind()
+        self.check_alignments(alignments)
+        with Align.parse(self.path, "bigmaf") as alignments:
+            self.check_alignments(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(self.path, "bigmaf") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
+
+    def test_writing(self):
+        """Test writing bundle_without_target.bb."""
+        alignments = Align.parse(self.path, "bigmaf")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigmaf")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigmaf")
+            self.check_alignments(alignments)
+
+    def check_alignments(self, alignments):
+        self.assertEqual(
+            str(alignments.declaration),
+            """\
+table bedMaf
+"Bed3 with MAF block"
+(
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position in chromosome"
+   uint    chromEnd;      "End position in chromosome"
+   lstring mafBlock;      "MAF block"
+)
+""",
+        )
+        self.assertEqual(alignments.reference, "mm8")
+        self.assertEqual(len(alignments.targets), 1)
+        self.assertEqual(alignments.targets[0].id, "mm8.chr10")
         self.assertEqual(len(alignments.targets[0]), 129959148)
         self.assertEqual(len(alignments), 1)
         alignment = next(alignments)
@@ -133,15 +439,31 @@ oryCun1.s     11207 TGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT   11251
             )
         )
 
-    def test_reading_ucsc_mm9_chr10(self):
-        """Test parsing MAF file ucsc_mm9_chr10.bb."""
+
+class TestAlign_ucsc_mm9_chr10(unittest.TestCase):
+    path = "MAF/ucsc_mm9_chr10.bb"
+
+    def test_reading(self):
+        """Test parsing file ucsc_mm9_chr10.bb."""
 
         # BigMaf file ucsc_mm9_chr10.bb was created using the commands
         # mafToBigMaf mm9 ucsc_mm9_chr10.maf stdout | sort -k1,1 -k2,2n > ucsc_mm9_chr10.txt
         # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab ucsc_mm9_chr10.txt mm9.chrom.sizes ucsc_mm9_chr10.bb
 
-        path = "MAF/ucsc_mm9_chr10.bb"
-        alignments = Align.parse(path, "bigmaf")
+        alignments = Align.parse(self.path, "bigmaf")
+        self.check_alignments(alignments)
+
+    def test_writing(self):
+        """Test writing file ucsc_mm9_chr10.bb."""
+        alignments = Align.parse(self.path, "bigmaf")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigmaf")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigmaf")
+            self.check_alignments(alignments)
+
+    def check_alignments(self, alignments):
         self.assertEqual(
             str(alignments.declaration),
             """\
@@ -155,8 +477,9 @@ table bedMaf
 )
 """,
         )
+        self.assertEqual(alignments.reference, "mm9")
         self.assertEqual(len(alignments.targets), 1)
-        self.assertEqual(alignments.targets[0].id, "chr10")
+        self.assertEqual(alignments.targets[0].id, "mm9.chr10")
         self.assertEqual(len(alignments.targets[0]), 129993255)
         self.assertEqual(len(alignments), 48)
         alignment = next(alignments)
@@ -9693,271 +10016,12 @@ numpy.array([['T', 'G', 'T', 'T', 'T', 'A', 'G', 'T', 'A', 'C', 'C', '-', '-',
         )
         self.assertRaises(StopIteration, next, alignments)
 
-    def test_reading_ucsc_test(self):
-        """Test parsing ucsc_test.bb."""
-
-        # BigMaf file ucsc_test.bb was created using the commands
-        # tail -n +2 ucsc_test.maf | mafToBigMaf hg16 stdin stdout | sort -k1,1 -k2,2n > ucsc_test.txt
-        # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab ucsc_test.txt hg16.chrom.sizes ucsc_test.bb
-
-        path = "MAF/ucsc_test.bb"
-        alignments = Align.parse(path, "bigmaf")
-        self.check_reading_ucsc_test(alignments)
-        alignments.rewind()
-        self.check_reading_ucsc_test(alignments)
-        with Align.parse(path, "bigmaf") as alignments:
-            self.check_reading_ucsc_test(alignments)
-        with self.assertRaises(AttributeError):
-            alignments._stream
-        with Align.parse(path, "bigmaf") as alignments:
-            pass
-        with self.assertRaises(AttributeError):
-            alignments._stream
-
-    def check_reading_ucsc_test(self, alignments):
-        self.assertEqual(
-            str(alignments.declaration),
-            """\
-table bedMaf
-"Bed3 with MAF block"
-(
-   string  chrom;         "Reference sequence chromosome or scaffold"
-   uint    chromStart;    "Start position in chromosome"
-   uint    chromEnd;      "End position in chromosome"
-   lstring mafBlock;      "MAF block"
-)
-""",
-        )
-        self.assertEqual(len(alignments.targets), 1)
-        self.assertEqual(alignments.targets[0].id, "chr7")
-        self.assertEqual(len(alignments.targets[0]), 158545518)
-        self.assertEqual(len(alignments), 3)
-        alignment = next(alignments)
-        self.assertAlmostEqual(alignment.score, 23262)
-        self.assertEqual(len(alignment.sequences), 5)
-        self.assertEqual(alignment.sequences[0].id, "hg16.chr7")
-        self.assertEqual(len(alignment.sequences[0]), 158545518)
-        self.assertEqual(
-            alignment.sequences[0].seq[27578828 : 27578828 + 38],
-            "AAAGGGAATGTTAACCAAATGAATTGTCTCTTACGGTG",
-        )
-        self.assertEqual(alignment[0], "AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG")
-        self.assertEqual(alignment.sequences[1].id, "panTro1.chr6")
-        self.assertEqual(len(alignment.sequences[1]), 161576975)
-        self.assertEqual(
-            alignment.sequences[1].seq[28741140 : 28741140 + 38],
-            "AAAGGGAATGTTAACCAAATGAATTGTCTCTTACGGTG",
-        )
-        self.assertEqual(alignment[1], "AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG")
-        self.assertEqual(alignment.sequences[2].id, "baboon")
-        self.assertEqual(len(alignment.sequences[2]), 4622798)
-        self.assertEqual(
-            alignment.sequences[2].seq[116834 : 116834 + 38],
-            "AAAGGGAATGTTAACCAAATGAGTTGTCTCTTATGGTG",
-        )
-        self.assertEqual(alignment[2], "AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG")
-        self.assertEqual(alignment.sequences[3].id, "mm4.chr6")
-        self.assertEqual(len(alignment.sequences[3]), 151104725)
-        self.assertEqual(
-            alignment.sequences[3].seq[53215344 : 53215344 + 38],
-            "AATGGGAATGTTAAGCAAACGAATTGTCTCTCAGTGTG",
-        )
-        self.assertEqual(alignment[3], "-AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG")
-        self.assertEqual(alignment.sequences[4].id, "rn3.chr4")
-        self.assertEqual(len(alignment.sequences[4]), 187371129)
-        self.assertEqual(
-            alignment.sequences[4].seq[81344243 : 81344243 + 40],
-            "AAGGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG",
-        )
-        self.assertEqual(alignment[4], "-AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG")
-        self.assertEqual(
-            str(alignment),
-            """\
-hg16.chr7  27578828 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 27578866
-panTro1.c  28741140 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 28741178
-baboon       116834 AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG   116872
-mm4.chr6   53215344 -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG 53215382
-rn3.chr4   81344243 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG 81344283
-""",
-        )
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates,
-                numpy.array(
-                    [
-                        # fmt: off
-        [27578828, 27578829, 27578831, 27578831, 27578850, 27578850, 27578866],
-        [28741140, 28741141, 28741143, 28741143, 28741162, 28741162, 28741178],
-        [  116834,   116835,   116837,   116837,   116856,   116856,   116872],
-        [53215344, 53215344, 53215346, 53215347, 53215366, 53215366, 53215382],
-        [81344243, 81344243, 81344245, 81344245, 81344264, 81344267, 81344283],
-                        # fmt: on
-                    ]
-                ),
-            )
-        )
-        self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
-                # fmt: off
-# flake8: noqa
-numpy.array([['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
-              'A', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', 'A', '-', '-', '-',
-              'A', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'T', 'A', 'C', 'G',
-              'G', 'T', 'G'],
-             ['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
-              'A', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', 'A', '-', '-', '-',
-              'A', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'T', 'A', 'C', 'G',
-              'G', 'T', 'G'],
-             ['A', 'A', 'A', '-', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
-              'A', 'A', 'C', 'C', 'A', 'A', 'A', 'T', 'G', 'A', '-', '-', '-',
-              'G', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'T', 'A', 'T', 'G',
-              'G', 'T', 'G'],
-             ['-', 'A', 'A', 'T', 'G', 'G', 'G', 'A', 'A', 'T', 'G', 'T', 'T',
-              'A', 'A', 'G', 'C', 'A', 'A', 'A', 'C', 'G', 'A', '-', '-', '-',
-              'A', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'C', 'A', 'G', 'T',
-              'G', 'T', 'G'],
-             ['-', 'A', 'A', '-', 'G', 'G', 'G', 'G', 'A', 'T', 'G', 'C', 'T',
-              'A', 'A', 'G', 'C', 'C', 'A', 'A', 'T', 'G', 'A', 'G', 'T', 'T',
-              'G', 'T', 'T', 'G', 'T', 'C', 'T', 'C', 'T', 'C', 'A', 'A', 'T',
-              'G', 'T', 'G']], dtype='U')
-                # fmt: on
-            )
-        )
-        alignment = next(alignments)
-        self.assertAlmostEqual(alignment.score, 5062.0)
-        self.assertEqual(len(alignment.sequences), 5)
-        self.assertEqual(alignment.sequences[0].id, "hg16.chr7")
-        self.assertEqual(len(alignment.sequences[0]), 158545518)
-        self.assertEqual(alignment.sequences[0].seq[27699739 : 27699739 + 6], "TAAAGA")
-        self.assertEqual(alignment[0], "TAAAGA")
-        self.assertEqual(alignment.sequences[1].id, "panTro1.chr6")
-        self.assertEqual(len(alignment.sequences[1]), 161576975)
-        self.assertEqual(alignment.sequences[1].seq[28862317 : 28862317 + 6], "TAAAGA")
-        self.assertEqual(alignment[1], "TAAAGA")
-        self.assertEqual(alignment.sequences[2].id, "baboon")
-        self.assertEqual(len(alignment.sequences[2]), 4622798)
-        self.assertEqual(alignment.sequences[2].seq[241163 : 241163 + 6], "TAAAGA")
-        self.assertEqual(alignment[2], "TAAAGA")
-        self.assertEqual(alignment.sequences[3].id, "mm4.chr6")
-        self.assertEqual(len(alignment.sequences[3]), 151104725)
-        self.assertEqual(alignment.sequences[3].seq[53303881 : 53303881 + 6], "TAAAGA")
-        self.assertEqual(alignment[3], "TAAAGA")
-        self.assertEqual(alignment.sequences[4].id, "rn3.chr4")
-        self.assertEqual(len(alignment.sequences[4]), 187371129)
-        self.assertEqual(alignment.sequences[4].seq[81444246 : 81444246 + 6], "taagga")
-        self.assertEqual(alignment[4], "taagga")
-        self.assertEqual(
-            str(alignment),
-            """\
-hg16.chr7  27699739 TAAAGA 27699745
-panTro1.c  28862317 TAAAGA 28862323
-baboon       241163 TAAAGA   241169
-mm4.chr6   53303881 TAAAGA 53303887
-rn3.chr4   81444246 taagga 81444252
-""",
-        )
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates,
-                numpy.array(
-                    [
-                        # fmt: off
-                             [27699739, 27699745],
-                             [28862317, 28862323],
-                             [  241163,   241169],
-                             [53303881, 53303887],
-                             [81444246, 81444252],
-                        # fmt: on
-                    ]
-                ),
-            )
-        )
-        self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
-                # fmt: off
-# flake8: noqa
-numpy.array([['T', 'A', 'A', 'A', 'G', 'A'],
-             ['T', 'A', 'A', 'A', 'G', 'A'],
-             ['T', 'A', 'A', 'A', 'G', 'A'],
-             ['T', 'A', 'A', 'A', 'G', 'A'],
-             ['t', 'a', 'a', 'g', 'g', 'a']], dtype='U')
-                # fmt: on
-            )
-        )
-        alignment = next(alignments)
-        self.assertAlmostEqual(alignment.score, 6636.0)
-        self.assertEqual(len(alignment.sequences), 4)
-        self.assertEqual(alignment.sequences[0].id, "hg16.chr7")
-        self.assertEqual(len(alignment.sequences[0]), 158545518)
-        self.assertEqual(
-            alignment.sequences[0].seq[27707221 : 27707221 + 13], "gcagctgaaaaca"
-        )
-        self.assertEqual(alignment[0], "gcagctgaaaaca")
-        self.assertEqual(alignment.sequences[1].id, "panTro1.chr6")
-        self.assertEqual(len(alignment.sequences[1]), 161576975)
-        self.assertEqual(
-            alignment.sequences[1].seq[28869787 : 28869787 + 13], "gcagctgaaaaca"
-        )
-        self.assertEqual(alignment[1], "gcagctgaaaaca")
-        self.assertEqual(alignment.sequences[2].id, "baboon")
-        self.assertEqual(len(alignment.sequences[2]), 4622798)
-        self.assertEqual(
-            alignment.sequences[2].seq[249182 : 249182 + 13], "gcagctgaaaaca"
-        )
-        self.assertEqual(alignment[2], "gcagctgaaaaca")
-        self.assertEqual(alignment.sequences[3].id, "mm4.chr6")
-        self.assertEqual(len(alignment.sequences[3]), 151104725)
-        self.assertEqual(
-            alignment.sequences[3].seq[53310102 : 53310102 + 13], "ACAGCTGAAAATA"
-        )
-        self.assertEqual(alignment[3], "ACAGCTGAAAATA")
-        self.assertEqual(
-            str(alignment),
-            """\
-hg16.chr7  27707221 gcagctgaaaaca 27707234
-panTro1.c  28869787 gcagctgaaaaca 28869800
-baboon       249182 gcagctgaaaaca   249195
-mm4.chr6   53310102 ACAGCTGAAAATA 53310115
-""",
-        )
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates,
-                numpy.array(
-                    [
-                        # fmt: off
-                    [27707221, 27707234],
-                    [28869787, 28869800],
-                    [  249182,   249195],
-                    [53310102, 53310115],
-                        # fmt: on
-                    ]
-                ),
-            )
-        )
-        self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
-                # fmt: off
-# flake8: noqa
-numpy.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
-             ['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
-             ['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
-             ['A', 'C', 'A', 'G', 'C', 'T', 'G', 'A', 'A', 'A', 'A', 'T', 'A']],
-            dtype='U')
-                # fmt: on
-            )
-        )
-        self.assertRaises(StopIteration, next, alignments)
-
 
 class TestAlign_searching(unittest.TestCase):
     def test_search_chromosome(self):
         path = "MAF/ucsc_test.bb"
         alignments = Align.parse(path, "bigmaf")
-        selected_alignments = alignments.search("chr7")
+        selected_alignments = alignments.search("hg16.chr7")
         alignment = next(selected_alignments)
         self.assertEqual(alignment.coordinates[0, 0], 27578828)
         self.assertEqual(alignment.coordinates[0, -1], 27578866)
@@ -10018,7 +10082,7 @@ numpy.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
         path = "MAF/ucsc_mm9_chr10.bb"
         alignments = Align.parse(path, "bigmaf")
         self.assertEqual(len(alignments), 48)
-        selected_alignments = alignments.search("chr10", 3014000, 3015000)
+        selected_alignments = alignments.search("mm9.chr10", 3014000, 3015000)
         alignment = next(selected_alignments)
         self.assertEqual(alignment.coordinates[0, 0], 3013603)
         self.assertEqual(alignment.coordinates[0, -1], 3014644)
@@ -10219,7 +10283,7 @@ ornAna1.c  40046122 -------------  40046122
         path = "MAF/ucsc_mm9_chr10.bb"
         alignments = Align.parse(path, "bigmaf")
         self.assertEqual(len(alignments), 48)
-        selected_alignments = alignments.search("chr10", 3015000)
+        selected_alignments = alignments.search("mm9.chr10", 3015000)
         alignment = next(selected_alignments)
         self.assertEqual(alignment.coordinates[0, 0], 3014842)
         self.assertEqual(alignment.coordinates[0, -1], 3015028)
