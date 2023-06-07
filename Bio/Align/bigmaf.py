@@ -15,8 +15,10 @@ See https://genome.ucsc.edu/goldenPath/help/bigMaf.html
 from io import StringIO
 
 
+from Bio.Align import Alignment
 from Bio.Align import interfaces, bigbed, maf
 from Bio.Align.bigbed import AutoSQLTable, Field
+from Bio.SeqRecord import SeqRecord
 
 
 declaration = AutoSQLTable(
@@ -45,6 +47,96 @@ declaration = AutoSQLTable(
         ),
     ],
 )
+
+
+class _Alignments(list):
+    def __init__(self):
+        super().__init__()
+        self.index = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        try:
+            item = self[self.index]
+        except IndexError:
+            raise StopIteration
+        self.index += 1
+        return item
+
+    def rewind(self):
+        self.index = 0
+
+
+class AlignmentWriter(bigbed.AlignmentWriter):
+    """Alignment file writer for the bigMaf file format."""
+
+    fmt = "bigMaf"
+
+    def __init__(
+        self,
+        target,
+        reference,
+        targets=None,
+        compress=True,
+    ):
+        """Create an AlignmentWriter object.
+
+        Arguments:
+         - target      - output stream or file name.
+         - reference   - reference assembly name (e.g., hg38)
+         - targets     - A list of SeqRecord objects with the chromosomes in the
+                         order as they appear in the alignments. The sequence
+                         contents in each SeqRecord may be undefined, but the
+                         sequence length must be defined, as in this example:
+
+                         SeqRecord(Seq(None, length=248956422), id="chr1")
+
+                         If targets is None (the default value), the alignments
+                         must have an attribute .targets providing the list of
+                         SeqRecord objects.
+         - compress    - If True (default), compress data using zlib.
+                         If False, do not compress data.
+        """
+        super().__init__(
+            target,
+            bedN=3,
+            declaration=declaration,
+            targets=targets,
+            compress=compress,
+        )
+        self.reference = reference
+
+    def write_file(self, stream, alignments):
+        """Write the file."""
+        fixed_alignments = _Alignments()
+        for alignment in alignments:
+            if not isinstance(alignment, Alignment):
+                raise TypeError("Expected an Alignment object")
+            mafBlock = format(alignment, "maf")
+            coordinates = alignment.coordinates
+            if not coordinates.size:  # alignment consists of gaps only
+                continue
+            alignment = alignment[:2]
+            reference, chromosome = alignment.target.id.split(".", 1)
+            alignment.target.id = chromosome
+            assert coordinates[0,0] < coordinates[0, -1]
+            alignment.annotations = {}
+            alignment.annotations["mafBlock"] = mafBlock
+            fixed_alignments.append(alignment)
+        fixed_alignments.sort(
+            key=lambda alignment: (alignment.target.id, alignment.coordinates[0, 0])
+        )
+        record = alignments.targets[0]
+        reference, chromosome = record.id.split(".", 1)
+        assert reference == self.reference
+        targets = list(alignments.targets)
+        targets[0] = SeqRecord(record.seq, id=chromosome)
+        fixed_alignments.targets = targets
+        bigbed.AlignmentWriter(
+            stream, bedN=3, declaration=declaration, compress=self.compress
+        ).write(fixed_alignments)
 
 
 class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
