@@ -2886,9 +2886,9 @@ class TestAlign_big(BinaryTestBaseClass):
     # (http://hgdownload.cse.ucsc.edu/admin/).
 
     def test_a_compressed(self):
-        # grep -E -v 'fix|alt' ucsc.bed > ucsc.clean.bed
+        # grep -E -v 'fix|alt' Blat/ucsc.bed > ucsc.clean.bed
         # sort -k1,1 -k2,2n ucsc.clean.bed -o ucsc.clean.bed
-        # bedToBigBed -as=Blat/bed12.as ucsc.clean.bed hg38.chrom.sizes ucsc.bb
+        # bedToBigBed -as=Blat/bed12.as ucsc.clean.bed Align/hg38.chrom.sizes ucsc.bb
         with open("Blat/bed12.as") as stream:
             data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(data)
@@ -2907,7 +2907,7 @@ class TestAlign_big(BinaryTestBaseClass):
             self.assertBinaryEqual(output, stream)
 
     def test_b_uncompressed(self):
-        # grep -E -v 'fix|alt' ucsc.bed > ucsc.clean.bed
+        # grep -E -v 'fix|alt' Blat/ucsc.bed > ucsc.clean.bed
         # sort -k1,1 -k2,2n ucsc.clean.bed -o ucsc.clean.bed
         # bedToBigBed -as=Blat/bed12.as -unc ucsc.clean.bed hg38.chrom.sizes ucsc.unc.bb
         with open("Blat/bed12.as") as stream:
@@ -2929,10 +2929,10 @@ class TestAlign_big(BinaryTestBaseClass):
             self.assertBinaryEqual(output, stream)
 
     def test_c_bed3(self):
-        # grep -E -v 'fix|alt' ucsc.bed > ucsc.clean.bed
+        # grep -E -v 'fix|alt' Blat/ucsc.bed > ucsc.clean.bed
         # sort -k1,1 -k2,2n ucsc.clean.bed -o ucsc.clean.bed
         # cut -f 1-3 ucsc.clean.bed > ucsc.bed3.bed
-        # bedToBigBed -as=Blat/bed3.as -type=bed3 ucsc.bed3.bed hg38.chrom.sizes ucsc.bed3.bb
+        # bedToBigBed -as=Blat/bed3.as -type=bed3 ucsc.bed3.bed Align/hg38.chrom.sizes ucsc.bed3.bb
         with open("Blat/bed3.as") as stream:
             data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(data)
@@ -2953,10 +2953,10 @@ class TestAlign_big(BinaryTestBaseClass):
             self.assertBinaryEqual(output, stream)
 
     def test_d_bed4(self):
-        # grep -E -v 'fix|alt' ucsc.bed > ucsc.clean.bed
+        # grep -E -v 'fix|alt' Blat/ucsc.bed > ucsc.clean.bed
         # sort -k1,1 -k2,2n ucsc.clean.bed -o ucsc.clean.bed
         # cut -f 1-4 ucsc.clean.bed > ucsc.bed4.bed
-        # bedToBigBed -as=Blat/bed4.as -type=bed4 ucsc.bed4.bed hg38.chrom.sizes ucsc.bed4.bb
+        # bedToBigBed -as=Blat/bed4.as -type=bed4 ucsc.bed4.bed Align/hg38.chrom.sizes ucsc.bed4.bb
         with open("Blat/bed4.as") as stream:
             data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(data)
@@ -2977,10 +2977,10 @@ class TestAlign_big(BinaryTestBaseClass):
             self.assertBinaryEqual(output, stream)
 
     def test_e_bed5(self):
-        # grep -E -v 'fix|alt' ucsc.bed > ucsc.clean.bed
+        # grep -E -v 'fix|alt' Blat/ucsc.bed > ucsc.clean.bed
         # sort -k1,1 -k2,2n ucsc.clean.bed -o ucsc.clean.bed
         # cut -f 1-5 ucsc.clean.bed > ucsc.bed5.bed
-        # bedToBigBed -as=Blat/bed5.as -type=bed5 ucsc.bed5.bed hg38.chrom.sizes ucsc.bed5.bb
+        # bedToBigBed -as=Blat/bed5.as -type=bed5 ucsc.bed5.bed Align/hg38.chrom.sizes ucsc.bed5.bb
         with open("Blat/bed5.as") as stream:
             data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(data)
@@ -3001,10 +3001,10 @@ class TestAlign_big(BinaryTestBaseClass):
             self.assertBinaryEqual(output, stream)
 
     def test_f_bed6(self):
-        # grep -E -v 'fix|alt' ucsc.bed > ucsc.clean.bed
+        # grep -E -v 'fix|alt' Blat/ucsc.bed > ucsc.clean.bed
         # sort -k1,1 -k2,2n ucsc.clean.bed -o ucsc.clean.bed
         # cut -f 1-6 ucsc.clean.bed > ucsc.bed6.bed
-        # bedToBigBed -as=Blat/bed6.as -type=bed6 ucsc.bed6.bed hg38.chrom.sizes ucsc.bed6.bb
+        # bedToBigBed -as=Blat/bed6.as -type=bed6 ucsc.bed6.bed Align/hg38.chrom.sizes ucsc.bed6.bb
         with open("Blat/bed6.as") as stream:
             data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(data)
@@ -3025,10 +3025,10 @@ class TestAlign_big(BinaryTestBaseClass):
             self.assertBinaryEqual(output, stream)
 
     def test_g_bed7(self):
-        # grep -E -v 'fix|alt' ucsc.bed > ucsc.clean.bed
+        # grep -E -v 'fix|alt' Blat/ucsc.bed > ucsc.clean.bed
         # sort -k1,1 -k2,2n ucsc.clean.bed -o ucsc.clean.bed
         # cut -f 1-7 ucsc.clean.bed > ucsc.bed7.bed
-        # bedToBigBed -as=Blat/bed7.as -type=bed7 ucsc.bed7.bed hg38.chrom.sizes ucsc.bed7.bb
+        # bedToBigBed -as=Blat/bed7.as -type=bed7 ucsc.bed7.bed Align/hg38.chrom.sizes ucsc.bed7.bb
         with open("Blat/bed7.as") as stream:
             data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(data)
@@ -3049,10 +3049,10 @@ class TestAlign_big(BinaryTestBaseClass):
             self.assertBinaryEqual(output, stream)
 
     def test_h_bed8(self):
-        # grep -E -v 'fix|alt' ucsc.bed > ucsc.clean.bed
+        # grep -E -v 'fix|alt' Blat/ucsc.bed > ucsc.clean.bed
         # sort -k1,1 -k2,2n ucsc.clean.bed -o ucsc.clean.bed
         # cut -f 1-8 ucsc.clean.bed > ucsc.bed8.bed
-        # bedToBigBed -as=Blat/bed8.as -type=bed8 ucsc.bed8.bed hg38.chrom.sizes ucsc.bed8.bb
+        # bedToBigBed -as=Blat/bed8.as -type=bed8 ucsc.bed8.bed Align/hg38.chrom.sizes ucsc.bed8.bb
         with open("Blat/bed8.as") as stream:
             data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(data)
@@ -3073,10 +3073,10 @@ class TestAlign_big(BinaryTestBaseClass):
             self.assertBinaryEqual(output, stream)
 
     def test_i_bed9(self):
-        # grep -E -v 'fix|alt' ucsc.bed > ucsc.clean.bed
+        # grep -E -v 'fix|alt' Blat/ucsc.bed > ucsc.clean.bed
         # sort -k1,1 -k2,2n ucsc.clean.bed -o ucsc.clean.bed
         # cut -f 1-9 ucsc.clean.bed > ucsc.bed9.bed
-        # bedToBigBed -as=Blat/bed9.as -type=bed9 ucsc.bed9.bed hg38.chrom.sizes ucsc.bed9.bb
+        # bedToBigBed -as=Blat/bed9.as -type=bed9 ucsc.bed9.bed Align/hg38.chrom.sizes ucsc.bed9.bb
         with open("Blat/bed9.as") as stream:
             data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(data)
@@ -3104,9 +3104,9 @@ class TestAlign_big(BinaryTestBaseClass):
         # To prevent spurious errors when comparing bigBed files created by
         # bedToBigBed and by Biopython, we first remove lines with duplicated
         # names from the BED file.
-        # grep -E -v 'fix|alt' ucsc.bed > ucsc.clean.bed
+        # grep -E -v 'fix|alt' Blat/ucsc.bed > ucsc.clean.bed
         # sort -u -k4,4 ucsc.clean.bed | sort -k1,1 -k2,2n > ucsc.unique.bed
-        # bedToBigBed -as=Blat/bed12.as -extraIndex=name ucsc.unique.bed hg38.chrom.sizes ucsc.indexed.bb
+        # bedToBigBed -as=Blat/bed12.as -extraIndex=name ucsc.unique.bed Align/hg38.chrom.sizes ucsc.indexed.bb
         with open("Blat/bed12.as") as stream:
             data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(data)
@@ -3125,8 +3125,8 @@ class TestAlign_big(BinaryTestBaseClass):
             self.assertBinaryEqual(output, stream)
 
     def test_k_anogam(self):
-        # sort -k1,1 -k2,2n anoGam3.bed -o anoGam3.bed
-        # bedToBigBed -as=Blat/bed12.as anoGam3.bed anoGam3.chrom.sizes anoGam3.bb
+        # sort -k1,1 -k2,2n Blat/anoGam3.bed -o anoGam3.bed
+        # bedToBigBed -as=Blat/bed12.as anoGam3.bed Blat/anoGam3.chrom.sizes anoGam3.bb
         with open("Blat/bed12.as") as stream:
             data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(data)
@@ -3145,8 +3145,8 @@ class TestAlign_big(BinaryTestBaseClass):
             self.assertBinaryEqual(output, stream)
 
     def test_l_ailmel(self):
-        # sort -k1,1 -k2,2n ailMel1.bed -o ailMel1.bed
-        # bedToBigBed -as=Blat/bed12.as ailMel1.bed ailMel1.chrom.sizes ailMel1.bb
+        # sort -k1,1 -k2,2n Blat/ailMel1.bed -o ailMel1.bed
+        # bedToBigBed -as=Blat/bed12.as ailMel1.bed Blat/ailMel1.chrom.sizes ailMel1.bb
         with open("Blat/bed12.as") as stream:
             data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(data)
@@ -3166,7 +3166,7 @@ class TestAlign_big(BinaryTestBaseClass):
 
     def test_m_bisbis(self):
         # sort -k1,1 -k2,2n bisBis1.bed -o bisBis1.bed
-        # bedToBigBed -as=Blat/bed12.as bisBis1.bed bisBis1.chrom.sizes bisBis1.bb
+        # bedToBigBed -as=Blat/bed12.as bisBis1.bed Blat/bisBis1.chrom.sizes bisBis1.bb
         with open("Blat/bed12.as") as stream:
             data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(data)

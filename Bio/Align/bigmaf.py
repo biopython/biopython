@@ -16,6 +16,35 @@ from io import StringIO
 
 
 from Bio.Align import interfaces, bigbed, maf
+from Bio.Align.bigbed import AutoSQLTable, Field
+
+
+declaration = AutoSQLTable(
+    "bedMaf",
+    "Bed3 with MAF block",
+    [
+        Field(
+            as_type="string",
+            name="chrom",
+            comment="Reference sequence chromosome or scaffold",
+        ),
+        Field(
+            as_type="uint",
+            name="chromStart",
+            comment="Start position in chromosome",
+        ),
+        Field(
+            as_type="uint",
+            name="chromEnd",
+            comment="End position in chromosome",
+        ),
+        Field(
+            as_type="lstring",
+            name="mafBlock",
+            comment="MAF block",
+        ),
+    ],
+)
 
 
 class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
@@ -36,6 +65,24 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
 
     fmt = "bigMaf"
     mode = "b"
+
+    def __init__(self, source):
+        """Create an AlignmentIterator object.
+
+        Arguments:
+        - source - input file stream, or path to input file
+        """
+        self.reference = None
+        super().__init__(source)
+
+    def _read_header(self, stream):
+        super()._read_header(stream)
+        if self.reference is None:
+            alignment = next(self)
+            self.reference, chromosome = alignment.sequences[0].id.split(".", 1)
+            self.rewind()
+        else:
+            self.targets[0].id = "%s.%s" % (self.reference, self.targets[0].id)
 
     def _create_alignment(self, chunk):
         chromId, chromStart, chromEnd, rest = chunk
