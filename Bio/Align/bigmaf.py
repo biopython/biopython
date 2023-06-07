@@ -77,7 +77,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
     def __init__(
         self,
         target,
-        reference,
         targets=None,
         compress=True,
     ):
@@ -85,7 +84,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
 
         Arguments:
          - target      - output stream or file name.
-         - reference   - reference assembly name (e.g., hg38)
          - targets     - A list of SeqRecord objects with the chromosomes in the
                          order as they appear in the alignments. The sequence
                          contents in each SeqRecord may be undefined, but the
@@ -106,7 +104,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             targets=targets,
             compress=compress,
         )
-        self.reference = reference
 
     def write_file(self, stream, alignments):
         """Write the file."""
@@ -130,7 +127,6 @@ class AlignmentWriter(bigbed.AlignmentWriter):
         )
         record = alignments.targets[0]
         reference, chromosome = record.id.split(".", 1)
-        assert reference == self.reference
         targets = list(alignments.targets)
         targets[0] = SeqRecord(record.seq, id=chromosome)
         fixed_alignments.targets = targets

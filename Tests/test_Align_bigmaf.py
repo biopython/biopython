@@ -47,7 +47,7 @@ class TestAlign_ucsc_test(unittest.TestCase):
         """Test writing ucsc_test.bb."""
         alignments = Align.parse(self.path, "bigmaf")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigmaf", reference="hg16")
+            Align.write(alignments, output, "bigmaf")
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigmaf")
@@ -320,7 +320,7 @@ class TestAlign_bundle_without_target(unittest.TestCase):
         """Test writing bundle_without_target.bb."""
         alignments = Align.parse(self.path, "bigmaf")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigmaf", reference="mm8")
+            Align.write(alignments, output, "bigmaf")
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigmaf")
@@ -457,7 +457,7 @@ class TestAlign_ucsc_mm9_chr10(unittest.TestCase):
         """Test writing file ucsc_mm9_chr10.bb."""
         alignments = Align.parse(self.path, "bigmaf")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigmaf", reference="mm9")
+            Align.write(alignments, output, "bigmaf")
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigmaf")
