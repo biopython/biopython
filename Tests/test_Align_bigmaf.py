@@ -417,16 +417,27 @@ oryCun1.s     11207 TGTTTTCTCCATGGAAACTGATGTCAAATACTTTCCCTTTGGTT   11251
 
 
 class TestAlign_ucsc_mm9_chr10(unittest.TestCase):
+    path = "MAF/ucsc_mm9_chr10.bb"
+
     def test_reading(self):
-        """Test parsing MAF file ucsc_mm9_chr10.bb."""
+        """Test parsing file ucsc_mm9_chr10.bb."""
 
         # BigMaf file ucsc_mm9_chr10.bb was created using the commands
         # mafToBigMaf mm9 ucsc_mm9_chr10.maf stdout | sort -k1,1 -k2,2n > ucsc_mm9_chr10.txt
         # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab ucsc_mm9_chr10.txt mm9.chrom.sizes ucsc_mm9_chr10.bb
 
-        path = "MAF/ucsc_mm9_chr10.bb"
-        alignments = Align.parse(path, "bigmaf")
+        alignments = Align.parse(self.path, "bigmaf")
         self.check_alignments(alignments)
+
+    def test_writing(self):
+        """Test writing file ucsc_mm9_chr10.bb."""
+        alignments = Align.parse(self.path, "bigmaf")
+        with tempfile.TemporaryFile() as output:
+            Align.write(alignments, output, "bigmaf", reference="mm9")
+            output.flush()
+            output.seek(0)
+            alignments = Align.parse(output, "bigmaf")
+            self.check_alignments(alignments)
 
     def check_alignments(self, alignments):
         self.assertEqual(
