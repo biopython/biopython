@@ -118,7 +118,7 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
     def _read_next_alignment(self, stream):
         """Read one Alignment from the stream, and return it."""
 
-    def rewind(self):
+    def rewind(self):  # noqa: D102
         self._stream.seek(0)
         self._read_header(self._stream)
 
