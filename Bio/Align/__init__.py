@@ -20,6 +20,8 @@ import importlib
 import warnings
 import numbers
 from itertools import zip_longest
+from abc import ABC, abstractmethod
+
 
 try:
     import numpy as np
@@ -3131,6 +3133,55 @@ class Alignment:
         return AlignmentCounts(gaps, identities, mismatches)
 
 
+class AlignmentsAbstractBaseClass(ABC):
+    """Abstract base class for sequence alignments.
+
+    Most users will not need to use this class. It is used internally as a base
+    class for the list-like Alignments class, and for the AlignmentIterator
+    class in Bio.Align.interfaces, which itself is the abstract base class for
+    the alignment parsers in Bio/Align/.
+    """
+
+    def __iter__(self):
+        """Iterate over the alignments as Alignment objects.
+
+        This method SHOULD NOT be overridden by any subclass.
+        """
+        return self
+
+    @abstractmethod
+    def __next__(self):
+        """Return the next alignment."""
+
+    @abstractmethod
+    def rewind(self):
+        """Rewind the iterator to let it loop over the alignments from the beginning."""
+
+    @abstractmethod
+    def __len__(self):
+        """Return the number of alignments."""
+
+
+class Alignments(AlignmentsAbstractBaseClass, list):  # noqa: D101
+    def __init__(self):  # noqa: D107
+        super().__init__()
+        self._index = 0
+
+    def __next__(self):
+        try:
+            item = self[self._index]
+        except IndexError:
+            raise StopIteration
+        self._index += 1
+        return item
+
+    def rewind(self):  # noqa: D102
+        self._index = 0
+
+    def __len__(self):
+        return list.__len__(self)
+
+
 class PairwiseAlignments:
     """Implements an iterator over pairwise alignments returned by the aligner.
 
@@ -3163,7 +3214,6 @@ class PairwiseAlignments:
         self._index = -1
 
     def __len__(self):
-        """Return the number of alignments."""
         return len(self._paths)
 
     def __getitem__(self, index):
@@ -3185,9 +3235,6 @@ class PairwiseAlignments:
                 break
         return alignment
 
-    def __iter__(self):
-        return self
-
     def __next__(self):
         path = next(self._paths)
         self._index += 1
@@ -3197,8 +3244,7 @@ class PairwiseAlignments:
         self._alignment = alignment
         return alignment
 
-    def rewind(self):
-        """Rewind the iterator to let it loop over the alignments from the beginning."""
+    def rewind(self):  # noqa: D102
         self._paths.reset()
         self._index = -1
 
@@ -3546,8 +3592,8 @@ def write(alignments, target, fmt, *args, **kwargs):
     """Write alignments to a file.
 
     Arguments:
-     - alignments - List (or iterator) of Alignment objects, or a single
-       Alignment.
+     - alignments - An Alignments object, an iterator of Alignment objects, or
+       a single Alignment.
      - target     - File or file-like object to write to, or filename as string.
      - fmt        - String describing the file format (case-insensitive).
 
