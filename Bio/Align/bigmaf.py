@@ -15,7 +15,7 @@ See https://genome.ucsc.edu/goldenPath/help/bigMaf.html
 from io import StringIO
 
 
-from Bio.Align import Alignment
+from Bio.Align import Alignment, Alignments
 from Bio.Align import interfaces, bigbed, maf
 from Bio.Align.bigbed import AutoSQLTable, Field
 from Bio.SeqRecord import SeqRecord
@@ -47,26 +47,6 @@ declaration = AutoSQLTable(
         ),
     ],
 )
-
-
-class _Alignments(list):
-    def __init__(self):
-        super().__init__()
-        self.index = 0
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        try:
-            item = self[self.index]
-        except IndexError:
-            raise StopIteration
-        self.index += 1
-        return item
-
-    def rewind(self):
-        self.index = 0
 
 
 class AlignmentWriter(bigbed.AlignmentWriter):
@@ -107,7 +87,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
 
     def write_file(self, stream, alignments):
         """Write the file."""
-        fixed_alignments = _Alignments()
+        fixed_alignments = Alignments()
         for alignment in alignments:
             if not isinstance(alignment, Alignment):
                 raise TypeError("Expected an Alignment object")

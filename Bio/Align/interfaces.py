@@ -15,9 +15,10 @@ from abc import ABC
 from abc import abstractmethod
 
 from Bio import StreamModeError
+from Bio.Align import AlignmentsAbstractBaseClass
 
 
-class AlignmentIterator(ABC):
+class AlignmentIterator(AlignmentsAbstractBaseClass):
     """Base class for building Alignment iterators.
 
     You should write a parse method that returns an Alignment generator.  You
@@ -63,7 +64,7 @@ class AlignmentIterator(ABC):
         self._read_header(self._stream)
 
     def __next__(self):
-        """Return the next entry."""
+        """Return the next alignment."""
         try:
             stream = self._stream
         except AttributeError:
@@ -72,13 +73,6 @@ class AlignmentIterator(ABC):
         if alignment is None:
             raise StopIteration
         return alignment
-
-    def __iter__(self):
-        """Iterate over the entries as Alignment objects.
-
-        This method SHOULD NOT be overridden by any subclass.
-        """
-        return self
 
     def __len__(self):
         """Return the number of alignments.
@@ -125,7 +119,6 @@ class AlignmentIterator(ABC):
         """Read one Alignment from the stream, and return it."""
 
     def rewind(self):
-        """Rewind the file and loop over the alignments from the beginning."""
         self._stream.seek(0)
         self._read_header(self._stream)
 
