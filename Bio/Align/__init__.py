@@ -3592,8 +3592,8 @@ def write(alignments, target, fmt, *args, **kwargs):
     """Write alignments to a file.
 
     Arguments:
-     - alignments - List (or iterator) of Alignment objects, or a single
-       Alignment.
+     - alignments - An Alignments object, an iterator of Alignment objects, or
+       a single Alignment.
      - target     - File or file-like object to write to, or filename as string.
      - fmt        - String describing the file format (case-insensitive).
 
