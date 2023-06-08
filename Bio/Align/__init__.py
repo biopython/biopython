@@ -3139,7 +3139,7 @@ class AlignmentsAbstractBaseClass(ABC):
     Most users will not need to use this class. It is used internally as a base
     class for the list-like Alignments class, and for the AlignmentIterator
     class in Bio.Align.interfaces, which itself is the abstract base class for
-    the alignment parsers in Bio/Align/*.
+    the alignment parsers in Bio/Align/.
     """
 
     def __iter__(self):
@@ -3162,8 +3162,8 @@ class AlignmentsAbstractBaseClass(ABC):
         """Return the number of alignments."""
 
 
-class Alignments(AlignmentsAbstractBaseClass, list):
-    def __init__(self):
+class Alignments(AlignmentsAbstractBaseClass, list):  # noqa: D101
+    def __init__(self):  # noqa: D107
         super().__init__()
         self._index = 0
 
@@ -3175,7 +3175,7 @@ class Alignments(AlignmentsAbstractBaseClass, list):
         self._index += 1
         return item
 
-    def rewind(self):
+    def rewind(self):  # noqa: D102
         self._index = 0
 
     def __len__(self):
@@ -3244,7 +3244,7 @@ class PairwiseAlignments:
         self._alignment = alignment
         return alignment
 
-    def rewind(self):
+    def rewind(self):  # noqa: D102
         self._paths.reset()
         self._index = -1
 
