@@ -105,12 +105,12 @@ def can_import(module_name):
     except ImportError:
         return None
 
+
 def extract_variable_value(file_path, variable_name):
-    with open(file_path, 'r') as file:
+    """Extract the value of a variable from a Python file."""
+    with open(file_path, "r") as file:
         source_code = file.read()
-
     tree = ast.parse(source_code)
-
     for node in ast.walk(tree):
         if isinstance(node, ast.Assign) and len(node.targets) == 1:
             target = node.targets[0]
