@@ -611,6 +611,29 @@ class StringMethodTests(unittest.TestCase):
         u = Seq(None, length=0)
         self.assertEqual(u, "")
 
+    def test_search(self):
+        """Check the search method of Seq objects."""
+        s = Seq("ACGTACGT")
+        matches = s.search(["CGT", Seq("CG"), b"ACGT", bytearray(b"GTA")])
+        self.assertEqual(next(matches), (0, "ACGT"))
+        self.assertEqual(next(matches), (1, "CGT"))
+        self.assertEqual(next(matches), (1, "CG"))
+        self.assertEqual(next(matches), (2, "GTA"))
+        self.assertEqual(next(matches), (4, "ACGT"))
+        self.assertEqual(next(matches), (5, "CGT"))
+        self.assertEqual(next(matches), (5, "CG"))
+        self.assertRaises(StopIteration, next, matches)
+        s = MutableSeq("ACGTACGT")
+        matches = s.search(["CGT", Seq("CG"), b"ACGT", bytearray(b"GTA")])
+        self.assertEqual(next(matches), (0, "ACGT"))
+        self.assertEqual(next(matches), (1, "CGT"))
+        self.assertEqual(next(matches), (1, "CG"))
+        self.assertEqual(next(matches), (2, "GTA"))
+        self.assertEqual(next(matches), (4, "ACGT"))
+        self.assertEqual(next(matches), (5, "CGT"))
+        self.assertEqual(next(matches), (5, "CG"))
+        self.assertRaises(StopIteration, next, matches)
+
     def test_MutableSeq_setitem(self):
         """Check setting sequence contents of a MutableSeq object."""
         m = MutableSeq("ABCD")

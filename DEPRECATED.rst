@@ -100,6 +100,11 @@ release 1.74. Also affects ``Bio.motifs.read`` and ``Bio.motifs.parse`` for the
 The ``format`` method of the ``Motif`` class in ``Bio.motifs`` was deprecated
 in release 1.77, in favor of a ``__format__`` method that can be used from the
 ``format`` built-in function. This decision was reversed in release 1.79.
+The ``search`` method of the ``Instances`` class in ``Bio.motifs`` was
+deprecated in release 1.82. Instead of ``instances.search(sequence)``,
+``sequence.search(instances)`` can be used, where sequence is a Seq object.
+This allows instances to have different lengths.
+
 
 Bio.Restriction.RanaConfig
 --------------------------

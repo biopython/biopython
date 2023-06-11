@@ -1129,7 +1129,7 @@ the true instances of the motif:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> for pos, seq in m.instances.search(test_seq):
+>>> for pos, seq in test_seq.search(m.instances):
 ...     print("%i %s" % (pos, seq))
 ...
 0 TACAC
@@ -1140,7 +1140,7 @@ We can do the same with the reverse complement (to find instances on the complem
 
 %cont-doctest
 \begin{minted}{pycon}
->>> for pos, seq in r.instances.search(test_seq):
+>>> for pos, seq in test_seq.search(r.instances):
 ...     print("%i %s" % (pos, seq))
 ...
 6 GCATT

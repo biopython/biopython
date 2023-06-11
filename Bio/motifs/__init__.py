@@ -17,6 +17,9 @@ and MAST programs, as well as files in the TRANSFAC format.
 
 from urllib.parse import urlencode
 from urllib.request import urlopen, Request
+import warnings
+
+from Bio import BiopythonDeprecationWarning
 
 
 def create(instances, alphabet="ACGT"):
@@ -229,6 +232,10 @@ class Instances(list):
         This is a generator function, returning found positions of motif
         instances in a given sequence.
         """
+        warnings.warn(
+            """instances.search(sequence) has been deprecated. Please use sequence.search(instances) instead, where sequence is a Seq object.""",
+            BiopythonDeprecationWarning,
+        )
         for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
                 if instance == sequence[pos : pos + self.length]:

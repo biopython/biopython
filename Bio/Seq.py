@@ -20,6 +20,7 @@ See also the Seq_ wiki and the chapter in our tutorial:
 
 """
 import array
+import collections
 import numbers
 import warnings
 
@@ -943,6 +944,47 @@ class _SeqAbstractBaseClass(ABC):
                 % type(sub)
             )
         return self._data.rindex(sub, start, end)
+
+    def search(self, subs):
+        """Search the substrings subs in self and yield the index and substring found.
+
+        Arguments:
+         - subs - a list of strings, Seq, MutableSeq, bytes, or bytearray
+           objects containing the substrings to search for.
+
+        >>> from Bio.Seq import Seq
+        >>> dna = Seq("GTCATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAGTTG")
+        >>> matches = dna.search(["CC", Seq("ATTG"), "ATTG", Seq("CCC")])
+        >>> for index, substring in matches:
+        ...     print(index, substring)
+        ...
+        7 CC
+        9 ATTG
+        20 CC
+        34 CC
+        34 CCC
+        35 CC
+        """
+        subdict = collections.defaultdict(set)
+        for index, sub in enumerate(subs):
+            if isinstance(sub, (_SeqAbstractBaseClass, bytearray)):
+                sub = bytes(sub)
+            elif isinstance(sub, str):
+                sub = sub.encode("ASCII")
+            elif not isinstance(sub, bytes):
+                raise TypeError(
+                    "subs[%d]: a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
+                    % (index, type(sub))
+                )
+            length = len(sub)
+            subdict[length].add(sub)
+        for start in range(len(self) - 1):
+            for length, subs in subdict.items():
+                stop = start + length
+                for sub in subs:
+                    if self._data[start:stop] == sub:
+                        yield (start, sub.decode())
+                        break
 
     def startswith(self, prefix, start=None, end=None):
         """Return True if the sequence starts with the given prefix, False otherwise.
