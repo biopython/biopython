@@ -25,6 +25,7 @@ http://biopython.org/wiki/Mailing_lists
 
 import sys
 import os
+import ast
 
 try:
     from setuptools import setup
@@ -103,6 +104,20 @@ def can_import(module_name):
         return __import__(module_name)
     except ImportError:
         return None
+
+def extract_variable_value(file_path, variable_name):
+    with open(file_path, 'r') as file:
+        source_code = file.read()
+
+    tree = ast.parse(source_code)
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign) and len(node.targets) == 1:
+            target = node.targets[0]
+            if isinstance(target, ast.Name) and target.id == variable_name:
+                value_node = node.value
+                value = ast.literal_eval(value_node)
+                return value
 
 
 # Using requirements.txt is preferred for an application
@@ -203,10 +218,7 @@ EXTENSIONS = [
 # We now define the Biopython version number in Bio/__init__.py
 # Here we can't use "import Bio" then "Bio.__version__" as that would
 # tell us the version of Biopython already installed (if any).
-__version__ = "Undefined"
-for line in open("Bio/__init__.py"):
-    if line.startswith("__version__"):
-        exec(line.strip())
+__version__ = extract_variable_value("Bio/__init__.py", "__version__")
 
 # We now load in our reStructuredText README.rst file to pass explicitly in the
 # metadata, since at time of writing PyPI did not do this for us.
