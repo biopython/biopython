@@ -18,6 +18,8 @@ and MAST programs, as well as files in the TRANSFAC format.
 from urllib.parse import urlencode
 from urllib.request import urlopen, Request
 
+from Bio.Seq import reverse_complement
+
 
 def create(instances, alphabet="ACGT"):
     """Create a Motif object."""
@@ -246,8 +248,10 @@ class Instances(list):
             # TODO: remove inplace=False
             if isinstance(instance, (Seq, MutableSeq)):
                 instance = instance.reverse_complement(inplace=False)
-            elif isinstance(instance, (str, SeqRecord)):
+            elif isinstance(instance, SeqRecord):
                 instance = instance.reverse_complement()
+            elif isinstance(instance, str):
+                instance = reverse_complement(instance)
             else:
                 raise RuntimeError("instance has unexpected type %s" % type(instance))
             instances.append(instance)
