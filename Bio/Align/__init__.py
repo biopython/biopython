@@ -3159,7 +3159,12 @@ class Alignment:
         {'score': [2, 2, 2, 3]}
         """
         sequences = [reverse_complement(sequence) for sequence in self.sequences]
-        coordinates = np.array([len(sequence) - row[::-1] for sequence, row in zip(sequences, self.coordinates)])
+        coordinates = np.array(
+            [
+                len(sequence) - row[::-1]
+                for sequence, row in zip(sequences, self.coordinates)
+            ]
+        )
         alignment = Alignment(sequences, coordinates)
         try:
             column_annotations = self.column_annotations
