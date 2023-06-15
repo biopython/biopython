@@ -2404,6 +2404,39 @@ query             0 --G 1
 <BLANKLINE>
 \end{minted}
 
+\paragraph*{Reverse-complementing the alignment}
+
+Reverse_complementing an alignment will take the reverse complement of each sequence, and recalculate the coordinates:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment.sequences)
+['GAACT', 'GAT']
+>>> rc_alignment = alignment.reverse_complement()
+>>> print(rc_alignment.sequences)
+['AGTTC', 'ATC']
+>>> print(rc_alignment)
+target            0 AGTTC 5
+                  0 |-|-| 5
+query             0 A-T-C 3
+<BLANKLINE>
+>>> print(alignment[:, :4].sequences)
+['GAACT', 'GAT']
+>>> print(alignment[:, :4])
+target            0 GAAC 4
+                  0 |-|- 4
+query             0 G-A- 2
+<BLANKLINE>
+>>> rc_alignment = alignment[:, :4].reverse_complement()
+>>> print(rc_alignment[:, :4].sequences)
+['AGTTC', 'ATC']
+>>> print(rc_alignment[:, :4])
+target            1 GTTC 5
+                  0 -|-| 4
+query             1 -T-C 3
+<BLANKLINE>
+\end{minted}
+Reverse-complementing an alignment preserves its column annotations (in reverse order), but discards all other annotations.
+
 \paragraph*{Exporting alignments}
 
 Use the \verb+format+ method to create a string representation of the alignment in various file formats. This method takes an argument \verb+fmt+ specifying the file format, and may take additional keyword arguments depending on file type. The following values for \verb+fmt+ are supported:

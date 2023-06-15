@@ -1292,6 +1292,44 @@ T  12.0  16.5   7.0 145.0
         self.assertEqual(alignment.target, target)
         self.assertEqual(alignment.query, query)
 
+    def test_reverse_complement(self):
+        target = SeqRecord(Seq(self.target), id="seqA")
+        query = SeqRecord(Seq(self.query), id="seqB")
+        sequences = [target, query]
+        coordinates = self.forward_coordinates
+        alignment = Align.Alignment(sequences, coordinates)
+        alignment.column_annotations = {
+            "score": [2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 1, 1],
+            "letter": "ABCDEFGHIJKL",
+        }
+        self.assertEqual(
+            str(alignment),
+            """\
+seqA              0 AACCGGGA-CCG 11
+                  0 |-|-||-|-|-- 12
+seqB              0 A-C-GG-AAC--  7
+""",
+        )
+        self.assertEqual(
+            alignment.column_annotations["score"], [2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 1, 1]
+        )
+        self.assertEqual(alignment.column_annotations["letter"], "ABCDEFGHIJKL")
+        rc_alignment = alignment.reverse_complement()
+        self.assertEqual(
+            str(rc_alignment),
+            """\
+<unknown          0 CGG-TCCCGGTT 11
+                  0 --|-|-||-|-| 12
+<unknown          0 --GTT-CC-G-T  7
+""",
+        )
+        self.assertEqual(len(rc_alignment.column_annotations), 2)
+        self.assertEqual(
+            rc_alignment.column_annotations["score"],
+            [1, 1, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2],
+        )
+        self.assertEqual(rc_alignment.column_annotations["letter"], "LKJIHGFEDCBA")
+
 
 class TestMultipleAlignment(unittest.TestCase):
     def setUp(self):
@@ -2607,7 +2645,6 @@ class TestAlignment_pairwise_format(unittest.TestCase):
 
 
 class TestAlign_out_of_order(unittest.TestCase):
-
     seq1 = "AACCCAAAACCAAAAATTTAAATTTTAAA"
     seq2 = "TGTTTTTCCCCC"
     coordinates = numpy.array(
@@ -3051,7 +3088,6 @@ query             7 CCC----CC 12
 
 
 class TestAlign_nucleotide_protein_str(unittest.TestCase):
-
     s1 = "ATGCGGAGCTTTCGAGCGACGTTTGGCTTTGACGACGGA" * 6
     s2 = "ATGCGGAGCCGAGCGACGTTTACGGCTTTGACGACGGA" * 6
     t1 = translate(s1)
