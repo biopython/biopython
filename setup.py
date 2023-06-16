@@ -218,7 +218,7 @@ EXTENSIONS = [
 # We now define the Biopython version number in Bio/__init__.py
 # Here we can't use "import Bio" then "Bio.__version__" as that would
 # tell us the version of Biopython already installed (if any).
-__version__ = extract_variable_value("Bio/__init__.py", "__version__")
+__version__ = extract_variable_value("Bio/__init__.py", "__version__") or "undefined"
 
 # We now load in our reStructuredText README.rst file to pass explicitly in the
 # metadata, since at time of writing PyPI did not do this for us.
