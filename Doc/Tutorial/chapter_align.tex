@@ -21,14 +21,14 @@ sequence alignment tools like ClustalW and MUSCLE.
 
 We have two functions for reading in sequence alignments, \verb|Bio.AlignIO.read()| and \verb|Bio.AlignIO.parse()| which following the convention introduced in \verb|Bio.SeqIO| are for files containing one or multiple alignments respectively.
 
-Using \verb|Bio.AlignIO.parse()| will return an {\textit iterator} which gives \verb|MultipleSeqAlignment| objects.  Iterators are typically used in a for loop.  Examples of situations where you will have multiple different alignments include resampled alignments from the PHYLIP tool \verb|seqboot|, or multiple pairwise alignments from the EMBOSS tools \verb|water| or \verb|needle|, or Bill Pearson's FASTA tools.
+Using \verb|Bio.AlignIO.parse()| will return an \textit{iterator} which gives \verb|MultipleSeqAlignment| objects.  Iterators are typically used in a for loop.  Examples of situations where you will have multiple different alignments include resampled alignments from the PHYLIP tool \verb|seqboot|, or multiple pairwise alignments from the EMBOSS tools \verb|water| or \verb|needle|, or Bill Pearson's FASTA tools.
 
 However, in many situations you will be dealing with files which contain only a single alignment.  In this case, you should use the \verb|Bio.AlignIO.read()| function which returns a single \verb|MultipleSeqAlignment| object.
 
 Both functions expect two mandatory arguments:
 
 \begin{enumerate}
-\item The first argument is a {\textit handle} to read the data from, typically an open file (see Section~\ref{sec:appendix-handles}), or a filename.
+\item The first argument is a \textit{handle} to read the data from, typically an open file (see Section~\ref{sec:appendix-handles}), or a filename.
 \item The second argument is a lower case string specifying the alignment format.  As in \verb|Bio.SeqIO| we don't try and guess the file format for you!  See \url{http://biopython.org/wiki/AlignIO} for a full listing of supported formats.
 \end{enumerate}
 
@@ -1489,7 +1489,7 @@ module contains the \verb|PairwiseAligner| class for global and local
 alignments using the Needleman-Wunsch, Smith-Waterman, Gotoh (three-state), and
 Waterman-Smith-Beyer global and local pairwise alignment algorithms, with
 numerous options to change the alignment parameters.
-We refer to Durbin {\textit et al.} \cite{durbin1998} for in-depth information on sequence alignment algorithms.
+We refer to Durbin \textit{et al.} \cite{durbin1998} for in-depth information on sequence alignment algorithms.
 
 \subsection{Basic usage}
 \label{sec:pairwise-basic}
