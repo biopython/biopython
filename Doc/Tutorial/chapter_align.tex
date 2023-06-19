@@ -1724,7 +1724,7 @@ scoring scheme by specifying the following twelve attributes of a \verb+Pairwise
 \begin{table}[h]
 \begin{tabular}{|l|l|}
 \hline
-\bf{Opening scores}                   & \bf{Extending scores} \\
+\textbf{Opening scores}               & \textbf{Extending scores} \\
 \hline
 \verb+query_left_open_gap_score+      & \verb+query_left_extend_gap_score+ \\
 \verb+query_internal_open_gap_score+  & \verb+query_internal_extend_gap_score+ \\
@@ -1741,7 +1741,7 @@ These attributes allow for different gap scores for internal gaps and on either 
 \begin{table}[h]
 \begin{tabular}{|c|c|l|}
 \hline
-\bf{target} & \bf{query} & \bf{score} \\
+\textbf{target} & \textbf{query} & \textbf{score} \\
 \hline
 A & - &  query left open gap score \\
 C & - &  query left extend gap score \\
@@ -1775,7 +1775,7 @@ For convenience, \verb+PairwiseAligner+ objects have additional attributes that 
 \caption{Meta-attributes of the pairwise aligner objects.}
 \begin{tabular}{|l|l|}
 \hline
-\bf{Meta-attribute} & \bf{Attributes it maps to} \\
+\textbf{Meta-attribute} & \textbf{Attributes it maps to} \\
 \hline
 \verb+gap_score+ & \verb+target_gap_score+, \verb+query_gap_score+ \\
 \verb+open_gap_score+ & \verb+target_open_gap_score+, \verb+query_open_gap_score+ \\
@@ -3138,7 +3138,7 @@ C 11.0 0.0 10.0
 
 \subsection{Calculating a substitution matrix from a pairwise sequence alignment}
 
-As \verb+Array+ is a subclass of a numpy array, you can apply mathematical operations on an \verb+Array+ object in much the same way. Here, we illustrate this by calculating a scoring matrix from the alignment of the 16S ribosomal RNA gene sequences of {\it Escherichia coli} and {\it Bacillus subtilis}. First, we create a \verb+PairwiseAligner+ and initialize it with the default scores used by \verb+blastn+:
+As \verb+Array+ is a subclass of a numpy array, you can apply mathematical operations on an \verb+Array+ object in much the same way. Here, we illustrate this by calculating a scoring matrix from the alignment of the 16S ribosomal RNA gene sequences of \textit{Escherichia coli} and \textit{Bacillus subtilis}. First, we create a \verb+PairwiseAligner+ and initialize it with the default scores used by \verb+blastn+:
 
 %doctest ../Tests/Align lib:numpy
 \begin{minted}{pycon}
@@ -3150,7 +3150,7 @@ As \verb+Array+ is a subclass of a numpy array, you can apply mathematical opera
 >>> aligner.open_gap_score = -7
 >>> aligner.extend_gap_score = -2
 \end{minted}
-Next, we read in the 16S ribosomal RNA gene sequence of {\it Escherichia coli} and {\it Bacillus subtilis} (provided in \verb+Tests/scoring_matrices/ecoli.fa+ and \verb+Tests/scoring_matrices/bsubtilis.fa+), and align them to each other:
+Next, we read in the 16S ribosomal RNA gene sequence of \textit{Escherichia coli} and \textit{Bacillus subtilis} (provided in \verb+Tests/scoring_matrices/ecoli.fa+ and \verb+Tests/scoring_matrices/bsubtilis.fa+), and align them to each other:
 
 %cont-doctest
 \begin{minted}{pycon}
