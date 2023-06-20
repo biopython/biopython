@@ -669,68 +669,6 @@ Partially defined sequences can also be created by appending sequences, if at le
 Seq({0: 'ACGT', 14: 'ACGT'}, length=18)
 \end{minted}
 
-\section{Finding subsequences}
-
-Sequence objects have ``find``, ``rfind``, ``index``, and ``rindex`` methods
-that perform the same function as the corresponding methods on plain string
-objects. The only difference is that the subsequence can be a string, ``bytes``,
-``bytearray``, ``Seq``, or ``MutableSeq`` object:
-
-%doctest
-\begin{minted}{pycon}
->>> from Bio.Seq import Seq
->>> seq = Seq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA")
->>> seq.index("ATGGGCCGC")
-9
->>> seq.index(b"ATGGGCCGC")
-9
->>> seq.index(bytearray(b"ATGGGCCGC"))
-9
->>> seq.index(Seq("ATGGGCCGC"))
-9
->>> seq.index(MutableSeq("ATGGGCCGC"))
-9
-\end{minted}
-A ``ValueError`` is raised if the subsequence is not found:
-%cont-doctest
-\begin{minted}{pycon}
->>> seq.index("ACTG")  # doctest:+ELLIPSIS
-Traceback (most recent call last):
-...
-ValueError: subsection not found
-\end{pycon}
-while the ``find`` method returns -1 if the subsequence is not found:
-%cont-doctest
-\begin{minted}{pycon}
->>> seq.find("ACTG")
--1
-\end{pycon}
-The methods ``rfind`` and ``rindex`` search for the subsequence starting from
-the right hand side of the sequence:
-%cont-doctest
-\begin{minted}{pycon}
->>> seq.find("CC")
-1
->>> seq.rfind("CC")
-29
-\end{pycon}
-
-Use the ``search`` method to search for multiple subsequences at the same time.
-This method returns an iterator:
-%cont-doctest
-\begin{minted}{pycon}
->>> for index, sub in seq.search(["CC", "GGG", "CC"]):
-...     print(index, sub)
-...
-1 CC
-11 GGG
-14 CC
-23 GGG
-28 CC
-29 CC
-\end{pycon}
-The ``search`` method also takes plain strings, `bytes`, `bytearray`, `Seq`, and `MutableSeq` objects as subsequences; identical subsequences are reported only once, as in the example above.
-
 \section{MutableSeq objects}
 \label{sec:mutable-seq}
 
@@ -801,6 +739,68 @@ Seq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG')
 \end{minted}
 
 You can also get a string from a \verb|MutableSeq| object just like from a \verb|Seq| object (Section~\ref{sec:seq-to-string}).
+
+\section{Finding subsequences}
+
+Sequence objects have ``find``, ``rfind``, ``index``, and ``rindex`` methods
+that perform the same function as the corresponding methods on plain string
+objects. The only difference is that the subsequence can be a string, ``bytes``,
+``bytearray``, ``Seq``, or ``MutableSeq`` object:
+
+%doctest
+\begin{minted}{pycon}
+>>> from Bio.Seq import Seq, MutableSeq
+>>> seq = Seq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA")
+>>> seq.index("ATGGGCCGC")
+9
+>>> seq.index(b"ATGGGCCGC")
+9
+>>> seq.index(bytearray(b"ATGGGCCGC"))
+9
+>>> seq.index(Seq("ATGGGCCGC"))
+9
+>>> seq.index(MutableSeq("ATGGGCCGC"))
+9
+\end{minted}
+A ``ValueError`` is raised if the subsequence is not found:
+%cont-doctest
+\begin{minted}{pycon}
+>>> seq.index("ACTG")  # doctest:+ELLIPSIS
+Traceback (most recent call last):
+...
+ValueError: subsection not found
+\end{minted}
+while the ``find`` method returns -1 if the subsequence is not found:
+%cont-doctest
+\begin{minted}{pycon}
+>>> seq.find("ACTG")
+-1
+\end{minted}
+The methods ``rfind`` and ``rindex`` search for the subsequence starting from
+the right hand side of the sequence:
+%cont-doctest
+\begin{minted}{pycon}
+>>> seq.find("CC")
+1
+>>> seq.rfind("CC")
+29
+\end{minted}
+
+Use the ``search`` method to search for multiple subsequences at the same time.
+This method returns an iterator:
+%cont-doctest
+\begin{minted}{pycon}
+>>> for index, sub in seq.search(["CC", "GGG", "CC"]):
+...     print(index, sub)
+...
+1 CC
+11 GGG
+14 CC
+23 GGG
+28 CC
+29 CC
+\end{minted}
+The ``search`` method also takes plain strings, `bytes`, `bytearray`, `Seq`, and `MutableSeq` objects as subsequences; identical subsequences are reported only once, as in the example above.
 
 \section{Working with strings directly}
 \label{sec:seq-module-functions}
