@@ -793,6 +793,9 @@ class _SeqAbstractBaseClass(ABC):
 
         >>> my_rna.find("AUG", 4)
         15
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, _SeqAbstractBaseClass):
             sub = bytes(sub)
@@ -831,6 +834,9 @@ class _SeqAbstractBaseClass(ABC):
 
         >>> my_rna.rfind("AUG", end=15)
         3
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, _SeqAbstractBaseClass):
             sub = bytes(sub)
@@ -871,7 +877,7 @@ class _SeqAbstractBaseClass(ABC):
         15
 
         This method performs the same search as the ``find`` method.  However,
-        if the subsequence is not found, ``find`` returns -1 which ``index``
+        if the subsequence is not found, ``find`` returns -1 while ``index``
         raises a ValueError:
 
         >>> my_rna.index("T")
@@ -880,6 +886,9 @@ class _SeqAbstractBaseClass(ABC):
         ValueError: ...
         >>> my_rna.find("T")
         -1
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, MutableSeq):
             sub = sub._data
@@ -931,6 +940,9 @@ class _SeqAbstractBaseClass(ABC):
         ValueError: ...
         >>> my_rna.rfind("T")
         -1
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, MutableSeq):
             sub = sub._data

@@ -41,6 +41,9 @@ Added ``make_extended()`` to set a chain to an extended beta strand
 conformation, as the default backbone values reflect the more popular
 alpha helix in most cases.
 
+Added a ``search`` method to ``Seq`` and ``MultipleSeq`` object to search for
+multiple subsequences at the same time.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
