@@ -20,6 +20,7 @@ See also the Seq_ wiki and the chapter in our tutorial:
 
 """
 import array
+import collections
 import numbers
 import warnings
 
@@ -792,6 +793,9 @@ class _SeqAbstractBaseClass(ABC):
 
         >>> my_rna.find("AUG", 4)
         15
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, _SeqAbstractBaseClass):
             sub = bytes(sub)
@@ -830,6 +834,9 @@ class _SeqAbstractBaseClass(ABC):
 
         >>> my_rna.rfind("AUG", end=15)
         3
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, _SeqAbstractBaseClass):
             sub = bytes(sub)
@@ -870,7 +877,7 @@ class _SeqAbstractBaseClass(ABC):
         15
 
         This method performs the same search as the ``find`` method.  However,
-        if the subsequence is not found, ``find`` returns -1 which ``index``
+        if the subsequence is not found, ``find`` returns -1 while ``index``
         raises a ValueError:
 
         >>> my_rna.index("T")
@@ -879,6 +886,9 @@ class _SeqAbstractBaseClass(ABC):
         ValueError: ...
         >>> my_rna.find("T")
         -1
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, MutableSeq):
             sub = sub._data
@@ -930,6 +940,9 @@ class _SeqAbstractBaseClass(ABC):
         ValueError: ...
         >>> my_rna.rfind("T")
         -1
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, MutableSeq):
             sub = sub._data
@@ -943,6 +956,47 @@ class _SeqAbstractBaseClass(ABC):
                 % type(sub)
             )
         return self._data.rindex(sub, start, end)
+
+    def search(self, subs):
+        """Search the substrings subs in self and yield the index and substring found.
+
+        Arguments:
+         - subs - a list of strings, Seq, MutableSeq, bytes, or bytearray
+           objects containing the substrings to search for.
+
+        >>> from Bio.Seq import Seq
+        >>> dna = Seq("GTCATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAGTTG")
+        >>> matches = dna.search(["CC", Seq("ATTG"), "ATTG", Seq("CCC")])
+        >>> for index, substring in matches:
+        ...     print(index, substring)
+        ...
+        7 CC
+        9 ATTG
+        20 CC
+        34 CC
+        34 CCC
+        35 CC
+        """
+        subdict = collections.defaultdict(set)
+        for index, sub in enumerate(subs):
+            if isinstance(sub, (_SeqAbstractBaseClass, bytearray)):
+                sub = bytes(sub)
+            elif isinstance(sub, str):
+                sub = sub.encode("ASCII")
+            elif not isinstance(sub, bytes):
+                raise TypeError(
+                    "subs[%d]: a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
+                    % (index, type(sub))
+                )
+            length = len(sub)
+            subdict[length].add(sub)
+        for start in range(len(self) - 1):
+            for length, subs in subdict.items():
+                stop = start + length
+                for sub in subs:
+                    if self._data[start:stop] == sub:
+                        yield (start, sub.decode())
+                        break
 
     def startswith(self, prefix, start=None, end=None):
         """Return True if the sequence starts with the given prefix, False otherwise.
