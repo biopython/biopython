@@ -763,12 +763,15 @@ objects. The only difference is that the subsequence can be a string, ``bytes``,
 9
 \end{minted}
 A ``ValueError`` is raised if the subsequence is not found:
+% The error message on CPython is "subsection not found";
+% on PyPy it is "substring not found".
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> seq.index("ACTG")  # doctest:+ELLIPSIS
 Traceback (most recent call last):
 ...
-ValueError: subsection not found
+ValueError: ...
 \end{minted}
 while the ``find`` method returns -1 if the subsequence is not found:
 %cont-doctest
