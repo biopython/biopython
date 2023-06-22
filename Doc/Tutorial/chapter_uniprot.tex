@@ -15,8 +15,9 @@ To parse a Swiss-Prot record, we first get a handle to a Swiss-Prot record. Ther
 \begin{itemize}
 
 \item Open a Swiss-Prot file locally:
+%doctest ../Tests
 \begin{minted}{pycon}
->>> handle = open("myswissprotfile.dat")
+>>> handle = open("SwissProt/F2CXE6.txt")
 \end{minted}
 
 \item Open a gzipped Swiss-Prot file:
@@ -37,7 +38,7 @@ to open the file stored on the Internet before calling \verb|read|.
 (see section \ref{sec:expasy_swissprot}):
 \begin{minted}{pycon}
 >>> from Bio import ExPASy
->>> handle = ExPASy.get_sprot_raw(myaccessionnumber)
+>>> handle = ExPASy.get_sprot_raw("F2CXE6")
 \end{minted}
 \end{itemize}
 The key point is that for the parser, it doesn't matter how the handle was created, as long as it points to data in the Swiss-Prot format. The parser will automatically decode the data as ASCII (the encoding used by Swiss-Prot) if the handle was opened in binary mode.
@@ -45,7 +46,7 @@ The key point is that for the parser, it doesn't matter how the handle was creat
 We can use \verb+Bio.SeqIO+ as described in Section~\ref{sec:SeqIO_ExPASy_and_SwissProt} to get file format agnostic \verb|SeqRecord| objects.  Alternatively, we can use \verb+Bio.SwissProt+ get \verb|Bio.SwissProt.Record| objects, which are a much closer match to the underlying file format.
 
 To read one Swiss-Prot record from the handle, we use the function \verb|read()|:
-%--cont-doctest
+%cont-doctest
 \begin{minted}{pycon}
 >>> from Bio import SwissProt
 >>> record = SwissProt.read(handle)
@@ -53,8 +54,7 @@ To read one Swiss-Prot record from the handle, we use the function \verb|read()|
 This function should be used if the handle points to exactly one Swiss-Prot record. It raises a \verb|ValueError| if no Swiss-Prot record was found, and also if more than one record was found.
 
 We can now print out some information about this record:
-%TODO - Check the single quotes when printing record.description here:
-%--cont-doctest
+%cont-doctest
 \begin{minted}{pycon}
 >>> print(record.description)
 SubName: Full=Plasma membrane intrinsic protein {ECO:0000313|EMBL:BAN04711.1}; SubName: Full=Predicted protein {ECO:0000313|EMBL:BAJ87517.1};
