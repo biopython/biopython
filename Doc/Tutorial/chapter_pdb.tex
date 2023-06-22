@@ -1261,7 +1261,6 @@ as may be desired.  The \texttt{distance\_plot\(\)} method wraps the line above
 and accepts an optional selector like \texttt{CaSelect} defined in the previous
 section.  See Figure~\ref{fig:distanceplot}.
 
-\begin{figure}[h!]
 \begin{minted}{python}
 # create a C-alpha distance plot
 caDistances = myChain.internal_coord.distance_plot(CaSelect)
@@ -1272,6 +1271,7 @@ plt.imshow(caDistances, cmap="hot", interpolation="nearest")
 plt.show()
 \end{minted}
 
+\begin{figure}[h!]
 \begin{htmlonly}
 \imgsrc[width=280, height=280]{images/1a8o-ca-plot.png}
 \end{htmlonly}
