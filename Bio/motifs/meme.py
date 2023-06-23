@@ -8,6 +8,7 @@
 
 import xml.etree.ElementTree as ET
 
+from Bio import Align
 from Bio import Seq
 from Bio import motifs
 
@@ -21,7 +22,7 @@ def read(handle):
     >>> with open("motifs/meme.INO_up800.classic.oops.xml") as f:
     ...     record = meme.read(f)
     >>> for motif in record:
-    ...     for instance in motif.instances:
+    ...     for instance in motif.alignment.sequences:
     ...         print(instance.motif_name, instance.sequence_name, instance.sequence_id, instance.strand, instance.pvalue)
     GSKGCATGTGAAA INO1 sequence_5 + 1.21e-08
     GSKGCATGTGAAA FAS1 sequence_2 - 1.87e-08
@@ -172,8 +173,8 @@ def __read_motifs(record, xml_tree, sequence_id_name_map):
             instance.strand = __convert_strand(site_tree.get("strand"))
             instance.length = len(sequence)
             instances.append(instance)
-        instances = motifs.Instances(instances, record.alphabet)
-        motif = Motif(record.alphabet, instances)
+        alignment = Align.Alignment(instances)
+        motif = Motif(record.alphabet, alignment)
         motif.id = motif_tree.get("id")
         motif.name = motif_tree.get("name")
         motif.alt_id = motif_tree.get("alt")

@@ -73,7 +73,6 @@ TACCC
 AACCC
 AATGC
 AATGC
-<BLANKLINE>
 \end{minted}
 The length of the motif is defined as the sequence length, which should be the same for all instances:
 
@@ -182,7 +181,6 @@ GGGTA
 GGGTT
 GCATT
 GCATT
-<BLANKLINE>
 \end{minted}
 
 The reverse complement and the degenerate consensus sequence are
@@ -254,14 +252,14 @@ We can create a \verb+Motif+ object from these instances as follows:
 ...     arnt = motifs.read(handle, "sites")
 ...
 \end{minted}
-The instances from which this motif was created is stored in the \verb+.instances+ property:
+The instances from which this motif was created is stored in the \verb+.alignment+ property:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> print(arnt.instances[:3])
+>>> print(arnt.alignment.sequences[:3])
 [Seq('CACGTG'), Seq('CACGTG'), Seq('CACGTG')]
->>> for instance in arnt.instances:
-...     print(instance)
+>>> for sequence in arnt.alignment.sequences:
+...     print(sequence)
 ...
 CACGTG
 CACGTG
@@ -329,7 +327,7 @@ As this motif was created from the counts matrix directly, it has no instances a
 
 %cont-doctest
 \begin{minted}{pycon}
->>> print(srf.instances)
+>>> print(srf.alignment)
 None
 \end{minted}
 We can now ask for the consensus sequence of these two motifs:
@@ -654,28 +652,28 @@ you can also find it by its name:
 \begin{minted}{pycon}
 >>> motif = record["GSKGCATGTGAAA"]
 \end{minted}
-Each motif has an attribute \verb+.instances+ with the sequence instances
-in which the motif was found, providing some information on each instance:
+Each motif has an attribute \verb+.alignment+ with the sequence alignment
+in which the motif was found, providing some information on each of the sequences:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> len(motif.instances)
+>>> len(motif.alignment)
 7
->>> motif.instances[0]
+>>> motif.alignment.sequences[0]
 Instance('GCGGCATGTGAAA')
->>> motif.instances[0].motif_name
+>>> motif.alignment.sequences[0].motif_name
 'GSKGCATGTGAAA'
->>> motif.instances[0].sequence_name
+>>> motif.alignment.sequences[0].sequence_name
 'INO1'
->>> motif.instances[0].sequence_id
+>>> motif.alignment.sequences[0].sequence_id
 'sequence_5'
->>> motif.instances[0].start
+>>> motif.alignment.sequences[0].start
 620
->>> motif.instances[0].strand
+>>> motif.alignment.sequences[0].strand
 '+'
->>> motif.instances[0].length
+>>> motif.alignment.sequences[0].length
 13
->>> pvalue = motif.instances[0].pvalue
+>>> pvalue = motif.alignment.sequences[0].pvalue
 >>> print("%5.3g" % pvalue)
 1.21e-08
 \end{minted}
@@ -1129,7 +1127,7 @@ the true instances of the motif:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> for pos, seq in test_seq.search(m.instances):
+>>> for pos, seq in test_seq.search(m.alignment):
 ...     print("%i %s" % (pos, seq))
 ...
 0 TACAC
@@ -1140,7 +1138,7 @@ We can do the same with the reverse complement (to find instances on the complem
 
 %cont-doctest
 \begin{minted}{pycon}
->>> for pos, seq in test_seq.search(r.instances):
+>>> for pos, seq in test_seq.search(r.alignment):
 ...     print("%i %s" % (pos, seq))
 ...
 6 GCATT
@@ -1542,17 +1540,17 @@ functionality, by adding additional information about the instances.
 \begin{minted}{pycon}
 >>> motifsM[0].consensus
 Seq('GCTTATGTAA')
->>> motifsM[0].instances[0].sequence_name
+>>> motifsM[0].alignment.sequences[0].sequence_name
 'iYFL005W'
->>> motifsM[0].instances[0].sequence_id
+>>> motifsM[0].alignment.sequences[0].sequence_id
 'sequence_15'
->>> motifsM[0].instances[0].start
+>>> motifsM[0].alignment.sequences[0].start
 480
->>> motifsM[0].instances[0].strand
+>>> motifsM[0].alignment.sequences[0].strand
 '+'
 \end{minted}
 \begin{minted}{pycon}
->>> motifsM[0].instances[0].pvalue
+>>> motifsM[0].alignment.sequences[0].pvalue
 1.97e-06
 \end{minted}
 
