@@ -300,10 +300,9 @@ class Motif:
                 raise Exception(
                     ValueError, "Specify either counts or instances, don't specify both"
                 )
-            self.instances = instances
+            alignment = Alignment(instances)
             alphabet = instances.alphabet
-            counts = instances.count()
-        elif counts is not None and alignment is not None:
+        if counts is not None and alignment is not None:
             raise Exception(
                 ValueError, "Specify either counts or an alignment, don't specify both"
             )
@@ -413,6 +412,15 @@ class Motif:
     def pssm(self):
         """Compute position specific scoring matrices."""
         return self.pwm.log_odds(self._background)
+
+    @property
+    def instances(self):
+        """Return the sequences from which the motif was built."""
+        warnings.warn(
+            """The instances attribute has been deprecated. Instead of motif.instances, Please motif.alignment.sequences.""",
+            BiopythonDeprecationWarning,
+        )
+        return self.alignment.sequences
 
     def __str__(self, masked=False):
         """Return string representation of a motif."""
