@@ -81,7 +81,7 @@ For a nice printout of an alignment, use the ``format_alignment`` method of
 the module:
 
     >>> from Bio.pairwise2 import format_alignment
-    >>> print(format_alignment(*alignments[0]))
+    >>> print(pairwise2.format_alignment(*alignments[0]))
     ACCGT
     | || 
     A-CG-
@@ -128,7 +128,7 @@ Some examples:
   characters are given 1 point. No points are deducted for mismatches or gaps.
 
     >>> for a in pairwise2.align.globalxx("ACCGT", "ACG"):
-    ...     print(format_alignment(*a))
+    ...     print(pairwise2.format_alignment(*a))
     ACCGT
     | || 
     A-CG-
@@ -145,7 +145,7 @@ Some examples:
   together with the starting positions.
 
     >>> for a in pairwise2.align.localxx("ACCGT", "ACG"):
-    ...     print(format_alignment(*a))
+    ...     print(pairwise2.format_alignment(*a))
     1 ACCG
       | ||
     1 A-CG
@@ -162,7 +162,7 @@ Some examples:
   ``full_sequences``:
 
     >>> for a in pairwise2.align.localxx("ACCGT", "ACG"):
-    ...     print(format_alignment(*a, full_sequences=True))
+    ...     print(pairwise2.format_alignment(*a, full_sequences=True))
     ACCGT
     | || 
     A-CG-
@@ -179,7 +179,7 @@ Some examples:
   deducted for each non-identical character. Don't penalize gaps.
 
     >>> for a in pairwise2.align.globalmx("ACCGT", "ACG", 2, -1):
-    ...     print(format_alignment(*a))
+    ...     print(pairwise2.format_alignment(*a))
     ACCGT
     | || 
     A-CG-
@@ -195,7 +195,7 @@ Some examples:
   0.1 points are deducted when extending it.
 
     >>> for a in pairwise2.align.globalms("ACCGT", "ACG", 2, -1, -.5, -.1):
-    ...     print(format_alignment(*a))
+    ...     print(pairwise2.format_alignment(*a))
     ACCGT
     | || 
     A-CG-
@@ -217,14 +217,14 @@ Some examples:
   penalty:
 
     >>> for a in pairwise2.align.globalms("A", "T", 5, -4, -1, -.1):
-    ...     print(format_alignment(*a))
+    ...     print(pairwise2.format_alignment(*a))
     A-
     <BLANKLINE>
     -T
       Score=-2
     <BLANKLINE>
     >>> for a in pairwise2.align.globalms("A", "T", 5, -4, -3, -.1):
-    ...	    print(format_alignment(*a))
+    ...	    print(pairwise2.format_alignment(*a))
     A
     .
     T
@@ -237,7 +237,7 @@ Some examples:
     >>> from Bio.Align import substitution_matrices
     >>> matrix = substitution_matrices.load("BLOSUM62")
     >>> for a in pairwise2.align.globaldx("KEVLA", "EVL", matrix):
-    ...     print(format_alignment(*a))
+    ...     print(pairwise2.format_alignment(*a))
     KEVLA
      ||| 
     -EVL-
