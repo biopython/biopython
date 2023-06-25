@@ -44,6 +44,24 @@ alpha helix in most cases.
 Added a ``search`` method to ``Seq`` and ``MultipleSeq`` object to search for
 multiple subsequences at the same time.
 
+The ``Instances`` class and the ``instances`` argument of the ``Motif`` class
+initializer in ``Bio.motifs`` were deprecated in release 1.82. Instead of
+
+>>> from Bio.motifs import Instances
+>>> instances = Instances([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])
+>>> motif = Motif(alphabet='ACGT', instances=instances)
+
+please use
+
+>>> from Bio.Align import Alignment
+>>> alignment = Alignment([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])
+>>> motif = Motif(alphabet='ACGT', alignment=alignment)
+
+The ``instances`` attribute of the ``Motif`` class  in ``Bio.motifs`` was
+deprecated in release 1.82. Instead of ``mymotif.instances``, please use
+``mymotif.alignment.sequences``.
+
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 

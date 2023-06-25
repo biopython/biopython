@@ -22,8 +22,8 @@ def read(handle):
     >>> with open("motifs/meme.INO_up800.classic.oops.xml") as f:
     ...     record = meme.read(f)
     >>> for motif in record:
-    ...     for instance in motif.alignment.sequences:
-    ...         print(instance.motif_name, instance.sequence_name, instance.sequence_id, instance.strand, instance.pvalue)
+    ...     for sequence in motif.alignment.sequences:
+    ...         print(sequence.motif_name, sequence.sequence_name, sequence.sequence_id, sequence.strand, sequence.pvalue)
     GSKGCATGTGAAA INO1 sequence_5 + 1.21e-08
     GSKGCATGTGAAA FAS1 sequence_2 - 1.87e-08
     GSKGCATGTGAAA ACC1 sequence_4 - 6.62e-08
@@ -63,9 +63,9 @@ class Motif(motifs.Motif):
     of occurrences.
     """
 
-    def __init__(self, alphabet=None, instances=None):
+    def __init__(self, alphabet=None, alignment=None):
         """Initialize the class."""
-        motifs.Motif.__init__(self, alphabet, instances)
+        motifs.Motif.__init__(self, alphabet, alignment)
         self.evalue = 0.0
         self.num_occurrences = 0
         self.name = None

@@ -186,6 +186,22 @@ class Instances(list):
         """Initialize the class."""
         from Bio.Seq import Seq, MutableSeq
 
+        warnings.warn(
+            "The Instances class has been deprecated; please use the\n"
+            "Alignment class in Bio.Align instead.\n"
+            "To create a Motif instance, instead of"
+            "\n"
+            ">>> from Bio.motifs import Instances\n"
+            ">>> instances = Instances([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])\n"
+            ">>> motif = Motif(alphabet='ACGT', instances=instances)\n"
+            "\n"
+            "please use\n"
+            "\n"
+            ">>> from Bio.Align import Alignment\n"
+            ">>> alignment = Alignment([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])\n"
+            ">>> motif = Motif(alphabet='ACGT', alignment=alignment)\n",
+            BiopythonDeprecationWarning,
+        )
         if isinstance(instances, (Seq, MutableSeq, str)):
             raise TypeError(
                 "instances should be iterator of Seq objects or strings. "
@@ -287,13 +303,14 @@ class Motif:
                 "The instances argument has been deprecated.\n"
                 "Instead of"
                 "\n"
-                "instances = [Seq('ACGT'), Seq('ACCT'), Seq('AAGT')]\n"
-                "motif = Motif(alphabet='ACGT', instances=instances)\n"
+                ">>> instances = [Seq('ACGT'), Seq('ACCT'), Seq('AAGT')]\n"
+                ">>> motif = Motif(alphabet='ACGT', instances=instances)\n"
                 "\n"
                 "please use\n"
-                "from Bio.Align import Alignment\n"
-                "alignment = Alignment([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])\n"
-                "motif = Motif(alphabet='ACGT', alignment=alignment)\n",
+                "\n"
+                ">>> from Bio.Align import Alignment\n"
+                ">>> alignment = Alignment([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])\n"
+                ">>> motif = Motif(alphabet='ACGT', alignment=alignment)\n",
                 BiopythonDeprecationWarning,
             )
             if counts is not None:
@@ -417,7 +434,7 @@ class Motif:
     def instances(self):
         """Return the sequences from which the motif was built."""
         warnings.warn(
-            """The instances attribute has been deprecated. Instead of motif.instances, Please motif.alignment.sequences.""",
+            """The instances attribute has been deprecated. Instead of mymotif.instances, please use mymotif.alignment.sequences.""",
             BiopythonDeprecationWarning,
         )
         return self.alignment.sequences
