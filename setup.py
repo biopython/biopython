@@ -203,6 +203,7 @@ EXTENSIONS = [
 
 
 def get_version():
+    """Get version number from __init__.py"""
     for line in open("Bio/__init__.py"):
         if line.startswith("__version__ = "):
             return ast.literal_eval(line.split("=")[1].strip())
