@@ -105,6 +105,7 @@ def can_import(module_name):
     except ImportError:
         return None
 
+
 # Using requirements.txt is preferred for an application
 # (and likely will pin specific version numbers), using
 # setup.py's install_requires is preferred for a library
@@ -200,11 +201,14 @@ EXTENSIONS = [
     Extension("Bio.SeqIO._twoBitIO", ["Bio/SeqIO/_twoBitIO.c"]),
 ]
 
+
 def get_version():
     for line in open("Bio/__init__.py"):
         if line.startswith("__version__ = "):
             return ast.literal_eval(line.split("=")[1].strip())
     return "Undefined"
+
+
 __version__ = get_version()
 
 # We now load in our reStructuredText README.rst file to pass explicitly in the
