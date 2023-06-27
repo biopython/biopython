@@ -105,21 +105,6 @@ def can_import(module_name):
     except ImportError:
         return None
 
-
-def extract_variable_value(file_path, variable_name):
-    """Extract the value of a variable from a Python file."""
-    with open(file_path, "r") as file:
-        source_code = file.read()
-    tree = ast.parse(source_code)
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Assign) and len(node.targets) == 1:
-            target = node.targets[0]
-            if isinstance(target, ast.Name) and target.id == variable_name:
-                value_node = node.value
-                value = ast.literal_eval(value_node)
-                return value
-
-
 # Using requirements.txt is preferred for an application
 # (and likely will pin specific version numbers), using
 # setup.py's install_requires is preferred for a library
@@ -215,10 +200,12 @@ EXTENSIONS = [
     Extension("Bio.SeqIO._twoBitIO", ["Bio/SeqIO/_twoBitIO.c"]),
 ]
 
-# We now define the Biopython version number in Bio/__init__.py
-# Here we can't use "import Bio" then "Bio.__version__" as that would
-# tell us the version of Biopython already installed (if any).
-__version__ = extract_variable_value("Bio/__init__.py", "__version__") or "undefined"
+def get_version():
+    for line in open("Bio/__init__.py"):
+        if line.startswith("__version__ = "):
+            return ast.literal_eval(line.split("=")[1].strip())
+    return "Undefined"
+__version__ = get_version()
 
 # We now load in our reStructuredText README.rst file to pass explicitly in the
 # metadata, since at time of writing PyPI did not do this for us.
