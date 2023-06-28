@@ -106,7 +106,7 @@ deprecated in release 1.82. Instead of ``instances.search(sequence)``,
 This allows instances to have different lengths.
 
 The ``Instances`` class and the ``instances`` argument of the ``Motif`` class
-initializer in ``Bio.motifs`` was deprecated in release 1.82. Instead of
+initializer in ``Bio.motifs`` were deprecated in release 1.82. Instead of
 
 >>> from Bio.motifs import Instances
 >>> instances = Instances([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])
