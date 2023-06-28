@@ -73,6 +73,10 @@ was deprecated as of Release 1.70.
 Biopython modules, methods, functions
 =====================================
 
+Bio.kNN
+-------
+Deprecated in release 1.82, consider using scikit-learn instead.
+
 Bio.LogisticRegression
 ----------------------
 Deprecated in release 1.82, consider using scikit-learn instead.
