@@ -437,6 +437,8 @@ class Motif:
             """The instances attribute has been deprecated. Instead of mymotif.instances, please use mymotif.alignment.sequences.""",
             BiopythonDeprecationWarning,
         )
+        if self.alignment is None:
+            return None
         return self.alignment.sequences
 
     def __str__(self, masked=False):
