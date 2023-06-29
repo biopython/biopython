@@ -107,7 +107,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             )
             target.letter_annotations["ss_pred"] = fmt % target_ss_pred.replace("-", "")
             target.letter_annotations["ss_dssp"] = fmt % target_ss_dssp.replace("-", "")
-            # target.letter_annotations["Confidence"] = fmt % confidence.replace(" ", "")
             target.letter_annotations["Confidence"] = fmt % "".join(
                 c for t, c in zip(target_sequence, confidence) if t != "-"
             )
