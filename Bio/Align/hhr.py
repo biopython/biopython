@@ -132,7 +132,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         column_score = ""
         confidence = ""
         for line in stream:
-            line_ = line
             line = line.rstrip()
             if not line:
                 pass
@@ -173,13 +172,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if counter > 0:
                     return create_alignment()
             elif line.startswith("Confidence"):
-                res = line_.split(None, 1)
-                if len(res) == 1:
-                    key = res
-                    value = "\n"
-                else:
-                    key, value = res
-                value = " " * (len(consensus) + 1 - len(value)) + value[:-1]
+                key, value = line.split(None, 1)
                 confidence += value
             elif line.startswith("Q ss_pred "):
                 key, value = line.rsplit(None, 1)
@@ -235,10 +228,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         alignment = create_alignment()
         length = self._length
         counter = self._counter
-        if length == counter:
-            self._close()
-            del self._counter
-        if alignment is None and length > 0:
+        if alignment is None and counter != length:
             raise ValueError("Expected %d alignments, found %d" % (length, counter))
         return alignment
 
