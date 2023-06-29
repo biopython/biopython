@@ -60,6 +60,7 @@ possible, especially the following contributors:
 - Ricardas Ralys (first contribution)
 - Vladislav Kuznetsov (first contribution)
 - Rob Miller
+- Yiming Qu (first contribution)
 
 12 February 2023: Biopython 1.81
 ================================
