@@ -155,14 +155,12 @@ Frequently Asked Questions (FAQ)
      “biopython” in lower case. It was designed by Patrick Kunzmann and
      this logo is dual licensed under your choice of the *Biopython
      License Agreement* or the *BSD 3-Clause License*.
-
-   | |image|
+   | |new-logo|
    | Prior to this, the Biopython logo was two yellow snakes forming a
      double helix around the word “BIOPYTHON”, designed by Henrik
      Vestergaard and Thomas Hamelryck in 2003 as part of an open
      competition.
-
-   | |image1|
+   | |old-logo|
 
 #. | *Do you have a change-log listing what’s new in each release?*
    | See the file ``NEWS.rst`` included with the source code (originally
@@ -308,7 +306,7 @@ Frequently Asked Questions (FAQ)
 For more general questions, the Python FAQ pages
 https://docs.python.org/3/faq/index.html may be useful.
 
-.. |image| image:: ../images/biopython_logo.pdf
+.. |new-logo| image:: ../images/biopython_logo_m.png
    :width: 6cm
-.. |image1| image:: ../images/biopython_logo_old.jpg
+.. |old-logo| image:: ../images/biopython_logo_old.jpg
    :width: 7cm
