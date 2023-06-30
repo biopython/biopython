@@ -861,8 +861,6 @@ TRANSFAC files are typically much more elaborate than this example, containing
 lots of additional information about the motif. Table \ref{table:transfaccodes}
 lists the two-letter field codes that are commonly found in TRANSFAC files:
 \begin{table}[h]
-\label{table:transfaccodes}
-\begin{center}
 \caption{Fields commonly found in TRANSFAC files}
 \begin{tabular}{|l|l||}
 \verb+AC+ & Accession number \\
@@ -886,7 +884,7 @@ lists the two-letter field codes that are commonly found in TRANSFAC files:
 \verb+TY+ & Type \\
 \verb+XX+ & Empty line; these are not stored in the Record. \\
 \end{tabular}
-\end{center}
+\label{table:transfaccodes}
 \end{table}
 
 Each motif also has an attribute \verb+.references+ containing the
