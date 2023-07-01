@@ -41,6 +41,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Antonio Jesús Gálvez Muñoz <https://github.com/PyCreatine>
 - Anthony Bradley <https://github.com/abradle>
 - Antony Lee <https://github.com/anntzer>
+- Antonio Trande <https://github.com/sagitter>
 - Anuj Sharma <https://github.com/xulesc>
 - Ariel Aptekmann <https://github.com/aralap>
 - Arpan Sahoo <https://github.com/arpansahoo>
