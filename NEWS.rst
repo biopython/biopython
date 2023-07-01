@@ -50,6 +50,7 @@ to the test suite.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Antonio Trande (first contribution)
 - Arpan Sahoo (first contribution)
 - Benedict Carling (first contribution)
 - Cam McMenamie (first contribution)
@@ -60,7 +61,6 @@ possible, especially the following contributors:
 - Ricardas Ralys (first contribution)
 - Vladislav Kuznetsov (first contribution)
 - Rob Miller
-- Antonio Trande
 
 12 February 2023: Biopython 1.81
 ================================
