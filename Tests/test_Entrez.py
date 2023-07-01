@@ -126,7 +126,7 @@ def check_request_ids(testcase, params, expected):
     :type params: dict
     :param expected: Expected set of IDs, as colleciton of strings.
     """
-    testcase.assertEquals(len(params["id"]), 1)
+    testcase.assertEqual(len(params["id"]), 1)
     ids_str = params["id"][0]
     # Compare up to ordering
     testcase.assertCountEqual(ids_str.split(","), expected)
