@@ -814,7 +814,7 @@ numpy.array([['P', 'E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "689999988999999999999999999999999999764347889986556788999999999999999999998698753        ",
+            "6899999889999999999999999999999999997643    478899865567889999999999999999999986 98753   ",
         )
         self.assertEqual(
             str(alignment),
@@ -908,7 +908,7 @@ numpy.array([['E', 'R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            " 5777666678999999999999999999999999875434788887654567889999999999999999999979974         ",
+            " 577766667899999999999999999999999987543    478888765456788999999999999999999997 9974    ",
         )
         self.assertEqual(
             str(alignment),
@@ -1088,7 +1088,7 @@ numpy.array([['E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P', 'N',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            " 3555444567889999999999999999998679874     ",
+            " 35554445678899999999999999999986  79874   ",
         )
         self.assertEqual(
             str(alignment),
@@ -1163,7 +1163,7 @@ numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'D',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "6899567789999999999999999999999849864    ",
+            "68995677899999999999999999999998 49864   ",
         )
         self.assertEqual(
             str(alignment),
@@ -1238,7 +1238,7 @@ numpy.array([['E', 'T', 'C', 'A', 'S', '-', 'R', 'C', 'P', 'R', 'P', 'C', 'N',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            " 355333567889999999999999999999849874    ",
+            " 35533356788999999999999999999984 9874   ",
         )
         self.assertEqual(
             str(alignment),
@@ -1313,7 +1313,7 @@ numpy.array([['T', 'C', 'A', 'S', '-', 'R', 'C', 'P', 'R', 'P', 'C', 'N', 'A',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "57999988889999999999999999999999679864     ",
+            "579999888899999999999999999999996  79864   ",
         )
         self.assertEqual(
             str(alignment),
@@ -1464,7 +1464,7 @@ numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P', 'G',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "  4555444567889999999999999999999868864     ",
+            "  455544456788999999999999999999986 8864    ",
         )
         self.assertEqual(
             str(alignment),
@@ -1614,7 +1614,7 @@ numpy.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            " 47899987789999999999999999999999868864     ",
+            " 4789998778999999999999999999999986 8864    ",
         )
         self.assertEqual(
             str(alignment),
@@ -2256,7 +2256,7 @@ numpy.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "                                               6899999999999999973565                                                                                                                                                                                           ",
+            "                                               689999999999999997 3565                                                                                                                                                                                          ",
         )
         self.assertEqual(
             str(alignment),
@@ -2433,7 +2433,7 @@ numpy.array([['X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "                          57765423467657899999999999999974576                                                                                                                                                                                                   ",
+            "                          577654     2346765   7899999999999999974 576                                                                                                                                                                                          ",
         )
         self.assertEqual(
             str(alignment),
@@ -2505,7 +2505,7 @@ numpy.array([['R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N', 'P',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "                             368999999999999999835553                                                                                                                                                                                       ",
+            "                             36899999999999999983 5553                                                                                                                                                                                      ",
         )
         self.assertEqual(
             str(alignment),
@@ -2578,7 +2578,7 @@ numpy.array([['V', 'D', 'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "        3677664334565378999999999999999845654                                                                                                                                                                                               ",
+            "        3677664     3345653   7899999999999999984 5654                                                                                                                                                                                      ",
         )
         self.assertEqual(
             str(alignment),
@@ -3513,7 +3513,7 @@ numpy.array([['P', 'E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            " 7999999999999999999999999999999999976665889999888899999999999999999999999989985         ",
+            " 7999999999999999999999999999999999976665    88999988889999999999999999999999998 9985    ",
         )
         self.assertEqual(
             str(alignment),
@@ -3607,7 +3607,7 @@ numpy.array([['R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P', 'G',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "68999999999999999999999999999999999986764678998888889999999999999999999999988863         ",
+            "68999999999999999999999999999999999986764    67899888888999999999999999999999998 8863    ",
         )
         self.assertEqual(
             str(alignment),
@@ -3863,7 +3863,7 @@ numpy.array([['M', 'E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            " 4788888899999999999999999999999689985     ",
+            " 47888888999999999999999999999996  89985   ",
         )
         self.assertEqual(
             str(alignment),
@@ -4014,7 +4014,7 @@ numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P', 'G',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "  5788888899999999999999999999999879976     ",
+            "  578888889999999999999999999999987 9976    ",
         )
         self.assertEqual(
             str(alignment),
@@ -4089,7 +4089,7 @@ numpy.array([['R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P', 'N',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "6899578889999999999999999999999959976    ",
+            "689957888999999999999999999999995 9976   ",
         )
         self.assertEqual(
             str(alignment),
@@ -4234,7 +4234,7 @@ numpy.array([['E', 'C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            " 477477889999999999999999999999859986    ",
+            " 47747788999999999999999999999985 9986   ",
         )
         self.assertEqual(
             str(alignment),
@@ -4309,7 +4309,7 @@ numpy.array([['T', 'C', 'A', '-', 'S', 'R', 'C', 'P', 'R', 'P', 'C', 'N', 'A',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "58999988899999999999999999999999778864     ",
+            "589999888999999999999999999999997  78864   ",
         )
         self.assertEqual(
             str(alignment),
@@ -4385,7 +4385,7 @@ numpy.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            " 47888888889999999999999999999999878865     ",
+            " 4788888888999999999999999999999987 8865    ",
         )
         self.assertEqual(
             str(alignment),
@@ -5071,7 +5071,7 @@ numpy.array([['X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "     55666776655567775899999999999999886                                                                                                                                                                                                    ",
+            "     5566677665     5567775   899999999999999886                                                                                                                                                                                            ",
         )
         self.assertEqual(
             str(alignment),
@@ -5147,7 +5147,7 @@ numpy.array([['R', 'S', 'D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "       346666656678875899999999999999997                                                                                                                                                                                                    ",
+            "       34666665     6678875   899999999999999997                                                                                                                                                                                            ",
         )
         self.assertEqual(
             str(alignment),
@@ -5223,7 +5223,7 @@ numpy.array([['D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "                      34555555544457776899999999999999875                                                                                                                                                                                                       ",
+            "                      3455555554     4457776   899999999999999875                                                                                                                                                                                               ",
         )
         self.assertEqual(
             str(alignment),
@@ -5299,7 +5299,7 @@ numpy.array([['R', 'S', 'D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P',
         )
         self.assertEqual(
             alignment.target.letter_annotations["Confidence"],
-            "                         456665555788768999999999999999864555                                                                                                                                                                                                   ",
+            "                         4566655     5578876   899999999999999986 4555                                                                                                                                                                                          ",
         )
         self.assertEqual(
             str(alignment),
@@ -14998,6 +14998,141 @@ class Align_hhr_2uvo_hhblits_onlyheader(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             alignments = Align.parse(self.path, "hhr")
         self.assertEqual(str(cm.exception), "Truncated file.")
+
+
+class Align_hhr_7rbx_A_hhsearch_trunc:
+    path = os.path.join("HHsuite", "7rbx_A_hhsearch_trunc.hhr")
+
+    def test_reading(self):
+        alignments = Align.parse(self.path, "hhr")
+        self.assertEqual(alignments.metadata["No_of_seqs"], (336, 10000))
+        self.assertAlmostEqual(alignments.metadata["Neff"], 5.31565)
+        self.assertEqual(alignments.metadata["Searched_HMMs"], 90139)
+        self.assertEqual(alignments.metadata["Rundate"], "Fri Dec 24 23:14:30 2021")
+        self.assertEqual(
+            alignments.metadata["Command_line"],
+            "/mnt/home/dberenberg/gustaf_stuff/hh-suite/build/bin/hhsearch -i /tmp/tmprgvo26zr/query.a3m -o /tmp/tmprgvo26zr/output.hhr -maxseq 1000000 -cpu 2 -d /mnt/home/dberenberg/gustaf_stuff/OpenFold/pdb70/pdb70",
+        )
+
+        alignment = next(alignments)
+        self.assertAlmostEqual(alignment.annotations["Probab"], 100.00)
+        self.assertAlmostEqual(alignment.annotations["E-value"], 1.8e-115)
+        self.assertAlmostEqual(alignment.annotations["Score"], 931.2)
+        self.assertAlmostEqual(alignment.annotations["Identities"], 36.0)
+        self.assertAlmostEqual(alignment.annotations["Similarity"], 0.615)
+        self.assertAlmostEqual(alignment.annotations["Sum_probs"], 412.8)
+        self.assertEqual(alignment.query.id, "query")
+        self.assertEqual(
+            alignment.query.seq[12:-1],
+            "EAQTQGPGSMTDFYSLIPSAPKGRFDGIERAHTAEDVKRLRGSVEIKYSLAEMGANRLWKLIHEEDFVNALGALSGNQAMQMVRAGLKAIYLSGWQVAADANTASAMYPDQSLYPANAGPELAKRINRTLQRADQIETAEGKGLSVDTWFAPIVADAEAGFGGPLDAFEIMKAYIEAGAAGVHFEDQLASEKKCGHLGGKVLIPTAAHIRNLNAARLAADVMGTPTLIVARTDAEAAKLLTSDIDERDQPFVDYEAGRTAEGFYQVKNGIEPCIARAIAYAPYCDLIWMETSKPDLAQARRFAEAVHKAHPGKLLAYNCSPSFNWKKNLDDATIAKFQRELGAMGYKFQFITLAGFHQLNYGMFELARGYKDRQMAAYSELQQAEFAAEADGYTATKHQREVGTGYFDAVSLAITGGQSSTTAMKESTETAQFKPAA",
+        )
+        self.assertEqual(
+            alignment[1],
+            "EAQTQGPGSMTDFYSLIPSAPKGRFDGIERAHTAEDVKRLRGSVEIKYSLAEMGANRLWKLIHE----EDFVNALGALSGNQAMQMVRAGLKAIYLSGWQVAADANTASAMYPDQSLYPANAGPELAKRINRTLQRADQIETAEGKG--------LSVDTWFAPIVADAEAGFGGPLDAFEIMKAYIEAGAAGVHFEDQLASEKKCGHLGGKVLIPTAAHIRNLNAARLAADVMGTPTLIVARTDAEAAKLLTSDIDERDQPFV------------------------------------------------------------------------------------------------DYEAGRTAEGFYQVKNGIEPCIARAIAYAPYCDLIWMETSKPDLAQARRFAEAVHKAHPGKLLAYNCSPSFNWKKNLDDATIAKFQRELGAMGYKFQFITLAGFHQLNYGMFELARGYKDRQMAAYSELQQAEFAAEADGYTATKHQREVGTGYFDAVSLAITGGQSSTTAMKESTETAQFKPAA",
+        )
+        self.assertEqual(
+            alignment.query.letter_annotations["Consensus"],
+            "            ~~~~~~~~~~~~~~~~~~~~~~~R~~~i~R~ysa~~V~~lrgs~~~~~~~a~~~a~kL~~ll~~~~~~~~~Ga~~~~~a~~~~~ag~~aiYvSG~~~a~~a~~~~~~~PD~~~yp~~tvp~~v~~i~~~~~~~~~~~~~e~~~~~~~~~~~PiiaDaDtG~Gg~~~~~~~~k~~ieaGaAgih~EDQ~~~~KrCGh~~gK~lvp~~e~i~~l~Aa~~a~d~~~~~~~iiARTDA~aa~ll~s~id~rd~~Fid~ea~RT~EGfy~~k~gle~AIaRalA~Ap~aDliW~Et~kPdl~~A~~FAe~V~~~~P~k~LaYN~SpSFnw~~~~~d~~i~~f~~eLa~lGy~~QfitLAGfh~~~~~~~~lA~~~~~~gm~aYvelqq~e~~~~~~g~~~~~HQ~~~G~~y~D~~~~~i~gg~~st~a~~~ste~~qf~~~~ ",
+        )
+        self.assertEqual(
+            alignment.target.letter_annotations["Consensus"],
+            "            ~~~~~~~~~~~~v~~i~~~~~~~R~~~i~R~Yta~~V~~lRgs~~~~~~~~~~a~kL~~lL~~~~~~~~~~~~~Ga~D~~sA~~~a~Gf~aiyvSG~~vSa~~g~~~~~~PD~~~~p~~ev~~~v~rI~~a~~~~Dr~q~~~~~~~~~~~r~~~~~~d~~~PIIAD~DtGfGg~~~v~~lvk~~~eAGaAGIhIEDq~~g~Kkcgh~~gk~Lvp~~e~~~RL~AAr~a~d~~g~d~vIiARTDA~~a~li~s~~D~rDh~~I~G~~~~~~~~l~~al~ra~~~g~~~~ei~~~~~~w~~~~~Ltty~e~~~~~l~~~~~~~~~~~~~~~~~~~~~~~~~s~~~~r~~a~~~~~~~~~~dwd~~Rt~eG~Y~~~~g~~~aI~Ra~a~apyaDllW~Et~~P~~~~a~~Fa~~i~~~~P~~~laYN~SpSFnW~~~~~~~~~~~f~~~L~klG~~~qfitlag~h~~~~~~~~~a~~~~~~gm~aYv~~vQr~e~~~g~~~~~HQ~wsGa~~~D~~~~~v~~g~sst~a~g~~~te~qf~~~~   ",
+        )
+        self.assertEqual(alignment.target.id, "7EBE_A")
+        self.assertEqual(
+            alignment.target.seq[12:-3],
+            "DIQKEEADFQKEVAEIKKWWSEPRWRKTKRIYSAEDIAKKRGTLKINHPSSQQADKLFKLLEKHDADKTVSFTFGALDPIHVAQMAKYLDSIYVSGWQCSSTASTSNEPSPDLADYPMDTVPNKVEHLWFAQLFHDRKQREERLTLSKEERAKTPYIDFLRPIIADADTGHGGITAIIKLTKMFIERGAAGIHIEDQAPGTKKCGHMAGKVLVPVQEHINRLVAIRASADIFGSNLLAVARTDSEAATLITSTIDHRDHYFIIGATNPEAGDLAALMAEAESKGIYGNELAAIESEWTKKAGLKLFHEAVIDEIKNGNYSNKDALIKKFTDKVNPLSHTSHKEAKKLAKELTGKDIYFNWDVARAREGYYRYQGGTQCAVMRGRAFAPYADLIWMESALPDYAQAKEFADGVKAAVPDQWLAYNLSPSFNWNKAMPADEQETYIKRLGKLGYVWQFITLAGLHTTALAVDDFSNQYSQIGMKAYGQTVQQPEIEKGVEVVKHQKWSGATYIDGLLKMVSGGVTSTAAMGQGVTEDQFKESK",
+        )
+        self.assertEqual(alignment.target.seq.annotations["hmm_name"], "7EBE_A")
+        self.assertEqual(
+            alignment.target.seq.annotations["hmm_description"],
+            "Isocitrate lyase (E.C.4.1.3.1); Isocitrate lyase, glyoxylate cycle, ubiquitination; HET: FMT; 2.69A {Candida albicans}",
+        )
+        self.assertEqual(
+            alignment[0],
+            "DIQKEEADFQKEVAEIKKWWSEPRWRKTKRIYSAEDIAKKRGTLKINH-PSSQQADKLFKLLEKHDADKTVSFTFGALDPIHVAQMAK-YLDSIYVSGWQCSSTASTSNEPSPDLADYPMDTVPNKVEHLWFAQLFHDRKQREERLTLSKEERAKTPYIDFLRPIIADADTGHGGITAIIKLTKMFIERGAAGIHIEDQAPGTKKCGHMAGKVLVPVQEHINRLVAIRASADIFGSNLLAVARTDSEAATLITSTIDHRDHYFIIGATNPEAGDLAALMAEAESKGIYGNELAAIESEWTKKAGLKLFHEAVIDEIKNGNYSNKDALIKKFTDKVNPLSHTSHKEAKKLAKELTGKDIYFNWDVARAREGYYRYQGGTQCAVMRGRAFAPYADLIWMESALPDYAQAKEFADGVKAAVPDQWLAYNLSPSFNWNKAMPADEQETYIKRLGKLGYVWQFITLAGLHTTALAVDDFSNQYSQIGMKAYGQTVQQPE--IEKGVEVVKHQKWSGATYIDGLLKMVSGGVTSTAAMGQGVTEDQFKESK",
+        )
+        self.assertEqual(
+            alignment.target.letter_annotations["ss_dssp"],
+            "            CHHHHHHHHHHHHHHHHHHHTSGGGTTCCCCSCHHHHHTTSCSSCCCCTHHHHHHHHHHHHHHHHHTTCCEEEEBCCSHHHHHHHTTTCSCEEECHHHHHHHCCTTSCCCSSSSCSCTTHHHHHHHHHHHHHHHHHHHHHHHHHTSCHHHHTTSCBCCCCCCEEEECTTCSSSHHHHHHHHHHHHHTTCSEEEEESBCTTSCCCTTSSCCEECCHHHHHHHHHHHHHHHHHHTCCCEEEEEECTTTCCEESCCCCGGGGGGBCEECCTTCCCHHHHHHHHHTTTCCHHHHHHHHHHHHHHHTEECHHHHHHHHHHTSSCSSHHHHHHHHHHHSSTTSCCCHHHHHHHHHHHHSSCCCCBSSTTCCTTSCEEBCCCHHHHHHHHHHHGGGCSEEEECCSSCCHHHHHHHHHHHHTTCTTCEEEEECCTTSCHHHHSCHHHHHHHHHHHHHHTEEEEEETTHHHHHHHHHHHHHHHHHHHHTTHHHCCCCCHHHHHTTCGGGSHHHHHTHHHHHHHHHHHTTTCCTTCTTSTTCTTGGGC      ",
+        )
+        self.assertEqual(
+            alignment.target.letter_annotations["ss_pred"],
+            "            ChhHHHHHHHHHHHHHHHHHhCcccccCCCCCCHHHHHHHhCCCCCCCcchHHHHHHHHHHHHcccCCCeEEEecCCCHHHHHHHHhcCCEEEEchhHHHHhccCCCCCCCCccCCChhHHHHHHHHHHHHHHHHHHHHHHHHHhcCHHHHccCCCCCCCCcEEEeCCCCCCcHHHHHHHHHHHHHcCCCEEEeCCCCCCCCCCccCCCCeecCHHHHHHHHHHHHHHHHHhCCCEEEEEEecchhhhhhhccCCCCCcceeecCCCcccCcHHHHHHHHHHCCCCHHHHHHHHHHHhhhcCCccHhHHHHHHHHhCCCCChHHHHHHHHHHhccCCCCCHHHHHHHHHHHhCCCCcCCCCCCCcccccEEecccHHHHHHHHHHhccccCEEEEeCCCCCHHHHHHHHHHHHHHCCCCEEEEEeCCCCCcccCCCHHHHHHHHHHHHHcCCeEEEEechHHHHHHHHHHHHHHHHHHcCHHHHHHHcHHHHHHcCCcccccCccccchHHHHHHHHHhCCcchhhhccCCCchhhccchh   ",
+        )
+        self.assertEqual(
+            alignment.target.letter_annotations["Confidence"],
+            "            334556778999999999999999999999999999999999999988888999999999985    689999999999999999979999999999999999877999999999999999999999999999999999987754        3456678999999999999999999999999999999999999998899999999999999999999999999999989999999Confidence            999999999999999999999876                                        78899999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999998  78899999999999999999999999999999999999999999876                                     ",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
+7EBE_A           12 DIQKEEADFQKEVAEIKKWWSEPRWRKTKRIYSAEDIAKKRGTLKINH-PSSQQADKLFK
+                  0 ..|....................|.....|...|||....||...|..-.....|..|.|
+query            12 EAQTQGPGSMTDFYSLIPSAPKGRFDGIERAHTAEDVKRLRGSVEIKYSLAEMGANRLWK
+
+7EBE_A           71 LLEKHDADKTVSFTFGALDPIHVAQMAK-YLDSIYVSGWQCSSTASTSNEPSPDLADYPM
+                 60 |...----.......|||......||..-.|..||.||||....|.|.....||...||.
+query            72 LIHE----EDFVNALGALSGNQAMQMVRAGLKAIYLSGWQVAADANTASAMYPDQSLYPA
+
+7EBE_A          130 DTVPNKVEHLWFAQLFHDRKQREERLTLSKEERAKTPYIDFLRPIIADADTGHGGITAII
+                120 ...|.............|.....|...--------........||.|||..|.||.....
+query           128 NAGPELAKRINRTLQRADQIETAEGKG--------LSVDTWFAPIVADAEAGFGGPLDAF
+
+7EBE_A          190 KLTKMFIERGAAGIHIEDQAPGTKKCGHMAGKVLVPVQEHINRLVAIRASADIFGSNLLA
+                180 ...|..||.||||.|.|||....|||||..||||.|...||..|.|.|..||..|...|.
+query           180 EIMKAYIEAGAAGVHFEDQLASEKKCGHLGGKVLIPTAAHIRNLNAARLAADVMGTPTLI
+
+7EBE_A          250 VARTDSEAATLITSTIDHRDHYFIIGATNPEAGDLAALMAEAESKGIYGNELAAIESEWT
+                240 |||||.|||.|.||.||.||..|.------------------------------------
+query           240 VARTDAEAAKLLTSDIDERDQPFV------------------------------------
+
+7EBE_A          310 KKAGLKLFHEAVIDEIKNGNYSNKDALIKKFTDKVNPLSHTSHKEAKKLAKELTGKDIYF
+                300 ------------------------------------------------------------
+query           264 ------------------------------------------------------------
+
+7EBE_A          370 NWDVARAREGYYRYQGGTQCAVMRGRAFAPYADLIWMESALPDYAQAKEFADGVKAAVPD
+                360 .....|..||.|....|......|..|.|||.||||||...||.|||..||..|..|.|.
+query           264 DYEAGRTAEGFYQVKNGIEPCIARAIAYAPYCDLIWMETSKPDLAQARRFAEAVHKAHPG
+
+7EBE_A          430 QWLAYNLSPSFNWNKAMPADEQETYIKRLGKLGYVWQFITLAGLHTTALAVDDFSNQYSQ
+                420 ..||||.||||||.|.............||..||..|||||||.|............|..
+query           324 KLLAYNCSPSFNWKKNLDDATIAKFQRELGAMGYKFQFITLAGFHQLNYGMFELARGYKD
+
+7EBE_A          490 IGMKAYGQTVQQPE--IEKGVEVVKHQKWSGATYIDGLLKMVSGGVTSTAAMGQGVTEDQ
+                480 ..|.||....|...--...|....|||...|..|.|.......||..||.||.......|
+query           384 RQMAAYSELQQAEFAAEADGYTATKHQREVGTGYFDAVSLAITGGQSSTTAMKESTETAQ
+
+7EBE_A          548 FKESK 553
+                540 ||... 545
+query           444 FKPAA 449
+""",
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                numpy.array(
+                    [
+                        [12, 60, 60, 75, 79, 99, 99, 157, 165, 274, 370, 504, 504, 553],
+                        [12, 60, 61, 76, 76, 96, 97, 155, 155, 264, 264, 398, 400, 449],
+                    ]
+                ),
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                numpy.array(alignment, "U"),
+                numpy.array(
+                    [
+                        list(i)
+                        for i in [
+                            "DIQKEEADFQKEVAEIKKWWSEPRWRKTKRIYSAEDIAKKRGTLKINH-PSSQQADKLFKLLEKHDADKTVSFTFGALDPIHVAQMAK-YLDSIYVSGWQCSSTASTSNEPSPDLADYPMDTVPNKVEHLWFAQLFHDRKQREERLTLSKEERAKTPYIDFLRPIIADADTGHGGITAIIKLTKMFIERGAAGIHIEDQAPGTKKCGHMAGKVLVPVQEHINRLVAIRASADIFGSNLLAVARTDSEAATLITSTIDHRDHYFIIGATNPEAGDLAALMAEAESKGIYGNELAAIESEWTKKAGLKLFHEAVIDEIKNGNYSNKDALIKKFTDKVNPLSHTSHKEAKKLAKELTGKDIYFNWDVARAREGYYRYQGGTQCAVMRGRAFAPYADLIWMESALPDYAQAKEFADGVKAAVPDQWLAYNLSPSFNWNKAMPADEQETYIKRLGKLGYVWQFITLAGLHTTALAVDDFSNQYSQIGMKAYGQTVQQPE--IEKGVEVVKHQKWSGATYIDGLLKMVSGGVTSTAAMGQGVTEDQFKESK",
+                            "EAQTQGPGSMTDFYSLIPSAPKGRFDGIERAHTAEDVKRLRGSVEIKYSLAEMGANRLWKLIHE----EDFVNALGALSGNQAMQMVRAGLKAIYLSGWQVAADANTASAMYPDQSLYPANAGPELAKRINRTLQRADQIETAEGKG--------LSVDTWFAPIVADAEAGFGGPLDAFEIMKAYIEAGAAGVHFEDQLASEKKCGHLGGKVLIPTAAHIRNLNAARLAADVMGTPTLIVARTDAEAAKLLTSDIDERDQPFV------------------------------------------------------------------------------------------------DYEAGRTAEGFYQVKNGIEPCIARAIAYAPYCDLIWMETSKPDLAQARRFAEAVHKAHPGKLLAYNCSPSFNWKKNLDDATIAKFQRELGAMGYKFQFITLAGFHQLNYGMFELARGYKDRQMAAYSELQQAEFAAEADGYTATKHQREVGTGYFDAVSLAITGGQSSTTAMKESTETAQFKPAA",
+                        ]
+                    ]
+                ),
+            )
+        )
 
 
 if __name__ == "__main__":

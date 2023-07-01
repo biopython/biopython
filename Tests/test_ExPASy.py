@@ -40,7 +40,7 @@ class ExPASyOnlineTests(unittest.TestCase):
             handle.url,
             "https://prosite.expasy.org/cgi-bin/prosite/get-prosite-entry?PS00001",
         )
-        self.assertIn("<title>PROSITE: PS00001</title>", html)
+        self.assertIn("<title>PROSITE - PS00001</title>", html)
 
     def test_prodoc_html(self):
         with ExPASy.get_prodoc_entry("PDOC00001") as handle:

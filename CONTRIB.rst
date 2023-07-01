@@ -333,6 +333,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Yanbo Ye <https://github.com/lijax>
 - Yasar L. Ahmed <https://github.com/pyahmed>
 - Yi Hsiao <https://github.com/hsiaoyi0504>
+- Yiming Qu <https://github.com/whatever60>
 - Yogesh Kulkarni <https://https://github.com/yogeshhk>
 - Yu Huang <krocea at domain yahoo.com.cn>
 - Yves Bastide <ybastide at domain irisa.fr>

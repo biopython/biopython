@@ -58,8 +58,9 @@ possible, especially the following contributors:
 - Michiel de Hoon
 - Peter Cock
 - Ricardas Ralys (first contribution)
-- Vladislav Kuznetsov (first contribution)
 - Rob Miller
+- Vladislav Kuznetsov (first contribution)
+- Yiming Qu (first contribution)
 
 12 February 2023: Biopython 1.81
 ================================
