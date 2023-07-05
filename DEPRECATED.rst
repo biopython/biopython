@@ -113,6 +113,23 @@ deprecated in release 1.82. Instead of ``instances.search(sequence)``,
 ``sequence.search(instances)`` can be used, where sequence is a Seq object.
 This allows instances to have different lengths.
 
+The ``Instances`` class and the ``instances`` argument of the ``Motif`` class
+initializer in ``Bio.motifs`` were deprecated in release 1.82. Instead of
+
+>>> from Bio.motifs import Instances
+>>> instances = Instances([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])
+>>> motif = Motif(alphabet='ACGT', instances=instances)
+
+please use
+
+>>> from Bio.Align import Alignment
+>>> alignment = Alignment([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])
+>>> motif = Motif(alphabet='ACGT', alignment=alignment)
+
+The ``instances`` attribute of the ``Motif`` class  in ``Bio.motifs`` was
+deprecated in release 1.82. Instead of ``mymotif.instances``, please use
+``mymotif.alignment.sequences``.
+
 
 Bio.Restriction.RanaConfig
 --------------------------
