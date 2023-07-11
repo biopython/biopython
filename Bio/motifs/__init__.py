@@ -328,15 +328,14 @@ class Motif:
             self.counts = matrix.FrequencyPositionMatrix(alphabet, counts)
             self.length = self.counts.length
         elif alignment is not None:
+            length = alignment.length
+            frequencies = alignment.frequencies
+            for letter in alphabet:
+                if letter not in frequencies:
+                    frequencies[letter] = np.zeros(length, int)
+            self.counts = matrix.FrequencyPositionMatrix(alphabet, frequencies)
             self.alignment = alignment
-            block = np.array(alignment, dtype="U")
-            self.length = block.shape[1]
-            counts = {letter: [0] * self.length for letter in alphabet}
-            for row in block:
-                for position, letter in enumerate(row):
-                    counts[letter][position] += 1
-            self.counts = matrix.FrequencyPositionMatrix(alphabet, counts)
-            self.length = self.counts.length
+            self.length = length
         else:
             self.counts = None
             self.alignment = None
