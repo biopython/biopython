@@ -159,3 +159,9 @@ class IsoelectricPoint:
             next_pH = (min_ + max_) / 2
             return self.pi(next_pH, min_, max_)
         return pH
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()

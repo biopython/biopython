@@ -37,25 +37,15 @@ to this?
 \section{Maintaining a distribution for a platform}
 \label{sec:maintain_dist}
 
-We currently provide source code archives (suitable for any OS, if you have the right build tools installed), and Windows Installers which are just click and run.  This covers all the major operating systems.
+We currently provide source code archives (suitable for any OS, if you have the right build tools installed), and pre-compiled wheels via \url{https://github.com/biopython/biopython-wheels} to cover the major operating systems.
 
-Most major Linux distributions have volunteers who take these source code releases, and compile them into packages for Linux users to easily install (taking care of dependencies etc).  This is really great and we are of course very grateful.  If you would like to contribute to this work, please find out more about how your Linux distribution handles this.
+Most major Linux distributions have volunteers who take these source code releases, and compile them into packages for Linux users to easily install (taking care of dependencies etc).  This is really great and we are of course very grateful.  If you would like to contribute to this work, please find out more about how your Linux distribution handles this. There is a similar process for conda packages via \url{https://github.com/conda-forge/biopython-feedstock} thanks to the conda-forge team.
 
 Below are some tips for certain platforms to maybe get people started with helping out:
 
 \begin{description}
 
-\item[Windows] -- Windows products typically have a nice graphical installer that installs all of the essential components in the right place. We use Distutils to create a installer of this type fairly easily.
-
-You must first make sure you have a C compiler on your Windows computer, and that you can compile and install things (this is the hard bit - see the Biopython installation instructions for info on how to do this).
-
-Once you are setup with a C compiler, making the installer just requires doing:
-
-\begin{minted}{console}
-$ python setup.py bdist_wininst
-\end{minted}
-
-Now you've got a Windows installer. Congrats!  At the moment we have no trouble shipping installers built on 32 bit windows.  If anyone would like to look into supporting 64 bit Windows that would be great.
+  \item[Windows] -- You must first make sure you have a C compiler on your Windows computer, and that you can compile and install things (this is the hard bit - see the Biopython installation instructions for info on how to do this).
 
   \item[RPMs] -- RPMs are pretty popular package systems on some Linux platforms. There is lots of documentation on RPMs available at \url{http://www.rpm.org} to help you get started with them. To create an RPM for your platform is really easy. You just need to be able to build the package from source (having a C compiler that works is thus essential) -- see the Biopython installation instructions for more info on this.
 

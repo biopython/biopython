@@ -576,7 +576,7 @@ class InsdcScanner:
                         # sub features...
                         annotations["raw_location"] = location_string.replace(" ", "")
 
-                        for (qualifier_name, qualifier_data) in qualifiers:
+                        for qualifier_name, qualifier_data in qualifiers:
                             if (
                                 qualifier_data is not None
                                 and qualifier_data[0] == '"'
@@ -1706,7 +1706,21 @@ class GenBankScanner(InsdcScanner):
                     while True:
                         line = next(line_iter)
                         if line[0 : self.GENBANK_INDENT] == self.GENBANK_SPACER:
-                            if lineage_data or ";" in line:
+                            if (
+                                lineage_data
+                                or ";" in line
+                                or line[self.GENBANK_INDENT :].strip()
+                                in (
+                                    "Bacteria.",
+                                    "Archaea.",
+                                    "Eukaryota.",
+                                    "Unclassified.",
+                                    "Viruses.",
+                                    "cellular organisms.",
+                                    "other sequences.",
+                                    "unclassified sequences.",
+                                )
+                            ):
                                 lineage_data += " " + line[self.GENBANK_INDENT :]
                             elif line[self.GENBANK_INDENT :].strip() == ".":
                                 # No lineage data, just . place holder

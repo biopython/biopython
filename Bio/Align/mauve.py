@@ -16,7 +16,9 @@ from Bio.SeqRecord import SeqRecord
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
-    """Mauve/XMFA alignment writer."""
+    """Mauve xmfa alignment writer."""
+
+    fmt = "Mauve"
 
     def __init__(self, target, metadata=None, identifiers=None):
         """Create an AlignmentWriter object.
@@ -32,13 +34,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                           then the alignments object to be written must have
                           an attribute `identifiers`.
         """
-        super().__init__(target, mode="w")
+        super().__init__(target)
         self._metadata = metadata
         self._identifiers = identifiers
 
-    def write_header(self, alignments):
+    def write_header(self, stream, alignments):
         """Write the file header to the output file."""
-        stream = self.stream
         metadata = self._metadata
         format_version = metadata.get("FormatVersion", "Mauve1")
         line = f"#FormatVersion {format_version}\n"
@@ -69,7 +70,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             line = f"#BackboneFile\t{backbone_file}\n"
             stream.write(line)
 
-    def write_file(self, alignments):
+    def write_file(self, stream, alignments):
         """Write a file with the alignments, and return the number of alignments.
 
         alignments - A Bio.Align.mauve.AlignmentIterator object.
@@ -90,7 +91,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 raise ValueError("alignments do not have an attribute `identifiers`")
             else:
                 self._identifiers = identifiers
-        count = interfaces.AlignmentWriter.write_file(self, alignments)
+        count = interfaces.AlignmentWriter.write_file(self, stream, alignments)
         return count
 
     def format_alignment(self, alignment):
@@ -137,14 +138,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Mauve xmfa alignment iterator."""
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="Mauve")
+    fmt = "Mauve"
 
     def _read_header(self, stream):
         metadata = {}

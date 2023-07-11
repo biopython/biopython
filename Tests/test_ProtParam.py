@@ -165,9 +165,9 @@ class ProtParamTest(unittest.TestCase):
         for analysis in self.analyses:
             helix, turn, sheet = analysis.secondary_structure_fraction()
             # Old test used numbers rounded to two digits, so use the same
-            self.assertAlmostEqual(helix, 0.28, 2)
-            self.assertAlmostEqual(turn, 0.26, 2)
-            self.assertAlmostEqual(sheet, 0.25, 2)
+            self.assertAlmostEqual(helix, 0.33, 2)
+            self.assertAlmostEqual(turn, 0.29, 2)
+            self.assertAlmostEqual(sheet, 0.37, 2)
 
     def test_protein_scale(self):
         """Calculate the Kite Doolittle scale."""

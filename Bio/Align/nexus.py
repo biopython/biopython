@@ -30,28 +30,55 @@ class AlignmentWriter(interfaces.AlignmentWriter):
     You are expected to call this class via Bio.Align.write().
     """
 
-    def write_file(self, alignments):
+    fmt = "Nexus"
+
+    def __init__(self, target, interleave=None):
+        """Create an AlignmentWriter object.
+
+        Arguments:
+         - target     - output stream or file name
+         - interleave - if None (default): interleave if columns > 1000
+                        if True: use interleaved format
+                        if False: do not use interleaved format
+
+        """
+        super().__init__(target)
+        self.interleave = interleave
+
+    def write_file(self, stream, alignments):
         """Write a file with the alignments, and return the number of alignments.
 
         alignments - A list or iterator returning Alignment objects
         """
-        count = super().write_file(alignments)
+        count = super().write_file(stream, alignments)
         if count != 1:
             raise ValueError("Expected to write 1 alignment; wrote %d" % count)
         return count
-
-    def write_header(self, alignments):
-        """Use this to write the file header."""
-        stream = self.stream
-        stream.write("#NEXUS\n")
 
     def format_alignment(self, alignment, interleave=None):
         """Return a string with a single alignment in the Nexus format.
 
         Creates an empty Nexus object, adds the sequences
         and then gets Nexus to prepare the output.
-        Default interleave behavior: Interleave if columns > 1000
-        --> Override with interleave=[True/False]
+
+         - alignment  - An Alignment object
+         - interleave - if None (default): interleave if columns > 1000
+                        if True: use interleaved format
+                        if False: do not use interleaved format
+        """
+        stream = StringIO()
+        self.write_alignment(alignment, stream, interleave)
+        stream.seek(0)
+        return stream.read()
+
+    def write_alignment(self, alignment, stream, interleave=None):
+        """Write a single alignment to the output file.
+
+        - alignment  - An Alignment object
+        - stream     - output stream
+        - interleave - if None (default): interleave if columns > 1000
+                       if True: use interleaved format
+                       if False: do not use interleaved format
         """
         nseqs, length = alignment.shape
         if nseqs == 0:
@@ -80,10 +107,19 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         # Note: MrBayes may choke on large alignments if not interleaved
         if interleave is None:
             interleave = columns > 1000
-        stream = StringIO()
         n.write_nexus_data(stream, interleave=interleave)
-        stream.seek(0)
-        return stream.read()
+
+    def write_alignments(self, stream, alignments):
+        """Write alignments to the output file, and return the number of alignments.
+
+        alignments - A list or iterator returning Alignment objects
+        """
+        count = 0
+        interleave = self.interleave
+        for alignment in alignments:
+            self.write_alignment(alignment, stream, interleave=interleave)
+            count += 1
+        return count
 
     def _classify_mol_type_for_nexus(self, alignment):
         """Return 'protein', 'dna', or 'rna' based on records' molecule type (PRIVATE).
@@ -110,14 +146,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Nexus alignment iterator."""
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="Nexus")
+    fmt = "Nexus"
 
     def _read_header(self, stream):
         try:
@@ -159,5 +188,4 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         ]
         coordinates = Alignment.infer_coordinates(aligned_seqs)
         alignment = Alignment(records, coordinates)
-        self._close()
         return alignment

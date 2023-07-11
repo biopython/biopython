@@ -295,6 +295,21 @@ class TestSeqStringMethods(unittest.TestCase):
                 self.assertEqual(a.strip(char), str(a).strip(str_char))
                 self.assertEqual(a.lstrip(char), str(a).lstrip(str_char))
                 self.assertEqual(a.rstrip(char), str(a).rstrip(str_char))
+                try:
+                    removeprefix = str(a).removeprefix(str_char)
+                    removesuffix = str(a).removesuffix(str_char)
+                except AttributeError:
+                    if str(a).startswith(str_char):
+                        removeprefix = str(a)[len(str_char) :]
+                    else:
+                        removeprefix = str(a)
+                    if str_char and str(a).endswith(str_char):
+                        removesuffix = str(a)[: -len(str_char)]
+                    else:
+                        removesuffix = str(a)
+
+                self.assertEqual(a.removeprefix(char), removeprefix)
+                self.assertEqual(a.removesuffix(char), removesuffix)
 
     def test_finding_characters(self):
         for a in self.dna + self.rna + self.nuc + self.protein:

@@ -459,7 +459,6 @@ class TestSelf(unittest.TestCase):
 
             def fileiter(handle):
                 for record in SffIterator(handle):
-                    # print(record.id)
                     i = record.id
 
             self.assertRaises(ValueError, fileiter, handle)

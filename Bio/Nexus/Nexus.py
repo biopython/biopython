@@ -707,7 +707,6 @@ class Nexus:
                 file_contents = input
                 self.filename = "input_string"
             else:
-                print(input.strip()[:50])
                 raise NexusError(f"Unrecognized input: {input[:100]} ...") from None
         file_contents = file_contents.strip()
         if file_contents.startswith("#NEXUS"):

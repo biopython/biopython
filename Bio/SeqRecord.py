@@ -603,6 +603,9 @@ class SeqRecord:
         """
         return char in self.seq
 
+    def __bytes__(self):
+        return bytes(self.seq)
+
     def __str__(self):
         """Return a human readable summary of the record and its annotation (string).
 

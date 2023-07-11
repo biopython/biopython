@@ -111,9 +111,12 @@ def real_test():
                 "Check the fonts needed by ReportLab if you want "
                 "bitmaps from Bio.Graphics\n" + str(err)
             ) from None
+        elif str(err).startswith("cannot import desired renderPM backend rlPyCairo"):
+            raise MissingExternalDependencyError(
+                "Reportlab module rlPyCairo unavailable\n" + str(err)
+            ) from None
         else:
             raise
-
     return True
 
 

@@ -20,6 +20,7 @@ See also the Seq_ wiki and the chapter in our tutorial:
 
 """
 import array
+import collections
 import numbers
 import warnings
 
@@ -273,6 +274,32 @@ class SequenceDataAbstractBaseClass(ABC):
         If the argument is omitted or None, strip trailing ASCII whitespace.
         """
         return bytes(self).rstrip(chars)
+
+    def removeprefix(self, prefix):
+        """Remove the prefix if present."""
+        # Want to do just this, but need Python 3.9+
+        # return bytes(self).removeprefix(prefix)
+        data = bytes(self)
+        try:
+            return data.removeprefix(prefix)
+        except AttributeError:
+            if data.startswith(prefix):
+                return data[len(prefix) :]
+            else:
+                return data
+
+    def removesuffix(self, suffix):
+        """Remove the suffix if present."""
+        # Want to do just this, but need Python 3.9+
+        # return bytes(self).removesuffix(suffix)
+        data = bytes(self)
+        try:
+            return data.removesuffix(suffix)
+        except AttributeError:
+            if data.startswith(suffix):
+                return data[: -len(suffix)]
+            else:
+                return data
 
     def upper(self):
         """Return a copy of data with all ASCII characters converted to uppercase."""
@@ -766,6 +793,9 @@ class _SeqAbstractBaseClass(ABC):
 
         >>> my_rna.find("AUG", 4)
         15
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, _SeqAbstractBaseClass):
             sub = bytes(sub)
@@ -804,6 +834,9 @@ class _SeqAbstractBaseClass(ABC):
 
         >>> my_rna.rfind("AUG", end=15)
         3
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, _SeqAbstractBaseClass):
             sub = bytes(sub)
@@ -844,7 +877,7 @@ class _SeqAbstractBaseClass(ABC):
         15
 
         This method performs the same search as the ``find`` method.  However,
-        if the subsequence is not found, ``find`` returns -1 which ``index``
+        if the subsequence is not found, ``find`` returns -1 while ``index``
         raises a ValueError:
 
         >>> my_rna.index("T")
@@ -853,6 +886,9 @@ class _SeqAbstractBaseClass(ABC):
         ValueError: ...
         >>> my_rna.find("T")
         -1
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, MutableSeq):
             sub = sub._data
@@ -904,6 +940,9 @@ class _SeqAbstractBaseClass(ABC):
         ValueError: ...
         >>> my_rna.rfind("T")
         -1
+
+        See the ``search`` method to find the locations of multiple subsequences
+        at the same time.
         """
         if isinstance(sub, MutableSeq):
             sub = sub._data
@@ -917,6 +956,47 @@ class _SeqAbstractBaseClass(ABC):
                 % type(sub)
             )
         return self._data.rindex(sub, start, end)
+
+    def search(self, subs):
+        """Search the substrings subs in self and yield the index and substring found.
+
+        Arguments:
+         - subs - a list of strings, Seq, MutableSeq, bytes, or bytearray
+           objects containing the substrings to search for.
+
+        >>> from Bio.Seq import Seq
+        >>> dna = Seq("GTCATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAGTTG")
+        >>> matches = dna.search(["CC", Seq("ATTG"), "ATTG", Seq("CCC")])
+        >>> for index, substring in matches:
+        ...     print(index, substring)
+        ...
+        7 CC
+        9 ATTG
+        20 CC
+        34 CC
+        34 CCC
+        35 CC
+        """
+        subdict = collections.defaultdict(set)
+        for index, sub in enumerate(subs):
+            if isinstance(sub, (_SeqAbstractBaseClass, bytearray)):
+                sub = bytes(sub)
+            elif isinstance(sub, str):
+                sub = sub.encode("ASCII")
+            elif not isinstance(sub, bytes):
+                raise TypeError(
+                    "subs[%d]: a Seq, MutableSeq, str, bytes, or bytearray object is required, not '%s'"
+                    % (index, type(sub))
+                )
+            length = len(sub)
+            subdict[length].add(sub)
+        for start in range(len(self) - 1):
+            for length, subs in subdict.items():
+                stop = start + length
+                for sub in subs:
+                    if self._data[start:stop] == sub:
+                        yield (start, sub.decode())
+                        break
 
     def startswith(self, prefix, start=None, end=None):
         """Return True if the sequence starts with the given prefix, False otherwise.
@@ -1222,6 +1302,91 @@ class _SeqAbstractBaseClass(ABC):
             raise TypeError(
                 "argument must be None or a string, Seq, MutableSeq, or bytes-like object"
             ) from None
+        if inplace:
+            if not isinstance(self._data, bytearray):
+                raise TypeError("Sequence is immutable")
+            self._data[:] = data
+            return self
+        else:
+            return self.__class__(data)
+
+    def removeprefix(self, prefix, inplace=False):
+        """Return a new Seq object with prefix (left) removed.
+
+        This behaves like the python string method of the same name.
+
+        e.g. Removing a start Codon:
+
+        >>> from Bio.Seq import Seq
+        >>> my_seq = Seq("ATGGTGTGTGT")
+        >>> my_seq
+        Seq('ATGGTGTGTGT')
+        >>> my_seq.removeprefix('ATG')
+        Seq('GTGTGTGT')
+
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if
+        ``removeprefix`` is called on a ``Seq`` object with ``inplace=True``.
+
+        See also the removesuffix method.
+        """
+        if isinstance(prefix, _SeqAbstractBaseClass):
+            prefix = bytes(prefix)
+        elif isinstance(prefix, str):
+            prefix = prefix.encode("ASCII")
+        try:
+            data = self._data.removeprefix(prefix)
+        except TypeError:
+            raise TypeError(
+                "argument must be a string, Seq, MutableSeq, or bytes-like object"
+            ) from None
+        except AttributeError:
+            # Fall back for pre-Python 3.9
+            data = self._data
+            if data.startswith(prefix):
+                data = data[len(prefix) :]
+        if inplace:
+            if not isinstance(self._data, bytearray):
+                raise TypeError("Sequence is immutable")
+            self._data[:] = data
+            return self
+        else:
+            return self.__class__(data)
+
+    def removesuffix(self, suffix, inplace=False):
+        """Return a new Seq object with suffix (right) removed.
+
+        This behaves like the python string method of the same name.
+
+        e.g. Removing a stop codon:
+
+        >>> from Bio.Seq import Seq
+        >>> my_seq = Seq("GTGTGTGTTAG")
+        >>> my_seq
+        Seq('GTGTGTGTTAG')
+        >>> stop_codon = Seq("TAG")
+        >>> my_seq.removesuffix(stop_codon)
+        Seq('GTGTGTGT')
+
+        As ``Seq`` objects are immutable, a ``TypeError`` is raised if
+        ``removesuffix`` is called on a ``Seq`` object with ``inplace=True``.
+
+        See also the removeprefix method.
+        """
+        if isinstance(suffix, _SeqAbstractBaseClass):
+            suffix = bytes(suffix)
+        elif isinstance(suffix, str):
+            suffix = suffix.encode("ASCII")
+        try:
+            data = self._data.removesuffix(suffix)
+        except TypeError:
+            raise TypeError(
+                "argument must be a string, Seq, MutableSeq, or bytes-like object"
+            ) from None
+        except AttributeError:
+            # Fall back for pre-Python 3.9
+            data = self._data
+            if data.endswith(suffix):
+                data = data[: -len(suffix)]
         if inplace:
             if not isinstance(self._data, bytearray):
                 raise TypeError("Sequence is immutable")

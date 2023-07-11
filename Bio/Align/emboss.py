@@ -22,14 +22,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     call the "pairs" and "simple" formats.
     """
 
-    def __init__(self, source):
-        """Create an Iterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="EMBOSS")
+    fmt = "EMBOSS"
 
     def _read_header(self, stream):
         try:

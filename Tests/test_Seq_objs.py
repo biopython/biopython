@@ -399,6 +399,30 @@ class StringMethodTests(unittest.TestCase):
             s.lstrip("ACGT", inplace=True)
         self.assertEqual(str(cm.exception), "Sequence is immutable")
 
+    def test_str_removeprefix(self):
+        """Check matches the python string removeprefix method."""
+        self.assertRaises(TypeError, Seq("ACGT").removeprefix, 7)
+        self.assertRaises(TypeError, Seq("ACGT").removeprefix, 7.0)
+        self.assertRaises(TypeError, Seq("ACGT").removeprefix, None)
+        self.assertRaises(
+            UndefinedSequenceError, Seq(data=None, length=1000).removeprefix, 7.0
+        )
+        self.assertRaises(
+            UndefinedSequenceError, Seq(data=None, length=1000).removeprefix, "A"
+        )
+
+    def test_str_removesuffix(self):
+        """Check matches the python string removesuffix method."""
+        self.assertRaises(TypeError, Seq("ACGT").removesuffix, 7)
+        self.assertRaises(TypeError, Seq("ACGT").removesuffix, 7.0)
+        self.assertRaises(TypeError, Seq("ACGT").removesuffix, None)
+        self.assertRaises(
+            UndefinedSequenceError, Seq(data=None, length=1000).removesuffix, 7.0
+        )
+        self.assertRaises(
+            UndefinedSequenceError, Seq(data=None, length=1000).removesuffix, "A"
+        )
+
     def test_str_rstrip(self):
         """Check matches the python string rstrip method."""
         self._test_method("rstrip")
@@ -586,6 +610,29 @@ class StringMethodTests(unittest.TestCase):
                             self.assertEqual(example1[i:j:step], str1[i:j:step])
         u = Seq(None, length=0)
         self.assertEqual(u, "")
+
+    def test_search(self):
+        """Check the search method of Seq objects."""
+        s = Seq("ACGTACGT")
+        matches = s.search(["CGT", Seq("CG"), b"ACGT", bytearray(b"GTA")])
+        self.assertEqual(next(matches), (0, "ACGT"))
+        self.assertEqual(next(matches), (1, "CGT"))
+        self.assertEqual(next(matches), (1, "CG"))
+        self.assertEqual(next(matches), (2, "GTA"))
+        self.assertEqual(next(matches), (4, "ACGT"))
+        self.assertEqual(next(matches), (5, "CGT"))
+        self.assertEqual(next(matches), (5, "CG"))
+        self.assertRaises(StopIteration, next, matches)
+        s = MutableSeq("ACGTACGT")
+        matches = s.search(["CGT", Seq("CG"), b"ACGT", bytearray(b"GTA")])
+        self.assertEqual(next(matches), (0, "ACGT"))
+        self.assertEqual(next(matches), (1, "CGT"))
+        self.assertEqual(next(matches), (1, "CG"))
+        self.assertEqual(next(matches), (2, "GTA"))
+        self.assertEqual(next(matches), (4, "ACGT"))
+        self.assertEqual(next(matches), (5, "CGT"))
+        self.assertEqual(next(matches), (5, "CG"))
+        self.assertRaises(StopIteration, next, matches)
 
     def test_MutableSeq_setitem(self):
         """Check setting sequence contents of a MutableSeq object."""

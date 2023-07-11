@@ -26,7 +26,7 @@ unparsable file.
 
 You are expected to use this module via the Bio.Align functions.
 """
-import numpy
+import numpy as np
 
 
 from Bio.Align import Alignment
@@ -37,6 +37,8 @@ from Bio.SeqRecord import SeqRecord
 
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the Exonerate cigar and vulgar file format."""
+
+    fmt = "Exonerate"
 
     def __init__(self, target, fmt="vulgar"):
         """Create an AlignmentWriter object.
@@ -50,7 +52,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                        Default value is 'vulgar'.
 
         """
-        super().__init__(target, mode="w")
+        super().__init__(target)
         if fmt == "vulgar":
             self.format_alignment = self._format_alignment_vulgar
         elif fmt == "cigar":
@@ -60,16 +62,22 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 "argument fmt should be 'vulgar' or 'cigar' (received %s)" % fmt
             )
 
-    def write_header(self, alignments):
+    def write_header(self, stream, alignments):
         """Write the header."""
-        commandline = alignments.metadata.get("Command line", "")
-        hostname = alignments.metadata.get("Hostname", "")
-        self.stream.write(f"Command line: [{commandline}]\n")
-        self.stream.write(f"Hostname: [{hostname}]\n")
+        try:
+            metadata = alignments.metadata
+        except AttributeError:
+            commandline = ""
+            hostname = ""
+        else:
+            commandline = metadata.get("Command line", "")
+            hostname = metadata.get("Hostname", "")
+        stream.write(f"Command line: [{commandline}]\n")
+        stream.write(f"Hostname: [{hostname}]\n")
 
-    def write_footer(self):
+    def write_footer(self, stream):
         """Write the footer."""
-        self.stream.write("-- completed exonerate analysis\n")
+        stream.write("-- completed exonerate analysis\n")
 
     def _format_alignment_cigar(self, alignment):
         """Return a string with a single alignment formatted as a cigar line."""
@@ -80,7 +88,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         target_end = coordinates[0, -1]
         query_start = coordinates[1, 0]
         query_end = coordinates[1, -1]
-        steps = coordinates[:, 1:] - coordinates[:, :-1]
+        steps = np.diff(coordinates)
         query = alignment.query
         target = alignment.target
         try:
@@ -113,7 +121,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         elif query_start > query_end:
             query_strand = "-"
             steps[1, :] = -steps[1, :]
-        score = alignment.score
+        score = format(alignment.score, "g")
         words = [
             "cigar:",
             query_id,
@@ -124,7 +132,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             str(target_start),
             str(target_end),
             target_strand,
-            str(score),
+            score,
         ]
         try:
             operations = alignment.operations
@@ -272,7 +280,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         target_end = coordinates[0, -1]
         query_start = coordinates[1, 0]
         query_end = coordinates[1, -1]
-        steps = coordinates[:, 1:] - coordinates[:, :-1]
+        steps = np.diff(coordinates)
         query = alignment.query
         target = alignment.target
         try:
@@ -305,7 +313,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         elif query_start > query_end:
             query_strand = "-"
             steps[1, :] = -steps[1, :]
-        score = alignment.score
+        score = format(alignment.score, "g")
         words = [
             "vulgar:",
             query_id,
@@ -417,14 +425,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     of matches and mismatches are stored as attributes of each alignment.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="Exonerate")
+    fmt = "Exonerate"
 
     def _read_header(self, stream):
         self.metadata = {}
@@ -454,15 +455,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_start = int(words[5])
         target_end = int(words[6])
         target_strand = words[7]
-        score = int(words[8])
+        score = float(words[8])
         target_seq = Seq(None, length=target_end)
         query_seq = Seq(None, length=query_end)
-        target = SeqRecord(target_seq, id=target_id)
-        query = SeqRecord(query_seq, id=query_id)
+        target = SeqRecord(target_seq, id=target_id, description="")
+        query = SeqRecord(query_seq, id=query_id, description="")
         qs = 0
         ts = 0
         n = (len(words) - 8) // 2
-        coordinates = numpy.empty((2, n + 1), int)
+        coordinates = np.empty((2, n + 1), int)
         coordinates[0, 0] = ts
         coordinates[1, 0] = qs
         for i, (operation, step) in enumerate(zip(words[9::2], words[10::2])):
@@ -501,7 +502,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         elif query_strand == ".":  # protein
             if target_strand != ".":
                 # protein to dna alignment; integer division, but round up:
-                coordinates[1, :] = (coordinates[1, :] + 2) // 3
+                coordinates[1, :] = -(coordinates[1, :] // -3)
             coordinates[1, :] += query_start
             query.annotations["molecule_type"] = "protein"
         alignment = Alignment([target, query], coordinates)
@@ -518,16 +519,16 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_start = int(words[5])
         target_end = int(words[6])
         target_strand = words[7]
-        score = int(words[8])
+        score = float(words[8])
         target_seq = Seq(None, length=target_end)
         query_seq = Seq(None, length=query_end)
-        target = SeqRecord(target_seq, id=target_id)
-        query = SeqRecord(query_seq, id=query_id)
+        target = SeqRecord(target_seq, id=target_id, description="")
+        query = SeqRecord(query_seq, id=query_id, description="")
         ops = words[9::3]
         qs = 0
         ts = 0
         n = (len(words) - 8) // 3 + ops.count("N")
-        coordinates = numpy.empty((2, n + 1), int)
+        coordinates = np.empty((2, n + 1), int)
         coordinates[0, 0] = ts
         coordinates[1, 0] = qs
         operations = bytearray(n)

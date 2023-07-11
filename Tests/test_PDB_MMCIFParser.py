@@ -54,6 +54,21 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(len(structure), 1)
         self.assertEqual(len(f_structure), 1)
 
+        parser_lab_res = MMCIFParser(auth_residues=False, QUIET=True)
+        fast_parser_lab_res = FastMMCIFParser(auth_residues=False, QUIET=True)
+        parser_lab_chain = MMCIFParser(auth_chains=False, QUIET=True)
+        fast_parser_lab_chain = FastMMCIFParser(auth_chains=False, QUIET=True)
+
+        structure_lr = parser_lab_res.get_structure("example", "PDB/1A8O.cif")
+        f_structure_lr = fast_parser_lab_res.get_structure("example", "PDB/1A8O.cif")
+        structure_lc = parser_lab_chain.get_structure("example", "PDB/1A8O.cif")
+        f_structure_lc = fast_parser_lab_chain.get_structure("example", "PDB/1A8O.cif")
+
+        self.assertEqual(len(list(structure_lr.get_atoms())), 556)
+        self.assertEqual(len(list(f_structure_lr.get_atoms())), 556)
+        self.assertEqual(len(list(structure_lc.get_atoms())), 644)
+        self.assertEqual(len(list(f_structure_lc.get_atoms())), 644)
+
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             # ==========================================================
             # Check that serial_num (model column) is stored properly

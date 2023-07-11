@@ -13,6 +13,7 @@ import gzip
 import os
 import tempfile
 from random import shuffle
+import io
 
 from Bio import bgzf
 
@@ -464,6 +465,28 @@ class BgzfTests(unittest.TestCase):
             with bgzf.open("GenBank/cor6_6.gb.bgz", mode) as decompressed:
                 with self.assertRaises(TypeError):
                     list(bgzf.BgzfBlocks(decompressed))
+
+    def test_reader_with_binary_fileobj(self):
+        """A BgzfReader must accept a binary mode file object."""
+        reader = bgzf.BgzfReader(fileobj=io.BytesIO())
+        self.assertEqual(0, reader.tell())
+
+    def test_reader_with_non_binary_fileobj(self):
+        """A BgzfReader must raise ValueError on a non-binary file object."""
+        error = "^fileobj not opened in binary mode$"
+        with self.assertRaisesRegex(ValueError, error):
+            bgzf.BgzfReader(fileobj=io.StringIO())
+
+    def test_writer_with_binary_fileobj(self):
+        """A BgzfWriter must accept a binary mode file object."""
+        writer = bgzf.BgzfWriter(fileobj=io.BytesIO())
+        self.assertEqual(0, writer.tell())
+
+    def test_writer_with_non_binary_fileobj(self):
+        """A BgzfWriter must raise ValueError on a non-binary file object."""
+        error = "^fileobj not opened in binary mode$"
+        with self.assertRaisesRegex(ValueError, error):
+            bgzf.BgzfWriter(fileobj=io.StringIO())
 
 
 if __name__ == "__main__":

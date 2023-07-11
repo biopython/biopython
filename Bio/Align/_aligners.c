@@ -1771,7 +1771,6 @@ set_alphabet(Aligner* self, PyObject* alphabet)
                                 * is 0x10ffff = 1114111 */
                 break;
             }
-            case PyUnicode_WCHAR_KIND:
             default:
                 PyErr_SetString(PyExc_ValueError, "could not interpret alphabet");
                 return -1;
@@ -6656,7 +6655,6 @@ sequence_converter(PyObject* argument, void* pointer)
                 indices = convert_4bytes_to_ints(mapping, n, s);
                 break;
             }
-            case PyUnicode_WCHAR_KIND:
             default:
                 PyErr_SetString(PyExc_ValueError, "could not interpret unicode data");
                 return 0;

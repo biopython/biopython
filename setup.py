@@ -47,7 +47,7 @@ if "bdist_wheel" in sys.argv:
 
 
 # Make sure we have the right Python version.
-MIN_PY_VER = (3, 7)
+MIN_PY_VER = (3, 8)
 if sys.version_info[:2] < MIN_PY_VER:
     sys.stderr.write(
         ("ERROR: Biopython requires Python %i.%i or later. " % MIN_PY_VER)
@@ -243,10 +243,10 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
         "Topic :: Software Development :: Libraries :: Python Modules",

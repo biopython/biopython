@@ -15,6 +15,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Aaron Rosenfeld <https://github.com/arosenfeld>
 - Adam Kurkiewicz <adam@kurkiewicz.pl>
 - Adam Novak <https://github.com/AdamNovak>
+- Adam Vandergriff <https://github.com/acvander>
 - Adhemar Zerlotini <https://github.com/azneto>
 - Adil Iqbal <https://github.com/Adil-Iqbal>
 - Adrian Altenhoff <https://github.com/alpae>
@@ -37,10 +38,13 @@ please open an issue on GitHub or mention it on the mailing list.
 - Andrey Raspopov <https://github.com/Andrey-Raspopov>
 - Andrius Merkys <https://github.com/merkys>
 - Anne Pajon <ap one two at sanger ac uk>
+- Antonio Jesús Gálvez Muñoz <https://github.com/PyCreatine>
 - Anthony Bradley <https://github.com/abradle>
 - Antony Lee <https://github.com/anntzer>
+- Antonio Trande <https://github.com/sagitter>
 - Anuj Sharma <https://github.com/xulesc>
 - Ariel Aptekmann <https://github.com/aralap>
+- Arpan Sahoo <https://github.com/arpansahoo>
 - Artemi Bendandi <https://github.com/artbendandi>
 - Arup Ghosh <https://github.com/arupgsh>
 - Austin Varela <https://github.com/austinv11>
@@ -52,6 +56,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Ben Fulton <https://github.com/benfulton>
 - Ben Morris <https://github.com/bendmorris>
 - Ben Woodcroft <https://github.com/wwood>
+- Benedict Carling <https://github.com/Benedict-Carling>
 - Benjamin Rowell <https://github.com/benjaminr>
 - Benjamin Vaisvil <https://github.com/bvaisvil>
 - Bernhard C. Thiel <https://github.com/Bernhard10>
@@ -68,6 +73,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Brian Osborne <https://github.com/bosborne>
 - Bryan Lunt <https://github.com/bryan-lunt>
 - Caio Fontes <https://github.com/Caiofcas>
+- Cam McMenamie <https://github.com/kamurani>
 - Carlos Pena <https://github.com/carlosp420>
 - Carlos Ríos <https://github.com/Crosvera>
 - Catherine Lesuisse <https://github.com/kaskales>
@@ -262,6 +268,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Ralf Stephan <https://github.com/rwst>
 - Rasmus Fonseca <https://github.com/RasmusFonseca>
 - rht <https://github.com/rht>
+- Ricardas Ralys
 - Richard Neher <https://github.com/rneher>
 - Rob Miller <https://github.com/rob-miller>
 - Robert Ernst <https://github.com/rernst>
@@ -283,6 +290,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Shoichiro Kawauchi <https://github.com/lacrosse91>
 - Shuichiro MAKIGAKI <https://github.com/shuichiro-makigaki>
 - Shyam Saladi <https://github.com/smsaladi>
+- Siddharta Morion <https://github.com/siddhartasr10>
 - Siong Kong <https://github.com/siongkong>
 - Sjoerd de Vries <https://github.com/sjdv1982>
 - Soroush Saffari <https://github.com/sorsaffari>
@@ -308,6 +316,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Tiago Antao <https://github.com/tiagoantao>
 - Tianyi Shi <https://github.com/TianyiShi2001>
 - Tim Burke <https://github.com/tipabu>
+- Tommy Carstensen <https://github.com/tommycarstensen>
 - Tyghe Vallard <https://github.com/necrolyte2>
 - Uri Laserson <https://github.com/laserson>
 - Uwe Schmitt <https://github.com/uweschmitt>
@@ -316,6 +325,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Victor Lin <https://github.com/victorlin>
 - Vini Salazar <https://github.com/vinisalazar>
 - Vishesh Soni <https://github.com/vishesh2802>
+- Vladislav Kuznetsov <https://github.com/vladkuz-vk>
 - Walter Gillett <https://github.com/wgillett>
 - Wayne Decatur <https://github.com/fomightez>
 - Wibowo Arindrarto <https://github.com/bow>
@@ -325,9 +335,11 @@ please open an issue on GitHub or mention it on the mailing list.
 - Yanbo Ye <https://github.com/lijax>
 - Yasar L. Ahmed <https://github.com/pyahmed>
 - Yi Hsiao <https://github.com/hsiaoyi0504>
+- Yiming Qu <https://github.com/whatever60>
 - Yogesh Kulkarni <https://https://github.com/yogeshhk>
 - Yu Huang <krocea at domain yahoo.com.cn>
 - Yves Bastide <ybastide at domain irisa.fr>
 - Zachary Sailer <https://github.com/Zsailer>
 - Zaid Ur-Rehman <https://github.com/zaidurrehman>
 - Zheng Ruan <https://github.com/zruan>
+- Farhan Khan <https://github.com/BabaYaga1221>

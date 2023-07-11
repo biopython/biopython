@@ -118,6 +118,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     https://en.wikipedia.org/wiki/Stockholm_format
     """
 
+    fmt = "Stockholm"
+
     gf_mapping = {
         "ID": "identifier",
         "AC": "accession",
@@ -205,15 +207,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         "OC": "organism classification",
         "LO": "look",
     }
-
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="Stockholm")
 
     @staticmethod
     def _store_per_file_annotations(alignment, gf, rows):
@@ -373,7 +366,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 sequence = aligned_sequence.replace("-", "")
                 aligned_sequences.append(aligned_sequence)
                 seq = Seq(sequence)
-                record = SeqRecord(seq, id=seqname)
+                record = SeqRecord(seq, id=seqname, description="")
                 records.append(record)
             elif line.startswith("#=GF "):
                 # Generic per-File annotation, free text
@@ -455,6 +448,8 @@ class AlignmentWriter(interfaces.AlignmentWriter):
     gs_mapping = {value: key for key, value in AlignmentIterator.gs_mapping.items()}
     gr_mapping = {value: key for key, value in AlignmentIterator.gr_mapping.items()}
     gc_mapping = {value: key for key, value in AlignmentIterator.gc_mapping.items()}
+
+    fmt = "Stockholm"
 
     def format_alignment(self, alignment):
         """Return a string with a single alignment in the Stockholm format."""
@@ -540,7 +535,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             for key, value in record.annotations.items():
                 feature = self.gs_mapping[key]
                 lines.append(f"#=GS {name}  {feature} {value}\n")
-            if record.description != "<unknown description>":
+            if record.description:
                 lines.append(f"#=GS {name}  DE {record.description}\n")
             for value in record.dbxrefs:
                 lines.append(f"#=GS {name}  DR {value}\n")

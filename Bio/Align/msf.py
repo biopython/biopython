@@ -25,20 +25,15 @@ from Bio import BiopythonParserWarning
 class AlignmentIterator(interfaces.AlignmentIterator):
     """GCG MSF alignment iterator."""
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="MSF")
+    fmt = "MSF"
 
     def _read_next_alignment(self, stream):
         try:
             line = next(stream)
         except StopIteration:
-            raise ValueError("Empty file.") from None
+            if stream.tell() == 0:
+                raise ValueError("Empty file.") from None
+            return
         # Whitelisted headers we know about.
         known_headers = ["!!NA_MULTIPLE_ALIGNMENT", "!!AA_MULTIPLE_ALIGNMENT", "PileUp"]
         # Examples in "Molecular Biology Software Training Manual GCG version 10"
@@ -206,12 +201,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         else:
             raise ValueError("End of file where expecting sequence data.")
 
+        # skip any remaining empty lines
+        for line in stream:
+            assert line.strip() == ""
+
         length = max(len(seq) for seq in seqs)
         if length != aln_length:
             warnings.warn(
                 "GCG MSF headers said alignment length %i, but found %i"
                 % (aln_length, length),
                 BiopythonParserWarning,
+                stacklevel=2,
             )
             aln_length = length
 
@@ -237,11 +237,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         alignment = Alignment(records, coordinates)
         # This will check alignment lengths are self-consistent:
-        rows, columns = alignment.shape
+        columns = alignment.length
         if columns != aln_length:
             raise ValueError(
                 "GCG MSF headers said alignment length %i, but found %i"
                 % (aln_length, columns)
             )
-        self._close()
         return alignment

@@ -212,7 +212,7 @@ class FeatureTable(SeqFeature):
           frameshifting
         - ZN_FING:  zinc finger region
 
-     - qualifiers   A dictionary of additional information, which may include
+     - ``qualifiers``: a dictionary of additional information, which may include
        the feature evidence and free-text notes. While SwissProt includes the
        feature identifier code (FTId) as a qualifier, it is stored as the
        attribute ID of the FeatureTable object.
@@ -406,7 +406,7 @@ def _read(handle):
             # **HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
             pass
         else:
-            raise SwissProtParserError(f"Unknown keyword '{key}' found", line=line)
+            raise SwissProtParserError(f"Unknown keyword {key!r} found", line=line)
     if record:
         raise ValueError("Unexpected end of stream.")
 
@@ -416,7 +416,9 @@ def _read_gn(record):
         tokens = text.rstrip("; ").split("; ")
         gene_name = {}
         for token in tokens:
-            key, value = token.strip().split("=")
+            # value may include an equals sign, e.g.
+            # GN   Name=Lacc1=POX4 {ECO:0000313|EMBL:KDQ27217.1};
+            key, value = token.strip().split("=", 1)
             if key == "Name":
                 gene_name["Name"] = value
             else:
@@ -447,13 +449,13 @@ def _read_id(record, line):
     # check if the data class is one of the allowed values
     allowed = ("STANDARD", "PRELIMINARY", "IPI", "Reviewed", "Unreviewed")
     if record.data_class not in allowed:
-        message = f"Unrecognized data class '{record.data_class}'"
+        message = f"Unrecognized data class {record.data_class!r}"
         raise SwissProtParserError(message, line=line)
 
     # molecule_type should be 'PRT' for PRoTein
     # Note that has been removed in recent releases (set to None)
     if record.molecule_type not in (None, "PRT"):
-        message = f"Unrecognized molecule type '{record.molecule_type}'"
+        message = f"Unrecognized molecule type {record.molecule_type!r}"
         raise SwissProtParserError(message, line=line)
 
 
@@ -805,7 +807,7 @@ def _read_ft(record, line):
                     value = value[1:]
                 if qualifier_type in feature.qualifiers:
                     raise ValueError(
-                        f"Feature qualifier '{qualifier_type}' already exists for feature"
+                        f"Feature qualifier {qualifier_type!r} already exists for feature"
                     )
                 feature.qualifiers[qualifier_type] = value
             return

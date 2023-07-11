@@ -737,8 +737,6 @@ class JASPAR5:
         if where_clauses:
             sql = "".join([sql, " where ", " and ".join(where_clauses)])
 
-        # print("sql = %s" % sql)
-
         cur.execute(sql)
         rows = cur.fetchall()
 

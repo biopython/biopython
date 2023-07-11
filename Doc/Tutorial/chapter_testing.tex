@@ -91,7 +91,7 @@ If you are interested in using Tox, you could start with the example
 
 \begin{minted}{text}
 [tox]
-envlist = pypy,py37,py38,py39
+envlist = pypy,py38,py39
 
 [testenv]
 changedir = Tests
@@ -102,8 +102,8 @@ deps =
 \end{minted}
 
 Using the template above, executing \texttt{tox} will test your Biopython
-code against PyPy, Python 3.7, 3.8 and 3.9. It assumes that those Pythons'
-executables are named ``python3.7`` for Python 3.7, and so on.
+code against PyPy, Python 3.8 and 3.9. It assumes that those Pythons'
+executables are named ``python3.8`` for Python 3.8, and so on.
 
 
 \section{Writing tests}
@@ -140,7 +140,7 @@ test_Clustalw ... ok
 Ran 107 tests in 86.127 seconds
 \end{minted}
 
-\subsection{Writing a test using {\texttt unittest}}
+\subsection{Writing a test using \texttt{unittest}}
 
 The \verb|unittest|-framework has been included with Python since version
 2.1, and is documented in the Python Library Reference (which I know you

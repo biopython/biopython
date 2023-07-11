@@ -71,7 +71,7 @@ methods that allow it to be used as a dictionary.
 #             T - 00, C - 01, A - 10, G - 11. The first base is in the most
 #             significant 2-bit byte; the last base is in the least significan
 #             2 bits. For example, the sequence TCAG is represented as 00011011.
-import numpy
+import numpy as np
 
 from Bio.Seq import Seq
 from Bio.Seq import SequenceDataAbstractBaseClass
@@ -130,7 +130,7 @@ class _TwoBitSequenceData(SequenceDataAbstractBaseClass):
             if str(exception) == "seek of closed file":
                 raise ValueError("cannot retrieve sequence: file is closed") from None
             raise
-        data = numpy.fromfile(stream, dtype="uint8", count=byteSize)
+        data = np.fromfile(stream, dtype="uint8", count=byteSize)
         sequence = _twoBitIO.convert(
             data, start, end, step, self.nBlocks, self.maskBlocks
         )
@@ -147,14 +147,14 @@ class _TwoBitSequenceData(SequenceDataAbstractBaseClass):
         """Remove the sequence mask."""
         data = _TwoBitSequenceData(self.stream, self.offset, self.length)
         data.nBlocks = self.nBlocks[:, :]
-        data.maskBlocks = numpy.empty((0, 2), dtype="uint32")
+        data.maskBlocks = np.empty((0, 2), dtype="uint32")
         return data
 
     def lower(self):
         """Extend the sequence mask to the full sequence."""
         data = _TwoBitSequenceData(self.stream, self.offset, self.length)
         data.nBlocks = self.nBlocks[:, :]
-        data.maskBlocks = numpy.array([[0, self.length]], dtype="uint32")
+        data.maskBlocks = np.array([[0, self.length]], dtype="uint32")
         return data
 
 
@@ -210,16 +210,16 @@ class TwoBitIterator(SequenceIterator):
             sequence = _TwoBitSequenceData(stream, offset, dnaSize)
             data = stream.read(4)
             nBlockCount = int.from_bytes(data, byteorder, signed=False)
-            nBlockStarts = numpy.fromfile(stream, dtype=dtype, count=nBlockCount)
-            nBlockSizes = numpy.fromfile(stream, dtype=dtype, count=nBlockCount)
-            sequence.nBlocks = numpy.empty((nBlockCount, 2), dtype="uint32")
+            nBlockStarts = np.fromfile(stream, dtype=dtype, count=nBlockCount)
+            nBlockSizes = np.fromfile(stream, dtype=dtype, count=nBlockCount)
+            sequence.nBlocks = np.empty((nBlockCount, 2), dtype="uint32")
             sequence.nBlocks[:, 0] = nBlockStarts
             sequence.nBlocks[:, 1] = nBlockStarts + nBlockSizes
             data = stream.read(4)
             maskBlockCount = int.from_bytes(data, byteorder, signed=False)
-            maskBlockStarts = numpy.fromfile(stream, dtype=dtype, count=maskBlockCount)
-            maskBlockSizes = numpy.fromfile(stream, dtype=dtype, count=maskBlockCount)
-            sequence.maskBlocks = numpy.empty((maskBlockCount, 2), dtype="uint32")
+            maskBlockStarts = np.fromfile(stream, dtype=dtype, count=maskBlockCount)
+            maskBlockSizes = np.fromfile(stream, dtype=dtype, count=maskBlockCount)
+            sequence.maskBlocks = np.empty((maskBlockCount, 2), dtype="uint32")
             sequence.maskBlocks[:, 0] = maskBlockStarts
             sequence.maskBlocks[:, 1] = maskBlockStarts + maskBlockSizes
             data = stream.read(4)

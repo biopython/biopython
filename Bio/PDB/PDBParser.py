@@ -9,7 +9,7 @@
 import warnings
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -217,7 +217,7 @@ class PDBParser:
                         "Invalid or missing coordinate(s) at line %i."
                         % global_line_counter
                     ) from None
-                coord = numpy.array((x, y, z), "f")
+                coord = np.array((x, y, z), "f")
 
                 # occupancy & B factor
                 if not self.is_pqr:
@@ -338,7 +338,7 @@ class PDBParser:
                     )
                 ]
                 # U's are scaled by 10^4
-                anisou_array = (numpy.array(anisou, "f") / 10000.0).astype("f")
+                anisou_array = (np.array(anisou, "f") / 10000.0).astype("f")
                 structure_builder.set_anisou(anisou_array)
             elif record_type == "MODEL ":
                 try:
@@ -375,7 +375,7 @@ class PDBParser:
                     )
                 ]
                 # U sigma's are scaled by 10^4
-                siguij_array = (numpy.array(siguij, "f") / 10000.0).astype("f")
+                siguij_array = (np.array(siguij, "f") / 10000.0).astype("f")
                 structure_builder.set_siguij(siguij_array)
             elif record_type == "SIGATM":
                 # standard deviation of atomic positions
@@ -389,7 +389,7 @@ class PDBParser:
                         line[60:66],
                     )
                 ]
-                sigatm_array = numpy.array(sigatm, "f")
+                sigatm_array = np.array(sigatm, "f")
                 structure_builder.set_sigatm(sigatm_array)
             elif record_type not in allowed_records:
                 warnings.warn(

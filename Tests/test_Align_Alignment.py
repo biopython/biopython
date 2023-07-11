@@ -7,6 +7,7 @@
 
 import os
 import unittest
+from io import StringIO
 
 try:
     import numpy
@@ -18,9 +19,22 @@ except ImportError:
     ) from None
 
 from Bio import Align, SeqIO
-from Bio.Seq import Seq, reverse_complement
+from Bio.Seq import Seq, reverse_complement, translate
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import gc_fraction
+
+
+class TestAlignment(unittest.TestCase):
+    def test_empty_alignment(self):
+        alignment = Align.Alignment([])
+        self.assertEqual(
+            repr(alignment),
+            "<Alignment object (0 rows x 0 columns) at 0x%x>" % id(alignment),
+        )
+        self.assertEqual(len(alignment), 0)
+        self.assertEqual(len(alignment.sequences), 0)
+        self.assertEqual(alignment.shape, (0, 0))
+        self.assertEqual(alignment.coordinates.shape, (0, 0))
 
 
 class TestPairwiseAlignment(unittest.TestCase):
@@ -60,6 +74,23 @@ query             7 A-C-GG-AAC--  0
 """,
                 msg=msg,
             )
+        frequencies = alignment.frequencies
+        self.assertEqual(list(frequencies.keys()), ["A", "C", "G"])
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["A"], numpy.array([2, 1, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["C"], numpy.array([0, 0, 2, 1, 0, 0, 0, 0, 0, 2, 1, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["G"], numpy.array([0, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 1])
+            )
+        )
         self.assertAlmostEqual(alignment.score, 6.0)
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.shape, (2, 12))
@@ -135,7 +166,7 @@ query             7 A-C-GG-AAC--  0
         self.assertAlmostEqual(subalignment.score, 6.0, msg=msg)
         if strand == "forward":
             self.assertEqual(
-                str(alignment[:, :]),
+                str(subalignment),
                 """\
 target            0 AACCGGGA-CCG 11
                   0 |-|-||-|-|-- 12
@@ -145,7 +176,7 @@ query             0 A-C-GG-AAC--  7
             )
         if strand == "reverse":
             self.assertEqual(
-                str(alignment[:, :]),
+                str(subalignment),
                 """\
 target            0 AACCGGGA-CCG 11
                   0 |-|-||-|-|-- 12
@@ -573,6 +604,23 @@ query             0 -AG 2
                 numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]]),
             )
         )
+        frequencies = subalignment.frequencies
+        self.assertEqual(list(frequencies.keys()), ["A", "C", "G"])
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["A"], numpy.array([1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["C"], numpy.array([0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["G"], numpy.array([0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1])
+            )
+        )
         subalignment = alignment[:1, :]
         self.assertEqual(len(subalignment.sequences), 1)
         sequence = subalignment.sequences[0]
@@ -586,6 +634,23 @@ query             0 -AG 2
             numpy.array_equal(
                 subalignment.coordinates,
                 numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]]),
+            )
+        )
+        frequencies = subalignment.frequencies
+        self.assertEqual(list(frequencies.keys()), ["A", "C", "G"])
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["A"], numpy.array([1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["C"], numpy.array([0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["G"], numpy.array([0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1])
             )
         )
         subalignment = alignment[:]
@@ -1277,6 +1342,44 @@ T  12.0  16.5   7.0 145.0
         self.assertEqual(alignment.sequences[1], query)
         self.assertEqual(alignment.target, target)
         self.assertEqual(alignment.query, query)
+
+    def test_reverse_complement(self):
+        target = SeqRecord(Seq(self.target), id="seqA")
+        query = SeqRecord(Seq(self.query), id="seqB")
+        sequences = [target, query]
+        coordinates = self.forward_coordinates
+        alignment = Align.Alignment(sequences, coordinates)
+        alignment.column_annotations = {
+            "score": [2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 1, 1],
+            "letter": "ABCDEFGHIJKL",
+        }
+        self.assertEqual(
+            str(alignment),
+            """\
+seqA              0 AACCGGGA-CCG 11
+                  0 |-|-||-|-|-- 12
+seqB              0 A-C-GG-AAC--  7
+""",
+        )
+        self.assertEqual(
+            alignment.column_annotations["score"], [2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 1, 1]
+        )
+        self.assertEqual(alignment.column_annotations["letter"], "ABCDEFGHIJKL")
+        rc_alignment = alignment.reverse_complement()
+        self.assertEqual(
+            str(rc_alignment),
+            """\
+<unknown          0 CGG-TCCCGGTT 11
+                  0 --|-|-||-|-| 12
+<unknown          0 --GTT-CC-G-T  7
+""",
+        )
+        self.assertEqual(len(rc_alignment.column_annotations), 2)
+        self.assertEqual(
+            rc_alignment.column_annotations["score"],
+            [1, 1, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2],
+        )
+        self.assertEqual(rc_alignment.column_annotations["letter"], "LKJIHGFEDCBA")
 
 
 class TestMultipleAlignment(unittest.TestCase):
@@ -2007,13 +2110,13 @@ gi|627329        40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
 gi|627328        40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
 gi|627329        40 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
 
-gi|627328        90
-gi|627328        92
-gi|627328        90
-gi|627328        90
-gi|627329        94
-gi|627328        94
-gi|627329       100
+gi|627328        90 
+gi|627328        92 
+gi|627328        90 
+gi|627328        90 
+gi|627329        94 
+gi|627328        94 
+gi|627329       100 
 """,
         )
         self.assertEqual(
@@ -2040,13 +2143,13 @@ gi|627328        40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
 gi|627329        40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
 gi|627329        40 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
 
-gi|627328        92
-gi|627328        90
-gi|627328        90
-gi|627328        90
-gi|627328        94
-gi|627329        94
-gi|627329       100
+gi|627328        92 
+gi|627328        90 
+gi|627328        90 
+gi|627328        90 
+gi|627328        94 
+gi|627329        94 
+gi|627329       100 
 """,
         )
         self.assertEqual(
@@ -2073,13 +2176,13 @@ gi|627328        40 AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
 gi|627328        40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
 gi|627328        40 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
 
-gi|627329       100
-gi|627329        94
-gi|627328        94
-gi|627328        90
-gi|627328        90
-gi|627328        90
-gi|627328        92
+gi|627329       100 
+gi|627329        94 
+gi|627328        94 
+gi|627328        90 
+gi|627328        90 
+gi|627328        90 
+gi|627328        92 
 """,
         )
         self.assertEqual(
@@ -2112,13 +2215,13 @@ seq5             40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
 seq6             40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
 seq7             40 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
 
-seq1             92
-seq2             90
-seq3             90
-seq4             90
-seq5             94
-seq6             94
-seq7            100
+seq1             92 
+seq2             90 
+seq3             90 
+seq4             90 
+seq5             94 
+seq6             94 
+seq7            100 
 """,
         )
         self.assertEqual(
@@ -2137,13 +2240,13 @@ seq3             40 AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
 seq2             40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
 seq1             40 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
 
-seq7            100
-seq6             94
-seq5             94
-seq4             90
-seq3             90
-seq2             90
-seq1             92
+seq7            100 
+seq6             94 
+seq5             94 
+seq4             90 
+seq3             90 
+seq2             90 
+seq1             92 
 """,
         )
         self.assertEqual(
@@ -2162,13 +2265,13 @@ seq1             40 AAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATA
 seq6             40 AAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATA
 seq2             40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATA
 
-seq3             90
-seq7            100
-seq4             90
-seq5             94
-seq1             92
-seq6             94
-seq2             90
+seq3             90 
+seq7            100 
+seq4             90 
+seq5             94 
+seq1             92 
+seq6             94 
+seq2             90 
 """,
         )
         self.assertEqual(
@@ -2187,13 +2290,13 @@ seq4             40 AAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATA
 seq7             40 AAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATA
 seq3             40 AAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATA
 
-seq2             90
-seq6             94
-seq1             92
-seq5             94
-seq4             90
-seq7            100
-seq3             90
+seq2             90 
+seq6             94 
+seq1             92 
+seq5             94 
+seq4             90 
+seq7            100 
+seq3             90 
 """,
         )
         self.assertEqual(
@@ -2244,9 +2347,9 @@ class TestAlignment_format(unittest.TestCase):
         self.assertEqual(
             self.alignment.format("a2m"),
             """\
->Test1seq <unknown description>
+>Test1seq
 .................................................................AGTTACAATAACTGACGAAGCTAAGTAGGCTACTAATTAACGTCATCAACCTAATACATAGCACTTAGAAAAAAGTGAAGTAAGAAAATATAAAATAATAAAAGGGTGGGTTATCAATTGATAGTGTAAATCATCGTATTCCGGTGATATACCCTACCACAAAAACTCAAACCGACTTGATTCAAATCATCTCAATAAATTAGCGCCAAAATAATGAAAAAAATAATAACAAACAAAAACAAACCAAAATAAGAAAAAACATTACGCAAAACATAATAATTTACTCTTCGTTATTGTATTAACAAATCAAAGAGCTGAATTTTGATCACCTGCTAATACTACTTTCTGTATTGATCCTATATCAACGTAAACAAAGATACTAATAATTAACTAAAAGTACGTTCATCGATCGTGTTCGTTGACGAAGAAGAGCTCTATCTCCGGCGGAGCAAAGAAAACGATCTGTCTCCGTCGTAACACACGGTCGCTAGAGAAACTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCCGGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCGTGGTGACGTCAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTT.
->AT3G20900.1-SEQ <unknown description>
+>AT3G20900.1-SEQ
 atgaacaaagtagcgaggaagaacaaaacatcaggtgaacaaaaaaaaaactcaatccacatcaaAGTTACAATAACTGACGAAGCTAAGTAGGCTAGAAATTAAAGTCATCAACCTAATACATAGCACTTAGAAAAAAGTGAAGCAAGAAAATATAAAATAATAAAAGGGTGGGTTATCAATTGATAGTGTAAATCATAGTTGATTTTTGATATACCCTACCACAAAAACTCAAACCGACTTGATTCAAATCATCTCAAAAAACAAGCGCCAAAATAATGAAAAAAATAATAACAAAAACAAACAAACCAAAATAAGAAAAAACATTACGCAAAACATAATAATTTACTCTTCGTTATTGTATTAACAAATCAAAGAGATGAATTTTGATCACCTGCTAATACTACTTTCTGTATTGATCCTATATCAAAAAAAAAAAAGATACTAATAATTAACTAAAAGTACGTTCATCGATCGTGTGCGTTGACGAAGAAGAGCTCTATCTCCGGCGGAGCAAAGAAAACGATCTGTCTCCGTCGTAACACACAGTTTTTCGAGACCCTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCCGGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCCTGGTGACGTCAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAg
 """,
         )
@@ -2313,7 +2416,7 @@ AT3G20900.1-SEQ                     CAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAG
     def test_bigbed(self):
         self.assertRaisesRegex(
             ValueError,
-            "Formatting alignments has not yet been implemented for the bigbed format",
+            "bigbed is a binary file format",
             self.alignment.format,
             "bigbed",
         )
@@ -2321,7 +2424,7 @@ AT3G20900.1-SEQ                     CAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAG
     def test_bigmaf(self):
         self.assertRaisesRegex(
             ValueError,
-            "Formatting alignments has not yet been implemented for the bigmaf format",
+            "bigmaf is a binary file format",
             self.alignment.format,
             "bigmaf",
         )
@@ -2329,7 +2432,7 @@ AT3G20900.1-SEQ                     CAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAG
     def test_bigpsl(self):
         self.assertRaisesRegex(
             ValueError,
-            "Formatting alignments has not yet been implemented for the bigpsl format",
+            "bigpsl is a binary file format",
             self.alignment.format,
             "bigpsl",
         )
@@ -2367,9 +2470,9 @@ cigar: AT3G20900.1-SEQ 0 687 + Test1seq 0 621 + 100 I 65 M 213 M 23 M 30 M 9 M 1
         self.assertEqual(
             self.alignment.format("fasta"),
             """\
->Test1seq <unknown description>
+>Test1seq
 -----------------------------------------------------------------AGTTACAATAACTGACGAAGCTAAGTAGGCTACTAATTAACGTCATCAACCTAATACATAGCACTTAGAAAAAAGTGAAGTAAGAAAATATAAAATAATAAAAGGGTGGGTTATCAATTGATAGTGTAAATCATCGTATTCCGGTGATATACCCTACCACAAAAACTCAAACCGACTTGATTCAAATCATCTCAATAAATTAGCGCCAAAATAATGAAAAAAATAATAACAAACAAAAACAAACCAAAATAAGAAAAAACATTACGCAAAACATAATAATTTACTCTTCGTTATTGTATTAACAAATCAAAGAGCTGAATTTTGATCACCTGCTAATACTACTTTCTGTATTGATCCTATATCAACGTAAACAAAGATACTAATAATTAACTAAAAGTACGTTCATCGATCGTGTTCGTTGACGAAGAAGAGCTCTATCTCCGGCGGAGCAAAGAAAACGATCTGTCTCCGTCGTAACACACGGTCGCTAGAGAAACTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCCGGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCGTGGTGACGTCAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTT-
->AT3G20900.1-SEQ <unknown description>
+>AT3G20900.1-SEQ
 ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGTGAACAAAAAAAAAACTCAATCCACATCAAAGTTACAATAACTGACGAAGCTAAGTAGGCTAGAAATTAAAGTCATCAACCTAATACATAGCACTTAGAAAAAAGTGAAGCAAGAAAATATAAAATAATAAAAGGGTGGGTTATCAATTGATAGTGTAAATCATAGTTGATTTTTGATATACCCTACCACAAAAACTCAAACCGACTTGATTCAAATCATCTCAAAAAACAAGCGCCAAAATAATGAAAAAAATAATAACAAAAACAAACAAACCAAAATAAGAAAAAACATTACGCAAAACATAATAATTTACTCTTCGTTATTGTATTAACAAATCAAAGAGATGAATTTTGATCACCTGCTAATACTACTTTCTGTATTGATCCTATATCAAAAAAAAAAAAGATACTAATAATTAACTAAAAGTACGTTCATCGATCGTGTGCGTTGACGAAGAAGAGCTCTATCTCCGGCGGAGCAAAGAAAACGATCTGTCTCCGTCGTAACACACAGTTTTTCGAGACCCTTTGCTTCTTCGGCGCCGGTGGACACGTCAGCATCTCCGGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCCTGGTGACGTCAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAG
 """,
         )
@@ -2502,6 +2605,646 @@ AT3G20900.1-SEQ                 ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGTGAACAAAAAAAA
             "Formatting alignments has not yet been implemented for the tabular format",
             self.alignment.format,
             "tabular",
+        )
+
+
+class TestAlignment_pairwise_format(unittest.TestCase):
+    def setUp(self):
+        aligner = Align.PairwiseAligner("blastn")
+        aligner.mode = "local"
+        seqA = "AAAAACCCGGGTTTT"
+        seqB = "CCCTGGG"
+        alignments = aligner.align(seqA, seqB)
+        self.assertEqual(len(alignments), 2)
+        self.plain_alignments = list(alignments)
+        seqA = Seq("AAAAACCCGGGTTTT")
+        seqB = Seq("CCCTGGG")
+        alignments = aligner.align(seqA, seqB)
+        self.assertEqual(len(alignments), 2)
+        self.seq_alignments = list(alignments)
+        alignments = aligner.align(seqA, seqB)
+        alignments = list(alignments)
+        for alignment in alignments:
+            alignment.sequences[0] = SeqRecord(seqA, id="A", description="sequence A")
+            alignment.sequences[1] = SeqRecord(seqB, id="B", description="sequence B")
+        self.seqrecord_alignments = alignments
+
+    def test_a2m(self):
+        for alignment in self.plain_alignments:
+            alignment.column_annotations = {"state": "DDDDDD"}
+        for alignment in self.seq_alignments:
+            alignment.column_annotations = {"state": "DDDDDD"}
+        for alignment in self.seqrecord_alignments:
+            alignment.column_annotations = {"state": "DDDDDD"}
+        self.check("a2m", self.plain_alignments)
+        self.check("a2m", self.seq_alignments)
+        self.check(
+            "a2m", self.seqrecord_alignments, ("A", "B"), ("sequence A", "sequence B")
+        )
+
+    def test_bed(self):
+        self.check("bed", self.plain_alignments, ("target", "query"))
+        self.check("bed", self.seq_alignments, ("target", "query"))
+        self.check("bed", self.seqrecord_alignments, ("A", "B"))
+
+    def test_clustal(self):
+        self.check("clustal", self.plain_alignments, ("sequence_0", "sequence_1"))
+        self.check("clustal", self.seq_alignments, ("sequence_0", "sequence_1"))
+        self.check("clustal", self.seqrecord_alignments, ("A", "B"))
+
+    def test_exonerate(self):
+        self.check("exonerate", self.plain_alignments, ("target", "query"))
+        self.check("exonerate", self.seq_alignments, ("target", "query"))
+        self.check("exonerate", self.seqrecord_alignments, ("A", "B"))
+
+    def test_fasta(self):
+        self.check("fasta", self.plain_alignments)
+        self.check("fasta", self.seq_alignments)
+        self.check(
+            "fasta", self.seqrecord_alignments, ("A", "B"), ("sequence A", "sequence B")
+        )
+
+    def test_maf(self):
+        self.check("maf", self.plain_alignments, ("sequence_0", "sequence_1"))
+        self.check("maf", self.seq_alignments, ("sequence_0", "sequence_1"))
+        self.check("maf", self.seqrecord_alignments, ("A", "B"))
+
+    def test_phylip(self):
+        self.check("phylip", self.plain_alignments)
+        self.check("phylip", self.seq_alignments)
+        self.check("phylip", self.seqrecord_alignments, ("A", "B"))
+
+    def test_psl(self):
+        self.check("psl", self.plain_alignments, ("target", "query"))
+        self.check("psl", self.seq_alignments, ("target", "query"))
+        self.check("psl", self.seqrecord_alignments, ("A", "B"))
+
+    def test_sam(self):
+        self.check("sam", self.plain_alignments, ("target", "query"))
+        self.check("sam", self.seq_alignments, ("target", "query"))
+        self.check("sam", self.seqrecord_alignments, ("A", "B"))
+
+    def check(self, fmt, alignments, ids=("", ""), descriptions=("", "")):
+        stream = StringIO()
+        Align.write(alignments[0], stream, fmt)
+        stream.seek(0)
+        alignment = Align.read(stream, fmt)
+        self.assertEqual(alignment.sequences[0].id, ids[0])
+        self.assertEqual(alignment.sequences[1].id, ids[1])
+        self.assertEqual(alignment.sequences[0].description, descriptions[0])
+        self.assertEqual(alignment.sequences[1].description, descriptions[1])
+
+
+class TestAlign_out_of_order(unittest.TestCase):
+    seq1 = "AACCCAAAACCAAAAATTTAAATTTTAAA"
+    seq2 = "TGTTTTTCCCCC"
+    coordinates = numpy.array(
+        [[16, 19, 22, 26, 2, 5, 9, 11], [0, 3, 3, 7, 7, 10, 10, 12]]
+    )
+    forward_alignment = Align.Alignment([seq1, seq2], coordinates)
+    coordinates = numpy.array(
+        [[13, 10, 7, 3, 27, 24, 20, 18], [0, 3, 3, 7, 7, 10, 10, 12]]
+    )
+    reverse_alignment = Align.Alignment([reverse_complement(seq1), seq2], coordinates)
+    # fmt: off
+    coordinates = numpy.array(
+        [
+            [16, 19, 22, 26, 2,  2,  5,  9, 11],
+            [13, 10,  7,  3, 3, 27, 24, 20, 18],
+            [ 0,  3,  3,  7, 7,  7, 10, 10, 12],
+        ]
+    )
+    # fmt: on
+    multiple_alignment = Align.Alignment(
+        [seq1, reverse_complement(seq1), seq2], coordinates
+    )
+    del seq1
+    del seq2
+    del coordinates
+    forward_array = numpy.array(forward_alignment, "U")
+    reverse_array = numpy.array(reverse_alignment, "U")
+    multiple_array = numpy.array(multiple_alignment, "U")
+
+    def test_array(self):
+        alignments = (self.forward_alignment, self.reverse_alignment)
+        arrays = (self.forward_array, self.reverse_array)
+        for alignment, a in zip(alignments, arrays):
+            self.assertEqual(alignment.shape, (2, 19))
+            self.assertTrue(
+                numpy.array_equal(
+                    a,
+                    # fmt: off
+# flake8: noqa
+numpy.array([['T', 'T', 'T', 'A', 'A', 'A', 'T', 'T', 'T', 'T', 'C', 'C', 'C', 'A', 'A', 'A', 'A', 'C', 'C'],
+             ['T', 'G', 'T', '-', '-', '-', 'T', 'T', 'T', 'T', 'C', 'C', 'C', '-', '-', '-', '-', 'C', 'C']],
+            dtype='U')
+                    # fmt: on
+                )
+            )
+        self.assertEqual(self.multiple_alignment.shape, (3, 19))
+        self.assertTrue(
+            numpy.array_equal(
+                self.multiple_array,
+                # fmt: off
+# flake8: noqa
+numpy.array([['T', 'T', 'T', 'A', 'A', 'A', 'T', 'T', 'T', 'T', 'C', 'C', 'C', 'A', 'A', 'A', 'A', 'C', 'C'],
+             ['T', 'T', 'T', 'A', 'A', 'A', 'T', 'T', 'T', 'T', 'C', 'C', 'C', 'A', 'A', 'A', 'A', 'C', 'C'],
+             ['T', 'G', 'T', '-', '-', '-', 'T', 'T', 'T', 'T', 'C', 'C', 'C', '-', '-', '-', '-', 'C', 'C']],
+            dtype='U')
+                # fmt: on
+            )
+        )
+
+    def test_row(self):
+        alignments = (self.forward_alignment, self.reverse_alignment)
+        arrays = (self.forward_array, self.reverse_array)
+        for alignment, a in zip(alignments, arrays):
+            n = len(alignment)
+            for i in range(n):
+                s = "".join(a[i, :])
+                self.assertEqual(alignment[i], s)
+            for i in range(-n, 0):
+                s = "".join(a[i, :])
+                self.assertEqual(alignment[i], s)
+        alignment = self.multiple_alignment
+        a = self.multiple_array
+        n = len(alignment)
+        for i in range(n):
+            s = "".join(a[i, :])
+            self.assertEqual(alignment[i], s)
+        for i in range(-n, 0):
+            s = "".join(a[i, :])
+            self.assertEqual(alignment[i], s)
+
+    def test_row_col(self):
+        alignments = (self.forward_alignment, self.reverse_alignment)
+        arrays = (self.forward_array, self.reverse_array)
+        for alignment, a in zip(alignments, arrays):
+            n, m = alignment.shape
+            for i in range(n):
+                for j in range(m):
+                    self.assertEqual(alignment[i, j], a[i, j])
+                for j in range(-m, 0):
+                    self.assertEqual(alignment[i, j], a[i, j])
+        alignment = self.multiple_alignment
+        a = self.multiple_array
+        n, m = alignment.shape
+        for i in range(n):
+            for j in range(m):
+                self.assertEqual(alignment[i, j], a[i, j])
+            for j in range(-m, 0):
+                self.assertEqual(alignment[i, j], a[i, j])
+
+    def test_row_slice(self):
+        alignments = (self.forward_alignment, self.reverse_alignment)
+        arrays = (self.forward_array, self.reverse_array)
+        for alignment, a in zip(alignments, arrays):
+            n, m = alignment.shape
+            for i in range(n):
+                s = "".join(a[i, :])
+                for j in range(m):
+                    self.assertEqual(alignment[i, j:], s[j:])
+                for j in range(-m, 0):
+                    self.assertEqual(alignment[i, j:], s[j:])
+                for j in range(m):
+                    self.assertEqual(alignment[i, j:-1], s[j:-1])
+                for j in range(-m, 0):
+                    self.assertEqual(alignment[i, j:-1], s[j:-1])
+        alignment = self.multiple_alignment
+        a = self.multiple_array
+        n, m = alignment.shape
+        for i in range(n):
+            s = "".join(a[i, :])
+            for j in range(m):
+                self.assertEqual(alignment[i, j:], s[j:])
+            for j in range(-m, 0):
+                self.assertEqual(alignment[i, j:], s[j:])
+            for j in range(m):
+                self.assertEqual(alignment[i, j:-1], s[j:-1])
+            for j in range(-m, 0):
+                self.assertEqual(alignment[i, j:-1], s[j:-1])
+
+    def test_row_iterable(self):
+        alignments = (self.forward_alignment, self.reverse_alignment)
+        arrays = (self.forward_array, self.reverse_array)
+        for alignment, a in zip(alignments, arrays):
+            n = len(alignment)
+            for i in range(n):
+                jj = (1, 2, 6, 8)
+                s = "".join([a[i, j] for j in jj])
+                self.assertEqual(alignment[i, jj], s)
+                jj = (3, 3, 2, 7)
+                s = "".join([a[i, j] for j in jj])
+                self.assertEqual(alignment[i, jj], s)
+        alignment = self.multiple_alignment
+        a = self.multiple_array
+        n = len(alignment)
+        for i in range(n):
+            jj = (1, 2, 6, 8)
+            s = "".join([a[i, j] for j in jj])
+            self.assertEqual(alignment[i, jj], s)
+            jj = (3, 3, 2, 7)
+            s = "".join([a[i, j] for j in jj])
+            self.assertEqual(alignment[i, jj], s)
+
+    def test_rows_col(self):
+        alignments = (self.forward_alignment, self.reverse_alignment)
+        arrays = (self.forward_array, self.reverse_array)
+        for alignment, a in zip(alignments, arrays):
+            n, m = alignment.shape
+            for j in range(m):
+                s = "".join(a[:, j])
+                self.assertEqual(alignment[:, j], s)
+            for j in range(-m, 0):
+                s = "".join(a[:, j])
+                self.assertEqual(alignment[:, j], s)
+        alignment = self.multiple_alignment
+        a = self.multiple_array
+        n, m = alignment.shape
+        for j in range(m):
+            s = "".join(a[:, j])
+            self.assertEqual(alignment[:, j], s)
+        for j in range(-m, 0):
+            s = "".join(a[:, j])
+            self.assertEqual(alignment[:, j], s)
+
+    def test_rows_cols(self):
+        alignment = self.forward_alignment[:, 1:]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           17 TTAAATTTT 26
+                  0 .|---||||
+query             1 GT---TTTT 7
+
+target            2 CCCAAAACC 11
+                  9 |||----|| 18
+query             7 CCC----CC 12
+""",
+        )
+        alignment = self.forward_alignment[:, :-1]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           16 TTTAAATTTT 26
+                  0 |.|---||||
+query             0 TGT---TTTT 7
+
+target            2 CCCAAAAC 10
+                 10 |||----| 18
+query             7 CCC----C 11
+""",
+        )
+        alignment = self.forward_alignment[:, 2:-2]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           18 TAAATTTT 26
+                  0 |---||||
+query             2 T---TTTT 7
+
+target            2 CCCAAAA  9
+                  8 |||---- 15
+query             7 CCC---- 10
+""",
+        )
+        alignment = self.reverse_alignment[:, 1:]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           12 TTAAATTTT 3
+                  0 .|---||||
+query             1 GT---TTTT 7
+
+target           27 CCCAAAACC 18
+                  9 |||----|| 18
+query             7 CCC----CC 12
+""",
+        )
+        alignment = self.reverse_alignment[:, :-1]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           13 TTTAAATTTT 3
+                  0 |.|---||||
+query             0 TGT---TTTT 7
+
+target           27 CCCAAAAC 19
+                 10 |||----| 18
+query             7 CCC----C 11
+""",
+        )
+        alignment = self.reverse_alignment[:, 2:-2]
+        self.assertEqual(
+            str(alignment),
+            """\
+target           11 TAAATTTT 3
+                  0 |---||||
+query             2 T---TTTT 7
+
+target           27 CCCAAAA 20
+                  8 |||---- 15
+query             7 CCC---- 10
+""",
+        )
+
+    def test_aligned(self):
+        self.assertTrue(
+            numpy.array_equal(
+                self.forward_alignment.aligned,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[[16, 19],
+                              [22, 26],
+                              [ 2,  5],
+                              [ 9, 11]],
+
+                             [[ 0,  3],
+                              [ 3,  7],
+                              [ 7, 10],
+                              [10, 12]]])
+                # fmt: on
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                self.reverse_alignment.aligned,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[[13, 10],
+                              [ 7,  3],
+                              [27, 24],
+                              [20, 18]],
+
+                             [[ 0,  3],
+                              [ 3,  7],
+                              [ 7, 10],
+                              [10, 12]]])
+                # fmt: on
+            )
+        )
+
+    def test_indices(self):
+        indices = self.forward_alignment.indices
+        self.assertTrue(
+            numpy.array_equal(
+                indices,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  2,  3,  4,  5,  6,  7, 8,  9, 10],
+                             [ 0,  1,  2, -1, -1, -1,  3,  4,  5,  6,  7,  8,  9, -1, -1, -1, -1, 10, 11]])
+                # fmt: on
+            )
+        )
+        inverse_indices = self.forward_alignment.inverse_indices
+        self.assertEqual(len(inverse_indices), 2)
+        self.assertTrue(
+            numpy.array_equal(
+                inverse_indices[0],
+                # fmt: off
+                numpy.array([-1, -1, 10, 11, 12, 13, 14, 15, 16, 17, 18, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -1, -1]),
+                # fmt: on
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                inverse_indices[1],
+                numpy.array([0, 1, 2, 6, 7, 8, 9, 10, 11, 12, 17, 18]),
+            )
+        )
+        indices = self.reverse_alignment.indices
+        self.assertTrue(
+            numpy.array_equal(
+                indices,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[12, 11, 10,  9,  8,  7,  6,  5,  4,  3, 26, 25, 24, 23, 22, 21, 20, 19, 18],
+                             [ 0,  1,  2, -1, -1, -1,  3,  4,  5,  6,  7,  8,  9, -1, -1, -1, -1, 10, 11]])
+                # fmt: on
+            )
+        )
+        inverse_indices = self.reverse_alignment.inverse_indices
+        self.assertEqual(len(inverse_indices), 2)
+        self.assertTrue(
+            numpy.array_equal(
+                inverse_indices[0],
+                # fmt: off
+                numpy.array([-1, -1, -1, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -1, -1, -1, -1, 18, 17, 16, 15, 14, 13, 12, 11, 10, -1, -1]),
+                # fmt: on
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                inverse_indices[1],
+                numpy.array([0, 1, 2, 6, 7, 8, 9, 10, 11, 12, 17, 18]),
+            )
+        )
+        indices = self.multiple_alignment.indices
+        self.assertTrue(
+            numpy.array_equal(
+                indices,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  2,  3,  4,  5,  6,  7,  8,  9, 10],
+                             [12, 11, 10,  9,  8,  7,  6,  5,  4,  3, 26, 25, 24, 23, 22, 21, 20, 19, 18],
+                             [ 0,  1,  2, -1, -1, -1,  3,  4,  5,  6,  7,  8,  9, -1, -1, -1, -1, 10, 11]])
+                # fmt: on
+            )
+        )
+        inverse_indices = self.multiple_alignment.inverse_indices
+        self.assertEqual(len(inverse_indices), 3)
+        self.assertTrue(
+            numpy.array_equal(
+                inverse_indices[0],
+                # fmt: off
+                numpy.array([-1, -1, 10, 11, 12, 13, 14, 15, 16, 17, 18, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -1, -1])
+                # fmt: on
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                inverse_indices[1],
+                # fmt: off
+                numpy.array([-1, -1, -1, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -1, -1, -1, -1, 18, 17, 16, 15, 14, 13, 12, 11, 10, -1, -1]),
+                # fmt: on
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                inverse_indices[2],
+                numpy.array([0, 1, 2, 6, 7, 8, 9, 10, 11, 12, 17, 18]),
+            )
+        )
+
+    def test_substitutions(self):
+        for alignment in (self.forward_alignment, self.reverse_alignment):
+            self.assertEqual(
+                str(alignment.substitutions),
+                """\
+    A   C   G   T
+A 0.0 0.0 0.0 0.0
+C 0.0 5.0 0.0 0.0
+G 0.0 0.0 0.0 0.0
+T 0.0 0.0 1.0 6.0
+""",
+            )
+        self.assertEqual(
+            str(self.multiple_alignment.substitutions),
+            """\
+    A    C   G    T
+A 7.0  0.0 0.0  0.0
+C 0.0 15.0 0.0  0.0
+G 0.0  0.0 0.0  0.0
+T 0.0  0.0 2.0 19.0
+""",
+        )
+
+    def test_str(self):
+        self.assertEqual(
+            str(self.forward_alignment),
+            """\
+target           16 TTTAAATTTT 26
+                  0 |.|---||||
+query             0 TGT---TTTT 7
+
+target            2 CCCAAAACC 11
+                 10 |||----|| 19
+query             7 CCC----CC 12
+""",
+        )
+        self.assertEqual(
+            str(self.reverse_alignment),
+            """\
+target           13 TTTAAATTTT 3
+                  0 |.|---||||
+query             0 TGT---TTTT 7
+
+target           27 CCCAAAACC 18
+                 10 |||----|| 19
+query             7 CCC----CC 12
+""",
+        )
+        self.assertEqual(
+            str(self.multiple_alignment),
+            """\
+                 16 TTTAAATTTT 26 2
+                 13 TTTAAATTTT 3 3
+                  0 TGT---TTTT 7 7
+
+                  2 CCCAAAACC 11
+                 27 CCCAAAACC 18
+                  7 CCC----CC 12
+""",
+        )
+
+
+class TestAlign_nucleotide_protein_str(unittest.TestCase):
+    s1 = "ATGCGGAGCTTTCGAGCGACGTTTGGCTTTGACGACGGA" * 6
+    s2 = "ATGCGGAGCCGAGCGACGTTTACGGCTTTGACGACGGA" * 6
+    t1 = translate(s1)
+
+    aligner = Align.PairwiseAligner("blastn")
+    alignments = aligner.align(s1, s2)
+    alignment = next(alignments)
+    del aligner
+
+    def test_nucleotide_nucleotide_str(self):
+        self.assertEqual(len(self.alignments), 1)
+        self.assertEqual(
+            str(self.alignment),
+            """\
+target            0 ATGCGGAGCTTTCGAGCGACGTTT--GGCTTTGACGACGGAATGCGGAGCTTTCGAGCGA
+                  0 |||||||||---||||||||||||--||||||||||||||||||||||||---|||||||
+query             0 ATGCGGAGC---CGAGCGACGTTTACGGCTTTGACGACGGAATGCGGAGC---CGAGCGA
+
+target           58 CGTTT--GGCTTTGACGACGGAATGCGGAGCTTTCGAGCGACGTTT--GGCTTTGACGAC
+                 60 |||||--||||||||||||||||||||||||---||||||||||||--||||||||||||
+query            54 CGTTTACGGCTTTGACGACGGAATGCGGAGC---CGAGCGACGTTTACGGCTTTGACGAC
+
+target          114 GGAATGCGGAGCTTTCGAGCGACGTTT--GGCTTTGACGACGGAATGCGGAGCTTTCGAG
+                120 ||||||||||||---||||||||||||--||||||||||||||||||||||||---||||
+query           111 GGAATGCGGAGC---CGAGCGACGTTTACGGCTTTGACGACGGAATGCGGAGC---CGAG
+
+target          172 CGACGTTT--GGCTTTGACGACGGAATGCGGAGCTTTCGAGCGACGTTT--GGCTTTGAC
+                180 ||||||||--||||||||||||||||||||||||---||||||||||||--|||||||||
+query           165 CGACGTTTACGGCTTTGACGACGGAATGCGGAGC---CGAGCGACGTTTACGGCTTTGAC
+
+target          228 GACGGA 234
+                240 |||||| 246
+query           222 GACGGA 228
+""",
+        )
+
+    def test_protein_nucleotide_str(self):
+        coordinates_s1, coordinates_s2 = self.alignment.coordinates
+        coordinates_t1 = coordinates_s1 // 3
+        sequences = [self.t1, self.s1]
+        coordinates = numpy.array([coordinates_t1, coordinates_s1])
+        alignment = Align.Alignment(sequences, coordinates)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 M  R  S  F  R  A  T  F  G  F  D  D  G  M  R  S  F  R  A  T  
+query             0 ATGCGGAGCTTTCGAGCGACGTTTGGCTTTGACGACGGAATGCGGAGCTTTCGAGCGACG
+
+target           20 F  G  F  D  D  G  M  R  S  F  R  A  T  F  G  F  D  D  G  M  
+query            60 TTTGGCTTTGACGACGGAATGCGGAGCTTTCGAGCGACGTTTGGCTTTGACGACGGAATG
+
+target           40 R  S  F  R  A  T  F  G  F  D  D  G  M  R  S  F  R  A  T  F  
+query           120 CGGAGCTTTCGAGCGACGTTTGGCTTTGACGACGGAATGCGGAGCTTTCGAGCGACGTTT
+
+target           60 G  F  D  D  G  M  R  S  F  R  A  T  F  G  F  D  D  G    78
+query           180 GGCTTTGACGACGGAATGCGGAGCTTTCGAGCGACGTTTGGCTTTGACGACGGA 234
+""",
+        )
+        sequences = [self.t1, self.s2]
+        coordinates = numpy.array([coordinates_t1, coordinates_s2])
+        alignment = Align.Alignment(sequences, coordinates)
+        self.assertEqual(
+            str(alignment),
+            """\
+target            0 M  R  S  F  R  A  T  F  --G  F  D  D  G  M  R  S  F  R  A  T
+query             0 ATGCGGAGC---CGAGCGACGTTTACGGCTTTGACGACGGAATGCGGAGC---CGAGCGA
+
+target           20   F  --G  F  D  D  G  M  R  S  F  R  A  T  F  --G  F  D  D  
+query            54 CGTTTACGGCTTTGACGACGGAATGCGGAGC---CGAGCGACGTTTACGGCTTTGACGAC
+
+target           38 G  M  R  S  F  R  A  T  F  --G  F  D  D  G  M  R  S  F  R  A
+query           111 GGAATGCGGAGC---CGAGCGACGTTTACGGCTTTGACGACGGAATGCGGAGC---CGAG
+
+target           58   T  F  --G  F  D  D  G  M  R  S  F  R  A  T  F  --G  F  D  
+query           165 CGACGTTTACGGCTTTGACGACGGAATGCGGAGC---CGAGCGACGTTTACGGCTTTGAC
+
+target           76 D  G    78
+query           222 GACGGA 228
+""",
+        )
+        sequences = [self.t1, self.s1, self.s2]
+        coordinates = numpy.array([coordinates_t1, coordinates_s1, coordinates_s2])
+        alignment = Align.Alignment(sequences, coordinates)
+        self.assertEqual(
+            str(alignment),
+            """\
+                  0 M  R  S  F  R  A  T  F  --G  F  D  D  G  M  R  S  F  R  A  T
+                  0 ATGCGGAGCTTTCGAGCGACGTTT--GGCTTTGACGACGGAATGCGGAGCTTTCGAGCGA
+                  0 ATGCGGAGC---CGAGCGACGTTTACGGCTTTGACGACGGAATGCGGAGC---CGAGCGA
+
+                 20   F  --G  F  D  D  G  M  R  S  F  R  A  T  F  --G  F  D  D  
+                 58 CGTTT--GGCTTTGACGACGGAATGCGGAGCTTTCGAGCGACGTTT--GGCTTTGACGAC
+                 54 CGTTTACGGCTTTGACGACGGAATGCGGAGC---CGAGCGACGTTTACGGCTTTGACGAC
+
+                 38 G  M  R  S  F  R  A  T  F  --G  F  D  D  G  M  R  S  F  R  A
+                114 GGAATGCGGAGCTTTCGAGCGACGTTT--GGCTTTGACGACGGAATGCGGAGCTTTCGAG
+                111 GGAATGCGGAGC---CGAGCGACGTTTACGGCTTTGACGACGGAATGCGGAGC---CGAG
+
+                 58   T  F  --G  F  D  D  G  M  R  S  F  R  A  T  F  --G  F  D  
+                172 CGACGTTT--GGCTTTGACGACGGAATGCGGAGCTTTCGAGCGACGTTT--GGCTTTGAC
+                165 CGACGTTTACGGCTTTGACGACGGAATGCGGAGC---CGAGCGACGTTTACGGCTTTGAC
+
+                 76 D  G    78
+                228 GACGGA 234
+                222 GACGGA 228
+""",
         )
 
 

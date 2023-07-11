@@ -8,6 +8,10 @@
 
 """Tests for LogisticRegression module."""
 
+import copy
+import unittest
+import warnings
+
 try:
     import numpy
     from numpy import linalg  # missing in PyPy's micronumpy
@@ -18,10 +22,11 @@ except ImportError:
         "Install NumPy if you want to use Bio.LogisticRegression."
     ) from None
 
-import unittest
-import copy
+from Bio import BiopythonDeprecationWarning
 
-from Bio import LogisticRegression
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=BiopythonDeprecationWarning)
+    from Bio import LogisticRegression
 
 
 xs = [

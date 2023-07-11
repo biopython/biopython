@@ -513,7 +513,6 @@ findPath(double **S, double **dA, double **dB, int lenA, int lenB,
         Py_INCREF(pathBList);
 
         int j = 0;
-        int it = 0;
         // Grab the current path
         while (j < smaller) {
             if (pathBuffer[o][j].first != -1) {
@@ -527,8 +526,6 @@ findPath(double **S, double **dA, double **dB, int lenA, int lenB,
                     v = Py_BuildValue("i", idxB + k);
                     PyList_Append(pathBList, v);
                     Py_DECREF(v);
-
-                    it++;
                 }
                 j++;
             } else {

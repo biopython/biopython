@@ -39,7 +39,7 @@ sorted into the right place.
 
 see _RecordConsumer for details.
 
-The second option is to  iterate over the contigs of an ace file one by one
+The second option is to iterate over the contigs of an ace file one by one
 in the usual way::
 
     from Bio.Sequencing import Ace

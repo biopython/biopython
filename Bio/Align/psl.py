@@ -26,7 +26,7 @@ zero-based end position. We can therefore manipulate ``start`` and
 ``start + size`` as python list slice boundaries.
 """
 from itertools import chain
-import numpy
+import numpy as np
 
 
 from Bio.Align import Alignment
@@ -38,6 +38,8 @@ from Bio.SeqFeature import SeqFeature, ExactPosition, SimpleLocation, CompoundLo
 
 class AlignmentWriter(interfaces.AlignmentWriter):
     """Alignment file writer for the Pattern Space Layout (PSL) file format."""
+
+    fmt = "PSL"
 
     def __init__(self, target, header=True, mask=None, wildcard="N"):
         """Create an AlignmentWriter object.
@@ -63,7 +65,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                        Default value is 'N'.
 
         """
-        super().__init__(target, mode="w")
+        super().__init__(target)
         self.header = header
         if wildcard is not None:
             if mask == "upper":
@@ -73,7 +75,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         self.wildcard = wildcard
         self.mask = mask
 
-    def write_header(self, alignments):
+    def write_header(self, stream, alignments):
         """Write the PSL header."""
         if not self.header:
             return
@@ -84,7 +86,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         else:
             version = metadata.get("psLayout version", "3")
         # fmt: off
-        self.stream.write(
+        stream.write(
             f"""\
 psLayout version {version}
 
@@ -299,14 +301,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     of matches and mismatches are stored as attributes of each alignment.
     """
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
-
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="PSL")
+    fmt = "PSL"
 
     def _read_header(self, stream):
         line = next(stream)
@@ -366,9 +361,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     "Inconsistent number of target start positions (%d found, expected %d)"
                     % (len(tStarts), blockCount)
                 )
-            qStarts = numpy.array(qStarts)
-            tStarts = numpy.array(tStarts)
-            qBlockSizes = numpy.array(blockSizes)
+            qStarts = np.array(qStarts)
+            tStarts = np.array(tStarts)
+            qBlockSizes = np.array(blockSizes)
             if strand in ("++", "+-"):
                 # protein sequence aligned against translated DNA sequence
                 tBlockSizes = 3 * qBlockSizes
@@ -389,7 +384,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 tPosition += tBlockSize
                 qPosition += qBlockSize
                 coordinates.append([tPosition, qPosition])
-            coordinates = numpy.array(coordinates).transpose()
+            coordinates = np.array(coordinates).transpose()
             qNumInsert = 0
             qBaseInsert = 0
             tNumInsert = 0
@@ -519,8 +514,8 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 target_sequence = Seq(None, length=tSize)
                 query_sequence = Seq(None, length=qSize)
-            target_record = SeqRecord(target_sequence, id=tName)
-            query_record = SeqRecord(query_sequence, id=qName)
+            target_record = SeqRecord(target_sequence, id=tName, description="")
+            query_record = SeqRecord(query_sequence, id=qName, description="")
             if feature is not None:
                 target_record.features.append(feature)
             records = [target_record, query_record]

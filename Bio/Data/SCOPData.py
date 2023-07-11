@@ -48,7 +48,7 @@ protein_letters_3to1 = {
     "2TL": "T", "2TY": "Y", "2VA": "V", "2XA": "C", "32S": "X",
     "32T": "X", "3AH": "H", "3AR": "X", "3CF": "F", "3DA": "A",
     "3DR": "N", "3GA": "A", "3MD": "D", "3ME": "U", "3NF": "Y",
-    "3QN": "K", "3TY": "X", "3XH": "G", "4AC": "N", "4BF": "Y",
+    "3QN": "K", "3TY": "X", "3XH": "G", "4AC": "N", "4BF": "F",
     "4CF": "F", "4CY": "M", "4DP": "W", "4F3": "GYG", "4FB": "P",
     "4FW": "W", "4HT": "W", "4IN": "W", "4MF": "N", "4MM": "X",
     "4OC": "C", "4PC": "C", "4PD": "C", "4PE": "C", "4PH": "F",

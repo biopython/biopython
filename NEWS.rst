@@ -1,29 +1,118 @@
 News for the Biopython Project
 ==============================
 
-This file contains release notes and general news about the Biopython project.
-See also the DEPRECATED file which tracks the removal of obsolete modules or
-functions, and online https://biopython.org/wiki/News and
+This NEWS file contains release notes covering major additions or changes.
+Separately the DEPRECATED file tracks the removal of obsolete modules or
+functions (which are generally not covered here in the NEWS file).
+
+The news entries for each release are also usually repeated as a blog post at
 https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released): Biopython 1.81
+(In progress, not yet released): Biopython 1.82
 ===============================================
 
-This release of Biopython supports Python 3.7, 3.8, 3.9, 3.10, 3.11. It has
-also been tested on PyPy3.7 v7.3.5. We intend to drop Python 3.7 support.
+Calling ``iter`` on a ``PairwiseAlignments`` object returned by a
+``PairwiseAigner`` previously reset the iterator such that it will start from
+the first alignment when iterating. As a side effect, this will cause all other
+iterators of the alignments to reset as well, which is bug prone. Instead,
+calling ``iter`` on a ``PairwiseAlignments`` object will now return itself. The
+iterator can be reset by calling the ``rewind`` method.
+
+Calling ``secondary_structure_fraction()`` on a ``ProtParam.ProteinAnalysis``
+object historically returned (sheet, turn, helix) while claiming to return
+(helix, turn, sheet). This was fixed to correctly return (helix, turn, sheet).
+Additionally, the amino acids considered were revised as per recent literature.
+
+The sequence objects now have ``.removeprefix()`` and ``.removesuffix()``
+methods matching that added to strings in Python 3.9.
+
+Calling ``set_angle()`` on a residue dihedral angle previously set only
+the specified angle, now the default behavior is to update overlapping
+angles as well.  For example, setting Psi (N-CA-CN) now updates the
+overlapping angle N-CA-C-O. as most users would probably expect.
+
+Generating a structure with default internal coordinates, e.g. from a
+sequence with ``read_PIC_seq()``,  previously selected wrong default
+values in many cases.  This has been fixed.
+
+Added ``make_extended()`` to set a chain to an extended beta strand
+conformation, as the default backbone values reflect the more popular
+alpha helix in most cases.
+
+Added a ``search`` method to ``Seq`` and ``MultipleSeq`` object to search for
+multiple subsequences at the same time.
+
+The ``Instances`` class and the ``instances`` argument of the ``Motif`` class
+initializer in ``Bio.motifs`` were deprecated in release 1.82. Instead of
+
+>>> from Bio.motifs import Instances
+>>> instances = Instances([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])
+>>> motif = Motif(alphabet='ACGT', instances=instances)
+
+please use
+
+>>> from Bio.Align import Alignment
+>>> alignment = Alignment([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])
+>>> motif = Motif(alphabet='ACGT', alignment=alignment)
+
+The ``instances`` attribute of the ``Motif`` class  in ``Bio.motifs`` was
+deprecated in release 1.82. Instead of ``mymotif.instances``, please use
+``mymotif.alignment.sequences``.
 
 The function ``flexibility`` in ``Bio.SeqUtils.ProtParam`` is re-implemented
 to match the Vihinen 1994 paper.
 
+Additionally, a number of small bugs and typos have been fixed with additions
+to the test suite.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Antonio Trande (first contribution)
+- Arpan Sahoo (first contribution)
+- Benedict Carling (first contribution)
+- Cam McMenamie (first contribution)
+- João Rodrigues
+- Joe Greener
+- Michiel de Hoon
+- Peter Cock
+- Ricardas Ralys (first contribution)
+- Rob Miller
+- Ruibin Liu (first contribution)
+- Vladislav Kuznetsov (first contribution)
+- Yiming Qu (first contribution)
+
+12 February 2023: Biopython 1.81
+================================
+
+This release of Biopython supports Python 3.7, 3.8, 3.9, 3.10, 3.11. It has
+also been tested on PyPy3.7 v7.3.5. We intend to drop Python 3.7 support.
+
+The API documentation and the `Biopython Tutorial and Cookbook` have
+been updated to better annotate use and application of the
+``Bio.PDB.internal_coords`` module.
+
+``Bio.Phylo`` now supports ``Alignment`` and ``MultipleSeqAlignment``
+objects as input.
+
+Several improvements and bug fixes to the snapgene parser contributes by
+Damien Goutte-Gattat.
+
+Additionally, a number of small bugs and typos have been fixed with additions
+to the test suite.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Adam Vandergriff (first contribution)
+- Damien Goutte-Gatta
+- Joe Greener
 - Michiel de Hoon
 - Peter Cock
 - Robert Miller
-- Ruibin Liu (first contribution)
+- Farhan Khan (first contribution)
 
 18 November 2022: Biopython 1.80
 ================================
@@ -32,11 +121,29 @@ This release of Biopython supports Python 3.7, 3.8, 3.9, 3.10, 3.11. It has
 also been tested on PyPy3.7 v7.3.5.
 
 Functions ``read``, ``parse``, and ``write`` were added to ``Bio.Align`` to
-read and write ``Alignment`` objects.
+read and write ``Alignment`` objects.  String formatting and printing output
+of ``Alignment`` objects from ``Bio.Align`` were changed to support these new
+functions. To obtain a string showing the aligned sequence with the appropriate
+gap characters (as previously shown when calling ``format`` on an alignment),
+use ``alignment[i]``, where ``alignment`` is an ``Alignment`` object and ``i``
+is the index of the aligned sequence.
 
 Because dict retains the item order by default since Python3.6, all instances
 of ``collections.OrderedDict`` have been replaced by either standard ``dict``
 or where appropriate by ``collections.defaultsdict``.
+
+Robert Miller has updated the ``Bio.PDB.internal_coords`` module  to
+make better use of Numpy for lossless structure assembly from dihedral
+angles and related internal coordinates.  In addition to speeding the
+assembly step by ~30%, this adds distance plot support (including
+re-generating structures from distance plot data), coordinate space
+transforms for superimposing residues and their environments, a
+per-chain all-atom array for Atom coordinates, and optional default
+values for all internal coordinates.  The internal coordinates module
+continues to support extracting dihedral angle, bond angle and bond
+length (internal coordinates) data, reading/writing structure files of
+internal coordinates, and OpenSCAD output of structures for 3D CAD/3D
+printing work.
 
 The ``Bio.motifs.jaspar.db`` now returns ``tf_family`` and ``tf_class`` as a
 string array since the JASPAR 2018 release.
@@ -120,6 +227,8 @@ possible, especially the following contributors:
 - Soroush Saffari (first contribution)
 - Tim Burke
 - Valentin Vareškić (first contribution)
+- Robert Miller
+
 
 3 June 2021: Biopython 1.79
 ===========================

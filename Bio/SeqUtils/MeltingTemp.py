@@ -18,11 +18,6 @@ temperature of oligonucleotides:
    Correction for mismatches, dangling ends, salt concentration and other
    additives are available.
 
-Tm_staluc is the 'old' NN calculation and is kept for compatibility. It is,
-however, recommended to use Tm_NN instead, since Tm_staluc may be deprecated
-in the future. Also, Tm_NN has much more options. Using Tm_staluc and Tm_NN
-with default parameters gives (essentially) the same results.
-
 General parameters for most Tm methods:
  - seq -- A Biopython sequence object or a string.
  - check -- Checks if the sequence is valid for the given method (default=
@@ -66,11 +61,6 @@ For example:
     >>> print('%0.2f' % mt.Tm_NN(myseq))
     60.32
 
-Tm_NN with default values gives same result as 'old' Tm_staluc. However, values
-differ for RNA, since Tm_staluc had some errors for RNA calculation. These
-errors have been fixed in this version.
-
-New Tm_NN can do slightly more:
 Using different thermodynamic tables, e.g. from Breslauer '86 or Sugimoto '96:
 
     >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.DNA_NN1))  # Breslauer '86
@@ -218,10 +208,10 @@ DNA_NN4 = {
     "init": (0.2, -5.7), "init_A/T": (2.2, 6.9), "init_G/C": (0, 0),
     "init_oneG/C": (0, 0), "init_allA/T": (0, 0), "init_5T/A": (0, 0),
     "sym": (0, -1.4),
-    "AA/TT": (-7.6, -21.3), "AT/TA": (-7.2, -20.4), "TA/AT": (-7.2, -20.4),
+    "AA/TT": (-7.6, -21.3), "AT/TA": (-7.2, -20.4), "TA/AT": (-7.2, -21.3),
     "CA/GT": (-8.5, -22.7), "GT/CA": (-8.4, -22.4), "CT/GA": (-7.8, -21.0),
     "GA/CT": (-8.2, -22.2), "CG/GC": (-10.6, -27.2), "GC/CG": (-9.8, -24.4),
-    "GG/CC": (-8.0, -19.0)}
+    "GG/CC": (-8.0, -19.9)}
 
 # RNA/RNA
 # Freier et al. (1986), Proc Natl Acad Sci USA 83: 9373-9377
