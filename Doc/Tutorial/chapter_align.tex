@@ -2056,13 +2056,23 @@ Here, the two rows refer to the target and query sequence. These coordinates sho
 \item \verb+target[4:5]+ aligned to \verb+query[2:3]+.
 \end{itemize}
 
-The length of the alignment is defined as the number of aligned sequences,
-which is always 2 for a pairwise alignment:
+The number of aligned sequences is returned by \verb+len(alignment)+; this is
+always 2 for a pairwise alignment:
 
 %cont-doctest
 \begin{minted}{pycon}
 >>> len(alignment)
 2
+\end{minted}
+
+The alignment length is defined as the number of columns in the alignment as
+printed. This is equal to the sum of the number of matches, number of
+mismatches, and the total length of gaps in the target and query:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.length
+5
 \end{minted}
 
 The \verb+shape+ property returns a tuple consisting of the length of the

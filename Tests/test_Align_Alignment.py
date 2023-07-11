@@ -74,6 +74,23 @@ query             7 A-C-GG-AAC--  0
 """,
                 msg=msg,
             )
+        frequencies = alignment.frequencies
+        self.assertEqual(list(frequencies.keys()), ["A", "C", "G"])
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["A"], numpy.array([2, 1, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["C"], numpy.array([0, 0, 2, 1, 0, 0, 0, 0, 0, 2, 1, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["G"], numpy.array([0, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 1])
+            )
+        )
         self.assertAlmostEqual(alignment.score, 6.0)
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.shape, (2, 12))
@@ -587,6 +604,23 @@ query             0 -AG 2
                 numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]]),
             )
         )
+        frequencies = subalignment.frequencies
+        self.assertEqual(list(frequencies.keys()), ["A", "C", "G"])
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["A"], numpy.array([1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["C"], numpy.array([0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["G"], numpy.array([0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1])
+            )
+        )
         subalignment = alignment[:1, :]
         self.assertEqual(len(subalignment.sequences), 1)
         sequence = subalignment.sequences[0]
@@ -600,6 +634,23 @@ query             0 -AG 2
             numpy.array_equal(
                 subalignment.coordinates,
                 numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]]),
+            )
+        )
+        frequencies = subalignment.frequencies
+        self.assertEqual(list(frequencies.keys()), ["A", "C", "G"])
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["A"], numpy.array([1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["C"], numpy.array([0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["G"], numpy.array([0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1])
             )
         )
         subalignment = alignment[:]
