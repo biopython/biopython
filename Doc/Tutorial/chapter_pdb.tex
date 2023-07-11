@@ -272,7 +272,7 @@ This is the way many structural biologists/bioinformaticians think
 about structure, and provides a simple but efficient way to deal with
 structure. Additional stuff is essentially added when needed. A UML
 diagram of the \texttt{Structure} object (forget about the \texttt{Disordered}
-classes for now) is shown in Fig. \ref{fig:smcra}. Such a data structure is not
+classes for now) is shown in Figure~\ref{fig:smcra}. Such a data structure is not
 necessarily best suited for the representation of the macromolecular content of
 a structure, but it is absolutely necessary for a good interpretation of the
 data present in a file that describes the structure (typically a PDB or MMCIF
@@ -607,7 +607,7 @@ can be specified by the user.
 
 Disordered atoms are represented by ordinary \texttt{Atom} objects, but
 all \texttt{Atom} objects that represent the same physical atom are stored
-in a \texttt{Disordered\-Atom} object (see Fig. \ref{fig:smcra}).
+in a \texttt{Disordered\-Atom} object (see Figure~\ref{fig:smcra}).
 Each \texttt{Atom} object in a \texttt{Disordered\-Atom} object can
 be uniquely indexed using its altloc specifier. The \texttt{Disordered\-Atom}
 object forwards all uncaught method calls to the selected Atom object,
@@ -653,8 +653,8 @@ Since these residues belong to a different residue type (e.g. let's
 say Ser 60 and Cys 60) they should not be stored in a single \texttt{Residue}
 object as in the common case. In this case, each residue is represented
 by one \texttt{Residue} object, and both \texttt{Residue} objects
-are stored in a single \texttt{Disordered\-Residue} object (see Fig.
-\ref{fig:smcra}).
+are stored in a single \texttt{Disordered\-Residue} object (see
+Figure~\ref{fig:smcra}).
 
 The \texttt{Dis\-ordered\-Residue} object forwards all un\-caught methods to
 the selected \texttt{Residue} object (by default the last \texttt{Residue}
