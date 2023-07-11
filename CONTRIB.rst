@@ -174,6 +174,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - João Vitor F Cavalcante <https://github.com/jvfe>
 - Joe Cora <https://github.com/JoeCora>
 - Joe Greener <https://github.com/jgreener64>
+- Joel Ibaceta <https://github.com/joelibaceta>
 - Joerg Schaarschmidt <https://github.com/schaarj>
 - Johann Visagie <wjv at domain cityip.co.za>
 - John Bradley <https://github.com/johnbradley>
