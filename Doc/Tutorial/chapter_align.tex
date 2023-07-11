@@ -2211,12 +2211,11 @@ query             1 GAAC 5
 <BLANKLINE>
 \end{minted}
 
-Use the \verb+substitutions+ method to find the number of substitutions between each pair of nucleotides:
+The \verb+frequencies+ method calculates how often each letter appears in each column of the alignment:
 %cont-doctest
 \begin{minted}{pycon}
 >>> target = "AAAAAAAACCCCCCCCGGGGGGGGTTTTTTTT"
 >>> query = "AAAAAAACCCTCCCCGGCCGGGGTTTAGTTT"
->>> alignments = aligner.align(target, query)
 >>> aligner.mismatch_score = -1
 >>> aligner.gap_score = -1
 >>> alignments = aligner.align(target, query)
@@ -2227,6 +2226,15 @@ target            0 AAAAAAAACCCCCCCCGGGGGGGGTTTTTTTT 32
                   0 |||||||-|||.||||||..|||||||..||| 32
 query             0 AAAAAAA-CCCTCCCCGGCCGGGGTTTAGTTT 31
 <BLANKLINE>
+>>> alignments[0].frequencies  # doctest: +NORMALIZE_WHITESPACE
+{'A': array([2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0]),
+ 'C': array([0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 1, 2, 2, 2, 2, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+ 'G': array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 1, 1, 2, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0]),
+ 'T': array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 1, 1, 2, 2, 2])}
+\end{minted}
+Use the \verb+substitutions+ method to find the number of substitutions between each pair of nucleotides:
+%cont-doctest
+\begin{minted}{pycon}
 >>> m = alignments[0].substitutions
 >>> print(m)
     A   C   G   T
