@@ -1218,13 +1218,11 @@ simplicity we’ll only look for perfect matches (shown in black in
 :numref:`fig:nuc-dot-plot`).
 
 .. figure:: ../images/dot_plot.png
-   :alt: Nucleotide dot plot of two orchid sequence lengths (using
-   pylab’s imshow function).
+   :alt: Nucleotide dot plot of two orchid sequences using image show.
    :name: fig:nuc-dot-plot
    :width: 80.0%
 
-   Nucleotide dot plot of two orchid sequence lengths (using pylab’s
-   imshow function).
+   Nucleotide dot plot of two orchid sequences using image show.
 
 To start off, we’ll need two sequences. For the sake of argument, we’ll
 just take the first two from our orchid FASTA file
@@ -1346,13 +1344,11 @@ That should pop up a new window showing the graph in
 :numref:`fig:nuc-dot-plot-scatter`.
 
 .. figure:: ../images/dot_plot_scatter.png
-   :alt: Nucleotide dot plot of two orchid sequence lengths (using
-   pylab’s scatter function).
+   :alt: Nucleotide dot plot of two orchid sequences using scatter.
    :name: fig:nuc-dot-plot-scatter
    :width: 80.0%
 
-   Nucleotide dot plot of two orchid sequence lengths (using pylab’s
-   scatter function).
+   Nucleotide dot plot of two orchid sequence using  scatter.
 
 Personally I find this second plot much easier to read! Again note that
 we have *not* checked for reverse complement matches here – you could

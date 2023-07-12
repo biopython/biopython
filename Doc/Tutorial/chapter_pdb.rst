@@ -334,18 +334,15 @@ detect likely problems. We will give several examples of this in section
 
 .. figure:: ../images/smcra.png
    :alt: UML diagram of SMCRA architecture of the ``Structure`` class
-   used to represent a macromolecular structure. Full lines with
-   diamonds denote aggregation, full lines with arrows denote
-   referencing, full lines with triangles denote inheritance and dashed
-   lines with triangles denote interface realization.
    :name: fig:smcra
    :width: 80.0%
 
-   UML diagram of SMCRA architecture of the ``Structure`` class used to
-   represent a macromolecular structure. Full lines with diamonds denote
-   aggregation, full lines with arrows denote referencing, full lines
-   with triangles denote inheritance and dashed lines with triangles
-   denote interface realization.
+   UML diagram of SMCRA architecture of the ``Structure`` class.
+
+   This is used to represent a macromolecular structure. Full lines with
+   diamonds denote aggregation, full lines with arrows denote referencing,
+   full lines with triangles denote inheritance and dashed lines with
+   triangles denote interface realization.
 
 Structure, Model, Chain and Residue are all subclasses of the Entity
 base class. The Atom class only (partly) implements the Entity interface
@@ -1450,13 +1447,11 @@ optional selector like ``CaSelect`` defined in the previous section. See
    plt.show()
 
 .. figure:: ../images/1a8o-ca-plot.png
-   :alt: C\ :math:`\alpha` distance plot for PDB file 1A8O (HIV capsid
-   C-terminal domain)
+   :alt: C-alpha distance plot for PDB file 1A8O
    :name: fig:distanceplot
    :width: 30.0%
 
-   C\ :math:`\alpha` distance plot for PDB file 1A8O (HIV capsid
-   C-terminal domain)
+   C-alpha distance plot for PDB file 1A8O (HIV capsid C-terminal domain)
 
 Building a structure from a distance plot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1569,13 +1564,11 @@ higher order residue intereactions can be investigated and visualized
 across multiple protein structures, e.g. :numref:`fig:phepairs`.
 
 .. figure:: ../images/phe-pairs-3pbl.png
-   :alt: Neighboring phenylalanine sidechains in PDB file 3PBL (human
-   dopamine D3 receptor)
+   :alt: Neighboring phenylalanine sidechains in PDB file 3PBL
    :name: fig:phepairs
    :width: 70.0%
 
-   Neighboring phenylalanine sidechains in PDB file 3PBL (human dopamine
-   D3 receptor)
+   Neighboring phenylalanine sidechains in PDB file 3PBL (human dopamine D3 receptor)
 
 This example superimposes each PHE residue in a chain on its
 N-C\ :math:`\alpha`-C\ :math:`\beta` atoms, and presents all PHEs in the
