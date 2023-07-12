@@ -6563,6 +6563,7 @@ sequence_converter(PyObject* argument, void* pointer)
     const int flag = PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
     Aligner* aligner;
     int* mapping;
+    PyObject* alphabet;
 
     if (argument == NULL) {
         if (view->obj) PyBuffer_Release(view);
@@ -6636,7 +6637,13 @@ sequence_converter(PyObject* argument, void* pointer)
     }
     PyErr_Clear();  /* To clear the exception raised by PyObject_GetBuffer */
     mapping = aligner->mapping;
-    if (PyUnicode_Check(argument)) {
+    alphabet = aligner->alphabet;
+    if (mapping || !alphabet) {
+        if (!PyUnicode_Check(argument)) {
+            PyErr_Format(PyExc_TypeError, "sequence has unexpected type %s",
+                         Py_TYPE(argument)->tp_name);
+            return 0;
+        }
         if (PyUnicode_READY(argument) == -1) return 0;
         n = PyUnicode_GET_LENGTH(argument);
         switch (PyUnicode_KIND(argument)) {
@@ -6665,13 +6672,8 @@ sequence_converter(PyObject* argument, void* pointer)
         view->len = n;
         return Py_CLEANUP_SUPPORTED;
     }
-
-    if (!mapping) {
-        if (!convert_objects_to_ints(view, aligner->alphabet, argument)) return 0;
+    if (convert_objects_to_ints(view, alphabet, argument))
         return Py_CLEANUP_SUPPORTED;
-    }
-
-    PyErr_SetString(PyExc_ValueError, "sequence has unexpected format");
     return 0;
 }
  
