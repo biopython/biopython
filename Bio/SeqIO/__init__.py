@@ -873,7 +873,7 @@ def index(filename, format, alphabet=None, key_function=None):
     except TypeError:
         raise TypeError(
             "Need a string or path-like object for the filename (not a handle)"
-        )
+        ) from None
 
     return _IndexedSeqFileDict(random_access_proxy, key_function, repr, "SeqRecord")
 
