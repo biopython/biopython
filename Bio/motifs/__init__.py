@@ -427,7 +427,7 @@ class Motif:
         >>> print(motif)
         AACGCCA
         ACCGCCC
-        ACCTCCG
+        AACTCCG
         >>> print(motif[:-1])
         AACGCC
         ACCGCC
