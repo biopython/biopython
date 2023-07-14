@@ -1833,7 +1833,10 @@ CCTCCAGGTCGCATG""",
         self.assertEqual(motif.degenerate_consensus, "TTAATKA")
         self.assertEqual(motif[1:-2].consensus, "TAAT")
         motif = record[4]
-        self.assertEqual(motif.name, "ATGACTCATC AP-1(bZIP)/ThioMac-PU.1-ChIP-Seq(GSE21512)/Homer    6.049537    -1.782996e+03   0   9805.3,5781.0,3085.1,2715.0,0.00e+00")
+        self.assertEqual(
+            motif.name,
+            "ATGACTCATC AP-1(bZIP)/ThioMac-PU.1-ChIP-Seq(GSE21512)/Homer    6.049537    -1.782996e+03   0   9805.3,5781.0,3085.1,2715.0,0.00e+00",
+        )
         self.assertEqual(motif.length, 10)
         self.assertEqual(motif.alphabet, "GATC")
         self.assertAlmostEqual(motif.counts["G", 0], 0.277000000)

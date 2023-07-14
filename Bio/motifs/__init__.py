@@ -355,8 +355,8 @@ class Motif:
             self.__mask = (1,) * self.length
         elif len(mask) != self.length:
             raise ValueError(
-                "The length (%d) of the mask is inconsistent with the length (%d) of the motif" %
-                (len(mask), self.length),
+                "The length (%d) of the mask is inconsistent with the length (%d) of the motif"
+                % (len(mask), self.length),
             )
         elif isinstance(mask, str):
             self.__mask = []
