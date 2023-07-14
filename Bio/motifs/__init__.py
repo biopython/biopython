@@ -419,6 +419,38 @@ class Motif:
     del __get_background
     del __set_background
 
+    def __getitem__(self, key):
+        """Return a new Motif object for the positions included in key.
+
+        >>> from Bio import motifs
+        >>> motif = motifs.create(["AACGCCA", "ACCGCCC", "AACTCCG"])
+        >>> print(motif)
+        AACGCCA
+        ACCGCCC
+        ACCTCCG
+        >>> print(motif[:-1])
+        AACGCC
+        ACCGCC
+        AACTCC
+        """
+        if not isinstance(key, slice):
+            raise TypeError("motif indices must be slices")
+        alphabet = self.alphabet
+        if self.alignment is None:
+            alignment = None
+            if self.counts is None:
+                counts = None
+            else:
+                counts = {letter: self.counts[letter][key] for letter in alphabet}
+        else:
+            alignment = self.alignment[:, key]
+            counts = None
+        motif = Motif(alphabet=alphabet, alignment=alignment, counts=counts)
+        motif.pseudocounts = self.pseudocounts.copy()
+        motif.background = self.background.copy()
+        motif.mask = self.mask[key]
+        return motif
+
     @property
     def pwm(self):
         """Compute position weight matrices."""

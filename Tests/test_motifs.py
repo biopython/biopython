@@ -9,6 +9,7 @@
 """Tests for motifs module."""
 
 import os
+import tempfile
 import unittest
 import math
 
@@ -29,28 +30,6 @@ from Bio.Align import Alignment
 
 class MotifTestsBasic(unittest.TestCase):
     """Basic motif tests."""
-
-    def setUp(self):
-        self.PFMin = open("motifs/SRF.pfm")
-        self.SITESin = open("motifs/Arnt.sites")
-        self.CLUSTERBUSTERin = open("motifs/clusterbuster.pfm")
-        self.XMSin = open("motifs/abdb.xms")
-        self.PFMFOURCOLUMNSin = open("motifs/fourcolumns.pfm")
-        self.PFMFOURROWSin = open("motifs/fourrows.pfm")
-        self.TFout = "motifs/tf.out"
-        self.FAout = "motifs/fa.out"
-        self.PFMout = "motifs/fa.out"
-        instance = Seq("ATATA")
-        alignment = Alignment([instance])
-        self.m = motifs.create(alignment)
-
-    def tearDown(self):
-        self.PFMin.close()
-        self.SITESin.close()
-        if os.path.exists(self.TFout):
-            os.remove(self.TFout)
-        if os.path.exists(self.FAout):
-            os.remove(self.FAout)
 
     def test_alignace_parsing(self):
         """Test if Bio.motifs can parse AlignAce output files."""
@@ -107,6 +86,39 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record[0].alignment.sequences[10], "TCTACGATTGAG")
         self.assertEqual(record[0].mask, (1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1))
         self.assertAlmostEqual(record[0].score, 57.9079)
+        self.assertEqual(
+            str(record[0]),
+            """\
+TCTACGATTGAG
+TCTACGATTGAG
+TCTACGATTGAG
+TCTACGATTGAG
+TCTACGATTGAG
+TCTACGATTGAG
+TCTACGATTGAG
+TCTACGATTGAG
+TCTACGATTGAG
+TCAAAGATAGAG
+TCTACGATTGAG""",
+        )
+        motif = record[0][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+TACGATTGA
+TACGATTGA
+TACGATTGA
+TACGATTGA
+TACGATTGA
+TACGATTGA
+TACGATTGA
+TACGATTGA
+TACGATTGA
+AAAGATAGA
+TACGATTGA""",
+        )
+        self.assertEqual(motif.mask, (0, 1, 1, 1, 1, 1, 0, 1, 1))
         self.assertEqual(record[1].alphabet, "ACGT")
         # using the old instances property:
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -161,6 +173,60 @@ class MotifTestsBasic(unittest.TestCase):
             (1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
         )
         self.assertAlmostEqual(record[1].score, 19.6235)
+        self.assertEqual(
+            str(record[1]),
+            """\
+GCGAAGGAAGCAGCGCGTGTG
+GGCACCGCCTCTACGATTGAG
+CAGAGCTTAGCATTGAACGCG
+CTAATGAAAGCAATGAGAGTG
+CTTGTGCCCTCTAAGCGTCCG
+GAGCACGACGCTTTGTACCTG
+CGGCACTTAGCAGCGTATCGT
+CTGGTTTCATCTACGATTGAG
+GGGCCAATAGCGGCGCCGGAG
+GTGGAGTTATCTTAGTGCGCG
+GAGAGGTTATCTACGATTGAG
+CTGCTCCCCGCATACAGCGCG
+CAGAACCGAGGTCCGGTACGG
+GTGCCCCAAGCTTACCCAGGG
+CGCCTCTGATCTACGATTGAG
+GTGCTCATAGGGACGTCGCGG
+CTGCCCCCCGCATAGTAGGGG
+GTAAAGAAATCGATGTGCCAG
+CACCTGCAATTGCTGGCAGCG
+GGCGGGCCATCCCTGTATGAA
+CTCCAGGTCGCATGGAGAGAG
+CCTCGGATCGCTTGGGAAGAG""",
+        )
+        motif = record[1][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+GAAGGAAGCAGCGCGTGT
+CACCGCCTCTACGATTGA
+GAGCTTAGCATTGAACGC
+AATGAAAGCAATGAGAGT
+TGTGCCCTCTAAGCGTCC
+GCACGACGCTTTGTACCT
+GCACTTAGCAGCGTATCG
+GGTTTCATCTACGATTGA
+GCCAATAGCGGCGCCGGA
+GGAGTTATCTTAGTGCGC
+GAGGTTATCTACGATTGA
+GCTCCCCGCATACAGCGC
+GAACCGAGGTCCGGTACG
+GCCCCAAGCTTACCCAGG
+CCTCTGATCTACGATTGA
+GCTCATAGGGACGTCGCG
+GCCCCCCGCATAGTAGGG
+AAAGAAATCGATGTGCCA
+CCTGCAATTGCTGGCAGC
+CGGGCCATCCCTGTATGA
+CCAGGTCGCATGGAGAGA
+TCGGATCGCTTGGGAAGA""",
+        )
 
         self.assertEqual(record[2].alphabet, "ACGT")
         # using the old instances property:
@@ -208,6 +274,52 @@ class MotifTestsBasic(unittest.TestCase):
             (1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1),
         )
         self.assertAlmostEqual(record[2].score, 19.1804)
+        self.assertEqual(
+            str(record[2]),
+            """\
+GTGCGCGAAGGAAGCAGCGCG
+CAGAGCTTAGCATTGAACGCG
+GTGCCCGATGACCACCCGTCG
+GCCCTCTAAGCGTCCGCGGAT
+GAGCACGACGCTTTGTACCTG
+CGGCACTTAGCAGCGTATCGT
+GGGCCAATAGCGGCGCCGGAG
+GCGCACTAAGATAACTCCACG
+CGGCCCGTTGTCCAGCAGACG
+CTGCTCCCCGCATACAGCGCG
+GTGCCCCAAGCTTACCCAGGG
+GTGCTCATAGGGACGTCGCGG
+CTGCCCCCCGCATAGTAGGGG
+CGCCGCCATGCGACGCAGAGG
+AACCTCTAAGCATACTCTACG
+GACCTGGAGGCTTAGACTTGG
+GCGCTCTTCCCAAGCGATCCG
+GGGCCGTCAGCTCTCAAGTCT""",
+        )
+        motif = record[2][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+GCGCGAAGGAAGCAGCGC
+GAGCTTAGCATTGAACGC
+GCCCGATGACCACCCGTC
+CCTCTAAGCGTCCGCGGA
+GCACGACGCTTTGTACCT
+GCACTTAGCAGCGTATCG
+GCCAATAGCGGCGCCGGA
+GCACTAAGATAACTCCAC
+GCCCGTTGTCCAGCAGAC
+GCTCCCCGCATACAGCGC
+GCCCCAAGCTTACCCAGG
+GCTCATAGGGACGTCGCG
+GCCCCCCGCATAGTAGGG
+CCGCCATGCGACGCAGAG
+CCTCTAAGCATACTCTAC
+CCTGGAGGCTTAGACTTG
+GCTCTTCCCAAGCGATCC
+GCCGTCAGCTCTCAAGTC""",
+        )
 
         self.assertEqual(record[3].alphabet, "ACGT")
         # using the old instances property:
@@ -251,6 +363,48 @@ class MotifTestsBasic(unittest.TestCase):
             (1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1),
         )
         self.assertAlmostEqual(record[3].score, 18.0097)
+        self.assertEqual(
+            str(record[3]),
+            """\
+GCCCCAAGCTTACCCAGGGAC
+GCCGTCTGCTGGACAACGGGC
+GCCGACGGGTGGTCATCGGGC
+GCCAATAGCGGCGCCGGAGTC
+GCCCCCCGCATAGTAGGGGGA
+GCCCGTACCGGACCTCGGTTC
+GCCTCATGTACCGGAAGGGAC
+GACACGCGCCTGGGAGGGTTC
+GCCTTTGGCCTTGGATGAGAA
+GGCCCTCGGATCGCTTGGGAA
+GCATGTTGGGAATCCGCGGAC
+GACACGCGCTGTATGCGGGGA
+GCCAGGTACAAAGCGTCGTGC
+GCGATCAGCTTGTGGGCGTGC
+GACAAATCGGATACTGGGGCA
+GCACTTAGCAGCGTATCGTTA""",
+        )
+        motif = record[3][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+CCCAAGCTTACCCAGGGA
+CGTCTGCTGGACAACGGG
+CGACGGGTGGTCATCGGG
+CAATAGCGGCGCCGGAGT
+CCCCCGCATAGTAGGGGG
+CCGTACCGGACCTCGGTT
+CTCATGTACCGGAAGGGA
+CACGCGCCTGGGAGGGTT
+CTTTGGCCTTGGATGAGA
+CCCTCGGATCGCTTGGGA
+ATGTTGGGAATCCGCGGA
+CACGCGCTGTATGCGGGG
+CAGGTACAAAGCGTCGTG
+GATCAGCTTGTGGGCGTG
+CAAATCGGATACTGGGGC
+ACTTAGCAGCGTATCGTT""",
+        )
         self.assertEqual(record[4].alphabet, "ACGT")
         # using the old instances property:
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -288,6 +442,46 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record[4].alignment.sequences[14], "CGACCTGGAGGCT")
         self.assertEqual(record[4].mask, (1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1))
         self.assertAlmostEqual(record[4].score, 16.8287)
+        self.assertEqual(
+            str(record[4]),
+            """\
+CGGCACAGAGCTT
+ATCCGCGGACGCT
+CGCCTGGGAGGGT
+CGGAAGGGACGTT
+ACACACAGACGGT
+TGCCAGAGAGGTT
+AGACTGAGACGTT
+AATCGTAGAGGAT
+CGTCTCGTAGGGT
+CGTCGCGGAGGAT
+CTTCTTAGACGCT
+CGACGCAGAGGAT
+ATGCTTAGAGGTT
+AGACTTGGGCGAT
+CGACCTGGAGGCT""",
+        )
+        motif = record[4][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+GCACAGAGCT
+CCGCGGACGC
+CCTGGGAGGG
+GAAGGGACGT
+ACACAGACGG
+CCAGAGAGGT
+ACTGAGACGT
+TCGTAGAGGA
+TCTCGTAGGG
+TCGCGGAGGA
+TCTTAGACGC
+ACGCAGAGGA
+GCTTAGAGGT
+ACTTGGGCGA
+ACCTGGAGGC""",
+        )
         self.assertEqual(record[5].alphabet, "ACGT")
         # using the old instances property:
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -334,6 +528,52 @@ class MotifTestsBasic(unittest.TestCase):
             (1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1),
         )
         self.assertAlmostEqual(record[5].score, 15.0441)
+        self.assertEqual(
+            str(record[5]),
+            """\
+GTGCGCGAAGGAAGCAGCGCGTG
+TTGAGCCGAGTAAAGGGCTGGTG
+CAATGCTAAGCTCTGTGCCGACG
+CAACTCTCTATGTAGTGCCCGAG
+CGACGCTTTGTACCTGGCTTGCG
+CGAGTCAATGACACGCGCCTGGG
+CGATACGCTGCTAAGTGCCGTCC
+CCGGGCCAATAGCGGCGCCGGAG
+CCACGCTTCGACACGTGGTATAG
+CCGAGCCTCATGTACCGGAAGGG
+CTGCTCCCCGCATACAGCGCGTG
+CCGAGGTCCGGTACGGGCAAGCC
+GTGCTCATAGGGACGTCGCGGAG
+CCCTACTATGCGGGGGGCAGGTC
+GCCAGCAATTGCAGGTGGTCGTG
+CTCTGCGTCGCATGGCGGCGTGG
+GGAGGCTTAGACTTGGGCGATAC
+GCATGGAGAGAGATCCGGAGGAG""",
+        )
+        motif = record[5][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+GCGCGAAGGAAGCAGCGCGT
+GAGCCGAGTAAAGGGCTGGT
+ATGCTAAGCTCTGTGCCGAC
+ACTCTCTATGTAGTGCCCGA
+ACGCTTTGTACCTGGCTTGC
+AGTCAATGACACGCGCCTGG
+ATACGCTGCTAAGTGCCGTC
+GGGCCAATAGCGGCGCCGGA
+ACGCTTCGACACGTGGTATA
+GAGCCTCATGTACCGGAAGG
+GCTCCCCGCATACAGCGCGT
+GAGGTCCGGTACGGGCAAGC
+GCTCATAGGGACGTCGCGGA
+CTACTATGCGGGGGGCAGGT
+CAGCAATTGCAGGTGGTCGT
+CTGCGTCGCATGGCGGCGTG
+AGGCTTAGACTTGGGCGATA
+ATGGAGAGAGATCCGGAGGA""",
+        )
         self.assertEqual(record[6].alphabet, "ACGT")
         # using the old instances property:
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -381,6 +621,56 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record[6].alignment.sequences[19], "GGCCGTCAGCTCTCA")
         self.assertEqual(record[6].mask, (1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1))
         self.assertAlmostEqual(record[6].score, 13.3145)
+        self.assertEqual(
+            str(record[6]),
+            """\
+GCGCGTGTGTGTAAC
+GCACAGAGCTTAGCA
+GGTGGTCATCGGGCA
+GCGCGTGTCATTGAC
+GGACGGCACTTAGCA
+GCGCGTCCCGGGCCA
+GCTCGGCCCGTTGTC
+GCGCGTGTCCTTTAA
+GCTGATCGCTGCTCC
+GCCCGTACCGGACCT
+GGACGTCGCGGAGGA
+GCGGGGGGCAGGTCA
+GGACGTACTGGCACA
+GCAGGTGGTCGTGCA
+GCGCATACCTTAACA
+GCACGGGACTTCAAC
+GCACGTAGCTGGTAA
+GCTCGTCTATGGTCA
+GCGCATGCTGGATCC
+GGCCGTCAGCTCTCA""",
+        )
+        motif = record[6][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+GCGTGTGTGTAA
+ACAGAGCTTAGC
+TGGTCATCGGGC
+GCGTGTCATTGA
+ACGGCACTTAGC
+GCGTCCCGGGCC
+TCGGCCCGTTGT
+GCGTGTCCTTTA
+TGATCGCTGCTC
+CCGTACCGGACC
+ACGTCGCGGAGG
+GGGGGGCAGGTC
+ACGTACTGGCAC
+AGGTGGTCGTGC
+GCATACCTTAAC
+ACGGGACTTCAA
+ACGTAGCTGGTA
+TCGTCTATGGTC
+GCATGCTGGATC
+CCGTCAGCTCTC""",
+        )
         self.assertEqual(record[7].alphabet, "ACGT")
         # using the old instances property:
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -431,6 +721,56 @@ class MotifTestsBasic(unittest.TestCase):
             (1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1),
         )
         self.assertAlmostEqual(record[7].score, 11.6098)
+        self.assertEqual(
+            str(record[7]),
+            """\
+GAACCGAGGTCCGGTACGGGC
+GCCCCCCGCATAGTAGGGGGA
+GTCCCTGGGTAAGCTTGGGGC
+ACTCCACGCTTCGACACGTGG
+ATCCTCTGCGTCGCATGGCGG
+GTTCAATGCTAAGCTCTGTGC
+GCTCATAGGGACGTCGCGGAG
+GTCCCGGGCCAATAGCGGCGC
+GCACTTAGCAGCGTATCGTTA
+GGCCCTCGGATCGCTTGGGAA
+CTGCTGGACAACGGGCCGAGC
+GGGCACTACATAGAGAGTTGC
+AGCCTCCAGGTCGCATGGAGA
+AATCGTAGATCAGAGGCGAGA
+GAACTCCACTAAGACTTGAGA
+GAGCAGCGATCAGCTTGTGGG
+GCCAGGTACAAAGCGTCGTGC
+AGTCAATGACACGCGCCTGGG
+GGTCATGGAATCTTATGTAGC
+GTAGATAACAGAGGTCGGGGG""",
+        )
+        motif = record[7][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+ACCGAGGTCCGGTACGGG
+CCCCCGCATAGTAGGGGG
+CCCTGGGTAAGCTTGGGG
+TCCACGCTTCGACACGTG
+CCTCTGCGTCGCATGGCG
+TCAATGCTAAGCTCTGTG
+TCATAGGGACGTCGCGGA
+CCCGGGCCAATAGCGGCG
+ACTTAGCAGCGTATCGTT
+CCCTCGGATCGCTTGGGA
+GCTGGACAACGGGCCGAG
+GCACTACATAGAGAGTTG
+CCTCCAGGTCGCATGGAG
+TCGTAGATCAGAGGCGAG
+ACTCCACTAAGACTTGAG
+GCAGCGATCAGCTTGTGG
+CAGGTACAAAGCGTCGTG
+TCAATGACACGCGCCTGG
+TCATGGAATCTTATGTAG
+AGATAACAGAGGTCGGGG""",
+        )
         self.assertEqual(record[8].alphabet, "ACGT")
         # using the old instances property:
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -466,6 +806,44 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record[8].alignment.sequences[13], "GAGTTCACATGGCTG")
         self.assertEqual(record[8].mask, (1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1))
         self.assertAlmostEqual(record[8].score, 11.2943)
+        self.assertEqual(
+            str(record[8]),
+            """\
+CCGAGTAAAGGGCTG
+GTGGTCATCGGGCAC
+GATAACAGAGGTCGG
+CGGCGCCGGAGTCTG
+GCGCGTCCCGGGCCA
+CTGGACAACGGGCCG
+CGGATACTGGGGCAG
+GGGAGCAGCGATCAG
+CAGAACCGAGGTCCG
+GGGTCCCTGGGTAAG
+GTGCTCATAGGGACG
+GAGATCCGGAGGAGG
+GCGATCCGAGGGCCG
+GAGTTCACATGGCTG""",
+        )
+        motif = record[8][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+GAGTAAAGGGCT
+GGTCATCGGGCA
+TAACAGAGGTCG
+GCGCCGGAGTCT
+GCGTCCCGGGCC
+GGACAACGGGCC
+GATACTGGGGCA
+GAGCAGCGATCA
+GAACCGAGGTCC
+GTCCCTGGGTAA
+GCTCATAGGGAC
+GATCCGGAGGAG
+GATCCGAGGGCC
+GTTCACATGGCT""",
+        )
         self.assertEqual(record[9].alphabet, "ACGT")
         # using the old instances property:
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -509,6 +887,52 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record[9].alignment.sequences[17], "TGGAGGCTTAG")
         self.assertEqual(record[9].mask, (1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1))
         self.assertAlmostEqual(record[9].score, 9.7924)
+        self.assertEqual(
+            str(record[9]),
+            """\
+TAGAGGCGGTG
+GCTAAGCTCTG
+TGGAAGCAGTG
+GCGAGGCTGTG
+ACGACGCTTTG
+GGGACGCGCAC
+TCGAAGCGTGG
+TGTATGCGGGG
+GGTAAGCTTGG
+TGTACGCTGGG
+ACTATGCGGGG
+GGTATGCGCTG
+GGTACCCGGAG
+GCGACGCAGAG
+TGGCGGCGTGG
+TCTAGGCGGGC
+AGTATGCTTAG
+TGGAGGCTTAG""",
+        )
+        motif = record[9][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+GAGGCGGT
+TAAGCTCT
+GAAGCAGT
+GAGGCTGT
+GACGCTTT
+GACGCGCA
+GAAGCGTG
+TATGCGGG
+TAAGCTTG
+TACGCTGG
+TATGCGGG
+TATGCGCT
+TACCCGGA
+GACGCAGA
+GCGGCGTG
+TAGGCGGG
+TATGCTTA
+GAGGCTTA""",
+        )
         self.assertEqual(record[10].alphabet, "ACGT")
         # using the old instances property:
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -545,6 +969,42 @@ class MotifTestsBasic(unittest.TestCase):
             (1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1),
         )
         self.assertAlmostEqual(record[10].score, 9.01393)
+        self.assertEqual(
+            str(record[10]),
+            """\
+GCACAGAGCTTAGCATTGAAC
+GTCCGCGGATTCCCAACATGC
+ATACACAGCCTCGCAAGCCAG
+GGCCCGGGACGCGCACTAAGA
+GCCCGTTGTCCAGCAGACGGC
+GAGCAGCGATCAGCTTGTGGG
+GAACCGAGGTCCGGTACGGGC
+GTCCCTGGGTAAGCTTGGGGC
+GACCTGCCCCCCGCATAGTAG
+AACCAGCGCATACCTTAACAG
+ATCCTCTGCGTCGCATGGCGG
+GACCATAGACGAGCATCAAAG
+GGCCCTCGGATCGCTTGGGAA""",
+        )
+        motif = record[10][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+ACAGAGCTTAGCATTGAA
+CCGCGGATTCCCAACATG
+ACACAGCCTCGCAAGCCA
+CCCGGGACGCGCACTAAG
+CCGTTGTCCAGCAGACGG
+GCAGCGATCAGCTTGTGG
+ACCGAGGTCCGGTACGGG
+CCCTGGGTAAGCTTGGGG
+CCTGCCCCCCGCATAGTA
+CCAGCGCATACCTTAACA
+CCTCTGCGTCGCATGGCG
+CCATAGACGAGCATCAAA
+CCCTCGGATCGCTTGGGA""",
+        )
         self.assertEqual(record[11].alphabet, "ACGT")
         # using the old instances property:
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -584,6 +1044,48 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record[11].alignment.sequences[15], "AGTGCCCGAG")
         self.assertEqual(record[11].mask, (1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
         self.assertAlmostEqual(record[11].score, 7.51121)
+        self.assertEqual(
+            str(record[11]),
+            """\
+GCCGTCCGTC
+GGCGTGCGCG
+GGCGCGTGTC
+AGCGCGTGTG
+GCGGTGCGTG
+AGCGCGTGTC
+AGCGTCCGCG
+ACCGTCTGTG
+GCCATGCGAC
+ACCACCCGTC
+GGCGCCGGAG
+ACCACGTGTC
+GGCTTGCGAG
+GCGATCCGAG
+AGTGCGCGTC
+AGTGCCCGAG""",
+        )
+        motif = record[11][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+CGTCCGT
+CGTGCGC
+CGCGTGT
+CGCGTGT
+GGTGCGT
+CGCGTGT
+CGTCCGC
+CGTCTGT
+CATGCGA
+CACCCGT
+CGCCGGA
+CACGTGT
+CTTGCGA
+GATCCGA
+TGCGCGT
+TGCCCGA""",
+        )
         self.assertEqual(record[12].alphabet, "ACGT")
         # using the old instances property:
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -626,6 +1128,48 @@ class MotifTestsBasic(unittest.TestCase):
             (1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1),
         )
         self.assertAlmostEqual(record[12].score, 5.63667)
+        self.assertEqual(
+            str(record[12]),
+            """\
+GCCGACGGGTGGTCATCGGG
+GCACGACGCTTTGTACCTGG
+CCTGGGAGGGTTCAATAACG
+GCGCGTCCCGGGCCAATAGC
+GCCGTCTGCTGGACAACGGG
+GTCCCTTCCGGTACATGAGG
+GCTGCTCCCCGCATACAGCG
+GCCCCAAGCTTACCCAGGGA
+ACCGGCTGACGCTAATACGG
+GCGGGGGGCAGGTCATTACA
+GCTGGCAGCGTCTAAGAAGG
+GCAGGTGGTCGTGCAATACG
+GCTGGTTGAAGTCCCGTGCG
+GCACGTAGCTGGTAAATAGG
+GCGGCGTGGATTTCATACAG
+CCTGGAGGCTTAGACTTGGG""",
+        )
+        motif = record[12][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+CGACGGGTGGTCATCGG
+ACGACGCTTTGTACCTG
+TGGGAGGGTTCAATAAC
+GCGTCCCGGGCCAATAG
+CGTCTGCTGGACAACGG
+CCCTTCCGGTACATGAG
+TGCTCCCCGCATACAGC
+CCCAAGCTTACCCAGGG
+CGGCTGACGCTAATACG
+GGGGGGCAGGTCATTAC
+TGGCAGCGTCTAAGAAG
+AGGTGGTCGTGCAATAC
+TGGTTGAAGTCCCGTGC
+ACGTAGCTGGTAAATAG
+GGCGTGGATTTCATACA
+TGGAGGCTTAGACTTGG""",
+        )
         self.assertEqual(record[13].alphabet, "ACGT")
         # using the old instances property:
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -666,6 +1210,46 @@ class MotifTestsBasic(unittest.TestCase):
             (1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1),
         )
         self.assertAlmostEqual(record[13].score, 3.89842)
+        self.assertEqual(
+            str(record[13]),
+            """\
+GCCGACGGGTGGTCATCGGG
+ATCCGCGGACGCTTAGAGGG
+ACGCTTTGTACCTGGCTTGC
+ACGGACGGCACTTAGCAGCG
+GCCGTCTGCTGGACAACGGG
+ACACACAGACGGTTGAAAGG
+GCCGATAGTGCTTAAGTTCG
+CTTGCCCGTACCGGACCTCG
+ACCGGCTGACGCTAATACGG
+GCCCCCCGCATAGTAGGGGG
+GCTGGCAGCGTCTAAGAAGG
+GCAGGTGGTCGTGCAATACG
+ACGCACGGGACTTCAACCAG
+GCACGTAGCTGGTAAATAGG
+ATCCTCTGCGTCGCATGGCG""",
+        )
+        motif = record[13][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+CGACGGGTGGTCATCGG
+CCGCGGACGCTTAGAGG
+GCTTTGTACCTGGCTTG
+GGACGGCACTTAGCAGC
+CGTCTGCTGGACAACGG
+ACACAGACGGTTGAAAG
+CGATAGTGCTTAAGTTC
+TGCCCGTACCGGACCTC
+CGGCTGACGCTAATACG
+CCCCCGCATAGTAGGGG
+TGGCAGCGTCTAAGAAG
+AGGTGGTCGTGCAATAC
+GCACGGGACTTCAACCA
+ACGTAGCTGGTAAATAG
+CCTCTGCGTCGCATGGC""",
+        )
         self.assertEqual(record[14].alphabet, "ACGT")
         # using the old instances property:
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -701,6 +1285,44 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(record[14].alignment.sequences[13], "TAGGCGGGCCAT")
         self.assertEqual(record[14].mask, (1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1))
         self.assertAlmostEqual(record[14].score, 3.33444)
+        self.assertEqual(
+            str(record[14]),
+            """\
+GAGGCTGTGTAT
+GAGGTCGGGGGT
+GACGGACGGCAC
+TTGGCCCGGGAC
+GAGGCTCGGCCC
+CACGCGCTGTAT
+TAGGCCAGGTAT
+GAGGTCCGGTAC
+TACGCTGGGGAT
+GTCGCGGAGGAT
+TACGCACGGGAC
+TACTCCGGGTAC
+GACGCAGAGGAT
+TAGGCGGGCCAT""",
+        )
+        motif = record[14][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+GGCTGTGTA
+GGTCGGGGG
+CGGACGGCA
+GGCCCGGGA
+GGCTCGGCC
+CGCGCTGTA
+GGCCAGGTA
+GGTCCGGTA
+CGCTGGGGA
+CGCGGAGGA
+CGCACGGGA
+CTCCGGGTA
+CGCAGAGGA
+GGCGGGCCA""",
+        )
         self.assertEqual(record[15].alphabet, "ACGT")
         # using the old instances property:
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -752,39 +1374,95 @@ class MotifTestsBasic(unittest.TestCase):
             record[15].mask, (1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1)
         )
         self.assertAlmostEqual(record[15].score, 1.0395)
+        self.assertEqual(
+            str(record[15]),
+            """\
+CGGCTCAATCGTAGAGGC
+CGACGGGTGGTCATCGGG
+CGCTTAGAGGGCACAAGC
+TGACACGCGCCTGGGAGG
+CGATACGCTGCTAAGTGC
+CGTCCCGGGCCAATAGCG
+CCACGCTTCGACACGTGG
+CGTCTGCTGGACAACGGG
+ACACAGACGGTTGAAAGG
+TGCTCCCCGCATACAGCG
+TGAGGCTTGCCCGTACCG
+TGCCCCAAGCTTACCCAG
+CGGCTGACGCTAATACGG
+CGCGACGTCCCTATGAGC
+TGCCCCCCGCATAGTAGG
+CGTTGCCTTCTTAGACGC
+TGACTCAATCGTAGACCC
+AGTCCCGTGCGTATGTGG
+AGGCTCGCACGTAGCTGG
+CCACGCCGCCATGCGACG
+AGCCTCCAGGTCGCATGG""",
+        )
+        motif = record[15][2:-1]
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertEqual(
+            str(motif),
+            """\
+GCTCAATCGTAGAGG
+ACGGGTGGTCATCGG
+CTTAGAGGGCACAAG
+ACACGCGCCTGGGAG
+ATACGCTGCTAAGTG
+TCCCGGGCCAATAGC
+ACGCTTCGACACGTG
+TCTGCTGGACAACGG
+ACAGACGGTTGAAAG
+CTCCCCGCATACAGC
+AGGCTTGCCCGTACC
+CCCCAAGCTTACCCA
+GCTGACGCTAATACG
+CGACGTCCCTATGAG
+CCCCCCGCATAGTAG
+TTGCCTTCTTAGACG
+ACTCAATCGTAGACC
+TCCCGTGCGTATGTG
+GCTCGCACGTAGCTG
+ACGCCGCCATGCGAC
+CCTCCAGGTCGCATG""",
+        )
 
     def test_clusterbuster_parsing_and_output(self):
         """Test if Bio.motifs can parse and output Cluster Buster PFM files."""
-        record = motifs.parse(self.CLUSTERBUSTERin, "clusterbuster")
-        self.assertEqual(len(record), 3)
-        self.assertEqual(record[0].name, "MA0004.1")
-        self.assertEqual(record[1].name, "MA0006.1")
-        self.assertEqual(record[2].name, "MA0008.1")
-        self.assertEqual(record[0].degenerate_consensus, "CACGTG")
-        self.assertEqual(record[1].degenerate_consensus, "YGCGTG")
-        self.assertEqual(record[2].degenerate_consensus, "CAATTATT")
+        with open("motifs/clusterbuster.pfm") as stream:
+            record = motifs.parse(stream, "clusterbuster")
+            self.assertEqual(len(record), 3)
+            self.assertEqual(record[0].name, "MA0004.1")
+            self.assertEqual(record[1].name, "MA0006.1")
+            self.assertEqual(record[2].name, "MA0008.1")
+            self.assertEqual(record[0].degenerate_consensus, "CACGTG")
+            self.assertEqual(record[1].degenerate_consensus, "YGCGTG")
+            self.assertEqual(record[2].degenerate_consensus, "CAATTATT")
 
-        self.CLUSTERBUSTERin.seek(0)
-        self.assertEqual(
-            motifs.write(record, "clusterbuster").split(),
-            self.CLUSTERBUSTERin.read().split(),
-        )
+            stream.seek(0)
+            self.assertEqual(
+                motifs.write(record, "clusterbuster").split(),
+                stream.read().split(),
+            )
 
     def test_xms_parsing(self):
         """Test if Bio.motifs can parse and output xms PFM files."""
-        record = motifs.parse(self.XMSin, "xms")
+        with open("motifs/abdb.xms") as stream:
+            record = motifs.parse(stream, "xms")
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0].name, "Abd-B")
         self.assertEqual(record[0].length, 14)
 
     def test_pfm_parsing(self):
         """Test if Bio.motifs can parse JASPAR-style pfm files."""
-        m = motifs.read(self.PFMin, "pfm")
+        with open("motifs/SRF.pfm") as stream:
+            m = motifs.read(stream, "pfm")
         self.assertEqual(m.length, 12)
 
     def test_pfm_four_columns_parsing(self):
         """Test if Bio.motifs.pfm can parse motifs in position frequency matrix format (4 columns)."""
-        record = motifs.parse(self.PFMFOURCOLUMNSin, "pfm-four-columns")
+        with open("motifs/fourcolumns.pfm") as stream:
+            record = motifs.parse(stream, "pfm-four-columns")
         self.assertEqual(len(record), 8)
         self.assertEqual(record[0].length, 8)
         self.assertEqual(record[1].length, 20)
@@ -800,7 +1478,8 @@ class MotifTestsBasic(unittest.TestCase):
 
     def test_pfm_four_rows_parsing(self):
         """Test if Bio.motifs.pfm can parse motifs in position frequency matrix format (4 rows)."""
-        record = motifs.parse(self.PFMFOURROWSin, "pfm-four-rows")
+        with open("motifs/fourrows.pfm") as stream:
+            record = motifs.parse(stream, "pfm-four-rows")
         self.assertEqual(len(record), 8)
         self.assertEqual(record[0].length, 6)
         self.assertEqual(record[1].length, 15)
@@ -816,23 +1495,26 @@ class MotifTestsBasic(unittest.TestCase):
 
     def test_sites_parsing(self):
         """Test if Bio.motifs can parse JASPAR-style sites files."""
-        m = motifs.read(self.SITESin, "sites")
+        with open("motifs/Arnt.sites") as stream:
+            m = motifs.read(stream, "sites")
         self.assertEqual(m.length, 6)
 
     def test_TFoutput(self):
         """Ensure that we can write proper TransFac output files."""
-        with open(self.TFout, "w") as output_handle:
-            output_handle.write(self.m.format("transfac"))
+        m = motifs.create([Seq("ATATA")])
+        with tempfile.TemporaryFile("w") as stream:
+            stream.write(m.format("transfac"))
 
     def test_format(self):
-        self.m.name = "Foo"
-        s1 = self.m.format("pfm")
+        m = motifs.create([Seq("ATATA")])
+        m.name = "Foo"
+        s1 = m.format("pfm")
         expected_pfm = """  1.00   0.00   1.00   0.00  1.00
   0.00   0.00   0.00   0.00  0.00
   0.00   0.00   0.00   0.00  0.00
   0.00   1.00   0.00   1.00  0.00
 """
-        s2 = self.m.format("jaspar")
+        s2 = m.format("jaspar")
         expected_jaspar = """>None Foo
 A [  1.00   0.00   1.00   0.00   1.00]
 C [  0.00   0.00   0.00   0.00   0.00]
@@ -840,7 +1522,7 @@ G [  0.00   0.00   0.00   0.00   0.00]
 T [  0.00   1.00   0.00   1.00   0.00]
 """
         self.assertEqual(s2, expected_jaspar)
-        s3 = self.m.format("transfac")
+        s3 = m.format("transfac")
         expected_transfac = """P0      A      C      G      T
 01      1      0      0      0      A
 02      0      0      0      1      T
@@ -851,16 +1533,16 @@ XX
 //
 """
         self.assertEqual(s3, expected_transfac)
-        self.assertRaises(ValueError, self.m.format, "foo_bar")
+        self.assertRaises(ValueError, m.format, "foo_bar")
 
     def test_reverse_complement(self):
         """Test if motifs can be reverse-complemented."""
         background = {"A": 0.3, "C": 0.2, "G": 0.2, "T": 0.3}
         pseudocounts = 0.5
-        m = self.m
+        m = motifs.create([Seq("ATATA")])
         m.background = background
         m.pseudocounts = pseudocounts
-        received_forward = self.m.format("transfac")
+        received_forward = m.format("transfac")
         expected_forward = """\
 P0      A      C      G      T
 01      1      0      0      0      A
@@ -902,7 +1584,8 @@ T:   0.50   0.17   0.50   0.17   0.50
 """
         self.assertEqual(str(m.pwm), expected_reverse_pwm)
         # Same thing, but now start with a motif calculated from a count matrix
-        counts = self.m.counts
+        m = motifs.create([Seq("ATATA")])
+        counts = m.counts
         m = motifs.Motif(counts=counts)
         m.background = background
         m.pseudocounts = pseudocounts
@@ -3419,11 +4102,10 @@ class TestTransfac(unittest.TestCase):
 class MotifTestPWM(unittest.TestCase):
     """PWM motif tests."""
 
-    def setUp(self):
-        """Define motif and sequence for tests."""
-        with open("motifs/SRF.pfm") as handle:
-            self.m = motifs.read(handle, "pfm")
-        self.s = Seq("ACGTGTGCGTAGTGCGT")
+    with open("motifs/SRF.pfm") as handle:
+        m = motifs.read(handle, "pfm")
+
+    s = Seq("ACGTGTGCGTAGTGCGT")
 
     def test_getitem(self):
         counts = self.m.counts
