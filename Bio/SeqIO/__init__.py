@@ -844,8 +844,12 @@ def index(filename, format, alphabet=None, key_function=None):
 
     """
     # Try and give helpful error messages:
-    if not isinstance(filename, str):
-        raise TypeError("Need a filename (not a handle)")
+    if type(filename).__str__ is object.__str__:
+        raise TypeError("Need string for the filename (not a handle)")
+    elif not isinstance(filename, str):
+        # if filename is not a string, but can be converted to one, then
+        # convert it. Makes the API a bit nicer.
+        filename = str(filename)
     if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
@@ -924,14 +928,19 @@ def index_db(
 
     """
     # Try and give helpful error messages:
-    if not isinstance(index_filename, str):
-        raise TypeError("Need a string for the index filename")
-    if isinstance(filenames, str):
+    if type(index_filename).__str__ is object.__str__:
+        raise TypeError("Need a string for the index filename (not a handle)")
+    elif not isinstance(index_filename, str):
+        # if index_filename is not a string, but can be converted to one, then
+        # convert it. Makes the API a bit nicer.
+        index_filename = str(index_filename)
+    if type(filenames).__str__ is not object.__str__:
         # Make the API a little more friendly, and more similar
         # to Bio.SeqIO.index(...) for indexing just one file.
-        filenames = [filenames]
+        filenames = [str(filenames)]
     if filenames is not None and not isinstance(filenames, list):
-        raise TypeError("Need a list of filenames (as strings), or one filename")
+        # raise TypeError("Need a list of filenames (as strings), or one filename")
+        raise TypeError(str(type(filenames)))
     if format is not None and not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if format and not format.islower():
