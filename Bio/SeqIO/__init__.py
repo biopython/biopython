@@ -844,12 +844,6 @@ def index(filename, format, alphabet=None, key_function=None):
 
     """
     # Try and give helpful error messages:
-    if type(filename).__str__ is object.__str__:
-        raise TypeError("Need string for the filename (not a handle)")
-    elif not isinstance(filename, str):
-        # if filename is not a string, but can be converted to one, then
-        # convert it. Makes the API a bit nicer.
-        filename = str(filename)
     if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
@@ -873,9 +867,15 @@ def index(filename, format, alphabet=None, key_function=None):
         alphabet,
         key_function,
     )
-    return _IndexedSeqFileDict(
-        proxy_class(filename, format), key_function, repr, "SeqRecord"
-    )
+
+    try:
+        random_access_proxy = proxy_class(filename, format)
+    except TypeError:
+        raise TypeError(
+            "Need a string or path-like object for the filename (not a handle)"
+        )
+
+    return _IndexedSeqFileDict(random_access_proxy, key_function, repr, "SeqRecord")
 
 
 def index_db(
@@ -927,20 +927,28 @@ def index_db(
     glob which is useful for building lists of files.
 
     """
+    from os import fspath
+
+    def is_pathlike(obj):
+        """Test if the given object can be accepted as a path."""
+        try:
+            fspath(obj)
+            return True
+        except TypeError:
+            return False
+
     # Try and give helpful error messages:
-    if type(index_filename).__str__ is object.__str__:
-        raise TypeError("Need a string for the index filename (not a handle)")
-    elif not isinstance(index_filename, str):
-        # if index_filename is not a string, but can be converted to one, then
-        # convert it. Makes the API a bit nicer.
-        index_filename = str(index_filename)
-    if type(filenames).__str__ is not object.__str__:
+    if not is_pathlike(index_filename):
+        raise TypeError("Need a string or path-like object for filename (not a handle)")
+    if is_pathlike(filenames):
         # Make the API a little more friendly, and more similar
         # to Bio.SeqIO.index(...) for indexing just one file.
-        filenames = [str(filenames)]
+        filenames = [filenames]
     if filenames is not None and not isinstance(filenames, list):
-        # raise TypeError("Need a list of filenames (as strings), or one filename")
-        raise TypeError(str(type(filenames)))
+        raise TypeError(
+            "Need a list of filenames (as strings or path-like "
+            "object), or one filename"
+        )
     if format is not None and not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if format and not format.islower():
