@@ -355,7 +355,7 @@ class Motif:
             self.__mask = (1,) * self.length
         elif len(mask) != self.length:
             raise ValueError(
-                "The length (%d) of the mask is inconsistent with the length (%d) of the motif",
+                "The length (%d) of the mask is inconsistent with the length (%d) of the motif" %
                 (len(mask), self.length),
             )
         elif isinstance(mask, str):
@@ -446,9 +446,16 @@ class Motif:
             alignment = self.alignment[:, key]
             counts = None
         motif = Motif(alphabet=alphabet, alignment=alignment, counts=counts)
+        motif.mask = self.mask[key]
+        if alignment is None and counts is None:
+            try:
+                length = self.length
+            except AttributeError:
+                pass
+            else:
+                motif.length = len(range(*key.indices(length)))
         motif.pseudocounts = self.pseudocounts.copy()
         motif.background = self.background.copy()
-        motif.mask = self.mask[key]
         return motif
 
     @property
