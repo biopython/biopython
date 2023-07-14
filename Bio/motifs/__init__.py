@@ -670,18 +670,6 @@ class Motif:
          - transfac : TRANSFAC like files
 
         """
-        return self.format(format_spec)
-
-    def format(self, format_spec):
-        """Return a string representation of the Motif in the given format.
-
-        Currently supported formats:
-         - clusterbuster: Cluster Buster position frequency matrix format
-         - pfm : JASPAR single Position Frequency Matrix
-         - jaspar : JASPAR multiple Position Frequency Matrix
-         - transfac : TRANSFAC like files
-
-        """
         if format_spec in ("pfm", "jaspar"):
             from Bio.motifs import jaspar
 
@@ -699,6 +687,19 @@ class Motif:
             return clusterbuster.write(motifs)
         else:
             raise ValueError("Unknown format type %s" % format_spec)
+
+    def format(self, format_spec):
+        """Return a string representation of the Motif in the given format.
+
+        Currently supported formats:
+         - clusterbuster: Cluster Buster position frequency matrix format
+         - pfm : JASPAR single Position Frequency Matrix
+         - jaspar : JASPAR multiple Position Frequency Matrix
+         - transfac : TRANSFAC like files
+
+        """
+        raise Exception
+        return self.__format__(format_spec)
 
 
 def write(motifs, fmt):
