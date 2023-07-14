@@ -186,6 +186,22 @@ GCATT
 The reverse complement and the degenerate consensus sequence are
 only defined for DNA motifs.
 
+You can slice the motif to obtain a new \verb+Motif+ object for the selected positions:
+%cont-doctest
+\begin{minted}{pycon}
+>>> m_sub = m[1:-2]
+>>> print(m_sub)
+AC
+AC
+AC
+AC
+AC
+AT
+AT
+>>> m_sub.consensus
+Seq('AC')
+\end{minted}
+
 \subsection{Creating a sequence logo}
 If we have internet access, we can create a \href{https://weblogo.berkeley.edu}{weblogo}:
 \begin{minted}{pycon}

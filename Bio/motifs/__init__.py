@@ -355,8 +355,8 @@ class Motif:
             self.__mask = (1,) * self.length
         elif len(mask) != self.length:
             raise ValueError(
-                "The length (%d) of the mask is inconsistent with the length (%d) of the motif",
-                (len(mask), self.length),
+                "The length (%d) of the mask is inconsistent with the length (%d) of the motif"
+                % (len(mask), self.length),
             )
         elif isinstance(mask, str):
             self.__mask = []
@@ -418,6 +418,45 @@ class Motif:
     background = property(__get_background, __set_background)
     del __get_background
     del __set_background
+
+    def __getitem__(self, key):
+        """Return a new Motif object for the positions included in key.
+
+        >>> from Bio import motifs
+        >>> motif = motifs.create(["AACGCCA", "ACCGCCC", "AACTCCG"])
+        >>> print(motif)
+        AACGCCA
+        ACCGCCC
+        AACTCCG
+        >>> print(motif[:-1])
+        AACGCC
+        ACCGCC
+        AACTCC
+        """
+        if not isinstance(key, slice):
+            raise TypeError("motif indices must be slices")
+        alphabet = self.alphabet
+        if self.alignment is None:
+            alignment = None
+            if self.counts is None:
+                counts = None
+            else:
+                counts = {letter: self.counts[letter][key] for letter in alphabet}
+        else:
+            alignment = self.alignment[:, key]
+            counts = None
+        motif = Motif(alphabet=alphabet, alignment=alignment, counts=counts)
+        motif.mask = self.mask[key]
+        if alignment is None and counts is None:
+            try:
+                length = self.length
+            except AttributeError:
+                pass
+            else:
+                motif.length = len(range(*key.indices(length)))
+        motif.pseudocounts = self.pseudocounts.copy()
+        motif.background = self.background.copy()
+        return motif
 
     @property
     def pwm(self):
