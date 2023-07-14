@@ -887,7 +887,7 @@ Speaking of exporting, let's look at export functions in general.
 We can use the \verb+format+ built-in function to write the motif in the simple JASPAR \verb+pfm+ format:
 %the tabs in the output confuse doctest; don't test
 \begin{minted}{pycon}
->>> print(arnt.format("pfm"))
+>>> print(format(arnt, "pfm"))
   4.00  19.00   0.00   0.00   0.00   0.00
  16.00   0.00  20.00   0.00   0.00   0.00
   0.00   1.00   0.00  20.00   0.00  20.00
@@ -895,7 +895,7 @@ We can use the \verb+format+ built-in function to write the motif in the simple 
 \end{minted}
 Similarly, we can use \verb+format+ to write the motif in the JASPAR \verb+jaspar+ format:
 \begin{minted}{pycon}
->>> print(arnt.format("jaspar"))
+>>> print(format(arnt, "jaspar"))
 >MA0004.1  Arnt
 A [  4.00  19.00   0.00   0.00   0.00   0.00]
 C [ 16.00   0.00  20.00   0.00   0.00   0.00]
@@ -907,7 +907,7 @@ To write the motif in a TRANSFAC-like matrix format, use
 
 %cont-doctest
 \begin{minted}{pycon}
->>> print(m.format("transfac"))
+>>> print(format(m, "transfac"))
 P0      A      C      G      T
 01      3      0      0      4      W
 02      7      0      0      0      A
