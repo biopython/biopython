@@ -698,7 +698,6 @@ class Motif:
          - transfac : TRANSFAC like files
 
         """
-        raise Exception
         return self.__format__(format_spec)
 
 
