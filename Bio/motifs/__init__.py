@@ -460,12 +460,12 @@ class Motif:
 
     @property
     def pwm(self):
-        """Compute position weight matrices."""
+        """Calculate and return the position weight matrix for this motif."""
         return self.counts.normalize(self._pseudocounts)
 
     @property
     def pssm(self):
-        """Compute position specific scoring matrices."""
+        """Calculate and return the position specific scoring matrix for this motif."""
         return self.pwm.log_odds(self._background)
 
     @property
@@ -555,6 +555,19 @@ class Motif:
         The same rules are used by TRANSFAC.
         """
         return self.counts.degenerate_consensus
+
+    @property
+    def information_content(self):
+        """Return an array with the information content for each column of the motif."""
+        alignment = self.alignment
+        background = self.background
+        total = len(alignment)
+        values = np.zeros(alignment.length)
+        for letter, frequencies in alignment.frequencies.items():
+            mask = frequencies > 0
+            frequencies = frequencies[mask] / total
+            values[mask] += frequencies * np.log2(frequencies / background[letter])
+        return values
 
     def weblogo(self, fname, fmt="PNG", version="2.8.2", **kwds):
         """Download and save a weblogo using the Berkeley weblogo service.
