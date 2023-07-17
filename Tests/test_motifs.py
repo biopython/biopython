@@ -1437,6 +1437,14 @@ CCTCCAGGTCGCATG""",
             self.assertEqual(motif.alphabet, "GATC")
             self.assertEqual(motif.consensus, "CACGTG")
             self.assertEqual(motif.degenerate_consensus, "CACGTG")
+            self.assertTrue(
+                numpy.array_equal(
+                    motif.information_content,
+                    numpy.array(
+                        [1.278071905112638, 1.7136030428840439, 2.0, 2.0, 2.0, 2.0]
+                    ),
+                )
+            )
             self.assertEqual(motif[1:-2].consensus, "ACG")
             self.assertEqual(motif.length, 6)
             self.assertAlmostEqual(motif.counts["G", 0], 0.0)
@@ -1468,6 +1476,21 @@ CCTCCAGGTCGCATG""",
             self.assertEqual(motif.alphabet, "GATC")
             self.assertEqual(motif.consensus, "TGCGTG")
             self.assertEqual(motif.degenerate_consensus, "YGCGTG")
+            self.assertTrue(
+                numpy.array_equal(
+                    motif.information_content,
+                    numpy.array(
+                        [
+                            0.28206397041108283,
+                            1.7501177071668148,
+                            1.7501177071668148,
+                            1.7501177071668148,
+                            2.0,
+                            2.0,
+                        ]
+                    ),
+                )
+            )
             self.assertEqual(motif[1:-2].consensus, "GCG")
             self.assertEqual(motif.length, 6)
             self.assertAlmostEqual(motif.counts["G", 0], 2.0)
@@ -1499,6 +1522,23 @@ CCTCCAGGTCGCATG""",
             self.assertEqual(motif.alphabet, "GATC")
             self.assertEqual(motif.consensus, "CAATTATT")
             self.assertEqual(motif.degenerate_consensus, "CAATTATT")
+            self.assertTrue(
+                numpy.array_equal(
+                    motif.information_content,
+                    numpy.array(
+                        [
+                            0.2549535827226545,
+                            1.2358859454459725,
+                            2.0,
+                            2.0,
+                            1.278071905112638,
+                            1.7577078109175852,
+                            1.7577078109175852,
+                            1.5978208097977271,
+                        ]
+                    ),
+                )
+            )
             self.assertEqual(motif[1:-2].consensus, "AATTA")
             self.assertEqual(motif.length, 8)
             self.assertAlmostEqual(motif.counts["G", 0], 4.0)
@@ -1606,8 +1646,46 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 13], 0.333333333)
         self.assertEqual(motif.consensus, "GCGTTTATGGCGAC")
         self.assertEqual(motif.degenerate_consensus, "NSNTTTATGGCNNN")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        0.09689283163718865,
+                        0.26557323997556864,
+                        0.007815379142180268,
+                        1.1150033950025815,
+                        0.78848108520697,
+                        0.3768768552773923,
+                        1.125231003810913,
+                        0.7023990165752877,
+                        0.7536432192801433,
+                        0.3995487907017483,
+                        1.0658162802208113,
+                        0.022422587676774776,
+                        0.07979555429087543,
+                        0.03400971806422712,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[3::2].consensus, "TTTGGC")
         self.assertEqual(motif[3::2].degenerate_consensus, "TTTGNN")
+        self.assertTrue(
+            numpy.array_equal(
+                motif[3::2].information_content,
+                numpy.array(
+                    [
+                        1.1150033950025815,
+                        0.3768768552773923,
+                        0.7023990165752877,
+                        0.3995487907017483,
+                        0.022422587676774776,
+                        0.03400971806422712,
+                    ]
+                ),
+            )
+        )
 
     def test_pfm_parsing(self):
         """Test if Bio.motifs can parse JASPAR-style pfm files."""
@@ -1658,6 +1736,23 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 7], 0.009615385)
         self.assertEqual(motif.consensus, "TTATCACT")
         self.assertEqual(motif.degenerate_consensus, "TTATCACT")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        1.765707971839016,
+                        1.765707971839016,
+                        1.7657079718390165,
+                        1.765707971839016,
+                        1.7657079718390158,
+                        1.7657079718390165,
+                        1.7657079718390158,
+                        1.765707971839016,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[1:-2].consensus, "TATCA")
         motif = record[1]
         self.assertEqual(motif.name, "ENSG00000197372")
@@ -1745,6 +1840,35 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 19], 0.000000000)
         self.assertEqual(motif.consensus, "TGAACCGGATTAAGAGGACA")
         self.assertEqual(motif.degenerate_consensus, "WNRWNMGGATTANGAGGACA")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        0.1946677220077018,
+                        0.1566211351816578,
+                        0.31728135119311995,
+                        0.3086747573287918,
+                        0.053393542701508756,
+                        0.381471417197324,
+                        1.5505596169174871,
+                        1.8558501430757017,
+                        1.6274200195132635,
+                        1.8972899364737197,
+                        1.809312450637467,
+                        1.7709547585539227,
+                        0.2549373240046801,
+                        2.0,
+                        2.0,
+                        2.0,
+                        2.0,
+                        2.0,
+                        2.0,
+                        2.0,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[1:-2].consensus, "GAACCGGATTAAGAGGA")
         motif = record[2]
         self.assertAlmostEqual(motif.counts["G", 0], 0.083333300)
@@ -1796,6 +1920,26 @@ CCTCCAGGTCGCATG""",
         self.assertEqual(motif.alphabet, "GATC")
         self.assertEqual(motif.consensus, "TAAACTAAAAG")
         self.assertEqual(motif.degenerate_consensus, "TAAACTARNNN")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        0.4489017067534855,
+                        0.9591474871280075,
+                        1.3499768043761913,
+                        2.0,
+                        1.1833109116849791,
+                        1.0817044992792044,
+                        1.3499768043761913,
+                        0.5408517496401433,
+                        0.2704258182036411,
+                        0.04085174964014324,
+                        0.1120812409282564,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[1:-2].consensus, "AAACTAAA")
         motif = record[3]
         self.assertEqual(motif.name, "AbdA_Cell_FBgn0000014")
@@ -1831,6 +1975,22 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 6], 1.000000000)
         self.assertEqual(motif.consensus, "TTAATTA")
         self.assertEqual(motif.degenerate_consensus, "TTAATKA")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        1.0555114658337947,
+                        2.0,
+                        1.4967416652243541,
+                        2.0,
+                        1.6904565708496748,
+                        1.0817041659455104,
+                        1.1969282726758976,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[1:-2].consensus, "TAAT")
         motif = record[4]
         self.assertEqual(
@@ -1881,6 +2041,25 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 9], 0.444000000)
         self.assertEqual(motif.consensus, "ATGACTCATC")
         self.assertEqual(motif.degenerate_consensus, "NTGASTCAKN")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        0.30427230622817475,
+                        1.9657810606529142,
+                        1.7408585738061,
+                        1.8654244261025423,
+                        0.5449286810918202,
+                        1.8033449015144003,
+                        1.639502374827662,
+                        1.8370335049436752,
+                        0.3124728907316759,
+                        0.13671828556764112,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[1:-2].consensus, "TGACTCA")
         motif = record[5]
         self.assertEqual(motif.name, "AHR_si")
@@ -1924,6 +2103,24 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 8], 66.875582269)
         self.assertEqual(motif.consensus, "GTTGCGTGC")
         self.assertEqual(motif.degenerate_consensus, "NTNGCGTGN")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        0.09662409645348236,
+                        0.5383413903068038,
+                        0.17471270188228985,
+                        1.6270151623731723,
+                        1.8170663607301638,
+                        1.7760800937680195,
+                        1.803660112630464,
+                        2.0,
+                        0.17577786614573548,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[1:-2].consensus, "TTGCGT")
         motif = record[6]
         self.assertIsNone(motif.name)
@@ -1963,6 +2160,23 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 7], 0.019497000)
         self.assertEqual(motif.consensus, "ATGACTCA")
         self.assertEqual(motif.degenerate_consensus, "ATGACTCA")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        0.889358068874075,
+                        1.6123293058245811,
+                        1.471654165929799,
+                        1.4693092198124151,
+                        0.8764628815119266,
+                        1.5686388858173408,
+                        1.37357038822754,
+                        1.6369796776980579,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[1:-2].consensus, "TGACT")
         motif = record[7]
         self.assertIsNone(motif.name)
@@ -2014,6 +2228,26 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 10], 0.0)
         self.assertEqual(motif.consensus, "CCAAAAAACTT")
         self.assertEqual(motif.degenerate_consensus, "BCMAAMNRMTT")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        0.43314504855176084,
+                        2.0,
+                        0.6114044621231828,
+                        2.0,
+                        1.2699833698542062,
+                        0.7139129756130338,
+                        0.1909607288346033,
+                        1.0366644543273158,
+                        1.0817041659455104,
+                        1.180735028768561,
+                        2.0,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[1:-2].consensus, "CAAAAAAC")
 
     def test_pfm_four_rows_parsing(self):
@@ -2051,6 +2285,21 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 5], 4.0)
         self.assertEqual(motif.consensus, "GAAAGC")
         self.assertEqual(motif.degenerate_consensus, "GAAAKY")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        1.349977578351646,
+                        1.349977578351646,
+                        2.0,
+                        1.349977578351646,
+                        0.5408520829727552,
+                        1.0817041659455104,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[:-2].consensus, "GAAA")
         motif = record[1]
         self.assertEqual(motif.name, "")
@@ -2118,6 +2367,30 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 14], 0.583333333)
         self.assertEqual(motif.consensus, "AGCGGGGGGGGGAGC")
         self.assertEqual(motif.degenerate_consensus, "MGCNNNNNNNNNMGC")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        1.0,
+                        2.0,
+                        2.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        2.0,
+                        0.44890182844369547,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[:-2].consensus, "AGCGGGGGGGGGA")
         motif = record[2]
         self.assertEqual(motif.name, "")
@@ -2185,6 +2458,30 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 14], 148.0)
         self.assertEqual(motif.consensus, "TGTTCGAGGAATTTT")
         self.assertEqual(motif.degenerate_consensus, "NKWTCGAGGAATNNN")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        0.13892143832881046,
+                        0.2692660952911542,
+                        0.27915566353819243,
+                        0.2665840150038887,
+                        1.8371160692433293,
+                        1.3354706334248059,
+                        1.8856611660889357,
+                        1.6600123906824402,
+                        1.7329826640509962,
+                        1.3601399752384014,
+                        1.5978925123167893,
+                        0.8698961051280728,
+                        0.19290147849975406,
+                        0.11003972948477392,
+                        0.08469189143040626,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[:-2].consensus, "TGTTCGAGGAATT")
         motif = record[3]
         self.assertEqual(motif.name, "")
@@ -2216,6 +2513,21 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 5], 2.0)
         self.assertEqual(motif.consensus, "TCTAGA")
         self.assertEqual(motif.degenerate_consensus, "TCTAGA")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        1.0042727863947818,
+                        1.758059267146789,
+                        1.7580592671467892,
+                        1.7580592671467892,
+                        1.7580592671467892,
+                        1.5774573308022544,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[:-2].consensus, "TCTA")
         motif = record[4]
         self.assertEqual(motif.name, "")
@@ -2247,6 +2559,21 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 5], 0.02)
         self.assertEqual(motif.consensus, "TCTAGA")
         self.assertEqual(motif.degenerate_consensus, "TCTAGA")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        1.0042727863947818,
+                        1.758059267146789,
+                        1.7580592671467892,
+                        1.7580592671467892,
+                        1.7580592671467892,
+                        1.5774573308022544,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[:-2].consensus, "TCTA")
         motif = record[5]
         self.assertEqual(motif.name, "abd-A")
@@ -2286,6 +2613,23 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 7], 0.033934252)
         self.assertEqual(motif.consensus, "GTAATTAA")
         self.assertEqual(motif.degenerate_consensus, "NYAATTAA")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        0.2005361303021225,
+                        0.6336277209668335,
+                        0.933405467206956,
+                        1.3704286046679186,
+                        1.2873833086962072,
+                        1.0187720746919493,
+                        0.975022432438911,
+                        0.547109562258496,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[:-2].consensus, "GTAATT")
         motif = record[6]
         self.assertEqual(motif.name, "MA0001.1 AGL3")
@@ -2333,6 +2677,25 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 9], 3.0)
         self.assertEqual(motif.consensus, "CCATAAATAG")
         self.assertEqual(motif.degenerate_consensus, "CCAWAWATAG")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        1.7725753233561499,
+                        1.0972718180683638,
+                        1.0578945228970464,
+                        0.6353945886004412,
+                        0.9651537633423314,
+                        0.8757972203228152,
+                        0.6864859661195083,
+                        1.1561334005018244,
+                        0.8724039945822116,
+                        1.4691041160249607,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[:-2].consensus, "CCATAAAT")
         motif = record[7]
         self.assertEqual(motif.name, "MA0001.1 AGL3")
@@ -2380,6 +2743,25 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(motif.counts["C", 9], 3.0)
         self.assertEqual(motif.consensus, "CCATAAATAG")
         self.assertEqual(motif.degenerate_consensus, "CCAWAWATAG")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        1.7725753233561499,
+                        1.0972718180683638,
+                        1.0578945228970464,
+                        0.6353945886004412,
+                        0.9651537633423314,
+                        0.8757972203228152,
+                        0.6864859661195083,
+                        1.1561334005018244,
+                        0.8724039945822116,
+                        1.4691041160249607,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[:-2].consensus, "CCATAAAT")
 
     def test_sites_parsing(self):
@@ -2433,6 +2815,14 @@ CCTCCAGGTCGCATG""",
         self.assertAlmostEqual(m.counts["T", 5], 0)
         self.assertEqual(m.consensus, "CACGTG")
         self.assertEqual(m.degenerate_consensus, "CACGTG")
+        self.assertTrue(
+            numpy.array_equal(
+                m.information_content,
+                numpy.array(
+                    [1.278071905112638, 1.7136030428840439, 2.0, 2.0, 2.0, 2.0]
+                ),
+            )
+        )
         self.assertEqual(m[::2].consensus, "CCT")
 
     def test_TFoutput(self):
@@ -2665,6 +3055,28 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.alignment.sequences[6], "AGTGCATGTGGAA")
         self.assertEqual(motif.consensus, "GCGGCATGTGAAA")
         self.assertEqual(motif.degenerate_consensus, "GSKGCATGTGAAA")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        1.4083272214176723,
+                        0.5511843642748154,
+                        0.6212165065138244,
+                        1.136879431433369,
+                        2.0,
+                        2.0,
+                        2.0,
+                        2.0,
+                        1.4083272214176723,
+                        2.0,
+                        1.4083272214176723,
+                        2.0,
+                        1.136879431433369,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[1::2].consensus, "CGAGGA")
         motif = record[1]
         self.assertEqual(motif.name, "TTGACWCYTGCYCWG")
@@ -2762,6 +3174,30 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.alignment.sequences[6], "TTCACGCTTGCTACG")
         self.assertEqual(motif.consensus, "TTGACACCTGCTCTG")
         self.assertEqual(motif.degenerate_consensus, "TTGACWCYTGCYCNG")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        2.0,
+                        2.0,
+                        1.136879431433369,
+                        1.4083272214176723,
+                        2.0,
+                        0.6212165065138244,
+                        1.136879431433369,
+                        1.0147718639657484,
+                        1.4083272214176723,
+                        0.8511651457190834,
+                        1.4083272214176723,
+                        1.0147718639657484,
+                        0.8511651457190834,
+                        0.15762900682289133,
+                        2.0,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[1::2].consensus, "TAACGTT")
 
     def test_meme_parser_2(self):
@@ -4357,6 +4793,34 @@ class TestMEME(unittest.TestCase):
             self.assertIsNone(motif.instances)
         self.assertEqual(motif.consensus, "TGTGATCGAGGTCACACTT")
         self.assertEqual(motif.degenerate_consensus, "TGTGANNNWGNTCACAYWW")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        1.1684297174927525,
+                        0.9432809925744818,
+                        1.4307101633876265,
+                        1.1549413780465179,
+                        0.9308256303218774,
+                        0.009164393966550805,
+                        0.20124190687894253,
+                        0.17618542656995528,
+                        0.36777933103380855,
+                        0.6635834532368525,
+                        0.07729943368061855,
+                        0.9838293592717438,
+                        1.72489868427398,
+                        0.8397561713453014,
+                        1.72489868427398,
+                        0.8455332015343343,
+                        0.3106481207768122,
+                        0.7382733641762232,
+                        0.537435993300495,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[2:9].consensus, "TGATCGA")
         motif = record[1]
         self.assertEqual(motif.name, "IFXA")
@@ -4372,6 +4836,33 @@ class TestMEME(unittest.TestCase):
         self.assertIsNone(motif.alignment)
         self.assertEqual(motif.consensus, "TACTGTATATATATCCAG")
         self.assertEqual(motif.degenerate_consensus, "TACTGTATATAHAWMCAG")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        0.9632889858595118,
+                        1.02677956765017,
+                        2.451526420551951,
+                        1.7098384161433415,
+                        2.2598671267551107,
+                        1.7098384161433415,
+                        1.02677956765017,
+                        1.391583804103081,
+                        1.02677956765017,
+                        1.1201961888781142,
+                        0.27822438781180836,
+                        0.36915366971717867,
+                        1.7240522753630425,
+                        0.3802185945622609,
+                        0.790937683007783,
+                        2.451526420551951,
+                        1.7240522753630425,
+                        1.3924085743645374,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[2:9].consensus, "CTGTATA")
         # using the old instances property:
         with self.assertWarns(BiopythonDeprecationWarning):
@@ -4990,7 +5481,46 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif.counts["T", 10], 3)
         self.assertEqual(motif.counts["T", 11], 1)
         self.assertEqual(motif.degenerate_consensus, "SRACAGGTGKYG")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        0.4780719051126377,
+                        0.4780719051126377,
+                        0.6290494055453314,
+                        2.0,
+                        2.0,
+                        1.278071905112638,
+                        1.278071905112638,
+                        2.0,
+                        2.0,
+                        0.4780719051126377,
+                        1.0290494055453312,
+                        0.6290494055453314,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[1:-2].degenerate_consensus, "RACAGGTGK")
+        self.assertTrue(
+            numpy.array_equal(
+                motif[1:-2].information_content,
+                numpy.array(
+                    [
+                        0.4780719051126377,
+                        0.6290494055453314,
+                        2.0,
+                        2.0,
+                        1.278071905112638,
+                        1.278071905112638,
+                        2.0,
+                        2.0,
+                        0.4780719051126377,
+                    ]
+                ),
+            )
+        )
         motif = record[1]
         self.assertEqual(motif["ID"], "motif2")
         self.assertEqual(len(motif.counts), 4)
@@ -5036,7 +5566,34 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif.counts["T", 8], 5)
         self.assertEqual(motif.counts["T", 9], 3)
         self.assertEqual(motif.degenerate_consensus, "RSCAGAGGTY")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        0.4780719051126377,
+                        0.4780719051126377,
+                        2.0,
+                        0.6290494055453314,
+                        1.278071905112638,
+                        2.0,
+                        1.278071905112638,
+                        2.0,
+                        2.0,
+                        1.0290494055453312,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[::2].degenerate_consensus, "RCGGT")
+        self.assertTrue(
+            numpy.array_equal(
+                motif[::2].information_content,
+                numpy.array(
+                    [0.4780719051126377, 2.0, 1.278071905112638, 1.278071905112638, 2.0]
+                ),
+            )
+        )
 
     def test_permissive_transfac_parser(self):
         """Parse the TRANSFAC-like file motifs/MA0056.1.transfac."""
@@ -5083,7 +5640,28 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif.counts["T", 5], 0.0)
         self.assertEqual(motif.consensus, "TGGGGA")
         self.assertEqual(motif.degenerate_consensus, "NGGGGA")
+        self.assertTrue(
+            numpy.array_equal(
+                motif.information_content,
+                numpy.array(
+                    [
+                        0.09629830394265171,
+                        1.7136030428840439,
+                        1.5310044064107189,
+                        1.7136030428840439,
+                        2.0,
+                        1.5310044064107189,
+                    ]
+                ),
+            )
+        )
         self.assertEqual(motif[1:-3].degenerate_consensus, "GG")
+        self.assertTrue(
+            numpy.array_equal(
+                motif[1:-3].information_content,
+                numpy.array([1.7136030428840439, 1.5310044064107189]),
+            )
+        )
 
 
 class MotifTestPWM(unittest.TestCase):

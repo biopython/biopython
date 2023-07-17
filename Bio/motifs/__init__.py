@@ -559,14 +559,24 @@ class Motif:
     @property
     def information_content(self):
         """Return an array with the information content for each column of the motif."""
-        alignment = self.alignment
         background = self.background
-        total = len(alignment)
-        values = np.zeros(alignment.length)
-        for letter, frequencies in alignment.frequencies.items():
-            mask = frequencies > 0
-            frequencies = frequencies[mask] / total
-            values[mask] += frequencies * np.log2(frequencies / background[letter])
+        counts = self.counts
+        length = self.length
+        values = np.zeros(length)
+        if self.alignment is None:
+            total = np.array([sum(counts[c][i] for c in counts) for i in range(length)])
+            for letter, frequencies in counts.items():
+                frequencies = np.array(frequencies)
+                mask = frequencies > 0
+                frequencies = frequencies[mask] / total[mask]
+                values[mask] += frequencies * np.log2(frequencies / background[letter])
+        else:
+            total = len(self.alignment)
+            for letter, frequencies in counts.items():
+                frequencies = np.array(frequencies)
+                mask = frequencies > 0
+                frequencies = frequencies[mask] / total
+                values[mask] += frequencies * np.log2(frequencies / background[letter])
         return values
 
     def weblogo(self, fname, fmt="PNG", version="2.8.2", **kwds):
