@@ -354,7 +354,7 @@ if sqlite3:
 
             self.assertEqual(len(results), 4 + 4)
 
-            self.assertEqual({len(x) for x in results}, {4, 1, 9, 10, 4, 3, 5, 1})
+            self.assertEqual({len(x) for x in results}, {1, 3, 4, 5, 9, 10})
 
             # Code formatting note:
             # Expected start coordinates are grouped by alignment blocks
