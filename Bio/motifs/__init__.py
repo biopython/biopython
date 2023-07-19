@@ -460,12 +460,12 @@ class Motif:
 
     @property
     def pwm(self):
-        """Compute position weight matrices."""
+        """Calculate and return the position weight matrix for this motif."""
         return self.counts.normalize(self._pseudocounts)
 
     @property
     def pssm(self):
-        """Compute position specific scoring matrices."""
+        """Calculate and return the position specific scoring matrix for this motif."""
         return self.pwm.log_odds(self._background)
 
     @property
@@ -555,6 +555,36 @@ class Motif:
         The same rules are used by TRANSFAC.
         """
         return self.counts.degenerate_consensus
+
+    @property
+    def relative_entropy(self):
+        """Return an array with the relative entropy for each column of the motif."""
+        background = self.background
+        pseudocounts = self.pseudocounts
+        alphabet = self.alphabet
+        counts = self.counts
+        length = self.length
+        values = np.zeros(length)
+        if self.alignment is None:
+            total = np.array(
+                [
+                    sum(counts[c][i] + pseudocounts[c] for c in alphabet)
+                    for i in range(length)
+                ]
+            )
+            for letter, frequencies in counts.items():
+                frequencies = np.array(frequencies) + pseudocounts[letter]
+                mask = frequencies > 0
+                frequencies = frequencies[mask] / total[mask]
+                values[mask] += frequencies * np.log2(frequencies / background[letter])
+        else:
+            total = len(self.alignment) + sum(pseudocounts.values())
+            for letter, frequencies in counts.items():
+                frequencies = np.array(frequencies) + pseudocounts[letter]
+                mask = frequencies > 0
+                frequencies = frequencies[mask] / total
+                values[mask] += frequencies * np.log2(frequencies / background[letter])
+        return values
 
     def weblogo(self, fname, fmt="PNG", version="2.8.2", **kwds):
         """Download and save a weblogo using the Berkeley weblogo service.
