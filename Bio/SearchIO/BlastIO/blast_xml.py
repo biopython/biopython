@@ -211,7 +211,7 @@ def _extract_ids_and_descs(raw_id, raw_desc):
     # create a list of lists, each list containing an ID and description
     # or just an ID, if description is not present
     id_desc_pairs = [
-        re.split(_RE_ID_DESC_PATTERN, x, 1)
+        re.split(_RE_ID_DESC_PATTERN, x, maxsplit=1)
         for x in re.split(_RE_ID_DESC_PAIRS_PATTERN, id_desc_line)
     ]
     # make sure empty descriptions are added as empty strings
