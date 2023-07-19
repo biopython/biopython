@@ -60,9 +60,13 @@ then we can create a Motif object as follows:
 \begin{minted}{pycon}
 >>> m = motifs.create(instances)
 \end{minted}
-The instances are saved in an attribute \verb+m.instances+, which is essentially a Python list with some added functionality, as described below.
-Printing out the Motif object shows the instances from which it was constructed:
-
+The instances from which this motif was created is stored in the \verb+.alignment+ property:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(m.alignment.sequences)
+[Seq('TACAA'), Seq('TACGC'), Seq('TACAC'), Seq('TACCC'), Seq('AACCC'), Seq('AATGC'), Seq('AATGC')]
+\end{minted}
+Printing the Motif object shows the instances from which it was constructed:
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(m)
@@ -164,8 +168,48 @@ Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T,
 and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is
 constructed following the rules specified by Cavener \cite{cavener1987}.
 
-We can also get the reverse complement of a motif:
+The information content $IC_j$ of column $j$ of the motif is defined as \cite{schneider1986}
+\begin{displaymath}
+IC_{j} = \sum_{i=1}^{M} P_{ij} \mathrm{log}\left(\frac{P_{ij}}{Q_{i}}\right)
+\end{displaymath}
 
+\noindent where:
+
+\begin{itemize}
+  \item $M$ -- The number of letters in the alphabet;
+  \item $P_{ij}$ -- The observed normalized frequency of letter $i$ in the $j$-th column;
+  \item $Q_{i}$ --  The background probability of letter $i$.
+\end{itemize}
+Both $P_{ij}$ and $Q_{i}$ are normalized to 1:
+\begin{displaymath}
+\sum_{i=1}^{M} P_{ij} = 1 \\
+\sum_{i=1}^{M} Q_i = 1
+\end{displaymath}
+The observed normalized frequency $P_{ij}$ is computed as follows:
+\begin{displaymath}
+P_{ij} = \frac{n_{ij} + k\times Q_{i}}{N_{j} + k}
+\end{displaymath}
+\noindent where:
+
+\begin{itemize}
+  \item $n_{ij}$ -- the number of times letter $i$ appears in column $j$ of the alignment;
+  \item $k$ -- the pseudocount;
+  \item $N_{j}$ --  The total number of letters in column $j$: $N_{j} = \sum_{i=1}^{M} n_{ij}$.
+\end{itemize}
+The information content for each column of motif \verb+m+ can be obtained using the \verb+information_content+ property:
+%cont-doctest
+\begin{minted}{pycon}
+>>> m.information_content
+array([1.01477186, 2.        , 1.13687943, 0.44334329, 1.40832722])
+\end{minted}
+These values are calculated using the base-2 logarithm, and are therefore in units of bits. The second column (which consists of \verb+A+ nucleotides only) has the highest information content; the fourth column (which consists of \verb+A+, \verb+C+, or \verb+G+ nucleotides) has the lowest information content). The total information content of the motif can be calculated by summing over the columns:
+%cont-doctest
+\begin{minted}{pycon}
+>>> sum(m.information_content)
+6.0033218093539675
+\end{minted}
+
+We can also get the reverse complement of a motif:
 %cont-doctest
 \begin{minted}{pycon}
 >>> r = m.reverse_complement()
@@ -182,7 +226,6 @@ GGGTT
 GCATT
 GCATT
 \end{minted}
-
 The reverse complement and the degenerate consensus sequence are
 only defined for DNA motifs.
 

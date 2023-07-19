@@ -28,8 +28,166 @@ from Bio.Seq import Seq
 from Bio.Align import Alignment
 
 
-class MotifTestsBasic(unittest.TestCase):
+class TestBasic(unittest.TestCase):
     """Basic motif tests."""
+
+    def test_format(self):
+        m = motifs.create([Seq("ATATA")])
+        m.name = "Foo"
+        s1 = format(m, "pfm")
+        expected_pfm = """  1.00   0.00   1.00   0.00  1.00
+  0.00   0.00   0.00   0.00  0.00
+  0.00   0.00   0.00   0.00  0.00
+  0.00   1.00   0.00   1.00  0.00
+"""
+        s2 = format(m, "jaspar")
+        expected_jaspar = """>None Foo
+A [  1.00   0.00   1.00   0.00   1.00]
+C [  0.00   0.00   0.00   0.00   0.00]
+G [  0.00   0.00   0.00   0.00   0.00]
+T [  0.00   1.00   0.00   1.00   0.00]
+"""
+        self.assertEqual(s2, expected_jaspar)
+        s3 = format(m, "transfac")
+        expected_transfac = """P0      A      C      G      T
+01      1      0      0      0      A
+02      0      0      0      1      T
+03      1      0      0      0      A
+04      0      0      0      1      T
+05      1      0      0      0      A
+XX
+//
+"""
+        self.assertEqual(s3, expected_transfac)
+        self.assertRaises(ValueError, format, m, "foo_bar")
+
+    def test_information_content(self):
+        m = motifs.create([Seq("ATATA"), Seq("ATCTA"), Seq("TTGTA")])
+        self.assertEqual(len(m.alignment), 3)
+        self.assertEqual(m.background, {"A": 0.25, "C": 0.25, "G": 0.25, "T": 0.25})
+        self.assertEqual(m.pseudocounts, {"A": 0.0, "C": 0.0, "G": 0.0, "T": 0.0})
+        self.assertTrue(
+            numpy.array_equal(
+                m.information_content,
+                numpy.array([1.0817041659455104, 2.0, 0.4150374992788437, 2.0, 2.0]),
+            )
+        )
+        m.background = {"A": 0.3, "C": 0.2, "G": 0.2, "T": 0.3}
+        self.assertTrue(
+            numpy.array_equal(
+                m.information_content,
+                numpy.array(
+                    [
+                        0.8186697601117167,
+                        1.7369655941662063,
+                        0.5419780939258206,
+                        1.7369655941662063,
+                        1.7369655941662063,
+                    ]
+                ),
+            )
+        )
+        m.background = None
+        self.assertEqual(m.background, {"A": 0.25, "C": 0.25, "G": 0.25, "T": 0.25})
+        pseudocounts = math.sqrt(len(m.alignment))
+        m.pseudocounts = {
+            letter: m.background[letter] * pseudocounts for letter in "ACGT"
+        }
+        self.assertTrue(
+            numpy.array_equal(
+                m.information_content,
+                numpy.array(
+                    [
+                        0.3532586861097656,
+                        0.7170228827697498,
+                        0.11859369972847714,
+                        0.7170228827697498,
+                        0.7170228827697499,
+                    ]
+                ),
+            )
+        )
+        m.background = {"A": 0.3, "C": 0.2, "G": 0.2, "T": 0.3}
+        self.assertTrue(
+            numpy.array_equal(
+                m.information_content,
+                numpy.array(
+                    [
+                        0.19727984803857979,
+                        0.561044044698564,
+                        0.20984910512125132,
+                        0.561044044698564,
+                        0.5610440446985638,
+                    ]
+                ),
+            )
+        )
+
+    def test_reverse_complement(self):
+        """Test if motifs can be reverse-complemented."""
+        background = {"A": 0.3, "C": 0.2, "G": 0.2, "T": 0.3}
+        pseudocounts = 0.5
+        m = motifs.create([Seq("ATATA")])
+        m.background = background
+        m.pseudocounts = pseudocounts
+        received_forward = format(m, "transfac")
+        expected_forward = """\
+P0      A      C      G      T
+01      1      0      0      0      A
+02      0      0      0      1      T
+03      1      0      0      0      A
+04      0      0      0      1      T
+05      1      0      0      0      A
+XX
+//
+"""
+        self.assertEqual(received_forward, expected_forward)
+        expected_forward_pwm = """\
+        0      1      2      3      4
+A:   0.50   0.17   0.50   0.17   0.50
+C:   0.17   0.17   0.17   0.17   0.17
+G:   0.17   0.17   0.17   0.17   0.17
+T:   0.17   0.50   0.17   0.50   0.17
+"""
+        self.assertEqual(str(m.pwm), expected_forward_pwm)
+        m = m.reverse_complement()
+        received_reverse = format(m, "transfac")
+        expected_reverse = """\
+P0      A      C      G      T
+01      0      0      0      1      T
+02      1      0      0      0      A
+03      0      0      0      1      T
+04      1      0      0      0      A
+05      0      0      0      1      T
+XX
+//
+"""
+        self.assertEqual(received_reverse, expected_reverse)
+        expected_reverse_pwm = """\
+        0      1      2      3      4
+A:   0.17   0.50   0.17   0.50   0.17
+C:   0.17   0.17   0.17   0.17   0.17
+G:   0.17   0.17   0.17   0.17   0.17
+T:   0.50   0.17   0.50   0.17   0.50
+"""
+        self.assertEqual(str(m.pwm), expected_reverse_pwm)
+        # Same thing, but now start with a motif calculated from a count matrix
+        m = motifs.create([Seq("ATATA")])
+        counts = m.counts
+        m = motifs.Motif(counts=counts)
+        m.background = background
+        m.pseudocounts = pseudocounts
+        received_forward = format(m, "transfac")
+        self.assertEqual(received_forward, expected_forward)
+        self.assertEqual(str(m.pwm), expected_forward_pwm)
+        m = m.reverse_complement()
+        received_reverse = format(m, "transfac")
+        self.assertEqual(received_reverse, expected_reverse)
+        self.assertEqual(str(m.pwm), expected_reverse_pwm)
+
+
+class TestAlignAce(unittest.TestCase):
+    """Testing parsing AlignAce output files."""
 
     def test_alignace_parsing(self):
         """Test if Bio.motifs can parse AlignAce output files."""
@@ -1427,8 +1585,12 @@ ACGCCGCCATGCGAC
 CCTCCAGGTCGCATG""",
         )
 
+
+class TestClusterBuster(unittest.TestCase):
+    """Testing parsing Cluster-Buster output files."""
+
     def test_clusterbuster_parsing_and_output(self):
-        """Test if Bio.motifs can parse and output Cluster Buster PFM files."""
+        """Test if Bio.motifs can parse and output Cluster-Buster PFM files."""
         with open("motifs/clusterbuster.pfm") as stream:
             record = motifs.parse(stream, "clusterbuster")
             self.assertEqual(len(record), 3)
@@ -1579,6 +1741,10 @@ CCTCCAGGTCGCATG""",
                 stream.read().split(),
             )
 
+
+class TestXMS(unittest.TestCase):
+    """Testing parsing xms output files."""
+
     def test_xms_parsing(self):
         """Test if Bio.motifs can parse and output xms PFM files."""
         with open("motifs/abdb.xms") as stream:
@@ -1686,6 +1852,10 @@ CCTCCAGGTCGCATG""",
                 ),
             )
         )
+
+
+class TestJASPAR(unittest.TestCase):
+    """Testing parsing JASPAR files."""
 
     def test_pfm_parsing(self):
         """Test if Bio.motifs can parse JASPAR-style pfm files."""
@@ -2824,104 +2994,6 @@ CCTCCAGGTCGCATG""",
             )
         )
         self.assertEqual(m[::2].consensus, "CCT")
-
-    def test_TFoutput(self):
-        """Ensure that we can write proper TransFac output files."""
-        m = motifs.create([Seq("ATATA")])
-        with tempfile.TemporaryFile("w") as stream:
-            stream.write(format(m, "transfac"))
-
-    def test_format(self):
-        m = motifs.create([Seq("ATATA")])
-        m.name = "Foo"
-        s1 = format(m, "pfm")
-        expected_pfm = """  1.00   0.00   1.00   0.00  1.00
-  0.00   0.00   0.00   0.00  0.00
-  0.00   0.00   0.00   0.00  0.00
-  0.00   1.00   0.00   1.00  0.00
-"""
-        s2 = format(m, "jaspar")
-        expected_jaspar = """>None Foo
-A [  1.00   0.00   1.00   0.00   1.00]
-C [  0.00   0.00   0.00   0.00   0.00]
-G [  0.00   0.00   0.00   0.00   0.00]
-T [  0.00   1.00   0.00   1.00   0.00]
-"""
-        self.assertEqual(s2, expected_jaspar)
-        s3 = format(m, "transfac")
-        expected_transfac = """P0      A      C      G      T
-01      1      0      0      0      A
-02      0      0      0      1      T
-03      1      0      0      0      A
-04      0      0      0      1      T
-05      1      0      0      0      A
-XX
-//
-"""
-        self.assertEqual(s3, expected_transfac)
-        self.assertRaises(ValueError, format, m, "foo_bar")
-
-    def test_reverse_complement(self):
-        """Test if motifs can be reverse-complemented."""
-        background = {"A": 0.3, "C": 0.2, "G": 0.2, "T": 0.3}
-        pseudocounts = 0.5
-        m = motifs.create([Seq("ATATA")])
-        m.background = background
-        m.pseudocounts = pseudocounts
-        received_forward = format(m, "transfac")
-        expected_forward = """\
-P0      A      C      G      T
-01      1      0      0      0      A
-02      0      0      0      1      T
-03      1      0      0      0      A
-04      0      0      0      1      T
-05      1      0      0      0      A
-XX
-//
-"""
-        self.assertEqual(received_forward, expected_forward)
-        expected_forward_pwm = """\
-        0      1      2      3      4
-A:   0.50   0.17   0.50   0.17   0.50
-C:   0.17   0.17   0.17   0.17   0.17
-G:   0.17   0.17   0.17   0.17   0.17
-T:   0.17   0.50   0.17   0.50   0.17
-"""
-        self.assertEqual(str(m.pwm), expected_forward_pwm)
-        m = m.reverse_complement()
-        received_reverse = format(m, "transfac")
-        expected_reverse = """\
-P0      A      C      G      T
-01      0      0      0      1      T
-02      1      0      0      0      A
-03      0      0      0      1      T
-04      1      0      0      0      A
-05      0      0      0      1      T
-XX
-//
-"""
-        self.assertEqual(received_reverse, expected_reverse)
-        expected_reverse_pwm = """\
-        0      1      2      3      4
-A:   0.17   0.50   0.17   0.50   0.17
-C:   0.17   0.17   0.17   0.17   0.17
-G:   0.17   0.17   0.17   0.17   0.17
-T:   0.50   0.17   0.50   0.17   0.50
-"""
-        self.assertEqual(str(m.pwm), expected_reverse_pwm)
-        # Same thing, but now start with a motif calculated from a count matrix
-        m = motifs.create([Seq("ATATA")])
-        counts = m.counts
-        m = motifs.Motif(counts=counts)
-        m.background = background
-        m.pseudocounts = pseudocounts
-        received_forward = format(m, "transfac")
-        self.assertEqual(received_forward, expected_forward)
-        self.assertEqual(str(m.pwm), expected_forward_pwm)
-        m = m.reverse_complement()
-        received_reverse = format(m, "transfac")
-        self.assertEqual(received_reverse, expected_reverse)
-        self.assertEqual(str(m.pwm), expected_reverse_pwm)
 
 
 class TestMEME(unittest.TestCase):
@@ -5662,6 +5734,12 @@ class TestTransfac(unittest.TestCase):
                 numpy.array([1.7136030428840439, 1.5310044064107189]),
             )
         )
+
+    def test_TFoutput(self):
+        """Ensure that we can write proper TransFac output files."""
+        m = motifs.create([Seq("ATATA")])
+        with tempfile.TemporaryFile("w") as stream:
+            stream.write(format(m, "transfac"))
 
 
 class MotifTestPWM(unittest.TestCase):

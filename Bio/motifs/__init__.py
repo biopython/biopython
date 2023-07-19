@@ -560,20 +560,27 @@ class Motif:
     def information_content(self):
         """Return an array with the information content for each column of the motif."""
         background = self.background
+        pseudocounts = self.pseudocounts
+        alphabet = self.alphabet
         counts = self.counts
         length = self.length
         values = np.zeros(length)
         if self.alignment is None:
-            total = np.array([sum(counts[c][i] for c in counts) for i in range(length)])
+            total = np.array(
+                [
+                    sum(counts[c][i] + pseudocounts[c] for c in alphabet)
+                    for i in range(length)
+                ]
+            )
             for letter, frequencies in counts.items():
-                frequencies = np.array(frequencies)
+                frequencies = np.array(frequencies) + pseudocounts[letter]
                 mask = frequencies > 0
                 frequencies = frequencies[mask] / total[mask]
                 values[mask] += frequencies * np.log2(frequencies / background[letter])
         else:
-            total = len(self.alignment)
+            total = len(self.alignment) + sum(pseudocounts.values())
             for letter, frequencies in counts.items():
-                frequencies = np.array(frequencies)
+                frequencies = np.array(frequencies) + pseudocounts[letter]
                 mask = frequencies > 0
                 frequencies = frequencies[mask] / total
                 values[mask] += frequencies * np.log2(frequencies / background[letter])
