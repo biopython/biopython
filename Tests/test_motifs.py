@@ -61,21 +61,21 @@ XX
         self.assertEqual(s3, expected_transfac)
         self.assertRaises(ValueError, format, m, "foo_bar")
 
-    def test_information_content(self):
+    def test_relative_entropy(self):
         m = motifs.create([Seq("ATATA"), Seq("ATCTA"), Seq("TTGTA")])
         self.assertEqual(len(m.alignment), 3)
         self.assertEqual(m.background, {"A": 0.25, "C": 0.25, "G": 0.25, "T": 0.25})
         self.assertEqual(m.pseudocounts, {"A": 0.0, "C": 0.0, "G": 0.0, "T": 0.0})
         self.assertTrue(
             numpy.array_equal(
-                m.information_content,
+                m.relative_entropy,
                 numpy.array([1.0817041659455104, 2.0, 0.4150374992788437, 2.0, 2.0]),
             )
         )
         m.background = {"A": 0.3, "C": 0.2, "G": 0.2, "T": 0.3}
         self.assertTrue(
             numpy.array_equal(
-                m.information_content,
+                m.relative_entropy,
                 numpy.array(
                     [
                         0.8186697601117167,
@@ -95,7 +95,7 @@ XX
         }
         self.assertTrue(
             numpy.array_equal(
-                m.information_content,
+                m.relative_entropy,
                 numpy.array(
                     [
                         0.3532586861097656,
@@ -110,7 +110,7 @@ XX
         m.background = {"A": 0.3, "C": 0.2, "G": 0.2, "T": 0.3}
         self.assertTrue(
             numpy.array_equal(
-                m.information_content,
+                m.relative_entropy,
                 numpy.array(
                     [
                         0.19727984803857979,
@@ -1601,7 +1601,7 @@ class TestClusterBuster(unittest.TestCase):
             self.assertEqual(motif.degenerate_consensus, "CACGTG")
             self.assertTrue(
                 numpy.array_equal(
-                    motif.information_content,
+                    motif.relative_entropy,
                     numpy.array(
                         [1.278071905112638, 1.7136030428840439, 2.0, 2.0, 2.0, 2.0]
                     ),
@@ -1640,7 +1640,7 @@ class TestClusterBuster(unittest.TestCase):
             self.assertEqual(motif.degenerate_consensus, "YGCGTG")
             self.assertTrue(
                 numpy.array_equal(
-                    motif.information_content,
+                    motif.relative_entropy,
                     numpy.array(
                         [
                             0.28206397041108283,
@@ -1686,7 +1686,7 @@ class TestClusterBuster(unittest.TestCase):
             self.assertEqual(motif.degenerate_consensus, "CAATTATT")
             self.assertTrue(
                 numpy.array_equal(
-                    motif.information_content,
+                    motif.relative_entropy,
                     numpy.array(
                         [
                             0.2549535827226545,
@@ -1814,7 +1814,7 @@ class TestXMS(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "NSNTTTATGGCNNN")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         0.09689283163718865,
@@ -1839,7 +1839,7 @@ class TestXMS(unittest.TestCase):
         self.assertEqual(motif[3::2].degenerate_consensus, "TTTGNN")
         self.assertTrue(
             numpy.array_equal(
-                motif[3::2].information_content,
+                motif[3::2].relative_entropy,
                 numpy.array(
                     [
                         1.1150033950025815,
@@ -1908,7 +1908,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "TTATCACT")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         1.765707971839016,
@@ -2012,7 +2012,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "WNRWNMGGATTANGAGGACA")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         0.1946677220077018,
@@ -2092,7 +2092,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "TAAACTARNNN")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         0.4489017067534855,
@@ -2147,7 +2147,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "TTAATKA")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         1.0555114658337947,
@@ -2213,7 +2213,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "NTGASTCAKN")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         0.30427230622817475,
@@ -2275,7 +2275,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "NTNGCGTGN")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         0.09662409645348236,
@@ -2332,7 +2332,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "ATGACTCA")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         0.889358068874075,
@@ -2400,7 +2400,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "BCMAAMNRMTT")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         0.43314504855176084,
@@ -2457,7 +2457,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "GAAAKY")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         1.349977578351646,
@@ -2539,7 +2539,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "MGCNNNNNNNNNMGC")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         1.0,
@@ -2630,7 +2630,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "NKWTCGAGGAATNNN")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         0.13892143832881046,
@@ -2685,7 +2685,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "TCTAGA")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         1.0042727863947818,
@@ -2731,7 +2731,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "TCTAGA")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         1.0042727863947818,
@@ -2785,7 +2785,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "NYAATTAA")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         0.2005361303021225,
@@ -2849,7 +2849,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "CCAWAWATAG")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         1.7725753233561499,
@@ -2915,7 +2915,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "CCAWAWATAG")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         1.7725753233561499,
@@ -2987,7 +2987,7 @@ class TestJASPAR(unittest.TestCase):
         self.assertEqual(m.degenerate_consensus, "CACGTG")
         self.assertTrue(
             numpy.array_equal(
-                m.information_content,
+                m.relative_entropy,
                 numpy.array(
                     [1.278071905112638, 1.7136030428840439, 2.0, 2.0, 2.0, 2.0]
                 ),
@@ -3129,7 +3129,7 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "GSKGCATGTGAAA")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         1.4083272214176723,
@@ -3248,7 +3248,7 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "TTGACWCYTGCYCNG")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         2.0,
@@ -4867,7 +4867,7 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "TGTGANNNWGNTCACAYWW")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         1.1684297174927525,
@@ -4910,7 +4910,7 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "TACTGTATATAHAWMCAG")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         0.9632889858595118,
@@ -5555,7 +5555,7 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "SRACAGGTGKYG")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         0.4780719051126377,
@@ -5577,7 +5577,7 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif[1:-2].degenerate_consensus, "RACAGGTGK")
         self.assertTrue(
             numpy.array_equal(
-                motif[1:-2].information_content,
+                motif[1:-2].relative_entropy,
                 numpy.array(
                     [
                         0.4780719051126377,
@@ -5640,7 +5640,7 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "RSCAGAGGTY")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         0.4780719051126377,
@@ -5660,7 +5660,7 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif[::2].degenerate_consensus, "RCGGT")
         self.assertTrue(
             numpy.array_equal(
-                motif[::2].information_content,
+                motif[::2].relative_entropy,
                 numpy.array(
                     [0.4780719051126377, 2.0, 1.278071905112638, 1.278071905112638, 2.0]
                 ),
@@ -5714,7 +5714,7 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif.degenerate_consensus, "NGGGGA")
         self.assertTrue(
             numpy.array_equal(
-                motif.information_content,
+                motif.relative_entropy,
                 numpy.array(
                     [
                         0.09629830394265171,
@@ -5730,7 +5730,7 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif[1:-3].degenerate_consensus, "GG")
         self.assertTrue(
             numpy.array_equal(
-                motif[1:-3].information_content,
+                motif[1:-3].relative_entropy,
                 numpy.array([1.7136030428840439, 1.5310044064107189]),
             )
         )

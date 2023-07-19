@@ -557,8 +557,8 @@ class Motif:
         return self.counts.degenerate_consensus
 
     @property
-    def information_content(self):
-        """Return an array with the information content for each column of the motif."""
+    def relative_entropy(self):
+        """Return an array with the relative entropy for each column of the motif."""
         background = self.background
         pseudocounts = self.pseudocounts
         alphabet = self.alphabet
