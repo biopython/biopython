@@ -292,7 +292,7 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[2][typekey]
     elif resname == "VAL" and at_name in {"CG1", "CG2"}:
         return _atomic_radii[9][typekey]
-    elif at_name in {"CD", "CD"}:
+    elif at_name == "CD":
         return _atomic_radii[8][typekey]
     # Co-factors, and other weirdos
     elif (
