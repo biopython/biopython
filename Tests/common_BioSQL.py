@@ -1008,9 +1008,9 @@ class DupLoadTest(unittest.TestCase):
     def tearDown(self):
         self.server.rollback()
         self.server.close()
-        destroy_database()
         del self.db
         del self.server
+        destroy_database()
 
     def test_duplicate_load(self):
         """Make sure can't import a single record twice (in one go)."""
@@ -1247,9 +1247,9 @@ class InDepthLoadTest(unittest.TestCase):
 
     def tearDown(self):
         self.server.close()
-        destroy_database()
         del self.db
         del self.server
+        destroy_database()
 
     def test_transfer(self):
         """Make sure can load record into another namespace."""
