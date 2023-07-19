@@ -136,7 +136,10 @@ in the alphabet of the motif:
 >>> m.counts[0, :]
 (3, 7, 0, 2, 1)
 \end{minted}
-The motif has an associated consensus sequence, defined as the sequence of
+
+\subsection{Consensus, anticonsensus, and degenerate consensus  sequence}
+
+The consensus sequence of a motif is defined as the sequence of
 letters along the positions of the motif for which the largest value in the
 corresponding columns of the \verb+.counts+ matrix is obtained:
 
@@ -145,7 +148,7 @@ corresponding columns of the \verb+.counts+ matrix is obtained:
 >>> m.consensus
 Seq('TACGC')
 \end{minted}
-as well as an anticonsensus sequence, corresponding to the smallest values in
+Conversely, the anticonsensus sequence corresponds to the smallest values in
 the columns of the \verb+.counts+ matrix:
 
 %cont-doctest
@@ -155,9 +158,7 @@ Seq('CCATG')
 \end{minted}
 Note that there is some ambiguity in the definition of the consensus and anticonsensus sequence if in some columns multiple nucleotides have the maximum or minimum count.
 
-You can also ask for a degenerate consensus sequence, in which ambiguous
-nucleotides are used for positions where there are multiple nucleotides with
-high counts:
+for DNA sequences, you can also ask for a degenerate consensus sequence, in which ambiguous nucleotides are used for positions where there are multiple nucleotides with high counts:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -168,7 +169,9 @@ Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T,
 and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is
 constructed following the rules specified by Cavener \cite{cavener1987}.
 
-We can also get the reverse complement of a motif:
+\subsection{Reverse-complementing a motif}
+
+We can get the reverse complement of a motif by calling the \verb+reverse_complement+ method on it:
 %cont-doctest
 \begin{minted}{pycon}
 >>> r = m.reverse_complement()
@@ -185,23 +188,75 @@ GGGTT
 GCATT
 GCATT
 \end{minted}
-The reverse complement and the degenerate consensus sequence are
-only defined for DNA motifs.
+The reverse complement is only defined for DNA motifs.
+
+\subsection{Slicing a motif}
 
 You can slice the motif to obtain a new \verb+Motif+ object for the selected positions:
 %cont-doctest
 \begin{minted}{pycon}
->>> m_sub = m[1:-2]
+>>> m_sub = m[2:-1]
 >>> print(m_sub)
-AC
-AC
-AC
-AC
-AC
-AT
-AT
+CA
+CG
+CA
+CC
+CC
+TG
+TG
 >>> m_sub.consensus
-Seq('AC')
+Seq('CG')
+>>> m_sub.degenerate_consensus
+Seq('CV')
+\end{minted}
+
+\subsection{Relative entropy}
+\label{subsec:relative_entropy}
+
+The relative entropy (or Kullback-Leibler distance) $H_j$ of column $j$ of the motif is defined as \cite{schneider1986,durbin1998}
+\begin{displaymath}
+H_{j} = \sum_{i=1}^{M} p_{ij} \log\left(\frac{p_{ij}}{b_{i}}\right)
+\end{displaymath}
+
+\noindent where:
+
+\begin{itemize}
+  \item $M$ -- The number of letters in the alphabet (given by \verb+len(m.alphabet)+);
+  \item $p_{ij}$ -- The observed frequency of letter $i$, normalized, in the $j$-th column (see below);
+  \item $b_{i}$ --  The background probability of letter $i$ (given by \verb+m.background[i]+).
+\end{itemize}
+The observed frequency $p_{ij}$ is computed as follows:
+\begin{displaymath}
+p_{ij} = \frac{c_{ij} + k_i}{C_{j} + k}
+\end{displaymath}
+\noindent where:
+\begin{itemize}
+  \item $c_{ij}$ -- the number of times letter $i$ appears in column $j$ of the alignment (given by \verb+m.counts[i, j]+);
+  \item $C_{j}$ --  The total number of letters in column $j$: $C_{j} = \sum_{i=1}^{M} c_{ij}$ (given by \verb+sum(m.counts[:, j])+).
+  \item $k_i$ -- the pseudocount of letter $i$ (given by \verb+m.pseudocounts[i]+).
+  \item $k$ -- the total pseudocount: $k = \sum_{i=1}^{M} k_i$ (given by \verb+sum(m.pseudocounts.values())+).
+\end{itemize}
+With these definitions, both $p_{ij}$ and $b_{i}$ are normalized to 1:
+\begin{displaymath}
+\sum_{i=1}^{M} p_{ij} = 1
+\end{displaymath}
+\begin{displaymath}
+\sum_{i=1}^{M} b_i = 1
+\end{displaymath}
+The relative entropy is the same as the information content if the background distribution is uniform.
+
+The relative entropy for each column of motif \verb+m+ can be obtained using the \verb+relative_entropy+ property:
+% Don't include this in the doctest, as the exact output can vary.  To ensure
+% that the calculation is correct, we test the sum of these values below.
+\begin{minted}{pycon}
+>>> m.relative_entropy
+array([1.01477186, 2.        , 1.13687943, 0.44334329, 1.40832722])
+\end{minted}
+These values are calculated using the base-2 logarithm, and are therefore in units of bits. The second column (which consists of \verb+A+ nucleotides only) has the highest relative entropy; the fourth column (which consists of \verb+A+, \verb+C+, or \verb+G+ nucleotides) has the lowest relative entropy). The relative entropy of the motif can be calculated by summing over the columns:
+%cont-doctest
+\begin{minted}{pycon}
+>>> sum(m.relative_entropy)  # doctest:+ELLIPSIS
+6.003321...
 \end{minted}
 
 \subsection{Creating a sequence logo}
@@ -971,53 +1026,6 @@ G [  0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   2.00  50.00]
 T [  7.00  58.00   0.00  55.00  49.00  52.00  21.00  56.00   0.00   2.00]
 \end{minted}
 
-\section{Relative entropy}
-\label{sec:relative_entropy}
-
-The relative entropy (or Kullback-Leibler distance) $H_j$ of column $j$ of the motif is defined as \cite{schneider1986,durbin1998}
-\begin{displaymath}
-H_{j} = \sum_{i=1}^{M} P_{ij} \mathrm{log}\left(\frac{P_{ij}}{Q_{i}}\right)
-\end{displaymath}
-
-\noindent where:
-
-\begin{itemize}
-  \item $M$ -- The number of letters in the alphabet;
-  \item $P_{ij}$ -- The observed normalized frequency of letter $i$ in the $j$-th column;
-  \item $Q_{i}$ --  The background probability of letter $i$.
-\end{itemize}
-Both $P_{ij}$ and $Q_{i}$ are normalized to 1:
-\begin{displaymath}
-\sum_{i=1}^{M} P_{ij} = 1 \\
-\sum_{i=1}^{M} Q_i = 1
-\end{displaymath}
-The observed normalized frequency $P_{ij}$ is computed as follows:
-\begin{displaymath}
-P_{ij} = \frac{n_{ij} + k\times Q_{i}}{N_{j} + k}
-\end{displaymath}
-\noindent where:
-
-\begin{itemize}
-  \item $n_{ij}$ -- the number of times letter $i$ appears in column $j$ of the alignment;
-  \item $k$ -- the pseudocount;
-  \item $N_{j}$ --  The total number of letters in column $j$: $N_{j} = \sum_{i=1}^{M} n_{ij}$.
-\end{itemize}
-The relative entropy is the same as the information content if the background distribution is uniform.
-
-The relative entropy for each column of motif \verb+m+ can be obtained using the \verb+relative_entropy+ property:
-% Don't include this in the doctest, as the exact output can vary.  To ensure
-% that the calculation is correct, we test the sum of these values below.
-\begin{minted}{pycon}
->>> m.relative_entropy
-array([1.01477186, 2.        , 1.13687943, 0.44334329, 1.40832722])
-\end{minted}
-These values are calculated using the base-2 logarithm, and are therefore in units of bits. The second column (which consists of \verb+A+ nucleotides only) has the highest relative entropy; the fourth column (which consists of \verb+A+, \verb+C+, or \verb+G+ nucleotides) has the lowest relative entropy). The relative entropy of the motif can be calculated by summing over the columns:
-%cont-doctest
-\begin{minted}{pycon}
->>> sum(m.relative_entropy)  # doctest:+ELLIPSIS
-6.003321...
-\end{minted}
-
 \section{Position-Weight Matrices}
 
 The \verb+.counts+ attribute of a Motif object shows how often each
@@ -1163,7 +1171,7 @@ background are calculated by the \verb+.mean+ and \verb+.std+ methods.
 mean = 3.21, standard deviation = 2.59
 \end{minted}
 A uniform background is used if \verb+background+ is not specified.
-The mean is equal to the Kullback-Leibler divergence or relative entropy described in Section~\ref{sec:relative_entropy}.
+The mean is equal to the Kullback-Leibler divergence or relative entropy described in Section~\ref{subsec:relative_entropy}.
 
 The \verb+.reverse_complement+, \verb+.consensus+, \verb+.anticonsensus+, and
 \verb+.degenerate_consensus+ methods can be applied directly to PSSM objects.
