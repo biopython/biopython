@@ -299,6 +299,17 @@ class MafIndex:
         # lastly, setup a MafIterator pointing at the open maf_file
         self._mafiter = MafIterator(self._maf_fp)
 
+    def close(self):
+        """Close the file handle being used to read the data.
+
+        Once called, further use of the index won't work. The sole
+        purpose of this method is to allow explicit handle closure
+        - for example if you wish to delete the file, on Windows
+        you must first close all open handles to that file.
+        """
+        self._con.close()
+        self._record_count = 0
+
     def __check_existing_db(self):
         """Perform basic sanity checks upon loading an existing index (PRIVATE)."""
         try:
