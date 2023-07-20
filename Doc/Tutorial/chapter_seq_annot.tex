@@ -960,10 +960,10 @@ the new desired value instead.
 Consider this example record:
 
 %doctest ../Tests/GenBank
-\begin{minted}[breaklines=true,breaksymbolleft=]{pycon}
+\begin{minted}{pycon}
 >>> from Bio import SeqIO
->>> record = SeqIO.read("NC_005816.gb", "genbank")
->>> print("%s %i %i %i %i" % (record.id, len(record), len(record.features), len(record.dbxrefs), len(record.annotations)))
+>>> rec = SeqIO.read("NC_005816.gb", "genbank")
+>>> print(rec.id, len(rec), len(rec.features), len(rec.dbxrefs), len(rec.annotations))
 NC_005816.1 9609 41 1 13
 \end{minted}
 
@@ -971,8 +971,8 @@ Here we take the reverse complement and specify a new identifier -- but notice
 how most of the annotation is dropped (but not the features):
 
 %cont-doctest
-\begin{minted}[breaklines=true,breaksymbolleft=]{pycon}
->>> rc = record.reverse_complement(id="TESTING")
->>> print("%s %i %i %i %i" % (rc.id, len(rc), len(rc.features), len(rc.dbxrefs), len(rc.annotations)))
+\begin{minted}{pycon}
+>>> rc = rec.reverse_complement(id="TESTING")
+>>> print(rc.id, len(rc), len(rc.features), len(rc.dbxrefs), len(rc.annotations))
 TESTING 9609 41 0 0
 \end{minted}

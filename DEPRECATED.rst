@@ -73,6 +73,14 @@ was deprecated as of Release 1.70.
 Biopython modules, methods, functions
 =====================================
 
+Bio.kNN
+-------
+Deprecated in release 1.82, consider using scikit-learn instead.
+
+Bio.LogisticRegression
+----------------------
+Deprecated in release 1.82, consider using scikit-learn instead.
+
 Bio.Data.SCOPData
 -----------------
 Declared obsolete in release 1.80. Please use Bio.Data.PDBData instead.
@@ -100,6 +108,28 @@ release 1.74. Also affects ``Bio.motifs.read`` and ``Bio.motifs.parse`` for the
 The ``format`` method of the ``Motif`` class in ``Bio.motifs`` was deprecated
 in release 1.77, in favor of a ``__format__`` method that can be used from the
 ``format`` built-in function. This decision was reversed in release 1.79.
+The ``search`` method of the ``Instances`` class in ``Bio.motifs`` was
+deprecated in release 1.82. Instead of ``instances.search(sequence)``,
+``sequence.search(instances)`` can be used, where sequence is a Seq object.
+This allows instances to have different lengths.
+
+The ``Instances`` class and the ``instances`` argument of the ``Motif`` class
+initializer in ``Bio.motifs`` were deprecated in release 1.82. Instead of
+
+>>> from Bio.motifs import Instances
+>>> instances = Instances([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])
+>>> motif = Motif(alphabet='ACGT', instances=instances)
+
+please use
+
+>>> from Bio.Align import Alignment
+>>> alignment = Alignment([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])
+>>> motif = Motif(alphabet='ACGT', alignment=alignment)
+
+The ``instances`` attribute of the ``Motif`` class  in ``Bio.motifs`` was
+deprecated in release 1.82. Instead of ``mymotif.instances``, please use
+``mymotif.alignment.sequences``.
+
 
 Bio.Restriction.RanaConfig
 --------------------------

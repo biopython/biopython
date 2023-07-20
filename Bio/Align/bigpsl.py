@@ -21,11 +21,412 @@ You are expected to use this module via the Bio.Align functions.
 import numpy as np
 
 
-from Bio.Align import Alignment
-from Bio.Align import bigbed
-from Bio.Seq import Seq
+from Bio.Align import Alignment, Alignments
+from Bio.Align import bigbed, psl
+from Bio.Align.bigbed import AutoSQLTable, Field
+from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, Location
+from Bio.SeqIO.InsdcIO import _insdc_location_string
+
+
+declaration = AutoSQLTable(
+    "bigPsl",
+    "bigPsl pairwise alignment",
+    [
+        Field(
+            as_type="string",
+            name="chrom",
+            comment="Reference sequence chromosome or scaffold",
+        ),
+        Field(
+            as_type="uint",
+            name="chromStart",
+            comment="Start position in chromosome",
+        ),
+        Field(
+            as_type="uint",
+            name="chromEnd",
+            comment="End position in chromosome",
+        ),
+        Field(
+            as_type="string",
+            name="name",
+            comment="Name or ID of item, ideally both human readable and unique",
+        ),
+        Field(
+            as_type="uint",
+            name="score",
+            comment="Score (0-1000)",
+        ),
+        Field(
+            as_type="char[1]",
+            name="strand",
+            comment="+ or - indicates whether the query aligns to the + or - strand on the reference",
+        ),
+        Field(
+            as_type="uint",
+            name="thickStart",
+            comment="Start of where display should be thick (start codon)",
+        ),
+        Field(
+            as_type="uint",
+            name="thickEnd",
+            comment="End of where display should be thick (stop codon)",
+        ),
+        Field(
+            as_type="uint",
+            name="reserved",
+            comment="RGB value (use R,G,B string in input file)",
+        ),
+        Field(
+            as_type="int",
+            name="blockCount",
+            comment="Number of blocks",
+        ),
+        Field(
+            as_type="int[blockCount]",
+            name="blockSizes",
+            comment="Comma separated list of block sizes",
+        ),
+        Field(
+            as_type="int[blockCount]",
+            name="chromStarts",
+            comment="Start positions relative to chromStart",
+        ),
+        Field(
+            as_type="uint",
+            name="oChromStart",
+            comment="Start position in other chromosome",
+        ),
+        Field(
+            as_type="uint",
+            name="oChromEnd",
+            comment="End position in other chromosome",
+        ),
+        Field(
+            as_type="char[1]",
+            name="oStrand",
+            comment="+ or -, - means that psl was reversed into BED-compatible coordinates",
+        ),
+        Field(
+            as_type="uint",
+            name="oChromSize",
+            comment="Size of other chromosome.",
+        ),
+        Field(
+            as_type="int[blockCount]",
+            name="oChromStarts",
+            comment="Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand",
+        ),
+        Field(
+            as_type="lstring",
+            name="oSequence",
+            comment="Sequence on other chrom (or edit list, or empty)",
+        ),
+        Field(
+            as_type="string",
+            name="oCDS",
+            comment="CDS in NCBI format",
+        ),
+        Field(
+            as_type="uint",
+            name="chromSize",
+            comment="Size of target chromosome",
+        ),
+        Field(
+            as_type="uint",
+            name="match",
+            comment="Number of bases matched.",
+        ),
+        Field(
+            as_type="uint",
+            name="misMatch",
+            comment="Number of bases that don't match",
+        ),
+        Field(
+            as_type="uint",
+            name="repMatch",
+            comment="Number of bases that match but are part of repeats",
+        ),
+        Field(
+            as_type="uint",
+            name="nCount",
+            comment="Number of 'N' bases",
+        ),
+        Field(
+            as_type="uint",
+            name="seqType",
+            comment="0=empty, 1=nucleotide, 2=amino_acid",
+        ),
+    ],
+)
+
+
+class AlignmentWriter(bigbed.AlignmentWriter):
+    """Alignment file writer for the bigPsl file format."""
+
+    fmt = "bigPsl"
+
+    def __init__(
+        self,
+        target,
+        targets=None,
+        compress=True,
+        extraIndex=(),
+        cds=False,
+        fa=False,
+        mask=None,
+        wildcard="N",
+    ):
+        """Create an AlignmentWriter object.
+
+        Arguments:
+         - target      - output stream or file name.
+         - targets     - A list of SeqRecord objects with the chromosomes in the
+                         order as they appear in the alignments. The sequence
+                         contents in each SeqRecord may be undefined, but the
+                         sequence length must be defined, as in this example:
+
+                         SeqRecord(Seq(None, length=248956422), id="chr1")
+
+                         If targets is None (the default value), the alignments
+                         must have an attribute .targets providing the list of
+                         SeqRecord objects.
+         - compress    - If True (default), compress data using zlib.
+                         If False, do not compress data.
+         - extraIndex  - List of strings with the names of extra columns to be
+                         indexed.
+                         Default value is an empty list.
+         - target      - output stream or file name
+         - cds         - If True, look for a query feature of type CDS and write
+                         it in NCBI style in the PSL file (default: False).
+         - fa          - If True, include the query sequence in the PSL file
+                         (default: False).
+         - mask        - Specify if repeat regions in the target sequence are
+                         masked and should be reported in the `repMatches` field
+                         of the PSL file instead of in the `matches` field.
+                         Acceptable values are
+                         None   : no masking (default);
+                         "lower": masking by lower-case characters;
+                         "upper": masking by upper-case characters.
+         - wildcard    - Report alignments to the wildcard character in the
+                         target or query sequence in the `nCount` field of the
+                         PSL file instead of in the `matches`, `misMatches`, or
+                         `repMatches` fields.
+                         Default value is 'N'.
+        """
+        super().__init__(
+            target,
+            bedN=12,
+            declaration=declaration,
+            targets=targets,
+            compress=compress,
+            extraIndex=extraIndex,
+        )
+        self.cds = cds
+        self.fa = fa
+        self.mask = mask
+        self.wildcard = wildcard
+
+    def write_file(self, stream, alignments):
+        """Write the file."""
+        fixed_alignments = Alignments()
+        cds = self.cds
+        fa = self.fa
+        for alignment in alignments:
+            if not isinstance(alignment, Alignment):
+                raise TypeError("Expected an Alignment object")
+            coordinates = alignment.coordinates
+            if not coordinates.size:  # alignment consists of gaps only
+                continue
+            target, query = alignment.sequences
+            try:
+                query = query.seq
+            except AttributeError:
+                pass
+            try:
+                target = target.seq
+            except AttributeError:
+                pass
+            tSize = len(target)
+            qSize = len(query)
+            # fmt: off
+            dnax = None  # set to True for translated DNA aligned to protein,
+            # and to False for DNA/RNA aligned to DNA/RNA  # noqa: E114, E116
+            # fmt: on
+            if coordinates[1, 0] > coordinates[1, -1]:
+                # DNA/RNA mapped to reverse strand of DNA/RNA
+                strand = "-"
+                query = reverse_complement(query, inplace=False)
+                coordinates = coordinates.copy()
+                coordinates[1, :] = qSize - coordinates[1, :]
+            elif coordinates[0, 0] > coordinates[0, -1]:
+                # protein mapped to reverse strand of DNA
+                strand = "-"
+                target = reverse_complement(target, inplace=False)
+                coordinates = coordinates.copy()
+                coordinates[0, :] = tSize - coordinates[0, :]
+                dnax = True
+            else:
+                # mapped to forward strand
+                strand = "+"
+            wildcard = self.wildcard
+            mask = self.mask
+            # variable names follow those in the PSL file format specification
+            matches = 0
+            misMatches = 0
+            repMatches = 0
+            nCount = 0
+            blockSizes = []
+            qStarts = []
+            tStarts = []
+            tStart, qStart = coordinates[:, 0]
+            for tEnd, qEnd in coordinates[:, 1:].transpose():
+                if tStart == tEnd:
+                    qStart = qEnd
+                elif qStart == qEnd:
+                    tStart = tEnd
+                else:
+                    tCount = tEnd - tStart
+                    qCount = qEnd - qStart
+                    tStarts.append(tStart)
+                    qStarts.append(qStart)
+                    blockSizes.append(qCount)
+                    if tCount == qCount:
+                        assert dnax is not True
+                        dnax = False
+                    else:
+                        # translated DNA aligned to protein, typically generated by
+                        # blat -t=dnax -q=prot
+                        assert tCount == 3 * qCount
+                        assert dnax is not False
+                        dnax = True
+                    tSeq = target[tStart:tEnd]
+                    qSeq = query[qStart:qEnd]
+                    try:
+                        tSeq = bytes(tSeq)
+                    except TypeError:  # string
+                        tSeq = bytes(tSeq, "ASCII")
+                    except UndefinedSequenceError:  # sequence contents is unknown
+                        tSeq = None
+                    try:
+                        qSeq = bytes(qSeq)
+                    except TypeError:  # string
+                        qSeq = bytes(qSeq, "ASCII")
+                    except UndefinedSequenceError:  # sequence contents is unknown
+                        qSeq = None
+                    if tSeq is None or qSeq is None:
+                        # contents of at least one sequence is unknown;
+                        # count all aligned letters as matches:
+                        matches += qCount
+                    else:
+                        if mask == "lower":
+                            for u1, u2, c1 in zip(tSeq.upper(), qSeq.upper(), tSeq):
+                                if u1 == wildcard or u2 == wildcard:
+                                    nCount += 1
+                                elif u1 == u2:
+                                    if u1 == c1:
+                                        matches += 1
+                                    else:
+                                        repMatches += 1
+                                else:
+                                    misMatches += 1
+                        elif mask == "upper":
+                            for u1, u2, c1 in zip(tSeq.lower(), qSeq.lower(), tSeq):
+                                if u1 == wildcard or u2 == wildcard:
+                                    nCount += 1
+                                elif u1 == u2:
+                                    if u1 == c1:
+                                        matches += 1
+                                    else:
+                                        repMatches += 1
+                                else:
+                                    misMatches += 1
+                        else:
+                            for u1, u2 in zip(tSeq.upper(), qSeq.upper()):
+                                if u1 == wildcard or u2 == wildcard:
+                                    nCount += 1
+                                elif u1 == u2:
+                                    matches += 1
+                                else:
+                                    misMatches += 1
+                    tStart = tEnd
+                    qStart = qEnd
+            tStarts = np.array(tStarts)
+            qStarts = np.array(qStarts)
+            blockSizes = np.array(blockSizes)
+            try:
+                matches = alignment.matches
+            except AttributeError:
+                pass
+            try:
+                misMatches = alignment.misMatches
+            except AttributeError:
+                pass
+            try:
+                repMatches = alignment.repMatches
+            except AttributeError:
+                pass
+            try:
+                nCount = alignment.nCount
+            except AttributeError:
+                pass
+            qStart = qStarts[0]  # start of alignment in query
+            qEnd = qStarts[-1] + qCount  # end of alignment in query
+            oStrand = "+"
+            if strand == "-":
+                if dnax is True:
+                    oStrand = "-"
+                    qStarts = qSize - (qStarts + blockSizes)
+                    qStarts = qStarts[::-1]
+                    alignment.coordinates = alignment.coordinates[:, ::-1]
+                else:
+                    qStart, qEnd = qSize - qEnd, qSize - qStart
+            if fa is True:
+                oSequence = str(alignment.query.seq)
+            else:
+                oSequence = ""
+            if cds is True:
+                for feature in alignment.query.features:
+                    if feature.type == "CDS":
+                        oCDS = _insdc_location_string(
+                            feature.location, len(alignment.query)
+                        )
+                        break
+                else:
+                    oCDS = "n/a"
+            else:
+                oCDS = ""
+            seqType = 0
+            molecule_type = alignment.query.annotations.get("molecule_type")
+            if molecule_type == "DNA":
+                seqType = "1"
+            elif molecule_type == "protein":
+                seqType = "2"
+            else:
+                seqType = "0"
+            alignment.annotations["oChromStart"] = str(qStart)
+            alignment.annotations["oChromEnd"] = str(qEnd)
+            alignment.annotations["oStrand"] = oStrand
+            alignment.annotations["oChromSize"] = str(qSize)
+            alignment.annotations["oChromStarts"] = ",".join(map(str, qStarts))
+            alignment.annotations["oSequence"] = oSequence
+            alignment.annotations["oCDS"] = oCDS
+            alignment.annotations["chromSize"] = str(tSize)
+            alignment.annotations["match"] = str(matches)
+            alignment.annotations["misMatch"] = str(misMatches)
+            alignment.annotations["repMatch"] = str(repMatches)
+            alignment.annotations["nCount"] = str(nCount)
+            alignment.annotations["seqType"] = seqType
+            fixed_alignments.append(alignment)
+        fixed_alignments.sort(
+            key=lambda alignment: (alignment.target.id, alignment.coordinates[0, 0])
+        )
+        fixed_alignments.targets = alignments.targets
+        bigbed.AlignmentWriter(
+            stream, bedN=12, declaration=declaration, compress=self.compress
+        ).write(fixed_alignments)
 
 
 class AlignmentIterator(bigbed.AlignmentIterator):

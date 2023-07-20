@@ -5,7 +5,7 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Code for doing k-nearest-neighbors classification.
+"""Code for doing k-nearest-neighbors classification (DEPRECATED).
 
 k Nearest Neighbors is a supervised learning algorithm that classifies
 a new observation based the classes in its surrounding neighborhood.
@@ -26,9 +26,21 @@ Functions:
 Weighting Functions:
  - equal_weight    Every example is given a weight of 1.
 
+This module has been deprecated, please consider an alternative like scikit-learn
+insead.
 """
 
+import warnings
+
 import numpy as np
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.kNN' module is deprecated and will be removed in a future "
+    "release of Biopython. Consider using scikit-learn instead.",
+    BiopythonDeprecationWarning,
+)
 
 
 class kNN:

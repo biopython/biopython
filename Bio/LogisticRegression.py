@@ -5,7 +5,7 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Code for doing logistic regressions.
+"""Code for doing logistic regressions (DEPRECATED).
 
 Classes:
  - LogisticRegression    Holds information for a LogisticRegression classifier.
@@ -14,12 +14,24 @@ Functions:
  - train        Train a new classifier.
  - calculate    Calculate the probabilities of each class, given an observation.
  - classify     Classify an observation into a class.
+
+This module has been deprecated, please consider an alternative like scikit-learn
+insead.
 """
 
+import warnings
 
 import numpy as np
 
 import numpy.linalg
+
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.LogisticRegression' module is deprecated and will be removed in a future "
+    "release of Biopython. Consider using scikit-learn instead.",
+    BiopythonDeprecationWarning,
+)
 
 
 class LogisticRegression:
