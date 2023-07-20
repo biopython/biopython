@@ -17,21 +17,89 @@ Right now we've got tests for:
 
 # standard library
 import os
+import collections
 import unittest
 from io import StringIO
+
+import numpy as np
 
 # biopython
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import AlignInfo
-from Bio import AlignIO
-from Bio.Align import MultipleSeqAlignment
+from Bio import AlignIO, Align
+from Bio.Align import MultipleSeqAlignment, Alignment
+from Bio import motifs
 
 
-opuntia_clustal = """\
+class TestBasics(unittest.TestCase):
+    def test_empty_alignment(self):
+        """Very simple tests on an empty alignment."""
+        alignment = MultipleSeqAlignment([])
+        self.assertEqual(alignment.get_alignment_length(), 0)
+        self.assertEqual(len(alignment), 0)
+        alignment = alignment.alignment  # new-style Alignment object
+        self.assertEqual(alignment.length, 0)
+        self.assertEqual(len(alignment), 0)
+
+    def test_basic_alignment(self):
+        """Basic tests on a simple alignment of three sequences."""
+        msa = MultipleSeqAlignment([])
+        letters = "AbcDefGhiJklMnoPqrStuVwxYz"
+        msa.append(SeqRecord(Seq(letters), id="mixed"))
+        msa.append(SeqRecord(Seq(letters.lower()), id="lower"))
+        msa.append(SeqRecord(Seq(letters.upper()), id="upper"))
+        msa.append(SeqRecord(Seq(letters), id="duplicate"))
+        del msa[3]
+        self.assertEqual(msa.get_alignment_length(), 26)
+        self.assertEqual(len(msa), 3)
+        self.assertEqual(msa[0].seq, letters)
+        self.assertEqual(msa[1].seq, letters.lower())
+        self.assertEqual(msa[2].seq, letters.upper())
+        self.assertEqual(msa[0].id, "mixed")
+        self.assertEqual(msa[1].id, "lower")
+        self.assertEqual(msa[2].id, "upper")
+        for (col, letter) in enumerate(letters):
+            self.assertEqual(msa[:, col], letter + letter.lower() + letter.upper())
+        # Check row extractions:
+        self.assertEqual(msa[0].id, "mixed")
+        self.assertEqual(msa[-1].id, "upper")
+        # Check sub-alignment extraction by row slicing:
+        self.assertIsInstance(msa[::-1], MultipleSeqAlignment)
+        self.assertEqual(msa[::-1][0].id, "upper")
+        self.assertEqual(msa[::-1][2].id, "mixed")
+        # create a new-style Alignment object
+        alignment = msa.alignment
+        self.assertEqual(alignment.shape, (3, 26))
+        self.assertEqual(len(alignment), 3)
+        self.assertEqual(alignment.sequences[0].seq, letters)
+        self.assertEqual(alignment.sequences[1].seq, letters.lower())
+        self.assertEqual(alignment.sequences[2].seq, letters.upper())
+        self.assertEqual(alignment.sequences[0].id, "mixed")
+        self.assertEqual(alignment.sequences[1].id, "lower")
+        self.assertEqual(alignment.sequences[2].id, "upper")
+        for (col, letter) in enumerate(letters):
+            self.assertEqual(
+                alignment[:, col], letter + letter.lower() + letter.upper()
+            )
+        # Check row extractions:
+        self.assertEqual(alignment[0], letters)
+        self.assertEqual(alignment[-1], letters.upper())
+        # Check sub-alignment extraction by row slicing:
+        self.assertIsInstance(alignment[::-1], Alignment)
+        self.assertEqual(alignment[::-1].sequences[0].id, "upper")
+        self.assertEqual(alignment[::-1].sequences[2].id, "mixed")
+
+
+class TestReading(unittest.TestCase):
+    def test_read_clustal1(self):
+        """Parse an alignment file and get an alignment object."""
+        opuntia_clustal_header = """\
 CLUSTAL X (1.81) multiple sequence alignment
 
 
+"""
+        opuntia_clustal_body = """\
 gi|6273285|gb|AF191659.1|AF191      TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
 gi|6273284|gb|AF191658.1|AF191      TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
 gi|6273287|gb|AF191661.1|AF191      TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
@@ -70,11 +138,94 @@ gi|6273291|gb|AF191665.1|AF191      ACCAGA
 
 
 """  # noqa : W291
+        opuntia_fasta = """\
+>gi|6273285|gb|AF191659.1|AF191
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+TGAATATCAAAGAATCCATTGATTTAGTGTACCAGA
+>gi|6273284|gb|AF191658.1|AF191
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--
+------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
+TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+>gi|6273287|gb|AF191661.1|AF191
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+>gi|6273286|gb|AF191660.1|AF191
+TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
+------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+>gi|6273290|gb|AF191664.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+>gi|6273289|gb|AF191663.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+TGAATATCAAAGAATCTATTGATTTAGTATACCAGA
+>gi|6273291|gb|AF191665.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
+TATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
+TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+"""
+        opuntia_fasta_oneline = """\
+>gi|6273285|gb|AF191659.1|AF191
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA
+>gi|6273284|gb|AF191658.1|AF191
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+>gi|6273287|gb|AF191661.1|AF191
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+>gi|6273286|gb|AF191660.1|AF191
+TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+>gi|6273290|gb|AF191664.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+>gi|6273289|gb|AF191663.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTATACCAGA
+>gi|6273291|gb|AF191665.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+"""
+        opuntia_fasta_oneline_with_description = """\
+>gi|6273285|gb|AF191659.1|AF191 gi|6273285|gb|AF191659.1|AF191
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA
+>gi|6273284|gb|AF191658.1|AF191 gi|6273284|gb|AF191658.1|AF191
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+>gi|6273287|gb|AF191661.1|AF191 gi|6273287|gb|AF191661.1|AF191
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+>gi|6273286|gb|AF191660.1|AF191 gi|6273286|gb|AF191660.1|AF191
+TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+>gi|6273290|gb|AF191664.1|AF191 gi|6273290|gb|AF191664.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+>gi|6273289|gb|AF191663.1|AF191 gi|6273289|gb|AF191663.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTATACCAGA
+>gi|6273291|gb|AF191665.1|AF191 gi|6273291|gb|AF191665.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
+"""
+        path = os.path.join(os.getcwd(), "Clustalw", "opuntia.aln")
+        msa = AlignIO.read(path, "clustal")
+        opuntia_clustal = opuntia_clustal_header + opuntia_clustal_body
+        self.assertEqual(format(msa, "clustal"), opuntia_clustal)
+        self.assertEqual(format(msa, "fasta"), opuntia_fasta)
+        # create a new-style Alignment object
+        alignment = msa.alignment
+        self.assertEqual(format(alignment, "clustal"), opuntia_clustal_body)
+        # New-style Alignment objects generate FASTA format with the sequence
+        # on one line. Also, the clustal parser in Bio.AlignIO generates
+        # SeqRecords with an (identical) ID and a description; the clustal
+        # parser in Bio.Align generates SeqRecords with an ID only.
+        self.assertEqual(
+            format(alignment, "fasta"), opuntia_fasta_oneline_with_description
+        )
+        alignment = Align.read(path, "clustal")
+        self.assertEqual(format(alignment, "fasta"), opuntia_fasta_oneline)
 
-clustalw_clustal = """\
+    def test_read_clustal2(self):
+        """Parse an alignment file and get an alignment object."""
+        clustalw_clustal_header = """\
 CLUSTAL X (1.81) multiple sequence alignment
 
 
+"""
+        clustalw_clustal_body = """\
 gi|4959044|gb|AAD34209.1|AF069      MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNN
 gi|671626|emb|CAA85685.1|           ---------MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFR
                                               * *: ::    :.   :*  :  :. : . :*  ::   .
@@ -130,94 +281,20 @@ gi|671626|emb|CAA85685.1|           -
 
 """  # noqa : W291
 
-opuntia_fasta = """\
->gi|6273285|gb|AF191659.1|AF191
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
-------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
-TGAATATCAAAGAATCCATTGATTTAGTGTACCAGA
->gi|6273284|gb|AF191658.1|AF191
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--
-------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGA
-TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
->gi|6273287|gb|AF191661.1|AF191
-TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
-------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
-TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
->gi|6273286|gb|AF191660.1|AF191
-TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----
-------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
-TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
->gi|6273290|gb|AF191664.1|AF191
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
-------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
-TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
->gi|6273289|gb|AF191663.1|AF191
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
-------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
-TGAATATCAAAGAATCTATTGATTTAGTATACCAGA
->gi|6273291|gb|AF191665.1|AF191
-TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA
-TATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGA
-TGAATATCAAAGAATCTATTGATTTAGTGTACCAGA
-"""
-
-
-class TestBasics(unittest.TestCase):
-    def test_empty_alignment(self):
-        """Very simple tests on an empty alignment."""
-        alignment = MultipleSeqAlignment([])
-        self.assertEqual(alignment.get_alignment_length(), 0)
-        self.assertEqual(len(alignment), 0)
-
-    def test_basic_alignment(self):
-        """Basic tests on a simple alignment of three sequences."""
-        alignment = MultipleSeqAlignment([])
-        letters = "AbcDefGhiJklMnoPqrStuVwxYz"
-        alignment.append(SeqRecord(Seq(letters), id="mixed"))
-        alignment.append(SeqRecord(Seq(letters.lower()), id="lower"))
-        alignment.append(SeqRecord(Seq(letters.upper()), id="upper"))
-        alignment.append(SeqRecord(Seq(letters), id="duplicate"))
-        del alignment[3]
-        self.assertEqual(alignment.get_alignment_length(), 26)
-        self.assertEqual(len(alignment), 3)
-        self.assertEqual(alignment[0].seq, letters)
-        self.assertEqual(alignment[1].seq, letters.lower())
-        self.assertEqual(alignment[2].seq, letters.upper())
-        self.assertEqual(alignment[0].id, "mixed")
-        self.assertEqual(alignment[1].id, "lower")
-        self.assertEqual(alignment[2].id, "upper")
-        for (col, letter) in enumerate(letters):
-            self.assertEqual(
-                alignment[:, col], letter + letter.lower() + letter.upper()
-            )
-        # Check row extractions:
-        self.assertEqual(alignment[0].id, "mixed")
-        self.assertEqual(alignment[-1].id, "upper")
-        # Check sub-alignment extraction by row slicing:
-        self.assertIsInstance(alignment[::-1], MultipleSeqAlignment)
-        self.assertEqual(alignment[::-1][0].id, "upper")
-        self.assertEqual(alignment[::-1][2].id, "mixed")
-
-
-class TestReading(unittest.TestCase):
-    def test_read_clustal1(self):
-        """Parse an alignment file and get an alignment object."""
-        path = os.path.join(os.getcwd(), "Clustalw", "opuntia.aln")
-        alignment = AlignIO.read(path, "clustal")
-        self.assertEqual(format(alignment, "clustal"), opuntia_clustal)
-
-    def test_read_clustal2(self):
-        """Parse an alignment file and get an alignment object."""
         path = os.path.join(os.curdir, "Clustalw", "clustalw.aln")
-        alignment = AlignIO.read(path, "clustal")
-        self.assertEqual(format(alignment, "clustal"), clustalw_clustal)
+        msa = AlignIO.read(path, "clustal")
+        clustalw_clustal = clustalw_clustal_header + clustalw_clustal_body
+        self.assertEqual(format(msa, "clustal"), clustalw_clustal)
+        # create a new-style Alignment object
+        alignment = msa.alignment
+        self.assertEqual(format(alignment, "clustal"), clustalw_clustal_body)
 
     def test_read_write_clustal(self):
         """Test the base alignment stuff."""
         path = os.path.join(os.getcwd(), "Clustalw", "opuntia.aln")
-        alignment = AlignIO.read(path, "clustal")
-        self.assertEqual(len(alignment), 7)
-        seq_record = alignment[0]
+        msa = AlignIO.read(path, "clustal")
+        self.assertEqual(len(msa), 7)
+        seq_record = msa[0]
         self.assertEqual(seq_record.description, "gi|6273285|gb|AF191659.1|AF191")
         self.assertEqual(
             seq_record.seq,
@@ -225,44 +302,44 @@ class TestReading(unittest.TestCase):
                 "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA"
             ),
         )
-        seq_record = alignment[1]
+        seq_record = msa[1]
         self.assertEqual(seq_record.description, "gi|6273284|gb|AF191658.1|AF191")
         self.assertEqual(
             seq_record.seq,
             "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
         )
-        seq_record = alignment[2]
+        seq_record = msa[2]
         self.assertEqual(seq_record.description, "gi|6273287|gb|AF191661.1|AF191")
         self.assertEqual(
             seq_record.seq,
             "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
         )
-        seq_record = alignment[3]
+        seq_record = msa[3]
         self.assertEqual(seq_record.description, "gi|6273286|gb|AF191660.1|AF191")
         self.assertEqual(
             seq_record.seq,
             "TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
         )
-        seq_record = alignment[4]
+        seq_record = msa[4]
         self.assertEqual(seq_record.description, "gi|6273290|gb|AF191664.1|AF191")
         self.assertEqual(
             seq_record.seq,
             "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
         )
-        seq_record = alignment[5]
+        seq_record = msa[5]
         self.assertEqual(seq_record.description, "gi|6273289|gb|AF191663.1|AF191")
         self.assertEqual(
             seq_record.seq,
             "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTATACCAGA",
         )
-        seq_record = alignment[6]
+        seq_record = msa[6]
         self.assertEqual(seq_record.description, "gi|6273291|gb|AF191665.1|AF191")
         self.assertEqual(
             seq_record.seq,
             "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
         )
-        self.assertEqual(alignment.get_alignment_length(), 156)
-        align_info = AlignInfo.SummaryInfo(alignment)
+        self.assertEqual(msa.get_alignment_length(), 156)
+        align_info = AlignInfo.SummaryInfo(msa)
         consensus = align_info.dumb_consensus()
         self.assertIsInstance(consensus, Seq)
         self.assertEqual(
@@ -615,7 +692,7 @@ A  7.0 0.0 0.0 0.0
 """,
         )
 
-        second_seq = alignment[1].seq
+        second_seq = msa[1].seq
         matrix = align_info.pos_specific_score_matrix(second_seq, ["N", "-"])
         self.assertEqual(
             str(matrix),
@@ -783,7 +860,7 @@ A  7.0 0.0 0.0 0.0
         value = align_info.information_content(
             5, 50, chars_to_ignore=["N"], e_freq_table=e_freq_table
         )
-        self.assertAlmostEqual(value, 88.42, places=2)
+        self.assertAlmostEqual(value, 88.42309908538343)
         value = align_info.information_content(
             e_freq_table=e_freq_table, chars_to_ignore=["N"]
         )
@@ -955,40 +1032,351 @@ A  7.0 0.0 0.0 0.0
 155 A 2.000
 """,
         )
+        # create a new-style Alignment object
+        del seq_record
+        del align_info
+        del consensus
+        del dictionary
+        del matrix
+        del second_seq
+        del e_freq_table
+        del value
+        del handle
+        alignment = msa.alignment
+        self.assertEqual(len(alignment), 7)
+        seq_record = alignment.sequences[0]
+        self.assertEqual(seq_record.description, "gi|6273285|gb|AF191659.1|AF191")
+        self.assertEqual(
+            alignment[0],
+            "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA",
+        )
+        self.assertEqual(
+            seq_record.seq,
+            Seq(
+                "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATAATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA"
+            ),
+        )
+        seq_record = alignment.sequences[1]
+        self.assertEqual(seq_record.description, "gi|6273284|gb|AF191658.1|AF191")
+        self.assertEqual(
+            alignment[1],
+            "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+        )
+        self.assertEqual(
+            seq_record.seq,
+            "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATAATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+        )
+        seq_record = alignment.sequences[2]
+        self.assertEqual(seq_record.description, "gi|6273287|gb|AF191661.1|AF191")
+        self.assertEqual(
+            alignment[2],
+            "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+        )
+        self.assertEqual(
+            seq_record.seq,
+            "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATAATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+        )
+        seq_record = alignment.sequences[3]
+        self.assertEqual(seq_record.description, "gi|6273286|gb|AF191660.1|AF191")
+        self.assertEqual(
+            alignment[3],
+            "TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+        )
+        self.assertEqual(
+            seq_record.seq,
+            "TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATAATATATTTATAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+        )
+        seq_record = alignment.sequences[4]
+        self.assertEqual(seq_record.description, "gi|6273290|gb|AF191664.1|AF191")
+        self.assertEqual(
+            alignment[4],
+            "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+        )
+        self.assertEqual(
+            seq_record.seq,
+            "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+        )
+        seq_record = alignment.sequences[5]
+        self.assertEqual(seq_record.description, "gi|6273289|gb|AF191663.1|AF191")
+        self.assertEqual(
+            alignment[5],
+            "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATA------ATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTATACCAGA",
+        )
+        self.assertEqual(
+            seq_record.seq,
+            "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTATACCAGA",
+        )
+        seq_record = alignment.sequences[6]
+        self.assertEqual(seq_record.description, "gi|6273291|gb|AF191665.1|AF191")
+        self.assertEqual(
+            alignment[6],
+            "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+        )
+        self.assertEqual(
+            seq_record.seq,
+            "TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTCCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+        )
+        self.assertEqual(alignment.shape, (7, 156))
+        substitutions = alignment.substitutions
+        self.assertEqual(len(substitutions), 4)
+        self.assertEqual(substitutions.shape, (4, 4))
+        self.assertAlmostEqual(substitutions[("A", "A")], 1395)
+        self.assertAlmostEqual(substitutions[("A", "C")], 3)
+        self.assertAlmostEqual(substitutions[("A", "G")], 13)
+        self.assertAlmostEqual(substitutions[("A", "T")], 6)
+        self.assertAlmostEqual(substitutions[("C", "A")], 3)
+        self.assertAlmostEqual(substitutions[("C", "C")], 271)
+        self.assertAlmostEqual(substitutions[("C", "G")], 0)
+        self.assertAlmostEqual(substitutions[("C", "T")], 16)
+        self.assertAlmostEqual(substitutions[("G", "A")], 5)
+        self.assertAlmostEqual(substitutions[("G", "C")], 0)
+        self.assertAlmostEqual(substitutions[("G", "G")], 480)
+        self.assertAlmostEqual(substitutions[("G", "T")], 0)
+        self.assertAlmostEqual(substitutions[("T", "A")], 6)
+        self.assertAlmostEqual(substitutions[("T", "C")], 12)
+        self.assertAlmostEqual(substitutions[("T", "G")], 0)
+        self.assertAlmostEqual(substitutions[("T", "T")], 874)
+        motif = motifs.Motif(alphabet="ACGT", alignment=alignment)
+        self.assertEqual(
+            motif.consensus,
+            "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTTCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+        )
+        self.assertEqual(
+            motif.degenerate_consensus,
+            "TATACATTAAAGRAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTYCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA",
+        )
+        matrix = motif.counts
+        self.assertEqual(
+            str(matrix),
+            """\
+        0      1      2      3      4      5      6      7      8      9     10     11     12     13     14     15     16     17     18     19     20     21     22     23     24     25     26     27     28     29     30     31     32     33     34     35     36     37     38     39     40     41     42     43     44     45     46     47     48     49     50     51     52     53     54     55     56     57     58     59     60     61     62     63     64     65     66     67     68     69     70     71     72     73     74     75     76     77     78     79     80     81     82     83     84     85     86     87     88     89     90     91     92     93     94     95     96     97     98     99    100    101    102    103    104    105    106    107    108    109    110    111    112    113    114    115    116    117    118    119    120    121    122    123    124    125    126    127    128    129    130    131    132    133    134    135    136    137    138    139    140    141    142    143    144    145    146    147    148    149    150    151    152    153    154    155
+A:   0.00   7.00   0.00   7.00   0.00   7.00   0.00   1.00   7.00   7.00   7.00   0.00   4.00   7.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   7.00   7.00   7.00   0.00   0.00   0.00   7.00   7.00   7.00   0.00   0.00   0.00   0.00   7.00   7.00   7.00   0.00   7.00   7.00   7.00   0.00   7.00   7.00   0.00   7.00   0.00   7.00   0.00   7.00   0.00   4.00   0.00   3.00   0.00   1.00   0.00   1.00   0.00   1.00   7.00   0.00   7.00   0.00   7.00   0.00   0.00   0.00   1.00   6.00   7.00   7.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   7.00   0.00   7.00   0.00   0.00   0.00   7.00   7.00   7.00   0.00   7.00   0.00   7.00   7.00   7.00   7.00   7.00   0.00   7.00   0.00   0.00   0.00   7.00   7.00   0.00   7.00   7.00   7.00   0.00   0.00   7.00   0.00   7.00   0.00   0.00   7.00   7.00   0.00   7.00   0.00   0.00   7.00   7.00   7.00   0.00   7.00   7.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   7.00   0.00   0.00   1.00   0.00   7.00   0.00   0.00   7.00   0.00   7.00
+C:   0.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   6.00   0.00   0.00   0.00   0.00   0.00   3.00   7.00   7.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   2.00   7.00   7.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   7.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   7.00   7.00   0.00   0.00   0.00
+G:   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   7.00   3.00   0.00   7.00   7.00   7.00   7.00   7.00   0.00   0.00   7.00   0.00   7.00   7.00   0.00   0.00   0.00   0.00   0.00   0.00   7.00   7.00   0.00   0.00   0.00   7.00   7.00   0.00   7.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   0.00   7.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   6.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00
+T:   7.00   0.00   7.00   0.00   0.00   0.00   7.00   6.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   7.00   0.00   7.00   0.00   4.00   0.00   3.00   0.00   1.00   0.00   1.00   0.00   1.00   0.00   0.00   7.00   0.00   7.00   0.00   7.00   7.00   7.00   0.00   1.00   0.00   0.00   7.00   7.00   4.00   0.00   0.00   7.00   7.00   0.00   7.00   0.00   7.00   0.00   5.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   7.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   7.00   0.00   7.00   0.00   0.00   7.00   0.00   0.00   0.00   7.00   7.00   0.00   0.00   0.00   7.00   0.00   0.00   0.00   7.00   0.00   7.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   7.00   0.00   6.00   0.00   7.00   7.00   0.00   0.00   7.00   7.00   7.00   0.00   0.00   7.00   0.00   7.00   0.00   0.00   0.00   0.00   0.00   0.00
+""",
+        )
+        self.assertEqual(
+            format(motif, "transfac"),
+            """\
+P0      A      C      G      T
+01      0      0      0      7      T
+02      7      0      0      0      A
+03      0      0      0      7      T
+04      7      0      0      0      A
+05      0      7      0      0      C
+06      7      0      0      0      A
+07      0      0      0      7      T
+08      1      0      0      6      T
+09      7      0      0      0      A
+10      7      0      0      0      A
+11      7      0      0      0      A
+12      0      0      7      0      G
+13      4      0      3      0      R
+14      7      0      0      0      A
+15      0      0      7      0      G
+16      0      0      7      0      G
+17      0      0      7      0      G
+18      0      0      7      0      G
+19      0      0      7      0      G
+20      7      0      0      0      A
+21      0      0      0      7      T
+22      0      0      7      0      G
+23      0      7      0      0      C
+24      0      0      7      0      G
+25      0      0      7      0      G
+26      7      0      0      0      A
+27      0      0      0      7      T
+28      7      0      0      0      A
+29      7      0      0      0      A
+30      7      0      0      0      A
+31      0      0      0      7      T
+32      0      0      7      0      G
+33      0      0      7      0      G
+34      7      0      0      0      A
+35      7      0      0      0      A
+36      7      0      0      0      A
+37      0      0      7      0      G
+38      0      0      7      0      G
+39      0      7      0      0      C
+40      0      0      7      0      G
+41      7      0      0      0      A
+42      7      0      0      0      A
+43      7      0      0      0      A
+44      0      0      7      0      G
+45      7      0      0      0      A
+46      7      0      0      0      A
+47      7      0      0      0      A
+48      0      0      7      0      G
+49      7      0      0      0      A
+50      7      0      0      0      A
+51      0      0      0      7      T
+52      7      0      0      0      A
+53      0      0      0      7      T
+54      7      0      0      0      A
+55      0      0      0      7      T
+56      7      0      0      0      A
+57      0      0      0      4      T
+58      4      0      0      0      A
+59      0      0      0      3      T
+60      3      0      0      0      A
+61      0      0      0      1      T
+62      1      0      0      0      A
+63      0      0      0      1      T
+64      1      0      0      0      A
+65      0      0      0      1      T
+66      1      0      0      0      A
+67      7      0      0      0      A
+68      0      0      0      7      T
+69      7      0      0      0      A
+70      0      0      0      7      T
+71      7      0      0      0      A
+72      0      0      0      7      T
+73      0      0      0      7      T
+74      0      0      0      7      T
+75      1      6      0      0      C
+76      6      0      0      1      A
+77      7      0      0      0      A
+78      7      0      0      0      A
+79      0      0      0      7      T
+80      0      0      0      7      T
+81      0      3      0      4      Y
+82      0      7      0      0      C
+83      0      7      0      0      C
+84      0      0      0      7      T
+85      0      0      0      7      T
+86      7      0      0      0      A
+87      0      0      0      7      T
+88      7      0      0      0      A
+89      0      0      0      7      T
+90      7      0      0      0      A
+91      0      2      0      5      T
+92      0      7      0      0      C
+93      0      7      0      0      C
+94      7      0      0      0      A
+95      7      0      0      0      A
+96      7      0      0      0      A
+97      0      0      0      7      T
+98      7      0      0      0      A
+99      0      0      0      7      T
+100      7      0      0      0      A
+101      7      0      0      0      A
+102      7      0      0      0      A
+103      7      0      0      0      A
+104      7      0      0      0      A
+105      0      0      0      7      T
+106      7      0      0      0      A
+107      0      0      0      7      T
+108      0      7      0      0      C
+109      0      0      0      7      T
+110      7      0      0      0      A
+111      7      0      0      0      A
+112      0      0      0      7      T
+113      7      0      0      0      A
+114      7      0      0      0      A
+115      7      0      0      0      A
+116      0      0      0      7      T
+117      0      0      0      7      T
+118      7      0      0      0      A
+119      0      0      7      0      G
+120      7      0      0      0      A
+121      0      0      0      7      T
+122      0      0      7      0      G
+123      7      0      0      0      A
+124      7      0      0      0      A
+125      0      0      0      7      T
+126      7      0      0      0      A
+127      0      0      0      7      T
+128      0      7      0      0      C
+129      7      0      0      0      A
+130      7      0      0      0      A
+131      7      0      0      0      A
+132      0      0      7      0      G
+133      7      0      0      0      A
+134      7      0      0      0      A
+135      0      0      0      7      T
+136      0      7      0      0      C
+137      0      1      0      6      T
+138      7      0      0      0      A
+139      0      0      0      7      T
+140      0      0      0      7      T
+141      0      0      7      0      G
+142      7      0      0      0      A
+143      0      0      0      7      T
+144      0      0      0      7      T
+145      0      0      0      7      T
+146      7      0      0      0      A
+147      0      0      7      0      G
+148      0      0      0      7      T
+149      1      0      6      0      G
+150      0      0      0      7      T
+151      7      0      0      0      A
+152      0      7      0      0      C
+153      0      7      0      0      C
+154      7      0      0      0      A
+155      0      0      7      0      G
+156      7      0      0      0      A
+XX
+//
+""",
+        )
+        self.assertAlmostEqual(sum(motif[5:50].relative_entropy), 88.42309908538343)
+        relative_entropy = motif.relative_entropy
+        self.assertAlmostEqual(sum(relative_entropy), 287.54558448976394)
+        self.assertEqual(alignment[:, 1], "AAAAAAA")
+        self.assertAlmostEqual(motif.relative_entropy[1], 2.0)
+        self.assertEqual(alignment[:, 7], "TTTATTT")
+        self.assertAlmostEqual(relative_entropy[7], 1.4083272214176723)
 
     def test_read_fasta(self):
         path = os.path.join(os.curdir, "Quality", "example.fasta")
-        alignment = AlignIO.read(path, "fasta")
-        self.assertEqual(len(alignment), 3)
-        seq_record = alignment[0]
+        msa = AlignIO.read(path, "fasta")
+        self.assertEqual(len(msa), 3)
+        seq_record = msa[0]
         self.assertEqual(seq_record.description, "EAS54_6_R1_2_1_413_324")
         self.assertEqual(seq_record.seq, "CCCTTCTTGTCTTCAGCGTTTCTCC")
-        seq_record = alignment[1]
+        seq_record = msa[1]
         self.assertEqual(seq_record.description, "EAS54_6_R1_2_1_540_792")
         self.assertEqual(seq_record.seq, "TTGGCAGGCCAAGGCCGATGGATCA")
-        seq_record = alignment[2]
+        seq_record = msa[2]
         self.assertEqual(seq_record.description, "EAS54_6_R1_2_1_443_348")
         self.assertEqual(seq_record.seq, "GTTGCTTCTGGCGTGGGTGGGGGGG")
-        self.assertEqual(alignment.get_alignment_length(), 25)
-        align_info = AlignInfo.SummaryInfo(alignment)
+        self.assertEqual(msa.get_alignment_length(), 25)
+        align_info = AlignInfo.SummaryInfo(msa)
         consensus = align_info.dumb_consensus(ambiguous="N", threshold=0.6)
         self.assertIsInstance(consensus, Seq)
         self.assertEqual(consensus, "NTNGCNTNNNNNGNNGGNTGGNTCN")
         self.assertEqual(
-            str(alignment),
+            str(msa),
             """\
 Alignment with 3 rows and 25 columns
 CCCTTCTTGTCTTCAGCGTTTCTCC EAS54_6_R1_2_1_413_324
 TTGGCAGGCCAAGGCCGATGGATCA EAS54_6_R1_2_1_540_792
 GTTGCTTCTGGCGTGGGTGGGGGGG EAS54_6_R1_2_1_443_348""",
         )
-
-    def test_format_conversion(self):
-        """Parse the alignment file and get an alignment object."""
-        path = os.path.join(os.curdir, "Clustalw", "opuntia.aln")
-        alignment = AlignIO.read(path, "clustal")
-        self.assertEqual(format(alignment, "fasta"), opuntia_fasta)
-        self.assertEqual(format(alignment, "clustal"), opuntia_clustal)
+        alignment = msa.alignment
+        self.assertEqual(len(alignment), 3)
+        seq_record = alignment.sequences[0]
+        self.assertEqual(seq_record.description, "EAS54_6_R1_2_1_413_324")
+        self.assertEqual(seq_record.seq, "CCCTTCTTGTCTTCAGCGTTTCTCC")
+        seq_record = alignment.sequences[1]
+        self.assertEqual(seq_record.description, "EAS54_6_R1_2_1_540_792")
+        self.assertEqual(seq_record.seq, "TTGGCAGGCCAAGGCCGATGGATCA")
+        seq_record = alignment.sequences[2]
+        self.assertEqual(seq_record.description, "EAS54_6_R1_2_1_443_348")
+        self.assertEqual(seq_record.seq, "GTTGCTTCTGGCGTGGGTGGGGGGG")
+        self.assertEqual(alignment.length, 25)
+        motif = motifs.Motif(alphabet="ACGT", alignment=alignment)
+        self.assertEqual(motif.consensus, "CTCGCATCCCAAGCAGGATGGATCA")
+        self.assertEqual(motif.degenerate_consensus, "BYBKYHKBBBVHKBVSSDKKKVKSV")
+        self.assertEqual(
+            str(alignment),
+            """\
+EAS54_6_R         0 CCCTTCTTGTCTTCAGCGTTTCTCC 25
+EAS54_6_R         0 TTGGCAGGCCAAGGCCGATGGATCA 25
+EAS54_6_R         0 GTTGCTTCTGGCGTGGGTGGGGGGG 25
+""",
+        )
 
 
 if __name__ == "__main__":
