@@ -669,14 +669,13 @@ class CodonAdaptationIndex(dict):
 
     def optimize(self, sequence, seq_type="DNA", table=standard_dna_table):
         """Return a new DNA sequence with preferred codons only."""
-        
-        try: # If seq record is provided, convert to sequence
+        try:  # If seq record is provided, convert to sequence
             name = sequence.id
             sequence = sequence.seq
         except AttributeError:  # not a  SeqRecord object
             pass
         seq = sequence.upper()
-        # Make dict with amino acids referencing preferred codons 
+        # Make dict with amino acids referencing preferred codons
         pref_codons = {aminoacid: [] for aminoacid in table.protein_alphabet}
         for codon, aminoacid in table.forward_table.items():
             if self[codon] == 1.0:
@@ -693,8 +692,8 @@ class CodonAdaptationIndex(dict):
         for aa in aa_seq:
             try:
                 pref_codon = pref_codons[aa]
-            except KeyError: # Keep stop codon from original sequence
-                if aa=="*":
+            except KeyError:  # Keep stop codon from original sequence
+                if aa == "*":
                     pref_codon = codon
                     continue
                 else:
