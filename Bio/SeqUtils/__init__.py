@@ -586,7 +586,7 @@ class CodonAdaptationIndex(dict):
     Li (Nucleic Acids Res. 1987 Feb 11;15(3):1281-95).
     """
 
-    def __init__(self, sequences, table=standard_dna_table, ignore_illegal_codons=False):
+    def __init__(self, sequences, table=standard_dna_table):
         """Generate a codon adaptiveness table from the coding DNA sequences.
 
         This calculates the relative adaptiveness of each codon (w_ij) as
@@ -623,14 +623,11 @@ class CodonAdaptationIndex(dict):
                 try:
                     counts[codon] += 1
                 except KeyError:
-                    if ignore_illegal_codons:
-                        continue
+                    if name is None:
+                        message = f"illegal codon '{codon}'"
                     else:
-                        if name is None:
-                            message = f"illegal codon '{codon}'"
-                        else:
-                            message = f"illegal codon '{codon}' in gene {name}"
-                        raise ValueError(message) from None
+                        message = f"illegal codon '{codon}' in gene {name}"
+                    raise ValueError(message) from None
 
         # Following the description in the original paper, we use a value
         # of 0.5 for codons that do not appear in the reference sequences.
