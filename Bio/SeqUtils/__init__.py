@@ -671,9 +671,7 @@ class CodonAdaptationIndex(dict):
         return exp(cai_value / cai_length)
 
     def optimize(self, sequence, seq_type="DNA", table=standard_dna_table):
-        """Return a new DNA sequence encoding the same amino acids as in
-         the provided DNA sequence but using only the preferred codons
-        """
+        """Return a new DNA sequence with preferred codons only."""
         
         try: # If seq record is provided, convert to sequence
             name = sequence.id
