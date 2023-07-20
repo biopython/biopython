@@ -266,6 +266,9 @@ TTT	0.886
         )
         value = cai.calculate("ATGCGTATCGATCGCGATACGATTAGGCGGATG")
         self.assertAlmostEqual(value, 0.70246, places=5)
+        optimized_sequence = cai.optimize("ATGCGTATCGATCGCGATACGATTAGGCGGATG")
+        optimized_value = cai.calculate(optimized_sequence)
+        self.assertEqual(optimized_value, 1.0)
         self.maxDiff = None
         self.assertEqual(
             str(cai),
