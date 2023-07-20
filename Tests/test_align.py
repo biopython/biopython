@@ -17,11 +17,8 @@ Right now we've got tests for:
 
 # standard library
 import os
-import collections
 import unittest
 from io import StringIO
-
-import numpy as np
 
 # biopython
 from Bio.Seq import Seq
