@@ -237,7 +237,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
         alignment = Alignment(records, coordinates)
         # This will check alignment lengths are self-consistent:
-        rows, columns = alignment.shape
+        columns = alignment.length
         if columns != aln_length:
             raise ValueError(
                 "GCG MSF headers said alignment length %i, but found %i"

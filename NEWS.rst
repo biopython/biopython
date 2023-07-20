@@ -28,12 +28,48 @@ Additionally, the amino acids considered were revised as per recent literature.
 The sequence objects now have ``.removeprefix()`` and ``.removesuffix()``
 methods matching that added to strings in Python 3.9.
 
+Calling ``set_angle()`` on a residue dihedral angle previously set only
+the specified angle, now the default behavior is to update overlapping
+angles as well.  For example, setting Psi (N-CA-CN) now updates the
+overlapping angle N-CA-C-O. as most users would probably expect.
+
+Generating a structure with default internal coordinates, e.g. from a
+sequence with ``read_PIC_seq()``,  previously selected wrong default
+values in many cases.  This has been fixed.
+
+Added ``make_extended()`` to set a chain to an extended beta strand
+conformation, as the default backbone values reflect the more popular
+alpha helix in most cases.
+
+Added a ``search`` method to ``Seq`` and ``MultipleSeq`` object to search for
+multiple subsequences at the same time.
+
+The ``Instances`` class and the ``instances`` argument of the ``Motif`` class
+initializer in ``Bio.motifs`` were deprecated in release 1.82. Instead of
+
+>>> from Bio.motifs import Instances
+>>> instances = Instances([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])
+>>> motif = Motif(alphabet='ACGT', instances=instances)
+
+please use
+
+>>> from Bio.Align import Alignment
+>>> alignment = Alignment([Seq('ACGT'), Seq('ACCT'), Seq('AAGT')])
+>>> motif = Motif(alphabet='ACGT', alignment=alignment)
+
+The ``instances`` attribute of the ``Motif`` class  in ``Bio.motifs`` was
+deprecated in release 1.82. Instead of ``mymotif.instances``, please use
+``mymotif.alignment.sequences``.
+
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Alex Crocker (first contribution)
+- Antonio Trande (first contribution)
 - Arpan Sahoo (first contribution)
 - Benedict Carling (first contribution)
 - Cam McMenamie (first contribution)
@@ -42,7 +78,9 @@ possible, especially the following contributors:
 - Michiel de Hoon
 - Peter Cock
 - Ricardas Ralys (first contribution)
+- Rob Miller
 - Vladislav Kuznetsov (first contribution)
+- Yiming Qu (first contribution)
 
 12 February 2023: Biopython 1.81
 ================================

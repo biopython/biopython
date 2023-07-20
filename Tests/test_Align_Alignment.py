@@ -74,6 +74,23 @@ query             7 A-C-GG-AAC--  0
 """,
                 msg=msg,
             )
+        frequencies = alignment.frequencies
+        self.assertEqual(list(frequencies.keys()), ["A", "C", "G"])
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["A"], numpy.array([2, 1, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["C"], numpy.array([0, 0, 2, 1, 0, 0, 0, 0, 0, 2, 1, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["G"], numpy.array([0, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 1])
+            )
+        )
         self.assertAlmostEqual(alignment.score, 6.0)
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.shape, (2, 12))
@@ -587,6 +604,23 @@ query             0 -AG 2
                 numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]]),
             )
         )
+        frequencies = subalignment.frequencies
+        self.assertEqual(list(frequencies.keys()), ["A", "C", "G"])
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["A"], numpy.array([1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["C"], numpy.array([0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["G"], numpy.array([0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1])
+            )
+        )
         subalignment = alignment[:1, :]
         self.assertEqual(len(subalignment.sequences), 1)
         sequence = subalignment.sequences[0]
@@ -600,6 +634,23 @@ query             0 -AG 2
             numpy.array_equal(
                 subalignment.coordinates,
                 numpy.array([[0, 1, 2, 3, 4, 6, 7, 8, 8, 9, 11]]),
+            )
+        )
+        frequencies = subalignment.frequencies
+        self.assertEqual(list(frequencies.keys()), ["A", "C", "G"])
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["A"], numpy.array([1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["C"], numpy.array([0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0])
+            )
+        )
+        self.assertTrue(
+            numpy.array_equal(
+                frequencies["G"], numpy.array([0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1])
             )
         )
         subalignment = alignment[:]
@@ -1291,6 +1342,44 @@ T  12.0  16.5   7.0 145.0
         self.assertEqual(alignment.sequences[1], query)
         self.assertEqual(alignment.target, target)
         self.assertEqual(alignment.query, query)
+
+    def test_reverse_complement(self):
+        target = SeqRecord(Seq(self.target), id="seqA")
+        query = SeqRecord(Seq(self.query), id="seqB")
+        sequences = [target, query]
+        coordinates = self.forward_coordinates
+        alignment = Align.Alignment(sequences, coordinates)
+        alignment.column_annotations = {
+            "score": [2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 1, 1],
+            "letter": "ABCDEFGHIJKL",
+        }
+        self.assertEqual(
+            str(alignment),
+            """\
+seqA              0 AACCGGGA-CCG 11
+                  0 |-|-||-|-|-- 12
+seqB              0 A-C-GG-AAC--  7
+""",
+        )
+        self.assertEqual(
+            alignment.column_annotations["score"], [2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 1, 1]
+        )
+        self.assertEqual(alignment.column_annotations["letter"], "ABCDEFGHIJKL")
+        rc_alignment = alignment.reverse_complement()
+        self.assertEqual(
+            str(rc_alignment),
+            """\
+<unknown          0 CGG-TCCCGGTT 11
+                  0 --|-|-||-|-| 12
+<unknown          0 --GTT-CC-G-T  7
+""",
+        )
+        self.assertEqual(len(rc_alignment.column_annotations), 2)
+        self.assertEqual(
+            rc_alignment.column_annotations["score"],
+            [1, 1, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2],
+        )
+        self.assertEqual(rc_alignment.column_annotations["letter"], "LKJIHGFEDCBA")
 
 
 class TestMultipleAlignment(unittest.TestCase):
@@ -2607,7 +2696,6 @@ class TestAlignment_pairwise_format(unittest.TestCase):
 
 
 class TestAlign_out_of_order(unittest.TestCase):
-
     seq1 = "AACCCAAAACCAAAAATTTAAATTTTAAA"
     seq2 = "TGTTTTTCCCCC"
     coordinates = numpy.array(
@@ -3051,7 +3139,6 @@ query             7 CCC----CC 12
 
 
 class TestAlign_nucleotide_protein_str(unittest.TestCase):
-
     s1 = "ATGCGGAGCTTTCGAGCGACGTTTGGCTTTGACGACGGA" * 6
     s2 = "ATGCGGAGCCGAGCGACGTTTACGGCTTTGACGACGGA" * 6
     t1 = translate(s1)

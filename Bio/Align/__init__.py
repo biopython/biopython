@@ -20,6 +20,8 @@ import importlib
 import warnings
 import numbers
 from itertools import zip_longest
+from abc import ABC, abstractmethod
+
 
 try:
     import numpy as np
@@ -139,8 +141,8 @@ class MultipleSeqAlignment:
 
         Arguments:
          - records - A list (or iterator) of SeqRecord objects, whose
-                     sequences are all the same length.  This may be an be an
-                     empty list.
+                     sequences are all the same length.  This may be an empty
+                     list.
          - alphabet - For backward compatibility only; its value should always
                       be None.
          - annotations - Information about the whole alignment (dictionary).
@@ -1114,10 +1116,89 @@ class Alignment:
         return data
 
     @property
+    def frequencies(self):
+        """Return the frequency of each letter in each column of the alignment.
+
+        For example,
+
+        >>> from Bio import Align
+        >>> aligner = Align.PairwiseAligner()
+        >>> aligner.mode = "global"
+        >>> alignments = aligner.align("GACCTG", "CGATCG")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        target            0 -GACCT-G 6
+                          0 -||--|-| 8
+        query             0 CGA--TCG 6
+        <BLANKLINE>
+        >>> alignment.frequencies
+        {'G': array([0, 2, 0, 0, 0, 0, 0, 2]), 'A': array([0, 0, 2, 0, 0, 0, 0, 0]), 'C': array([1, 0, 0, 1, 1, 0, 1, 0]), 'T': array([0, 0, 0, 0, 0, 2, 0, 0])}
+        >>> aligner.mode = "local"
+        >>> alignments = aligner.align("GACCTG", "CGATCG")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        target            0 GACCT-G 6
+                          0 ||--|-| 7
+        query             1 GA--TCG 6
+        <BLANKLINE>
+        >>> alignment.frequencies
+        {'G': array([2, 0, 0, 0, 0, 0, 2]), 'A': array([0, 2, 0, 0, 0, 0, 0]), 'C': array([0, 0, 1, 1, 0, 1, 0]), 'T': array([0, 0, 0, 0, 2, 0, 0])}
+        """
+        coordinates = self.coordinates.copy()
+        sequences = list(self.sequences)
+        steps = np.diff(self.coordinates, 1)
+        aligned = sum(steps != 0, 0) > 1
+        # True for steps in which at least two sequences align, False if a gap
+        for i, sequence in enumerate(sequences):
+            row = steps[i, aligned]
+            if (row >= 0).all():
+                pass
+            elif (row <= 0).all():
+                sequences[i] = reverse_complement(sequence, inplace=False)
+                coordinates[i, :] = len(sequence) - coordinates[i, :]
+                steps[i, :] = -steps[i, :]
+            else:
+                raise ValueError(f"Inconsistent steps in row {i}")
+        gaps = steps.max(0)
+        if not ((steps == gaps) | (steps <= 0)).all():
+            raise ValueError("Unequal step sizes in alignment")
+        n = len(steps)
+        length = sum(gaps)
+        counts = {}
+        for i in range(n):
+            sequence = sequences[i]
+            k = coordinates[i, 0]
+            m = 0
+            for step, gap in zip(steps[i], gaps):
+                if step > 0:
+                    j = k + step
+                    n = m + step
+                    try:
+                        subsequence = bytes(sequence[k:j])
+                    except TypeError:  # str
+                        subsequence = bytes(sequence[k:j], "UTF8")
+                    for index, letter in zip(range(m, n), subsequence):
+                        character = chr(letter)
+                        row = counts.get(character)
+                        if row is None:
+                            row = np.zeros(length, int)
+                            counts[character] = row
+                        row[index] += 1
+                    k = j
+                    m = n
+                elif step < 0:
+                    k += step
+                else:  # step == 0
+                    n = m + gap
+                    m = n
+        return counts
+
+    @property
     def target(self):
         """Return self.sequences[0] for a pairwise alignment."""
         n = len(self.sequences)
-        if n != 2:
+        if n > 2:
+            # also allow alignments in which only the target alignment is defined
             raise ValueError(
                 "self.target is defined for pairwise alignments only (found alignment of %d sequences)"
                 % n
@@ -2394,6 +2475,62 @@ class Alignment:
         return len(self.sequences)
 
     @property
+    def length(self):
+        """Return the alignment length, i.e. the number of columns when printed..
+
+        The alignment length is the number of columns in the alignment when it
+        is printed, and is equal to the sum of the number of matches, number of
+        mismatches, and the total length of gaps in the target and query.
+        Sequence sections beyond the aligned segment are not included in the
+        number of columns.
+
+        For example,
+
+        >>> from Bio import Align
+        >>> aligner = Align.PairwiseAligner()
+        >>> aligner.mode = "global"
+        >>> alignments = aligner.align("GACCTG", "CGATCG")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        target            0 -GACCT-G 6
+                          0 -||--|-| 8
+        query             0 CGA--TCG 6
+        <BLANKLINE>
+        >>> alignment.length
+        8
+        >>> aligner.mode = "local"
+        >>> alignments = aligner.align("GACCTG", "CGATCG")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        target            0 GACCT-G 6
+                          0 ||--|-| 7
+        query             1 GA--TCG 6
+        <BLANKLINE>
+        >>> len(alignment)
+        2
+        >>> alignment.length
+        7
+        """
+        n = len(self.coordinates)
+        if n == 0:  # no sequences
+            return 0
+        steps = np.diff(self.coordinates, 1)
+        aligned = sum(steps != 0, 0) > 1
+        # True for steps in which at least two sequences align, False if a gap
+        for i in range(n):
+            row = steps[i, aligned]
+            if (row >= 0).all():
+                pass
+            elif (row <= 0).all():
+                steps[i, :] = -steps[i, :]
+            else:
+                raise ValueError(f"Inconsistent steps in row {i}")
+        gaps = steps.max(0)
+        if not ((steps == gaps) | (steps <= 0)).all():
+            raise ValueError("Unequal step sizes in alignment")
+        return sum(gaps)
+
+    @property
     def shape(self):
         """Return the shape of the alignment as a tuple of two integer values.
 
@@ -2436,23 +2573,7 @@ class Alignment:
         (2, 7)
         """
         n = len(self.coordinates)
-        if n == 0:  # no sequences
-            return (0, 0)
-        steps = np.diff(self.coordinates, 1)
-        aligned = sum(steps != 0, 0) > 1
-        # True for steps in which at least two sequences align, False if a gap
-        for i in range(n):
-            row = steps[i, aligned]
-            if (row >= 0).all():
-                pass
-            elif (row <= 0).all():
-                steps[i, :] = -steps[i, :]
-            else:
-                raise ValueError(f"Inconsistent steps in row {i}")
-        gaps = steps.max(0)
-        if not ((steps == gaps) | (steps <= 0)).all():
-            raise ValueError("Unequal step sizes in alignment")
-        m = sum(gaps)
+        m = self.length
         return (n, m)
 
     @property
@@ -3129,6 +3250,103 @@ class Alignment:
                         mismatches += 1
         return AlignmentCounts(gaps, identities, mismatches)
 
+    def reverse_complement(self):
+        """Reverse-complement the alignment and return it.
+
+        >>> sequences = ["ATCG", "AAG", "ATC"]
+        >>> coordinates = np.array([[0, 2, 3, 4], [0, 2, 2, 3], [0, 2, 3, 3]])
+        >>> alignment = Alignment(sequences, coordinates)
+        >>> print(alignment)
+                          0 ATCG 4
+                          0 AA-G 3
+                          0 ATC- 3
+        <BLANKLINE>
+        >>> rc_alignment = alignment.reverse_complement()
+        >>> print(rc_alignment)
+                          0 CGAT 4
+                          0 C-TT 3
+                          0 -GAT 3
+        <BLANKLINE>
+
+        The attribute `column_annotations`, if present, is associated with the
+        reverse-complemented alignment, with its values in reverse order.
+
+        >>> alignment.column_annotations = {"score": [3, 2, 2, 2]}
+        >>> rc_alignment = alignment.reverse_complement()
+        >>> print(rc_alignment.column_annotations)
+        {'score': [2, 2, 2, 3]}
+        """
+        sequences = [reverse_complement(sequence) for sequence in self.sequences]
+        coordinates = np.array(
+            [
+                len(sequence) - row[::-1]
+                for sequence, row in zip(sequences, self.coordinates)
+            ]
+        )
+        alignment = Alignment(sequences, coordinates)
+        try:
+            column_annotations = self.column_annotations
+        except AttributeError:
+            pass
+        else:
+            alignment.column_annotations = {}
+            for key, value in column_annotations.items():
+                if isinstance(value, np.ndarray):
+                    value = value[::-1].copy()
+                else:
+                    value = value[::-1]
+                alignment.column_annotations[key] = value
+        return alignment
+
+
+class AlignmentsAbstractBaseClass(ABC):
+    """Abstract base class for sequence alignments.
+
+    Most users will not need to use this class. It is used internally as a base
+    class for the list-like Alignments class, and for the AlignmentIterator
+    class in Bio.Align.interfaces, which itself is the abstract base class for
+    the alignment parsers in Bio/Align/.
+    """
+
+    def __iter__(self):
+        """Iterate over the alignments as Alignment objects.
+
+        This method SHOULD NOT be overridden by any subclass.
+        """
+        return self
+
+    @abstractmethod
+    def __next__(self):
+        """Return the next alignment."""
+
+    @abstractmethod
+    def rewind(self):
+        """Rewind the iterator to let it loop over the alignments from the beginning."""
+
+    @abstractmethod
+    def __len__(self):
+        """Return the number of alignments."""
+
+
+class Alignments(AlignmentsAbstractBaseClass, list):  # noqa: D101
+    def __init__(self):  # noqa: D107
+        super().__init__()
+        self._index = 0
+
+    def __next__(self):
+        try:
+            item = self[self._index]
+        except IndexError:
+            raise StopIteration
+        self._index += 1
+        return item
+
+    def rewind(self):  # noqa: D102
+        self._index = 0
+
+    def __len__(self):
+        return list.__len__(self)
+
 
 class PairwiseAlignments:
     """Implements an iterator over pairwise alignments returned by the aligner.
@@ -3162,7 +3380,6 @@ class PairwiseAlignments:
         self._index = -1
 
     def __len__(self):
-        """Return the number of alignments."""
         return len(self._paths)
 
     def __getitem__(self, index):
@@ -3184,9 +3401,6 @@ class PairwiseAlignments:
                 break
         return alignment
 
-    def __iter__(self):
-        return self
-
     def __next__(self):
         path = next(self._paths)
         self._index += 1
@@ -3196,8 +3410,7 @@ class PairwiseAlignments:
         self._alignment = alignment
         return alignment
 
-    def rewind(self):
-        """Rewind the iterator to let it loop over the alignments from the beginning."""
+    def rewind(self):  # noqa: D102
         self._paths.reset()
         self._index = -1
 
@@ -3545,8 +3758,8 @@ def write(alignments, target, fmt, *args, **kwargs):
     """Write alignments to a file.
 
     Arguments:
-     - alignments - List (or iterator) of Alignment objects, or a single
-       Alignment.
+     - alignments - An Alignments object, an iterator of Alignment objects, or
+       a single Alignment.
      - target     - File or file-like object to write to, or filename as string.
      - fmt        - String describing the file format (case-insensitive).
 

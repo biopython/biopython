@@ -10,6 +10,7 @@ import re
 import math
 
 from Bio import motifs
+from Bio import Align
 
 
 class Motif(motifs.Motif):
@@ -25,7 +26,7 @@ class Motif(motifs.Motif):
         matrix_id,
         name,
         alphabet="ACGT",
-        instances=None,
+        alignment=None,
         counts=None,
         collection=None,
         tf_class=None,
@@ -39,7 +40,7 @@ class Motif(motifs.Motif):
         comment=None,
     ):
         """Construct a JASPAR Motif instance."""
-        motifs.Motif.__init__(self, alphabet, instances, counts)
+        motifs.Motif.__init__(self, alphabet, alignment, counts)
         self.name = name
         self.matrix_id = matrix_id
         self.collection = collection
@@ -238,8 +239,8 @@ def _read_sites(handle):
         instance = Seq(instance)
         instances.append(instance)
 
-    instances = motifs.Instances(instances, alphabet)
-    motif = Motif(matrix_id=None, name=None, alphabet=alphabet, instances=instances)
+    alignment = Align.Alignment(instances)
+    motif = Motif(matrix_id=None, name=None, alphabet=alphabet, alignment=alignment)
     motif.mask = "*" * motif.length
     record = Record()
     record.append(motif)

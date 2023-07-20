@@ -22,6 +22,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Alan Medlar <https://github.com/ajm>
 - Alessio Papini <first dot last at unifi dot it>
 - Alessio Quercia <https://github.com/AlessioQuercia>
+- Alex Crocker <alex.w.crocker at gmail>
 - Alex Morehead <https://github.com/amorehead>
 - Alexander Decurnou <https://github.com/adcrn>
 - Allis Tauri <https://github.com/allista>
@@ -41,6 +42,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Antonio Jesús Gálvez Muñoz <https://github.com/PyCreatine>
 - Anthony Bradley <https://github.com/abradle>
 - Antony Lee <https://github.com/anntzer>
+- Antonio Trande <https://github.com/sagitter>
 - Anuj Sharma <https://github.com/xulesc>
 - Ariel Aptekmann <https://github.com/aralap>
 - Arpan Sahoo <https://github.com/arpansahoo>
@@ -173,6 +175,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - João Vitor F Cavalcante <https://github.com/jvfe>
 - Joe Cora <https://github.com/JoeCora>
 - Joe Greener <https://github.com/jgreener64>
+- Joel Ibaceta <https://github.com/joelibaceta>
 - Joerg Schaarschmidt <https://github.com/schaarj>
 - Johann Visagie <wjv at domain cityip.co.za>
 - John Bradley <https://github.com/johnbradley>
@@ -333,6 +336,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Yanbo Ye <https://github.com/lijax>
 - Yasar L. Ahmed <https://github.com/pyahmed>
 - Yi Hsiao <https://github.com/hsiaoyi0504>
+- Yiming Qu <https://github.com/whatever60>
 - Yogesh Kulkarni <https://https://github.com/yogeshhk>
 - Yu Huang <krocea at domain yahoo.com.cn>
 - Yves Bastide <ybastide at domain irisa.fr>

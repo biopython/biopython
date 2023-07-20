@@ -60,9 +60,13 @@ then we can create a Motif object as follows:
 \begin{minted}{pycon}
 >>> m = motifs.create(instances)
 \end{minted}
-The instances are saved in an attribute \verb+m.instances+, which is essentially a Python list with some added functionality, as described below.
-Printing out the Motif object shows the instances from which it was constructed:
-
+The instances from which this motif was created is stored in the \verb+.alignment+ property:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(m.alignment.sequences)
+[Seq('TACAA'), Seq('TACGC'), Seq('TACAC'), Seq('TACCC'), Seq('AACCC'), Seq('AATGC'), Seq('AATGC')]
+\end{minted}
+Printing the Motif object shows the instances from which it was constructed:
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(m)
@@ -73,7 +77,6 @@ TACCC
 AACCC
 AATGC
 AATGC
-<BLANKLINE>
 \end{minted}
 The length of the motif is defined as the sequence length, which should be the same for all instances:
 
@@ -133,7 +136,10 @@ in the alphabet of the motif:
 >>> m.counts[0, :]
 (3, 7, 0, 2, 1)
 \end{minted}
-The motif has an associated consensus sequence, defined as the sequence of
+
+\subsection{Consensus, anticonsensus, and degenerate consensus  sequence}
+
+The consensus sequence of a motif is defined as the sequence of
 letters along the positions of the motif for which the largest value in the
 corresponding columns of the \verb+.counts+ matrix is obtained:
 
@@ -142,7 +148,7 @@ corresponding columns of the \verb+.counts+ matrix is obtained:
 >>> m.consensus
 Seq('TACGC')
 \end{minted}
-as well as an anticonsensus sequence, corresponding to the smallest values in
+Conversely, the anticonsensus sequence corresponds to the smallest values in
 the columns of the \verb+.counts+ matrix:
 
 %cont-doctest
@@ -152,9 +158,7 @@ Seq('CCATG')
 \end{minted}
 Note that there is some ambiguity in the definition of the consensus and anticonsensus sequence if in some columns multiple nucleotides have the maximum or minimum count.
 
-You can also ask for a degenerate consensus sequence, in which ambiguous
-nucleotides are used for positions where there are multiple nucleotides with
-high counts:
+for DNA sequences, you can also ask for a degenerate consensus sequence, in which ambiguous nucleotides are used for positions where there are multiple nucleotides with high counts:
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -165,8 +169,9 @@ Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T,
 and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is
 constructed following the rules specified by Cavener \cite{cavener1987}.
 
-We can also get the reverse complement of a motif:
+\subsection{Reverse-complementing a motif}
 
+We can get the reverse complement of a motif by calling the \verb+reverse_complement+ method on it:
 %cont-doctest
 \begin{minted}{pycon}
 >>> r = m.reverse_complement()
@@ -182,11 +187,77 @@ GGGTA
 GGGTT
 GCATT
 GCATT
-<BLANKLINE>
+\end{minted}
+The reverse complement is only defined for DNA motifs.
+
+\subsection{Slicing a motif}
+
+You can slice the motif to obtain a new \verb+Motif+ object for the selected positions:
+%cont-doctest
+\begin{minted}{pycon}
+>>> m_sub = m[2:-1]
+>>> print(m_sub)
+CA
+CG
+CA
+CC
+CC
+TG
+TG
+>>> m_sub.consensus
+Seq('CG')
+>>> m_sub.degenerate_consensus
+Seq('CV')
 \end{minted}
 
-The reverse complement and the degenerate consensus sequence are
-only defined for DNA motifs.
+\subsection{Relative entropy}
+\label{subsec:relative_entropy}
+
+The relative entropy (or Kullback-Leibler distance) $H_j$ of column $j$ of the motif is defined as \cite{schneider1986,durbin1998}
+\begin{displaymath}
+H_{j} = \sum_{i=1}^{M} p_{ij} \log\left(\frac{p_{ij}}{b_{i}}\right)
+\end{displaymath}
+
+\noindent where:
+
+\begin{itemize}
+  \item $M$ -- The number of letters in the alphabet (given by \verb+len(m.alphabet)+);
+  \item $p_{ij}$ -- The observed frequency of letter $i$, normalized, in the $j$-th column (see below);
+  \item $b_{i}$ --  The background probability of letter $i$ (given by \verb+m.background[i]+).
+\end{itemize}
+The observed frequency $p_{ij}$ is computed as follows:
+\begin{displaymath}
+p_{ij} = \frac{c_{ij} + k_i}{C_{j} + k}
+\end{displaymath}
+\noindent where:
+\begin{itemize}
+  \item $c_{ij}$ -- the number of times letter $i$ appears in column $j$ of the alignment (given by \verb+m.counts[i, j]+);
+  \item $C_{j}$ --  The total number of letters in column $j$: $C_{j} = \sum_{i=1}^{M} c_{ij}$ (given by \verb+sum(m.counts[:, j])+).
+  \item $k_i$ -- the pseudocount of letter $i$ (given by \verb+m.pseudocounts[i]+).
+  \item $k$ -- the total pseudocount: $k = \sum_{i=1}^{M} k_i$ (given by \verb+sum(m.pseudocounts.values())+).
+\end{itemize}
+With these definitions, both $p_{ij}$ and $b_{i}$ are normalized to 1:
+\begin{displaymath}
+\sum_{i=1}^{M} p_{ij} = 1
+\end{displaymath}
+\begin{displaymath}
+\sum_{i=1}^{M} b_i = 1
+\end{displaymath}
+The relative entropy is the same as the information content if the background distribution is uniform.
+
+The relative entropy for each column of motif \verb+m+ can be obtained using the \verb+relative_entropy+ property:
+% Don't include this in the doctest, as the exact output can vary.  To ensure
+% that the calculation is correct, we test the sum of these values below.
+\begin{minted}{pycon}
+>>> m.relative_entropy
+array([1.01477186, 2.        , 1.13687943, 0.44334329, 1.40832722])
+\end{minted}
+These values are calculated using the base-2 logarithm, and are therefore in units of bits. The second column (which consists of \verb+A+ nucleotides only) has the highest relative entropy; the fourth column (which consists of \verb+A+, \verb+C+, or \verb+G+ nucleotides) has the lowest relative entropy). The relative entropy of the motif can be calculated by summing over the columns:
+%cont-doctest
+\begin{minted}{pycon}
+>>> sum(m.relative_entropy)  # doctest:+ELLIPSIS
+6.003321...
+\end{minted}
 
 \subsection{Creating a sequence logo}
 If we have internet access, we can create a \href{https://weblogo.berkeley.edu}{weblogo}:
@@ -254,14 +325,14 @@ We can create a \verb+Motif+ object from these instances as follows:
 ...     arnt = motifs.read(handle, "sites")
 ...
 \end{minted}
-The instances from which this motif was created is stored in the \verb+.instances+ property:
+The instances from which this motif was created is stored in the \verb+.alignment+ property:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> print(arnt.instances[:3])
+>>> print(arnt.alignment.sequences[:3])
 [Seq('CACGTG'), Seq('CACGTG'), Seq('CACGTG')]
->>> for instance in arnt.instances:
-...     print(instance)
+>>> for sequence in arnt.alignment.sequences:
+...     print(sequence)
 ...
 CACGTG
 CACGTG
@@ -329,7 +400,7 @@ As this motif was created from the counts matrix directly, it has no instances a
 
 %cont-doctest
 \begin{minted}{pycon}
->>> print(srf.instances)
+>>> print(srf.alignment)
 None
 \end{minted}
 We can now ask for the consensus sequence of these two motifs:
@@ -654,28 +725,28 @@ you can also find it by its name:
 \begin{minted}{pycon}
 >>> motif = record["GSKGCATGTGAAA"]
 \end{minted}
-Each motif has an attribute \verb+.instances+ with the sequence instances
-in which the motif was found, providing some information on each instance:
+Each motif has an attribute \verb+.alignment+ with the sequence alignment
+in which the motif was found, providing some information on each of the sequences:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> len(motif.instances)
+>>> len(motif.alignment)
 7
->>> motif.instances[0]
+>>> motif.alignment.sequences[0]
 Instance('GCGGCATGTGAAA')
->>> motif.instances[0].motif_name
+>>> motif.alignment.sequences[0].motif_name
 'GSKGCATGTGAAA'
->>> motif.instances[0].sequence_name
+>>> motif.alignment.sequences[0].sequence_name
 'INO1'
->>> motif.instances[0].sequence_id
+>>> motif.alignment.sequences[0].sequence_id
 'sequence_5'
->>> motif.instances[0].start
+>>> motif.alignment.sequences[0].start
 620
->>> motif.instances[0].strand
+>>> motif.alignment.sequences[0].strand
 '+'
->>> motif.instances[0].length
+>>> motif.alignment.sequences[0].length
 13
->>> pvalue = motif.instances[0].pvalue
+>>> pvalue = motif.alignment.sequences[0].pvalue
 >>> print("%5.3g" % pvalue)
 1.21e-08
 \end{minted}
@@ -873,7 +944,7 @@ Speaking of exporting, let's look at export functions in general.
 We can use the \verb+format+ built-in function to write the motif in the simple JASPAR \verb+pfm+ format:
 %the tabs in the output confuse doctest; don't test
 \begin{minted}{pycon}
->>> print(arnt.format("pfm"))
+>>> print(format(arnt, "pfm"))
   4.00  19.00   0.00   0.00   0.00   0.00
  16.00   0.00  20.00   0.00   0.00   0.00
   0.00   1.00   0.00  20.00   0.00  20.00
@@ -881,7 +952,7 @@ We can use the \verb+format+ built-in function to write the motif in the simple 
 \end{minted}
 Similarly, we can use \verb+format+ to write the motif in the JASPAR \verb+jaspar+ format:
 \begin{minted}{pycon}
->>> print(arnt.format("jaspar"))
+>>> print(format(arnt, "jaspar"))
 >MA0004.1  Arnt
 A [  4.00  19.00   0.00   0.00   0.00   0.00]
 C [ 16.00   0.00  20.00   0.00   0.00   0.00]
@@ -893,7 +964,7 @@ To write the motif in a TRANSFAC-like matrix format, use
 
 %cont-doctest
 \begin{minted}{pycon}
->>> print(m.format("transfac"))
+>>> print(format(m, "transfac"))
 P0      A      C      G      T
 01      3      0      0      4      W
 02      7      0      0      0      A
@@ -1100,11 +1171,7 @@ background are calculated by the \verb+.mean+ and \verb+.std+ methods.
 mean = 3.21, standard deviation = 2.59
 \end{minted}
 A uniform background is used if \verb+background+ is not specified.
-The mean is particularly important, as its value is equal to the
-Kullback-Leibler divergence or relative entropy, and is a measure for the
-information content of the motif compared to the background. As in Biopython
-the base-2 logarithm is used in the calculation of the log-odds scores, the
-information content has units of bits.
+The mean is equal to the Kullback-Leibler divergence or relative entropy described in Section~\ref{subsec:relative_entropy}.
 
 The \verb+.reverse_complement+, \verb+.consensus+, \verb+.anticonsensus+, and
 \verb+.degenerate_consensus+ methods can be applied directly to PSSM objects.
@@ -1129,7 +1196,7 @@ the true instances of the motif:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> for pos, seq in m.instances.search(test_seq):
+>>> for pos, seq in test_seq.search(m.alignment):
 ...     print("%i %s" % (pos, seq))
 ...
 0 TACAC
@@ -1140,7 +1207,7 @@ We can do the same with the reverse complement (to find instances on the complem
 
 %cont-doctest
 \begin{minted}{pycon}
->>> for pos, seq in r.instances.search(test_seq):
+>>> for pos, seq in test_seq.search(r.alignment):
 ...     print("%i %s" % (pos, seq))
 ...
 6 GCATT
@@ -1542,17 +1609,17 @@ functionality, by adding additional information about the instances.
 \begin{minted}{pycon}
 >>> motifsM[0].consensus
 Seq('GCTTATGTAA')
->>> motifsM[0].instances[0].sequence_name
+>>> motifsM[0].alignment.sequences[0].sequence_name
 'iYFL005W'
->>> motifsM[0].instances[0].sequence_id
+>>> motifsM[0].alignment.sequences[0].sequence_id
 'sequence_15'
->>> motifsM[0].instances[0].start
+>>> motifsM[0].alignment.sequences[0].start
 480
->>> motifsM[0].instances[0].strand
+>>> motifsM[0].alignment.sequences[0].strand
 '+'
 \end{minted}
 \begin{minted}{pycon}
->>> motifsM[0].instances[0].pvalue
+>>> motifsM[0].alignment.sequences[0].pvalue
 1.97e-06
 \end{minted}
 

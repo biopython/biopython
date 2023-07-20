@@ -244,7 +244,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         coordinates = Alignment.infer_coordinates(aligned_seqs)
         alignment = Alignment(records, coordinates)
         if consensus:
-            rows, columns = alignment.shape
+            columns = alignment.length
             if len(consensus) != columns:
                 raise ValueError(
                     "Alignment has %i columns, consensus length is %i, '%s'"

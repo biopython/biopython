@@ -3539,7 +3539,7 @@ CGTT
 class TestArgumentErrors(unittest.TestCase):
     def test_aligner_string_errors(self):
         aligner = Align.PairwiseAligner()
-        message = "^argument should support the sequence protocol$"
+        message = "^sequence has unexpected type int$"
         with self.assertRaisesRegex(TypeError, message):
             aligner.score("AAA", 3)
         message = "^sequence has zero length$"

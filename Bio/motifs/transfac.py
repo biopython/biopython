@@ -68,6 +68,13 @@ class Motif(motifs.Motif, dict):
     reference_keys = {"RX", "RA", "RT", "RL"}
     # These keys occur for references
 
+    def __getitem__(self, key):
+        try:
+            value = super().__getitem__(key)  # motifs.Motif
+        except TypeError:
+            value = super(motifs.Motif, self).__getitem__(key)  # dict
+        return value
+
 
 class Record(list):
     """Store the information in a TRANSFAC matrix table.

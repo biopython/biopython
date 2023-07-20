@@ -449,30 +449,27 @@ doing what you need to do!
 
 An important consideration for extracting information from a BLAST report is the type of objects that the information is stored in. In Biopython, the parsers return \verb|Record| objects, either \verb|Blast| or \verb|PSIBlast| depending on what you are parsing. These objects are defined in \verb|Bio.Blast.Record| and are quite complete.
 
-Here are my attempts at UML class diagrams for the \verb|Blast| and \verb|PSIBlast| record classes. If you are good at UML and see mistakes/improvements that can be made, please let me know. The Blast class diagram is shown in Figure~\ref{fig:blastrecord}.
-
 \begin{htmlonly}
-\label{fig:blastrecord}
+Here is my attempt at a UML class diagram for the \verb|Blast| record class:
+
 \imgsrc[width=650, height=750]{images/BlastRecord.png}
+
+The PSIBlast record object is similar, but has support for the rounds that are used in the iteration steps of PSIBlast:
+
+\imgsrc[width=650, height=750]{images/PSIBlastRecord.png}
 \end{htmlonly}
 
 \begin{latexonly}
+Figures~\ref{fig:blastrecord} and~\ref{fig:psiblastrecord} and are my attempts at UML class diagrams for the \verb|Blast| and \verb|PSIBlast| record classes.
+The PSIBlast record object is similar, but has support for the rounds that are used in the iteration steps of PSIBlast.
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{images/BlastRecord.png}
 \caption{Class diagram for the Blast Record class representing all of the info in a BLAST report}
 \label{fig:blastrecord}
 \end{figure}
-\end{latexonly}
 
-The PSIBlast record object is similar, but has support for the rounds that are used in the iteration steps of PSIBlast. The class diagram for PSIBlast is shown in Figure~\ref{fig:psiblastrecord}.
-
-\begin{htmlonly}
-\label{fig:psiblastrecord}
-\imgsrc[width=650, height=750]{images/PSIBlastRecord.png}
-\end{htmlonly}
-
-\begin{latexonly}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{images/PSIBlastRecord.png}
@@ -481,6 +478,7 @@ The PSIBlast record object is similar, but has support for the rounds that are u
 \end{figure}
 \end{latexonly}
 
+If you are good at UML and see mistakes/improvements that can be made, please let me know.
 
 \section{Dealing with PSI-BLAST}
 

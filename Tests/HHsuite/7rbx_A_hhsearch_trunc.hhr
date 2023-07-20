@@ -1,0 +1,140 @@
+Query         query 
+Match_columns 450
+No_of_seqs    336 out of 10000
+Neff          5.31565
+Searched_HMMs 90139
+Date          Fri Dec 24 23:14:30 2021
+Command       /mnt/home/dberenberg/gustaf_stuff/hh-suite/build/bin/hhsearch -i /tmp/tmprgvo26zr/query.a3m -o /tmp/tmprgvo26zr/output.hhr -maxseq 1000000 -cpu 2 -d /mnt/home/dberenberg/gustaf_stuff/OpenFold/pdb70/pdb70 
+
+ No Hit                             Prob E-value P-value  Score    SS Cols Query HMM  Template HMM
+  1 7EBE_A Isocitrate lyase (E.C.4 100.0  2E-115  2E-120  931.2   0.0  433   13-449    13-553 (556)
+  2 7EBE_G Isocitrate lyase (E.C.4 100.0  2E-115  2E-120  931.2   0.0  433   13-449    13-553 (556)
+  3 7EBF_C Isocitrate lyase (E.C.4 100.0  2E-115  2E-120  931.2   0.0  433   13-449    13-553 (556)
+  4 6EDW_B Isocitrate lyase 2 (E.C 100.0  5E-115  5E-120  941.5   0.0  432   15-449    32-624 (786)
+  5 7EBC_B Isocitrate lyase (E.C.4 100.0  3E-112  3E-117  907.8   0.0  431   16-449    20-560 (563)
+  6 7EBC_C Isocitrate lyase (E.C.4 100.0  3E-112  3E-117  907.8   0.0  431   16-449    20-560 (563)
+  7 1DQU_A ISOCITRATE LYASE (E.C.4 100.0  4E-112  5E-117  904.6   0.0  428   16-447     6-538 (538)
+  8 3OQ8_A Isocitrate lyase (E.C.4 100.0  5E-111  6E-116  878.2   0.0  430   21-450     4-433 (433)
+  9 7RBX_A structural genomics, NI 100.0  2E-110  3E-115  876.1   0.0  435   16-450    16-450 (450)
+ 10 3LG3_B Isocitrate lyase (E.C.4 100.0  8E-109  9E-114  861.7   0.0  425   19-445     3-435 (435)
+ 11 3LG3_A Isocitrate lyase (E.C.4 100.0  3E-108  4E-113  856.3   0.0  425   19-445     3-435 (435)
+ 12 5E9G_A Isocitrate lyase (E.C.4 100.0  2E-106  2E-111  863.0   0.0  433   13-449    12-550 (560)
+ 13 5DQL_C Isocitrate lyase 1 (E.C 100.0  3E-106  4E-111  841.0   0.0  424   19-446     4-428 (428)
+ 14 6XPP_B Isocitrate lyase (E.C.4 100.0  3E-106  4E-111  841.0   0.0  424   19-446     4-428 (428)
+ 15 5E9F_B Isocitrate lyase (E.C.4 100.0  4E-106  5E-111  860.6   0.0  433   13-449    12-550 (560)
+ 16 7CMX_B Isocitrate lyase (E.C.4 100.0  2E-105  2E-110  836.0   0.0  425   21-449     2-427 (433)
+ 17 6G1O_A Isocitrate lyase (E.C.4 100.0 2.7E-84   3E-89  683.8   0.0  374   20-398     3-486 (486)
+ 18 1ZLP_B petal death protein (E. 100.0   3E-37 3.3E-42  313.6   0.0  275   43-389     7-282 (318)
+ 19 5UNC_A PHOSPHOENOLPYRUVATE PHO 100.0 4.5E-37   5E-42  314.6   0.0  263   60-392    13-277 (337)
+ 20 3FA3_B 2,3-dimethylmalate lyas 100.0 9.1E-37   1E-41  308.0   0.0  260   65-390     4-265 (302)
+ 21 5UNC_B PHOSPHOENOLPYRUVATE PHO 100.0 2.6E-36 2.8E-41  309.1   0.0  258   64-391    17-276 (337)
+ 22 3EOO_A Methylisocitrate lyase  100.0 3.2E-36 3.5E-41  303.4   0.0  256   65-390     9-265 (298)
+ 23 3FA3_F 2,3-dimethylmalate lyas 100.0 5.2E-36 5.8E-41  302.4   0.0  260   64-389     3-264 (302)
+ 24 3FA4_C 2,3-dimethylmalate lyas 100.0 5.2E-36 5.8E-41  302.4   0.0  260   64-389     3-264 (302)
+ 25 1OQF_B 2-methylisocitrate lyas 100.0 7.2E-36   8E-41  299.9   0.0  257   65-391     4-262 (295)
+ 26 1M1B_A PHOSPHOENOLPYRUVATE PHO 100.0 8.7E-36 9.6E-41  299.1   0.0  258   65-392     6-266 (295)
+ 27 1XG3_D 2-methylisocitrate lyas 100.0 2.5E-35 2.7E-40  295.8   0.0  257   65-391     4-262 (295)
+ 28 1XG4_D Probable methylisocitra 100.0 2.5E-35 2.7E-40  295.8   0.0  257   65-391     4-262 (295)
+ 29 3M0J_A Oxaloacetate acetyl hyd 100.0 3.7E-35 4.1E-40  297.0   0.0  262   64-390    10-273 (307)
+ 30 4IQD_B Carboxyvinyl-carboxypho 100.0 3.8E-35 4.2E-40  296.3   0.0  285   64-430    15-300 (305)
+ 31 4IQE_B carboxyvinyl-carboxypho 100.0 3.8E-35 4.2E-40  296.3   0.0  285   64-430    15-300 (305)
+ 32 3LYE_A Oxaloacetate acetyl hyd 100.0 4.9E-35 5.4E-40  296.1   0.0  263   63-390     9-273 (307)
+ 33 1S2W_A Phosphoenolpyruvate pho 100.0 7.9E-35 8.8E-40  292.4   0.0  258   64-391     5-265 (295)
+ 34 3EOO_L Methylisocitrate lyase  100.0 5.4E-34   6E-39  286.8   0.0  256   65-390     9-265 (298)
+ 35 3B8I_B PA4872 oxaloacetate dec 100.0   2E-33 2.3E-38  281.1   0.0  250   64-388     7-258 (287)
+ 36 3B8I_F PA4872 oxaloacetate dec 100.0   2E-33 2.3E-38  281.1   0.0  250   64-388     7-258 (287)
+ 37 4IQD_A Carboxyvinyl-carboxypho  99.9 6.1E-33 6.7E-38  280.5   0.0  254   64-390    15-269 (305)
+ 38 2DUA_A Phosphonopyruvate hydro  99.9   2E-32 2.2E-37  274.2   0.0  255   66-390     3-261 (290)
+ 39 2HJP_A Phosphonopyruvate hydro  99.9   2E-32 2.2E-37  274.2   0.0  255   66-390     3-261 (290)
+ 40 4LSB_B lyase/mutase; Structura  99.9 3.3E-30 3.7E-35  259.4   0.0  254   62-391    14-269 (294)
+ 41 4MG4_E Phosphonomutase; SSGCID  99.9 1.1E-29 1.2E-34  252.0   0.0  247   62-380    10-258 (261)
+ 42 2ZE3_A DFA0005; Deinococcus fi  99.9 1.7E-28 1.8E-33  244.4   0.0  253   66-392     6-260 (275)
+ 43 2QIW_B PEP phosphonomutase (E.  99.9 5.6E-28 6.2E-33  239.0   0.0  246   65-382     7-254 (255)
+ 44 1O66_D 3-methyl-2-oxobutanoate  99.6 2.5E-19 2.8E-24  180.0   0.0  188   67-319     6-196 (275)
+ 45 1O68_A 3-methyl-2-oxobutanoate  99.6 2.5E-19 2.8E-24  180.0   0.0  188   67-319     6-196 (275)
+ 46 1O68_D 3-methyl-2-oxobutanoate  99.6 2.5E-19 2.8E-24  180.0   0.0  188   67-319     6-196 (275)
+ 47 1M3U_A 3-methyl-2-oxobutanoate  99.6   4E-19 4.5E-24  177.4   0.0  189   67-319     6-196 (264)
+ 48 3VAV_B 3-methyl-2-oxobutanoate  99.5   3E-18 3.4E-23  172.4   0.0  179   66-319    17-208 (275)
+ 49 3VAV_J 3-methyl-2-oxobutanoate  99.5   3E-18 3.4E-23  172.4   0.0  179   66-319    17-208 (275)
+ 50 1OY0_A Ketopantoate hydroxymet  99.5 1.7E-17 1.8E-22  167.6   0.0  189   66-319    22-214 (281)
+ 51 2P10_C Mll9387 protein; PUTATI  97.4 1.3E-06 1.5E-11   88.9   0.0  149   67-246    17-172 (286)
+ 52 2P10_D Mll9387 protein; PUTATI  97.2   3E-06 3.3E-11   86.4   0.0  149   67-246    17-172 (286)
+ 53 7NRC_A 40S ribosomal protein S  41.4      25 0.00027   41.0   0.0   32  168-206   179-211 (1209)
+ 54 1VR6_B Phospho-2-dehydro-3-deo  27.0      61 0.00068   35.8   0.0   65  162-228   275-339 (350)
+ 55 4QIT_B Nitronate monooxygenase  26.8      61 0.00068   34.9   0.0   30   80-109   157-186 (357)
+ 56 3PG9_D Phospho-2-dehydro-3-deo  26.1      65 0.00072   35.2   0.0   65  162-228   263-327 (338)
+ 57 6M74_A L-lactate oxidase (E.C.  24.7      72 0.00079   34.3   0.0   31   78-108   232-262 (368)
+
+No 1
+>7EBE_A Isocitrate lyase (E.C.4.1.3.1); Isocitrate lyase, glyoxylate cycle, ubiquitination; HET: FMT; 2.69A {Candida albicans}
+Probab=100.00  E-value=1.8e-115  Score=931.20  Aligned_cols=433  Identities=36%  Similarity=0.615  Sum_probs=412.8  Template_Neff=5.300
+
+Q query            13 EAQTQGPGSMTDFYSLIPSAPKGRFDGIERAHTAEDVKRLRGSVEIKYSLAEMGANRLWKLIHE----EDFVNALGALSG   88 (450)
+Q Consensus        13 ~~~~~~~~~~~~~~~~~~~~~~~R~~~i~R~ysa~~V~~lrgs~~~~~~~a~~~a~kL~~ll~~----~~~~~~~Ga~~~   88 (450)
+                      ........++++|++|++||.+|||++|+|||||+||++||||++++| +++.++.|||++|++    +++++++|++||
+T Consensus        13 ~~~~~~~~~~~~v~~i~~~~~~~R~~~i~R~Yta~~V~~lRgs~~~~~-~~~~~a~kL~~lL~~~~~~~~~~~~~Ga~D~   91 (556)
+T 7EBE_A           13 DIQKEEADFQKEVAEIKKWWSEPRWRKTKRIYSAEDIAKKRGTLKINH-PSSQQADKLFKLLEKHDADKTVSFTFGALDP   91 (556)
+T ss_dssp             CHHHHHHHHHHHHHHHHHHHTSGGGTTCCCCSCHHHHHTTSCSSCCCC-THHHHHHHHHHHHHHHHHTTCCEEEEBCCSH
+T ss_pred             ChhHHHHHHHHHHHHHHHHHhCcccccCCCCCCHHHHHHHhCCCCCCC-cchHHHHHHHHHHHHcccCCCeEEEecCCCH
+Confidence            334556778999999999999999999999999999999999999988 888999999999985    689999999999
+
+
+Q query            89 NQAMQMVRAGLKAIYLSGWQVAADANTASAMYPDQSLYPANAGPELAKRINRTLQRADQIETAEGKG--------LSVDT  160 (450)
+Q Consensus        89 ~~a~~~~~ag~~aiYvSG~~~a~~a~~~~~~~PD~~~yp~~tvp~~v~~i~~~~~~~~~~~~~e~~~--------~~~~~  160 (450)
+                      +||+++++ ||++||+|||++|++.+.+++|+||.++||+++|++.|++|++++++|||+|+.++..        .+..+
+T Consensus        92 ~sA~~~a~-Gf~aiyvSG~~vSa~~g~~~~~~PD~~~~p~~ev~~~v~rI~~a~~~~Dr~q~~~~~~~~~~~r~~~~~~d  170 (556)
+T 7EBE_A           92 IHVAQMAK-YLDSIYVSGWQCSSTASTSNEPSPDLADYPMDTVPNKVEHLWFAQLFHDRKQREERLTLSKEERAKTPYID  170 (556)
+T ss_dssp             HHHHHHTT-TCSCEEECHHHHHHHCCTTSCCCSSSSCSCTTHHHHHHHHHHHHHHHHHHHHHHHHHTSCHHHHTTSCBCC
+T ss_pred             HHHHHHHh-cCCEEEEchhHHHHhccCCCCCCCCccCCChhHHHHHHHHHHHHHHHHHHHHHHHHHhcCHHHHccCCCCC
+Confidence            99999997 9999999999999999877999999999999999999999999999999999987754        34566
+
+
+Q query           161 WFAPIVADAEAGFGGPLDAFEIMKAYIEAGAAGVHFEDQLASEKKCGHLGGKVLIPTAAHIRNLNAARLAADVMGTPTLI  240 (450)
+Q Consensus       161 ~~~PiiaDaDtG~Gg~~~~~~~~k~~ieaGaAgih~EDQ~~~~KrCGh~~gK~lvp~~e~i~~l~Aa~~a~d~~~~~~~i  240 (450)
+                      |.+|||||+|+|||+++++++++|.|+++||+|||||||..++|||||++||+|+|+++|+.||+|||.+.|++|++++|
+T Consensus       171 ~~~PIIAD~DtGfGg~~~v~~lvk~~~eAGaAGIhIEDq~~g~Kkcgh~~gk~Lvp~~e~~~RL~AAr~a~d~~g~d~vI  250 (556)
+T 7EBE_A          171 FLRPIIADADTGHGGITAIIKLTKMFIERGAAGIHIEDQAPGTKKCGHMAGKVLVPVQEHINRLVAIRASADIFGSNLLA  250 (556)
+T ss_dssp             CCCCEEEECTTCSSSHHHHHHHHHHHHHTTCSEEEEESBCTTSCCCTTSSCCEECCHHHHHHHHHHHHHHHHHHTCCCEE
+T ss_pred             CCCcEEEeCCCCCCcHHHHHHHHHHHHHcCCCEEEeCCCCCCCCCCccCCCCeecCHHHHHHHHHHHHHHHHHhCCCEEE
+Confidence            78999999999999999999999999999999999999998899999999999999999999999999999989999999
+
+
+Q query           241 VARTDAEAAKLLTSDIDERDQPFV--------------------------------------------------------  264 (450)
+Q Consensus       241 iARTDA~aa~ll~s~id~rd~~Fi--------------------------------------------------------  264 (450)
+                      |||||++.+++|++++|+|||+||                                                        
+T Consensus       251 iARTDA~~a~li~s~~D~rDh~~I~G~~~~~~~~l~~al~ra~~~g~~~~ei~~~~~~w~~~~~Ltty~e~~~~~l~~~~  330 (556)
+T 7EBE_A          251 VARTDSEAATLITSTIDHRDHYFIIGATNPEAGDLAALMAEAESKGIYGNELAAIESEWTKKAGLKLFHEAVIDEIKNGN  330 (556)
+T ss_dssp             EEEECTTTCCEESCCCCGGGGGGBCEECCTTCCCHHHHHHHHHTTTCCHHHHHHHHHHHHHHHTEECHHHHHHHHHHTSS
+T ss_pred             EEEecchhhhhhhccCCCCCcceeecCCCcccCcHHHHHHHHHHCCCCHHHHHHHHHHHhhhcCCccHhHHHHHHHHhCC
+Confidence            999999999999999999999876                                                        
+
+
+Q query           265 ----------------------------------------DYEAGRTAEGFYQVKNGIEPCIARAIAYAPYCDLIWMETS  304 (450)
+Q Consensus       265 ----------------------------------------d~ea~RT~EGfy~~k~gle~AIaRalA~Ap~aDliW~Et~  304 (450)
+                                                              ||+.+||+||||++++|+++||+|+++|||||||+||||+
+T Consensus       331 ~~~~~~~~~~~~~~~~~~~~~s~~~~r~~a~~~~~~~~~~dwd~~Rt~eG~Y~~~~g~~~aI~Ra~a~apyaDllW~Et~  410 (556)
+T 7EBE_A          331 YSNKDALIKKFTDKVNPLSHTSHKEAKKLAKELTGKDIYFNWDVARAREGYYRYQGGTQCAVMRGRAFAPYADLIWMESA  410 (556)
+T ss_dssp             CSSHHHHHHHHHHHSSTTSCCCHHHHHHHHHHHHSSCCCCBSSTTCCTTSCEEBCCCHHHHHHHHHHHGGGCSEEEECCS
+T ss_pred             CCChHHHHHHHHHHhccCCCCCHHHHHHHHHHHhCCCCcCCCCCCCcccccEEecccHHHHHHHHHHhccccCEEEEeCC
+Confidence                                                    7889999999999999999999999999999999999999
+
+
+Q query           305 KPDLAQARRFAEAVHKAHPGKLLAYNCSPSFNWKKNLDDATIAKFQRELGAMGYKFQFITLAGFHQLNYGMFELARGYKD  384 (450)
+Q Consensus       305 kPdl~~A~~FAe~V~~~~P~k~LaYN~SpSFnw~~~~~d~~i~~f~~eLa~lGy~~QfitLAGfh~~~~~~~~lA~~~~~  384 (450)
+                      +||+.+|++||++||++||+++|||||||||||+++|++++|++|+++|++|||+||||||+|||++++++++||+.|++
+T Consensus       411 ~P~~~~a~~Fa~~i~~~~P~~~laYN~SpSFnW~~~~~~~~~~~f~~~L~klG~~~qfitlag~h~~~~~~~~~a~~~~~  490 (556)
+T 7EBE_A          411 LPDYAQAKEFADGVKAAVPDQWLAYNLSPSFNWNKAMPADEQETYIKRLGKLGYVWQFITLAGLHTTALAVDDFSNQYSQ  490 (556)
+T ss_dssp             SCCHHHHHHHHHHHHTTCTTCEEEEECCTTSCHHHHSCHHHHHHHHHHHHHHTEEEEEETTHHHHHHHHHHHHHHHHHHH
+T ss_pred             CCCHHHHHHHHHHHHHHCCCCEEEEEeCCCCCcccCCCHHHHHHHHHHHHHcCCeEEEEechHHHHHHHHHHHHHHHHHH
+Confidence            99999999999999999999999999999999999999999999999999999999999999999999999999999999
+
+
+Q query           385 RQMAAYSELQQAEFAAEADGYTATKHQREVGTGYFDAVSLAITGGQSSTTAMKESTETAQFKPAA  449 (450)
+Q Consensus       385 ~gm~aYvelqq~e~~~~~~g~~~~~HQ~~~G~~y~D~~~~~i~gg~~st~a~~~ste~~qf~~~~  449 (450)
+                      +||++||++||++|  ++.||++++||+|||++|+|+++++++||.++|++||+|+||+||++++
+T Consensus       491 ~gm~aYv~~vQr~e--~~~g~~~~~HQ~wsGa~~~D~~~~~v~~g~sst~a~g~~~te~qf~~~~  553 (556)
+T 7EBE_A          491 IGMKAYGQTVQQPE--IEKGVEVVKHQKWSGATYIDGLLKMVSGGVTSTAAMGQGVTEDQFKESK  553 (556)
+T ss_dssp             HTTHHHCCCCCHHH--HHTTCGGGSHHHHHTHHHHHHHHHHHTTTCCTTCTTSTTCTTGGGC---
+T ss_pred             cCHHHHHHHcHHHH--HHcCCcccccCccccchHHHHHHHHHhCCcchhhhccCCCchhhccchh
+Confidence            99999999999998  7889999999999999999999999999999999999999999999876
+

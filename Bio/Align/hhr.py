@@ -107,7 +107,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             )
             target.letter_annotations["ss_pred"] = fmt % target_ss_pred.replace("-", "")
             target.letter_annotations["ss_dssp"] = fmt % target_ss_dssp.replace("-", "")
-            target.letter_annotations["Confidence"] = fmt % confidence.replace(" ", "")
+            target.letter_annotations["Confidence"] = fmt % "".join(
+                c for t, c in zip(target_sequence, confidence) if t != "-"
+            )
             fmt = f"{' ' * query_start}%-{query_length - query_start}s"
             query.letter_annotations["Consensus"] = fmt % query_consensus.replace(
                 "-", ""
@@ -131,6 +133,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         target_ss_dssp = ""
         column_score = ""
         confidence = ""
+        consensus = ""
         for line in stream:
             line = line.rstrip()
             if not line:
@@ -172,7 +175,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if counter > 0:
                     return create_alignment()
             elif line.startswith("Confidence"):
-                key, value = line.split(None, 1)
+                value = line[-len(consensus) :]
                 confidence += value
             elif line.startswith("Q ss_pred "):
                 key, value = line.rsplit(None, 1)
