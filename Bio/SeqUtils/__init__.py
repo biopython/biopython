@@ -15,7 +15,7 @@ import re
 import warnings
 from math import pi, sin, cos, log, exp
 
-from Bio.Seq import Seq, complement, complement_rna
+from Bio.Seq import Seq, complement, complement_rna, translate
 from Bio.Data import IUPACData
 from Bio.Data.CodonTable import standard_dna_table
 from Bio import BiopythonDeprecationWarning
@@ -666,6 +666,43 @@ class CodonAdaptationIndex(dict):
                 cai_length += 1
 
         return exp(cai_value / cai_length)
+
+    def optimize(self, sequence, seq_type="DNA", table=standard_dna_table):
+        """Return a new DNA sequence encoding the same amino acids as in
+         the provided DNA sequence but using only the preferred codons
+        """
+        
+        try: # If seq record is provided, convert to sequence
+            name = sequence.id
+            sequence = sequence.seq
+        except AttributeError:  # not a  SeqRecord object
+            pass
+        seq = sequence.upper()
+        # Make dict with amino acids referencing preferred codons 
+        pref_codons = {aminoacid: [] for aminoacid in table.protein_alphabet}
+        for codon, aminoacid in table.forward_table.items():
+            if self[codon] == 1.0:
+                pref_codons[aminoacid] = codon
+        # Create amino acid sequence if DNA was provided
+        if seq_type == "DNA":
+            aa_seq = translate(seq)
+        elif seq_type == "protein":
+            aa_seq = seq
+        else:
+            raise TypeError
+        # Un-translate in loop using only preferred codons
+        optimized = Seq("")
+        for aa in aa_seq:
+            try:
+                pref_codon = pref_codons[aa]
+            except KeyError: # Keep stop codon from original sequence
+                if aa=="*":
+                    pref_codon = codon
+                    continue
+                else:
+                    print(f"Unrecognized codon: {codon}")
+            optimized += pref_codon
+        return optimized
 
     def __str__(self):
         lines = []
