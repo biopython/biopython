@@ -22,6 +22,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Alan Medlar <https://github.com/ajm>
 - Alessio Papini <first dot last at unifi dot it>
 - Alessio Quercia <https://github.com/AlessioQuercia>
+- Alex Crocker <alex.w.crocker at gmail>
 - Alex Morehead <https://github.com/amorehead>
 - Alexander Decurnou <https://github.com/adcrn>
 - Allis Tauri <https://github.com/allista>
