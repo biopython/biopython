@@ -49,21 +49,6 @@ No longer supported as of Release 1.77 (2020, in line with end-of-life or
 sunset date for Python 2.7 itself), having triggered a warning in prior
 releases.
 
-Python 2.6
-----------
-No longer supported as of Release 1.69, having triggered a warning with
-release 1.66 onwards.
-
-Python 2.5
-----------
-No longer supported as of Release 1.63, having triggered a warning with
-Release 1.62, with advance notice in the release notes for Release 1.61.
-
-Python 2.4
-----------
-No longer supported as of Release 1.59, having triggered a warning since
-Release 1.55, with advance notice in the release notes for Release 1.54.
-
 Jython
 ------
 No longer supported as of Release 1.77 with the end of Python 2 support.
