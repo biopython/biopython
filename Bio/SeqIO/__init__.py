@@ -872,7 +872,7 @@ def index(filename, format, alphabet=None, key_function=None):
         random_access_proxy = proxy_class(filename, format)
     except TypeError:
         raise TypeError(
-            "Need a string or path-like objects for the filename (not a handle)"
+            "Need a string or path-like object for the filename (not a handle)"
         ) from None
 
     return _IndexedSeqFileDict(random_access_proxy, key_function, repr, "SeqRecord")
