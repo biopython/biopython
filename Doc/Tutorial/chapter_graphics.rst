@@ -149,13 +149,11 @@ bitmaps, for example:
 The expected output is shown in :numref:`fig:plasmid_linear`.
 
 .. figure:: ../images/plasmid_linear.png
-   :alt: Simple linear diagram for *Yersinia pestis biovar Microtus*
-   plasmid pPCP1.
+   :alt: Simple linear diagram for *Y. pestis biovar Microtus* plasmid pPCP1.
    :name: fig:plasmid_linear
    :width: 80.0%
 
-   Simple linear diagram for *Yersinia pestis biovar Microtus* plasmid
-   pPCP1.
+   Simple linear diagram for *Y. pestis biovar Microtus* plasmid pPCP1.
 
 Notice that the ``fragments`` argument which we set to four controls how
 many pieces the genome gets broken up into.
@@ -177,14 +175,12 @@ If you want to do a circular figure, then try this:
 The expected output is shown in :numref:`fig:plasmid_circular`.
 
 .. figure:: ../images/plasmid_circular.png
-   :alt: Simple circular diagram for *Yersinia pestis biovar Microtus*
-   plasmid pPCP1.
+   :alt: Simple circular diagram for *Y. pestis biovar Microtus* plasmid pPCP1.
    :name: fig:plasmid_circular
    :width: 8cm
    :height: 8cm
 
-   Simple circular diagram for *Yersinia pestis biovar Microtus* plasmid
-   pPCP1.
+   Simple circular diagram for *Y. pestis biovar Microtus* plasmid pPCP1.
 
 These figures are not very exciting, but we’ve only just got started.
 
@@ -336,16 +332,13 @@ previous section should give something like the tracks in
 :numref:`fig:gd_sigil_labels`.
 
 .. figure:: ../images/GD_sigil_labels.png
-   :alt: Simple GenomeDiagram showing label options. The top plot in
-   pale green shows the default label settings (see
-   Section :ref:`sec:gd_features_without_seqfeatures`) while the
-   rest show variations in the label size, position and orientation (see
-   Section :ref:`sec:gd_feature_captions`).
+   :alt: Simple GenomeDiagram showing label options.
    :name: fig:gd_sigil_labels
    :width: 80.0%
 
-   Simple GenomeDiagram showing label options. The top plot in pale
-   green shows the default label settings (see
+   Simple GenomeDiagram showing label options.
+
+   The top plot in pale green shows the default label settings (see
    Section :ref:`sec:gd_features_without_seqfeatures`) while the
    rest show variations in the label size, position and orientation (see
    Section :ref:`sec:gd_feature_captions`).
@@ -399,13 +392,11 @@ different, always straddling the axis with the direction taken from the
 feature’s stand.
 
 .. figure:: ../images/GD_sigils.png
-   :alt: Simple GenomeDiagram showing different sigils (see
-   Section :ref:`sec:gd_sigils`)
+   :alt: Simple GenomeDiagram showing different sigils
    :name: fig:gd_sigils
    :width: 80.0%
 
-   Simple GenomeDiagram showing different sigils (see
-   Section :ref:`sec:gd_sigils`)
+   Simple GenomeDiagram showing different sigils.
 
 .. _`sec:gd_arrow_sigils`:
 
@@ -431,13 +422,11 @@ bounding box:
 The results are shown in :numref:`fig:gd_sigil_arrow_shafts`.
 
 .. figure:: ../images/GD_sigil_arrow_shafts.png
-   :alt: Simple GenomeDiagram showing arrow shaft options (see
-   Section :ref:`sec:gd_arrow_sigils`)
+   :alt: Simple GenomeDiagram showing arrow shaft options
    :name: fig:gd_sigil_arrow_shafts
    :width: 80.0%
 
-   Simple GenomeDiagram showing arrow shaft options (see
-   Section :ref:`sec:gd_arrow_sigils`)
+   Simple GenomeDiagram showing arrow shaft options.
 
 Secondly, the length of the arrow head - given as a proportion of the
 height of the bounding box (defaulting to :math:`0.5`, or :math:`50\%`):
@@ -454,13 +443,11 @@ height of the bounding box (defaulting to :math:`0.5`, or :math:`50\%`):
 The results are shown in :numref:`fig:gd_sigil_arrow_heads`.
 
 .. figure:: ../images/GD_sigil_arrow_heads.png
-   :alt: Simple GenomeDiagram showing arrow head options (see
-   Section :ref:`sec:gd_arrow_sigils`)
+   :alt: Simple GenomeDiagram showing arrow head options
    :name: fig:gd_sigil_arrow_heads
    :width: 80.0%
 
-   Simple GenomeDiagram showing arrow head options (see
-   Section :ref:`sec:gd_arrow_sigils`)
+   Simple GenomeDiagram showing arrow head options.
 
 Biopython 1.61 adds a new ``BIGARROW`` sigil which always straddles the
 axis, pointing left for the reverse strand or right otherwise:
@@ -557,26 +544,18 @@ Figures :ref:`fig:plasmid_linear_nice`
 and :ref:`fig:plasmid_circular_nice`.
 
 .. figure:: ../images/plasmid_linear_nice.png
-   :alt: Linear diagram for *Yersinia pestis biovar Microtus* plasmid
-   pPCP1 showing selected restriction digest sites (see
-   Section :ref:`sec:gd_nice_example`).
+   :alt: Linear diagram for plasmid showing selected restriction digest sites
    :name: fig:plasmid_linear_nice
    :width: 80.0%
 
-   Linear diagram for *Yersinia pestis biovar Microtus* plasmid pPCP1
-   showing selected restriction digest sites (see
-   Section :ref:`sec:gd_nice_example`).
+   Linear diagram for plasmid pPCP1 showing selected restriction digest sites.
 
 .. figure:: ../images/plasmid_circular_nice.png
-   :alt: Circular diagram for *Yersinia pestis biovar Microtus* plasmid
-   pPCP1 showing selected restriction digest sites (see
-   Section :ref:`sec:gd_nice_example`).
+   :alt: Circular diagram for plasmid showing selected restriction digest sites
    :name: fig:plasmid_circular_nice
    :width: 80.0%
 
-   Circular diagram for *Yersinia pestis biovar Microtus* plasmid pPCP1
-   showing selected restriction digest sites (see
-   Section :ref:`sec:gd_nice_example`).
+   Circular diagram for plasmid pPCP1 showing selected restriction digest sites .
 
 .. _`sec:gd_multiple_tracks`:
 
@@ -727,16 +706,14 @@ The expected output is shown in
 :numref:`fig:three_track_simple`.
 
 .. figure:: ../images/three_track_simple.png
-   :alt: Linear diagram with three tracks for Lactococcus phage Tuc2009
-   (NC_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
-   *Listeria innocua* Clip11262 (NC_003212) (see
-   Section :ref:`sec:gd_multiple_tracks`).
+   :alt: Linear diagram with three tracks for three phages
    :name: fig:three_track_simple
 
-   Linear diagram with three tracks for Lactococcus phage Tuc2009
-   (NC_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
-   *Listeria innocua* Clip11262 (NC_003212) (see
-   Section :ref:`sec:gd_multiple_tracks`).
+   Linear diagram with three tracks for three phages.
+
+   This shows Lactococcus phage Tuc2009 (NC_002703), bacteriophage
+   bIL285 (AF323668), and prophage 5 from *Listeria innocua* Clip11262
+   (NC_003212) (see Section :ref:`sec:gd_multiple_tracks`).
 
 I did wonder why in the original manuscript there were no red or orange
 genes marked in the bottom phage. Another important point is here the
@@ -889,15 +866,13 @@ would be difficult to interpret. The expected output is shown in
 :numref:`fig:three_track_cl`.
 
 .. figure:: ../images/three_track_cl.png
-   :alt: Linear diagram with three tracks for Lactococcus phage Tuc2009
-   (NC_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
-   *Listeria innocua* Clip11262 (NC_003212) plus basic cross-links
-   shaded by percentage identity (see
-   Section :ref:`sec:gd_cross_links`).
+   :alt: Linear diagram with three tracks plus basic cross-links
    :name: fig:three_track_cl
 
-   Linear diagram with three tracks for Lactococcus phage Tuc2009
-   (NC_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
+   Linear diagram with three tracks plus basic cross-links.
+   
+   The three tracks show Lactococcus phage Tuc2009 (NC_002703),
+   bacteriophage bIL285 (AF323668), and prophage 5 from
    *Listeria innocua* Clip11262 (NC_003212) plus basic cross-links
    shaded by percentage identity (see
    Section :ref:`sec:gd_cross_links`).
@@ -918,14 +893,13 @@ included in the ``Doc/examples`` folder of the Biopython source code.
 The expected output is shown in :numref:`fig:three_track_cl2`.
 
 .. figure:: ../images/three_track_cl2a.png
-   :alt: Linear diagram with three tracks for Lactococcus phage Tuc2009
-   (NC_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
-   *Listeria innocua* Clip11262 (NC_003212) plus cross-links shaded by
-   percentage identity (see Section :ref:`sec:gd_cross_links`).
+   :alt: Linear diagram with three tracks plus shaded cross-links
    :name: fig:three_track_cl2
 
-   Linear diagram with three tracks for Lactococcus phage Tuc2009
-   (NC_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
+   Linear diagram with three tracks plus shaded cross-links.
+   
+   The three tracks show Lactococcus phage Tuc2009 (NC_002703),
+   bacteriophage bIL285 (AF323668), and prophage 5 from
    *Listeria innocua* Clip11262 (NC_003212) plus cross-links shaded by
    percentage identity (see Section :ref:`sec:gd_cross_links`).
 
@@ -1032,8 +1006,7 @@ thaliana*.
    Simple chromosome diagram for *Arabidopsis thaliana*.
 
 .. figure:: ../images/tRNA_chrom.pdf
-   :alt: Chromosome diagram for *Arabidopsis thaliana* showing tRNA
-   genes.
+   :alt: Chromosome diagram for *Arabidopsis thaliana* showing tRNA.
    :name: fig:trnachromosome
 
    Chromosome diagram for *Arabidopsis thaliana* showing tRNA genes.
