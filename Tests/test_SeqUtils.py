@@ -269,6 +269,9 @@ TTT	0.886
         optimized_sequence = cai.optimize("ATGCGTATCGATCGCGATACGATTAGGCGGATG")
         optimized_value = cai.calculate(optimized_sequence)
         self.assertEqual(optimized_value, 1.0)
+        aa_initial = Seq("ATGCGTATCGATCGCGATACGATTAGGCGGATG").translate()
+        aa_optimized = optimized_sequence.translate()
+        self.assertEqual(aa_initial, aa_optimized)
         self.maxDiff = None
         self.assertEqual(
             str(cai),
