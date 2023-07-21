@@ -690,7 +690,7 @@ class CodonAdaptationIndex(dict):
         else:
             raise TypeError
         # Un-translate in loop using only preferred codons
-        optimized = Seq("")
+        optimized = []
         for aa in aa_seq:
             try:
                 pref_codon = pref_codons[aa]
@@ -700,8 +700,9 @@ class CodonAdaptationIndex(dict):
                     continue
                 else:
                     print(f"Unrecognized amino acid: {aa}")
-            optimized += pref_codon
-        return optimized
+            optimized.append(pref_codon)
+        optimized_str = "".join(optimized)
+        return Seq(optimized_str)
 
     def __str__(self):
         lines = []
