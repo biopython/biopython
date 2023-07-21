@@ -1403,13 +1403,11 @@ record classes. The PSIBlast record object is similar, but has support
 for the rounds that are used in the iteration steps of PSIBlast.
 
 .. figure:: ../images/BlastRecord.png
-   :alt: Class diagram for the Blast Record class representing all of
-   the info in a BLAST report
+   :alt: Class diagram for the Blast Record class representing a report
    :name: fig:blastrecord
    :width: 80.0%
 
-   Class diagram for the Blast Record class representing all of the info
-   in a BLAST report
+   Class diagram for the Blast Record class representing a BLAST report.
 
 .. figure:: ../images/PSIBlastRecord.png
    :alt: Class diagram for the PSIBlast Record class.
