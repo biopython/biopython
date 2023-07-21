@@ -680,7 +680,7 @@ class CodonAdaptationIndex(dict):
             if self[codon] == 1.0:
                 pref_codons[aminoacid] = codon
         # Create amino acid sequence if DNA was provided
-        if seq_type == "DNA":
+        if seq_type == "DNA" or seq_type == "RNA":
             aa_seq = translate(seq)
         elif seq_type == "protein":
             aa_seq = seq
