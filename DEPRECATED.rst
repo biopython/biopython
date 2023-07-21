@@ -207,7 +207,7 @@ the tostring() methods.
 
 Bio.Seq.Seq.tomutable() and Bio.Seq.MutableSeq.toseq()
 ------------------------------------------------------
-Deprecated in release 1.79.
+Deprecated in release 1.79, removed in release 1.81.
 Instead of myseq.tomutable() or mymutableseq.toseq(), you should now use
 Bio.Seq.MutableSeq(myseq) or Bio.Seq.Seq(mymutableseq), respectively.
 
