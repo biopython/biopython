@@ -1416,14 +1416,14 @@ Here is the result:
 
 \section{Dealing with alignments}
 
-This section can been seen as a follow on to Chapter~\ref{chapter:align}.
+This section can been seen as a follow on to Chapter~\ref{chapter:msa}.
 
 \subsection{Calculating summary information}
 \label{sec:summary_info}
 
 Once you have an alignment, you are very likely going to want to find out information about it. Instead of trying to have all of the functions that can generate information about an alignment in the alignment object itself, we've tried to separate out the functionality into separate classes, which act on the alignment.
 
-Getting ready to calculate summary information about an object is quick to do. Let's say we've got an alignment object called \verb|alignment|, for example read in using \verb|Bio.AlignIO.read(...)| as described in Chapter~\ref{chapter:align}. All we need to do to get an object that will calculate summary information is:
+Getting ready to calculate summary information about an object is quick to do. Let's say we've got an alignment object called \verb|alignment|, for example read in using \verb|Bio.AlignIO.read(...)| as described in Chapter~\ref{chapter:msa}. All we need to do to get an object that will calculate summary information is:
 
 \begin{minted}{python}
 from Bio.Align import AlignInfo
