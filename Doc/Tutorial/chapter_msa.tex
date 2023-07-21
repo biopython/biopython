@@ -857,9 +857,7 @@ array([['A', 'E', 'P', 'N', 'A', 'A', 'T', 'N', 'Y', 'A'],
 Note that this leaves the original Biopython alignment object and the NumPy array
 in memory as separate objects - editing one will not update the other!
 
-\section{Getting information on the alignment}
-
-\subsection{Substitutions}
+\subsection{Counting substitutions}
 
 The \verb+substitutions+ property of an alignment reports how often letters in the alignment are substituted for each other. This is calculated by taking all pairs of rows in the alignment, counting the number of times two letters are aligned to each other, and summing this over all pairs. For example,
 
@@ -868,7 +866,7 @@ The \verb+substitutions+ property of an alignment reports how often letters in t
 >>> from Bio.Seq import Seq
 >>> from Bio.SeqRecord import SeqRecord
 >>> from Bio.Align import MultipleSeqAlignment
->>> alignment = MultipleSeqAlignment(
+>>> msa = MultipleSeqAlignment(
 ...     [
 ...         SeqRecord(Seq("ACTCCTA"), id="seq1"),
 ...         SeqRecord(Seq("AAT-CTA"), id="seq2"),
@@ -876,13 +874,13 @@ The \verb+substitutions+ property of an alignment reports how often letters in t
 ...         SeqRecord(Seq("TCTCCTC"), id="seq4"),
 ...     ]
 ... )
->>> print(alignment)
+>>> print(msa)
 Alignment with 4 rows and 7 columns
 ACTCCTA seq1
 AAT-CTA seq2
 CCTACT- seq3
 TCTCCTC seq4
->>> substitutions = alignment.substitutions
+>>> substitutions = msa.substitutions
 >>> print(substitutions)
     A    C    T
 A 2.0  4.5  1.0
@@ -892,7 +890,7 @@ T 1.0  0.5 12.0
 \end{minted}
 As the ordering of pairs is arbitrary, counts are divided equally above and below the diagonal. For example, the 9 alignments of \verb+A+ to \verb+C+ are stored as 4.5 at position \verb+['A', 'C']+ and 4.5  at position \verb+['C', 'A']+. This arrangement helps to make the math easier when calculating a substitution matrix from these counts, as described in Section~\ref{sec:subs_mat_ex}.
 
-Note that \verb+alignment.substitutions+ contains entries for the letters appearing in the alignment only. You can use the \verb+select+ method to add entries for missing letters, for example
+Note that \verb+msa.substitutions+ contains entries for the letters appearing in the alignment only. You can use the \verb+select+ method to add entries for missing letters, for example
 %cont-doctest
 \begin{minted}{pycon}
 >>> m = substitutions.select("ATCG")
@@ -905,6 +903,32 @@ G 0.0  0.0  0.0 0.0
 <BLANKLINE>
 \end{minted}
 This also allows you to change the order of letters in the alphabet.
+
+\section{Getting a new-style Alignment object}
+
+Use the \verb+alignment+ property to create a new-style \verb+Alignment+ object (see section~\ref{sec:alignmentobject}) from an old-style \verb+MultipleSeqAlignment+ object:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> type(msa)
+<class 'Bio.Align.MultipleSeqAlignment'>
+>>> print(msa)
+Alignment with 4 rows and 7 columns
+ACTCCTA seq1
+AAT-CTA seq2
+CCTACT- seq3
+TCTCCTC seq4
+>>> alignment = msa.alignment
+>>> type(alignment)
+<class 'Bio.Align.Alignment'>
+>>> print(alignment)
+seq1              0 ACTCCTA 7
+seq2              0 AAT-CTA 6
+seq3              0 CCTACT- 6
+seq4              0 TCTCCTC 7
+<BLANKLINE>
+\end{minted}
+Note that the \verb+alignment+ property creates and returns a new \verb+Alignment+ object that is consistent with the information stored in the \verb+MultipleSeqAlignment+ object at the time the \verb+Alignment+ object is created. Any changes to the \verb+MultipleSeqAlignment+ after calling the \verb+alignment+ property will not propagate to the \verb+Alignment+ object. However, you can of course call the \verb+alignment+ property again to create a new \verb+Alignment+ object consistent with the updated \verb+MultipleSeqAlignment+ object.
 
 \section{Alignment Tools}
 \label{sec:alignment-tools}
