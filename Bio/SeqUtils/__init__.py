@@ -679,6 +679,9 @@ class CodonAdaptationIndex(dict):
         for codon, aminoacid in table.forward_table.items():
             if self[codon] == 1.0:
                 pref_codons[aminoacid] = codon
+        for codon in table.stop_codons:
+            if self[codon] == 1.0:
+                pref_codons["*"] = codon
         # Create amino acid sequence if DNA was provided
         if seq_type == "DNA" or seq_type == "RNA":
             aa_seq = translate(seq)
@@ -696,7 +699,7 @@ class CodonAdaptationIndex(dict):
                     pref_codon = codon
                     continue
                 else:
-                    print(f"Unrecognized codon: {codon}")
+                    print(f"Unrecognized amino acid: {aa}")
             optimized += pref_codon
         return optimized
 
