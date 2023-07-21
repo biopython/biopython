@@ -953,6 +953,27 @@ class MultipleSeqAlignment:
 
         return m
 
+    @property
+    def alignment(self):
+        """Return an Alignment object based on the MultipleSeqAlignment object.
+
+        This makes a copy of each SeqRecord with a gap-less sequence. Any
+        future changes to the original records in the MultipleSeqAlignment will
+        not affect the new records in the Alignment.
+        """
+        records = [copy.copy(record) for record in self._records]
+        if records:
+            lines = [str(record.seq) for record in records]
+            coordinates = Alignment.infer_coordinates(lines)
+            for record in records:
+                record.seq = record.seq.replace("-", "")
+            alignment = Alignment(records, coordinates)
+        else:
+            alignment = Alignment([])
+        alignment.annotations = self.annotations
+        alignment.column_annotations = self.column_annotations
+        return alignment
+
 
 class Alignment:
     """Represents a sequence alignment.
