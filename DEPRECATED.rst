@@ -265,12 +265,6 @@ something like ``from Bio.PDB.Vector import calc_dihedral`` in which case
 use ``from Bio.PDB import calc_dihedral`` (which will work on older versions
 of Biopython as well).
 
-Bio.PDB.mmCIF
--------------
-This was removed in Release 1.62, when MMCIF2Dict was updated to use shlex
-from the standard library instead. This had required manual intervention to
-include when installing Biopython from source due to a dependency on flex.
-
 Bio.PDB.Residue
 ---------------
 The ``get_atom`` and ``sort`` methods of the ``Residue`` class were deprecated
@@ -354,11 +348,6 @@ Bio.Search
 ----------
 Long obsolete file Bio/Search.py was deprecated in Release 1.61, and removed
 in Release 1.64.
-
-Bio.Pathway.Rep.HashSet
------------------------
-Deprecated in Release 1.59, removed in Release 1.62. Use Python's built in
-set object.
 
 Bio.SeqFeature.WithinPosition and OneOfPosition
 -----------------------------------------------
@@ -483,13 +472,6 @@ Bio.EZRetrieve, Bio.NetCatch, Bio.FilteredReader
 ------------------------------------------------
 Declared obsolete in Release 1.50, deprecated in Release 1.52, and removed in
 Release 1.56.
-
-Bio.File
---------
-Bio.File.SGMLHandle was declared obsolete in Release 1.50, deprecated in
-Release 1.52, and removed in Release 1.56. Bio.File.SGMLStripper was deprecated
-in Release 1.57, removed in Release 1.61. Bio.File.StringHandle was deprecated
-in Release 1.59, removed in Release 1.61.
 
 Bio.Graphics.GenomeDiagram and colour/color, centre/center
 ----------------------------------------------------------
@@ -722,9 +704,6 @@ Bio.ParserSupport
 ``Bio.ParserSupport`` was declared obsolete in Release 1.59, and deprecated in
 Release 1.63. The Martel specific ``EventGenerator`` was removed in Release
 1.67, and the entire module was removed in Release 1.72.
-
-``Bio.ParserSupport.SGMLStrippingConsumer`` was deprecated in Release 1.59, and
-removed in Release 1.61.
 
 Bio.KDTree
 ----------
