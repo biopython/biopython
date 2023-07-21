@@ -872,7 +872,7 @@ def index(filename, format, alphabet=None, key_function=None):
         random_access_proxy = proxy_class(filename, format)
     except TypeError:
         raise TypeError(
-            "Need a string or path-like object for the filename (not a handle)"
+            "Need a string or path-like objects for the filename (not a handle)"
         ) from None
 
     return _IndexedSeqFileDict(random_access_proxy, key_function, repr, "SeqRecord")
@@ -947,7 +947,7 @@ def index_db(
     if filenames is not None and not isinstance(filenames, list):
         raise TypeError(
             "Need a list of filenames (as strings or path-like "
-            "object), or one filename"
+            "objects), or one filename"
         )
     if format is not None and not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")

@@ -552,7 +552,7 @@ class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
             # Saving to file...
             index_tmp = None
             if isinstance(filename, str):
-                index_tmp = filename + ".key.idx"
+                index_tmp = filename.with_suffix(".key.idx")
             elif isinstance(filename, Path):
                 index_tmp = Path(str(filename) + ".key.idx")
 
