@@ -670,7 +670,6 @@ class CodonAdaptationIndex(dict):
     def optimize(self, sequence, seq_type="DNA", table=standard_dna_table):
         """Return a new DNA sequence with preferred codons only."""
         try:  # If seq record is provided, convert to sequence
-            name = sequence.id
             sequence = sequence.seq
         except AttributeError:  # not a  SeqRecord object
             pass
