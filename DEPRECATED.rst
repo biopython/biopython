@@ -286,7 +286,7 @@ used, instead do this via the CompoundLocation object.
 There were multiple deprecations in Release 1.80:
 
 * Class ``FeatureLocation`` renamed to ``SimpleLocation``, with the old
-  name preserved for now solely for backard compatibility.
+  name preserved for now solely for backward compatibility.
 * Arguments ``strand``, ``ref`` and ``ref_db`` to the ``SeqFeature``
   class - set them via the location object
 * Unused class ``PositionGap`` - originally for very old GenBank files.
