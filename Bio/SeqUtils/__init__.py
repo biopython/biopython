@@ -678,6 +678,9 @@ class CodonAdaptationIndex(dict):
         pref_codons = {aminoacid: [] for aminoacid in table.protein_alphabet}
         for codon, aminoacid in table.forward_table.items():
             if self[codon] == 1.0:
+                if pref_codons[aminoacid] != []:
+                    message = f"{pref_codons[aminoacid]} and {codon} are equally preferred. Using {codon}"
+                    warnings.warn(message, RuntimeWarning)
                 pref_codons[aminoacid] = codon
         for codon in table.stop_codons:
             if self[codon] == 1.0:
