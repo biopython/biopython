@@ -371,6 +371,12 @@ making up each alignment as SeqRecords.
 # See also http://biopython.org/wiki/SeqIO_dev
 #
 # --Peter
+
+from difflib import get_close_matches
+
+# from Bio import AlignIO
+from Bio.AlignIO import readable_formats as _alignio_readable_formats
+from Bio.AlignIO import writable_formats as _alignio_writable_formats
 from Bio.Align import MultipleSeqAlignment
 from Bio.File import as_handle
 from Bio.SeqIO import AbiIO
@@ -440,6 +446,8 @@ _FormatToIterator = {
     "xdna": XdnaIO.XdnaIterator,
 }
 
+readable_formats = set(_FormatToIterator).union(_alignio_readable_formats)
+
 _FormatToString = {
     "fasta": FastaIO.as_fasta,
     "fasta-2line": FastaIO.as_fasta_2line,
@@ -450,6 +458,8 @@ _FormatToString = {
     "fastq-illumina": QualityIO.as_fastq_illumina,
     "qual": QualityIO.as_qual,
 }
+
+stringable_formats = set(_FormatToString)
 
 # This could exclude file formats covered by _FormatToString?
 # Right now used in the unit tests as proxy for all supported outputs...
@@ -474,6 +484,8 @@ _FormatToWriter = {
     "xdna": XdnaIO.XdnaWriter,
 }
 
+writable_formats = set(_FormatToWriter.keys()).union(_alignio_writable_formats)
+
 
 def write(sequences, handle, format):
     """Write complete set of sequences to a file.
@@ -494,10 +506,21 @@ def write(sequences, handle, format):
     # Try and give helpful error messages:
     if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
-    if not format:
-        raise ValueError("Format required (lower case string)")
-    if not format.islower():
-        raise ValueError(f"Format string '{format}' should be lower case")
+    if format not in writable_formats:
+        close_formats = get_close_matches(format.lower(), writable_formats)
+        if close_formats:
+            raise ValueError(
+                f"The supplied format '{format}' does not exist. The following are "
+                f"supported close matches: {close_formats}. "
+                "More information on the supported formats "
+                f"({list(writable_formats)}) is available via help(SeqIO), "
+                "SeqIO.writable_formats or https://biopython.org/wiki/SeqIO."
+            )
+        raise ValueError(
+            f"The supplied format '{format}' does not exist. More information on the "
+            f"formarts ({list(writable_formats)}) is available via help(SeqIO) or "
+            "https://biopython.org/wiki/SeqIO."
+        )
 
     if isinstance(handle, SeqRecord):
         raise TypeError("Check arguments, handle should NOT be a SeqRecord")
@@ -593,10 +616,22 @@ def parse(handle, format, alphabet=None):
     # Try and give helpful error messages:
     if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
-    if not format:
-        raise ValueError("Format required (lower case string)")
-    if not format.islower():
-        raise ValueError(f"Format string '{format}' should be lower case")
+    if format not in readable_formats:
+        close_formats = get_close_matches(format.lower(), readable_formats)
+        if close_formats:
+            raise ValueError(
+                f"The supplied format '{format}' does not exist. The following are "
+                f"supported close matches: {close_formats}. "
+                "More information on the supported formats "
+                f"({list(readable_formats)}) is available via help(SeqIO) "
+                "or https://biopython.org/wiki/SeqIO."
+            )
+        raise ValueError(
+            f"The supplied format '{format}' does not exist. More information on the "
+            f"formarts ({list(readable_formats)}) is available via help(SeqIO) or "
+            "https://biopython.org/wiki/SeqIO."
+        )
+
     if alphabet is not None:
         raise ValueError("The alphabet argument is no longer supported")
 

@@ -178,6 +178,9 @@ _FormatToWriter = {  # "fasta" is done via Bio.SeqIO
     "stockholm": StockholmIO.StockholmWriter,
 }
 
+readable_formats = set(_FormatToIterator)
+writable_formats = set(_FormatToWriter)
+
 
 def write(alignments, handle, format):
     """Write complete set of alignments to a file.
