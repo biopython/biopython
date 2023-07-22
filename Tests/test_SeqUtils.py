@@ -272,6 +272,8 @@ TTT	0.886
         aa_initial = Seq("ATGCGTATCGATCGCGATACGATTAGGCGGATG").translate()
         aa_optimized = optimized_sequence.translate()
         self.assertEqual(aa_initial, aa_optimized)
+        with self.assertRaises(KeyError):
+            cai.optimize("CAU", "protein")
         self.maxDiff = None
         self.assertEqual(
             str(cai),
