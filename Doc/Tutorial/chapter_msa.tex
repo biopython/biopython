@@ -888,7 +888,7 @@ C 4.5 10.0  0.5
 T 1.0  0.5 12.0
 <BLANKLINE>
 \end{minted}
-As the ordering of pairs is arbitrary, counts are divided equally above and below the diagonal. For example, the 9 alignments of \verb+A+ to \verb+C+ are stored as 4.5 at position \verb+['A', 'C']+ and 4.5  at position \verb+['C', 'A']+. This arrangement helps to make the math easier when calculating a substitution matrix from these counts, as described in Section~\ref{sec:subs_mat_ex}.
+As the ordering of pairs is arbitrary, counts are divided equally above and below the diagonal. For example, the 9 alignments of \verb+A+ to \verb+C+ are stored as 4.5 at position \verb+['A', 'C']+ and 4.5  at position \verb+['C', 'A']+. This arrangement helps to make the math easier when calculating a substitution matrix from these counts, as described in Section~\ref{sec:substitution_matrices}.
 
 Note that \verb+msa.substitutions+ contains entries for the letters appearing in the alignment only. You can use the \verb+select+ method to add entries for missing letters, for example
 %cont-doctest
@@ -923,7 +923,7 @@ The \verb|summary_align| object is very useful, and will do the following neat t
   \item Calculate a quick consensus sequence -- see section~\ref{sec:consensus}
   \item Get a position specific score matrix for the alignment -- see section~\ref{sec:pssm}
   \item Calculate the information content for the alignment -- see section~\ref{sec:getting_info_content}
-  \item Generate information on substitutions in the alignment -- section~\ref{sec:sub_matrix} details using this to generate a substitution matrix.
+  \item Generate information on substitutions in the alignment -- section~\ref{sec:substitution_matrices} details using this to generate a substitution matrix.
 \end{enumerate}
 
 \subsection{Calculating a quick consensus sequence}
@@ -1121,6 +1121,120 @@ seq4              0 TCTCCTC 7
 \end{minted}
 Note that the \verb+alignment+ property creates and returns a new \verb+Alignment+ object that is consistent with the information stored in the \verb+MultipleSeqAlignment+ object at the time the \verb+Alignment+ object is created. Any changes to the \verb+MultipleSeqAlignment+ after calling the \verb+alignment+ property will not propagate to the \verb+Alignment+ object. However, you can of course call the \verb+alignment+ property again to create a new \verb+Alignment+ object consistent with the updated \verb+MultipleSeqAlignment+ object.
 
+\section{Calculating a substitution matrix from a multiple sequence alignment}
+\label{sec:subs_mat_ex}
+
+You can create your own substitution matrix from an alignment.  In this
+example, we'll first read a protein sequence alignment from the Clustalw file
+\href{examples/protein.aln}{protein.aln} (also available online
+\href{https://raw.githubusercontent.com/biopython/biopython/master/Tests/Clustalw/protein.aln}{here})
+
+%doctest ../Tests/Clustalw
+\begin{minted}{pycon}
+>>> from Bio import AlignIO
+>>> filename = "protein.aln"
+>>> msa = AlignIO.read(filename, "clustal")
+\end{minted}
+
+Section~\ref{sec:alignio_clustal} contains more information on doing this.
+
+The \verb+substitutions+ property of the alignment stores the number of times
+different residues substitute for each other:
+%cont-doctest
+\begin{minted}{pycon}
+>>> observed_frequencies = msa.substitutions
+\end{minted}
+
+To make the example more readable, we'll select only amino acids with polar charged side chains:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> observed_frequencies = observed_frequencies.select("DEHKR")
+>>> print(observed_frequencies)
+       D      E      H      K      R
+D 2360.0  255.5    7.5    0.5   25.0
+E  255.5 3305.0   16.5   27.0    2.0
+H    7.5   16.5 1235.0   16.0    8.5
+K    0.5   27.0   16.0 3218.0  116.5
+R   25.0    2.0    8.5  116.5 2079.0
+<BLANKLINE>
+\end{minted}
+Rows and columns for other amino acids were removed from the matrix.
+
+Next, we normalize the matrix:
+%cont-doctest
+\begin{minted}{pycon}
+>>> import numpy as np
+>>> observed_frequencies /= np.sum(observed_frequencies)
+\end{minted}
+
+Summing over rows or columns gives the relative frequency of occurrence of
+each residue:
+%cont-doctest
+\begin{minted}{pycon}
+>>> residue_frequencies = np.sum(observed_frequencies, 0)
+>>> print(residue_frequencies.format("%.4f"))
+D 0.2015
+E 0.2743
+H 0.0976
+K 0.2569
+R 0.1697
+<BLANKLINE>
+>>> np.sum(residue_frequencies)
+1.0
+\end{minted}
+
+The expected frequency of residue pairs is then
+%cont-doctest
+\begin{minted}{pycon}
+>>> expected_frequencies = np.dot(
+...     residue_frequencies[:, None], residue_frequencies[None, :]
+... )
+>>> print(expected_frequencies.format("%.4f"))
+       D      E      H      K      R
+D 0.0406 0.0553 0.0197 0.0518 0.0342
+E 0.0553 0.0752 0.0268 0.0705 0.0465
+H 0.0197 0.0268 0.0095 0.0251 0.0166
+K 0.0518 0.0705 0.0251 0.0660 0.0436
+R 0.0342 0.0465 0.0166 0.0436 0.0288
+<BLANKLINE>
+\end{minted}
+Here, \verb+residue_frequencies[:, None]+ creates a 2D array consisting of a single column with the values of \verb+residue_frequencies+, and \verb+residue_frequencies[None, :]+ a 2D array with these values as a single row. Taking their dot product (inner product) creates a matrix of expected frequencies where each entry consists of two \verb+residue_frequencies+ values multiplied with each other. For example, \verb+expected_frequencies['D', 'E']+ is equal to \verb+residue_frequencies['D'] * residue_frequencies['E']+.
+
+We can now calculate the log-odds matrix by dividing the observed frequencies by the expected frequencies and taking the logarithm:
+%cont-doctest
+\begin{minted}{pycon}
+>>> m = np.log2(observed_frequencies / expected_frequencies)
+>>> print(m)
+      D    E    H     K    R
+D   2.1 -1.5 -5.1 -10.4 -4.2
+E  -1.5  1.7 -4.4  -5.1 -8.3
+H  -5.1 -4.4  3.3  -4.4 -4.7
+K -10.4 -5.1 -4.4   1.9 -2.3
+R  -4.2 -8.3 -4.7  -2.3  2.5
+<BLANKLINE>
+\end{minted}
+
+This matrix can be used as the substitution matrix when performing alignments. For example,
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.Align import PairwiseAligner
+>>> aligner = PairwiseAligner()
+>>> aligner.substitution_matrix = m
+>>> aligner.gap_score = -3.0
+>>> alignments = aligner.align("DEHEK", "DHHKK")
+>>> print(alignments[0])
+target            0 DEHEK 5
+                  0 |.|.| 5
+query             0 DHHKK 5
+<BLANKLINE>
+>>> print("%.2f" % alignments.score)
+-2.18
+>>> score = m["D", "D"] + m["E", "H"] + m["H", "H"] + m["E", "K"] + m["K", "K"]
+>>> print("%.2f" % score)
+-2.18
+\end{minted}
+
 \section{Alignment Tools}
 \label{sec:alignment-tools}
 
@@ -1168,7 +1282,7 @@ We won't explore all these alignment tools here in the section, just a
 sample, but the same principles apply.
 
 \subsection{ClustalW}
-\label{sec:align_clustal}
+\label{sec:alignio_clustal}
 ClustalW is a popular command line tool for multiple sequence alignment
 (there is also a graphical interface called ClustalX). Biopython's
 \verb|Bio.Align.Applications| module has a wrapper for this alignment tool
