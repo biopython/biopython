@@ -697,12 +697,8 @@ class CodonAdaptationIndex(dict):
         for aa in aa_seq:
             try:
                 pref_codon = pref_codons[aa]
-            except KeyError:  # Keep stop codon from original sequence
-                if aa == "*":
-                    pref_codon = codon
-                    continue
-                else:
-                    print(f"Unrecognized amino acid: {aa}")
+            except KeyError:
+                print(f"Unrecognized amino acid: {aa}")
             optimized.append(pref_codon)
         optimized_str = "".join(optimized)
         return Seq(optimized_str)
