@@ -1637,45 +1637,41 @@ A few control attributes are available in the ``internal_coords``
 classes to modify or filter data as internal coordinates are calculated.
 These are listed in Table :ref:`table:ic-attribs`:
 
-.. container::
+.. table:: Control attributes in Bio.PDB.internal_coords.
    :name: table:ic-attribs
 
-   .. table:: Control attributes in Bio.PDB.internal_coords.
-
-      +------------+-----------------+-----------------+-----------------+
-      | Class      | Attribute       | Default         | Effect          |
-      +============+=================+=================+=================+
-      | AtomKey    | d2h             | False           | Convert D atoms |
-      |            |                 |                 | to H if True    |
-      +------------+-----------------+-----------------+-----------------+
-      | IC_Chain   | MaxPeptideBond  | 1.4             | Max C-N length  |
-      |            |                 |                 | w/o chain       |
-      |            |                 |                 | break; make     |
-      |            |                 |                 | large to link   |
-      |            |                 |                 | over missing    |
-      |            |                 |                 | residues for 3D |
-      |            |                 |                 | models          |
-      +------------+-----------------+-----------------+-----------------+
-      | IC_Residue | accept_atoms    | mainchain,      | override to     |
-      |            |                 | hydrogen atoms  | remove some or  |
-      |            |                 |                 | all sidechains, |
-      |            |                 |                 | H’s, D’s        |
-      +------------+-----------------+-----------------+-----------------+
-      |            | accept_resnames | CYG, YCM, UNK   | 3-letter names  |
-      |            |                 |                 | for HETATMs to  |
-      |            |                 |                 | process,        |
-      |            |                 |                 | backbone only   |
-      |            |                 |                 | unless added to |
-      |            |                 |                 | ic_data.py      |
-      +------------+-----------------+-----------------+-----------------+
-      |            | gly_Cbeta       | False           | override to     |
-      |            |                 |                 | generate Gly    |
-      |            |                 |                 | C               |
-      |            |                 |                 | \ :math:`\beta` |
-      |            |                 |                 | atoms based on  |
-      |            |                 |                 | database        |
-      |            |                 |                 | averages        |
-      +------------+-----------------+-----------------+-----------------+
+   +------------+-----------------+-----------------+------------------+
+   | Class      | Attribute       | Default         | Effect           |
+   +============+=================+=================+==================+
+   | AtomKey    | d2h             | False           | Convert D atoms  |
+   |            |                 |                 | to H if True     |
+   +------------+-----------------+-----------------+------------------+
+   | IC_Chain   | MaxPeptideBond  | 1.4             | Max C-N length   |
+   |            |                 |                 | w/o chain break; |
+   |            |                 |                 | make large to    |
+   |            |                 |                 | link over        |
+   |            |                 |                 | missing residues |
+   |            |                 |                 | for 3D models    |
+   +------------+-----------------+-----------------+------------------+
+   | IC_Residue | accept_atoms    | mainchain,      | override to      |
+   |            |                 | hydrogen atoms  | remove some or   |
+   |            |                 |                 | all sidechains,  |
+   |            |                 |                 | H’s, D’s         |
+   +------------+-----------------+-----------------+------------------+
+   | IC_Residue | accept_resnames | CYG, YCM, UNK   | 3-letter names   |
+   |            |                 |                 | for HETATMs to   |
+   |            |                 |                 | process,         |
+   |            |                 |                 | backbone only    |
+   |            |                 |                 | unless added to  |
+   |            |                 |                 | ic_data.py       |
+   +------------+-----------------+-----------------+------------------+
+   | IC_Residue | gly_Cbeta       | False           | override to      |
+   |            |                 |                 | generate Gly     |
+   |            |                 |                 | C\ :math:`\beta` |
+   |            |                 |                 | atoms based on   |
+   |            |                 |                 | database         |
+   |            |                 |                 | averages         |
+   +------------+-----------------+-----------------+------------------+
 
 Determining atom-atom contacts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1773,23 +1769,21 @@ surface area). The DSSP codes are listed in
 Table :ref:`table:DSSP-codes`. Note that DSSP (the program, and thus
 by consequence the class) cannot handle multiple models!
 
-.. container::
+.. table:: DSSP codes in Bio.PDB.
    :name: table:DSSP-codes
 
-   .. table:: DSSP codes in Bio.PDB.
-
-      ==== =====================================
-      Code Secondary structure
-      ==== =====================================
-      H    :math:`\alpha`-helix
-      B    Isolated :math:`\beta`-bridge residue
-      E    Strand
-      G    3-10 helix
-      I    :math:`\Pi`-helix
-      T    Turn
-      S    Bend
-      -    Other
-      ==== =====================================
+   ==== =====================================
+   Code Secondary structure
+   ==== =====================================
+   H    :math:`\alpha`-helix
+   B    Isolated :math:`\beta`-bridge residue
+   E    Strand
+   G    3-10 helix
+   I    :math:`\Pi`-helix
+   T    Turn
+   S    Bend
+   -    Other
+   ==== =====================================
 
 The ``DSSP`` class can also be used to calculate the accessible surface
 area of a residue. But see also section :ref:`sec:residue_depth`.

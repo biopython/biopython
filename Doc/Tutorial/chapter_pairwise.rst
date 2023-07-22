@@ -566,133 +566,115 @@ For convenience, ``PairwiseAligner`` objects have additional attributes
 that refer to a number of these values collectively, as shown
 (hierarchically) in Table :ref:`table:align-meta-attributes`.
 
-.. container::
+.. table:: Meta-attributes of the pairwise aligner objects.
    :name: table:align-meta-attributes
 
-   .. table:: Meta-attributes of PairwiseAligner objects.
-
-      +---------------------------------+-----------------------------------+
-      | **Meta-attribute**              | **Attributes it maps to**         |
-      +=================================+===================================+
-      | ``gap_score``                   | ``target_gap_score``,             |
-      |                                 | ``query_gap_score``               |
-      +---------------------------------+-----------------------------------+
-      | ``open_gap_score``              | ``target_open_gap_score``,        |
-      |                                 | ``query_open_gap_score``          |
-      +---------------------------------+-----------------------------------+
-      | ``extend_gap_score``            | ``target_extend_gap_score``,      |
-      |                                 | ``query_extend_gap_score``        |
-      +---------------------------------+-----------------------------------+
-      | ``internal_gap_score``          | ``target_internal_gap_score``,    |
-      |                                 | ``query_internal_gap_score``      |
-      +---------------------------------+-----------------------------------+
-      | ``internal_open_gap_score``     | ``                                |
-      |                                 | target_internal_open_gap_score``, |
-      |                                 | ``query_internal_open_gap_score`` |
-      +---------------------------------+-----------------------------------+
-      | ``internal_extend_gap_score``   | ``ta                              |
-      |                                 | rget_internal_extend_gap_score``, |
-      |                                 | ``                                |
-      |                                 | query_internal_extend_gap_score`` |
-      +---------------------------------+-----------------------------------+
-      | ``end_gap_score``               | ``target_end_gap_score``,         |
-      |                                 | ``query_end_gap_score``           |
-      +---------------------------------+-----------------------------------+
-      | ``end_open_gap_score``          | ``target_end_open_gap_score``,    |
-      |                                 | ``query_end_open_gap_score``      |
-      +---------------------------------+-----------------------------------+
-      | ``end_extend_gap_score``        | ``target_end_extend_gap_score``,  |
-      |                                 | ``query_end_extend_gap_score``    |
-      +---------------------------------+-----------------------------------+
-      | ``left_gap_score``              | ``target_left_gap_score``,        |
-      |                                 | ``query_left_gap_score``          |
-      +---------------------------------+-----------------------------------+
-      | ``right_gap_score``             | ``target_right_gap_score``,       |
-      |                                 | ``query_right_gap_score``         |
-      +---------------------------------+-----------------------------------+
-      | ``left_open_gap_score``         | ``target_left_open_gap_score``,   |
-      |                                 | ``query_left_open_gap_score``     |
-      +---------------------------------+-----------------------------------+
-      | ``left_extend_gap_score``       | ``target_left_extend_gap_score``, |
-      |                                 | ``query_left_extend_gap_score``   |
-      +---------------------------------+-----------------------------------+
-      | ``right_open_gap_score``        | ``target_right_open_gap_score``,  |
-      |                                 | ``query_right_open_gap_score``    |
-      +---------------------------------+-----------------------------------+
-      | ``right_extend_gap_score``      | `                                 |
-      |                                 | `target_right_extend_gap_score``, |
-      |                                 | ``query_right_extend_gap_score``  |
-      +---------------------------------+-----------------------------------+
-      | ``target_open_gap_score``       | ``                                |
-      |                                 | target_internal_open_gap_score``, |
-      |                                 | ``target_left_open_gap_score``,   |
-      +---------------------------------+-----------------------------------+
-      |                                 | ``target_right_open_gap_score``   |
-      +---------------------------------+-----------------------------------+
-      | ``target_extend_gap_score``     | ``ta                              |
-      |                                 | rget_internal_extend_gap_score``, |
-      |                                 | ``target_left_extend_gap_score``, |
-      +---------------------------------+-----------------------------------+
-      |                                 | ``target_right_extend_gap_score`` |
-      +---------------------------------+-----------------------------------+
-      | ``target_gap_score``            | ``target_open_gap_score``,        |
-      |                                 | ``target_extend_gap_score``       |
-      +---------------------------------+-----------------------------------+
-      | ``query_open_gap_score``        | `                                 |
-      |                                 | `query_internal_open_gap_score``, |
-      |                                 | ``query_left_open_gap_score``,    |
-      +---------------------------------+-----------------------------------+
-      |                                 | ``query_right_open_gap_score``    |
-      +---------------------------------+-----------------------------------+
-      | ``query_extend_gap_score``      | ``q                               |
-      |                                 | uery_internal_extend_gap_score``, |
-      |                                 | ``query_left_extend_gap_score``,  |
-      +---------------------------------+-----------------------------------+
-      |                                 | ``query_right_extend_gap_score``  |
-      +---------------------------------+-----------------------------------+
-      | ``query_gap_score``             | ``query_open_gap_score``,         |
-      |                                 | ``query_extend_gap_score``        |
-      +---------------------------------+-----------------------------------+
-      | ``target_internal_gap_score``   | ``                                |
-      |                                 | target_internal_open_gap_score``, |
-      |                                 | ``t                               |
-      |                                 | arget_internal_extend_gap_score`` |
-      +---------------------------------+-----------------------------------+
-      | ``target_end_gap_score``        | ``target_end_open_gap_score``,    |
-      |                                 | ``target_end_extend_gap_score``   |
-      +---------------------------------+-----------------------------------+
-      | ``target_end_open_gap_score``   | ``target_left_open_gap_score``,   |
-      |                                 | ``target_right_open_gap_score``   |
-      +---------------------------------+-----------------------------------+
-      | ``target_end_extend_gap_score`` | ``target_left_extend_gap_score``, |
-      |                                 | ``target_right_extend_gap_score`` |
-      +---------------------------------+-----------------------------------+
-      | ``target_left_gap_score``       | ``target_left_open_gap_score``,   |
-      |                                 | ``target_left_extend_gap_score``  |
-      +---------------------------------+-----------------------------------+
-      | ``target_right_gap_score``      | ``target_right_open_gap_score``,  |
-      |                                 | ``target_right_extend_gap_score`` |
-      +---------------------------------+-----------------------------------+
-      | ``query_end_gap_score``         | ``query_end_open_gap_score``,     |
-      |                                 | ``query_end_extend_gap_score``    |
-      +---------------------------------+-----------------------------------+
-      | ``query_end_open_gap_score``    | ``query_left_open_gap_score``,    |
-      |                                 | ``query_right_open_gap_score``    |
-      +---------------------------------+-----------------------------------+
-      | ``query_end_extend_gap_score``  | ``query_left_extend_gap_score``,  |
-      |                                 | ``query_right_extend_gap_score``  |
-      +---------------------------------+-----------------------------------+
-      | ``query_internal_gap_score``    | `                                 |
-      |                                 | `query_internal_open_gap_score``, |
-      |                                 | ``                                |
-      |                                 | query_internal_extend_gap_score`` |
-      +---------------------------------+-----------------------------------+
-      | ``query_left_gap_score``        | ``query_left_open_gap_score``,    |
-      |                                 | ``query_left_extend_gap_score``   |
-      +---------------------------------+-----------------------------------+
-      | ``query_right_gap_score``       | ``query_right_open_gap_score``,   |
-      |                                 | ``query_right_extend_gap_score``  |
-      +---------------------------------+-----------------------------------+
+   +---------------------------------+---------------------------------------+
+   | Meta-attribute                  | Attributes it maps to                 |
+   +=================================+=======================================+
+   | ``gap_score``                   | ``target_gap_score``,                 |
+   |                                 | ``query_gap_score``                   |
+   +---------------------------------+---------------------------------------+
+   | ``open_gap_score``              | ``target_open_gap_score``,            |
+   |                                 | ``query_open_gap_score``              |
+   +---------------------------------+---------------------------------------+
+   | ``extend_gap_score``            | ``target_extend_gap_score``,          |
+   |                                 | ``query_extend_gap_score``            |
+   +---------------------------------+---------------------------------------+
+   | ``internal_gap_score``          | ``target_internal_gap_score``,        |
+   |                                 | ``query_internal_gap_score``          |
+   +---------------------------------+---------------------------------------+
+   | ``internal_open_gap_score``     | ``target_internal_open_gap_score``,   |
+   |                                 | ``query_internal_open_gap_score``     |
+   +---------------------------------+---------------------------------------+
+   | ``internal_extend_gap_score``   | ``target_internal_extend_gap_score``, |
+   |                                 | ``query_internal_extend_gap_score``   |
+   +---------------------------------+---------------------------------------+
+   | ``end_gap_score``               | ``target_end_gap_score``,             |
+   |                                 | ``query_end_gap_score``               |
+   +---------------------------------+---------------------------------------+
+   | ``end_open_gap_score``          | ``target_end_open_gap_score``,        |
+   |                                 | ``query_end_open_gap_score``          |
+   +---------------------------------+---------------------------------------+
+   | ``end_extend_gap_score``        | ``target_end_extend_gap_score``,      |
+   |                                 | ``query_end_extend_gap_score``        |
+   +---------------------------------+---------------------------------------+
+   | ``left_gap_score``              | ``target_left_gap_score``,            |
+   |                                 | ``query_left_gap_score``              |
+   +---------------------------------+---------------------------------------+
+   | ``right_gap_score``             | ``target_right_gap_score``,           |
+   |                                 | ``query_right_gap_score``             |
+   +---------------------------------+---------------------------------------+
+   | ``left_open_gap_score``         | ``target_left_open_gap_score``,       |
+   |                                 | ``query_left_open_gap_score``         |
+   +---------------------------------+---------------------------------------+
+   | ``left_extend_gap_score``       | ``target_left_extend_gap_score``,     |
+   |                                 | ``query_left_extend_gap_score``       |
+   +---------------------------------+---------------------------------------+
+   | ``right_open_gap_score``        | ``target_right_open_gap_score``,      |
+   |                                 | ``query_right_open_gap_score``        |
+   +---------------------------------+---------------------------------------+
+   | ``right_extend_gap_score``      | ``target_right_extend_gap_score``,    |
+   |                                 | ``query_right_extend_gap_score``      |
+   +---------------------------------+---------------------------------------+
+   | ``target_open_gap_score``       | ``target_internal_open_gap_score``,   |
+   |                                 | ``target_left_open_gap_score``,       |
+   |                                 | ``target_right_open_gap_score``       |
+   +---------------------------------+---------------------------------------+
+   | ``target_extend_gap_score``     | ``target_internal_extend_gap_score``, |
+   |                                 | ``target_left_extend_gap_score``,     |
+   |                                 | ``target_right_extend_gap_score``     |
+   +---------------------------------+---------------------------------------+
+   | ``target_gap_score``            | ``target_open_gap_score``,            |
+   |                                 | ``target_extend_gap_score``           |
+   +---------------------------------+---------------------------------------+
+   | ``query_open_gap_score``        | ``query_internal_open_gap_score``,    |
+   |                                 | ``query_left_open_gap_score``,        |
+   |                                 | ``query_right_open_gap_score``        |
+   +---------------------------------+---------------------------------------+
+   | ``query_extend_gap_score``      | ``query_internal_extend_gap_score``,  |
+   |                                 | ``query_left_extend_gap_score``,      |
+   |                                 | ``query_right_extend_gap_score``      |
+   +---------------------------------+---------------------------------------+
+   | ``query_gap_score``             | ``query_open_gap_score``,             |
+   |                                 | ``query_extend_gap_score``            |
+   +---------------------------------+---------------------------------------+
+   | ``target_internal_gap_score``   | ``target_internal_open_gap_score``,   |
+   |                                 | ``target_internal_extend_gap_score``  |
+   +---------------------------------+---------------------------------------+
+   | ``target_end_gap_score``        | ``target_end_open_gap_score``,        |
+   |                                 | ``target_end_extend_gap_score``       |
+   +---------------------------------+---------------------------------------+
+   | ``target_end_open_gap_score``   | ``target_left_open_gap_score``,       |
+   |                                 | ``target_right_open_gap_score``       |
+   +---------------------------------+---------------------------------------+
+   | ``target_end_extend_gap_score`` | ``target_left_extend_gap_score``,     |
+   |                                 | ``target_right_extend_gap_score``     |
+   +---------------------------------+---------------------------------------+
+   | ``target_left_gap_score``       | ``target_left_open_gap_score``,       |
+   |                                 | ``target_left_extend_gap_score``      |
+   +---------------------------------+---------------------------------------+
+   | ``target_right_gap_score``      | ``target_right_open_gap_score``,      |
+   |                                 | ``target_right_extend_gap_score``     |
+   +---------------------------------+---------------------------------------+
+   | ``query_end_gap_score``         | ``query_end_open_gap_score``,         |
+   |                                 | ``query_end_extend_gap_score``        |
+   +---------------------------------+---------------------------------------+
+   | ``query_end_open_gap_score``    | ``query_left_open_gap_score``,        |
+   |                                 | ``query_right_open_gap_score``        |
+   +---------------------------------+---------------------------------------+
+   | ``query_end_extend_gap_score``  | ``query_left_extend_gap_score``,      |
+   |                                 | ``query_right_extend_gap_score``      |
+   +---------------------------------+---------------------------------------+
+   | ``query_internal_gap_score``    | ``query_internal_open_gap_score``,    |
+   |                                 | ``query_internal_extend_gap_score``   |
+   +---------------------------------+---------------------------------------+
+   | ``query_left_gap_score``        | ``query_left_open_gap_score``,        |
+   |                                 | ``query_left_extend_gap_score``       |
+   +---------------------------------+---------------------------------------+
+   | ``query_right_gap_score``       | ``query_right_open_gap_score``,       |
+   |                                 | ``query_right_extend_gap_score``      |
+   +---------------------------------+---------------------------------------+
 
 .. _`sec:pairwise-general-gapscores`:
 
@@ -2217,32 +2199,29 @@ class defines additional attributes that refer to a number of these
 values collectively, as shown in
 Table :ref:`table:codonalign-meta-attributes`.
 
-.. container::
+.. table:: Meta-attributes of CodonAligner objects.
    :name: table:codonalign-meta-attributes
 
-   .. table:: Meta-attributes of CodonAligner objects.
-
-      +----------------------------+----------------------------------------+
-      | **Meta-attribute**         | **Attributes it maps to**              |
-      +============================+========================================+
-      | ``frameshift_minus_score`` | ``frameshift_minus_two_score``,        |
-      |                            | ``frameshift_minus_one_score``         |
-      +----------------------------+----------------------------------------+
-      | ``frameshift_plus_score``  | ``frameshift_plus_two_score``,         |
-      |                            | ``frameshift_plus_one_score``          |
-      +----------------------------+----------------------------------------+
-      | ``frameshift_two_score``   | ``frameshift_minus_two_score``,        |
-      |                            | ``frameshift_plus_two_score``          |
-      +----------------------------+----------------------------------------+
-      | ``frameshift_one_score``   | ``frameshift_minus_one_score``,        |
-      |                            | ``frameshift_plus_one_score``          |
-      +----------------------------+----------------------------------------+
-      | ``frameshift_score``       | ``frameshift_minus_two_score``,        |
-      |                            | ``frameshift_minus_one_score``,        |
-      +----------------------------+----------------------------------------+
-      |                            | ``frameshift_plus_one_score``,         |
-      |                            | ``frameshift_plus_two_score``          |
-      +----------------------------+----------------------------------------+
+   +----------------------------+---------------------------------+
+   | Meta-attribute             | Attributes it maps to           |
+   +============================+=================================+
+   | ``frameshift_minus_score`` | ``frameshift_minus_two_score``, |
+   |                            | ``frameshift_minus_one_score``  |
+   +----------------------------+---------------------------------+
+   | ``frameshift_plus_score``  | ``frameshift_plus_two_score``,  |
+   |                            | ``frameshift_plus_one_score``   |
+   +----------------------------+---------------------------------+
+   | ``frameshift_two_score``   | ``frameshift_minus_two_score``, |
+   |                            | ``frameshift_plus_two_score``   |
+   +----------------------------+---------------------------------+
+   | ``frameshift_one_score``   | ``frameshift_minus_one_score``, |
+   |                            | ``frameshift_plus_one_score``   |
+   +----------------------------+---------------------------------+
+   | ``frameshift_score``       | ``frameshift_minus_two_score``, |
+   |                            | ``frameshift_minus_one_score``, |
+   |                            | ``frameshift_plus_one_score``,  |
+   |                            | ``frameshift_plus_two_score``   |
+   +----------------------------+---------------------------------+
 
 Now let’s consider two nucleotide sequences and the amino acid sequences
 they encode:
