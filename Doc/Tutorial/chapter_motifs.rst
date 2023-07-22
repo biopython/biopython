@@ -1165,33 +1165,31 @@ containing lots of additional information about the motif. Table
 :ref:`table:transfaccodes` lists the two-letter field codes that are
 commonly found in TRANSFAC files:
 
-.. container::
+.. table:: Fields commonly found in TRANSFAC files
    :name: table:transfaccodes
 
-   .. table:: Fields commonly found in TRANSFAC files
-
-      ====== ===============================================
-      ``AC`` Accession number
-      ``AS`` Accession numbers, secondary
-      ``BA`` Statistical basis
-      ``BF`` Binding factors
-      ``BS`` Factor binding sites underlying the matrix
-      ``CC`` Comments
-      ``CO`` Copyright notice
-      ``DE`` Short factor description
-      ``DR`` External databases
-      ``DT`` Date created/updated
-      ``HC`` Subfamilies
-      ``HP`` Superfamilies
-      ``ID`` Identifier
-      ``NA`` Name of the binding factor
-      ``OC`` Taxonomic classification
-      ``OS`` Species/Taxon
-      ``OV`` Older version
-      ``PV`` Preferred version
-      ``TY`` Type
-      ``XX`` Empty line; these are not stored in the Record.
-      ====== ===============================================
+   ====== ===============================================
+   ``AC`` Accession number
+   ``AS`` Accession numbers, secondary
+   ``BA`` Statistical basis
+   ``BF`` Binding factors
+   ``BS`` Factor binding sites underlying the matrix
+   ``CC`` Comments
+   ``CO`` Copyright notice
+   ``DE`` Short factor description
+   ``DR`` External databases
+   ``DT`` Date created/updated
+   ``HC`` Subfamilies
+   ``HP`` Superfamilies
+   ``ID`` Identifier
+   ``NA`` Name of the binding factor
+   ``OC`` Taxonomic classification
+   ``OS`` Species/Taxon
+   ``OV`` Older version
+   ``PV`` Preferred version
+   ``TY`` Type
+   ``XX`` Empty line; these are not stored in the Record.
+   ====== ===============================================
 
 Each motif also has an attribute ``.references`` containing the
 references associated with the motif, using these two-letter keys:
