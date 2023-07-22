@@ -844,8 +844,6 @@ def index(filename, format, alphabet=None, key_function=None):
 
     """
     # Try and give helpful error messages:
-    if not isinstance(filename, str):
-        raise TypeError("Need a filename (not a handle)")
     if not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
@@ -869,9 +867,15 @@ def index(filename, format, alphabet=None, key_function=None):
         alphabet,
         key_function,
     )
-    return _IndexedSeqFileDict(
-        proxy_class(filename, format), key_function, repr, "SeqRecord"
-    )
+
+    try:
+        random_access_proxy = proxy_class(filename, format)
+    except TypeError:
+        raise TypeError(
+            "Need a string or path-like object for the filename (not a handle)"
+        ) from None
+
+    return _IndexedSeqFileDict(random_access_proxy, key_function, repr, "SeqRecord")
 
 
 def index_db(
@@ -923,15 +927,28 @@ def index_db(
     glob which is useful for building lists of files.
 
     """
+    from os import fspath
+
+    def is_pathlike(obj):
+        """Test if the given object can be accepted as a path."""
+        try:
+            fspath(obj)
+            return True
+        except TypeError:
+            return False
+
     # Try and give helpful error messages:
-    if not isinstance(index_filename, str):
-        raise TypeError("Need a string for the index filename")
-    if isinstance(filenames, str):
+    if not is_pathlike(index_filename):
+        raise TypeError("Need a string or path-like object for filename (not a handle)")
+    if is_pathlike(filenames):
         # Make the API a little more friendly, and more similar
         # to Bio.SeqIO.index(...) for indexing just one file.
         filenames = [filenames]
     if filenames is not None and not isinstance(filenames, list):
-        raise TypeError("Need a list of filenames (as strings), or one filename")
+        raise TypeError(
+            "Need a list of filenames (as strings or path-like "
+            "objects), or one filename"
+        )
     if format is not None and not isinstance(format, str):
         raise TypeError("Need a string for the file format (lower case)")
     if format and not format.islower():
