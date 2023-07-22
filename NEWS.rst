@@ -61,6 +61,8 @@ The ``instances`` attribute of the ``Motif`` class  in ``Bio.motifs`` was
 deprecated in release 1.82. Instead of ``mymotif.instances``, please use
 ``mymotif.alignment.sequences``.
 
+The function ``flexibility`` in ``Bio.SeqUtils.ProtParam`` is re-implemented
+to match the Vihinen 1994 paper.
 
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite.
@@ -78,6 +80,7 @@ possible, especially the following contributors:
 - Peter Cock
 - Ricardas Ralys (first contribution)
 - Rob Miller
+- Ruibin Liu (first contribution)
 - Vladislav Kuznetsov (first contribution)
 - Yiming Qu (first contribution)
 
