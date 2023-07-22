@@ -700,6 +700,7 @@ class CodonAdaptationIndex(dict):
                 pref_codon = pref_codons[aa]
             except KeyError:
                 print(f"Unrecognized amino acid: {aa}")
+                raise
             optimized.append(pref_codon)
         optimized_str = "".join(optimized)
         return Seq(optimized_str)
