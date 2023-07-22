@@ -676,10 +676,10 @@ class CodonAdaptationIndex(dict):
             pass
         seq = sequence.upper()
         # Make dict with amino acids referencing preferred codons
-        pref_codons = {aminoacid: [] for aminoacid in self._table.protein_alphabet}
+        pref_codons = {}
         for codon, aminoacid in self._table.forward_table.items():
             if self[codon] == 1.0:
-                if pref_codons[aminoacid] != []:
+                if aminoacid in pref_codons:
                     message = f"{pref_codons[aminoacid]} and {codon} are equally preferred. Using {codon}"
                     warnings.warn(message, RuntimeWarning)
                 pref_codons[aminoacid] = codon
