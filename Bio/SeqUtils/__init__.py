@@ -601,6 +601,7 @@ class CodonAdaptationIndex(dict):
                       genetic code. By default, the standard genetic code is
                       used.
         """
+        self._table = table
         codons = {aminoacid: [] for aminoacid in table.protein_alphabet}
         for codon, aminoacid in table.forward_table.items():
             codons[aminoacid].append(codon)
@@ -667,7 +668,7 @@ class CodonAdaptationIndex(dict):
 
         return exp(cai_value / cai_length)
 
-    def optimize(self, sequence, seq_type="DNA", table=standard_dna_table):
+    def optimize(self, sequence, seq_type="DNA"):
         """Return a new DNA sequence with preferred codons only."""
         try:  # If seq record is provided, convert to sequence
             sequence = sequence.seq
@@ -675,14 +676,14 @@ class CodonAdaptationIndex(dict):
             pass
         seq = sequence.upper()
         # Make dict with amino acids referencing preferred codons
-        pref_codons = {aminoacid: [] for aminoacid in table.protein_alphabet}
-        for codon, aminoacid in table.forward_table.items():
+        pref_codons = {aminoacid: [] for aminoacid in self._table.protein_alphabet}
+        for codon, aminoacid in self._table.forward_table.items():
             if self[codon] == 1.0:
                 if pref_codons[aminoacid] != []:
                     message = f"{pref_codons[aminoacid]} and {codon} are equally preferred. Using {codon}"
                     warnings.warn(message, RuntimeWarning)
                 pref_codons[aminoacid] = codon
-        for codon in table.stop_codons:
+        for codon in self._table.stop_codons:
             if self[codon] == 1.0:
                 pref_codons["*"] = codon
         # Create amino acid sequence if DNA was provided
