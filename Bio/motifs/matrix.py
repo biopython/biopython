@@ -18,7 +18,7 @@ import numpy as np
 
 from Bio.Seq import Seq
 
-from . import _pwm
+from . import _pwm  # type: ignore
 
 
 class GenericPositionMatrix(dict):

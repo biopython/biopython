@@ -51,14 +51,18 @@ Or,
 
 Note these examples only show the first 50 bases to keep the output short.
 """
-from Bio.SeqIO import QualityIO
+from typing import Iterator
+
 from Bio.SeqRecord import SeqRecord
 from Bio.Sequencing import Phd
 
+from .QualityIO import _get_phred_quality
 from .Interfaces import SequenceWriter
+from .Interfaces import _TextIOSource
+from .Interfaces import _IOSource
 
 
-def PhdIterator(source):
+def PhdIterator(source: _TextIOSource) -> Iterator[SeqRecord]:
     """Return SeqRecord objects from a PHD file.
 
     Arguments:
@@ -99,7 +103,7 @@ def PhdIterator(source):
 class PhdWriter(SequenceWriter):
     """Class to write Phd format files."""
 
-    def __init__(self, handle):
+    def __init__(self, handle: _IOSource) -> None:
         """Initialize the class."""
         super().__init__(handle)
 
@@ -108,7 +112,7 @@ class PhdWriter(SequenceWriter):
         assert record.seq, "No sequence present in SeqRecord"
         # This method returns the 'phred_quality' scores or converted
         # 'solexa_quality' scores if present, else raises a value error
-        phred_qualities = QualityIO._get_phred_quality(record)
+        phred_qualities = _get_phred_quality(record)
         peak_locations = record.letter_annotations.get("peak_location")
         if len(record.seq) != len(phred_qualities):
             raise ValueError(

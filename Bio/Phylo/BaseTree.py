@@ -238,7 +238,7 @@ def _combine_args(first, *rest):
 class TreeElement:
     """Base class for all Bio.Phylo classes."""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Show this object's constructor with its primitive arguments."""
 
         def pair_as_kwarg_string(key, val):
@@ -256,7 +256,8 @@ class TreeElement:
             ),
         )
 
-    __str__ = __repr__
+    def __str__(self) -> str:
+        return self.__repr__()
 
 
 class TreeMixin:
@@ -981,7 +982,7 @@ class Tree(TreeElement, TreeMixin):
 
     # Pretty-printer for the entire tree hierarchy
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Return a string representation of the entire tree.
 
         Serialize each sub-clade recursively using ``repr`` to create a summary
@@ -1088,7 +1089,7 @@ class Clade(TreeElement, TreeMixin):
         """
         return True
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Return name of the class instance."""
         if self.name:
             return self.name[:37] + "..." if len(self.name) > 40 else self.name
@@ -1224,7 +1225,7 @@ class BranchColor:
         """
         return (self.red, self.green, self.blue)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Preserve the standard RGB order when representing this object."""
         return "%s(red=%d, green=%d, blue=%d)" % (
             self.__class__.__name__,
@@ -1233,6 +1234,6 @@ class BranchColor:
             self.blue,
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Show the color's RGB values."""
         return "(%d, %d, %d)" % (self.red, self.green, self.blue)

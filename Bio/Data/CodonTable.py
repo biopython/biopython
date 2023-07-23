@@ -15,6 +15,7 @@ Last updated at Version 4.4 (May 2019)
 
 from Bio.Data import IUPACData
 
+from typing import Dict, List, Optional
 
 unambiguous_dna_by_name = {}
 unambiguous_dna_by_id = {}
@@ -49,16 +50,16 @@ class TranslationError(Exception):
 class CodonTable:
     """A codon-table, or genetic code."""
 
-    forward_table = {}  # only includes codons which actually code
-    back_table = {}  # for back translations
-    start_codons = []
-    stop_codons = []
+    forward_table: Dict[str, str] = {}  # only includes codons which actually code
+    back_table: Dict[str, str] = {}  # for back translations
+    start_codons: List[str] = []
+    stop_codons: List[str] = []
 
     # Not always called from derived classes!
     def __init__(
         self,
-        nucleotide_alphabet=None,
-        protein_alphabet=None,
+        nucleotide_alphabet: Optional[str] = None,
+        protein_alphabet: Optional[str] = None,
         forward_table=forward_table,
         back_table=back_table,
         start_codons=start_codons,
@@ -165,7 +166,7 @@ def make_back_table(table, default_stop_codon):
 class NCBICodonTable(CodonTable):
     """Codon table for generic nucleotide sequences."""
 
-    nucleotide_alphabet = None
+    nucleotide_alphabet: Optional[str] = None
     protein_alphabet = IUPACData.protein_letters
 
     def __init__(self, id, names, table, start_codons, stop_codons):

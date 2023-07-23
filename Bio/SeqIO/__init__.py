@@ -371,6 +371,9 @@ making up each alignment as SeqRecords.
 # See also http://biopython.org/wiki/SeqIO_dev
 #
 # --Peter
+
+from typing import Callable, Dict, Iterable, Union
+
 from Bio.Align import MultipleSeqAlignment
 from Bio.File import as_handle
 from Bio.SeqIO import AbiIO
@@ -393,6 +396,7 @@ from Bio.SeqIO import TwoBitIO
 from Bio.SeqIO import UniprotIO
 from Bio.SeqIO import XdnaIO
 from Bio.SeqRecord import SeqRecord
+from .Interfaces import _TextIOSource
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl or EMBOSS where possible.
@@ -440,7 +444,7 @@ _FormatToIterator = {
     "xdna": XdnaIO.XdnaIterator,
 }
 
-_FormatToString = {
+_FormatToString: Dict[str, Callable[[SeqRecord], str]] = {
     "fasta": FastaIO.as_fasta,
     "fasta-2line": FastaIO.as_fasta_2line,
     "tab": TabIO.as_tab,
@@ -475,7 +479,11 @@ _FormatToWriter = {
 }
 
 
-def write(sequences, handle, format):
+def write(
+    sequences: Union[Iterable[SeqRecord], SeqRecord],
+    handle: _TextIOSource,
+    format: str,
+) -> int:
     """Write complete set of sequences to a file.
 
     Arguments:

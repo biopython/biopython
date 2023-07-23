@@ -22,6 +22,7 @@ from .Interfaces import _clean
 from .Interfaces import _get_seq_string
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
+from .Interfaces import _TextIOSource
 
 
 def SimpleFastaParser(handle):
@@ -140,7 +141,12 @@ def FastaTwoLineParser(handle):
 class FastaIterator(SequenceIterator):
     """Parser for Fasta files."""
 
-    def __init__(self, source, alphabet=None, title2ids=None):
+    def __init__(
+        self,
+        source: _TextIOSource,
+        alphabet=None,
+        title2ids=None,
+    ) -> None:
         """Iterate over Fasta records as SeqRecord objects.
 
         Arguments:
