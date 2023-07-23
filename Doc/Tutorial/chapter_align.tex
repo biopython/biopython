@@ -1,8 +1,16 @@
 \chapter{Sequence alignments}
 \label{chapter:align}
 
+Sequence alignments are a collection of two or more sequences that have been aligned to each other -- usually with the insertion of gaps, and the addition of leading or trailing gaps -- such that all the sequence strings are the same length.
+
+Alignments may extend over the full length of each sequence, or may be limited to a subsection of each sequence. In Biopython, all sequence alignments are represented by an \verb|Alignment| object, described in section~\ref{sec:alignmentobject}. \verb|Alignment| objects can be obtained by parsing the output of alignment software such as Clustal or BLAT (described in section+\ref{seq:alignmentparsers}. or by using Biopython's pairwise sequence aligner, which can align two sequences to each other (described in chapter~\ref{chapter:pairwise}).
+
+See Chapter~\ref{chapter:msa} for a description of the older MultipleSeqAlignment class and the parsers in Bio.AlignIO that parse the output of sequence alignment software, generating MultipleSeqAlignment objects.
+
 \section{Alignment objects}
 \label{sec:alignmentobject}
+
+The \verb|Alignment| class is defined in \verb|Bio.Align|. Usually you would get an \verb|Alignment| object by parsing the output of alignment programs (section~\ref{sec:alignmentparsers}) or by running Biopython's pairwise aligner (chapter~\ref{chapter:pairwise}). For the benefit of this section, however, we will create an \verb|Alignment| object from scratch.
 
 The \verb+aligner.align+ method returns \verb+Alignment+ objects, each representing one alignment between the two sequences.
 
@@ -552,6 +560,7 @@ The alignment in PSL format is '6   1   0   1   0   0   0   0   +   query   8   
 Note that optional keyword arguments cannot be used with the \verb+format+ function or with formatted strings.
 
 \section{Reading and writing alignments}
+\label{sec:alignmentparsers}
 
 \subsection{ClustalW}
 \label{subsec:align_clustal}

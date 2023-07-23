@@ -22,17 +22,12 @@ To generate pairwise alignments, first create a \verb+PairwiseAligner+ object:
 The \verb+PairwiseAligner+ object \verb+aligner+
 (see Section~\ref{sec:pairwise-aligner})
 stores the alignment parameters to be used for the pairwise alignments.
-
-These attributes can be set in the constructor of the object or after the object
-is made.
-
+These attributes can be set in the constructor of the object:
 %cont-doctest
 \begin{minted}{pycon}
 >>> aligner = Align.PairwiseAligner(match_score=1.0)
 \end{minted}
-
-Or, equivalently:
-
+or after the object is made:
 %cont-doctest
 \begin{minted}{pycon}
 >>> aligner.match_score = 1.0
@@ -50,11 +45,18 @@ two sequences:
 3.0
 \end{minted}
 
-To see the actual alignments, use the \verb+aligner.align+ method and iterate over the \verb+Alignment+ objects returned:
-
+The \verb+aligner.align+ method returns \verb+Alignment+ objects, each representing one alignment between the two sequences:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignments = aligner.align(target, query)
+>>> alignment = alignments[0]
+>>> alignment  # doctest: +ELLIPSIS
+<Alignment object (2 rows x 5 columns) at ...>
+\end{minted}
+
+Iterate over the \verb+Alignment+ objects and print them to see the alignments:
+%cont-doctest
+\begin{minted}{pycon}
 >>> for alignment in alignments:
 ...     print(alignment)
 ...
@@ -66,6 +68,174 @@ target            0 GAACT 5
                   0 |-|-| 5
 query             0 G-A-T 3
 <BLANKLINE>
+\end{minted}
+
+Each alignment stores the alignment score:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.score
+3.0
+\end{minted}
+as well as pointers to the sequences that were aligned:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.target
+'GAACT'
+>>> alignment.query
+'GAT'
+\end{minted}
+
+Internally, the alignment is stored in terms of the sequence coordinates:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = alignments[0]
+>>> alignment.coordinates
+array([[0, 2, 4, 5],
+       [0, 2, 2, 3]])
+\end{minted}
+
+Here, the two rows refer to the target and query sequence. These coordinates show that the alignment consists of the following three blocks:
+
+\begin{itemize}
+\item \verb+target[0:2]+ aligned to \verb+query[0:2]+;
+\item \verb+target[2:4]+ aligned to a gap, since \verb+query[2:2]+ is an empty string;
+\item \verb+target[4:5]+ aligned to \verb+query[2:3]+.
+\end{itemize}
+
+The number of aligned sequences is always 2 for a pairwise alignment:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> len(alignment)
+2
+\end{minted}
+
+The alignment length is defined as the number of columns in the alignment as
+printed. This is equal to the sum of the number of matches, number of
+mismatches, and the total length of gaps in the target and query:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.length
+5
+\end{minted}
+
+The \verb|aligned| property, which returns the start and end indices of aligned subsequences, returns two tuples of length 2 for the first alignment:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.aligned
+array([[[0, 2],
+        [4, 5]],
+<BLANKLINE>
+       [[0, 2],
+        [2, 3]]])
+\end{minted}
+while for the alternative alignment, two tuples of length 3 are returned:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = alignments[1]
+>>> print(alignment)
+target            0 GAACT 5
+                  0 |-|-| 5
+query             0 G-A-T 3
+<BLANKLINE>
+>>> alignment.aligned
+array([[[0, 1],
+        [2, 3],
+        [4, 5]],
+<BLANKLINE>
+       [[0, 1],
+        [1, 2],
+        [2, 3]]])
+\end{minted}
+Note that different alignments may have the same subsequences aligned to each other. In particular, this may occur if alignments differ from each other in terms of their gap placement only:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> aligner.mode = "global"
+>>> aligner.mismatch_score = -10
+>>> alignments = aligner.align("AAACAAA", "AAAGAAA")
+>>> len(alignments)
+2
+>>> print(alignments[0])
+target            0 AAAC-AAA 7
+                  0 |||--||| 8
+query             0 AAA-GAAA 7
+<BLANKLINE>
+>>> alignments[0].aligned
+array([[[0, 3],
+        [4, 7]],
+<BLANKLINE>
+       [[0, 3],
+        [4, 7]]])
+>>> print(alignments[1])
+target            0 AAA-CAAA 7
+                  0 |||--||| 8
+query             0 AAAG-AAA 7
+<BLANKLINE>
+>>> alignments[1].aligned
+array([[[0, 3],
+        [4, 7]],
+<BLANKLINE>
+       [[0, 3],
+        [4, 7]]])
+\end{minted}
+
+The \verb+map+ method can be applied on a pairwise alignment \verb+alignment1+ to find the pairwise alignment of the query of \verb+alignment2+ to the target of \verb+alignment1+, where the target of \verb+alignment2+ and the query of \verb+alignment1+ are identical. A typical example is where \verb+alignment1+ is the pairwise alignment between a chromosome and a transcript, \verb+alignment2+ is the pairwise alignment between the transcript and a sequence (e.g., an RNA-seq read), and we want to find the alignment of the sequence to the chromosome:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> aligner.mode = "local"
+>>> aligner.open_gap_score = -1
+>>> aligner.extend_gap_score = 0
+>>> chromosome = "AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA"
+>>> transcript = "CCCCCCCGGGGGG"
+>>> alignments1 = aligner.align(chromosome, transcript)
+>>> len(alignments1)
+1
+>>> alignment1 = alignments1[0]
+>>> print(alignment1)
+target            8 CCCCCCCAAAAAAAAAAAGGGGGG 32
+                  0 |||||||-----------|||||| 24
+query             0 CCCCCCC-----------GGGGGG 13
+<BLANKLINE>
+>>> sequence = "CCCCGGGG"
+>>> alignments2 = aligner.align(transcript, sequence)
+>>> len(alignments2)
+1
+>>> alignment2 = alignments2[0]
+>>> print(alignment2)
+target            3 CCCCGGGG 11
+                  0 ||||||||  8
+query             0 CCCCGGGG  8
+<BLANKLINE>
+>>> mapped_alignment = alignment1.map(alignment2)
+>>> print(mapped_alignment)
+target           11 CCCCAAAAAAAAAAAGGGG 30
+                  0 ||||-----------|||| 19
+query             0 CCCC-----------GGGG  8
+<BLANKLINE>
+>>> format(mapped_alignment, "psl")
+'8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
+\end{minted}
+
+Mapping the alignment does not depend on the sequence contents. If we delete
+the sequence contents, the same alignment is found in PSL format (though we
+obviously lose the ability to print the sequence alignment):
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.Seq import Seq
+>>> alignment1.target = Seq(None, len(alignment1.target))
+>>> alignment1.query = Seq(None, len(alignment1.query))
+>>> alignment2.target = Seq(None, len(alignment2.target))
+>>> alignment2.query = Seq(None, len(alignment2.query))
+>>> mapped_alignment = alignment1.map(alignment2)
+>>> format(mapped_alignment, "psl")
+'8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
 \end{minted}
 
 By default, a global pairwise alignment is performed, which finds the optimal
@@ -101,8 +271,10 @@ Note that there is some ambiguity in the definition of the best local alignments
 The \verb+PairwiseAligner+ object stores all alignment parameters to be used
 for the pairwise alignments. To see an overview of the values for all parameters, use
 
-%cont-doctest
+%doctest
 \begin{minted}{pycon}
+>>> from Bio import Align
+>>> aligner = Align.PairwiseAligner(match_score=1.0, mode="local")
 >>> print(aligner)
 Pairwise sequence aligner with parameters
   wildcard: None
