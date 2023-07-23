@@ -1696,7 +1696,7 @@ are stored as a tuple in the ``rotran`` attribute of the
 The RMSD is stored in the ``rmsd`` attribute.
 
 The algorithm used by ``Superimposer`` comes from
-:raw-latex:`\cite[Golub \& Van Loan]{golub1989}` and makes use of
+Golub \& Van Loan [Golub1989]_ and makes use of
 singular value decomposition (this is implemented in the general
 ``Bio.SVDSuperimposer`` module).
 
@@ -1842,8 +1842,7 @@ errors include:
 -  Multiple atoms with the same identifier (taking into account the
    altloc identifier)
 
-These errors indicate real problems in the PDB file (for details see
-:raw-latex:`\cite[Hamelryck and Manderick, 2003]{hamelryck2003a}`). In
+These errors indicate real problems in the PDB file (for details see Hamelryck and Manderick, 2003 [Hamelryck2003A]_). In
 the restrictive state, PDB files with errors cause an exception to
 occur. This is useful to find errors in PDB files.
 
@@ -2094,9 +2093,8 @@ Bio.PDB was used in the construction of DISEMBL, a web server that
 predicts disordered regions in proteins (http://dis.embl.de/). Bio.PDB
 has also been used to perform a large scale search for active sites
 similarities between protein structures in the PDB
-:raw-latex:`\cite[Hamelryck, 2003]{hamelryck2003b}`, and to develop a
-new algorithm that identifies linear secondary structure elements
-:raw-latex:`\cite[Majumdar \textit{et al.}, 2005]{majumdar2005}`.
+[Hamelryck2003B]_, and to develop a
+new algorithm that identifies linear secondary structure elements [Majumdar2005]_.
 
 Judging from requests for features and information, Bio.PDB is also used
 by several LPCs (Large Pharmaceutical Companies :-).

@@ -317,8 +317,8 @@ Relative entropy
 ~~~~~~~~~~~~~~~~
 
 The relative entropy (or Kullback-Leibler distance) :math:`H_j` of
-column :math:`j` of the motif is defined as
-:raw-latex:`\cite{schneider1986,durbin1998}`
+column :math:`j` of the motif is defined as in
+[Schneider1986]_ [Durbin1998]_:
 
 .. math:: H_{j} = \sum_{i=1}^{M} p_{ij} \log\left(\frac{p_{ij}}{b_{i}}\right)
 

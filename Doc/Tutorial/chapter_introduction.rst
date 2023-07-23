@@ -11,9 +11,9 @@ Biopython is a collection of freely available Python
 Python is an object oriented, interpreted, flexible language that is
 widely used for scientific computing. Python is easy to learn, has a
 very clear syntax and can easily be extended with modules written in C,
-C++ or FORTRAN. Since its inception in
-2000 [Chapman2000]_, Biopython has been continuously
-developed and maintained by a large group of volunteers worldwide.
+C++ or FORTRAN. Since its inception in 2000 [Chapman2000]_, Biopython
+has been continuously developed and maintained by a large group of
+volunteers worldwide.
 
 The Biopython web site (http://www.biopython.org) provides an online
 resource for modules, scripts, and web links for developers of
@@ -111,31 +111,30 @@ Frequently Asked Questions (FAQ)
 --------------------------------
 
 #. | *How do I cite Biopython in a scientific publication?*
-   | Please cite our application note
-     :raw-latex:`\cite[Cock \textit{et al.}, 2009]{cock2009}` as the
+   | Please cite our application note [Cock2009]_ as the
      main Biopython reference. In addition, please cite any publications
      from the following list if appropriate, in particular as a
      reference for specific modules within Biopython (more information
      can be found on our website):
 
    -  For the official project announcement:
-      :raw-latex:`\cite[Chapman and Chang, 2000]{chapman2000}`;
+      Chapman and Chang, 2000 [Chapman2000]_;
 
    -  For ``Bio.PDB``:
-      :raw-latex:`\cite[Hamelryck and Manderick, 2003]{hamelryck2003a}`;
+      Hamelryck and Manderick, 2003 [Hamelryck2003A]_;
 
    -  For ``Bio.Cluster``:
-      :raw-latex:`\cite[De Hoon \textit{et al.}, 2004]{dehoon2004}`;
+      de Hoon *et al.*, 2004 [deHoon2004]_;
 
    -  For ``Bio.Graphics.GenomeDiagram``:
-      :raw-latex:`\cite[Pritchard \textit{et al.}, 2006]{pritchard2006}`;
+      Pritchard *et al.*, 2006 [Pritchard2006]_;
 
    -  For ``Bio.Phylo`` and ``Bio.Phylo.PAML``:
-      :raw-latex:`\cite[Talevich \textit{et al.}, 2012]{talevich2012}`;
+      Talevich *et al.* 2012 [Talevich2012]_;
 
    -  For the FASTQ file format as supported in Biopython, BioPerl,
       BioRuby, BioJava, and EMBOSS:
-      :raw-latex:`\cite[Cock \textit{et al.}, 2010]{cock2010}`.
+      Cock *et al.*, 2010 [Cock2010]_.
 
 #. | *How should I capitalize “Biopython”? Is “BioPython” OK?*
    | The correct capitalization is “Biopython”, not “BioPython” (even
