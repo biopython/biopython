@@ -31,3 +31,4 @@ Biopython Tutorial & Cookbook
    chapter_testing
    chapter_contributing
    chapter_appendix
+   chapter_bibliography
