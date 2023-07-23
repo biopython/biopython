@@ -134,6 +134,7 @@ from urllib.error import URLError, HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen, Request
 
+from Bio._utils import function_with_previous
 
 email = None
 max_tries = 3
@@ -562,6 +563,7 @@ def parse(handle, validate=True, escape=False, ignore_errors=False):
     return records
 
 
+@function_with_previous
 def _open(request):
     """Make an HTTP request to Entrez, handling errors and enforcing rate limiting (PRIVATE).
 

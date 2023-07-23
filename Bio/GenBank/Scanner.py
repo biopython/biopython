@@ -38,6 +38,8 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import BiopythonParserWarning
 
+from typing import List
+
 
 class InsdcScanner:
     """Basic functions for breaking up a GenBank/EMBL file into sub sections.
@@ -1171,7 +1173,7 @@ class GenBankScanner(InsdcScanner):
     RECORD_START = "LOCUS       "
     HEADER_WIDTH = 12
     FEATURE_START_MARKERS = ["FEATURES             Location/Qualifiers", "FEATURES"]
-    FEATURE_END_MARKERS = []
+    FEATURE_END_MARKERS: List[str] = []
     FEATURE_QUALIFIER_INDENT = 21
     FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
     SEQUENCE_HEADERS = [
