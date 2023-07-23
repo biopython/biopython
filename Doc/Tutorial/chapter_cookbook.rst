@@ -680,7 +680,7 @@ Back in Section :ref:`sec:SeqIO-conversion` we
 showed how to use ``Bio.SeqIO`` to convert between two file formats.
 Here we’ll go into a little more detail regarding FASTQ files which are
 used in second generation DNA sequencing. Please refer to Cock *et al.*
-(2009) [Cock2010]_ for a longer description. FASTQ
+(2010) [Cock2010]_ for a longer description. FASTQ
 files store both the DNA sequence (as a string) and the associated read
 qualities.
 

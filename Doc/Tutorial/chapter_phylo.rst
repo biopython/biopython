@@ -9,8 +9,7 @@ phylogenetic trees independently of the source data format, as well as a
 consistent API for I/O operations.
 
 Bio.Phylo is described in an open-access journal article
-:raw-latex:`\cite[Talevich
-\textit{et al.}, 2012]{talevich2012}`, which you might also find
+Talevich *et al.* 2012 [Talevich2012]_, which you might also find
 helpful.
 
 Demo: What’s in a Tree?

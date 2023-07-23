@@ -3474,7 +3474,7 @@ A2M
 
 A2M files are alignment files created by ``align2model`` or ``hmmscore``
 in the SAM Sequence Alignment and Modeling Software
-System :raw-latex:`\cite{krogh1994,hughey1996}`. An A2M file contains
+System [Krogh1994]_, [Hughey1996]_. An A2M file contains
 one multiple alignment. The A2M file format is similar to aligned FASTA
 (see section :ref:`subsec:align_fasta`). However, to distinguish
 insertions from deletions, A2M uses both dashes and periods to represent
