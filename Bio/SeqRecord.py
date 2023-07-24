@@ -1,6 +1,6 @@
 # Copyright 2000-2002 Andrew Dalke.  All rights reserved.
 # Copyright 2002-2004 Brad Chapman.  All rights reserved.
-# Copyright 2006-2020 by Peter Cock.  All rights reserved.
+# Copyright 2006-2023 by Peter Cock.  All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -41,7 +41,7 @@ class _RestrictedDict(dict):
     >>> x["test"] = "hello world"
     Traceback (most recent call last):
     ...
-    TypeError: We only allow python sequences (lists, tuples or strings) of length 5.
+    TypeError: Any per-letter annotation should be a Python sequence (list, tuple or string) of the same length as the biological sequence, here 5.
 
     The expected length is stored as a private attribute,
 
@@ -85,8 +85,9 @@ class _RestrictedDict(dict):
             or (hasattr(self, "_length") and len(value) != self._length)
         ):
             raise TypeError(
-                "We only allow python sequences (lists, tuples or strings) "
-                f"of length {self._length}."
+                "Any per-letter annotation should be a Python sequence "
+                "(list, tuple or string) of the same length as the "
+                f"biological sequence, here {self._length}."
             )
         dict.__setitem__(self, key, value)
 
