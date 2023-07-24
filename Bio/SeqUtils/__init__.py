@@ -694,15 +694,11 @@ class CodonAdaptationIndex(dict):
         else:
             raise TypeError
         # Un-translate in loop using only preferred codons
-        optimized = []
-        for aa in aa_seq:
-            try:
-                pref_codon = pref_codons[aa]
-            except KeyError:
-                raise KeyError(f"Unrecognized amino acid: {aa}") from None
-            optimized.append(pref_codon)
-        optimized_str = "".join(optimized)
-        return Seq(optimized_str)
+        try:
+            optimized = "".join(pref_codons[aa] for aa in aa_seq)
+        except KeyError as ex:
+            raise KeyError(f"Unrecognized amino acid: {ex}") from None
+        return Seq(optimized)
 
     def __str__(self):
         lines = []
