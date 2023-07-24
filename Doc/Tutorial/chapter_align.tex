@@ -313,6 +313,37 @@ Reverse-complementing an alignment preserves its column annotations (in reverse 
 \section{Reading and writing alignments}
 \label{sec:alignmentparsers}
 
+Output from sequence alignment software such as Clustal can be parsed into \verb|Alignment| objects by the \verb|Bio.Align.read| and \verb|Bio.Align.parse| functions. Their usage is analogous to the \verb|read| and \verb|parse| functions in \verb|Bio.SeqIO| (see Section~\ref{sec:Bio.SeqIO-input}): The \verb|read| function is used to read an output file containing a single alignment and returns an \verb|Alignment| object, while the \verb|parse| function returns an iterator to iterate over alignments stored in an output file containing one or more alignments. The table below the alignment formats that can be parsed in \verb|Bio.Align|. \verb|Bio.Align| provides a \verb|write| function that can write alignments in most of these formats, as shown in the table. For text (non-binary) formats, you can also call Python's built-in \verb|format| function on an alignment to get a string showing the alignment in the requested format, or use \verb|Alignment| objects in formatted (f-) strings. As optional keyword arguments cannot be used with Python's built-in \verb|format| function or with formatted strings, the \verb|Alignment| class has a \verb|format| method with optional arguments to customize the alignment format, as described in the subsections below. When called with an empty string (which is the default), \verb|format| returns a human-readable representation of the alignment (same as when you \verb|print| the alignment).
+
+\begin{table}[!htbp]
+\begin{center}
+\begin{tabular}{|l|l|c|c|c|}
+Name & Description & text / binary & Supported by \verb|write| & Subsection \\
+\verb|a2m| & A2M & text & yes & \ref{subsec:align_a2m} \\
+\verb|bed| & Browser Extensible Data (BED) & text & yes & \ref{subsec:align_bed} \\
+\verb|bigbed| & bigBed & binary & yes & \ref{subsec:align_bigbed} \\
+\verb|bigmaf| & bigMaf & binary & yes & \ref{subsec:align_bigmaf} \\
+\verb|bigpsl| & bigPsl & binary & yes & \ref{subsec:align_bigpsl} \\
+\verb|clustal| & ClustalW & text & yes & \ref{subsec:align_clustal} \\
+\verb|emboss| & EMBOSS & text & no & \ref{subsec:align_emboss} \\
+\verb|exonerate| & Exonerate & text & yes & \ref{subsec:align_exonerate} \\
+\verb|fasta| & FASTA & text & yes & \ref{subsec:align_fasta} \\
+\verb|hhr| & HH-suite output files & text & no & \ref{subsec:align_hhr} \\
+\verb|maf| & Multiple Alignment Format (MAF) & text & yes & \ref{subsec:align_maf} \\
+\verb|mauve| & Mauve eXtended Multi-FastA (xmfa) format & text & yes & \ref{subsec:align_mauve} \\
+\verb|msf| & GSG Multiple Sequence Format (MSF) & text & no & \ref{subsec:align_msf} \\
+\verb|nexus| & Nexus & text & yes & \ref{subsec:align_nexus} \\
+\verb|phylip| & PHYLIP output files & text & yes & \ref{subsec:align_phylip} \\
+\verb|psl| & Pattern Space Layout (PSL) & text & yes & \ref{subsec:align_psl} \\
+\verb|sam| & Sequence Alignment/Map (SAM) & text & yes & \ref{subseq:align_sam} \\
+\verb|stockholm| & Stockholm & text & yes & \ref{subsec:align_stockholm} \\
+\verb|tabular| & Tabular output from BLAST or FASTA & text & no & \ref{subsec:align_tabular} \\
+\end{tabular}
+\end{center}
+\end{table}
+
+These formats are described in detail in the subsections below.
+
 \subsection{FASTA}
 \label{subsec:align_fasta}
 
@@ -352,44 +383,31 @@ Reverse-complementing an alignment preserves its column annotations (in reverse 
 \subsection{Sequence Alignment/Map (SAM)}
 \label{subseq:align_sam}
 
-\subsection{Browser Extensible Data (BED)}
-\label{subsec:align_bed}
-
-\subsection{bigBed}
-\label{subsec:align_bigbed}
-
-\subsection{Pattern Space Layout (PSL)}
-\label{subsec:align_maf}
-
-\subsection{bigPsl}
-\label{subsec:align_bigpsl}
-
-\subsection{Multiple Alignment Format (MAF)}
-\label{subsec:align_maf}
-
-\subsection{bigMaf}
-\label{subsec:align_bigmaf}
-
-\section{Exporting alignments}
-
-Use the \verb+format+ method to create a string representation of the alignment in various file formats. This method takes an argument \verb+fmt+ specifying the file format, and may take additional keyword arguments depending on file type. The following values for \verb+fmt+ are supported:
-
-\begin{itemize}
-\item \verb+""+ (empty string; default): Create a human-readable representation of the alignment (same as when you \verb+print+ the alignment).
-\item \verb+"SAM"+: Create a line representing the alignment in the Sequence Alignment/Map (SAM) format:
+Create a string representing the alignment in the Sequence Alignment/Map (SAM) format:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment = alignment[:2]
 >>> alignment.format("sam")
 'query\t0\ttarget\t2\t255\t2M1D3M2I\t*\t0\t0\tCGTTTTT\t*\n'
 \end{minted}
-\item \verb+"BED"+: Create a line representing the alignment in the Browser Extensible Data (BED) file format:
+
+\subsection{Browser Extensible Data (BED)}
+\label{subsec:align_bed}
+
+Create a string representing the alignment in the Browser Extensible Data (BED) file format:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.format("bed")
 'target\t1\t7\tquery\t0\t+\t1\t7\t0\t2\t2,3,\t0,3,\n'
 \end{minted}
-\item \verb+"PSL"+: Create a line representing the alignment in the Pattern Space Layout (PSL) file format as generated by BLAT \cite{kent2002}).
+
+\subsection{bigBed}
+\label{subsec:align_bigbed}
+
+\subsection{Pattern Space Layout (PSL)}
+\label{subsec:align_psl}
+
+Create a string representing the alignment in the Pattern Space Layout (PSL) file format as generated by BLAT \cite{kent2002}).
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.format("psl")
@@ -442,7 +460,6 @@ query             0 -------GGTGGGGG-----  8
 ... )  # doctest: +NORMALIZE_WHITESPACE
 3   2   3   0   0   0   0   0   +   query   8   0   8   target   20   7   15   1   8,   0,   7,
 \end{minted}
-\end{itemize}
 
 In addition to the \verb+format+ method, you can use Python's built-in \verb+format+ function:
 %cont-doctest
@@ -459,6 +476,15 @@ The alignment in PSL format is '6   1   0   1   0   0   0   0   +   query   8   
 '
 \end{minted}
 Note that optional keyword arguments cannot be used with the \verb+format+ function or with formatted strings.
+
+\subsection{bigPsl}
+\label{subsec:align_bigpsl}
+
+\subsection{Multiple Alignment Format (MAF)}
+\label{subsec:align_maf}
+
+\subsection{bigMaf}
+\label{subsec:align_bigmaf}
 
 \section{Substitution matrices}
 \label{sec:substitution_matrices}
