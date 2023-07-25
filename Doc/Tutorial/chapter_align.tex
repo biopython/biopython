@@ -358,7 +358,7 @@ To write alignments to a file, use
 >>> target = "myfile.txt"
 >>> Align.write(alignments, target, "clustal")
 \end{minted}
-where \verb|alignments| is either a single alignment or a list of alignments, \verb|target| is a file name or an open file stream, and \verb|fmt| is the file format. As some file formats allow or require metadata to be stored with the alignments, you may want to use the \verb|Alignments| (plural) class instead of a plain list of alignments. This class inherits from \verb|AlignmentsAbstractBaseClass| as well as from \verb|list|, and can therefore be used as a list, but also allows you to store metadata as attributes on the \verb|alignments| object:
+where \verb|alignments| is either a single alignment or a list of alignments, \verb|target| is a file name or an open file-like object, and \verb|fmt| is the file format. As some file formats allow or require metadata to be stored with the alignments, you may want to use the \verb|Alignments| (plural) class instead of a plain list of alignments. This class inherits from \verb|AlignmentsAbstractBaseClass| as well as from \verb|list|, and can therefore be used as a list, but also allows you to store metadata as attributes on the \verb|alignments| object:
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> alignments = Align.Alignments(alignments)
