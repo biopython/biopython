@@ -3,7 +3,7 @@
 
 Sequence alignments are a collection of two or more sequences that have been aligned to each other -- usually with the insertion of gaps, and the addition of leading or trailing gaps -- such that all the sequence strings are the same length.
 
-Alignments may extend over the full length of each sequence, or may be limited to a subsection of each sequence. In Biopython, all sequence alignments are represented by an \verb|Alignment| object, described in section~\ref{sec:alignmentobject}. \verb|Alignment| objects can be obtained by parsing the output of alignment software such as Clustal or BLAT (described in section+\ref{seq:alignmentparsers}. or by using Biopython's pairwise sequence aligner, which can align two sequences to each other (described in chapter~\ref{chapter:pairwise}).
+Alignments may extend over the full length of each sequence, or may be limited to a subsection of each sequence. In Biopython, all sequence alignments are represented by an \verb|Alignment| object, described in section~\ref{sec:alignmentobject}. \verb|Alignment| objects can be obtained by parsing the output of alignment software such as Clustal or BLAT (described in section+\ref{sec:alignmentparsers}. or by using Biopython's pairwise sequence aligner, which can align two sequences to each other (described in chapter~\ref{chapter:pairwise}).
 
 See Chapter~\ref{chapter:msa} for a description of the older \verb|MultipleSeqAlignment| class and the parsers in \verb|Bio.AlignIO| that parse the output of sequence alignment software, generating \verb|MultipleSeqAlignment| objects.
 
@@ -313,12 +313,12 @@ Reverse-complementing an alignment preserves its column annotations (in reverse 
 \section{Reading and writing alignments}
 \label{sec:alignmentparsers}
 
-Output from sequence alignment software such as Clustal can be parsed into \verb|Alignment| objects by the \verb|Bio.Align.read| and \verb|Bio.Align.parse| functions. Their usage is analogous to the \verb|read| and \verb|parse| functions in \verb|Bio.SeqIO| (see Section~\ref{sec:Bio.SeqIO-input}): The \verb|read| function is used to read an output file containing a single alignment and returns an \verb|Alignment| object, while the \verb|parse| function returns an iterator to iterate over alignments stored in an output file containing one or more alignments. The table below the alignment formats that can be parsed in \verb|Bio.Align|. \verb|Bio.Align| provides a \verb|write| function that can write alignments in most of these formats, as shown in the table. For text (non-binary) formats, you can also call Python's built-in \verb|format| function on an alignment to get a string showing the alignment in the requested format, or use \verb|Alignment| objects in formatted (f-) strings. As optional keyword arguments cannot be used with Python's built-in \verb|format| function or with formatted strings, the \verb|Alignment| class has a \verb|format| method with optional arguments to customize the alignment format, as described in the subsections below. When called with an empty string (which is the default), \verb|format| returns a human-readable representation of the alignment (same as when you \verb|print| the alignment).
+Output from sequence alignment software such as Clustal can be parsed into \verb|Alignment| objects by the \verb|Bio.Align.read| and \verb|Bio.Align.parse| functions. Their usage is analogous to the \verb|read| and \verb|parse| functions in \verb|Bio.SeqIO| (see Section~\ref{sec:Bio.SeqIO-input}): The \verb|read| function is used to read an output file containing a single alignment and returns an \verb|Alignment| object, while the \verb|parse| function returns an iterator to iterate over alignments stored in an output file containing one or more alignments. The table below shows the alignment formats that can be parsed in \verb|Bio.Align|. \verb|Bio.Align| provides a \verb|write| function that can write alignments in most of these formats, as shown in the table.
 
 \begin{table}[!htbp]
 \begin{center}
 \begin{tabular}{|l|l|c|c|c|}
-Name & Description & text / binary & Supported by \verb|write| & Subsection \\
+File format \verb+fmt+ & Description & text / binary & Supported by \verb|write| & Subsection \\
 \verb|a2m| & A2M & text & yes & \ref{subsec:align_a2m} \\
 \verb|bed| & Browser Extensible Data (BED) & text & yes & \ref{subsec:align_bed} \\
 \verb|bigbed| & bigBed & binary & yes & \ref{subsec:align_bigbed} \\
@@ -342,7 +342,38 @@ Name & Description & text / binary & Supported by \verb|write| & Subsection \\
 \end{center}
 \end{table}
 
-These formats are described in detail in the subsections below.
+These formats are described in detail in Section~\ref{sec:alignformats}.
+
+\subsection{Reading alignments}
+
+The alignments returned by \verb|Bio.Align.parse| inherit from the \verb|AlignmentsAbstractBaseClass| base class. This class defines a \verb|rewind| method that resets the iterator to let it loop over the alignments from the beginning. You can also call \verb|len| on the alignments to obtain the number of alignments. Depending on the file format, the number of alignments may be explicitly stored in the file (for example in the case of bigBed, bigPsl, and bigMaf files), or otherwise the number of alignments is counted by looping over them once (and returning the iterator to its original position). If the file is large, it may therefore take a considerable amount of time for \verb|len| to return. As the number of alignments is cached, subsequent calls to \verb|len| will return quickly.
+
+Depending on the file format, the alignments object returned by \verb|Bio.Align.parse| may contain attributes that store metadata found in the file, such as the version number of the software that was used to create the alignments. The specific attributes stored for each file format are described in Section~\ref{sec:alignformats}.
+
+\subsection{Writing alignments}
+
+To write alignments to a file, use
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> target = "myfile.txt"
+>>> Align.write(alignments, target, "clustal")
+\end{minted}
+where \verb|alignments| is either a single alignment or a list of alignments, \verb|target| is a file name or an open file-like object, and \verb|fmt| is the file format. As some file formats allow or require metadata to be stored with the alignments, you may want to use the \verb|Alignments| (plural) class instead of a plain list of alignments. This class inherits from \verb|AlignmentsAbstractBaseClass| as well as from \verb|list|, and can therefore be used as a list, but also allows you to store metadata as attributes on the \verb|alignments| object:
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.Alignments(alignments)
+>>> metadata = {"Program": "Biopython", "Version": "1.81"}
+>>> alignments.metadata = metadata
+>>> target = "myfile.txt"
+>>> Align.write(alignments, target, "clustal")
+\end{minted}
+
+\subsection{Printing alignments}
+
+For text (non-binary) formats, you can call Python's built-in \verb|format| function on an alignment to get a string showing the alignment in the requested format, or use \verb|Alignment| objects in formatted (f-) strings. As optional keyword arguments cannot be used with Python's built-in \verb|format| function or with formatted strings, the \verb|Alignment| class has a \verb|format| method with optional arguments to customize the alignment format, as described in the subsections below. When called with an empty string (which is the default), \verb|format| returns a human-readable representation of the alignment (same as when you \verb|print| the alignment).
+
+\section{Alignment file formats}
+\label{sec:alignformats}
 
 \subsection{FASTA}
 \label{subsec:align_fasta}
