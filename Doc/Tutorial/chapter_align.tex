@@ -3,7 +3,7 @@
 
 Sequence alignments are a collection of two or more sequences that have been aligned to each other -- usually with the insertion of gaps, and the addition of leading or trailing gaps -- such that all the sequence strings are the same length.
 
-Alignments may extend over the full length of each sequence, or may be limited to a subsection of each sequence. In Biopython, all sequence alignments are represented by an \verb|Alignment| object, described in section~\ref{sec:alignmentobject}. \verb|Alignment| objects can be obtained by parsing the output of alignment software such as Clustal or BLAT (described in section+\ref{seq:alignmentparsers}. or by using Biopython's pairwise sequence aligner, which can align two sequences to each other (described in chapter~\ref{chapter:pairwise}).
+Alignments may extend over the full length of each sequence, or may be limited to a subsection of each sequence. In Biopython, all sequence alignments are represented by an \verb|Alignment| object, described in section~\ref{sec:alignmentobject}. \verb|Alignment| objects can be obtained by parsing the output of alignment software such as Clustal or BLAT (described in section+\ref{sec:alignmentparsers}. or by using Biopython's pairwise sequence aligner, which can align two sequences to each other (described in chapter~\ref{chapter:pairwise}).
 
 See Chapter~\ref{chapter:msa} for a description of the older \verb|MultipleSeqAlignment| class and the parsers in \verb|Bio.AlignIO| that parse the output of sequence alignment software, generating \verb|MultipleSeqAlignment| objects.
 
@@ -318,7 +318,7 @@ Output from sequence alignment software such as Clustal can be parsed into \verb
 \begin{table}[!htbp]
 \begin{center}
 \begin{tabular}{|l|l|c|c|c|}
-Name & Description & text / binary & Supported by \verb|write| & Subsection \\
+File format \verb+fmt+ & Description & text / binary & Supported by \verb|write| & Subsection \\
 \verb|a2m| & A2M & text & yes & \ref{subsec:align_a2m} \\
 \verb|bed| & Browser Extensible Data (BED) & text & yes & \ref{subsec:align_bed} \\
 \verb|bigbed| & bigBed & binary & yes & \ref{subsec:align_bigbed} \\
@@ -348,7 +348,25 @@ These formats are described in detail in Section~\ref{sec:alignformats}.
 
 The alignments returned by \verb|Bio.Align.parse| inherit from the \verb|AlignmentsAbstractBaseClass| base class. This class defines a \verb|rewind| method that resets the iterator to let it loop over the alignments from the beginning. You can also call \verb|len| on the alignments to obtain the number of alignments. Depending on the file format, the number of alignments may be explicitly stored in the file (for example in the case of bigBed, bigPsl, and bigMaf files), or otherwise the number of alignments is counted by looping over them once (and returning the iterator to its original position). If the file is large, it may therefore take a considerable amount of time for \verb|len| to return. As the number of alignments is cached, subsequent calls to \verb|len| will return quickly.
 
+Depending on the file format, the alignments object returned by \verb|Bio.Align.parse| may contain attributes that store metadata found in the file, such as the version number of the software that was used to create the alignments. The specific attributes stored for each file format are described in Section~\ref{sec:alignformats}.
+
 \subsection{Writing alignments}
+
+To write alignments to a file, use
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> target = "myfile.txt"
+>>> Align.write(alignments, target, "clustal")
+\end{minted}
+where \verb|alignments| is either a single alignment or a list of alignments, \verb|target| is a file name or an open file stream, and \verb|fmt| is the file format. As some file formats allow or require metadata to be stored with the alignments, you may want to use the \verb|Alignments| (plural) class instead of a plain list of alignments. This class inherits from \verb|AlignmentsAbstractBaseClass| as well as from \verb|list|, and can therefore be used as a list, but also allows you to store metadata as attributes on the \verb|alignments| object:
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.Alignments(alignments)
+>>> metadata = {"Program": "Biopython", "Version": "1.81"}
+>>> alignments.metadata = metadata
+>>> target = "myfile.txt"
+>>> Align.write(alignments, target, "clustal")
+\end{minted}
 
 \subsection{Printing alignments}
 
