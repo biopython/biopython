@@ -58,8 +58,8 @@ from Bio.Sequencing import Phd
 
 from .QualityIO import _get_phred_quality
 from .Interfaces import SequenceWriter
-from .Interfaces import _TextIOSource
-from .Interfaces import _IOSource
+from Bio.File import _TextIOSource
+from Bio.File import _IOSource
 
 
 def PhdIterator(source: _TextIOSource) -> Iterator[SeqRecord]:

@@ -376,6 +376,7 @@ from typing import Callable, Dict, Iterable, Union
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.File import as_handle
+from Bio.File import _TextIOSource
 from Bio.SeqIO import AbiIO
 from Bio.SeqIO import AceIO
 from Bio.SeqIO import FastaIO
@@ -396,7 +397,6 @@ from Bio.SeqIO import TwoBitIO
 from Bio.SeqIO import UniprotIO
 from Bio.SeqIO import XdnaIO
 from Bio.SeqRecord import SeqRecord
-from .Interfaces import _TextIOSource
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl or EMBOSS where possible.

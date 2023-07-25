@@ -22,7 +22,7 @@ from .Interfaces import _clean
 from .Interfaces import _get_seq_string
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
-from .Interfaces import _TextIOSource
+from Bio.File import _TextIOSource
 
 
 def SimpleFastaParser(handle):
