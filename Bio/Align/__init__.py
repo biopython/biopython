@@ -3352,18 +3352,19 @@ class AlignmentsAbstractBaseClass(ABC):
 class Alignments(AlignmentsAbstractBaseClass, list):  # noqa: D101
     def __init__(self):  # noqa: D107
         super().__init__()
-        self._index = 0
+        self._index = -1
 
     def __next__(self):
+        index = self._index + 1
         try:
-            item = self[self._index]
+            item = self[index]
         except IndexError:
             raise StopIteration
-        self._index += 1
+        self._index = index
         return item
 
     def rewind(self):  # noqa: D102
-        self._index = 0
+        self._index = -1
 
     def __len__(self):
         return list.__len__(self)
