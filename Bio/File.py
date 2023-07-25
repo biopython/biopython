@@ -17,6 +17,18 @@ import itertools
 import os
 from abc import ABC
 from abc import abstractmethod
+from os import PathLike
+from typing import (
+    Any,
+    AnyStr,
+    IO,
+    Iterator,
+    Optional,
+    Tuple,
+    Union,
+)
+
+from Bio import StreamModeError
 
 try:
     import sqlite3
@@ -24,9 +36,69 @@ except ImportError:
     # May be missing if Python was compiled from source without its dependencies
     sqlite3 = None  # type: ignore
 
+# https://docs.python.org/3/glossary.html#term-path-like-object
+_PathLikeTypes = (PathLike, str, bytes)
+_IOSource = Union[IO[AnyStr], PathLike, str, bytes]
+_TextIOSource = _IOSource[str]
+
+
+def check_handle_mode(handle: IO, mode: str, fmt: Optional[str] = None) -> None:
+    """
+    Check if handle is opened with mode.
+
+    Raises:
+      StreamModeError if handle is not opened with mode
+    """
+    try:
+        if "w" in mode or "a" in mode or "+" in mode:
+            if "b" in mode:
+                msg = "must be opened for writing in binary mode"
+                handle.write(b"")
+            else:
+                msg = "must be opened for writing in text mode"
+                handle.write("")
+            if "+" in mode:
+                msg = "must be opened for updating"
+                handle.read(0)
+        elif "b" in mode:
+            msg = "must be opened in binary mode"
+            if not isinstance(handle.read(0), bytes):
+                raise TypeError
+        else:
+            msg = "must be opened in text mode"
+            if not isinstance(handle.read(0), str):
+                raise TypeError
+    except (TypeError, OSError):
+        prefix = f"{fmt} files " if fmt else "File "
+        raise StreamModeError(prefix + msg) from None
+
+
+def as_handle_and_flag(
+    handleish: _IOSource, mode: str = "r", *, fmt: Optional[str] = None
+) -> Tuple[IO, bool]:
+    """
+    Open handleish with mode, or return it as-is if it's already a file handle.
+
+    Args:
+      handleish: File handle or path-like object
+      mode: Mode to open handleish
+      fmt: File type name for error message
+
+    Returns:
+      File handle and flag whether the caller should close the handle or not.
+
+    Raises:
+      StreamModeError if handleish is a file handle and is not opened with mode
+    """
+    if isinstance(handleish, _PathLikeTypes):
+        return open(handleish, mode), True
+
+    check_handle_mode(handleish, mode, fmt)
+    return handleish, False
+
 
 @contextlib.contextmanager
-def as_handle(handleish, mode="r", **kwargs):
+def as_handle(handleish: _IOSource, mode: str = "r", **kwargs: Any) -> Iterator[IO]:
     r"""Context manager to ensure we are using a handle.
 
     Context manager for arguments that can be passed to SeqIO and AlignIO read, write,
@@ -68,10 +140,10 @@ def as_handle(handleish, mode="r", **kwargs):
     >>> os.remove("seqs.fasta")  # tidy up
 
     """
-    try:
+    if isinstance(handleish, _PathLikeTypes):
         with open(handleish, mode, **kwargs) as fp:
             yield fp
-    except TypeError:
+    else:
         yield handleish
 
 

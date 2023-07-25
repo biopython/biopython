@@ -11,11 +11,11 @@ See also the Bio.Sequencing.Ace module which offers more than just accessing
 the contig consensus sequences in an ACE file as SeqRecord objects.
 """
 
+from Bio.File import _TextIOSource
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Sequencing import Ace
 
-from .Interfaces import _TextIOSource
 from .Interfaces import SequenceIterator
 
 

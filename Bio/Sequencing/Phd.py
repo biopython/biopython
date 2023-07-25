@@ -16,6 +16,13 @@ Alternatively, using Bio.SeqIO with the "phd" format will call this module
 internally.  This will give SeqRecord objects for each contig sequence.
 """
 
+from typing import (
+    Iterator,
+    Optional,
+)
+
+from Bio.File import _TextIOSource
+from Bio import File
 from Bio import Seq
 
 CKEYWORDS = [
@@ -48,7 +55,7 @@ class Record:
         self.seq_trimmed = ""
 
 
-def read(source):
+def read(source: _TextIOSource) -> Optional[Record]:
     """Read one PHD record from the file and return it as a Record object.
 
     Argument source is a file-like object opened in text mode, or a path
@@ -58,8 +65,8 @@ def read(source):
     returns a single Record object. A ValueError is raised if more than
     one record is found in the file.
     """
-    handle = _open(source)
-    try:
+    with File.as_handle(source) as handle:
+        File.check_handle_mode(handle, "r", fmt="PHD")
         record = _read(handle)
         try:
             next(handle)
@@ -67,12 +74,9 @@ def read(source):
             return record
         else:
             raise ValueError("More than one PHD record found")
-    finally:
-        if handle is not source:
-            handle.close()
 
 
-def parse(source):
+def parse(source: _TextIOSource) -> Iterator[Record]:
     """Iterate over a file yielding multiple PHD records.
 
     Argument source is a file-like object opened in text mode, or a path
@@ -87,29 +91,16 @@ def parse(source):
             # do something with the record object
 
     """
-    handle = _open(source)
-    try:
+    with File.as_handle(source) as handle:
+        File.check_handle_mode(handle, "r", fmt="PHD")
         while True:
             record = _read(handle)
             if not record:
                 return
             yield record
-    finally:
-        if handle is not source:
-            handle.close()
 
 
 # Everything below is considered private
-
-
-def _open(source):
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise ValueError("PHD files must be opened in text mode.") from None
-    return handle
 
 
 def _read(handle):

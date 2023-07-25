@@ -12,23 +12,15 @@ use this module.  It provides base classes to try and simplify things.
 
 from abc import ABC
 from abc import abstractmethod
-from os import PathLike
 from typing import AnyStr
 from typing import Generic
-from typing import IO
-from collections.abc import Iterator
 from typing import Optional
-from typing import Union
 
-from Bio import StreamModeError
+from Bio import File
+from Bio.File import _IOSource
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-
-# https://docs.python.org/3/glossary.html#term-path-like-object
-_PathLikeTypes = (PathLike, str, bytes)
-_IOSource = Union[IO[AnyStr], PathLike, str, bytes]
-_TextIOSource = _IOSource[str]
 
 
 class SequenceIterator(ABC, Generic[AnyStr]):
@@ -62,24 +54,11 @@ class SequenceIterator(ABC, Generic[AnyStr]):
         """
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
-        if isinstance(source, _PathLikeTypes):
-            self.stream = open(source, "r" + mode)
-            self.should_close_stream = True
-        else:
-            if mode == "t":
-                if source.read(0) != "":
-                    raise StreamModeError(
-                        f"{fmt} files must be opened in text mode."
-                    ) from None
-            elif mode == "b":
-                if source.read(0) != b"":
-                    raise StreamModeError(
-                        f"{fmt} files must be opened in binary mode."
-                    ) from None
-            else:
-                raise ValueError(f"Unknown mode '{mode}'") from None
-            self.stream = source
-            self.should_close_stream = False
+        if mode not in ("t", "b"):
+            raise ValueError(f"Unknown mode '{mode}'")
+        self.stream, self.should_close_stream = File.as_handle_and_flag(
+            source, "r" + mode, fmt=fmt
+        )
 
     @abstractmethod
     def __next__(self):
@@ -141,35 +120,10 @@ class SequenceWriter:
 
     def __init__(self, target: _IOSource, mode: str = "w") -> None:
         """Create the writer object."""
-        if mode == "w":
-            if isinstance(target, _PathLikeTypes):
-                # target is a path
-                handle = open(target, mode)
-            else:
-                try:
-                    handle = target
-                    target.write("")
-                except TypeError:
-                    # target was opened in binary mode
-                    raise StreamModeError("File must be opened in text mode.") from None
-        elif mode == "wb":
-            if isinstance(target, _PathLikeTypes):
-                # target is a path
-                handle = open(target, mode)
-            else:
-                handle = target
-                try:
-                    target.write(b"")
-                except TypeError:
-                    # target was opened in text mode
-                    raise StreamModeError(
-                        "File must be opened in binary mode."
-                    ) from None
-        else:
+        if "w" not in mode:
             raise RuntimeError(f"Unknown mode '{mode}'")
 
-        self._target = target
-        self.handle = handle
+        self.handle, self._should_close_handle = File.as_handle_and_flag(target, mode)
 
     def clean(self, text: str) -> str:
         """Use this to avoid getting newlines in the output."""
@@ -239,7 +193,7 @@ class SequenceWriter:
             count = self.write_records(records, maxcount)
             self.write_footer()
         finally:
-            if self.handle is not self._target:
+            if self._should_close_handle:
                 self.handle.close()
         if count < mincount:
             if mincount == 1:  # Common case

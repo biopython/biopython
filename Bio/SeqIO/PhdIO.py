@@ -54,11 +54,11 @@ Note these examples only show the first 50 bases to keep the output short.
 
 from collections.abc import Iterator
 
+from Bio.File import _IOSource
+from Bio.File import _TextIOSource
 from Bio.SeqRecord import SeqRecord
 from Bio.Sequencing import Phd
 
-from .Interfaces import _IOSource
-from .Interfaces import _TextIOSource
 from .Interfaces import SequenceWriter
 from .QualityIO import _get_phred_quality
 

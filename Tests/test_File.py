@@ -12,6 +12,7 @@ from io import StringIO
 
 from Bio import bgzf
 from Bio import File
+from Bio import StreamModeError
 
 
 class RandomAccess(unittest.TestCase):
@@ -115,6 +116,81 @@ class AsHandleTestCase(unittest.TestCase):
         s = StringIO()
         with File.as_handle(s) as handle:
             self.assertIs(s, handle)
+
+    def test_as_handle_and_flag(self):
+        p = self._path("test_file.fasta")
+        fp, shouldclose = File.as_handle_and_flag(p, "w")
+        self.assertTrue(shouldclose)
+        fp.write(">test\nACGT")
+        fp.close()
+        fp, shouldclose = File.as_handle_and_flag(p, "r")
+        self.assertTrue(shouldclose)
+        self.assertEqual(fp.read(), ">test\nACGT")
+        fp.close()
+        fp, shouldclose = File.as_handle_and_flag(p, "wb")
+        self.assertTrue(shouldclose)
+        fp.write(b">protein\nACDEFG")
+        fp.close()
+        fp, shouldclose = File.as_handle_and_flag(p, "rb")
+        self.assertTrue(shouldclose)
+        self.assertEqual(fp.read(), b">protein\nACDEFG")
+        fp.close()
+        with open(p, "w") as handle:
+            fp, shouldclose = File.as_handle_and_flag(handle, "w")
+            self.assertFalse(shouldclose)
+            fp, shouldclose = File.as_handle_and_flag(handle, "a")
+            self.assertFalse(shouldclose)
+            fp.write(">test\nACGT")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "wb")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "r")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "r+")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "rb")
+        with open(p, "rt") as handle:
+            fp, shouldclose = File.as_handle_and_flag(handle, "r")
+            self.assertFalse(shouldclose)
+            fp, shouldclose = File.as_handle_and_flag(handle, "rt")
+            self.assertFalse(shouldclose)
+            self.assertEqual(fp.read(), ">test\nACGT")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "rb")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "r+")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "w")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "wb")
+        with open(p, "r+") as handle:
+            self.assertFalse(File.as_handle_and_flag(handle, "r")[1])
+            self.assertFalse(File.as_handle_and_flag(handle, "rt")[1])
+            self.assertFalse(File.as_handle_and_flag(handle, "r+")[1])
+            self.assertFalse(File.as_handle_and_flag(handle, "w")[1])
+            self.assertFalse(File.as_handle_and_flag(handle, "a")[1])
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "wb")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "rb")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "r+b")
+        with open(p, "wb") as handle:
+            fp, shouldclose = File.as_handle_and_flag(handle, "wb")
+            self.assertFalse(shouldclose)
+            fp, shouldclose = File.as_handle_and_flag(handle, "ab")
+            self.assertFalse(shouldclose)
+            fp.write(b">protein\nACDEFG")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "w")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "r")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "r+")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "rb")
+        with open(p, "rb") as handle:
+            fp, shouldclose = File.as_handle_and_flag(handle, "rb")
+            self.assertFalse(shouldclose)
+            self.assertEqual(fp.read(), b">protein\nACDEFG")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "r")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "r+b")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "w")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "wb")
+        with open(p, "r+b") as handle:
+            self.assertFalse(File.as_handle_and_flag(handle, "rb")[1])
+            self.assertFalse(File.as_handle_and_flag(handle, "r+b")[1])
+            self.assertFalse(File.as_handle_and_flag(handle, "wb")[1])
+            self.assertFalse(File.as_handle_and_flag(handle, "ab")[1])
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "w")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "r")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "r+")
+            self.assertRaises(StreamModeError, File.as_handle_and_flag, handle, "r+t")
 
 
 class BaseClassTests(unittest.TestCase):

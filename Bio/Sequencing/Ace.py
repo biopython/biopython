@@ -57,6 +57,8 @@ Thus an ace file does not entirerly suit the concept of iterating. If WA, CT, RT
 are needed, the 'read' function rather than the 'parse' function might be more appropriate.
 """
 
+from Bio import File
+
 
 class rd:
     """RD (reads), store a read with its name, sequence etc.
@@ -300,14 +302,8 @@ def parse(source):
 
     where each record is a Contig object.
     """
-    try:
-        handle = open(source)
-    except TypeError:
-        handle = source
-        if handle.read(0) != "":
-            raise ValueError("Ace files must be opened in text mode.") from None
-
-    try:
+    with File.as_handle(source) as handle:
+        File.check_handle_mode(handle, "r", fmt="Ace")
         line = ""
         while True:
             # at beginning, skip the AS and look for first CO command
@@ -498,10 +494,6 @@ def parse(source):
                     break
 
             yield record
-
-    finally:
-        if handle is not source:
-            handle.close()
 
 
 class ACEFileRecord:

@@ -16,7 +16,7 @@ from abc import ABC
 from abc import abstractmethod
 from typing import Optional
 
-from Bio import StreamModeError
+from Bio import File
 from Bio.Align import Alignments
 from Bio.Align import AlignmentsAbstractBaseClass
 
@@ -47,23 +47,11 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
         - there should be a single non-optional argument, the source.
         - you can add additional optional arguments.
         """
-        self.source = source
-        try:
-            self._stream = open(source, "r" + self.mode)
-        except TypeError:  # not a path, assume we received a stream
-            if self.mode == "t":
-                if source.read(0) != "":
-                    raise StreamModeError(
-                        f"{self.fmt} files must be opened in text mode."
-                    ) from None
-            elif self.mode == "b":
-                if source.read(0) != b"":
-                    raise StreamModeError(
-                        f"{self.fmt} files must be opened in binary mode."
-                    ) from None
-            else:
-                raise ValueError(f"Unknown mode '{self.mode}'") from None
-            self._stream = source
+        if self.mode not in ("t", "b"):
+            raise ValueError(f"Unknown mode '{self.mode}'") from None
+        self._stream, self._should_close_stream = File.as_handle_and_flag(
+            source, "r" + self.mode, fmt=self.fmt
+        )
         self._index = 0
         self._read_header(self._stream)
 
@@ -110,7 +98,7 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
             stream = self._stream
         except AttributeError:
             return
-        if stream is not self.source:
+        if self._should_close_stream:
             stream.close()
         del self._stream
 
@@ -229,35 +217,11 @@ class AlignmentWriter(ABC):  # noqa: B024
         """
         if target is not None:
             # target is None if we only use the writer to format strings.
-            if self.mode == "w":
-                try:
-                    target.write("")
-                except TypeError:
-                    # target was opened in binary mode
-                    raise StreamModeError("File must be opened in text mode.") from None
-                except AttributeError:
-                    # target is a path
-                    stream = open(target, self.mode)
-                else:
-                    stream = target
-            elif self.mode == "wb":
-                try:
-                    target.write(b"")
-                except TypeError:
-                    # target was opened in text mode
-                    raise StreamModeError(
-                        "File must be opened in binary mode."
-                    ) from None
-                except AttributeError:
-                    # target is a path
-                    stream = open(target, self.mode)
-                else:
-                    stream = target
-            else:
+            if self.mode not in ("w", "wb"):
                 raise RuntimeError("Unknown mode '%s'" % self.mode)
-            self._stream = stream
-
-        self._target = target
+            self._stream, self._should_close_stream = File.as_handle_and_flag(
+                target, self.mode
+            )
 
     def write_header(self, stream, alignments):
         """Write the file header to the output file."""
@@ -337,7 +301,7 @@ class AlignmentWriter(ABC):  # noqa: B024
         try:
             count = self.write_file(stream, alignments)
         finally:
-            if stream is not self._target:
+            if self._should_close_stream:
                 stream.close()
         return count
 
