@@ -12,7 +12,14 @@ It is a simple container class, with list and dictionary like properties.
 from collections import deque
 from copy import copy
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to work with structural entities."
+    ) from None
 
 from Bio.PDB.PDBExceptions import PDBConstructionException
 

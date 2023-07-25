@@ -8,8 +8,16 @@
 """Vector class, including rotation-related functions."""
 
 
-import numpy as np  # type: ignore
 from typing import Tuple, Optional
+
+try:
+    import numpy as np  # type: ignore
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to work with vectors."
+    ) from None
 
 
 def m2rotaxis(m):

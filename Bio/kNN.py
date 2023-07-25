@@ -32,7 +32,14 @@ insead.
 
 import warnings
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use kNN."
+    ) from None
 
 from Bio import BiopythonDeprecationWarning
 

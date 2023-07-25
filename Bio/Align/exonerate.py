@@ -26,7 +26,14 @@ unparsable file.
 
 You are expected to use this module via the Bio.Align functions.
 """
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.Align with Exonerate output."
+    ) from None
 
 
 from Bio.Align import Alignment

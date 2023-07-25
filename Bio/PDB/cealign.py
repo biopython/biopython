@@ -18,7 +18,14 @@ Shindyalov, I.N., Bourne P.E. (1998).
 of the optimal path". Protein Engineering. 11 (9): 739–747. PMID 9796821.
 """
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.PDB.CEAligner."
+    ) from None
 
 from Bio.PDB.ccealign import run_cealign
 from Bio.PDB.PDBExceptions import PDBException

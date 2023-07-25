@@ -19,7 +19,14 @@ Reference:
 import collections
 import math
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.PDB.SASA."
+    ) from None
 
 from Bio.PDB.kdtrees import KDTree
 

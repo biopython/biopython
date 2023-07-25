@@ -20,11 +20,6 @@ insead.
 """
 
 import warnings
-
-import numpy as np
-
-import numpy.linalg
-
 from Bio import BiopythonDeprecationWarning
 
 warnings.warn(
@@ -32,6 +27,16 @@ warnings.warn(
     "release of Biopython. Consider using scikit-learn instead.",
     BiopythonDeprecationWarning,
 )
+
+try:
+    import numpy as np
+    import numpy.linalg
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.LogisticRegression."
+    ) from None
 
 
 class LogisticRegression:

@@ -55,7 +55,14 @@ import subprocess
 import tempfile
 import warnings
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.PDB.ResidueDepth."
+    ) from None
 
 from Bio.PDB import PDBParser
 from Bio.PDB import Selection

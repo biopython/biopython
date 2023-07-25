@@ -11,7 +11,14 @@ import copy
 import sys
 import warnings
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to work with atoms in structures."
+    ) from None
 
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning

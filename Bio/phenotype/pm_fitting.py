@@ -20,7 +20,14 @@ fit                Sigmoid functions fit.
 get_area           Calculate the area under the PM curve.
 """
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install numpy to extract curve parameters."
+    ) from None
 
 try:
     from scipy.optimize.minpack import curve_fit
