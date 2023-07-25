@@ -3369,7 +3369,7 @@ class Alignments(AlignmentsAbstractBaseClass, list):  # noqa: D101
         return list.__len__(self)
 
 
-class PairwiseAlignments:
+class PairwiseAlignments(AlignmentsAbstractBaseClass):
     """Implements an iterator over pairwise alignments returned by the aligner.
 
     This class also supports indexing, which is fast for increasing indices,
@@ -3402,6 +3402,10 @@ class PairwiseAlignments:
 
     def __len__(self):
         return len(self._paths)
+
+    def __iter__(self):
+        self.rewind()
+        return self
 
     def __getitem__(self, index):
         if not isinstance(index, int):
