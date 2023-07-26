@@ -29,7 +29,7 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Please install numpy if you want to use Bio.PDB. See http://www.numpy.org/"
+        "Please install NumPy if you want to use Bio.PDB. See http://www.numpy.org/"
     ) from None
 
 # Get a Structure object from a PDB file

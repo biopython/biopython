@@ -90,7 +90,7 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Please install numpy if you want to use Bio.phenotype. "
+        "Please install NumPy if you want to use Bio.phenotype. "
         "See http://www.numpy.org/"
     ) from None
 
