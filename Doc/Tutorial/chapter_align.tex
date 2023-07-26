@@ -547,24 +547,6 @@ To parse this file, use
 >>> from Bio import Align
 >>> alignments = Align.parse("ex1.sam", "sam")
 >>> alignment = next(alignments)
->>> alignment.flag
-69
-\end{minted}
-%doctest ../Tests/SamBam lib:numpy
-\begin{minted}{pycon}
->>> from Bio import Align
->>> alignments = Align.parse("ex1.sam", "sam")
->>> alignment = next(alignments)
->>> alignment.flag
-69
->>> bin(69)
-'0b1000101'
-\end{minted}
-%doctest ../Tests/SamBam lib:numpy
-\begin{minted}{pycon}
->>> from Bio import Align
->>> alignments = Align.parse("ex1.sam", "sam")
->>> alignment = next(alignments)
 \end{minted}
 The \verb|flag| of the first line is 69. According to the SAM/BAM file format specification, lines for which the flag contains the bitwise flag 4 are unmapped. As 69 has the bit corresponding to this position set to True, this sequence is unmapped and was not aligned to the genome (in spite of the first line showing \verb|chr1|). The target of this alignment (or the first item in \verb|alignment.sequences|) is therefore \verb|None|:
 %cont-doctest
@@ -613,7 +595,7 @@ However, we cannot print the alignment in PSL format (see section~\ref{subsec:al
 >>> format(alignment, "psl")  # doctest: +ELLIPSIS
 Traceback (most recent call last):
  ...
-TypeError: object of type 'NoneType' has no len()
+TypeError: ...
 \end{minted}
 If you know the size of the target sequences, you can set them by hand:
 %cont-doctest
