@@ -10,14 +10,7 @@
 import os
 import string
 
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.Align.substitution_matrices."
-    ) from None
+import numpy as np
 
 
 class Array(np.ndarray):

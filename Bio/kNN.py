@@ -38,7 +38,7 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use kNN."
+        "Please install numpy if you want to use Bio.kNN. See http://www.numpy.org/"
     ) from None
 
 from Bio import BiopythonDeprecationWarning

@@ -36,14 +36,7 @@ hydrogen bonds is at <https://www.thingiverse.com/thing:3957471>.
 """
 # import re
 
-try:
-    import numpy as np  # type: ignore
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use use Bio.PDB.SCADIO."
-    ) from None
+import numpy as np  # type: ignore
 
 from Bio.File import as_handle
 from Bio.PDB.PDBExceptions import PDBException

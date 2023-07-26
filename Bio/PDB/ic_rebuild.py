@@ -10,14 +10,7 @@ import re
 
 from itertools import zip_longest
 
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy to build proteins from internal coordinates."
-    )
+import numpy as np
 
 from Bio.PDB.PDBExceptions import PDBException
 from io import StringIO

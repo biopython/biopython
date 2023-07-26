@@ -22,14 +22,7 @@ Epub 2005 Jun 23. PMID: 15973002.
 """
 
 
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to work with QCP."
-    ) from None
+import numpy as np
 
 from Bio.PDB.PDBExceptions import PDBException
 

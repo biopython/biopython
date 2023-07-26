@@ -43,15 +43,7 @@ The library files can be found in directory 'fragment_data'.
 """
 
 
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.PDB.FragmentMapper or "
-        "Bio.PDB.Fragment."
-    ) from None
+import numpy as np
 
 from Bio.SVDSuperimposer import SVDSuperimposer
 

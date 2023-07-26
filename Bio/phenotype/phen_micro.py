@@ -28,14 +28,7 @@ import warnings
 import json
 import csv
 
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to work with phenotype microarray data."
-    ) from None
+import numpy as np
 
 from Bio import BiopythonParserWarning
 

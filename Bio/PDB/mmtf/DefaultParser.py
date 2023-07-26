@@ -6,14 +6,7 @@
 # package.
 """Code handle loading mmtf-python into Biopython's structures."""
 
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.PDB.mmtf.StructureDecoder."
-    ) from None
+import numpy as np
 
 from Bio.PDB.StructureBuilder import StructureBuilder
 

@@ -17,14 +17,7 @@ from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.Align with tabular BLAST output."
-    ) from None
+import numpy as np
 
 
 class State(enum.Enum):

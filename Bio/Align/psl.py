@@ -27,15 +27,7 @@ zero-based end position. We can therefore manipulate ``start`` and
 """
 from itertools import chain
 
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.Align with the PSL format."
-    ) from None
-
+import numpy as np
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
