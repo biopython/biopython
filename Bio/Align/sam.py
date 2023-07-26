@@ -148,9 +148,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             query = query.seq
         qSize = len(query)
         try:
-            rName = target.id
+            rname = target.id
         except AttributeError:
-            rName = "target"
+            rname = "target"
         else:
             target = target.seq
         if coordinates[0, 1] < coordinates[-1, 1]:  # mapped to forward strand
@@ -162,6 +162,10 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             coordinates[:, 1] = qSize - coordinates[:, 1]
             hard_clip_left, hard_clip_right = hard_clip_right, hard_clip_left
         try:
+            flag |= alignment.flag
+        except AttributeError:
+            pass
+        try:
             query = bytes(query)
         except TypeError:  # string
             pass
@@ -170,7 +174,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         else:
             query = str(query, "ASCII")
         tStart, qStart = coordinates[0, :]
-        pos = tStart
+        pos = tStart + 1  # 1-based coordinate
         cigar = ""
         if hard_clip_left is not None:
             cigar += "%dH" % hard_clip_left
@@ -226,18 +230,29 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             mapq = alignment.mapq
         except AttributeError:
             mapq = 255  # not available
-        rNext = "*"
-        pNext = 0
+        try:
+            rnext = alignment.rnext
+        except AttributeError:
+            rnext = "*"
+        else:
+            if rnext == rname:
+                rnext = "="
+        try:
+            pnext = alignment.pnext
+        except AttributeError:
+            pnext = 0
+        else:
+            pnext += 1  # 1-based coordinates
         tLen = 0
         fields = [
             qName,
             str(flag),
-            rName,
-            str(pos + 1),  # 1-based coordinates
+            rname,
+            str(pos),
             str(mapq),
             cigar,
-            rNext,
-            str(pNext),
+            rnext,
+            str(pnext),
             str(tLen),
             query,
             qual,
