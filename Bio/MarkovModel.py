@@ -32,29 +32,7 @@ except ImportError:
         "See http://www.numpy.org/"
     ) from None
 
-
-try:
-    logaddexp = np.logaddexp
-except AttributeError:
-    # Numpy versions older than 1.3 do not contain logaddexp.
-    # Once we require Numpy version 1.3 or later, we should revisit this
-    # module to see if we can simplify some of the other functions in
-    # this module.
-    import warnings
-
-    warnings.warn(
-        "For optimal speed, please update to NumPy version 1.3 or later (current version is %s)"
-        % np.__version__
-    )
-
-    def logaddexp(logx, logy):
-        """Implement logaddexp method if NumPy version is older than 1.3."""
-        if logy - logx > 100:
-            return logy
-        elif logx - logy > 100:
-            return logx
-        minxy = min(logx, logy)
-        return minxy + np.log(np.exp(logx - minxy) + np.exp(logy - minxy))
+logaddexp = np.logaddexp
 
 
 def itemindex(values):
