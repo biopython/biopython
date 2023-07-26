@@ -62,7 +62,7 @@ class Motif(motifs.Motif, dict):
     For more information, see the TRANSFAC documentation.
     """
 
-    multiple_value_keys = {"BF", "OV", "HP", "BS", "HC", "DT", "DR"}
+    multiple_value_keys = {"BF", "OV", "HP", "BS", "HC", "DT", "DR", "CC"}
     # These keys can occur multiple times for one motif
 
     reference_keys = {"RX", "RA", "RT", "RL"}
