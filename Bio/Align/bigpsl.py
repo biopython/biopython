@@ -20,6 +20,7 @@ You are expected to use this module via the Bio.Align functions.
 
 import numpy as np
 
+
 from Bio.Align import Alignment, Alignments
 from Bio.Align import bigbed, psl
 from Bio.Align.bigbed import AutoSQLTable, Field

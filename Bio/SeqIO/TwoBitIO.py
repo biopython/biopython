@@ -78,6 +78,7 @@ except ImportError:
 
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.SeqIO with TwoBit files."
+        "See http://www.numpy.org/"
     ) from None
 
 from Bio.Seq import Seq

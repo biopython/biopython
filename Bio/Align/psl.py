@@ -26,8 +26,8 @@ zero-based end position. We can therefore manipulate ``start`` and
 ``start + size`` as python list slice boundaries.
 """
 from itertools import chain
-
 import numpy as np
+
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces

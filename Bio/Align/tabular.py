@@ -12,12 +12,11 @@ FASTA alignment tools using the '-m 8CB' or '-m 8CC' arguments.
 """
 import re
 import enum
+import numpy as np
 from Bio.Align import Alignment
 from Bio.Align import interfaces
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-
-import numpy as np
 
 
 class State(enum.Enum):

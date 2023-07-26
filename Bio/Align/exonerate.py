@@ -26,9 +26,8 @@ unparsable file.
 
 You are expected to use this module via the Bio.Align functions.
 """
-
-
 import numpy as np
+
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces

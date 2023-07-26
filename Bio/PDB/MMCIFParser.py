@@ -6,9 +6,8 @@
 """mmCIF parsers."""
 
 
-import warnings
-
 import numpy as np
+import warnings
 
 from Bio.File import as_handle
 

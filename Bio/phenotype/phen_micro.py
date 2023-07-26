@@ -27,7 +27,6 @@ Functions:
 import warnings
 import json
 import csv
-
 import numpy as np
 
 from Bio import BiopythonParserWarning

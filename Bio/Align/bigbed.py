@@ -60,8 +60,8 @@ import struct
 import zlib
 from collections import namedtuple
 from io import BytesIO
-
 import numpy as np
+
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
@@ -1189,6 +1189,7 @@ class _ExtraIndex:
 
 
 class _ExtraIndices(list):
+
     formatter = struct.Struct("=HHQ52x")
 
     def __init__(self, names, declaration):
@@ -1241,6 +1242,7 @@ class _ZoomLevel:
 
 
 class _ZoomLevels(list):
+
     bbiResIncrement = 4
     bbiMaxZoomLevels = 10
     size = _ZoomLevel.formatter.size * bbiMaxZoomLevels
@@ -1348,6 +1350,7 @@ class _Region:
 
 
 class _RegionSummary(_Summary):
+
     __slots__ = _Region.__slots__ + _Summary.__slots__
 
     formatter = struct.Struct("=IIIIffff")
@@ -1673,6 +1676,7 @@ class _RedBlackTreeNode:
 
 
 class _RTreeFormatter:
+
     signature = 0x2468ACE0
 
     def __init__(self, byteorder="="):
@@ -2013,9 +2017,11 @@ class _RTreeFormatter:
 
 
 class _BPlusTreeFormatter:
+
     signature = 0x78CA8C91
 
     def __init__(self, byteorder="="):
+
         # Supplemental Table 8: Chromosome B+ tree header
         # magic     4 bytes, unsigned
         # blockSize 4 bytes, unsigned

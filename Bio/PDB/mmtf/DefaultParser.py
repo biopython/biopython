@@ -6,9 +6,8 @@
 # package.
 """Code handle loading mmtf-python into Biopython's structures."""
 
-import numpy as np
-
 from Bio.PDB.StructureBuilder import StructureBuilder
+import numpy as np
 
 
 class StructureDecoder:

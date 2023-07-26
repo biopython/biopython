@@ -14,16 +14,8 @@ Quaternion Characteristic Polynomial, which is used in the algorithm.
 """
 
 
+import numpy as np
 from .qcprotmodule import FastCalcRMSDAndRotation
-
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.PDB.QCPSuperimposer."
-    ) from None
 
 import warnings
 from Bio import BiopythonDeprecationWarning
