@@ -410,7 +410,7 @@ In pairwise centroid-linkage clustering, the distance between two nodes is defin
 
 For pairwise single-, complete-, and average-linkage clustering, the distance between two nodes can be found directly from the distances between the individual items. Therefore, the clustering algorithm does not need access to the original gene expression data, once the distance matrix is known. For pairwise centroid-linkage clustering, however, the centroids of newly formed subnodes can only be calculated from the original data and not from the distance matrix.
 
-The implementation of pairwise single-linkage hierarchical clustering is based on the SLINK algorithm (R. Sibson, 1973), which is much faster and more memory-efficient than a straightforward implementation of pairwise single-linkage clustering. The clustering result produced by this algorithm is identical to the clustering solution found by the conventional single-linkage algorithm. The single-linkage hierarchical clustering algorithm implemented in this library can be used to cluster large gene expression data sets, for which conventional hierarchical clustering algorithms fail due to excessive memory requirements and running time.
+The implementation of pairwise single-linkage hierarchical clustering is based on the SLINK algorithm \cite{sibson1973}, which is much faster and more memory-efficient than a straightforward implementation of pairwise single-linkage clustering. The clustering result produced by this algorithm is identical to the clustering solution found by the conventional single-linkage algorithm. The single-linkage hierarchical clustering algorithm implemented in this library can be used to cluster large gene expression data sets, for which conventional hierarchical clustering algorithms fail due to excessive memory requirements and running time.
 
 \subsection*{Representing a hierarchical clustering solution}
 
@@ -687,7 +687,7 @@ The original matrix \verb|data| can be recreated by calculating \verb|columnmean
 
 \section{Handling Cluster/TreeView-type files}
 
-Cluster/TreeView are GUI-based codes for clustering gene expression data. They were originally written by \href{http://rana.lbl.gov}{Michael Eisen} while at Stanford University. \verb|Bio.Cluster| contains functions for reading and writing data files that correspond to the format specified for Cluster/TreeView. In particular, by saving a clustering result in that format, TreeView can be used to visualize the clustering results. We recommend using Alok Saldanha's \url{http://jtreeview.sourceforge.net/}{Java TreeView program}, which can display hierarchical as well as $k$-means clustering results.
+Cluster/TreeView are GUI-based codes for clustering gene expression data. They were originally written by \href{http://rana.lbl.gov}{Michael Eisen} while at Stanford University \cite{eisen1998}. \verb|Bio.Cluster| contains functions for reading and writing data files that correspond to the format specified for Cluster/TreeView. In particular, by saving a clustering result in that format, TreeView can be used to visualize the clustering results. We recommend using Alok Saldanha's \url{http://jtreeview.sourceforge.net/}{Java TreeView program} \cite{saldanha2004}, which can display hierarchical as well as $k$-means clustering results.
 
 An object of the class \verb|Record| contains all information stored in a Cluster/TreeView-type data file. To store the information contained in the data file in a \verb|Record| object, we first open the file and then read it:
 
