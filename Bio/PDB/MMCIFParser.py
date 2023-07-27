@@ -191,6 +191,8 @@ class MMCIFParser:
                 seq_id_list = mmcif_dict["_atom_site.label_seq_id"]
         else:
             seq_id_list = mmcif_dict["_atom_site.label_seq_id"]
+            icode_list = ["."] * len(icode_list)
+
         # Now loop over atoms and build the structure
         current_chain_id = None
         current_residue_id = None
@@ -488,6 +490,7 @@ class FastMMCIFParser:
                 seq_id_list = mmcif_dict["_atom_site.label_seq_id"]
         else:
             seq_id_list = mmcif_dict["_atom_site.label_seq_id"]
+            icode_list = ["."] * len(icode_list)
 
         # Now loop over atoms and build the structure
         current_chain_id = None
