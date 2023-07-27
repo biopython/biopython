@@ -24,15 +24,7 @@ with Python and other alignment formats.
 from itertools import chain
 import copy
 
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Please install NumPy if you want to use Bio.Align. "
-        "See http://www.numpy.org/"
-    ) from None
+import numpy as np
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces

@@ -274,14 +274,7 @@ import copy
 # from numpy import floor, ndarray
 from numbers import Integral
 
-try:
-    import numpy as np  # type: ignore
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install numpy to build proteins from internal coordinates."
-    )
+import numpy as np  # type: ignore
 
 from Bio.PDB.Atom import Atom, DisorderedAtom
 from Bio.Data.PDBData import protein_letters_3to1

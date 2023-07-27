@@ -10,14 +10,7 @@ import re
 from datetime import date
 from io import StringIO
 
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy to build proteins from internal coordinates."
-    )
+import numpy as np
 
 from Bio.File import as_handle
 from Bio.PDB.StructureBuilder import StructureBuilder

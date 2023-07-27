@@ -71,7 +71,15 @@ methods that allow it to be used as a dictionary.
 #             T - 00, C - 01, A - 10, G - 11. The first base is in the most
 #             significant 2-bit byte; the last base is in the least significan
 #             2 bits. For example, the sequence TCAG is represented as 00011011.
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.SeqIO with TwoBit files."
+        "See http://www.numpy.org/"
+    ) from None
 
 from Bio.Seq import Seq
 from Bio.Seq import SequenceDataAbstractBaseClass

@@ -18,8 +18,9 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.MaxEntropy."
-    )
+        "Please install NumPy if you want to use Bio.MaxEntropy. "
+        "See http://www.numpy.org/"
+    ) from None
 
 
 class MaxEntropy:

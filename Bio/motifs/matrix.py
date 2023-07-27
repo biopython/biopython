@@ -14,14 +14,7 @@ and position-specific scoring matrices.
 import math
 import numbers
 
-try:
-    import numpy as np
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.motifs.matrix."
-    )
+import numpy as np
 
 from Bio.Seq import Seq
 
