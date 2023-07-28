@@ -638,7 +638,6 @@ DN7E_SULAC/3-60             KVRFKYKGEEKEVDTSKIKKVWRVGKMVSFTYDD.NGKTGRGAVSEKDAPKE
 #=GC seq_cons               KVKFKYKGEEKEVDISKIKKVWRVGKMVSFTYDD.NGKTGRGAVSEKDAPKELLsMLuK
 //
 \end{minted}
-
 This is the seed alignment for the 7kD\_DNA\_binding (PF02294.20) PFAM entry, downloaded from the InterPro website (\url{https://www.ebi.ac.uk/interpro/}). This version of the PFAM entry is also available in the Biopython source distribution as the file \verb+pfam2.seed.txt+ in the subdirectory \verb+Tests/Stockholm/+. We can load this file as follows:
 %doctest ../Tests/Stockholm lib:numpy
 \begin{minted}{pycon}
@@ -736,11 +735,11 @@ DN7E_SULACKVRFKYKGEEKEVDTSKIKKVWRVGKMVSFTYDD-NGKTGRGAVSEKDAPKELMDMLAR
 General information of the alignment is stored under the \verb+annotations+ attribute of the \verb+Alignment+ object, for example
 %cont-doctest
 \begin{minted}{pycon}
->>> alignment.annotations['identifier']
+>>> alignment.annotations["identifier"]
 '7kD_DNA_binding'
->>> alignment.annotations['clan']
+>>> alignment.annotations["clan"]
 'CL0049'
->>> alignment.annotations['database references']
+>>> alignment.annotations["database references"]
 [{'reference': 'INTERPRO; IPR003212;'}, {'reference': 'SCOP; 1sso; fa;'}, {'reference': 'SO; 0000417; polypeptide_domain;'}]
 \end{minted}
 The individual sequences in this alignment are stored under \verb|alignment.sequences| as \verb|SeqRecord|s, including any annotations associated with each sequence record:
