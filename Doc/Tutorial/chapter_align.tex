@@ -370,6 +370,7 @@ where \verb|alignments| is either a single alignment or a list of alignments, \v
 \end{minted}
 
 \subsection{Printing alignments}
+\label{subsec:align_printing}
 
 For text (non-binary) formats, you can call Python's built-in \verb|format| function on an alignment to get a string showing the alignment in the requested format, or use \verb|Alignment| objects in formatted (f-) strings. As optional keyword arguments cannot be used with Python's built-in \verb|format| function or with formatted strings, the \verb|Alignment| class has a \verb|format| method with optional arguments to customize the alignment format, as described in the subsections below. When called with an empty string (which is the default), \verb|format| returns a human-readable representation of the alignment (same as when you \verb|print| the alignment).
 
@@ -499,9 +500,6 @@ VHMLNKGKDGAMVFEPASLKVAPGDTVTFIPTDK-GHNVETIKGMIPDG-AE-A-------FKSKINENYKVTFTA---P
 \end{minted}
 Note that \verb|Align.write| returns the number of alignments written (1, in this case).
 
-\subsection{Tabular output from BLAST or FASTA}
-\label{subsec:align_tabular}
-
 \subsection{ClustalW}
 \label{subsec:align_clustal}
 
@@ -590,6 +588,190 @@ gi|6273286|gb|AF191660.1|AF191      TATACATAAAAGAAG...
 \end{minted}
 Use an \verb|Alignments| (plural) object (see section \ref{subsec:align_writing}) if you are creating alignments by hand, and would like to include metadata information in the output.
 
+\subsection{Stockholm}
+\label{subsec:align_stockholm}
+
+This is an example of a protein sequence alignment in the Stockholm file format used by PFAM:
+
+\begin{minted}{text}
+# STOCKHOLM 1.0
+#=GF ID   7kD_DNA_binding
+#=GF AC   PF02294.20
+#=GF DE   7kD DNA-binding domain
+#=GF AU   Mian N;0000-0003-4284-4749
+#=GF AU   Bateman A;0000-0002-6982-4660
+#=GF SE   Pfam-B_8148 (release 5.2)
+#=GF GA   25.00 25.00;
+#=GF TC   26.60 46.20;
+#=GF NC   23.20 19.20;
+#=GF BM   hmmbuild HMM.ann SEED.ann
+#=GF SM   hmmsearch -Z 57096847 -E 1000 --cpu 4 HMM pfamseq
+#=GF TP   Domain
+#=GF CL   CL0049
+#=GF RN   [1]
+#=GF RM   3130377
+#=GF RT   Microsequence analysis of DNA-binding proteins 7a, 7b, and 7e
+#=GF RT   from the archaebacterium Sulfolobus acidocaldarius. 
+#=GF RA   Choli T, Wittmann-Liebold B, Reinhardt R; 
+#=GF RL   J Biol Chem 1988;263:7087-7093.
+#=GF DR   INTERPRO; IPR003212;
+#=GF DR   SCOP; 1sso; fa;
+#=GF DR   SO; 0000417; polypeptide_domain;
+#=GF CC   This family contains members of the hyper-thermophilic
+#=GF CC   archaebacterium  7kD DNA-binding/endoribonuclease P2 family.
+#=GF CC   There are five 7kD DNA-binding proteins, 7a-7e, found as
+#=GF CC   monomers in the cell. Protein 7e shows the  tightest DNA-binding
+#=GF CC   ability.
+#=GF SQ   3
+#=GS DN7_METS5/4-61   AC A4YEA2.1
+#=GS DN7A_SACS2/3-61  AC P61991.2
+#=GS DN7A_SACS2/3-61  DR PDB; 1SSO A; 2-60;
+#=GS DN7A_SACS2/3-61  DR PDB; 1JIC A; 2-60;
+#=GS DN7A_SACS2/3-61  DR PDB; 2CVR A; 2-60;
+#=GS DN7A_SACS2/3-61  DR PDB; 1B4O A; 2-60;
+#=GS DN7E_SULAC/3-60  AC P13125.2
+DN7_METS5/4-61              KIKFKYKGQDLEVDISKVKKVWKVGKMVSFTYDD.NGKTGRGAVSEKDAPKELLNMIGK
+DN7A_SACS2/3-61             TVKFKYKGEEKQVDISKIKKVWRVGKMISFTYDEGGGKTGRGAVSEKDAPKELLQMLEK
+#=GR DN7A_SACS2/3-61  SS    EEEEESSSSEEEEETTTEEEEEESSSSEEEEEE-SSSSEEEEEEETTTS-CHHHHHHTT
+DN7E_SULAC/3-60             KVRFKYKGEEKEVDTSKIKKVWRVGKMVSFTYDD.NGKTGRGAVSEKDAPKELMDMLAR
+#=GC SS_cons                EEEEESSSSEEEEETTTEEEEEESSSSEEEEEE-SSSSEEEEEEETTTS-CHHHHHHTT
+#=GC seq_cons               KVKFKYKGEEKEVDISKIKKVWRVGKMVSFTYDD.NGKTGRGAVSEKDAPKELLsMLuK
+//
+\end{minted}
+
+This is the seed alignment for the 7kD\_DNA\_binding (PF02294.20) PFAM entry, downloaded from the InterPro website (\url{https://www.ebi.ac.uk/interpro/}). This version of the PFAM entry is also available in the Biopython source distribution as the file \verb+pfam2.seed.txt+ in the subdirectory \verb+Tests/Stockholm/+. We can load this file as follows:
+
+%doctest ../Tests/Stockholm lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignment = Align.read("pfam2.seed.txt", "stockholm")
+>>> alignment  # doctest: +ELLIPSIS
+<Alignment object (3 rows x 59 columns) at ...>
+\end{minted}
+
+\noindent We can print out a summary of the alignment:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment)
+DN7_METS5         0 KIKFKYKGQDLEVDISKVKKVWKVGKMVSFTYDD-NGKTGRGAVSEKDAPKELLNMIGK
+DN7A_SACS         0 TVKFKYKGEEKQVDISKIKKVWRVGKMISFTYDEGGGKTGRGAVSEKDAPKELLQMLEK
+DN7E_SULA         0 KVRFKYKGEEKEVDTSKIKKVWRVGKMVSFTYDD-NGKTGRGAVSEKDAPKELMDMLAR
+<BLANKLINE>
+DN7_METS5        58
+DN7A_SACS        59
+DN7E_SULA        58
+<BLANKLINE>
+\end{minted}
+
+You could also call Python's built-in \verb|format| function on the alignment object to show it in a particular file format (see section~\ref{subsec:align_printing} for details), for example in the Stockholm format to regenerate the file:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "stockholm"))
+# STOCKHOLM 1.0
+#=GF ID   7kD_DNA_binding
+#=GF AC   PF02294.20
+#=GF DE   7kD DNA-binding domain
+#=GF AU   Mian N;0000-0003-4284-4749
+#=GF AU   Bateman A;0000-0002-6982-4660
+#=GF SE   Pfam-B_8148 (release 5.2)
+#=GF GA   25.00 25.00;
+#=GF TC   26.60 46.20;
+#=GF NC   23.20 19.20;
+#=GF BM   hmmbuild HMM.ann SEED.ann
+#=GF SM   hmmsearch -Z 57096847 -E 1000 --cpu 4 HMM pfamseq
+#=GF TP   Domain
+#=GF CL   CL0049
+#=GF RN   [1]
+#=GF RM   3130377
+#=GF RT   Microsequence analysis of DNA-binding proteins 7a, 7b, and 7e from
+#=GF RT   the archaebacterium Sulfolobus acidocaldarius.
+#=GF RA   Choli T, Wittmann-Liebold B, Reinhardt R;
+#=GF RL   J Biol Chem 1988;263:7087-7093.
+#=GF DR   INTERPRO; IPR003212;
+#=GF DR   SCOP; 1sso; fa;
+#=GF DR   SO; 0000417; polypeptide_domain;
+#=GF CC   This family contains members of the hyper-thermophilic
+#=GF CC   archaebacterium  7kD DNA-binding/endoribonuclease P2 family. There
+#=GF CC   are five 7kD DNA-binding proteins, 7a-7e, found as monomers in the
+#=GF CC   cell. Protein 7e shows the  tightest DNA-binding ability.
+#=GF SQ   3
+#=GS DN7_METS5/4-61   AC A4YEA2.1
+#=GS DN7A_SACS2/3-61  AC P61991.2
+#=GS DN7A_SACS2/3-61  DR PDB; 1SSO A; 2-60;
+#=GS DN7A_SACS2/3-61  DR PDB; 1JIC A; 2-60;
+#=GS DN7A_SACS2/3-61  DR PDB; 2CVR A; 2-60;
+#=GS DN7A_SACS2/3-61  DR PDB; 1B4O A; 2-60;
+#=GS DN7E_SULAC/3-60  AC P13125.2
+DN7_METS5/4-61                  KIKFKYKGQDLEVDISKVKKVWKVGKMVSFTYDD.NGKTGRGAVSEKDAPKELLNMIGK
+DN7A_SACS2/3-61                 TVKFKYKGEEKQVDISKIKKVWRVGKMISFTYDEGGGKTGRGAVSEKDAPKELLQMLEK
+#=GR DN7A_SACS2/3-61  SS        EEEEESSSSEEEEETTTEEEEEESSSSEEEEEE-SSSSEEEEEEETTTS-CHHHHHHTT
+DN7E_SULAC/3-60                 KVRFKYKGEEKEVDTSKIKKVWRVGKMVSFTYDD.NGKTGRGAVSEKDAPKELMDMLAR
+#=GC SS_cons                    EEEEESSSSEEEEETTTEEEEEESSSSEEEEEE-SSSSEEEEEEETTTS-CHHHHHHTT
+#=GC seq_cons                   KVKFKYKGEEKEVDISKIKKVWRVGKMVSFTYDD.NGKTGRGAVSEKDAPKELLsMLuK
+//
+<BLANKLINE>
+\end{minted}
+or alternatively as aligned FASTA (see section \ref{subsec:align_fasta}):
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "fasta"))
+>DN7_METS5/4-61
+KIKFKYKGQDLEVDISKVKKVWKVGKMVSFTYDD-NGKTGRGAVSEKDAPKELLNMIGK
+>DN7A_SACS2/3-61
+TVKFKYKGEEKQVDISKIKKVWRVGKMISFTYDEGGGKTGRGAVSEKDAPKELLQMLEK
+>DN7E_SULAC/3-60
+KVRFKYKGEEKEVDTSKIKKVWRVGKMVSFTYDD-NGKTGRGAVSEKDAPKELMDMLAR
+<BLANKLINE>
+\end{minted}
+or in the PHYLIP format (see section~\ref{subsec:align_phylip}):
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "phylip"))
+3 59
+DN7_METS5/KIKFKYKGQDLEVDISKVKKVWKVGKMVSFTYDD-NGKTGRGAVSEKDAPKELLNMIGK
+DN7A_SACS2TVKFKYKGEEKQVDISKIKKVWRVGKMISFTYDEGGGKTGRGAVSEKDAPKELLQMLEK
+DN7E_SULACKVRFKYKGEEKEVDTSKIKKVWRVGKMVSFTYDD-NGKTGRGAVSEKDAPKELMDMLAR
+<BLANKLINE>
+\end{minted}
+General information of the alignment is stored under the \verb+annotations+ attribute of the \verb+Alignment+ object, for example
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.annotations['identifier']
+'7kD_DNA_binding'
+>>> alignment.annotations['clan']
+'CL0049'
+>>> alignment.annotations['database references']
+[{'reference': 'INTERPRO; IPR003212;'}, {'reference': 'SCOP; 1sso; fa;'}, {'reference': 'SO; 0000417; polypeptide_domain;'}]
+\end{minted}
+The individual sequences in this alignment are stored under \verb|alignment.sequences| as \verb|SeqRecord|s, including any annotations associated with each sequence record:
+%cont-doctest
+\begin{minted}{pycon}
+>>> for record in alignment.sequences:
+...     print("%s %s %s" % (record.id, record.annotations["accession"], record.dbxrefs))
+...
+DN7_METS5/4-61 A4YEA2.1 []
+DN7A_SACS2/3-61 P61991.2 ['PDB; 1SSO A; 2-60;', 'PDB; 1JIC A; 2-60;', 'PDB; 2CVR A; 2-60;', 'PDB; 1B4O A; 2-60;']
+DN7E_SULAC/3-60 P13125.2 []
+\end{minted}
+The secondary structure of the second sequence (\verb+DN7A_SACS2/3-61+) is stored in the \verb+letter_annotations+ attribute of the \verb+SeqRecord+:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.sequences[0].letter_annotations
+{}
+>>> alignment.sequences[1].letter_annotations
+{'secondary structure': 'EEEEESSSSEEEEETTTEEEEEESSSSEEEEEE-SSSSEEEEEEETTTS-CHHHHHHTT'}
+>>> alignment.sequences[2].letter_annotations
+{}
+\end{minted}
+The consensus sequence and secondary structure are associated with the sequence alignment as a whole, and are therefore stored in the \verb+column_annotations+ attribute of the \verb+Alignment+ object:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.column_annotations  # doctest: +NORMALIZE_WHITESPACE
+{'consensus secondary structure': 'EEEEESSSSEEEEETTTEEEEEESSSSEEEEEE-SSSSEEEEEEETTTS-CHHHHHHTT',
+ 'consensus sequence': 'KVKFKYKGEEKEVDISKIKKVWRVGKMVSFTYDD.NGKTGRGAVSEKDAPKELLsMLuK'}
+\end{minted}
+
 \subsection{EMBOSS}
 \label{subsec:align_emboss}
 
@@ -605,8 +787,8 @@ Use an \verb|Alignments| (plural) object (see section \ref{subsec:align_writing}
 \subsection{Mauve eXtended Multi-FastA (xmfa) format}
 \label{subsec:align_mauve}
 
-\subsection{Stockholm}
-\label{subsec:align_stockholm}
+\subsection{Tabular output from BLAST or FASTA}
+\label{subsec:align_tabular}
 
 \subsection{PHYLIP output files}
 \label{subsec:align_phylip}
