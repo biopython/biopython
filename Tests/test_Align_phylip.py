@@ -519,11 +519,11 @@ Gorilla   AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA
         path = "Phylip/interlaced.phy"
         with open(path) as stream:
             alignments = Align.parse(stream, "phylip")
-            self.check_interlaced(alignments)
+            self.check_sequential_interlaced(alignments)
             alignments.rewind()
-            self.check_interlaced(alignments)
+            self.check_sequential_interlaced(alignments)
         with Align.parse(path, "phylip") as alignments:
-            self.check_interlaced(alignments)
+            self.check_sequential_interlaced(alignments)
         with self.assertRaises(AttributeError):
             alignments._stream
         with Align.parse(path, "phylip") as alignments:
@@ -532,7 +532,24 @@ Gorilla   AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA
             alignments._stream
         self.check_reading_writing(path)
 
-    def check_interlaced(self, alignments):
+    def test_sequential(self):
+        path = "Phylip/sequential.phy"
+        with open(path) as stream:
+            alignments = Align.parse(stream, "phylip")
+            self.check_sequential_interlaced(alignments)
+            alignments.rewind()
+            self.check_sequential_interlaced(alignments)
+        with Align.parse(path, "phylip") as alignments:
+            self.check_sequential_interlaced(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "phylip") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        self.check_reading_writing(path)
+
+    def check_sequential_interlaced(self, alignments):
         alignment = next(alignments)
         with self.assertRaises(StopIteration):
             next(alignments)
@@ -632,11 +649,11 @@ CATH_HUMAN------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK------------FHFKSWMSKHRK
         path = "Phylip/interlaced2.phy"
         with open(path) as stream:
             alignments = Align.parse(stream, "phylip")
-            self.check_interlaced2(alignments)
+            self.check_sequential_interlaced2(alignments)
             alignments.rewind()
-            self.check_interlaced2(alignments)
+            self.check_sequential_interlaced2(alignments)
         with Align.parse(path, "phylip") as alignments:
-            self.check_interlaced2(alignments)
+            self.check_sequential_interlaced2(alignments)
         with self.assertRaises(AttributeError):
             alignments._stream
         with Align.parse(path, "phylip") as alignments:
@@ -645,7 +662,24 @@ CATH_HUMAN------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSLEK------------FHFKSWMSKHRK
             alignments._stream
         self.check_reading_writing(path)
 
-    def check_interlaced2(self, alignments):
+    def test_sequential2(self):
+        path = "Phylip/sequential2.phy"
+        with open(path) as stream:
+            alignments = Align.parse(stream, "phylip")
+            self.check_sequential_interlaced2(alignments)
+            alignments.rewind()
+            self.check_sequential_interlaced2(alignments)
+        with Align.parse(path, "phylip") as alignments:
+            self.check_sequential_interlaced2(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "phylip") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        self.check_reading_writing(path)
+
+    def check_sequential_interlaced2(self, alignments):
         alignment = next(alignments)
         with self.assertRaises(StopIteration):
             next(alignments)
