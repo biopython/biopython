@@ -692,7 +692,7 @@ class CodonAdaptationIndex(dict):
         elif seq_type == "protein":
             aa_seq = seq
         else:
-            raise ValueError("Unsupported seq_type value (use DNA, RNA, or protein)."
+            raise ValueError(f"Allowed seq_types are DNA, RNA or protein, not {seq_type!r}")
         # Un-translate in loop using only preferred codons
         try:
             optimized = "".join(pref_codons[aa] for aa in aa_seq)
