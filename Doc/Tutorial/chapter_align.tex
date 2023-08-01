@@ -359,7 +359,7 @@ To write alignments to a file, use
 >>> target = "myfile.txt"
 >>> Align.write(alignments, target, "clustal")
 \end{minted}
-where \verb|alignments| is either a single alignment or a list of alignments, \verb|target| is a file name or an open file-like object, and \verb|fmt| is the file format. As some file formats allow or require metadata to be stored with the alignments, you may want to use the \verb|Alignments| (plural) class instead of a plain list of alignments. This class inherits from \verb|AlignmentsAbstractBaseClass| as well as from \verb|list|, and can therefore be used as a list, but also allows you to store metadata as attributes on the \verb|alignments| object:
+where \verb|alignments| is either a single alignment or a list of alignments, \verb|target| is a file name or an open file-like object, and \verb|"clustal"| is the file format to be used. As some file formats allow or require metadata to be stored with the alignments, you may want to use the \verb|Alignments| (plural) class instead of a plain list of alignments. This class inherits from \verb|AlignmentsAbstractBaseClass| as well as from \verb|list|, and can therefore be used as a list, but also allows you to store metadata as attributes on the \verb|alignments| object:
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> alignments = Align.Alignments(alignments)
@@ -926,6 +926,73 @@ True
 \subsection{A2M}
 \label{subsec:align_a2m}
 
+A2M files are alignment files created by \verb+align2model+ or \verb+hmmscore+
+in the SAM Sequence Alignment and Modeling Software System~\cite{krogh1994,hughey1996}.  An A2M file contains one multiple alignment. The A2M file format is similar to aligned FASTA (see section \ref{subsec:align_fasta}). However, to distinguish insertions from deletions, A2M uses both dashes and periods to represent gaps, and both upper and lower case characters in the aligned sequences.
+Matches are represented by upper case letters and deletions by dashes in alignment columns containing matches or deletions only. Insertions are represented by lower case letters, with gaps aligned to the insertion shown as periods.  Header lines start with "\verb+>+" followed by the name of the sequence, and optionally a description.
+
+The file \verb+probcons.a2m+ in Biopython's test suite is an example of an A2M file (see section \ref{subsec:align_fasta} for the same alignment in aligned FASTA format):
+\begin{minted}{text}
+>plas_horvu
+D.VLLGANGGVLVFEPNDFSVKAGETITFKNNAGYPHNVVFDEDAVPSG.VD.VSKISQEEYLTAPGETFSVTLTV...PGTYGFYCEPHAGAGMVGKVT
+V
+>plas_chlre
+-.VKLGADSGALEFVPKTLTIKSGETVNFVNNAGFPHNIVFDEDAIPSG.VN.ADAISRDDYLNAPGETYSVKLTA...AGEYGYYCEPHQGAGMVGKII
+V
+>plas_anava
+-.VKLGSDKGLLVFEPAKLTIKPGDTVEFLNNKVPPHNVVFDAALNPAKsADlAKSLSHKQLLMSPGQSTSTTFPAdapAGEYTFYCEPHRGAGMVGKIT
+V
+>plas_proho
+VqIKMGTDKYAPLYEPKALSISAGDTVEFVMNKVGPHNVIFDK--VPAG.ES.APALSNTKLRIAPGSFYSVTLGT...PGTYSFYCTPHRGAGMVGTIT
+V
+>azup_achcy
+VhMLNKGKDGAMVFEPASLKVAPGDTVTFIPTDK-GHNVETIKGMIPDG.AE.A-------FKSKINENYKVTFTA...PGVYGVKCTPHYGMGMVGVVE
+V
+\end{minted}
+To parse this alignment, use
+%doctest ../Tests/Clustalw lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignment = Align.read("probcons.a2m", "a2m")
+>>> alignment  # doctest: +ELLIPSIS
+<Alignment object (5 rows x 101 columns) at ...>
+>>> print(alignment)  # doctest: +NORMALIZE_WHITESPACE
+plas_horv         0 D-VLLGANGGVLVFEPNDFSVKAGETITFKNNAGYPHNVVFDEDAVPSG-VD-VSKISQE
+plas_chlr         0 --VKLGADSGALEFVPKTLTIKSGETVNFVNNAGFPHNIVFDEDAIPSG-VN-ADAISRD
+plas_anav         0 --VKLGSDKGLLVFEPAKLTIKPGDTVEFLNNKVPPHNVVFDAALNPAKSADLAKSLSHK
+plas_proh         0 VQIKMGTDKYAPLYEPKALSISAGDTVEFVMNKVGPHNVIFDK--VPAG-ES-APALSNT
+azup_achc         0 VHMLNKGKDGAMVFEPASLKVAPGDTVTFIPTDK-GHNVETIKGMIPDG-AE-A------
+<BLANKLINE>
+plas_horv        57 EYLTAPGETFSVTLTV---PGTYGFYCEPHAGAGMVGKVTV 95
+plas_chlr        56 DYLNAPGETYSVKLTA---AGEYGYYCEPHQGAGMVGKIIV 94
+plas_anav        58 QLLMSPGQSTSTTFPADAPAGEYTFYCEPHRGAGMVGKITV 99
+plas_proh        56 KLRIAPGSFYSVTLGT---PGTYSFYCTPHRGAGMVGTITV 94
+azup_achc        51 -FKSKINENYKVTFTA---PGVYGVKCTPHYGMGMVGVVEV 88
+<BLANKLINE>
+\end{minted}
+The parser analyzes the pattern of dashes, periods, and lower and upper case letters in the A2M file to determine if a column is an match/mismatch/deletion ("\verb|D|") or an insertion ("\verb|I|"). This information is stored under the \verb+match+ key of the \verb+alignment.column_annotations+ dictionary:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.column_annotations
+{'state': 'DIDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDIDDIDDDDDDDDDDDDDDDDDDDDDDDIIIDDDDDDDDDDDDDDDDDDDDDD'}
+\end{minted}
+As the state information is stored in the \verb+alignment+, we can print the alignment in the A2M format:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "a2m"))
+>plas_horvu
+D.VLLGANGGVLVFEPNDFSVKAGETITFKNNAGYPHNVVFDEDAVPSG.VD.VSKISQEEYLTAPGETFSVTLTV...PGTYGFYCEPHAGAGMVGKVTV
+>plas_chlre
+-.VKLGADSGALEFVPKTLTIKSGETVNFVNNAGFPHNIVFDEDAIPSG.VN.ADAISRDDYLNAPGETYSVKLTA...AGEYGYYCEPHQGAGMVGKIIV
+>plas_anava
+-.VKLGSDKGLLVFEPAKLTIKPGDTVEFLNNKVPPHNVVFDAALNPAKsADlAKSLSHKQLLMSPGQSTSTTFPAdapAGEYTFYCEPHRGAGMVGKITV
+>plas_proho
+VqIKMGTDKYAPLYEPKALSISAGDTVEFVMNKVGPHNVIFDK--VPAG.ES.APALSNTKLRIAPGSFYSVTLGT...PGTYSFYCTPHRGAGMVGTITV
+>azup_achcy
+VhMLNKGKDGAMVFEPASLKVAPGDTVTFIPTDK-GHNVETIKGMIPDG.AE.A-------FKSKINENYKVTFTA...PGVYGVKCTPHYGMGMVGVVEV
+<BLANKLINE>
+\end{minted}
+Similarly, the alignment can be written in the A2M format to an output file using \verb|Align.write| (see section~\ref{subsec:align_writing}).
+
 \subsection{Mauve eXtended Multi-FastA (xmfa) format}
 \label{subsec:align_mauve}
 
@@ -1104,7 +1171,7 @@ mm9.fa           19 CTGGCGTCCGGAGCTGGGACGT 41
 ******
 \end{minted}
 
-To print the alignments in Mauve format, use \verb|Align.write|:
+To output the alignments in Mauve format, use \verb|Align.write|:
 %cont-doctest
 \begin{minted}{pycon}
 >>> from io import StringIO
