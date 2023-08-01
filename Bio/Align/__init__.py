@@ -3350,8 +3350,8 @@ class AlignmentsAbstractBaseClass(ABC):
 
 
 class Alignments(AlignmentsAbstractBaseClass, list):  # noqa: D101
-    def __init__(self):  # noqa: D107
-        super().__init__()
+    def __init__(self, alignments=()):  # noqa: D107
+        super().__init__(alignments)
         self._index = -1
 
     def __next__(self):

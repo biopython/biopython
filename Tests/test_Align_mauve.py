@@ -25,13 +25,16 @@ except ImportError:
 
 
 class TestCombinedFile(unittest.TestCase):
-    def setUp(self):
-        filename = "combined.fa"
-        path = os.path.join("Mauve", filename)
-        records = SeqIO.parse(path, "fasta")
-        self.sequences = {
-            str(index): record.seq for index, record in enumerate(records)
-        }
+    # Generate the output file combined.xmfa by running
+    # progressiveMauve combined.fa --output=combined.xmfa
+
+    filename = "combined.fa"
+    path = os.path.join("Mauve", filename)
+    records = SeqIO.parse(path, "fasta")
+    sequences = {str(index): record.seq for index, record in enumerate(records)}
+    del filename
+    del path
+    del records
 
     def test_parse(self):
         path = os.path.join("Mauve", "combined.xmfa")
@@ -432,14 +435,19 @@ numpy.array([['C']], dtype='U')
         self.assertEqual(output.read(), data)
 
 
-class TestDSeparateFiles(unittest.TestCase):
-    def setUp(self):
-        self.sequences = {}
-        for species in ("equCab1", "canFam2", "mm9"):
-            filename = f"{species}.fa"
-            path = os.path.join("Mauve", filename)
-            record = SeqIO.read(path, "fasta")
-            self.sequences[filename] = record.seq
+class TestSeparateFiles(unittest.TestCase):
+    # Generate the output file separate.xmfa by running
+    # progressiveMauve --solid-seeds equCab1.fa canFam2.fa mm9.fa --output=separate.xmfa
+
+    sequences = {}
+    for species in ("equCab1", "canFam2", "mm9"):
+        filename = f"{species}.fa"
+        path = os.path.join("Mauve", filename)
+        record = SeqIO.read(path, "fasta")
+        sequences[filename] = record.seq
+        del filename
+        del path
+        del record
 
     def test_parse(self):
         path = os.path.join("Mauve", "separate.xmfa")
@@ -456,20 +464,23 @@ class TestDSeparateFiles(unittest.TestCase):
             self.assertEqual(len(alignment), 3)
             self.assertEqual(len(alignment.sequences), 3)
             self.assertEqual(alignment.sequences[0].id, "equCab1.fa")
-            self.assertEqual(alignment.sequences[0].seq, "")
+            self.assertEqual(
+                alignment.sequences[0].seq,
+                Seq("GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA"),
+            )
             start = alignment.coordinates[0, 0]
             end = alignment.coordinates[0, -1]
-            self.assertEqual(start, 0)
+            self.assertEqual(start, 50)
             self.assertEqual(end, 0)
             self.assertEqual(alignment.sequences[1].id, "canFam2.fa")
             self.assertEqual(
-                repr(alignment.sequences[1].seq),
-                "Seq({25: 'GTCCCGGGCCCTGCTTTCCTTTTC'}, length=49)",
+                alignment.sequences[1].seq,
+                Seq("CAAGCCCTGCGCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTTC"),
             )
             start = alignment.coordinates[1, 0]
             end = alignment.coordinates[1, -1]
             sequence = self.sequences[alignment.sequences[1].id]
-            self.assertEqual(start, 25)
+            self.assertEqual(start, 0)
             self.assertEqual(end, 49)
             self.assertEqual(alignment.sequences[1].seq[start:end], sequence[start:end])
             self.assertEqual(alignment.sequences[2].id, "mm9.fa")
@@ -478,83 +489,46 @@ class TestDSeparateFiles(unittest.TestCase):
             start = len(sequence) - alignment.coordinates[2, 0]
             end = len(sequence) - alignment.coordinates[2, -1]
             self.assertEqual(start, 0)
-            self.assertEqual(end, 24)
+            self.assertEqual(end, 19)
             sequence = self.sequences[alignment.sequences[2].id][start:end]
             self.assertEqual(alignment.sequences[2].seq[start:end], sequence)
-            self.assertEqual(alignment[0], "------------------------")
-            self.assertEqual(alignment[1], "GTCCCGGGCCCTGCTTTCCTTTTC")
-            self.assertEqual(alignment[2], "GCCAGGGATCTACTTTTCCTCTTC")
+            self.assertEqual(
+                alignment[0], "TAAGCCCTCCTAGCACACACCCGGAGTGGCC-GGGCCGTAC-TTTCCTTTTC"
+            )
+            self.assertEqual(
+                alignment[1], "CAAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGC-TTTCCTTTTC"
+            )
+            self.assertEqual(
+                alignment[2], "---------------------------------GGATCTACTTTTCCTCTTC"
+            )
             self.assertEqual(
                 str(alignment),
                 """\
-equCab1.f         0 ------------------------  0
-canFam2.f        25 GTCCCGGGCCCTGCTTTCCTTTTC 49
-mm9.fa           24 GCCAGGGATCTACTTTTCCTCTTC  0
+equCab1.f        50 TAAGCCCTCCTAGCACACACCCGGAGTGGCC-GGGCCGTAC-TTTCCTTTTC  0
+canFam2.f         0 CAAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGC-TTTCCTTTTC 49
+mm9.fa           19 ---------------------------------GGATCTACTTTTCCTCTTC  0
 """,
             )
             self.assertTrue(
                 numpy.array_equal(
                     alignment.coordinates,
-                    numpy.array([[0, 0], [25, 49], [24, 0]]),
-                )
-            )
-            self.assertEqual(
-                alignment.format("mauve", metadata, identifiers),
-                """\
-> 1:0-0 + equCab1.fa
-------------------------
-> 2:26-49 + canFam2.fa
-GTCCCGGGCCCTGCTTTCCTTTTC
-> 3:1-24 - mm9.fa
-GCCAGGGATCTACTTTTCCTCTTC
-=
-""",
-            )
-            self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
                     # fmt: off
 # flake8: noqa
-numpy.array([['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-             ['G', 'T', 'C', 'C', 'C', 'G', 'G', 'G', 'C', 'C', 'C', 'T', 'G',
-              'C', 'T', 'T', 'T', 'C', 'C', 'T', 'T', 'T', 'T', 'C'],
-             ['G', 'C', 'C', 'A', 'G', 'G', 'G', 'A', 'T', 'C', 'T', 'A', 'C',
-              'T', 'T', 'T', 'T', 'C', 'C', 'T', 'C', 'T', 'T', 'C']],
-            dtype='U')
+                    numpy.array([[50, 40, 38, 19, 19, 18, 10, 10,  0],
+                                 [ 0, 10, 10, 29, 30, 31, 39, 39, 49],
+                                 [19, 19, 19, 19, 19, 19, 11, 10,  0]]),
                     # fmt: on
                 )
             )
-            alignment = next(alignments)
-            saved_alignments.append(alignment)
-            self.assertEqual(len(alignment), 1)
-            self.assertEqual(len(alignment.sequences), 1)
-            self.assertEqual(alignment.sequences[0].id, "equCab1.fa")
-            self.assertEqual(
-                alignment.sequences[0].seq,
-                "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA",
-            )
-            sequence = self.sequences[alignment.sequences[0].id]
-            start = alignment.coordinates[0, 0]
-            end = alignment.coordinates[0, -1]
-            self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
-            self.assertEqual(
-                alignment[0], "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA"
-            )
-            self.assertTrue(
-                numpy.array_equal(alignment.coordinates, numpy.array([[0, 50]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
-equCab1.f         0 GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA 50
-""",
-            )
             self.assertEqual(
                 alignment.format("mauve", metadata, identifiers),
                 """\
-> 1:1-50 + equCab1.fa
-GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA
+> 1:1-50 - equCab1.fa
+TAAGCCCTCCTAGCACACACCCGGAGTGGCC-GGGCCGTAC-TTTCCTTTTC
+> 2:1-49 + canFam2.fa
+CAAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGC-TTTCCTTTTC
+> 3:1-19 - mm9.fa
+---------------------------------GGATCTACTTTTCCTCTTC
 =
 """,
             )
@@ -563,49 +537,18 @@ GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA
                     numpy.array(alignment, "U"),
                     # fmt: off
 # flake8: noqa
-numpy.array([['G', 'A', 'A', 'A', 'A', 'G', 'G', 'A', 'A', 'A', 'G', 'T', 'A',
-              'C', 'G', 'G', 'C', 'C', 'C', 'G', 'G', 'C', 'C', 'A', 'C', 'T',
-              'C', 'C', 'G', 'G', 'G', 'T', 'G', 'T', 'G', 'T', 'G', 'C', 'T',
-              'A', 'G', 'G', 'A', 'G', 'G', 'G', 'C', 'T', 'T', 'A']],
-            dtype='U')
-                    # fmt: on
-                )
-            )
-            alignment = next(alignments)
-            saved_alignments.append(alignment)
-            self.assertEqual(len(alignment), 1)
-            self.assertEqual(len(alignment.sequences), 1)
-            self.assertEqual(alignment.sequences[0].id, "canFam2.fa")
-            self.assertEqual(alignment.sequences[0].seq, "CAAGCCCTGCGCGCTCAGCCGGAGT")
-            sequence = self.sequences[alignment.sequences[0].id]
-            start = alignment.coordinates[0, 0]
-            end = alignment.coordinates[0, -1]
-            self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
-            self.assertEqual(alignment[0], "CAAGCCCTGCGCGCTCAGCCGGAGT")
-            self.assertTrue(
-                numpy.array_equal(alignment.coordinates, numpy.array([[0, 25]]))
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
-canFam2.f         0 CAAGCCCTGCGCGCTCAGCCGGAGT 25
-""",
-            )
-            self.assertEqual(
-                alignment.format("mauve", metadata, identifiers),
-                """\
-> 2:1-25 + canFam2.fa
-CAAGCCCTGCGCGCTCAGCCGGAGT
-=
-""",
-            )
-            self.assertTrue(
-                numpy.array_equal(
-                    numpy.array(alignment, "U"),
-                    # fmt: off
-# flake8: noqa
-numpy.array([['C', 'A', 'A', 'G', 'C', 'C', 'C', 'T', 'G', 'C', 'G', 'C', 'G',
-              'C', 'T', 'C', 'A', 'G', 'C', 'C', 'G', 'G', 'A', 'G', 'T']],
+numpy.array([['T', 'A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G',
+              'C', 'A', 'C', 'A', 'C', 'A', 'C', 'C', 'C', 'G', 'G', 'A', 'G',
+              'T', 'G', 'G', 'C', 'C', '-', 'G', 'G', 'G', 'C', 'C', 'G', 'T',
+              'A', 'C', '-', 'T', 'T', 'T', 'C', 'C', 'T', 'T', 'T', 'T', 'C'],
+             ['C', 'A', 'A', 'G', 'C', 'C', 'C', 'T', 'G', 'C', '-', '-', 'G',
+              'C', 'G', 'C', 'T', 'C', 'A', 'G', 'C', 'C', 'G', 'G', 'A', 'G',
+              'T', 'G', 'T', 'C', 'C', 'C', 'G', 'G', 'G', 'C', 'C', 'C', 'T',
+              'G', 'C', '-', 'T', 'T', 'T', 'C', 'C', 'T', 'T', 'T', 'T', 'C'],
+             ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+              '-', '-', '-', '-', '-', '-', '-', 'G', 'G', 'A', 'T', 'C', 'T',
+              'A', 'C', 'T', 'T', 'T', 'T', 'C', 'C', 'T', 'C', 'T', 'T', 'C']],
             dtype='U')
                     # fmt: on
                 )
@@ -615,31 +558,29 @@ numpy.array([['C', 'A', 'A', 'G', 'C', 'C', 'C', 'T', 'G', 'C', 'G', 'C', 'G',
             self.assertEqual(len(alignment), 1)
             self.assertEqual(len(alignment.sequences), 1)
             self.assertEqual(alignment.sequences[0].id, "mm9.fa")
-            sequence = self.sequences[alignment.sequences[0].id]
-            start = alignment.coordinates[0, 0]
-            end = alignment.coordinates[0, -1]
-            self.assertEqual(start, 24)
-            self.assertEqual(end, 41)
-            self.assertEqual(alignment.sequences[0].seq[start:end], "GTCCGGAGCTGGGACGT")
+            self.assertEqual(
+                repr(alignment.sequences[0].seq),
+                "Seq({19: 'CTGGCGTCCGGAGCTGGGACGT'}, length=41)",
+            )
             sequence = self.sequences[alignment.sequences[0].id]
             start = alignment.coordinates[0, 0]
             end = alignment.coordinates[0, -1]
             self.assertEqual(alignment.sequences[0].seq[start:end], sequence[start:end])
-            self.assertEqual(alignment[0], "GTCCGGAGCTGGGACGT")
+            self.assertEqual(alignment[0], "CTGGCGTCCGGAGCTGGGACGT")
+            self.assertTrue(
+                numpy.array_equal(alignment.coordinates, numpy.array([[19, 41]]))
+            )
             self.assertEqual(
                 str(alignment),
                 """\
-mm9.fa           24 GTCCGGAGCTGGGACGT 41
+mm9.fa           19 CTGGCGTCCGGAGCTGGGACGT 41
 """,
-            )
-            self.assertTrue(
-                numpy.array_equal(alignment.coordinates, numpy.array([[24, 41]]))
             )
             self.assertEqual(
                 alignment.format("mauve", metadata, identifiers),
                 """\
-> 3:25-41 + mm9.fa
-GTCCGGAGCTGGGACGT
+> 3:20-41 + mm9.fa
+CTGGCGTCCGGAGCTGGGACGT
 =
 """,
             )
@@ -648,15 +589,15 @@ GTCCGGAGCTGGGACGT
                     numpy.array(alignment, "U"),
                     # fmt: off
 # flake8: noqa
-numpy.array([['G', 'T', 'C', 'C', 'G', 'G', 'A', 'G', 'C', 'T', 'G', 'G', 'G',
-              'A', 'C', 'G', 'T']], dtype='U')
+numpy.array([['C', 'T', 'G', 'G', 'C', 'G', 'T', 'C', 'C', 'G', 'G',
+              'A', 'G', 'C', 'T', 'G', 'G', 'G', 'A', 'C', 'G', 'T']], dtype='U')
                     # fmt: on
                 )
             )
             self.assertRaises(StopIteration, next, alignments)
         # As each nucleotide in each sequence is stored exactly once in an XMFA
         # file, we can reconstitute the full sequences:
-        self.assertEqual(len(saved_alignments), 4)
+        self.assertEqual(len(saved_alignments), 2)
         filenames = []
         for alignment in saved_alignments:
             for record in alignment.sequences:
@@ -697,26 +638,20 @@ numpy.array([['G', 'T', 'C', 'C', 'G', 'G', 'A', 'G', 'C', 'T', 'G', 'G', 'G',
         for record in alignment.sequences:
             filename = record.id
             record.seq = sequences[filename]
-            self.assertEqual(alignment[0], "------------------------")
-            self.assertEqual(alignment[1], "GTCCCGGGCCCTGCTTTCCTTTTC")
-            self.assertEqual(alignment[2], "GCCAGGGATCTACTTTTCCTCTTC")
+            self.assertEqual(
+                alignment[0], "TAAGCCCTCCTAGCACACACCCGGAGTGGCC-GGGCCGTAC-TTTCCTTTTC"
+            )
+            self.assertEqual(
+                alignment[1], "CAAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGC-TTTCCTTTTC"
+            )
+            self.assertEqual(
+                alignment[2], "---------------------------------GGATCTACTTTTCCTCTTC"
+            )
         alignment = saved_alignments[1]
         for record in alignment.sequences:
             filename = record.id
             record.seq = sequences[filename]
-            self.assertEqual(
-                alignment[0], "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA"
-            )
-        alignment = saved_alignments[2]
-        for record in alignment.sequences:
-            filename = record.id
-            record.seq = sequences[filename]
-            self.assertEqual(alignment[0], "CAAGCCCTGCGCGCTCAGCCGGAGT")
-        alignment = saved_alignments[3]
-        for record in alignment.sequences:
-            filename = record.id
-            record.seq = sequences[filename]
-            self.assertEqual(alignment[0], "GTCCGGAGCTGGGACGT")
+            self.assertEqual(alignment[0], "CTGGCGTCCGGAGCTGGGACGT")
 
     def test_write_read(self):
         path = os.path.join("Mauve", "separate.xmfa")
@@ -729,7 +664,7 @@ numpy.array([['G', 'T', 'C', 'C', 'G', 'G', 'A', 'G', 'C', 'T', 'G', 'G', 'G',
         alignments = Align.parse(stream, "mauve")
         output = StringIO()
         n = Align.write(alignments, output, "mauve")
-        self.assertEqual(n, 4)
+        self.assertEqual(n, 2)
         output.seek(0)
         self.assertEqual(output.read(), data)
 
