@@ -917,11 +917,6 @@ True
 \subsection{Nexus}
 \label{subsec:align_nexus}
 
-\subsection{Mauve eXtended Multi-FastA (xmfa) format}
-\label{subsec:align_mauve}
-
-Mauve~\cite{darling2004} is a software package for constructing multiple genome alignments.
-
 \subsection{Tabular output from BLAST or FASTA}
 \label{subsec:align_tabular}
 
@@ -930,6 +925,299 @@ Mauve~\cite{darling2004} is a software package for constructing multiple genome 
 
 \subsection{A2M}
 \label{subsec:align_a2m}
+
+\subsection{Mauve eXtended Multi-FastA (xmfa) format}
+\label{subsec:align_mauve}
+
+Mauve~\cite{darling2004} is a software package for constructing multiple genome alignments. These alignments are stored in the eXtended Multi-FastA (xmfa) format.
+Depending on how exactly \verb|progressiveMauve| (the aligner program in Mauve) was called, the xmfa format is slightly different.
+
+If \verb|progressiveMauve| is called with a single sequence input file, as in
+\begin{minted}{text}
+progressiveMauve combined.fasta  --output=combined.xmfa ...
+\end{minted}
+where \verb|combined.fasta| contains the genome sequences:
+\begin{minted}{text}
+>equCab1
+GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA
+>mm9
+GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT
+>canFam2
+CAAGCCCTGCGCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTTC
+\end{minted}
+then the output file \verb|combined.xmfa| is as follows:
+\begin{minted}{text}
+#FormatVersion Mauve1
+#Sequence1File	combined.fa
+#Sequence1Entry	1
+#Sequence1Format	FastA
+#Sequence2File	combined.fa
+#Sequence2Entry	2
+#Sequence2Format	FastA
+#Sequence3File	combined.fa
+#Sequence3Entry	3
+#Sequence3Format	FastA
+#BackboneFile	combined.xmfa.bbcols
+> 1:2-49 - combined.fa
+AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT
+> 2:0-0 + combined.fa
+-------------------------------------------------
+> 3:2-48 + combined.fa
+AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT
+=
+> 1:1-1 + combined.fa
+G
+=
+> 1:50-50 + combined.fa
+A
+=
+> 2:1-41 + combined.fa
+GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT
+=
+> 3:1-1 + combined.fa
+C
+=
+> 3:49-49 + combined.fa
+C
+=
+\end{minted}
+with numbers (1, 2, 3) referring to the input genome sequences for horse (\verb+equCab1+), mouse (\verb+mm9+), and dog (\verb+canFam2+), respectively.
+This xmfa file consists of six alignment blocks, separated by \verb|=| characters. Use \verb|Align.parse| to extract these alignments:
+%doctest ../Tests/Mauve lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("combined.xmfa", "mauve")
+\end{minted}
+The file header data are stored in the \verb|metadata| attribute:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.metadata  # doctest: +NORMALIZE_WHITESPACE
+{'FormatVersion': 'Mauve1',
+ 'BackboneFile': 'combined.xmfa.bbcols',
+ 'File': 'combined.fa'}
+\end{minted}
+The \verb|identifiers| attribute stores the sequence identifiers for the three sequences, which in this case is the three numbers:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.identifiers
+['0', '1', '2']
+\end{minted}
+These identifiers are used in the individual alignments:
+%cont-doctest
+\begin{minted}{pycon}
+>>> for alignment in alignments:
+...     print([record.id for record in alignment.sequences])
+...     print(alignment)
+...     print("******")
+...
+['0', '1', '2']
+0                49 AAGCCCTCCTAGCACACACCCGGAGTGG-CCGGGCCGTACTTTCCTTTT  1
+1                 0 -------------------------------------------------  0
+2                 1 AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT 48
+<BLANKLINE>
+******
+['0']
+0                 0 G 1
+<BLANKLINE>
+******
+['0']
+0                49 A 50
+<BLANKLINE>
+******
+['1']
+1                 0 GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT 41
+<BLANKLINE>
+******
+['2']
+2                 0 C 1
+<BLANKLINE>
+******
+['2']
+2                48 C 49
+<BLANKLINE>
+******
+\end{minted}
+Note that only the first block is a real alignment; the other blocks contain only a single sequence. By including these blocks, the xmfa file contains the full sequence that was provided in the \verb|combined.fa| input file.
+
+If \verb|progressiveMauve| is called with a separate input file for each genome, as in
+\begin{minted}{text}
+progressiveMauve equCab1.fa canFam2.fa mm9.fa --output=separate.xmfa ...
+\end{minted}
+where each Fasta file contains the genome sequence for one species only, then the output file \verb|separate.xmfa| is as follows:
+\begin{minted}{text}
+#FormatVersion Mauve1
+#Sequence1File	equCab1.fa
+#Sequence1Format	FastA
+#Sequence2File	canFam2.fa
+#Sequence2Format	FastA
+#Sequence3File	mm9.fa
+#Sequence3Format	FastA
+#BackboneFile	separate.xmfa.bbcols
+> 1:1-50 - equCab1.fa
+TAAGCCCTCCTAGCACACACCCGGAGTGGCC-GGGCCGTAC-TTTCCTTTTC
+> 2:1-49 + canFam2.fa
+CAAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGC-TTTCCTTTTC
+> 3:1-19 - mm9.fa
+---------------------------------GGATCTACTTTTCCTCTTC
+=
+> 3:20-41 + mm9.fa
+CTGGCGTCCGGAGCTGGGACGT
+=
+\end{minted}
+The identifiers \verb+equCab1+ for horse, \verb+mm9+ for mouse, and \verb+canFam2+ for dog are now shown explicitly in the output file.
+This xmfa file consists of two alignment blocks, separated by \verb|=| characters. Use \verb|Align.parse| to extract these alignments:
+%doctest ../Tests/Mauve lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("separate.xmfa", "mauve")
+\end{minted}
+The file header data now does not include the input file name:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.metadata  # doctest: +NORMALIZE_WHITESPACE
+{'FormatVersion': 'Mauve1',
+ 'BackboneFile': 'separate.xmfa.bbcols'}
+\end{minted}
+The \verb|identifiers| attribute stores the sequence identifiers for the three sequences:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.identifiers
+['equCab1.fa', 'canFam2.fa', 'mm9.fa']
+\end{minted}
+These identifiers are used in the individual alignments:
+%cont-doctest
+\begin{minted}{pycon}
+>>> for alignment in alignments:
+...     print([record.id for record in alignment.sequences])
+...     print(alignment)
+...     print("******")
+...
+['equCab1.fa', 'canFam2.fa', 'mm9.fa']
+equCab1.f        50 TAAGCCCTCCTAGCACACACCCGGAGTGGCC-GGGCCGTAC-TTTCCTTTTC  0
+canFam2.f         0 CAAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGC-TTTCCTTTTC 49
+mm9.fa           19 ---------------------------------GGATCTACTTTTCCTCTTC  0
+<BLANKLINE>
+******
+['mm9.fa']
+mm9.fa           19 CTGGCGTCCGGAGCTGGGACGT 41
+<BLANKLINE>
+******
+\end{minted}
+
+To print the alignments in Mauve format, use \verb|Align.write|:
+%cont-doctest
+\begin{minted}{pycon}
+>>> from io import StringIO
+>>> stream = StringIO()
+>>> alignments = Align.parse("separate.xmfa", "mauve")
+>>> Align.write(alignments, stream, "mauve")
+2
+>>> print(stream.getvalue())  # doctest: +NORMALIZE_WHITESPACE
+#FormatVersion Mauve1
+#Sequence1File	equCab1.fa
+#Sequence1Format	FastA
+#Sequence2File	canFam2.fa
+#Sequence2Format	FastA
+#Sequence3File	mm9.fa
+#Sequence3Format	FastA
+#BackboneFile	separate.xmfa.bbcols
+> 1:1-50 - equCab1.fa
+TAAGCCCTCCTAGCACACACCCGGAGTGGCC-GGGCCGTAC-TTTCCTTTTC
+> 2:1-49 + canFam2.fa
+CAAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGC-TTTCCTTTTC
+> 3:1-19 - mm9.fa
+---------------------------------GGATCTACTTTTCCTCTTC
+=
+> 3:20-41 + mm9.fa
+CTGGCGTCCGGAGCTGGGACGT
+=
+<BLANKLINE>
+\end{minted}
+Here, the writer makes use of the information stored in \verb+alignments.metadata+ and \verb+alignments.identifiers+ to create this format.
+If your \verb|alignments| object does not have these attributes, you can provide them as keyword arguments to \verb+Align.write+:
+%cont-doctest
+\begin{minted}{pycon}
+>>> stream = StringIO()
+>>> alignments = Align.parse("separate.xmfa", "mauve")
+>>> metadata = alignments.metadata
+>>> identifiers = alignments.identifiers
+>>> alignments = list(alignments)  # this drops the attributes
+>>> alignments.metadata  # doctest: +ELLIPSIS
+Traceback (most recent call last):
+ ...
+AttributeError: 'list' object has no attribute 'metadata'
+>>> alignments.identifiers  # doctest: +ELLIPSIS
+Traceback (most recent call last):
+ ...
+AttributeError: 'list' object has no attribute 'identifiers'
+>>> Align.write(alignments, stream, "mauve", metadata=metadata, identifiers=identifiers)
+2
+>>> print(stream.getvalue())  # doctest: +NORMALIZE_WHITESPACE
+#FormatVersion Mauve1
+#Sequence1File	equCab1.fa
+#Sequence1Format	FastA
+#Sequence2File	canFam2.fa
+#Sequence2Format	FastA
+#Sequence3File	mm9.fa
+#Sequence3Format	FastA
+#BackboneFile	separate.xmfa.bbcols
+> 1:1-50 - equCab1.fa
+TAAGCCCTCCTAGCACACACCCGGAGTGGCC-GGGCCGTAC-TTTCCTTTTC
+> 2:1-49 + canFam2.fa
+CAAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGC-TTTCCTTTTC
+> 3:1-19 - mm9.fa
+---------------------------------GGATCTACTTTTCCTCTTC
+=
+> 3:20-41 + mm9.fa
+CTGGCGTCCGGAGCTGGGACGT
+=
+<BLANKLINE>
+\end{minted}
+Python does not allow you to add these attributes to the \verb+alignments+ object directly, as in this example it was converted to a plain list.
+However, you can construct an \verb|Alignments| object (which inherits from \verb+list+) and add the attributes to it:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments = Align.Alignments(alignments)
+>>> alignments.metadata = metadata
+>>> alignments.identifiers = identifiers
+>>> stream = StringIO()
+>>> Align.write(alignments, stream, "mauve", metadata=metadata, identifiers=identifiers)
+2
+>>> print(stream.getvalue())  # doctest: +NORMALIZE_WHITESPACE
+#FormatVersion Mauve1
+#Sequence1File	equCab1.fa
+#Sequence1Format	FastA
+#Sequence2File	canFam2.fa
+#Sequence2Format	FastA
+#Sequence3File	mm9.fa
+#Sequence3Format	FastA
+#BackboneFile	separate.xmfa.bbcols
+> 1:1-50 - equCab1.fa
+TAAGCCCTCCTAGCACACACCCGGAGTGGCC-GGGCCGTAC-TTTCCTTTTC
+> 2:1-49 + canFam2.fa
+CAAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGC-TTTCCTTTTC
+> 3:1-19 - mm9.fa
+---------------------------------GGATCTACTTTTCCTCTTC
+=
+> 3:20-41 + mm9.fa
+CTGGCGTCCGGAGCTGGGACGT
+=
+<BLANKLINE>
+\end{minted}
+When printing a single alignment in \verb+Mauve+ format, use keyword arguments to provide the metadata and identifiers:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = alignments[0]
+>>> print(alignment.format("mauve", metadata=metadata, identifiers=identifiers))
+> 1:1-50 - equCab1.fa
+TAAGCCCTCCTAGCACACACCCGGAGTGGCC-GGGCCGTAC-TTTCCTTTTC
+> 2:1-49 + canFam2.fa
+CAAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGC-TTTCCTTTTC
+> 3:1-19 - mm9.fa
+---------------------------------GGATCTACTTTTCCTCTTC
+=
+<BLANKLINE>
+\end{minted}
 
 \subsection{Sequence Alignment/Map (SAM)}
 \label{subseq:align_sam}
