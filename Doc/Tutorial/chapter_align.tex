@@ -1050,6 +1050,44 @@ Iterate over the alignments:
 4z8i_A
 1wga
 \end{minted}
+Let's look at the last alignment in more detail:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment  # doctest: +ELLIPSIS
+<Alignment object (2 rows x 110 columns) at ...>
+>>> print(alignment)
+1wga             10 XCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXX--XXXCXXXXCCXXXXXCXXX
+                  0 .|....||.....|......|...|....|.....|...--...|....||.....|...
+2UVO:A|PD        53 TCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLG
+<BLANKLINE>
+1wga             68 XXXCXXXCXXXXCXXXXXCXXX--XXXCXXXXCCXXXXXCXXXXXXCXXX 116
+                 60 ...|...|....|.....|...--...|....||.....|......|... 110
+2UVO:A|PD       113 SEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAG 163
+<BLANKLINE>
+\end{minted}
+The target and query sequences are stored in \verb|alignment.sequences|. As these are pairwise alignments, we can also access them through \verb|alignment.query| and \verb|alignment.target|:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.target is alignment.sequences[0]
+True
+>>> alignment.query is alignment.sequences[1]
+True
+\end{minted}
+The ID of the query is set from the \verb|alignments.query_name| (note that the query ID printed in the alignment in the \verb|hhr| file is abbreviated):
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.query.id
+'2UVO:A|PDBID|CHAIN|SEQUENCE'
+\end{minted}
+while the sequence contents is filled in as much as possible:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.query.seq
+Seq({53: 'TCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQW...GAG'}, length=171)
+\end{minted}
+
+
+
 
 \subsection{Mauve eXtended Multi-FastA (xmfa) format}
 \label{subsec:align_mauve}

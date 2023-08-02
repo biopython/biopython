@@ -66,10 +66,9 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignment.target.seq[0:171],
             "ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQSGGCDG",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2uvo_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Agglutinin isolectin 1; carbohydrate-binding protein, hevein domain, chitin-binding, GERM agglutinin, chitin-binding protein; HET: NDG NAG GOL; 1.40A {Triticum aestivum} PDB: 1wgc_A* 2cwg_A* 2x3t_A* 4aml_A* 7wga_A 9wga_A 2wgc_A 1wgt_A 1k7t_A* 1k7v_A* 1k7u_A 2x52_A* 1t0w_A*",
+            alignment.target.annotations["hmm"],
+            "2uvo_A Agglutinin isolectin 1; carbohydrate-binding protein, hevein domain, chitin-binding, GERM agglutinin, chitin-binding protein; HET: NDG NAG GOL; 1.40A {Triticum aestivum} PDB: 1wgc_A* 2cwg_A* 2x3t_A* 4aml_A* 7wga_A 9wga_A 2wgc_A 1wgt_A 1k7t_A* 1k7v_A* 1k7u_A 2x52_A* 1t0w_A*",
         )
         self.assertEqual(
             alignment[0],
@@ -178,10 +177,9 @@ numpy.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
             alignment.target.seq[1:163],
             "GXGCXGXXMYCSTNNCCXXWESCGSGGYXCGEGCNLGACQXGXPCXXPGSVCTNLHCCARGGHCGMGSGYCGXGCXGGACXADIXCGXGXXXCPTDSCCGGWGXCGNGXEFCGXGCXVGGCAAXSPCGXPGSXCTLDKCCSGXGACXSGSGGCGXGCXAGGC",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2wga")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; lectin (agglutinin); NMR {}",
+            alignment.target.annotations["hmm"],
+            "2wga   ; lectin (agglutinin); NMR {}",
         )
         self.assertEqual(
             alignment[0],
@@ -289,10 +287,9 @@ numpy.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
             alignment.target.seq[1:121],
             "PVCGVRASGRVCPDGYCCSQWGYCGTTEEYCGKGCQSQCDYNRCGKEFGGKECHDELCCSQYGWCGNSDGHCGEGCQSQCSYWRCGKDFGGRLCTEDMCCSQYGWCGLTDDHCEDGCQSQ",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1ulk_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Lectin-C; chitin-binding protein, hevein domain, PL-C, sugar binding protein; 1.80A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 g.3.1.1",
+            alignment.target.annotations["hmm"],
+            "1ulk_A Lectin-C; chitin-binding protein, hevein domain, PL-C, sugar binding protein; 1.80A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 g.3.1.1",
         )
         self.assertEqual(
             alignment[0],
@@ -393,10 +390,9 @@ numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
             alignment.target.seq[1:121],
             "PVCGVRASGRVCPDGYCCSQWGYCGTTEEYCGKGCQSQCDYNRCGKEFGGKECHDELCCSQYGWCGNSDGHCGEGCQSQCSYWRCGKDFGGRLCTEDMCCSQYGWCGLTDDHCEDGCQSQ",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1ulk_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Lectin-C; chitin-binding protein, hevein domain, PL-C, sugar binding protein; 1.80A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 g.3.1.1",
+            alignment.target.annotations["hmm"],
+            "1ulk_A Lectin-C; chitin-binding protein, hevein domain, PL-C, sugar binding protein; 1.80A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 g.3.1.1",
         )
         self.assertEqual(
             alignment[0],
@@ -497,10 +493,9 @@ numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
             alignment.target.seq[1:126],
             "RCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGAC",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2uvo_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Agglutinin isolectin 1; carbohydrate-binding protein, hevein domain, chitin-binding, GERM agglutinin, chitin-binding protein; HET: NDG NAG GOL; 1.40A {Triticum aestivum} PDB: 1wgc_A* 2cwg_A* 2x3t_A* 4aml_A* 7wga_A 9wga_A 2wgc_A 1wgt_A 1k7t_A* 1k7v_A* 1k7u_A 2x52_A* 1t0w_A*",
+            alignment.target.annotations["hmm"],
+            "2uvo_A Agglutinin isolectin 1; carbohydrate-binding protein, hevein domain, chitin-binding, GERM agglutinin, chitin-binding protein; HET: NDG NAG GOL; 1.40A {Triticum aestivum} PDB: 1wgc_A* 2cwg_A* 2x3t_A* 4aml_A* 7wga_A 9wga_A 2wgc_A 1wgt_A 1k7t_A* 1k7v_A* 1k7u_A 2x52_A* 1t0w_A*",
         )
         self.assertEqual(
             alignment[0],
@@ -601,10 +596,9 @@ numpy.array([['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
             alignment.target.seq[2:123],
             "XGCXGXXMYCSTNNCCXXWESCGSGGYXCGEGCNLGACQXGXPCXXPGSVCTNLHCCARGGHCGMGSGYCGXGCXGGACXADIXCGXGXXXCPTDSCCGGWGXCGNGXEFCGXGCXVGGCA",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2wga")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; lectin (agglutinin); NMR {}",
+            alignment.target.annotations["hmm"],
+            "2wga   ; lectin (agglutinin); NMR {}",
         )
         self.assertEqual(
             alignment[0],
@@ -701,10 +695,9 @@ numpy.array([['X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T', 'N',
             alignment.target.seq[1:79],
             "PECGERASGKRCPNGKCCSQWGYCGTTDNYCGQGCQSQCDYWRCGRDFGGRLCEEDMCCSKYGWCGYSDDHCEDGCQS",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1uha_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Lectin-D2; chitin-binding domain, sugar binding protein; 1.50A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 PDB: 1ulm_A* 1uln_A",
+            alignment.target.annotations["hmm"],
+            "1uha_A Lectin-D2; chitin-binding domain, sugar binding protein; 1.50A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 PDB: 1ulm_A* 1uln_A",
         )
         self.assertEqual(
             alignment[0],
@@ -795,10 +788,9 @@ numpy.array([['P', 'E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P',
             alignment.target.seq[0:86],
             "ERCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGERSDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1en2_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "UDA, agglutinin isolectin I/agglutinin isolectin V/ AG isolectin VI; hevein domain, superantigen, saccharide binding binding protein; HET: NAG; 1.40A {Urtica dioica} SCOP: g.3.1.1 g.3.1.1 PDB: 1eis_A* 1enm_A* 1ehd_A 1ehh_A* 1iqb_A",
+            alignment.target.annotations["hmm"],
+            "1en2_A UDA, agglutinin isolectin I/agglutinin isolectin V/ AG isolectin VI; hevein domain, superantigen, saccharide binding binding protein; HET: NAG; 1.40A {Urtica dioica} SCOP: g.3.1.1 g.3.1.1 PDB: 1eis_A* 1enm_A* 1ehd_A 1ehh_A* 1iqb_A",
         )
         self.assertEqual(
             alignment[0],
@@ -889,10 +881,9 @@ numpy.array([['E', 'R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P',
             alignment.target.seq[1:85],
             "RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGERSDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYR",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1en2_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "UDA, agglutinin isolectin I/agglutinin isolectin V/ AG isolectin VI; hevein domain, superantigen, saccharide binding binding protein; HET: NAG; 1.40A {Urtica dioica} SCOP: g.3.1.1 g.3.1.1 PDB: 1eis_A* 1enm_A* 1ehd_A 1ehh_A* 1iqb_A",
+            alignment.target.annotations["hmm"],
+            "1en2_A UDA, agglutinin isolectin I/agglutinin isolectin V/ AG isolectin VI; hevein domain, superantigen, saccharide binding binding protein; HET: NAG; 1.40A {Urtica dioica} SCOP: g.3.1.1 g.3.1.1 PDB: 1eis_A* 1enm_A* 1ehd_A 1ehh_A* 1iqb_A",
         )
         self.assertEqual(
             alignment[0],
@@ -983,10 +974,9 @@ numpy.array([['R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P', 'G',
             alignment.target.seq[2:80],
             "ECGERASGKRCPNGKCCSQWGYCGTTDNYCGQGCQSQCDYWRCGRDFGGRLCEEDMCCSKYGWCGYSDDHCEDGCQSQ",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1uha_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Lectin-D2; chitin-binding domain, sugar binding protein; 1.50A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 PDB: 1ulm_A* 1uln_A",
+            alignment.target.annotations["hmm"],
+            "1uha_A Lectin-D2; chitin-binding domain, sugar binding protein; 1.50A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 PDB: 1ulm_A* 1uln_A",
         )
         self.assertEqual(
             alignment[0],
@@ -1072,10 +1062,9 @@ numpy.array([['E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P', 'N',
         self.assertEqual(
             alignment.target.seq[1:40], "QCGRQAGGKLCPDNLCCSQWGWCGSTDEYCSPDHNCQSN"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1wkx_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Hevein isoform 2; allergen, lectin, agglutinin-toxin motif; 1.70A {Hevea brasiliensis} PDB: 1hev_A 1q9b_A* 4wp4_A",
+            alignment.target.annotations["hmm"],
+            "1wkx_A Hevein isoform 2; allergen, lectin, agglutinin-toxin motif; 1.70A {Hevea brasiliensis} PDB: 1hev_A 1q9b_A* 4wp4_A",
         )
         self.assertEqual(alignment[0], "QCGRQAGGKLCPDNLCCSQWGWCGSTDEYCSPDHNCQSN")
         self.assertEqual(
@@ -1147,10 +1136,9 @@ numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'D',
         self.assertEqual(
             alignment.target.seq[0:38], "ETCASRCPRPCNAGLCCSIYGYCGSGAAYCGAGNCRCQ"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1p9g_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "EAFP 2; antifungal peptide, atomic resolution, antifungal protein; HET: PCA; 0.84A {Eucommia ulmoides} SCOP: g.3.1.1 PDB: 1p9z_A*",
+            alignment.target.annotations["hmm"],
+            "1p9g_A EAFP 2; antifungal peptide, atomic resolution, antifungal protein; HET: PCA; 0.84A {Eucommia ulmoides} SCOP: g.3.1.1 PDB: 1p9z_A*",
         )
         self.assertEqual(alignment[0], "ETCAS-RCPRPCNAGLCCSIYGYCGSGAAYCGAGNCRCQ")
         self.assertEqual(
@@ -1222,10 +1210,9 @@ numpy.array([['E', 'T', 'C', 'A', 'S', '-', 'R', 'C', 'P', 'R', 'P', 'C', 'N',
         self.assertEqual(
             alignment.target.seq[1:38], "TCASRCPRPCNAGLCCSIYGYCGSGAAYCGAGNCRCQ"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1p9g_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "EAFP 2; antifungal peptide, atomic resolution, antifungal protein; HET: PCA; 0.84A {Eucommia ulmoides} SCOP: g.3.1.1 PDB: 1p9z_A*",
+            alignment.target.annotations["hmm"],
+            "1p9g_A EAFP 2; antifungal peptide, atomic resolution, antifungal protein; HET: PCA; 0.84A {Eucommia ulmoides} SCOP: g.3.1.1 PDB: 1p9z_A*",
         )
         self.assertEqual(alignment[0], "TCAS-RCPRPCNAGLCCSIYGYCGSGAAYCGAGNCRCQ")
         self.assertEqual(
@@ -1297,10 +1284,9 @@ numpy.array([['T', 'C', 'A', 'S', '-', 'R', 'C', 'P', 'R', 'P', 'C', 'N', 'A',
         self.assertEqual(
             alignment.target.seq[0:40], "EQCGRQAGGKLCPDNLCCSQWGWCGSTDEYCSPDHNCQSN"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1wkx_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Hevein isoform 2; allergen, lectin, agglutinin-toxin motif; 1.70A {Hevea brasiliensis} PDB: 1hev_A 1q9b_A* 4wp4_A",
+            alignment.target.annotations["hmm"],
+            "1wkx_A Hevein isoform 2; allergen, lectin, agglutinin-toxin motif; 1.70A {Hevea brasiliensis} PDB: 1hev_A 1q9b_A* 4wp4_A",
         )
         self.assertEqual(alignment[0], "EQCGRQAGGKLCPDNLCCSQWGWCGSTDEYCSPDHNCQSN")
         self.assertEqual(
@@ -1373,10 +1359,9 @@ numpy.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
         self.assertEqual(
             alignment.target.seq[3:40], "QCGRQAGGALCPGGLCCSQYGWCANTPEYCGSGCQSQ"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4mpi_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Class I chitinase; hevein-like domain, chitin oligomers, sugar binding protein; HET: MES; 1.60A {Hevea brasiliensis subsp}",
+            alignment.target.annotations["hmm"],
+            "4mpi_A Class I chitinase; hevein-like domain, chitin oligomers, sugar binding protein; HET: MES; 1.60A {Hevea brasiliensis subsp}",
         )
         self.assertEqual(alignment[0], "QCGRQAGGALCPGGLCCSQYGWCANTPEYCGSGCQSQ")
         self.assertEqual(
@@ -1448,10 +1433,9 @@ numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P', 'G',
         self.assertEqual(
             alignment.target.seq[2:40], "RCGDQARGAKCPNCLCCGKYGFCGSGDAYCGAGSCQSQ"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2lb7_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "WAMP-1A, antimicrobial peptide 1A; antimicrobial protein; NMR {Triticum kiharae}",
+            alignment.target.annotations["hmm"],
+            "2lb7_A WAMP-1A, antimicrobial peptide 1A; antimicrobial protein; NMR {Triticum kiharae}",
         )
         self.assertEqual(alignment[0], "RCGDQARGAKCPNCLCCGKYGFCGSGDAYCGAGSCQSQ")
         self.assertEqual(
@@ -1523,10 +1507,9 @@ numpy.array([['R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P', 'N',
         self.assertEqual(
             alignment.target.seq[2:40], "EQCGRQAGGALCPGGLCCSQYGWCANTPEYCGSGCQSQ"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4mpi_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Class I chitinase; hevein-like domain, chitin oligomers, sugar binding protein; HET: MES; 1.60A {Hevea brasiliensis subsp}",
+            alignment.target.annotations["hmm"],
+            "4mpi_A Class I chitinase; hevein-like domain, chitin oligomers, sugar binding protein; HET: MES; 1.60A {Hevea brasiliensis subsp}",
         )
         self.assertEqual(alignment[0], "EQCGRQAGGALCPGGLCCSQYGWCANTPEYCGSGCQSQ")
         self.assertEqual(
@@ -1598,10 +1581,9 @@ numpy.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P',
         self.assertEqual(
             alignment.target.seq[1:40], "QRCGDQARGAKCPNCLCCGKYGFCGSGDAYCGAGSCQSQ"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2lb7_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "WAMP-1A, antimicrobial peptide 1A; antimicrobial protein; NMR {Triticum kiharae}",
+            alignment.target.annotations["hmm"],
+            "2lb7_A WAMP-1A, antimicrobial peptide 1A; antimicrobial protein; NMR {Triticum kiharae}",
         )
         self.assertEqual(alignment[0], "QRCGDQARGAKCPNCLCCGKYGFCGSGDAYCGAGSCQSQ")
         self.assertEqual(
@@ -1671,10 +1653,9 @@ numpy.array([['Q', 'R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P',
         )
         self.assertEqual(alignment.target.id, "2kus_A")
         self.assertEqual(alignment.target.seq[2:34], "PNGQCGPGWGGCRGGLCCSQYGYCGSGPKYCA")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2kus_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "SM-AMP-1.1A; plant antimicrobial peptide, chitin-binding peptide, antimic protein; NMR {Stellaria media}",
+            alignment.target.annotations["hmm"],
+            "2kus_A SM-AMP-1.1A; plant antimicrobial peptide, chitin-binding peptide, antimic protein; NMR {Stellaria media}",
         )
         self.assertEqual(alignment[0], "PNGQCGPGWG--GCRGGLCCSQYGYCGSGPKYCA")
         self.assertEqual(
@@ -1743,10 +1724,9 @@ numpy.array([['P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G',
         )
         self.assertEqual(alignment.target.id, "2kus_A")
         self.assertEqual(alignment.target.seq[2:34], "PNGQCGPGWGGCRGGLCCSQYGYCGSGPKYCA")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2kus_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "SM-AMP-1.1A; plant antimicrobial peptide, chitin-binding peptide, antimic protein; NMR {Stellaria media}",
+            alignment.target.annotations["hmm"],
+            "2kus_A SM-AMP-1.1A; plant antimicrobial peptide, chitin-binding peptide, antimic protein; NMR {Stellaria media}",
         )
         self.assertEqual(alignment[0], "PNGQCGPGWG--GCRGGLCCSQYGYCGSGPKYCA")
         self.assertEqual(
@@ -1813,10 +1793,9 @@ numpy.array([['P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G',
         )
         self.assertEqual(alignment.target.id, "1mmc_A")
         self.assertEqual(alignment.target.seq[5:30], "RGRCPSGMCCSQFGYCGKGPKYCGR")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1mmc_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "AC-AMP2, antimicrobial peptide 2; antifungal antimicrobial, chitin-binding; NMR {Amaranthus caudatus} SCOP: g.3.1.2 PDB: 1zuv_A 1zwu_A* 1znt_A*",
+            alignment.target.annotations["hmm"],
+            "1mmc_A AC-AMP2, antimicrobial peptide 2; antifungal antimicrobial, chitin-binding; NMR {Amaranthus caudatus} SCOP: g.3.1.2 PDB: 1zuv_A 1zwu_A* 1znt_A*",
         )
         self.assertEqual(alignment[0], "RGRCPSGMCCSQFGYCGKGPKYCGR")
         self.assertEqual(
@@ -1882,10 +1861,9 @@ numpy.array([['R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C', 'S', 'Q', 'F',
         )
         self.assertEqual(alignment.target.id, "1mmc_A")
         self.assertEqual(alignment.target.seq[3:30], "CVRGRCPSGMCCSQFGYCGKGPKYCGR")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1mmc_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "AC-AMP2, antimicrobial peptide 2; antifungal antimicrobial, chitin-binding; NMR {Amaranthus caudatus} SCOP: g.3.1.2 PDB: 1zuv_A 1zwu_A* 1znt_A*",
+            alignment.target.annotations["hmm"],
+            "1mmc_A AC-AMP2, antimicrobial peptide 2; antifungal antimicrobial, chitin-binding; NMR {Amaranthus caudatus} SCOP: g.3.1.2 PDB: 1zuv_A 1zwu_A* 1znt_A*",
         )
         self.assertEqual(alignment[0], "CVRGRCPSGMCCSQFGYCGKGPKYCGR")
         self.assertEqual(
@@ -1952,10 +1930,9 @@ numpy.array([['C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C', 'S',
         )
         self.assertEqual(alignment.target.id, "2n1s_A")
         self.assertEqual(alignment.target.seq[7:30], "GRCSGGLCCSKYGYCGSGPAYCG")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2n1s_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "AMP-2; antimicrobial peptide, ICK, cystine knot inhibitor, cystine antimicrobial protein; NMR {Stellaria media}",
+            alignment.target.annotations["hmm"],
+            "2n1s_A AMP-2; antimicrobial peptide, ICK, cystine knot inhibitor, cystine antimicrobial protein; NMR {Stellaria media}",
         )
         self.assertEqual(alignment[0], "GRCSGGLCCSKYGYCGSGPAYCG")
         self.assertEqual(
@@ -2020,10 +1997,9 @@ numpy.array([['G', 'R', 'C', 'S', 'G', 'G', 'L', 'C', 'C', 'S', 'K', 'Y', 'G',
         )
         self.assertEqual(alignment.target.id, "2n1s_A")
         self.assertEqual(alignment.target.seq[3:30], "QCYRGRCSGGLCCSKYGYCGSGPAYCG")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2n1s_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "AMP-2; antimicrobial peptide, ICK, cystine knot inhibitor, cystine antimicrobial protein; NMR {Stellaria media}",
+            alignment.target.annotations["hmm"],
+            "2n1s_A AMP-2; antimicrobial peptide, ICK, cystine knot inhibitor, cystine antimicrobial protein; NMR {Stellaria media}",
         )
         self.assertEqual(alignment[0], "QCY----RGRCSGGLCCSKYGYCGSGPAYCG")
         self.assertEqual(
@@ -2094,10 +2070,9 @@ numpy.array([['Q', 'C', 'Y', '-', '-', '-', '-', 'R', 'G', 'R', 'C', 'S', 'G',
         self.assertEqual(
             alignment.target.seq[1:39], "EQCGAQAGGARCPNCLCCSRWGWCGTTSDFCGDGCQSQ"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2dkv_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Chitinase; whole structure, oryza sativa L. japonica, hydrolase; HET: MES; 2.00A {Oryza sativa japonica group} PDB: 3iwr_A*",
+            alignment.target.annotations["hmm"],
+            "2dkv_A Chitinase; whole structure, oryza sativa L. japonica, hydrolase; HET: MES; 2.00A {Oryza sativa japonica group} PDB: 3iwr_A*",
         )
         self.assertEqual(alignment[0], "EQCGAQAGGARCPNCLCCSRWGWCGTTSDFCGDGCQSQ")
         self.assertEqual(
@@ -2169,10 +2144,9 @@ numpy.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
         self.assertEqual(
             alignment.target.seq[1:39], "EQCGAQAGGARCPNCLCCSRWGWCGTTSDFCGDGCQSQ"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2dkv_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Chitinase; whole structure, oryza sativa L. japonica, hydrolase; HET: MES; 2.00A {Oryza sativa japonica group} PDB: 3iwr_A*",
+            alignment.target.annotations["hmm"],
+            "2dkv_A Chitinase; whole structure, oryza sativa L. japonica, hydrolase; HET: MES; 2.00A {Oryza sativa japonica group} PDB: 3iwr_A*",
         )
         self.assertEqual(alignment[0], "EQCGAQAGGARCPNCLCCSRWGWCGTTSDFCGDGCQSQ")
         self.assertEqual(
@@ -2240,10 +2214,9 @@ numpy.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
         )
         self.assertEqual(alignment.target.id, "4zxm_A")
         self.assertEqual(alignment.target.seq[47:70], "DHCCSEWGWCGRETSHCTCSSCV")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4zxm_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "PGRP domain of peptidoglycan recognition protein; amidase, hydrolase; 2.80A {Branchiostoma belcheri tsingtauense}",
+            alignment.target.annotations["hmm"],
+            "4zxm_A PGRP domain of peptidoglycan recognition protein; amidase, hydrolase; 2.80A {Branchiostoma belcheri tsingtauense}",
         )
         self.assertEqual(alignment[0], "DHCCSEWGWCGRETSHCTCSSCV")
         self.assertEqual(
@@ -2317,10 +2290,9 @@ numpy.array([['D', 'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E',
             alignment.target.seq[10:160],
             "XCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXXXXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXXXXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXXXXXCXXXXCCXXXXXCXXXXXXCXXXCXX",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1wga")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; lectin (agglutinin); NMR {}",
+            alignment.target.annotations["hmm"],
+            "1wga   ; lectin (agglutinin); NMR {}",
         )
         self.assertEqual(
             alignment[0],
@@ -2417,10 +2389,9 @@ numpy.array([['X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X',
         self.assertEqual(
             alignment.target.seq[26:70], "RCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCTCSSCV"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4zxm_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "PGRP domain of peptidoglycan recognition protein; amidase, hydrolase; 2.80A {Branchiostoma belcheri tsingtauense}",
+            alignment.target.annotations["hmm"],
+            "4zxm_A PGRP domain of peptidoglycan recognition protein; amidase, hydrolase; 2.80A {Branchiostoma belcheri tsingtauense}",
         )
         self.assertEqual(alignment[0], "RCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCTCSSCV")
         self.assertEqual(
@@ -2489,10 +2460,9 @@ numpy.array([['R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N', 'P',
         )
         self.assertEqual(alignment.target.id, "4z8i_A")
         self.assertEqual(alignment.target.seq[29:54], "VDHCCSEWGWCGRETSHCTCSSCVD")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4z8i_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "BBTPGRP3, peptidoglycan recognition protein 3; chitin-binding domain, AM hydrolase; 2.70A {Branchiostoma belcheri tsingtauense}",
+            alignment.target.annotations["hmm"],
+            "4z8i_A BBTPGRP3, peptidoglycan recognition protein 3; chitin-binding domain, AM hydrolase; 2.70A {Branchiostoma belcheri tsingtauense}",
         )
         self.assertEqual(alignment[0], "VDHCCSEWGWCGRETSHCTCSSCVD")
         self.assertEqual(
@@ -2562,10 +2532,9 @@ numpy.array([['V', 'D', 'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R',
         self.assertEqual(
             alignment.target.seq[8:54], "GRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCTCSSCVD"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4z8i_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "BBTPGRP3, peptidoglycan recognition protein 3; chitin-binding domain, AM hydrolase; 2.70A {Branchiostoma belcheri tsingtauense}",
+            alignment.target.annotations["hmm"],
+            "4z8i_A BBTPGRP3, peptidoglycan recognition protein 3; chitin-binding domain, AM hydrolase; 2.70A {Branchiostoma belcheri tsingtauense}",
         )
         self.assertEqual(alignment[0], "GRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCTCSSCVD")
         self.assertEqual(
@@ -2643,10 +2612,9 @@ numpy.array([['G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N',
             alignment.target.seq[10:116],
             "XCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXXXXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXXXXXCXXXXCCXXXXXCXXXXXXCXXX",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1wga")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; lectin (agglutinin); NMR {}",
+            alignment.target.annotations["hmm"],
+            "1wga   ; lectin (agglutinin); NMR {}",
         )
         self.assertEqual(
             alignment[0],
@@ -2761,10 +2729,9 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
             alignment.target.seq[0:171],
             "ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQSGGCDG",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2uvo_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Agglutinin isolectin 1; carbohydrate-binding protein, hevein domain, chitin-binding, GERM agglutinin, chitin-binding protein; HET: NDG NAG GOL; 1.40A {Triticum aestivum} PDB: 1wgc_A* 2cwg_A* 2x3t_A* 4aml_A* 7wga_A 9wga_A 2wgc_A 1wgt_A 1k7t_A* 1k7v_A* 1k7u_A 2x52_A* 1t0w_A*",
+            alignment.target.annotations["hmm"],
+            "2uvo_A Agglutinin isolectin 1; carbohydrate-binding protein, hevein domain, chitin-binding, GERM agglutinin, chitin-binding protein; HET: NDG NAG GOL; 1.40A {Triticum aestivum} PDB: 1wgc_A* 2cwg_A* 2x3t_A* 4aml_A* 7wga_A 9wga_A 2wgc_A 1wgt_A 1k7t_A* 1k7v_A* 1k7u_A 2x52_A* 1t0w_A*",
         )
         self.assertEqual(
             alignment[0],
@@ -2873,10 +2840,9 @@ numpy.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
             alignment.target.seq[1:163],
             "GXGCXGXXMYCSTNNCCXXWESCGSGGYXCGEGCNLGACQXGXPCXXPGSVCTNLHCCARGGHCGMGSGYCGXGCXGGACXADIXCGXGXXXCPTDSCCGGWGXCGNGXEFCGXGCXVGGCAAXSPCGXPGSXCTLDKCCSGXGACXSGSGGCGXGCXAGGC",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2wga")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; lectin (agglutinin); NMR {}",
+            alignment.target.annotations["hmm"],
+            "2wga   ; lectin (agglutinin); NMR {}",
         )
         self.assertEqual(
             alignment[0],
@@ -2984,10 +2950,9 @@ numpy.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
             alignment.target.seq[0:126],
             "ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGAC",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2uvo_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Agglutinin isolectin 1; carbohydrate-binding protein, hevein domain, chitin-binding, GERM agglutinin, chitin-binding protein; HET: NDG NAG GOL; 1.40A {Triticum aestivum} PDB: 1wgc_A* 2cwg_A* 2x3t_A* 4aml_A* 7wga_A 9wga_A 2wgc_A 1wgt_A 1k7t_A* 1k7v_A* 1k7u_A 2x52_A* 1t0w_A*",
+            alignment.target.annotations["hmm"],
+            "2uvo_A Agglutinin isolectin 1; carbohydrate-binding protein, hevein domain, chitin-binding, GERM agglutinin, chitin-binding protein; HET: NDG NAG GOL; 1.40A {Triticum aestivum} PDB: 1wgc_A* 2cwg_A* 2x3t_A* 4aml_A* 7wga_A 9wga_A 2wgc_A 1wgt_A 1k7t_A* 1k7v_A* 1k7u_A 2x52_A* 1t0w_A*",
         )
         self.assertEqual(
             alignment[0],
@@ -3088,10 +3053,9 @@ numpy.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
             alignment.target.seq[1:121],
             "PVCGVRASGRVCPDGYCCSQWGYCGTTEEYCGKGCQSQCDYNRCGKEFGGKECHDELCCSQYGWCGNSDGHCGEGCQSQCSYWRCGKDFGGRLCTEDMCCSQYGWCGLTDDHCEDGCQSQ",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1ulk_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Lectin-C; chitin-binding protein, hevein domain, PL-C, sugar binding protein; 1.80A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 g.3.1.1",
+            alignment.target.annotations["hmm"],
+            "1ulk_A Lectin-C; chitin-binding protein, hevein domain, PL-C, sugar binding protein; 1.80A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 g.3.1.1",
         )
         self.assertEqual(
             alignment[0],
@@ -3192,10 +3156,9 @@ numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
             alignment.target.seq[1:120],
             "PVCGVRASGRVCPDGYCCSQWGYCGTTEEYCGKGCQSQCDYNRCGKEFGGKECHDELCCSQYGWCGNSDGHCGEGCQSQCSYWRCGKDFGGRLCTEDMCCSQYGWCGLTDDHCEDGCQS",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1ulk_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Lectin-C; chitin-binding protein, hevein domain, PL-C, sugar binding protein; 1.80A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 g.3.1.1",
+            alignment.target.annotations["hmm"],
+            "1ulk_A Lectin-C; chitin-binding protein, hevein domain, PL-C, sugar binding protein; 1.80A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 g.3.1.1",
         )
         self.assertEqual(
             alignment[0],
@@ -3296,10 +3259,9 @@ numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
             alignment.target.seq[1:122],
             "GXGCXGXXMYCSTNNCCXXWESCGSGGYXCGEGCNLGACQXGXPCXXPGSVCTNLHCCARGGHCGMGSGYCGXGCXGGACXADIXCGXGXXXCPTDSCCGGWGXCGNGXEFCGXGCXVGGC",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2wga")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; lectin (agglutinin); NMR {}",
+            alignment.target.annotations["hmm"],
+            "2wga   ; lectin (agglutinin); NMR {}",
         )
         self.assertEqual(
             alignment[0],
@@ -3400,10 +3362,9 @@ numpy.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
             alignment.target.seq[1:80],
             "PECGERASGKRCPNGKCCSQWGYCGTTDNYCGQGCQSQCDYWRCGRDFGGRLCEEDMCCSKYGWCGYSDDHCEDGCQSQ",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1uha_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Lectin-D2; chitin-binding domain, sugar binding protein; 1.50A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 PDB: 1ulm_A* 1uln_A",
+            alignment.target.annotations["hmm"],
+            "1uha_A Lectin-D2; chitin-binding domain, sugar binding protein; 1.50A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 PDB: 1ulm_A* 1uln_A",
         )
         self.assertEqual(
             alignment[0],
@@ -3494,10 +3455,9 @@ numpy.array([['P', 'E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P',
             alignment.target.seq[1:85],
             "RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGERSDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYR",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1en2_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "UDA, agglutinin isolectin I/agglutinin isolectin V/ AG isolectin VI; hevein domain, superantigen, saccharide binding binding protein; HET: NAG; 1.40A {Urtica dioica} SCOP: g.3.1.1 g.3.1.1 PDB: 1eis_A* 1enm_A* 1ehd_A 1ehh_A* 1iqb_A",
+            alignment.target.annotations["hmm"],
+            "1en2_A UDA, agglutinin isolectin I/agglutinin isolectin V/ AG isolectin VI; hevein domain, superantigen, saccharide binding binding protein; HET: NAG; 1.40A {Urtica dioica} SCOP: g.3.1.1 g.3.1.1 PDB: 1eis_A* 1enm_A* 1ehd_A 1ehh_A* 1iqb_A",
         )
         self.assertEqual(
             alignment[0],
@@ -3588,10 +3548,9 @@ numpy.array([['R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P', 'G',
             alignment.target.seq[0:85],
             "ERCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGERSDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYR",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1en2_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "UDA, agglutinin isolectin I/agglutinin isolectin V/ AG isolectin VI; hevein domain, superantigen, saccharide binding binding protein; HET: NAG; 1.40A {Urtica dioica} SCOP: g.3.1.1 g.3.1.1 PDB: 1eis_A* 1enm_A* 1ehd_A 1ehh_A* 1iqb_A",
+            alignment.target.annotations["hmm"],
+            "1en2_A UDA, agglutinin isolectin I/agglutinin isolectin V/ AG isolectin VI; hevein domain, superantigen, saccharide binding binding protein; HET: NAG; 1.40A {Urtica dioica} SCOP: g.3.1.1 g.3.1.1 PDB: 1eis_A* 1enm_A* 1ehd_A 1ehh_A* 1iqb_A",
         )
         self.assertEqual(
             alignment[0],
@@ -3682,10 +3641,9 @@ numpy.array([['E', 'R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P',
             alignment.target.seq[2:80],
             "ECGERASGKRCPNGKCCSQWGYCGTTDNYCGQGCQSQCDYWRCGRDFGGRLCEEDMCCSKYGWCGYSDDHCEDGCQSQ",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1uha_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Lectin-D2; chitin-binding domain, sugar binding protein; 1.50A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 PDB: 1ulm_A* 1uln_A",
+            alignment.target.annotations["hmm"],
+            "1uha_A Lectin-D2; chitin-binding domain, sugar binding protein; 1.50A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 PDB: 1ulm_A* 1uln_A",
         )
         self.assertEqual(
             alignment[0],
@@ -3771,10 +3729,9 @@ numpy.array([['E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P', 'N',
         self.assertEqual(
             alignment.target.seq[1:42], "MEQCGRQAGGALCPGGLCCSQYGWCANTPEYCGSGCQSQCD"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4mpi_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Class I chitinase; hevein-like domain, chitin oligomers, sugar binding protein; HET: MES; 1.60A {Hevea brasiliensis subsp}",
+            alignment.target.annotations["hmm"],
+            "4mpi_A Class I chitinase; hevein-like domain, chitin oligomers, sugar binding protein; HET: MES; 1.60A {Hevea brasiliensis subsp}",
         )
         self.assertEqual(alignment[0], "MEQCGRQAGGALCPGGLCCSQYGWCANTPEYCGSGCQSQ-CD")
         self.assertEqual(
@@ -3847,10 +3804,9 @@ numpy.array([['M', 'E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C',
         self.assertEqual(
             alignment.target.seq[1:40], "QCGRQAGGKLCPDNLCCSQWGWCGSTDEYCSPDHNCQSN"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1wkx_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Hevein isoform 2; allergen, lectin, agglutinin-toxin motif; 1.70A {Hevea brasiliensis} PDB: 1hev_A 1q9b_A* 4wp4_A",
+            alignment.target.annotations["hmm"],
+            "1wkx_A Hevein isoform 2; allergen, lectin, agglutinin-toxin motif; 1.70A {Hevea brasiliensis} PDB: 1hev_A 1q9b_A* 4wp4_A",
         )
         self.assertEqual(alignment[0], "QCGRQAGGKLCPDNLCCSQWGWCGSTDEYCSPDHNCQSN")
         self.assertEqual(
@@ -3922,10 +3878,9 @@ numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'D',
         self.assertEqual(
             alignment.target.seq[3:44], "QCGRQAGGALCPGGLCCSQYGWCANTPEYCGSGCQSQCDGG"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4mpi_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Class I chitinase; hevein-like domain, chitin oligomers, sugar binding protein; HET: MES; 1.60A {Hevea brasiliensis subsp}",
+            alignment.target.annotations["hmm"],
+            "4mpi_A Class I chitinase; hevein-like domain, chitin oligomers, sugar binding protein; HET: MES; 1.60A {Hevea brasiliensis subsp}",
         )
         self.assertEqual(alignment[0], "QCGRQAGGALCPGGLCCSQYGWCANTPEYCGSGCQSQ-CDGG")
         self.assertEqual(
@@ -3998,10 +3953,9 @@ numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P', 'G',
         self.assertEqual(
             alignment.target.seq[2:40], "RCGDQARGAKCPNCLCCGKYGFCGSGDAYCGAGSCQSQ"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2lb7_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "WAMP-1A, antimicrobial peptide 1A; antimicrobial protein; NMR {Triticum kiharae}",
+            alignment.target.annotations["hmm"],
+            "2lb7_A WAMP-1A, antimicrobial peptide 1A; antimicrobial protein; NMR {Triticum kiharae}",
         )
         self.assertEqual(alignment[0], "RCGDQARGAKCPNCLCCGKYGFCGSGDAYCGAGSCQSQ")
         self.assertEqual(
@@ -4073,10 +4027,9 @@ numpy.array([['R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P', 'N',
         self.assertEqual(
             alignment.target.seq[0:38], "ETCASRCPRPCNAGLCCSIYGYCGSGAAYCGAGNCRCQ"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1p9g_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "EAFP 2; antifungal peptide, atomic resolution, antifungal protein; HET: PCA; 0.84A {Eucommia ulmoides} SCOP: g.3.1.1 PDB: 1p9z_A*",
+            alignment.target.annotations["hmm"],
+            "1p9g_A EAFP 2; antifungal peptide, atomic resolution, antifungal protein; HET: PCA; 0.84A {Eucommia ulmoides} SCOP: g.3.1.1 PDB: 1p9z_A*",
         )
         self.assertEqual(alignment[0], "ETCA-SRCPRPCNAGLCCSIYGYCGSGAAYCGAGNCRCQ")
         self.assertEqual(
@@ -4144,10 +4097,9 @@ numpy.array([['E', 'T', 'C', 'A', '-', 'S', 'R', 'C', 'P', 'R', 'P', 'C', 'N',
         )
         self.assertEqual(alignment.target.id, "1mmc_A")
         self.assertEqual(alignment.target.seq[2:29], "ECVRGRCPSGMCCSQFGYCGKGPKYCG")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1mmc_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "AC-AMP2, antimicrobial peptide 2; antifungal antimicrobial, chitin-binding; NMR {Amaranthus caudatus} SCOP: g.3.1.2 PDB: 1zuv_A 1zwu_A* 1znt_A*",
+            alignment.target.annotations["hmm"],
+            "1mmc_A AC-AMP2, antimicrobial peptide 2; antifungal antimicrobial, chitin-binding; NMR {Amaranthus caudatus} SCOP: g.3.1.2 PDB: 1zuv_A 1zwu_A* 1znt_A*",
         )
         self.assertEqual(alignment[0], "ECVRGRCPSGMCCSQFGYCGKGPKYCG")
         self.assertEqual(
@@ -4218,10 +4170,9 @@ numpy.array([['E', 'C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C',
         self.assertEqual(
             alignment.target.seq[1:38], "TCASRCPRPCNAGLCCSIYGYCGSGAAYCGAGNCRCQ"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1p9g_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "EAFP 2; antifungal peptide, atomic resolution, antifungal protein; HET: PCA; 0.84A {Eucommia ulmoides} SCOP: g.3.1.1 PDB: 1p9z_A*",
+            alignment.target.annotations["hmm"],
+            "1p9g_A EAFP 2; antifungal peptide, atomic resolution, antifungal protein; HET: PCA; 0.84A {Eucommia ulmoides} SCOP: g.3.1.1 PDB: 1p9z_A*",
         )
         self.assertEqual(alignment[0], "TCA-SRCPRPCNAGLCCSIYGYCGSGAAYCGAGNCRCQ")
         self.assertEqual(
@@ -4293,10 +4244,9 @@ numpy.array([['T', 'C', 'A', '-', 'S', 'R', 'C', 'P', 'R', 'P', 'C', 'N', 'A',
         self.assertEqual(
             alignment.target.seq[0:40], "EQCGRQAGGKLCPDNLCCSQWGWCGSTDEYCSPDHNCQSN"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1wkx_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Hevein isoform 2; allergen, lectin, agglutinin-toxin motif; 1.70A {Hevea brasiliensis} PDB: 1hev_A 1q9b_A* 4wp4_A",
+            alignment.target.annotations["hmm"],
+            "1wkx_A Hevein isoform 2; allergen, lectin, agglutinin-toxin motif; 1.70A {Hevea brasiliensis} PDB: 1hev_A 1q9b_A* 4wp4_A",
         )
         self.assertEqual(alignment[0], "EQCGRQAGGKLCPDNLCCSQWGWCGSTDEYCSPDHNCQSN")
         self.assertEqual(
@@ -4369,10 +4319,9 @@ numpy.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
         self.assertEqual(
             alignment.target.seq[1:40], "QRCGDQARGAKCPNCLCCGKYGFCGSGDAYCGAGSCQSQ"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2lb7_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "WAMP-1A, antimicrobial peptide 1A; antimicrobial protein; NMR {Triticum kiharae}",
+            alignment.target.annotations["hmm"],
+            "2lb7_A WAMP-1A, antimicrobial peptide 1A; antimicrobial protein; NMR {Triticum kiharae}",
         )
         self.assertEqual(alignment[0], "QRCGDQARGAKCPNCLCCGKYGFCGSGDAYCGAGSCQSQ")
         self.assertEqual(
@@ -4440,10 +4389,9 @@ numpy.array([['Q', 'R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P',
         )
         self.assertEqual(alignment.target.id, "2n1s_A")
         self.assertEqual(alignment.target.seq[4:30], "CYRGRCSGGLCCSKYGYCGSGPAYCG")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2n1s_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "AMP-2; antimicrobial peptide, ICK, cystine knot inhibitor, cystine antimicrobial protein; NMR {Stellaria media}",
+            alignment.target.annotations["hmm"],
+            "2n1s_A AMP-2; antimicrobial peptide, ICK, cystine knot inhibitor, cystine antimicrobial protein; NMR {Stellaria media}",
         )
         self.assertEqual(alignment[0], "CYRGRCSGGLCCSKYGYCGSGPAYCG")
         self.assertEqual(
@@ -4513,10 +4461,9 @@ numpy.array([['C', 'Y', 'R', 'G', 'R', 'C', 'S', 'G', 'G', 'L', 'C', 'C', 'S',
         self.assertEqual(
             alignment.target.seq[1:34], "GPNGQCGPGWGGCRGGLCCSQYGYCGSGPKYCA"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2kus_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "SM-AMP-1.1A; plant antimicrobial peptide, chitin-binding peptide, antimic protein; NMR {Stellaria media}",
+            alignment.target.annotations["hmm"],
+            "2kus_A SM-AMP-1.1A; plant antimicrobial peptide, chitin-binding peptide, antimic protein; NMR {Stellaria media}",
         )
         self.assertEqual(alignment[0], "GPNGQCGPGWG--GCRGGLCCSQYGYCGSGPKYCA")
         self.assertEqual(
@@ -4587,10 +4534,9 @@ numpy.array([['G', 'P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-',
         self.assertEqual(
             alignment.target.seq[2:39], "QCGAQAGGARCPNCLCCSRWGWCGTTSDFCGDGCQSQ"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2dkv_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Chitinase; whole structure, oryza sativa L. japonica, hydrolase; HET: MES; 2.00A {Oryza sativa japonica group} PDB: 3iwr_A*",
+            alignment.target.annotations["hmm"],
+            "2dkv_A Chitinase; whole structure, oryza sativa L. japonica, hydrolase; HET: MES; 2.00A {Oryza sativa japonica group} PDB: 3iwr_A*",
         )
         self.assertEqual(alignment[0], "QCGAQAGGARCPNCLCCSRWGWCGTTSDFCGDGCQSQ")
         self.assertEqual(
@@ -4658,10 +4604,9 @@ numpy.array([['Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P', 'N',
         )
         self.assertEqual(alignment.target.id, "1mmc_A")
         self.assertEqual(alignment.target.seq[2:30], "ECVRGRCPSGMCCSQFGYCGKGPKYCGR")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1mmc_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "AC-AMP2, antimicrobial peptide 2; antifungal antimicrobial, chitin-binding; NMR {Amaranthus caudatus} SCOP: g.3.1.2 PDB: 1zuv_A 1zwu_A* 1znt_A*",
+            alignment.target.annotations["hmm"],
+            "1mmc_A AC-AMP2, antimicrobial peptide 2; antifungal antimicrobial, chitin-binding; NMR {Amaranthus caudatus} SCOP: g.3.1.2 PDB: 1zuv_A 1zwu_A* 1znt_A*",
         )
         self.assertEqual(alignment[0], "ECVRGRCPSGMCCSQFGYCGKGPKYCGR")
         self.assertEqual(
@@ -4728,10 +4673,9 @@ numpy.array([['E', 'C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C',
         )
         self.assertEqual(alignment.target.id, "2n1s_A")
         self.assertEqual(alignment.target.seq[3:30], "QCYRGRCSGGLCCSKYGYCGSGPAYCG")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2n1s_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "AMP-2; antimicrobial peptide, ICK, cystine knot inhibitor, cystine antimicrobial protein; NMR {Stellaria media}",
+            alignment.target.annotations["hmm"],
+            "2n1s_A AMP-2; antimicrobial peptide, ICK, cystine knot inhibitor, cystine antimicrobial protein; NMR {Stellaria media}",
         )
         self.assertEqual(alignment[0], "QCY----RGRCSGGLCCSKYGYCGSGPAYCG")
         self.assertEqual(
@@ -4802,10 +4746,9 @@ numpy.array([['Q', 'C', 'Y', '-', '-', '-', '-', 'R', 'G', 'R', 'C', 'S', 'G',
         self.assertEqual(
             alignment.target.seq[1:39], "EQCGAQAGGARCPNCLCCSRWGWCGTTSDFCGDGCQSQ"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2dkv_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Chitinase; whole structure, oryza sativa L. japonica, hydrolase; HET: MES; 2.00A {Oryza sativa japonica group} PDB: 3iwr_A*",
+            alignment.target.annotations["hmm"],
+            "2dkv_A Chitinase; whole structure, oryza sativa L. japonica, hydrolase; HET: MES; 2.00A {Oryza sativa japonica group} PDB: 3iwr_A*",
         )
         self.assertEqual(alignment[0], "EQCGAQAGGARCPNCLCCSRWGWCGTTSDFCGDGCQSQ")
         self.assertEqual(
@@ -4875,10 +4818,9 @@ numpy.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
         )
         self.assertEqual(alignment.target.id, "2kus_A")
         self.assertEqual(alignment.target.seq[3:35], "NGQCGPGWGGCRGGLCCSQYGYCGSGPKYCAH")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2kus_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "SM-AMP-1.1A; plant antimicrobial peptide, chitin-binding peptide, antimic protein; NMR {Stellaria media}",
+            alignment.target.annotations["hmm"],
+            "2kus_A SM-AMP-1.1A; plant antimicrobial peptide, chitin-binding peptide, antimic protein; NMR {Stellaria media}",
         )
         self.assertEqual(alignment[0], "NGQCGPGWG--GCRGGLCCSQYGYCGSGPKYCAH")
         self.assertEqual(
@@ -4954,10 +4896,9 @@ numpy.array([['N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G', 'C',
             alignment.target.seq[8:163],
             "XXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXXXXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXXXXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXXXXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXC",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1wga")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; lectin (agglutinin); NMR {}",
+            alignment.target.annotations["hmm"],
+            "1wga   ; lectin (agglutinin); NMR {}",
         )
         self.assertEqual(
             alignment[0],
@@ -5055,10 +4996,9 @@ numpy.array([['X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X',
         self.assertEqual(
             alignment.target.seq[5:48], "RSDGRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCT"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4z8i_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "BBTPGRP3, peptidoglycan recognition protein 3; chitin-binding domain, AM hydrolase; 2.70A {Branchiostoma belcheri tsingtauense}",
+            alignment.target.annotations["hmm"],
+            "4z8i_A BBTPGRP3, peptidoglycan recognition protein 3; chitin-binding domain, AM hydrolase; 2.70A {Branchiostoma belcheri tsingtauense}",
         )
         self.assertEqual(alignment[0], "RSDGRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCT")
         self.assertEqual(
@@ -5131,10 +5071,9 @@ numpy.array([['R', 'S', 'D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P',
         self.assertEqual(
             alignment.target.seq[7:48], "DGRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCT"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4z8i_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "BBTPGRP3, peptidoglycan recognition protein 3; chitin-binding domain, AM hydrolase; 2.70A {Branchiostoma belcheri tsingtauense}",
+            alignment.target.annotations["hmm"],
+            "4z8i_A BBTPGRP3, peptidoglycan recognition protein 3; chitin-binding domain, AM hydrolase; 2.70A {Branchiostoma belcheri tsingtauense}",
         )
         self.assertEqual(alignment[0], "DGRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCT")
         self.assertEqual(
@@ -5207,10 +5146,9 @@ numpy.array([['D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A',
         self.assertEqual(
             alignment.target.seq[22:65], "RSDGRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCT"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4zxm_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "PGRP domain of peptidoglycan recognition protein; amidase, hydrolase; 2.80A {Branchiostoma belcheri tsingtauense}",
+            alignment.target.annotations["hmm"],
+            "4zxm_A PGRP domain of peptidoglycan recognition protein; amidase, hydrolase; 2.80A {Branchiostoma belcheri tsingtauense}",
         )
         self.assertEqual(alignment[0], "RSDGRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCT")
         self.assertEqual(
@@ -5283,10 +5221,9 @@ numpy.array([['R', 'S', 'D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P',
         self.assertEqual(
             alignment.target.seq[25:70], "GRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCTCSSCV"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4zxm_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "PGRP domain of peptidoglycan recognition protein; amidase, hydrolase; 2.80A {Branchiostoma belcheri tsingtauense}",
+            alignment.target.annotations["hmm"],
+            "4zxm_A PGRP domain of peptidoglycan recognition protein; amidase, hydrolase; 2.80A {Branchiostoma belcheri tsingtauense}",
         )
         self.assertEqual(alignment[0], "GRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCTCSSCV")
         self.assertEqual(
@@ -5364,10 +5301,9 @@ numpy.array([['G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N',
             alignment.target.seq[49:163],
             "XXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXXXXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXXXXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXC",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1wga")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; lectin (agglutinin); NMR {}",
+            alignment.target.annotations["hmm"],
+            "1wga   ; lectin (agglutinin); NMR {}",
         )
         self.assertEqual(
             alignment[0],
@@ -5479,10 +5415,9 @@ class Align_hhr_allx(unittest.TestCase):
         )
         self.assertEqual(alignment.target.id, "1klr_A")
         self.assertEqual(alignment.target.seq[23:24], "T")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1klr_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Zinc finger Y-chromosomal protein; transcription; NMR {Synthetic} SCOP: g.37.1.1 PDB: 5znf_A 1kls_A 1xrz_A* 7znf_A",
+            alignment.target.annotations["hmm"],
+            "1klr_A Zinc finger Y-chromosomal protein; transcription; NMR {Synthetic} SCOP: g.37.1.1 PDB: 5znf_A 1kls_A 1xrz_A* 7znf_A",
         )
         self.assertEqual(alignment[0], "T")
         self.assertEqual(
@@ -5541,10 +5476,9 @@ numpy.array([['T'],
         )
         self.assertEqual(alignment.target.id, "5ion_A")
         self.assertEqual(alignment.target.seq[9:10], "G")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5ion_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Zinc finger and BTB domain-containing protein 17; C2H2 zinc finger, MIZ-1, ZBTB17, transcription factor, trans; NMR {Homo sapiens}",
+            alignment.target.annotations["hmm"],
+            "5ion_A Zinc finger and BTB domain-containing protein 17; C2H2 zinc finger, MIZ-1, ZBTB17, transcription factor, trans; NMR {Homo sapiens}",
         )
         self.assertEqual(alignment[0], "G")
         self.assertEqual(
@@ -5603,10 +5537,9 @@ numpy.array([['G'],
         )
         self.assertEqual(alignment.target.id, "2jvx_A")
         self.assertEqual(alignment.target.seq[0:1], "S")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2jvx_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "NF-kappa-B essential modulator; CCHC classical zinc finger, NEMO zinc finger, beta-BETA- alpha fold, coiled coil, cytoplasm, disease mutation; NMR {Synthetic} PDB: 2jvy_A",
+            alignment.target.annotations["hmm"],
+            "2jvx_A NF-kappa-B essential modulator; CCHC classical zinc finger, NEMO zinc finger, beta-BETA- alpha fold, coiled coil, cytoplasm, disease mutation; NMR {Synthetic} PDB: 2jvy_A",
         )
         self.assertEqual(alignment[0], "S")
         self.assertEqual(
@@ -5665,10 +5598,9 @@ numpy.array([['S'],
         )
         self.assertEqual(alignment.target.id, "2ab3_A")
         self.assertEqual(alignment.target.seq[10:11], "G")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2ab3_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "ZNF29; zinc finger protein, beta BETA alpha, RREIIB-TR, RNA binding protein; NMR {Escherichia coli} SCOP: k.12.1.1 PDB: 2ab7_A",
+            alignment.target.annotations["hmm"],
+            "2ab3_A ZNF29; zinc finger protein, beta BETA alpha, RREIIB-TR, RNA binding protein; NMR {Escherichia coli} SCOP: k.12.1.1 PDB: 2ab7_A",
         )
         self.assertEqual(alignment[0], "G")
         self.assertEqual(
@@ -5727,10 +5659,9 @@ numpy.array([['G'],
         )
         self.assertEqual(alignment.target.id, "1sp2_A")
         self.assertEqual(alignment.target.seq[5:6], "T")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1sp2_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "SP1F2; zinc finger, transcription activation; NMR {Homo sapiens} SCOP: g.37.1.1 PDB: 1va2_A",
+            alignment.target.annotations["hmm"],
+            "1sp2_A SP1F2; zinc finger, transcription activation; NMR {Homo sapiens} SCOP: g.37.1.1 PDB: 1va2_A",
         )
         self.assertEqual(alignment[0], "T")
         self.assertEqual(
@@ -5789,10 +5720,9 @@ numpy.array([['T'],
         )
         self.assertEqual(alignment.target.id, "2lvr_A")
         self.assertEqual(alignment.target.seq[28:29], "E")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2lvr_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Zinc finger and BTB domain-containing protein 17; C2H2 zinc finger, classical zinc finger, transcription; NMR {Homo sapiens}",
+            alignment.target.annotations["hmm"],
+            "2lvr_A Zinc finger and BTB domain-containing protein 17; C2H2 zinc finger, classical zinc finger, transcription; NMR {Homo sapiens}",
         )
         self.assertEqual(alignment[0], "E")
         self.assertEqual(
@@ -5851,10 +5781,9 @@ numpy.array([['E'],
         )
         self.assertEqual(alignment.target.id, "2kvf_A")
         self.assertEqual(alignment.target.seq[0:1], "M")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2kvf_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Zinc finger and BTB domain-containing protein 32; protein/DNA, metal-binding, transcription; NMR {Mus musculus}",
+            alignment.target.annotations["hmm"],
+            "2kvf_A Zinc finger and BTB domain-containing protein 32; protein/DNA, metal-binding, transcription; NMR {Mus musculus}",
         )
         self.assertEqual(alignment[0], "M")
         self.assertEqual(
@@ -5913,10 +5842,9 @@ numpy.array([['M'],
         )
         self.assertEqual(alignment.target.id, "1dsq_A")
         self.assertEqual(alignment.target.seq[16:17], "D")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1dsq_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Nucleic acid binding protein P14; CCHC type zinc finger, virus/viral protein; NMR {Mouse mammary tumor virus} SCOP: g.40.1.1",
+            alignment.target.annotations["hmm"],
+            "1dsq_A Nucleic acid binding protein P14; CCHC type zinc finger, virus/viral protein; NMR {Mouse mammary tumor virus} SCOP: g.40.1.1",
         )
         self.assertEqual(alignment[0], "D")
         self.assertEqual(
@@ -5973,10 +5901,9 @@ numpy.array([['D'],
         )
         self.assertEqual(alignment.target.id, "5a7u_A")
         self.assertEqual(alignment.target.seq[28:29], "N")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5a7u_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "ADR1, regulatory protein ADR1; protein folding, translation, ribosome, zinc finger, SECM, translational arrest peptide, cryo-EM; 4.80A {Saccharomyces cerevisiae} PDB: 1paa_A",
+            alignment.target.annotations["hmm"],
+            "5a7u_A ADR1, regulatory protein ADR1; protein folding, translation, ribosome, zinc finger, SECM, translational arrest peptide, cryo-EM; 4.80A {Saccharomyces cerevisiae} PDB: 1paa_A",
         )
         self.assertEqual(alignment[0], "N")
         self.assertEqual(
@@ -6035,10 +5962,9 @@ numpy.array([['N'],
         )
         self.assertEqual(alignment.target.id, "1zfd_A")
         self.assertEqual(alignment.target.seq[0:1], "D")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1zfd_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "SWI5; DNA binding motif, zinc finger DNA binding domain; NMR {Saccharomyces cerevisiae} SCOP: g.37.1.1",
+            alignment.target.annotations["hmm"],
+            "1zfd_A SWI5; DNA binding motif, zinc finger DNA binding domain; NMR {Saccharomyces cerevisiae} SCOP: g.37.1.1",
         )
         self.assertEqual(alignment[0], "D")
         self.assertEqual(
@@ -6135,10 +6061,9 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.seq[0:198],
             "GSEFMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGNVITTNTIFENLWYSCATDSLGVSNCWDFPSMLALSGYVQGCRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKLLAIAGTLHILAGACGMVAISWYAVNITTDFFNPLYAGTKYELGPALYLGWSASLLSILGGICVFSTAAASSKEEPATR",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4P79_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "cell adhesion protein; cell adhesion, tight junction, membrane; HET: OLC, MSE; 2.4A {Mus musculus}",
+            alignment.target.annotations["hmm"],
+            "4P79_A cell adhesion protein; cell adhesion, tight junction, membrane; HET: OLC, MSE; 2.4A {Mus musculus}",
         )
         self.assertEqual(
             alignment[0],
@@ -6256,10 +6181,9 @@ numpy.array([['G', 'S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G',
             alignment.target.seq[0:185],
             "MANSGLQLLGYFLALGGWVGIIASTALPQWKQSSYAGDAIITAVGLYEGLWMSCASQSTGQVQCKLYDSLLALDGHIQSARALMVVAVLLGFVAMVLSVVGMKATRVGDSNPTAKSRVAISGGALFLLAGLCTLTAVSWYATLVTQEFFNPSTPVNARYEFGPALFVGWASAGLAMLGGSFLAAT",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "3X29_C")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Claudin-19, Heat-labile enterotoxin B chain; TOXIN-CELL ADHESION COMPLEX, TIGHT JUNCTION; 3.7A {Mus musculus}; Related PDB entries: 3X29_A",
+            alignment.target.annotations["hmm"],
+            "3X29_C Claudin-19, Heat-labile enterotoxin B chain; TOXIN-CELL ADHESION COMPLEX, TIGHT JUNCTION; 3.7A {Mus musculus}; Related PDB entries: 3X29_A",
         )
         self.assertEqual(
             alignment[0],
@@ -6375,10 +6299,9 @@ numpy.array([['M', 'A', 'N', 'S', 'G', 'L', 'Q', 'L', 'L', 'G', 'Y', 'F', 'L',
             alignment.target.seq[167:364],
             "KGMASMGLQVMGIALAVLGWLAVMLCCALPMWRVTAFIGSNIVTSQTIWEGLWMNCVVQSTGQMQCKVYDSLLALPQDLQAARALVIISIIVAALGVLLSVVGGKCTNCLEDESAKAKTMIVAGVVFLLAGLMVIVPVSWTAHNIIQDFYNPLVASGQKREMGASLYVGWAASGLLLLGGGLLCCSGPSSGENLYFQ",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5B2G_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Endolysin,Claudin-4 (E.C.3.2.1.17), Heat-labile enterotoxin B; Membrane protein, Complex, Cell-free protein; HET: MSE; 3.5A {Enterobacteria phage T4}; Related PDB entries: 5B2G_E 5B2G_C 5B2G_G",
+            alignment.target.annotations["hmm"],
+            "5B2G_A Endolysin,Claudin-4 (E.C.3.2.1.17), Heat-labile enterotoxin B; Membrane protein, Complex, Cell-free protein; HET: MSE; 3.5A {Enterobacteria phage T4}; Related PDB entries: 5B2G_E 5B2G_C 5B2G_G",
         )
         self.assertEqual(
             alignment[0],
@@ -6496,10 +6419,9 @@ numpy.array([['K', 'G', 'M', 'A', 'S', 'M', 'G', 'L', 'Q', 'V', 'M', 'G', 'I',
             alignment.target.seq[0:212],
             "MGLFDRGVQMLLTTVGAFAAFSLMTIAVGTDYWLYSRGVCKTKSVSENETSKKNEEVMTHSGLWRTCCLEGNFKGLCKQIDHFPEDADYEADTAEYFLRAVRASSIFPILSVILLFMGGLCIAASEFYKTRHNIILSAGIFFVSAGLSNIIGIIVYISANAGDPSKSDSKKNSYSYGWSFYFGALSFIIAEMVGVLAVHMFIDRHKQLRATA",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5KK2_G")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Glutamate receptor 2, Voltage-dependent calcium; Tetrameric, ionotropic, glutamate receptors, GluA2; 7.3A {Rattus norvegicus}; Related PDB entries: 5VOT_E 5VOT_H 5VOU_H 5KK2_H 5VOV_E 5VOT_F 5KK2_F 5VOT_G 5VOV_G 5VOU_E 5VOV_H 5VOU_G 5VOV_F 5VOU_F 5KK2_E",
+            alignment.target.annotations["hmm"],
+            "5KK2_G Glutamate receptor 2, Voltage-dependent calcium; Tetrameric, ionotropic, glutamate receptors, GluA2; 7.3A {Rattus norvegicus}; Related PDB entries: 5VOT_E 5VOT_H 5VOU_H 5KK2_H 5VOV_E 5VOT_F 5KK2_F 5VOT_G 5VOV_G 5VOU_E 5VOV_H 5VOU_G 5VOV_F 5VOU_F 5KK2_E",
         )
         self.assertEqual(
             alignment[0],
@@ -6620,10 +6542,9 @@ numpy.array([['M', 'G', 'L', 'F', 'D', 'R', 'G', 'V', 'Q', 'M', 'L', 'L', 'T',
             alignment.target.seq[0:214],
             "MSPTEAPKVRVTLFCILVGIVLAMTAVVSDHWAVLSPHMENHNTTCEAAHFGLWRICTKRIALGEDRSCGPITLPGEKNCSYFRHFNPGESSEIFEFTTQKEYSISAAAISVFSLGFLIMGTICALMAFRKKRDYLLRPASMFYVFAGLCLFVSLEVMRQSVKRMIDSEDTVWIEYYYSWSFACACAAFVLLFLGGISLLLFSLPRMPQNPWES",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5GJV_E")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Voltage-dependent L-type calcium channel subunit; complex, channel, membrane protein; HET: PC1, BMA, NAG; 3.6A {Oryctolagus cuniculus}; Related PDB entries: 3JBR_E 5GJW_E",
+            alignment.target.annotations["hmm"],
+            "5GJV_E Voltage-dependent L-type calcium channel subunit; complex, channel, membrane protein; HET: PC1, BMA, NAG; 3.6A {Oryctolagus cuniculus}; Related PDB entries: 3JBR_E 5GJW_E",
         )
         self.assertEqual(
             alignment[0],
@@ -6745,10 +6666,9 @@ numpy.array([['M', 'S', 'P', 'T', 'E', 'A', 'P', 'K', 'V', 'R', 'V', 'T', 'L',
             alignment.target.seq[27:218],
             "NSRAVGVMWGTLTICFSVLVMALFIQPYWIGDSVSTPQAGYFGLFSYCVGNVLSSELICKGGPLDFSSIPSRAFKTAMFFVALAMFLIIGSIICFSLFFVCNTATVYKICAWMQLAAATGLMIGCLVYPDGWDSSEVRRMCGEQTGKYTLGHCTIRWAFMLAILSIGDALILSFLAFVLGYRQDKLLPDDY",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "6C14_D")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Protocadherin-15, LHFPL tetraspan subfamily member; PCDH15, LHFPL5, protocadherin, tip link;{Mus musculus}; Related PDB entries: 6C14_B",
+            alignment.target.annotations["hmm"],
+            "6C14_D Protocadherin-15, LHFPL tetraspan subfamily member; PCDH15, LHFPL5, protocadherin, tip link;{Mus musculus}; Related PDB entries: 6C14_B",
         )
         self.assertEqual(
             alignment[0],
@@ -6866,10 +6786,9 @@ numpy.array([['N', 'S', 'R', 'A', 'V', 'G', 'V', 'M', 'W', 'G', 'T', 'L', 'T',
             alignment.target.seq[819:1030],
             "GLFDRGVQMLLTTVGAFAAFSLMTIAVGTDYWLYSRGVCKTKSVSEDETSKKNEEVMTHSGLWRTCCLEGNFKGLCKQIDHFPEDADYEADTAEYFLRAVRASSIFPILSVILLFMGGLCIAASEFYKTRHNIILSAGIFFVSAGLSNIIGIIVYISANAGDPSKSDSKKNSYSYGWSFYFGALSFIIAEMVGVLAVHMFIDRHKQLTGGA",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "6DLZ_D")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Glutamate receptor 2,Voltage-dependent calcium channel; Ion channel, TRANSPORT PROTEIN; HET: GLU, CYZ; 3.9A {Rattus norvegicus}; Related PDB entries: 5VHY_B 5WEL_C 5WEL_D 5VHZ_E 5WEK_D 5WEN_C 5VHX_E 5VHY_C 5VHZ_F 5VHY_D 5VHZ_B 5WEN_D 5WEM_C 5WEL_B 5WEM_A 5VHX_C 5WEM_D 5WEK_C 5WEK_A 5VHY_A 5VHW_C 5VHX_A 5VHZ_C 5VHW_D 5VHY_E 5WEN_A 5VHX_B 5VHX_D 5VHW_B 5WEL_A 5VHW_A 5VHZ_D 5WEN_B 5WEK_B 5VHY_F 5VHZ_A 5WEM_B 5WEO_B 5KBT_D 5KBS_A 5KBU_B 5WEO_C 5KBU_A 5KBS_C 5KBU_D 5KBT_A 5KBS_B 5KBT_C 5KBT_B 5KBU_C 5WEO_D 5WEO_A 5KBS_D 6DM2_D 6DLZ_A 6DM0_A 6DM0_B 6DM1_D 6DM2_C 6DM0_C 6DM1_B 6DLZ_B 6DM2_B 6DM1_C 6DM2_A 6DLZ_C 6DM1_A 6DM0_D",
+            alignment.target.annotations["hmm"],
+            "6DLZ_D Glutamate receptor 2,Voltage-dependent calcium channel; Ion channel, TRANSPORT PROTEIN; HET: GLU, CYZ; 3.9A {Rattus norvegicus}; Related PDB entries: 5VHY_B 5WEL_C 5WEL_D 5VHZ_E 5WEK_D 5WEN_C 5VHX_E 5VHY_C 5VHZ_F 5VHY_D 5VHZ_B 5WEN_D 5WEM_C 5WEL_B 5WEM_A 5VHX_C 5WEM_D 5WEK_C 5WEK_A 5VHY_A 5VHW_C 5VHX_A 5VHZ_C 5VHW_D 5VHY_E 5WEN_A 5VHX_B 5VHX_D 5VHW_B 5WEL_A 5VHW_A 5VHZ_D 5WEN_B 5WEK_B 5VHY_F 5VHZ_A 5WEM_B 5WEO_B 5KBT_D 5KBS_A 5KBU_B 5WEO_C 5KBU_A 5KBS_C 5KBU_D 5KBT_A 5KBS_B 5KBT_C 5KBT_B 5KBU_C 5WEO_D 5WEO_A 5KBS_D 6DM2_D 6DLZ_A 6DM0_A 6DM0_B 6DM1_D 6DM2_C 6DM0_C 6DM1_B 6DLZ_B 6DM2_B 6DM1_C 6DM2_A 6DLZ_C 6DM1_A 6DM0_D",
         )
         self.assertEqual(
             alignment[0],
@@ -6983,10 +6902,9 @@ numpy.array([['G', 'L', 'F', 'D', 'R', 'G', 'V', 'Q', 'M', 'L', 'L', 'T', 'T',
         self.assertEqual(
             alignment.target.seq[8:42], "RTSVVVSTLLGLVMALLIHFVVLSSGAFNWLRAP"
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5YQ7_F")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Beta subunit of light-harvesting 1; Photosynthetic core complex, PHOTOSYNTHESIS; HET: MQE, BCL, HEM, KGD, BPH;{Roseiflexus castenholzii}; Related PDB entries: 5YQ7_V 5YQ7_3 5YQ7_T 5YQ7_J 5YQ7_9 5YQ7_N 5YQ7_A 5YQ7_P 5YQ7_H 5YQ7_D 5YQ7_5 5YQ7_7 5YQ7_1 5YQ7_R",
+            alignment.target.annotations["hmm"],
+            "5YQ7_F Beta subunit of light-harvesting 1; Photosynthetic core complex, PHOTOSYNTHESIS; HET: MQE, BCL, HEM, KGD, BPH;{Roseiflexus castenholzii}; Related PDB entries: 5YQ7_V 5YQ7_3 5YQ7_T 5YQ7_J 5YQ7_9 5YQ7_N 5YQ7_A 5YQ7_P 5YQ7_H 5YQ7_D 5YQ7_5 5YQ7_7 5YQ7_1 5YQ7_R",
         )
         self.assertEqual(alignment[0], "RTSVVVSTLLGLVMALLIHFVVLSSGAFNWLRAP")
         self.assertEqual(
@@ -7087,10 +7005,9 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
             alignment.target.seq[1:227],
             "GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGLTMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVGALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWSAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIFG",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5ZIM_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Bacteriorhodopsin; proton pump, membrane protein, PROTON; HET: L2P, RET; 1.25A {Halobacterium salinarum}; Related PDB entries: 1R84_A 1KG8_A 1KME_B 1KGB_A 1KG9_A 1KME_A 4X31_A 5ZIL_A 1E0P_A 4X32_A 5ZIN_A 1S53_B 1S51_B 1S53_A 1S54_A 1F50_A 1S54_B 1S51_A 1F4Z_A 5J7A_A 1S52_B 1S52_A 4Y9H_A 3T45_A 3T45_C 3T45_B 1C3W_A 1L0M_A",
+            alignment.target.annotations["hmm"],
+            "5ZIM_A Bacteriorhodopsin; proton pump, membrane protein, PROTON; HET: L2P, RET; 1.25A {Halobacterium salinarum}; Related PDB entries: 1R84_A 1KG8_A 1KME_B 1KGB_A 1KG9_A 1KME_A 4X31_A 5ZIL_A 1E0P_A 4X32_A 5ZIN_A 1S53_B 1S51_B 1S53_A 1S54_A 1F50_A 1S54_B 1S51_A 1F4Z_A 5J7A_A 1S52_B 1S52_A 4Y9H_A 3T45_A 3T45_C 3T45_B 1C3W_A 1L0M_A",
         )
         self.assertEqual(
             alignment[0],
@@ -7212,10 +7129,9 @@ numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
             alignment.target.seq[18:244],
             "GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGLTMVPFGGEQNPIYWARYADWLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVGALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRPEVASTFKVLRNVTVVLWSAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIFG",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1M0K_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "BACTERIORHODOPSIN; ION PUMP, MEMBRANE PROTEIN, RETINAL; HET: RET, SQU, LI1; 1.43A {Halobacterium salinarum} SCOP: f.13.1.1; Related PDB entries: 4XXJ_B 4XXJ_A 4XXJ_C 6G7L_A 5VN7_B 1M0M_A 4HWL_A 2ZFE_A 4FPD_A 6G7J_A 3VHZ_A 1M0L_A 2ZZL_A 4HYX_A 4HWL_B 4HYX_B 6G7K_A 6G7I_A 3VI0_A 5VN7_A 5VN9_B 5VN9_A 3COC_B 2I21_A 5B34_A 3HAQ_A 1S8L_A 1TN0_B 1O0A_A 1JV6_A 1TN0_A 5BR2_A 2I1X_A 1UCQ_A 1MGY_A 1C8R_A 3HAR_A 1P8U_A 3UTX_A 1Q5I_A 1Q5J_A 1Q5J_B 1JV7_A 1P8I_A 1S8J_A 3COC_A 3HAO_A 1PY6_B 1PXR_B 1Q5I_B 3UTY_A 2NTU_A 1PXS_B 5BR5_A 1PXS_A 3HAS_A 1PXR_A 1TN5_A 2WJL_A 3HAP_A 3COD_A 1TN5_B 3HAO_B 2I20_A 2WJK_A 1R2N_A 3UTV_A 3UTX_B 3HAN_A 1PY6_A 1VJM_A 3UTY_B 5B35_A 3COD_B 3UTW_A 2NTW_A 4OV0_A 1P8H_A 1CWQ_A 6G7H_A 5H2J_A 1BRD_A 5H2H_A 1X0I_1 5A44_A 1QM8_A 1X0S_A 5B6V_A 1BM1_A 1AP9_A 2BRD_A 1IW6_A 3MBV_A 5H2P_A 1QKP_A 5H2O_A 5H2N_A 5B6X_A 1FBB_A 1CWQ_B 4MD2_A 1QKO_A 1IW9_A 1QHJ_A 1AT9_A 1DZE_A 4MD1_A 5H2K_A 1X0K_1 5B6Z_A 5H2L_A 5H2I_A 1FBK_A 1IXF_A 3NS0_A 1BRX_A 3NSB_A 5H2M_A 2AT9_A 5B6Y_A 5B6W_A 5A45_A 1XJI_A 1BRR_B 1BRR_A 1BRR_C",
+            alignment.target.annotations["hmm"],
+            "1M0K_A BACTERIORHODOPSIN; ION PUMP, MEMBRANE PROTEIN, RETINAL; HET: RET, SQU, LI1; 1.43A {Halobacterium salinarum} SCOP: f.13.1.1; Related PDB entries: 4XXJ_B 4XXJ_A 4XXJ_C 6G7L_A 5VN7_B 1M0M_A 4HWL_A 2ZFE_A 4FPD_A 6G7J_A 3VHZ_A 1M0L_A 2ZZL_A 4HYX_A 4HWL_B 4HYX_B 6G7K_A 6G7I_A 3VI0_A 5VN7_A 5VN9_B 5VN9_A 3COC_B 2I21_A 5B34_A 3HAQ_A 1S8L_A 1TN0_B 1O0A_A 1JV6_A 1TN0_A 5BR2_A 2I1X_A 1UCQ_A 1MGY_A 1C8R_A 3HAR_A 1P8U_A 3UTX_A 1Q5I_A 1Q5J_A 1Q5J_B 1JV7_A 1P8I_A 1S8J_A 3COC_A 3HAO_A 1PY6_B 1PXR_B 1Q5I_B 3UTY_A 2NTU_A 1PXS_B 5BR5_A 1PXS_A 3HAS_A 1PXR_A 1TN5_A 2WJL_A 3HAP_A 3COD_A 1TN5_B 3HAO_B 2I20_A 2WJK_A 1R2N_A 3UTV_A 3UTX_B 3HAN_A 1PY6_A 1VJM_A 3UTY_B 5B35_A 3COD_B 3UTW_A 2NTW_A 4OV0_A 1P8H_A 1CWQ_A 6G7H_A 5H2J_A 1BRD_A 5H2H_A 1X0I_1 5A44_A 1QM8_A 1X0S_A 5B6V_A 1BM1_A 1AP9_A 2BRD_A 1IW6_A 3MBV_A 5H2P_A 1QKP_A 5H2O_A 5H2N_A 5B6X_A 1FBB_A 1CWQ_B 4MD2_A 1QKO_A 1IW9_A 1QHJ_A 1AT9_A 1DZE_A 4MD1_A 5H2K_A 1X0K_1 5B6Z_A 5H2L_A 5H2I_A 1FBK_A 1IXF_A 3NS0_A 1BRX_A 3NSB_A 5H2M_A 2AT9_A 5B6Y_A 5B6W_A 5A45_A 1XJI_A 1BRR_B 1BRR_A 1BRR_C",
         )
         self.assertEqual(
             alignment[0],
@@ -7337,10 +7253,9 @@ numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
             alignment.target.seq[5:231],
             "GPESIWLWIGTIGMTLGTLYFVGRGRGVRDRKMQEFYIITTFITTIAAAMYFAMATGFGVTEVVVGDEALTIYWARYADWLFTTPLLLLDLGLLAGANRNTIATLIGLDVFMIGTGMIAAFAATPGTRIAWWGISTGALLALLYVLVGTLSKDARGQSPEVASLFGRLRNLVIVLWLLYPVVWILGTEGTFGILPLYWETAAFMVLDLSAKVGFGVVLLRSRSVLR",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4FBZ_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "deltarhodopsin; 7 transmembrane helices, light-driven proton; HET: RET, L2P, 22B, SQL, BNG, SO4; 2.7A {Haloterrigena thermotolerans} SCOP: f.13.1.0",
+            alignment.target.annotations["hmm"],
+            "4FBZ_A deltarhodopsin; 7 transmembrane helices, light-driven proton; HET: RET, L2P, 22B, SQL, BNG, SO4; 2.7A {Haloterrigena thermotolerans} SCOP: f.13.1.0",
         )
         self.assertEqual(
             alignment[0],
@@ -7462,10 +7377,9 @@ numpy.array([['G', 'P', 'E', 'S', 'I', 'W', 'L', 'W', 'I', 'G', 'T', 'I', 'G',
             alignment.target.seq[15:242],
             "GRPETLWLGIGTLLMLIGTFYFIARGWGVTDKEAREYYAITILVPGIASAAYLAMFFGIGVTEVELASGTVLDIYYARYADWLFTTPLLLLDLALLAKVDRVTIGTLIGVDALMIVTGLIGALSKTPLARYTWWLFSTIAFLFVLYYLLTSLRSAAAKRSEEVRSTFNTLTALVAVLWTAYPILWIVGTEGAGVVGLGIETLAFMVLDVTAKVGFGFVLLRSRAILG",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "3WQJ_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Archaerhodopsin-2; 7 trans-membrane helices, light-driven proton; HET: RET, L3P, L2P, 22B, SQL, L4P; 1.8A {Halobacterium}; Related PDB entries: 2Z55_B 2EI4_A 2Z55_D 1VGO_A 2Z55_E 1VGO_B 2Z55_A 1UAZ_A 1UAZ_B",
+            alignment.target.annotations["hmm"],
+            "3WQJ_A Archaerhodopsin-2; 7 trans-membrane helices, light-driven proton; HET: RET, L3P, L2P, 22B, SQL, L4P; 1.8A {Halobacterium}; Related PDB entries: 2Z55_B 2EI4_A 2Z55_D 1VGO_A 2Z55_E 1VGO_B 2Z55_A 1UAZ_A 1UAZ_B",
         )
         self.assertEqual(
             alignment[0],
@@ -7587,10 +7501,9 @@ numpy.array([['G', 'R', 'P', 'E', 'T', 'L', 'W', 'L', 'G', 'I', 'G', 'T', 'L',
             alignment.target.seq[4:234],
             "EGEAIWLWLGTAGMFLGMLYFIARGWGETDSRRQKFYIATILITAIAFVNYLAMALGFGLTIVEIAGEQRPIYWARYSDWLFTTPLLLYDLGLLAGADRNTISSLVSLDVLMIGTGLVATLSAGSGVLSAGAERLVWWGISTAFLLVLLYFLFSSLSGRVADLPSDTRSTFKTLRNLVTVVWLVYPVWWLVGTEGIGLVGIGIETAGFMVIDLVAKVGFGIILLRSHGVL",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4L35_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Cruxrhodopsin-3; protein-bacterioruberin complex, seven transmembrane alpha; HET: RET, 22B; 2.1A {Haloarcula vallismortis} SCOP: f.13.1.0; Related PDB entries: 4PXK_A 4JR8_A",
+            alignment.target.annotations["hmm"],
+            "4L35_A Cruxrhodopsin-3; protein-bacterioruberin complex, seven transmembrane alpha; HET: RET, 22B; 2.1A {Haloarcula vallismortis} SCOP: f.13.1.0; Related PDB entries: 4PXK_A 4JR8_A",
         )
         self.assertEqual(
             alignment[0],
@@ -7712,10 +7625,9 @@ numpy.array([['E', 'G', 'E', 'A', 'I', 'W', 'L', 'W', 'L', 'G', 'T', 'A', 'G',
             alignment.target.seq[13:239],
             "EGEGIWLALGTIGMLLGMLYFIADGLDVQDPRQKEFYVITILIPAIAAASYLSMFFGFGLTEVSLANGRVVDVYWARYADWLFTTPLLLLDIGLLAGASQRDIGALVGIDAFMIVTGLVATLTKVVVARYAFWTISTISMVFLLYYLVAVFGEAVSDADEDTRSTFNALRNIILVTWAIYPVAWLVGTEGLALTGLYGETLLFMVLDLVAKVGFGFILLRSRAIMG",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4QI1_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Bacteriorhodopsin-I; Bacteriorhodopsin, proton pump, Membrane, MEMBRANE; HET: MPG, RET; 1.85A {Haloquadratum walsbyi} SCOP: f.13.1.0; Related PDB entries: 5ITC_A 5KKH_A 5ITE_B 5KKH_C 5ITE_C 5ITC_C 5ITC_B 5KKH_B 5ITE_A 4QI1_B 4WAV_B 4WAV_A 4QID_B 4QID_A 4QI1_C",
+            alignment.target.annotations["hmm"],
+            "4QI1_A Bacteriorhodopsin-I; Bacteriorhodopsin, proton pump, Membrane, MEMBRANE; HET: MPG, RET; 1.85A {Haloquadratum walsbyi} SCOP: f.13.1.0; Related PDB entries: 5ITC_A 5KKH_A 5ITE_B 5KKH_C 5ITE_C 5ITC_C 5ITC_B 5KKH_B 5ITE_A 4QI1_B 4WAV_B 4WAV_A 4QID_B 4QID_A 4QI1_C",
         )
         self.assertEqual(
             alignment[0],
@@ -7837,10 +7749,9 @@ numpy.array([['E', 'G', 'E', 'G', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'I', 'G',
             alignment.target.seq[1:218],
             "VGLTTLFWLGAIGMLVGTLAFAWAGRDAGSGERRYYVTLVGISGIAAVAYVVMALGVGWVPVAERTVFAPRYIDWILTTPLIVYFLGLLAGLDSREFGIVITLNTVVMLAGFAGAMVPGIERYALFGMGAVAFLGLVYYLVGPMTESASQRSSGIKSLYVRLRNLTVILWAIYPFIWLLGPPGVALLTPTVDVALIVYLDLVTKVGFGFIALDAAAT",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1H2S_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "SENSORY RHODOPSIN II, SENSORY RHODOPSIN; MEMBRANE PROTEIN, MENBRANE PROTEIN COMPLEX; HET: BOG, RET; 1.93A {NATRONOMONAS PHARAONIS} SCOP: f.13.1.1; Related PDB entries: 1JGJ_A",
+            alignment.target.annotations["hmm"],
+            "1H2S_A SENSORY RHODOPSIN II, SENSORY RHODOPSIN; MEMBRANE PROTEIN, MENBRANE PROTEIN COMPLEX; HET: BOG, RET; 1.93A {NATRONOMONAS PHARAONIS} SCOP: f.13.1.1; Related PDB entries: 1JGJ_A",
         )
         self.assertEqual(
             alignment[0],
@@ -7962,10 +7873,9 @@ numpy.array([['V', 'G', 'L', 'T', 'T', 'L', 'F', 'W', 'L', 'G', 'A', 'I', 'G',
             alignment.target.seq[5:225],
             "TETGMIAQWIVFAIMAAAAIAFGVAVHFRPSELKSAYYINIAICTIAATAYYAMAVNYQDLTMNGERQVVYARYIDWVLTTPLLLLDLIVMTKMGGVMISWVIGADIFMIVFGILGAFEDEHKFKWVYFIAGCVMQAVLTYGMYNATWKDDLKKSPEYHSSYVSLLVFLSILWVFYPVVWAFGSGSGVLSVDNEAILMGILDVLAKPLFGMGCLIAHETI",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "3AM6_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "rhodopsin-2; seven trans-membrane, Transport Protein; HET: RET, CLR; 3.2A {Acetabularia acetabulum}; Related PDB entries: 3AM6_B 3AM6_C 3AM6_D",
+            alignment.target.annotations["hmm"],
+            "3AM6_A rhodopsin-2; seven trans-membrane, Transport Protein; HET: RET, CLR; 3.2A {Acetabularia acetabulum}; Related PDB entries: 3AM6_B 3AM6_C 3AM6_D",
         )
         self.assertEqual(
             alignment[0],
@@ -8087,10 +7997,9 @@ numpy.array([['T', 'E', 'T', 'G', 'M', 'I', 'A', 'Q', 'W', 'I', 'V', 'F', 'A',
             alignment.target.seq[2:217],
             "LTTLFWLGAIGMLVGTLAFAWAGRDAGSGERRYYVTLVGISGIAAVAYVVMALGVGWVPVAERTVFAPRYIDWILTTPLIVYFLGLLAGLDSREFGIVITLNTVVMLAGFAGAMVPGIERYALFGMGAVAFLGLVYYLVGPMTESASQRSSGIKSLYVRLRNLTVILWAIYPFIWLLGPPGVALLTPTVDVALIVYLDLVTKVGFGFIALDAAAT",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5JJF_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "sensory rhodopsin; sensory rhodopsin II, transducer, membrane; HET: LFA, RET, BOG; 1.9A {Natronomonas pharaonis}; Related PDB entries: 5JJE_A 5JJN_C 2F93_A 5JJN_A 2F95_A 5JJJ_A 2KSY_A 4GYC_A 1GU8_A 1GUE_A 3QDC_A 3QAP_A 1H68_A",
+            alignment.target.annotations["hmm"],
+            "5JJF_A sensory rhodopsin; sensory rhodopsin II, transducer, membrane; HET: LFA, RET, BOG; 1.9A {Natronomonas pharaonis}; Related PDB entries: 5JJE_A 5JJN_C 2F93_A 5JJN_A 2F95_A 5JJJ_A 2KSY_A 4GYC_A 1GU8_A 1GUE_A 3QDC_A 3QAP_A 1H68_A",
         )
         self.assertEqual(
             alignment[0],
@@ -8207,10 +8116,9 @@ numpy.array([['L', 'T', 'T', 'L', 'F', 'W', 'L', 'G', 'A', 'I', 'G', 'M', 'L',
             alignment.target.seq[21:239],
             "AQWVVFAVMALAAIVFSIAVQFRPLPLRLTYYVNIAICTIAATAYYAMAVNGGDNKPTAGTGADERQVIYARYIDWVFTTPLLLLDLVLLTNMPATMIAWIMGADIAMIAFGIIGAFTVGSYKWFYFVVGCIMLAVLAWGMINPIFKEELQKHKEYTGAYTTLLIYLIVLWVIYPIVWGLGAGGHIIGVDVEIIAMGILDLLAKPLYAIGVLITVEVV",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5AX0_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Rhodopsin I; PROTON TRANSPORT, MEMBRANE PROTEIN, RETINAL; HET: RET, D10, OLB, R16, D12, C14; 1.521A {Acetabularia acetabulum}; Related PDB entries: 5AX1_A 5AWZ_A",
+            alignment.target.annotations["hmm"],
+            "5AX0_A Rhodopsin I; PROTON TRANSPORT, MEMBRANE PROTEIN, RETINAL; HET: RET, D10, OLB, R16, D12, C14; 1.521A {Acetabularia acetabulum}; Related PDB entries: 5AX1_A 5AWZ_A",
         )
         self.assertEqual(
             alignment[0],
@@ -8331,10 +8239,9 @@ numpy.array([['A', 'Q', 'W', 'V', 'V', 'F', 'A', 'V', 'M', 'A', 'L', 'A', 'A',
             alignment.target.seq[1:225],
             "NLESLLHWIYVAGMTIGALHFWSLSRNPRGVPQYEYLVAMFIPIWSGLAYMAMAIDQGKVEAAGQIAHYARYIDWMVTTPLLLLSLSWTAMQFIKKDWTLIGFLMSTQIVVITSGLIADLSERDWVRYLWYICGVCAFLIILWGIWNPLRAKTRTQSSELANLYDKLVTYFTVLWIGYPIVWIIGPSGFGWINQTIDTFLFCLLPFFSKVGFSFLDLHGLRNLN",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1XIO_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "ANABAENA SENSORY RHODOPSIN; signaling protein, photoreceptor; HET: PEE, RET; 2.0A {Nostoc sp. PCC 7120} SCOP: f.13.1.1; Related PDB entries: 2M3G_C 5UK6_B 5UK6_A 5UK6_C 2M3G_B 2M3G_A 4TL3_B 4TL3_A",
+            alignment.target.annotations["hmm"],
+            "1XIO_A ANABAENA SENSORY RHODOPSIN; signaling protein, photoreceptor; HET: PEE, RET; 2.0A {Nostoc sp. PCC 7120} SCOP: f.13.1.1; Related PDB entries: 2M3G_C 5UK6_B 5UK6_A 5UK6_C 2M3G_B 2M3G_A 4TL3_B 4TL3_A",
         )
         self.assertEqual(
             alignment[0],
@@ -8456,10 +8363,9 @@ numpy.array([['N', 'L', 'E', 'S', 'L', 'L', 'H', 'W', 'I', 'Y', 'V', 'A', 'G',
             alignment.target.seq[36:269],
             "SLYINIALAGLSILLFVFMTRGLDDPRAKLIAVSTILVPVVSIASYTGLASGLTISVLEMPAGHFAEGSSVMLGGEEVDGVVTMWGRYLTWALSTPMILLALGLLAGSNATKLFTAITFDIAMCVTGLAAALTTSSHLMRWFWYAISCACFIVVLYILLVEWAQDAKAAGTADIFSTLKLLTVVMWLGYPIVWALGVEGVAVLPVGYTSWAYSALDIVAKYIFAFLLLNYLTS",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5B0W_G")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Halorhodopsin; seven trans-membrane helices, retinylidene protein; HET: RET, L3P, BNG, 22B; 1.7A {Natronomonas pharaonis DSM 2160}; Related PDB entries: 5B0W_D 3QBI_D 5ETZ_A 3ABW_D 3A7K_B 5ETZ_D 3QBK_D 3ABW_A 3VVK_C 4QRY_G 5B0W_F 3QBL_A 3ABW_B 3QBG_B 4QRY_E 3QBK_A 3QBI_B 3QBG_D 3VVK_B 3QBG_A 4QRY_C 5B0W_B 4QRY_F 3QBL_D 5B0W_A 3VVK_D 4QRY_A 5B0W_E 3VVK_A 3QBL_B 5ETZ_B 3A7K_A 3QBI_A 4QRY_B 3QBK_B 3VVK_F 3A7K_D 3VVK_E",
+            alignment.target.annotations["hmm"],
+            "5B0W_G Halorhodopsin; seven trans-membrane helices, retinylidene protein; HET: RET, L3P, BNG, 22B; 1.7A {Natronomonas pharaonis DSM 2160}; Related PDB entries: 5B0W_D 3QBI_D 5ETZ_A 3ABW_D 3A7K_B 5ETZ_D 3QBK_D 3ABW_A 3VVK_C 4QRY_G 5B0W_F 3QBL_A 3ABW_B 3QBG_B 4QRY_E 3QBK_A 3QBI_B 3QBG_D 3VVK_B 3QBG_A 4QRY_C 5B0W_B 4QRY_F 3QBL_D 5B0W_A 3VVK_D 4QRY_A 5B0W_E 3VVK_A 3QBL_B 5ETZ_B 3A7K_A 3QBI_A 4QRY_B 3QBK_B 3VVK_F 3A7K_D 3VVK_E",
         )
         self.assertEqual(
             alignment[0],
@@ -8583,10 +8489,9 @@ numpy.array([['S', 'L', 'Y', 'I', 'N', 'I', 'A', 'L', 'A', 'G', 'L', 'S', 'I',
             alignment.target.seq[31:257],
             "SLWVNVALAGIAILVFVYMGRTIRPGRPRLIWGATLMIPLVSISSYLGLLSGLTVGMIEMPAGHALAGEMVRSQWGRYLTWALSTPMILLALGLLADVDLGSLFTVIAADIGMCVTGLAAAMTTSALLFRWAFYAISCAFFVVVLSALVTDWAASASSAGTAEIFDTLRVLVVVLWLGYPIVWAVGVEGLALVQSVGATSWAYSVLDVFAKYVFAFILLRWVANNE",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2JAF_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "HALORHODOPSIN; CHROMOPHORE, CHLORIDE PUMP, ION TRANSPORT; HET: BOG, RET, PLM; 1.7A {HALOBACTERIUM SALINARIUM} SCOP: f.13.1.1; Related PDB entries: 2JAG_A 5AHZ_A 5G36_A 5AHY_A 1E12_A",
+            alignment.target.annotations["hmm"],
+            "2JAF_A HALORHODOPSIN; CHROMOPHORE, CHLORIDE PUMP, ION TRANSPORT; HET: BOG, RET, PLM; 1.7A {HALOBACTERIUM SALINARIUM} SCOP: f.13.1.1; Related PDB entries: 2JAG_A 5AHZ_A 5G36_A 5AHY_A 1E12_A",
         )
         self.assertEqual(
             alignment[0],
@@ -8708,10 +8613,9 @@ numpy.array([['S', 'L', 'W', 'V', 'N', 'V', 'A', 'L', 'A', 'G', 'I', 'A', 'I',
             alignment.target.seq[1:196],
             "GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGLTMVPFGGEQNPIYWARYADWLFTTPLLLLNLALLVDADQGTILALVGADGIMIGTGLVGALTKVYSYRFVWWAISTAAMLYILYVLFNVTVVLWSAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLI",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1C8S_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "BACTERIORHODOPSIN MUTANT/LIPID COMPLEX; ION PUMP, MEMBRANE PROTEIN, RETINAL; HET: LI1, SQU, RET; 2.0A {Halobacterium salinarum} SCOP: f.13.1.1",
+            alignment.target.annotations["hmm"],
+            "1C8S_A BACTERIORHODOPSIN MUTANT/LIPID COMPLEX; ION PUMP, MEMBRANE PROTEIN, RETINAL; HET: LI1, SQU, RET; 2.0A {Halobacterium salinarum} SCOP: f.13.1.1",
         )
         self.assertEqual(
             alignment[0],
@@ -8831,10 +8735,9 @@ numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
             alignment.target.seq[24:268],
             "YQFTSHILTLGYAVMLAGLLYFILTIKNVDKKFQMSNILSAVVMVSAFLLLYAQAQNWTSSFTFNEEVGRYFLDPSGDLFNNGYRYLNWLIDVPMLLFQILFVVSLTTSKFSSVRNQFWFSGAMMIITGYIGQFYEVSNLTAFLVWGAISSAFFFHILWVMKKVINEGKEGISPAGQKILSNIWILFLISWTLYPGAYLMPYLTGVDGFLYSEDGVMARQLVYTIADVSSXVIYGVLLGNLAIT",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4XTL_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "KR2; ion pump, membrane protein; HET: GOL, LFA, LYR; 1.45A {Dokdonia eikasta}; Related PDB entries: 3X3B_A 3X3C_A 5JRF_A 4XTO_D 4XTN_C 4XTN_H 4XTN_A 4XTO_E 4XTN_B 4XTN_D 4XTO_A 4XTN_G 4XTO_B 4XTN_F 4XTO_C 4XTN_I 4XTN_J 4XTN_E",
+            alignment.target.annotations["hmm"],
+            "4XTL_A KR2; ion pump, membrane protein; HET: GOL, LFA, LYR; 1.45A {Dokdonia eikasta}; Related PDB entries: 3X3B_A 3X3C_A 5JRF_A 4XTO_D 4XTN_C 4XTN_H 4XTN_A 4XTO_E 4XTN_B 4XTN_D 4XTO_A 4XTN_G 4XTO_B 4XTN_F 4XTO_C 4XTN_I 4XTN_J 4XTN_E",
         )
         self.assertEqual(
             alignment[0],
@@ -8965,10 +8868,9 @@ numpy.array([['Y', 'Q', 'F', 'T', 'S', 'H', 'I', 'L', 'T', 'L', 'G', 'Y', 'A',
             alignment.target.seq[87:311],
             "KIGAQVCQWIAFSIAIALLTFYGFSAWKATCGWEEVYVCCVEVLFVTLEIFKEFSSPATVYLSTGNHAYCLRYFEWLLSCPVILIKLSNLSGLKNDYSKRTMGLIVSCVGMIVFGMAAGLATDWLKWLLYIVSCIYGGYMYFQAAKCYVEANHSVPKGHCRMVVKLMAYAYFASWGSYPILWAVGPEGLLKLSPYANSIGHSICDIIAXEFWTFLAHHLRIKIH",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5ZIH_B")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Sensory opsin A,Chrimson; membrane protein, rhodopsin, ion channel; HET: OLC, LYR; 2.6A {Chlamydomonas reinhardtii}; Related PDB entries: 5ZIH_A",
+            alignment.target.annotations["hmm"],
+            "5ZIH_B Sensory opsin A,Chrimson; membrane protein, rhodopsin, ion channel; HET: OLC, LYR; 2.6A {Chlamydomonas reinhardtii}; Related PDB entries: 5ZIH_A",
         )
         self.assertEqual(
             alignment[0],
@@ -9093,10 +8995,9 @@ numpy.array([['K', 'I', 'G', 'A', 'Q', 'V', 'C', 'Q', 'W', 'I', 'A', 'F', 'S',
             alignment.target.seq[12:226],
             "ISFWLAAAIMLASTVFFFVERSDVPVKWKTSLTVAGLVTGVAFWHYLYMRGVWIYAGETPTVFRYIDWLITVPLQIIEFYLIIAAVTAISSAVFWKLLIASLVMLIGGFIGEAGLGDVVVWWIVGMIAWLYIIYEIFLGETAKANAGSGNAASQQAFNTIKWIVTVGWAIYPIGYAWGYFGDGLNEDALNIVYNLADLINKAAFGLAIWAAAMK",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4JQ6_C")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Proteorhodopsin; retinylidene protein, ion transport, PROTON; HET: LI1, RET; 2.31A {uncultured bacterium} SCOP: f.13.1.0; Related PDB entries: 4JQ6_A 4JQ6_B",
+            alignment.target.annotations["hmm"],
+            "4JQ6_C Proteorhodopsin; retinylidene protein, ion transport, PROTON; HET: LI1, RET; 2.31A {uncultured bacterium} SCOP: f.13.1.0; Related PDB entries: 4JQ6_A 4JQ6_B",
         )
         self.assertEqual(
             alignment[0],
@@ -9220,10 +9121,9 @@ numpy.array([['I', 'S', 'F', 'W', 'L', 'A', 'A', 'A', 'I', 'M', 'L', 'A', 'S',
             alignment.target.seq[23:251],
             "LLTMGVGVHFAALIFFLVVSQFVAPKYRIATALSCIVMVSAGLILNSQAVMWTDAYAYVDGSYQLQDLTFSNGYRYVNWMATIPCLLLQLLIVLNLKGKELFSTATWLILAAWGMIITGYVGQLYEVDDIAQLMIWGAVSTAFFVVMNWIVGTKIFKNRATMLGGTDSTITKVFWLMMFAWTLYPIAYLVPAFMNNADGVVLRQLLFTIADISSKVIYGLMITYIAIQ",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5G28_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "CHLORIDE PUMPING RHODOPSIN; SIGNALING PROTEIN; HET: OLA, RET; 1.57A {NONLABENS MARINUS S1-08}; Related PDB entries: 5B2N_A 5G2D_A 5G54_A 5G2C_A 5G2A_A 5FJG_A",
+            alignment.target.annotations["hmm"],
+            "5G28_A CHLORIDE PUMPING RHODOPSIN; SIGNALING PROTEIN; HET: OLA, RET; 1.57A {NONLABENS MARINUS S1-08}; Related PDB entries: 5B2N_A 5G2D_A 5G54_A 5G2C_A 5G2A_A 5FJG_A",
         )
         self.assertEqual(
             alignment[0],
@@ -9345,10 +9245,9 @@ numpy.array([['L', 'L', 'T', 'M', 'G', 'V', 'G', 'V', 'H', 'F', 'A', 'A', 'L',
             alignment.target.seq[7:238],
             "VLATQYMFWVGFVGMAAGTLYFLVERNSLAPEYRSTATVAALVTFVAAIHYYFMKDAVGTSGLLSEIDGFPTEIRYIDWLVTTPLLLVKFPLLLGLKGRLGRPLLTKLVIADVIMIVGGYIGESSINIAGGFTQLGLWSYLIGCFAWIYIIYLLFTNVTKAAENKPAPIRDALLKMRLFILIGWAIYPIGYAVTLFAPGVEIQLVRELIYNFADLTNKVGFGLIAFFAVKT",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4HYJ_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Rhodopsin; Seven-helical transmembrane protein, Proton pump; HET: RET, LFA; 2.3A {Exiguobacterium sibiricum} SCOP: f.13.1.0; Related PDB entries: 4HYJ_B",
+            alignment.target.annotations["hmm"],
+            "4HYJ_A Rhodopsin; Seven-helical transmembrane protein, Proton pump; HET: RET, LFA; 2.3A {Exiguobacterium sibiricum} SCOP: f.13.1.0; Related PDB entries: 4HYJ_B",
         )
         self.assertEqual(
             alignment[0],
@@ -9471,10 +9370,9 @@ numpy.array([['V', 'L', 'A', 'T', 'Q', 'Y', 'M', 'F', 'W', 'V', 'G', 'F', 'V',
             alignment.target.seq[26:246],
             "SDTVGVSFWLVTAGMLAATVFFFVERDQVSAKWKTSLTVSGLITGIAFWHYLYMRGVWIDTGDTPTVFRYINWLLTVPLLVVEFYLILAACTSVAASLFKKLLAGSLVMLGAGFAGEAGLAPVLPAFIIGMAGWLYMIYELYMGEGKAAVSTASPAVNSAYNAMMMIIVVGWAIYPAGYAAGYLMGGEGVYASNLNLIYNLADFVNKILFGLIIWNVAVK",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4KNF_D")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Blue-light absorbing proteorhodopsin; Membrane, Proton transport, ion transport; HET: RET; 2.6A {gamma proteobacterium 'Hot 75m4'} SCOP: l.1.1.1, f.13.1.0; Related PDB entries: 2L6X_A 4KNF_A 4KNF_B 4KNF_C 4KNF_E 4KLY_A 4KLY_B 4KLY_E 4KLY_C 4KLY_D",
+            alignment.target.annotations["hmm"],
+            "4KNF_D Blue-light absorbing proteorhodopsin; Membrane, Proton transport, ion transport; HET: RET; 2.6A {gamma proteobacterium 'Hot 75m4'} SCOP: l.1.1.1, f.13.1.0; Related PDB entries: 2L6X_A 4KNF_A 4KNF_B 4KNF_C 4KNF_E 4KLY_A 4KLY_B 4KLY_E 4KLY_C 4KLY_D",
         )
         self.assertEqual(
             alignment[0],
@@ -9598,10 +9496,9 @@ numpy.array([['S', 'D', 'T', 'V', 'G', 'V', 'S', 'F', 'W', 'L', 'V', 'T', 'A',
             alignment.target.seq[18:246],
             "LSLTIAGMLAAFVFFLLARSYVAPRYHIALYLSALIVFIAGYHYLRIFESWVGAYQLQDGVYVPTGKPFNDFYRYADWLLTVPLLLLELILVLGLTAARTWNLSIKLVVASVLMLALGYVGEVNTEPGPRTLWGALSSIPFFYILYVLWVELGQAIREAKFGPRVLELLGATRLVLLMSWGFYPIAYALGTWLPGGAAQEVAIQIGYSLADLIAXPIYGLLVFAIARA",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5AZD_C")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Thermophilic rhodopsin; Membrane protein, Retinal, Ion pump; HET: LYR; 2.8A {Thermus thermophilus JL-18}; Related PDB entries: 5AZD_D 5AZD_B 5AZD_A",
+            alignment.target.annotations["hmm"],
+            "5AZD_C Thermophilic rhodopsin; Membrane protein, Retinal, Ion pump; HET: LYR; 2.8A {Thermus thermophilus JL-18}; Related PDB entries: 5AZD_D 5AZD_B 5AZD_A",
         )
         self.assertEqual(
             alignment[0],
@@ -9725,10 +9622,9 @@ numpy.array([['L', 'S', 'L', 'T', 'I', 'A', 'G', 'M', 'L', 'A', 'A', 'F', 'V',
             alignment.target.seq[18:253],
             "MFSFTVATMTASFVFFVLARNNVAPKYRISMMVSALVVFIAGYHYFRITSSWEAAYALQNGMYQPTGELFNDAYRYVDWLLTVPLLTVELVLVMGLPKNERGPLAAKLGFLAALMIVLGYPGEVSENAALFGTRGLWGFLSTIPFVWILYILFTQLGDTIQRQSSRVSTLLGNARLLLLATWGFYPIAYMIPMAFPEAFPSNTPGTIVALQVGYTIADVLAKAGYGVLIYNIAKA",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "3DDL_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Xanthorhodopsin; rhodopsin, carotenoid, ion pump, light-harvesting; HET: PX4, SXN, PCW, RET, UNL; 1.9A {Salinibacter ruber} SCOP: f.13.1.0; Related PDB entries: 3DDL_B",
+            alignment.target.annotations["hmm"],
+            "3DDL_A Xanthorhodopsin; rhodopsin, carotenoid, ion pump, light-harvesting; HET: PX4, SXN, PCW, RET, UNL; 1.9A {Salinibacter ruber} SCOP: f.13.1.0; Related PDB entries: 3DDL_B",
         )
         self.assertEqual(
             alignment[0],
@@ -9854,10 +9750,9 @@ numpy.array([['M', 'F', 'S', 'F', 'T', 'V', 'A', 'T', 'M', 'T', 'A', 'S', 'F',
             alignment.target.seq[68:286],
             "NILQWITFALSALCLMFYGYQTWKSTCGWEEIYVATIEMIKFIIEYFHEFDEPAVIYSSNGNKTVWLRYAEWLLTCPVILIHLSNLTGLANDYNKRTMGLLVSDIGTIVWGTTAALSKGYVRVIFFLMGLCYGIYTFFNAAKVYIEAYHTVPKGRCRQVVTGMAWLFFVSWGMFPILFILGPEGFGVLSVYGSTVGHTIIDLMSKNCWGLLGHYLRVL",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "3UG9_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Archaeal-type opsin 1, Archaeal-type opsin; microbialrhodopsin, seven-transmembrane, light-gated cation channel; HET: OLA, RET; 2.3A {Chlamydomonas reinhardtii}; Related PDB entries: 6CSO_A 6EIG_A 6EIG_B 6EID_B 6EID_A 4YZI_A 6CSN_A",
+            alignment.target.annotations["hmm"],
+            "3UG9_A Archaeal-type opsin 1, Archaeal-type opsin; microbialrhodopsin, seven-transmembrane, light-gated cation channel; HET: OLA, RET; 2.3A {Chlamydomonas reinhardtii}; Related PDB entries: 6CSO_A 6EIG_A 6EIG_B 6EID_B 6EID_A 4YZI_A 6CSN_A",
         )
         self.assertEqual(
             alignment[0],
@@ -9981,10 +9876,9 @@ numpy.array([['N', 'I', 'L', 'Q', 'W', 'I', 'T', 'F', 'A', 'L', 'S', 'A', 'L',
             alignment.target.seq[6:213],
             "RLFMVATVGMLAGTVFLLASSREVKPEHRRGVYISALVCGIAWYHYQKMGASWESGSYDTGLRYVDWVLTVPLMFVEVLAVTRKGAAYNEAVRNWGIAATVMIGAGYYGETSAAGSNEYWTGFVIAMATYVWLMRNLQAEGEGLKGDQAVAFENIKNLILVGWIIYPLGYIAPVVGDFDAIREVLYTIADIINXVGLGVLVLQMARV",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5JSI_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Nitrate/nitrite sensor protein NarQ (E.C.2.7.13.3); membrane protein, iodide, UNKNOWN FUNCTION; HET: LYR, OLC, LFA, IOD; 2.0A {Candidatus Actinomarina minuta}; Related PDB entries: 5JSI_B",
+            alignment.target.annotations["hmm"],
+            "5JSI_A Nitrate/nitrite sensor protein NarQ (E.C.2.7.13.3); membrane protein, iodide, UNKNOWN FUNCTION; HET: LYR, OLC, LFA, IOD; 2.0A {Candidatus Actinomarina minuta}; Related PDB entries: 5JSI_B",
         )
         self.assertEqual(
             alignment[0],
@@ -10108,10 +10002,9 @@ numpy.array([['R', 'L', 'F', 'M', 'V', 'A', 'T', 'V', 'G', 'M', 'L', 'A', 'G',
             alignment.target.seq[26:248],
             "DGIKYVQLVMAVVSACQVFFMVTRAPKVPWEAIYLPTTEMITYSLAFTGNGYIRVANGKYLPWARMASWLCTCPIMLGLVSNMALVKYKSIPLNPMMIAASSICTVFGITASVVLDPLHVWLYCFISSIFFIFEMVVAFAIFAITIHDFQTIGSPMSLKVVERLKLMRIVFYVSWMAYPILWSFSSTGACIMSENTSSVLYLLGDALCKNTYGILLWATTWG",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "6CSM_D")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "GtACR1; rhodopsin, channelrhodopsin, anion channel, optogenetics; HET: RET, OLA; 2.9A {Guillardia theta CCMP2712}; Related PDB entries: 6CSM_B 6CSM_A 6CSM_C",
+            alignment.target.annotations["hmm"],
+            "6CSM_D GtACR1; rhodopsin, channelrhodopsin, anion channel, optogenetics; HET: RET, OLA; 2.9A {Guillardia theta CCMP2712}; Related PDB entries: 6CSM_B 6CSM_A 6CSM_C",
         )
         self.assertEqual(
             alignment[0],
@@ -10234,10 +10127,9 @@ numpy.array([['D', 'G', 'I', 'K', 'Y', 'V', 'Q', 'L', '-', '-', '-', 'V', 'M',
             alignment.target.seq[8:226],
             "GGFGSQPFILAYIITAMISGLLFLYLPRKLDVPQKFGIIHFFIVVWSGLMYTNFLNQSFLSDYAWYMDWMVSTPLILLALGLTAFHGADTKRYDLLGALLGAEFTLVITGLLAQAQGSITPYYVGVLLLLGVVYLLAKPFREIAEESSDGLARAYKILAGYIGIFFLSYPTVWYISGIDALPGSLNILDPTQTSIALVVLPFFCKQVYGFLDMYLIHK",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "6EYU_B")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Bacteriorhodopsin; Retinal protein, proton transport, MEMBRANE; HET: RET, LFA, MUN; 2.5A {Nanosalina sp. (strain J07AB43)}; Related PDB entries: 6EYU_C 6EYU_A",
+            alignment.target.annotations["hmm"],
+            "6EYU_B Bacteriorhodopsin; Retinal protein, proton transport, MEMBRANE; HET: RET, LFA, MUN; 2.5A {Nanosalina sp. (strain J07AB43)}; Related PDB entries: 6EYU_C 6EYU_A",
         )
         self.assertEqual(
             alignment[0],
@@ -10363,10 +10255,9 @@ numpy.array([['G', 'G', 'F', 'G', 'S', 'Q', 'P', 'F', 'I', 'L', 'A', 'Y', 'I',
             alignment.target.seq[1:69],
             "RPEVASTFKVLRNVTVVLWSAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIFG",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1BCT_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "BACTERIORHODOPSIN (FRAGMENT 163-231) (NMR, 14; PHOTORECEPTOR; NMR {Halobacterium salinarum} SCOP: j.35.1.1",
+            alignment.target.annotations["hmm"],
+            "1BCT_A BACTERIORHODOPSIN (FRAGMENT 163-231) (NMR, 14; PHOTORECEPTOR; NMR {Halobacterium salinarum} SCOP: j.35.1.1",
         )
         self.assertEqual(
             alignment[0],
@@ -10456,10 +10347,9 @@ numpy.array([['R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N',
             alignment.target.seq[5:71],
             "GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGLTMVPF",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "1BHA_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "BACTERIORHODOPSIN (PROTEOLYTIC FRAGMENT 1 -; PHOTORECEPTOR; NMR {Halobacterium salinarum} SCOP: j.35.1.1; Related PDB entries: 1BHB_A",
+            alignment.target.annotations["hmm"],
+            "1BHA_A BACTERIORHODOPSIN (PROTEOLYTIC FRAGMENT 1 -; PHOTORECEPTOR; NMR {Halobacterium salinarum} SCOP: j.35.1.1; Related PDB entries: 1BHB_A",
         )
         self.assertEqual(
             alignment[0],
@@ -10548,10 +10438,9 @@ numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
             alignment.target.seq[14:65],
             "FWLVTAALLASTVFFFVERDRVSAKWKTSLTVSGLVTGIAFWHYMYMRGVW",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5ABB_Z")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "PROTEIN TRANSLOCASE SUBUNIT SECY, PROTEIN; TRANSLATION, RIBOSOME, MEMBRANE PROTEIN, TRANSLOCON; 8.0A {ESCHERICHIA COLI}",
+            alignment.target.annotations["hmm"],
+            "5ABB_Z PROTEIN TRANSLOCASE SUBUNIT SECY, PROTEIN; TRANSLATION, RIBOSOME, MEMBRANE PROTEIN, TRANSLOCON; 8.0A {ESCHERICHIA COLI}",
         )
         self.assertEqual(
             alignment[0], "FWLVTAALLASTVFFFVERDRVS-AKWKTSLTVSGLVTGIAFWHYMYMRGVW"
@@ -10660,10 +10549,9 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
             alignment.target.seq[0:394],
             "GMHFSQSVAIIQSQVGTIRGVQVLYSDQNPLSVDLVINMPQDGMRLIFDPVAQRLKIIEIYNMKLVKLRYSGMCFNSPEITPSIEQVEHCFGATHPGLYDSQRHLFALNFRGLSFYFPVDSKFEPGYAHGLGSLQFPNGGSPVVSRTTIYYGSQHQLSSNTSSRVSGVPLPDLPLSCYRQQLHLRRCDVLRNTTSTMGLRLHMFTEGTSRALEPSQVALVRVVRFGDSCQGVARALGAPARLYYKADDKMRIHRPTARRRPPPASDYLFNYFTLGLDVLFDARTNQVKKFVLHTNYPGHYNFNMYHRCEFELTVQPDKSEAHSLVESGGGVAVTAYSKWEVVSRALRVCERPVVLNRASSTNTTNPFGSTFCYGYQDIIFEVMSNNYIASITLY",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF03676.14")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; UPF0183 ; Uncharacterised protein family (UPF0183)",
+            alignment.target.annotations["hmm"],
+            "PF03676.14 ; UPF0183 ; Uncharacterised protein family (UPF0183)",
         )
         self.assertEqual(
             alignment[0],
@@ -10826,10 +10714,9 @@ numpy.array([['G', 'M', 'H', 'F', 'S', 'Q', 'S', 'V', 'A', 'I', 'I', 'Q', 'S',
             alignment.target.seq[11:159],
             "IKVTTDQNHFSGGTSIEQLKQWFGDPNKSEQRNAGNITLDSYTWVKDGAVINAQLYKNSTVARSISNFSFSREAKIGKEDYDELKIGESYKKVVEKLGEPDVLSQSMSSDKEEMQTVWSSGIKTKSSSATIELYFENGLLKNKTQKDL",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF12978.7")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF3862 ; Domain of Unknown Function with PDB structure (DUF3862)",
+            alignment.target.annotations["hmm"],
+            "PF12978.7 ; DUF3862 ; Domain of Unknown Function with PDB structure (DUF3862)",
         )
         self.assertEqual(
             alignment[0],
@@ -10937,10 +10824,9 @@ numpy.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
         )
         self.assertEqual(alignment.target.id, "A6W2D6_MARMS/3")
         self.assertEqual(alignment.target.seq[11:31], "LQIGMSESQVTYLLGNPMLR")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF04355.13")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; SmpA_OmlA ; SmpA / OmlA family",
+            alignment.target.annotations["hmm"],
+            "PF04355.13 ; SmpA_OmlA ; SmpA / OmlA family",
         )
         self.assertEqual(alignment[0], "LQIGMSESQVTYLLGNPMLR")
         self.assertEqual(
@@ -11005,10 +10891,9 @@ numpy.array([['L', 'Q', 'I', 'G', 'M', 'S', 'E', 'S', 'Q', 'V', 'T', 'Y', 'L',
         )
         self.assertEqual(alignment.target.id, "5EKQ_E")
         self.assertEqual(alignment.target.seq[26:46], "IRVGMTQQQVAYALGTPLMS")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5EKQ_E")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Outer membrane protein assembly factor; membrane protein, insertase, beta-barrel, outer; 3.392A {Escherichia coli (strain K12)}; Related PDB entries: 2KM7_A 2KXX_A 5AYW_E 5LJO_E",
+            alignment.target.annotations["hmm"],
+            "5EKQ_E Outer membrane protein assembly factor; membrane protein, insertase, beta-barrel, outer; 3.392A {Escherichia coli (strain K12)}; Related PDB entries: 2KM7_A 2KXX_A 5AYW_E 5LJO_E",
         )
         self.assertEqual(alignment[0], "IRVGMTQQQVAYALGTPLMS")
         self.assertEqual(
@@ -11077,10 +10962,9 @@ numpy.array([['I', 'R', 'V', 'G', 'M', 'T', 'Q', 'Q', 'Q', 'V', 'A', 'Y', 'A',
         )
         self.assertEqual(alignment.target.id, "A3QGB8_SHELP/1")
         self.assertEqual(alignment.target.seq[33:53], "LSLGMTRDQVMTLMGTADFN")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF11399.8")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF3192 ; Protein of unknown function (DUF3192)",
+            alignment.target.annotations["hmm"],
+            "PF11399.8 ; DUF3192 ; Protein of unknown function (DUF3192)",
         )
         self.assertEqual(alignment[0], "LSLGMTRDQVMTLMGTADFN")
         self.assertEqual(
@@ -11145,10 +11029,9 @@ numpy.array([['L', 'S', 'L', 'G', 'M', 'T', 'R', 'D', 'Q', 'V', 'M', 'T', 'L',
         )
         self.assertEqual(alignment.target.id, "5WAM_B")
         self.assertEqual(alignment.target.seq[29:49], "LRPGMTKDQVLLLLGSPILR")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5WAM_B")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Outer membrane protein assembly factor; beta-barrel assembly machinery, BAM complex; 2.45A {Neisseria gonorrhoeae (strain ATCC 700825 / FA 1090)}; Related PDB entries: 5WAM_A",
+            alignment.target.annotations["hmm"],
+            "5WAM_B Outer membrane protein assembly factor; beta-barrel assembly machinery, BAM complex; 2.45A {Neisseria gonorrhoeae (strain ATCC 700825 / FA 1090)}; Related PDB entries: 5WAM_A",
         )
         self.assertEqual(alignment[0], "LRPGMTKDQVLLLLGSPILR")
         self.assertEqual(
@@ -11226,10 +11109,9 @@ numpy.array([['L', 'R', 'P', 'G', 'M', 'T', 'K', 'D', 'Q', 'V', 'L', 'L', 'L',
             alignment.target.seq[11:141],
             "IQFGMDRTLVWQLAGADQSCSDQVERIICYNNPDHYGPQGHFFFNAADKLIHKRQMELFPAPKPTMRLATYNKTQTGMTEAQFWAAVPSDTCSALAEQYPNWPATNGNLREYVCPSKAERFAPSAYFTFT",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "3GMX_B")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "BLP; 2-layer alpha/beta sandwich, PROTEIN BINDING; HET: ACT; 1.05A {Streptomyces clavuligerus} SCOP: d.98.1.0; Related PDB entries: 3GMX_A 3GMY_A 3GMY_B",
+            alignment.target.annotations["hmm"],
+            "3GMX_B BLP; 2-layer alpha/beta sandwich, PROTEIN BINDING; HET: ACT; 1.05A {Streptomyces clavuligerus} SCOP: d.98.1.0; Related PDB entries: 3GMX_A 3GMY_A 3GMY_B",
         )
         self.assertEqual(
             alignment[0],
@@ -11339,10 +11221,9 @@ numpy.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
             alignment.target.seq[61:131],
             "FHIGQPVSEIYSSVFIDTNINFQYKGSSYRFELSEDDLNTRPLIKAGNIYAQLYIDRFTGELSSIRYMDA",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF14504.6")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; CAP_assoc_N ; CAP-associated N-terminal",
+            alignment.target.annotations["hmm"],
+            "PF14504.6 ; CAP_assoc_N ; CAP-associated N-terminal",
         )
         self.assertEqual(
             alignment[0],
@@ -11422,10 +11303,9 @@ numpy.array([['F', 'H', 'I', 'G', 'Q', 'P', 'V', 'S', 'E', 'I', 'Y', 'S', 'S',
         )
         self.assertEqual(alignment.target.id, "2YH9_C")
         self.assertEqual(alignment.target.seq[12:32], "IRVGMTQQQVAYALGTPLMS")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2YH9_C")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "SMALL PROTEIN A; LIPOPROTEIN, 3D DOMAIN SWAP, MEMBRANE; HET: MSE; 1.8A {ESCHERICHIA COLI}; Related PDB entries: 2YH9_B 2YH9_A",
+            alignment.target.annotations["hmm"],
+            "2YH9_C SMALL PROTEIN A; LIPOPROTEIN, 3D DOMAIN SWAP, MEMBRANE; HET: MSE; 1.8A {ESCHERICHIA COLI}; Related PDB entries: 2YH9_B 2YH9_A",
         )
         self.assertEqual(alignment[0], "IRVGMTQQQVAYALGTPLMS")
         self.assertEqual(
@@ -11503,10 +11383,9 @@ numpy.array([['I', 'R', 'V', 'G', 'M', 'T', 'Q', 'Q', 'Q', 'V', 'A', 'Y', 'A',
             alignment.target.seq[0:55],
             "IGKNASDLQVLLGDPERKDPSEYGYEWWIYKKGTSQYVQAGVLDGRIVTLFATGP",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF14504.6")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; CAP_assoc_N ; CAP-associated N-terminal",
+            alignment.target.annotations["hmm"],
+            "PF14504.6 ; CAP_assoc_N ; CAP-associated N-terminal",
         )
         self.assertEqual(
             alignment[0],
@@ -11586,10 +11465,9 @@ numpy.array([['I', 'G', 'K', 'N', 'A', 'S', 'D', 'L', 'Q', 'V', 'L', 'L', 'G',
         )
         self.assertEqual(alignment.target.id, "4DM5_A")
         self.assertEqual(alignment.target.seq[23:43], "VEKGMSQQEVLRIGGTPSGT")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4DM5_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Osmotically inducible lipoprotein OsmE; lipoprotein, UNKNOWN FUNCTION; HET: MSE; 1.5A {Pseudomonas aeruginosa PAO1}; Related PDB entries: 4DM5_C 4DM5_D 4DM5_B",
+            alignment.target.annotations["hmm"],
+            "4DM5_A Osmotically inducible lipoprotein OsmE; lipoprotein, UNKNOWN FUNCTION; HET: MSE; 1.5A {Pseudomonas aeruginosa PAO1}; Related PDB entries: 4DM5_C 4DM5_D 4DM5_B",
         )
         self.assertEqual(alignment[0], "VEKGMSQQEVLRIGGTPSGT")
         self.assertEqual(
@@ -11667,10 +11545,9 @@ numpy.array([['V', 'E', 'K', 'G', 'M', 'S', 'Q', 'Q', 'E', 'V', 'L', 'R', 'I',
             alignment.target.seq[60:130],
             "PFHIGQPVSEIYSSVFIDTNINFQYKGSSYRFELSEDDLNTRPLIKAGNIYAQLYIDRFTGELSSIRYMD",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF14504.6")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; CAP_assoc_N ; CAP-associated N-terminal",
+            alignment.target.annotations["hmm"],
+            "PF14504.6 ; CAP_assoc_N ; CAP-associated N-terminal",
         )
         self.assertEqual(
             alignment[0],
@@ -11760,10 +11637,9 @@ numpy.array([['P', '-', '-', '-', '-', '-', 'F', 'H', 'I', 'G', 'Q', 'P', 'V',
             alignment.target.seq[10:135],
             "GKVFNSDFPAKDTNIDSVESKWGKADNSEWVASAKGLYSTYSKHNIVFGSNKGGQIFEVRSLDKQLGNIYLSMVKDKLGTPQHDVKVNGEEIIGYKMGNDFKILFVFPEPTNQHANPIMSHYSVL",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF14172.6")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF4309 ; Domain of unknown function (DUF4309)",
+            alignment.target.annotations["hmm"],
+            "PF14172.6 ; DUF4309 ; Domain of unknown function (DUF4309)",
         )
         self.assertEqual(
             alignment[0],
@@ -11865,10 +11741,9 @@ numpy.array([['G', 'K', 'V', 'F', 'N', 'S', '-', '-', '-', 'D', 'F', 'P', 'A',
         )
         self.assertEqual(alignment.target.id, "B5GLC0_STRC2/3")
         self.assertEqual(alignment.target.seq[7:27], "IQFGMDRTLVWQLAGADQSC")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF07467.11")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; BLIP ; Beta-lactamase inhibitor (BLIP)",
+            alignment.target.annotations["hmm"],
+            "PF07467.11 ; BLIP ; Beta-lactamase inhibitor (BLIP)",
         )
         self.assertEqual(alignment[0], "IQFGMDRTLVWQLAGADQSC")
         self.assertEqual(
@@ -11933,10 +11808,9 @@ numpy.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
         )
         self.assertEqual(alignment.target.id, "B3PEX3_CELJU/2")
         self.assertEqual(alignment.target.seq[10:37], "TQTGDTKAEVIAKCGDPVFTDHYCAPM")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF11006.8")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF2845 ; Protein of unknown function (DUF2845)",
+            alignment.target.annotations["hmm"],
+            "PF11006.8 ; DUF2845 ; Protein of unknown function (DUF2845)",
         )
         self.assertEqual(alignment[0], "TQTGDTKAEVIAKCGDPVFTDHYCAPM")
         self.assertEqual(
@@ -12012,10 +11886,9 @@ numpy.array([['T', 'Q', 'T', 'G', 'D', 'T', 'K', 'A', 'E', 'V', 'I', 'A', 'K',
             alignment.target.seq[10:146],
             "KIKVTTDQNHFSGGTSIEQLKQWFGDPNKSEQRNAGNITLDSYTWVKDGAVINAQLYKNSTVARSISNFSFSREAKIGKEDYDELKIGESYKKVVEKLGEPDVLSQSMSSDKEEMQTVWSSGIKTKSSSATIELYF",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF12978.7")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF3862 ; Domain of Unknown Function with PDB structure (DUF3862)",
+            alignment.target.annotations["hmm"],
+            "PF12978.7 ; DUF3862 ; Domain of Unknown Function with PDB structure (DUF3862)",
         )
         self.assertEqual(
             alignment[0],
@@ -12123,10 +11996,9 @@ numpy.array([['K', 'I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', '-', '-', '-',
             alignment.target.seq[4:69],
             "LTPDKAVEYLKDNVKIHDNLEISYNRIFGSGEVLNMDFSEYFGKPGFKMLLSLDGDSINPTIEID",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF09870.9")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF2097 ; Uncharacterized protein conserved in archaea (DUF2097)",
+            alignment.target.annotations["hmm"],
+            "PF09870.9 ; DUF2097 ; Uncharacterized protein conserved in archaea (DUF2097)",
         )
         self.assertEqual(
             alignment[0],
@@ -12205,10 +12077,9 @@ numpy.array([['L', 'T', 'P', 'D', 'K', 'A', 'V', 'E', 'Y', 'L', 'K', 'D', 'N',
         )
         self.assertEqual(alignment.target.id, "2PXG_A")
         self.assertEqual(alignment.target.seq[25:45], "LQVGQSKQQVSALLGTPSIP")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "2PXG_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Outer membrane protein; two layer alpha/beta plait, two; NMR {Xanthomonas axonopodis pv. citri}",
+            alignment.target.annotations["hmm"],
+            "2PXG_A Outer membrane protein; two layer alpha/beta plait, two; NMR {Xanthomonas axonopodis pv. citri}",
         )
         self.assertEqual(alignment[0], "LQVGQSKQQVSALLGTPSIP")
         self.assertEqual(
@@ -12277,10 +12148,9 @@ numpy.array([['L', 'Q', 'V', 'G', 'Q', 'S', 'K', 'Q', 'Q', 'V', 'S', 'A', 'L',
         )
         self.assertEqual(alignment.target.id, "3GMX_B")
         self.assertEqual(alignment.target.seq[11:31], "IQFGMDRTLVWQLAGADQSC")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "3GMX_B")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "BLP; 2-layer alpha/beta sandwich, PROTEIN BINDING; HET: ACT; 1.05A {Streptomyces clavuligerus} SCOP: d.98.1.0; Related PDB entries: 3GMX_A 3GMY_A 3GMY_B",
+            alignment.target.annotations["hmm"],
+            "3GMX_B BLP; 2-layer alpha/beta sandwich, PROTEIN BINDING; HET: ACT; 1.05A {Streptomyces clavuligerus} SCOP: d.98.1.0; Related PDB entries: 3GMX_A 3GMY_A 3GMY_B",
         )
         self.assertEqual(alignment[0], "IQFGMDRTLVWQLAGADQSC")
         self.assertEqual(
@@ -12349,10 +12219,9 @@ numpy.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
         )
         self.assertEqual(alignment.target.id, "5D0O_E")
         self.assertEqual(alignment.target.seq[45:65], "IRVGMTQQQVAYALGTPLMS")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "5D0O_E")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Outer membrane protein assembly factor; E.coli, Bacterial outer membrane beta; 2.9A {Escherichia coli}; Related PDB entries: 5D0Q_E 5D0Q_I",
+            alignment.target.annotations["hmm"],
+            "5D0O_E Outer membrane protein assembly factor; E.coli, Bacterial outer membrane beta; 2.9A {Escherichia coli}; Related PDB entries: 5D0Q_E 5D0Q_I",
         )
         self.assertEqual(alignment[0], "IRVGMTQQQVAYALGTPLMS")
         self.assertEqual(
@@ -12430,10 +12299,9 @@ numpy.array([['I', 'R', 'V', 'G', 'M', 'T', 'Q', 'Q', 'Q', 'V', 'A', 'Y', 'A',
             alignment.target.seq[30:97],
             "IKVTTDQNHFSGGTSIEQLKQWFGDPNKSEQRNAGNITLDSYTWVKDGAVINAQLYKNSTVARSISN",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "3D4E_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "putative beta-lactamase inhibitor protein; NP_721579.1, putative beta-lactamase inhibitor protein; HET: EDO, MSE; 1.4A {Streptococcus mutans}",
+            alignment.target.annotations["hmm"],
+            "3D4E_A putative beta-lactamase inhibitor protein; NP_721579.1, putative beta-lactamase inhibitor protein; HET: EDO, MSE; 1.4A {Streptococcus mutans}",
         )
         self.assertEqual(
             alignment[0],
@@ -12528,10 +12396,9 @@ numpy.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
             alignment.target.seq[30:166],
             "IKVTTDQNHFSGGTSIEQLKQWFGDPNKSEQRNAGNITLDSYTWVKDGAVINAQLYKNSTVARSISNFSFSREAKIGKEDYDELKIGESYKKIVEKLGEPDVLSQSMSSDKEEMQTVWSSGIKTKSSSATIELYFE",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "3D4E_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "putative beta-lactamase inhibitor protein; NP_721579.1, putative beta-lactamase inhibitor protein; HET: EDO, MSE; 1.4A {Streptococcus mutans}",
+            alignment.target.annotations["hmm"],
+            "3D4E_A putative beta-lactamase inhibitor protein; NP_721579.1, putative beta-lactamase inhibitor protein; HET: EDO, MSE; 1.4A {Streptococcus mutans}",
         )
         self.assertEqual(
             alignment[0],
@@ -12633,10 +12500,9 @@ numpy.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
         )
         self.assertEqual(alignment.target.id, "H8H183_DEIGI/2")
         self.assertEqual(alignment.target.seq[4:34], "VFKFDGKVLDDPNPKSTPEQVKTFYAPTYP")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF14454.6")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; Prok_Ub ; Prokaryotic Ubiquitin",
+            alignment.target.annotations["hmm"],
+            "PF14454.6 ; Prok_Ub ; Prokaryotic Ubiquitin",
         )
         self.assertEqual(alignment[0], "VFKFDGKVLDDPNPKSTPEQVKTFYAPTYP")
         self.assertEqual(
@@ -12703,10 +12569,9 @@ numpy.array([['V', 'F', 'K', 'F', 'D', 'G', 'K', 'V', 'L', 'D', 'D', 'P', 'N',
         )
         self.assertEqual(alignment.target.id, "3N4I_B")
         self.assertEqual(alignment.target.seq[11:31], "IQFGMTRQQVLDIAGAENCE")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "3N4I_B")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Crystal structure of the SHV-1; beta-lactamase, protein-protein complex, BLIP, SHV-1; 1.56A {Klebsiella pneumoniae} SCOP: d.98.1.1; Related PDB entries: 3E2K_D 1XXM_C 2G2W_B 3E2L_C 3GMU_B 1XXM_D 3C4P_B 1S0W_C 3C7U_D 3C4O_B 1JTG_B 3C7V_B 3C7V_D 3E2L_D 3E2K_C 2G2U_B 3C7U_B 2B5R_C 1JTG_D 2B5R_D 1S0W_D",
+            alignment.target.annotations["hmm"],
+            "3N4I_B Crystal structure of the SHV-1; beta-lactamase, protein-protein complex, BLIP, SHV-1; 1.56A {Klebsiella pneumoniae} SCOP: d.98.1.1; Related PDB entries: 3E2K_D 1XXM_C 2G2W_B 3E2L_C 3GMU_B 1XXM_D 3C4P_B 1S0W_C 3C7U_D 3C4O_B 1JTG_B 3C7V_B 3C7V_D 3E2L_D 3E2K_C 2G2U_B 3C7U_B 2B5R_C 1JTG_D 2B5R_D 1S0W_D",
         )
         self.assertEqual(alignment[0], "IQFGMTRQQVLDIAGAENCE")
         self.assertEqual(
@@ -12775,10 +12640,9 @@ numpy.array([['I', 'Q', 'F', 'G', 'M', 'T', 'R', 'Q', 'Q', 'V', 'L', 'D', 'I',
         )
         self.assertEqual(alignment.target.id, "3GMX_B")
         self.assertEqual(alignment.target.seq[84:104], "TQTGMTEAQFWAAVPSDTCS")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "3GMX_B")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "BLP; 2-layer alpha/beta sandwich, PROTEIN BINDING; HET: ACT; 1.05A {Streptomyces clavuligerus} SCOP: d.98.1.0; Related PDB entries: 3GMX_A 3GMY_A 3GMY_B",
+            alignment.target.annotations["hmm"],
+            "3GMX_B BLP; 2-layer alpha/beta sandwich, PROTEIN BINDING; HET: ACT; 1.05A {Streptomyces clavuligerus} SCOP: d.98.1.0; Related PDB entries: 3GMX_A 3GMY_A 3GMY_B",
         )
         self.assertEqual(alignment[0], "TQTGMTEAQFWAAVPSDTCS")
         self.assertEqual(
@@ -12856,10 +12720,9 @@ numpy.array([['T', 'Q', 'T', 'G', 'M', 'T', 'E', 'A', 'Q', 'F', 'W', 'A', 'A',
             alignment.target.seq[17:69],
             "FPAKDTNIDSVESKWGKADNSEWVASAKGLYSTYSKHNIVFGSNKGGQIFEV",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF14172.6")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF4309 ; Domain of unknown function (DUF4309)",
+            alignment.target.annotations["hmm"],
+            "PF14172.6 ; DUF4309 ; Domain of unknown function (DUF4309)",
         )
         self.assertEqual(
             alignment[0],
@@ -12939,10 +12802,9 @@ numpy.array([['F', 'P', 'A', 'K', 'D', 'T', 'N', 'I', 'D', 'S', 'V', 'E', 'S',
         )
         self.assertEqual(alignment.target.id, "Q8DTX1_STRMU/4")
         self.assertEqual(alignment.target.seq[94:114], "LKIGESYKKVVEKLGEPDVL")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF12978.7")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF3862 ; Domain of Unknown Function with PDB structure (DUF3862)",
+            alignment.target.annotations["hmm"],
+            "PF12978.7 ; DUF3862 ; Domain of Unknown Function with PDB structure (DUF3862)",
         )
         self.assertEqual(alignment[0], "LKIGESYKKVVEKLGEPDVL")
         self.assertEqual(
@@ -13007,10 +12869,9 @@ numpy.array([['L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'V', 'V', 'E', 'K',
         )
         self.assertEqual(alignment.target.id, "4H0A_A")
         self.assertEqual(alignment.target.seq[42:63], "TWVGKDIKVLTSKFGQADRVY")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4H0A_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Uncharacterized protein; CAP protein family, cysteine-rich secretory; HET: EDO, MSE; 1.9A {Staphylococcus aureus subsp. aureus}; Related PDB entries: 4H0A_B",
+            alignment.target.annotations["hmm"],
+            "4H0A_A Uncharacterized protein; CAP protein family, cysteine-rich secretory; HET: EDO, MSE; 1.9A {Staphylococcus aureus subsp. aureus}; Related PDB entries: 4H0A_B",
         )
         self.assertEqual(alignment[0], "TWVGKDIKVLTSKFGQADRVY")
         self.assertEqual(
@@ -13088,9 +12949,8 @@ numpy.array([['T', 'W', 'V', 'G', 'K', 'D', 'I', 'K', 'V', 'L', 'T', 'S', 'K',
             alignment.target.seq[101:167],
             "GWEHVELVLPVAPEILSTAAKALLPQPLPAGFSVKESQPKGEQERLPNPTLAITDGEITVKFHPFT",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF06185.12")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"], "; YecM ; YecM protein"
+            alignment.target.annotations["hmm"], "PF06185.12 ; YecM ; YecM protein"
         )
         self.assertEqual(
             alignment[0],
@@ -13179,10 +13039,9 @@ numpy.array([['G', 'W', 'E', 'H', 'V', 'E', 'L', 'V', 'L', 'P', 'V', 'A', 'P',
             alignment.target.seq[8:157],
             "IPGEGTGIQLSAGQILKFYNVPIAEIIVEYDPSNVSGVSSNVKLKGTIHPLFEVPSQISIENFQPTENYLIYSGFGTSLPQTYTIPANGYLIISITNTSTGNIGQITLTIGSTTMTFNLQTGENKIPVIAGTQITNMTLTSSSAILIYE",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "4IL7_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Putative uncharacterized protein; partial jelly roll fold, hypothetical; 1.4A {Sulfolobus turreted icosahedral virus}",
+            alignment.target.annotations["hmm"],
+            "4IL7_A Putative uncharacterized protein; partial jelly roll fold, hypothetical; 1.4A {Sulfolobus turreted icosahedral virus}",
         )
         self.assertEqual(
             alignment[0],
@@ -13294,10 +13153,9 @@ numpy.array([['I', 'P', 'G', 'E', 'G', 'T', 'G', '-', '-', '-', '-', '-', 'I',
         )
         self.assertEqual(alignment.target.id, "3D4E_A")
         self.assertEqual(alignment.target.seq[113:133], "LKIGESYKKIVEKLGEPDVL")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "3D4E_A")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "putative beta-lactamase inhibitor protein; NP_721579.1, putative beta-lactamase inhibitor protein; HET: EDO, MSE; 1.4A {Streptococcus mutans}",
+            alignment.target.annotations["hmm"],
+            "3D4E_A putative beta-lactamase inhibitor protein; NP_721579.1, putative beta-lactamase inhibitor protein; HET: EDO, MSE; 1.4A {Streptococcus mutans}",
         )
         self.assertEqual(alignment[0], "LKIGESYKKIVEKLGEPDVL")
         self.assertEqual(
@@ -13366,10 +13224,9 @@ numpy.array([['L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'I', 'V', 'E', 'K',
         )
         self.assertEqual(alignment.target.id, "3N4I_B")
         self.assertEqual(alignment.target.seq[90:110], "VTVGMTRAQVLATVGQGSCT")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "3N4I_B")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "Crystal structure of the SHV-1; beta-lactamase, protein-protein complex, BLIP, SHV-1; 1.56A {Klebsiella pneumoniae} SCOP: d.98.1.1; Related PDB entries: 3E2K_D 1XXM_C 2G2W_B 3E2L_C 3GMU_B 1XXM_D 3C4P_B 1S0W_C 3C7U_D 3C4O_B 1JTG_B 3C7V_B 3C7V_D 3E2L_D 3E2K_C 2G2U_B 3C7U_B 2B5R_C 1JTG_D 2B5R_D 1S0W_D",
+            alignment.target.annotations["hmm"],
+            "3N4I_B Crystal structure of the SHV-1; beta-lactamase, protein-protein complex, BLIP, SHV-1; 1.56A {Klebsiella pneumoniae} SCOP: d.98.1.1; Related PDB entries: 3E2K_D 1XXM_C 2G2W_B 3E2L_C 3GMU_B 1XXM_D 3C4P_B 1S0W_C 3C7U_D 3C4O_B 1JTG_B 3C7V_B 3C7V_D 3E2L_D 3E2K_C 2G2U_B 3C7U_B 2B5R_C 1JTG_D 2B5R_D 1S0W_D",
         )
         self.assertEqual(alignment[0], "VTVGMTRAQVLATVGQGSCT")
         self.assertEqual(
@@ -13438,10 +13295,9 @@ numpy.array([['V', 'T', 'V', 'G', 'M', 'T', 'R', 'A', 'Q', 'V', 'L', 'A', 'T',
         )
         self.assertEqual(alignment.target.id, "B5GLC0_STRC2/3")
         self.assertEqual(alignment.target.seq[80:101], "TQTGMTEAQFWAAVPSDTCSA")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF07467.11")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; BLIP ; Beta-lactamase inhibitor (BLIP)",
+            alignment.target.annotations["hmm"],
+            "PF07467.11 ; BLIP ; Beta-lactamase inhibitor (BLIP)",
         )
         self.assertEqual(alignment[0], "TQTGMTEAQFWAAVPSDTCSA")
         self.assertEqual(
@@ -13515,10 +13371,9 @@ numpy.array([['T', 'Q', 'T', 'G', 'M', 'T', 'E', 'A', 'Q', 'F', 'W', 'A', 'A',
             alignment.target.seq[7:96],
             "IQFGMDRTLVWQLAGADQSCSDQVERIICYNNPDHYGPQGHFFFNAADKLIHKRQMELFPAPKPTMRLATYNKTQTGMTEAQFWAAVPS",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF07467.11")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; BLIP ; Beta-lactamase inhibitor (BLIP)",
+            alignment.target.annotations["hmm"],
+            "PF07467.11 ; BLIP ; Beta-lactamase inhibitor (BLIP)",
         )
         self.assertEqual(
             alignment[0],
@@ -13635,10 +13490,9 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
             alignment.target.seq[0:395],
             "EQWEFALGMPLAQAISILQKHCRIIKNVQVLYSEQMPLSHDLILNLTQDGIKLLFDACNQRLKVIEVYDLTKVKLKYCGVHFNSQAIAPTIEQIDQSFGATHPGVYNAAEQLFHLNFRGLSFSFQLDSWSEAPKYEPNFAHGLASLQIPHGATVKRMYIYSGNNLQETKAPAMPLACFLGNVYAECVEVLRDGAGPLGLKLRLLTAGCGPGVLADTKVRAVERSIYFGDSCQDVLSALGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYYILGVDILFDSTTHLVKKFVLHTNFPGHYNFNIYHRCDFKIPLIIKKDGADAHSEDCILTTYSKWDQIQELLGHPMEKPVVLHRSSSANNTNPFGSTFCFGLQRMIFEVMQNNHIASVTLY",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF03676.13")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; UPF0183 ; Uncharacterised protein family (UPF0183)",
+            alignment.target.annotations["hmm"],
+            "PF03676.13 ; UPF0183 ; Uncharacterised protein family (UPF0183)",
         )
         self.assertEqual(
             alignment[0],
@@ -13788,10 +13642,9 @@ numpy.array([['E', 'Q', 'W', 'E', '-', '-', '-', '-', 'F', 'A', 'L', 'G', 'M',
         )
         self.assertEqual(alignment.target.id, "A6W2D6_MARMS/3")
         self.assertEqual(alignment.target.seq[11:31], "LQIGMSESQVTYLLGNPMLR")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF04355.12")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; SmpA_OmlA ; SmpA / OmlA family",
+            alignment.target.annotations["hmm"],
+            "PF04355.12 ; SmpA_OmlA ; SmpA / OmlA family",
         )
         self.assertEqual(alignment[0], "LQIGMSESQVTYLLGNPMLR")
         self.assertEqual(
@@ -13856,10 +13709,9 @@ numpy.array([['L', 'Q', 'I', 'G', 'M', 'S', 'E', 'S', 'Q', 'V', 'T', 'Y', 'L',
         )
         self.assertEqual(alignment.target.id, "A3QGB8_SHELP/1")
         self.assertEqual(alignment.target.seq[33:53], "LSLGMTRDQVMTLMGTADFN")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF11399.7")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF3192 ; Protein of unknown function (DUF3192)",
+            alignment.target.annotations["hmm"],
+            "PF11399.7 ; DUF3192 ; Protein of unknown function (DUF3192)",
         )
         self.assertEqual(alignment[0], "LSLGMTRDQVMTLMGTADFN")
         self.assertEqual(
@@ -13933,10 +13785,9 @@ numpy.array([['L', 'S', 'L', 'G', 'M', 'T', 'R', 'D', 'Q', 'V', 'M', 'T', 'L',
             alignment.target.seq[17:78],
             "FPAKDTNIDSVESKWGKADNSEWVASAKGLYSTYSKHNIVFGSNKGGQIFEVRSLDKQLGN",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF14172.5")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF4309 ; Domain of unknown function (DUF4309)",
+            alignment.target.annotations["hmm"],
+            "PF14172.5 ; DUF4309 ; Domain of unknown function (DUF4309)",
         )
         self.assertEqual(
             alignment[0],
@@ -14017,10 +13868,9 @@ numpy.array([['F', 'P', 'A', 'K', 'D', 'T', 'N', 'I', 'D', 'S', 'V', 'E', 'S',
         )
         self.assertEqual(alignment.target.id, "H8MKT6_CORCM/2")
         self.assertEqual(alignment.target.seq[0:30], "ASALRCDNKIVSEGASQVDALAKCGQPVTK")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF11006.7")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF2845 ; Protein of unknown function (DUF2845)",
+            alignment.target.annotations["hmm"],
+            "PF11006.7 ; DUF2845 ; Protein of unknown function (DUF2845)",
         )
         self.assertEqual(alignment[0], "ASALRCDNKIVSEGASQVDALAKCGQPVTK")
         self.assertEqual(
@@ -14087,10 +13937,9 @@ numpy.array([['A', 'S', 'A', 'L', 'R', 'C', 'D', 'N', 'K', 'I', 'V', 'S', 'E',
         )
         self.assertEqual(alignment.target.id, "U5LAW6_9BACI/1")
         self.assertEqual(alignment.target.seq[0:19], "IGKNASDLQVLLGDPERKD")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF14504.5")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; CAP_assoc_N ; CAP-associated N-terminal",
+            alignment.target.annotations["hmm"],
+            "PF14504.5 ; CAP_assoc_N ; CAP-associated N-terminal",
         )
         self.assertEqual(alignment[0], "IGKNASDLQVLLGDPERKD")
         self.assertEqual(
@@ -14164,10 +14013,9 @@ numpy.array([['I', 'G', 'K', 'N', 'A', 'S', 'D', 'L', 'Q', 'V', 'L', 'L', 'G',
             alignment.target.seq[61:128],
             "FHIGQPVSEIYSSVFIDTNINFQYKGSSYRFELSEDDLNTRPLIKAGNIYAQLYIDRFTGELSSIRY",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF14504.5")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; CAP_assoc_N ; CAP-associated N-terminal",
+            alignment.target.annotations["hmm"],
+            "PF14504.5 ; CAP_assoc_N ; CAP-associated N-terminal",
         )
         self.assertEqual(
             alignment[0],
@@ -14249,10 +14097,9 @@ numpy.array([['F', 'H', 'I', 'G', 'Q', 'P', 'V', 'S', 'E', 'I', 'Y', 'S', 'S',
         )
         self.assertEqual(alignment.target.id, "H8H183_DEIGI/2")
         self.assertEqual(alignment.target.seq[4:34], "VFKFDGKVLDDPNPKSTPEQVKTFYAPTYP")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF14454.5")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; Prok_Ub ; Prokaryotic Ubiquitin",
+            alignment.target.annotations["hmm"],
+            "PF14454.5 ; Prok_Ub ; Prokaryotic Ubiquitin",
         )
         self.assertEqual(alignment[0], "VFKFDGKVLDDPNPKSTPEQVKTFYAPTYP")
         self.assertEqual(
@@ -14328,10 +14175,9 @@ numpy.array([['V', 'F', 'K', 'F', 'D', 'G', 'K', 'V', 'L', 'D', 'D', 'P', 'N',
             alignment.target.seq[10:135],
             "GKVFNSDFPAKDTNIDSVESKWGKADNSEWVASAKGLYSTYSKHNIVFGSNKGGQIFEVRSLDKQLGNIYLSMVKDKLGTPQHDVKVNGEEIIGYKMGNDFKILFVFPEPTNQHANPIMSHYSVL",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF14172.5")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF4309 ; Domain of unknown function (DUF4309)",
+            alignment.target.annotations["hmm"],
+            "PF14172.5 ; DUF4309 ; Domain of unknown function (DUF4309)",
         )
         self.assertEqual(
             alignment[0],
@@ -14446,9 +14292,8 @@ numpy.array([['G', 'K', 'V', 'F', 'N', 'S', '-', '-', '-', 'D', 'F', 'P', 'A',
             alignment.target.seq[101:167],
             "GWEHVELVLPVAPEILSTAAKALLPQPLPAGFSVKESQPKGEQERLPNPTLAITDGEITVKFHPFT",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF06185.11")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"], "; YecM ; YecM protein"
+            alignment.target.annotations["hmm"], "PF06185.11 ; YecM ; YecM protein"
         )
         self.assertEqual(
             alignment[0],
@@ -14528,10 +14373,9 @@ numpy.array([['G', 'W', 'E', 'H', 'V', 'E', 'L', 'V', 'L', 'P', 'V', 'A', 'P',
         )
         self.assertEqual(alignment.target.id, "Q8DTX1_STRMU/4")
         self.assertEqual(alignment.target.seq[94:114], "LKIGESYKKVVEKLGEPDVL")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF12978.6")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF3862 ; Domain of Unknown Function with PDB structure (DUF3862)",
+            alignment.target.annotations["hmm"],
+            "PF12978.6 ; DUF3862 ; Domain of Unknown Function with PDB structure (DUF3862)",
         )
         self.assertEqual(alignment[0], "LKIGESYKKVVEKLGEPDVL")
         self.assertEqual(
@@ -14605,10 +14449,9 @@ numpy.array([['L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'V', 'V', 'E', 'K',
             alignment.target.seq[60:130],
             "PFHIGQPVSEIYSSVFIDTNINFQYKGSSYRFELSEDDLNTRPLIKAGNIYAQLYIDRFTGELSSIRYMD",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF14504.5")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; CAP_assoc_N ; CAP-associated N-terminal",
+            alignment.target.annotations["hmm"],
+            "PF14504.5 ; CAP_assoc_N ; CAP-associated N-terminal",
         )
         self.assertEqual(
             alignment[0],
@@ -14698,10 +14541,9 @@ numpy.array([['P', '-', '-', '-', '-', '-', 'F', 'H', 'I', 'G', 'Q', 'P', 'V',
             alignment.target.seq[4:69],
             "LTPDKAVEYLKDNVKIHDNLEISYNRIFGSGEVLNMDFSEYFGKPGFKMLLSLDGDSINPTIEID",
         )
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF09870.8")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF2097 ; Uncharacterized protein conserved in archaea (DUF2097)",
+            alignment.target.annotations["hmm"],
+            "PF09870.8 ; DUF2097 ; Uncharacterized protein conserved in archaea (DUF2097)",
         )
         self.assertEqual(
             alignment[0],
@@ -14780,10 +14622,9 @@ numpy.array([['L', 'T', 'P', 'D', 'K', 'A', 'V', 'E', 'Y', 'L', 'K', 'D', 'N',
         )
         self.assertEqual(alignment.target.id, "Q9KJ90_STREX/2")
         self.assertEqual(alignment.target.seq[39:59], "IQFGMTFDEVWEIGGGEAAC")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF07467.10")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; BLIP ; Beta-lactamase inhibitor (BLIP)",
+            alignment.target.annotations["hmm"],
+            "PF07467.10 ; BLIP ; Beta-lactamase inhibitor (BLIP)",
         )
         self.assertEqual(alignment[0], "IQFGMTFDEVWEIGGGEAAC")
         self.assertEqual(
@@ -14848,10 +14689,9 @@ numpy.array([['I', 'Q', 'F', 'G', 'M', 'T', 'F', 'D', 'E', 'V', 'W', 'E', 'I',
         )
         self.assertEqual(alignment.target.id, "Q8DTX1_STRMU/4")
         self.assertEqual(alignment.target.seq[11:40], "IKVTTDQNHFSGGTSIEQLKQWFGDPNKS")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF12978.6")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF3862 ; Domain of Unknown Function with PDB structure (DUF3862)",
+            alignment.target.annotations["hmm"],
+            "PF12978.6 ; DUF3862 ; Domain of Unknown Function with PDB structure (DUF3862)",
         )
         self.assertEqual(alignment[0], "IKVTTDQNHFSGGTSIEQLKQWFGDPNKS")
         self.assertEqual(
@@ -14918,10 +14758,9 @@ numpy.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
         )
         self.assertEqual(alignment.target.id, "Q21BS2_RHOPB/5")
         self.assertEqual(alignment.target.seq[25:48], "APNVIFDYDAEGRIVGIELLDAR")
-        self.assertEqual(alignment.target.annotations["hmm_name"], "PF10049.8")
         self.assertEqual(
-            alignment.target.annotations["hmm_description"],
-            "; DUF2283 ; Protein of unknown function (DUF2283)",
+            alignment.target.annotations["hmm"],
+            "PF10049.8 ; DUF2283 ; Protein of unknown function (DUF2283)",
         )
         self.assertEqual(alignment[0], "APNVIFDYDA-EGRIVGIELLDAR")
         self.assertEqual(
@@ -15000,7 +14839,7 @@ class Align_hhr_2uvo_hhblits_onlyheader(unittest.TestCase):
         self.assertEqual(str(cm.exception), "Truncated file.")
 
 
-class Align_hhr_7rbx_A_hhsearch_trunc:
+class Align_hhr_7rbx_A_hhsearch_trunc(unittest.TestCase):
     path = os.path.join("HHsuite", "7rbx_A_hhsearch_trunc.hhr")
 
     def test_reading(self):
@@ -15010,7 +14849,7 @@ class Align_hhr_7rbx_A_hhsearch_trunc:
         self.assertEqual(alignments.metadata["Searched_HMMs"], 90139)
         self.assertEqual(alignments.metadata["Rundate"], "Fri Dec 24 23:14:30 2021")
         self.assertEqual(
-            alignments.metadata["Command_line"],
+            alignments.metadata["Command line"],
             "/mnt/home/dberenberg/gustaf_stuff/hh-suite/build/bin/hhsearch -i /tmp/tmprgvo26zr/query.a3m -o /tmp/tmprgvo26zr/output.hhr -maxseq 1000000 -cpu 2 -d /mnt/home/dberenberg/gustaf_stuff/OpenFold/pdb70/pdb70",
         )
 
@@ -15043,11 +14882,7 @@ class Align_hhr_7rbx_A_hhsearch_trunc:
             alignment.target.seq[12:-3],
             "DIQKEEADFQKEVAEIKKWWSEPRWRKTKRIYSAEDIAKKRGTLKINHPSSQQADKLFKLLEKHDADKTVSFTFGALDPIHVAQMAKYLDSIYVSGWQCSSTASTSNEPSPDLADYPMDTVPNKVEHLWFAQLFHDRKQREERLTLSKEERAKTPYIDFLRPIIADADTGHGGITAIIKLTKMFIERGAAGIHIEDQAPGTKKCGHMAGKVLVPVQEHINRLVAIRASADIFGSNLLAVARTDSEAATLITSTIDHRDHYFIIGATNPEAGDLAALMAEAESKGIYGNELAAIESEWTKKAGLKLFHEAVIDEIKNGNYSNKDALIKKFTDKVNPLSHTSHKEAKKLAKELTGKDIYFNWDVARAREGYYRYQGGTQCAVMRGRAFAPYADLIWMESALPDYAQAKEFADGVKAAVPDQWLAYNLSPSFNWNKAMPADEQETYIKRLGKLGYVWQFITLAGLHTTALAVDDFSNQYSQIGMKAYGQTVQQPEIEKGVEVVKHQKWSGATYIDGLLKMVSGGVTSTAAMGQGVTEDQFKESK",
         )
-        self.assertEqual(alignment.target.seq.annotations["hmm_name"], "7EBE_A")
-        self.assertEqual(
-            alignment.target.seq.annotations["hmm_description"],
-            "Isocitrate lyase (E.C.4.1.3.1); Isocitrate lyase, glyoxylate cycle, ubiquitination; HET: FMT; 2.69A {Candida albicans}",
-        )
+        self.assertEqual(alignment.target.annotations["hmm"], "7EBE_A Isocitrate lyase (E.C.4.1.3.1); Isocitrate lyase, glyoxylate cycle, ubiquitination; HET: FMT; 2.69A {Candida albicans}")
         self.assertEqual(
             alignment[0],
             "DIQKEEADFQKEVAEIKKWWSEPRWRKTKRIYSAEDIAKKRGTLKINH-PSSQQADKLFKLLEKHDADKTVSFTFGALDPIHVAQMAK-YLDSIYVSGWQCSSTASTSNEPSPDLADYPMDTVPNKVEHLWFAQLFHDRKQREERLTLSKEERAKTPYIDFLRPIIADADTGHGGITAIIKLTKMFIERGAAGIHIEDQAPGTKKCGHMAGKVLVPVQEHINRLVAIRASADIFGSNLLAVARTDSEAATLITSTIDHRDHYFIIGATNPEAGDLAALMAEAESKGIYGNELAAIESEWTKKAGLKLFHEAVIDEIKNGNYSNKDALIKKFTDKVNPLSHTSHKEAKKLAKELTGKDIYFNWDVARAREGYYRYQGGTQCAVMRGRAFAPYADLIWMESALPDYAQAKEFADGVKAAVPDQWLAYNLSPSFNWNKAMPADEQETYIKRLGKLGYVWQFITLAGLHTTALAVDDFSNQYSQIGMKAYGQTVQQPE--IEKGVEVVKHQKWSGATYIDGLLKMVSGGVTSTAAMGQGVTEDQFKESK",

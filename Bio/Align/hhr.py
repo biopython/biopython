@@ -91,10 +91,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             query = SeqRecord(query_seq, id=self.query_name)
             sequence = {target_start: target_sequence.replace("-", "")}
             target_seq = Seq(sequence, length=target_length)
-            target_annotations = {
-                "hmm_name": hmm_name,
-                "hmm_description": hmm_description,
-            }
+            target_annotations = {"hmm": hmm}
             target = SeqRecord(
                 target_seq, id=target_name, annotations=target_annotations
             )
@@ -136,7 +133,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if not line:
                 pass
             elif line.startswith(">"):
-                hmm_name, hmm_description = line[1:].split(None, 1)
+                hmm = line[1:].strip()
                 line = next(stream)
                 words = line.split()
                 alignment_annotations = {}
