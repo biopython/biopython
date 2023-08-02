@@ -91,29 +91,29 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             query = SeqRecord(query_seq, id=self.query_name)
             sequence = {target_start: target_sequence.replace("-", "")}
             target_seq = Seq(sequence, length=target_length)
-            target_annotations = {"hmm": hmm}
+            target_annotations = {
+                "hmm_name": hmm_name,
+                "hmm_description": hmm_description,
+            }
             target = SeqRecord(
                 target_seq, id=target_name, annotations=target_annotations
             )
             fmt = f"{' ' * target_start}%-{target_length - target_start}s"
-            target.letter_annotations["Consensus"] = fmt % target_consensus.replace(
-                "-", ""
-            )
+            target.letter_annotations["Consensus"] = fmt % target_consensus.replace("-", "")
             target.letter_annotations["ss_pred"] = fmt % target_ss_pred.replace("-", "")
             target.letter_annotations["ss_dssp"] = fmt % target_ss_dssp.replace("-", "")
-            target.letter_annotations["Confidence"] = fmt % "".join(
-                c for t, c in zip(target_sequence, confidence) if t != "-"
-            )
+            alignment_confidence = fmt % "".join(c for t, c in zip(target_sequence, confidence) if t != "-")
             fmt = f"{' ' * query_start}%-{query_length - query_start}s"
-            query.letter_annotations["Consensus"] = fmt % query_consensus.replace(
-                "-", ""
-            )
-            query.letter_annotations["ss_pred"] = fmt % query_ss_pred.replace("-", "")
+            if query_consensus:
+                query.letter_annotations["Consensus"] = fmt % query_consensus.replace("-", "")
+            if query_ss_pred:
+                query.letter_annotations["ss_pred"] = fmt % query_ss_pred.replace("-", "")
             records = [target, query]
             alignment = Alignment(records, coordinates=coordinates)
             alignment.annotations = alignment_annotations
             alignment.column_annotations = {}
             alignment.column_annotations["column score"] = column_score
+            alignment.column_annotations["Confidence"] = alignment_confidence
             return alignment
 
         query_start = None
@@ -133,7 +133,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             if not line:
                 pass
             elif line.startswith(">"):
-                hmm = line[1:].strip()
+                hmm_name, hmm_description = line[1:].split(None, 1)
                 line = next(stream)
                 words = line.split()
                 alignment_annotations = {}
