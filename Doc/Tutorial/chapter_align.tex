@@ -1141,41 +1141,6 @@ Confidence values for the pairwise alignment are stored under the \verb|"Confide
  'Confidence': '799999999999999999999999999999999999999999999999999999999999999999999999999999999999999999998899999999999999999999999999999999999999999999999999999999999999999999999999986'}
 \end{minted}
 
-\subsection{Mauve eXtended Multi-FastA (xmfa) format}
-\label{subsec:align_mauve}
-
-Mauve~\cite{darling2004} is a software package for constructing multiple genome alignments. These alignments are stored in the eXtended Multi-FastA (xmfa) format.
-Depending on how exactly \verb|progressiveMauve| (the aligner program in Mauve) was called, the xmfa format is slightly different.
-
-If \verb|progressiveMauve| is called with a single sequence input file, as in
-\begin{minted}{text}
-progressiveMauve combined.fasta  --output=combined.xmfa ...
-\end{minted}
-where \verb|combined.fasta| contains the genome sequences:
-\begin{minted}{text}
->equCab1
-GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA
->mm9
-GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT
->canFam2
-CAAGCCCTGCGCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTTC
-\end{minted}
-then the output file \verb|combined.xmfa| is as follows:
-\begin{minted}{text}
-#FormatVersion Mauve1
-#Sequence1File	combined.fa
-#Sequence1Entry	1
-#Sequence1Format	FastA
-#Sequence2File	combined.fa
-#Sequence2Entry	2
-#Sequence2Format	FastA
-#Sequence3File	combined.fa
-#Sequence3Entry	3
-#Sequence3Format	FastA
-#BackboneFile	combined.xmfa.bbcols
-> 1:2-49 - combined.fa
-
-
 \subsection{A2M}
 \label{subsec:align_a2m}
 

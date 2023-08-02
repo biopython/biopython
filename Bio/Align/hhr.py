@@ -101,7 +101,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             fmt = f"{' ' * target_start}%-{target_length - target_start}s"
             # fmt: off
             target.letter_annotations["Consensus"] = fmt % target_consensus.replace("-", "")
-            # fmt: on
             target.letter_annotations["ss_pred"] = fmt % target_ss_pred.replace("-", "")
             target.letter_annotations["ss_dssp"] = fmt % target_ss_dssp.replace("-", "")
             alignment_confidence = fmt % "".join(
@@ -109,14 +108,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             )
             fmt = f"{' ' * query_start}%-{query_length - query_start}s"
             if query_consensus:
-                # fmt: off
                 query.letter_annotations["Consensus"] = fmt % query_consensus.replace("-", "")
-                # fmt: on
             if query_ss_pred:
-                # fmt: off
                 query.letter_annotations["ss_pred"] = fmt % query_ss_pred.replace("-", "")
-                # fmt: on
             records = [target, query]
+            # fmt: on
             alignment = Alignment(records, coordinates=coordinates)
             alignment.annotations = alignment_annotations
             alignment.column_annotations = {}
