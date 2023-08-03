@@ -13,6 +13,8 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.82
 ===============================================
 
+The MMCIFParser now ignores '.' header values.
+
 Calling ``iter`` on a ``PairwiseAlignments`` object returned by a
 ``PairwiseAigner`` previously reset the iterator such that it will start from
 the first alignment when iterating. As a side effect, this will cause all other
