@@ -1022,7 +1022,7 @@ gi|330443   1319245 ?????????????????????????????? 1319275
 gi|296143        30 ??????????????????????????????       0
 <BLANKLINE>
 \end{minted}
-Now we can print the alignment in BED, PSL, and SAM format:
+Now we can print the alignment in BED and PSL format:
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(format(alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
@@ -1032,6 +1032,7 @@ gi|330443520|ref|NC_001136.10|	1318045	1319275	gi|296143771|ref|NM_001180731.1| 
 1230	0	0	0	0	0	0	0	-	gi|296143771|ref|NM_001180731.1|	1230	0	1230	gi|330443520|ref|NC_001136.10|	1319275	1318045	1319275	3	1226,3,1,	0,1226,1229,	1318045,1319271,1319274,
 <BLANKLINE>
 \end{minted}
+The SAM format parser defines its own (optional) \verb|operations| attribute (section~\ref{subseq:align_sam}), which is not quite consistent with the \verb|operations| attribute defined in the Exonerate format parser. As the \verb|operations| attribute is optional, we delete it before printing the alignment in SAM format:
 %cont-doctest
 \begin{minted}{pycon}
 >>> del alignment.operations
@@ -1039,6 +1040,7 @@ gi|330443520|ref|NC_001136.10|	1318045	1319275	gi|296143771|ref|NM_001180731.1| 
 gi|296143771|ref|NM_001180731.1|	16	gi|330443520|ref|NC_001136.10|	1318046	255	1226M3M1M	*	0	0	*	*	AS:i:6146
 <BLANKLINE>
 \end{minted}
+
 The second alignment already has the target on the forward strand and the query on the reverse strand, and can be printed to BED format directly:
 %cont-doctest
 \begin{minted}{pycon}
@@ -1828,6 +1830,25 @@ HWI-1KL12         0 TCACGGTGGCCTGTTGAGGCAGGGGCTCACGCTGACCTCTCTCGGCGTGGGAGGGGCCGG
 HWI-1KL12        60 TGTGAGGCAAGGGCTCACGCTGACCTCTCTCGGCGTGGGAG    101
 <BLANKLINE>
 \end{minted}
+
+SAM files may include additional information to distinguish simple sequence insertions and deletions from skipped regions of the genome (e.g. introns), hard and soft clipping, and padded sequence regions. As this information cannot be stored in the \verb|coordinates| attribute of an \verb|Alignment| object, and is stored in a dedicated \verb|operations| attribute instead:
+%doctest ../Tests/Blat lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("dna_rna.sam", "sam")
+>>> alignment = next(alignments)
+>>> print(format(alignment, "SAM"))  # doctest: +NORMALIZE_WHITESPACE
+NR_111921.1	0	chr3	48663768	0	46M1827N82M3376N76M12H	*	0	0	CACGAGAGGAGCGGAGGCGAGGGGTGAACGCGGAGCACTCCAATCGCTCCCAACTAGAGGTCCACCCAGGACCCAGAGACCTGGATTTGAGGCTGCTGGGCGGCAGATGGAGCGATCAGAAGACCAGGAGACGGGAGCTGGAGTGCAGTGGCTGTTCACAAGCGTGAAAGCAAAGATTAAAAAATTTGTTTTTATATTAAAAAA	*	AS:i:1000	NM:i:0
+<BLANKLINE>
+>>> alignment.coordinates
+array([[48663767, 48663813, 48665640, 48665722, 48669098, 48669174],
+       [       0,       46,       46,      128,      128,      204]])
+>>> alignment.operations
+bytearray(b'MNMNM')
+>>> alignment.query.annotations["hard_clip_right"]
+12
+\end{minted}
+In this alignment, the cigar string \verb|46M1827N82M3376N76M12H| defines 46 aligned nucleotides, an intron of 1827 nucleotides, 82 aligned nucleotides, an intron of 3376 nucleotides, 76 aligned nucleotides, and 12 hard-clipped nucleotides. These operations are shown in the \verb|operations| attribute, except for hard-clipping, which is stored in \verb|alignment.query.annotations["hard_clip_right"]| (or \verb|alignment.query.annotations["hard_clip_left"]|, if applicable) instead.
 
 To write a SAM file with alignments created from scratch, use an \verb|Alignments| (plural) object to store the alignments as well as the metadata and targets:
 %doctest . lib:numpy
