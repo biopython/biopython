@@ -914,6 +914,183 @@ True
 \subsection{Exonerate}
 \label{subsec:align_exonerate}
 
+Exonerate is a generic program for pairwise sequence alignments~\cite{slater2005}. The sequence alignments found by Exonerate can be output in a human-readable form, in the "cigar" (Compact Idiosyncratic Gapped Alignment Report) format, or in the "vulgar" (Verbose Useful Labelled Gapped Alignment Report) format. The user can request to include one or more of these formats in the output. The parser in \verb|Bio.Align| can only parse alignments in the cigar or vulgar formats, and will not parse output that includes alignments in human-readable format.
+
+The file \verb|exn_22_m_cdna2genome_vulgar.exn| in the Biopython test suite is an example of an Exonerate output file showing the alignments in vulgar format:
+\begin{minted}{text}
+Command line: [exonerate -m cdna2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes]
+Hostname: [blackbriar]
+vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6146 M 1 1 C 3 3 M 1226 1226
+vulgar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10| 1318045 1319275 + 6146 M 129 129 C 3 3 M 1098 1098
+vulgar: gi|296143771|ref|NM_001180731.1| 0 516 + gi|330443688|ref|NC_001145.3| 85010 667216 + 518 M 11 11 G 1 0 M 15 15 G 2 0 M 4 4 G 1 0 M 1 1 G 1 0 M 8 8 G 4 0 M 17 17 5 0 2 I 0 168904 3 0 2 M 4 4 G 0 1 M 8 8 G 2 0 M 3 3 G 1 0 M 33 33 G 0 2 M 7 7 G 0 1 M 102 102 5 0 2 I 0 96820 3 0 2 M 14 14 G 0 2 M 10 10 G 2 0 M 5 5 G 0 2 M 10 10 G 2 0 M 4 4 G 0 1 M 20 20 G 1 0 M 15 15 G 0 1 M 5 5 G 3 0 M 4 4 5 0 2 I 0 122114 3 0 2 M 20 20 G 0 5 M 6 6 5 0 2 I 0 193835 3 0 2 M 12 12 G 0 2 M 5 5 G 1 0 M 7 7 G 0 2 M 1 1 G 0 1 M 12 12 C 75 75 M 6 6 G 1 0 M 4 4 G 0 1 M 2 2 G 0 1 M 3 3 G 0 1 M 41 41
+-- completed exonerate analysis
+\end{minted}
+This file includes three alignments. To parse this file, use
+%doctest ../Tests/Exonerate lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("exn_22_m_cdna2genome_vulgar.exn", "exonerate")
+\end{minted}
+The dictionary \verb|alignments.metadata| stores general information about these alignments, shown at the top of the output file:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.metadata  # doctest: +NORMALIZE_WHITESPACE
+{'Program': 'exonerate',
+ 'Command line': 'exonerate -m cdna2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes',
+ 'Hostname': 'blackbriar'}
+\end{minted}
+Now we can iterate over the alignments. The first alignment, with alignment score 6146.0, has no gaps:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = next(alignments)
+>>> alignment.score
+6146.0
+>>> alignment.coordinates
+array([[1319275, 1319274, 1319271, 1318045],
+       [      0,       1,       4,    1230]])
+>>> print(alignment)  # doctest: +ELLIPSIS
+gi|330443   1319275 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+gi|296143         0 ????????????????????????????????????????????????????????????
+...
+gi|330443   1318075 ?????????????????????????????? 1318045
+               1200 ||||||||||||||||||||||||||||||    1230
+gi|296143      1200 ??????????????????????????????    1230
+<BLANKLINE>
+\end{minted}
+Printing this alignment in \verb|exonerate| format using Python's built-in \verb|format| function writes a vulgar line:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "exonerate"))
+vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6146 M 1 1 C 3 3 M 1226 1226
+<BLANKLINE>
+\end{minted}
+Using the \verb|format| method allows us to request either a vulgar line (default) or a cigar line:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment.format("exonerate", "vulgar"))
+vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6146 M 1 1 C 3 3 M 1226 1226
+<BLANKLINE>
+>>> print(alignment.format("exonerate", "cigar"))
+cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6146 M 1 M 3 M 1226
+<BLANKLINE>
+\end{minted}
+The vulgar line contains information about the alignment (in the section \verb|M 1 1 C 3 3 M 1226|) that is missing from the cigar line \verb|M 1 M 3 M 1226|. The vulgar line specifies that the alignment starts with a single aligned nucleotides, followed by three aligned nucleotides that form a codon (\verb|C|), followed by 1226 aligned nucleotides. In the cigar line, we see a single aligned nucleotide, followed by three aligned nucleotides, followed by 1226 aligned nucleotides; it does not specify that the three aligned nucleotides form a codon. This information from the vulgar line is stored in the \verb|operations| attribute:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.operations
+bytearray(b'MCM')
+\end{minted}
+See the Exonerate documentation for the definition of other operation codes.
+
+Similarly, the \verb|"vulgar"| or \verb|"cigar"| argument can be used when callingn \verb|Bio.Align.write| to write a file with vulgar or cigar alignment lines.
+
+Note that the target (the first sequence) in the printed alignment is on the reverse strand while the query (the second sequence) is on the forward strand, with the target coordinate decreasing and the query coordinate increasing:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment)  # doctest: +ELLIPSIS
+gi|330443   1319275 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+gi|296143         0 ????????????????????????????????????????????????????????????
+...
+gi|330443   1318075 ?????????????????????????????? 1318045
+               1200 ||||||||||||||||||||||||||||||    1230
+gi|296143      1200 ??????????????????????????????    1230
+<BLANKLINE>
+\end{minted}
+This prevents us from outputting the alignment in BED (section~\ref{subsec:align_bed}),  PSL (section~\ref{subsec:align_psl}), or SAM (section~\ref{subseq:align_sam}) format, which expect the target to be on the forward strand:
+%cont-doctest
+\begin{minted}{pycon}
+>>> format(alignment, "bed")  # doctest: +ELLIPSIS
+Traceback (most recent call last):
+...
+    assert coordinates[0, 0] <= coordinates[0, -1]
+AssertionError
+\end{minted}
+We can fix this by reversing the coordinates for both the target and query.
+This puts the target on the forward strand (with the coordinate increasing) and the query on the reverse strand (with the coordinate decreasing):
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.coordinates = alignment.coordinates[:, ::-1]
+>>> print(alignment)  # doctest: +ELLIPSIS
+gi|330443   1318045 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+gi|296143      1230 ????????????????????????????????????????????????????????????
+...
+gi|330443   1319245 ?????????????????????????????? 1319275
+               1200 ||||||||||||||||||||||||||||||    1230
+gi|296143        30 ??????????????????????????????       0
+<BLANKLINE>
+\end{minted}
+Now we can print the alignment in BED and PSL format:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
+gi|330443520|ref|NC_001136.10|	1318045	1319275	gi|296143771|ref|NM_001180731.1| 6146.0	-	1318045	1319275	0	3	1226,3,1,	0,1226,1229,
+<BLANKLINE>
+>>> print(format(alignment, "psl"))  # doctest: +NORMALIZE_WHITESPACE
+1230	0	0	0	0	0	0	0	-	gi|296143771|ref|NM_001180731.1|	1230	0	1230	gi|330443520|ref|NC_001136.10|	1319275	1318045	1319275	3	1226,3,1,	0,1226,1229,	1318045,1319271,1319274,
+<BLANKLINE>
+\end{minted}
+The SAM format parser defines its own (optional) \verb|operations| attribute (section~\ref{subseq:align_sam}), which is not quite consistent with the \verb|operations| attribute defined in the Exonerate format parser. As the \verb|operations| attribute is optional, we delete it before printing the alignment in SAM format:
+%cont-doctest
+\begin{minted}{pycon}
+>>> del alignment.operations
+>>> print(format(alignment, "sam"))  # doctest: +NORMALIZE_WHITESPACE
+gi|296143771|ref|NM_001180731.1|	16	gi|330443520|ref|NC_001136.10|	1318046	255	1226M3M1M	*	0	0	*	*	AS:i:6146
+<BLANKLINE>
+\end{minted}
+
+The second alignment already has the target on the forward strand and the query on the reverse strand, and can be printed to BED format directly:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = next(alignments)
+>>> alignment.coordinates
+array([[1318045, 1318174, 1318177, 1319275],
+       [   1230,    1101,    1098,       0]])
+>>> print(format(alignment, "BED"))  # doctest: +NORMALIZE_WHITESPACE
+gi|330443520|ref|NC_001136.10|	1318045	1319275	gi|296143771|ref|NM_001180731.1| 6146.0	-	1318045	1319275	0	3	129,3,1098,	0,129,132,
+<BLANKLINE>
+\end{minted}
+The third alignment contains a long gap:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = next(alignments)
+>>> print(alignment)  # doctest: +ELLIPSIS
+gi|330443     85010 ???????????-???????????????--????-?-????????----????????????
+                  0 |||||||||||-|||||||||||||||--||||-|-||||||||----||||||||||||
+gi|296143         0 ????????????????????????????????????????????????????????????
+<BLANKLINE>
+gi|330443     85061 ????????????????????????????????????????????????????????????
+                 60 |||||-------------------------------------------------------
+gi|296143        60 ?????-------------------------------------------------------
+...
+gi|330443    666990 ????????????????????????????????????????????????????????????
+             582000 --------------------------------------------------||||||||||
+gi|296143       346 --------------------------------------------------??????????
+<BLANKLINE>
+gi|330443    667050 ?????????-??????????????????????????????????????????????????
+             582060 ||--|||||-|||||||--|-|||||||||||||||||||||||||||||||||||||||
+gi|296143       356 ??--?????????????--?-???????????????????????????????????????
+<BLANKLINE>
+gi|330443    667109 ??????????????????????????????????????????????????????-?????
+             582120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||-||||-
+gi|296143       411 ???????????????????????????????????????????????????????????-
+<BLANKLINE>
+gi|330443    667168 ???????????????????????????????????????????????? 667216
+             582180 ||-|||-||||||||||||||||||||||||||||||||||||||||| 582228
+gi|296143       470 ??-???-?????????????????????????????????????????    516
+<BLANKLINE>
+\end{minted}
+As the target sequence (and also the query sequence) is on the forward strand, we can print the alignment in BED format directly:i
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "BED"))  # doctest: +NORMALIZE_WHITESPACE
+gi|330443688|ref|NC_001145.3|	85010	667216	gi|296143771|ref|NM_001180731.1| 518.0	+	85010	667216	0	34	11,15,4,1,8,17,4,8,3,33,7,102,14,10,5,10,4,20,15,5,4,20,6,12,5,7,1,12,75,6,4,2,3,41,	0,11,26,30,31,39,168964,168969,168977,168980,169015,169023,265949,265965,265975,265982,265992,265997,266017,266033,266038,388160,388185,582030,582044,582049,582058,582060,582072,582147,582153,582158,582161,582165,
+<BLANKLINE>
+\end{minted}
+
+
 \subsection{Nexus}
 \label{subsec:align_nexus}
 
@@ -1653,6 +1830,25 @@ HWI-1KL12         0 TCACGGTGGCCTGTTGAGGCAGGGGCTCACGCTGACCTCTCTCGGCGTGGGAGGGGCCGG
 HWI-1KL12        60 TGTGAGGCAAGGGCTCACGCTGACCTCTCTCGGCGTGGGAG    101
 <BLANKLINE>
 \end{minted}
+
+SAM files may include additional information to distinguish simple sequence insertions and deletions from skipped regions of the genome (e.g. introns), hard and soft clipping, and padded sequence regions. As this information cannot be stored in the \verb|coordinates| attribute of an \verb|Alignment| object, and is stored in a dedicated \verb|operations| attribute instead:
+%doctest ../Tests/Blat lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("dna_rna.sam", "sam")
+>>> alignment = next(alignments)
+>>> print(format(alignment, "SAM"))  # doctest: +NORMALIZE_WHITESPACE
+NR_111921.1	0	chr3	48663768	0	46M1827N82M3376N76M12H	*	0	0	CACGAGAGGAGCGGAGGCGAGGGGTGAACGCGGAGCACTCCAATCGCTCCCAACTAGAGGTCCACCCAGGACCCAGAGACCTGGATTTGAGGCTGCTGGGCGGCAGATGGAGCGATCAGAAGACCAGGAGACGGGAGCTGGAGTGCAGTGGCTGTTCACAAGCGTGAAAGCAAAGATTAAAAAATTTGTTTTTATATTAAAAAA	*	AS:i:1000	NM:i:0
+<BLANKLINE>
+>>> alignment.coordinates
+array([[48663767, 48663813, 48665640, 48665722, 48669098, 48669174],
+       [       0,       46,       46,      128,      128,      204]])
+>>> alignment.operations
+bytearray(b'MNMNM')
+>>> alignment.query.annotations["hard_clip_right"]
+12
+\end{minted}
+In this alignment, the cigar string \verb|46M1827N82M3376N76M12H| defines 46 aligned nucleotides, an intron of 1827 nucleotides, 82 aligned nucleotides, an intron of 3376 nucleotides, 76 aligned nucleotides, and 12 hard-clipped nucleotides. These operations are shown in the \verb|operations| attribute, except for hard-clipping, which is stored in \verb|alignment.query.annotations["hard_clip_right"]| (or \verb|alignment.query.annotations["hard_clip_left"]|, if applicable) instead.
 
 To write a SAM file with alignments created from scratch, use an \verb|Alignments| (plural) object to store the alignments as well as the metadata and targets:
 %doctest . lib:numpy

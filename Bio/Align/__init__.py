@@ -3297,7 +3297,9 @@ class Alignment:
         >>> print(rc_alignment.column_annotations)
         {'score': [2, 2, 2, 3]}
         """
-        sequences = [reverse_complement(sequence) for sequence in self.sequences]
+        sequences = [
+            reverse_complement(sequence, inplace=False) for sequence in self.sequences
+        ]
         coordinates = np.array(
             [
                 len(sequence) - row[::-1]
