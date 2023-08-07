@@ -3,14 +3,14 @@
 
 Sequence alignments are a collection of two or more sequences that have been aligned to each other -- usually with the insertion of gaps, and the addition of leading or trailing gaps -- such that all the sequence strings are the same length.
 
-Alignments may extend over the full length of each sequence, or may be limited to a subsection of each sequence. In Biopython, all sequence alignments are represented by an \verb|Alignment| object, described in section~\ref{sec:alignmentobject}. \verb|Alignment| objects can be obtained by parsing the output of alignment software such as Clustal or BLAT (described in section+\ref{sec:alignmentparsers}. or by using Biopython's pairwise sequence aligner, which can align two sequences to each other (described in chapter~\ref{chapter:pairwise}).
+Alignments may extend over the full length of each sequence, or may be limited to a subsection of each sequence. In Biopython, all sequence alignments are represented by an \verb|Alignment| object, described in section~\ref{sec:alignmentobject}. \verb|Alignment| objects can be obtained by parsing the output of alignment software such as Clustal or BLAT (described in section~\ref{sec:alignmentparsers}. or by using Biopython's pairwise sequence aligner, which can align two sequences to each other (described in Chapter~\ref{chapter:pairwise}).
 
 See Chapter~\ref{chapter:msa} for a description of the older \verb|MultipleSeqAlignment| class and the parsers in \verb|Bio.AlignIO| that parse the output of sequence alignment software, generating \verb|MultipleSeqAlignment| objects.
 
 \section{Alignment objects}
 \label{sec:alignmentobject}
 
-The \verb|Alignment| class is defined in \verb|Bio.Align|. Usually you would get an \verb|Alignment| object by parsing the output of alignment programs (section~\ref{sec:alignmentparsers}) or by running Biopython's pairwise aligner (chapter~\ref{chapter:pairwise}). For the benefit of this section, however, we will create an \verb|Alignment| object from scratch.
+The \verb|Alignment| class is defined in \verb|Bio.Align|. Usually you would get an \verb|Alignment| object by parsing the output of alignment programs (section~\ref{sec:alignmentparsers}) or by running Biopython's pairwise aligner (Chapter~\ref{chapter:pairwise}). For the benefit of this section, however, we will create an \verb|Alignment| object from scratch.
 
 Suppose you have three sequences:
 %doctest . lib:numpy
@@ -313,36 +313,7 @@ Reverse-complementing an alignment preserves its column annotations (in reverse 
 \section{Reading and writing alignments}
 \label{sec:alignmentparsers}
 
-Output from sequence alignment software such as Clustal can be parsed into \verb|Alignment| objects by the \verb|Bio.Align.read| and \verb|Bio.Align.parse| functions. Their usage is analogous to the \verb|read| and \verb|parse| functions in \verb|Bio.SeqIO| (see Section~\ref{sec:Bio.SeqIO-input}): The \verb|read| function is used to read an output file containing a single alignment and returns an \verb|Alignment| object, while the \verb|parse| function returns an iterator to iterate over alignments stored in an output file containing one or more alignments. The table below shows the alignment formats that can be parsed in \verb|Bio.Align|. \verb|Bio.Align| provides a \verb|write| function that can write alignments in most of these formats, as shown in the table.
-
-\begin{table}[!htbp]
-\begin{center}
-\begin{tabular}{|l|l|c|c|c|}
-File format \verb+fmt+ & Description & text / binary & Supported by \verb|write| & Subsection \\
-\verb|a2m| & A2M & text & yes & \ref{subsec:align_a2m} \\
-\verb|bed| & Browser Extensible Data (BED) & text & yes & \ref{subsec:align_bed} \\
-\verb|bigbed| & bigBed & binary & yes & \ref{subsec:align_bigbed} \\
-\verb|bigmaf| & bigMaf & binary & yes & \ref{subsec:align_bigmaf} \\
-\verb|bigpsl| & bigPsl & binary & yes & \ref{subsec:align_bigpsl} \\
-\verb|clustal| & ClustalW & text & yes & \ref{subsec:align_clustal} \\
-\verb|emboss| & EMBOSS & text & no & \ref{subsec:align_emboss} \\
-\verb|exonerate| & Exonerate & text & yes & \ref{subsec:align_exonerate} \\
-\verb|fasta| & Aligned FASTA & text & yes & \ref{subsec:align_fasta} \\
-\verb|hhr| & HH-suite output files & text & no & \ref{subsec:align_hhr} \\
-\verb|maf| & Multiple Alignment Format (MAF) & text & yes & \ref{subsec:align_maf} \\
-\verb|mauve| & Mauve eXtended Multi-FastA (xmfa) format & text & yes & \ref{subsec:align_mauve} \\
-\verb|msf| & GCG Multiple Sequence Format (MSF) & text & no & \ref{subsec:align_msf} \\
-\verb|nexus| & Nexus & text & yes & \ref{subsec:align_nexus} \\
-\verb|phylip| & PHYLIP output files & text & yes & \ref{subsec:align_phylip} \\
-\verb|psl| & Pattern Space Layout (PSL) & text & yes & \ref{subsec:align_psl} \\
-\verb|sam| & Sequence Alignment/Map (SAM) & text & yes & \ref{subseq:align_sam} \\
-\verb|stockholm| & Stockholm & text & yes & \ref{subsec:align_stockholm} \\
-\verb|tabular| & Tabular output from BLAST or FASTA & text & no & \ref{subsec:align_tabular} \\
-\end{tabular}
-\end{center}
-\end{table}
-
-These formats are described in detail in Section~\ref{sec:alignformats}. The format argument \verb|fmt| is case-insensitive.
+Output from sequence alignment software such as Clustal can be parsed into \verb|Alignment| objects by the \verb|Bio.Align.read| and \verb|Bio.Align.parse| functions. Their usage is analogous to the \verb|read| and \verb|parse| functions in \verb|Bio.SeqIO| (see Section~\ref{sec:Bio.SeqIO-input}): The \verb|read| function is used to read an output file containing a single alignment and returns an \verb|Alignment| object, while the \verb|parse| function returns an iterator to iterate over alignments stored in an output file containing one or more alignments. Section \ref{sec:alignformats} describes  the alignment formats that can be parsed in \verb|Bio.Align|.  \verb|Bio.Align| also provides a \verb|write| function that can write alignments in most of these formats.
 
 \subsection{Reading alignments}
 
@@ -376,6 +347,36 @@ For text (non-binary) formats, you can call Python's built-in \verb|format| func
 
 \section{Alignment file formats}
 \label{sec:alignformats}
+
+The table below shows the alignment formats that can be parsed in Bio.Align.
+The format argument \verb|fmt| used in \verb|Bio.Align| functions to specify the file format is case-insensitive. Most of these file formats can also be written by \verb|Bio.Align|, as shown in the table.
+
+\begin{table}[!htbp]
+\begin{center}
+\begin{tabular}{|l|l|c|c|c|}
+File format \verb+fmt+ & Description & text / binary & Supported by \verb|write| & Subsection \\
+\verb|a2m| & A2M & text & yes & \ref{subsec:align_a2m} \\
+\verb|bed| & Browser Extensible Data (BED) & text & yes & \ref{subsec:align_bed} \\
+\verb|bigbed| & bigBed & binary & yes & \ref{subsec:align_bigbed} \\
+\verb|bigmaf| & bigMaf & binary & yes & \ref{subsec:align_bigmaf} \\
+\verb|bigpsl| & bigPsl & binary & yes & \ref{subsec:align_bigpsl} \\
+\verb|clustal| & ClustalW & text & yes & \ref{subsec:align_clustal} \\
+\verb|emboss| & EMBOSS & text & no & \ref{subsec:align_emboss} \\
+\verb|exonerate| & Exonerate & text & yes & \ref{subsec:align_exonerate} \\
+\verb|fasta| & Aligned FASTA & text & yes & \ref{subsec:align_fasta} \\
+\verb|hhr| & HH-suite output files & text & no & \ref{subsec:align_hhr} \\
+\verb|maf| & Multiple Alignment Format (MAF) & text & yes & \ref{subsec:align_maf} \\
+\verb|mauve| & Mauve eXtended Multi-FastA (xmfa) format & text & yes & \ref{subsec:align_mauve} \\
+\verb|msf| & GCG Multiple Sequence Format (MSF) & text & no & \ref{subsec:align_msf} \\
+\verb|nexus| & NEXUS & text & yes & \ref{subsec:align_nexus} \\
+\verb|phylip| & PHYLIP output files & text & yes & \ref{subsec:align_phylip} \\
+\verb|psl| & Pattern Space Layout (PSL) & text & yes & \ref{subsec:align_psl} \\
+\verb|sam| & Sequence Alignment/Map (SAM) & text & yes & \ref{subseq:align_sam} \\
+\verb|stockholm| & Stockholm & text & yes & \ref{subsec:align_stockholm} \\
+\verb|tabular| & Tabular output from BLAST or FASTA & text & no & \ref{subsec:align_tabular} \\
+\end{tabular}
+\end{center}
+\end{table}
 
 \subsection{Aligned FASTA}
 \label{subsec:align_fasta}
@@ -1327,8 +1328,84 @@ gi|330443688|ref|NC_001145.3|	85010	667216	gi|296143771|ref|NM_001180731.1| 518.
 \end{minted}
 
 
-\subsection{Nexus}
+\subsection{NEXUS}
 \label{subsec:align_nexus}
+
+The NEXUS file format~\cite{maddison1997} is used by several programs to store phylogenetic information. This is an example of a file in the NEXUS format (available as \verb|codonposset.nex| in the \verb|Tests/Nexus| subdirectory in the Biopython distribution):
+\begin{minted}{text}
+#NEXUS
+[MacClade 4.05 registered to Computational Biologist, University]
+
+
+BEGIN DATA;
+       DIMENSIONS  NTAX=2 NCHAR=22;
+       FORMAT DATATYPE=DNA  MISSING=? GAP=- ;
+MATRIX
+[                           10        20 ]
+[                           .         .  ]
+
+Aegotheles         AAAAAGGCATTGTGGTGGGAAT   [22]
+Aerodramus         ?????????TTGTGGTGGGAAT   [13]
+;
+END;
+
+
+BEGIN CODONS;
+       CODONPOSSET * CodonPositions =
+               N: 1-10,
+               1: 11-22\3,
+               2: 12-22\3,
+               3: 13-22\3;
+       CODESET  * UNTITLED = Universal: all ;
+END;
+\end{minted}
+In general, files in the NEXUS format can be much more complex. \verb|Bio.Align| relies heavily on NEXUS parser in \verb|Bio.Nexus| (see Chapter~\ref{chapter:phylo}) to extract \verb|Alignment| objects from NEXUS files.
+
+To read the alignment in this NEXUS file, use
+%doctest ../Tests/Nexus lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignment = Align.read("codonposset.nex", "nexus")
+>>> print(alignment)
+Aegothele         0 AAAAAGGCATTGTGGTGGGAAT 22
+                  0 .........||||||||||||| 22
+Aerodramu         0 ?????????TTGTGGTGGGAAT 22
+<BLANKLINE>
+>>> alignment.shape
+(2, 22)
+\end{minted}
+The sequences are stored under the \verb|sequences| attribute:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.sequences[0].id
+'Aegotheles'
+>>> alignment.sequences[0].seq
+Seq('AAAAAGGCATTGTGGTGGGAAT')
+>>> alignment.sequences[0].annotations
+{'molecule_type': 'DNA'}
+>>> alignment.sequences[1].id
+'Aerodramus'
+>>> alignment.sequences[1].seq
+Seq('?????????TTGTGGTGGGAAT')
+>>> alignment.sequences[1].annotations
+{'molecule_type': 'DNA'}
+\end{minted}
+To print this alignment in the NEXUS format, use
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "nexus"))
+#NEXUS
+begin data;
+dimensions ntax=2 nchar=22;
+format datatype=dna missing=? gap=-;
+matrix
+Aegotheles AAAAAGGCATTGTGGTGGGAAT
+Aerodramus ?????????TTGTGGTGGGAAT
+;
+end;
+<BLANKLINE>
+\end{minted}
+Similarly, you can use \verb|Align.write(alignment, "myfilename.nex", "nexus")| to write the alignment in the NEXUS format to the file \verb|myfilename.nex|.
 
 \subsection{Tabular output from BLAST or FASTA}
 \label{subsec:align_tabular}
@@ -1586,7 +1663,7 @@ To parse this alignment, use
 >>> alignment = Align.read("probcons.a2m", "a2m")
 >>> alignment  # doctest: +ELLIPSIS
 <Alignment object (5 rows x 101 columns) at ...>
->>> print(alignment)  # doctest: +NORMALIZE_WHITESPACE
+>>> print(alignment)
 plas_horv         0 D-VLLGANGGVLVFEPNDFSVKAGETITFKNNAGYPHNVVFDEDAVPSG-VD-VSKISQE
 plas_chlr         0 --VKLGADSGALEFVPKTLTIKSGETVNFVNNAGFPHNIVFDEDAIPSG-VN-ADAISRD
 plas_anav         0 --VKLGSDKGLLVFEPAKLTIKPGDTVEFLNNKVPPHNVVFDAALNPAKSADLAKSLSHK
@@ -2228,9 +2305,8 @@ In addition to the \verb+format+ method, you can use Python's built-in \verb+for
 \end{minted}
 allowing \verb+Alignment+ objects to be used in formatted (f-) strings in Python:
 \begin{minted}{pycon}
->>> print(
-...     f"The alignment in PSL format is '{alignment:psl}'."
-... )  # doctest: +NORMALIZE_WHITESPACE
+>>> line = f"The alignment in PSL format is '{alignment:psl}'."
+>>> print(line)  # doctest: +NORMALIZE_WHITESPACE
 The alignment in PSL format is '6   1   0   1   0   0   0   0   +   query   8   0   8   target   20   7   15   1   8,   0,   7,
 '
 \end{minted}
