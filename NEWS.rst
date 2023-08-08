@@ -13,6 +13,11 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.82
 ===============================================
 
+We now have basic type hint annotations in various modules including ``Seq``,
+``SeqRecord``, and ``SeqIO``. This should help anyone using an editor or IDE
+with type-aware autocomplete, or in conjunction with mypy as a pre-commit
+check this can catch passing the wrong types to Biopython functions/methods.
+
 Calling ``iter`` on a ``PairwiseAlignments`` object returned by a
 ``PairwiseAigner`` previously reset the iterator such that it will start from
 the first alignment when iterating. As a side effect, this will cause all other
@@ -74,10 +79,12 @@ possible, especially the following contributors:
 - Cam McMenamie (first contribution)
 - João Rodrigues
 - Joe Greener
+- Michael R. Crusoe 
 - Michiel de Hoon
 - Peter Cock
 - Ricardas Ralys (first contribution)
 - Rob Miller
+- Thomas Holder
 - Vladislav Kuznetsov (first contribution)
 - Yiming Qu (first contribution)
 
