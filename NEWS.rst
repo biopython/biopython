@@ -79,7 +79,7 @@ possible, especially the following contributors:
 - Cam McMenamie (first contribution)
 - João Rodrigues
 - Joe Greener
-- Michael R. Crusoe 
+- Michael R. Crusoe
 - Michiel de Hoon
 - Peter Cock
 - Ricardas Ralys (first contribution)
