@@ -1235,7 +1235,7 @@ gi|330443   1318075 ?????????????????????????????? 1318045
 gi|296143      1200 ??????????????????????????????    1230
 <BLANKLINE>
 \end{minted}
-This prevents us from outputting the alignment in BED (section~\ref{subsec:align_bed}),  PSL (section~\ref{subsec:align_psl}), or SAM (section~\ref{subseq:align_sam}) format, which expect the target to be on the forward strand:
+This prevents us from outputting the alignment in BED (section~\ref{subsec:align_bed}), PSL (section~\ref{subsec:align_psl}), or SAM (section~\ref{subseq:align_sam}) format, which expect the target to be on the forward strand:
 %cont-doctest
 \begin{minted}{pycon}
 >>> format(alignment, "bed")  # doctest: +ELLIPSIS
@@ -1319,7 +1319,7 @@ gi|330443    667168 ???????????????????????????????????????????????? 667216
 gi|296143       470 ??-???-?????????????????????????????????????????    516
 <BLANKLINE>
 \end{minted}
-As the target sequence (and also the query sequence) is on the forward strand, we can print the alignment in BED format directly:i
+As the target sequence (and also the query sequence) is on the forward strand, we can print the alignment in BED format directly:
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(format(alignment, "BED"))  # doctest: +NORMALIZE_WHITESPACE
@@ -2312,7 +2312,96 @@ readC	0	chr2	12301	255	18M22S	*	0	0	*       *
 \subsection{Browser Extensible Data (BED)}
 \label{subsec:align_bed}
 
-Create a string representing the alignment in the Browser Extensible Data (BED) file format:
+BED (Browser Extensible Data) files are typically used to store the alignments of gene transcripts to the genome. See the \href{http://genome.cse.ucsc.edu/FAQ/FAQformat.html#format1}{description from UCSC} for a full explanation of the BED format.
+
+BED files have three required fields and nine optional fields. The file \verb|bed12.bed| in subdirectory \verb|Tests/Blat| is an example of a BED file with 12 fields:
+\begin{minted}{text}
+chr22	1000	5000	mRNA1	960	+	1200	4900	255,0,0	2	567,488,	0,3512,
+chr22	2000	6000	mRNA2	900	-	2300	5960	0,255,0	2	433,399,	0,3601,
+\end{minted}
+To parse this file, use
+%doctest ../Tests/Blat lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("bed12.bed", "bed")
+>>> len(alignments)
+2
+>>> for alignment in alignments:
+...     print(alignment.coordinates)
+...
+[[1000 1567 4512 5000]
+ [   0  567  567 1055]]
+[[2000 2433 5601 6000]
+ [ 832  399  399    0]]
+\end{minted}
+Note that the first sequence ("\verb|mRNA1|") was mapped to the forward strand, while the second sequence ("\verb|mRNA2|") was mapped to the reverse strand.
+
+As a BED file does not store the length of each chromosome, the length of the target sequence is set to its maximum:
+% don't include in the doctest, as 32-bit system show a different number
+\begin{minted}{pycon}
+>>> alignment.target
+SeqRecord(seq=Seq(None, length=9223372036854775807), id='chr22', name='<unknown name>', description='', dbxrefs=[])
+\end{minted}
+The length of the query sequence can be inferred from its alignment information:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.query
+SeqRecord(seq=Seq(None, length=832), id='mRNA2', name='<unknown name>', description='', dbxrefs=[])
+\end{minted}
+The alignment score (field 5) and information stored in fields 7-9 (referred to as \verb|thickStart|, \verb|thickEnd|, and \verb|itemRgb| in the BED format specification) are stored as attributes on the \verb|alignment| object:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.score
+900
+>>> alignment.thickStart
+2300
+>>> alignment.thickEnd
+5960
+>>> alignment.itemRgb
+'0,255,0'
+\end{minted}
+
+To print an alignment in the BED format, you can use Python's built-in \verb|format| function:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
+chr22	2000	6000	mRNA2	900	-	2300	5960	0,255,0	2	433,399,	0,3601,
+<BLANKLINE>
+\end{minted}
+or you can use the \verb|format| method of the \verb|alignment| object. This allows you to specify the number of fields to be written as the \verb|bedN| keyword argument:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment.format("bed"))  # doctest: +NORMALIZE_WHITESPACE
+chr22	2000	6000	mRNA2	900	-	2300	5960	0,255,0	2	433,399,	0,3601,
+<BLANKLINE>
+>>> print(alignment.format("bed", 3))  # doctest: +NORMALIZE_WHITESPACE
+chr22	2000	6000
+<BLANKLINE>
+>>> print(alignment.format("bed", 6))  # doctest: +NORMALIZE_WHITESPACE
+chr22	2000	6000	mRNA2	900	-
+<BLANKLINE>
+\end{minted}
+The same keyword argument can be used with \verb|Align.write|:
+\begin{minted}{pycon}
+>>> alignments.rewind()
+>>> Align.write(alignments, "mybed3file.bed", "bed", bedN=3)
+2
+>>> alignments.rewind()
+>>> Align.write(alignments, "mybed6file.bed", "bed", bedN=6)
+2
+>>> alignments.rewind()
+>>> Align.write(alignments, "mybed12file.bed", "bed")
+2
+\end{minted}
+
+
+\subsection{bigBed}
+\label{subsec:align_bigbed}
+
+\subsection{Pattern Space Layout (PSL)}
+\label{subsec:align_psl}
+
+Create a string representing the alignment in the Pattern Space Layout (PSL) file format as generated by BLAT \cite{kent2002}).
 %doctest . lib:numpy
 \begin{minted}{pycon}
 >>> import numpy as np
@@ -2328,17 +2417,6 @@ Create a string representing the alignment in the Browser Extensible Data (BED) 
 >>> alignment = alignment[:2]
 >>> format(alignment, "bed")
 'target\t1\t7\tquery\t0\t+\t1\t7\t0\t2\t2,3,\t0,3,\n'
-\end{minted}
-
-\subsection{bigBed}
-\label{subsec:align_bigbed}
-
-\subsection{Pattern Space Layout (PSL)}
-\label{subsec:align_psl}
-
-Create a string representing the alignment in the Pattern Space Layout (PSL) file format as generated by BLAT \cite{kent2002}).
-%cont-doctest
-\begin{minted}{pycon}
 >>> alignment.format("psl")
 '4\t1\t0\t0\t0\t0\t1\t1\t+\tquery\t7\t0\t5\ttarget\t7\t1\t7\t2\t2,3,\t0,2,\t1,4,\n'
 \end{minted}
