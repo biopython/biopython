@@ -2398,6 +2398,156 @@ The same keyword argument can be used with \verb|Align.write|:
 \subsection{bigBed}
 \label{subsec:align_bigbed}
 
+The bigBed file format is an index binary version of a BED file~\ref{subsec:align_bed}. To create a bigBed file, you can either use the \verb+bedToBigBed+ program from UCSC (\href{https://genome.ucsc.edu/goldenPath/help/bigBed.html}). or you can use Biopython for it by calling the \verb|Bio.Align.write| function with \verb|fmt="bigbed"|. While the two methods should result in identical bigBed files, using \verb+bedToBigBed+ is much faster and may be more reliable, as it is the gold standard. As bigBed files come with a built-in index, it allows you to quickly search a specific genomic region.
+
+As an example, let's parse the bigBed file \verb|dna_rna.bb|, available in the \verb|Tests/Blat| subdirectory in the Biopython distribution:
+%doctest ../Tests/Blat lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("dna_rna.bb", "bigbed")
+>>> len(alignments)
+4
+>>> print(alignments.declaration)  # doctest: +NORMALIZE_WHITESPACE
+table bed
+"Browser Extensible Data"
+(
+   string          chrom;          "Reference sequence chromosome or scaffold"
+   uint            chromStart;     "Start position in chromosome"
+   uint            chromEnd;       "End position in chromosome"
+   string          name;           "Name of item."
+   uint            score;          "Score (0-1000)"
+   char[1]         strand;         "+ or - for strand"
+   uint            thickStart;     "Start of where display should be thick (start codon)"
+   uint            thickEnd;       "End of where display should be thick (stop codon)"
+   uint            reserved;       "Used as itemRgb as of 2004-11-22"
+   int             blockCount;     "Number of blocks"
+   int[blockCount] blockSizes;     "Comma separated list of block sizes"
+   int[blockCount] chromStarts;    "Start positions relative to chromStart"
+)
+<BLANKLINE>
+\end{minted}
+The \verb|declaration| contains the specification of the columns, in AutoSql format, that was used to create the bigBed file.
+Target sequences (typically, the chromosomes against which the sequences were aligned) are stored in the \verb|targets| attribute. In the bigBed format, only the identifier and the size of each target is stored. In this example, there is only a single chromosome:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.targets
+[SeqRecord(seq=Seq(None, length=198295559), id='chr3', name='<unknown name>', description='<unknown description>', dbxrefs=[])]
+\end{minted}
+Let's look at the individual alignments. The alignment information is stored in the same way as for a BED file (see section \ref{subsec:align_bed}):
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = next(alignments)
+>>> alignment.target.id
+'chr3'
+>>> alignment.query.id
+'NR_046654.1'
+>>> alignment.coordinates
+array([[42530895, 42530958, 42532020, 42532095, 42532563, 42532606],
+       [     181,      118,      118,       43,       43,        0]])
+>>> alignment.thickStart
+42530895
+>>> alignment.thickEnd
+42532606
+>>> print(alignment)  # doctest: +ELLIPSIS
+chr3       42530895 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+NR_046654       181 ????????????????????????????????????????????????????????????
+<BLANKLINE>
+chr3       42530955 ????????????????????????????????????????????????????????????
+                 60 |||---------------------------------------------------------
+NR_046654       121 ???---------------------------------------------------------
+...
+chr3       42532515 ????????????????????????????????????????????????????????????
+               1620 ------------------------------------------------||||||||||||
+NR_046654        43 ------------------------------------------------????????????
+<BLANKLINE>
+chr3       42532575 ??????????????????????????????? 42532606
+               1680 |||||||||||||||||||||||||||||||     1711
+NR_046654        31 ???????????????????????????????        0
+<BLANKLINE>
+\end{minted}
+The default bigBed format does not store the sequence contents of the target and query. If these are available elsewhere (for example, a Fasta file), you can set \verb|alignment.target.seq| and \verb|alignment.query.seq| to show the sequence contents when printing the alignment, or to write the alignment in formats that require the sequence contents (such as Clustal, see section~\ref{subsec:align_clustal}). The test script \verb|test_Align_bigbed.py| in the \verb|Tests| subdirectory in the Biopython distribution gives some examples on how to do that.
+
+Now let's see how to search for a sequence region. These are the sequences stored in the bigBed file, printed in BED format (see section \ref{subsec:align_bed}):
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.rewind()
+>>> for alignment in alignments:
+...     print(format(alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
+...
+chr3	42530895	42532606	NR_046654.1	1000	-	42530895	42532606	0	3	63,75,43,	0,1125,1668,
+<BLANKLINE>
+chr3	42530895	42532606	NR_046654.1_modified	978	-	42530895	42532606	0	5	27,36,17,56,43,	0,27,1125,1144,1668,
+<BLANKLINE>
+chr3	48663767	48669174	NR_111921.1	1000	+	48663767	48669174	0	3	46,82,76,	0,1873,5331,
+<BLANKLINE>
+chr3	48663767	48669174	NR_111921.1_modified	972	+	48663767	48669174	0	5	28,17,76,6,76,	0,29,1873,1949,5331,
+<BLANKLINE>
+\end{minted}
+
+Use the \verb|search| method on the \verb|alignments| object to find search for regions on chr3 between positions 48000000 and 49000000. This method returns an iterator:
+%cont-doctest
+\begin{minted}{pycon}
+>>> selected_alignments = alignments.search("chr3", 48000000, 49000000)
+>>> for alignment in selected_alignments:
+...     print(alignment.query.id)
+...
+NR_111921.1
+NR_111921.1_modified
+\end{minted}
+The chromosome name may be \verb|None| to include all chromosomes, and the start and end positions may be \verb|None| to start searching from position 0 or to continue searching until the end of the chromosome, respectively.
+
+Writing alignments in the bigBed format is as easy as calling \verb|Bio.Align.write|:
+\begin{minted}{pycon}
+>>> Align.write(alignments, "output.bb", "bigbed")
+\end{minted}
+You can specify the number of BED fields to be included in the bigBed file. For example, to write a BED6 file, use
+\begin{minted}{pycon}
+>>> Align.write(alignments, "output.bb", "bigbed", bedN=6)
+\end{minted}
+Same as for \verb|bedToBigBed|, you can include additional columns in the bigBed output. Suppose the file \verb|bedExample2.as| (available in the \verb|Tests/Blat| subdirectory of the Biopython distribution) stores the declaration of the included BED fields in AutoSql format. We can read this declaration as follows:
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.Align import bigbed
+>>> with open("bedExample2.as") as stream:
+...     autosql_data = stream.read()
+...
+>>> declaration = bigbed.AutoSQLTable.from_string(autosql_data)
+>>> type(declaration)
+<class 'Bio.Align.bigbed.AutoSQLTable'>
+>>> print(declaration)
+table hg18KGchr7
+"UCSC Genes for chr7 with color plus GeneSymbol and SwissProtID"
+(
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position of feature on chromosome"
+   uint    chromEnd;      "End position of feature on chromosome"
+   string  name;          "Name of gene"
+   uint    score;         "Score"
+   char[1] strand;        "+ or - for strand"
+   uint    thickStart;    "Coding region start"
+   uint    thickEnd;      "Coding region end"
+   uint    reserved;      "Green on + strand, Red on - strand"
+   string  geneSymbol;    "Gene Symbol"
+   string  spID;          "SWISS-PROT protein Accession number"
+)
+<BLANKLINE>
+\end{minted}
+Now we can write a bigBed file with the 9 BED fields plus the additional fields \verb|geneSymbol| and \verb|spID| by calling
+\begin{minted}{pycon}
+>>> Align.write(
+...     alignments,
+...     "output.bb",
+...     "bigbed",
+...     bedN=9,
+...     declaration=declaration,
+...     extraIndex=["name", "geneSymbol"],
+... )
+\end{minted}
+Here, we also requested to include additional indices on the \verb|name| and \verb|geneSymbol| in the bigBed file. \verb|Align.write| expects to find the keys \verb|geneSymbol| and \verb|spID| in the \verb|alignment.annotations| dictionary.
+ Please refer to the test script \verb|test_Align_bigbed.py| in the \verb|Tests| subdirectory in the Biopython distribution for more examples of writing alignment files in the bigBed format.
+
+
 \subsection{Pattern Space Layout (PSL)}
 \label{subsec:align_psl}
 
