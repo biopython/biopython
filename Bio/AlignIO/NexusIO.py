@@ -14,7 +14,7 @@ as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
 
-from typing import Iterator, Optional
+from typing import IO, Iterator, Optional
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.AlignIO.Interfaces import AlignmentWriter
@@ -28,7 +28,7 @@ from Bio.SeqRecord import SeqRecord
 
 # This is a generator function!
 def NexusIterator(
-    handle, seq_count: Optional[int] = None
+    handle: IO[str], seq_count: Optional[int] = None
 ) -> Iterator[MultipleSeqAlignment]:
     """Return SeqRecord objects from a Nexus file.
 

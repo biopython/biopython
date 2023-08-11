@@ -9,7 +9,7 @@
 
 
 import os
-from typing import TypeVar, Callable, Optional, cast
+from typing import Any, TypeVar, Callable, Optional, cast
 from typing import Protocol
 
 # workaround type checking method attributes from https://github.com/python/mypy/issues/2087#issuecomment-587741762
@@ -30,7 +30,7 @@ def function_with_previous(func: F) -> _FunctionWithPrevious[F]:
     return function_with_previous
 
 
-def find_test_dir(start_dir=None):
+def find_test_dir(start_dir: Optional[str] = None) -> str:
     """Find the absolute path of Biopython's Tests directory.
 
     Arguments:
@@ -65,7 +65,7 @@ def find_test_dir(start_dir=None):
     )
 
 
-def run_doctest(target_dir: Optional[str] = None, *args, **kwargs):
+def run_doctest(target_dir: Optional[str] = None, *args: Any, **kwargs: Any) -> None:
     """Run doctest for the importing module."""
     import doctest
 

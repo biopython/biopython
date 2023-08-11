@@ -377,6 +377,7 @@ from .Interfaces import SequenceWriter
 from .Interfaces import _TextIOSource
 
 from typing import (
+    Any,
     Callable,
     Iterator,
     IO,
@@ -1004,8 +1005,8 @@ class FastqPhredIterator(SequenceIterator[str]):
     def __init__(
         self,
         source: _TextIOSource,
-        alphabet=None,
-        title2ids=None,
+        alphabet: None = None,
+        title2ids: Optional[Callable[[str], Tuple[str, str, str]]] = None,
     ):
         """Iterate over FASTQ records as SeqRecord objects.
 
@@ -1154,8 +1155,8 @@ class FastqPhredIterator(SequenceIterator[str]):
 
 def FastqSolexaIterator(
     source: _TextIOSource,
-    alphabet=None,
-    title2ids=None,
+    alphabet: None = None,
+    title2ids: Optional[Callable[[str], Tuple[str, str, str]]] = None,
 ) -> Iterator[SeqRecord]:
     r"""Parse old Solexa/Illumina FASTQ like files (which differ in the quality mapping).
 
@@ -1319,8 +1320,8 @@ def FastqSolexaIterator(
 
 def FastqIlluminaIterator(
     source: _TextIOSource,
-    alphabet=None,
-    title2ids=None,
+    alphabet: None = None,
+    title2ids: Optional[Callable[[str], Tuple[str, str, str]]] = None,
 ) -> Iterator[SeqRecord]:
     """Parse Illumina 1.3 to 1.7 FASTQ like files (which differ in the quality mapping).
 
@@ -1382,8 +1383,8 @@ class QualPhredIterator(SequenceIterator):
     def __init__(
         self,
         source: _TextIOSource,
-        alphabet=None,
-        title2ids=None,
+        alphabet: None = None,
+        title2ids: Optional[Callable[[str], Tuple[str, str, str]]] = None,
     ) -> None:
         """For QUAL files which include PHRED quality scores, but no sequence.
 
@@ -1942,8 +1943,8 @@ def as_fastq_illumina(record: SeqRecord) -> str:
 def PairedFastaQualIterator(
     fasta_source: _TextIOSource,
     qual_source: _TextIOSource,
-    alphabet=None,
-    title2ids=None,
+    alphabet: None = None,
+    title2ids: Optional[Callable[[str], Tuple[str, str, str]]] = None,
 ) -> Iterator[SeqRecord]:
     """Iterate over matched FASTA and QUAL files as SeqRecord objects.
 

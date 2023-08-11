@@ -12,7 +12,7 @@ use this module.  It provides base classes to try and simplify things.
 from abc import ABC
 from abc import abstractmethod
 from os import PathLike
-from typing import Iterator, IO, Union, Generic, AnyStr
+from typing import Iterator, IO, Optional, Union, Generic, AnyStr
 
 from Bio import StreamModeError
 from Bio.Seq import MutableSeq
@@ -35,10 +35,10 @@ class SequenceIterator(ABC, Generic[AnyStr]):
     def __init__(
         self,
         source: _IOSource,
-        alphabet=None,
-        mode="t",
-        fmt=None,
-    ):
+        alphabet: None = None,
+        mode: str = "t",
+        fmt: Optional[str] = None,
+    ) -> None:
         """Create a SequenceIterator object.
 
         Arguments:

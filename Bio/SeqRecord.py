@@ -821,27 +821,27 @@ class SeqRecord:
         """
         return len(self.seq)
 
-    def __lt__(self, other) -> NoReturn:
+    def __lt__(self, other: Any) -> NoReturn:
         """Define the less-than operand (not implemented)."""
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 
-    def __le__(self, other) -> NoReturn:
+    def __le__(self, other: Any) -> NoReturn:
         """Define the less-than-or-equal-to operand (not implemented)."""
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 
-    def __eq__(self, other) -> NoReturn:
+    def __eq__(self, other: Any) -> NoReturn:
         """Define the equal-to operand (not implemented)."""
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 
-    def __ne__(self, other) -> NoReturn:
+    def __ne__(self, other: Any) -> NoReturn:
         """Define the not-equal-to operand (not implemented)."""
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 
-    def __gt__(self, other) -> NoReturn:
+    def __gt__(self, other: Any) -> NoReturn:
         """Define the greater-than operand (not implemented)."""
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 
-    def __ge__(self, other) -> NoReturn:
+    def __ge__(self, other: Any) -> NoReturn:
         """Define the greater-than-or-equal-to operand (not implemented)."""
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 
