@@ -14,6 +14,8 @@ You are expected to use this module via the Bio.SeqIO functions.
 """
 import warnings
 
+from typing import Callable, Optional, Tuple
+
 from Bio import BiopythonDeprecationWarning
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -144,8 +146,8 @@ class FastaIterator(SequenceIterator):
     def __init__(
         self,
         source: _TextIOSource,
-        alphabet=None,
-        title2ids=None,
+        alphabet: None = None,
+        title2ids: Optional[Callable[[str], Tuple[str, str, str]]] = None,
     ) -> None:
         """Iterate over Fasta records as SeqRecord objects.
 

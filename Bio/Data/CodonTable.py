@@ -60,11 +60,11 @@ class CodonTable:
         self,
         nucleotide_alphabet: Optional[str] = None,
         protein_alphabet: Optional[str] = None,
-        forward_table=forward_table,
-        back_table=back_table,
-        start_codons=start_codons,
-        stop_codons=stop_codons,
-    ):
+        forward_table: Dict[str, str] = forward_table,
+        back_table: Dict[str, str] = back_table,
+        start_codons: List[str] = start_codons,
+        stop_codons: List[str] = stop_codons,
+    ) -> None:
         """Initialize the class."""
         self.nucleotide_alphabet = nucleotide_alphabet
         self.protein_alphabet = protein_alphabet
