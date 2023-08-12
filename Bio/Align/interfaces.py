@@ -30,7 +30,7 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
     """
 
     mode = "t"  # assume text files by default
-    fmt = None  # to be defined in the subclass
+    fmt: str  # to be defined in the subclass
 
     def __init__(self, source):
         """Create an AlignmentIterator object.
@@ -142,7 +142,7 @@ class AlignmentWriter(ABC):
     """
 
     mode = "w"  # assume text files by default
-    fmt = None  # to be defined in the subclass
+    fmt: str  # to be defined in the subclass
 
     def __init__(self, target):
         """Create the writer object.

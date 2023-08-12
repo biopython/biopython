@@ -2133,7 +2133,7 @@ class Nexus:
 
 
 try:
-    import cnexus
+    import cnexus  # type: ignore
 except ImportError:
 
     def _get_command_lines(file_contents):
