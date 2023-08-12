@@ -198,22 +198,21 @@ class AlignmentWriter(bigbed.AlignmentWriter):
          - extraIndex  - List of strings with the names of extra columns to be
                          indexed.
                          Default value is an empty list.
-         - target      - output stream or file name
          - cds         - If True, look for a query feature of type CDS and write
                          it in NCBI style in the PSL file (default: False).
          - fa          - If True, include the query sequence in the PSL file
                          (default: False).
          - mask        - Specify if repeat regions in the target sequence are
                          masked and should be reported in the `repMatches` field
-                         of the PSL file instead of in the `matches` field.
+                         instead of in the `matches` field.
                          Acceptable values are
                          None   : no masking (default);
                          "lower": masking by lower-case characters;
                          "upper": masking by upper-case characters.
          - wildcard    - Report alignments to the wildcard character in the
-                         target or query sequence in the `nCount` field of the
-                         PSL file instead of in the `matches`, `misMatches`, or
-                         `repMatches` fields.
+                         target or query sequence in the `nCount` field instead
+                         of in the `matches`, `misMatches`, or `repMatches`
+                         fields.
                          Default value is 'N'.
         """
         super().__init__(

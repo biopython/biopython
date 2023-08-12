@@ -2487,7 +2487,7 @@ chr3	48663767	48669174	NR_111921.1_modified	972	+	48663767	48669174	0	5	28,17,76
 <BLANKLINE>
 \end{minted}
 
-Use the \verb|search| method on the \verb|alignments| object to find search for regions on chr3 between positions 48000000 and 49000000. This method returns an iterator:
+Use the \verb|search| method on the \verb|alignments| object to find regions on chr3 between positions 48000000 and 49000000. This method returns an iterator:
 %cont-doctest
 \begin{minted}{pycon}
 >>> selected_alignments = alignments.search("chr3", 48000000, 49000000)
@@ -2670,7 +2670,7 @@ A bigPsl file is a bigBed file with a BED12+13 format consisting of the 12
 predefined BED fields and 13 custom fields defined in the AutoSql file
 \verb|bigPsl.as| provided by UCSC (see \href{https://genome.ucsc.edu/goldenPath/help/bigPsl.html}), creating an indexed binary version of a PSL file (see section~\ref{subsec:align_psl}). To create a bigPsl file, you can either use the \verb+pslToBigPsl+ and \verb+bedToBigBed+ programs from UCSC. or you can use Biopython by calling the \verb|Bio.Align.write| function with \verb|fmt="bigpsl"|. While the two methods should result in identical bigPsl files, the UCSC tools are much faster and may be more reliable, as it is the gold standard. As bigPsl files are bigBed files, they come with a built-in index, allowing you to quickly search a specific genomic region.
 
-As an example, let’s parse the bigBed file \verb|dna_rna.psl.bb|, available in the \verb|Tests/Blat| subdirectory in the Biopython distribution. This file is the bigPsl equivalent of the bigBed file \verb|dna_rna.bb| (see section~\ref{subsec:align_bigbed}) and of the PSL file \verb|dna_rna.psl| (see section~\ref{subsec:align_psl}).
+As an example, let's parse the bigBed file \verb|dna_rna.psl.bb|, available in the \verb|Tests/Blat| subdirectory in the Biopython distribution. This file is the bigPsl equivalent of the bigBed file \verb|dna_rna.bb| (see section~\ref{subsec:align_bigbed}) and of the PSL file \verb|dna_rna.psl| (see section~\ref{subsec:align_psl}).
 %doctest ../Tests/Blat lib:numpy
 \begin{minted}{pycon}
 >>> from Bio import Align
@@ -2726,7 +2726,7 @@ chr3 NR_046654.1_modified
 chr3 NR_111921.1
 chr3 NR_111921.1_modified
 \end{minted}
-Let’s look at the individual alignments. The alignment information is stored in the same way as for the corresponding PSL file (see section~\ref{subsec:align_psl}):
+Let's look at the individual alignments. The alignment information is stored in the same way as for the corresponding PSL file (see section~\ref{subsec:align_psl}):
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.coordinates
@@ -2747,7 +2747,44 @@ array([[48663767, 48663795, 48663796, 48663813, 48665640, 48665716,
 >>> alignment.nCount
 0
 \end{minted}
+We can print the alignment in BED or PSL format:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
+chr3	48663767	48669174	NR_111921.1_modified	1000	+	48663767	48669174	0	5	28,17,76,6,76,	0,29,1873,1949,5331,
+<BLANKLINE>
+>>> print(format(alignment, "psl"))  # doctest: +NORMALIZE_WHITESPACE
+162	2	39	0	1	2	3	5204	+	NR_111921.1_modified	220	3	208	chr3	198295559	48663767	48669174	5	28,17,76,6,76,	3,31,48,126,132,	48663767,48663796,48665640,48665716,48669098,
+<BLANKLINE>
+\end{minted}
 
+As a bigPsl file is a special case of a bigBed file, you can use the \verb|search| method on the alignments object to find alignments to specific genomic regions. For example, we can look for regions on chr3 between positions 48000000 and 49000000:
+%cont-doctest
+\begin{minted}{pycon}
+>>> selected_alignments = alignments.search("chr3", 48000000, 49000000)
+>>> for alignment in selected_alignments:
+...     print(alignment.query.id)
+...
+NR_111921.1
+NR_111921.1_modified
+\end{minted}
+The chromosome name may be \verb|None| to include all chromosomes, and the start and end positions may be \verb|None| to start searching from position 0 or to continue searching until the end of the chromosome, respectively.
+
+To write a bigPsl file with Biopython, use \verb|Bio.Align.write(alignments, "myfilename.bb", fmt="bigpsl")|, where \verb|myfilename.bb| is the name of the output bigPsl file. Alternatively, you can use a (binary) stream for output. Additional options are
+\begin{itemize}
+\item \verb|compress|: If \verb|True| (default), compress data using zlib; if \verb|False|, do not compress data.
+\item \verb|extraIndex|: List of strings with the names of extra columns to be indexed.
+\item \verb|cds|: If \verb|True|, look for a query feature of type CDS and write it in NCBI style in the PSL file (default: \verb|False|).
+\item \verb|fa|: If \verb|True|, include the query sequence in the PSL file (default: \verb|False|).
+\item \verb|mask|: Specify if repeat regions in the target sequence are masked and should be reported in the \verb|repMatches| field instead of in the \verb|matches| field.  Acceptable values are
+\begin{itemize}
+\item \verb|None|: no masking (default);
+\item \verb|"lower"|: masking by lower-case characters;
+\item \verb|"upper"|: masking by upper-case characters.
+\end{itemize}
+\item \verb|wildcard|: Report alignments to the wildcard character (representing unknown nucleotides) in the target or query sequence in the \verb|nCount| field instead of in the \verb|matches|, \verb|misMatches|, or \verb|repMatches| fields.  Default value is \verb|"N"|.
+\end{itemize}
+See section~\ref{subsec:align_psl} for an explanation on how the number of matches, mismatches, repeat region matches, and matches to unknown nucleotides are obtained.
 
 
 \subsection{Multiple Alignment Format (MAF)}
