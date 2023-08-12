@@ -365,8 +365,8 @@ from math import log
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
 from Bio import BiopythonDeprecationWarning
-from Bio import File
 from Bio.File import as_handle
+from Bio.File import check_handle_mode
 from Bio.File import _TextIOSource
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -929,7 +929,7 @@ def FastqGeneralIterator(source: _TextIOSource) -> Iterator[Tuple[str, str, str]
     would prevent the above problem with the "@" character.
     """
     with as_handle(source) as handle:
-        File.check_handle_mode(handle, "r", fmt="Fastq")
+        check_handle_mode(handle, "r", fmt="Fastq")
         try:
             line = next(handle)
         except StopIteration:
