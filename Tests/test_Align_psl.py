@@ -28,7 +28,8 @@ except ImportError:
 class TestAlign_dna_rna(unittest.TestCase):
 
     # The PSL file dna_rna.psl was generated using this command:
-    # blat -mask=lower hg38.2bit rna.fa dna_rna.psl
+    # blat -mask=lower hg38.2bit rna.fa dna_rna.unsorted.psl
+    # pslSort dirs dna_rna.psl . dna_rna.unsorted.psl
 
     def setUp(self):
         data = {}
@@ -64,6 +65,366 @@ class TestAlign_dna_rna(unittest.TestCase):
 
     def check_alignments(self, alignments):
         self.assertEqual(alignments.metadata["psLayout version"], "3")
+        alignment = next(alignments)
+        self.assertEqual(alignment.matches, 175)
+        self.assertEqual(alignment.misMatches, 0)
+        self.assertEqual(alignment.repMatches, 6)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 1711))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr3")
+        self.assertEqual(alignment.query.id, "NR_046654.1")
+        self.assertEqual(len(alignment.target.seq), 198295559)
+        self.assertEqual(len(alignment.query.seq), 181)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[42530895, 42530958, 42532020, 42532095, 42532563, 42532606],
+                             [     181,      118,      118,       43,       43,        0]])
+                # fmt: on
+            )
+        )
+        dna = Seq(self.dna, length=len(alignment.target))
+        alignment.target.seq = dna
+        alignment.query.seq = self.rna[alignment.query.id]
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.substitutions,
+                # fmt: off
+# flake8: noqa
+            numpy.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0., 42.,  0.,  0.,  0.,  0.],
+                         [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                        ])
+            )
+        )
+        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        matches = sum(
+            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
+        )
+        repMatches = sum(
+            alignment.substitutions[c, c.swapcase()]
+            for c in alignment.substitutions.alphabet
+        )
+        self.assertEqual(matches, alignment.matches)
+        self.assertEqual(repMatches, alignment.repMatches)
+        self.assertEqual(
+            str(alignment),
+            """\
+chr3       42530895 CGGAAGTACTTCTGGGGGTACATACTCATCGGCTGGGGTATGGTACCAGGGAGGGCTTCC
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+NR_046654       181 CGGAAGTACTTCTGGGGGTACATACTCATCGGCTGGGGTATGGTACCAGGGAGGGCTTCC
+
+chr3       42530955 AGGCTGGGGACAGAGGGGGCAAGGCCTGGAGAACTCCCTAGGGGGAGGGTGCCAACCCAG
+                 60 |||---------------------------------------------------------
+NR_046654       121 AGG---------------------------------------------------------
+
+chr3       42531015 CTTGCAGTCCTACGTCTTGCTTAGCTGCAGGTCCTGCCTGCAAGGATATCAGCCAAGGGT
+                120 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531075 CAAGAAAGTCCTCAAAATGTCTGATCCCAGGACAAGTCCCTCAGGTTGCAGCTGCACCTA
+                180 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531135 GGGCTGACCTGTGGGACAGATTTTGTGAACATCTTTCCATTTCCCTTTAGTTCCCGAAAT
+                240 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531195 ACAcagggccactgctaatctataaagggcctctgtcacaattagaaagagaatgtccgt
+                300 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531255 ctaggtagacacagcccttcaggcatacagcttCACCCCCTCAGTGGAGCATCCCTCCGT
+                360 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531315 GGTGAACAACCTATGCAACCAAAGACAGCAGACTGACAACCCACCCTTTtctctctccct
+                420 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531375 ccctctccctgcttttctccaaaatctctccctcatgccctctacccctgcttcctgtgc
+                480 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531435 cctctctgctctttcactctccctGGGCCTGACAGGGGTACCCAGCACATTCACCATGGT
+                540 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531495 GTGGACCATCGCCAGGATCCATTTTGAGGATTATGGGTGAGCTGCTGCCCCACACACTCC
+                600 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531555 CCCGGCCGCCATCACTTGGGCAGGCCCCCTGGGTGGGATGATAATGCCATCTGGCCTTGG
+                660 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531615 TGAGTGGACAAAAACCACAGCTCTCGGGCCAGAGGGGAGGCTGGAGGAGGACCTGGGGAG
+                720 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531675 CAACAGACTCTGGGCCCGGGGTTGCTAAAGTGCTCAGGAGCAGAGCTGGGGACAACTGGG
+                780 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531735 GGAGGTGCTGCTGAGTCTCTCTCTGGCTGAGGACAATCCCTCTCATTCCTCCCCACGGTC
+                840 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531795 TGCTCAGGTGCTGGGACACCATCAACTCCTCACTGTGGTGGATCATAAAGGGCCCCATCC
+                900 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531855 TCACCTCCATCTTGGTAAGATaccctcccaccacctagagatggggaaacaggcccaaag
+                960 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531915 ggcaggcaacttagcccaaggtcacatgggaaattagtatctaggtcagaactgaaacgt
+               1020 ------------------------------------------------------------
+NR_046654       118 ------------------------------------------------------------
+
+chr3       42531975 agcttcctaatgcccaatgcaggatcatccccacccctgtcctaccagTTCTTCCTTGAG
+               1080 ---------------------------------------------...||||||||||||
+NR_046654       118 ---------------------------------------------CAGTTCTTCCTTGAG
+
+chr3       42532035 CGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGATGAC
+               1140 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+NR_046654       103 CGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGATGAC
+
+chr3       42532095 CTGCCCAAAGGGGAAATGCCAGAGGAGAGGTAAGATAGAGAGAGGGGCAGCAGGACCCTG
+               1200 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532155 GGAAAGAAGACAGGCCAGCAGTCAAGGGGCCTGAACACCTCAGCCTTCCCGCTCTGACTG
+               1260 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532215 CCCGAACTCGGGTCCCCACCCACTAGGTAAACTTCATCCTGTTTATTTGCATCATCCGAA
+               1320 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532275 TCCTGCTTCAGAAACTGCGGCCCCCAGATATCAGGAAGAGTGACAGCAGTCCATACTCGT
+               1380 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532335 GAGTGTGGGCCTAGTGCCTCAGCCCCCAGTACCTCCATCCCCAGTCCTCAAATCATCCCA
+               1440 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532395 CATCTCCTTGAAGTCCTCCCACCCCAAACATCCAGAGTCACCAAAGAGCCACATTGTTCT
+               1500 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532455 TTCCCACCTCCACCATGGCCTGGCTcagcccaccaccatcccctgctccagccccaccct
+               1560 ------------------------------------------------------------
+NR_046654        43 ------------------------------------------------------------
+
+chr3       42532515 caCCAGGCTGCACTCAGAGCCCTGCATGCTTCTCCTGCCCACACTCACCTAGCATCCTTC
+               1620 ------------------------------------------------||||||||||||
+NR_046654        43 ------------------------------------------------CTAGCATCCTTC
+
+chr3       42532575 CCAGGTATGCATCTGCTGCCAAGCCAGGgag 42532606
+               1680 ||||||||||||||||||||||||||||...     1711
+NR_046654        31 CCAGGTATGCATCTGCTGCCAAGCCAGGGAG        0
+""",
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+175	0	6	0	0	0	2	1530	-	NR_046654.1	181	0	181	chr3	198295559	42530895	42532606	3	63,75,43,	0,63,138,	42530895,42532020,42532563,
+""",
+        )
+        alignment = next(alignments)
+        self.assertEqual(alignment.matches, 172)
+        self.assertEqual(alignment.misMatches, 1)
+        self.assertEqual(alignment.repMatches, 6)
+        self.assertEqual(alignment.nCount, 0)
+        self.assertEqual(alignment.shape, (2, 1714))
+        self.assertEqual(len(alignment), 2)
+        self.assertIs(alignment.sequences[0], alignment.target)
+        self.assertIs(alignment.sequences[1], alignment.query)
+        self.assertEqual(alignment.target.id, "chr3")
+        self.assertEqual(alignment.query.id, "NR_046654.1_modified")
+        self.assertEqual(len(alignment.target.seq), 198295559)
+        self.assertEqual(len(alignment.query.seq), 190)
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.coordinates,
+                # fmt: off
+# flake8: noqa
+                numpy.array([[42530895, 42530922, 42530922, 42530958, 42532020,
+                              42532037, 42532039, 42532095, 42532563, 42532606],
+                             [     185,      158,      155,      119,      119,
+                                   102,      102,       46,       46,        3],
+                            ])
+                # fmt: on
+            )
+        )
+        dna = Seq(self.dna, length=len(alignment.target))
+        alignment.target.seq = dna
+        alignment.query.seq = self.rna[alignment.query.id]
+        self.assertTrue(
+            numpy.array_equal(
+                alignment.substitutions,
+                # fmt: off
+# flake8: noqa
+            numpy.array([[34.,  0.,  0.,  1.,  0.,  0.,  0.,  0.],
+                         [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0., 41.,  0.,  0.,  0.,  0.],
+                         [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.],
+                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+                        ]),
+            )
+        )
+        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
+        matches = sum(
+            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
+        )
+        repMatches = sum(
+            alignment.substitutions[c, c.swapcase()]
+            for c in alignment.substitutions.alphabet
+            if c != "X"
+        )
+        self.assertEqual(matches, alignment.matches)
+        self.assertEqual(repMatches, alignment.repMatches)
+        self.assertEqual(
+            str(alignment),
+            """\
+chr3       42530895 CGGAAGTACTTCTGGGGGTACATACTC---ATCGGCTGGGGTATGGTACCAGGGAGGGCT
+                  0 |||||||||||||||||||||||||||---||||||||||||||||||||||||||||||
+NR_046654       185 CGGAAGTACTTCTGGGGGTACATACTCCCCATCGGCTGGGGTATGGTACCAGGGAGGGCT
+
+chr3       42530952 TCCAGGCTGGGGACAGAGGGGGCAAGGCCTGGAGAACTCCCTAGGGGGAGGGTGCCAACC
+                 60 ||||||------------------------------------------------------
+NR_046654       125 TCCAGG------------------------------------------------------
+
+chr3       42531012 CAGCTTGCAGTCCTACGTCTTGCTTAGCTGCAGGTCCTGCCTGCAAGGATATCAGCCAAG
+                120 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531072 GGTCAAGAAAGTCCTCAAAATGTCTGATCCCAGGACAAGTCCCTCAGGTTGCAGCTGCAC
+                180 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531132 CTAGGGCTGACCTGTGGGACAGATTTTGTGAACATCTTTCCATTTCCCTTTAGTTCCCGA
+                240 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531192 AATACAcagggccactgctaatctataaagggcctctgtcacaattagaaagagaatgtc
+                300 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531252 cgtctaggtagacacagcccttcaggcatacagcttCACCCCCTCAGTGGAGCATCCCTC
+                360 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531312 CGTGGTGAACAACCTATGCAACCAAAGACAGCAGACTGACAACCCACCCTTTtctctctc
+                420 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531372 cctccctctccctgcttttctccaaaatctctccctcatgccctctacccctgcttcctg
+                480 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531432 tgccctctctgctctttcactctccctGGGCCTGACAGGGGTACCCAGCACATTCACCAT
+                540 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531492 GGTGTGGACCATCGCCAGGATCCATTTTGAGGATTATGGGTGAGCTGCTGCCCCACACAC
+                600 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531552 TCCCCCGGCCGCCATCACTTGGGCAGGCCCCCTGGGTGGGATGATAATGCCATCTGGCCT
+                660 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531612 TGGTGAGTGGACAAAAACCACAGCTCTCGGGCCAGAGGGGAGGCTGGAGGAGGACCTGGG
+                720 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531672 GAGCAACAGACTCTGGGCCCGGGGTTGCTAAAGTGCTCAGGAGCAGAGCTGGGGACAACT
+                780 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531732 GGGGGAGGTGCTGCTGAGTCTCTCTCTGGCTGAGGACAATCCCTCTCATTCCTCCCCACG
+                840 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531792 GTCTGCTCAGGTGCTGGGACACCATCAACTCCTCACTGTGGTGGATCATAAAGGGCCCCA
+                900 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531852 TCCTCACCTCCATCTTGGTAAGATaccctcccaccacctagagatggggaaacaggccca
+                960 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531912 aagggcaggcaacttagcccaaggtcacatgggaaattagtatctaggtcagaactgaaa
+               1020 ------------------------------------------------------------
+NR_046654       119 ------------------------------------------------------------
+
+chr3       42531972 cgtagcttcctaatgcccaatgcaggatcatccccacccctgtcctaccagTTCTTCCTT
+               1080 ------------------------------------------------...|||||||||
+NR_046654       119 ------------------------------------------------CAGTTCTTCCTT
+
+chr3       42532032 GAGCGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGAT
+               1140 |||||--|||||||||||.|||||||||||||||||||||||||||||||||||||||||
+NR_046654       107 GAGCG--AGCGGATTGGGTGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGAT
+
+chr3       42532092 GACCTGCCCAAAGGGGAAATGCCAGAGGAGAGGTAAGATAGAGAGAGGGGCAGCAGGACC
+               1200 |||---------------------------------------------------------
+NR_046654        49 GAC---------------------------------------------------------
+
+chr3       42532152 CTGGGAAAGAAGACAGGCCAGCAGTCAAGGGGCCTGAACACCTCAGCCTTCCCGCTCTGA
+               1260 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532212 CTGCCCGAACTCGGGTCCCCACCCACTAGGTAAACTTCATCCTGTTTATTTGCATCATCC
+               1320 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532272 GAATCCTGCTTCAGAAACTGCGGCCCCCAGATATCAGGAAGAGTGACAGCAGTCCATACT
+               1380 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532332 CGTGAGTGTGGGCCTAGTGCCTCAGCCCCCAGTACCTCCATCCCCAGTCCTCAAATCATC
+               1440 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532392 CCACATCTCCTTGAAGTCCTCCCACCCCAAACATCCAGAGTCACCAAAGAGCCACATTGT
+               1500 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532452 TCTTTCCCACCTCCACCATGGCCTGGCTcagcccaccaccatcccctgctccagccccac
+               1560 ------------------------------------------------------------
+NR_046654        46 ------------------------------------------------------------
+
+chr3       42532512 cctcaCCAGGCTGCACTCAGAGCCCTGCATGCTTCTCCTGCCCACACTCACCTAGCATCC
+               1620 ---------------------------------------------------|||||||||
+NR_046654        46 ---------------------------------------------------CTAGCATCC
+
+chr3       42532572 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGgag 42532606
+               1680 |||||||||||||||||||||||||||||||...     1714
+NR_046654        37 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGGAG        3
+""",
+        )
+        self.assertEqual(
+            format(alignment, "psl"),
+            """\
+172	1	6	0	1	3	3	1532	-	NR_046654.1_modified	190	3	185	chr3	198295559	42530895	42532606	5	27,36,17,56,43,	5,35,71,88,144,	42530895,42530922,42532020,42532039,42532563,
+""",
+        )
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 165)
         self.assertEqual(alignment.misMatches, 0)
@@ -488,184 +849,6 @@ NR_111921       197 TAAAAAA      204
             format(alignment, "psl"),
             """\
 165	0	39	0	0	0	2	5203	+	NR_111921.1	216	0	204	chr3	198295559	48663767	48669174	3	46,82,76,	0,46,128,	48663767,48665640,48669098,
-""",
-        )
-        alignment = next(alignments)
-        self.assertEqual(alignment.matches, 175)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 6)
-        self.assertEqual(alignment.nCount, 0)
-        self.assertEqual(alignment.shape, (2, 1711))
-        self.assertEqual(len(alignment), 2)
-        self.assertIs(alignment.sequences[0], alignment.target)
-        self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr3")
-        self.assertEqual(alignment.query.id, "NR_046654.1")
-        self.assertEqual(len(alignment.target.seq), 198295559)
-        self.assertEqual(len(alignment.query.seq), 181)
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates,
-                # fmt: off
-# flake8: noqa
-                numpy.array([[42530895, 42530958, 42532020, 42532095, 42532563, 42532606],
-                             [     181,      118,      118,       43,       43,        0]])
-                # fmt: on
-            )
-        )
-        dna = Seq(self.dna, length=len(alignment.target))
-        alignment.target.seq = dna
-        alignment.query.seq = self.rna[alignment.query.id]
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.substitutions,
-                # fmt: off
-# flake8: noqa
-            numpy.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0., 42.,  0.,  0.,  0.,  0.],
-                         [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                        ])
-            )
-        )
-        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        matches = sum(
-            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
-        )
-        repMatches = sum(
-            alignment.substitutions[c, c.swapcase()]
-            for c in alignment.substitutions.alphabet
-        )
-        self.assertEqual(matches, alignment.matches)
-        self.assertEqual(repMatches, alignment.repMatches)
-        self.assertEqual(
-            str(alignment),
-            """\
-chr3       42530895 CGGAAGTACTTCTGGGGGTACATACTCATCGGCTGGGGTATGGTACCAGGGAGGGCTTCC
-                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-NR_046654       181 CGGAAGTACTTCTGGGGGTACATACTCATCGGCTGGGGTATGGTACCAGGGAGGGCTTCC
-
-chr3       42530955 AGGCTGGGGACAGAGGGGGCAAGGCCTGGAGAACTCCCTAGGGGGAGGGTGCCAACCCAG
-                 60 |||---------------------------------------------------------
-NR_046654       121 AGG---------------------------------------------------------
-
-chr3       42531015 CTTGCAGTCCTACGTCTTGCTTAGCTGCAGGTCCTGCCTGCAAGGATATCAGCCAAGGGT
-                120 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531075 CAAGAAAGTCCTCAAAATGTCTGATCCCAGGACAAGTCCCTCAGGTTGCAGCTGCACCTA
-                180 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531135 GGGCTGACCTGTGGGACAGATTTTGTGAACATCTTTCCATTTCCCTTTAGTTCCCGAAAT
-                240 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531195 ACAcagggccactgctaatctataaagggcctctgtcacaattagaaagagaatgtccgt
-                300 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531255 ctaggtagacacagcccttcaggcatacagcttCACCCCCTCAGTGGAGCATCCCTCCGT
-                360 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531315 GGTGAACAACCTATGCAACCAAAGACAGCAGACTGACAACCCACCCTTTtctctctccct
-                420 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531375 ccctctccctgcttttctccaaaatctctccctcatgccctctacccctgcttcctgtgc
-                480 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531435 cctctctgctctttcactctccctGGGCCTGACAGGGGTACCCAGCACATTCACCATGGT
-                540 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531495 GTGGACCATCGCCAGGATCCATTTTGAGGATTATGGGTGAGCTGCTGCCCCACACACTCC
-                600 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531555 CCCGGCCGCCATCACTTGGGCAGGCCCCCTGGGTGGGATGATAATGCCATCTGGCCTTGG
-                660 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531615 TGAGTGGACAAAAACCACAGCTCTCGGGCCAGAGGGGAGGCTGGAGGAGGACCTGGGGAG
-                720 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531675 CAACAGACTCTGGGCCCGGGGTTGCTAAAGTGCTCAGGAGCAGAGCTGGGGACAACTGGG
-                780 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531735 GGAGGTGCTGCTGAGTCTCTCTCTGGCTGAGGACAATCCCTCTCATTCCTCCCCACGGTC
-                840 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531795 TGCTCAGGTGCTGGGACACCATCAACTCCTCACTGTGGTGGATCATAAAGGGCCCCATCC
-                900 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531855 TCACCTCCATCTTGGTAAGATaccctcccaccacctagagatggggaaacaggcccaaag
-                960 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531915 ggcaggcaacttagcccaaggtcacatgggaaattagtatctaggtcagaactgaaacgt
-               1020 ------------------------------------------------------------
-NR_046654       118 ------------------------------------------------------------
-
-chr3       42531975 agcttcctaatgcccaatgcaggatcatccccacccctgtcctaccagTTCTTCCTTGAG
-               1080 ---------------------------------------------...||||||||||||
-NR_046654       118 ---------------------------------------------CAGTTCTTCCTTGAG
-
-chr3       42532035 CGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGATGAC
-               1140 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-NR_046654       103 CGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGATGAC
-
-chr3       42532095 CTGCCCAAAGGGGAAATGCCAGAGGAGAGGTAAGATAGAGAGAGGGGCAGCAGGACCCTG
-               1200 ------------------------------------------------------------
-NR_046654        43 ------------------------------------------------------------
-
-chr3       42532155 GGAAAGAAGACAGGCCAGCAGTCAAGGGGCCTGAACACCTCAGCCTTCCCGCTCTGACTG
-               1260 ------------------------------------------------------------
-NR_046654        43 ------------------------------------------------------------
-
-chr3       42532215 CCCGAACTCGGGTCCCCACCCACTAGGTAAACTTCATCCTGTTTATTTGCATCATCCGAA
-               1320 ------------------------------------------------------------
-NR_046654        43 ------------------------------------------------------------
-
-chr3       42532275 TCCTGCTTCAGAAACTGCGGCCCCCAGATATCAGGAAGAGTGACAGCAGTCCATACTCGT
-               1380 ------------------------------------------------------------
-NR_046654        43 ------------------------------------------------------------
-
-chr3       42532335 GAGTGTGGGCCTAGTGCCTCAGCCCCCAGTACCTCCATCCCCAGTCCTCAAATCATCCCA
-               1440 ------------------------------------------------------------
-NR_046654        43 ------------------------------------------------------------
-
-chr3       42532395 CATCTCCTTGAAGTCCTCCCACCCCAAACATCCAGAGTCACCAAAGAGCCACATTGTTCT
-               1500 ------------------------------------------------------------
-NR_046654        43 ------------------------------------------------------------
-
-chr3       42532455 TTCCCACCTCCACCATGGCCTGGCTcagcccaccaccatcccctgctccagccccaccct
-               1560 ------------------------------------------------------------
-NR_046654        43 ------------------------------------------------------------
-
-chr3       42532515 caCCAGGCTGCACTCAGAGCCCTGCATGCTTCTCCTGCCCACACTCACCTAGCATCCTTC
-               1620 ------------------------------------------------||||||||||||
-NR_046654        43 ------------------------------------------------CTAGCATCCTTC
-
-chr3       42532575 CCAGGTATGCATCTGCTGCCAAGCCAGGgag 42532606
-               1680 ||||||||||||||||||||||||||||...     1711
-NR_046654        31 CCAGGTATGCATCTGCTGCCAAGCCAGGGAG        0
-""",
-        )
-        self.assertEqual(
-            format(alignment, "psl"),
-            """\
-175	0	6	0	0	0	2	1530	-	NR_046654.1	181	0	181	chr3	198295559	42530895	42532606	3	63,75,43,	0,63,138,	42530895,42532020,42532563,
 """,
         )
         alignment = next(alignments)
@@ -1096,188 +1279,6 @@ NR_111921       199 ATTAAAAAA      208
             format(alignment, "psl"),
             """\
 162	2	39	0	1	2	3	5204	+	NR_111921.1_modified	220	3	208	chr3	198295559	48663767	48669174	5	28,17,76,6,76,	3,31,48,126,132,	48663767,48663796,48665640,48665716,48669098,
-""",
-        )
-        alignment = next(alignments)
-        self.assertEqual(alignment.matches, 172)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 6)
-        self.assertEqual(alignment.nCount, 0)
-        self.assertEqual(alignment.shape, (2, 1714))
-        self.assertEqual(len(alignment), 2)
-        self.assertIs(alignment.sequences[0], alignment.target)
-        self.assertIs(alignment.sequences[1], alignment.query)
-        self.assertEqual(alignment.target.id, "chr3")
-        self.assertEqual(alignment.query.id, "NR_046654.1_modified")
-        self.assertEqual(len(alignment.target.seq), 198295559)
-        self.assertEqual(len(alignment.query.seq), 190)
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.coordinates,
-                # fmt: off
-# flake8: noqa
-                numpy.array([[42530895, 42530922, 42530922, 42530958, 42532020,
-                              42532037, 42532039, 42532095, 42532563, 42532606],
-                             [     185,      158,      155,      119,      119,
-                                   102,      102,       46,       46,        3],
-                            ])
-                # fmt: on
-            )
-        )
-        dna = Seq(self.dna, length=len(alignment.target))
-        alignment.target.seq = dna
-        alignment.query.seq = self.rna[alignment.query.id]
-        self.assertTrue(
-            numpy.array_equal(
-                alignment.substitutions,
-                # fmt: off
-# flake8: noqa
-            numpy.array([[34.,  0.,  0.,  1.,  0.,  0.,  0.,  0.],
-                         [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0., 41.,  0.,  0.,  0.,  0.],
-                         [ 2.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  3.,  0.,  0.,  0.,  0.,  0.],
-                         [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-                        ]),
-            )
-        )
-        self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        matches = sum(
-            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
-        )
-        repMatches = sum(
-            alignment.substitutions[c, c.swapcase()]
-            for c in alignment.substitutions.alphabet
-            if c != "X"
-        )
-        self.assertEqual(matches, alignment.matches)
-        self.assertEqual(repMatches, alignment.repMatches)
-        self.assertEqual(
-            str(alignment),
-            """\
-chr3       42530895 CGGAAGTACTTCTGGGGGTACATACTC---ATCGGCTGGGGTATGGTACCAGGGAGGGCT
-                  0 |||||||||||||||||||||||||||---||||||||||||||||||||||||||||||
-NR_046654       185 CGGAAGTACTTCTGGGGGTACATACTCCCCATCGGCTGGGGTATGGTACCAGGGAGGGCT
-
-chr3       42530952 TCCAGGCTGGGGACAGAGGGGGCAAGGCCTGGAGAACTCCCTAGGGGGAGGGTGCCAACC
-                 60 ||||||------------------------------------------------------
-NR_046654       125 TCCAGG------------------------------------------------------
-
-chr3       42531012 CAGCTTGCAGTCCTACGTCTTGCTTAGCTGCAGGTCCTGCCTGCAAGGATATCAGCCAAG
-                120 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531072 GGTCAAGAAAGTCCTCAAAATGTCTGATCCCAGGACAAGTCCCTCAGGTTGCAGCTGCAC
-                180 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531132 CTAGGGCTGACCTGTGGGACAGATTTTGTGAACATCTTTCCATTTCCCTTTAGTTCCCGA
-                240 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531192 AATACAcagggccactgctaatctataaagggcctctgtcacaattagaaagagaatgtc
-                300 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531252 cgtctaggtagacacagcccttcaggcatacagcttCACCCCCTCAGTGGAGCATCCCTC
-                360 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531312 CGTGGTGAACAACCTATGCAACCAAAGACAGCAGACTGACAACCCACCCTTTtctctctc
-                420 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531372 cctccctctccctgcttttctccaaaatctctccctcatgccctctacccctgcttcctg
-                480 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531432 tgccctctctgctctttcactctccctGGGCCTGACAGGGGTACCCAGCACATTCACCAT
-                540 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531492 GGTGTGGACCATCGCCAGGATCCATTTTGAGGATTATGGGTGAGCTGCTGCCCCACACAC
-                600 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531552 TCCCCCGGCCGCCATCACTTGGGCAGGCCCCCTGGGTGGGATGATAATGCCATCTGGCCT
-                660 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531612 TGGTGAGTGGACAAAAACCACAGCTCTCGGGCCAGAGGGGAGGCTGGAGGAGGACCTGGG
-                720 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531672 GAGCAACAGACTCTGGGCCCGGGGTTGCTAAAGTGCTCAGGAGCAGAGCTGGGGACAACT
-                780 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531732 GGGGGAGGTGCTGCTGAGTCTCTCTCTGGCTGAGGACAATCCCTCTCATTCCTCCCCACG
-                840 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531792 GTCTGCTCAGGTGCTGGGACACCATCAACTCCTCACTGTGGTGGATCATAAAGGGCCCCA
-                900 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531852 TCCTCACCTCCATCTTGGTAAGATaccctcccaccacctagagatggggaaacaggccca
-                960 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531912 aagggcaggcaacttagcccaaggtcacatgggaaattagtatctaggtcagaactgaaa
-               1020 ------------------------------------------------------------
-NR_046654       119 ------------------------------------------------------------
-
-chr3       42531972 cgtagcttcctaatgcccaatgcaggatcatccccacccctgtcctaccagTTCTTCCTT
-               1080 ------------------------------------------------...|||||||||
-NR_046654       119 ------------------------------------------------CAGTTCTTCCTT
-
-chr3       42532032 GAGCGTAAGCGGATTGGGAGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGAT
-               1140 |||||--|||||||||||.|||||||||||||||||||||||||||||||||||||||||
-NR_046654       107 GAGCG--AGCGGATTGGGTGCACAGTCCTTAGGGATTTGAAGGAGGTAGAGTTCCCGGAT
-
-chr3       42532092 GACCTGCCCAAAGGGGAAATGCCAGAGGAGAGGTAAGATAGAGAGAGGGGCAGCAGGACC
-               1200 |||---------------------------------------------------------
-NR_046654        49 GAC---------------------------------------------------------
-
-chr3       42532152 CTGGGAAAGAAGACAGGCCAGCAGTCAAGGGGCCTGAACACCTCAGCCTTCCCGCTCTGA
-               1260 ------------------------------------------------------------
-NR_046654        46 ------------------------------------------------------------
-
-chr3       42532212 CTGCCCGAACTCGGGTCCCCACCCACTAGGTAAACTTCATCCTGTTTATTTGCATCATCC
-               1320 ------------------------------------------------------------
-NR_046654        46 ------------------------------------------------------------
-
-chr3       42532272 GAATCCTGCTTCAGAAACTGCGGCCCCCAGATATCAGGAAGAGTGACAGCAGTCCATACT
-               1380 ------------------------------------------------------------
-NR_046654        46 ------------------------------------------------------------
-
-chr3       42532332 CGTGAGTGTGGGCCTAGTGCCTCAGCCCCCAGTACCTCCATCCCCAGTCCTCAAATCATC
-               1440 ------------------------------------------------------------
-NR_046654        46 ------------------------------------------------------------
-
-chr3       42532392 CCACATCTCCTTGAAGTCCTCCCACCCCAAACATCCAGAGTCACCAAAGAGCCACATTGT
-               1500 ------------------------------------------------------------
-NR_046654        46 ------------------------------------------------------------
-
-chr3       42532452 TCTTTCCCACCTCCACCATGGCCTGGCTcagcccaccaccatcccctgctccagccccac
-               1560 ------------------------------------------------------------
-NR_046654        46 ------------------------------------------------------------
-
-chr3       42532512 cctcaCCAGGCTGCACTCAGAGCCCTGCATGCTTCTCCTGCCCACACTCACCTAGCATCC
-               1620 ---------------------------------------------------|||||||||
-NR_046654        46 ---------------------------------------------------CTAGCATCC
-
-chr3       42532572 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGgag 42532606
-               1680 |||||||||||||||||||||||||||||||...     1714
-NR_046654        37 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGGAG        3
-""",
-        )
-        self.assertEqual(
-            format(alignment, "psl"),
-            """\
-172	1	6	0	1	3	3	1532	-	NR_046654.1_modified	190	3	185	chr3	198295559	42530895	42532606	5	27,36,17,56,43,	5,35,71,88,144,	42530895,42530922,42532020,42532039,42532563,
 """,
         )
         self.assertRaises(StopIteration, next, alignments)

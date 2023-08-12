@@ -2237,11 +2237,13 @@ HWI-1KL12        60 TGTGAGGCAAGGGCTCACGCTGACCTCTCTCGGCGTGGGAG    101
 <BLANKLINE>
 \end{minted}
 
-SAM files may include additional information to distinguish simple sequence insertions and deletions from skipped regions of the genome (e.g. introns), hard and soft clipping, and padded sequence regions. As this information cannot be stored in the \verb|coordinates| attribute of an \verb|Alignment| object, and is stored in a dedicated \verb|operations| attribute instead:
+SAM files may include additional information to distinguish simple sequence insertions and deletions from skipped regions of the genome (e.g. introns), hard and soft clipping, and padded sequence regions. As this information cannot be stored in the \verb|coordinates| attribute of an \verb|Alignment| object, and is stored in a dedicated \verb|operations| attribute instead. Let's use the third alignment in this SAM file as an example:
 %doctest ../Tests/Blat lib:numpy
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> alignments = Align.parse("dna_rna.sam", "sam")
+>>> alignment = next(alignments)
+>>> alignment = next(alignments)
 >>> alignment = next(alignments)
 >>> print(format(alignment, "SAM"))  # doctest: +NORMALIZE_WHITESPACE
 NR_111921.1	0	chr3	48663768	0	46M1827N82M3376N76M12H	*	0	0	CACGAGAGGAGCGGAGGCGAGGGGTGAACGCGGAGCACTCCAATCGCTCCCAACTAGAGGTCCACCCAGGACCCAGAGACCTGGATTTGAGGCTGCTGGGCGGCAGATGGAGCGATCAGAAGACCAGGAGACGGGAGCTGGAGTGCAGTGGCTGTTCACAAGCGTGAAAGCAAAGATTAAAAAATTTGTTTTTATATTAAAAAA	*	AS:i:1000	NM:i:0
@@ -2254,7 +2256,7 @@ bytearray(b'MNMNM')
 >>> alignment.query.annotations["hard_clip_right"]
 12
 \end{minted}
-In this alignment, the cigar string \verb|46M1827N82M3376N76M12H| defines 46 aligned nucleotides, an intron of 1827 nucleotides, 82 aligned nucleotides, an intron of 3376 nucleotides, 76 aligned nucleotides, and 12 hard-clipped nucleotides. These operations are shown in the \verb|operations| attribute, except for hard-clipping, which is stored in \verb|alignment.query.annotations["hard_clip_right"]| (or \verb|alignment.query.annotations["hard_clip_left"]|, if applicable) instead.
+In this alignment, the cigar string \verb|63M1062N75M468N43M| defines 46 aligned nucleotides, an intron of 1827 nucleotides, 82 aligned nucleotides, an intron of 3376 nucleotides, 76 aligned nucleotides, and 12 hard-clipped nucleotides. These operations are shown in the \verb|operations| attribute, except for hard-clipping, which is stored in \verb|alignment.query.annotations["hard_clip_right"]| (or \verb|alignment.query.annotations["hard_clip_left"]|, if applicable) instead.
 
 To write a SAM file with alignments created from scratch, use an \verb|Alignments| (plural) object to store the alignments as well as the metadata and targets:
 %doctest . lib:numpy
@@ -2398,7 +2400,7 @@ The same keyword argument can be used with \verb|Align.write|:
 \subsection{bigBed}
 \label{subsec:align_bigbed}
 
-The bigBed file format is an index binary version of a BED file~\ref{subsec:align_bed}. To create a bigBed file, you can either use the \verb+bedToBigBed+ program from UCSC (\href{https://genome.ucsc.edu/goldenPath/help/bigBed.html}). or you can use Biopython for it by calling the \verb|Bio.Align.write| function with \verb|fmt="bigbed"|. While the two methods should result in identical bigBed files, using \verb+bedToBigBed+ is much faster and may be more reliable, as it is the gold standard. As bigBed files come with a built-in index, it allows you to quickly search a specific genomic region.
+The bigBed file format is an indexed binary version of a BED file~\ref{subsec:align_bed}. To create a bigBed file, you can either use the \verb+bedToBigBed+ program from UCSC (\href{https://genome.ucsc.edu/goldenPath/help/bigBed.html}). or you can use Biopython for it by calling the \verb|Bio.Align.write| function with \verb|fmt="bigbed"|. While the two methods should result in identical bigBed files, using \verb+bedToBigBed+ is much faster and may be more reliable, as it is the gold standard. As bigBed files come with a built-in index, it allows you to quickly search a specific genomic region.
 
 As an example, let's parse the bigBed file \verb|dna_rna.bb|, available in the \verb|Tests/Blat| subdirectory in the Biopython distribution:
 %doctest ../Tests/Blat lib:numpy
@@ -2485,7 +2487,7 @@ chr3	48663767	48669174	NR_111921.1_modified	972	+	48663767	48669174	0	5	28,17,76
 <BLANKLINE>
 \end{minted}
 
-Use the \verb|search| method on the \verb|alignments| object to find search for regions on chr3 between positions 48000000 and 49000000. This method returns an iterator:
+Use the \verb|search| method on the \verb|alignments| object to find regions on chr3 between positions 48000000 and 49000000. This method returns an iterator:
 %cont-doctest
 \begin{minted}{pycon}
 >>> selected_alignments = alignments.search("chr3", 48000000, 49000000)
@@ -2578,20 +2580,20 @@ Iterate over the alignments to get one \verb|Alignment| object for each line:
 >>> for alignment in alignments:
 ...     print(alignment.target.id, alignment.query.id)
 ...
-chr3 NR_111921.1
 chr3 NR_046654.1
-chr3 NR_111921.1_modified
 chr3 NR_046654.1_modified
+chr3 NR_111921.1
+chr3 NR_111921.1_modified
 \end{minted}
 Let's look at the last alignment in more detail. The first four columns in the PSL file show the number of matches, the number of mismatches, the number of nucleotides aligned to repeat regions, and the number of nucleotides aligned to N (unknown) characters. These values are stored as attributes to the \verb|Alignment| object:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.matches
-172
+162
 >>> alignment.misMatches
-1
+2
 >>> alignment.repMatches
-6
+39
 >>> alignment.nCount
 0
 \end{minted}
@@ -2601,16 +2603,16 @@ As the sequence data of the target and query are not stored explicitly in the PS
 >>> alignment.target  # doctest: +ELLIPSIS
 SeqRecord(seq=Seq(None, length=198295559), id='chr3', ...)
 >>> alignment.query  # doctest: +ELLIPSIS
-SeqRecord(seq=Seq(None, length=190), id='NR_046654.1_modified', ...)
+SeqRecord(seq=Seq(None, length=220), id='NR_111921.1_modified', ...)
 \end{minted}
 We can print the alignment in BED or PSL format:
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(format(alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
-chr3	42530895	42532606	NR_046654.1_modified	0	-	42530895	42532606	0	5	27,36,17,56,43,	0,27,1125,1144,1668,
+chr3	48663767	48669174	NR_111921.1_modified	0	+	48663767	48669174	0	5	28,17,76,6,76,	0,29,1873,1949,5331,
 <BLANKLINE>
 >>> print(format(alignment, "psl"))  # doctest: +NORMALIZE_WHITESPACE
-172	1	6	0	1	3	3	1532	-	NR_046654.1_modified	190	3	185	chr3	198295559	42530895	42532606	5	27,36,17,56,43,	5,35,71,88,144,	42530895,42530922,42532020,42532039,42532563,
+162	2	39	0	1	2	3	5204	+	NR_111921.1_modified	220	3	208	chr3	198295559	48663767	48669174	5	28,17,76,6,76,	3,31,48,126,132,	48663767,48663796,48665640,48665716,48669098,
 <BLANKLINE>
 \end{minted}
 Here, the number of matches, mismatches, repeat region matches, and matches to unknown nucleotides were taken from the corresponding attributes of the \verb|Alignment| object. If these attributes are not available, for example if the alignment did not come from a PSL file, then these numbers are calculated using the sequence contents, if available.
@@ -2663,6 +2665,127 @@ Note that optional keyword arguments cannot be used with the \verb+format+ funct
 
 \subsection{bigPsl}
 \label{subsec:align_bigpsl}
+
+A bigPsl file is a bigBed file with a BED12+13 format consisting of the 12
+predefined BED fields and 13 custom fields defined in the AutoSql file
+\verb|bigPsl.as| provided by UCSC (see \href{https://genome.ucsc.edu/goldenPath/help/bigPsl.html}), creating an indexed binary version of a PSL file (see section~\ref{subsec:align_psl}). To create a bigPsl file, you can either use the \verb+pslToBigPsl+ and \verb+bedToBigBed+ programs from UCSC. or you can use Biopython by calling the \verb|Bio.Align.write| function with \verb|fmt="bigpsl"|. While the two methods should result in identical bigPsl files, the UCSC tools are much faster and may be more reliable, as it is the gold standard. As bigPsl files are bigBed files, they come with a built-in index, allowing you to quickly search a specific genomic region.
+
+As an example, let's parse the bigBed file \verb|dna_rna.psl.bb|, available in the \verb|Tests/Blat| subdirectory in the Biopython distribution. This file is the bigPsl equivalent of the bigBed file \verb|dna_rna.bb| (see section~\ref{subsec:align_bigbed}) and of the PSL file \verb|dna_rna.psl| (see section~\ref{subsec:align_psl}).
+%doctest ../Tests/Blat lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("dna_rna.psl.bb", "bigpsl")
+>>> len(alignments)
+4
+>>> print(alignments.declaration)  # doctest: +NORMALIZE_WHITESPACE
+table bigPsl
+"bigPsl pairwise alignment"
+(
+   string          chrom;           "Reference sequence chromosome or scaffold"
+   uint            chromStart;      "Start position in chromosome"
+   uint            chromEnd;        "End position in chromosome"
+   string          name;            "Name or ID of item, ideally both human readable and unique"
+   uint            score;           "Score (0-1000)"
+   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
+   uint            thickStart;      "Start of where display should be thick (start codon)"
+   uint            thickEnd;        "End of where display should be thick (stop codon)"
+   uint            reserved;        "RGB value (use R,G,B string in input file)"
+   int             blockCount;      "Number of blocks"
+   int[blockCount] blockSizes;      "Comma separated list of block sizes"
+   int[blockCount] chromStarts;     "Start positions relative to chromStart"
+   uint            oChromStart;     "Start position in other chromosome"
+   uint            oChromEnd;       "End position in other chromosome"
+   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
+   uint            oChromSize;      "Size of other chromosome."
+   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
+   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
+   string          oCDS;            "CDS in NCBI format"
+   uint            chromSize;       "Size of target chromosome"
+   uint            match;           "Number of bases matched."
+   uint            misMatch;        "Number of bases that don't match"
+   uint            repMatch;        "Number of bases that match but are part of repeats"
+   uint            nCount;          "Number of 'N' bases"
+   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
+)
+<BLANKLINE>
+\end{minted}
+The declaration contains the specification of the columns as defined by the \verb|bigPsl.as| AutoSqlfile from UCSC. Target sequences (typically, the chromosomes against which the sequences were aligned) are stored in the \verb|targets| attribute. In the bigBed format, only the identifier and the size of each target is stored. In this example, there is only a single chromosome: 
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.targets
+[SeqRecord(seq=Seq(None, length=198295559), id='chr3', name='<unknown name>', description='<unknown description>', dbxrefs=[])]
+\end{minted}
+Iterating over the alignments gives one Alignment object for each line: 
+%cont-doctest
+\begin{minted}{pycon}
+>>> for alignment in alignments:
+...     print(alignment.target.id, alignment.query.id)
+...
+chr3 NR_046654.1
+chr3 NR_046654.1_modified
+chr3 NR_111921.1
+chr3 NR_111921.1_modified
+\end{minted}
+Let's look at the individual alignments. The alignment information is stored in the same way as for the corresponding PSL file (see section~\ref{subsec:align_psl}):
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.coordinates
+array([[48663767, 48663795, 48663796, 48663813, 48665640, 48665716,
+        48665716, 48665722, 48669098, 48669174],
+       [       3,       31,       31,       48,       48,      124,
+             126,      132,      132,      208]])
+>>> alignment.thickStart
+48663767
+>>> alignment.thickEnd
+48669174
+>>> alignment.matches
+162
+>>> alignment.misMatches
+2
+>>> alignment.repMatches
+39
+>>> alignment.nCount
+0
+\end{minted}
+We can print the alignment in BED or PSL format:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
+chr3	48663767	48669174	NR_111921.1_modified	1000	+	48663767	48669174	0	5	28,17,76,6,76,	0,29,1873,1949,5331,
+<BLANKLINE>
+>>> print(format(alignment, "psl"))  # doctest: +NORMALIZE_WHITESPACE
+162	2	39	0	1	2	3	5204	+	NR_111921.1_modified	220	3	208	chr3	198295559	48663767	48669174	5	28,17,76,6,76,	3,31,48,126,132,	48663767,48663796,48665640,48665716,48669098,
+<BLANKLINE>
+\end{minted}
+
+As a bigPsl file is a special case of a bigBed file, you can use the \verb|search| method on the alignments object to find alignments to specific genomic regions. For example, we can look for regions on chr3 between positions 48000000 and 49000000:
+%cont-doctest
+\begin{minted}{pycon}
+>>> selected_alignments = alignments.search("chr3", 48000000, 49000000)
+>>> for alignment in selected_alignments:
+...     print(alignment.query.id)
+...
+NR_111921.1
+NR_111921.1_modified
+\end{minted}
+The chromosome name may be \verb|None| to include all chromosomes, and the start and end positions may be \verb|None| to start searching from position 0 or to continue searching until the end of the chromosome, respectively.
+
+To write a bigPsl file with Biopython, use \verb|Bio.Align.write(alignments, "myfilename.bb", fmt="bigpsl")|, where \verb|myfilename.bb| is the name of the output bigPsl file. Alternatively, you can use a (binary) stream for output. Additional options are
+\begin{itemize}
+\item \verb|compress|: If \verb|True| (default), compress data using zlib; if \verb|False|, do not compress data.
+\item \verb|extraIndex|: List of strings with the names of extra columns to be indexed.
+\item \verb|cds|: If \verb|True|, look for a query feature of type CDS and write it in NCBI style in the PSL file (default: \verb|False|).
+\item \verb|fa|: If \verb|True|, include the query sequence in the PSL file (default: \verb|False|).
+\item \verb|mask|: Specify if repeat regions in the target sequence are masked and should be reported in the \verb|repMatches| field instead of in the \verb|matches| field.  Acceptable values are
+\begin{itemize}
+\item \verb|None|: no masking (default);
+\item \verb|"lower"|: masking by lower-case characters;
+\item \verb|"upper"|: masking by upper-case characters.
+\end{itemize}
+\item \verb|wildcard|: Report alignments to the wildcard character (representing unknown nucleotides) in the target or query sequence in the \verb|nCount| field instead of in the \verb|matches|, \verb|misMatches|, or \verb|repMatches| fields.  Default value is \verb|"N"|.
+\end{itemize}
+See section~\ref{subsec:align_psl} for an explanation on how the number of matches, mismatches, repeat region matches, and matches to unknown nucleotides are obtained.
+
 
 \subsection{Multiple Alignment Format (MAF)}
 \label{subsec:align_maf}
