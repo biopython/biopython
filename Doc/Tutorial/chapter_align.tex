@@ -7,7 +7,7 @@ Alignments may extend over the full length of each sequence, or may be limited t
 
 See Chapter~\ref{chapter:msa} for a description of the older \verb|MultipleSeqAlignment| class and the parsers in \verb|Bio.AlignIO| that parse the output of sequence alignment software, generating \verb|MultipleSeqAlignment| objects.
 
-\section{Alignment objects}
+\section{Creating an Alignment object}
 \label{sec:alignmentobject}
 
 The \verb|Alignment| class is defined in \verb|Bio.Align|. Usually you would get an \verb|Alignment| object by parsing the output of alignment programs (section~\ref{sec:alignmentparsers}) or by running Biopython's pairwise aligner (Chapter~\ref{chapter:pairwise}). For the benefit of this section, however, we will create an \verb|Alignment| object from scratch.
@@ -38,12 +38,12 @@ Note that the alignment does not include the first nucleotide and last two nucle
 Now we can create the \verb|Alignment| object:
 %cont-doctest
 \begin{minted}{pycon}
->>> from Bio import Align
->>> alignment = Align.Alignment(sequences, coordinates)
+>>> from Bio.Align import Alignment
+>>> alignment = Alignment(sequences, coordinates)
 >>> alignment  # doctest: +ELLIPSIS
 <Alignment object (3 rows x 8 columns) at ...>
 \end{minted}
-The alignment object has an attribute \verb|sequences| pointing to the sequences that were aligned:
+The alignment object has an attribute \verb|sequences| pointing to the sequences included in this alignment:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.sequences
@@ -68,6 +68,139 @@ Print the \verb+Alignment+ object to show the alignment explicitly:
 \end{minted}
 with the starting and end coordinate for each sequence are shown to the left and right, respectively, of the alignment.
 
+If you start out with the aligned sequences, with dashes representing gaps, then you can calculate the coordinates using the \verb|infer_coordinates| class method. This method is primarily employed in Biopython's alignment parsers (see Section~\ref{sec:alignmentparsers}), but it may be useful for other purposes. For example, to construct the \verb|Alignment| object from the aligned sequences, you can do
+%cont-doctest
+\begin{minted}{pycon}
+>>> aligned_sequences = ["CG-TTTTT", "CGATTTTT", "TGGTTT--"]
+>>> sequences = [
+...     aligned_sequence.replace("-", "") for aligned_sequence in aligned_sequences
+... ]
+>>> sequences
+['CGTTTTT', 'CGATTTTT', 'TGGTTT']
+>>> coordinates = Alignment.infer_coordinates(aligned_sequences)
+>>> coordinates
+array([[0, 2, 2, 5, 7],
+       [0, 2, 3, 6, 8],
+       [0, 2, 3, 6, 6]])
+\end{minted}
+The additional G nucleotide at the first position of \verb|seqC| was not included in the alignment and is therefore missing here. But this is easy to fix:
+%cont-doctest
+\begin{minted}{pycon}
+>>> sequences[2] = "G" + sequences[2]
+>>> sequences
+['CGTTTTT', 'CGATTTTT', 'GTGGTTT']
+>>> coordinates[2, :] += 1
+>>> coordinates
+array([[0, 2, 2, 5, 7],
+       [0, 2, 3, 6, 8],
+       [1, 3, 4, 7, 7]])
+\end{minted}
+Now we can create the \verb|Alignment| object:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = Alignment(sequences, coordinates)
+>>> print(alignment)
+                  0 CG-TTTTT 7
+                  0 CGATTTTT 8
+                  1 TGGTTT-- 7
+<BLANKLINE>
+\end{minted}
+which identical to the \verb|Alignment| object created above.
+
+\section{Slicing and indexing an alignment}
+
+Slices of the form \verb+alignment[k, i:j]+, where \verb+k+ is an integer and \verb+i+ and \verb+j+ are integers or are absent, return a string showing the aligned sequence (including gaps) for the target (if \verb+k=0+) or the query (if \verb+k=1+) that includes only the columns \verb+i+ through \verb+j+ in the printed alignment.
+
+To illustrate this, in the following example the printed alignment has 8 columns:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment)
+                  0 CG-TTTTT 7
+                  0 CGATTTTT 8
+                  1 TGGTTT-- 7
+<BLANKLINE>
+>>> alignment.length
+8
+\end{minted}
+
+To get the aligned sequence strings individually, use
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[0]
+'CG-TTTTT'
+>>> alignment[1]
+'CGATTTTT'
+>>> alignment[2]
+'TGGTTT--'
+>>> alignment[0, :]
+'CG-TTTTT'
+>>> alignment[1, :]
+'CGATTTTT'
+>>> alignment[0, 1:-1]
+'G-TTTT'
+>>> alignment[1, 1:-1]
+'GATTTT'
+\end{minted}
+
+Columns to be included can also be selected using an iterable over integers:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[0, (1, 2, 4)]
+'G-T'
+>>> alignment[1, range(0, 5, 2)]
+'CAT'
+\end{minted}
+
+To get specific columns in the alignment, use
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[:, 0]
+'CCT'
+>>> alignment[:, 1]
+'GGG'
+>>> alignment[:, 2]
+'-AG'
+\end{minted}
+
+Slices of the form \verb+alignment[:, i:j]+, where \verb+i+ and \verb+j+ are integers or are absent, return a new \verb+Alignment+ object that includes only the columns \verb+i+ through \verb+j+ in the printed alignment.
+
+Extracting the first 4 columns for the example alignment above gives:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[:, :4]  # doctest:+ELLIPSIS
+<Alignment object (3 rows x 4 columns) at ...>
+>>> print(alignment[:, :4])
+                  0 CG-T 3
+                  0 CGAT 4
+                  1 TGGT 5
+<BLANKLINE>
+\end{minted}
+
+Similarly, extracting the last 3 columns gives:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[:, -3:]  # doctest:+ELLIPSIS
+<Alignment object (3 rows x 3 columns) at ...>
+>>> print(alignment[:, -3:])
+                  4 TTT 7
+                  5 TTT 8
+                  6 T-- 7
+<BLANKLINE>
+\end{minted}
+
+The column index can also be an iterable of integers:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment[:, (1, 3, 0)])
+                  0 GTC 3
+                  0 GTC 3
+                  0 GTT 3
+<BLANKLINE>
+\end{minted}
+
+\section{Getting information about the alignment}
+
 The number of aligned sequences is returned by \verb+len(alignment)+:
 %cont-doctest
 \begin{minted}{pycon}
@@ -91,7 +224,63 @@ alignment and the number of columns in the alignment as printed:
 >>> alignment.shape
 (3, 8)
 \end{minted}
-Note that sections that are not aligned are not included in the number of columns.
+
+The \verb+frequencies+ method calculates how often each letter appears in each column of the alignment:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.frequencies  # doctest: +NORMALIZE_WHITESPACE
+{'C': array([2, 0, 0, 0, 0, 0, 0, 0]),
+ 'G': array([0, 3, 1, 0, 0, 0, 0, 0]),
+ 'T': array([1, 0, 0, 3, 3, 3, 2, 2]),
+ 'A': array([0, 0, 1, 0, 0, 0, 0, 0])}
+\end{minted}
+Use the \verb+substitutions+ method to find the number of substitutions between each pair of nucleotides:
+%cont-doctest
+\begin{minted}{pycon}
+>>> m = alignment.substitutions
+>>> print(m)
+    A   C   G    T
+A 0.0 0.0 1.0  0.0
+C 0.0 1.0 0.0  2.0
+G 0.0 0.0 3.0  0.0
+T 0.0 0.0 0.0 11.0
+<BLANKLINE>
+\end{minted}
+
+Note that the matrix is not symmetric: The counts for a row letter R and a column letter C is the number of times letter R in a sequence is replaced by letter C in a sequence appearing below it. For example, the number of C's that are aligned to a T in a later sequence is
+%cont-doctest
+\begin{minted}{pycon}
+>>> m["C", "T"]
+2.0
+\end{minted}
+while the number of T's that are aligned to a C in a later sequence is
+%cont-doctest
+\begin{minted}{pycon}
+>>> m["T", "C"]
+0.0
+\end{minted}
+To get a symmetric matrix, use
+%cont-doctest
+\begin{minted}{pycon}
+>>> m += m.transpose()
+>>> m /= 2.0
+>>> print(m)
+    A   C   G    T
+A 0.0 0.0 0.5  0.0
+C 0.0 1.0 0.0  1.0
+G 0.5 0.0 3.0  0.0
+T 0.0 1.0 0.0 11.0
+<BLANKLINE>
+>>> m["T", "C"]
+1.0
+>>> m["C", "T"]
+1.0
+\end{minted}
+The total number of substitutions between C's and T's in the alignment is 1.0 + 1.0 = 2.
+
+\section{Operations on alignments}
+
+\subsection{Sorting an alignment}
 
 The \verb+sort+ method sorts the alignment sequences. By default, sorting is done based on the \verb+id+ attribute of each sequence if available, or the sequence contents otherwise.
 %cont-doctest
@@ -132,152 +321,7 @@ The \verb+reverse+ argument lets you reverse the sort order to obtain the sequen
 <BLANKLINE>
 \end{minted}
 
-The \verb+frequencies+ method calculates how often each letter appears in each column of the alignment:
-%cont-doctest
-\begin{minted}{pycon}
->>> alignment.frequencies  # doctest: +NORMALIZE_WHITESPACE
-{'T': array([1, 0, 0, 3, 3, 3, 2, 2]),
- 'G': array([0, 3, 1, 0, 0, 0, 0, 0]),
- 'C': array([2, 0, 0, 0, 0, 0, 0, 0]),
- 'A': array([0, 0, 1, 0, 0, 0, 0, 0])}
-\end{minted}
-Use the \verb+substitutions+ method to find the number of substitutions between each pair of nucleotides:
-%cont-doctest
-\begin{minted}{pycon}
->>> m = alignment.substitutions
->>> print(m)
-    A   C   G    T
-A 0.0 0.0 0.0  0.0
-C 0.0 1.0 0.0  0.0
-G 1.0 0.0 3.0  0.0
-T 0.0 2.0 0.0 11.0
-<BLANKLINE>
-\end{minted}
-
-Note that the matrix is not symmetric: The counts for a row letter R and a column letter C is the number of times letter R in a sequence is replaced by letter C in a sequence appearing below it. For example, the number of T's that are aligned to a C in a later sequence is
-%cont-doctest
-\begin{minted}{pycon}
->>> m["T", "C"]
-2.0
-\end{minted}
-while the number of C's that are aligned to a T in a later sequence is
-%cont-doctest
-\begin{minted}{pycon}
->>> m["C", "T"]
-0.0
-\end{minted}
-To get a symmetric matrix, use
-%cont-doctest
-\begin{minted}{pycon}
->>> m += m.transpose()
->>> m /= 2.0
->>> print(m)
-    A   C   G    T
-A 0.0 0.0 0.5  0.0
-C 0.0 1.0 0.0  1.0
-G 0.5 0.0 3.0  0.0
-T 0.0 1.0 0.0 11.0
-<BLANKLINE>
->>> m["T", "C"]
-1.0
->>> m["C", "T"]
-1.0
-\end{minted}
-The total number of substitutions between C's and T's in the alignment is 1.0 + 1.0 = 2.
-
-\section{Slicing and indexing an alignment}
-
-Slices of the form \verb+alignment[k, i:j]+, where \verb+k+ is an integer and \verb+i+ and \verb+j+ are integers or are absent, return a string showing the aligned sequence (including gaps) for the target (if \verb+k=0+) or the query (if \verb+k=1+) that includes only the columns \verb+i+ through \verb+j+ in the printed alignment.
-
-To illustrate this, in the following example the printed alignment has 8 columns:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> print(alignment)
-                  1 TGGTTT-- 7
-                  0 CG-TTTTT 7
-                  0 CGATTTTT 8
-<BLANKLINE>
->>> alignment.length
-8
-\end{minted}
-
-To get the aligned sequence strings individually, use
-%cont-doctest
-\begin{minted}{pycon}
->>> alignment[0]
-'TGGTTT--'
->>> alignment[1]
-'CG-TTTTT'
->>> alignment[2]
-'CGATTTTT'
->>> alignment[0, :]
-'TGGTTT--'
->>> alignment[1, :]
-'CG-TTTTT'
->>> alignment[0, 1:-1]
-'GGTTT-'
->>> alignment[1, 1:-1]
-'G-TTTT'
-\end{minted}
-
-Columns to be included can also be selected using an iterable over integers:
-%cont-doctest
-\begin{minted}{pycon}
->>> alignment[0, (1, 3, 4)]
-'GTT'
->>> alignment[1, range(0, 5, 2)]
-'C-T'
-\end{minted}
-
-To get specific columns in the alignment, use
-%cont-doctest
-\begin{minted}{pycon}
->>> alignment[:, 0]
-'TCC'
->>> alignment[:, 1]
-'GGG'
->>> alignment[:, 2]
-'G-A'
-\end{minted}
-
-Slices of the form \verb+alignment[:, i:j]+, where \verb+i+ and \verb+j+ are integers or are absent, return a new \verb+Alignment+ object that includes only the columns \verb+i+ through \verb+j+ in the printed alignment.
-
-Extracting the first 4 columns for the example alignment above gives:
-%cont-doctest
-\begin{minted}{pycon}
->>> alignment[:, :4]  # doctest:+ELLIPSIS
-<Alignment object (3 rows x 4 columns) at ...>
->>> print(alignment[:, :4])
-                  1 TGGT 5
-                  0 CG-T 3
-                  0 CGAT 4
-<BLANKLINE>
-\end{minted}
-
-Similarly, extracting the last 3 columns gives:
-%cont-doctest
-\begin{minted}{pycon}
->>> alignment[:, -3:]  # doctest:+ELLIPSIS
-<Alignment object (3 rows x 3 columns) at ...>
->>> print(alignment[:, -3:])
-                  6 T-- 7
-                  4 TTT 7
-                  5 TTT 8
-<BLANKLINE>
-\end{minted}
-
-The column index can also be an iterable of integers:
-%cont-doctest
-\begin{minted}{pycon}
->>> print(alignment[:, (1, 3, 0)])
-                  0 GTT 3
-                  0 GTC 3
-                  0 GTC 3
-<BLANKLINE>
-\end{minted}
-
-\section{Reverse-complementing the alignment}
+\subsection{Reverse-complementing the alignment}
 
 Reverse-complementing an alignment will take the reverse complement of each sequence, and recalculate the coordinates:
 %cont-doctest
