@@ -2790,6 +2790,190 @@ See section~\ref{subsec:align_psl} for an explanation on how the number of match
 \subsection{Multiple Alignment Format (MAF)}
 \label{subsec:align_maf}
 
+MAF (Multiple Alignment Format) files store a series of multiple sequence alignments in a human-readable format. MAF files are typically used to store alignment
+s of genomes to each other. The file \verb|ucsc_test.maf| in the \verb|Tests/MAF| subdirectory of the Biopython distribution is an example of a simple MAF file:
+\begin{minted}{text}
+track name=euArc visibility=pack mafDot=off frames="multiz28wayFrames" speciesOrder="hg16 panTro1 baboon mm4 rn3" description="A sample alignment"
+##maf version=1 scoring=tba.v8
+# tba.v8 (((human chimp) baboon) (mouse rat))
+# multiz.v7
+# maf_project.v5 _tba_right.maf3 mouse _tba_C
+# single_cov2.v4 single_cov2 /dev/stdin
+
+a score=23262.0
+s hg16.chr7    27578828 38 + 158545518 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
+s panTro1.chr6 28741140 38 + 161576975 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
+s baboon         116834 38 +   4622798 AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG
+s mm4.chr6     53215344 38 + 151104725 -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG
+s rn3.chr4     81344243 40 + 187371129 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG
+
+a score=5062.0
+s hg16.chr7    27699739 6 + 158545518 TAAAGA
+s panTro1.chr6 28862317 6 + 161576975 TAAAGA
+s baboon         241163 6 +   4622798 TAAAGA
+s mm4.chr6     53303881 6 + 151104725 TAAAGA
+s rn3.chr4     81444246 6 + 187371129 taagga
+
+a score=6636.0
+s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
+s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
+s baboon         249182 13 +   4622798 gcagctgaaaaca
+s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
+
+\end{minted}
+To parse this file, use
+%doctest ../Tests/MAF lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("ucsc_test.maf", "maf")
+\end{minted}
+Information shown in the file header (the track line and subsequent lines starting with "\verb|#|")) is stored in the \verb|metadata| attribute of the \verb|alignments| object:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.metadata  # doctest: +NORMALIZE_WHITESPACE
+{'name': 'euArc',
+ 'visibility': 'pack',
+ 'mafDot': 'off',
+ 'frames': 'multiz28wayFrames',
+ 'speciesOrder': ['hg16', 'panTro1', 'baboon', 'mm4', 'rn3'],
+ 'description': 'A sample alignment',
+ 'MAF Version': '1',
+ 'Scoring': 'tba.v8',
+ 'Comments': ['tba.v8 (((human chimp) baboon) (mouse rat))',
+              'multiz.v7',
+              'maf_project.v5 _tba_right.maf3 mouse _tba_C',
+              'single_cov2.v4 single_cov2 /dev/stdin']}
+\end{minted}
+By iterating over the \verb|alignments| we obtain one \verb|Alignment| object for each alignment block in the MAF file:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = next(alignments)
+>>> alignment.score
+23262.0
+>>> {
+...     sequence.id: len(sequence) for sequence in alignment.sequences
+... }  # doctest: +NORMALIZE_WHITESPACE
+{'hg16.chr7': 158545518,
+ 'panTro1.chr6': 161576975,
+ 'baboon': 4622798,
+ 'mm4.chr6': 151104725,
+ 'rn3.chr4': 187371129}
+>>> alignment.coordinates  # doctest: +NORMALIZE_WHITESPACE
+array([[27578828, 27578829, 27578831, 27578831, 27578850, 27578850, 27578866],
+       [28741140, 28741141, 28741143, 28741143, 28741162, 28741162, 28741178],
+       [  116834,   116835,   116837,   116837,   116856,   116856, 116872],
+       [53215344, 53215344, 53215346, 53215347, 53215366, 53215366, 53215382],
+       [81344243, 81344243, 81344245, 81344245, 81344264, 81344267, 81344283]])
+>>> print(alignment)
+hg16.chr7  27578828 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 27578866
+panTro1.c  28741140 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 28741178
+baboon       116834 AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG   116872
+mm4.chr6   53215344 -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG 53215382
+rn3.chr4   81344243 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG 81344283
+<BLANKLINE>
+>>> print(format(alignment, "phylip"))
+5 42
+hg16.chr7 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
+panTro1.chAAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
+baboon    AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG
+mm4.chr6  -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG
+rn3.chr4  -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG
+<BLANKLINE>
+\end{minted}
+In addition to the "\verb|a|" (alignment block) and "\verb|s|" (sequence) lines, MAF files may contain "\verb|i|" lines with information about the genome sequence before and after this block, "\verb|e|" lines with information about empty parts of the alignment, and "\verb|q|" lines showing the quality of each aligned base. This is an example of an alignment block including such lines:
+\begin{minted}{text}
+a score=19159.000000
+s mm9.chr10                         3014644 45 + 129993255 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG
+s hg18.chr6                        15870786 46 - 170899992 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+i hg18.chr6                        I 9085 C 0
+s panTro2.chr6                     16389355 46 - 173908612 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+q panTro2.chr6                                             99999999999999999999999-9999999999999999999-9999
+i panTro2.chr6                     I 9106 C 0
+s calJac1.Contig6394                   6182 46 +    133105 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT
+i calJac1.Contig6394               N 0 C 0
+s loxAfr1.scaffold_75566               1167 34 -     10574 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC
+q loxAfr1.scaffold_75566                                   ------------99999699899-9999999999999869998-9997
+i loxAfr1.scaffold_75566           N 0 C 0
+e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
+e ponAbe2.chr6                     16161448 8044 - 174210431 I
+\end{minted}
+This is the 10th alignment block in the file \verb|ucsc_mm9_chr10.maf| (available in the \verb|Tests/MAF| subdirectory of the Biopython distribution):
+%doctest ../Tests/MAF lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("ucsc_mm9_chr10.maf", "maf")
+>>> for i in range(10):
+...     alignment = next(alignments)
+...
+>>> alignment.score
+19159.0
+>>> print(alignment)
+mm9.chr10   3014644 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG   3014689
+hg18.chr6 155029206 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT 155029160
+panTro2.c 157519257 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT 157519211
+calJac1.C      6182 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT      6228
+loxAfr1.s      9407 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC      9373
+<BLANKLINE>
+\end{minted}
+
+The "\verb|i|" lines shows the relationship between the sequence in the current alignment block to the ones in the preceding and subsequent alignment block. This information is stored in the \verb|annotations| attribute of the corresponding sequence:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.sequences[0].annotations
+{}
+>>> alignment.sequences[1].annotations
+{'leftStatus': 'I', 'leftCount': 9085, 'rightStatus': 'C', 'rightCount': 0}
+\end{minted}
+showing that there are 9085 bases inserted ("\verb|I|") between this block and the preceding one, while the block is contiguous ("\verb|C|") with the subsequent one.  See the \href{https://genome.ucsc.edu/FAQ/FAQformat.html#format5}{UCSC documentation} for the full description of these fields and status characters.
+
+The "\verb|q|" lines shows the sequence quality, which is stored under the "\verb|quality|" dictionary key of the\verb|annotations| attribute of the corresponding sequence:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.sequences[2].annotations["quality"]
+'9999999999999999999999999999999999999999999999'
+>>> alignment.sequences[4].annotations["quality"]
+'9999969989999999999999998699989997'
+\end{minted}
+
+The "\verb|e|" lines show information about organisms with a contiguous sequence before and after this alignment bloack, but with no aligning nucleotides in this alignment block. This is stored under the "\verb|empty|" key of the \verb|alignment.annotations| dictionary:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.annotations["empty"]  # doctest: +NORMALIZE_WHITESPACE
+[(SeqRecord(seq=Seq(None, length=498454), id='tupBel1.scaffold_114895.1-498454', name='', description='', dbxrefs=[]), (331078, 326933), 'I'),
+ (SeqRecord(seq=Seq(None, length=100002), id='echTel1.scaffold_288249', name='', description='', dbxrefs=[]), (87661, 95225), 'I'),
+ (SeqRecord(seq=Seq(None, length=359464), id='otoGar1.scaffold_334.1-359464', name='', description='', dbxrefs=[]), (178247, 175316), 'I'),
+ (SeqRecord(seq=Seq(None, length=174210431), id='ponAbe2.chr6', name='', description='', dbxrefs=[]), (158048983, 158040939), 'I')]
+\end{minted}
+This shows for example that there were non-aligning bases inserted ("\verb|I|") from position 158040939 to 158048983 on the opposite strand of the \verb|ponAbe2.chr6| genomic sequence.
+Again, see the \href{https://genome.ucsc.edu/FAQ/FAQformat.html#format5}{UCSC documentation} for the full definition of "\verb|e|" lines.
+
+To print an alignment in MAF format, you can use Python's built-in \verb|format| function:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "MAF"))
+a score=19159.000000
+s mm9.chr10                         3014644   45 + 129993255 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG
+s hg18.chr6                        15870786   46 - 170899992 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+i hg18.chr6                        I 9085 C 0
+s panTro2.chr6                     16389355   46 - 173908612 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+q panTro2.chr6                                               99999999999999999999999-9999999999999999999-9999
+i panTro2.chr6                     I 9106 C 0
+s calJac1.Contig6394                   6182   46 +    133105 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT
+i calJac1.Contig6394               N 0 C 0
+s loxAfr1.scaffold_75566               1167   34 -     10574 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC
+q loxAfr1.scaffold_75566                                     ------------99999699899-9999999999999869998-9997
+i loxAfr1.scaffold_75566           N 0 C 0
+e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
+e ponAbe2.chr6                     16161448 8044 - 174210431 I
+<BLANKLINE>
+<BLANKLINE>
+\end{minted}
+To write a complete MAF file, use \verb|Bio.Align.write(alignments, "myfilename.maf", fmt="maf")|, where \verb|myfilename.maf| is the name of the output MAF file. Alternatively, you can use a (text) stream for output. File header information will be taken from the \verb|metadata| attribute of the \verb|alignments| object. If you are creating the alignments from scratch, you can use the \verb|Alignments| (plural) class to create a list-like \verb|alignments| object (see section~\ref{subsec:align_writing}) and give it a \verb|metadata| attribute.
+
 \subsection{bigMaf}
 \label{subsec:align_bigmaf}
 
