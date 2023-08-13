@@ -371,7 +371,7 @@ File format \verb+fmt+ & Description & text / binary & Supported by \verb|write|
 \verb|nexus| & NEXUS & text & yes & \ref{subsec:align_nexus} \\
 \verb|phylip| & PHYLIP output files & text & yes & \ref{subsec:align_phylip} \\
 \verb|psl| & Pattern Space Layout (PSL) & text & yes & \ref{subsec:align_psl} \\
-\verb|sam| & Sequence Alignment/Map (SAM) & text & yes & \ref{subseq:align_sam} \\
+\verb|sam| & Sequence Alignment/Map (SAM) & text & yes & \ref{subsec:align_sam} \\
 \verb|stockholm| & Stockholm & text & yes & \ref{subsec:align_stockholm} \\
 \verb|tabular| & Tabular output from BLAST or FASTA & text & no & \ref{subsec:align_tabular} \\
 \end{tabular}
@@ -1235,7 +1235,7 @@ gi|330443   1318075 ?????????????????????????????? 1318045
 gi|296143      1200 ??????????????????????????????    1230
 <BLANKLINE>
 \end{minted}
-This prevents us from outputting the alignment in BED (section~\ref{subsec:align_bed}), PSL (section~\ref{subsec:align_psl}), or SAM (section~\ref{subseq:align_sam}) format, which expect the target to be on the forward strand:
+This prevents us from outputting the alignment in BED (section~\ref{subsec:align_bed}), PSL (section~\ref{subsec:align_psl}), or SAM (section~\ref{subsec:align_sam}) format, which expect the target to be on the forward strand:
 %cont-doctest
 \begin{minted}{pycon}
 >>> format(alignment, "bed")  # doctest: +ELLIPSIS
@@ -1269,7 +1269,7 @@ gi|330443520|ref|NC_001136.10|	1318045	1319275	gi|296143771|ref|NM_001180731.1| 
 1230	0	0	0	0	0	0	0	-	gi|296143771|ref|NM_001180731.1|	1230	0	1230	gi|330443520|ref|NC_001136.10|	1319275	1318045	1319275	3	1226,3,1,	0,1226,1229,	1318045,1319271,1319274,
 <BLANKLINE>
 \end{minted}
-The SAM format parser defines its own (optional) \verb|operations| attribute (section~\ref{subseq:align_sam}), which is not quite consistent with the \verb|operations| attribute defined in the Exonerate format parser. As the \verb|operations| attribute is optional, we delete it before printing the alignment in SAM format:
+The SAM format parser defines its own (optional) \verb|operations| attribute (section~\ref{subsec:align_sam}), which is not quite consistent with the \verb|operations| attribute defined in the Exonerate format parser. As the \verb|operations| attribute is optional, we delete it before printing the alignment in SAM format:
 %cont-doctest
 \begin{minted}{pycon}
 >>> del alignment.operations
@@ -2088,7 +2088,7 @@ CAAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGC-TTTCCTTTTC
 \end{minted}
 
 \subsection{Sequence Alignment/Map (SAM)}
-\label{subseq:align_sam}
+\label{subsec:align_sam}
 
 Files in the Sequence Alignment/Map (SAM) format \cite{li2009} store pairwise sequence alignments, usually of next-generation sequencing data against a reference genome. The file \verb+ex1.sam+ in Biopython's test suite is an example of a minimal file in the SAM format. Its first few lines are as follows:
 \begin{minted}{text}
@@ -2668,7 +2668,7 @@ Note that optional keyword arguments cannot be used with the \verb+format+ funct
 
 A bigPsl file is a bigBed file with a BED12+13 format consisting of the 12
 predefined BED fields and 13 custom fields defined in the AutoSql file
-\verb|bigPsl.as| provided by UCSC (see \href{https://genome.ucsc.edu/goldenPath/help/bigPsl.html}), creating an indexed binary version of a PSL file (see section~\ref{subsec:align_psl}). To create a bigPsl file, you can either use the \verb+pslToBigPsl+ and \verb+bedToBigBed+ programs from UCSC. or you can use Biopython by calling the \verb|Bio.Align.write| function with \verb|fmt="bigpsl"|. While the two methods should result in identical bigPsl files, the UCSC tools are much faster and may be more reliable, as it is the gold standard. As bigPsl files are bigBed files, they come with a built-in index, allowing you to quickly search a specific genomic region.
+\href{https://genome.ucsc.edu/goldenPath/help/bigPsl.html}{bigPsl.as} provided by UCSC, creating an indexed binary version of a PSL file (see section~\ref{subsec:align_psl}). To create a bigPsl file, you can either use the \verb+pslToBigPsl+ and \verb+bedToBigBed+ programs from UCSC. or you can use Biopython by calling the \verb|Bio.Align.write| function with \verb|fmt="bigpsl"|. While the two methods should result in identical bigPsl files, the UCSC tools are much faster and may be more reliable, as it is the gold standard. As bigPsl files are bigBed files, they come with a built-in index, allowing you to quickly search a specific genomic region.
 
 As an example, let's parse the bigBed file \verb|dna_rna.psl.bb|, available in the \verb|Tests/Blat| subdirectory in the Biopython distribution. This file is the bigPsl equivalent of the bigBed file \verb|dna_rna.bb| (see section~\ref{subsec:align_bigbed}) and of the PSL file \verb|dna_rna.psl| (see section~\ref{subsec:align_psl}).
 %doctest ../Tests/Blat lib:numpy
@@ -2709,7 +2709,7 @@ table bigPsl
 )
 <BLANKLINE>
 \end{minted}
-The declaration contains the specification of the columns as defined by the \verb|bigPsl.as| AutoSqlfile from UCSC. Target sequences (typically, the chromosomes against which the sequences were aligned) are stored in the \verb|targets| attribute. In the bigBed format, only the identifier and the size of each target is stored. In this example, there is only a single chromosome: 
+The declaration contains the specification of the columns as defined by the \verb|bigPsl.as| AutoSql file from UCSC. Target sequences (typically, the chromosomes against which the sequences were aligned) are stored in the \verb|targets| attribute. In the bigBed format, only the identifier and the size of each target is stored. In this example, there is only a single chromosome: 
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignments.targets
@@ -2850,9 +2850,7 @@ By iterating over the \verb|alignments| we obtain one \verb|Alignment| object fo
 >>> alignment = next(alignments)
 >>> alignment.score
 23262.0
->>> {
-...     sequence.id: len(sequence) for sequence in alignment.sequences
-... }  # doctest: +NORMALIZE_WHITESPACE
+>>> {seq.id: len(seq) for seq in alignment.sequences}  # doctest: +NORMALIZE_WHITESPACE
 {'hg16.chr7': 158545518,
  'panTro1.chr6': 161576975,
  'baboon': 4622798,
@@ -2918,7 +2916,7 @@ loxAfr1.s      9407 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC      9373
 <BLANKLINE>
 \end{minted}
 
-The "\verb|i|" lines shows the relationship between the sequence in the current alignment block to the ones in the preceding and subsequent alignment block. This information is stored in the \verb|annotations| attribute of the corresponding sequence:
+The "\verb|i|" lines show the relationship between the sequence in the current alignment block to the ones in the preceding and subsequent alignment block. This information is stored in the \verb|annotations| attribute of the corresponding sequence:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.sequences[0].annotations
@@ -2928,7 +2926,7 @@ The "\verb|i|" lines shows the relationship between the sequence in the current 
 \end{minted}
 showing that there are 9085 bases inserted ("\verb|I|") between this block and the preceding one, while the block is contiguous ("\verb|C|") with the subsequent one.  See the \href{https://genome.ucsc.edu/FAQ/FAQformat.html#format5}{UCSC documentation} for the full description of these fields and status characters.
 
-The "\verb|q|" lines shows the sequence quality, which is stored under the "\verb|quality|" dictionary key of the\verb|annotations| attribute of the corresponding sequence:
+The "\verb|q|" lines show the sequence quality, which is stored under the "\verb|quality|" dictionary key of the\verb|annotations| attribute of the corresponding sequence:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.sequences[2].annotations["quality"]
@@ -2937,7 +2935,7 @@ The "\verb|q|" lines shows the sequence quality, which is stored under the "\ver
 '9999969989999999999999998699989997'
 \end{minted}
 
-The "\verb|e|" lines show information about organisms with a contiguous sequence before and after this alignment bloack, but with no aligning nucleotides in this alignment block. This is stored under the "\verb|empty|" key of the \verb|alignment.annotations| dictionary:
+The "\verb|e|" lines show information about species with a contiguous sequence before and after this alignment bloack, but with no aligning nucleotides in this alignment block. This is stored under the "\verb|empty|" key of the \verb|alignment.annotations| dictionary:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.annotations["empty"]  # doctest: +NORMALIZE_WHITESPACE
@@ -2976,6 +2974,144 @@ To write a complete MAF file, use \verb|Bio.Align.write(alignments, "myfilename.
 
 \subsection{bigMaf}
 \label{subsec:align_bigmaf}
+
+A bigMaf file is a bigBed file with a BED3+1 format consisting of the 3 required BED fields plus a custom field that stores a MAF alignment block as a string, crearing an indexed binary version of a MAF file (see section~\ref{subsec:align_bigmaf}). The associated AutoSql file \href{https://genome.ucsc.edu/goldenPath/help/examples/bigMaf.as}{bigMaf.as} is provided by UCSC.
+To create a bigMaf file, you can either use the \verb|mafToBigMaf| and \verb|bedToBigBed| programs from UCSC. or you can use Biopython by calling the Bio.Align.write function with \verb|fmt="bigmaf"|. While the two methods should result in identical bigMaf files, the UCSC tools are much faster and may be more reliable, as it is the gold standard. As bigMaf files are bigBed files, they come with a built-in index, allowing you to quickly search a specific region of the reference genome.
+
+The file \verb|ucsc_test.bb| in the \verb|Tests/MAF| subdirectory of the Biopython distribution is an example of a bigMaf file. This file is equivalent to the MAF file \verb|ucsc_test.maf| (see section~\ref{subsec:align_maf}).
+To parse this file, use
+%doctest ../Tests/MAF lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("ucsc_test.bb", "bigmaf")
+>>> len(alignments)
+3
+>>> print(alignments.declaration)  # doctest: +NORMALIZE_WHITESPACE
+table bedMaf
+"Bed3 with MAF block"
+(
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position in chromosome"
+   uint    chromEnd;      "End position in chromosome"
+   lstring mafBlock;      "MAF block"
+)
+<BLANKLINE>
+\end{minted}
+The declaration contains the specification of the columns as defined by the bigMaf.as AutoSql file from UCSC.
+
+The bigMaf file does not store the header information found in the MAF file, but it does define a reference genome. The corresponding \verb|SeqRecord| is stored in the \verb|targets| attribute of the \verb|alignments| object:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.reference
+'hg16'
+>>> alignments.targets  # doctest: +ELLIPSIS
+[SeqRecord(seq=Seq(None, length=158545518), id='hg16.chr7', ...)]
+\end{minted}
+
+By iterating over the \verb|alignments| we obtain one \verb|Alignment| object for each alignment block in the bigMaf file:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = next(alignments)
+>>> alignment.score
+23262.0
+>>> {seq.id: len(seq) for seq in alignment.sequences}  # doctest: +NORMALIZE_WHITESPACE
+{'hg16.chr7': 158545518,
+ 'panTro1.chr6': 161576975,
+ 'baboon': 4622798,
+ 'mm4.chr6': 151104725,
+ 'rn3.chr4': 187371129}
+>>> alignment.coordinates  # doctest: +NORMALIZE_WHITESPACE
+array([[27578828, 27578829, 27578831, 27578831, 27578850, 27578850, 27578866],
+       [28741140, 28741141, 28741143, 28741143, 28741162, 28741162, 28741178],
+       [  116834,   116835,   116837,   116837,   116856,   116856, 116872],
+       [53215344, 53215344, 53215346, 53215347, 53215366, 53215366, 53215382],
+       [81344243, 81344243, 81344245, 81344245, 81344264, 81344267, 81344283]])
+>>> print(alignment)
+hg16.chr7  27578828 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 27578866
+panTro1.c  28741140 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 28741178
+baboon       116834 AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG   116872
+mm4.chr6   53215344 -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG 53215382
+rn3.chr4   81344243 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG 81344283
+<BLANKLINE>
+>>> print(format(alignment, "phylip"))
+5 42
+hg16.chr7 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
+panTro1.chAAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
+baboon    AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG
+mm4.chr6  -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG
+rn3.chr4  -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG
+<BLANKLINE>
+\end{minted}
+Information in the "\verb|i|", "\verb|e|", and "\verb|q|" lines is stored in the same way as in the corresponding MAF file (see section~\ref{subsec:align_maf}):
+%doctest ../Tests/MAF lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("ucsc_mm9_chr10.bb", "bigmaf")
+>>> for i in range(10):
+...     alignment = next(alignments)
+...
+>>> alignment.score
+19159.0
+>>> print(alignment)
+mm9.chr10   3014644 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG   3014689
+hg18.chr6 155029206 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT 155029160
+panTro2.c 157519257 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT 157519211
+calJac1.C      6182 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT      6228
+loxAfr1.s      9407 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC      9373
+<BLANKLINE>
+>>> print(format(alignment, "MAF"))
+a score=19159.000000
+s mm9.chr10                         3014644   45 + 129993255 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG
+s hg18.chr6                        15870786   46 - 170899992 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+i hg18.chr6                        I 9085 C 0
+s panTro2.chr6                     16389355   46 - 173908612 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+q panTro2.chr6                                               99999999999999999999999-9999999999999999999-9999
+i panTro2.chr6                     I 9106 C 0
+s calJac1.Contig6394                   6182   46 +    133105 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT
+i calJac1.Contig6394               N 0 C 0
+s loxAfr1.scaffold_75566               1167   34 -     10574 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC
+q loxAfr1.scaffold_75566                                     ------------99999699899-9999999999999869998-9997
+i loxAfr1.scaffold_75566           N 0 C 0
+e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
+e ponAbe2.chr6                     16161448 8044 - 174210431 I
+<BLANKLINE>
+<BLANKLINE>
+>>> alignment.sequences[1].annotations
+{'leftStatus': 'I', 'leftCount': 9085, 'rightStatus': 'C', 'rightCount': 0}
+>>> alignment.sequences[2].annotations["quality"]
+'9999999999999999999999999999999999999999999999'
+>>> alignment.sequences[4].annotations["quality"]
+'9999969989999999999999998699989997'
+>>> alignment.annotations["empty"]  # doctest: +NORMALIZE_WHITESPACE
+[(SeqRecord(seq=Seq(None, length=498454), id='tupBel1.scaffold_114895.1-498454', name='', description='', dbxrefs=[]), (331078, 326933), 'I'),
+ (SeqRecord(seq=Seq(None, length=100002), id='echTel1.scaffold_288249', name='', description='', dbxrefs=[]), (87661, 95225), 'I'),
+ (SeqRecord(seq=Seq(None, length=359464), id='otoGar1.scaffold_334.1-359464', name='', description='', dbxrefs=[]), (178247, 175316), 'I'),
+ (SeqRecord(seq=Seq(None, length=174210431), id='ponAbe2.chr6', name='', description='', dbxrefs=[]), (158048983, 158040939), 'I')]
+\end{minted}
+
+To write a complete bigMaf file, use \verb|Bio.Align.write(alignments, "myfilename.bb", fmt="bigMaf")|, where \verb|myfilename.bb| is the name of the output bigMaf file. Alternatively, you can use a (binary) stream for output. If you are creating the alignments from scratch, you can use the \verb|Alignments| (plural) class to create a list-like \verb|alignments| object (see section~\ref{subsec:align_writing}) and give it a \verb|targets| attribute. The latter must be a list of \verb|SeqRecord| objects for the chromosomes for the reference species in the order in which they appear in the alignments. Alternatively, you can use the \verb|targets| keyword argument when calling \verb|Bio.Align.write|. The \verb|id| of each \verb|SeqRecord| must be of the form \verb|reference.chromosome|, where \verb|reference| refers to the reference species. \verb|Bio.Align.write| has the additional keyword argument \verb|compress| (\verb|True| by default) specifying whether the data should be compressed using zlib.
+
+As a bigMaf file is a special case of a bigBed file, you can use the \verb|search| method on the \verb|alignments| object to find alignments to specific regions of the reference species. For example, we can look for regions on chr10 between positions 3018000 and 3019000 on chromosome 10:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> selected_alignments = alignments.search("mm9.chr10", 3018000, 3019000)
+>>> for alignment in selected_alignments:
+...     start, end = alignment.coordinates[0, 0], alignment.coordinates[0, -1]
+...     print(start, end)
+...
+3017743 3018161
+3018161 3018230
+3018230 3018359
+3018359 3018482
+3018482 3018644
+3018644 3018822
+3018822 3018932
+3018932 3019271
+\end{minted}
+The chromosome name may be \verb|None| to include all chromosomes, and the start and end positions may be \verb|None| to start searching from position 0 or to continue searching until the end of the chromosome, respectively. Note that we can search on genomic position for the reference species only.
 
 \section{Substitution matrices}
 \label{sec:substitution_matrices}
