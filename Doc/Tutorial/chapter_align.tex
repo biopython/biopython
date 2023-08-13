@@ -23,7 +23,7 @@ Suppose you have three sequences:
 >>> seqC = "GTGGTTT"
 >>> sequences = [seqA, seqB, seqC]
 \end{minted}
-These sequences can be plain strings, \verb|bytes| objects, \verb|Seq| objects,  or \verb|SeqRecord| objects. To create an \verb|Alignment| object, we also need the coordinates that define how the sequences are aligned to each other. We use a numpy array for that:
+These sequences can be plain strings, \verb|bytes| objects, \verb|Seq| objects,  or \verb|SeqRecord| objects. To create an \verb|Alignment| object, we also need the coordinates that define how the sequences are aligned to each other. We use a NumPy array for that:
 %cont-doctest
 \begin{minted}{pycon}
 >>> import numpy as np
@@ -307,13 +307,13 @@ array([[b'C', b'G', b'-', b'T', b'T', b'T', b'T', b'T'],
 \end{minted}
 By default, this will give you an array of \verb|bytes| characters (with data type \verb+dtype='|S1'+). You can create an array of Unicode (Python string) characters by using \verb+dtype='U'+:
 %cont-doctest
-\begin{minted}{pycon}
->>> align_array = np.array(alignment, dtype="U")
->>> align_array
-array([['C', 'G', '-', 'T', 'T', 'T', 'T', 'T'],
-       ['C', 'G', 'A', 'T', 'T', 'T', 'T', 'T'],
-       ['T', 'G', 'G', 'T', 'T', 'T', '-', '-']], dtype='<U1')
-\end{minted}
+% \begin{minted}{pycon}
+% >>> align_array = np.array(alignment, dtype="U")
+% >>> align_array
+% array([['C', 'G', '-', 'T', 'T', 'T', 'T', 'T'],
+       % ['C', 'G', 'A', 'T', 'T', 'T', 'T', 'T'],
+       % ['T', 'G', 'G', 'T', 'T', 'T', '-', '-']], dtype='<U1')
+% \end{minted}
 Note that the \verb+alignment+ object and the NumPy array \verb|align_array| are separate objects in memory - editing one will not update the other!
 
 \section{Operations on alignments}
