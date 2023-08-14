@@ -13,6 +13,7 @@ use this module.  It provides base classes to try and simplify things.
 """
 from abc import ABC
 from abc import abstractmethod
+from typing import Optional
 
 from Bio import StreamModeError
 from Bio.Align import AlignmentsAbstractBaseClass
@@ -30,7 +31,7 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
     """
 
     mode = "t"  # assume text files by default
-    fmt: str  # to be defined in the subclass
+    fmt: Optional[str] = None  # to be defined in the subclass
 
     def __init__(self, source):
         """Create an AlignmentIterator object.
@@ -142,7 +143,7 @@ class AlignmentWriter(ABC):
     """
 
     mode = "w"  # assume text files by default
-    fmt: str  # to be defined in the subclass
+    fmt: Optional[str] = None  # to be defined in the subclass
 
     def __init__(self, target):
         """Create the writer object.
