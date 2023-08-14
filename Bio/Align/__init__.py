@@ -17,10 +17,12 @@ import sys
 import collections
 import copy
 import importlib
+import types
 import warnings
 import numbers
 from itertools import zip_longest
 from abc import ABC, abstractmethod
+from typing import Dict
 
 
 try:
@@ -34,7 +36,7 @@ except ImportError:
     ) from None
 
 from Bio import BiopythonDeprecationWarning
-from Bio.Align import _aligners
+from Bio.Align import _aligners  # type: ignore
 from Bio.Align import substitution_matrices
 from Bio.Seq import Seq, MutableSeq, reverse_complement, UndefinedSequenceError
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
@@ -3766,10 +3768,10 @@ formats = (
 )
 # fmt: on
 
-_modules = {}
+_modules: Dict[str, types.ModuleType] = {}
 
 
-def _load(fmt):
+def _load(fmt: str) -> types.ModuleType:
     fmt = fmt.lower()
     try:
         return _modules[fmt]

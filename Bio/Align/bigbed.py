@@ -75,6 +75,8 @@ Field = namedtuple("Field", ("as_type", "name", "comment"))
 class AutoSQLTable(list):
     """AutoSQL table describing the columns of an (possibly extended) BED format."""
 
+    default: "AutoSQLTable"
+
     def __init__(self, name, comment, fields):
         """Create an AutoSQL table describing the columns of an (extended) BED format."""
         self.name = name
