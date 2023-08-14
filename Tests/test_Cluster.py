@@ -7,7 +7,7 @@
 import unittest
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -27,7 +27,7 @@ class TestCluster(unittest.TestCase):
             from Pycluster import treecluster
 
         # Normal matrix, no errors
-        data1 = numpy.array(
+        data1 = np.array(
             [
                 [1.1, 1.2],
                 [1.4, 1.3],
@@ -57,29 +57,29 @@ class TestCluster(unittest.TestCase):
         data3 = data1[::2, :]
 
         # Columns are not contiguous
-        data4 = numpy.array(data2)[:, ::2]
+        data4 = np.array(data2)[:, ::2]
 
         # Matrix using float32
-        data5 = numpy.array(
+        data5 = np.array(
             [
                 [1.1, 2.2, 3.3, 4.4, 5.5],
                 [3.1, 3.2, 1.3, 2.4, 1.5],
                 [4.1, 2.2, 0.3, 5.4, 0.5],
                 [2.1, 2.0, 0.0, 5.0, 0.0],
             ],
-            numpy.float32,
+            np.float32,
         )
 
         # Matrix using int
         # fmt: off
-        data6 = numpy.array(
+        data6 = np.array(
             [
                 [1, 2, 3, 4, 5],
                 [3, 3, 1, 2, 1],
                 [4, 2, 0, 5, 0],
                 [2, 2, 0, 5, 0]
             ],
-            numpy.int32,
+            np.int32,
         )
         # fmt: on
         try:
@@ -143,7 +143,7 @@ class TestCluster(unittest.TestCase):
         data13 = [None]
 
         # Array of incorrect rank
-        data14 = numpy.array(
+        data14 = np.array(
             [
                 [[1.1, 1.2], [2.3, 1.2], [3.4, 1.6]],
                 [[1.4, 1.3], [3.2, 4.5], [9.8, 4.9]],
@@ -152,10 +152,10 @@ class TestCluster(unittest.TestCase):
         )
 
         # Array with non-numerical values
-        data15 = numpy.array([["a", "b", "c"], ["e", "f", "g"]], "c")
+        data15 = np.array([["a", "b", "c"], ["e", "f", "g"]], "c")
 
         # Empty array
-        data16 = numpy.array([[]], "d")
+        data16 = np.array([[]], "d")
 
         self.assertRaises(ValueError, treecluster, data7)
         self.assertRaises(ValueError, treecluster, data8)
@@ -175,7 +175,7 @@ class TestCluster(unittest.TestCase):
             from Pycluster import treecluster
 
         # data matrix
-        data = numpy.array(
+        data = np.array(
             [
                 [1.1, 2.2, 3.3, 4.4, 5.5],
                 [3.1, 3.2, 1.3, 2.4, 1.5],
@@ -186,7 +186,7 @@ class TestCluster(unittest.TestCase):
 
         # Normal mask, no errors
         # fmt: off
-        mask1 = numpy.array(
+        mask1 = np.array(
             [
                 [1, 1, 0, 1, 0],
                 [1, 1, 1, 0, 0],
@@ -205,7 +205,7 @@ class TestCluster(unittest.TestCase):
         # fmt: on
 
         # Rows are not contiguous
-        mask3 = numpy.array(
+        mask3 = np.array(
             [
                 [1, 1, 0, 1, 0],
                 [1, 1, 1, 0, 0],
@@ -220,7 +220,7 @@ class TestCluster(unittest.TestCase):
         mask3 = mask3[::2, :]
 
         # Columns are not contiguous
-        mask4 = numpy.array(
+        mask4 = np.array(
             [
                 [1, 1, 0, 1, 0, 1, 0, 0, 1, 1],
                 [1, 1, 1, 0, 0, 1, 1, 0, 0, 1],
@@ -232,19 +232,19 @@ class TestCluster(unittest.TestCase):
 
         # Matrix using int16
         # fmt: off
-        mask5 = numpy.array(
+        mask5 = np.array(
             [
                 [1, 1, 0, 1, 0],
                 [1, 1, 1, 0, 0],
                 [1, 1, 1, 0, 0],
                 [1, 1, 0, 1, 1],
             ],
-            numpy.int16,
+            np.int16,
         )
         # fmt: on
 
         # Matrix using float
-        mask6 = numpy.array(
+        mask6 = np.array(
             [
                 [1.0, 2.2, 3.1, 4.8, 5.1],
                 [3.3, 3.3, 1.4, 2.4, 1.2],
@@ -294,7 +294,7 @@ class TestCluster(unittest.TestCase):
         # fmt: on
 
         # Mask with incorrect number of rows
-        mask8 = numpy.array(
+        mask8 = np.array(
             [
                 [1, 1, 0, 1, 0],
                 [1, 1, 1, 0, 0],
@@ -305,7 +305,7 @@ class TestCluster(unittest.TestCase):
         )
 
         # Mask with incorrect number of columns
-        mask9 = numpy.array(
+        mask9 = np.array(
             [
                 [1, 1, 0, 1, 0, 1],
                 [1, 1, 1, 0, 0, 0],
@@ -333,14 +333,14 @@ class TestCluster(unittest.TestCase):
         # fmt: on
 
         # Array with non-numerical values
-        mask12 = numpy.array([["a", "b", "c"], ["e", "f", "g"]], "c")
+        mask12 = np.array([["a", "b", "c"], ["e", "f", "g"]], "c")
 
         # Empty arrays
-        mask13 = numpy.array([[]], "d")
+        mask13 = np.array([[]], "d")
         mask14 = []
 
         # Array of incorrect rank
-        mask15 = numpy.array(
+        mask15 = np.array(
             [
                 [[1, 1], [0, 1], [1, 1]],
                 [[1, 1], [0, 1], [1, 1]],
@@ -374,8 +374,8 @@ class TestCluster(unittest.TestCase):
             from Pycluster._cluster import kcluster, clustercentroids
 
         nclusters = 3
-        weight = numpy.array([1.0, 1.0, 1.0, 1.0, 1.0])
-        data = numpy.array(
+        weight = np.array([1.0, 1.0, 1.0, 1.0, 1.0])
+        data = np.array(
             [
                 [1.1, 2.2, 3.3, 4.4, 5.5],
                 [3.1, 3.2, 1.3, 2.4, 1.5],
@@ -384,18 +384,18 @@ class TestCluster(unittest.TestCase):
             ]
         )
         # fmt: off
-        mask = numpy.array(
+        mask = np.array(
             [
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
             ],
-            numpy.int32,
+            np.int32,
         )
         # fmt: on
         nrows, ncols = data.shape
-        clusterid = numpy.zeros(nrows, numpy.int32)
+        clusterid = np.zeros(nrows, np.int32)
 
         message = "^data matrix is empty$"
         with self.assertRaisesRegex(ValueError, message):
@@ -414,7 +414,7 @@ class TestCluster(unittest.TestCase):
             kcluster(
                 data,
                 nclusters=nclusters,
-                mask=numpy.zeros(3),
+                mask=np.zeros(3),
                 weight=weight,
                 transpose=False,
                 npass=100,
@@ -426,7 +426,7 @@ class TestCluster(unittest.TestCase):
             kcluster(
                 data,
                 nclusters=nclusters,
-                mask=numpy.zeros((4, 3), numpy.int32),
+                mask=np.zeros((4, 3), np.int32),
                 weight=weight,
                 transpose=False,
                 npass=100,
@@ -440,7 +440,7 @@ class TestCluster(unittest.TestCase):
                 data,
                 nclusters=nclusters,
                 mask=mask,
-                weight=numpy.zeros((2, 2)),
+                weight=np.zeros((2, 2)),
                 transpose=False,
                 npass=100,
                 method="a",
@@ -452,7 +452,7 @@ class TestCluster(unittest.TestCase):
                 data,
                 nclusters=nclusters,
                 mask=mask,
-                weight=numpy.zeros(3),
+                weight=np.zeros(3),
                 transpose=False,
                 npass=100,
                 method="a",
@@ -511,7 +511,7 @@ class TestCluster(unittest.TestCase):
                 dist="e",
                 clusterid=clusterid,
             )
-        clusterid = numpy.array([0, -1, 2, 3], numpy.int32)
+        clusterid = np.array([0, -1, 2, 3], np.int32)
         message = "^negative cluster number found$"
         with self.assertRaisesRegex(ValueError, message):
             kcluster(
@@ -525,7 +525,7 @@ class TestCluster(unittest.TestCase):
                 dist="e",
                 clusterid=clusterid,
             )
-        clusterid = numpy.array([0, 0, 2, 3], numpy.int32)
+        clusterid = np.array([0, 0, 2, 3], np.int32)
         message = "^cluster 1 is empty$"
         with self.assertRaisesRegex(ValueError, message):
             kcluster(
@@ -549,8 +549,8 @@ class TestCluster(unittest.TestCase):
         nclusters = 3
 
         # First data set
-        weight = numpy.array([1, 1, 1, 1, 1])
-        data = numpy.array(
+        weight = np.array([1, 1, 1, 1, 1])
+        data = np.array(
             [
                 [1.1, 2.2, 3.3, 4.4, 5.5],
                 [3.1, 3.2, 1.3, 2.4, 1.5],
@@ -559,7 +559,7 @@ class TestCluster(unittest.TestCase):
             ]
         )
         # fmt: off
-        mask = numpy.array(
+        mask = np.array(
             [
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
@@ -597,7 +597,7 @@ class TestCluster(unittest.TestCase):
         for value in cmask.flat:
             self.assertEqual(value, 1)
 
-        correct = numpy.array(
+        correct = np.array(
             [
                 [1.1, 2.2, 3.3, 4.4, 5.5],
                 [3.6, 2.7, 0.8, 3.9, 1.0],
@@ -609,7 +609,7 @@ class TestCluster(unittest.TestCase):
                 self.assertAlmostEqual(cdata[mapping[i], j], correct[i, j])
 
         # First data set, using transpose=True
-        weight = numpy.array([1, 1, 1, 1])
+        weight = np.array([1, 1, 1, 1])
         clusterid, error, nfound = kcluster(
             data,
             nclusters=nclusters,
@@ -636,7 +636,7 @@ class TestCluster(unittest.TestCase):
         for value in cmask.flat:
             self.assertEqual(value, 1)
 
-        correct = numpy.array(
+        correct = np.array(
             [
                 [1.1, 3.6666666667, 4.4],
                 [3.1, 2.0000000000, 2.4],
@@ -649,8 +649,8 @@ class TestCluster(unittest.TestCase):
                 self.assertAlmostEqual(cdata[i, mapping[j]], correct[i, j])
 
         # Second data set
-        weight = numpy.array([1, 1])
-        data = numpy.array(
+        weight = np.array([1, 1])
+        data = np.array(
             [
                 [1.1, 1.2],
                 [1.4, 1.3],
@@ -667,7 +667,7 @@ class TestCluster(unittest.TestCase):
                 [5.1, 5.2],
             ]
         )
-        mask = numpy.array(
+        mask = np.array(
             [
                 [1, 1],
                 [1, 1],
@@ -713,7 +713,7 @@ class TestCluster(unittest.TestCase):
         for value in cmask.flat:
             self.assertEqual(value, 1)
 
-        correct = numpy.array([[1.5000000, 1.55], [5.3333333, 5.55], [3.1000000, 3.30]])
+        correct = np.array([[1.5000000, 1.55], [5.3333333, 5.55], [3.1000000, 3.30]])
         for i in range(nclusters):
             for j in range(ncols):
                 self.assertAlmostEqual(cdata[mapping[i], j], correct[i, j])
@@ -726,8 +726,8 @@ class TestCluster(unittest.TestCase):
             from Pycluster._cluster import clusterdistance
 
         # First data set
-        weight = numpy.array([1.0, 1.0, 1.0, 1.0, 1.0])
-        data = numpy.array(
+        weight = np.array([1.0, 1.0, 1.0, 1.0, 1.0])
+        data = np.array(
             [
                 [1.1, 2.2, 3.3, 4.4, 5.5],
                 [3.1, 3.2, 1.3, 2.4, 1.5],
@@ -736,21 +736,21 @@ class TestCluster(unittest.TestCase):
             ]
         )
         # fmt: off
-        mask = numpy.array(
+        mask = np.array(
             [
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
             ],
-            numpy.int32,
+            np.int32,
         )
         # fmt: on
 
         # Cluster assignments
-        c1 = numpy.array([0], numpy.int32)
-        c2 = numpy.array([1, 2], numpy.int32)
-        c3 = numpy.array([3], numpy.int32)
+        c1 = np.array([0], np.int32)
+        c2 = np.array([1, 2], np.int32)
+        c3 = np.array([3], np.int32)
 
         message = "^data is None$"
         with self.assertRaisesRegex(RuntimeError, message):
@@ -779,7 +779,7 @@ class TestCluster(unittest.TestCase):
         message = "^data matrix has incorrect rank 1 \\(expected 2\\)$"
         with self.assertRaisesRegex(RuntimeError, message):
             clusterdistance(
-                data=numpy.zeros(3),
+                data=np.zeros(3),
                 mask=mask,
                 weight=weight,
                 index1=c1,
@@ -791,7 +791,7 @@ class TestCluster(unittest.TestCase):
         message = "^data matrix has incorrect data type$"
         with self.assertRaisesRegex(RuntimeError, message):
             clusterdistance(
-                data=numpy.zeros((3, 3), dtype=numpy.int16),
+                data=np.zeros((3, 3), dtype=np.int16),
                 mask=mask,
                 weight=weight,
                 index1=c1,
@@ -840,7 +840,7 @@ class TestCluster(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, message):
             clusterdistance(
                 data=data,
-                mask=numpy.zeros(3),
+                mask=np.zeros(3),
                 weight=weight,
                 index1=c1,
                 index2=c2,
@@ -852,7 +852,7 @@ class TestCluster(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, message):
             clusterdistance(
                 data=data,
-                mask=numpy.ones((2, 2), dtype=numpy.int16),
+                mask=np.ones((2, 2), dtype=np.int16),
                 weight=weight,
                 index1=c1,
                 index2=c2,
@@ -889,7 +889,7 @@ class TestCluster(unittest.TestCase):
             clusterdistance(
                 data=data,
                 mask=mask,
-                weight=numpy.zeros((2, 2)),
+                weight=np.zeros((2, 2)),
                 index1=c1,
                 index2=c2,
                 dist="e",
@@ -901,7 +901,7 @@ class TestCluster(unittest.TestCase):
             clusterdistance(
                 data=data,
                 mask=mask,
-                weight=numpy.ones(3, dtype=numpy.int16),
+                weight=np.ones(3, dtype=np.int16),
                 index1=c1,
                 index2=c2,
                 dist="e",
@@ -926,7 +926,7 @@ class TestCluster(unittest.TestCase):
                 data=data,
                 mask=mask,
                 weight=weight,
-                index1=numpy.zeros((2, 2)),
+                index1=np.zeros((2, 2)),
                 index2=c2,
                 dist="e",
                 method="a",
@@ -938,7 +938,7 @@ class TestCluster(unittest.TestCase):
                 data=data,
                 mask=mask,
                 weight=weight,
-                index1=numpy.zeros(2, numpy.int16),
+                index1=np.zeros(2, np.int16),
                 index2=c2,
                 dist="e",
                 method="a",
@@ -963,7 +963,7 @@ class TestCluster(unittest.TestCase):
                 mask=mask,
                 weight=weight,
                 index1=c1,
-                index2=numpy.zeros((2, 2)),
+                index2=np.zeros((2, 2)),
                 dist="e",
                 method="a",
                 transpose=False,
@@ -975,7 +975,7 @@ class TestCluster(unittest.TestCase):
                 mask=mask,
                 weight=weight,
                 index1=c1,
-                index2=numpy.zeros(2, numpy.int16),
+                index2=np.zeros(2, np.int16),
                 dist="e",
                 method="a",
                 transpose=False,
@@ -988,8 +988,8 @@ class TestCluster(unittest.TestCase):
             from Pycluster import clusterdistance
 
         # First data set
-        weight = numpy.array([1, 1, 1, 1, 1])
-        data = numpy.array(
+        weight = np.array([1, 1, 1, 1, 1])
+        data = np.array(
             [
                 [1.1, 2.2, 3.3, 4.4, 5.5],
                 [3.1, 3.2, 1.3, 2.4, 1.5],
@@ -998,7 +998,7 @@ class TestCluster(unittest.TestCase):
             ]
         )
         # fmt: off
-        mask = numpy.array(
+        mask = np.array(
             [
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
@@ -1049,7 +1049,7 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(distance, 8.606, places=3)
 
         # First data set, using transpose=True
-        weight = numpy.array([1, 1, 1, 1])
+        weight = np.array([1, 1, 1, 1])
 
         # Cluster assignments
         c1 = [0, 2]
@@ -1091,8 +1091,8 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(distance, 8.176875, places=3)
 
         # Second data set
-        weight = numpy.array([1, 1])
-        data = numpy.array(
+        weight = np.array([1, 1])
+        data = np.array(
             [
                 [1.1, 1.2],
                 [1.4, 1.3],
@@ -1109,7 +1109,7 @@ class TestCluster(unittest.TestCase):
                 [5.1, 5.2],
             ]
         )
-        mask = numpy.array(
+        mask = np.array(
             [
                 [1, 1],
                 [1, 1],
@@ -1173,8 +1173,8 @@ class TestCluster(unittest.TestCase):
             from Bio.Cluster._cluster import treecluster, Tree
         elif TestCluster.module == "Pycluster":
             from Pycluster._cluster import treecluster, Tree
-        weight = numpy.array([1.0, 1.0, 1.0, 1.0, 1.0])
-        data = numpy.array(
+        weight = np.array([1.0, 1.0, 1.0, 1.0, 1.0])
+        data = np.array(
             [
                 [1.1, 2.2, 3.3, 4.4, 5.5],
                 [3.1, 3.2, 1.3, 2.4, 1.5],
@@ -1183,14 +1183,14 @@ class TestCluster(unittest.TestCase):
             ]
         )
         # fmt: off
-        mask = numpy.array(
+        mask = np.array(
             [
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
             ],
-            numpy.int32,
+            np.int32,
         )
         # fmt: on
 
@@ -1235,7 +1235,7 @@ class TestCluster(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, message):
             treecluster(
                 tree,
-                data=numpy.zeros((3, 3), numpy.int32),
+                data=np.zeros((3, 3), np.int32),
                 mask=mask,
                 weight=weight,
                 transpose=False,
@@ -1247,7 +1247,7 @@ class TestCluster(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, message):
             treecluster(
                 tree,
-                data=numpy.zeros(3),
+                data=np.zeros(3),
                 mask=mask,
                 weight=weight,
                 transpose=False,
@@ -1264,7 +1264,7 @@ class TestCluster(unittest.TestCase):
             from Pycluster._cluster import Node, Tree
 
         nodes = [Node(1, 2, 0.2), Node(0, -1, 0.5), Node(3, -2, 0.6)]
-        indices = numpy.zeros(4, numpy.int32)
+        indices = np.zeros(4, np.int32)
         tree = Tree(nodes)
         message = "^requested number of clusters should be positive$"
         with self.assertRaisesRegex(ValueError, message):
@@ -1277,13 +1277,13 @@ class TestCluster(unittest.TestCase):
             tree.sort(indices, "nothing")
         message = "^incorrect rank 2 \\(expected 1\\)$"
         with self.assertRaisesRegex(ValueError, message):
-            tree.sort(indices, numpy.zeros((5, 5)))
+            tree.sort(indices, np.zeros((5, 5)))
         message = "^order array has incorrect size 2 \\(expected 4\\)$"
         with self.assertRaisesRegex(ValueError, message):
-            tree.sort(indices, numpy.zeros(2))
+            tree.sort(indices, np.zeros(2))
         message = "^order array has incorrect size 6 \\(expected 4\\)$"
         with self.assertRaisesRegex(ValueError, message):
-            tree.sort(indices, numpy.zeros(6))
+            tree.sort(indices, np.zeros(6))
 
     def test_tree(self):
         if TestCluster.module == "Bio.Cluster":
@@ -1339,7 +1339,7 @@ class TestCluster(unittest.TestCase):
 
         # First data set
         weight1 = [1, 1, 1, 1, 1]
-        data1 = numpy.array(
+        data1 = np.array(
             [
                 [1.1, 2.2, 3.3, 4.4, 5.5],
                 [3.1, 3.2, 1.3, 2.4, 1.5],
@@ -1348,7 +1348,7 @@ class TestCluster(unittest.TestCase):
             ]
         )
         # fmt: off
-        mask1 = numpy.array(
+        mask1 = np.array(
             [
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
@@ -1585,7 +1585,7 @@ class TestCluster(unittest.TestCase):
 
         # First data set, using transpose=True
         weight1 = [1, 1, 1, 1]
-        data1 = numpy.array(
+        data1 = np.array(
             [
                 [1.1, 2.2, 3.3, 4.4, 5.5],
                 [3.1, 3.2, 1.3, 2.4, 1.5],
@@ -1594,7 +1594,7 @@ class TestCluster(unittest.TestCase):
             ]
         )
         # fmt: off
-        mask1 = numpy.array(
+        mask1 = np.array(
             [
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
@@ -1848,7 +1848,7 @@ class TestCluster(unittest.TestCase):
 
         # Second data set
         weight2 = [1, 1]
-        data2 = numpy.array(
+        data2 = np.array(
             [
                 [0.8223, 0.9295],
                 [1.4365, 1.3223],
@@ -1865,7 +1865,7 @@ class TestCluster(unittest.TestCase):
                 [5.3934, 5.1823],
             ]
         )
-        mask2 = numpy.array(
+        mask2 = np.array(
             [
                 [1, 1],
                 [1, 1],
@@ -2215,8 +2215,8 @@ class TestCluster(unittest.TestCase):
         elif TestCluster.module == "Pycluster":
             from Pycluster._cluster import somcluster
 
-        weight = numpy.array([1.0, 1.0, 1.0, 1.0, 1.0])
-        data = numpy.array(
+        weight = np.array([1.0, 1.0, 1.0, 1.0, 1.0])
+        data = np.array(
             [
                 [1.1, 2.2, 3.3, 4.4, 5.5],
                 [3.1, 3.2, 1.3, 2.4, 1.5],
@@ -2225,20 +2225,20 @@ class TestCluster(unittest.TestCase):
             ]
         )
         # fmt: off
-        mask = numpy.array(
+        mask = np.array(
             [
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
             ],
-            numpy.int32,
+            np.int32,
         )
         # fmt: on
         nitems, ndata = data.shape
         nxgrid, nygrid = 10, 10
-        clusterids = numpy.ones((nitems, 2), numpy.int32)
-        celldata = numpy.zeros((nxgrid, nygrid, ndata), dtype="d")
+        clusterids = np.ones((nitems, 2), np.int32)
+        celldata = np.zeros((nxgrid, nygrid, ndata), dtype="d")
 
         message = "^unexpected format.$"
         with self.assertRaisesRegex(RuntimeError, message):
@@ -2256,7 +2256,7 @@ class TestCluster(unittest.TestCase):
         message = "^incorrect rank 1 \\(expected 2\\)$"
         with self.assertRaisesRegex(ValueError, message):
             somcluster(
-                clusterids=numpy.ones(nitems, numpy.int32),
+                clusterids=np.ones(nitems, np.int32),
                 celldata=celldata,
                 data=data,
                 mask=mask,
@@ -2269,7 +2269,7 @@ class TestCluster(unittest.TestCase):
         message = "^argument has incorrect data type$"
         with self.assertRaisesRegex(RuntimeError, message):
             somcluster(
-                clusterids=numpy.ones((nitems, 2), numpy.int16),
+                clusterids=np.ones((nitems, 2), np.int16),
                 celldata=celldata,
                 data=data,
                 mask=mask,
@@ -2282,7 +2282,7 @@ class TestCluster(unittest.TestCase):
         message = "^array has 3 columns \\(expected 2\\)$"
         with self.assertRaisesRegex(ValueError, message):
             somcluster(
-                clusterids=numpy.ones((nitems, 3), numpy.int32),
+                clusterids=np.ones((nitems, 3), np.int32),
                 celldata=celldata,
                 data=data,
                 mask=mask,
@@ -2309,7 +2309,7 @@ class TestCluster(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, message):
             somcluster(
                 clusterids=clusterids,
-                celldata=numpy.zeros((nxgrid, nygrid, ndata), dtype=numpy.int32),
+                celldata=np.zeros((nxgrid, nygrid, ndata), dtype=np.int32),
                 data=data,
                 mask=mask,
                 weight=weight,
@@ -2349,7 +2349,7 @@ class TestCluster(unittest.TestCase):
             somcluster(
                 clusterids=clusterids,
                 celldata=celldata,
-                data=numpy.zeros((4, 5), dtype=numpy.int16),
+                data=np.zeros((4, 5), dtype=np.int16),
                 mask=mask,
                 weight=weight,
                 transpose=False,
@@ -2362,7 +2362,7 @@ class TestCluster(unittest.TestCase):
             somcluster(
                 clusterids=clusterids,
                 celldata=celldata,
-                data=numpy.zeros(4),
+                data=np.zeros(4),
                 mask=mask,
                 weight=weight,
                 transpose=False,
@@ -2428,7 +2428,7 @@ class TestCluster(unittest.TestCase):
                 clusterids=clusterids,
                 celldata=celldata,
                 data=data,
-                mask=numpy.array([1, 1, 1]),
+                mask=np.array([1, 1, 1]),
                 weight=weight,
                 transpose=False,
                 inittau=0.02,
@@ -2441,7 +2441,7 @@ class TestCluster(unittest.TestCase):
                 clusterids=clusterids,
                 celldata=celldata,
                 data=data,
-                mask=numpy.array([[1, 1], [1, 1]], dtype=numpy.int16),
+                mask=np.array([[1, 1], [1, 1]], dtype=np.int16),
                 weight=weight,
                 transpose=False,
                 inittau=0.02,
@@ -2481,7 +2481,7 @@ class TestCluster(unittest.TestCase):
                 celldata=celldata,
                 data=data,
                 mask=mask,
-                weight=numpy.zeros((2, 2, 2)),
+                weight=np.zeros((2, 2, 2)),
                 transpose=False,
                 inittau=0.02,
                 niter=100,
@@ -2494,7 +2494,7 @@ class TestCluster(unittest.TestCase):
                 celldata=celldata,
                 data=data,
                 mask=mask,
-                weight=numpy.array([1, 1, 1], dtype=numpy.int16),
+                weight=np.array([1, 1, 1], dtype=np.int16),
                 transpose=False,
                 inittau=0.02,
                 niter=100,
@@ -2548,7 +2548,7 @@ class TestCluster(unittest.TestCase):
 
         # First data set
         weight = [1, 1, 1, 1, 1]
-        data = numpy.array(
+        data = np.array(
             [
                 [1.1, 2.2, 3.3, 4.4, 5.5],
                 [3.1, 3.2, 1.3, 2.4, 1.5],
@@ -2557,7 +2557,7 @@ class TestCluster(unittest.TestCase):
             ]
         )
         # fmt: off
-        mask = numpy.array(
+        mask = np.array(
             [
                 [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1],
@@ -2601,7 +2601,7 @@ class TestCluster(unittest.TestCase):
 
         # Second data set
         weight = [1, 1]
-        data = numpy.array(
+        data = np.array(
             [
                 [1.1, 1.2],
                 [1.4, 1.3],
@@ -2618,7 +2618,7 @@ class TestCluster(unittest.TestCase):
                 [5.1, 5.2],
             ]
         )
-        mask = numpy.array(
+        mask = np.array(
             [
                 [1, 1],
                 [1, 1],
@@ -2658,7 +2658,7 @@ class TestCluster(unittest.TestCase):
         elif TestCluster.module == "Pycluster":
             from Pycluster._cluster import distancematrix
 
-        data = numpy.array(
+        data = np.array(
             [
                 [2.2, 3.3, 4.4],
                 [2.1, 1.4, 5.6],
@@ -2671,7 +2671,7 @@ class TestCluster(unittest.TestCase):
                 [1.7, 8.9, 1.1],
             ]
         )
-        mask = numpy.array(
+        mask = np.array(
             [
                 [1, 1, 1],
                 [1, 1, 1],
@@ -2683,15 +2683,15 @@ class TestCluster(unittest.TestCase):
                 [1, 0, 1],
                 [1, 1, 1],
             ],
-            numpy.int32,
+            np.int32,
         )
-        weight = numpy.array([2.0, 1.0, 0.5])
+        weight = np.array([2.0, 1.0, 0.5])
         message = "^data matrix is empty$"
         with self.assertRaisesRegex(ValueError, message):
             distancematrix(data[:0, :], mask=mask, weight=weight)
         message = "^mask has incorrect rank 1 \\(expected 2\\)$"
         with self.assertRaisesRegex(ValueError, message):
-            distancematrix(data, mask=numpy.zeros(3), weight=weight)
+            distancematrix(data, mask=np.zeros(3), weight=weight)
         message = "^mask has incorrect dimensions \\(4 x 3, expected 9 x 3\\)$"
         with self.assertRaisesRegex(ValueError, message):
             distancematrix(
@@ -2704,13 +2704,13 @@ class TestCluster(unittest.TestCase):
             )
         message = "^incorrect rank 2 \\(expected 1\\)$"
         with self.assertRaisesRegex(ValueError, message):
-            distancematrix(data, mask=mask, weight=numpy.zeros((2, 2)))
+            distancematrix(data, mask=mask, weight=np.zeros((2, 2)))
         message = "^weight has incorrect size 4 \\(expected 3\\)$"
         with self.assertRaisesRegex(ValueError, message):
             distancematrix(
                 data,
                 mask=mask,
-                weight=numpy.zeros(4),
+                weight=np.zeros(4),
                 transpose=False,
                 dist="c",
                 distancematrix=[],
@@ -2723,7 +2723,7 @@ class TestCluster(unittest.TestCase):
         elif TestCluster.module == "Pycluster":
             from Pycluster._cluster import distancematrix, kmedoids
 
-        clusterid = numpy.zeros(10, numpy.int32)
+        clusterid = np.zeros(10, np.int32)
         message = "^failed to parse row 0.$"
         with self.assertRaisesRegex(RuntimeError, message):
             kmedoids([None])
@@ -2732,10 +2732,10 @@ class TestCluster(unittest.TestCase):
             kmedoids([], nclusters=2, npass=1000, clusterid=clusterid)
         message = "^distance matrix is not square.$"
         with self.assertRaisesRegex(ValueError, message):
-            kmedoids(numpy.zeros((2, 3)), npass=1000)
+            kmedoids(np.zeros((2, 3)), npass=1000)
         message = "^distance matrix has incorrect rank 3 \\(expected 1 or 2\\)$"
         with self.assertRaisesRegex(ValueError, message):
-            kmedoids(numpy.zeros((2, 3, 4)), npass=1000)
+            kmedoids(np.zeros((2, 3, 4)), npass=1000)
 
     def test_distancematrix_kmedoids(self):
         if TestCluster.module == "Bio.Cluster":
@@ -2744,7 +2744,7 @@ class TestCluster(unittest.TestCase):
             from Pycluster import distancematrix, kmedoids
 
         # transpose=False
-        data = numpy.array(
+        data = np.array(
             [
                 [2.2, 3.3, 4.4],
                 [2.1, 1.4, 5.6],
@@ -2757,7 +2757,7 @@ class TestCluster(unittest.TestCase):
                 [1.7, 8.9, 1.1],
             ]
         )
-        mask = numpy.array(
+        mask = np.array(
             [
                 [1, 1, 1],
                 [1, 1, 1],
@@ -2771,7 +2771,7 @@ class TestCluster(unittest.TestCase):
             ],
             int,
         )
-        weight = numpy.array([2.0, 1.0, 0.5])
+        weight = np.array([2.0, 1.0, 0.5])
         matrix = distancematrix(data, mask=mask, weight=weight)
 
         self.assertAlmostEqual(matrix[1][0], 1.243, places=3)
@@ -2881,7 +2881,7 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(matrix[8][7], 36.745, places=3)
 
         # transpose=True
-        weight = numpy.array([2.0, 1.0, 0.5, 0.1, 0.9, 3.0, 2.0, 1.5, 0.2])
+        weight = np.array([2.0, 1.0, 0.5, 0.1, 0.9, 3.0, 2.0, 1.5, 0.2])
         matrix = distancematrix(data, mask=mask, weight=weight, transpose=True)
         self.assertEqual(len(matrix), 3)
         for i in range(3):
@@ -2913,22 +2913,22 @@ class TestCluster(unittest.TestCase):
         elif TestCluster.module == "Pycluster":
             from Pycluster._cluster import pca
 
-        data = numpy.zeros((4, 2))
-        columnmean = numpy.zeros(2)
-        pc = numpy.zeros((2, 2), dtype="d")
-        coordinates = numpy.zeros((4, 2), dtype="d")
-        eigenvalues = numpy.zeros(2, dtype="d")
+        data = np.zeros((4, 2))
+        columnmean = np.zeros(2)
+        pc = np.zeros((2, 2), dtype="d")
+        coordinates = np.zeros((4, 2), dtype="d")
+        eigenvalues = np.zeros(2, dtype="d")
 
         message = "^data matrix has unexpected format.$"
         with self.assertRaisesRegex(RuntimeError, message):
             pca([None], columnmean, coordinates, pc, eigenvalues)
         message = "^data matrix has incorrect rank 1 \\(expected 2\\)$"
         with self.assertRaisesRegex(RuntimeError, message):
-            pca(numpy.zeros(3), columnmean, coordinates, pc, eigenvalues)
+            pca(np.zeros(3), columnmean, coordinates, pc, eigenvalues)
         message = "^data matrix has incorrect data type$"
         with self.assertRaisesRegex(RuntimeError, message):
             pca(
-                numpy.zeros((3, 3), dtype=numpy.int16),
+                np.zeros((3, 3), dtype=np.int16),
                 columnmean,
                 coordinates,
                 pc,
@@ -2939,22 +2939,22 @@ class TestCluster(unittest.TestCase):
             pca(data, "nothing", coordinates, pc, eigenvalues)
         message = "^incorrect rank 2 \\(expected 1\\)$"
         with self.assertRaisesRegex(ValueError, message):
-            pca(data, numpy.zeros((2, 2)), coordinates, pc, eigenvalues)
+            pca(data, np.zeros((2, 2)), coordinates, pc, eigenvalues)
         message = "^array has incorrect data type$"
         with self.assertRaisesRegex(RuntimeError, message):
-            pca(data, numpy.ones(3, dtype=numpy.int16), coordinates, pc, eigenvalues)
+            pca(data, np.ones(3, dtype=np.int16), coordinates, pc, eigenvalues)
         message = "^data matrix has unexpected format.$"
         with self.assertRaisesRegex(RuntimeError, message):
             pca(data, columnmean, [None], pc, eigenvalues)
         message = "^data matrix has incorrect rank 1 \\(expected 2\\)$"
         with self.assertRaisesRegex(RuntimeError, message):
-            pca(data, columnmean, numpy.zeros(3), pc, eigenvalues)
+            pca(data, columnmean, np.zeros(3), pc, eigenvalues)
         message = "^data matrix has incorrect data type$"
         with self.assertRaisesRegex(RuntimeError, message):
             pca(
                 data,
                 columnmean,
-                numpy.zeros((3, 3), dtype=numpy.int16),
+                np.zeros((3, 3), dtype=np.int16),
                 pc,
                 eigenvalues,
             )
@@ -2963,14 +2963,14 @@ class TestCluster(unittest.TestCase):
             pca(data, columnmean, coordinates, [None], eigenvalues)
         message = "^data matrix has incorrect rank 1 \\(expected 2\\)$"
         with self.assertRaisesRegex(RuntimeError, message):
-            pca(data, columnmean, coordinates, numpy.zeros(3), eigenvalues)
+            pca(data, columnmean, coordinates, np.zeros(3), eigenvalues)
         message = "^data matrix has incorrect data type$"
         with self.assertRaisesRegex(RuntimeError, message):
             pca(
                 data,
                 columnmean,
                 coordinates,
-                numpy.zeros((3, 3), dtype=numpy.int16),
+                np.zeros((3, 3), dtype=np.int16),
                 eigenvalues,
             )
         message = "^unexpected format.$"
@@ -2978,10 +2978,10 @@ class TestCluster(unittest.TestCase):
             pca(data, columnmean, coordinates, pc, "nothing")
         message = "^incorrect rank 2 \\(expected 1\\)$"
         with self.assertRaisesRegex(ValueError, message):
-            pca(data, columnmean, coordinates, pc, numpy.zeros((2, 2)))
+            pca(data, columnmean, coordinates, pc, np.zeros((2, 2)))
         message = "^array has incorrect data type$"
         with self.assertRaisesRegex(RuntimeError, message):
-            pca(data, columnmean, coordinates, pc, numpy.ones(3, dtype=numpy.int16))
+            pca(data, columnmean, coordinates, pc, np.ones(3, dtype=np.int16))
 
     def test_pca(self):
         if TestCluster.module == "Bio.Cluster":
@@ -2989,7 +2989,7 @@ class TestCluster(unittest.TestCase):
         elif TestCluster.module == "Pycluster":
             from Pycluster import pca
 
-        data = numpy.array(
+        data = np.array(
             [
                 [3.1, 1.2],
                 [1.4, 1.3],
@@ -3043,7 +3043,7 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(eigenvalues[0], 9.3110471246032844)
         self.assertAlmostEqual(eigenvalues[1], 1.4437456297481428)
 
-        data = numpy.array(
+        data = np.array(
             [
                 [2.3, 4.5, 1.2, 6.7, 5.3, 7.1],
                 [1.3, 6.5, 2.2, 5.7, 6.2, 9.1],
