@@ -9,7 +9,7 @@ import unittest
 
 from Bio import Align
 
-import numpy
+import numpy as np
 
 
 class Align_hhr_2uvo_hhblits(unittest.TestCase):
@@ -104,48 +104,48 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  0, 171],
-                             [  0, 171]])
+                np.array([[  0, 171],
+                          [  0, 171]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
-              'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
-              'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
-              'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G',
-              'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C',
-              'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S',
-              'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
-              'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
-              'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K',
-              'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N',
-              'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G',
-              'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C',
-              'D', 'G'],
-             ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
-              'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
-              'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
-              'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G',
-              'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C',
-              'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S',
-              'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
-              'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
-              'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K',
-              'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N',
-              'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G',
-              'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C',
-              'D', 'G']], dtype='U')
+np.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
+           'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
+           'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
+           'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G',
+           'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C',
+           'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S',
+           'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
+           'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
+           'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K',
+           'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N',
+           'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G',
+           'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C',
+           'D', 'G'],
+          ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
+           'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
+           'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
+           'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G',
+           'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C',
+           'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S',
+           'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
+           'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
+           'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K',
+           'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N',
+           'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G',
+           'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C',
+           'D', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -216,47 +216,47 @@ numpy.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  48,  48,  90,  90, 131, 131, 163],
-                             [  1,  48,  50,  92,  94, 135, 137, 169]])
+                np.array([[  1,  48,  48,  90,  90, 131, 131, 163],
+                          [  1,  48,  50,  92,  94, 135, 137, 169]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
-              'N', 'N', 'C', 'C', 'X', 'X', 'W', 'E', 'S', 'C', 'G', 'S', 'G',
-              'G', 'Y', 'X', 'C', 'G', 'E', 'G', 'C', 'N', 'L', 'G', 'A', 'C',
-              'Q', 'X', 'G', 'X', 'P', 'C', 'X', 'X', '-', '-', 'P', 'G', 'S',
-              'V', 'C', 'T', 'N', 'L', 'H', 'C', 'C', 'A', 'R', 'G', 'G', 'H',
-              'C', 'G', 'M', 'G', 'S', 'G', 'Y', 'C', 'G', 'X', 'G', 'C', 'X',
-              'G', 'G', 'A', 'C', 'X', 'A', 'D', 'I', 'X', 'C', 'G', 'X', 'G',
-              '-', '-', 'X', 'X', 'X', 'C', 'P', 'T', 'D', 'S', 'C', 'C', 'G',
-              'G', 'W', 'G', 'X', 'C', 'G', 'N', 'G', 'X', 'E', 'F', 'C', 'G',
-              'X', 'G', 'C', 'X', 'V', 'G', 'G', 'C', 'A', 'A', 'X', 'S', 'P',
-              'C', 'G', 'X', 'P', '-', '-', 'G', 'S', 'X', 'C', 'T', 'L', 'D',
-              'K', 'C', 'C', 'S', 'G', 'X', 'G', 'A', 'C', 'X', 'S', 'G', 'S',
-              'G', 'G', 'C', 'G', 'X', 'G', 'C', 'X', 'A', 'G', 'G', 'C'],
-             ['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G',
-              'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A', 'C',
-              'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A',
-              'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y',
-              'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q',
-              'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q',
-              'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
-              'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G',
-              'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P',
-              'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N',
-              'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P',
-              'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C']],
-            dtype='U')
+np.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
+           'N', 'N', 'C', 'C', 'X', 'X', 'W', 'E', 'S', 'C', 'G', 'S', 'G',
+           'G', 'Y', 'X', 'C', 'G', 'E', 'G', 'C', 'N', 'L', 'G', 'A', 'C',
+           'Q', 'X', 'G', 'X', 'P', 'C', 'X', 'X', '-', '-', 'P', 'G', 'S',
+           'V', 'C', 'T', 'N', 'L', 'H', 'C', 'C', 'A', 'R', 'G', 'G', 'H',
+           'C', 'G', 'M', 'G', 'S', 'G', 'Y', 'C', 'G', 'X', 'G', 'C', 'X',
+           'G', 'G', 'A', 'C', 'X', 'A', 'D', 'I', 'X', 'C', 'G', 'X', 'G',
+           '-', '-', 'X', 'X', 'X', 'C', 'P', 'T', 'D', 'S', 'C', 'C', 'G',
+           'G', 'W', 'G', 'X', 'C', 'G', 'N', 'G', 'X', 'E', 'F', 'C', 'G',
+           'X', 'G', 'C', 'X', 'V', 'G', 'G', 'C', 'A', 'A', 'X', 'S', 'P',
+           'C', 'G', 'X', 'P', '-', '-', 'G', 'S', 'X', 'C', 'T', 'L', 'D',
+           'K', 'C', 'C', 'S', 'G', 'X', 'G', 'A', 'C', 'X', 'S', 'G', 'S',
+           'G', 'G', 'C', 'G', 'X', 'G', 'C', 'X', 'A', 'G', 'G', 'C'],
+          ['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G',
+           'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A', 'C',
+           'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A',
+           'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y',
+           'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q',
+           'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q',
+           'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
+           'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G',
+           'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P',
+           'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N',
+           'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P',
+           'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -327,40 +327,40 @@ numpy.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  39,  39,  40,  40,  80,  80,  81,  81, 121],
-                             [  0,  38,  39,  40,  41,  81,  82,  83,  84, 124]])
+                np.array([[  1,  39,  39,  40,  40,  80,  80,  81,  81, 121],
+                          [  0,  38,  39,  40,  41,  81,  82,  83,  84, 124]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
-              'D', 'G', 'Y', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T',
-              'T', 'E', 'E', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'S', 'Q', '-',
-              'C', '-', 'D', 'Y', 'N', 'R', 'C', 'G', 'K', 'E', 'F', 'G', 'G',
-              'K', 'E', 'C', 'H', 'D', 'E', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G',
-              'W', 'C', 'G', 'N', 'S', 'D', 'G', 'H', 'C', 'G', 'E', 'G', 'C',
-              'Q', 'S', 'Q', '-', 'C', '-', 'S', 'Y', 'W', 'R', 'C', 'G', 'K',
-              'D', 'F', 'G', 'G', 'R', 'L', 'C', 'T', 'E', 'D', 'M', 'C', 'C',
-              'S', 'Q', 'Y', 'G', 'W', 'C', 'G', 'L', 'T', 'D', 'D', 'H', 'C',
-              'E', 'D', 'G', 'C', 'Q', 'S', 'Q'],
-             ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
-              'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
-              'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
-              'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G',
-              'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C',
-              'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S',
-              'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
-              'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
-              'G', 'G', 'G', 'C', 'Q', 'S', 'G']], dtype='U')
+np.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
+           'D', 'G', 'Y', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T',
+           'T', 'E', 'E', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'S', 'Q', '-',
+           'C', '-', 'D', 'Y', 'N', 'R', 'C', 'G', 'K', 'E', 'F', 'G', 'G',
+           'K', 'E', 'C', 'H', 'D', 'E', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G',
+           'W', 'C', 'G', 'N', 'S', 'D', 'G', 'H', 'C', 'G', 'E', 'G', 'C',
+           'Q', 'S', 'Q', '-', 'C', '-', 'S', 'Y', 'W', 'R', 'C', 'G', 'K',
+           'D', 'F', 'G', 'G', 'R', 'L', 'C', 'T', 'E', 'D', 'M', 'C', 'C',
+           'S', 'Q', 'Y', 'G', 'W', 'C', 'G', 'L', 'T', 'D', 'D', 'H', 'C',
+           'E', 'D', 'G', 'C', 'Q', 'S', 'Q'],
+          ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
+           'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
+           'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
+           'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G',
+           'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C',
+           'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S',
+           'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
+           'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
+           'G', 'G', 'G', 'C', 'Q', 'S', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -431,40 +431,40 @@ numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  39,  39,  40,  40,  80,  80,  81,  81, 121],
-                             [ 43,  81,  82,  83,  84, 124, 125, 126, 127, 167]])
+                np.array([[  1,  39,  39,  40,  40,  80,  80,  81,  81, 121],
+                          [ 43,  81,  82,  83,  84, 124, 125, 126, 127, 167]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
-              'D', 'G', 'Y', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T',
-              'T', 'E', 'E', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'S', 'Q', '-',
-              'C', '-', 'D', 'Y', 'N', 'R', 'C', 'G', 'K', 'E', 'F', 'G', 'G',
-              'K', 'E', 'C', 'H', 'D', 'E', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G',
-              'W', 'C', 'G', 'N', 'S', 'D', 'G', 'H', 'C', 'G', 'E', 'G', 'C',
-              'Q', 'S', 'Q', '-', 'C', '-', 'S', 'Y', 'W', 'R', 'C', 'G', 'K',
-              'D', 'F', 'G', 'G', 'R', 'L', 'C', 'T', 'E', 'D', 'M', 'C', 'C',
-              'S', 'Q', 'Y', 'G', 'W', 'C', 'G', 'L', 'T', 'D', 'D', 'H', 'C',
-              'E', 'D', 'G', 'C', 'Q', 'S', 'Q'],
-             ['K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T',
-              'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F',
-              'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P',
-              'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
-              'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G',
-              'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C',
-              'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K',
-              'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C',
-              'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C',
-              'G', 'A', 'G', 'C', 'Q', 'S', 'G']], dtype='U')
+np.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
+           'D', 'G', 'Y', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T',
+           'T', 'E', 'E', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'S', 'Q', '-',
+           'C', '-', 'D', 'Y', 'N', 'R', 'C', 'G', 'K', 'E', 'F', 'G', 'G',
+           'K', 'E', 'C', 'H', 'D', 'E', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G',
+           'W', 'C', 'G', 'N', 'S', 'D', 'G', 'H', 'C', 'G', 'E', 'G', 'C',
+           'Q', 'S', 'Q', '-', 'C', '-', 'S', 'Y', 'W', 'R', 'C', 'G', 'K',
+           'D', 'F', 'G', 'G', 'R', 'L', 'C', 'T', 'E', 'D', 'M', 'C', 'C',
+           'S', 'Q', 'Y', 'G', 'W', 'C', 'G', 'L', 'T', 'D', 'D', 'H', 'C',
+           'E', 'D', 'G', 'C', 'Q', 'S', 'Q'],
+          ['K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T',
+           'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F',
+           'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P',
+           'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
+           'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G',
+           'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C',
+           'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K',
+           'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C',
+           'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C',
+           'G', 'A', 'G', 'C', 'Q', 'S', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -535,40 +535,40 @@ numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1, 126],
-                             [ 44, 169]])
+                np.array([[  1, 126],
+                          [ 44, 169]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G',
-              'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A', 'C',
-              'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A',
-              'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y',
-              'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q',
-              'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q',
-              'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
-              'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G',
-              'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C'],
-             ['R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N',
-              'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G',
-              'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C',
-              'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K',
-              'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F',
-              'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q',
-              'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K', 'D',
-              'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C', 'S',
-              'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C', 'G',
-              'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C']], dtype='U')
+np.array([['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G',
+           'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A', 'C',
+           'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A',
+           'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y',
+           'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q',
+           'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q',
+           'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
+           'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G',
+           'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C'],
+          ['R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N',
+           'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G',
+           'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C',
+           'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K',
+           'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F',
+           'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q',
+           'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K', 'D',
+           'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C', 'S',
+           'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C', 'G',
+           'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C']], dtype='U')
                 # fmt: on
             )
         )
@@ -635,40 +635,40 @@ numpy.array([['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  2,  48,  48,  90,  90, 123],
-                             [ 45,  91,  93, 135, 137, 170]])
+                np.array([[  2,  48,  48,  90,  90, 123],
+                          [ 45,  91,  93, 135, 137, 170]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T', 'N',
-              'N', 'C', 'C', 'X', 'X', 'W', 'E', 'S', 'C', 'G', 'S', 'G', 'G',
-              'Y', 'X', 'C', 'G', 'E', 'G', 'C', 'N', 'L', 'G', 'A', 'C', 'Q',
-              'X', 'G', 'X', 'P', 'C', 'X', 'X', '-', '-', 'P', 'G', 'S', 'V',
-              'C', 'T', 'N', 'L', 'H', 'C', 'C', 'A', 'R', 'G', 'G', 'H', 'C',
-              'G', 'M', 'G', 'S', 'G', 'Y', 'C', 'G', 'X', 'G', 'C', 'X', 'G',
-              'G', 'A', 'C', 'X', 'A', 'D', 'I', 'X', 'C', 'G', 'X', 'G', '-',
-              '-', 'X', 'X', 'X', 'C', 'P', 'T', 'D', 'S', 'C', 'C', 'G', 'G',
-              'W', 'G', 'X', 'C', 'G', 'N', 'G', 'X', 'E', 'F', 'C', 'G', 'X',
-              'G', 'C', 'X', 'V', 'G', 'G', 'C', 'A'],
-             ['C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N', 'N',
-              'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A',
-              'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C', 'R',
-              'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L',
-              'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C',
-              'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S',
-              'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K', 'D', 'A',
-              'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C', 'S', 'K',
-              'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C', 'G', 'A',
-              'G', 'C', 'Q', 'S', 'G', 'G', 'C', 'D']], dtype='U')
+np.array([['X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T', 'N',
+           'N', 'C', 'C', 'X', 'X', 'W', 'E', 'S', 'C', 'G', 'S', 'G', 'G',
+           'Y', 'X', 'C', 'G', 'E', 'G', 'C', 'N', 'L', 'G', 'A', 'C', 'Q',
+           'X', 'G', 'X', 'P', 'C', 'X', 'X', '-', '-', 'P', 'G', 'S', 'V',
+           'C', 'T', 'N', 'L', 'H', 'C', 'C', 'A', 'R', 'G', 'G', 'H', 'C',
+           'G', 'M', 'G', 'S', 'G', 'Y', 'C', 'G', 'X', 'G', 'C', 'X', 'G',
+           'G', 'A', 'C', 'X', 'A', 'D', 'I', 'X', 'C', 'G', 'X', 'G', '-',
+           '-', 'X', 'X', 'X', 'C', 'P', 'T', 'D', 'S', 'C', 'C', 'G', 'G',
+           'W', 'G', 'X', 'C', 'G', 'N', 'G', 'X', 'E', 'F', 'C', 'G', 'X',
+           'G', 'C', 'X', 'V', 'G', 'G', 'C', 'A'],
+          ['C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N', 'N',
+           'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A',
+           'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C', 'R',
+           'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L',
+           'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C',
+           'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S',
+           'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K', 'D', 'A',
+           'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C', 'S', 'K',
+           'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C', 'G', 'A',
+           'G', 'C', 'Q', 'S', 'G', 'G', 'C', 'D']], dtype='U')
                 # fmt: on
             )
         )
@@ -735,34 +735,34 @@ numpy.array([['X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T', 'N',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  39,  39,  79],
-                             [ 43,  81,  83, 123]])
+                np.array([[  1,  39,  39,  79],
+                          [ 43,  81,  83, 123]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['P', 'E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P',
-              'N', 'G', 'K', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T',
-              'T', 'D', 'N', 'Y', 'C', 'G', 'Q', 'G', 'C', 'Q', 'S', 'Q', '-',
-              '-', 'C', 'D', 'Y', 'W', 'R', 'C', 'G', 'R', 'D', 'F', 'G', 'G',
-              'R', 'L', 'C', 'E', 'E', 'D', 'M', 'C', 'C', 'S', 'K', 'Y', 'G',
-              'W', 'C', 'G', 'Y', 'S', 'D', 'D', 'H', 'C', 'E', 'D', 'G', 'C',
-              'Q', 'S'],
-             ['K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T',
-              'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F',
-              'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P',
-              'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
-              'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G',
-              'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C',
-              'Q', 'S']], dtype='U')
+np.array([['P', 'E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P',
+           'N', 'G', 'K', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T',
+           'T', 'D', 'N', 'Y', 'C', 'G', 'Q', 'G', 'C', 'Q', 'S', 'Q', '-',
+           '-', 'C', 'D', 'Y', 'W', 'R', 'C', 'G', 'R', 'D', 'F', 'G', 'G',
+           'R', 'L', 'C', 'E', 'E', 'D', 'M', 'C', 'C', 'S', 'K', 'Y', 'G',
+           'W', 'C', 'G', 'Y', 'S', 'D', 'D', 'H', 'C', 'E', 'D', 'G', 'C',
+           'Q', 'S'],
+          ['K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T',
+           'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F',
+           'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P',
+           'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
+           'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G',
+           'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C',
+           'Q', 'S']], dtype='U')
                 # fmt: on
             )
         )
@@ -829,34 +829,34 @@ numpy.array([['P', 'E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 0, 38, 38, 40, 44, 80, 81, 86],
-                             [ 0, 38, 39, 41, 41, 77, 77, 82]])
+                np.array([[ 0, 38, 38, 40, 44, 80, 81, 86],
+                          [ 0, 38, 39, 41, 41, 77, 77, 82]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P',
-              'G', 'L', 'R', 'C', 'C', 'S', 'I', 'W', 'G', 'W', 'C', 'G', 'D',
-              'S', 'E', 'P', 'Y', 'C', 'G', 'R', 'T', 'C', 'E', 'N', 'K', '-',
-              'C', 'W', 'S', 'G', 'E', 'R', 'S', 'D', 'H', 'R', 'C', 'G', 'A',
-              'A', 'V', 'G', 'N', 'P', 'P', 'C', 'G', 'Q', 'D', 'R', 'C', 'C',
-              'S', 'V', 'H', 'G', 'W', 'C', 'G', 'G', 'G', 'N', 'D', 'Y', 'C',
-              'S', 'G', 'G', 'N', 'C', 'Q', 'Y', 'R', 'C'],
-             ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
-              'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
-              'C', 'W', '-', '-', '-', '-', 'T', 'S', 'K', 'R', 'C', 'G', 'S',
-              'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C',
-              'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C',
-              'G', 'A', 'G', '-', 'C', 'Q', 'G', 'G', 'P']], dtype='U')
+np.array([['E', 'R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P',
+           'G', 'L', 'R', 'C', 'C', 'S', 'I', 'W', 'G', 'W', 'C', 'G', 'D',
+           'S', 'E', 'P', 'Y', 'C', 'G', 'R', 'T', 'C', 'E', 'N', 'K', '-',
+           'C', 'W', 'S', 'G', 'E', 'R', 'S', 'D', 'H', 'R', 'C', 'G', 'A',
+           'A', 'V', 'G', 'N', 'P', 'P', 'C', 'G', 'Q', 'D', 'R', 'C', 'C',
+           'S', 'V', 'H', 'G', 'W', 'C', 'G', 'G', 'G', 'N', 'D', 'Y', 'C',
+           'S', 'G', 'G', 'N', 'C', 'Q', 'Y', 'R', 'C'],
+          ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
+           'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
+           'C', 'W', '-', '-', '-', '-', 'T', 'S', 'K', 'R', 'C', 'G', 'S',
+           'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C',
+           'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C',
+           'G', 'A', 'G', '-', 'C', 'Q', 'G', 'G', 'P']], dtype='U')
                 # fmt: on
             )
         )
@@ -923,34 +923,34 @@ numpy.array([['E', 'R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  38,  38,  40,  44,  80,  81,  85],
-                             [ 44,  81,  82,  84,  84, 120, 120, 124]])
+                np.array([[  1,  38,  38,  40,  44,  80,  81,  85],
+                          [ 44,  81,  82,  84,  84, 120, 120, 124]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P', 'G',
-              'L', 'R', 'C', 'C', 'S', 'I', 'W', 'G', 'W', 'C', 'G', 'D', 'S',
-              'E', 'P', 'Y', 'C', 'G', 'R', 'T', 'C', 'E', 'N', 'K', '-', 'C',
-              'W', 'S', 'G', 'E', 'R', 'S', 'D', 'H', 'R', 'C', 'G', 'A', 'A',
-              'V', 'G', 'N', 'P', 'P', 'C', 'G', 'Q', 'D', 'R', 'C', 'C', 'S',
-              'V', 'H', 'G', 'W', 'C', 'G', 'G', 'G', 'N', 'D', 'Y', 'C', 'S',
-              'G', 'G', 'N', 'C', 'Q', 'Y', 'R'],
-             ['R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N',
-              'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G',
-              'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C',
-              'R', '-', '-', '-', '-', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q',
-              'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
-              'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G',
-              'G', 'G', '-', 'C', 'Q', 'S', 'G']], dtype='U')
+np.array([['R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P', 'G',
+           'L', 'R', 'C', 'C', 'S', 'I', 'W', 'G', 'W', 'C', 'G', 'D', 'S',
+           'E', 'P', 'Y', 'C', 'G', 'R', 'T', 'C', 'E', 'N', 'K', '-', 'C',
+           'W', 'S', 'G', 'E', 'R', 'S', 'D', 'H', 'R', 'C', 'G', 'A', 'A',
+           'V', 'G', 'N', 'P', 'P', 'C', 'G', 'Q', 'D', 'R', 'C', 'C', 'S',
+           'V', 'H', 'G', 'W', 'C', 'G', 'G', 'G', 'N', 'D', 'Y', 'C', 'S',
+           'G', 'G', 'N', 'C', 'Q', 'Y', 'R'],
+          ['R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N',
+           'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G',
+           'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C',
+           'R', '-', '-', '-', '-', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q',
+           'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
+           'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G',
+           'G', 'G', '-', 'C', 'Q', 'S', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -1017,34 +1017,34 @@ numpy.array([['R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  2,  39,  39,  40,  40,  80],
-                             [ 87, 124, 125, 126, 127, 167]])
+                np.array([[  2,  39,  39,  40,  40,  80],
+                          [ 87, 124, 125, 126, 127, 167]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P', 'N',
-              'G', 'K', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T', 'T',
-              'D', 'N', 'Y', 'C', 'G', 'Q', 'G', 'C', 'Q', 'S', 'Q', '-', 'C',
-              '-', 'D', 'Y', 'W', 'R', 'C', 'G', 'R', 'D', 'F', 'G', 'G', 'R',
-              'L', 'C', 'E', 'E', 'D', 'M', 'C', 'C', 'S', 'K', 'Y', 'G', 'W',
-              'C', 'G', 'Y', 'S', 'D', 'D', 'H', 'C', 'E', 'D', 'G', 'C', 'Q',
-              'S', 'Q'],
-             ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
-              'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C',
-              'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R',
-              'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S',
-              'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q',
-              'S', 'G']], dtype='U')
+np.array([['E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P', 'N',
+           'G', 'K', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T', 'T',
+           'D', 'N', 'Y', 'C', 'G', 'Q', 'G', 'C', 'Q', 'S', 'Q', '-', 'C',
+           '-', 'D', 'Y', 'W', 'R', 'C', 'G', 'R', 'D', 'F', 'G', 'G', 'R',
+           'L', 'C', 'E', 'E', 'D', 'M', 'C', 'C', 'S', 'K', 'Y', 'G', 'W',
+           'C', 'G', 'Y', 'S', 'D', 'D', 'H', 'C', 'E', 'D', 'G', 'C', 'Q',
+           'S', 'Q'],
+          ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
+           'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C',
+           'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R',
+           'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S',
+           'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q',
+           'S', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -1099,27 +1099,27 @@ numpy.array([['E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P', 'N',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  33,  35,  40],
-                             [ 87, 119, 119, 124]])
+                np.array([[  1,  33,  35,  40],
+                          [ 87, 119, 119, 124]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'D',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'W', 'C', 'G', 'S', 'T',
-              'D', 'E', 'Y', 'C', 'S', 'P', 'D', 'H', 'N', 'C', 'Q', 'S', 'N'],
-             ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
-              'S', 'E', 'F', 'C', 'G', 'G', '-', '-', 'G', 'C', 'Q', 'S', 'G']],
-            dtype='U')
+np.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'D',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'W', 'C', 'G', 'S', 'T',
+           'D', 'E', 'Y', 'C', 'S', 'P', 'D', 'H', 'N', 'C', 'Q', 'S', 'N'],
+          ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
+           'S', 'E', 'F', 'C', 'G', 'G', '-', '-', 'G', 'C', 'Q', 'S', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -1174,27 +1174,27 @@ numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'D',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 0,  5,  5, 32, 33, 38],
-                             [ 0,  5,  6, 33, 33, 38]])
+                np.array([[ 0,  5,  5, 32, 33, 38],
+                          [ 0,  5,  6, 33, 33, 38]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'T', 'C', 'A', 'S', '-', 'R', 'C', 'P', 'R', 'P', 'C', 'N',
-              'A', 'G', 'L', 'C', 'C', 'S', 'I', 'Y', 'G', 'Y', 'C', 'G', 'S',
-              'G', 'A', 'A', 'Y', 'C', 'G', 'A', 'G', 'N', 'C', 'R', 'C', 'Q'],
-             ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
-              'G', 'G', 'D', 'Y', 'C', 'G', 'K', '-', 'G', 'C', 'Q', 'N', 'G']],
-            dtype='U')
+np.array([['E', 'T', 'C', 'A', 'S', '-', 'R', 'C', 'P', 'R', 'P', 'C', 'N',
+           'A', 'G', 'L', 'C', 'C', 'S', 'I', 'Y', 'G', 'Y', 'C', 'G', 'S',
+           'G', 'A', 'A', 'Y', 'C', 'G', 'A', 'G', 'N', 'C', 'R', 'C', 'Q'],
+          ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
+           'G', 'G', 'D', 'Y', 'C', 'G', 'K', '-', 'G', 'C', 'Q', 'N', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -1249,27 +1249,27 @@ numpy.array([['E', 'T', 'C', 'A', 'S', '-', 'R', 'C', 'P', 'R', 'P', 'C', 'N',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,   5,   5,  33,  34,  38],
-                             [ 87,  91,  92, 120, 120, 124]])
+                np.array([[  1,   5,   5,  33,  34,  38],
+                          [ 87,  91,  92, 120, 120, 124]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'C', 'A', 'S', '-', 'R', 'C', 'P', 'R', 'P', 'C', 'N', 'A',
-              'G', 'L', 'C', 'C', 'S', 'I', 'Y', 'G', 'Y', 'C', 'G', 'S', 'G',
-              'A', 'A', 'Y', 'C', 'G', 'A', 'G', 'N', 'C', 'R', 'C', 'Q'],
-             ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
-              'S', 'E', 'F', 'C', 'G', 'G', 'G', '-', 'C', 'Q', 'S', 'G']],
-            dtype='U')
+np.array([['T', 'C', 'A', 'S', '-', 'R', 'C', 'P', 'R', 'P', 'C', 'N', 'A',
+           'G', 'L', 'C', 'C', 'S', 'I', 'Y', 'G', 'Y', 'C', 'G', 'S', 'G',
+           'A', 'A', 'Y', 'C', 'G', 'A', 'G', 'N', 'C', 'R', 'C', 'Q'],
+          ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
+           'S', 'E', 'F', 'C', 'G', 'G', 'G', '-', 'C', 'Q', 'S', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -1324,28 +1324,28 @@ numpy.array([['T', 'C', 'A', 'S', '-', 'R', 'C', 'P', 'R', 'P', 'C', 'N', 'A',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 0, 33, 35, 40],
-                             [ 0, 33, 33, 38]])
+                np.array([[ 0, 33, 35, 40],
+                          [ 0, 33, 33, 38]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
-              'D', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'W', 'C', 'G', 'S',
-              'T', 'D', 'E', 'Y', 'C', 'S', 'P', 'D', 'H', 'N', 'C', 'Q', 'S',
-              'N'],
-             ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
-              'G', 'G', 'D', 'Y', 'C', 'G', 'K', '-', '-', 'G', 'C', 'Q', 'N',
-              'G']], dtype='U')
+np.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
+           'D', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'W', 'C', 'G', 'S',
+           'T', 'D', 'E', 'Y', 'C', 'S', 'P', 'D', 'H', 'N', 'C', 'Q', 'S',
+           'N'],
+          ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
+           'G', 'G', 'D', 'Y', 'C', 'G', 'K', '-', '-', 'G', 'C', 'Q', 'N',
+           'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -1400,27 +1400,27 @@ numpy.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 3, 40],
-                             [ 1, 38]])
+                np.array([[ 3, 40],
+                          [ 1, 38]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P', 'G',
-              'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'W', 'C', 'A', 'N', 'T',
-              'P', 'E', 'Y', 'C', 'G', 'S', 'G', 'C', 'Q', 'S', 'Q'],
-             ['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G',
-              'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G']],
-            dtype='U')
+np.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P', 'G',
+           'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'W', 'C', 'A', 'N', 'T',
+           'P', 'E', 'Y', 'C', 'G', 'S', 'G', 'C', 'Q', 'S', 'Q'],
+          ['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G',
+           'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -1475,27 +1475,27 @@ numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  2,  35,  36,  40],
-                             [ 87, 120, 120, 124]])
+                np.array([[  2,  35,  36,  40],
+                          [ 87, 120, 120, 124]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P', 'N',
-              'C', 'L', 'C', 'C', 'G', 'K', 'Y', 'G', 'F', 'C', 'G', 'S', 'G',
-              'D', 'A', 'Y', 'C', 'G', 'A', 'G', 'S', 'C', 'Q', 'S', 'Q'],
-             ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
-              'S', 'E', 'F', 'C', 'G', 'G', 'G', '-', 'C', 'Q', 'S', 'G']],
-            dtype='U')
+np.array([['R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P', 'N',
+           'C', 'L', 'C', 'C', 'G', 'K', 'Y', 'G', 'F', 'C', 'G', 'S', 'G',
+           'D', 'A', 'Y', 'C', 'G', 'A', 'G', 'S', 'C', 'Q', 'S', 'Q'],
+          ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
+           'S', 'E', 'F', 'C', 'G', 'G', 'G', '-', 'C', 'Q', 'S', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -1550,27 +1550,27 @@ numpy.array([['R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P', 'N',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  2,  40],
-                             [ 86, 124]])
+                np.array([[  2,  40],
+                          [ 86, 124]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P',
-              'G', 'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'W', 'C', 'A', 'N',
-              'T', 'P', 'E', 'Y', 'C', 'G', 'S', 'G', 'C', 'Q', 'S', 'Q'],
-             ['I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L',
-              'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G']],
-            dtype='U')
+np.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P',
+           'G', 'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'W', 'C', 'A', 'N',
+           'T', 'P', 'E', 'Y', 'C', 'G', 'S', 'G', 'C', 'Q', 'S', 'Q'],
+          ['I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L',
+           'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -1625,27 +1625,27 @@ numpy.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 1, 35, 36, 40],
-                             [ 0, 34, 34, 38]])
+                np.array([[ 1, 35, 36, 40],
+                          [ 0, 34, 34, 38]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['Q', 'R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P',
-              'N', 'C', 'L', 'C', 'C', 'G', 'K', 'Y', 'G', 'F', 'C', 'G', 'S',
-              'G', 'D', 'A', 'Y', 'C', 'G', 'A', 'G', 'S', 'C', 'Q', 'S', 'Q'],
-             ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
-              'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', '-', 'C', 'Q', 'N', 'G']],
-            dtype='U')
+np.array([['Q', 'R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P',
+           'N', 'C', 'L', 'C', 'C', 'G', 'K', 'Y', 'G', 'F', 'C', 'G', 'S',
+           'G', 'D', 'A', 'Y', 'C', 'G', 'A', 'G', 'S', 'C', 'Q', 'S', 'Q'],
+          ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
+           'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', '-', 'C', 'Q', 'N', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -1698,26 +1698,26 @@ numpy.array([['Q', 'R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 2, 12, 12, 34],
-                             [41, 51, 53, 75]])
+                np.array([[ 2, 12, 12, 34],
+                          [41, 51, 53, 75]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G',
-              'C', 'R', 'G', 'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C',
-              'G', 'S', 'G', 'P', 'K', 'Y', 'C', 'A'],
-             ['T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T',
-              'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C',
-              'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G']], dtype='U')
+np.array([['P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G',
+           'C', 'R', 'G', 'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C',
+           'G', 'S', 'G', 'P', 'K', 'Y', 'C', 'A'],
+          ['T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T',
+           'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C',
+           'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -1770,26 +1770,26 @@ numpy.array([['P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  2,  12,  12,  34],
-                             [ 84,  94,  96, 118]])
+                np.array([[  2,  12,  12,  34],
+                          [ 84,  94,  96, 118]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G',
-              'C', 'R', 'G', 'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C',
-              'G', 'S', 'G', 'P', 'K', 'Y', 'C', 'A'],
-             ['A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L',
-              'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C',
-              'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G']], dtype='U')
+np.array([['P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G',
+           'C', 'R', 'G', 'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C',
+           'G', 'S', 'G', 'P', 'K', 'Y', 'C', 'A'],
+          ['A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L',
+           'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C',
+           'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -1840,25 +1840,25 @@ numpy.array([['P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  5,  30],
-                             [ 94, 119]])
+                np.array([[  5,  30],
+                          [ 94, 119]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C', 'S', 'Q', 'F',
-              'G', 'Y', 'C', 'G', 'K', 'G', 'P', 'K', 'Y', 'C', 'G', 'R'],
-             ['G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W',
-              'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G']],
-            dtype='U')
+np.array([['R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C', 'S', 'Q', 'F',
+           'G', 'Y', 'C', 'G', 'K', 'G', 'P', 'K', 'Y', 'C', 'G', 'R'],
+          ['G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W',
+           'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -1909,26 +1909,26 @@ numpy.array([['R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C', 'S', 'Q', 'F',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 3, 30],
-                             [ 6, 33]])
+                np.array([[ 3, 30],
+                          [ 6, 33]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C', 'S',
-              'Q', 'F', 'G', 'Y', 'C', 'G', 'K', 'G', 'P', 'K', 'Y', 'C', 'G',
-              'R'],
-             ['G', 'S', 'N', 'M', 'E', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
-              'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G', 'G', 'D', 'Y', 'C', 'G',
-              'K']], dtype='U')
+np.array([['C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C', 'S',
+           'Q', 'F', 'G', 'Y', 'C', 'G', 'K', 'G', 'P', 'K', 'Y', 'C', 'G',
+           'R'],
+          ['G', 'S', 'N', 'M', 'E', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
+           'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G', 'G', 'D', 'Y', 'C', 'G',
+           'K']], dtype='U')
                 # fmt: on
             )
         )
@@ -1979,24 +1979,24 @@ numpy.array([['C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C', 'S',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  7,  30],
-                             [ 95, 118]])
+                np.array([[  7,  30],
+                          [ 95, 118]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'R', 'C', 'S', 'G', 'G', 'L', 'C', 'C', 'S', 'K', 'Y', 'G',
-              'Y', 'C', 'G', 'S', 'G', 'P', 'A', 'Y', 'C', 'G'],
-             ['K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G',
-              'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G']], dtype='U')
+np.array([['G', 'R', 'C', 'S', 'G', 'G', 'L', 'C', 'C', 'S', 'K', 'Y', 'G',
+           'Y', 'C', 'G', 'S', 'G', 'P', 'A', 'Y', 'C', 'G'],
+          ['K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G',
+           'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -2047,26 +2047,26 @@ numpy.array([['G', 'R', 'C', 'S', 'G', 'G', 'L', 'C', 'C', 'S', 'K', 'Y', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 3,  6,  6, 30],
-                             [ 1,  4,  8, 32]])
+                np.array([[ 3,  6,  6, 30],
+                          [ 1,  4,  8, 32]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['Q', 'C', 'Y', '-', '-', '-', '-', 'R', 'G', 'R', 'C', 'S', 'G',
-              'G', 'L', 'C', 'C', 'S', 'K', 'Y', 'G', 'Y', 'C', 'G', 'S', 'G',
-              'P', 'A', 'Y', 'C', 'G'],
-             ['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G',
-              'G', 'D', 'Y', 'C', 'G']], dtype='U')
+np.array([['Q', 'C', 'Y', '-', '-', '-', '-', 'R', 'G', 'R', 'C', 'S', 'G',
+           'G', 'L', 'C', 'C', 'S', 'K', 'Y', 'G', 'Y', 'C', 'G', 'S', 'G',
+           'P', 'A', 'Y', 'C', 'G'],
+          ['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G',
+           'G', 'D', 'Y', 'C', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -2121,27 +2121,27 @@ numpy.array([['Q', 'C', 'Y', '-', '-', '-', '-', 'R', 'G', 'R', 'C', 'S', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  39],
-                             [ 86, 124]])
+                np.array([[  1,  39],
+                          [ 86, 124]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
-              'N', 'C', 'L', 'C', 'C', 'S', 'R', 'W', 'G', 'W', 'C', 'G', 'T',
-              'T', 'S', 'D', 'F', 'C', 'G', 'D', 'G', 'C', 'Q', 'S', 'Q'],
-             ['I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L',
-              'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G']],
-            dtype='U')
+np.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
+           'N', 'C', 'L', 'C', 'C', 'S', 'R', 'W', 'G', 'W', 'C', 'G', 'T',
+           'T', 'S', 'D', 'F', 'C', 'G', 'D', 'G', 'C', 'Q', 'S', 'Q'],
+          ['I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L',
+           'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -2196,27 +2196,27 @@ numpy.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 1, 39],
-                             [43, 81]])
+                np.array([[ 1, 39],
+                          [43, 81]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
-              'N', 'C', 'L', 'C', 'C', 'S', 'R', 'W', 'G', 'W', 'C', 'G', 'T',
-              'T', 'S', 'D', 'F', 'C', 'G', 'D', 'G', 'C', 'Q', 'S', 'Q'],
-             ['K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T',
-              'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F',
-              'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G']],
-            dtype='U')
+np.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
+           'N', 'C', 'L', 'C', 'C', 'S', 'R', 'W', 'G', 'W', 'C', 'G', 'T',
+           'T', 'S', 'D', 'F', 'C', 'G', 'D', 'G', 'C', 'Q', 'S', 'Q'],
+          ['K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T',
+           'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F',
+           'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -2267,24 +2267,24 @@ numpy.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 47,  65,  66,  70],
-                             [143, 161, 161, 165]])
+                np.array([[ 47,  65,  66,  70],
+                          [143, 161, 161, 165]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['D', 'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E',
-              'T', 'S', 'H', 'C', 'T', 'C', 'S', 'S', 'C', 'V'],
-             ['N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G',
-              'P', 'G', 'Y', 'C', 'G', '-', 'A', 'G', 'C', 'Q']], dtype='U')
+np.array([['D', 'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E',
+           'T', 'S', 'H', 'C', 'T', 'C', 'S', 'S', 'C', 'V'],
+          ['N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G',
+           'P', 'G', 'Y', 'C', 'G', '-', 'A', 'G', 'C', 'Q']], dtype='U')
                 # fmt: on
             )
         )
@@ -2351,45 +2351,45 @@ numpy.array([['D', 'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 10,  49,  49,  90,  90, 131, 131, 160],
-                             [ 10,  49,  51,  92,  94, 135, 137, 166]])
+                np.array([[ 10,  49,  49,  90,  90, 131, 131, 160],
+                          [ 10,  49,  51,  92,  94, 135, 137, 166]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X',
-              'C', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X',
-              'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
-              '-', '-', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X',
-              'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X',
-              'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X',
-              'C', 'X', 'X', 'X', '-', '-', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
-              'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X',
-              'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X',
-              'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', '-', '-', 'X', 'X', 'X',
-              'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X', 'C',
-              'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X', 'X'],
-             ['E', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y',
-              'C', 'G', 'M', 'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q',
-              'N', 'G', 'A', 'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q',
-              'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S',
-              'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G',
-              'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K',
-              'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N',
-              'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S',
-              'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S',
-              'T', 'D', 'K', 'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V',
-              'C', 'T', 'N', 'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C',
-              'G', 'I', 'G', 'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'S']],
-            dtype='U')
+np.array([['X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X',
+           'C', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X',
+           'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
+           '-', '-', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X',
+           'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X',
+           'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X',
+           'C', 'X', 'X', 'X', '-', '-', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
+           'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X',
+           'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X',
+           'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', '-', '-', 'X', 'X', 'X',
+           'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X', 'C',
+           'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X', 'X'],
+          ['E', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y',
+           'C', 'G', 'M', 'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q',
+           'N', 'G', 'A', 'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q',
+           'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S',
+           'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G',
+           'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K',
+           'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N',
+           'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S',
+           'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S',
+           'T', 'D', 'K', 'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V',
+           'C', 'T', 'N', 'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C',
+           'G', 'I', 'G', 'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'S']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -2444,28 +2444,28 @@ numpy.array([['X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[26, 32, 37, 44, 47, 66, 67, 70],
-                             [ 1,  7,  7, 14, 14, 33, 33, 36]])
+                np.array([[26, 32, 37, 44, 47, 66, 67, 70],
+                          [ 1,  7,  7, 14, 14, 33, 33, 36]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N', 'P',
-              'G', 'E', 'C', 'N', 'P', 'H', 'A', 'V', 'D', 'H', 'C', 'C', 'S',
-              'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E', 'T', 'S', 'H', 'C', 'T',
-              'C', 'S', 'S', 'C', 'V'],
-             ['R', 'C', 'G', 'E', 'Q', 'G', '-', '-', '-', '-', '-', 'S', 'N',
-              'M', 'E', 'C', 'P', 'N', '-', '-', '-', 'N', 'L', 'C', 'C', 'S',
-              'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G', 'G', 'D', 'Y', 'C', 'G',
-              'K', '-', 'G', 'C', 'Q']], dtype='U')
+np.array([['R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N', 'P',
+           'G', 'E', 'C', 'N', 'P', 'H', 'A', 'V', 'D', 'H', 'C', 'C', 'S',
+           'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E', 'T', 'S', 'H', 'C', 'T',
+           'C', 'S', 'S', 'C', 'V'],
+          ['R', 'C', 'G', 'E', 'Q', 'G', '-', '-', '-', '-', '-', 'S', 'N',
+           'M', 'E', 'C', 'P', 'N', '-', '-', '-', 'N', 'L', 'C', 'C', 'S',
+           'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G', 'G', 'D', 'Y', 'C', 'G',
+           'K', '-', 'G', 'C', 'Q']], dtype='U')
                 # fmt: on
             )
         )
@@ -2516,25 +2516,25 @@ numpy.array([['R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 29,  49,  50,  54],
-                             [ 99, 119, 119, 123]])
+                np.array([[ 29,  49,  50,  54],
+                          [ 99, 119, 119, 123]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['V', 'D', 'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R',
-              'E', 'T', 'S', 'H', 'C', 'T', 'C', 'S', 'S', 'C', 'V', 'D'],
-             ['N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L',
-              'G', 'S', 'E', 'F', 'C', 'G', 'G', '-', 'G', 'C', 'Q', 'S']],
-            dtype='U')
+np.array([['V', 'D', 'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R',
+           'E', 'T', 'S', 'H', 'C', 'T', 'C', 'S', 'S', 'C', 'V', 'D'],
+          ['N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L',
+           'G', 'S', 'E', 'F', 'C', 'G', 'G', '-', 'G', 'C', 'Q', 'S']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -2589,28 +2589,28 @@ numpy.array([['V', 'D', 'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 8, 15, 20, 27, 30, 49, 50, 54],
-                             [ 0,  7,  7, 14, 14, 33, 33, 37]])
+                np.array([[ 8, 15, 20, 27, 30, 49, 50, 54],
+                          [ 0,  7,  7, 14, 14, 33, 33, 37]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N',
-              'P', 'G', 'E', 'C', 'N', 'P', 'H', 'A', 'V', 'D', 'H', 'C', 'C',
-              'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E', 'T', 'S', 'H', 'C',
-              'T', 'C', 'S', 'S', 'C', 'V', 'D'],
-             ['E', 'R', 'C', 'G', 'E', 'Q', 'G', '-', '-', '-', '-', '-', 'S',
-              'N', 'M', 'E', 'C', 'P', 'N', '-', '-', '-', 'N', 'L', 'C', 'C',
-              'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G', 'G', 'D', 'Y', 'C',
-              'G', 'K', '-', 'G', 'C', 'Q', 'N']], dtype='U')
+np.array([['G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N',
+           'P', 'G', 'E', 'C', 'N', 'P', 'H', 'A', 'V', 'D', 'H', 'C', 'C',
+           'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E', 'T', 'S', 'H', 'C',
+           'T', 'C', 'S', 'S', 'C', 'V', 'D'],
+          ['E', 'R', 'C', 'G', 'E', 'Q', 'G', '-', '-', '-', '-', '-', 'S',
+           'N', 'M', 'E', 'C', 'P', 'N', '-', '-', '-', 'N', 'L', 'C', 'C',
+           'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G', 'G', 'D', 'Y', 'C',
+           'G', 'K', '-', 'G', 'C', 'Q', 'N']], dtype='U')
                 # fmt: on
             )
         )
@@ -2673,38 +2673,38 @@ numpy.array([['G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 10,  49,  49,  90,  90, 116],
-                             [ 53,  92,  94, 135, 137, 163]])
+                np.array([[ 10,  49,  49,  90,  90, 116],
+                          [ 53,  92,  94, 135, 137, 163]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X',
-              'C', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X',
-              'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
-              '-', '-', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X',
-              'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X',
-              'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X',
-              'C', 'X', 'X', 'X', '-', '-', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
-              'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X',
-              'X', 'X', 'C', 'X', 'X', 'X'],
-             ['T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y',
-              'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q',
-              'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q',
-              'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
-              'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G',
-              'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P',
-              'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N',
-              'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P',
-              'G', 'Y', 'C', 'G', 'A', 'G']], dtype='U')
+np.array([['X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X',
+           'C', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X',
+           'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
+           '-', '-', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X',
+           'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X',
+           'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X',
+           'C', 'X', 'X', 'X', '-', '-', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
+           'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X',
+           'X', 'X', 'C', 'X', 'X', 'X'],
+          ['T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y',
+           'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q',
+           'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q',
+           'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
+           'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G',
+           'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P',
+           'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N',
+           'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P',
+           'G', 'Y', 'C', 'G', 'A', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -2799,48 +2799,48 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  0, 171],
-                             [  0, 171]])
+                np.array([[  0, 171],
+                          [  0, 171]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
-              'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
-              'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
-              'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G',
-              'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C',
-              'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S',
-              'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
-              'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
-              'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K',
-              'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N',
-              'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G',
-              'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C',
-              'D', 'G'],
-             ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
-              'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
-              'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
-              'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G',
-              'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C',
-              'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S',
-              'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
-              'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
-              'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K',
-              'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N',
-              'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G',
-              'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C',
-              'D', 'G']], dtype='U')
+np.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
+           'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
+           'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
+           'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G',
+           'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C',
+           'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S',
+           'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
+           'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
+           'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K',
+           'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N',
+           'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G',
+           'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C',
+           'D', 'G'],
+          ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
+           'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
+           'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
+           'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G',
+           'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C',
+           'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S',
+           'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
+           'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
+           'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K',
+           'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N',
+           'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G',
+           'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C',
+           'D', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -2911,47 +2911,47 @@ numpy.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  48,  48,  90,  90, 130, 130, 163],
-                             [  1,  48,  50,  92,  94, 134, 136, 169]])
+                np.array([[  1,  48,  48,  90,  90, 130, 130, 163],
+                          [  1,  48,  50,  92,  94, 134, 136, 169]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
-              'N', 'N', 'C', 'C', 'X', 'X', 'W', 'E', 'S', 'C', 'G', 'S', 'G',
-              'G', 'Y', 'X', 'C', 'G', 'E', 'G', 'C', 'N', 'L', 'G', 'A', 'C',
-              'Q', 'X', 'G', 'X', 'P', 'C', 'X', 'X', '-', '-', 'P', 'G', 'S',
-              'V', 'C', 'T', 'N', 'L', 'H', 'C', 'C', 'A', 'R', 'G', 'G', 'H',
-              'C', 'G', 'M', 'G', 'S', 'G', 'Y', 'C', 'G', 'X', 'G', 'C', 'X',
-              'G', 'G', 'A', 'C', 'X', 'A', 'D', 'I', 'X', 'C', 'G', 'X', 'G',
-              '-', '-', 'X', 'X', 'X', 'C', 'P', 'T', 'D', 'S', 'C', 'C', 'G',
-              'G', 'W', 'G', 'X', 'C', 'G', 'N', 'G', 'X', 'E', 'F', 'C', 'G',
-              'X', 'G', 'C', 'X', 'V', 'G', 'G', 'C', 'A', 'A', 'X', 'S', 'P',
-              'C', 'G', 'X', '-', '-', 'P', 'G', 'S', 'X', 'C', 'T', 'L', 'D',
-              'K', 'C', 'C', 'S', 'G', 'X', 'G', 'A', 'C', 'X', 'S', 'G', 'S',
-              'G', 'G', 'C', 'G', 'X', 'G', 'C', 'X', 'A', 'G', 'G', 'C'],
-             ['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G',
-              'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A', 'C',
-              'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A',
-              'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y',
-              'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q',
-              'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q',
-              'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
-              'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G',
-              'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P',
-              'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N',
-              'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P',
-              'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C']],
-            dtype='U')
+np.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
+           'N', 'N', 'C', 'C', 'X', 'X', 'W', 'E', 'S', 'C', 'G', 'S', 'G',
+           'G', 'Y', 'X', 'C', 'G', 'E', 'G', 'C', 'N', 'L', 'G', 'A', 'C',
+           'Q', 'X', 'G', 'X', 'P', 'C', 'X', 'X', '-', '-', 'P', 'G', 'S',
+           'V', 'C', 'T', 'N', 'L', 'H', 'C', 'C', 'A', 'R', 'G', 'G', 'H',
+           'C', 'G', 'M', 'G', 'S', 'G', 'Y', 'C', 'G', 'X', 'G', 'C', 'X',
+           'G', 'G', 'A', 'C', 'X', 'A', 'D', 'I', 'X', 'C', 'G', 'X', 'G',
+           '-', '-', 'X', 'X', 'X', 'C', 'P', 'T', 'D', 'S', 'C', 'C', 'G',
+           'G', 'W', 'G', 'X', 'C', 'G', 'N', 'G', 'X', 'E', 'F', 'C', 'G',
+           'X', 'G', 'C', 'X', 'V', 'G', 'G', 'C', 'A', 'A', 'X', 'S', 'P',
+           'C', 'G', 'X', '-', '-', 'P', 'G', 'S', 'X', 'C', 'T', 'L', 'D',
+           'K', 'C', 'C', 'S', 'G', 'X', 'G', 'A', 'C', 'X', 'S', 'G', 'S',
+           'G', 'G', 'C', 'G', 'X', 'G', 'C', 'X', 'A', 'G', 'G', 'C'],
+          ['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G',
+           'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A', 'C',
+           'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A',
+           'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y',
+           'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q',
+           'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q',
+           'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
+           'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G',
+           'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P',
+           'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N',
+           'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P',
+           'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -3022,40 +3022,40 @@ numpy.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  0, 126],
-                             [ 43, 169]])
+                np.array([[  0, 126],
+                          [ 43, 169]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
-              'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
-              'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
-              'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G',
-              'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C',
-              'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S',
-              'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
-              'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
-              'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C'],
-             ['K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T',
-              'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F',
-              'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P',
-              'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
-              'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G',
-              'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C',
-              'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K',
-              'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C',
-              'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C',
-              'G', 'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C']], dtype='U')
+np.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
+           'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
+           'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
+           'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G',
+           'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C',
+           'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S',
+           'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
+           'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
+           'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C'],
+          ['K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T',
+           'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F',
+           'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P',
+           'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
+           'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G',
+           'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C',
+           'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K',
+           'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C',
+           'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C',
+           'G', 'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C']], dtype='U')
                 # fmt: on
             )
         )
@@ -3126,40 +3126,40 @@ numpy.array([['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  39,  39,  41,  41,  80,  80,  81,  81, 121],
-                             [ 43,  81,  82,  84,  85, 124, 125, 126, 127, 167]])
+                np.array([[  1,  39,  39,  41,  41,  80,  80,  81,  81, 121],
+                          [ 43,  81,  82,  84,  85, 124, 125, 126, 127, 167]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
-              'D', 'G', 'Y', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T',
-              'T', 'E', 'E', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'S', 'Q', '-',
-              'C', 'D', '-', 'Y', 'N', 'R', 'C', 'G', 'K', 'E', 'F', 'G', 'G',
-              'K', 'E', 'C', 'H', 'D', 'E', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G',
-              'W', 'C', 'G', 'N', 'S', 'D', 'G', 'H', 'C', 'G', 'E', 'G', 'C',
-              'Q', 'S', 'Q', '-', 'C', '-', 'S', 'Y', 'W', 'R', 'C', 'G', 'K',
-              'D', 'F', 'G', 'G', 'R', 'L', 'C', 'T', 'E', 'D', 'M', 'C', 'C',
-              'S', 'Q', 'Y', 'G', 'W', 'C', 'G', 'L', 'T', 'D', 'D', 'H', 'C',
-              'E', 'D', 'G', 'C', 'Q', 'S', 'Q'],
-             ['K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T',
-              'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F',
-              'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P',
-              'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
-              'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G',
-              'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C',
-              'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K',
-              'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C',
-              'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C',
-              'G', 'A', 'G', 'C', 'Q', 'S', 'G']], dtype='U')
+np.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
+           'D', 'G', 'Y', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T',
+           'T', 'E', 'E', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'S', 'Q', '-',
+           'C', 'D', '-', 'Y', 'N', 'R', 'C', 'G', 'K', 'E', 'F', 'G', 'G',
+           'K', 'E', 'C', 'H', 'D', 'E', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G',
+           'W', 'C', 'G', 'N', 'S', 'D', 'G', 'H', 'C', 'G', 'E', 'G', 'C',
+           'Q', 'S', 'Q', '-', 'C', '-', 'S', 'Y', 'W', 'R', 'C', 'G', 'K',
+           'D', 'F', 'G', 'G', 'R', 'L', 'C', 'T', 'E', 'D', 'M', 'C', 'C',
+           'S', 'Q', 'Y', 'G', 'W', 'C', 'G', 'L', 'T', 'D', 'D', 'H', 'C',
+           'E', 'D', 'G', 'C', 'Q', 'S', 'Q'],
+          ['K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T',
+           'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F',
+           'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P',
+           'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
+           'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G',
+           'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C',
+           'Q', 'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K',
+           'D', 'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C',
+           'S', 'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C',
+           'G', 'A', 'G', 'C', 'Q', 'S', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -3230,40 +3230,40 @@ numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  39,  39,  41,  41,  80,  80,  82,  82, 120],
-                             [  0,  38,  39,  41,  42,  81,  82,  84,  85, 123]])
+                np.array([[  1,  39,  39,  41,  41,  80,  80,  82,  82, 120],
+                          [  0,  38,  39,  41,  42,  81,  82,  84,  85, 123]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
-              'D', 'G', 'Y', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T',
-              'T', 'E', 'E', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'S', 'Q', '-',
-              'C', 'D', '-', 'Y', 'N', 'R', 'C', 'G', 'K', 'E', 'F', 'G', 'G',
-              'K', 'E', 'C', 'H', 'D', 'E', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G',
-              'W', 'C', 'G', 'N', 'S', 'D', 'G', 'H', 'C', 'G', 'E', 'G', 'C',
-              'Q', 'S', 'Q', '-', 'C', 'S', '-', 'Y', 'W', 'R', 'C', 'G', 'K',
-              'D', 'F', 'G', 'G', 'R', 'L', 'C', 'T', 'E', 'D', 'M', 'C', 'C',
-              'S', 'Q', 'Y', 'G', 'W', 'C', 'G', 'L', 'T', 'D', 'D', 'H', 'C',
-              'E', 'D', 'G', 'C', 'Q', 'S'],
-             ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
-              'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
-              'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
-              'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G',
-              'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C',
-              'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S',
-              'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
-              'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
-              'G', 'G', 'G', 'C', 'Q', 'S']], dtype='U')
+np.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
+           'D', 'G', 'Y', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T',
+           'T', 'E', 'E', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'S', 'Q', '-',
+           'C', 'D', '-', 'Y', 'N', 'R', 'C', 'G', 'K', 'E', 'F', 'G', 'G',
+           'K', 'E', 'C', 'H', 'D', 'E', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G',
+           'W', 'C', 'G', 'N', 'S', 'D', 'G', 'H', 'C', 'G', 'E', 'G', 'C',
+           'Q', 'S', 'Q', '-', 'C', 'S', '-', 'Y', 'W', 'R', 'C', 'G', 'K',
+           'D', 'F', 'G', 'G', 'R', 'L', 'C', 'T', 'E', 'D', 'M', 'C', 'C',
+           'S', 'Q', 'Y', 'G', 'W', 'C', 'G', 'L', 'T', 'D', 'D', 'H', 'C',
+           'E', 'D', 'G', 'C', 'Q', 'S'],
+          ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
+           'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
+           'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
+           'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G',
+           'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C',
+           'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S',
+           'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
+           'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
+           'G', 'G', 'G', 'C', 'Q', 'S']], dtype='U')
                 # fmt: on
             )
         )
@@ -3334,40 +3334,40 @@ numpy.array([['P', 'V', 'C', 'G', 'V', 'R', 'A', 'S', 'G', 'R', 'V', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  48,  48,  90,  90, 122],
-                             [ 44,  91,  93, 135, 137, 169]])
+                np.array([[  1,  48,  48,  90,  90, 122],
+                          [ 44,  91,  93, 135, 137, 169]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
-              'N', 'N', 'C', 'C', 'X', 'X', 'W', 'E', 'S', 'C', 'G', 'S', 'G',
-              'G', 'Y', 'X', 'C', 'G', 'E', 'G', 'C', 'N', 'L', 'G', 'A', 'C',
-              'Q', 'X', 'G', 'X', 'P', 'C', 'X', 'X', '-', '-', 'P', 'G', 'S',
-              'V', 'C', 'T', 'N', 'L', 'H', 'C', 'C', 'A', 'R', 'G', 'G', 'H',
-              'C', 'G', 'M', 'G', 'S', 'G', 'Y', 'C', 'G', 'X', 'G', 'C', 'X',
-              'G', 'G', 'A', 'C', 'X', 'A', 'D', 'I', 'X', 'C', 'G', 'X', 'G',
-              '-', '-', 'X', 'X', 'X', 'C', 'P', 'T', 'D', 'S', 'C', 'C', 'G',
-              'G', 'W', 'G', 'X', 'C', 'G', 'N', 'G', 'X', 'E', 'F', 'C', 'G',
-              'X', 'G', 'C', 'X', 'V', 'G', 'G', 'C'],
-             ['R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N',
-              'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G',
-              'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C',
-              'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K',
-              'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F',
-              'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q',
-              'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K', 'D',
-              'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C', 'S',
-              'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C', 'G',
-              'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C']], dtype='U')
+np.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
+           'N', 'N', 'C', 'C', 'X', 'X', 'W', 'E', 'S', 'C', 'G', 'S', 'G',
+           'G', 'Y', 'X', 'C', 'G', 'E', 'G', 'C', 'N', 'L', 'G', 'A', 'C',
+           'Q', 'X', 'G', 'X', 'P', 'C', 'X', 'X', '-', '-', 'P', 'G', 'S',
+           'V', 'C', 'T', 'N', 'L', 'H', 'C', 'C', 'A', 'R', 'G', 'G', 'H',
+           'C', 'G', 'M', 'G', 'S', 'G', 'Y', 'C', 'G', 'X', 'G', 'C', 'X',
+           'G', 'G', 'A', 'C', 'X', 'A', 'D', 'I', 'X', 'C', 'G', 'X', 'G',
+           '-', '-', 'X', 'X', 'X', 'C', 'P', 'T', 'D', 'S', 'C', 'C', 'G',
+           'G', 'W', 'G', 'X', 'C', 'G', 'N', 'G', 'X', 'E', 'F', 'C', 'G',
+           'X', 'G', 'C', 'X', 'V', 'G', 'G', 'C'],
+          ['R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N',
+           'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G',
+           'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C',
+           'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K',
+           'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F',
+           'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q',
+           'S', 'G', 'A', 'C', 'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K', 'D',
+           'A', 'G', 'G', 'R', 'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C', 'S',
+           'K', 'W', 'G', 'S', 'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C', 'G',
+           'A', 'G', 'C', 'Q', 'S', 'G', 'G', 'C']], dtype='U')
                 # fmt: on
             )
         )
@@ -3434,34 +3434,34 @@ numpy.array([['G', 'X', 'G', 'C', 'X', 'G', 'X', 'X', 'M', 'Y', 'C', 'S', 'T',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  39,  39,  40,  40,  80],
-                             [ 43,  81,  82,  83,  84, 124]])
+                np.array([[  1,  39,  39,  40,  40,  80],
+                          [ 43,  81,  82,  83,  84, 124]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['P', 'E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P',
-              'N', 'G', 'K', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T',
-              'T', 'D', 'N', 'Y', 'C', 'G', 'Q', 'G', 'C', 'Q', 'S', 'Q', '-',
-              'C', '-', 'D', 'Y', 'W', 'R', 'C', 'G', 'R', 'D', 'F', 'G', 'G',
-              'R', 'L', 'C', 'E', 'E', 'D', 'M', 'C', 'C', 'S', 'K', 'Y', 'G',
-              'W', 'C', 'G', 'Y', 'S', 'D', 'D', 'H', 'C', 'E', 'D', 'G', 'C',
-              'Q', 'S', 'Q'],
-             ['K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T',
-              'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F',
-              'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P',
-              'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
-              'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G',
-              'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C',
-              'Q', 'S', 'G']], dtype='U')
+np.array([['P', 'E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P',
+           'N', 'G', 'K', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T',
+           'T', 'D', 'N', 'Y', 'C', 'G', 'Q', 'G', 'C', 'Q', 'S', 'Q', '-',
+           'C', '-', 'D', 'Y', 'W', 'R', 'C', 'G', 'R', 'D', 'F', 'G', 'G',
+           'R', 'L', 'C', 'E', 'E', 'D', 'M', 'C', 'C', 'S', 'K', 'Y', 'G',
+           'W', 'C', 'G', 'Y', 'S', 'D', 'D', 'H', 'C', 'E', 'D', 'G', 'C',
+           'Q', 'S', 'Q'],
+          ['K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T',
+           'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F',
+           'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P',
+           'C', 'R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G',
+           'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G',
+           'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C',
+           'Q', 'S', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -3528,34 +3528,34 @@ numpy.array([['P', 'E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  38,  38,  41,  45,  80,  81,  85],
-                             [ 44,  81,  82,  85,  85, 120, 120, 124]])
+                np.array([[  1,  38,  38,  41,  45,  80,  81,  85],
+                          [ 44,  81,  82,  85,  85, 120, 120, 124]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P', 'G',
-              'L', 'R', 'C', 'C', 'S', 'I', 'W', 'G', 'W', 'C', 'G', 'D', 'S',
-              'E', 'P', 'Y', 'C', 'G', 'R', 'T', 'C', 'E', 'N', 'K', '-', 'C',
-              'W', 'S', 'G', 'E', 'R', 'S', 'D', 'H', 'R', 'C', 'G', 'A', 'A',
-              'V', 'G', 'N', 'P', 'P', 'C', 'G', 'Q', 'D', 'R', 'C', 'C', 'S',
-              'V', 'H', 'G', 'W', 'C', 'G', 'G', 'G', 'N', 'D', 'Y', 'C', 'S',
-              'G', 'G', 'N', 'C', 'Q', 'Y', 'R'],
-             ['R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N',
-              'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G',
-              'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C',
-              'R', 'A', '-', '-', '-', '-', 'D', 'I', 'K', 'C', 'G', 'S', 'Q',
-              'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
-              'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G',
-              'G', 'G', '-', 'C', 'Q', 'S', 'G']], dtype='U')
+np.array([['R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P', 'G',
+           'L', 'R', 'C', 'C', 'S', 'I', 'W', 'G', 'W', 'C', 'G', 'D', 'S',
+           'E', 'P', 'Y', 'C', 'G', 'R', 'T', 'C', 'E', 'N', 'K', '-', 'C',
+           'W', 'S', 'G', 'E', 'R', 'S', 'D', 'H', 'R', 'C', 'G', 'A', 'A',
+           'V', 'G', 'N', 'P', 'P', 'C', 'G', 'Q', 'D', 'R', 'C', 'C', 'S',
+           'V', 'H', 'G', 'W', 'C', 'G', 'G', 'G', 'N', 'D', 'Y', 'C', 'S',
+           'G', 'G', 'N', 'C', 'Q', 'Y', 'R'],
+          ['R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N',
+           'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G',
+           'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C',
+           'R', 'A', '-', '-', '-', '-', 'D', 'I', 'K', 'C', 'G', 'S', 'Q',
+           'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
+           'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G',
+           'G', 'G', '-', 'C', 'Q', 'S', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -3622,34 +3622,34 @@ numpy.array([['R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 0, 38, 38, 41, 45, 80, 81, 85],
-                             [ 0, 38, 39, 42, 42, 77, 77, 81]])
+                np.array([[ 0, 38, 38, 41, 45, 80, 81, 85],
+                          [ 0, 38, 39, 42, 42, 77, 77, 81]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P',
-              'G', 'L', 'R', 'C', 'C', 'S', 'I', 'W', 'G', 'W', 'C', 'G', 'D',
-              'S', 'E', 'P', 'Y', 'C', 'G', 'R', 'T', 'C', 'E', 'N', 'K', '-',
-              'C', 'W', 'S', 'G', 'E', 'R', 'S', 'D', 'H', 'R', 'C', 'G', 'A',
-              'A', 'V', 'G', 'N', 'P', 'P', 'C', 'G', 'Q', 'D', 'R', 'C', 'C',
-              'S', 'V', 'H', 'G', 'W', 'C', 'G', 'G', 'G', 'N', 'D', 'Y', 'C',
-              'S', 'G', 'G', 'N', 'C', 'Q', 'Y', 'R'],
-             ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
-              'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
-              'C', 'W', 'T', '-', '-', '-', '-', 'S', 'K', 'R', 'C', 'G', 'S',
-              'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C',
-              'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C',
-              'G', 'A', 'G', '-', 'C', 'Q', 'G', 'G']], dtype='U')
+np.array([['E', 'R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P',
+           'G', 'L', 'R', 'C', 'C', 'S', 'I', 'W', 'G', 'W', 'C', 'G', 'D',
+           'S', 'E', 'P', 'Y', 'C', 'G', 'R', 'T', 'C', 'E', 'N', 'K', '-',
+           'C', 'W', 'S', 'G', 'E', 'R', 'S', 'D', 'H', 'R', 'C', 'G', 'A',
+           'A', 'V', 'G', 'N', 'P', 'P', 'C', 'G', 'Q', 'D', 'R', 'C', 'C',
+           'S', 'V', 'H', 'G', 'W', 'C', 'G', 'G', 'G', 'N', 'D', 'Y', 'C',
+           'S', 'G', 'G', 'N', 'C', 'Q', 'Y', 'R'],
+          ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
+           'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A',
+           'C', 'W', 'T', '-', '-', '-', '-', 'S', 'K', 'R', 'C', 'G', 'S',
+           'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C', 'C',
+           'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C',
+           'G', 'A', 'G', '-', 'C', 'Q', 'G', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -3716,34 +3716,34 @@ numpy.array([['E', 'R', 'C', 'G', 'S', 'Q', 'G', 'G', 'G', 'S', 'T', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  2,  39,  39,  80],
-                             [ 87, 124, 126, 167]])
+                np.array([[  2,  39,  39,  80],
+                          [ 87, 124, 126, 167]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P', 'N',
-              'G', 'K', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T', 'T',
-              'D', 'N', 'Y', 'C', 'G', 'Q', 'G', 'C', 'Q', 'S', 'Q', '-', '-',
-              'C', 'D', 'Y', 'W', 'R', 'C', 'G', 'R', 'D', 'F', 'G', 'G', 'R',
-              'L', 'C', 'E', 'E', 'D', 'M', 'C', 'C', 'S', 'K', 'Y', 'G', 'W',
-              'C', 'G', 'Y', 'S', 'D', 'D', 'H', 'C', 'E', 'D', 'G', 'C', 'Q',
-              'S', 'Q'],
-             ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
-              'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C',
-              'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R',
-              'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S',
-              'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q',
-              'S', 'G']], dtype='U')
+np.array([['E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P', 'N',
+           'G', 'K', 'C', 'C', 'S', 'Q', 'W', 'G', 'Y', 'C', 'G', 'T', 'T',
+           'D', 'N', 'Y', 'C', 'G', 'Q', 'G', 'C', 'Q', 'S', 'Q', '-', '-',
+           'C', 'D', 'Y', 'W', 'R', 'C', 'G', 'R', 'D', 'F', 'G', 'G', 'R',
+           'L', 'C', 'E', 'E', 'D', 'M', 'C', 'C', 'S', 'K', 'Y', 'G', 'W',
+           'C', 'G', 'Y', 'S', 'D', 'D', 'H', 'C', 'E', 'D', 'G', 'C', 'Q',
+           'S', 'Q'],
+          ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
+           'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A', 'C',
+           'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G', 'R',
+           'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G', 'S',
+           'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q',
+           'S', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -3798,28 +3798,28 @@ numpy.array([['E', 'C', 'G', 'E', 'R', 'A', 'S', 'G', 'K', 'R', 'C', 'P', 'N',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  40,  40,  42],
-                             [ 85, 124, 125, 127]])
+                np.array([[  1,  40,  40,  42],
+                          [ 85, 124, 125, 127]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['M', 'E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C',
-              'P', 'G', 'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'W', 'C', 'A',
-              'N', 'T', 'P', 'E', 'Y', 'C', 'G', 'S', 'G', 'C', 'Q', 'S', 'Q',
-              '-', 'C', 'D'],
-             ['D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C',
-              'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G',
-              'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G',
-              'A', 'C', 'S']], dtype='U')
+np.array([['M', 'E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C',
+           'P', 'G', 'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'W', 'C', 'A',
+           'N', 'T', 'P', 'E', 'Y', 'C', 'G', 'S', 'G', 'C', 'Q', 'S', 'Q',
+           '-', 'C', 'D'],
+          ['D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C',
+           'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G',
+           'L', 'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G',
+           'A', 'C', 'S']], dtype='U')
                 # fmt: on
             )
         )
@@ -3874,27 +3874,27 @@ numpy.array([['M', 'E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  33,  35,  40],
-                             [ 87, 119, 119, 124]])
+                np.array([[  1,  33,  35,  40],
+                          [ 87, 119, 119, 124]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'D',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'W', 'C', 'G', 'S', 'T',
-              'D', 'E', 'Y', 'C', 'S', 'P', 'D', 'H', 'N', 'C', 'Q', 'S', 'N'],
-             ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
-              'S', 'E', 'F', 'C', 'G', 'G', '-', '-', 'G', 'C', 'Q', 'S', 'G']],
-            dtype='U')
+np.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'D',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'W', 'C', 'G', 'S', 'T',
+           'D', 'E', 'Y', 'C', 'S', 'P', 'D', 'H', 'N', 'C', 'Q', 'S', 'N'],
+          ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
+           'S', 'E', 'F', 'C', 'G', 'G', '-', '-', 'G', 'C', 'Q', 'S', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -3949,28 +3949,28 @@ numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'D',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 3, 40, 40, 44],
-                             [ 1, 38, 39, 43]])
+                np.array([[ 3, 40, 40, 44],
+                          [ 1, 38, 39, 43]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P', 'G',
-              'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'W', 'C', 'A', 'N', 'T',
-              'P', 'E', 'Y', 'C', 'G', 'S', 'G', 'C', 'Q', 'S', 'Q', '-', 'C',
-              'D', 'G', 'G'],
-             ['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G',
-              'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A', 'C',
-              'W', 'T', 'S']], dtype='U')
+np.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P', 'G',
+           'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'W', 'C', 'A', 'N', 'T',
+           'P', 'E', 'Y', 'C', 'G', 'S', 'G', 'C', 'Q', 'S', 'Q', '-', 'C',
+           'D', 'G', 'G'],
+          ['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G',
+           'G', 'D', 'Y', 'C', 'G', 'K', 'G', 'C', 'Q', 'N', 'G', 'A', 'C',
+           'W', 'T', 'S']], dtype='U')
                 # fmt: on
             )
         )
@@ -4025,27 +4025,27 @@ numpy.array([['Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'A', 'L', 'C', 'P', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  2,  35,  36,  40],
-                             [ 87, 120, 120, 124]])
+                np.array([[  2,  35,  36,  40],
+                          [ 87, 120, 120, 124]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P', 'N',
-              'C', 'L', 'C', 'C', 'G', 'K', 'Y', 'G', 'F', 'C', 'G', 'S', 'G',
-              'D', 'A', 'Y', 'C', 'G', 'A', 'G', 'S', 'C', 'Q', 'S', 'Q'],
-             ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
-              'S', 'E', 'F', 'C', 'G', 'G', 'G', '-', 'C', 'Q', 'S', 'G']],
-            dtype='U')
+np.array([['R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P', 'N',
+           'C', 'L', 'C', 'C', 'G', 'K', 'Y', 'G', 'F', 'C', 'G', 'S', 'G',
+           'D', 'A', 'Y', 'C', 'G', 'A', 'G', 'S', 'C', 'Q', 'S', 'Q'],
+          ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
+           'S', 'E', 'F', 'C', 'G', 'G', 'G', '-', 'C', 'Q', 'S', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -4100,27 +4100,27 @@ numpy.array([['R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P', 'N',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 0,  4,  4, 33, 34, 38],
-                             [ 0,  4,  5, 34, 34, 38]])
+                np.array([[ 0,  4,  4, 33, 34, 38],
+                          [ 0,  4,  5, 34, 34, 38]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'T', 'C', 'A', '-', 'S', 'R', 'C', 'P', 'R', 'P', 'C', 'N',
-              'A', 'G', 'L', 'C', 'C', 'S', 'I', 'Y', 'G', 'Y', 'C', 'G', 'S',
-              'G', 'A', 'A', 'Y', 'C', 'G', 'A', 'G', 'N', 'C', 'R', 'C', 'Q'],
-             ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
-              'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', '-', 'C', 'Q', 'N', 'G']],
-            dtype='U')
+np.array([['E', 'T', 'C', 'A', '-', 'S', 'R', 'C', 'P', 'R', 'P', 'C', 'N',
+           'A', 'G', 'L', 'C', 'C', 'S', 'I', 'Y', 'G', 'Y', 'C', 'G', 'S',
+           'G', 'A', 'A', 'Y', 'C', 'G', 'A', 'G', 'N', 'C', 'R', 'C', 'Q'],
+          ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
+           'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', '-', 'C', 'Q', 'N', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -4171,26 +4171,26 @@ numpy.array([['E', 'T', 'C', 'A', '-', 'S', 'R', 'C', 'P', 'R', 'P', 'C', 'N',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  2,  29],
-                             [ 91, 118]])
+                np.array([[  2,  29],
+                          [ 91, 118]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C',
-              'S', 'Q', 'F', 'G', 'Y', 'C', 'G', 'K', 'G', 'P', 'K', 'Y', 'C',
-              'G'],
-             ['Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
-              'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
-              'G']], dtype='U')
+np.array([['E', 'C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C',
+           'S', 'Q', 'F', 'G', 'Y', 'C', 'G', 'K', 'G', 'P', 'K', 'Y', 'C',
+           'G'],
+          ['Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
+           'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C',
+           'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -4245,27 +4245,27 @@ numpy.array([['E', 'C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,   4,   4,  33,  34,  38],
-                             [ 87,  90,  91, 120, 120, 124]])
+                np.array([[  1,   4,   4,  33,  34,  38],
+                          [ 87,  90,  91, 120, 120, 124]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'C', 'A', '-', 'S', 'R', 'C', 'P', 'R', 'P', 'C', 'N', 'A',
-              'G', 'L', 'C', 'C', 'S', 'I', 'Y', 'G', 'Y', 'C', 'G', 'S', 'G',
-              'A', 'A', 'Y', 'C', 'G', 'A', 'G', 'N', 'C', 'R', 'C', 'Q'],
-             ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
-              'S', 'E', 'F', 'C', 'G', 'G', 'G', '-', 'C', 'Q', 'S', 'G']],
-            dtype='U')
+np.array([['T', 'C', 'A', '-', 'S', 'R', 'C', 'P', 'R', 'P', 'C', 'N', 'A',
+           'G', 'L', 'C', 'C', 'S', 'I', 'Y', 'G', 'Y', 'C', 'G', 'S', 'G',
+           'A', 'A', 'Y', 'C', 'G', 'A', 'G', 'N', 'C', 'R', 'C', 'Q'],
+          ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
+           'S', 'E', 'F', 'C', 'G', 'G', 'G', '-', 'C', 'Q', 'S', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -4320,28 +4320,28 @@ numpy.array([['T', 'C', 'A', '-', 'S', 'R', 'C', 'P', 'R', 'P', 'C', 'N', 'A',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 0, 33, 35, 40],
-                             [ 0, 33, 33, 38]])
+                np.array([[ 0, 33, 35, 40],
+                          [ 0, 33, 33, 38]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
-              'D', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'W', 'C', 'G', 'S',
-              'T', 'D', 'E', 'Y', 'C', 'S', 'P', 'D', 'H', 'N', 'C', 'Q', 'S',
-              'N'],
-             ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
-              'G', 'G', 'D', 'Y', 'C', 'G', 'K', '-', '-', 'G', 'C', 'Q', 'N',
-              'G']], dtype='U')
+np.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
+           'D', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'W', 'C', 'G', 'S',
+           'T', 'D', 'E', 'Y', 'C', 'S', 'P', 'D', 'H', 'N', 'C', 'Q', 'S',
+           'N'],
+          ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
+           'G', 'G', 'D', 'Y', 'C', 'G', 'K', '-', '-', 'G', 'C', 'Q', 'N',
+           'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -4396,27 +4396,27 @@ numpy.array([['E', 'Q', 'C', 'G', 'R', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 1, 35, 36, 40],
-                             [ 0, 34, 34, 38]])
+                np.array([[ 1, 35, 36, 40],
+                          [ 0, 34, 34, 38]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['Q', 'R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P',
-              'N', 'C', 'L', 'C', 'C', 'G', 'K', 'Y', 'G', 'F', 'C', 'G', 'S',
-              'G', 'D', 'A', 'Y', 'C', 'G', 'A', 'G', 'S', 'C', 'Q', 'S', 'Q'],
-             ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
-              'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', '-', 'C', 'Q', 'N', 'G']],
-            dtype='U')
+np.array([['Q', 'R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P',
+           'N', 'C', 'L', 'C', 'C', 'G', 'K', 'Y', 'G', 'F', 'C', 'G', 'S',
+           'G', 'D', 'A', 'Y', 'C', 'G', 'A', 'G', 'S', 'C', 'Q', 'S', 'Q'],
+          ['E', 'R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M',
+           'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G', '-', 'C', 'Q', 'N', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -4467,25 +4467,25 @@ numpy.array([['Q', 'R', 'C', 'G', 'D', 'Q', 'A', 'R', 'G', 'A', 'K', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  4,  30],
-                             [ 92, 118]])
+                np.array([[  4,  30],
+                          [ 92, 118]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['C', 'Y', 'R', 'G', 'R', 'C', 'S', 'G', 'G', 'L', 'C', 'C', 'S',
-              'K', 'Y', 'G', 'Y', 'C', 'G', 'S', 'G', 'P', 'A', 'Y', 'C', 'G'],
-             ['A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
-              'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G']],
-            dtype='U')
+np.array([['C', 'Y', 'R', 'G', 'R', 'C', 'S', 'G', 'G', 'L', 'C', 'C', 'S',
+           'K', 'Y', 'G', 'Y', 'C', 'G', 'S', 'G', 'P', 'A', 'Y', 'C', 'G'],
+          ['A', 'G', 'G', 'K', 'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S',
+           'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -4540,26 +4540,26 @@ numpy.array([['C', 'Y', 'R', 'G', 'R', 'C', 'S', 'G', 'G', 'L', 'C', 'C', 'S',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  12,  12,  34],
-                             [ 83,  94,  96, 118]])
+                np.array([[  1,  12,  12,  34],
+                          [ 83,  94,  96, 118]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-',
-              'G', 'C', 'R', 'G', 'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y',
-              'C', 'G', 'S', 'G', 'P', 'K', 'Y', 'C', 'A'],
-             ['R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K',
-              'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F',
-              'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G']], dtype='U')
+np.array([['G', 'P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-',
+           'G', 'C', 'R', 'G', 'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y',
+           'C', 'G', 'S', 'G', 'P', 'K', 'Y', 'C', 'A'],
+          ['R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K',
+           'L', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F',
+           'C', 'G', 'L', 'G', 'S', 'E', 'F', 'C', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -4614,27 +4614,27 @@ numpy.array([['G', 'P', 'N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  2,  39],
-                             [ 87, 124]])
+                np.array([[  2,  39],
+                          [ 87, 124]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P', 'N',
-              'C', 'L', 'C', 'C', 'S', 'R', 'W', 'G', 'W', 'C', 'G', 'T', 'T',
-              'S', 'D', 'F', 'C', 'G', 'D', 'G', 'C', 'Q', 'S', 'Q'],
-             ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
-              'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G']],
-            dtype='U')
+np.array([['Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P', 'N',
+           'C', 'L', 'C', 'C', 'S', 'R', 'W', 'G', 'W', 'C', 'G', 'T', 'T',
+           'S', 'D', 'F', 'C', 'G', 'D', 'G', 'C', 'Q', 'S', 'Q'],
+          ['K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G',
+           'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -4685,26 +4685,26 @@ numpy.array([['Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P', 'N',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 2, 30],
-                             [ 5, 33]])
+                np.array([[ 2, 30],
+                          [ 5, 33]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C',
-              'S', 'Q', 'F', 'G', 'Y', 'C', 'G', 'K', 'G', 'P', 'K', 'Y', 'C',
-              'G', 'R'],
-             ['Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
-              'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G', 'G', 'D', 'Y', 'C',
-              'G', 'K']], dtype='U')
+np.array([['E', 'C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C',
+           'S', 'Q', 'F', 'G', 'Y', 'C', 'G', 'K', 'G', 'P', 'K', 'Y', 'C',
+           'G', 'R'],
+          ['Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N', 'N', 'L', 'C', 'C',
+           'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G', 'G', 'D', 'Y', 'C',
+           'G', 'K']], dtype='U')
                 # fmt: on
             )
         )
@@ -4755,26 +4755,26 @@ numpy.array([['E', 'C', 'V', 'R', 'G', 'R', 'C', 'P', 'S', 'G', 'M', 'C', 'C',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 3,  6,  6, 30],
-                             [ 1,  4,  8, 32]])
+                np.array([[ 3,  6,  6, 30],
+                          [ 1,  4,  8, 32]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['Q', 'C', 'Y', '-', '-', '-', '-', 'R', 'G', 'R', 'C', 'S', 'G',
-              'G', 'L', 'C', 'C', 'S', 'K', 'Y', 'G', 'Y', 'C', 'G', 'S', 'G',
-              'P', 'A', 'Y', 'C', 'G'],
-             ['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
-              'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G',
-              'G', 'D', 'Y', 'C', 'G']], dtype='U')
+np.array([['Q', 'C', 'Y', '-', '-', '-', '-', 'R', 'G', 'R', 'C', 'S', 'G',
+           'G', 'L', 'C', 'C', 'S', 'K', 'Y', 'G', 'Y', 'C', 'G', 'S', 'G',
+           'P', 'A', 'Y', 'C', 'G'],
+          ['R', 'C', 'G', 'E', 'Q', 'G', 'S', 'N', 'M', 'E', 'C', 'P', 'N',
+           'N', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'M', 'G',
+           'G', 'D', 'Y', 'C', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -4829,27 +4829,27 @@ numpy.array([['Q', 'C', 'Y', '-', '-', '-', '-', 'R', 'G', 'R', 'C', 'S', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 1, 39],
-                             [43, 81]])
+                np.array([[ 1, 39],
+                          [43, 81]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
-              'N', 'C', 'L', 'C', 'C', 'S', 'R', 'W', 'G', 'W', 'C', 'G', 'T',
-              'T', 'S', 'D', 'F', 'C', 'G', 'D', 'G', 'C', 'Q', 'S', 'Q'],
-             ['K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T',
-              'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F',
-              'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G']],
-            dtype='U')
+np.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
+           'N', 'C', 'L', 'C', 'C', 'S', 'R', 'W', 'G', 'W', 'C', 'G', 'T',
+           'T', 'S', 'D', 'F', 'C', 'G', 'D', 'G', 'C', 'Q', 'S', 'Q'],
+          ['K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T',
+           'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F',
+           'G', 'A', 'E', 'Y', 'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -4902,26 +4902,26 @@ numpy.array([['E', 'Q', 'C', 'G', 'A', 'Q', 'A', 'G', 'G', 'A', 'R', 'C', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 3, 12, 12, 35],
-                             [42, 51, 53, 76]])
+                np.array([[ 3, 12, 12, 35],
+                          [42, 51, 53, 76]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G', 'C',
-              'R', 'G', 'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G',
-              'S', 'G', 'P', 'K', 'Y', 'C', 'A', 'H'],
-             ['S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C',
-              'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G',
-              'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A']], dtype='U')
+np.array([['N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G', 'C',
+           'R', 'G', 'G', 'L', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G',
+           'S', 'G', 'P', 'K', 'Y', 'C', 'A', 'H'],
+          ['S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C',
+           'T', 'N', 'N', 'Q', 'C', 'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G',
+           'F', 'G', 'A', 'E', 'Y', 'C', 'G', 'A']], dtype='U')
                 # fmt: on
             )
         )
@@ -4988,46 +4988,46 @@ numpy.array([['N', 'G', 'Q', 'C', 'G', 'P', 'G', 'W', 'G', '-', '-', 'G', 'C',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  8,  49,  49,  90,  90, 131, 131, 163],
-                             [  8,  49,  51,  92,  94, 135, 137, 169]])
+                np.array([[  8,  49,  49,  90,  90, 131, 131, 163],
+                          [  8,  49,  51,  92,  94, 135, 137, 169]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X',
-              'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
-              'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X',
-              'X', 'X', '-', '-', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C',
-              'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X',
-              'C', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
-              'X', 'X', 'C', 'X', 'X', 'X', '-', '-', 'X', 'X', 'X', 'C', 'X',
-              'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X',
-              'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X',
-              'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', '-', '-', 'X',
-              'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X',
-              'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C',
-              'X', 'X', 'X', 'X', 'C'],
-             ['N', 'M', 'E', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y',
-              'G', 'Y', 'C', 'G', 'M', 'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G',
-              'C', 'Q', 'N', 'G', 'A', 'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G',
-              'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C',
-              'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y',
-              'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D',
-              'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L',
-              'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A',
-              'C', 'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G',
-              'R', 'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G',
-              'S', 'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C',
-              'Q', 'S', 'G', 'G', 'C']], dtype='U')
+np.array([['X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X',
+           'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
+           'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X',
+           'X', 'X', '-', '-', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C',
+           'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X',
+           'C', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
+           'X', 'X', 'C', 'X', 'X', 'X', '-', '-', 'X', 'X', 'X', 'C', 'X',
+           'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X',
+           'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X',
+           'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', '-', '-', 'X',
+           'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X',
+           'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C',
+           'X', 'X', 'X', 'X', 'C'],
+          ['N', 'M', 'E', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y',
+           'G', 'Y', 'C', 'G', 'M', 'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G',
+           'C', 'Q', 'N', 'G', 'A', 'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G',
+           'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C',
+           'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y',
+           'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D',
+           'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L',
+           'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A',
+           'C', 'S', 'T', 'D', 'K', 'P', 'C', 'G', 'K', 'D', 'A', 'G', 'G',
+           'R', 'V', 'C', 'T', 'N', 'N', 'Y', 'C', 'C', 'S', 'K', 'W', 'G',
+           'S', 'C', 'G', 'I', 'G', 'P', 'G', 'Y', 'C', 'G', 'A', 'G', 'C',
+           'Q', 'S', 'G', 'G', 'C']], dtype='U')
                 # fmt: on
             )
         )
@@ -5082,28 +5082,28 @@ numpy.array([['X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  5,  15,  20,  27,  30,  48],
-                             [ 83,  93,  93, 100, 100, 118]])
+                np.array([[  5,  15,  20,  27,  30,  48],
+                          [ 83,  93,  93, 100, 100, 118]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['R', 'S', 'D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P',
-              'D', 'A', 'N', 'P', 'G', 'E', 'C', 'N', 'P', 'H', 'A', 'V', 'D',
-              'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E', 'T',
-              'S', 'H', 'C', 'T'],
-             ['R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', '-', '-', '-',
-              '-', '-', 'G', 'G', 'K', 'L', 'C', 'P', 'N', '-', '-', '-', 'N',
-              'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S',
-              'E', 'F', 'C', 'G']], dtype='U')
+np.array([['R', 'S', 'D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P',
+           'D', 'A', 'N', 'P', 'G', 'E', 'C', 'N', 'P', 'H', 'A', 'V', 'D',
+           'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E', 'T',
+           'S', 'H', 'C', 'T'],
+          ['R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', '-', '-', '-',
+           '-', '-', 'G', 'G', 'K', 'L', 'C', 'P', 'N', '-', '-', '-', 'N',
+           'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S',
+           'E', 'F', 'C', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -5158,28 +5158,28 @@ numpy.array([['R', 'S', 'D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 7, 15, 20, 27, 30, 48],
-                             [42, 50, 50, 57, 57, 75]])
+                np.array([[ 7, 15, 20, 27, 30, 48],
+                          [42, 50, 50, 57, 57, 75]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A',
-              'N', 'P', 'G', 'E', 'C', 'N', 'P', 'H', 'A', 'V', 'D', 'H', 'C',
-              'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E', 'T', 'S', 'H',
-              'C', 'T'],
-             ['S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', '-', '-', '-', '-', '-',
-              'G', 'G', 'A', 'T', 'C', 'T', 'N', '-', '-', '-', 'N', 'Q', 'C',
-              'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y',
-              'C', 'G']], dtype='U')
+np.array([['D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A',
+           'N', 'P', 'G', 'E', 'C', 'N', 'P', 'H', 'A', 'V', 'D', 'H', 'C',
+           'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E', 'T', 'S', 'H',
+           'C', 'T'],
+          ['S', 'K', 'R', 'C', 'G', 'S', 'Q', 'A', '-', '-', '-', '-', '-',
+           'G', 'G', 'A', 'T', 'C', 'T', 'N', '-', '-', '-', 'N', 'Q', 'C',
+           'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y',
+           'C', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -5234,28 +5234,28 @@ numpy.array([['D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 22,  32,  37,  44,  47,  65],
-                             [ 83,  93,  93, 100, 100, 118]])
+                np.array([[ 22,  32,  37,  44,  47,  65],
+                          [ 83,  93,  93, 100, 100, 118]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['R', 'S', 'D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P',
-              'D', 'A', 'N', 'P', 'G', 'E', 'C', 'N', 'P', 'H', 'A', 'V', 'D',
-              'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E', 'T',
-              'S', 'H', 'C', 'T'],
-             ['R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', '-', '-', '-',
-              '-', '-', 'G', 'G', 'K', 'L', 'C', 'P', 'N', '-', '-', '-', 'N',
-              'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S',
-              'E', 'F', 'C', 'G']], dtype='U')
+np.array([['R', 'S', 'D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P',
+           'D', 'A', 'N', 'P', 'G', 'E', 'C', 'N', 'P', 'H', 'A', 'V', 'D',
+           'H', 'C', 'C', 'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E', 'T',
+           'S', 'H', 'C', 'T'],
+          ['R', 'A', 'D', 'I', 'K', 'C', 'G', 'S', 'Q', 'A', '-', '-', '-',
+           '-', '-', 'G', 'G', 'K', 'L', 'C', 'P', 'N', '-', '-', '-', 'N',
+           'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L', 'G', 'S',
+           'E', 'F', 'C', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -5310,28 +5310,28 @@ numpy.array([['R', 'S', 'D', 'G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[25, 32, 37, 44, 47, 65, 66, 70],
-                             [43, 50, 50, 57, 57, 75, 75, 79]])
+                np.array([[25, 32, 37, 44, 47, 65, 66, 70],
+                          [43, 50, 50, 57, 57, 75, 75, 79]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N',
-              'P', 'G', 'E', 'C', 'N', 'P', 'H', 'A', 'V', 'D', 'H', 'C', 'C',
-              'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E', 'T', 'S', 'H', 'C',
-              'T', 'C', 'S', 'S', 'C', 'V'],
-             ['K', 'R', 'C', 'G', 'S', 'Q', 'A', '-', '-', '-', '-', '-', 'G',
-              'G', 'A', 'T', 'C', 'T', 'N', '-', '-', '-', 'N', 'Q', 'C', 'C',
-              'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C',
-              'G', '-', 'A', 'G', 'C', 'Q']], dtype='U')
+np.array([['G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N',
+           'P', 'G', 'E', 'C', 'N', 'P', 'H', 'A', 'V', 'D', 'H', 'C', 'C',
+           'S', 'E', 'W', 'G', 'W', 'C', 'G', 'R', 'E', 'T', 'S', 'H', 'C',
+           'T', 'C', 'S', 'S', 'C', 'V'],
+          ['K', 'R', 'C', 'G', 'S', 'Q', 'A', '-', '-', '-', '-', '-', 'G',
+           'G', 'A', 'T', 'C', 'T', 'N', '-', '-', '-', 'N', 'Q', 'C', 'C',
+           'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y', 'C',
+           'G', '-', 'A', 'G', 'C', 'Q']], dtype='U')
                 # fmt: on
             )
         )
@@ -5398,40 +5398,40 @@ numpy.array([['G', 'R', 'C', 'G', 'P', 'N', 'Y', 'P', 'A', 'P', 'D', 'A', 'N',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 49,  90,  90, 131, 131, 163],
-                             [  8,  49,  51,  92,  94, 126]])
+                np.array([[ 49,  90,  90, 131, 131, 163],
+                          [  8,  49,  51,  92,  94, 126]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X',
-              'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
-              'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X',
-              'X', 'X', '-', '-', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C',
-              'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X',
-              'C', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
-              'X', 'X', 'C', 'X', 'X', 'X', '-', '-', 'X', 'X', 'X', 'C', 'X',
-              'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X',
-              'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X',
-              'C'],
-             ['N', 'M', 'E', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y',
-              'G', 'Y', 'C', 'G', 'M', 'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G',
-              'C', 'Q', 'N', 'G', 'A', 'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G',
-              'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C',
-              'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y',
-              'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D',
-              'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
-              'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L',
-              'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A',
-              'C']], dtype='U')
+np.array([['X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X',
+           'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
+           'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X',
+           'X', 'X', '-', '-', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C',
+           'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X',
+           'C', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X',
+           'X', 'X', 'C', 'X', 'X', 'X', '-', '-', 'X', 'X', 'X', 'C', 'X',
+           'X', 'X', 'X', 'C', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X',
+           'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X',
+           'C'],
+          ['N', 'M', 'E', 'C', 'P', 'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'Y',
+           'G', 'Y', 'C', 'G', 'M', 'G', 'G', 'D', 'Y', 'C', 'G', 'K', 'G',
+           'C', 'Q', 'N', 'G', 'A', 'C', 'W', 'T', 'S', 'K', 'R', 'C', 'G',
+           'S', 'Q', 'A', 'G', 'G', 'A', 'T', 'C', 'T', 'N', 'N', 'Q', 'C',
+           'C', 'S', 'Q', 'Y', 'G', 'Y', 'C', 'G', 'F', 'G', 'A', 'E', 'Y',
+           'C', 'G', 'A', 'G', 'C', 'Q', 'G', 'G', 'P', 'C', 'R', 'A', 'D',
+           'I', 'K', 'C', 'G', 'S', 'Q', 'A', 'G', 'G', 'K', 'L', 'C', 'P',
+           'N', 'N', 'L', 'C', 'C', 'S', 'Q', 'W', 'G', 'F', 'C', 'G', 'L',
+           'G', 'S', 'E', 'F', 'C', 'G', 'G', 'G', 'C', 'Q', 'S', 'G', 'A',
+           'C']], dtype='U')
                 # fmt: on
             )
         )
@@ -5502,23 +5502,18 @@ Only X am        38 X 39
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[23, 24],
-                             [38, 39]])
+                np.array([[23, 24],
+                          [38, 39]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
-                # fmt: off
-# flake8: noqa
-numpy.array([['T'],
-             ['X']], dtype='U')
-                # fmt: on
+            np.array_equal(
+                np.array(alignment, "U"), np.array([["T"], ["X"]], dtype="U")
             )
         )
         alignment = next(alignments)
@@ -5564,23 +5559,18 @@ Only X am         3 X  4
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 9, 10],
-                             [ 3,  4]])
+                np.array([[ 9, 10],
+                          [ 3,  4]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
-                # fmt: off
-# flake8: noqa
-numpy.array([['G'],
-             ['X']], dtype='U')
-                # fmt: on
+            np.array_equal(
+                np.array(alignment, "U"), np.array([["G"], ["X"]], dtype="U")
             )
         )
         alignment = next(alignments)
@@ -5626,23 +5616,18 @@ Only X am         3 X 4
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[0, 1],
-                             [3, 4]])
+                np.array([[0, 1],
+                          [3, 4]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
-                # fmt: off
-# flake8: noqa
-numpy.array([['S'],
-             ['X']], dtype='U')
-                # fmt: on
+            np.array_equal(
+                np.array(alignment, "U"), np.array([["S"], ["X"]], dtype="U")
             )
         )
         alignment = next(alignments)
@@ -5688,23 +5673,18 @@ Only X am         3 X  4
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[10, 11],
-                             [ 3,  4]])
+                np.array([[10, 11],
+                          [ 3,  4]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
-                # fmt: off
-# flake8: noqa
-numpy.array([['G'],
-             ['X']], dtype='U')
-                # fmt: on
+            np.array_equal(
+                np.array(alignment, "U"), np.array([["G"], ["X"]], dtype="U")
             )
         )
         alignment = next(alignments)
@@ -5750,23 +5730,18 @@ Only X am         3 X 4
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[5, 6],
-                             [3, 4]])
+                np.array([[5, 6],
+                          [3, 4]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
-                # fmt: off
-# flake8: noqa
-numpy.array([['T'],
-             ['X']], dtype='U')
-                # fmt: on
+            np.array_equal(
+                np.array(alignment, "U"), np.array([["T"], ["X"]], dtype="U")
             )
         )
         alignment = next(alignments)
@@ -5812,23 +5787,18 @@ Only X am        37 X 38
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[28, 29],
-                             [37, 38]])
+                np.array([[28, 29],
+                          [37, 38]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
-                # fmt: off
-# flake8: noqa
-numpy.array([['E'],
-             ['X']], dtype='U')
-                # fmt: on
+            np.array_equal(
+                np.array(alignment, "U"), np.array([["E"], ["X"]], dtype="U")
             )
         )
         alignment = next(alignments)
@@ -5874,23 +5844,18 @@ Only X am         1 X 2
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[0, 1],
-                             [1, 2]])
+                np.array([[0, 1],
+                          [1, 2]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
-                # fmt: off
-# flake8: noqa
-numpy.array([['M'],
-             ['X']], dtype='U')
-                # fmt: on
+            np.array_equal(
+                np.array(alignment, "U"), np.array([["M"], ["X"]], dtype="U")
             )
         )
         alignment = next(alignments)
@@ -5934,23 +5899,18 @@ Only X am        35 X 36
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[16, 17],
-                             [35, 36]])
+                np.array([[16, 17],
+                          [35, 36]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
-                # fmt: off
-# flake8: noqa
-numpy.array([['D'],
-             ['X']], dtype='U')
-                # fmt: on
+            np.array_equal(
+                np.array(alignment, "U"), np.array([["D"], ["X"]], dtype="U")
             )
         )
         alignment = next(alignments)
@@ -5996,23 +5956,18 @@ Only X am        35 X 36
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[28, 29],
-                             [35, 36]])
+                np.array([[28, 29],
+                          [35, 36]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
-                # fmt: off
-# flake8: noqa
-numpy.array([['N'],
-             ['X']], dtype='U')
-                # fmt: on
+            np.array_equal(
+                np.array(alignment, "U"), np.array([["N"], ["X"]], dtype="U")
             )
         )
         alignment = next(alignments)
@@ -6058,23 +6013,18 @@ Only X am         3 X 4
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[0, 1],
-                             [3, 4]])
+                np.array([[0, 1],
+                          [3, 4]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
-                # fmt: off
-# flake8: noqa
-numpy.array([['D'],
-             ['X']], dtype='U')
-                # fmt: on
+            np.array_equal(
+                np.array(alignment, "U"), np.array([["D"], ["X"]], dtype="U")
             )
         )
         with self.assertRaises(StopIteration):
@@ -6173,52 +6123,52 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  0, 198],
-                             [  0, 198]])
+                np.array([[  0, 198],
+                          [  0, 198]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G',
-              'F', 'F', 'M', 'S', 'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L',
-              'T', 'L', 'S', 'N', 'S', 'Y', 'W', 'R', 'V', 'S', 'T', 'V', 'H',
-              'G', 'N', 'V', 'I', 'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N', 'L',
-              'W', 'Y', 'S', 'C', 'A', 'T', 'D', 'S', 'L', 'G', 'V', 'S', 'N',
-              'C', 'W', 'D', 'F', 'P', 'S', 'M', 'L', 'A', 'L', 'S', 'G', 'Y',
-              'V', 'Q', 'G', 'C', 'R', 'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L',
-              'L', 'G', 'F', 'L', 'G', 'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L',
-              'R', 'A', 'T', 'N', 'V', 'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K',
-              'A', 'K', 'L', 'L', 'A', 'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L',
-              'A', 'G', 'A', 'C', 'G', 'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A',
-              'V', 'N', 'I', 'T', 'T', 'D', 'F', 'F', 'N', 'P', 'L', 'Y', 'A',
-              'G', 'T', 'K', 'Y', 'E', 'L', 'G', 'P', 'A', 'L', 'Y', 'L', 'G',
-              'W', 'S', 'A', 'S', 'L', 'L', 'S', 'I', 'L', 'G', 'G', 'I', 'C',
-              'V', 'F', 'S', 'T', 'A', 'A', 'A', 'S', 'S', 'K', 'E', 'E', 'P',
-              'A', 'T', 'R'],
-             ['G', 'S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G',
-              'F', 'F', 'M', 'S', 'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L',
-              'T', 'L', 'S', 'N', 'S', 'Y', 'W', 'R', 'V', 'S', 'T', 'V', 'H',
-              'G', 'N', 'V', 'I', 'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N', 'L',
-              'W', 'Y', 'S', 'C', 'A', 'T', 'D', 'S', 'L', 'G', 'V', 'S', 'N',
-              'C', 'W', 'D', 'F', 'P', 'S', 'M', 'L', 'A', 'L', 'S', 'G', 'Y',
-              'V', 'Q', 'G', 'C', 'R', 'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L',
-              'L', 'G', 'F', 'L', 'G', 'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L',
-              'R', 'A', 'T', 'N', 'V', 'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K',
-              'A', 'K', 'L', 'L', 'A', 'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L',
-              'A', 'G', 'A', 'C', 'G', 'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A',
-              'V', 'N', 'I', 'T', 'T', 'D', 'F', 'F', 'N', 'P', 'L', 'Y', 'A',
-              'G', 'T', 'K', 'Y', 'E', 'L', 'G', 'P', 'A', 'L', 'Y', 'L', 'G',
-              'W', 'S', 'A', 'S', 'L', 'L', 'S', 'I', 'L', 'G', 'G', 'I', 'C',
-              'V', 'F', 'S', 'T', 'A', 'A', 'A', 'S', 'S', 'K', 'E', 'E', 'P',
-              'A', 'T', 'R']], dtype='U')
+np.array([['G', 'S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G',
+           'F', 'F', 'M', 'S', 'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L',
+           'T', 'L', 'S', 'N', 'S', 'Y', 'W', 'R', 'V', 'S', 'T', 'V', 'H',
+           'G', 'N', 'V', 'I', 'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N', 'L',
+           'W', 'Y', 'S', 'C', 'A', 'T', 'D', 'S', 'L', 'G', 'V', 'S', 'N',
+           'C', 'W', 'D', 'F', 'P', 'S', 'M', 'L', 'A', 'L', 'S', 'G', 'Y',
+           'V', 'Q', 'G', 'C', 'R', 'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L',
+           'L', 'G', 'F', 'L', 'G', 'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L',
+           'R', 'A', 'T', 'N', 'V', 'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K',
+           'A', 'K', 'L', 'L', 'A', 'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L',
+           'A', 'G', 'A', 'C', 'G', 'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A',
+           'V', 'N', 'I', 'T', 'T', 'D', 'F', 'F', 'N', 'P', 'L', 'Y', 'A',
+           'G', 'T', 'K', 'Y', 'E', 'L', 'G', 'P', 'A', 'L', 'Y', 'L', 'G',
+           'W', 'S', 'A', 'S', 'L', 'L', 'S', 'I', 'L', 'G', 'G', 'I', 'C',
+           'V', 'F', 'S', 'T', 'A', 'A', 'A', 'S', 'S', 'K', 'E', 'E', 'P',
+           'A', 'T', 'R'],
+          ['G', 'S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G',
+           'F', 'F', 'M', 'S', 'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L',
+           'T', 'L', 'S', 'N', 'S', 'Y', 'W', 'R', 'V', 'S', 'T', 'V', 'H',
+           'G', 'N', 'V', 'I', 'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N', 'L',
+           'W', 'Y', 'S', 'C', 'A', 'T', 'D', 'S', 'L', 'G', 'V', 'S', 'N',
+           'C', 'W', 'D', 'F', 'P', 'S', 'M', 'L', 'A', 'L', 'S', 'G', 'Y',
+           'V', 'Q', 'G', 'C', 'R', 'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L',
+           'L', 'G', 'F', 'L', 'G', 'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L',
+           'R', 'A', 'T', 'N', 'V', 'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K',
+           'A', 'K', 'L', 'L', 'A', 'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L',
+           'A', 'G', 'A', 'C', 'G', 'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A',
+           'V', 'N', 'I', 'T', 'T', 'D', 'F', 'F', 'N', 'P', 'L', 'Y', 'A',
+           'G', 'T', 'K', 'Y', 'E', 'L', 'G', 'P', 'A', 'L', 'Y', 'L', 'G',
+           'W', 'S', 'A', 'S', 'L', 'L', 'S', 'I', 'L', 'G', 'G', 'I', 'C',
+           'V', 'F', 'S', 'T', 'A', 'A', 'A', 'S', 'S', 'K', 'E', 'E', 'P',
+           'A', 'T', 'R']], dtype='U')
                 # fmt: on
             )
         )
@@ -6294,50 +6244,50 @@ numpy.array([['G', 'S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  0,  38,  39, 153, 154, 185],
-                             [  3,  41,  41, 155, 155, 186]])
+                np.array([[  0,  38,  39, 153, 154, 185],
+                          [  3,  41,  41, 155, 155, 186]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['M', 'A', 'N', 'S', 'G', 'L', 'Q', 'L', 'L', 'G', 'Y', 'F', 'L',
-              'A', 'L', 'G', 'G', 'W', 'V', 'G', 'I', 'I', 'A', 'S', 'T', 'A',
-              'L', 'P', 'Q', 'W', 'K', 'Q', 'S', 'S', 'Y', 'A', 'G', 'D', 'A',
-              'I', 'I', 'T', 'A', 'V', 'G', 'L', 'Y', 'E', 'G', 'L', 'W', 'M',
-              'S', 'C', 'A', 'S', 'Q', 'S', 'T', 'G', 'Q', 'V', 'Q', 'C', 'K',
-              'L', 'Y', 'D', 'S', 'L', 'L', 'A', 'L', 'D', 'G', 'H', 'I', 'Q',
-              'S', 'A', 'R', 'A', 'L', 'M', 'V', 'V', 'A', 'V', 'L', 'L', 'G',
-              'F', 'V', 'A', 'M', 'V', 'L', 'S', 'V', 'V', 'G', 'M', 'K', 'A',
-              'T', 'R', 'V', 'G', 'D', 'S', 'N', 'P', 'T', 'A', 'K', 'S', 'R',
-              'V', 'A', 'I', 'S', 'G', 'G', 'A', 'L', 'F', 'L', 'L', 'A', 'G',
-              'L', 'C', 'T', 'L', 'T', 'A', 'V', 'S', 'W', 'Y', 'A', 'T', 'L',
-              'V', 'T', 'Q', 'E', 'F', 'F', 'N', 'P', 'S', 'T', 'P', 'V', 'N',
-              'A', 'R', 'Y', 'E', 'F', 'G', 'P', 'A', 'L', 'F', 'V', 'G', 'W',
-              'A', 'S', 'A', 'G', 'L', 'A', 'M', 'L', 'G', 'G', 'S', 'F', 'L',
-              'A', 'A', 'T'],
-             ['F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G', 'F', 'F', 'M',
-              'S', 'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L', 'T', 'L', 'S',
-              'N', 'S', 'Y', 'W', 'R', 'V', 'S', 'T', 'V', 'H', 'G', 'N', '-',
-              'V', 'I', 'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N', 'L', 'W', 'Y',
-              'S', 'C', 'A', 'T', 'D', 'S', 'L', 'G', 'V', 'S', 'N', 'C', 'W',
-              'D', 'F', 'P', 'S', 'M', 'L', 'A', 'L', 'S', 'G', 'Y', 'V', 'Q',
-              'G', 'C', 'R', 'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L', 'L', 'G',
-              'F', 'L', 'G', 'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L', 'R', 'A',
-              'T', 'N', 'V', 'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K', 'A', 'K',
-              'L', 'L', 'A', 'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L', 'A', 'G',
-              'A', 'C', 'G', 'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A', 'V', 'N',
-              'I', 'T', 'T', 'D', 'F', 'F', 'N', 'P', 'L', 'Y', '-', 'A', 'G',
-              'T', 'K', 'Y', 'E', 'L', 'G', 'P', 'A', 'L', 'Y', 'L', 'G', 'W',
-              'S', 'A', 'S', 'L', 'L', 'S', 'I', 'L', 'G', 'G', 'I', 'C', 'V',
-              'F', 'S', 'T']], dtype='U')
+np.array([['M', 'A', 'N', 'S', 'G', 'L', 'Q', 'L', 'L', 'G', 'Y', 'F', 'L',
+           'A', 'L', 'G', 'G', 'W', 'V', 'G', 'I', 'I', 'A', 'S', 'T', 'A',
+           'L', 'P', 'Q', 'W', 'K', 'Q', 'S', 'S', 'Y', 'A', 'G', 'D', 'A',
+           'I', 'I', 'T', 'A', 'V', 'G', 'L', 'Y', 'E', 'G', 'L', 'W', 'M',
+           'S', 'C', 'A', 'S', 'Q', 'S', 'T', 'G', 'Q', 'V', 'Q', 'C', 'K',
+           'L', 'Y', 'D', 'S', 'L', 'L', 'A', 'L', 'D', 'G', 'H', 'I', 'Q',
+           'S', 'A', 'R', 'A', 'L', 'M', 'V', 'V', 'A', 'V', 'L', 'L', 'G',
+           'F', 'V', 'A', 'M', 'V', 'L', 'S', 'V', 'V', 'G', 'M', 'K', 'A',
+           'T', 'R', 'V', 'G', 'D', 'S', 'N', 'P', 'T', 'A', 'K', 'S', 'R',
+           'V', 'A', 'I', 'S', 'G', 'G', 'A', 'L', 'F', 'L', 'L', 'A', 'G',
+           'L', 'C', 'T', 'L', 'T', 'A', 'V', 'S', 'W', 'Y', 'A', 'T', 'L',
+           'V', 'T', 'Q', 'E', 'F', 'F', 'N', 'P', 'S', 'T', 'P', 'V', 'N',
+           'A', 'R', 'Y', 'E', 'F', 'G', 'P', 'A', 'L', 'F', 'V', 'G', 'W',
+           'A', 'S', 'A', 'G', 'L', 'A', 'M', 'L', 'G', 'G', 'S', 'F', 'L',
+           'A', 'A', 'T'],
+          ['F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G', 'F', 'F', 'M',
+           'S', 'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L', 'T', 'L', 'S',
+           'N', 'S', 'Y', 'W', 'R', 'V', 'S', 'T', 'V', 'H', 'G', 'N', '-',
+           'V', 'I', 'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N', 'L', 'W', 'Y',
+           'S', 'C', 'A', 'T', 'D', 'S', 'L', 'G', 'V', 'S', 'N', 'C', 'W',
+           'D', 'F', 'P', 'S', 'M', 'L', 'A', 'L', 'S', 'G', 'Y', 'V', 'Q',
+           'G', 'C', 'R', 'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L', 'L', 'G',
+           'F', 'L', 'G', 'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L', 'R', 'A',
+           'T', 'N', 'V', 'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K', 'A', 'K',
+           'L', 'L', 'A', 'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L', 'A', 'G',
+           'A', 'C', 'G', 'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A', 'V', 'N',
+           'I', 'T', 'T', 'D', 'F', 'F', 'N', 'P', 'L', 'Y', '-', 'A', 'G',
+           'T', 'K', 'Y', 'E', 'L', 'G', 'P', 'A', 'L', 'Y', 'L', 'G', 'W',
+           'S', 'A', 'S', 'L', 'L', 'S', 'I', 'L', 'G', 'G', 'I', 'C', 'V',
+           'F', 'S', 'T']], dtype='U')
                 # fmt: on
             )
         )
@@ -6413,52 +6363,52 @@ numpy.array([['M', 'A', 'N', 'S', 'G', 'L', 'Q', 'L', 'L', 'G', 'Y', 'F', 'L',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[167, 207, 208, 279, 279, 321, 322, 364],
-                             [  1,  41,  41, 112, 113, 155, 155, 197]])
+                np.array([[167, 207, 208, 279, 279, 321, 322, 364],
+                          [  1,  41,  41, 112, 113, 155, 155, 197]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['K', 'G', 'M', 'A', 'S', 'M', 'G', 'L', 'Q', 'V', 'M', 'G', 'I',
-              'A', 'L', 'A', 'V', 'L', 'G', 'W', 'L', 'A', 'V', 'M', 'L', 'C',
-              'C', 'A', 'L', 'P', 'M', 'W', 'R', 'V', 'T', 'A', 'F', 'I', 'G',
-              'S', 'N', 'I', 'V', 'T', 'S', 'Q', 'T', 'I', 'W', 'E', 'G', 'L',
-              'W', 'M', 'N', 'C', 'V', 'V', 'Q', 'S', 'T', 'G', 'Q', 'M', 'Q',
-              'C', 'K', 'V', 'Y', 'D', 'S', 'L', 'L', 'A', 'L', 'P', 'Q', 'D',
-              'L', 'Q', 'A', 'A', 'R', 'A', 'L', 'V', 'I', 'I', 'S', 'I', 'I',
-              'V', 'A', 'A', 'L', 'G', 'V', 'L', 'L', 'S', 'V', 'V', 'G', 'G',
-              'K', 'C', 'T', 'N', 'C', 'L', 'E', 'D', '-', 'E', 'S', 'A', 'K',
-              'A', 'K', 'T', 'M', 'I', 'V', 'A', 'G', 'V', 'V', 'F', 'L', 'L',
-              'A', 'G', 'L', 'M', 'V', 'I', 'V', 'P', 'V', 'S', 'W', 'T', 'A',
-              'H', 'N', 'I', 'I', 'Q', 'D', 'F', 'Y', 'N', 'P', 'L', 'V', 'A',
-              'S', 'G', 'Q', 'K', 'R', 'E', 'M', 'G', 'A', 'S', 'L', 'Y', 'V',
-              'G', 'W', 'A', 'A', 'S', 'G', 'L', 'L', 'L', 'L', 'G', 'G', 'G',
-              'L', 'L', 'C', 'C', 'S', 'G', 'P', 'S', 'S', 'G', 'E', 'N', 'L',
-              'Y', 'F', 'Q'],
-             ['S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G', 'F',
-              'F', 'M', 'S', 'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L', 'T',
-              'L', 'S', 'N', 'S', 'Y', 'W', 'R', 'V', 'S', 'T', 'V', 'H', 'G',
-              'N', '-', 'V', 'I', 'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N', 'L',
-              'W', 'Y', 'S', 'C', 'A', 'T', 'D', 'S', 'L', 'G', 'V', 'S', 'N',
-              'C', 'W', 'D', 'F', 'P', 'S', 'M', 'L', 'A', 'L', 'S', 'G', 'Y',
-              'V', 'Q', 'G', 'C', 'R', 'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L',
-              'L', 'G', 'F', 'L', 'G', 'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L',
-              'R', 'A', 'T', 'N', 'V', 'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K',
-              'A', 'K', 'L', 'L', 'A', 'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L',
-              'A', 'G', 'A', 'C', 'G', 'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A',
-              'V', 'N', 'I', 'T', 'T', 'D', 'F', 'F', 'N', 'P', 'L', 'Y', '-',
-              'A', 'G', 'T', 'K', 'Y', 'E', 'L', 'G', 'P', 'A', 'L', 'Y', 'L',
-              'G', 'W', 'S', 'A', 'S', 'L', 'L', 'S', 'I', 'L', 'G', 'G', 'I',
-              'C', 'V', 'F', 'S', 'T', 'A', 'A', 'A', 'S', 'S', 'K', 'E', 'E',
-              'P', 'A', 'T']], dtype='U')
+np.array([['K', 'G', 'M', 'A', 'S', 'M', 'G', 'L', 'Q', 'V', 'M', 'G', 'I',
+           'A', 'L', 'A', 'V', 'L', 'G', 'W', 'L', 'A', 'V', 'M', 'L', 'C',
+           'C', 'A', 'L', 'P', 'M', 'W', 'R', 'V', 'T', 'A', 'F', 'I', 'G',
+           'S', 'N', 'I', 'V', 'T', 'S', 'Q', 'T', 'I', 'W', 'E', 'G', 'L',
+           'W', 'M', 'N', 'C', 'V', 'V', 'Q', 'S', 'T', 'G', 'Q', 'M', 'Q',
+           'C', 'K', 'V', 'Y', 'D', 'S', 'L', 'L', 'A', 'L', 'P', 'Q', 'D',
+           'L', 'Q', 'A', 'A', 'R', 'A', 'L', 'V', 'I', 'I', 'S', 'I', 'I',
+           'V', 'A', 'A', 'L', 'G', 'V', 'L', 'L', 'S', 'V', 'V', 'G', 'G',
+           'K', 'C', 'T', 'N', 'C', 'L', 'E', 'D', '-', 'E', 'S', 'A', 'K',
+           'A', 'K', 'T', 'M', 'I', 'V', 'A', 'G', 'V', 'V', 'F', 'L', 'L',
+           'A', 'G', 'L', 'M', 'V', 'I', 'V', 'P', 'V', 'S', 'W', 'T', 'A',
+           'H', 'N', 'I', 'I', 'Q', 'D', 'F', 'Y', 'N', 'P', 'L', 'V', 'A',
+           'S', 'G', 'Q', 'K', 'R', 'E', 'M', 'G', 'A', 'S', 'L', 'Y', 'V',
+           'G', 'W', 'A', 'A', 'S', 'G', 'L', 'L', 'L', 'L', 'G', 'G', 'G',
+           'L', 'L', 'C', 'C', 'S', 'G', 'P', 'S', 'S', 'G', 'E', 'N', 'L',
+           'Y', 'F', 'Q'],
+          ['S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G', 'F',
+           'F', 'M', 'S', 'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L', 'T',
+           'L', 'S', 'N', 'S', 'Y', 'W', 'R', 'V', 'S', 'T', 'V', 'H', 'G',
+           'N', '-', 'V', 'I', 'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N', 'L',
+           'W', 'Y', 'S', 'C', 'A', 'T', 'D', 'S', 'L', 'G', 'V', 'S', 'N',
+           'C', 'W', 'D', 'F', 'P', 'S', 'M', 'L', 'A', 'L', 'S', 'G', 'Y',
+           'V', 'Q', 'G', 'C', 'R', 'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L',
+           'L', 'G', 'F', 'L', 'G', 'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L',
+           'R', 'A', 'T', 'N', 'V', 'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K',
+           'A', 'K', 'L', 'L', 'A', 'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L',
+           'A', 'G', 'A', 'C', 'G', 'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A',
+           'V', 'N', 'I', 'T', 'T', 'D', 'F', 'F', 'N', 'P', 'L', 'Y', '-',
+           'A', 'G', 'T', 'K', 'Y', 'E', 'L', 'G', 'P', 'A', 'L', 'Y', 'L',
+           'G', 'W', 'S', 'A', 'S', 'L', 'L', 'S', 'I', 'L', 'G', 'G', 'I',
+           'C', 'V', 'F', 'S', 'T', 'A', 'A', 'A', 'S', 'S', 'K', 'E', 'E',
+           'P', 'A', 'T']], dtype='U')
                 # fmt: on
             )
         )
@@ -6534,55 +6484,55 @@ numpy.array([['K', 'G', 'M', 'A', 'S', 'M', 'G', 'L', 'Q', 'V', 'M', 'G', 'I',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  0,  41,  52,  86,  97, 128, 128, 212],
-                             [  0,  41,  41,  75,  75, 106, 114, 198]])
+                np.array([[  0,  41,  52,  86,  97, 128, 128, 212],
+                          [  0,  41,  41,  75,  75, 106, 114, 198]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['M', 'G', 'L', 'F', 'D', 'R', 'G', 'V', 'Q', 'M', 'L', 'L', 'T',
-              'T', 'V', 'G', 'A', 'F', 'A', 'A', 'F', 'S', 'L', 'M', 'T', 'I',
-              'A', 'V', 'G', 'T', 'D', 'Y', 'W', 'L', 'Y', 'S', 'R', 'G', 'V',
-              'C', 'K', 'T', 'K', 'S', 'V', 'S', 'E', 'N', 'E', 'T', 'S', 'K',
-              'K', 'N', 'E', 'E', 'V', 'M', 'T', 'H', 'S', 'G', 'L', 'W', 'R',
-              'T', 'C', 'C', 'L', 'E', 'G', 'N', 'F', 'K', 'G', 'L', 'C', 'K',
-              'Q', 'I', 'D', 'H', 'F', 'P', 'E', 'D', 'A', 'D', 'Y', 'E', 'A',
-              'D', 'T', 'A', 'E', 'Y', 'F', 'L', 'R', 'A', 'V', 'R', 'A', 'S',
-              'S', 'I', 'F', 'P', 'I', 'L', 'S', 'V', 'I', 'L', 'L', 'F', 'M',
-              'G', 'G', 'L', 'C', 'I', 'A', 'A', 'S', 'E', 'F', 'Y', '-', '-',
-              '-', '-', '-', '-', '-', '-', 'K', 'T', 'R', 'H', 'N', 'I', 'I',
-              'L', 'S', 'A', 'G', 'I', 'F', 'F', 'V', 'S', 'A', 'G', 'L', 'S',
-              'N', 'I', 'I', 'G', 'I', 'I', 'V', 'Y', 'I', 'S', 'A', 'N', 'A',
-              'G', 'D', 'P', 'S', 'K', 'S', 'D', 'S', 'K', 'K', 'N', 'S', 'Y',
-              'S', 'Y', 'G', 'W', 'S', 'F', 'Y', 'F', 'G', 'A', 'L', 'S', 'F',
-              'I', 'I', 'A', 'E', 'M', 'V', 'G', 'V', 'L', 'A', 'V', 'H', 'M',
-              'F', 'I', 'D', 'R', 'H', 'K', 'Q', 'L', 'R', 'A', 'T', 'A'],
-             ['G', 'S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G',
-              'F', 'F', 'M', 'S', 'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L',
-              'T', 'L', 'S', 'N', 'S', 'Y', 'W', 'R', 'V', 'S', 'T', 'V', 'H',
-              'G', 'N', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-              'V', 'I', 'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N', 'L', 'W', 'Y',
-              'S', 'C', 'A', 'T', 'D', 'S', 'L', 'G', 'V', 'S', 'N', 'C', 'W',
-              'D', 'F', 'P', 'S', 'M', 'L', 'A', 'L', '-', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', 'S', 'G', 'Y', 'V', 'Q', 'G', 'C',
-              'R', 'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L', 'L', 'G', 'F', 'L',
-              'G', 'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L', 'R', 'A', 'T', 'N',
-              'V', 'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K', 'A', 'K', 'L', 'L',
-              'A', 'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L', 'A', 'G', 'A', 'C',
-              'G', 'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A', 'V', 'N', 'I', 'T',
-              'T', 'D', 'F', 'F', 'N', 'P', 'L', 'Y', 'A', 'G', 'T', 'K', 'Y',
-              'E', 'L', 'G', 'P', 'A', 'L', 'Y', 'L', 'G', 'W', 'S', 'A', 'S',
-              'L', 'L', 'S', 'I', 'L', 'G', 'G', 'I', 'C', 'V', 'F', 'S', 'T',
-              'A', 'A', 'A', 'S', 'S', 'K', 'E', 'E', 'P', 'A', 'T', 'R']],
-            dtype='U')
+np.array([['M', 'G', 'L', 'F', 'D', 'R', 'G', 'V', 'Q', 'M', 'L', 'L', 'T',
+           'T', 'V', 'G', 'A', 'F', 'A', 'A', 'F', 'S', 'L', 'M', 'T', 'I',
+           'A', 'V', 'G', 'T', 'D', 'Y', 'W', 'L', 'Y', 'S', 'R', 'G', 'V',
+           'C', 'K', 'T', 'K', 'S', 'V', 'S', 'E', 'N', 'E', 'T', 'S', 'K',
+           'K', 'N', 'E', 'E', 'V', 'M', 'T', 'H', 'S', 'G', 'L', 'W', 'R',
+           'T', 'C', 'C', 'L', 'E', 'G', 'N', 'F', 'K', 'G', 'L', 'C', 'K',
+           'Q', 'I', 'D', 'H', 'F', 'P', 'E', 'D', 'A', 'D', 'Y', 'E', 'A',
+           'D', 'T', 'A', 'E', 'Y', 'F', 'L', 'R', 'A', 'V', 'R', 'A', 'S',
+           'S', 'I', 'F', 'P', 'I', 'L', 'S', 'V', 'I', 'L', 'L', 'F', 'M',
+           'G', 'G', 'L', 'C', 'I', 'A', 'A', 'S', 'E', 'F', 'Y', '-', '-',
+           '-', '-', '-', '-', '-', '-', 'K', 'T', 'R', 'H', 'N', 'I', 'I',
+           'L', 'S', 'A', 'G', 'I', 'F', 'F', 'V', 'S', 'A', 'G', 'L', 'S',
+           'N', 'I', 'I', 'G', 'I', 'I', 'V', 'Y', 'I', 'S', 'A', 'N', 'A',
+           'G', 'D', 'P', 'S', 'K', 'S', 'D', 'S', 'K', 'K', 'N', 'S', 'Y',
+           'S', 'Y', 'G', 'W', 'S', 'F', 'Y', 'F', 'G', 'A', 'L', 'S', 'F',
+           'I', 'I', 'A', 'E', 'M', 'V', 'G', 'V', 'L', 'A', 'V', 'H', 'M',
+           'F', 'I', 'D', 'R', 'H', 'K', 'Q', 'L', 'R', 'A', 'T', 'A'],
+          ['G', 'S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G',
+           'F', 'F', 'M', 'S', 'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L',
+           'T', 'L', 'S', 'N', 'S', 'Y', 'W', 'R', 'V', 'S', 'T', 'V', 'H',
+           'G', 'N', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           'V', 'I', 'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N', 'L', 'W', 'Y',
+           'S', 'C', 'A', 'T', 'D', 'S', 'L', 'G', 'V', 'S', 'N', 'C', 'W',
+           'D', 'F', 'P', 'S', 'M', 'L', 'A', 'L', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', 'S', 'G', 'Y', 'V', 'Q', 'G', 'C',
+           'R', 'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L', 'L', 'G', 'F', 'L',
+           'G', 'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L', 'R', 'A', 'T', 'N',
+           'V', 'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K', 'A', 'K', 'L', 'L',
+           'A', 'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L', 'A', 'G', 'A', 'C',
+           'G', 'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A', 'V', 'N', 'I', 'T',
+           'T', 'D', 'F', 'F', 'N', 'P', 'L', 'Y', 'A', 'G', 'T', 'K', 'Y',
+           'E', 'L', 'G', 'P', 'A', 'L', 'Y', 'L', 'G', 'W', 'S', 'A', 'S',
+           'L', 'L', 'S', 'I', 'L', 'G', 'G', 'I', 'C', 'V', 'F', 'S', 'T',
+           'A', 'A', 'A', 'S', 'S', 'K', 'E', 'E', 'P', 'A', 'T', 'R']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -6658,56 +6608,56 @@ numpy.array([['M', 'G', 'L', 'F', 'D', 'R', 'G', 'V', 'Q', 'M', 'L', 'L', 'T',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  0,  41,  43,  63,  76,  87,  98, 131, 131, 214],
-                             [  1,  42,  42,  62,  62,  73,  73, 106, 115, 198]])
+                np.array([[  0,  41,  43,  63,  76,  87,  98, 131, 131, 214],
+                          [  1,  42,  42,  62,  62,  73,  73, 106, 115, 198]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['M', 'S', 'P', 'T', 'E', 'A', 'P', 'K', 'V', 'R', 'V', 'T', 'L',
-              'F', 'C', 'I', 'L', 'V', 'G', 'I', 'V', 'L', 'A', 'M', 'T', 'A',
-              'V', 'V', 'S', 'D', 'H', 'W', 'A', 'V', 'L', 'S', 'P', 'H', 'M',
-              'E', 'N', 'H', 'N', 'T', 'T', 'C', 'E', 'A', 'A', 'H', 'F', 'G',
-              'L', 'W', 'R', 'I', 'C', 'T', 'K', 'R', 'I', 'A', 'L', 'G', 'E',
-              'D', 'R', 'S', 'C', 'G', 'P', 'I', 'T', 'L', 'P', 'G', 'E', 'K',
-              'N', 'C', 'S', 'Y', 'F', 'R', 'H', 'F', 'N', 'P', 'G', 'E', 'S',
-              'S', 'E', 'I', 'F', 'E', 'F', 'T', 'T', 'Q', 'K', 'E', 'Y', 'S',
-              'I', 'S', 'A', 'A', 'A', 'I', 'S', 'V', 'F', 'S', 'L', 'G', 'F',
-              'L', 'I', 'M', 'G', 'T', 'I', 'C', 'A', 'L', 'M', 'A', 'F', 'R',
-              'K', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'K', 'R', 'D',
-              'Y', 'L', 'L', 'R', 'P', 'A', 'S', 'M', 'F', 'Y', 'V', 'F', 'A',
-              'G', 'L', 'C', 'L', 'F', 'V', 'S', 'L', 'E', 'V', 'M', 'R', 'Q',
-              'S', 'V', 'K', 'R', 'M', 'I', 'D', 'S', 'E', 'D', 'T', 'V', 'W',
-              'I', 'E', 'Y', 'Y', 'Y', 'S', 'W', 'S', 'F', 'A', 'C', 'A', 'C',
-              'A', 'A', 'F', 'V', 'L', 'L', 'F', 'L', 'G', 'G', 'I', 'S', 'L',
-              'L', 'L', 'F', 'S', 'L', 'P', 'R', 'M', 'P', 'Q', 'N', 'P', 'W',
-              'E', 'S'],
-             ['S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G', 'F',
-              'F', 'M', 'S', 'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L', 'T',
-              'L', 'S', 'N', 'S', 'Y', 'W', 'R', 'V', 'S', 'T', 'V', 'H', 'G',
-              'N', 'V', '-', '-', 'I', 'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N',
-              'L', 'W', 'Y', 'S', 'C', 'A', 'T', 'D', 'S', 'L', 'G', '-', '-',
-              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'V', 'S',
-              'N', 'C', 'W', 'D', 'F', 'P', 'S', 'M', 'L', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', '-', 'A', 'L', 'S', 'G', 'Y', 'V',
-              'Q', 'G', 'C', 'R', 'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L', 'L',
-              'G', 'F', 'L', 'G', 'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L', 'R',
-              'A', 'T', 'N', 'V', 'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K', 'A',
-              'K', 'L', 'L', 'A', 'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L', 'A',
-              'G', 'A', 'C', 'G', 'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A', 'V',
-              'N', 'I', 'T', 'T', 'D', 'F', 'F', 'N', 'P', 'L', 'Y', 'A', 'G',
-              'T', 'K', 'Y', 'E', 'L', 'G', 'P', 'A', 'L', 'Y', 'L', 'G', 'W',
-              'S', 'A', 'S', 'L', 'L', 'S', 'I', 'L', 'G', 'G', 'I', 'C', 'V',
-              'F', 'S', 'T', 'A', 'A', 'A', 'S', 'S', 'K', 'E', 'E', 'P', 'A',
-              'T', 'R']], dtype='U')
+np.array([['M', 'S', 'P', 'T', 'E', 'A', 'P', 'K', 'V', 'R', 'V', 'T', 'L',
+           'F', 'C', 'I', 'L', 'V', 'G', 'I', 'V', 'L', 'A', 'M', 'T', 'A',
+           'V', 'V', 'S', 'D', 'H', 'W', 'A', 'V', 'L', 'S', 'P', 'H', 'M',
+           'E', 'N', 'H', 'N', 'T', 'T', 'C', 'E', 'A', 'A', 'H', 'F', 'G',
+           'L', 'W', 'R', 'I', 'C', 'T', 'K', 'R', 'I', 'A', 'L', 'G', 'E',
+           'D', 'R', 'S', 'C', 'G', 'P', 'I', 'T', 'L', 'P', 'G', 'E', 'K',
+           'N', 'C', 'S', 'Y', 'F', 'R', 'H', 'F', 'N', 'P', 'G', 'E', 'S',
+           'S', 'E', 'I', 'F', 'E', 'F', 'T', 'T', 'Q', 'K', 'E', 'Y', 'S',
+           'I', 'S', 'A', 'A', 'A', 'I', 'S', 'V', 'F', 'S', 'L', 'G', 'F',
+           'L', 'I', 'M', 'G', 'T', 'I', 'C', 'A', 'L', 'M', 'A', 'F', 'R',
+           'K', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'K', 'R', 'D',
+           'Y', 'L', 'L', 'R', 'P', 'A', 'S', 'M', 'F', 'Y', 'V', 'F', 'A',
+           'G', 'L', 'C', 'L', 'F', 'V', 'S', 'L', 'E', 'V', 'M', 'R', 'Q',
+           'S', 'V', 'K', 'R', 'M', 'I', 'D', 'S', 'E', 'D', 'T', 'V', 'W',
+           'I', 'E', 'Y', 'Y', 'Y', 'S', 'W', 'S', 'F', 'A', 'C', 'A', 'C',
+           'A', 'A', 'F', 'V', 'L', 'L', 'F', 'L', 'G', 'G', 'I', 'S', 'L',
+           'L', 'L', 'F', 'S', 'L', 'P', 'R', 'M', 'P', 'Q', 'N', 'P', 'W',
+           'E', 'S'],
+          ['S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G', 'F',
+           'F', 'M', 'S', 'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L', 'T',
+           'L', 'S', 'N', 'S', 'Y', 'W', 'R', 'V', 'S', 'T', 'V', 'H', 'G',
+           'N', 'V', '-', '-', 'I', 'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N',
+           'L', 'W', 'Y', 'S', 'C', 'A', 'T', 'D', 'S', 'L', 'G', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'V', 'S',
+           'N', 'C', 'W', 'D', 'F', 'P', 'S', 'M', 'L', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', 'A', 'L', 'S', 'G', 'Y', 'V',
+           'Q', 'G', 'C', 'R', 'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L', 'L',
+           'G', 'F', 'L', 'G', 'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L', 'R',
+           'A', 'T', 'N', 'V', 'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K', 'A',
+           'K', 'L', 'L', 'A', 'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L', 'A',
+           'G', 'A', 'C', 'G', 'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A', 'V',
+           'N', 'I', 'T', 'T', 'D', 'F', 'F', 'N', 'P', 'L', 'Y', 'A', 'G',
+           'T', 'K', 'Y', 'E', 'L', 'G', 'P', 'A', 'L', 'Y', 'L', 'G', 'W',
+           'S', 'A', 'S', 'L', 'L', 'S', 'I', 'L', 'G', 'G', 'I', 'C', 'V',
+           'F', 'S', 'T', 'A', 'A', 'A', 'S', 'S', 'K', 'E', 'E', 'P', 'A',
+           'T', 'R']], dtype='U')
                 # fmt: on
             )
         )
@@ -6783,52 +6733,52 @@ numpy.array([['M', 'S', 'P', 'T', 'E', 'A', 'P', 'K', 'V', 'R', 'V', 'T', 'L',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 27,  64,  64,  80,  81,  95,  97, 128, 128, 165, 172, 218],
-                             [  4,  41,  45,  61,  61,  75,  75, 106, 115, 152, 152, 198]])
+                np.array([[ 27,  64,  64,  80,  81,  95,  97, 128, 128, 165, 172, 218],
+                          [  4,  41,  45,  61,  61,  75,  75, 106, 115, 152, 152, 198]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['N', 'S', 'R', 'A', 'V', 'G', 'V', 'M', 'W', 'G', 'T', 'L', 'T',
-              'I', 'C', 'F', 'S', 'V', 'L', 'V', 'M', 'A', 'L', 'F', 'I', 'Q',
-              'P', 'Y', 'W', 'I', 'G', 'D', 'S', 'V', 'S', 'T', 'P', '-', '-',
-              '-', '-', 'Q', 'A', 'G', 'Y', 'F', 'G', 'L', 'F', 'S', 'Y', 'C',
-              'V', 'G', 'N', 'V', 'L', 'S', 'S', 'E', 'L', 'I', 'C', 'K', 'G',
-              'G', 'P', 'L', 'D', 'F', 'S', 'S', 'I', 'P', 'S', 'R', 'A', 'F',
-              'K', 'T', 'A', 'M', 'F', 'F', 'V', 'A', 'L', 'A', 'M', 'F', 'L',
-              'I', 'I', 'G', 'S', 'I', 'I', 'C', 'F', 'S', 'L', 'F', 'F', 'V',
-              'C', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'N', 'T', 'A',
-              'T', 'V', 'Y', 'K', 'I', 'C', 'A', 'W', 'M', 'Q', 'L', 'A', 'A',
-              'A', 'T', 'G', 'L', 'M', 'I', 'G', 'C', 'L', 'V', 'Y', 'P', 'D',
-              'G', 'W', 'D', 'S', 'S', 'E', 'V', 'R', 'R', 'M', 'C', 'G', 'E',
-              'Q', 'T', 'G', 'K', 'Y', 'T', 'L', 'G', 'H', 'C', 'T', 'I', 'R',
-              'W', 'A', 'F', 'M', 'L', 'A', 'I', 'L', 'S', 'I', 'G', 'D', 'A',
-              'L', 'I', 'L', 'S', 'F', 'L', 'A', 'F', 'V', 'L', 'G', 'Y', 'R',
-              'Q', 'D', 'K', 'L', 'L', 'P', 'D', 'D', 'Y'],
-             ['M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G', 'F', 'F', 'M', 'S',
-              'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L', 'T', 'L', 'S', 'N',
-              'S', 'Y', 'W', 'R', 'V', 'S', 'T', 'V', 'H', 'G', 'N', 'V', 'I',
-              'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N', 'L', 'W', 'Y', 'S', 'C',
-              'A', 'T', 'D', 'S', 'L', '-', 'G', 'V', 'S', 'N', 'C', 'W', 'D',
-              'F', 'P', 'S', 'M', 'L', 'A', 'L', '-', '-', 'S', 'G', 'Y', 'V',
-              'Q', 'G', 'C', 'R', 'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L', 'L',
-              'G', 'F', 'L', 'G', 'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L', 'R',
-              'A', 'T', 'N', 'V', 'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K', 'A',
-              'K', 'L', 'L', 'A', 'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L', 'A',
-              'G', 'A', 'C', 'G', 'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A', 'V',
-              'N', 'I', 'T', 'T', 'D', 'F', 'F', 'N', '-', '-', '-', '-', '-',
-              '-', '-', 'P', 'L', 'Y', 'A', 'G', 'T', 'K', 'Y', 'E', 'L', 'G',
-              'P', 'A', 'L', 'Y', 'L', 'G', 'W', 'S', 'A', 'S', 'L', 'L', 'S',
-              'I', 'L', 'G', 'G', 'I', 'C', 'V', 'F', 'S', 'T', 'A', 'A', 'A',
-              'S', 'S', 'K', 'E', 'E', 'P', 'A', 'T', 'R']], dtype='U')
+np.array([['N', 'S', 'R', 'A', 'V', 'G', 'V', 'M', 'W', 'G', 'T', 'L', 'T',
+           'I', 'C', 'F', 'S', 'V', 'L', 'V', 'M', 'A', 'L', 'F', 'I', 'Q',
+           'P', 'Y', 'W', 'I', 'G', 'D', 'S', 'V', 'S', 'T', 'P', '-', '-',
+           '-', '-', 'Q', 'A', 'G', 'Y', 'F', 'G', 'L', 'F', 'S', 'Y', 'C',
+           'V', 'G', 'N', 'V', 'L', 'S', 'S', 'E', 'L', 'I', 'C', 'K', 'G',
+           'G', 'P', 'L', 'D', 'F', 'S', 'S', 'I', 'P', 'S', 'R', 'A', 'F',
+           'K', 'T', 'A', 'M', 'F', 'F', 'V', 'A', 'L', 'A', 'M', 'F', 'L',
+           'I', 'I', 'G', 'S', 'I', 'I', 'C', 'F', 'S', 'L', 'F', 'F', 'V',
+           'C', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'N', 'T', 'A',
+           'T', 'V', 'Y', 'K', 'I', 'C', 'A', 'W', 'M', 'Q', 'L', 'A', 'A',
+           'A', 'T', 'G', 'L', 'M', 'I', 'G', 'C', 'L', 'V', 'Y', 'P', 'D',
+           'G', 'W', 'D', 'S', 'S', 'E', 'V', 'R', 'R', 'M', 'C', 'G', 'E',
+           'Q', 'T', 'G', 'K', 'Y', 'T', 'L', 'G', 'H', 'C', 'T', 'I', 'R',
+           'W', 'A', 'F', 'M', 'L', 'A', 'I', 'L', 'S', 'I', 'G', 'D', 'A',
+           'L', 'I', 'L', 'S', 'F', 'L', 'A', 'F', 'V', 'L', 'G', 'Y', 'R',
+           'Q', 'D', 'K', 'L', 'L', 'P', 'D', 'D', 'Y'],
+          ['M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G', 'F', 'F', 'M', 'S',
+           'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L', 'T', 'L', 'S', 'N',
+           'S', 'Y', 'W', 'R', 'V', 'S', 'T', 'V', 'H', 'G', 'N', 'V', 'I',
+           'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N', 'L', 'W', 'Y', 'S', 'C',
+           'A', 'T', 'D', 'S', 'L', '-', 'G', 'V', 'S', 'N', 'C', 'W', 'D',
+           'F', 'P', 'S', 'M', 'L', 'A', 'L', '-', '-', 'S', 'G', 'Y', 'V',
+           'Q', 'G', 'C', 'R', 'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L', 'L',
+           'G', 'F', 'L', 'G', 'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L', 'R',
+           'A', 'T', 'N', 'V', 'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K', 'A',
+           'K', 'L', 'L', 'A', 'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L', 'A',
+           'G', 'A', 'C', 'G', 'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A', 'V',
+           'N', 'I', 'T', 'T', 'D', 'F', 'F', 'N', '-', '-', '-', '-', '-',
+           '-', '-', 'P', 'L', 'Y', 'A', 'G', 'T', 'K', 'Y', 'E', 'L', 'G',
+           'P', 'A', 'L', 'Y', 'L', 'G', 'W', 'S', 'A', 'S', 'L', 'L', 'S',
+           'I', 'L', 'G', 'G', 'I', 'C', 'V', 'F', 'S', 'T', 'A', 'A', 'A',
+           'S', 'S', 'K', 'E', 'E', 'P', 'A', 'T', 'R']], dtype='U')
                 # fmt: on
             )
         )
@@ -6904,55 +6854,55 @@ numpy.array([['N', 'S', 'R', 'A', 'V', 'G', 'V', 'M', 'W', 'G', 'T', 'L', 'T',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 819,  851,  862,  902,  913,  946,  946, 1030],
-                             [   1,   33,   33,   73,   73,  106,  114,  198]])
+                np.array([[ 819,  851,  862,  902,  913,  946,  946, 1030],
+                          [   1,   33,   33,   73,   73,  106,  114,  198]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'L', 'F', 'D', 'R', 'G', 'V', 'Q', 'M', 'L', 'L', 'T', 'T',
-              'V', 'G', 'A', 'F', 'A', 'A', 'F', 'S', 'L', 'M', 'T', 'I', 'A',
-              'V', 'G', 'T', 'D', 'Y', 'W', 'L', 'Y', 'S', 'R', 'G', 'V', 'C',
-              'K', 'T', 'K', 'S', 'V', 'S', 'E', 'D', 'E', 'T', 'S', 'K', 'K',
-              'N', 'E', 'E', 'V', 'M', 'T', 'H', 'S', 'G', 'L', 'W', 'R', 'T',
-              'C', 'C', 'L', 'E', 'G', 'N', 'F', 'K', 'G', 'L', 'C', 'K', 'Q',
-              'I', 'D', 'H', 'F', 'P', 'E', 'D', 'A', 'D', 'Y', 'E', 'A', 'D',
-              'T', 'A', 'E', 'Y', 'F', 'L', 'R', 'A', 'V', 'R', 'A', 'S', 'S',
-              'I', 'F', 'P', 'I', 'L', 'S', 'V', 'I', 'L', 'L', 'F', 'M', 'G',
-              'G', 'L', 'C', 'I', 'A', 'A', 'S', 'E', 'F', 'Y', '-', '-', '-',
-              '-', '-', '-', '-', '-', 'K', 'T', 'R', 'H', 'N', 'I', 'I', 'L',
-              'S', 'A', 'G', 'I', 'F', 'F', 'V', 'S', 'A', 'G', 'L', 'S', 'N',
-              'I', 'I', 'G', 'I', 'I', 'V', 'Y', 'I', 'S', 'A', 'N', 'A', 'G',
-              'D', 'P', 'S', 'K', 'S', 'D', 'S', 'K', 'K', 'N', 'S', 'Y', 'S',
-              'Y', 'G', 'W', 'S', 'F', 'Y', 'F', 'G', 'A', 'L', 'S', 'F', 'I',
-              'I', 'A', 'E', 'M', 'V', 'G', 'V', 'L', 'A', 'V', 'H', 'M', 'F',
-              'I', 'D', 'R', 'H', 'K', 'Q', 'L', 'T', 'G', 'G', 'A'],
-             ['S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G', 'F',
-              'F', 'M', 'S', 'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L', 'T',
-              'L', 'S', 'N', 'S', 'Y', 'W', '-', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', '-', 'R', 'V', 'S', 'T', 'V', 'H', 'G', 'N', 'V',
-              'I', 'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N', 'L', 'W', 'Y', 'S',
-              'C', 'A', 'T', 'D', 'S', 'L', 'G', 'V', 'S', 'N', 'C', 'W', 'D',
-              'F', 'P', 'S', 'M', 'L', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', 'A', 'L', 'S', 'G', 'Y', 'V', 'Q', 'G', 'C', 'R',
-              'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L', 'L', 'G', 'F', 'L', 'G',
-              'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L', 'R', 'A', 'T', 'N', 'V',
-              'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K', 'A', 'K', 'L', 'L', 'A',
-              'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L', 'A', 'G', 'A', 'C', 'G',
-              'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A', 'V', 'N', 'I', 'T', 'T',
-              'D', 'F', 'F', 'N', 'P', 'L', 'Y', 'A', 'G', 'T', 'K', 'Y', 'E',
-              'L', 'G', 'P', 'A', 'L', 'Y', 'L', 'G', 'W', 'S', 'A', 'S', 'L',
-              'L', 'S', 'I', 'L', 'G', 'G', 'I', 'C', 'V', 'F', 'S', 'T', 'A',
-              'A', 'A', 'S', 'S', 'K', 'E', 'E', 'P', 'A', 'T', 'R']],
-            dtype='U')
+np.array([['G', 'L', 'F', 'D', 'R', 'G', 'V', 'Q', 'M', 'L', 'L', 'T', 'T',
+           'V', 'G', 'A', 'F', 'A', 'A', 'F', 'S', 'L', 'M', 'T', 'I', 'A',
+           'V', 'G', 'T', 'D', 'Y', 'W', 'L', 'Y', 'S', 'R', 'G', 'V', 'C',
+           'K', 'T', 'K', 'S', 'V', 'S', 'E', 'D', 'E', 'T', 'S', 'K', 'K',
+           'N', 'E', 'E', 'V', 'M', 'T', 'H', 'S', 'G', 'L', 'W', 'R', 'T',
+           'C', 'C', 'L', 'E', 'G', 'N', 'F', 'K', 'G', 'L', 'C', 'K', 'Q',
+           'I', 'D', 'H', 'F', 'P', 'E', 'D', 'A', 'D', 'Y', 'E', 'A', 'D',
+           'T', 'A', 'E', 'Y', 'F', 'L', 'R', 'A', 'V', 'R', 'A', 'S', 'S',
+           'I', 'F', 'P', 'I', 'L', 'S', 'V', 'I', 'L', 'L', 'F', 'M', 'G',
+           'G', 'L', 'C', 'I', 'A', 'A', 'S', 'E', 'F', 'Y', '-', '-', '-',
+           '-', '-', '-', '-', '-', 'K', 'T', 'R', 'H', 'N', 'I', 'I', 'L',
+           'S', 'A', 'G', 'I', 'F', 'F', 'V', 'S', 'A', 'G', 'L', 'S', 'N',
+           'I', 'I', 'G', 'I', 'I', 'V', 'Y', 'I', 'S', 'A', 'N', 'A', 'G',
+           'D', 'P', 'S', 'K', 'S', 'D', 'S', 'K', 'K', 'N', 'S', 'Y', 'S',
+           'Y', 'G', 'W', 'S', 'F', 'Y', 'F', 'G', 'A', 'L', 'S', 'F', 'I',
+           'I', 'A', 'E', 'M', 'V', 'G', 'V', 'L', 'A', 'V', 'H', 'M', 'F',
+           'I', 'D', 'R', 'H', 'K', 'Q', 'L', 'T', 'G', 'G', 'A'],
+          ['S', 'E', 'F', 'M', 'S', 'V', 'A', 'V', 'E', 'T', 'F', 'G', 'F',
+           'F', 'M', 'S', 'A', 'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L', 'T',
+           'L', 'S', 'N', 'S', 'Y', 'W', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', 'R', 'V', 'S', 'T', 'V', 'H', 'G', 'N', 'V',
+           'I', 'T', 'T', 'N', 'T', 'I', 'F', 'E', 'N', 'L', 'W', 'Y', 'S',
+           'C', 'A', 'T', 'D', 'S', 'L', 'G', 'V', 'S', 'N', 'C', 'W', 'D',
+           'F', 'P', 'S', 'M', 'L', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', 'A', 'L', 'S', 'G', 'Y', 'V', 'Q', 'G', 'C', 'R',
+           'A', 'L', 'M', 'I', 'T', 'A', 'I', 'L', 'L', 'G', 'F', 'L', 'G',
+           'L', 'F', 'L', 'G', 'M', 'V', 'G', 'L', 'R', 'A', 'T', 'N', 'V',
+           'G', 'N', 'M', 'D', 'L', 'S', 'K', 'K', 'A', 'K', 'L', 'L', 'A',
+           'I', 'A', 'G', 'T', 'L', 'H', 'I', 'L', 'A', 'G', 'A', 'C', 'G',
+           'M', 'V', 'A', 'I', 'S', 'W', 'Y', 'A', 'V', 'N', 'I', 'T', 'T',
+           'D', 'F', 'F', 'N', 'P', 'L', 'Y', 'A', 'G', 'T', 'K', 'Y', 'E',
+           'L', 'G', 'P', 'A', 'L', 'Y', 'L', 'G', 'W', 'S', 'A', 'S', 'L',
+           'L', 'S', 'I', 'L', 'G', 'G', 'I', 'C', 'V', 'F', 'S', 'T', 'A',
+           'A', 'A', 'S', 'S', 'K', 'E', 'E', 'P', 'A', 'T', 'R']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -7006,26 +6956,26 @@ numpy.array([['G', 'L', 'F', 'D', 'R', 'G', 'V', 'Q', 'M', 'L', 'L', 'T', 'T',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 8, 34, 36, 42],
-                             [ 5, 31, 31, 37]])
+                np.array([[ 8, 34, 36, 42],
+                          [ 5, 31, 31, 37]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['R', 'T', 'S', 'V', 'V', 'V', 'S', 'T', 'L', 'L', 'G', 'L', 'V',
-              'M', 'A', 'L', 'L', 'I', 'H', 'F', 'V', 'V', 'L', 'S', 'S', 'G',
-              'A', 'F', 'N', 'W', 'L', 'R', 'A', 'P'],
-             ['S', 'V', 'A', 'V', 'E', 'T', 'F', 'G', 'F', 'F', 'M', 'S', 'A',
-              'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L', 'T', 'L', 'S', 'N', 'S',
-              '-', '-', 'Y', 'W', 'R', 'V', 'S', 'T']], dtype='U')
+np.array([['R', 'T', 'S', 'V', 'V', 'V', 'S', 'T', 'L', 'L', 'G', 'L', 'V',
+           'M', 'A', 'L', 'L', 'I', 'H', 'F', 'V', 'V', 'L', 'S', 'S', 'G',
+           'A', 'F', 'N', 'W', 'L', 'R', 'A', 'P'],
+          ['S', 'V', 'A', 'V', 'E', 'T', 'F', 'G', 'F', 'F', 'M', 'S', 'A',
+           'L', 'G', 'L', 'L', 'M', 'L', 'G', 'L', 'T', 'L', 'S', 'N', 'S',
+           '-', '-', 'Y', 'W', 'R', 'V', 'S', 'T']], dtype='U')
                 # fmt: on
             )
         )
@@ -7125,56 +7075,56 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1, 227],
-                             [  0, 226]])
+                np.array([[  1, 227],
+                          [  0, 226]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
-              'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
-              'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
-              'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
-              'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
-              'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
-              'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
-              'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
-              'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
-              'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
-              'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
-              'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L',
-              'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
-              'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
-              'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
-              'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S',
-              'R', 'A', 'I', 'F', 'G'],
-             ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
-              'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
-              'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
-              'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
-              'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
-              'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
-              'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
-              'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
-              'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
-              'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
-              'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
-              'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L',
-              'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
-              'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
-              'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
-              'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S',
-              'R', 'A', 'I', 'F', 'G']], dtype='U')
+np.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
+           'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
+           'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
+           'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
+           'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
+           'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
+           'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
+           'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
+           'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
+           'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
+           'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
+           'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L',
+           'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
+           'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
+           'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
+           'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S',
+           'R', 'A', 'I', 'F', 'G'],
+          ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
+           'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
+           'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
+           'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
+           'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
+           'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
+           'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
+           'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
+           'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
+           'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
+           'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
+           'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L',
+           'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
+           'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
+           'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
+           'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S',
+           'R', 'A', 'I', 'F', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -7250,56 +7200,56 @@ numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 18, 244],
-                             [  0, 226]])
+                np.array([[ 18, 244],
+                          [  0, 226]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
-              'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
-              'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
-              'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
-              'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
-              'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
-              'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
-              'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
-              'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
-              'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
-              'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
-              'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L',
-              'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
-              'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
-              'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
-              'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S',
-              'R', 'A', 'I', 'F', 'G'],
-             ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
-              'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
-              'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
-              'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
-              'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
-              'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
-              'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
-              'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
-              'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
-              'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
-              'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
-              'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L',
-              'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
-              'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
-              'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
-              'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S',
-              'R', 'A', 'I', 'F', 'G']], dtype='U')
+np.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
+           'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
+           'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
+           'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
+           'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
+           'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
+           'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
+           'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
+           'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
+           'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
+           'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
+           'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L',
+           'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
+           'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
+           'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
+           'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S',
+           'R', 'A', 'I', 'F', 'G'],
+          ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
+           'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
+           'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
+           'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
+           'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
+           'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
+           'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
+           'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
+           'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
+           'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
+           'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
+           'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L',
+           'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
+           'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
+           'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
+           'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S',
+           'R', 'A', 'I', 'F', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -7375,56 +7325,56 @@ numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  5, 194, 195, 231],
-                             [  1, 190, 190, 226]])
+                np.array([[  5, 194, 195, 231],
+                          [  1, 190, 190, 226]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'P', 'E', 'S', 'I', 'W', 'L', 'W', 'I', 'G', 'T', 'I', 'G',
-              'M', 'T', 'L', 'G', 'T', 'L', 'Y', 'F', 'V', 'G', 'R', 'G', 'R',
-              'G', 'V', 'R', 'D', 'R', 'K', 'M', 'Q', 'E', 'F', 'Y', 'I', 'I',
-              'T', 'T', 'F', 'I', 'T', 'T', 'I', 'A', 'A', 'A', 'M', 'Y', 'F',
-              'A', 'M', 'A', 'T', 'G', 'F', 'G', 'V', 'T', 'E', 'V', 'V', 'V',
-              'G', 'D', 'E', 'A', 'L', 'T', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A',
-              'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L',
-              'G', 'L', 'L', 'A', 'G', 'A', 'N', 'R', 'N', 'T', 'I', 'A', 'T',
-              'L', 'I', 'G', 'L', 'D', 'V', 'F', 'M', 'I', 'G', 'T', 'G', 'M',
-              'I', 'A', 'A', 'F', 'A', 'A', 'T', 'P', 'G', 'T', 'R', 'I', 'A',
-              'W', 'W', 'G', 'I', 'S', 'T', 'G', 'A', 'L', 'L', 'A', 'L', 'L',
-              'Y', 'V', 'L', 'V', 'G', 'T', 'L', 'S', 'K', 'D', 'A', 'R', 'G',
-              'Q', 'S', 'P', 'E', 'V', 'A', 'S', 'L', 'F', 'G', 'R', 'L', 'R',
-              'N', 'L', 'V', 'I', 'V', 'L', 'W', 'L', 'L', 'Y', 'P', 'V', 'V',
-              'W', 'I', 'L', 'G', 'T', 'E', 'G', 'T', 'F', 'G', 'I', 'L', 'P',
-              'L', 'Y', 'W', 'E', 'T', 'A', 'A', 'F', 'M', 'V', 'L', 'D', 'L',
-              'S', 'A', 'K', 'V', 'G', 'F', 'G', 'V', 'V', 'L', 'L', 'R', 'S',
-              'R', 'S', 'V', 'L', 'R'],
-             ['R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L',
-              'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M',
-              'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I',
-              'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L',
-              'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F',
-              'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A',
-              'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L',
-              'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L', 'A',
-              'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L',
-              'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F', 'V',
-              'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L',
-              'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S',
-              'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R',
-              'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V',
-              'W', 'L', 'I', 'G', 'S', 'E', 'G', '-', 'A', 'G', 'I', 'V', 'P',
-              'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
-              'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S',
-              'R', 'A', 'I', 'F', 'G']], dtype='U')
+np.array([['G', 'P', 'E', 'S', 'I', 'W', 'L', 'W', 'I', 'G', 'T', 'I', 'G',
+           'M', 'T', 'L', 'G', 'T', 'L', 'Y', 'F', 'V', 'G', 'R', 'G', 'R',
+           'G', 'V', 'R', 'D', 'R', 'K', 'M', 'Q', 'E', 'F', 'Y', 'I', 'I',
+           'T', 'T', 'F', 'I', 'T', 'T', 'I', 'A', 'A', 'A', 'M', 'Y', 'F',
+           'A', 'M', 'A', 'T', 'G', 'F', 'G', 'V', 'T', 'E', 'V', 'V', 'V',
+           'G', 'D', 'E', 'A', 'L', 'T', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A',
+           'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L',
+           'G', 'L', 'L', 'A', 'G', 'A', 'N', 'R', 'N', 'T', 'I', 'A', 'T',
+           'L', 'I', 'G', 'L', 'D', 'V', 'F', 'M', 'I', 'G', 'T', 'G', 'M',
+           'I', 'A', 'A', 'F', 'A', 'A', 'T', 'P', 'G', 'T', 'R', 'I', 'A',
+           'W', 'W', 'G', 'I', 'S', 'T', 'G', 'A', 'L', 'L', 'A', 'L', 'L',
+           'Y', 'V', 'L', 'V', 'G', 'T', 'L', 'S', 'K', 'D', 'A', 'R', 'G',
+           'Q', 'S', 'P', 'E', 'V', 'A', 'S', 'L', 'F', 'G', 'R', 'L', 'R',
+           'N', 'L', 'V', 'I', 'V', 'L', 'W', 'L', 'L', 'Y', 'P', 'V', 'V',
+           'W', 'I', 'L', 'G', 'T', 'E', 'G', 'T', 'F', 'G', 'I', 'L', 'P',
+           'L', 'Y', 'W', 'E', 'T', 'A', 'A', 'F', 'M', 'V', 'L', 'D', 'L',
+           'S', 'A', 'K', 'V', 'G', 'F', 'G', 'V', 'V', 'L', 'L', 'R', 'S',
+           'R', 'S', 'V', 'L', 'R'],
+          ['R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L',
+           'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M',
+           'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I',
+           'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L',
+           'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F',
+           'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A',
+           'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L',
+           'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L', 'A',
+           'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L',
+           'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F', 'V',
+           'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L',
+           'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S',
+           'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R',
+           'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V',
+           'W', 'L', 'I', 'G', 'S', 'E', 'G', '-', 'A', 'G', 'I', 'V', 'P',
+           'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
+           'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S',
+           'R', 'A', 'I', 'F', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -7500,56 +7450,56 @@ numpy.array([['G', 'P', 'E', 'S', 'I', 'W', 'L', 'W', 'I', 'G', 'T', 'I', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 15,  80,  81, 242],
-                             [  0,  65,  65, 226]])
+                np.array([[ 15,  80,  81, 242],
+                          [  0,  65,  65, 226]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'R', 'P', 'E', 'T', 'L', 'W', 'L', 'G', 'I', 'G', 'T', 'L',
-              'L', 'M', 'L', 'I', 'G', 'T', 'F', 'Y', 'F', 'I', 'A', 'R', 'G',
-              'W', 'G', 'V', 'T', 'D', 'K', 'E', 'A', 'R', 'E', 'Y', 'Y', 'A',
-              'I', 'T', 'I', 'L', 'V', 'P', 'G', 'I', 'A', 'S', 'A', 'A', 'Y',
-              'L', 'A', 'M', 'F', 'F', 'G', 'I', 'G', 'V', 'T', 'E', 'V', 'E',
-              'L', 'A', 'S', 'G', 'T', 'V', 'L', 'D', 'I', 'Y', 'Y', 'A', 'R',
-              'Y', 'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L',
-              'D', 'L', 'A', 'L', 'L', 'A', 'K', 'V', 'D', 'R', 'V', 'T', 'I',
-              'G', 'T', 'L', 'I', 'G', 'V', 'D', 'A', 'L', 'M', 'I', 'V', 'T',
-              'G', 'L', 'I', 'G', 'A', 'L', 'S', 'K', 'T', 'P', 'L', 'A', 'R',
-              'Y', 'T', 'W', 'W', 'L', 'F', 'S', 'T', 'I', 'A', 'F', 'L', 'F',
-              'V', 'L', 'Y', 'Y', 'L', 'L', 'T', 'S', 'L', 'R', 'S', 'A', 'A',
-              'A', 'K', 'R', 'S', 'E', 'E', 'V', 'R', 'S', 'T', 'F', 'N', 'T',
-              'L', 'T', 'A', 'L', 'V', 'A', 'V', 'L', 'W', 'T', 'A', 'Y', 'P',
-              'I', 'L', 'W', 'I', 'V', 'G', 'T', 'E', 'G', 'A', 'G', 'V', 'V',
-              'G', 'L', 'G', 'I', 'E', 'T', 'L', 'A', 'F', 'M', 'V', 'L', 'D',
-              'V', 'T', 'A', 'K', 'V', 'G', 'F', 'G', 'F', 'V', 'L', 'L', 'R',
-              'S', 'R', 'A', 'I', 'L', 'G'],
-             ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
-              'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
-              'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
-              'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
-              '-', 'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R',
-              'Y', 'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L',
-              'D', 'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I',
-              'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T',
-              'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R',
-              'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y',
-              'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A',
-              'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V',
-              'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P',
-              'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V',
-              'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D',
-              'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R',
-              'S', 'R', 'A', 'I', 'F', 'G']], dtype='U')
+np.array([['G', 'R', 'P', 'E', 'T', 'L', 'W', 'L', 'G', 'I', 'G', 'T', 'L',
+           'L', 'M', 'L', 'I', 'G', 'T', 'F', 'Y', 'F', 'I', 'A', 'R', 'G',
+           'W', 'G', 'V', 'T', 'D', 'K', 'E', 'A', 'R', 'E', 'Y', 'Y', 'A',
+           'I', 'T', 'I', 'L', 'V', 'P', 'G', 'I', 'A', 'S', 'A', 'A', 'Y',
+           'L', 'A', 'M', 'F', 'F', 'G', 'I', 'G', 'V', 'T', 'E', 'V', 'E',
+           'L', 'A', 'S', 'G', 'T', 'V', 'L', 'D', 'I', 'Y', 'Y', 'A', 'R',
+           'Y', 'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L',
+           'D', 'L', 'A', 'L', 'L', 'A', 'K', 'V', 'D', 'R', 'V', 'T', 'I',
+           'G', 'T', 'L', 'I', 'G', 'V', 'D', 'A', 'L', 'M', 'I', 'V', 'T',
+           'G', 'L', 'I', 'G', 'A', 'L', 'S', 'K', 'T', 'P', 'L', 'A', 'R',
+           'Y', 'T', 'W', 'W', 'L', 'F', 'S', 'T', 'I', 'A', 'F', 'L', 'F',
+           'V', 'L', 'Y', 'Y', 'L', 'L', 'T', 'S', 'L', 'R', 'S', 'A', 'A',
+           'A', 'K', 'R', 'S', 'E', 'E', 'V', 'R', 'S', 'T', 'F', 'N', 'T',
+           'L', 'T', 'A', 'L', 'V', 'A', 'V', 'L', 'W', 'T', 'A', 'Y', 'P',
+           'I', 'L', 'W', 'I', 'V', 'G', 'T', 'E', 'G', 'A', 'G', 'V', 'V',
+           'G', 'L', 'G', 'I', 'E', 'T', 'L', 'A', 'F', 'M', 'V', 'L', 'D',
+           'V', 'T', 'A', 'K', 'V', 'G', 'F', 'G', 'F', 'V', 'L', 'L', 'R',
+           'S', 'R', 'A', 'I', 'L', 'G'],
+          ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
+           'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
+           'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
+           'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
+           '-', 'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R',
+           'Y', 'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L',
+           'D', 'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I',
+           'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T',
+           'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R',
+           'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y',
+           'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A',
+           'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V',
+           'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P',
+           'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V',
+           'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D',
+           'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R',
+           'S', 'R', 'A', 'I', 'F', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -7625,56 +7575,56 @@ numpy.array([['G', 'R', 'P', 'E', 'T', 'L', 'W', 'L', 'G', 'I', 'G', 'T', 'L',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  4, 128, 134, 234],
-                             [  1, 125, 125, 225]])
+                np.array([[  4, 128, 134, 234],
+                          [  1, 125, 125, 225]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'G', 'E', 'A', 'I', 'W', 'L', 'W', 'L', 'G', 'T', 'A', 'G',
-              'M', 'F', 'L', 'G', 'M', 'L', 'Y', 'F', 'I', 'A', 'R', 'G', 'W',
-              'G', 'E', 'T', 'D', 'S', 'R', 'R', 'Q', 'K', 'F', 'Y', 'I', 'A',
-              'T', 'I', 'L', 'I', 'T', 'A', 'I', 'A', 'F', 'V', 'N', 'Y', 'L',
-              'A', 'M', 'A', 'L', 'G', 'F', 'G', 'L', 'T', 'I', 'V', 'E', 'I',
-              'A', 'G', 'E', 'Q', 'R', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'S',
-              'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'Y', 'D', 'L',
-              'G', 'L', 'L', 'A', 'G', 'A', 'D', 'R', 'N', 'T', 'I', 'S', 'S',
-              'L', 'V', 'S', 'L', 'D', 'V', 'L', 'M', 'I', 'G', 'T', 'G', 'L',
-              'V', 'A', 'T', 'L', 'S', 'A', 'G', 'S', 'G', 'V', 'L', 'S', 'A',
-              'G', 'A', 'E', 'R', 'L', 'V', 'W', 'W', 'G', 'I', 'S', 'T', 'A',
-              'F', 'L', 'L', 'V', 'L', 'L', 'Y', 'F', 'L', 'F', 'S', 'S', 'L',
-              'S', 'G', 'R', 'V', 'A', 'D', 'L', 'P', 'S', 'D', 'T', 'R', 'S',
-              'T', 'F', 'K', 'T', 'L', 'R', 'N', 'L', 'V', 'T', 'V', 'V', 'W',
-              'L', 'V', 'Y', 'P', 'V', 'W', 'W', 'L', 'V', 'G', 'T', 'E', 'G',
-              'I', 'G', 'L', 'V', 'G', 'I', 'G', 'I', 'E', 'T', 'A', 'G', 'F',
-              'M', 'V', 'I', 'D', 'L', 'V', 'A', 'K', 'V', 'G', 'F', 'G', 'I',
-              'I', 'L', 'L', 'R', 'S', 'H', 'G', 'V', 'L'],
-             ['R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L',
-              'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M',
-              'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I',
-              'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L',
-              'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F',
-              'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A',
-              'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L',
-              'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L', 'A',
-              'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L',
-              'V', 'G', 'A', 'L', 'T', 'K', 'V', '-', '-', '-', '-', '-', '-',
-              'Y', 'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A',
-              'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F',
-              'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S',
-              'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W',
-              'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G',
-              'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F',
-              'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L',
-              'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I', 'F']], dtype='U')
+np.array([['E', 'G', 'E', 'A', 'I', 'W', 'L', 'W', 'L', 'G', 'T', 'A', 'G',
+           'M', 'F', 'L', 'G', 'M', 'L', 'Y', 'F', 'I', 'A', 'R', 'G', 'W',
+           'G', 'E', 'T', 'D', 'S', 'R', 'R', 'Q', 'K', 'F', 'Y', 'I', 'A',
+           'T', 'I', 'L', 'I', 'T', 'A', 'I', 'A', 'F', 'V', 'N', 'Y', 'L',
+           'A', 'M', 'A', 'L', 'G', 'F', 'G', 'L', 'T', 'I', 'V', 'E', 'I',
+           'A', 'G', 'E', 'Q', 'R', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'S',
+           'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'Y', 'D', 'L',
+           'G', 'L', 'L', 'A', 'G', 'A', 'D', 'R', 'N', 'T', 'I', 'S', 'S',
+           'L', 'V', 'S', 'L', 'D', 'V', 'L', 'M', 'I', 'G', 'T', 'G', 'L',
+           'V', 'A', 'T', 'L', 'S', 'A', 'G', 'S', 'G', 'V', 'L', 'S', 'A',
+           'G', 'A', 'E', 'R', 'L', 'V', 'W', 'W', 'G', 'I', 'S', 'T', 'A',
+           'F', 'L', 'L', 'V', 'L', 'L', 'Y', 'F', 'L', 'F', 'S', 'S', 'L',
+           'S', 'G', 'R', 'V', 'A', 'D', 'L', 'P', 'S', 'D', 'T', 'R', 'S',
+           'T', 'F', 'K', 'T', 'L', 'R', 'N', 'L', 'V', 'T', 'V', 'V', 'W',
+           'L', 'V', 'Y', 'P', 'V', 'W', 'W', 'L', 'V', 'G', 'T', 'E', 'G',
+           'I', 'G', 'L', 'V', 'G', 'I', 'G', 'I', 'E', 'T', 'A', 'G', 'F',
+           'M', 'V', 'I', 'D', 'L', 'V', 'A', 'K', 'V', 'G', 'F', 'G', 'I',
+           'I', 'L', 'L', 'R', 'S', 'H', 'G', 'V', 'L'],
+          ['R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L',
+           'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M',
+           'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I',
+           'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L',
+           'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F',
+           'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A',
+           'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L',
+           'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L', 'A',
+           'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L',
+           'V', 'G', 'A', 'L', 'T', 'K', 'V', '-', '-', '-', '-', '-', '-',
+           'Y', 'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A',
+           'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F',
+           'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S',
+           'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W',
+           'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G',
+           'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F',
+           'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L',
+           'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I', 'F']], dtype='U')
                 # fmt: on
             )
         )
@@ -7750,56 +7700,56 @@ numpy.array([['E', 'G', 'E', 'A', 'I', 'W', 'L', 'W', 'L', 'G', 'T', 'A', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 13,  78,  79, 239],
-                             [  1,  66,  66, 226]])
+                np.array([[ 13,  78,  79, 239],
+                          [  1,  66,  66, 226]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'G', 'E', 'G', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'I', 'G',
-              'M', 'L', 'L', 'G', 'M', 'L', 'Y', 'F', 'I', 'A', 'D', 'G', 'L',
-              'D', 'V', 'Q', 'D', 'P', 'R', 'Q', 'K', 'E', 'F', 'Y', 'V', 'I',
-              'T', 'I', 'L', 'I', 'P', 'A', 'I', 'A', 'A', 'A', 'S', 'Y', 'L',
-              'S', 'M', 'F', 'F', 'G', 'F', 'G', 'L', 'T', 'E', 'V', 'S', 'L',
-              'A', 'N', 'G', 'R', 'V', 'V', 'D', 'V', 'Y', 'W', 'A', 'R', 'Y',
-              'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
-              'I', 'G', 'L', 'L', 'A', 'G', 'A', 'S', 'Q', 'R', 'D', 'I', 'G',
-              'A', 'L', 'V', 'G', 'I', 'D', 'A', 'F', 'M', 'I', 'V', 'T', 'G',
-              'L', 'V', 'A', 'T', 'L', 'T', 'K', 'V', 'V', 'V', 'A', 'R', 'Y',
-              'A', 'F', 'W', 'T', 'I', 'S', 'T', 'I', 'S', 'M', 'V', 'F', 'L',
-              'L', 'Y', 'Y', 'L', 'V', 'A', 'V', 'F', 'G', 'E', 'A', 'V', 'S',
-              'D', 'A', 'D', 'E', 'D', 'T', 'R', 'S', 'T', 'F', 'N', 'A', 'L',
-              'R', 'N', 'I', 'I', 'L', 'V', 'T', 'W', 'A', 'I', 'Y', 'P', 'V',
-              'A', 'W', 'L', 'V', 'G', 'T', 'E', 'G', 'L', 'A', 'L', 'T', 'G',
-              'L', 'Y', 'G', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'L',
-              'V', 'A', 'K', 'V', 'G', 'F', 'G', 'F', 'I', 'L', 'L', 'R', 'S',
-              'R', 'A', 'I', 'M', 'G'],
-             ['R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L',
-              'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M',
-              'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I',
-              'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L',
-              'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F',
-              '-', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
-              'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
-              'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
-              'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
-              'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
-              'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
-              'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
-              'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L',
-              'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
-              'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
-              'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
-              'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S',
-              'R', 'A', 'I', 'F', 'G']], dtype='U')
+np.array([['E', 'G', 'E', 'G', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'I', 'G',
+           'M', 'L', 'L', 'G', 'M', 'L', 'Y', 'F', 'I', 'A', 'D', 'G', 'L',
+           'D', 'V', 'Q', 'D', 'P', 'R', 'Q', 'K', 'E', 'F', 'Y', 'V', 'I',
+           'T', 'I', 'L', 'I', 'P', 'A', 'I', 'A', 'A', 'A', 'S', 'Y', 'L',
+           'S', 'M', 'F', 'F', 'G', 'F', 'G', 'L', 'T', 'E', 'V', 'S', 'L',
+           'A', 'N', 'G', 'R', 'V', 'V', 'D', 'V', 'Y', 'W', 'A', 'R', 'Y',
+           'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
+           'I', 'G', 'L', 'L', 'A', 'G', 'A', 'S', 'Q', 'R', 'D', 'I', 'G',
+           'A', 'L', 'V', 'G', 'I', 'D', 'A', 'F', 'M', 'I', 'V', 'T', 'G',
+           'L', 'V', 'A', 'T', 'L', 'T', 'K', 'V', 'V', 'V', 'A', 'R', 'Y',
+           'A', 'F', 'W', 'T', 'I', 'S', 'T', 'I', 'S', 'M', 'V', 'F', 'L',
+           'L', 'Y', 'Y', 'L', 'V', 'A', 'V', 'F', 'G', 'E', 'A', 'V', 'S',
+           'D', 'A', 'D', 'E', 'D', 'T', 'R', 'S', 'T', 'F', 'N', 'A', 'L',
+           'R', 'N', 'I', 'I', 'L', 'V', 'T', 'W', 'A', 'I', 'Y', 'P', 'V',
+           'A', 'W', 'L', 'V', 'G', 'T', 'E', 'G', 'L', 'A', 'L', 'T', 'G',
+           'L', 'Y', 'G', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'L',
+           'V', 'A', 'K', 'V', 'G', 'F', 'G', 'F', 'I', 'L', 'L', 'R', 'S',
+           'R', 'A', 'I', 'M', 'G'],
+          ['R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L',
+           'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M',
+           'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I',
+           'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L',
+           'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F',
+           '-', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
+           'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
+           'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
+           'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
+           'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
+           'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
+           'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
+           'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L',
+           'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
+           'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
+           'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
+           'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S',
+           'R', 'A', 'I', 'F', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -7875,56 +7825,56 @@ numpy.array([['E', 'G', 'E', 'G', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'I', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  30,  30,  63,  63, 120, 120, 218],
-                             [  1,  30,  31,  64,  68, 125, 126, 224]])
+                np.array([[  1,  30,  30,  63,  63, 120, 120, 218],
+                          [  1,  30,  31,  64,  68, 125, 126, 224]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['V', 'G', 'L', 'T', 'T', 'L', 'F', 'W', 'L', 'G', 'A', 'I', 'G',
-              'M', 'L', 'V', 'G', 'T', 'L', 'A', 'F', 'A', 'W', 'A', 'G', 'R',
-              'D', 'A', 'G', '-', 'S', 'G', 'E', 'R', 'R', 'Y', 'Y', 'V', 'T',
-              'L', 'V', 'G', 'I', 'S', 'G', 'I', 'A', 'A', 'V', 'A', 'Y', 'V',
-              'V', 'M', 'A', 'L', 'G', 'V', 'G', 'W', 'V', 'P', 'V', '-', '-',
-              '-', '-', 'A', 'E', 'R', 'T', 'V', 'F', 'A', 'P', 'R', 'Y', 'I',
-              'D', 'W', 'I', 'L', 'T', 'T', 'P', 'L', 'I', 'V', 'Y', 'F', 'L',
-              'G', 'L', 'L', 'A', 'G', 'L', 'D', 'S', 'R', 'E', 'F', 'G', 'I',
-              'V', 'I', 'T', 'L', 'N', 'T', 'V', 'V', 'M', 'L', 'A', 'G', 'F',
-              'A', 'G', 'A', 'M', 'V', 'P', 'G', '-', 'I', 'E', 'R', 'Y', 'A',
-              'L', 'F', 'G', 'M', 'G', 'A', 'V', 'A', 'F', 'L', 'G', 'L', 'V',
-              'Y', 'Y', 'L', 'V', 'G', 'P', 'M', 'T', 'E', 'S', 'A', 'S', 'Q',
-              'R', 'S', 'S', 'G', 'I', 'K', 'S', 'L', 'Y', 'V', 'R', 'L', 'R',
-              'N', 'L', 'T', 'V', 'I', 'L', 'W', 'A', 'I', 'Y', 'P', 'F', 'I',
-              'W', 'L', 'L', 'G', 'P', 'P', 'G', 'V', 'A', 'L', 'L', 'T', 'P',
-              'T', 'V', 'D', 'V', 'A', 'L', 'I', 'V', 'Y', 'L', 'D', 'L', 'V',
-              'T', 'K', 'V', 'G', 'F', 'G', 'F', 'I', 'A', 'L', 'D', 'A', 'A',
-              'A', 'T'],
-             ['R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L',
-              'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M',
-              'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I',
-              'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L',
-              'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F',
-              'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A',
-              'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L',
-              'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L', 'A',
-              'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L',
-              'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F', 'V',
-              'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L',
-              'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S',
-              'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R',
-              'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V',
-              'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L',
-              'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S',
-              'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R',
-              'A', 'I']], dtype='U')
+np.array([['V', 'G', 'L', 'T', 'T', 'L', 'F', 'W', 'L', 'G', 'A', 'I', 'G',
+           'M', 'L', 'V', 'G', 'T', 'L', 'A', 'F', 'A', 'W', 'A', 'G', 'R',
+           'D', 'A', 'G', '-', 'S', 'G', 'E', 'R', 'R', 'Y', 'Y', 'V', 'T',
+           'L', 'V', 'G', 'I', 'S', 'G', 'I', 'A', 'A', 'V', 'A', 'Y', 'V',
+           'V', 'M', 'A', 'L', 'G', 'V', 'G', 'W', 'V', 'P', 'V', '-', '-',
+           '-', '-', 'A', 'E', 'R', 'T', 'V', 'F', 'A', 'P', 'R', 'Y', 'I',
+           'D', 'W', 'I', 'L', 'T', 'T', 'P', 'L', 'I', 'V', 'Y', 'F', 'L',
+           'G', 'L', 'L', 'A', 'G', 'L', 'D', 'S', 'R', 'E', 'F', 'G', 'I',
+           'V', 'I', 'T', 'L', 'N', 'T', 'V', 'V', 'M', 'L', 'A', 'G', 'F',
+           'A', 'G', 'A', 'M', 'V', 'P', 'G', '-', 'I', 'E', 'R', 'Y', 'A',
+           'L', 'F', 'G', 'M', 'G', 'A', 'V', 'A', 'F', 'L', 'G', 'L', 'V',
+           'Y', 'Y', 'L', 'V', 'G', 'P', 'M', 'T', 'E', 'S', 'A', 'S', 'Q',
+           'R', 'S', 'S', 'G', 'I', 'K', 'S', 'L', 'Y', 'V', 'R', 'L', 'R',
+           'N', 'L', 'T', 'V', 'I', 'L', 'W', 'A', 'I', 'Y', 'P', 'F', 'I',
+           'W', 'L', 'L', 'G', 'P', 'P', 'G', 'V', 'A', 'L', 'L', 'T', 'P',
+           'T', 'V', 'D', 'V', 'A', 'L', 'I', 'V', 'Y', 'L', 'D', 'L', 'V',
+           'T', 'K', 'V', 'G', 'F', 'G', 'F', 'I', 'A', 'L', 'D', 'A', 'A',
+           'A', 'T'],
+          ['R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L',
+           'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M',
+           'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I',
+           'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L',
+           'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F',
+           'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A',
+           'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L',
+           'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L', 'A',
+           'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L',
+           'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F', 'V',
+           'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L',
+           'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S',
+           'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R',
+           'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V',
+           'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L',
+           'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S',
+           'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R',
+           'A', 'I']], dtype='U')
                 # fmt: on
             )
         )
@@ -8000,56 +7950,56 @@ numpy.array([['V', 'G', 'L', 'T', 'T', 'L', 'F', 'W', 'L', 'G', 'A', 'I', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  5,  35,  35,  69,  69, 188, 188, 225],
-                             [  0,  30,  31,  65,  68, 187, 188, 225]])
+                np.array([[  5,  35,  35,  69,  69, 188, 188, 225],
+                          [  0,  30,  31,  65,  68, 187, 188, 225]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'E', 'T', 'G', 'M', 'I', 'A', 'Q', 'W', 'I', 'V', 'F', 'A',
-              'I', 'M', 'A', 'A', 'A', 'A', 'I', 'A', 'F', 'G', 'V', 'A', 'V',
-              'H', 'F', 'R', 'P', '-', 'S', 'E', 'L', 'K', 'S', 'A', 'Y', 'Y',
-              'I', 'N', 'I', 'A', 'I', 'C', 'T', 'I', 'A', 'A', 'T', 'A', 'Y',
-              'Y', 'A', 'M', 'A', 'V', 'N', 'Y', 'Q', 'D', 'L', 'T', 'M', 'N',
-              '-', '-', '-', 'G', 'E', 'R', 'Q', 'V', 'V', 'Y', 'A', 'R', 'Y',
-              'I', 'D', 'W', 'V', 'L', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
-              'L', 'I', 'V', 'M', 'T', 'K', 'M', 'G', 'G', 'V', 'M', 'I', 'S',
-              'W', 'V', 'I', 'G', 'A', 'D', 'I', 'F', 'M', 'I', 'V', 'F', 'G',
-              'I', 'L', 'G', 'A', 'F', 'E', 'D', 'E', 'H', 'K', 'F', 'K', 'W',
-              'V', 'Y', 'F', 'I', 'A', 'G', 'C', 'V', 'M', 'Q', 'A', 'V', 'L',
-              'T', 'Y', 'G', 'M', 'Y', 'N', 'A', 'T', 'W', 'K', 'D', 'D', 'L',
-              'K', 'K', 'S', 'P', 'E', 'Y', 'H', 'S', 'S', 'Y', 'V', 'S', 'L',
-              'L', 'V', 'F', 'L', 'S', 'I', 'L', 'W', 'V', 'F', 'Y', 'P', 'V',
-              'V', 'W', 'A', 'F', 'G', '-', 'S', 'G', 'S', 'G', 'V', 'L', 'S',
-              'V', 'D', 'N', 'E', 'A', 'I', 'L', 'M', 'G', 'I', 'L', 'D', 'V',
-              'L', 'A', 'K', 'P', 'L', 'F', 'G', 'M', 'G', 'C', 'L', 'I', 'A',
-              'H', 'E', 'T', 'I'],
-             ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
-              'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
-              'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
-              'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
-              'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
-              'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
-              'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
-              'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
-              'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
-              'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
-              'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
-              'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L',
-              'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
-              'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
-              'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
-              'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S',
-              'R', 'A', 'I', 'F']], dtype='U')
+np.array([['T', 'E', 'T', 'G', 'M', 'I', 'A', 'Q', 'W', 'I', 'V', 'F', 'A',
+           'I', 'M', 'A', 'A', 'A', 'A', 'I', 'A', 'F', 'G', 'V', 'A', 'V',
+           'H', 'F', 'R', 'P', '-', 'S', 'E', 'L', 'K', 'S', 'A', 'Y', 'Y',
+           'I', 'N', 'I', 'A', 'I', 'C', 'T', 'I', 'A', 'A', 'T', 'A', 'Y',
+           'Y', 'A', 'M', 'A', 'V', 'N', 'Y', 'Q', 'D', 'L', 'T', 'M', 'N',
+           '-', '-', '-', 'G', 'E', 'R', 'Q', 'V', 'V', 'Y', 'A', 'R', 'Y',
+           'I', 'D', 'W', 'V', 'L', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
+           'L', 'I', 'V', 'M', 'T', 'K', 'M', 'G', 'G', 'V', 'M', 'I', 'S',
+           'W', 'V', 'I', 'G', 'A', 'D', 'I', 'F', 'M', 'I', 'V', 'F', 'G',
+           'I', 'L', 'G', 'A', 'F', 'E', 'D', 'E', 'H', 'K', 'F', 'K', 'W',
+           'V', 'Y', 'F', 'I', 'A', 'G', 'C', 'V', 'M', 'Q', 'A', 'V', 'L',
+           'T', 'Y', 'G', 'M', 'Y', 'N', 'A', 'T', 'W', 'K', 'D', 'D', 'L',
+           'K', 'K', 'S', 'P', 'E', 'Y', 'H', 'S', 'S', 'Y', 'V', 'S', 'L',
+           'L', 'V', 'F', 'L', 'S', 'I', 'L', 'W', 'V', 'F', 'Y', 'P', 'V',
+           'V', 'W', 'A', 'F', 'G', '-', 'S', 'G', 'S', 'G', 'V', 'L', 'S',
+           'V', 'D', 'N', 'E', 'A', 'I', 'L', 'M', 'G', 'I', 'L', 'D', 'V',
+           'L', 'A', 'K', 'P', 'L', 'F', 'G', 'M', 'G', 'C', 'L', 'I', 'A',
+           'H', 'E', 'T', 'I'],
+          ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
+           'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
+           'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
+           'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
+           'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
+           'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
+           'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
+           'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
+           'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
+           'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
+           'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
+           'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L',
+           'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
+           'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
+           'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
+           'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S',
+           'R', 'A', 'I', 'F']], dtype='U')
                 # fmt: on
             )
         )
@@ -8121,55 +8071,55 @@ numpy.array([['T', 'E', 'T', 'G', 'M', 'I', 'A', 'Q', 'W', 'I', 'V', 'F', 'A',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  2,  29,  29,  62,  62, 119, 119, 217],
-                             [  3,  30,  31,  64,  68, 125, 126, 224]])
+                np.array([[  2,  29,  29,  62,  62, 119, 119, 217],
+                          [  3,  30,  31,  64,  68, 125, 126, 224]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['L', 'T', 'T', 'L', 'F', 'W', 'L', 'G', 'A', 'I', 'G', 'M', 'L',
-              'V', 'G', 'T', 'L', 'A', 'F', 'A', 'W', 'A', 'G', 'R', 'D', 'A',
-              'G', '-', 'S', 'G', 'E', 'R', 'R', 'Y', 'Y', 'V', 'T', 'L', 'V',
-              'G', 'I', 'S', 'G', 'I', 'A', 'A', 'V', 'A', 'Y', 'V', 'V', 'M',
-              'A', 'L', 'G', 'V', 'G', 'W', 'V', 'P', 'V', '-', '-', '-', '-',
-              'A', 'E', 'R', 'T', 'V', 'F', 'A', 'P', 'R', 'Y', 'I', 'D', 'W',
-              'I', 'L', 'T', 'T', 'P', 'L', 'I', 'V', 'Y', 'F', 'L', 'G', 'L',
-              'L', 'A', 'G', 'L', 'D', 'S', 'R', 'E', 'F', 'G', 'I', 'V', 'I',
-              'T', 'L', 'N', 'T', 'V', 'V', 'M', 'L', 'A', 'G', 'F', 'A', 'G',
-              'A', 'M', 'V', 'P', 'G', '-', 'I', 'E', 'R', 'Y', 'A', 'L', 'F',
-              'G', 'M', 'G', 'A', 'V', 'A', 'F', 'L', 'G', 'L', 'V', 'Y', 'Y',
-              'L', 'V', 'G', 'P', 'M', 'T', 'E', 'S', 'A', 'S', 'Q', 'R', 'S',
-              'S', 'G', 'I', 'K', 'S', 'L', 'Y', 'V', 'R', 'L', 'R', 'N', 'L',
-              'T', 'V', 'I', 'L', 'W', 'A', 'I', 'Y', 'P', 'F', 'I', 'W', 'L',
-              'L', 'G', 'P', 'P', 'G', 'V', 'A', 'L', 'L', 'T', 'P', 'T', 'V',
-              'D', 'V', 'A', 'L', 'I', 'V', 'Y', 'L', 'D', 'L', 'V', 'T', 'K',
-              'V', 'G', 'F', 'G', 'F', 'I', 'A', 'L', 'D', 'A', 'A', 'A', 'T'],
-             ['E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G',
-              'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V',
-              'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T',
-              'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M',
-              'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', 'G', 'G',
-              'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D', 'W',
-              'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A', 'L',
-              'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L', 'A', 'L', 'V',
-              'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L', 'V', 'G',
-              'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F', 'V', 'W', 'W',
-              'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V',
-              'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R',
-              'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V',
-              'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L',
-              'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I',
-              'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K',
-              'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I']],
-            dtype='U')
+np.array([['L', 'T', 'T', 'L', 'F', 'W', 'L', 'G', 'A', 'I', 'G', 'M', 'L',
+           'V', 'G', 'T', 'L', 'A', 'F', 'A', 'W', 'A', 'G', 'R', 'D', 'A',
+           'G', '-', 'S', 'G', 'E', 'R', 'R', 'Y', 'Y', 'V', 'T', 'L', 'V',
+           'G', 'I', 'S', 'G', 'I', 'A', 'A', 'V', 'A', 'Y', 'V', 'V', 'M',
+           'A', 'L', 'G', 'V', 'G', 'W', 'V', 'P', 'V', '-', '-', '-', '-',
+           'A', 'E', 'R', 'T', 'V', 'F', 'A', 'P', 'R', 'Y', 'I', 'D', 'W',
+           'I', 'L', 'T', 'T', 'P', 'L', 'I', 'V', 'Y', 'F', 'L', 'G', 'L',
+           'L', 'A', 'G', 'L', 'D', 'S', 'R', 'E', 'F', 'G', 'I', 'V', 'I',
+           'T', 'L', 'N', 'T', 'V', 'V', 'M', 'L', 'A', 'G', 'F', 'A', 'G',
+           'A', 'M', 'V', 'P', 'G', '-', 'I', 'E', 'R', 'Y', 'A', 'L', 'F',
+           'G', 'M', 'G', 'A', 'V', 'A', 'F', 'L', 'G', 'L', 'V', 'Y', 'Y',
+           'L', 'V', 'G', 'P', 'M', 'T', 'E', 'S', 'A', 'S', 'Q', 'R', 'S',
+           'S', 'G', 'I', 'K', 'S', 'L', 'Y', 'V', 'R', 'L', 'R', 'N', 'L',
+           'T', 'V', 'I', 'L', 'W', 'A', 'I', 'Y', 'P', 'F', 'I', 'W', 'L',
+           'L', 'G', 'P', 'P', 'G', 'V', 'A', 'L', 'L', 'T', 'P', 'T', 'V',
+           'D', 'V', 'A', 'L', 'I', 'V', 'Y', 'L', 'D', 'L', 'V', 'T', 'K',
+           'V', 'G', 'F', 'G', 'F', 'I', 'A', 'L', 'D', 'A', 'A', 'A', 'T'],
+          ['E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G',
+           'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V',
+           'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T',
+           'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M',
+           'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', 'G', 'G',
+           'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D', 'W',
+           'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A', 'L',
+           'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L', 'A', 'L', 'V',
+           'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L', 'V', 'G',
+           'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F', 'V', 'W', 'W',
+           'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V',
+           'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R',
+           'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V',
+           'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L',
+           'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I',
+           'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K',
+           'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -8245,55 +8195,55 @@ numpy.array([['L', 'T', 'T', 'L', 'F', 'W', 'L', 'G', 'A', 'I', 'G', 'M', 'L',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 21,  45,  45,  77,  79, 141, 141, 201, 201, 239],
-                             [  6,  30,  31,  63,  63, 125, 126, 186, 187, 225]])
+                np.array([[ 21,  45,  45,  77,  79, 141, 141, 201, 201, 239],
+                          [  6,  30,  31,  63,  63, 125, 126, 186, 187, 225]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'Q', 'W', 'V', 'V', 'F', 'A', 'V', 'M', 'A', 'L', 'A', 'A',
-              'I', 'V', 'F', 'S', 'I', 'A', 'V', 'Q', 'F', 'R', 'P', '-', 'L',
-              'P', 'L', 'R', 'L', 'T', 'Y', 'Y', 'V', 'N', 'I', 'A', 'I', 'C',
-              'T', 'I', 'A', 'A', 'T', 'A', 'Y', 'Y', 'A', 'M', 'A', 'V', 'N',
-              'G', 'G', 'D', 'N', 'K', 'P', 'T', 'A', 'G', 'T', 'G', 'A', 'D',
-              'E', 'R', 'Q', 'V', 'I', 'Y', 'A', 'R', 'Y', 'I', 'D', 'W', 'V',
-              'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'V', 'L', 'L',
-              'T', 'N', 'M', 'P', 'A', 'T', 'M', 'I', 'A', 'W', 'I', 'M', 'G',
-              'A', 'D', 'I', 'A', 'M', 'I', 'A', 'F', 'G', 'I', 'I', 'G', 'A',
-              'F', 'T', 'V', 'G', '-', 'S', 'Y', 'K', 'W', 'F', 'Y', 'F', 'V',
-              'V', 'G', 'C', 'I', 'M', 'L', 'A', 'V', 'L', 'A', 'W', 'G', 'M',
-              'I', 'N', 'P', 'I', 'F', 'K', 'E', 'E', 'L', 'Q', 'K', 'H', 'K',
-              'E', 'Y', 'T', 'G', 'A', 'Y', 'T', 'T', 'L', 'L', 'I', 'Y', 'L',
-              'I', 'V', 'L', 'W', 'V', 'I', 'Y', 'P', 'I', 'V', 'W', 'G', 'L',
-              '-', 'G', 'A', 'G', 'G', 'H', 'I', 'I', 'G', 'V', 'D', 'V', 'E',
-              'I', 'I', 'A', 'M', 'G', 'I', 'L', 'D', 'L', 'L', 'A', 'K', 'P',
-              'L', 'Y', 'A', 'I', 'G', 'V', 'L', 'I', 'T', 'V', 'E', 'V', 'V'],
-             ['W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G', 'T',
-              'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D', 'P',
-              'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V', 'P',
-              'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L', 'G',
-              'Y', 'G', 'L', 'T', 'M', '-', '-', 'V', 'P', 'F', 'G', 'G', 'E',
-              'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D', 'W', 'L',
-              'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A', 'L', 'L',
-              'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L', 'A', 'L', 'V', 'G',
-              'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L', 'V', 'G', 'A',
-              'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A',
-              'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L',
-              'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R', 'P',
-              'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T',
-              'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I',
-              'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I', 'E',
-              'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V',
-              'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I', 'F']],
-            dtype='U')
+np.array([['A', 'Q', 'W', 'V', 'V', 'F', 'A', 'V', 'M', 'A', 'L', 'A', 'A',
+           'I', 'V', 'F', 'S', 'I', 'A', 'V', 'Q', 'F', 'R', 'P', '-', 'L',
+           'P', 'L', 'R', 'L', 'T', 'Y', 'Y', 'V', 'N', 'I', 'A', 'I', 'C',
+           'T', 'I', 'A', 'A', 'T', 'A', 'Y', 'Y', 'A', 'M', 'A', 'V', 'N',
+           'G', 'G', 'D', 'N', 'K', 'P', 'T', 'A', 'G', 'T', 'G', 'A', 'D',
+           'E', 'R', 'Q', 'V', 'I', 'Y', 'A', 'R', 'Y', 'I', 'D', 'W', 'V',
+           'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'V', 'L', 'L',
+           'T', 'N', 'M', 'P', 'A', 'T', 'M', 'I', 'A', 'W', 'I', 'M', 'G',
+           'A', 'D', 'I', 'A', 'M', 'I', 'A', 'F', 'G', 'I', 'I', 'G', 'A',
+           'F', 'T', 'V', 'G', '-', 'S', 'Y', 'K', 'W', 'F', 'Y', 'F', 'V',
+           'V', 'G', 'C', 'I', 'M', 'L', 'A', 'V', 'L', 'A', 'W', 'G', 'M',
+           'I', 'N', 'P', 'I', 'F', 'K', 'E', 'E', 'L', 'Q', 'K', 'H', 'K',
+           'E', 'Y', 'T', 'G', 'A', 'Y', 'T', 'T', 'L', 'L', 'I', 'Y', 'L',
+           'I', 'V', 'L', 'W', 'V', 'I', 'Y', 'P', 'I', 'V', 'W', 'G', 'L',
+           '-', 'G', 'A', 'G', 'G', 'H', 'I', 'I', 'G', 'V', 'D', 'V', 'E',
+           'I', 'I', 'A', 'M', 'G', 'I', 'L', 'D', 'L', 'L', 'A', 'K', 'P',
+           'L', 'Y', 'A', 'I', 'G', 'V', 'L', 'I', 'T', 'V', 'E', 'V', 'V'],
+          ['W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G', 'T',
+           'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D', 'P',
+           'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V', 'P',
+           'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L', 'G',
+           'Y', 'G', 'L', 'T', 'M', '-', '-', 'V', 'P', 'F', 'G', 'G', 'E',
+           'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D', 'W', 'L',
+           'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A', 'L', 'L',
+           'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L', 'A', 'L', 'V', 'G',
+           'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L', 'V', 'G', 'A',
+           'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A',
+           'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L',
+           'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R', 'P',
+           'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T',
+           'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I',
+           'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I', 'E',
+           'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V',
+           'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I', 'F']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -8369,56 +8319,56 @@ numpy.array([['A', 'Q', 'W', 'V', 'V', 'F', 'A', 'V', 'M', 'A', 'L', 'A', 'A',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  28,  28,  63,  63,  93,  97, 225],
-                             [  1,  28,  29,  64,  68,  98,  98, 226]])
+                np.array([[  1,  28,  28,  63,  63,  93,  97, 225],
+                          [  1,  28,  29,  64,  68,  98,  98, 226]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['N', 'L', 'E', 'S', 'L', 'L', 'H', 'W', 'I', 'Y', 'V', 'A', 'G',
-              'M', 'T', 'I', 'G', 'A', 'L', 'H', 'F', 'W', 'S', 'L', 'S', 'R',
-              'N', '-', 'P', 'R', 'G', 'V', 'P', 'Q', 'Y', 'E', 'Y', 'L', 'V',
-              'A', 'M', 'F', 'I', 'P', 'I', 'W', 'S', 'G', 'L', 'A', 'Y', 'M',
-              'A', 'M', 'A', 'I', 'D', 'Q', 'G', 'K', 'V', 'E', 'A', '-', '-',
-              '-', '-', 'A', 'G', 'Q', 'I', 'A', 'H', 'Y', 'A', 'R', 'Y', 'I',
-              'D', 'W', 'M', 'V', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'S', 'L',
-              'S', 'W', 'T', 'A', 'M', 'Q', 'F', 'I', 'K', 'K', 'D', 'W', 'T',
-              'L', 'I', 'G', 'F', 'L', 'M', 'S', 'T', 'Q', 'I', 'V', 'V', 'I',
-              'T', 'S', 'G', 'L', 'I', 'A', 'D', 'L', 'S', 'E', 'R', 'D', 'W',
-              'V', 'R', 'Y', 'L', 'W', 'Y', 'I', 'C', 'G', 'V', 'C', 'A', 'F',
-              'L', 'I', 'I', 'L', 'W', 'G', 'I', 'W', 'N', 'P', 'L', 'R', 'A',
-              'K', 'T', 'R', 'T', 'Q', 'S', 'S', 'E', 'L', 'A', 'N', 'L', 'Y',
-              'D', 'K', 'L', 'V', 'T', 'Y', 'F', 'T', 'V', 'L', 'W', 'I', 'G',
-              'Y', 'P', 'I', 'V', 'W', 'I', 'I', 'G', 'P', 'S', 'G', 'F', 'G',
-              'W', 'I', 'N', 'Q', 'T', 'I', 'D', 'T', 'F', 'L', 'F', 'C', 'L',
-              'L', 'P', 'F', 'F', 'S', 'K', 'V', 'G', 'F', 'S', 'F', 'L', 'D',
-              'L', 'H', 'G', 'L', 'R', 'N', 'L', 'N'],
-             ['R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L',
-              'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M',
-              'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I',
-              'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L',
-              'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F',
-              'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A',
-              'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L',
-              'A', 'L', 'L', 'V', 'D', 'A', '-', '-', '-', '-', 'D', 'Q', 'G',
-              'T', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I',
-              'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S',
-              'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M',
-              'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S',
-              'K', 'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F',
-              'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A',
-              'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G',
-              'I', 'V', 'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V',
-              'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L',
-              'L', 'R', 'S', 'R', 'A', 'I', 'F', 'G']], dtype='U')
+np.array([['N', 'L', 'E', 'S', 'L', 'L', 'H', 'W', 'I', 'Y', 'V', 'A', 'G',
+           'M', 'T', 'I', 'G', 'A', 'L', 'H', 'F', 'W', 'S', 'L', 'S', 'R',
+           'N', '-', 'P', 'R', 'G', 'V', 'P', 'Q', 'Y', 'E', 'Y', 'L', 'V',
+           'A', 'M', 'F', 'I', 'P', 'I', 'W', 'S', 'G', 'L', 'A', 'Y', 'M',
+           'A', 'M', 'A', 'I', 'D', 'Q', 'G', 'K', 'V', 'E', 'A', '-', '-',
+           '-', '-', 'A', 'G', 'Q', 'I', 'A', 'H', 'Y', 'A', 'R', 'Y', 'I',
+           'D', 'W', 'M', 'V', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'S', 'L',
+           'S', 'W', 'T', 'A', 'M', 'Q', 'F', 'I', 'K', 'K', 'D', 'W', 'T',
+           'L', 'I', 'G', 'F', 'L', 'M', 'S', 'T', 'Q', 'I', 'V', 'V', 'I',
+           'T', 'S', 'G', 'L', 'I', 'A', 'D', 'L', 'S', 'E', 'R', 'D', 'W',
+           'V', 'R', 'Y', 'L', 'W', 'Y', 'I', 'C', 'G', 'V', 'C', 'A', 'F',
+           'L', 'I', 'I', 'L', 'W', 'G', 'I', 'W', 'N', 'P', 'L', 'R', 'A',
+           'K', 'T', 'R', 'T', 'Q', 'S', 'S', 'E', 'L', 'A', 'N', 'L', 'Y',
+           'D', 'K', 'L', 'V', 'T', 'Y', 'F', 'T', 'V', 'L', 'W', 'I', 'G',
+           'Y', 'P', 'I', 'V', 'W', 'I', 'I', 'G', 'P', 'S', 'G', 'F', 'G',
+           'W', 'I', 'N', 'Q', 'T', 'I', 'D', 'T', 'F', 'L', 'F', 'C', 'L',
+           'L', 'P', 'F', 'F', 'S', 'K', 'V', 'G', 'F', 'S', 'F', 'L', 'D',
+           'L', 'H', 'G', 'L', 'R', 'N', 'L', 'N'],
+          ['R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L',
+           'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M',
+           'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I',
+           'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L',
+           'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F',
+           'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A',
+           'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L',
+           'A', 'L', 'L', 'V', 'D', 'A', '-', '-', '-', '-', 'D', 'Q', 'G',
+           'T', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I',
+           'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S',
+           'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M',
+           'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S',
+           'K', 'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F',
+           'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A',
+           'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G',
+           'I', 'V', 'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V',
+           'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L',
+           'L', 'R', 'S', 'R', 'A', 'I', 'F', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -8494,58 +8444,58 @@ numpy.array([['N', 'L', 'E', 'S', 'L', 'L', 'H', 'W', 'I', 'Y', 'V', 'A', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 36,  95, 111, 172, 173, 206, 206, 269],
-                             [  6,  65,  65, 126, 126, 159, 161, 224]])
+                np.array([[ 36,  95, 111, 172, 173, 206, 206, 269],
+                          [  6,  65,  65, 126, 126, 159, 161, 224]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['S', 'L', 'Y', 'I', 'N', 'I', 'A', 'L', 'A', 'G', 'L', 'S', 'I',
-              'L', 'L', 'F', 'V', 'F', 'M', 'T', 'R', 'G', 'L', 'D', 'D', 'P',
-              'R', 'A', 'K', 'L', 'I', 'A', 'V', 'S', 'T', 'I', 'L', 'V', 'P',
-              'V', 'V', 'S', 'I', 'A', 'S', 'Y', 'T', 'G', 'L', 'A', 'S', 'G',
-              'L', 'T', 'I', 'S', 'V', 'L', 'E', 'M', 'P', 'A', 'G', 'H', 'F',
-              'A', 'E', 'G', 'S', 'S', 'V', 'M', 'L', 'G', 'G', 'E', 'E', 'V',
-              'D', 'G', 'V', 'V', 'T', 'M', 'W', 'G', 'R', 'Y', 'L', 'T', 'W',
-              'A', 'L', 'S', 'T', 'P', 'M', 'I', 'L', 'L', 'A', 'L', 'G', 'L',
-              'L', 'A', 'G', 'S', 'N', 'A', 'T', 'K', 'L', 'F', 'T', 'A', 'I',
-              'T', 'F', 'D', 'I', 'A', 'M', 'C', 'V', 'T', 'G', 'L', 'A', 'A',
-              'A', 'L', 'T', 'T', 'S', 'S', 'H', 'L', 'M', 'R', 'W', 'F', 'W',
-              'Y', 'A', 'I', 'S', 'C', 'A', 'C', 'F', 'I', 'V', 'V', 'L', 'Y',
-              'I', 'L', 'L', 'V', 'E', 'W', 'A', 'Q', 'D', 'A', 'K', 'A', 'A',
-              'G', '-', '-', 'T', 'A', 'D', 'I', 'F', 'S', 'T', 'L', 'K', 'L',
-              'L', 'T', 'V', 'V', 'M', 'W', 'L', 'G', 'Y', 'P', 'I', 'V', 'W',
-              'A', 'L', 'G', 'V', 'E', 'G', 'V', 'A', 'V', 'L', 'P', 'V', 'G',
-              'Y', 'T', 'S', 'W', 'A', 'Y', 'S', 'A', 'L', 'D', 'I', 'V', 'A',
-              'K', 'Y', 'I', 'F', 'A', 'F', 'L', 'L', 'L', 'N', 'Y', 'L', 'T',
-              'S'],
-             ['W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G', 'T',
-              'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D', 'P',
-              'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V', 'P',
-              'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L', 'G',
-              'Y', 'G', 'L', 'T', 'M', 'V', 'P', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'F', 'G', 'G',
-              'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D', 'W',
-              'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A', 'L',
-              'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L', 'A', 'L', 'V',
-              'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L', 'V', 'G',
-              'A', 'L', 'T', 'K', 'V', 'Y', '-', 'S', 'Y', 'R', 'F', 'V', 'W',
-              'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y',
-              'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M',
-              'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N',
-              'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W',
-              'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N',
-              'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A',
-              'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A',
-              'I']], dtype='U')
+np.array([['S', 'L', 'Y', 'I', 'N', 'I', 'A', 'L', 'A', 'G', 'L', 'S', 'I',
+           'L', 'L', 'F', 'V', 'F', 'M', 'T', 'R', 'G', 'L', 'D', 'D', 'P',
+           'R', 'A', 'K', 'L', 'I', 'A', 'V', 'S', 'T', 'I', 'L', 'V', 'P',
+           'V', 'V', 'S', 'I', 'A', 'S', 'Y', 'T', 'G', 'L', 'A', 'S', 'G',
+           'L', 'T', 'I', 'S', 'V', 'L', 'E', 'M', 'P', 'A', 'G', 'H', 'F',
+           'A', 'E', 'G', 'S', 'S', 'V', 'M', 'L', 'G', 'G', 'E', 'E', 'V',
+           'D', 'G', 'V', 'V', 'T', 'M', 'W', 'G', 'R', 'Y', 'L', 'T', 'W',
+           'A', 'L', 'S', 'T', 'P', 'M', 'I', 'L', 'L', 'A', 'L', 'G', 'L',
+           'L', 'A', 'G', 'S', 'N', 'A', 'T', 'K', 'L', 'F', 'T', 'A', 'I',
+           'T', 'F', 'D', 'I', 'A', 'M', 'C', 'V', 'T', 'G', 'L', 'A', 'A',
+           'A', 'L', 'T', 'T', 'S', 'S', 'H', 'L', 'M', 'R', 'W', 'F', 'W',
+           'Y', 'A', 'I', 'S', 'C', 'A', 'C', 'F', 'I', 'V', 'V', 'L', 'Y',
+           'I', 'L', 'L', 'V', 'E', 'W', 'A', 'Q', 'D', 'A', 'K', 'A', 'A',
+           'G', '-', '-', 'T', 'A', 'D', 'I', 'F', 'S', 'T', 'L', 'K', 'L',
+           'L', 'T', 'V', 'V', 'M', 'W', 'L', 'G', 'Y', 'P', 'I', 'V', 'W',
+           'A', 'L', 'G', 'V', 'E', 'G', 'V', 'A', 'V', 'L', 'P', 'V', 'G',
+           'Y', 'T', 'S', 'W', 'A', 'Y', 'S', 'A', 'L', 'D', 'I', 'V', 'A',
+           'K', 'Y', 'I', 'F', 'A', 'F', 'L', 'L', 'L', 'N', 'Y', 'L', 'T',
+           'S'],
+          ['W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G', 'T',
+           'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D', 'P',
+           'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V', 'P',
+           'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L', 'G',
+           'Y', 'G', 'L', 'T', 'M', 'V', 'P', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'F', 'G', 'G',
+           'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D', 'W',
+           'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A', 'L',
+           'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L', 'A', 'L', 'V',
+           'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L', 'V', 'G',
+           'A', 'L', 'T', 'K', 'V', 'Y', '-', 'S', 'Y', 'R', 'F', 'V', 'W',
+           'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y',
+           'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M',
+           'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N',
+           'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W',
+           'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N',
+           'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A',
+           'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A',
+           'I']], dtype='U')
                 # fmt: on
             )
         )
@@ -8621,56 +8571,56 @@ numpy.array([['S', 'L', 'Y', 'I', 'N', 'I', 'A', 'L', 'A', 'G', 'L', 'S', 'I',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 31,  91,  97, 156, 156, 157, 159, 188, 188, 224, 225, 257],
-                             [  6,  66,  66, 125, 126, 127, 127, 156, 158, 194, 194, 226]])
+                np.array([[ 31,  91,  97, 156, 156, 157, 159, 188, 188, 224, 225, 257],
+                          [  6,  66,  66, 125, 126, 127, 127, 156, 158, 194, 194, 226]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['S', 'L', 'W', 'V', 'N', 'V', 'A', 'L', 'A', 'G', 'I', 'A', 'I',
-              'L', 'V', 'F', 'V', 'Y', 'M', 'G', 'R', 'T', 'I', 'R', 'P', 'G',
-              'R', 'P', 'R', 'L', 'I', 'W', 'G', 'A', 'T', 'L', 'M', 'I', 'P',
-              'L', 'V', 'S', 'I', 'S', 'S', 'Y', 'L', 'G', 'L', 'L', 'S', 'G',
-              'L', 'T', 'V', 'G', 'M', 'I', 'E', 'M', 'P', 'A', 'G', 'H', 'A',
-              'L', 'A', 'G', 'E', 'M', 'V', 'R', 'S', 'Q', 'W', 'G', 'R', 'Y',
-              'L', 'T', 'W', 'A', 'L', 'S', 'T', 'P', 'M', 'I', 'L', 'L', 'A',
-              'L', 'G', 'L', 'L', 'A', 'D', 'V', 'D', 'L', 'G', 'S', 'L', 'F',
-              'T', 'V', 'I', 'A', 'A', 'D', 'I', 'G', 'M', 'C', 'V', 'T', 'G',
-              'L', 'A', 'A', 'A', 'M', 'T', 'T', 'S', '-', 'A', 'L', 'L', 'F',
-              'R', 'W', 'A', 'F', 'Y', 'A', 'I', 'S', 'C', 'A', 'F', 'F', 'V',
-              'V', 'V', 'L', 'S', 'A', 'L', 'V', 'T', 'D', 'W', 'A', 'A', 'S',
-              'A', 'S', '-', '-', 'S', 'A', 'G', 'T', 'A', 'E', 'I', 'F', 'D',
-              'T', 'L', 'R', 'V', 'L', 'V', 'V', 'V', 'L', 'W', 'L', 'G', 'Y',
-              'P', 'I', 'V', 'W', 'A', 'V', 'G', 'V', 'E', 'G', 'L', 'A', 'L',
-              'V', 'Q', 'S', 'V', 'G', 'A', 'T', 'S', 'W', 'A', 'Y', 'S', 'V',
-              'L', 'D', 'V', 'F', 'A', 'K', 'Y', 'V', 'F', 'A', 'F', 'I', 'L',
-              'L', 'R', 'W', 'V', 'A', 'N', 'N', 'E'],
-             ['W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G', 'T',
-              'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D', 'P',
-              'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V', 'P',
-              'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L', 'G',
-              'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', '-', '-', '-', '-', '-',
-              '-', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
-              'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
-              'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
-              'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
-              'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', '-', '-', 'Y',
-              'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L',
-              'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K',
-              'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K',
-              'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y',
-              'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I',
-              'V', '-', 'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V',
-              'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L',
-              'L', 'R', 'S', 'R', 'A', 'I', 'F', 'G']], dtype='U')
+np.array([['S', 'L', 'W', 'V', 'N', 'V', 'A', 'L', 'A', 'G', 'I', 'A', 'I',
+           'L', 'V', 'F', 'V', 'Y', 'M', 'G', 'R', 'T', 'I', 'R', 'P', 'G',
+           'R', 'P', 'R', 'L', 'I', 'W', 'G', 'A', 'T', 'L', 'M', 'I', 'P',
+           'L', 'V', 'S', 'I', 'S', 'S', 'Y', 'L', 'G', 'L', 'L', 'S', 'G',
+           'L', 'T', 'V', 'G', 'M', 'I', 'E', 'M', 'P', 'A', 'G', 'H', 'A',
+           'L', 'A', 'G', 'E', 'M', 'V', 'R', 'S', 'Q', 'W', 'G', 'R', 'Y',
+           'L', 'T', 'W', 'A', 'L', 'S', 'T', 'P', 'M', 'I', 'L', 'L', 'A',
+           'L', 'G', 'L', 'L', 'A', 'D', 'V', 'D', 'L', 'G', 'S', 'L', 'F',
+           'T', 'V', 'I', 'A', 'A', 'D', 'I', 'G', 'M', 'C', 'V', 'T', 'G',
+           'L', 'A', 'A', 'A', 'M', 'T', 'T', 'S', '-', 'A', 'L', 'L', 'F',
+           'R', 'W', 'A', 'F', 'Y', 'A', 'I', 'S', 'C', 'A', 'F', 'F', 'V',
+           'V', 'V', 'L', 'S', 'A', 'L', 'V', 'T', 'D', 'W', 'A', 'A', 'S',
+           'A', 'S', '-', '-', 'S', 'A', 'G', 'T', 'A', 'E', 'I', 'F', 'D',
+           'T', 'L', 'R', 'V', 'L', 'V', 'V', 'V', 'L', 'W', 'L', 'G', 'Y',
+           'P', 'I', 'V', 'W', 'A', 'V', 'G', 'V', 'E', 'G', 'L', 'A', 'L',
+           'V', 'Q', 'S', 'V', 'G', 'A', 'T', 'S', 'W', 'A', 'Y', 'S', 'V',
+           'L', 'D', 'V', 'F', 'A', 'K', 'Y', 'V', 'F', 'A', 'F', 'I', 'L',
+           'L', 'R', 'W', 'V', 'A', 'N', 'N', 'E'],
+          ['W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G', 'T',
+           'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D', 'P',
+           'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V', 'P',
+           'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L', 'G',
+           'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', '-', '-', '-', '-', '-',
+           '-', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
+           'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
+           'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
+           'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
+           'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', '-', '-', 'Y',
+           'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L',
+           'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K',
+           'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K',
+           'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y',
+           'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I',
+           'V', '-', 'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V',
+           'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L',
+           'L', 'R', 'S', 'R', 'A', 'I', 'F', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -8746,54 +8696,54 @@ numpy.array([['S', 'L', 'W', 'V', 'N', 'V', 'A', 'L', 'A', 'G', 'I', 'A', 'I',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1, 149, 149, 196],
-                             [  0, 148, 170, 217]])
+                np.array([[  1, 149, 149, 196],
+                          [  0, 148, 170, 217]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
-              'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
-              'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
-              'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
-              'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
-              'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'N',
-              'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
-              'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
-              'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
-              'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
-              'L', 'Y', 'V', 'L', 'F', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
-              'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
-              'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
-              'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I'],
-             ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
-              'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
-              'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
-              'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
-              'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
-              'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
-              'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
-              'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
-              'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
-              'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
-              'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
-              'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L',
-              'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
-              'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
-              'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
-              'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I']], dtype='U')
+np.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
+           'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
+           'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
+           'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
+           'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
+           'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'N',
+           'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
+           'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
+           'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
+           'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
+           'L', 'Y', 'V', 'L', 'F', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
+           'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
+           'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
+           'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I'],
+          ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
+           'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
+           'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
+           'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
+           'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
+           'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
+           'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L',
+           'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
+           'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
+           'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
+           'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
+           'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L',
+           'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V',
+           'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P',
+           'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V',
+           'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I']], dtype='U')
                 # fmt: on
             )
         )
@@ -8873,61 +8823,61 @@ numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 24,  54,  54,  90,  97, 103, 105, 136, 140, 161, 163, 227, 231,
-                              236, 238, 268],
-                             [  0,  30,  31,  67,  67,  73,  73, 104, 104, 125, 125, 189, 189,
-                              194, 194, 224]])
+                np.array([[ 24,  54,  54,  90,  97, 103, 105, 136, 140, 161,
+                           163, 227, 231, 236, 238, 268],
+                          [  0,  30,  31,  67,  67,  73,  73, 104, 104, 125,
+                           125, 189, 189, 194, 194, 224]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['Y', 'Q', 'F', 'T', 'S', 'H', 'I', 'L', 'T', 'L', 'G', 'Y', 'A',
-              'V', 'M', 'L', 'A', 'G', 'L', 'L', 'Y', 'F', 'I', 'L', 'T', 'I',
-              'K', 'N', 'V', 'D', '-', 'K', 'K', 'F', 'Q', 'M', 'S', 'N', 'I',
-              'L', 'S', 'A', 'V', 'V', 'M', 'V', 'S', 'A', 'F', 'L', 'L', 'L',
-              'Y', 'A', 'Q', 'A', 'Q', 'N', 'W', 'T', 'S', 'S', 'F', 'T', 'F',
-              'N', 'E', 'E', 'V', 'G', 'R', 'Y', 'F', 'L', 'D', 'P', 'S', 'G',
-              'D', 'L', 'F', 'N', 'N', 'G', 'Y', 'R', 'Y', 'L', 'N', 'W', 'L',
-              'I', 'D', 'V', 'P', 'M', 'L', 'L', 'F', 'Q', 'I', 'L', 'F', 'V',
-              'V', 'S', 'L', 'T', 'T', 'S', 'K', 'F', 'S', 'S', 'V', 'R', 'N',
-              'Q', 'F', 'W', 'F', 'S', 'G', 'A', 'M', 'M', 'I', 'I', 'T', 'G',
-              'Y', 'I', 'G', 'Q', 'F', 'Y', 'E', 'V', 'S', 'N', 'L', 'T', 'A',
-              'F', 'L', 'V', 'W', 'G', 'A', 'I', 'S', 'S', 'A', 'F', 'F', 'F',
-              'H', 'I', 'L', 'W', 'V', 'M', 'K', 'K', 'V', 'I', 'N', 'E', 'G',
-              'K', 'E', 'G', 'I', 'S', 'P', 'A', 'G', 'Q', 'K', 'I', 'L', 'S',
-              'N', 'I', 'W', 'I', 'L', 'F', 'L', 'I', 'S', 'W', 'T', 'L', 'Y',
-              'P', 'G', 'A', 'Y', 'L', 'M', 'P', 'Y', 'L', 'T', 'G', 'V', 'D',
-              'G', 'F', 'L', 'Y', 'S', 'E', 'D', 'G', 'V', 'M', 'A', 'R', 'Q',
-              'L', 'V', 'Y', 'T', 'I', 'A', 'D', 'V', 'S', 'S', 'X', 'V', 'I',
-              'Y', 'G', 'V', 'L', 'L', 'G', 'N', 'L', 'A', 'I', 'T'],
-             ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
-              'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
-              'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
-              'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
-              'F', 'G', '-', '-', '-', '-', '-', '-', '-', 'G', 'E', 'Q', 'N',
-              'P', 'I', '-', '-', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D', 'W', 'L',
-              'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A', 'L', 'L',
-              'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L', '-', '-', '-', '-',
-              'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
-              'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', '-', '-', 'Y', 'S', 'Y',
-              'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L',
-              'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K',
-              'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K',
-              'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y',
-              'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', '-', '-', '-', '-',
-              'G', 'A', 'G', 'I', 'V', '-', '-', 'P', 'L', 'N', 'I', 'E', 'T',
-              'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G',
-              'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I']],
-            dtype='U')
+np.array([['Y', 'Q', 'F', 'T', 'S', 'H', 'I', 'L', 'T', 'L', 'G', 'Y', 'A',
+           'V', 'M', 'L', 'A', 'G', 'L', 'L', 'Y', 'F', 'I', 'L', 'T', 'I',
+           'K', 'N', 'V', 'D', '-', 'K', 'K', 'F', 'Q', 'M', 'S', 'N', 'I',
+           'L', 'S', 'A', 'V', 'V', 'M', 'V', 'S', 'A', 'F', 'L', 'L', 'L',
+           'Y', 'A', 'Q', 'A', 'Q', 'N', 'W', 'T', 'S', 'S', 'F', 'T', 'F',
+           'N', 'E', 'E', 'V', 'G', 'R', 'Y', 'F', 'L', 'D', 'P', 'S', 'G',
+           'D', 'L', 'F', 'N', 'N', 'G', 'Y', 'R', 'Y', 'L', 'N', 'W', 'L',
+           'I', 'D', 'V', 'P', 'M', 'L', 'L', 'F', 'Q', 'I', 'L', 'F', 'V',
+           'V', 'S', 'L', 'T', 'T', 'S', 'K', 'F', 'S', 'S', 'V', 'R', 'N',
+           'Q', 'F', 'W', 'F', 'S', 'G', 'A', 'M', 'M', 'I', 'I', 'T', 'G',
+           'Y', 'I', 'G', 'Q', 'F', 'Y', 'E', 'V', 'S', 'N', 'L', 'T', 'A',
+           'F', 'L', 'V', 'W', 'G', 'A', 'I', 'S', 'S', 'A', 'F', 'F', 'F',
+           'H', 'I', 'L', 'W', 'V', 'M', 'K', 'K', 'V', 'I', 'N', 'E', 'G',
+           'K', 'E', 'G', 'I', 'S', 'P', 'A', 'G', 'Q', 'K', 'I', 'L', 'S',
+           'N', 'I', 'W', 'I', 'L', 'F', 'L', 'I', 'S', 'W', 'T', 'L', 'Y',
+           'P', 'G', 'A', 'Y', 'L', 'M', 'P', 'Y', 'L', 'T', 'G', 'V', 'D',
+           'G', 'F', 'L', 'Y', 'S', 'E', 'D', 'G', 'V', 'M', 'A', 'R', 'Q',
+           'L', 'V', 'Y', 'T', 'I', 'A', 'D', 'V', 'S', 'S', 'X', 'V', 'I',
+           'Y', 'G', 'V', 'L', 'L', 'G', 'N', 'L', 'A', 'I', 'T'],
+          ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
+           'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
+           'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
+           'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
+           'F', 'G', '-', '-', '-', '-', '-', '-', '-', 'G', 'E', 'Q', 'N',
+           'P', 'I', '-', '-', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D', 'W', 'L',
+           'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A', 'L', 'L',
+           'V', 'D', 'A', 'D', 'Q', 'G', 'T', 'I', 'L', '-', '-', '-', '-',
+           'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
+           'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', '-', '-', 'Y', 'S', 'Y',
+           'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L',
+           'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K',
+           'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K',
+           'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y',
+           'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', '-', '-', '-', '-',
+           'G', 'A', 'G', 'I', 'V', '-', '-', 'P', 'L', 'N', 'I', 'E', 'T',
+           'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G',
+           'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -9003,59 +8953,59 @@ numpy.array([['Y', 'Q', 'F', 'T', 'S', 'H', 'I', 'L', 'T', 'L', 'G', 'Y', 'A',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 87, 117, 117, 127, 130, 150, 150, 182, 185, 210, 210, 242, 243,
-                              311],
-                             [  0,  30,  31,  41,  41,  61,  68, 100, 100, 125, 126, 158, 158,
-                              226]])
+                np.array([[ 87, 117, 117, 127, 130, 150, 150, 182, 185, 210,
+                           210, 242, 243, 311],
+                          [  0,  30,  31,  41,  41,  61,  68, 100, 100, 125,
+                           126, 158, 158, 226]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['K', 'I', 'G', 'A', 'Q', 'V', 'C', 'Q', 'W', 'I', 'A', 'F', 'S',
-              'I', 'A', 'I', 'A', 'L', 'L', 'T', 'F', 'Y', 'G', 'F', 'S', 'A',
-              'W', 'K', 'A', 'T', '-', 'C', 'G', 'W', 'E', 'E', 'V', 'Y', 'V',
-              'C', 'C', 'V', 'E', 'V', 'L', 'F', 'V', 'T', 'L', 'E', 'I', 'F',
-              'K', 'E', 'F', 'S', 'S', 'P', 'A', 'T', 'V', 'Y', 'L', 'S', '-',
-              '-', '-', '-', '-', '-', '-', 'T', 'G', 'N', 'H', 'A', 'Y', 'C',
-              'L', 'R', 'Y', 'F', 'E', 'W', 'L', 'L', 'S', 'C', 'P', 'V', 'I',
-              'L', 'I', 'K', 'L', 'S', 'N', 'L', 'S', 'G', 'L', 'K', 'N', 'D',
-              'Y', 'S', 'K', 'R', 'T', 'M', 'G', 'L', 'I', 'V', 'S', 'C', 'V',
-              'G', 'M', 'I', 'V', 'F', 'G', 'M', 'A', 'A', 'G', 'L', 'A', 'T',
-              'D', '-', 'W', 'L', 'K', 'W', 'L', 'L', 'Y', 'I', 'V', 'S', 'C',
-              'I', 'Y', 'G', 'G', 'Y', 'M', 'Y', 'F', 'Q', 'A', 'A', 'K', 'C',
-              'Y', 'V', 'E', 'A', 'N', 'H', 'S', 'V', 'P', 'K', 'G', 'H', 'C',
-              'R', 'M', 'V', 'V', 'K', 'L', 'M', 'A', 'Y', 'A', 'Y', 'F', 'A',
-              'S', 'W', 'G', 'S', 'Y', 'P', 'I', 'L', 'W', 'A', 'V', 'G', 'P',
-              'E', 'G', 'L', 'L', 'K', 'L', 'S', 'P', 'Y', 'A', 'N', 'S', 'I',
-              'G', 'H', 'S', 'I', 'C', 'D', 'I', 'I', 'A', 'X', 'E', 'F', 'W',
-              'T', 'F', 'L', 'A', 'H', 'H', 'L', 'R', 'I', 'K', 'I', 'H'],
-             ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
-              'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
-              'I', 'T', '-', '-', '-', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F',
-              'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T',
-              'M', 'V', 'P', 'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W',
-              'A', 'R', 'Y', 'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L',
-              'L', 'L', 'D', 'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', '-',
-              '-', '-', 'G', 'T', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G',
-              'I', 'M', 'I', 'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K',
-              'V', 'Y', 'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T',
-              'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G',
-              'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', '-', 'R', 'P', 'E', 'V',
-              'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V',
-              'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S',
-              'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I', 'E', 'T', 'L',
-              'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G', 'F',
-              'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I', 'F', 'G']],
-            dtype='U')
+np.array([['K', 'I', 'G', 'A', 'Q', 'V', 'C', 'Q', 'W', 'I', 'A', 'F', 'S',
+           'I', 'A', 'I', 'A', 'L', 'L', 'T', 'F', 'Y', 'G', 'F', 'S', 'A',
+           'W', 'K', 'A', 'T', '-', 'C', 'G', 'W', 'E', 'E', 'V', 'Y', 'V',
+           'C', 'C', 'V', 'E', 'V', 'L', 'F', 'V', 'T', 'L', 'E', 'I', 'F',
+           'K', 'E', 'F', 'S', 'S', 'P', 'A', 'T', 'V', 'Y', 'L', 'S', '-',
+           '-', '-', '-', '-', '-', '-', 'T', 'G', 'N', 'H', 'A', 'Y', 'C',
+           'L', 'R', 'Y', 'F', 'E', 'W', 'L', 'L', 'S', 'C', 'P', 'V', 'I',
+           'L', 'I', 'K', 'L', 'S', 'N', 'L', 'S', 'G', 'L', 'K', 'N', 'D',
+           'Y', 'S', 'K', 'R', 'T', 'M', 'G', 'L', 'I', 'V', 'S', 'C', 'V',
+           'G', 'M', 'I', 'V', 'F', 'G', 'M', 'A', 'A', 'G', 'L', 'A', 'T',
+           'D', '-', 'W', 'L', 'K', 'W', 'L', 'L', 'Y', 'I', 'V', 'S', 'C',
+           'I', 'Y', 'G', 'G', 'Y', 'M', 'Y', 'F', 'Q', 'A', 'A', 'K', 'C',
+           'Y', 'V', 'E', 'A', 'N', 'H', 'S', 'V', 'P', 'K', 'G', 'H', 'C',
+           'R', 'M', 'V', 'V', 'K', 'L', 'M', 'A', 'Y', 'A', 'Y', 'F', 'A',
+           'S', 'W', 'G', 'S', 'Y', 'P', 'I', 'L', 'W', 'A', 'V', 'G', 'P',
+           'E', 'G', 'L', 'L', 'K', 'L', 'S', 'P', 'Y', 'A', 'N', 'S', 'I',
+           'G', 'H', 'S', 'I', 'C', 'D', 'I', 'I', 'A', 'X', 'E', 'F', 'W',
+           'T', 'F', 'L', 'A', 'H', 'H', 'L', 'R', 'I', 'K', 'I', 'H'],
+          ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
+           'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
+           'I', 'T', '-', '-', '-', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F',
+           'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T',
+           'M', 'V', 'P', 'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W',
+           'A', 'R', 'Y', 'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L',
+           'L', 'L', 'D', 'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', '-',
+           '-', '-', 'G', 'T', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G',
+           'I', 'M', 'I', 'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K',
+           'V', 'Y', 'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T',
+           'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G',
+           'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', '-', 'R', 'P', 'E', 'V',
+           'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V',
+           'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S',
+           'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I', 'E', 'T', 'L',
+           'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G', 'F',
+           'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I', 'F', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -9131,58 +9081,58 @@ numpy.array([['K', 'I', 'G', 'A', 'Q', 'V', 'C', 'Q', 'W', 'I', 'A', 'F', 'S',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 12,  37,  37,  67,  67,  97, 101, 129, 129, 158, 160, 189, 189,
-                              226],
-                             [  5,  30,  31,  61,  68,  98,  98, 126, 128, 157, 157, 186, 187,
-                              224]])
+                np.array([[ 12,  37,  37,  67,  67,  97, 101, 129, 129, 158,
+                           160, 189, 189, 226],
+                          [  5,  30,  31,  61,  68,  98,  98, 126, 128, 157,
+                           157, 186, 187, 224]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'S', 'F', 'W', 'L', 'A', 'A', 'A', 'I', 'M', 'L', 'A', 'S',
-              'T', 'V', 'F', 'F', 'F', 'V', 'E', 'R', 'S', 'D', 'V', 'P', '-',
-              'V', 'K', 'W', 'K', 'T', 'S', 'L', 'T', 'V', 'A', 'G', 'L', 'V',
-              'T', 'G', 'V', 'A', 'F', 'W', 'H', 'Y', 'L', 'Y', 'M', 'R', 'G',
-              'V', 'W', 'I', 'Y', '-', '-', '-', '-', '-', '-', '-', 'A', 'G',
-              'E', 'T', 'P', 'T', 'V', 'F', 'R', 'Y', 'I', 'D', 'W', 'L', 'I',
-              'T', 'V', 'P', 'L', 'Q', 'I', 'I', 'E', 'F', 'Y', 'L', 'I', 'I',
-              'A', 'A', 'V', 'T', 'A', 'I', 'S', 'S', 'A', 'V', 'F', 'W', 'K',
-              'L', 'L', 'I', 'A', 'S', 'L', 'V', 'M', 'L', 'I', 'G', 'G', 'F',
-              'I', 'G', 'E', 'A', 'G', 'L', 'G', 'D', '-', '-', 'V', 'V', 'V',
-              'W', 'W', 'I', 'V', 'G', 'M', 'I', 'A', 'W', 'L', 'Y', 'I', 'I',
-              'Y', 'E', 'I', 'F', 'L', 'G', 'E', 'T', 'A', 'K', 'A', 'N', 'A',
-              'G', 'S', 'G', 'N', 'A', 'A', 'S', 'Q', 'Q', 'A', 'F', 'N', 'T',
-              'I', 'K', 'W', 'I', 'V', 'T', 'V', 'G', 'W', 'A', 'I', 'Y', 'P',
-              'I', 'G', 'Y', 'A', 'W', '-', 'G', 'Y', 'F', 'G', 'D', 'G', 'L',
-              'N', 'E', 'D', 'A', 'L', 'N', 'I', 'V', 'Y', 'N', 'L', 'A', 'D',
-              'L', 'I', 'N', 'K', 'A', 'A', 'F', 'G', 'L', 'A', 'I', 'W', 'A',
-              'A', 'A', 'M', 'K'],
-             ['I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G',
-              'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D',
-              'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V',
-              'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L',
-              'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', 'G', 'G', 'E', 'Q',
-              'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D', 'W', 'L', 'F',
-              'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A', 'L', 'L', 'V',
-              'D', 'A', '-', '-', '-', '-', 'D', 'Q', 'G', 'T', 'I', 'L', 'A',
-              'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L',
-              'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F', 'V',
-              'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L',
-              'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S',
-              '-', '-', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V',
-              'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P',
-              'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V',
-              'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D',
-              'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R',
-              'S', 'R', 'A', 'I']], dtype='U')
+np.array([['I', 'S', 'F', 'W', 'L', 'A', 'A', 'A', 'I', 'M', 'L', 'A', 'S',
+           'T', 'V', 'F', 'F', 'F', 'V', 'E', 'R', 'S', 'D', 'V', 'P', '-',
+           'V', 'K', 'W', 'K', 'T', 'S', 'L', 'T', 'V', 'A', 'G', 'L', 'V',
+           'T', 'G', 'V', 'A', 'F', 'W', 'H', 'Y', 'L', 'Y', 'M', 'R', 'G',
+           'V', 'W', 'I', 'Y', '-', '-', '-', '-', '-', '-', '-', 'A', 'G',
+           'E', 'T', 'P', 'T', 'V', 'F', 'R', 'Y', 'I', 'D', 'W', 'L', 'I',
+           'T', 'V', 'P', 'L', 'Q', 'I', 'I', 'E', 'F', 'Y', 'L', 'I', 'I',
+           'A', 'A', 'V', 'T', 'A', 'I', 'S', 'S', 'A', 'V', 'F', 'W', 'K',
+           'L', 'L', 'I', 'A', 'S', 'L', 'V', 'M', 'L', 'I', 'G', 'G', 'F',
+           'I', 'G', 'E', 'A', 'G', 'L', 'G', 'D', '-', '-', 'V', 'V', 'V',
+           'W', 'W', 'I', 'V', 'G', 'M', 'I', 'A', 'W', 'L', 'Y', 'I', 'I',
+           'Y', 'E', 'I', 'F', 'L', 'G', 'E', 'T', 'A', 'K', 'A', 'N', 'A',
+           'G', 'S', 'G', 'N', 'A', 'A', 'S', 'Q', 'Q', 'A', 'F', 'N', 'T',
+           'I', 'K', 'W', 'I', 'V', 'T', 'V', 'G', 'W', 'A', 'I', 'Y', 'P',
+           'I', 'G', 'Y', 'A', 'W', '-', 'G', 'Y', 'F', 'G', 'D', 'G', 'L',
+           'N', 'E', 'D', 'A', 'L', 'N', 'I', 'V', 'Y', 'N', 'L', 'A', 'D',
+           'L', 'I', 'N', 'K', 'A', 'A', 'F', 'G', 'L', 'A', 'I', 'W', 'A',
+           'A', 'A', 'M', 'K'],
+          ['I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G',
+           'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D',
+           'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V',
+           'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L',
+           'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', 'G', 'G', 'E', 'Q',
+           'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D', 'W', 'L', 'F',
+           'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A', 'L', 'L', 'V',
+           'D', 'A', '-', '-', '-', '-', 'D', 'Q', 'G', 'T', 'I', 'L', 'A',
+           'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L',
+           'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F', 'V',
+           'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L',
+           'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S',
+           '-', '-', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V',
+           'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P',
+           'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V',
+           'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D',
+           'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R',
+           'S', 'R', 'A', 'I']], dtype='U')
                 # fmt: on
             )
         )
@@ -9258,56 +9208,58 @@ numpy.array([['I', 'S', 'F', 'W', 'L', 'A', 'A', 'A', 'I', 'M', 'L', 'A', 'S',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 23,  47,  47,  82,  88,  95,  95, 122, 126, 151, 153, 251],
-                             [  6,  30,  31,  66,  66,  73,  74, 101, 101, 126, 126, 224]])
+                np.array([[ 23,  47,  47,  82,  88,  95,  95, 122, 126, 151,
+                           153, 251],
+                          [  6,  30,  31,  66,  66,  73,  74, 101, 101, 126,
+                           126, 224]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['L', 'L', 'T', 'M', 'G', 'V', 'G', 'V', 'H', 'F', 'A', 'A', 'L',
-              'I', 'F', 'F', 'L', 'V', 'V', 'S', 'Q', 'F', 'V', 'A', '-', 'P',
-              'K', 'Y', 'R', 'I', 'A', 'T', 'A', 'L', 'S', 'C', 'I', 'V', 'M',
-              'V', 'S', 'A', 'G', 'L', 'I', 'L', 'N', 'S', 'Q', 'A', 'V', 'M',
-              'W', 'T', 'D', 'A', 'Y', 'A', 'Y', 'V', 'D', 'G', 'S', 'Y', 'Q',
-              'L', 'Q', 'D', 'L', 'T', 'F', 'S', 'N', '-', 'G', 'Y', 'R', 'Y',
-              'V', 'N', 'W', 'M', 'A', 'T', 'I', 'P', 'C', 'L', 'L', 'L', 'Q',
-              'L', 'L', 'I', 'V', 'L', 'N', 'L', 'K', 'G', 'K', 'E', 'L', 'F',
-              'S', 'T', 'A', 'T', 'W', 'L', 'I', 'L', 'A', 'A', 'W', 'G', 'M',
-              'I', 'I', 'T', 'G', 'Y', 'V', 'G', 'Q', 'L', 'Y', 'E', 'V', 'D',
-              'D', 'I', 'A', 'Q', 'L', 'M', 'I', 'W', 'G', 'A', 'V', 'S', 'T',
-              'A', 'F', 'F', 'V', 'V', 'M', 'N', 'W', 'I', 'V', 'G', 'T', 'K',
-              'I', 'F', 'K', 'N', 'R', 'A', 'T', 'M', 'L', 'G', 'G', 'T', 'D',
-              'S', 'T', 'I', 'T', 'K', 'V', 'F', 'W', 'L', 'M', 'M', 'F', 'A',
-              'W', 'T', 'L', 'Y', 'P', 'I', 'A', 'Y', 'L', 'V', 'P', 'A', 'F',
-              'M', 'N', 'N', 'A', 'D', 'G', 'V', 'V', 'L', 'R', 'Q', 'L', 'L',
-              'F', 'T', 'I', 'A', 'D', 'I', 'S', 'S', 'K', 'V', 'I', 'Y', 'G',
-              'L', 'M', 'I', 'T', 'Y', 'I', 'A', 'I', 'Q'],
-             ['W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G', 'T',
-              'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D', 'P',
-              'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V', 'P',
-              'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L', 'G',
-              'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', '-', '-', '-', '-', '-',
-              '-', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
-              'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
-              'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', '-', '-', '-',
-              '-', 'T', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M',
-              'I', 'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y',
-              '-', '-', 'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T',
-              'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G',
-              'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A',
-              'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L',
-              'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E',
-              'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L',
-              'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G',
-              'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I']], dtype='U')
+np.array([['L', 'L', 'T', 'M', 'G', 'V', 'G', 'V', 'H', 'F', 'A', 'A', 'L',
+           'I', 'F', 'F', 'L', 'V', 'V', 'S', 'Q', 'F', 'V', 'A', '-', 'P',
+           'K', 'Y', 'R', 'I', 'A', 'T', 'A', 'L', 'S', 'C', 'I', 'V', 'M',
+           'V', 'S', 'A', 'G', 'L', 'I', 'L', 'N', 'S', 'Q', 'A', 'V', 'M',
+           'W', 'T', 'D', 'A', 'Y', 'A', 'Y', 'V', 'D', 'G', 'S', 'Y', 'Q',
+           'L', 'Q', 'D', 'L', 'T', 'F', 'S', 'N', '-', 'G', 'Y', 'R', 'Y',
+           'V', 'N', 'W', 'M', 'A', 'T', 'I', 'P', 'C', 'L', 'L', 'L', 'Q',
+           'L', 'L', 'I', 'V', 'L', 'N', 'L', 'K', 'G', 'K', 'E', 'L', 'F',
+           'S', 'T', 'A', 'T', 'W', 'L', 'I', 'L', 'A', 'A', 'W', 'G', 'M',
+           'I', 'I', 'T', 'G', 'Y', 'V', 'G', 'Q', 'L', 'Y', 'E', 'V', 'D',
+           'D', 'I', 'A', 'Q', 'L', 'M', 'I', 'W', 'G', 'A', 'V', 'S', 'T',
+           'A', 'F', 'F', 'V', 'V', 'M', 'N', 'W', 'I', 'V', 'G', 'T', 'K',
+           'I', 'F', 'K', 'N', 'R', 'A', 'T', 'M', 'L', 'G', 'G', 'T', 'D',
+           'S', 'T', 'I', 'T', 'K', 'V', 'F', 'W', 'L', 'M', 'M', 'F', 'A',
+           'W', 'T', 'L', 'Y', 'P', 'I', 'A', 'Y', 'L', 'V', 'P', 'A', 'F',
+           'M', 'N', 'N', 'A', 'D', 'G', 'V', 'V', 'L', 'R', 'Q', 'L', 'L',
+           'F', 'T', 'I', 'A', 'D', 'I', 'S', 'S', 'K', 'V', 'I', 'Y', 'G',
+           'L', 'M', 'I', 'T', 'Y', 'I', 'A', 'I', 'Q'],
+          ['W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G', 'T',
+           'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D', 'P',
+           'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V', 'P',
+           'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L', 'G',
+           'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', '-', '-', '-', '-', '-',
+           '-', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
+           'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
+           'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', '-', '-', '-',
+           '-', 'T', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M',
+           'I', 'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y',
+           '-', '-', 'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T',
+           'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G',
+           'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A',
+           'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L',
+           'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E',
+           'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L',
+           'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G',
+           'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I']], dtype='U')
                 # fmt: on
             )
         )
@@ -9383,57 +9335,57 @@ numpy.array([['L', 'L', 'T', 'M', 'G', 'V', 'G', 'V', 'H', 'F', 'A', 'A', 'L',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  7,  37,  37,  79,  79, 103, 107, 134, 139, 238],
-                             [  0,  30,  31,  73,  74,  98,  98, 125, 125, 224]])
+                np.array([[  7,  37,  37,  79,  79, 103, 107, 134, 139, 238],
+                          [  0,  30,  31,  73,  74,  98,  98, 125, 125, 224]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['V', 'L', 'A', 'T', 'Q', 'Y', 'M', 'F', 'W', 'V', 'G', 'F', 'V',
-              'G', 'M', 'A', 'A', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'E', 'R',
-              'N', 'S', 'L', 'A', '-', 'P', 'E', 'Y', 'R', 'S', 'T', 'A', 'T',
-              'V', 'A', 'A', 'L', 'V', 'T', 'F', 'V', 'A', 'A', 'I', 'H', 'Y',
-              'Y', 'F', 'M', 'K', 'D', 'A', 'V', 'G', 'T', 'S', 'G', 'L', 'L',
-              'S', 'E', 'I', 'D', 'G', 'F', 'P', 'T', '-', 'E', 'I', 'R', 'Y',
-              'I', 'D', 'W', 'L', 'V', 'T', 'T', 'P', 'L', 'L', 'L', 'V', 'K',
-              'F', 'P', 'L', 'L', 'L', 'G', 'L', 'K', 'G', 'R', 'L', 'G', 'R',
-              'P', 'L', 'L', 'T', 'K', 'L', 'V', 'I', 'A', 'D', 'V', 'I', 'M',
-              'I', 'V', 'G', 'G', 'Y', 'I', 'G', 'E', 'S', 'S', 'I', 'N', 'I',
-              'A', 'G', 'G', 'F', 'T', 'Q', 'L', 'G', 'L', 'W', 'S', 'Y', 'L',
-              'I', 'G', 'C', 'F', 'A', 'W', 'I', 'Y', 'I', 'I', 'Y', 'L', 'L',
-              'F', 'T', 'N', 'V', 'T', 'K', 'A', 'A', 'E', 'N', 'K', 'P', 'A',
-              'P', 'I', 'R', 'D', 'A', 'L', 'L', 'K', 'M', 'R', 'L', 'F', 'I',
-              'L', 'I', 'G', 'W', 'A', 'I', 'Y', 'P', 'I', 'G', 'Y', 'A', 'V',
-              'T', 'L', 'F', 'A', 'P', 'G', 'V', 'E', 'I', 'Q', 'L', 'V', 'R',
-              'E', 'L', 'I', 'Y', 'N', 'F', 'A', 'D', 'L', 'T', 'N', 'K', 'V',
-              'G', 'F', 'G', 'L', 'I', 'A', 'F', 'F', 'A', 'V', 'K', 'T'],
-             ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
-              'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
-              'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
-              'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
-              'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
-              'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
-              'L', 'A', 'L', 'L', 'V', 'D', 'A', '-', '-', '-', '-', 'D', 'Q',
-              'G', 'T', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M',
-              'I', 'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', '-',
-              '-', '-', '-', '-', 'Y', 'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A',
-              'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L',
-              'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R', 'P',
-              'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T',
-              'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I',
-              'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I', 'E',
-              'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V',
-              'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I']],
-            dtype='U')
+np.array([['V', 'L', 'A', 'T', 'Q', 'Y', 'M', 'F', 'W', 'V', 'G', 'F', 'V',
+           'G', 'M', 'A', 'A', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'E', 'R',
+           'N', 'S', 'L', 'A', '-', 'P', 'E', 'Y', 'R', 'S', 'T', 'A', 'T',
+           'V', 'A', 'A', 'L', 'V', 'T', 'F', 'V', 'A', 'A', 'I', 'H', 'Y',
+           'Y', 'F', 'M', 'K', 'D', 'A', 'V', 'G', 'T', 'S', 'G', 'L', 'L',
+           'S', 'E', 'I', 'D', 'G', 'F', 'P', 'T', '-', 'E', 'I', 'R', 'Y',
+           'I', 'D', 'W', 'L', 'V', 'T', 'T', 'P', 'L', 'L', 'L', 'V', 'K',
+           'F', 'P', 'L', 'L', 'L', 'G', 'L', 'K', 'G', 'R', 'L', 'G', 'R',
+           'P', 'L', 'L', 'T', 'K', 'L', 'V', 'I', 'A', 'D', 'V', 'I', 'M',
+           'I', 'V', 'G', 'G', 'Y', 'I', 'G', 'E', 'S', 'S', 'I', 'N', 'I',
+           'A', 'G', 'G', 'F', 'T', 'Q', 'L', 'G', 'L', 'W', 'S', 'Y', 'L',
+           'I', 'G', 'C', 'F', 'A', 'W', 'I', 'Y', 'I', 'I', 'Y', 'L', 'L',
+           'F', 'T', 'N', 'V', 'T', 'K', 'A', 'A', 'E', 'N', 'K', 'P', 'A',
+           'P', 'I', 'R', 'D', 'A', 'L', 'L', 'K', 'M', 'R', 'L', 'F', 'I',
+           'L', 'I', 'G', 'W', 'A', 'I', 'Y', 'P', 'I', 'G', 'Y', 'A', 'V',
+           'T', 'L', 'F', 'A', 'P', 'G', 'V', 'E', 'I', 'Q', 'L', 'V', 'R',
+           'E', 'L', 'I', 'Y', 'N', 'F', 'A', 'D', 'L', 'T', 'N', 'K', 'V',
+           'G', 'F', 'G', 'L', 'I', 'A', 'F', 'F', 'A', 'V', 'K', 'T'],
+          ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
+           'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
+           'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
+           'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
+           'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
+           'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
+           'L', 'A', 'L', 'L', 'V', 'D', 'A', '-', '-', '-', '-', 'D', 'Q',
+           'G', 'T', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M',
+           'I', 'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', '-',
+           '-', '-', '-', '-', 'Y', 'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A',
+           'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L',
+           'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R', 'P',
+           'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T',
+           'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I',
+           'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I', 'E',
+           'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V',
+           'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -9509,58 +9461,58 @@ numpy.array([['V', 'L', 'A', 'T', 'Q', 'Y', 'M', 'F', 'W', 'V', 'G', 'F', 'V',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 26,  56,  56,  86,  86, 117, 121, 147, 147, 170, 171, 208, 209,
-                              246],
-                             [  0,  30,  31,  61,  68,  99,  99, 125, 127, 150, 150, 187, 187,
-                              224]])
+                np.array([[ 26,  56,  56,  86,  86, 117, 121, 147, 147, 170,
+                           171, 208, 209, 246],
+                          [  0,  30,  31,  61,  68,  99,  99, 125, 127, 150,
+                           150, 187, 187, 224]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['S', 'D', 'T', 'V', 'G', 'V', 'S', 'F', 'W', 'L', 'V', 'T', 'A',
-              'G', 'M', 'L', 'A', 'A', 'T', 'V', 'F', 'F', 'F', 'V', 'E', 'R',
-              'D', 'Q', 'V', 'S', '-', 'A', 'K', 'W', 'K', 'T', 'S', 'L', 'T',
-              'V', 'S', 'G', 'L', 'I', 'T', 'G', 'I', 'A', 'F', 'W', 'H', 'Y',
-              'L', 'Y', 'M', 'R', 'G', 'V', 'W', 'I', 'D', '-', '-', '-', '-',
-              '-', '-', '-', 'T', 'G', 'D', 'T', 'P', 'T', 'V', 'F', 'R', 'Y',
-              'I', 'N', 'W', 'L', 'L', 'T', 'V', 'P', 'L', 'L', 'V', 'V', 'E',
-              'F', 'Y', 'L', 'I', 'L', 'A', 'A', 'C', 'T', 'S', 'V', 'A', 'A',
-              'S', 'L', 'F', 'K', 'K', 'L', 'L', 'A', 'G', 'S', 'L', 'V', 'M',
-              'L', 'G', 'A', 'G', 'F', 'A', 'G', 'E', 'A', 'G', 'L', 'A', '-',
-              '-', 'P', 'V', 'L', 'P', 'A', 'F', 'I', 'I', 'G', 'M', 'A', 'G',
-              'W', 'L', 'Y', 'M', 'I', 'Y', 'E', 'L', 'Y', 'M', 'G', 'E', 'G',
-              'K', 'A', 'A', 'V', 'S', 'T', 'A', 'S', 'P', 'A', 'V', 'N', 'S',
-              'A', 'Y', 'N', 'A', 'M', 'M', 'M', 'I', 'I', 'V', 'V', 'G', 'W',
-              'A', 'I', 'Y', 'P', 'A', 'G', 'Y', 'A', 'A', 'G', 'Y', 'L', 'M',
-              'G', 'G', 'E', 'G', 'V', 'Y', 'A', 'S', 'N', 'L', 'N', 'L', 'I',
-              'Y', 'N', 'L', 'A', 'D', 'F', 'V', 'N', 'K', 'I', 'L', 'F', 'G',
-              'L', 'I', 'I', 'W', 'N', 'V', 'A', 'V', 'K'],
-             ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
-              'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
-              'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
-              'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
-              'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
-              'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
-              'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', '-', '-', '-', '-', 'Q',
-              'G', 'T', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M',
-              'I', 'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y',
-              'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A',
-              'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', '-', 'F',
-              'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S',
-              'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W',
-              'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', '-', 'S', 'E',
-              'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L',
-              'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G',
-              'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I']], dtype='U')
+np.array([['S', 'D', 'T', 'V', 'G', 'V', 'S', 'F', 'W', 'L', 'V', 'T', 'A',
+           'G', 'M', 'L', 'A', 'A', 'T', 'V', 'F', 'F', 'F', 'V', 'E', 'R',
+           'D', 'Q', 'V', 'S', '-', 'A', 'K', 'W', 'K', 'T', 'S', 'L', 'T',
+           'V', 'S', 'G', 'L', 'I', 'T', 'G', 'I', 'A', 'F', 'W', 'H', 'Y',
+           'L', 'Y', 'M', 'R', 'G', 'V', 'W', 'I', 'D', '-', '-', '-', '-',
+           '-', '-', '-', 'T', 'G', 'D', 'T', 'P', 'T', 'V', 'F', 'R', 'Y',
+           'I', 'N', 'W', 'L', 'L', 'T', 'V', 'P', 'L', 'L', 'V', 'V', 'E',
+           'F', 'Y', 'L', 'I', 'L', 'A', 'A', 'C', 'T', 'S', 'V', 'A', 'A',
+           'S', 'L', 'F', 'K', 'K', 'L', 'L', 'A', 'G', 'S', 'L', 'V', 'M',
+           'L', 'G', 'A', 'G', 'F', 'A', 'G', 'E', 'A', 'G', 'L', 'A', '-',
+           '-', 'P', 'V', 'L', 'P', 'A', 'F', 'I', 'I', 'G', 'M', 'A', 'G',
+           'W', 'L', 'Y', 'M', 'I', 'Y', 'E', 'L', 'Y', 'M', 'G', 'E', 'G',
+           'K', 'A', 'A', 'V', 'S', 'T', 'A', 'S', 'P', 'A', 'V', 'N', 'S',
+           'A', 'Y', 'N', 'A', 'M', 'M', 'M', 'I', 'I', 'V', 'V', 'G', 'W',
+           'A', 'I', 'Y', 'P', 'A', 'G', 'Y', 'A', 'A', 'G', 'Y', 'L', 'M',
+           'G', 'G', 'E', 'G', 'V', 'Y', 'A', 'S', 'N', 'L', 'N', 'L', 'I',
+           'Y', 'N', 'L', 'A', 'D', 'F', 'V', 'N', 'K', 'I', 'L', 'F', 'G',
+           'L', 'I', 'I', 'W', 'N', 'V', 'A', 'V', 'K'],
+          ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
+           'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
+           'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
+           'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
+           'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
+           'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
+           'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', '-', '-', '-', '-', 'Q',
+           'G', 'T', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M',
+           'I', 'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y',
+           'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A',
+           'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', '-', 'F',
+           'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A', 'S',
+           'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W',
+           'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', '-', 'S', 'E',
+           'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L',
+           'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G',
+           'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I']], dtype='U')
                 # fmt: on
             )
         )
@@ -9636,58 +9588,58 @@ numpy.array([['S', 'D', 'T', 'V', 'G', 'V', 'S', 'F', 'W', 'L', 'V', 'T', 'A',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 18,  41,  41,  66,  67,  78,  82, 114, 118, 176, 178, 211, 212,
-                              246],
-                             [  7,  30,  31,  56,  56,  67,  67,  99,  99, 157, 157, 190, 190,
-                              224]])
+                np.array([[ 18,  41,  41,  66,  67,  78,  82, 114, 118, 176,
+                           178, 211, 212, 246],
+                          [  7,  30,  31,  56,  56,  67,  67,  99,  99, 157,
+                           157, 190, 190, 224]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['L', 'S', 'L', 'T', 'I', 'A', 'G', 'M', 'L', 'A', 'A', 'F', 'V',
-              'F', 'F', 'L', 'L', 'A', 'R', 'S', 'Y', 'V', 'A', '-', 'P', 'R',
-              'Y', 'H', 'I', 'A', 'L', 'Y', 'L', 'S', 'A', 'L', 'I', 'V', 'F',
-              'I', 'A', 'G', 'Y', 'H', 'Y', 'L', 'R', 'I', 'F', 'E', 'S', 'W',
-              'V', 'G', 'A', 'Y', 'Q', 'L', 'Q', 'D', 'G', 'V', 'Y', 'V', 'P',
-              'T', 'G', 'K', 'P', 'F', 'N', 'D', 'F', 'Y', 'R', 'Y', 'A', 'D',
-              'W', 'L', 'L', 'T', 'V', 'P', 'L', 'L', 'L', 'L', 'E', 'L', 'I',
-              'L', 'V', 'L', 'G', 'L', 'T', 'A', 'A', 'R', 'T', 'W', 'N', 'L',
-              'S', 'I', 'K', 'L', 'V', 'V', 'A', 'S', 'V', 'L', 'M', 'L', 'A',
-              'L', 'G', 'Y', 'V', 'G', 'E', 'V', 'N', 'T', 'E', 'P', 'G', 'P',
-              'R', 'T', 'L', 'W', 'G', 'A', 'L', 'S', 'S', 'I', 'P', 'F', 'F',
-              'Y', 'I', 'L', 'Y', 'V', 'L', 'W', 'V', 'E', 'L', 'G', 'Q', 'A',
-              'I', 'R', 'E', 'A', 'K', 'F', 'G', 'P', 'R', 'V', 'L', 'E', 'L',
-              'L', 'G', 'A', 'T', 'R', 'L', 'V', 'L', 'L', 'M', 'S', 'W', 'G',
-              'F', 'Y', 'P', 'I', 'A', 'Y', 'A', 'L', 'G', 'T', 'W', 'L', 'P',
-              'G', 'G', 'A', 'A', 'Q', 'E', 'V', 'A', 'I', 'Q', 'I', 'G', 'Y',
-              'S', 'L', 'A', 'D', 'L', 'I', 'A', 'X', 'P', 'I', 'Y', 'G', 'L',
-              'L', 'V', 'F', 'A', 'I', 'A', 'R', 'A'],
-             ['L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G', 'T', 'L',
-              'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D', 'P', 'D',
-              'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V', 'P', 'A',
-              'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', '-', 'L', 'G',
-              'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', 'G', '-', '-', '-', '-',
-              'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D',
-              'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A',
-              'L', 'L', 'V', 'D', 'A', 'D', '-', '-', '-', '-', 'Q', 'G', 'T',
-              'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G',
-              'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y',
-              'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L',
-              'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K',
-              'A', 'E', 'S', '-', '-', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T',
-              'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S',
-              'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', '-',
-              'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F',
-              'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L',
-              'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I']], dtype='U')
+np.array([['L', 'S', 'L', 'T', 'I', 'A', 'G', 'M', 'L', 'A', 'A', 'F', 'V',
+           'F', 'F', 'L', 'L', 'A', 'R', 'S', 'Y', 'V', 'A', '-', 'P', 'R',
+           'Y', 'H', 'I', 'A', 'L', 'Y', 'L', 'S', 'A', 'L', 'I', 'V', 'F',
+           'I', 'A', 'G', 'Y', 'H', 'Y', 'L', 'R', 'I', 'F', 'E', 'S', 'W',
+           'V', 'G', 'A', 'Y', 'Q', 'L', 'Q', 'D', 'G', 'V', 'Y', 'V', 'P',
+           'T', 'G', 'K', 'P', 'F', 'N', 'D', 'F', 'Y', 'R', 'Y', 'A', 'D',
+           'W', 'L', 'L', 'T', 'V', 'P', 'L', 'L', 'L', 'L', 'E', 'L', 'I',
+           'L', 'V', 'L', 'G', 'L', 'T', 'A', 'A', 'R', 'T', 'W', 'N', 'L',
+           'S', 'I', 'K', 'L', 'V', 'V', 'A', 'S', 'V', 'L', 'M', 'L', 'A',
+           'L', 'G', 'Y', 'V', 'G', 'E', 'V', 'N', 'T', 'E', 'P', 'G', 'P',
+           'R', 'T', 'L', 'W', 'G', 'A', 'L', 'S', 'S', 'I', 'P', 'F', 'F',
+           'Y', 'I', 'L', 'Y', 'V', 'L', 'W', 'V', 'E', 'L', 'G', 'Q', 'A',
+           'I', 'R', 'E', 'A', 'K', 'F', 'G', 'P', 'R', 'V', 'L', 'E', 'L',
+           'L', 'G', 'A', 'T', 'R', 'L', 'V', 'L', 'L', 'M', 'S', 'W', 'G',
+           'F', 'Y', 'P', 'I', 'A', 'Y', 'A', 'L', 'G', 'T', 'W', 'L', 'P',
+           'G', 'G', 'A', 'A', 'Q', 'E', 'V', 'A', 'I', 'Q', 'I', 'G', 'Y',
+           'S', 'L', 'A', 'D', 'L', 'I', 'A', 'X', 'P', 'I', 'Y', 'G', 'L',
+           'L', 'V', 'F', 'A', 'I', 'A', 'R', 'A'],
+          ['L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G', 'T', 'L',
+           'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D', 'P', 'D',
+           'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V', 'P', 'A',
+           'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', '-', 'L', 'G',
+           'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', 'G', '-', '-', '-', '-',
+           'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D',
+           'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A',
+           'L', 'L', 'V', 'D', 'A', 'D', '-', '-', '-', '-', 'Q', 'G', 'T',
+           'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G',
+           'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y',
+           'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L',
+           'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K',
+           'A', 'E', 'S', '-', '-', 'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T',
+           'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S',
+           'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', '-',
+           'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F',
+           'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L',
+           'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I']], dtype='U')
                 # fmt: on
             )
         )
@@ -9763,60 +9715,60 @@ numpy.array([['L', 'S', 'L', 'T', 'I', 'A', 'G', 'M', 'L', 'A', 'A', 'F', 'V',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 18,  42,  42,  79,  82,  89,  91, 118, 122, 146, 149, 212, 215,
-                              222, 225, 253],
-                             [  6,  30,  31,  68,  68,  75,  75, 102, 102, 126, 126, 189, 189,
-                              196, 196, 224]])
+                np.array([[ 18,  42,  42,  79,  82,  89,  91, 118, 122, 146,
+                           149, 212, 215, 222, 225, 253],
+                          [  6,  30,  31,  68,  68,  75,  75, 102, 102, 126,
+                           126, 189, 189, 196, 196, 224]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['M', 'F', 'S', 'F', 'T', 'V', 'A', 'T', 'M', 'T', 'A', 'S', 'F',
-              'V', 'F', 'F', 'V', 'L', 'A', 'R', 'N', 'N', 'V', 'A', '-', 'P',
-              'K', 'Y', 'R', 'I', 'S', 'M', 'M', 'V', 'S', 'A', 'L', 'V', 'V',
-              'F', 'I', 'A', 'G', 'Y', 'H', 'Y', 'F', 'R', 'I', 'T', 'S', 'S',
-              'W', 'E', 'A', 'A', 'Y', 'A', 'L', 'Q', 'N', 'G', 'M', 'Y', 'Q',
-              'P', 'T', 'G', 'E', 'L', 'F', 'N', 'D', 'A', 'Y', 'R', 'Y', 'V',
-              'D', 'W', 'L', 'L', 'T', 'V', 'P', 'L', 'L', 'T', 'V', 'E', 'L',
-              'V', 'L', 'V', 'M', 'G', 'L', 'P', 'K', 'N', 'E', 'R', 'G', 'P',
-              'L', 'A', 'A', 'K', 'L', 'G', 'F', 'L', 'A', 'A', 'L', 'M', 'I',
-              'V', 'L', 'G', 'Y', 'P', 'G', 'E', 'V', 'S', 'E', 'N', 'A', 'A',
-              'L', 'F', 'G', 'T', 'R', 'G', 'L', 'W', 'G', 'F', 'L', 'S', 'T',
-              'I', 'P', 'F', 'V', 'W', 'I', 'L', 'Y', 'I', 'L', 'F', 'T', 'Q',
-              'L', 'G', 'D', 'T', 'I', 'Q', 'R', 'Q', 'S', 'S', 'R', 'V', 'S',
-              'T', 'L', 'L', 'G', 'N', 'A', 'R', 'L', 'L', 'L', 'L', 'A', 'T',
-              'W', 'G', 'F', 'Y', 'P', 'I', 'A', 'Y', 'M', 'I', 'P', 'M', 'A',
-              'F', 'P', 'E', 'A', 'F', 'P', 'S', 'N', 'T', 'P', 'G', 'T', 'I',
-              'V', 'A', 'L', 'Q', 'V', 'G', 'Y', 'T', 'I', 'A', 'D', 'V', 'L',
-              'A', 'K', 'A', 'G', 'Y', 'G', 'V', 'L', 'I', 'Y', 'N', 'I', 'A',
-              'K', 'A'],
-             ['W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G', 'T',
-              'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D', 'P',
-              'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V', 'P',
-              'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L', 'G',
-              'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', 'G', 'G', '-', '-', '-',
-              'E', 'Q', 'N', 'P', 'I', 'Y', 'W', '-', '-', 'A', 'R', 'Y', 'A',
-              'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L',
-              'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', '-', '-', '-',
-              '-', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I',
-              'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', '-',
-              '-', '-', 'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T',
-              'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G',
-              'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A',
-              'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L',
-              'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E',
-              '-', '-', '-', 'G', 'A', 'G', 'I', 'V', 'P', 'L', '-', '-', '-',
-              'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S',
-              'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R',
-              'A', 'I']], dtype='U')
+np.array([['M', 'F', 'S', 'F', 'T', 'V', 'A', 'T', 'M', 'T', 'A', 'S', 'F',
+           'V', 'F', 'F', 'V', 'L', 'A', 'R', 'N', 'N', 'V', 'A', '-', 'P',
+           'K', 'Y', 'R', 'I', 'S', 'M', 'M', 'V', 'S', 'A', 'L', 'V', 'V',
+           'F', 'I', 'A', 'G', 'Y', 'H', 'Y', 'F', 'R', 'I', 'T', 'S', 'S',
+           'W', 'E', 'A', 'A', 'Y', 'A', 'L', 'Q', 'N', 'G', 'M', 'Y', 'Q',
+           'P', 'T', 'G', 'E', 'L', 'F', 'N', 'D', 'A', 'Y', 'R', 'Y', 'V',
+           'D', 'W', 'L', 'L', 'T', 'V', 'P', 'L', 'L', 'T', 'V', 'E', 'L',
+           'V', 'L', 'V', 'M', 'G', 'L', 'P', 'K', 'N', 'E', 'R', 'G', 'P',
+           'L', 'A', 'A', 'K', 'L', 'G', 'F', 'L', 'A', 'A', 'L', 'M', 'I',
+           'V', 'L', 'G', 'Y', 'P', 'G', 'E', 'V', 'S', 'E', 'N', 'A', 'A',
+           'L', 'F', 'G', 'T', 'R', 'G', 'L', 'W', 'G', 'F', 'L', 'S', 'T',
+           'I', 'P', 'F', 'V', 'W', 'I', 'L', 'Y', 'I', 'L', 'F', 'T', 'Q',
+           'L', 'G', 'D', 'T', 'I', 'Q', 'R', 'Q', 'S', 'S', 'R', 'V', 'S',
+           'T', 'L', 'L', 'G', 'N', 'A', 'R', 'L', 'L', 'L', 'L', 'A', 'T',
+           'W', 'G', 'F', 'Y', 'P', 'I', 'A', 'Y', 'M', 'I', 'P', 'M', 'A',
+           'F', 'P', 'E', 'A', 'F', 'P', 'S', 'N', 'T', 'P', 'G', 'T', 'I',
+           'V', 'A', 'L', 'Q', 'V', 'G', 'Y', 'T', 'I', 'A', 'D', 'V', 'L',
+           'A', 'K', 'A', 'G', 'Y', 'G', 'V', 'L', 'I', 'Y', 'N', 'I', 'A',
+           'K', 'A'],
+          ['W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G', 'T',
+           'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D', 'P',
+           'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V', 'P',
+           'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L', 'G',
+           'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', 'G', 'G', '-', '-', '-',
+           'E', 'Q', 'N', 'P', 'I', 'Y', 'W', '-', '-', 'A', 'R', 'Y', 'A',
+           'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L',
+           'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', '-', '-', '-',
+           '-', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I',
+           'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', '-',
+           '-', '-', 'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T',
+           'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G',
+           'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A',
+           'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L',
+           'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E',
+           '-', '-', '-', 'G', 'A', 'G', 'I', 'V', 'P', 'L', '-', '-', '-',
+           'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S',
+           'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R',
+           'A', 'I']], dtype='U')
                 # fmt: on
             )
         )
@@ -9892,58 +9844,58 @@ numpy.array([['M', 'F', 'S', 'F', 'T', 'V', 'A', 'T', 'M', 'T', 'A', 'S', 'F',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 68,  94,  94, 106, 107, 111, 111, 127, 127, 160, 163, 187, 187,
-                              220, 221, 286],
-                             [  4,  30,  31,  43,  43,  47,  49,  65,  68, 101, 101, 125, 126,
-                              159, 159, 224]])
+                np.array([[ 68,  94,  94, 106, 107, 111, 111, 127, 127, 160,
+                           163, 187, 187, 220, 221, 286],
+                          [  4,  30,  31,  43,  43,  47,  49,  65,  68, 101,
+                           101, 125, 126, 159, 159, 224]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['N', 'I', 'L', 'Q', 'W', 'I', 'T', 'F', 'A', 'L', 'S', 'A', 'L',
-              'C', 'L', 'M', 'F', 'Y', 'G', 'Y', 'Q', 'T', 'W', 'K', 'S', 'T',
-              '-', 'C', 'G', 'W', 'E', 'E', 'I', 'Y', 'V', 'A', 'T', 'I', 'E',
-              'M', 'I', 'K', 'F', 'I', '-', '-', 'I', 'E', 'Y', 'F', 'H', 'E',
-              'F', 'D', 'E', 'P', 'A', 'V', 'I', 'Y', 'S', 'S', '-', '-', '-',
-              'N', 'G', 'N', 'K', 'T', 'V', 'W', 'L', 'R', 'Y', 'A', 'E', 'W',
-              'L', 'L', 'T', 'C', 'P', 'V', 'I', 'L', 'I', 'H', 'L', 'S', 'N',
-              'L', 'T', 'G', 'L', 'A', 'N', 'D', 'Y', 'N', 'K', 'R', 'T', 'M',
-              'G', 'L', 'L', 'V', 'S', 'D', 'I', 'G', 'T', 'I', 'V', 'W', 'G',
-              'T', 'T', 'A', 'A', 'L', 'S', 'K', 'G', '-', 'Y', 'V', 'R', 'V',
-              'I', 'F', 'F', 'L', 'M', 'G', 'L', 'C', 'Y', 'G', 'I', 'Y', 'T',
-              'F', 'F', 'N', 'A', 'A', 'K', 'V', 'Y', 'I', 'E', 'A', 'Y', 'H',
-              'T', 'V', 'P', 'K', 'G', 'R', 'C', 'R', 'Q', 'V', 'V', 'T', 'G',
-              'M', 'A', 'W', 'L', 'F', 'F', 'V', 'S', 'W', 'G', 'M', 'F', 'P',
-              'I', 'L', 'F', 'I', 'L', 'G', 'P', 'E', 'G', 'F', 'G', 'V', 'L',
-              'S', 'V', 'Y', 'G', 'S', 'T', 'V', 'G', 'H', 'T', 'I', 'I', 'D',
-              'L', 'M', 'S', 'K', 'N', 'C', 'W', 'G', 'L', 'L', 'G', 'H', 'Y',
-              'L', 'R', 'V', 'L'],
-             ['W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L',
-              'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S',
-              'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L',
-              '-', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M',
-              'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', 'G', 'G',
-              'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D', 'W',
-              'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A', 'L',
-              'L', 'V', 'D', 'A', 'D', 'Q', 'G', '-', '-', '-', 'T', 'I', 'L',
-              'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
-              'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
-              'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
-              'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
-              'S', 'M', 'R', '-', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V',
-              'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P',
-              'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V',
-              'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D',
-              'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R',
-              'S', 'R', 'A', 'I']], dtype='U')
+np.array([['N', 'I', 'L', 'Q', 'W', 'I', 'T', 'F', 'A', 'L', 'S', 'A', 'L',
+           'C', 'L', 'M', 'F', 'Y', 'G', 'Y', 'Q', 'T', 'W', 'K', 'S', 'T',
+           '-', 'C', 'G', 'W', 'E', 'E', 'I', 'Y', 'V', 'A', 'T', 'I', 'E',
+           'M', 'I', 'K', 'F', 'I', '-', '-', 'I', 'E', 'Y', 'F', 'H', 'E',
+           'F', 'D', 'E', 'P', 'A', 'V', 'I', 'Y', 'S', 'S', '-', '-', '-',
+           'N', 'G', 'N', 'K', 'T', 'V', 'W', 'L', 'R', 'Y', 'A', 'E', 'W',
+           'L', 'L', 'T', 'C', 'P', 'V', 'I', 'L', 'I', 'H', 'L', 'S', 'N',
+           'L', 'T', 'G', 'L', 'A', 'N', 'D', 'Y', 'N', 'K', 'R', 'T', 'M',
+           'G', 'L', 'L', 'V', 'S', 'D', 'I', 'G', 'T', 'I', 'V', 'W', 'G',
+           'T', 'T', 'A', 'A', 'L', 'S', 'K', 'G', '-', 'Y', 'V', 'R', 'V',
+           'I', 'F', 'F', 'L', 'M', 'G', 'L', 'C', 'Y', 'G', 'I', 'Y', 'T',
+           'F', 'F', 'N', 'A', 'A', 'K', 'V', 'Y', 'I', 'E', 'A', 'Y', 'H',
+           'T', 'V', 'P', 'K', 'G', 'R', 'C', 'R', 'Q', 'V', 'V', 'T', 'G',
+           'M', 'A', 'W', 'L', 'F', 'F', 'V', 'S', 'W', 'G', 'M', 'F', 'P',
+           'I', 'L', 'F', 'I', 'L', 'G', 'P', 'E', 'G', 'F', 'G', 'V', 'L',
+           'S', 'V', 'Y', 'G', 'S', 'T', 'V', 'G', 'H', 'T', 'I', 'I', 'D',
+           'L', 'M', 'S', 'K', 'N', 'C', 'W', 'G', 'L', 'L', 'G', 'H', 'Y',
+           'L', 'R', 'V', 'L'],
+          ['W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L',
+           'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S',
+           'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L',
+           '-', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M',
+           'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', 'G', 'G',
+           'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D', 'W',
+           'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A', 'L',
+           'L', 'V', 'D', 'A', 'D', 'Q', 'G', '-', '-', '-', 'T', 'I', 'L',
+           'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G',
+           'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S', 'Y', 'R', 'F',
+           'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I',
+           'L', 'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E',
+           'S', 'M', 'R', '-', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V',
+           'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P',
+           'V', 'V', 'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V',
+           'P', 'L', 'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D',
+           'V', 'S', 'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R',
+           'S', 'R', 'A', 'I']], dtype='U')
                 # fmt: on
             )
         )
@@ -10019,58 +9971,58 @@ numpy.array([['N', 'I', 'L', 'Q', 'W', 'I', 'T', 'F', 'A', 'L', 'S', 'A', 'L',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  6,  31,  31,  60,  60,  93,  96, 120, 121, 145, 145, 182, 182,
-                              185, 185, 213],
-                             [  5,  30,  31,  60,  68, 101, 101, 125, 125, 149, 153, 190, 192,
-                              195, 196, 224]])
+                np.array([[  6,  31,  31,  60,  60,  93,  96, 120, 121, 145,
+                           145, 182, 182, 185, 185, 213],
+                          [  5,  30,  31,  60,  68, 101, 101, 125, 125, 149,
+                           153, 190, 192, 195, 196, 224]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['R', 'L', 'F', 'M', 'V', 'A', 'T', 'V', 'G', 'M', 'L', 'A', 'G',
-              'T', 'V', 'F', 'L', 'L', 'A', 'S', 'S', 'R', 'E', 'V', 'K', '-',
-              'P', 'E', 'H', 'R', 'R', 'G', 'V', 'Y', 'I', 'S', 'A', 'L', 'V',
-              'C', 'G', 'I', 'A', 'W', 'Y', 'H', 'Y', 'Q', 'K', 'M', 'G', 'A',
-              'S', 'W', 'E', '-', '-', '-', '-', '-', '-', '-', '-', 'S', 'G',
-              'S', 'Y', 'D', 'T', 'G', 'L', 'R', 'Y', 'V', 'D', 'W', 'V', 'L',
-              'T', 'V', 'P', 'L', 'M', 'F', 'V', 'E', 'V', 'L', 'A', 'V', 'T',
-              'R', 'K', 'G', 'A', 'A', 'Y', 'N', 'E', 'A', 'V', 'R', 'N', 'W',
-              'G', 'I', 'A', 'A', 'T', 'V', 'M', 'I', 'G', 'A', 'G', 'Y', 'Y',
-              'G', 'E', 'T', 'S', 'A', 'A', 'G', 'S', 'N', 'E', 'Y', 'W', 'T',
-              'G', 'F', 'V', 'I', 'A', 'M', 'A', 'T', 'Y', 'V', 'W', 'L', 'M',
-              'R', 'N', 'L', 'Q', 'A', '-', '-', '-', '-', 'E', 'G', 'E', 'G',
-              'L', 'K', 'G', 'D', 'Q', 'A', 'V', 'A', 'F', 'E', 'N', 'I', 'K',
-              'N', 'L', 'I', 'L', 'V', 'G', 'W', 'I', 'I', 'Y', 'P', 'L', 'G',
-              'Y', 'I', 'A', 'P', 'V', 'V', 'G', '-', '-', 'D', 'F', 'D', '-',
-              'A', 'I', 'R', 'E', 'V', 'L', 'Y', 'T', 'I', 'A', 'D', 'I', 'I',
-              'N', 'X', 'V', 'G', 'L', 'G', 'V', 'L', 'V', 'L', 'Q', 'M', 'A',
-              'R', 'V'],
-             ['I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G',
-              'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D',
-              'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V',
-              'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L',
-              'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', 'G', 'G', 'E', 'Q',
-              'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D', 'W', 'L', 'F',
-              'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A', 'L', 'L', 'V',
-              'D', 'A', 'D', 'Q', 'G', '-', '-', '-', 'T', 'I', 'L', 'A', 'L',
-              'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L', 'V',
-              'G', 'A', 'L', 'T', 'K', 'V', '-', 'Y', 'S', 'Y', 'R', 'F', 'V',
-              'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L',
-              'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S',
-              'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R',
-              'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V',
-              'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L',
-              'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S',
-              'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R',
-              'A', 'I']], dtype='U')
+np.array([['R', 'L', 'F', 'M', 'V', 'A', 'T', 'V', 'G', 'M', 'L', 'A', 'G',
+           'T', 'V', 'F', 'L', 'L', 'A', 'S', 'S', 'R', 'E', 'V', 'K', '-',
+           'P', 'E', 'H', 'R', 'R', 'G', 'V', 'Y', 'I', 'S', 'A', 'L', 'V',
+           'C', 'G', 'I', 'A', 'W', 'Y', 'H', 'Y', 'Q', 'K', 'M', 'G', 'A',
+           'S', 'W', 'E', '-', '-', '-', '-', '-', '-', '-', '-', 'S', 'G',
+           'S', 'Y', 'D', 'T', 'G', 'L', 'R', 'Y', 'V', 'D', 'W', 'V', 'L',
+           'T', 'V', 'P', 'L', 'M', 'F', 'V', 'E', 'V', 'L', 'A', 'V', 'T',
+           'R', 'K', 'G', 'A', 'A', 'Y', 'N', 'E', 'A', 'V', 'R', 'N', 'W',
+           'G', 'I', 'A', 'A', 'T', 'V', 'M', 'I', 'G', 'A', 'G', 'Y', 'Y',
+           'G', 'E', 'T', 'S', 'A', 'A', 'G', 'S', 'N', 'E', 'Y', 'W', 'T',
+           'G', 'F', 'V', 'I', 'A', 'M', 'A', 'T', 'Y', 'V', 'W', 'L', 'M',
+           'R', 'N', 'L', 'Q', 'A', '-', '-', '-', '-', 'E', 'G', 'E', 'G',
+           'L', 'K', 'G', 'D', 'Q', 'A', 'V', 'A', 'F', 'E', 'N', 'I', 'K',
+           'N', 'L', 'I', 'L', 'V', 'G', 'W', 'I', 'I', 'Y', 'P', 'L', 'G',
+           'Y', 'I', 'A', 'P', 'V', 'V', 'G', '-', '-', 'D', 'F', 'D', '-',
+           'A', 'I', 'R', 'E', 'V', 'L', 'Y', 'T', 'I', 'A', 'D', 'I', 'I',
+           'N', 'X', 'V', 'G', 'L', 'G', 'V', 'L', 'V', 'L', 'Q', 'M', 'A',
+           'R', 'V'],
+          ['I', 'W', 'L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G',
+           'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D',
+           'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V',
+           'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L',
+           'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P', 'F', 'G', 'G', 'E', 'Q',
+           'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y', 'A', 'D', 'W', 'L', 'F',
+           'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D', 'L', 'A', 'L', 'L', 'V',
+           'D', 'A', 'D', 'Q', 'G', '-', '-', '-', 'T', 'I', 'L', 'A', 'L',
+           'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I', 'G', 'T', 'G', 'L', 'V',
+           'G', 'A', 'L', 'T', 'K', 'V', '-', 'Y', 'S', 'Y', 'R', 'F', 'V',
+           'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M', 'L', 'Y', 'I', 'L',
+           'Y', 'V', 'L', 'F', 'F', 'G', 'F', 'T', 'S', 'K', 'A', 'E', 'S',
+           'M', 'R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R',
+           'N', 'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V',
+           'W', 'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L',
+           'N', 'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S',
+           'A', 'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R',
+           'A', 'I']], dtype='U')
                 # fmt: on
             )
         )
@@ -10146,57 +10098,59 @@ numpy.array([['R', 'L', 'F', 'M', 'V', 'A', 'T', 'V', 'G', 'M', 'L', 'A', 'G',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 26,  34,  34,  53,  53,  82,  82, 114, 117, 167, 174, 248],
-                             [  0,   8,  11,  30,  36,  65,  68, 100, 100, 150, 150, 224]])
+                np.array([[ 26,  34,  34,  53,  53,  82,  82, 114, 117, 167,
+                           174, 248],
+                          [  0,   8,  11,  30,  36,  65,  68, 100, 100, 150,
+                           150, 224]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['D', 'G', 'I', 'K', 'Y', 'V', 'Q', 'L', '-', '-', '-', 'V', 'M',
-              'A', 'V', 'V', 'S', 'A', 'C', 'Q', 'V', 'F', 'F', 'M', 'V', 'T',
-              'R', 'A', 'P', 'K', '-', '-', '-', '-', '-', '-', 'V', 'P', 'W',
-              'E', 'A', 'I', 'Y', 'L', 'P', 'T', 'T', 'E', 'M', 'I', 'T', 'Y',
-              'S', 'L', 'A', 'F', 'T', 'G', 'N', 'G', 'Y', 'I', 'R', 'V', 'A',
-              '-', '-', '-', 'N', 'G', 'K', 'Y', 'L', 'P', 'W', 'A', 'R', 'M',
-              'A', 'S', 'W', 'L', 'C', 'T', 'C', 'P', 'I', 'M', 'L', 'G', 'L',
-              'V', 'S', 'N', 'M', 'A', 'L', 'V', 'K', 'Y', 'K', 'S', 'I', 'P',
-              'L', 'N', 'P', 'M', 'M', 'I', 'A', 'A', 'S', 'S', 'I', 'C', 'T',
-              'V', 'F', 'G', 'I', 'T', 'A', 'S', 'V', 'V', 'L', 'D', 'P', 'L',
-              'H', 'V', 'W', 'L', 'Y', 'C', 'F', 'I', 'S', 'S', 'I', 'F', 'F',
-              'I', 'F', 'E', 'M', 'V', 'V', 'A', 'F', 'A', 'I', 'F', 'A', 'I',
-              'T', 'I', 'H', 'D', 'F', 'Q', 'T', 'I', 'G', 'S', 'P', 'M', 'S',
-              'L', 'K', 'V', 'V', 'E', 'R', 'L', 'K', 'L', 'M', 'R', 'I', 'V',
-              'F', 'Y', 'V', 'S', 'W', 'M', 'A', 'Y', 'P', 'I', 'L', 'W', 'S',
-              'F', 'S', 'S', 'T', 'G', 'A', 'C', 'I', 'M', 'S', 'E', 'N', 'T',
-              'S', 'S', 'V', 'L', 'Y', 'L', 'L', 'G', 'D', 'A', 'L', 'C', 'K',
-              'N', 'T', 'Y', 'G', 'I', 'L', 'L', 'W', 'A', 'T', 'T', 'W', 'G'],
-             ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
-              'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
-              'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
-              'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
-              'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
-              'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
-              'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', '-', '-', '-', 'G',
-              'T', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I',
-              'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S',
-              'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M',
-              'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', '-', '-', '-',
-              '-', '-', '-', '-', 'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R',
-              'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V',
-              'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L',
-              'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I',
-              'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K',
-              'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I']],
-            dtype='U')
+np.array([['D', 'G', 'I', 'K', 'Y', 'V', 'Q', 'L', '-', '-', '-', 'V', 'M',
+           'A', 'V', 'V', 'S', 'A', 'C', 'Q', 'V', 'F', 'F', 'M', 'V', 'T',
+           'R', 'A', 'P', 'K', '-', '-', '-', '-', '-', '-', 'V', 'P', 'W',
+           'E', 'A', 'I', 'Y', 'L', 'P', 'T', 'T', 'E', 'M', 'I', 'T', 'Y',
+           'S', 'L', 'A', 'F', 'T', 'G', 'N', 'G', 'Y', 'I', 'R', 'V', 'A',
+           '-', '-', '-', 'N', 'G', 'K', 'Y', 'L', 'P', 'W', 'A', 'R', 'M',
+           'A', 'S', 'W', 'L', 'C', 'T', 'C', 'P', 'I', 'M', 'L', 'G', 'L',
+           'V', 'S', 'N', 'M', 'A', 'L', 'V', 'K', 'Y', 'K', 'S', 'I', 'P',
+           'L', 'N', 'P', 'M', 'M', 'I', 'A', 'A', 'S', 'S', 'I', 'C', 'T',
+           'V', 'F', 'G', 'I', 'T', 'A', 'S', 'V', 'V', 'L', 'D', 'P', 'L',
+           'H', 'V', 'W', 'L', 'Y', 'C', 'F', 'I', 'S', 'S', 'I', 'F', 'F',
+           'I', 'F', 'E', 'M', 'V', 'V', 'A', 'F', 'A', 'I', 'F', 'A', 'I',
+           'T', 'I', 'H', 'D', 'F', 'Q', 'T', 'I', 'G', 'S', 'P', 'M', 'S',
+           'L', 'K', 'V', 'V', 'E', 'R', 'L', 'K', 'L', 'M', 'R', 'I', 'V',
+           'F', 'Y', 'V', 'S', 'W', 'M', 'A', 'Y', 'P', 'I', 'L', 'W', 'S',
+           'F', 'S', 'S', 'T', 'G', 'A', 'C', 'I', 'M', 'S', 'E', 'N', 'T',
+           'S', 'S', 'V', 'L', 'Y', 'L', 'L', 'G', 'D', 'A', 'L', 'C', 'K',
+           'N', 'T', 'Y', 'G', 'I', 'L', 'L', 'W', 'A', 'T', 'T', 'W', 'G'],
+          ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
+           'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y', 'A',
+           'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M', 'Y',
+           'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V', 'P',
+           'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R', 'Y',
+           'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L', 'D',
+           'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', '-', '-', '-', 'G',
+           'T', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G', 'I', 'M', 'I',
+           'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K', 'V', 'Y', 'S',
+           'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T', 'A', 'A', 'M',
+           'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G', '-', '-', '-',
+           '-', '-', '-', '-', 'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R',
+           'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V',
+           'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L',
+           'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N', 'I',
+           'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A', 'K',
+           'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A', 'I']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -10272,60 +10226,60 @@ numpy.array([['D', 'G', 'I', 'K', 'Y', 'V', 'Q', 'L', '-', '-', '-', 'V', 'M',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  8,  22,  23,  38,  38,  65,  65,  98, 103, 126, 126, 184, 189,
-                              226],
-                             [  0,  14,  14,  29,  31,  58,  69, 102, 102, 125, 129, 187, 187,
-                              224]])
+                np.array([[  8,  22,  23,  38,  38,  65,  65,  98, 103, 126,
+                           126, 184, 189, 226],
+                          [  0,  14,  14,  29,  31,  58,  69, 102, 102, 125,
+                           129, 187, 187, 224]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'G', 'F', 'G', 'S', 'Q', 'P', 'F', 'I', 'L', 'A', 'Y', 'I',
-              'I', 'T', 'A', 'M', 'I', 'S', 'G', 'L', 'L', 'F', 'L', 'Y', 'L',
-              'P', 'R', 'K', 'L', '-', '-', 'D', 'V', 'P', 'Q', 'K', 'F', 'G',
-              'I', 'I', 'H', 'F', 'F', 'I', 'V', 'V', 'W', 'S', 'G', 'L', 'M',
-              'Y', 'T', 'N', 'F', 'L', 'N', 'Q', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', 'S', 'F', 'L', 'S', 'D', 'Y', 'A', 'W',
-              'Y', 'M', 'D', 'W', 'M', 'V', 'S', 'T', 'P', 'L', 'I', 'L', 'L',
-              'A', 'L', 'G', 'L', 'T', 'A', 'F', 'H', 'G', 'A', 'D', 'T', 'K',
-              'R', 'Y', 'D', 'L', 'L', 'G', 'A', 'L', 'L', 'G', 'A', 'E', 'F',
-              'T', 'L', 'V', 'I', 'T', 'G', 'L', 'L', 'A', 'Q', 'A', 'Q', 'G',
-              'S', '-', '-', '-', '-', 'I', 'T', 'P', 'Y', 'Y', 'V', 'G', 'V',
-              'L', 'L', 'L', 'L', 'G', 'V', 'V', 'Y', 'L', 'L', 'A', 'K', 'P',
-              'F', 'R', 'E', 'I', 'A', 'E', 'E', 'S', 'S', 'D', 'G', 'L', 'A',
-              'R', 'A', 'Y', 'K', 'I', 'L', 'A', 'G', 'Y', 'I', 'G', 'I', 'F',
-              'F', 'L', 'S', 'Y', 'P', 'T', 'V', 'W', 'Y', 'I', 'S', 'G', 'I',
-              'D', 'A', 'L', 'P', 'G', 'S', 'L', 'N', 'I', 'L', 'D', 'P', 'T',
-              'Q', 'T', 'S', 'I', 'A', 'L', 'V', 'V', 'L', 'P', 'F', 'F', 'C',
-              'K', 'Q', 'V', 'Y', 'G', 'F', 'L', 'D', 'M', 'Y', 'L', 'I', 'H',
-              'K'],
-             ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', '-', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K',
-              'G', 'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y',
-              'A', 'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M',
-              'Y', 'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V',
-              'P', 'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R',
-              'Y', 'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L',
-              'D', 'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', '-',
-              '-', '-', '-', '-', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G',
-              'I', 'M', 'I', 'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K',
-              'V', 'Y', 'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T',
-              'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G',
-              'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A',
-              'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L',
-              'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', '-', '-',
-              '-', '-', '-', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N',
-              'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A',
-              'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A',
-              'I']], dtype='U')
+np.array([['G', 'G', 'F', 'G', 'S', 'Q', 'P', 'F', 'I', 'L', 'A', 'Y', 'I',
+           'I', 'T', 'A', 'M', 'I', 'S', 'G', 'L', 'L', 'F', 'L', 'Y', 'L',
+           'P', 'R', 'K', 'L', '-', '-', 'D', 'V', 'P', 'Q', 'K', 'F', 'G',
+           'I', 'I', 'H', 'F', 'F', 'I', 'V', 'V', 'W', 'S', 'G', 'L', 'M',
+           'Y', 'T', 'N', 'F', 'L', 'N', 'Q', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', 'S', 'F', 'L', 'S', 'D', 'Y', 'A', 'W',
+           'Y', 'M', 'D', 'W', 'M', 'V', 'S', 'T', 'P', 'L', 'I', 'L', 'L',
+           'A', 'L', 'G', 'L', 'T', 'A', 'F', 'H', 'G', 'A', 'D', 'T', 'K',
+           'R', 'Y', 'D', 'L', 'L', 'G', 'A', 'L', 'L', 'G', 'A', 'E', 'F',
+           'T', 'L', 'V', 'I', 'T', 'G', 'L', 'L', 'A', 'Q', 'A', 'Q', 'G',
+           'S', '-', '-', '-', '-', 'I', 'T', 'P', 'Y', 'Y', 'V', 'G', 'V',
+           'L', 'L', 'L', 'L', 'G', 'V', 'V', 'Y', 'L', 'L', 'A', 'K', 'P',
+           'F', 'R', 'E', 'I', 'A', 'E', 'E', 'S', 'S', 'D', 'G', 'L', 'A',
+           'R', 'A', 'Y', 'K', 'I', 'L', 'A', 'G', 'Y', 'I', 'G', 'I', 'F',
+           'F', 'L', 'S', 'Y', 'P', 'T', 'V', 'W', 'Y', 'I', 'S', 'G', 'I',
+           'D', 'A', 'L', 'P', 'G', 'S', 'L', 'N', 'I', 'L', 'D', 'P', 'T',
+           'Q', 'T', 'S', 'I', 'A', 'L', 'V', 'V', 'L', 'P', 'F', 'F', 'C',
+           'K', 'Q', 'V', 'Y', 'G', 'F', 'L', 'D', 'M', 'Y', 'L', 'I', 'H',
+           'K'],
+          ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', '-', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K',
+           'G', 'M', 'G', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y',
+           'A', 'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M',
+           'Y', 'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V',
+           'P', 'F', 'G', 'G', 'E', 'Q', 'N', 'P', 'I', 'Y', 'W', 'A', 'R',
+           'Y', 'A', 'D', 'W', 'L', 'F', 'T', 'T', 'P', 'L', 'L', 'L', 'L',
+           'D', 'L', 'A', 'L', 'L', 'V', 'D', 'A', 'D', 'Q', 'G', 'T', '-',
+           '-', '-', '-', '-', 'I', 'L', 'A', 'L', 'V', 'G', 'A', 'D', 'G',
+           'I', 'M', 'I', 'G', 'T', 'G', 'L', 'V', 'G', 'A', 'L', 'T', 'K',
+           'V', 'Y', 'S', 'Y', 'R', 'F', 'V', 'W', 'W', 'A', 'I', 'S', 'T',
+           'A', 'A', 'M', 'L', 'Y', 'I', 'L', 'Y', 'V', 'L', 'F', 'F', 'G',
+           'F', 'T', 'S', 'K', 'A', 'E', 'S', 'M', 'R', 'P', 'E', 'V', 'A',
+           'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N', 'V', 'T', 'V', 'V', 'L',
+           'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W', 'L', 'I', 'G', '-', '-',
+           '-', '-', '-', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N',
+           'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A',
+           'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A',
+           'I']], dtype='U')
                 # fmt: on
             )
         )
@@ -10393,32 +10347,32 @@ numpy.array([['G', 'G', 'F', 'G', 'S', 'Q', 'P', 'F', 'I', 'L', 'A', 'Y', 'I',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  1,  69],
-                             [158, 226]])
+                np.array([[  1,  69],
+                          [158, 226]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N',
-              'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W',
-              'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N',
-              'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A',
-              'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A',
-              'I', 'F', 'G'],
-             ['R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N',
-              'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W',
-              'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N',
-              'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A',
-              'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A',
-              'I', 'F', 'G']], dtype='U')
+np.array([['R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N',
+           'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W',
+           'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N',
+           'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A',
+           'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A',
+           'I', 'F', 'G'],
+          ['R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N',
+           'V', 'T', 'V', 'V', 'L', 'W', 'S', 'A', 'Y', 'P', 'V', 'V', 'W',
+           'L', 'I', 'G', 'S', 'E', 'G', 'A', 'G', 'I', 'V', 'P', 'L', 'N',
+           'I', 'E', 'T', 'L', 'L', 'F', 'M', 'V', 'L', 'D', 'V', 'S', 'A',
+           'K', 'V', 'G', 'F', 'G', 'L', 'I', 'L', 'L', 'R', 'S', 'R', 'A',
+           'I', 'F', 'G']], dtype='U')
                 # fmt: on
             )
         )
@@ -10486,32 +10440,32 @@ numpy.array([['R', 'P', 'E', 'V', 'A', 'S', 'T', 'F', 'K', 'V', 'L', 'R', 'N',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 5, 33, 34, 36, 36, 71],
-                             [ 0, 28, 28, 30, 31, 66]])
+                np.array([[ 5, 33, 34, 36, 36, 71],
+                          [ 0, 28, 28, 30, 31, 66]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
-              'M', 'G', 'V', 'S', 'D', '-', 'P', 'D', 'A', 'K', 'K', 'F', 'Y',
-              'A', 'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M',
-              'Y', 'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V',
-              'P', 'F'],
-             ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
-              'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
-              'M', 'G', '-', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y',
-              'A', 'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M',
-              'Y', 'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V',
-              'P', 'F']], dtype='U')
+np.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
+           'M', 'G', 'V', 'S', 'D', '-', 'P', 'D', 'A', 'K', 'K', 'F', 'Y',
+           'A', 'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M',
+           'Y', 'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V',
+           'P', 'F'],
+          ['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
+           'L', 'M', 'G', 'L', 'G', 'T', 'L', 'Y', 'F', 'L', 'V', 'K', 'G',
+           'M', 'G', '-', 'V', 'S', 'D', 'P', 'D', 'A', 'K', 'K', 'F', 'Y',
+           'A', 'I', 'T', 'T', 'L', 'V', 'P', 'A', 'I', 'A', 'F', 'T', 'M',
+           'Y', 'L', 'S', 'M', 'L', 'L', 'G', 'Y', 'G', 'L', 'T', 'M', 'V',
+           'P', 'F']], dtype='U')
                 # fmt: on
             )
         )
@@ -10573,29 +10527,29 @@ numpy.array([['G', 'R', 'P', 'E', 'W', 'I', 'W', 'L', 'A', 'L', 'G', 'T', 'A',
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[14, 37, 37, 65],
-                             [ 7, 30, 31, 59]])
+                np.array([[14, 37, 37, 65],
+                          [ 7, 30, 31, 59]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['F', 'W', 'L', 'V', 'T', 'A', 'A', 'L', 'L', 'A', 'S', 'T', 'V',
-              'F', 'F', 'F', 'V', 'E', 'R', 'D', 'R', 'V', 'S', '-', 'A', 'K',
-              'W', 'K', 'T', 'S', 'L', 'T', 'V', 'S', 'G', 'L', 'V', 'T', 'G',
-              'I', 'A', 'F', 'W', 'H', 'Y', 'M', 'Y', 'M', 'R', 'G', 'V', 'W'],
-             ['L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G', 'T', 'L',
-              'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D', 'P', 'D',
-              'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V', 'P', 'A',
-              'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L', 'G', 'Y']],
-            dtype='U')
+np.array([['F', 'W', 'L', 'V', 'T', 'A', 'A', 'L', 'L', 'A', 'S', 'T', 'V',
+           'F', 'F', 'F', 'V', 'E', 'R', 'D', 'R', 'V', 'S', '-', 'A', 'K',
+           'W', 'K', 'T', 'S', 'L', 'T', 'V', 'S', 'G', 'L', 'V', 'T', 'G',
+           'I', 'A', 'F', 'W', 'H', 'Y', 'M', 'Y', 'M', 'R', 'G', 'V', 'W'],
+          ['L', 'A', 'L', 'G', 'T', 'A', 'L', 'M', 'G', 'L', 'G', 'T', 'L',
+           'Y', 'F', 'L', 'V', 'K', 'G', 'M', 'G', 'V', 'S', 'D', 'P', 'D',
+           'A', 'K', 'K', 'F', 'Y', 'A', 'I', 'T', 'T', 'L', 'V', 'P', 'A',
+           'I', 'A', 'F', 'T', 'M', 'Y', 'L', 'S', 'M', 'L', 'L', 'G', 'Y']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -10706,86 +10660,86 @@ sp|Q9BSU1       363 KPVVLHRSSSPNNTNPFGSTFCFGLQRMIFEVMQNNHIASVTLY 407
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  0, 121, 121, 140, 142, 156, 165, 169, 170, 208, 208, 260, 260,
-                              317, 317, 322, 328, 346, 346, 394],
-                             [ 21, 142, 147, 166, 166, 180, 180, 184, 184, 222, 224, 276, 277,
-                              334, 335, 340, 340, 358, 359, 407]])
+                np.array([[  0, 121, 121, 140, 142, 156, 165, 169, 170, 208,
+                           208, 260, 260, 317, 317, 322, 328, 346, 346, 394],
+                          [ 21, 142, 147, 166, 166, 180, 180, 184, 184, 222,
+                           224, 276, 277, 334, 335, 340, 340, 358, 359, 407]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'M', 'H', 'F', 'S', 'Q', 'S', 'V', 'A', 'I', 'I', 'Q', 'S',
-              'Q', 'V', 'G', 'T', 'I', 'R', 'G', 'V', 'Q', 'V', 'L', 'Y', 'S',
-              'D', 'Q', 'N', 'P', 'L', 'S', 'V', 'D', 'L', 'V', 'I', 'N', 'M',
-              'P', 'Q', 'D', 'G', 'M', 'R', 'L', 'I', 'F', 'D', 'P', 'V', 'A',
-              'Q', 'R', 'L', 'K', 'I', 'I', 'E', 'I', 'Y', 'N', 'M', 'K', 'L',
-              'V', 'K', 'L', 'R', 'Y', 'S', 'G', 'M', 'C', 'F', 'N', 'S', 'P',
-              'E', 'I', 'T', 'P', 'S', 'I', 'E', 'Q', 'V', 'E', 'H', 'C', 'F',
-              'G', 'A', 'T', 'H', 'P', 'G', 'L', 'Y', 'D', 'S', 'Q', 'R', 'H',
-              'L', 'F', 'A', 'L', 'N', 'F', 'R', 'G', 'L', 'S', 'F', 'Y', 'F',
-              'P', 'V', 'D', 'S', '-', '-', '-', '-', '-', 'K', 'F', 'E', 'P',
-              'G', 'Y', 'A', 'H', 'G', 'L', 'G', 'S', 'L', 'Q', 'F', 'P', 'N',
-              'G', 'G', 'S', 'P', 'V', 'V', 'S', 'R', 'T', 'T', 'I', 'Y', 'Y',
-              'G', 'S', 'Q', 'H', 'Q', 'L', 'S', 'S', 'N', 'T', 'S', 'S', 'R',
-              'V', 'S', 'G', 'V', 'P', 'L', 'P', 'D', 'L', 'P', 'L', 'S', 'C',
-              'Y', 'R', 'Q', 'Q', 'L', 'H', 'L', 'R', 'R', 'C', 'D', 'V', 'L',
-              'R', 'N', 'T', 'T', 'S', 'T', 'M', 'G', 'L', 'R', 'L', 'H', 'M',
-              'F', 'T', 'E', 'G', 'T', '-', '-', 'S', 'R', 'A', 'L', 'E', 'P',
-              'S', 'Q', 'V', 'A', 'L', 'V', 'R', 'V', 'V', 'R', 'F', 'G', 'D',
-              'S', 'C', 'Q', 'G', 'V', 'A', 'R', 'A', 'L', 'G', 'A', 'P', 'A',
-              'R', 'L', 'Y', 'Y', 'K', 'A', 'D', 'D', 'K', 'M', 'R', 'I', 'H',
-              'R', 'P', 'T', 'A', 'R', 'R', 'R', '-', 'P', 'P', 'P', 'A', 'S',
-              'D', 'Y', 'L', 'F', 'N', 'Y', 'F', 'T', 'L', 'G', 'L', 'D', 'V',
-              'L', 'F', 'D', 'A', 'R', 'T', 'N', 'Q', 'V', 'K', 'K', 'F', 'V',
-              'L', 'H', 'T', 'N', 'Y', 'P', 'G', 'H', 'Y', 'N', 'F', 'N', 'M',
-              'Y', 'H', 'R', 'C', 'E', 'F', 'E', 'L', 'T', 'V', 'Q', 'P', 'D',
-              '-', 'K', 'S', 'E', 'A', 'H', 'S', 'L', 'V', 'E', 'S', 'G', 'G',
-              'G', 'V', 'A', 'V', 'T', 'A', 'Y', 'S', 'K', 'W', 'E', 'V', 'V',
-              'S', 'R', 'A', 'L', '-', 'R', 'V', 'C', 'E', 'R', 'P', 'V', 'V',
-              'L', 'N', 'R', 'A', 'S', 'S', 'T', 'N', 'T', 'T', 'N', 'P', 'F',
-              'G', 'S', 'T', 'F', 'C', 'Y', 'G', 'Y', 'Q', 'D', 'I', 'I', 'F',
-              'E', 'V', 'M', 'S', 'N', 'N', 'Y', 'I', 'A', 'S', 'I', 'T', 'L',
-              'Y'],
-             ['G', 'M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K',
-              'H', 'C', 'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y', 'S',
-              'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N', 'L',
-              'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A', 'F', 'N',
-              'Q', 'R', 'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D', 'L', 'T', 'K',
-              'V', 'K', 'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N', 'S', 'Q',
-              'A', 'I', 'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q', 'S', 'F',
-              'G', 'A', 'T', 'H', 'P', 'G', 'V', 'Y', 'N', 'S', 'A', 'E', 'Q',
-              'L', 'F', 'H', 'L', 'N', 'F', 'R', 'G', 'L', 'S', 'F', 'S', 'F',
-              'Q', 'L', 'D', 'S', 'W', 'T', 'E', 'A', 'P', 'K', 'Y', 'E', 'P',
-              'N', 'F', 'A', 'H', 'G', 'L', 'A', 'S', 'L', 'Q', 'I', 'P', 'H',
-              'G', 'A', '-', '-', 'T', 'V', 'K', 'R', 'M', 'Y', 'I', 'Y', 'S',
-              'G', 'N', 'S', 'L', 'Q', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', 'D', 'T', 'K', 'A', '-', 'P', 'M', 'M', 'P', 'L', 'S', 'C',
-              'F', 'L', 'G', 'N', 'V', 'Y', 'A', 'E', 'S', 'V', 'D', 'V', 'L',
-              'R', 'D', 'G', 'T', 'G', 'P', 'A', 'G', 'L', 'R', 'L', 'R', 'L',
-              'L', 'A', 'A', 'G', 'C', 'G', 'P', 'G', 'L', 'L', 'A', 'D', 'A',
-              'K', 'M', 'R', 'V', 'F', 'E', 'R', 'S', 'V', 'Y', 'F', 'G', 'D',
-              'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G', 'S', 'P', 'H',
-              'K', 'V', 'F', 'Y', 'K', 'S', 'E', 'D', 'K', 'M', 'K', 'I', 'H',
-              'S', 'P', 'S', 'P', 'H', 'K', 'Q', 'V', 'P', 'S', 'K', 'C', 'N',
-              'D', 'Y', 'F', 'F', 'N', 'Y', 'F', 'T', 'L', 'G', 'V', 'D', 'I',
-              'L', 'F', 'D', 'A', 'N', 'T', 'H', 'K', 'V', 'K', 'K', 'F', 'V',
-              'L', 'H', 'T', 'N', 'Y', 'P', 'G', 'H', 'Y', 'N', 'F', 'N', 'I',
-              'Y', 'H', 'R', 'C', 'E', 'F', 'K', 'I', 'P', 'L', 'A', 'I', 'K',
-              'K', 'E', 'N', 'A', 'D', 'G', '-', '-', '-', '-', '-', '-', 'Q',
-              'T', 'E', 'T', 'C', 'T', 'T', 'Y', 'S', 'K', 'W', 'D', 'N', 'I',
-              'Q', 'E', 'L', 'L', 'G', 'H', 'P', 'V', 'E', 'K', 'P', 'V', 'V',
-              'L', 'H', 'R', 'S', 'S', 'S', 'P', 'N', 'N', 'T', 'N', 'P', 'F',
-              'G', 'S', 'T', 'F', 'C', 'F', 'G', 'L', 'Q', 'R', 'M', 'I', 'F',
-              'E', 'V', 'M', 'Q', 'N', 'N', 'H', 'I', 'A', 'S', 'V', 'T', 'L',
-              'Y']], dtype='U')
+np.array([['G', 'M', 'H', 'F', 'S', 'Q', 'S', 'V', 'A', 'I', 'I', 'Q', 'S',
+           'Q', 'V', 'G', 'T', 'I', 'R', 'G', 'V', 'Q', 'V', 'L', 'Y', 'S',
+           'D', 'Q', 'N', 'P', 'L', 'S', 'V', 'D', 'L', 'V', 'I', 'N', 'M',
+           'P', 'Q', 'D', 'G', 'M', 'R', 'L', 'I', 'F', 'D', 'P', 'V', 'A',
+           'Q', 'R', 'L', 'K', 'I', 'I', 'E', 'I', 'Y', 'N', 'M', 'K', 'L',
+           'V', 'K', 'L', 'R', 'Y', 'S', 'G', 'M', 'C', 'F', 'N', 'S', 'P',
+           'E', 'I', 'T', 'P', 'S', 'I', 'E', 'Q', 'V', 'E', 'H', 'C', 'F',
+           'G', 'A', 'T', 'H', 'P', 'G', 'L', 'Y', 'D', 'S', 'Q', 'R', 'H',
+           'L', 'F', 'A', 'L', 'N', 'F', 'R', 'G', 'L', 'S', 'F', 'Y', 'F',
+           'P', 'V', 'D', 'S', '-', '-', '-', '-', '-', 'K', 'F', 'E', 'P',
+           'G', 'Y', 'A', 'H', 'G', 'L', 'G', 'S', 'L', 'Q', 'F', 'P', 'N',
+           'G', 'G', 'S', 'P', 'V', 'V', 'S', 'R', 'T', 'T', 'I', 'Y', 'Y',
+           'G', 'S', 'Q', 'H', 'Q', 'L', 'S', 'S', 'N', 'T', 'S', 'S', 'R',
+           'V', 'S', 'G', 'V', 'P', 'L', 'P', 'D', 'L', 'P', 'L', 'S', 'C',
+           'Y', 'R', 'Q', 'Q', 'L', 'H', 'L', 'R', 'R', 'C', 'D', 'V', 'L',
+           'R', 'N', 'T', 'T', 'S', 'T', 'M', 'G', 'L', 'R', 'L', 'H', 'M',
+           'F', 'T', 'E', 'G', 'T', '-', '-', 'S', 'R', 'A', 'L', 'E', 'P',
+           'S', 'Q', 'V', 'A', 'L', 'V', 'R', 'V', 'V', 'R', 'F', 'G', 'D',
+           'S', 'C', 'Q', 'G', 'V', 'A', 'R', 'A', 'L', 'G', 'A', 'P', 'A',
+           'R', 'L', 'Y', 'Y', 'K', 'A', 'D', 'D', 'K', 'M', 'R', 'I', 'H',
+           'R', 'P', 'T', 'A', 'R', 'R', 'R', '-', 'P', 'P', 'P', 'A', 'S',
+           'D', 'Y', 'L', 'F', 'N', 'Y', 'F', 'T', 'L', 'G', 'L', 'D', 'V',
+           'L', 'F', 'D', 'A', 'R', 'T', 'N', 'Q', 'V', 'K', 'K', 'F', 'V',
+           'L', 'H', 'T', 'N', 'Y', 'P', 'G', 'H', 'Y', 'N', 'F', 'N', 'M',
+           'Y', 'H', 'R', 'C', 'E', 'F', 'E', 'L', 'T', 'V', 'Q', 'P', 'D',
+           '-', 'K', 'S', 'E', 'A', 'H', 'S', 'L', 'V', 'E', 'S', 'G', 'G',
+           'G', 'V', 'A', 'V', 'T', 'A', 'Y', 'S', 'K', 'W', 'E', 'V', 'V',
+           'S', 'R', 'A', 'L', '-', 'R', 'V', 'C', 'E', 'R', 'P', 'V', 'V',
+           'L', 'N', 'R', 'A', 'S', 'S', 'T', 'N', 'T', 'T', 'N', 'P', 'F',
+           'G', 'S', 'T', 'F', 'C', 'Y', 'G', 'Y', 'Q', 'D', 'I', 'I', 'F',
+           'E', 'V', 'M', 'S', 'N', 'N', 'Y', 'I', 'A', 'S', 'I', 'T', 'L',
+           'Y'],
+          ['G', 'M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K',
+           'H', 'C', 'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y', 'S',
+           'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N', 'L',
+           'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A', 'F', 'N',
+           'Q', 'R', 'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D', 'L', 'T', 'K',
+           'V', 'K', 'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N', 'S', 'Q',
+           'A', 'I', 'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q', 'S', 'F',
+           'G', 'A', 'T', 'H', 'P', 'G', 'V', 'Y', 'N', 'S', 'A', 'E', 'Q',
+           'L', 'F', 'H', 'L', 'N', 'F', 'R', 'G', 'L', 'S', 'F', 'S', 'F',
+           'Q', 'L', 'D', 'S', 'W', 'T', 'E', 'A', 'P', 'K', 'Y', 'E', 'P',
+           'N', 'F', 'A', 'H', 'G', 'L', 'A', 'S', 'L', 'Q', 'I', 'P', 'H',
+           'G', 'A', '-', '-', 'T', 'V', 'K', 'R', 'M', 'Y', 'I', 'Y', 'S',
+           'G', 'N', 'S', 'L', 'Q', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', 'D', 'T', 'K', 'A', '-', 'P', 'M', 'M', 'P', 'L', 'S', 'C',
+           'F', 'L', 'G', 'N', 'V', 'Y', 'A', 'E', 'S', 'V', 'D', 'V', 'L',
+           'R', 'D', 'G', 'T', 'G', 'P', 'A', 'G', 'L', 'R', 'L', 'R', 'L',
+           'L', 'A', 'A', 'G', 'C', 'G', 'P', 'G', 'L', 'L', 'A', 'D', 'A',
+           'K', 'M', 'R', 'V', 'F', 'E', 'R', 'S', 'V', 'Y', 'F', 'G', 'D',
+           'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G', 'S', 'P', 'H',
+           'K', 'V', 'F', 'Y', 'K', 'S', 'E', 'D', 'K', 'M', 'K', 'I', 'H',
+           'S', 'P', 'S', 'P', 'H', 'K', 'Q', 'V', 'P', 'S', 'K', 'C', 'N',
+           'D', 'Y', 'F', 'F', 'N', 'Y', 'F', 'T', 'L', 'G', 'V', 'D', 'I',
+           'L', 'F', 'D', 'A', 'N', 'T', 'H', 'K', 'V', 'K', 'K', 'F', 'V',
+           'L', 'H', 'T', 'N', 'Y', 'P', 'G', 'H', 'Y', 'N', 'F', 'N', 'I',
+           'Y', 'H', 'R', 'C', 'E', 'F', 'K', 'I', 'P', 'L', 'A', 'I', 'K',
+           'K', 'E', 'N', 'A', 'D', 'G', '-', '-', '-', '-', '-', '-', 'Q',
+           'T', 'E', 'T', 'C', 'T', 'T', 'Y', 'S', 'K', 'W', 'D', 'N', 'I',
+           'Q', 'E', 'L', 'L', 'G', 'H', 'P', 'V', 'E', 'K', 'P', 'V', 'V',
+           'L', 'H', 'R', 'S', 'S', 'S', 'P', 'N', 'N', 'T', 'N', 'P', 'F',
+           'G', 'S', 'T', 'F', 'C', 'F', 'G', 'L', 'Q', 'R', 'M', 'I', 'F',
+           'E', 'V', 'M', 'Q', 'N', 'N', 'H', 'I', 'A', 'S', 'V', 'T', 'L',
+           'Y']], dtype='U')
                 # fmt: on
             )
         )
@@ -10860,52 +10814,52 @@ sp|Q9BSU1       397 NNHIASVTLYGP 409
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 11,  14,  23,  46,  46,  67,  67,  77,  82,  93,  93, 108, 108,
-                              119, 119, 132, 138, 145, 146, 159],
-                             [238, 241, 241, 264, 277, 298, 299, 309, 309, 320, 343, 358, 362,
-                              373, 376, 389, 389, 396, 396, 409]])
+                np.array([[ 11,  14,  23,  46,  46,  67,  67,  77,  82,  93,
+                            93, 108, 108, 119, 119, 132, 138, 145, 146, 159],
+                          [238, 241, 241, 264, 277, 298, 299, 309, 309, 320,
+                           343, 358, 362, 373, 376, 389, 389, 396, 396, 409]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
-              'T', 'S', 'I', 'E', 'Q', 'L', 'K', 'Q', 'W', 'F', 'G', 'D', 'P',
-              'N', 'K', 'S', 'E', 'Q', 'R', 'N', 'A', 'G', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', '-', '-', '-', 'N', 'I', 'T', 'L',
-              'D', 'S', 'Y', 'T', 'W', 'V', 'K', 'D', 'G', 'A', 'V', 'I', 'N',
-              'A', 'Q', 'L', 'Y', '-', 'K', 'N', 'S', 'T', 'V', 'A', 'R', 'S',
-              'I', 'S', 'N', 'F', 'S', 'F', 'S', 'R', 'E', 'A', 'K', 'I', 'G',
-              'K', 'E', 'D', 'Y', 'D', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', '-', 'E', 'L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'V',
-              'V', 'E', 'K', 'L', '-', '-', '-', '-', 'G', 'E', 'P', 'D', 'V',
-              'L', 'S', 'Q', 'S', 'M', 'S', '-', '-', '-', 'S', 'D', 'K', 'E',
-              'E', 'M', 'Q', 'T', 'V', 'W', 'S', 'S', 'G', 'I', 'K', 'T', 'K',
-              'S', 'S', 'S', 'A', 'T', 'I', 'E', 'L', 'Y', 'F', 'E', 'N', 'G',
-              'L', 'L', 'K', 'N', 'K', 'T', 'Q', 'K', 'D', 'L'],
-             ['V', 'Y', 'F', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'G',
-              'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G', 'S', 'P',
-              'H', 'K', 'V', 'F', 'Y', 'K', 'S', 'E', 'D', 'K', 'M', 'K', 'I',
-              'H', 'S', 'P', 'S', 'P', 'H', 'K', 'Q', 'V', 'P', 'S', 'K', 'C',
-              'N', 'D', 'Y', 'F', 'F', 'N', 'Y', 'F', 'T', 'L', 'G', 'V', 'D',
-              'I', 'L', 'F', 'D', 'A', 'N', 'T', 'H', 'K', 'V', 'K', 'K', 'F',
-              'V', 'L', '-', '-', '-', '-', '-', 'H', 'T', 'N', 'Y', 'P', 'G',
-              'H', 'Y', 'N', 'F', 'N', 'I', 'Y', 'H', 'R', 'C', 'E', 'F', 'K',
-              'I', 'P', 'L', 'A', 'I', 'K', 'K', 'E', 'N', 'A', 'D', 'G', 'Q',
-              'T', 'E', 'T', 'C', 'T', 'T', 'Y', 'S', 'K', 'W', 'D', 'N', 'I',
-              'Q', 'E', 'L', 'L', 'G', 'H', 'P', 'V', 'E', 'K', 'P', 'V', 'V',
-              'L', 'H', 'R', 'S', 'S', 'S', 'P', 'N', 'N', 'T', 'N', 'P', 'F',
-              'G', 'S', 'T', 'F', 'C', 'F', 'G', 'L', 'Q', '-', '-', '-', '-',
-              '-', '-', 'R', 'M', 'I', 'F', 'E', 'V', 'M', '-', 'Q', 'N', 'N',
-              'H', 'I', 'A', 'S', 'V', 'T', 'L', 'Y', 'G', 'P']], dtype='U')
+np.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
+           'T', 'S', 'I', 'E', 'Q', 'L', 'K', 'Q', 'W', 'F', 'G', 'D', 'P',
+           'N', 'K', 'S', 'E', 'Q', 'R', 'N', 'A', 'G', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', 'N', 'I', 'T', 'L',
+           'D', 'S', 'Y', 'T', 'W', 'V', 'K', 'D', 'G', 'A', 'V', 'I', 'N',
+           'A', 'Q', 'L', 'Y', '-', 'K', 'N', 'S', 'T', 'V', 'A', 'R', 'S',
+           'I', 'S', 'N', 'F', 'S', 'F', 'S', 'R', 'E', 'A', 'K', 'I', 'G',
+           'K', 'E', 'D', 'Y', 'D', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'E', 'L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'V',
+           'V', 'E', 'K', 'L', '-', '-', '-', '-', 'G', 'E', 'P', 'D', 'V',
+           'L', 'S', 'Q', 'S', 'M', 'S', '-', '-', '-', 'S', 'D', 'K', 'E',
+           'E', 'M', 'Q', 'T', 'V', 'W', 'S', 'S', 'G', 'I', 'K', 'T', 'K',
+           'S', 'S', 'S', 'A', 'T', 'I', 'E', 'L', 'Y', 'F', 'E', 'N', 'G',
+           'L', 'L', 'K', 'N', 'K', 'T', 'Q', 'K', 'D', 'L'],
+          ['V', 'Y', 'F', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'G',
+           'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G', 'S', 'P',
+           'H', 'K', 'V', 'F', 'Y', 'K', 'S', 'E', 'D', 'K', 'M', 'K', 'I',
+           'H', 'S', 'P', 'S', 'P', 'H', 'K', 'Q', 'V', 'P', 'S', 'K', 'C',
+           'N', 'D', 'Y', 'F', 'F', 'N', 'Y', 'F', 'T', 'L', 'G', 'V', 'D',
+           'I', 'L', 'F', 'D', 'A', 'N', 'T', 'H', 'K', 'V', 'K', 'K', 'F',
+           'V', 'L', '-', '-', '-', '-', '-', 'H', 'T', 'N', 'Y', 'P', 'G',
+           'H', 'Y', 'N', 'F', 'N', 'I', 'Y', 'H', 'R', 'C', 'E', 'F', 'K',
+           'I', 'P', 'L', 'A', 'I', 'K', 'K', 'E', 'N', 'A', 'D', 'G', 'Q',
+           'T', 'E', 'T', 'C', 'T', 'T', 'Y', 'S', 'K', 'W', 'D', 'N', 'I',
+           'Q', 'E', 'L', 'L', 'G', 'H', 'P', 'V', 'E', 'K', 'P', 'V', 'V',
+           'L', 'H', 'R', 'S', 'S', 'S', 'P', 'N', 'N', 'T', 'N', 'P', 'F',
+           'G', 'S', 'T', 'F', 'C', 'F', 'G', 'L', 'Q', '-', '-', '-', '-',
+           '-', '-', 'R', 'M', 'I', 'F', 'E', 'V', 'M', '-', 'Q', 'N', 'N',
+           'H', 'I', 'A', 'S', 'V', 'T', 'L', 'Y', 'G', 'P']], dtype='U')
                 # fmt: on
             )
         )
@@ -10956,24 +10910,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 11,  31],
-                             [238, 258]])
+                np.array([[ 11,  31],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['L', 'Q', 'I', 'G', 'M', 'S', 'E', 'S', 'Q', 'V', 'T', 'Y', 'L',
-              'L', 'G', 'N', 'P', 'M', 'L', 'R'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['L', 'Q', 'I', 'G', 'M', 'S', 'E', 'S', 'Q', 'V', 'T', 'Y', 'L',
+           'L', 'G', 'N', 'P', 'M', 'L', 'R'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -11028,24 +10982,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 26,  46],
-                             [238, 258]])
+                np.array([[ 26,  46],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'R', 'V', 'G', 'M', 'T', 'Q', 'Q', 'Q', 'V', 'A', 'Y', 'A',
-              'L', 'G', 'T', 'P', 'L', 'M', 'S'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['I', 'R', 'V', 'G', 'M', 'T', 'Q', 'Q', 'Q', 'V', 'A', 'Y', 'A',
+           'L', 'G', 'T', 'P', 'L', 'M', 'S'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -11096,24 +11050,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 33,  53],
-                             [238, 258]])
+                np.array([[ 33,  53],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['L', 'S', 'L', 'G', 'M', 'T', 'R', 'D', 'Q', 'V', 'M', 'T', 'L',
-              'M', 'G', 'T', 'A', 'D', 'F', 'N'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['L', 'S', 'L', 'G', 'M', 'T', 'R', 'D', 'Q', 'V', 'M', 'T', 'L',
+           'M', 'G', 'T', 'A', 'D', 'F', 'N'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -11168,24 +11122,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 29,  49],
-                             [238, 258]])
+                np.array([[ 29,  49],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['L', 'R', 'P', 'G', 'M', 'T', 'K', 'D', 'Q', 'V', 'L', 'L', 'L',
-              'L', 'G', 'S', 'P', 'I', 'L', 'R'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['L', 'R', 'P', 'G', 'M', 'T', 'K', 'D', 'Q', 'V', 'L', 'L', 'L',
+           'L', 'G', 'S', 'P', 'I', 'L', 'R'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -11260,45 +11214,45 @@ sp|Q9BSU1       125 LFHLNFR--------GLSFSFQ 139
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 11,  34,  36,  59,  59,  70,  71, 100, 100, 106, 116, 126, 134,
-                              141],
-                             [ 18,  41,  41,  64,  74,  85,  85, 114, 116, 122, 122, 132, 132,
-                              139]])
+                np.array([[ 11,  34,  36,  59,  59,  70,  71, 100, 100, 106,
+                           116, 126, 134, 141],
+                          [ 18,  41,  41,  64,  74,  85,  85, 114, 116, 122,
+                           122, 132, 132, 139]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
-              'A', 'G', 'A', 'D', 'Q', 'S', 'C', 'S', 'D', 'Q', 'V', 'E', 'R',
-              'I', 'I', 'C', 'Y', 'N', 'N', 'P', 'D', 'H', 'Y', 'G', 'P', 'Q',
-              'G', 'H', 'F', 'F', 'F', 'N', 'A', 'A', 'D', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', 'K', 'L', 'I', 'H', 'K', 'R', 'Q',
-              'M', 'E', 'L', 'F', 'P', 'A', 'P', 'K', 'P', 'T', 'M', 'R', 'L',
-              'A', 'T', 'Y', 'N', 'K', 'T', 'Q', 'T', 'G', 'M', 'T', 'E', 'A',
-              'Q', 'F', 'W', 'A', 'A', 'V', 'P', 'S', '-', '-', 'D', 'T', 'C',
-              'S', 'A', 'L', 'A', 'E', 'Q', 'Y', 'P', 'N', 'W', 'P', 'A', 'T',
-              'N', 'G', 'N', 'L', 'R', 'E', 'Y', 'V', 'C', 'P', 'S', 'K', 'A',
-              'E', 'R', 'F', 'A', 'P', 'S', 'A', 'Y', 'F', 'T', 'F', 'T'],
-             ['F', 'T', 'L', 'G', 'M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I',
-              'L', 'Q', 'K', 'H', 'C', 'R', 'I', 'I', 'K', 'N', '-', '-', 'V',
-              'Q', 'V', 'L', 'Y', 'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D',
-              'L', 'I', 'L', 'N', 'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M',
-              'F', 'D', 'A', 'F', 'N', 'Q', 'R', 'L', 'K', 'V', 'I', 'E', 'V',
-              'C', 'D', 'L', 'T', '-', 'K', 'V', 'K', 'L', 'K', 'Y', 'C', 'G',
-              'V', 'H', 'F', 'N', 'S', 'Q', 'A', 'I', 'A', 'P', 'T', 'I', 'E',
-              'Q', 'I', 'D', 'Q', 'S', 'F', 'G', 'A', 'T', 'H', 'P', 'G', 'V',
-              'Y', 'N', 'S', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-              'A', 'E', 'Q', 'L', 'F', 'H', 'L', 'N', 'F', 'R', '-', '-', '-',
-              '-', '-', '-', '-', '-', 'G', 'L', 'S', 'F', 'S', 'F', 'Q']],
-            dtype='U')
+np.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
+           'A', 'G', 'A', 'D', 'Q', 'S', 'C', 'S', 'D', 'Q', 'V', 'E', 'R',
+           'I', 'I', 'C', 'Y', 'N', 'N', 'P', 'D', 'H', 'Y', 'G', 'P', 'Q',
+           'G', 'H', 'F', 'F', 'F', 'N', 'A', 'A', 'D', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', 'K', 'L', 'I', 'H', 'K', 'R', 'Q',
+           'M', 'E', 'L', 'F', 'P', 'A', 'P', 'K', 'P', 'T', 'M', 'R', 'L',
+           'A', 'T', 'Y', 'N', 'K', 'T', 'Q', 'T', 'G', 'M', 'T', 'E', 'A',
+           'Q', 'F', 'W', 'A', 'A', 'V', 'P', 'S', '-', '-', 'D', 'T', 'C',
+           'S', 'A', 'L', 'A', 'E', 'Q', 'Y', 'P', 'N', 'W', 'P', 'A', 'T',
+           'N', 'G', 'N', 'L', 'R', 'E', 'Y', 'V', 'C', 'P', 'S', 'K', 'A',
+           'E', 'R', 'F', 'A', 'P', 'S', 'A', 'Y', 'F', 'T', 'F', 'T'],
+          ['F', 'T', 'L', 'G', 'M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I',
+           'L', 'Q', 'K', 'H', 'C', 'R', 'I', 'I', 'K', 'N', '-', '-', 'V',
+           'Q', 'V', 'L', 'Y', 'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D',
+           'L', 'I', 'L', 'N', 'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M',
+           'F', 'D', 'A', 'F', 'N', 'Q', 'R', 'L', 'K', 'V', 'I', 'E', 'V',
+           'C', 'D', 'L', 'T', '-', 'K', 'V', 'K', 'L', 'K', 'Y', 'C', 'G',
+           'V', 'H', 'F', 'N', 'S', 'Q', 'A', 'I', 'A', 'P', 'T', 'I', 'E',
+           'Q', 'I', 'D', 'Q', 'S', 'F', 'G', 'A', 'T', 'H', 'P', 'G', 'V',
+           'Y', 'N', 'S', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           'A', 'E', 'Q', 'L', 'F', 'H', 'L', 'N', 'F', 'R', '-', '-', '-',
+           '-', '-', '-', '-', '-', 'G', 'L', 'S', 'F', 'S', 'F', 'Q']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -11365,32 +11319,32 @@ sp|Q9BSU1       298 ANTHKVKKFVLHTN 312
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 61,  98,  98, 131],
-                             [238, 275, 279, 312]])
+                np.array([[ 61,  98,  98, 131],
+                          [238, 275, 279, 312]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['F', 'H', 'I', 'G', 'Q', 'P', 'V', 'S', 'E', 'I', 'Y', 'S', 'S',
-              'V', 'F', 'I', 'D', 'T', 'N', 'I', 'N', 'F', 'Q', 'Y', 'K', 'G',
-              'S', 'S', 'Y', 'R', 'F', 'E', 'L', 'S', 'E', 'D', 'D', '-', '-',
-              '-', '-', 'L', 'N', 'T', 'R', 'P', 'L', 'I', 'K', 'A', 'G', 'N',
-              'I', 'Y', 'A', 'Q', 'L', 'Y', 'I', 'D', 'R', 'F', 'T', 'G', 'E',
-              'L', 'S', 'S', 'I', 'R', 'Y', 'M', 'D', 'A'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V', 'F', 'Y', 'K', 'S', 'E', 'D',
-              'K', 'M', 'K', 'I', 'H', 'S', 'P', 'S', 'P', 'H', 'K', 'Q', 'V',
-              'P', 'S', 'K', 'C', 'N', 'D', 'Y', 'F', 'F', 'N', 'Y', 'F', 'T',
-              'L', 'G', 'V', 'D', 'I', 'L', 'F', 'D', 'A', 'N', 'T', 'H', 'K',
-              'V', 'K', 'K', 'F', 'V', 'L', 'H', 'T', 'N']], dtype='U')
+np.array([['F', 'H', 'I', 'G', 'Q', 'P', 'V', 'S', 'E', 'I', 'Y', 'S', 'S',
+           'V', 'F', 'I', 'D', 'T', 'N', 'I', 'N', 'F', 'Q', 'Y', 'K', 'G',
+           'S', 'S', 'Y', 'R', 'F', 'E', 'L', 'S', 'E', 'D', 'D', '-', '-',
+           '-', '-', 'L', 'N', 'T', 'R', 'P', 'L', 'I', 'K', 'A', 'G', 'N',
+           'I', 'Y', 'A', 'Q', 'L', 'Y', 'I', 'D', 'R', 'F', 'T', 'G', 'E',
+           'L', 'S', 'S', 'I', 'R', 'Y', 'M', 'D', 'A'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V', 'F', 'Y', 'K', 'S', 'E', 'D',
+           'K', 'M', 'K', 'I', 'H', 'S', 'P', 'S', 'P', 'H', 'K', 'Q', 'V',
+           'P', 'S', 'K', 'C', 'N', 'D', 'Y', 'F', 'F', 'N', 'Y', 'F', 'T',
+           'L', 'G', 'V', 'D', 'I', 'L', 'F', 'D', 'A', 'N', 'T', 'H', 'K',
+           'V', 'K', 'K', 'F', 'V', 'L', 'H', 'T', 'N']], dtype='U')
                 # fmt: on
             )
         )
@@ -11445,24 +11399,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 12,  32],
-                             [238, 258]])
+                np.array([[ 12,  32],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'R', 'V', 'G', 'M', 'T', 'Q', 'Q', 'Q', 'V', 'A', 'Y', 'A',
-              'L', 'G', 'T', 'P', 'L', 'M', 'S'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['I', 'R', 'V', 'G', 'M', 'T', 'Q', 'Q', 'Q', 'V', 'A', 'Y', 'A',
+           'L', 'G', 'T', 'P', 'L', 'M', 'S'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -11529,32 +11483,32 @@ sp|Q9BSU1       299 NTHKVKKFVLHTN 312
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  0,  24,  24,  32,  33,  55],
-                             [240, 264, 282, 290, 290, 312]])
+                np.array([[  0,  24,  24,  32,  33,  55],
+                          [240, 264, 282, 290, 290, 312]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'G', 'K', 'N', 'A', 'S', 'D', 'L', 'Q', 'V', 'L', 'L', 'G',
-              'D', 'P', 'E', 'R', 'K', 'D', 'P', 'S', 'E', 'Y', 'G', '-', '-',
-              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', 'Y', 'E', 'W', 'W', 'I', 'Y', 'K', 'K', 'G', 'T',
-              'S', 'Q', 'Y', 'V', 'Q', 'A', 'G', 'V', 'L', 'D', 'G', 'R', 'I',
-              'V', 'T', 'L', 'F', 'A', 'T', 'G', 'P'],
-             ['F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G',
-              'S', 'P', 'H', 'K', 'V', 'F', 'Y', 'K', 'S', 'E', 'D', 'K', 'M',
-              'K', 'I', 'H', 'S', 'P', 'S', 'P', 'H', 'K', 'Q', 'V', 'P', 'S',
-              'K', 'C', 'N', 'D', 'Y', 'F', 'F', 'N', 'Y', 'F', 'T', '-', 'L',
-              'G', 'V', 'D', 'I', 'L', 'F', 'D', 'A', 'N', 'T', 'H', 'K', 'V',
-              'K', 'K', 'F', 'V', 'L', 'H', 'T', 'N']], dtype='U')
+np.array([['I', 'G', 'K', 'N', 'A', 'S', 'D', 'L', 'Q', 'V', 'L', 'L', 'G',
+           'D', 'P', 'E', 'R', 'K', 'D', 'P', 'S', 'E', 'Y', 'G', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', 'Y', 'E', 'W', 'W', 'I', 'Y', 'K', 'K', 'G', 'T',
+           'S', 'Q', 'Y', 'V', 'Q', 'A', 'G', 'V', 'L', 'D', 'G', 'R', 'I',
+           'V', 'T', 'L', 'F', 'A', 'T', 'G', 'P'],
+          ['F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G',
+           'S', 'P', 'H', 'K', 'V', 'F', 'Y', 'K', 'S', 'E', 'D', 'K', 'M',
+           'K', 'I', 'H', 'S', 'P', 'S', 'P', 'H', 'K', 'Q', 'V', 'P', 'S',
+           'K', 'C', 'N', 'D', 'Y', 'F', 'F', 'N', 'Y', 'F', 'T', '-', 'L',
+           'G', 'V', 'D', 'I', 'L', 'F', 'D', 'A', 'N', 'T', 'H', 'K', 'V',
+           'K', 'K', 'F', 'V', 'L', 'H', 'T', 'N']], dtype='U')
                 # fmt: on
             )
         )
@@ -11609,24 +11563,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 23,  43],
-                             [238, 258]])
+                np.array([[ 23,  43],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['V', 'E', 'K', 'G', 'M', 'S', 'Q', 'Q', 'E', 'V', 'L', 'R', 'I',
-              'G', 'G', 'T', 'P', 'S', 'G', 'T'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['V', 'E', 'K', 'G', 'M', 'S', 'Q', 'Q', 'E', 'V', 'L', 'R', 'I',
+           'G', 'G', 'T', 'P', 'S', 'G', 'T'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -11693,33 +11647,33 @@ sp|Q9BSU1        67 MFDAFNQRLKVIEVCD  83
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 60,  61,  61,  81,  86, 107, 107, 130],
-                             [ 12,  13,  18,  38,  38,  59,  60,  83]])
+                np.array([[ 60,  61,  61,  81,  86, 107, 107, 130],
+                          [ 12,  13,  18,  38,  38,  59,  60,  83]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['P', '-', '-', '-', '-', '-', 'F', 'H', 'I', 'G', 'Q', 'P', 'V',
-              'S', 'E', 'I', 'Y', 'S', 'S', 'V', 'F', 'I', 'D', 'T', 'N', 'I',
-              'N', 'F', 'Q', 'Y', 'K', 'G', 'S', 'S', 'Y', 'R', 'F', 'E', 'L',
-              'S', 'E', 'D', 'D', 'L', 'N', 'T', 'R', 'P', 'L', 'I', 'K', 'A',
-              '-', 'G', 'N', 'I', 'Y', 'A', 'Q', 'L', 'Y', 'I', 'D', 'R', 'F',
-              'T', 'G', 'E', 'L', 'S', 'S', 'I', 'R', 'Y', 'M', 'D'],
-             ['G', 'N', 'E', 'Q', 'W', 'E', 'F', 'T', 'L', 'G', 'M', 'P', 'L',
-              'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H', 'C', 'R', 'I',
-              '-', '-', '-', '-', '-', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y',
-              'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N',
-              'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A', 'F',
-              'N', 'Q', 'R', 'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D']],
-            dtype='U')
+np.array([['P', '-', '-', '-', '-', '-', 'F', 'H', 'I', 'G', 'Q', 'P', 'V',
+           'S', 'E', 'I', 'Y', 'S', 'S', 'V', 'F', 'I', 'D', 'T', 'N', 'I',
+           'N', 'F', 'Q', 'Y', 'K', 'G', 'S', 'S', 'Y', 'R', 'F', 'E', 'L',
+           'S', 'E', 'D', 'D', 'L', 'N', 'T', 'R', 'P', 'L', 'I', 'K', 'A',
+           '-', 'G', 'N', 'I', 'Y', 'A', 'Q', 'L', 'Y', 'I', 'D', 'R', 'F',
+           'T', 'G', 'E', 'L', 'S', 'S', 'I', 'R', 'Y', 'M', 'D'],
+          ['G', 'N', 'E', 'Q', 'W', 'E', 'F', 'T', 'L', 'G', 'M', 'P', 'L',
+           'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H', 'C', 'R', 'I',
+           '-', '-', '-', '-', '-', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y',
+           'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N',
+           'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A', 'F',
+           'N', 'Q', 'R', 'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -11790,50 +11744,52 @@ sp|Q9BSU1       127 HLNF-RG----LSFSFQLDSWTEAPKYEPNFAHGLASLQIPHGATVKRMYIY 174
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 10,  16,  16,  23,  24,  34,  34,  44,  44,  64,  64,  78,  78,
-                               89,  89, 105, 106, 108, 112, 123, 123, 135],
-                             [  8,  14,  17,  24,  24,  34,  40,  50,  53,  73,  74,  88, 102,
-                              113, 115, 131, 131, 133, 133, 144, 162, 174]])
+                np.array([[ 10,  16,  16,  23,  24,  34,  34,  44,  44,  64,
+                            64,  78,  78,  89,  89, 105, 106, 108, 112, 123,
+                           123, 135],
+                          [  8,  14,  17,  24,  24,  34,  40,  50,  53,  73,
+                            74,  88, 102, 113, 115, 131, 131, 133, 133, 144,
+                           162, 174]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'K', 'V', 'F', 'N', 'S', '-', '-', '-', 'D', 'F', 'P', 'A',
-              'K', 'D', 'T', 'N', 'I', 'D', 'S', 'V', 'E', 'S', 'K', 'W', 'G',
-              'K', '-', '-', '-', '-', '-', '-', 'A', 'D', 'N', 'S', 'E', 'W',
-              'V', 'A', 'S', 'A', '-', '-', '-', 'K', 'G', 'L', 'Y', 'S', 'T',
-              'Y', 'S', 'K', 'H', 'N', 'I', 'V', 'F', 'G', 'S', 'N', 'K', 'G',
-              'G', '-', 'Q', 'I', 'F', 'E', 'V', 'R', 'S', 'L', 'D', 'K', 'Q',
-              'L', 'G', 'N', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', '-', 'I', 'Y', 'L', 'S', 'M', 'V', 'K', 'D', 'K',
-              'L', 'G', '-', '-', 'T', 'P', 'Q', 'H', 'D', 'V', 'K', 'V', 'N',
-              'G', 'E', 'E', 'I', 'I', 'G', 'Y', 'K', 'M', 'G', 'N', 'D', 'F',
-              'K', 'I', 'L', 'F', 'V', 'F', 'P', 'E', 'P', 'T', 'N', 'Q', '-',
-              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', '-', 'H', 'A', 'N', 'P', 'I', 'M', 'S', 'H', 'Y',
-              'S', 'V', 'L'],
-             ['E', 'R', 'S', 'L', 'G', 'N', 'E', 'Q', 'W', 'E', 'F', 'T', 'L',
-              'G', 'M', 'P', '-', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q',
-              'K', 'H', 'C', 'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y',
-              'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N',
-              'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A', 'F',
-              'N', 'Q', 'R', 'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D', 'L', 'T',
-              'K', 'V', 'K', 'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N', 'S',
-              'Q', 'A', 'I', 'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q', 'S',
-              'F', 'G', 'A', 'T', 'H', 'P', 'G', 'V', 'Y', 'N', 'S', 'A', 'E',
-              'Q', 'L', 'F', 'H', 'L', 'N', 'F', '-', 'R', 'G', '-', '-', '-',
-              '-', 'L', 'S', 'F', 'S', 'F', 'Q', 'L', 'D', 'S', 'W', 'T', 'E',
-              'A', 'P', 'K', 'Y', 'E', 'P', 'N', 'F', 'A', 'H', 'G', 'L', 'A',
-              'S', 'L', 'Q', 'I', 'P', 'H', 'G', 'A', 'T', 'V', 'K', 'R', 'M',
-              'Y', 'I', 'Y']], dtype='U')
+np.array([['G', 'K', 'V', 'F', 'N', 'S', '-', '-', '-', 'D', 'F', 'P', 'A',
+           'K', 'D', 'T', 'N', 'I', 'D', 'S', 'V', 'E', 'S', 'K', 'W', 'G',
+           'K', '-', '-', '-', '-', '-', '-', 'A', 'D', 'N', 'S', 'E', 'W',
+           'V', 'A', 'S', 'A', '-', '-', '-', 'K', 'G', 'L', 'Y', 'S', 'T',
+           'Y', 'S', 'K', 'H', 'N', 'I', 'V', 'F', 'G', 'S', 'N', 'K', 'G',
+           'G', '-', 'Q', 'I', 'F', 'E', 'V', 'R', 'S', 'L', 'D', 'K', 'Q',
+           'L', 'G', 'N', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', 'I', 'Y', 'L', 'S', 'M', 'V', 'K', 'D', 'K',
+           'L', 'G', '-', '-', 'T', 'P', 'Q', 'H', 'D', 'V', 'K', 'V', 'N',
+           'G', 'E', 'E', 'I', 'I', 'G', 'Y', 'K', 'M', 'G', 'N', 'D', 'F',
+           'K', 'I', 'L', 'F', 'V', 'F', 'P', 'E', 'P', 'T', 'N', 'Q', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', 'H', 'A', 'N', 'P', 'I', 'M', 'S', 'H', 'Y',
+           'S', 'V', 'L'],
+          ['E', 'R', 'S', 'L', 'G', 'N', 'E', 'Q', 'W', 'E', 'F', 'T', 'L',
+           'G', 'M', 'P', '-', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q',
+           'K', 'H', 'C', 'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y',
+           'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N',
+           'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A', 'F',
+           'N', 'Q', 'R', 'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D', 'L', 'T',
+           'K', 'V', 'K', 'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N', 'S',
+           'Q', 'A', 'I', 'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q', 'S',
+           'F', 'G', 'A', 'T', 'H', 'P', 'G', 'V', 'Y', 'N', 'S', 'A', 'E',
+           'Q', 'L', 'F', 'H', 'L', 'N', 'F', '-', 'R', 'G', '-', '-', '-',
+           '-', 'L', 'S', 'F', 'S', 'F', 'Q', 'L', 'D', 'S', 'W', 'T', 'E',
+           'A', 'P', 'K', 'Y', 'E', 'P', 'N', 'F', 'A', 'H', 'G', 'L', 'A',
+           'S', 'L', 'Q', 'I', 'P', 'H', 'G', 'A', 'T', 'V', 'K', 'R', 'M',
+           'Y', 'I', 'Y']], dtype='U')
                 # fmt: on
             )
         )
@@ -11884,24 +11840,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  7,  27],
-                             [238, 258]])
+                np.array([[  7,  27],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
-              'A', 'G', 'A', 'D', 'Q', 'S', 'C'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
+           'A', 'G', 'A', 'D', 'Q', 'S', 'C'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -11952,26 +11908,26 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKVFYKSEDK 265
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 10,  37],
-                             [238, 265]])
+                np.array([[ 10,  37],
+                          [238, 265]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'Q', 'T', 'G', 'D', 'T', 'K', 'A', 'E', 'V', 'I', 'A', 'K',
-              'C', 'G', 'D', 'P', 'V', 'F', 'T', 'D', 'H', 'Y', 'C', 'A', 'P',
-              'M'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V', 'F', 'Y', 'K', 'S', 'E', 'D',
-              'K']], dtype='U')
+np.array([['T', 'Q', 'T', 'G', 'D', 'T', 'K', 'A', 'E', 'V', 'I', 'A', 'K',
+           'C', 'G', 'D', 'P', 'V', 'F', 'T', 'D', 'H', 'Y', 'C', 'A', 'P',
+           'M'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V', 'F', 'Y', 'K', 'S', 'E', 'D',
+           'K']], dtype='U')
                 # fmt: on
             )
         )
@@ -12042,47 +11998,47 @@ sp|Q9BSU1       116 PGVYNSAE----QLFHLNFR----------GLSFSF 138
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 10,  20,  20,  44,  51,  57,  57,  67,  67,  82,  83, 109, 109,
-                              118, 122, 130, 140, 146],
-                             [  4,  14,  18,  42,  42,  48,  60,  70,  72,  87,  87, 113, 115,
-                              124, 124, 132, 132, 138]])
+                np.array([[ 10,  20,  20,  44,  51,  57,  57,  67,  67,  82,
+                            83, 109, 109, 118, 122, 130, 140, 146],
+                          [  4,  14,  18,  42,  42,  48,  60,  70,  72,  87,
+                            87, 113, 115, 124, 124, 132, 132, 138]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['K', 'I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', '-', '-', '-',
-              '-', 'F', 'S', 'G', 'G', 'T', 'S', 'I', 'E', 'Q', 'L', 'K', 'Q',
-              'W', 'F', 'G', 'D', 'P', 'N', 'K', 'S', 'E', 'Q', 'R', 'N', 'A',
-              'G', 'N', 'I', 'T', 'L', 'D', 'S', 'Y', 'T', 'W', 'V', 'K', '-',
-              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'D', 'G',
-              'A', 'V', 'I', 'N', 'A', 'Q', 'L', 'Y', '-', '-', 'K', 'N', 'S',
-              'T', 'V', 'A', 'R', 'S', 'I', 'S', 'N', 'F', 'S', 'F', 'S', 'R',
-              'E', 'A', 'K', 'I', 'G', 'K', 'E', 'D', 'Y', 'D', 'E', 'L', 'K',
-              'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'V', 'V', 'E', 'K', 'L', 'G',
-              '-', '-', 'E', 'P', 'D', 'V', 'L', 'S', 'Q', 'S', 'M', 'S', 'S',
-              'D', 'K', 'E', 'E', 'M', 'Q', 'T', 'V', 'W', 'S', 'S', 'G', 'I',
-              'K', 'T', 'K', 'S', 'S', 'S', 'A', 'T', 'I', 'E', 'L', 'Y', 'F'],
-             ['E', 'V', 'V', 'P', 'E', 'R', 'S', 'L', 'G', 'N', 'E', 'Q', 'W',
-              'E', 'F', 'T', 'L', 'G', 'M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A',
-              'I', 'L', 'Q', 'K', 'H', 'C', 'R', 'I', 'I', 'K', 'N', 'V', '-',
-              '-', '-', '-', '-', '-', '-', 'Q', 'V', 'L', 'Y', 'S', 'E', 'Q',
-              'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N', 'L', 'T', 'Q',
-              'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A', 'F', 'N', 'Q', 'R',
-              'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D', 'L', 'T', 'K', 'V', '-',
-              'K', 'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N', 'S', 'Q', 'A',
-              'I', 'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q', 'S', 'F', 'G',
-              'A', 'T', 'H', 'P', 'G', 'V', 'Y', 'N', 'S', 'A', 'E', '-', '-',
-              '-', '-', 'Q', 'L', 'F', 'H', 'L', 'N', 'F', 'R', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', '-', 'G', 'L', 'S', 'F', 'S', 'F']],
-            dtype='U')
+np.array([['K', 'I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', '-', '-', '-',
+           '-', 'F', 'S', 'G', 'G', 'T', 'S', 'I', 'E', 'Q', 'L', 'K', 'Q',
+           'W', 'F', 'G', 'D', 'P', 'N', 'K', 'S', 'E', 'Q', 'R', 'N', 'A',
+           'G', 'N', 'I', 'T', 'L', 'D', 'S', 'Y', 'T', 'W', 'V', 'K', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'D', 'G',
+           'A', 'V', 'I', 'N', 'A', 'Q', 'L', 'Y', '-', '-', 'K', 'N', 'S',
+           'T', 'V', 'A', 'R', 'S', 'I', 'S', 'N', 'F', 'S', 'F', 'S', 'R',
+           'E', 'A', 'K', 'I', 'G', 'K', 'E', 'D', 'Y', 'D', 'E', 'L', 'K',
+           'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'V', 'V', 'E', 'K', 'L', 'G',
+           '-', '-', 'E', 'P', 'D', 'V', 'L', 'S', 'Q', 'S', 'M', 'S', 'S',
+           'D', 'K', 'E', 'E', 'M', 'Q', 'T', 'V', 'W', 'S', 'S', 'G', 'I',
+           'K', 'T', 'K', 'S', 'S', 'S', 'A', 'T', 'I', 'E', 'L', 'Y', 'F'],
+          ['E', 'V', 'V', 'P', 'E', 'R', 'S', 'L', 'G', 'N', 'E', 'Q', 'W',
+           'E', 'F', 'T', 'L', 'G', 'M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A',
+           'I', 'L', 'Q', 'K', 'H', 'C', 'R', 'I', 'I', 'K', 'N', 'V', '-',
+           '-', '-', '-', '-', '-', '-', 'Q', 'V', 'L', 'Y', 'S', 'E', 'Q',
+           'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N', 'L', 'T', 'Q',
+           'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A', 'F', 'N', 'Q', 'R',
+           'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D', 'L', 'T', 'K', 'V', '-',
+           'K', 'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N', 'S', 'Q', 'A',
+           'I', 'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q', 'S', 'F', 'G',
+           'A', 'T', 'H', 'P', 'G', 'V', 'Y', 'N', 'S', 'A', 'E', '-', '-',
+           '-', '-', 'Q', 'L', 'F', 'H', 'L', 'N', 'F', 'R', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', 'G', 'L', 'S', 'F', 'S', 'F']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -12149,31 +12105,31 @@ sp|Q9BSU1        77 VIEVC 82
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 4, 42, 46, 63, 64, 69],
-                             [22, 60, 60, 77, 77, 82]])
+                np.array([[ 4, 42, 46, 63, 64, 69],
+                          [22, 60, 60, 77, 77, 82]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['L', 'T', 'P', 'D', 'K', 'A', 'V', 'E', 'Y', 'L', 'K', 'D', 'N',
-              'V', 'K', 'I', 'H', 'D', 'N', 'L', 'E', 'I', 'S', 'Y', 'N', 'R',
-              'I', 'F', 'G', 'S', 'G', 'E', 'V', 'L', 'N', 'M', 'D', 'F', 'S',
-              'E', 'Y', 'F', 'G', 'K', 'P', 'G', 'F', 'K', 'M', 'L', 'L', 'S',
-              'L', 'D', 'G', 'D', 'S', 'I', 'N', 'P', 'T', 'I', 'E', 'I', 'D'],
-             ['M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H',
-              'C', 'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y', 'S', 'E',
-              'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N', 'L', '-',
-              '-', '-', '-', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D',
-              'A', 'F', 'N', 'Q', 'R', 'L', 'K', '-', 'V', 'I', 'E', 'V', 'C']],
-            dtype='U')
+np.array([['L', 'T', 'P', 'D', 'K', 'A', 'V', 'E', 'Y', 'L', 'K', 'D', 'N',
+           'V', 'K', 'I', 'H', 'D', 'N', 'L', 'E', 'I', 'S', 'Y', 'N', 'R',
+           'I', 'F', 'G', 'S', 'G', 'E', 'V', 'L', 'N', 'M', 'D', 'F', 'S',
+           'E', 'Y', 'F', 'G', 'K', 'P', 'G', 'F', 'K', 'M', 'L', 'L', 'S',
+           'L', 'D', 'G', 'D', 'S', 'I', 'N', 'P', 'T', 'I', 'E', 'I', 'D'],
+          ['M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H',
+           'C', 'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y', 'S', 'E',
+           'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N', 'L', '-',
+           '-', '-', '-', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D',
+           'A', 'F', 'N', 'Q', 'R', 'L', 'K', '-', 'V', 'I', 'E', 'V', 'C']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -12228,24 +12184,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 25,  45],
-                             [238, 258]])
+                np.array([[ 25,  45],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['L', 'Q', 'V', 'G', 'Q', 'S', 'K', 'Q', 'Q', 'V', 'S', 'A', 'L',
-              'L', 'G', 'T', 'P', 'S', 'I', 'P'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['L', 'Q', 'V', 'G', 'Q', 'S', 'K', 'Q', 'Q', 'V', 'S', 'A', 'L',
+           'L', 'G', 'T', 'P', 'S', 'I', 'P'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -12300,24 +12256,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 11,  31],
-                             [238, 258]])
+                np.array([[ 11,  31],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
-              'A', 'G', 'A', 'D', 'Q', 'S', 'C'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
+           'A', 'G', 'A', 'D', 'Q', 'S', 'C'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -12372,24 +12328,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 45,  65],
-                             [238, 258]])
+                np.array([[ 45,  65],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'R', 'V', 'G', 'M', 'T', 'Q', 'Q', 'Q', 'V', 'A', 'Y', 'A',
-              'L', 'G', 'T', 'P', 'L', 'M', 'S'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['I', 'R', 'V', 'G', 'M', 'T', 'Q', 'Q', 'Q', 'V', 'A', 'Y', 'A',
+           'L', 'G', 'T', 'P', 'L', 'M', 'S'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -12460,34 +12416,34 @@ sp|Q9BSU1       289 TLGVDILFDANTHKVKKFVLH 310
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 30,  33,  42,  65,  65,  86,  86,  97],
-                             [238, 241, 241, 264, 277, 298, 299, 310]])
+                np.array([[ 30,  33,  42,  65,  65,  86,  86,  97],
+                          [238, 241, 241, 264, 277, 298, 299, 310]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
-              'T', 'S', 'I', 'E', 'Q', 'L', 'K', 'Q', 'W', 'F', 'G', 'D', 'P',
-              'N', 'K', 'S', 'E', 'Q', 'R', 'N', 'A', 'G', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', '-', '-', '-', 'N', 'I', 'T', 'L',
-              'D', 'S', 'Y', 'T', 'W', 'V', 'K', 'D', 'G', 'A', 'V', 'I', 'N',
-              'A', 'Q', 'L', 'Y', '-', 'K', 'N', 'S', 'T', 'V', 'A', 'R', 'S',
-              'I', 'S', 'N'],
-             ['V', 'Y', 'F', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'G',
-              'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G', 'S', 'P',
-              'H', 'K', 'V', 'F', 'Y', 'K', 'S', 'E', 'D', 'K', 'M', 'K', 'I',
-              'H', 'S', 'P', 'S', 'P', 'H', 'K', 'Q', 'V', 'P', 'S', 'K', 'C',
-              'N', 'D', 'Y', 'F', 'F', 'N', 'Y', 'F', 'T', 'L', 'G', 'V', 'D',
-              'I', 'L', 'F', 'D', 'A', 'N', 'T', 'H', 'K', 'V', 'K', 'K', 'F',
-              'V', 'L', 'H']], dtype='U')
+np.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
+           'T', 'S', 'I', 'E', 'Q', 'L', 'K', 'Q', 'W', 'F', 'G', 'D', 'P',
+           'N', 'K', 'S', 'E', 'Q', 'R', 'N', 'A', 'G', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', 'N', 'I', 'T', 'L',
+           'D', 'S', 'Y', 'T', 'W', 'V', 'K', 'D', 'G', 'A', 'V', 'I', 'N',
+           'A', 'Q', 'L', 'Y', '-', 'K', 'N', 'S', 'T', 'V', 'A', 'R', 'S',
+           'I', 'S', 'N'],
+          ['V', 'Y', 'F', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'G',
+           'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G', 'S', 'P',
+           'H', 'K', 'V', 'F', 'Y', 'K', 'S', 'E', 'D', 'K', 'M', 'K', 'I',
+           'H', 'S', 'P', 'S', 'P', 'H', 'K', 'Q', 'V', 'P', 'S', 'K', 'C',
+           'N', 'D', 'Y', 'F', 'F', 'N', 'Y', 'F', 'T', 'L', 'G', 'V', 'D',
+           'I', 'L', 'F', 'D', 'A', 'N', 'T', 'H', 'K', 'V', 'K', 'K', 'F',
+           'V', 'L', 'H']], dtype='U')
                 # fmt: on
             )
         )
@@ -12562,46 +12518,46 @@ sp|Q9BSU1       121 SAEQ----LFHLNF----------RGLSFSFQ 139
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 30,  33,  42,  60,  67,  76,  76,  86,  86, 100, 101, 129, 129,
-                              138, 142, 148, 158, 166],
-                             [ 18,  21,  21,  39,  39,  48,  60,  70,  72,  86,  86, 114, 116,
-                              125, 125, 131, 131, 139]])
+                np.array([[ 30,  33,  42,  60,  67,  76,  76,  86,  86, 100,
+                           101, 129, 129, 138, 142, 148, 158, 166],
+                          [ 18,  21,  21,  39,  39,  48,  60,  70,  72,  86,
+                            86, 114, 116, 125, 125, 131, 131, 139]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
-              'T', 'S', 'I', 'E', 'Q', 'L', 'K', 'Q', 'W', 'F', 'G', 'D', 'P',
-              'N', 'K', 'S', 'E', 'Q', 'R', 'N', 'A', 'G', 'N', 'I', 'T', 'L',
-              'D', 'S', 'Y', 'T', 'W', 'V', 'K', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', 'D', 'G', 'A', 'V', 'I', 'N', 'A',
-              'Q', 'L', 'Y', '-', '-', 'K', 'N', 'S', 'T', 'V', 'A', 'R', 'S',
-              'I', 'S', 'N', 'F', 'S', 'F', 'S', 'R', 'E', 'A', 'K', 'I', 'G',
-              'K', 'E', 'D', 'Y', 'D', 'E', 'L', 'K', 'I', 'G', 'E', 'S', 'Y',
-              'K', 'K', 'I', 'V', 'E', 'K', 'L', 'G', 'E', '-', '-', 'P', 'D',
-              'V', 'L', 'S', 'Q', 'S', 'M', 'S', 'S', 'D', 'K', 'E', 'E', 'M',
-              'Q', 'T', 'V', 'W', 'S', 'S', 'G', 'I', 'K', 'T', 'K', 'S', 'S',
-              'S', 'A', 'T', 'I', 'E', 'L', 'Y', 'F', 'E'],
-             ['F', 'T', 'L', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'G',
-              'M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H',
-              'C', 'R', 'I', 'I', '-', '-', '-', '-', '-', '-', '-', 'K', 'N',
-              'V', 'Q', 'V', 'L', 'Y', 'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H',
-              'D', 'L', 'I', 'L', 'N', 'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L',
-              'M', 'F', 'D', 'A', 'F', 'N', 'Q', 'R', 'L', 'K', 'V', 'I', 'E',
-              'V', 'C', 'D', 'L', 'T', 'K', '-', 'V', 'K', 'L', 'K', 'Y', 'C',
-              'G', 'V', 'H', 'F', 'N', 'S', 'Q', 'A', 'I', 'A', 'P', 'T', 'I',
-              'E', 'Q', 'I', 'D', 'Q', 'S', 'F', 'G', 'A', 'T', 'H', 'P', 'G',
-              'V', 'Y', 'N', 'S', 'A', 'E', 'Q', '-', '-', '-', '-', 'L', 'F',
-              'H', 'L', 'N', 'F', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', 'R', 'G', 'L', 'S', 'F', 'S', 'F', 'Q']], dtype='U')
+np.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
+           'T', 'S', 'I', 'E', 'Q', 'L', 'K', 'Q', 'W', 'F', 'G', 'D', 'P',
+           'N', 'K', 'S', 'E', 'Q', 'R', 'N', 'A', 'G', 'N', 'I', 'T', 'L',
+           'D', 'S', 'Y', 'T', 'W', 'V', 'K', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', 'D', 'G', 'A', 'V', 'I', 'N', 'A',
+           'Q', 'L', 'Y', '-', '-', 'K', 'N', 'S', 'T', 'V', 'A', 'R', 'S',
+           'I', 'S', 'N', 'F', 'S', 'F', 'S', 'R', 'E', 'A', 'K', 'I', 'G',
+           'K', 'E', 'D', 'Y', 'D', 'E', 'L', 'K', 'I', 'G', 'E', 'S', 'Y',
+           'K', 'K', 'I', 'V', 'E', 'K', 'L', 'G', 'E', '-', '-', 'P', 'D',
+           'V', 'L', 'S', 'Q', 'S', 'M', 'S', 'S', 'D', 'K', 'E', 'E', 'M',
+           'Q', 'T', 'V', 'W', 'S', 'S', 'G', 'I', 'K', 'T', 'K', 'S', 'S',
+           'S', 'A', 'T', 'I', 'E', 'L', 'Y', 'F', 'E'],
+          ['F', 'T', 'L', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'G',
+           'M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H',
+           'C', 'R', 'I', 'I', '-', '-', '-', '-', '-', '-', '-', 'K', 'N',
+           'V', 'Q', 'V', 'L', 'Y', 'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H',
+           'D', 'L', 'I', 'L', 'N', 'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L',
+           'M', 'F', 'D', 'A', 'F', 'N', 'Q', 'R', 'L', 'K', 'V', 'I', 'E',
+           'V', 'C', 'D', 'L', 'T', 'K', '-', 'V', 'K', 'L', 'K', 'Y', 'C',
+           'G', 'V', 'H', 'F', 'N', 'S', 'Q', 'A', 'I', 'A', 'P', 'T', 'I',
+           'E', 'Q', 'I', 'D', 'Q', 'S', 'F', 'G', 'A', 'T', 'H', 'P', 'G',
+           'V', 'Y', 'N', 'S', 'A', 'E', 'Q', '-', '-', '-', '-', 'L', 'F',
+           'H', 'L', 'N', 'F', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', 'R', 'G', 'L', 'S', 'F', 'S', 'F', 'Q']], dtype='U')
                 # fmt: on
             )
         )
@@ -12652,26 +12608,26 @@ sp|Q9BSU1        87 KLKYCGVHFNSQAIAPTIEQIDQSFGATHP 117
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  4,  34],
-                             [ 87, 117]])
+                np.array([[  4,  34],
+                          [ 87, 117]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['V', 'F', 'K', 'F', 'D', 'G', 'K', 'V', 'L', 'D', 'D', 'P', 'N',
-              'P', 'K', 'S', 'T', 'P', 'E', 'Q', 'V', 'K', 'T', 'F', 'Y', 'A',
-              'P', 'T', 'Y', 'P'],
-             ['K', 'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N', 'S', 'Q', 'A',
-              'I', 'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q', 'S', 'F', 'G',
-              'A', 'T', 'H', 'P']], dtype='U')
+np.array([['V', 'F', 'K', 'F', 'D', 'G', 'K', 'V', 'L', 'D', 'D', 'P', 'N',
+           'P', 'K', 'S', 'T', 'P', 'E', 'Q', 'V', 'K', 'T', 'F', 'Y', 'A',
+           'P', 'T', 'Y', 'P'],
+          ['K', 'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N', 'S', 'Q', 'A',
+           'I', 'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q', 'S', 'F', 'G',
+           'A', 'T', 'H', 'P']], dtype='U')
                 # fmt: on
             )
         )
@@ -12726,24 +12682,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 11,  31],
-                             [238, 258]])
+                np.array([[ 11,  31],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'Q', 'F', 'G', 'M', 'T', 'R', 'Q', 'Q', 'V', 'L', 'D', 'I',
-              'A', 'G', 'A', 'E', 'N', 'C', 'E'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['I', 'Q', 'F', 'G', 'M', 'T', 'R', 'Q', 'Q', 'V', 'L', 'D', 'I',
+           'A', 'G', 'A', 'E', 'N', 'C', 'E'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -12798,24 +12754,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 84, 104],
-                             [238, 258]])
+                np.array([[ 84, 104],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'Q', 'T', 'G', 'M', 'T', 'E', 'A', 'Q', 'F', 'W', 'A', 'A',
-              'V', 'P', 'S', 'D', 'T', 'C', 'S'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['T', 'Q', 'T', 'G', 'M', 'T', 'E', 'A', 'Q', 'F', 'W', 'A', 'A',
+           'V', 'P', 'S', 'D', 'T', 'C', 'S'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -12882,32 +12838,32 @@ sp|Q9BSU1       297 DANTHKVKKF 307
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 17,  23,  24,  45,  45,  62,  62,  69],
-                             [238, 244, 244, 265, 282, 299, 300, 307]])
+                np.array([[ 17,  23,  24,  45,  45,  62,  62,  69],
+                          [238, 244, 244, 265, 282, 299, 300, 307]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['F', 'P', 'A', 'K', 'D', 'T', 'N', 'I', 'D', 'S', 'V', 'E', 'S',
-              'K', 'W', 'G', 'K', 'A', 'D', 'N', 'S', 'E', 'W', 'V', 'A', 'S',
-              'A', 'K', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', 'G', 'L', 'Y', 'S', 'T', 'Y', 'S',
-              'K', 'H', 'N', 'I', 'V', 'F', 'G', 'S', 'N', 'K', '-', 'G', 'G',
-              'Q', 'I', 'F', 'E', 'V'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', '-', 'C', 'Q', 'D', 'V', 'L', 'S',
-              'M', 'L', 'G', 'S', 'P', 'H', 'K', 'V', 'F', 'Y', 'K', 'S', 'E',
-              'D', 'K', 'M', 'K', 'I', 'H', 'S', 'P', 'S', 'P', 'H', 'K', 'Q',
-              'V', 'P', 'S', 'K', 'C', 'N', 'D', 'Y', 'F', 'F', 'N', 'Y', 'F',
-              'T', 'L', 'G', 'V', 'D', 'I', 'L', 'F', 'D', 'A', 'N', 'T', 'H',
-              'K', 'V', 'K', 'K', 'F']], dtype='U')
+np.array([['F', 'P', 'A', 'K', 'D', 'T', 'N', 'I', 'D', 'S', 'V', 'E', 'S',
+           'K', 'W', 'G', 'K', 'A', 'D', 'N', 'S', 'E', 'W', 'V', 'A', 'S',
+           'A', 'K', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', 'G', 'L', 'Y', 'S', 'T', 'Y', 'S',
+           'K', 'H', 'N', 'I', 'V', 'F', 'G', 'S', 'N', 'K', '-', 'G', 'G',
+           'Q', 'I', 'F', 'E', 'V'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', '-', 'C', 'Q', 'D', 'V', 'L', 'S',
+           'M', 'L', 'G', 'S', 'P', 'H', 'K', 'V', 'F', 'Y', 'K', 'S', 'E',
+           'D', 'K', 'M', 'K', 'I', 'H', 'S', 'P', 'S', 'P', 'H', 'K', 'Q',
+           'V', 'P', 'S', 'K', 'C', 'N', 'D', 'Y', 'F', 'F', 'N', 'Y', 'F',
+           'T', 'L', 'G', 'V', 'D', 'I', 'L', 'F', 'D', 'A', 'N', 'T', 'H',
+           'K', 'V', 'K', 'K', 'F']], dtype='U')
                 # fmt: on
             )
         )
@@ -12958,24 +12914,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 94, 114],
-                             [238, 258]])
+                np.array([[ 94, 114],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'V', 'V', 'E', 'K',
-              'L', 'G', 'E', 'P', 'D', 'V', 'L'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'V', 'V', 'E', 'K',
+           'L', 'G', 'E', 'P', 'D', 'V', 'L'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -13030,24 +12986,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKVF 259
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 42,  63],
-                             [238, 259]])
+                np.array([[ 42,  63],
+                          [238, 259]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'W', 'V', 'G', 'K', 'D', 'I', 'K', 'V', 'L', 'T', 'S', 'K',
-              'F', 'G', 'Q', 'A', 'D', 'R', 'V', 'Y'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V', 'F']], dtype='U')
+np.array([['T', 'W', 'V', 'G', 'K', 'D', 'I', 'K', 'V', 'L', 'T', 'S', 'K',
+           'F', 'G', 'Q', 'A', 'D', 'R', 'V', 'Y'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V', 'F']], dtype='U')
                 # fmt: on
             )
         )
@@ -13113,32 +13069,32 @@ sp|Q9BSU1        66 LMFDAFN  73
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[101, 128, 130, 140, 144, 151, 151, 167],
-                             [ 12,  39,  39,  49,  49,  56,  57,  73]])
+                np.array([[101, 128, 130, 140, 144, 151, 151, 167],
+                          [ 12,  39,  39,  49,  49,  56,  57,  73]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'W', 'E', 'H', 'V', 'E', 'L', 'V', 'L', 'P', 'V', 'A', 'P',
-              'E', 'I', 'L', 'S', 'T', 'A', 'A', 'K', 'A', 'L', 'L', 'P', 'Q',
-              'P', 'L', 'P', 'A', 'G', 'F', 'S', 'V', 'K', 'E', 'S', 'Q', 'P',
-              'K', 'G', 'E', 'Q', 'E', 'R', 'L', 'P', 'N', 'P', 'T', '-', 'L',
-              'A', 'I', 'T', 'D', 'G', 'E', 'I', 'T', 'V', 'K', 'F', 'H', 'P',
-              'F', 'T'],
-             ['G', 'N', 'E', 'Q', 'W', 'E', 'F', 'T', 'L', 'G', 'M', 'P', 'L',
-              'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H', 'C', 'R', 'I',
-              'I', '-', '-', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y', 'S', 'E', 'Q',
-              '-', '-', '-', '-', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L',
-              'N', 'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A',
-              'F', 'N']], dtype='U')
+np.array([['G', 'W', 'E', 'H', 'V', 'E', 'L', 'V', 'L', 'P', 'V', 'A', 'P',
+           'E', 'I', 'L', 'S', 'T', 'A', 'A', 'K', 'A', 'L', 'L', 'P', 'Q',
+           'P', 'L', 'P', 'A', 'G', 'F', 'S', 'V', 'K', 'E', 'S', 'Q', 'P',
+           'K', 'G', 'E', 'Q', 'E', 'R', 'L', 'P', 'N', 'P', 'T', '-', 'L',
+           'A', 'I', 'T', 'D', 'G', 'E', 'I', 'T', 'V', 'K', 'F', 'H', 'P',
+           'F', 'T'],
+          ['G', 'N', 'E', 'Q', 'W', 'E', 'F', 'T', 'L', 'G', 'M', 'P', 'L',
+           'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H', 'C', 'R', 'I',
+           'I', '-', '-', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y', 'S', 'E', 'Q',
+           '-', '-', '-', '-', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L',
+           'N', 'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A',
+           'F', 'N']], dtype='U')
                 # fmt: on
             )
         )
@@ -13217,52 +13173,52 @@ sp|Q9BSU1       170 MYIYS 175
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  8,  15,  15,  21,  21,  53,  53,  65,  65,  82,  82,  95, 111,
-                              147, 147, 157],
-                             [  6,  13,  18,  24,  29,  61,  62,  74,  76,  93, 111, 124, 124,
-                              160, 165, 175]])
+                np.array([[  8,  15,  15,  21,  21,  53,  53,  65,  65,  82,
+                            82,  95, 111, 147, 147, 157],
+                          [  6,  13,  18,  24,  29,  61,  62,  74,  76,  93,
+                           111, 124, 124, 160, 165, 175]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'P', 'G', 'E', 'G', 'T', 'G', '-', '-', '-', '-', '-', 'I',
-              'Q', 'L', 'S', 'A', 'G', '-', '-', '-', '-', '-', 'Q', 'I', 'L',
-              'K', 'F', 'Y', 'N', 'V', 'P', 'I', 'A', 'E', 'I', 'I', 'V', 'E',
-              'Y', 'D', 'P', 'S', 'N', 'V', 'S', 'G', 'V', 'S', 'S', 'N', 'V',
-              'K', 'L', 'K', '-', 'G', 'T', 'I', 'H', 'P', 'L', 'F', 'E', 'V',
-              'P', 'S', 'Q', '-', '-', 'I', 'S', 'I', 'E', 'N', 'F', 'Q', 'P',
-              'T', 'E', 'N', 'Y', 'L', 'I', 'Y', 'S', 'G', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', 'F', 'G', 'T', 'S', 'L', 'P', 'Q', 'T', 'Y', 'T', 'I', 'P',
-              'A', 'N', 'G', 'Y', 'L', 'I', 'I', 'S', 'I', 'T', 'N', 'T', 'S',
-              'T', 'G', 'N', 'I', 'G', 'Q', 'I', 'T', 'L', 'T', 'I', 'G', 'S',
-              'T', 'T', 'M', 'T', 'F', 'N', 'L', 'Q', 'T', 'G', 'E', 'N', 'K',
-              'I', 'P', 'V', 'I', 'A', 'G', 'T', 'Q', 'I', 'T', 'N', 'M', 'T',
-              'L', '-', '-', '-', '-', '-', 'T', 'S', 'S', 'S', 'A', 'I', 'L',
-              'I', 'Y', 'E'],
-             ['V', 'P', 'E', 'R', 'S', 'L', 'G', 'N', 'E', 'Q', 'W', 'E', 'F',
-              'T', 'L', 'G', 'M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L',
-              'Q', 'K', 'H', 'C', 'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L',
-              'Y', 'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L',
-              'N', 'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A',
-              'F', 'N', 'Q', 'R', 'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D', 'L',
-              'T', 'K', 'V', 'K', 'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N',
-              'S', 'Q', 'A', 'I', 'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q',
-              'S', 'F', 'G', 'A', 'T', 'H', 'P', 'G', 'V', 'Y', 'N', 'S', 'A',
-              'E', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', '-', 'Q', 'L', 'F', 'H', 'L', 'N', 'F', 'R', 'G',
-              'L', 'S', 'F', 'S', 'F', 'Q', 'L', 'D', 'S', 'W', 'T', 'E', 'A',
-              'P', 'K', 'Y', 'E', 'P', 'N', 'F', 'A', 'H', 'G', 'L', 'A', 'S',
-              'L', 'Q', 'I', 'P', 'H', 'G', 'A', 'T', 'V', 'K', 'R', 'M', 'Y',
-              'I', 'Y', 'S']], dtype='U')
+np.array([['I', 'P', 'G', 'E', 'G', 'T', 'G', '-', '-', '-', '-', '-', 'I',
+           'Q', 'L', 'S', 'A', 'G', '-', '-', '-', '-', '-', 'Q', 'I', 'L',
+           'K', 'F', 'Y', 'N', 'V', 'P', 'I', 'A', 'E', 'I', 'I', 'V', 'E',
+           'Y', 'D', 'P', 'S', 'N', 'V', 'S', 'G', 'V', 'S', 'S', 'N', 'V',
+           'K', 'L', 'K', '-', 'G', 'T', 'I', 'H', 'P', 'L', 'F', 'E', 'V',
+           'P', 'S', 'Q', '-', '-', 'I', 'S', 'I', 'E', 'N', 'F', 'Q', 'P',
+           'T', 'E', 'N', 'Y', 'L', 'I', 'Y', 'S', 'G', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', 'F', 'G', 'T', 'S', 'L', 'P', 'Q', 'T', 'Y', 'T', 'I', 'P',
+           'A', 'N', 'G', 'Y', 'L', 'I', 'I', 'S', 'I', 'T', 'N', 'T', 'S',
+           'T', 'G', 'N', 'I', 'G', 'Q', 'I', 'T', 'L', 'T', 'I', 'G', 'S',
+           'T', 'T', 'M', 'T', 'F', 'N', 'L', 'Q', 'T', 'G', 'E', 'N', 'K',
+           'I', 'P', 'V', 'I', 'A', 'G', 'T', 'Q', 'I', 'T', 'N', 'M', 'T',
+           'L', '-', '-', '-', '-', '-', 'T', 'S', 'S', 'S', 'A', 'I', 'L',
+           'I', 'Y', 'E'],
+          ['V', 'P', 'E', 'R', 'S', 'L', 'G', 'N', 'E', 'Q', 'W', 'E', 'F',
+           'T', 'L', 'G', 'M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L',
+           'Q', 'K', 'H', 'C', 'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L',
+           'Y', 'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L',
+           'N', 'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A',
+           'F', 'N', 'Q', 'R', 'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D', 'L',
+           'T', 'K', 'V', 'K', 'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N',
+           'S', 'Q', 'A', 'I', 'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q',
+           'S', 'F', 'G', 'A', 'T', 'H', 'P', 'G', 'V', 'Y', 'N', 'S', 'A',
+           'E', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', 'Q', 'L', 'F', 'H', 'L', 'N', 'F', 'R', 'G',
+           'L', 'S', 'F', 'S', 'F', 'Q', 'L', 'D', 'S', 'W', 'T', 'E', 'A',
+           'P', 'K', 'Y', 'E', 'P', 'N', 'F', 'A', 'H', 'G', 'L', 'A', 'S',
+           'L', 'Q', 'I', 'P', 'H', 'G', 'A', 'T', 'V', 'K', 'R', 'M', 'Y',
+           'I', 'Y', 'S']], dtype='U')
                 # fmt: on
             )
         )
@@ -13317,24 +13273,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[113, 133],
-                             [238, 258]])
+                np.array([[113, 133],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'I', 'V', 'E', 'K',
-              'L', 'G', 'E', 'P', 'D', 'V', 'L'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'I', 'V', 'E', 'K',
+           'L', 'G', 'E', 'P', 'D', 'V', 'L'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -13389,24 +13345,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 90, 110],
-                             [238, 258]])
+                np.array([[ 90, 110],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['V', 'T', 'V', 'G', 'M', 'T', 'R', 'A', 'Q', 'V', 'L', 'A', 'T',
-              'V', 'G', 'Q', 'G', 'S', 'C', 'T'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['V', 'T', 'V', 'G', 'M', 'T', 'R', 'A', 'Q', 'V', 'L', 'A', 'T',
+           'V', 'G', 'Q', 'G', 'S', 'C', 'T'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -13457,24 +13413,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKVF 259
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 80, 101],
-                             [238, 259]])
+                np.array([[ 80, 101],
+                          [238, 259]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['T', 'Q', 'T', 'G', 'M', 'T', 'E', 'A', 'Q', 'F', 'W', 'A', 'A',
-              'V', 'P', 'S', 'D', 'T', 'C', 'S', 'A'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V', 'F']], dtype='U')
+np.array([['T', 'Q', 'T', 'G', 'M', 'T', 'E', 'A', 'Q', 'F', 'W', 'A', 'A',
+           'V', 'P', 'S', 'D', 'T', 'C', 'S', 'A'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V', 'F']], dtype='U')
                 # fmt: on
             )
         )
@@ -13541,36 +13497,36 @@ sp|Q9BSU1        78 IEVCDLTKVKLKYCGVH-FNSQAIAPTIEQIDQSFGA 114
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  7,  42,  42,  53,  53,  76,  77,  96],
-                             [ 18,  53,  60,  71,  72,  95,  95, 114]])
+                np.array([[  7,  42,  42,  53,  53,  76,  77,  96],
+                          [ 18,  53,  60,  71,  72,  95,  95, 114]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
-              'A', 'G', 'A', 'D', 'Q', 'S', 'C', 'S', 'D', 'Q', 'V', 'E', 'R',
-              'I', 'I', 'C', 'Y', 'N', 'N', 'P', 'D', 'H', '-', '-', '-', '-',
-              '-', '-', '-', 'Y', 'G', 'P', 'Q', 'G', 'H', 'F', 'F', 'F', 'N',
-              'A', '-', 'A', 'D', 'K', 'L', 'I', 'H', 'K', 'R', 'Q', 'M', 'E',
-              'L', 'F', 'P', 'A', 'P', 'K', 'P', 'T', 'M', 'R', 'L', 'A', 'T',
-              'Y', 'N', 'K', 'T', 'Q', 'T', 'G', 'M', 'T', 'E', 'A', 'Q', 'F',
-              'W', 'A', 'A', 'V', 'P', 'S'],
-             ['F', 'T', 'L', 'G', 'M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I',
-              'L', 'Q', 'K', 'H', 'C', 'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V',
-              'L', 'Y', 'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I',
-              'L', 'N', 'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D',
-              'A', 'F', 'N', 'Q', 'R', 'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D',
-              'L', 'T', 'K', 'V', 'K', 'L', 'K', 'Y', 'C', 'G', 'V', 'H', '-',
-              'F', 'N', 'S', 'Q', 'A', 'I', 'A', 'P', 'T', 'I', 'E', 'Q', 'I',
-              'D', 'Q', 'S', 'F', 'G', 'A']], dtype='U')
+np.array([['I', 'Q', 'F', 'G', 'M', 'D', 'R', 'T', 'L', 'V', 'W', 'Q', 'L',
+           'A', 'G', 'A', 'D', 'Q', 'S', 'C', 'S', 'D', 'Q', 'V', 'E', 'R',
+           'I', 'I', 'C', 'Y', 'N', 'N', 'P', 'D', 'H', '-', '-', '-', '-',
+           '-', '-', '-', 'Y', 'G', 'P', 'Q', 'G', 'H', 'F', 'F', 'F', 'N',
+           'A', '-', 'A', 'D', 'K', 'L', 'I', 'H', 'K', 'R', 'Q', 'M', 'E',
+           'L', 'F', 'P', 'A', 'P', 'K', 'P', 'T', 'M', 'R', 'L', 'A', 'T',
+           'Y', 'N', 'K', 'T', 'Q', 'T', 'G', 'M', 'T', 'E', 'A', 'Q', 'F',
+           'W', 'A', 'A', 'V', 'P', 'S'],
+          ['F', 'T', 'L', 'G', 'M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I',
+           'L', 'Q', 'K', 'H', 'C', 'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V',
+           'L', 'Y', 'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I',
+           'L', 'N', 'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D',
+           'A', 'F', 'N', 'Q', 'R', 'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D',
+           'L', 'T', 'K', 'V', 'K', 'L', 'K', 'Y', 'C', 'G', 'V', 'H', '-',
+           'F', 'N', 'S', 'Q', 'A', 'I', 'A', 'P', 'T', 'I', 'E', 'Q', 'I',
+           'D', 'Q', 'S', 'F', 'G', 'A']], dtype='U')
                 # fmt: on
             )
         )
@@ -13681,82 +13637,82 @@ sp|Q9BSU1       368 HRSSSPNNTNPFGSTFCFGLQRMIFEVMQNNHIASVTLY 407
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  0,   4,   4, 329, 331, 395],
-                             [ 10,  14,  18, 343, 343, 407]])
+                np.array([[  0,   4,   4, 329, 331, 395],
+                          [ 10,  14,  18, 343, 343, 407]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['E', 'Q', 'W', 'E', '-', '-', '-', '-', 'F', 'A', 'L', 'G', 'M',
-              'P', 'L', 'A', 'Q', 'A', 'I', 'S', 'I', 'L', 'Q', 'K', 'H', 'C',
-              'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y', 'S', 'E', 'Q',
-              'M', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N', 'L', 'T', 'Q',
-              'D', 'G', 'I', 'K', 'L', 'L', 'F', 'D', 'A', 'C', 'N', 'Q', 'R',
-              'L', 'K', 'V', 'I', 'E', 'V', 'Y', 'D', 'L', 'T', 'K', 'V', 'K',
-              'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N', 'S', 'Q', 'A', 'I',
-              'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q', 'S', 'F', 'G', 'A',
-              'T', 'H', 'P', 'G', 'V', 'Y', 'N', 'A', 'A', 'E', 'Q', 'L', 'F',
-              'H', 'L', 'N', 'F', 'R', 'G', 'L', 'S', 'F', 'S', 'F', 'Q', 'L',
-              'D', 'S', 'W', 'S', 'E', 'A', 'P', 'K', 'Y', 'E', 'P', 'N', 'F',
-              'A', 'H', 'G', 'L', 'A', 'S', 'L', 'Q', 'I', 'P', 'H', 'G', 'A',
-              'T', 'V', 'K', 'R', 'M', 'Y', 'I', 'Y', 'S', 'G', 'N', 'N', 'L',
-              'Q', 'E', 'T', 'K', 'A', 'P', 'A', 'M', 'P', 'L', 'A', 'C', 'F',
-              'L', 'G', 'N', 'V', 'Y', 'A', 'E', 'C', 'V', 'E', 'V', 'L', 'R',
-              'D', 'G', 'A', 'G', 'P', 'L', 'G', 'L', 'K', 'L', 'R', 'L', 'L',
-              'T', 'A', 'G', 'C', 'G', 'P', 'G', 'V', 'L', 'A', 'D', 'T', 'K',
-              'V', 'R', 'A', 'V', 'E', 'R', 'S', 'I', 'Y', 'F', 'G', 'D', 'S',
-              'C', 'Q', 'D', 'V', 'L', 'S', 'A', 'L', 'G', 'S', 'P', 'H', 'K',
-              'V', 'F', 'Y', 'K', 'S', 'E', 'D', 'K', 'M', 'K', 'I', 'H', 'S',
-              'P', 'S', 'P', 'H', 'K', 'Q', 'V', 'P', 'S', 'K', 'C', 'N', 'D',
-              'Y', 'F', 'F', 'N', 'Y', 'Y', 'I', 'L', 'G', 'V', 'D', 'I', 'L',
-              'F', 'D', 'S', 'T', 'T', 'H', 'L', 'V', 'K', 'K', 'F', 'V', 'L',
-              'H', 'T', 'N', 'F', 'P', 'G', 'H', 'Y', 'N', 'F', 'N', 'I', 'Y',
-              'H', 'R', 'C', 'D', 'F', 'K', 'I', 'P', 'L', 'I', 'I', 'K', 'K',
-              'D', 'G', 'A', 'D', 'A', 'H', 'S', 'E', 'D', 'C', 'I', 'L', 'T',
-              'T', 'Y', 'S', 'K', 'W', 'D', 'Q', 'I', 'Q', 'E', 'L', 'L', 'G',
-              'H', 'P', 'M', 'E', 'K', 'P', 'V', 'V', 'L', 'H', 'R', 'S', 'S',
-              'S', 'A', 'N', 'N', 'T', 'N', 'P', 'F', 'G', 'S', 'T', 'F', 'C',
-              'F', 'G', 'L', 'Q', 'R', 'M', 'I', 'F', 'E', 'V', 'M', 'Q', 'N',
-              'N', 'H', 'I', 'A', 'S', 'V', 'T', 'L', 'Y'],
-             ['S', 'L', 'G', 'N', 'E', 'Q', 'W', 'E', 'F', 'T', 'L', 'G', 'M',
-              'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H', 'C',
-              'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y', 'S', 'E', 'Q',
-              'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N', 'L', 'T', 'Q',
-              'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A', 'F', 'N', 'Q', 'R',
-              'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D', 'L', 'T', 'K', 'V', 'K',
-              'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N', 'S', 'Q', 'A', 'I',
-              'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q', 'S', 'F', 'G', 'A',
-              'T', 'H', 'P', 'G', 'V', 'Y', 'N', 'S', 'A', 'E', 'Q', 'L', 'F',
-              'H', 'L', 'N', 'F', 'R', 'G', 'L', 'S', 'F', 'S', 'F', 'Q', 'L',
-              'D', 'S', 'W', 'T', 'E', 'A', 'P', 'K', 'Y', 'E', 'P', 'N', 'F',
-              'A', 'H', 'G', 'L', 'A', 'S', 'L', 'Q', 'I', 'P', 'H', 'G', 'A',
-              'T', 'V', 'K', 'R', 'M', 'Y', 'I', 'Y', 'S', 'G', 'N', 'S', 'L',
-              'Q', 'D', 'T', 'K', 'A', 'P', 'M', 'M', 'P', 'L', 'S', 'C', 'F',
-              'L', 'G', 'N', 'V', 'Y', 'A', 'E', 'S', 'V', 'D', 'V', 'L', 'R',
-              'D', 'G', 'T', 'G', 'P', 'A', 'G', 'L', 'R', 'L', 'R', 'L', 'L',
-              'A', 'A', 'G', 'C', 'G', 'P', 'G', 'L', 'L', 'A', 'D', 'A', 'K',
-              'M', 'R', 'V', 'F', 'E', 'R', 'S', 'V', 'Y', 'F', 'G', 'D', 'S',
-              'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G', 'S', 'P', 'H', 'K',
-              'V', 'F', 'Y', 'K', 'S', 'E', 'D', 'K', 'M', 'K', 'I', 'H', 'S',
-              'P', 'S', 'P', 'H', 'K', 'Q', 'V', 'P', 'S', 'K', 'C', 'N', 'D',
-              'Y', 'F', 'F', 'N', 'Y', 'F', 'T', 'L', 'G', 'V', 'D', 'I', 'L',
-              'F', 'D', 'A', 'N', 'T', 'H', 'K', 'V', 'K', 'K', 'F', 'V', 'L',
-              'H', 'T', 'N', 'Y', 'P', 'G', 'H', 'Y', 'N', 'F', 'N', 'I', 'Y',
-              'H', 'R', 'C', 'E', 'F', 'K', 'I', 'P', 'L', 'A', 'I', 'K', 'K',
-              'E', 'N', 'A', 'D', 'G', 'Q', 'T', 'E', '-', '-', 'T', 'C', 'T',
-              'T', 'Y', 'S', 'K', 'W', 'D', 'N', 'I', 'Q', 'E', 'L', 'L', 'G',
-              'H', 'P', 'V', 'E', 'K', 'P', 'V', 'V', 'L', 'H', 'R', 'S', 'S',
-              'S', 'P', 'N', 'N', 'T', 'N', 'P', 'F', 'G', 'S', 'T', 'F', 'C',
-              'F', 'G', 'L', 'Q', 'R', 'M', 'I', 'F', 'E', 'V', 'M', 'Q', 'N',
-              'N', 'H', 'I', 'A', 'S', 'V', 'T', 'L', 'Y']], dtype='U')
+np.array([['E', 'Q', 'W', 'E', '-', '-', '-', '-', 'F', 'A', 'L', 'G', 'M',
+           'P', 'L', 'A', 'Q', 'A', 'I', 'S', 'I', 'L', 'Q', 'K', 'H', 'C',
+           'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y', 'S', 'E', 'Q',
+           'M', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N', 'L', 'T', 'Q',
+           'D', 'G', 'I', 'K', 'L', 'L', 'F', 'D', 'A', 'C', 'N', 'Q', 'R',
+           'L', 'K', 'V', 'I', 'E', 'V', 'Y', 'D', 'L', 'T', 'K', 'V', 'K',
+           'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N', 'S', 'Q', 'A', 'I',
+           'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q', 'S', 'F', 'G', 'A',
+           'T', 'H', 'P', 'G', 'V', 'Y', 'N', 'A', 'A', 'E', 'Q', 'L', 'F',
+           'H', 'L', 'N', 'F', 'R', 'G', 'L', 'S', 'F', 'S', 'F', 'Q', 'L',
+           'D', 'S', 'W', 'S', 'E', 'A', 'P', 'K', 'Y', 'E', 'P', 'N', 'F',
+           'A', 'H', 'G', 'L', 'A', 'S', 'L', 'Q', 'I', 'P', 'H', 'G', 'A',
+           'T', 'V', 'K', 'R', 'M', 'Y', 'I', 'Y', 'S', 'G', 'N', 'N', 'L',
+           'Q', 'E', 'T', 'K', 'A', 'P', 'A', 'M', 'P', 'L', 'A', 'C', 'F',
+           'L', 'G', 'N', 'V', 'Y', 'A', 'E', 'C', 'V', 'E', 'V', 'L', 'R',
+           'D', 'G', 'A', 'G', 'P', 'L', 'G', 'L', 'K', 'L', 'R', 'L', 'L',
+           'T', 'A', 'G', 'C', 'G', 'P', 'G', 'V', 'L', 'A', 'D', 'T', 'K',
+           'V', 'R', 'A', 'V', 'E', 'R', 'S', 'I', 'Y', 'F', 'G', 'D', 'S',
+           'C', 'Q', 'D', 'V', 'L', 'S', 'A', 'L', 'G', 'S', 'P', 'H', 'K',
+           'V', 'F', 'Y', 'K', 'S', 'E', 'D', 'K', 'M', 'K', 'I', 'H', 'S',
+           'P', 'S', 'P', 'H', 'K', 'Q', 'V', 'P', 'S', 'K', 'C', 'N', 'D',
+           'Y', 'F', 'F', 'N', 'Y', 'Y', 'I', 'L', 'G', 'V', 'D', 'I', 'L',
+           'F', 'D', 'S', 'T', 'T', 'H', 'L', 'V', 'K', 'K', 'F', 'V', 'L',
+           'H', 'T', 'N', 'F', 'P', 'G', 'H', 'Y', 'N', 'F', 'N', 'I', 'Y',
+           'H', 'R', 'C', 'D', 'F', 'K', 'I', 'P', 'L', 'I', 'I', 'K', 'K',
+           'D', 'G', 'A', 'D', 'A', 'H', 'S', 'E', 'D', 'C', 'I', 'L', 'T',
+           'T', 'Y', 'S', 'K', 'W', 'D', 'Q', 'I', 'Q', 'E', 'L', 'L', 'G',
+           'H', 'P', 'M', 'E', 'K', 'P', 'V', 'V', 'L', 'H', 'R', 'S', 'S',
+           'S', 'A', 'N', 'N', 'T', 'N', 'P', 'F', 'G', 'S', 'T', 'F', 'C',
+           'F', 'G', 'L', 'Q', 'R', 'M', 'I', 'F', 'E', 'V', 'M', 'Q', 'N',
+           'N', 'H', 'I', 'A', 'S', 'V', 'T', 'L', 'Y'],
+          ['S', 'L', 'G', 'N', 'E', 'Q', 'W', 'E', 'F', 'T', 'L', 'G', 'M',
+           'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H', 'C',
+           'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y', 'S', 'E', 'Q',
+           'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N', 'L', 'T', 'Q',
+           'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A', 'F', 'N', 'Q', 'R',
+           'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D', 'L', 'T', 'K', 'V', 'K',
+           'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N', 'S', 'Q', 'A', 'I',
+           'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q', 'S', 'F', 'G', 'A',
+           'T', 'H', 'P', 'G', 'V', 'Y', 'N', 'S', 'A', 'E', 'Q', 'L', 'F',
+           'H', 'L', 'N', 'F', 'R', 'G', 'L', 'S', 'F', 'S', 'F', 'Q', 'L',
+           'D', 'S', 'W', 'T', 'E', 'A', 'P', 'K', 'Y', 'E', 'P', 'N', 'F',
+           'A', 'H', 'G', 'L', 'A', 'S', 'L', 'Q', 'I', 'P', 'H', 'G', 'A',
+           'T', 'V', 'K', 'R', 'M', 'Y', 'I', 'Y', 'S', 'G', 'N', 'S', 'L',
+           'Q', 'D', 'T', 'K', 'A', 'P', 'M', 'M', 'P', 'L', 'S', 'C', 'F',
+           'L', 'G', 'N', 'V', 'Y', 'A', 'E', 'S', 'V', 'D', 'V', 'L', 'R',
+           'D', 'G', 'T', 'G', 'P', 'A', 'G', 'L', 'R', 'L', 'R', 'L', 'L',
+           'A', 'A', 'G', 'C', 'G', 'P', 'G', 'L', 'L', 'A', 'D', 'A', 'K',
+           'M', 'R', 'V', 'F', 'E', 'R', 'S', 'V', 'Y', 'F', 'G', 'D', 'S',
+           'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G', 'S', 'P', 'H', 'K',
+           'V', 'F', 'Y', 'K', 'S', 'E', 'D', 'K', 'M', 'K', 'I', 'H', 'S',
+           'P', 'S', 'P', 'H', 'K', 'Q', 'V', 'P', 'S', 'K', 'C', 'N', 'D',
+           'Y', 'F', 'F', 'N', 'Y', 'F', 'T', 'L', 'G', 'V', 'D', 'I', 'L',
+           'F', 'D', 'A', 'N', 'T', 'H', 'K', 'V', 'K', 'K', 'F', 'V', 'L',
+           'H', 'T', 'N', 'Y', 'P', 'G', 'H', 'Y', 'N', 'F', 'N', 'I', 'Y',
+           'H', 'R', 'C', 'E', 'F', 'K', 'I', 'P', 'L', 'A', 'I', 'K', 'K',
+           'E', 'N', 'A', 'D', 'G', 'Q', 'T', 'E', '-', '-', 'T', 'C', 'T',
+           'T', 'Y', 'S', 'K', 'W', 'D', 'N', 'I', 'Q', 'E', 'L', 'L', 'G',
+           'H', 'P', 'V', 'E', 'K', 'P', 'V', 'V', 'L', 'H', 'R', 'S', 'S',
+           'S', 'P', 'N', 'N', 'T', 'N', 'P', 'F', 'G', 'S', 'T', 'F', 'C',
+           'F', 'G', 'L', 'Q', 'R', 'M', 'I', 'F', 'E', 'V', 'M', 'Q', 'N',
+           'N', 'H', 'I', 'A', 'S', 'V', 'T', 'L', 'Y']], dtype='U')
                 # fmt: on
             )
         )
@@ -13807,24 +13763,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 11,  31],
-                             [238, 258]])
+                np.array([[ 11,  31],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['L', 'Q', 'I', 'G', 'M', 'S', 'E', 'S', 'Q', 'V', 'T', 'Y', 'L',
-              'L', 'G', 'N', 'P', 'M', 'L', 'R'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['L', 'Q', 'I', 'G', 'M', 'S', 'E', 'S', 'Q', 'V', 'T', 'Y', 'L',
+           'L', 'G', 'N', 'P', 'M', 'L', 'R'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -13875,24 +13831,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 33,  53],
-                             [238, 258]])
+                np.array([[ 33,  53],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['L', 'S', 'L', 'G', 'M', 'T', 'R', 'D', 'Q', 'V', 'M', 'T', 'L',
-              'M', 'G', 'T', 'A', 'D', 'F', 'N'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['L', 'S', 'L', 'G', 'M', 'T', 'R', 'D', 'Q', 'V', 'M', 'T', 'L',
+           'M', 'G', 'T', 'A', 'D', 'F', 'N'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -13959,33 +13915,33 @@ sp|Q9BSU1       297 DANTHKVKKFVLHTNYPG 315
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 17,  23,  24,  45,  45,  78],
-                             [238, 244, 244, 265, 282, 315]])
+                np.array([[ 17,  23,  24,  45,  45,  78],
+                          [238, 244, 244, 265, 282, 315]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['F', 'P', 'A', 'K', 'D', 'T', 'N', 'I', 'D', 'S', 'V', 'E', 'S',
-              'K', 'W', 'G', 'K', 'A', 'D', 'N', 'S', 'E', 'W', 'V', 'A', 'S',
-              'A', 'K', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', 'G', 'L', 'Y', 'S', 'T', 'Y', 'S',
-              'K', 'H', 'N', 'I', 'V', 'F', 'G', 'S', 'N', 'K', 'G', 'G', 'Q',
-              'I', 'F', 'E', 'V', 'R', 'S', 'L', 'D', 'K', 'Q', 'L', 'G', 'N'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', '-', 'C', 'Q', 'D', 'V', 'L', 'S',
-              'M', 'L', 'G', 'S', 'P', 'H', 'K', 'V', 'F', 'Y', 'K', 'S', 'E',
-              'D', 'K', 'M', 'K', 'I', 'H', 'S', 'P', 'S', 'P', 'H', 'K', 'Q',
-              'V', 'P', 'S', 'K', 'C', 'N', 'D', 'Y', 'F', 'F', 'N', 'Y', 'F',
-              'T', 'L', 'G', 'V', 'D', 'I', 'L', 'F', 'D', 'A', 'N', 'T', 'H',
-              'K', 'V', 'K', 'K', 'F', 'V', 'L', 'H', 'T', 'N', 'Y', 'P', 'G']],
-            dtype='U')
+np.array([['F', 'P', 'A', 'K', 'D', 'T', 'N', 'I', 'D', 'S', 'V', 'E', 'S',
+           'K', 'W', 'G', 'K', 'A', 'D', 'N', 'S', 'E', 'W', 'V', 'A', 'S',
+           'A', 'K', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', 'G', 'L', 'Y', 'S', 'T', 'Y', 'S',
+           'K', 'H', 'N', 'I', 'V', 'F', 'G', 'S', 'N', 'K', 'G', 'G', 'Q',
+           'I', 'F', 'E', 'V', 'R', 'S', 'L', 'D', 'K', 'Q', 'L', 'G', 'N'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', '-', 'C', 'Q', 'D', 'V', 'L', 'S',
+           'M', 'L', 'G', 'S', 'P', 'H', 'K', 'V', 'F', 'Y', 'K', 'S', 'E',
+           'D', 'K', 'M', 'K', 'I', 'H', 'S', 'P', 'S', 'P', 'H', 'K', 'Q',
+           'V', 'P', 'S', 'K', 'C', 'N', 'D', 'Y', 'F', 'F', 'N', 'Y', 'F',
+           'T', 'L', 'G', 'V', 'D', 'I', 'L', 'F', 'D', 'A', 'N', 'T', 'H',
+           'K', 'V', 'K', 'K', 'F', 'V', 'L', 'H', 'T', 'N', 'Y', 'P', 'G']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -14036,26 +13992,26 @@ sp|Q9BSU1       228 DAKMRVFERSVYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  0,  30],
-                             [228, 258]])
+                np.array([[  0,  30],
+                          [228, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'S', 'A', 'L', 'R', 'C', 'D', 'N', 'K', 'I', 'V', 'S', 'E',
-              'G', 'A', 'S', 'Q', 'V', 'D', 'A', 'L', 'A', 'K', 'C', 'G', 'Q',
-              'P', 'V', 'T', 'K'],
-             ['D', 'A', 'K', 'M', 'R', 'V', 'F', 'E', 'R', 'S', 'V', 'Y', 'F',
-              'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G', 'S',
-              'P', 'H', 'K', 'V']], dtype='U')
+np.array([['A', 'S', 'A', 'L', 'R', 'C', 'D', 'N', 'K', 'I', 'V', 'S', 'E',
+           'G', 'A', 'S', 'Q', 'V', 'D', 'A', 'L', 'A', 'K', 'C', 'G', 'Q',
+           'P', 'V', 'T', 'K'],
+          ['D', 'A', 'K', 'M', 'R', 'V', 'F', 'E', 'R', 'S', 'V', 'Y', 'F',
+           'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G', 'S',
+           'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -14106,24 +14062,24 @@ sp|Q9BSU1       240 FGDSCQDVLSMLGSPHKVF 259
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  0,  19],
-                             [240, 259]])
+                np.array([[  0,  19],
+                          [240, 259]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'G', 'K', 'N', 'A', 'S', 'D', 'L', 'Q', 'V', 'L', 'L', 'G',
-              'D', 'P', 'E', 'R', 'K', 'D'],
-             ['F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G',
-              'S', 'P', 'H', 'K', 'V', 'F']], dtype='U')
+np.array([['I', 'G', 'K', 'N', 'A', 'S', 'D', 'L', 'Q', 'V', 'L', 'L', 'G',
+           'D', 'P', 'E', 'R', 'K', 'D'],
+          ['F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G',
+           'S', 'P', 'H', 'K', 'V', 'F']], dtype='U')
                 # fmt: on
             )
         )
@@ -14190,34 +14146,34 @@ sp|Q9BSU1       289 TLGVDILFDANTHKVKKFVL 309
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 61,  81,  90,  96,  96, 128],
-                             [238, 258, 258, 264, 277, 309]])
+                np.array([[ 61,  81,  90,  96,  96, 128],
+                          [238, 258, 258, 264, 277, 309]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['F', 'H', 'I', 'G', 'Q', 'P', 'V', 'S', 'E', 'I', 'Y', 'S', 'S',
-              'V', 'F', 'I', 'D', 'T', 'N', 'I', 'N', 'F', 'Q', 'Y', 'K', 'G',
-              'S', 'S', 'Y', 'R', 'F', 'E', 'L', 'S', 'E', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', '-', '-', '-', 'D', 'D', 'L', 'N',
-              'T', 'R', 'P', 'L', 'I', 'K', 'A', 'G', 'N', 'I', 'Y', 'A', 'Q',
-              'L', 'Y', 'I', 'D', 'R', 'F', 'T', 'G', 'E', 'L', 'S', 'S', 'I',
-              'R', 'Y'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', 'F', 'Y', 'K', 'S', 'E', 'D', 'K', 'M', 'K', 'I',
-              'H', 'S', 'P', 'S', 'P', 'H', 'K', 'Q', 'V', 'P', 'S', 'K', 'C',
-              'N', 'D', 'Y', 'F', 'F', 'N', 'Y', 'F', 'T', 'L', 'G', 'V', 'D',
-              'I', 'L', 'F', 'D', 'A', 'N', 'T', 'H', 'K', 'V', 'K', 'K', 'F',
-              'V', 'L']], dtype='U')
+np.array([['F', 'H', 'I', 'G', 'Q', 'P', 'V', 'S', 'E', 'I', 'Y', 'S', 'S',
+           'V', 'F', 'I', 'D', 'T', 'N', 'I', 'N', 'F', 'Q', 'Y', 'K', 'G',
+           'S', 'S', 'Y', 'R', 'F', 'E', 'L', 'S', 'E', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', 'D', 'D', 'L', 'N',
+           'T', 'R', 'P', 'L', 'I', 'K', 'A', 'G', 'N', 'I', 'Y', 'A', 'Q',
+           'L', 'Y', 'I', 'D', 'R', 'F', 'T', 'G', 'E', 'L', 'S', 'S', 'I',
+           'R', 'Y'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', 'F', 'Y', 'K', 'S', 'E', 'D', 'K', 'M', 'K', 'I',
+           'H', 'S', 'P', 'S', 'P', 'H', 'K', 'Q', 'V', 'P', 'S', 'K', 'C',
+           'N', 'D', 'Y', 'F', 'F', 'N', 'Y', 'F', 'T', 'L', 'G', 'V', 'D',
+           'I', 'L', 'F', 'D', 'A', 'N', 'T', 'H', 'K', 'V', 'K', 'K', 'F',
+           'V', 'L']], dtype='U')
                 # fmt: on
             )
         )
@@ -14268,26 +14224,26 @@ sp|Q9BSU1        87 KLKYCGVHFNSQAIAPTIEQIDQSFGATHP 117
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[  4,  34],
-                             [ 87, 117]])
+                np.array([[  4,  34],
+                          [ 87, 117]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['V', 'F', 'K', 'F', 'D', 'G', 'K', 'V', 'L', 'D', 'D', 'P', 'N',
-              'P', 'K', 'S', 'T', 'P', 'E', 'Q', 'V', 'K', 'T', 'F', 'Y', 'A',
-              'P', 'T', 'Y', 'P'],
-             ['K', 'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N', 'S', 'Q', 'A',
-              'I', 'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q', 'S', 'F', 'G',
-              'A', 'T', 'H', 'P']], dtype='U')
+np.array([['V', 'F', 'K', 'F', 'D', 'G', 'K', 'V', 'L', 'D', 'D', 'P', 'N',
+           'P', 'K', 'S', 'T', 'P', 'E', 'Q', 'V', 'K', 'T', 'F', 'Y', 'A',
+           'P', 'T', 'Y', 'P'],
+          ['K', 'L', 'K', 'Y', 'C', 'G', 'V', 'H', 'F', 'N', 'S', 'Q', 'A',
+           'I', 'A', 'P', 'T', 'I', 'E', 'Q', 'I', 'D', 'Q', 'S', 'F', 'G',
+           'A', 'T', 'H', 'P']], dtype='U')
                 # fmt: on
             )
         )
@@ -14362,50 +14318,52 @@ sp|Q9BSU1       174
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 10,  16,  16,  23,  24,  32,  32,  39,  46,  65,  65,  72,  72,
-                               90,  90, 106, 107, 108, 112, 123, 123, 135],
-                             [  8,  14,  17,  24,  24,  32,  48,  55,  55,  74,  77,  84,  96,
-                              114, 116, 132, 132, 133, 133, 144, 162, 174]])
+                np.array([[ 10,  16,  16,  23,  24,  32,  32,  39,  46,  65,
+                            65,  72,  72,  90,  90, 106, 107, 108, 112, 123,
+                           123, 135],
+                          [  8,  14,  17,  24,  24,  32,  48,  55,  55,  74,
+                            77,  84,  96, 114, 116, 132, 132, 133, 133, 144,
+                           162, 174]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'K', 'V', 'F', 'N', 'S', '-', '-', '-', 'D', 'F', 'P', 'A',
-              'K', 'D', 'T', 'N', 'I', 'D', 'S', 'V', 'E', 'S', 'K', 'W', '-',
-              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-              '-', '-', 'G', 'K', 'A', 'D', 'N', 'S', 'E', 'W', 'V', 'A', 'S',
-              'A', 'K', 'G', 'L', 'Y', 'S', 'T', 'Y', 'S', 'K', 'H', 'N', 'I',
-              'V', 'F', 'G', 'S', 'N', 'K', 'G', 'G', 'Q', '-', '-', '-', 'I',
-              'F', 'E', 'V', 'R', 'S', 'L', '-', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', 'D', 'K', 'Q', 'L', 'G', 'N', 'I', 'Y',
-              'L', 'S', 'M', 'V', 'K', 'D', 'K', 'L', 'G', 'T', '-', '-', 'P',
-              'Q', 'H', 'D', 'V', 'K', 'V', 'N', 'G', 'E', 'E', 'I', 'I', 'G',
-              'Y', 'K', 'M', 'G', 'N', 'D', 'F', 'K', 'I', 'L', 'F', 'V', 'F',
-              'P', 'E', 'P', 'T', 'N', 'Q', '-', '-', '-', '-', '-', '-', '-',
-              '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'H', 'A',
-              'N', 'P', 'I', 'M', 'S', 'H', 'Y', 'S', 'V', 'L'],
-             ['E', 'R', 'S', 'L', 'G', 'N', 'E', 'Q', 'W', 'E', 'F', 'T', 'L',
-              'G', 'M', 'P', '-', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q',
-              'K', 'H', 'C', 'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y',
-              'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', '-', '-', '-', '-',
-              '-', '-', '-', 'L', 'I', 'L', 'N', 'L', 'T', 'Q', 'D', 'G', 'I',
-              'K', 'L', 'M', 'F', 'D', 'A', 'F', 'N', 'Q', 'R', 'L', 'K', 'V',
-              'I', 'E', 'V', 'C', 'D', 'L', 'T', 'K', 'V', 'K', 'L', 'K', 'Y',
-              'C', 'G', 'V', 'H', 'F', 'N', 'S', 'Q', 'A', 'I', 'A', 'P', 'T',
-              'I', 'E', 'Q', 'I', 'D', 'Q', 'S', 'F', 'G', 'A', 'T', 'H', 'P',
-              'G', 'V', 'Y', 'N', 'S', 'A', 'E', 'Q', 'L', 'F', 'H', 'L', 'N',
-              'F', 'R', '-', 'G', '-', '-', '-', '-', 'L', 'S', 'F', 'S', 'F',
-              'Q', 'L', 'D', 'S', 'W', 'T', 'E', 'A', 'P', 'K', 'Y', 'E', 'P',
-              'N', 'F', 'A', 'H', 'G', 'L', 'A', 'S', 'L', 'Q', 'I', 'P', 'H',
-              'G', 'A', 'T', 'V', 'K', 'R', 'M', 'Y', 'I', 'Y']], dtype='U')
+np.array([['G', 'K', 'V', 'F', 'N', 'S', '-', '-', '-', 'D', 'F', 'P', 'A',
+           'K', 'D', 'T', 'N', 'I', 'D', 'S', 'V', 'E', 'S', 'K', 'W', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', 'G', 'K', 'A', 'D', 'N', 'S', 'E', 'W', 'V', 'A', 'S',
+           'A', 'K', 'G', 'L', 'Y', 'S', 'T', 'Y', 'S', 'K', 'H', 'N', 'I',
+           'V', 'F', 'G', 'S', 'N', 'K', 'G', 'G', 'Q', '-', '-', '-', 'I',
+           'F', 'E', 'V', 'R', 'S', 'L', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', 'D', 'K', 'Q', 'L', 'G', 'N', 'I', 'Y',
+           'L', 'S', 'M', 'V', 'K', 'D', 'K', 'L', 'G', 'T', '-', '-', 'P',
+           'Q', 'H', 'D', 'V', 'K', 'V', 'N', 'G', 'E', 'E', 'I', 'I', 'G',
+           'Y', 'K', 'M', 'G', 'N', 'D', 'F', 'K', 'I', 'L', 'F', 'V', 'F',
+           'P', 'E', 'P', 'T', 'N', 'Q', '-', '-', '-', '-', '-', '-', '-',
+           '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'H', 'A',
+           'N', 'P', 'I', 'M', 'S', 'H', 'Y', 'S', 'V', 'L'],
+          ['E', 'R', 'S', 'L', 'G', 'N', 'E', 'Q', 'W', 'E', 'F', 'T', 'L',
+           'G', 'M', 'P', '-', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q',
+           'K', 'H', 'C', 'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y',
+           'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', '-', '-', '-', '-',
+           '-', '-', '-', 'L', 'I', 'L', 'N', 'L', 'T', 'Q', 'D', 'G', 'I',
+           'K', 'L', 'M', 'F', 'D', 'A', 'F', 'N', 'Q', 'R', 'L', 'K', 'V',
+           'I', 'E', 'V', 'C', 'D', 'L', 'T', 'K', 'V', 'K', 'L', 'K', 'Y',
+           'C', 'G', 'V', 'H', 'F', 'N', 'S', 'Q', 'A', 'I', 'A', 'P', 'T',
+           'I', 'E', 'Q', 'I', 'D', 'Q', 'S', 'F', 'G', 'A', 'T', 'H', 'P',
+           'G', 'V', 'Y', 'N', 'S', 'A', 'E', 'Q', 'L', 'F', 'H', 'L', 'N',
+           'F', 'R', '-', 'G', '-', '-', '-', '-', 'L', 'S', 'F', 'S', 'F',
+           'Q', 'L', 'D', 'S', 'W', 'T', 'E', 'A', 'P', 'K', 'Y', 'E', 'P',
+           'N', 'F', 'A', 'H', 'G', 'L', 'A', 'S', 'L', 'Q', 'I', 'P', 'H',
+           'G', 'A', 'T', 'V', 'K', 'R', 'M', 'Y', 'I', 'Y']], dtype='U')
                 # fmt: on
             )
         )
@@ -14471,32 +14429,32 @@ sp|Q9BSU1        65 KLMFDAFN  73
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[101, 129, 131, 139, 144, 156, 156, 167],
-                             [ 12,  40,  40,  48,  48,  60,  62,  73]])
+                np.array([[101, 129, 131, 139, 144, 156, 156, 167],
+                          [ 12,  40,  40,  48,  48,  60,  62,  73]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['G', 'W', 'E', 'H', 'V', 'E', 'L', 'V', 'L', 'P', 'V', 'A', 'P',
-              'E', 'I', 'L', 'S', 'T', 'A', 'A', 'K', 'A', 'L', 'L', 'P', 'Q',
-              'P', 'L', 'P', 'A', 'G', 'F', 'S', 'V', 'K', 'E', 'S', 'Q', 'P',
-              'K', 'G', 'E', 'Q', 'E', 'R', 'L', 'P', 'N', 'P', 'T', 'L', 'A',
-              'I', 'T', 'D', '-', '-', 'G', 'E', 'I', 'T', 'V', 'K', 'F', 'H',
-              'P', 'F', 'T'],
-             ['G', 'N', 'E', 'Q', 'W', 'E', 'F', 'T', 'L', 'G', 'M', 'P', 'L',
-              'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H', 'C', 'R', 'I',
-              'I', 'K', '-', '-', 'N', 'V', 'Q', 'V', 'L', 'Y', 'S', 'E', '-',
-              '-', '-', '-', '-', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I',
-              'L', 'N', 'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D',
-              'A', 'F', 'N']], dtype='U')
+np.array([['G', 'W', 'E', 'H', 'V', 'E', 'L', 'V', 'L', 'P', 'V', 'A', 'P',
+           'E', 'I', 'L', 'S', 'T', 'A', 'A', 'K', 'A', 'L', 'L', 'P', 'Q',
+           'P', 'L', 'P', 'A', 'G', 'F', 'S', 'V', 'K', 'E', 'S', 'Q', 'P',
+           'K', 'G', 'E', 'Q', 'E', 'R', 'L', 'P', 'N', 'P', 'T', 'L', 'A',
+           'I', 'T', 'D', '-', '-', 'G', 'E', 'I', 'T', 'V', 'K', 'F', 'H',
+           'P', 'F', 'T'],
+          ['G', 'N', 'E', 'Q', 'W', 'E', 'F', 'T', 'L', 'G', 'M', 'P', 'L',
+           'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H', 'C', 'R', 'I',
+           'I', 'K', '-', '-', 'N', 'V', 'Q', 'V', 'L', 'Y', 'S', 'E', '-',
+           '-', '-', '-', '-', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I',
+           'L', 'N', 'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D',
+           'A', 'F', 'N']], dtype='U')
                 # fmt: on
             )
         )
@@ -14547,24 +14505,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 94, 114],
-                             [238, 258]])
+                np.array([[ 94, 114],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'V', 'V', 'E', 'K',
-              'L', 'G', 'E', 'P', 'D', 'V', 'L'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['L', 'K', 'I', 'G', 'E', 'S', 'Y', 'K', 'K', 'V', 'V', 'E', 'K',
+           'L', 'G', 'E', 'P', 'D', 'V', 'L'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -14631,33 +14589,33 @@ sp|Q9BSU1        67 MFDAFNQRLKVIEVCD  83
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 60,  61,  61,  81,  86, 107, 107, 130],
-                             [ 12,  13,  18,  38,  38,  59,  60,  83]])
+                np.array([[ 60,  61,  61,  81,  86, 107, 107, 130],
+                          [ 12,  13,  18,  38,  38,  59,  60,  83]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['P', '-', '-', '-', '-', '-', 'F', 'H', 'I', 'G', 'Q', 'P', 'V',
-              'S', 'E', 'I', 'Y', 'S', 'S', 'V', 'F', 'I', 'D', 'T', 'N', 'I',
-              'N', 'F', 'Q', 'Y', 'K', 'G', 'S', 'S', 'Y', 'R', 'F', 'E', 'L',
-              'S', 'E', 'D', 'D', 'L', 'N', 'T', 'R', 'P', 'L', 'I', 'K', 'A',
-              '-', 'G', 'N', 'I', 'Y', 'A', 'Q', 'L', 'Y', 'I', 'D', 'R', 'F',
-              'T', 'G', 'E', 'L', 'S', 'S', 'I', 'R', 'Y', 'M', 'D'],
-             ['G', 'N', 'E', 'Q', 'W', 'E', 'F', 'T', 'L', 'G', 'M', 'P', 'L',
-              'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H', 'C', 'R', 'I',
-              '-', '-', '-', '-', '-', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y',
-              'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N',
-              'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A', 'F',
-              'N', 'Q', 'R', 'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D']],
-            dtype='U')
+np.array([['P', '-', '-', '-', '-', '-', 'F', 'H', 'I', 'G', 'Q', 'P', 'V',
+           'S', 'E', 'I', 'Y', 'S', 'S', 'V', 'F', 'I', 'D', 'T', 'N', 'I',
+           'N', 'F', 'Q', 'Y', 'K', 'G', 'S', 'S', 'Y', 'R', 'F', 'E', 'L',
+           'S', 'E', 'D', 'D', 'L', 'N', 'T', 'R', 'P', 'L', 'I', 'K', 'A',
+           '-', 'G', 'N', 'I', 'Y', 'A', 'Q', 'L', 'Y', 'I', 'D', 'R', 'F',
+           'T', 'G', 'E', 'L', 'S', 'S', 'I', 'R', 'Y', 'M', 'D'],
+          ['G', 'N', 'E', 'Q', 'W', 'E', 'F', 'T', 'L', 'G', 'M', 'P', 'L',
+           'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H', 'C', 'R', 'I',
+           '-', '-', '-', '-', '-', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y',
+           'S', 'E', 'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N',
+           'L', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A', 'F',
+           'N', 'Q', 'R', 'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -14724,31 +14682,31 @@ sp|Q9BSU1        77 VIEVC 82
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 4, 42, 46, 63, 64, 69],
-                             [22, 60, 60, 77, 77, 82]])
+                np.array([[ 4, 42, 46, 63, 64, 69],
+                          [22, 60, 60, 77, 77, 82]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['L', 'T', 'P', 'D', 'K', 'A', 'V', 'E', 'Y', 'L', 'K', 'D', 'N',
-              'V', 'K', 'I', 'H', 'D', 'N', 'L', 'E', 'I', 'S', 'Y', 'N', 'R',
-              'I', 'F', 'G', 'S', 'G', 'E', 'V', 'L', 'N', 'M', 'D', 'F', 'S',
-              'E', 'Y', 'F', 'G', 'K', 'P', 'G', 'F', 'K', 'M', 'L', 'L', 'S',
-              'L', 'D', 'G', 'D', 'S', 'I', 'N', 'P', 'T', 'I', 'E', 'I', 'D'],
-             ['M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H',
-              'C', 'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y', 'S', 'E',
-              'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N', 'L', '-',
-              '-', '-', '-', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D',
-              'A', 'F', 'N', 'Q', 'R', 'L', 'K', '-', 'V', 'I', 'E', 'V', 'C']],
-            dtype='U')
+np.array([['L', 'T', 'P', 'D', 'K', 'A', 'V', 'E', 'Y', 'L', 'K', 'D', 'N',
+           'V', 'K', 'I', 'H', 'D', 'N', 'L', 'E', 'I', 'S', 'Y', 'N', 'R',
+           'I', 'F', 'G', 'S', 'G', 'E', 'V', 'L', 'N', 'M', 'D', 'F', 'S',
+           'E', 'Y', 'F', 'G', 'K', 'P', 'G', 'F', 'K', 'M', 'L', 'L', 'S',
+           'L', 'D', 'G', 'D', 'S', 'I', 'N', 'P', 'T', 'I', 'E', 'I', 'D'],
+          ['M', 'P', 'L', 'A', 'Q', 'A', 'V', 'A', 'I', 'L', 'Q', 'K', 'H',
+           'C', 'R', 'I', 'I', 'K', 'N', 'V', 'Q', 'V', 'L', 'Y', 'S', 'E',
+           'Q', 'S', 'P', 'L', 'S', 'H', 'D', 'L', 'I', 'L', 'N', 'L', '-',
+           '-', '-', '-', 'T', 'Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D',
+           'A', 'F', 'N', 'Q', 'R', 'L', 'K', '-', 'V', 'I', 'E', 'V', 'C']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -14799,24 +14757,24 @@ sp|Q9BSU1       238 VYFGDSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 39,  59],
-                             [238, 258]])
+                np.array([[ 39,  59],
+                          [238, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'Q', 'F', 'G', 'M', 'T', 'F', 'D', 'E', 'V', 'W', 'E', 'I',
-              'G', 'G', 'G', 'E', 'A', 'A', 'C'],
-             ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
-              'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
+np.array([['I', 'Q', 'F', 'G', 'M', 'T', 'F', 'D', 'E', 'V', 'W', 'E', 'I',
+           'G', 'G', 'G', 'E', 'A', 'A', 'C'],
+          ['V', 'Y', 'F', 'G', 'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M',
+           'L', 'G', 'S', 'P', 'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -14867,26 +14825,26 @@ sp|Q9BSU1       238 VYFG---------DSCQDVLSMLGSPHKV 258
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[ 11,  15,  24,  40],
-                             [238, 242, 242, 258]])
+                np.array([[ 11,  15,  24,  40],
+                          [238, 242, 242, 258]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
-              'T', 'S', 'I', 'E', 'Q', 'L', 'K', 'Q', 'W', 'F', 'G', 'D', 'P',
-              'N', 'K', 'S'],
-             ['V', 'Y', 'F', 'G', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-              'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G', 'S', 'P',
-              'H', 'K', 'V']], dtype='U')
+np.array([['I', 'K', 'V', 'T', 'T', 'D', 'Q', 'N', 'H', 'F', 'S', 'G', 'G',
+           'T', 'S', 'I', 'E', 'Q', 'L', 'K', 'Q', 'W', 'F', 'G', 'D', 'P',
+           'N', 'K', 'S'],
+          ['V', 'Y', 'F', 'G', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+           'D', 'S', 'C', 'Q', 'D', 'V', 'L', 'S', 'M', 'L', 'G', 'S', 'P',
+           'H', 'K', 'V']], dtype='U')
                 # fmt: on
             )
         )
@@ -14937,25 +14895,25 @@ sp|Q9BSU1        61 QDGIKLMFDAFNQRLKVIEVCDLT 85
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
 # flake8: noqa
-                numpy.array([[25, 35, 35, 48],
-                             [61, 71, 72, 85]])
+                np.array([[25, 35, 35, 48],
+                          [61, 71, 72, 85]])
                 # fmt: on
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
 # flake8: noqa
-numpy.array([['A', 'P', 'N', 'V', 'I', 'F', 'D', 'Y', 'D', 'A', '-', 'E', 'G',
-              'R', 'I', 'V', 'G', 'I', 'E', 'L', 'L', 'D', 'A', 'R'],
-             ['Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A', 'F', 'N', 'Q',
-              'R', 'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D', 'L', 'T']],
-            dtype='U')
+np.array([['A', 'P', 'N', 'V', 'I', 'F', 'D', 'Y', 'D', 'A', '-', 'E', 'G',
+           'R', 'I', 'V', 'G', 'I', 'E', 'L', 'L', 'D', 'A', 'R'],
+          ['Q', 'D', 'G', 'I', 'K', 'L', 'M', 'F', 'D', 'A', 'F', 'N', 'Q',
+           'R', 'L', 'K', 'V', 'I', 'E', 'V', 'C', 'D', 'L', 'T']],
+         dtype='U')
                 # fmt: on
             )
         )
@@ -15109,9 +15067,9 @@ query           444 FKPAA 449
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     [
                         [12, 60, 60, 75, 79, 99, 99, 157, 165, 274, 370, 504, 504, 553],
                         [12, 60, 61, 76, 76, 96, 97, 155, 155, 264, 264, 398, 400, 449],
@@ -15120,9 +15078,9 @@ query           444 FKPAA 449
             )
         )
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
-                numpy.array(
+            np.array_equal(
+                np.array(alignment, "U"),
+                np.array(
                     [
                         list(i)
                         for i in [
