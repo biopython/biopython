@@ -25,26 +25,6 @@ from Bio.SeqUtils import gc_fraction
 
 
 class TestAlignment(unittest.TestCase):
-    def test_alignment_array(self):
-        seqA = "CGTTTTT"
-        seqB = "CGATTTTT"
-        seqC = "GTGGTTT"
-        sequences = [seqA, seqB, seqC]
-        coordinates = np.array([[0, 2, 2, 5, 7], [0, 2, 3, 6, 8], [1, 3, 4, 7, 7]])
-        alignment = Align.Alignment(sequences, coordinates)
-        alignment_array = np.array(alignment)
-        self.assertEqual(repr(alignment_array), "test")
-
-    def test_alignment_array_unicode(self):
-        seqA = "CGTTTTT"
-        seqB = "CGATTTTT"
-        seqC = "GTGGTTT"
-        sequences = [seqA, seqB, seqC]
-        coordinates = np.array([[0, 2, 2, 5, 7], [0, 2, 3, 6, 8], [1, 3, 4, 7, 7]])
-        alignment = Align.Alignment(sequences, coordinates)
-        alignment_array = np.array(alignment, dtype="U")
-        self.assertEqual(repr(alignment_array), "test")
-
     def test_empty_alignment(self):
         alignment = Align.Alignment([])
         self.assertEqual(
