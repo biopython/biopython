@@ -23,7 +23,7 @@ Suppose you have three sequences:
 >>> seqC = "GTGGTTT"
 >>> sequences = [seqA, seqB, seqC]
 \end{minted}
-These sequences can be plain strings, \verb|bytes| objects, \verb|Seq| objects,  or \verb|SeqRecord| objects. To create an \verb|Alignment| object, we also need the coordinates that define how the sequences are aligned to each other. We use a numpy array for that:
+These sequences can be plain strings, \verb|bytes| objects, \verb|Seq| objects,  or \verb|SeqRecord| objects. To create an \verb|Alignment| object, we also need the coordinates that define how the sequences are aligned to each other. We use a NumPy array for that:
 %cont-doctest
 \begin{minted}{pycon}
 >>> import numpy as np
@@ -208,6 +208,8 @@ The column index can also be an iterable of integers:
 
 \section{Getting information about the alignment}
 
+\subsection{Alignment shape}
+
 The number of aligned sequences is returned by \verb+len(alignment)+:
 %cont-doctest
 \begin{minted}{pycon}
@@ -232,6 +234,8 @@ alignment and the number of columns in the alignment as printed:
 (3, 8)
 \end{minted}
 
+\subsection{Letter frequencies}
+
 The \verb+frequencies+ method calculates how often each letter appears in each column of the alignment:
 %cont-doctest
 \begin{minted}{pycon}
@@ -241,6 +245,9 @@ The \verb+frequencies+ method calculates how often each letter appears in each c
  'T': array([1, 0, 0, 3, 3, 3, 2, 2]),
  'A': array([0, 0, 1, 0, 0, 0, 0, 0])}
 \end{minted}
+
+\subsection{Substitutions}
+
 Use the \verb+substitutions+ method to find the number of substitutions between each pair of nucleotides:
 %cont-doctest
 \begin{minted}{pycon}
@@ -284,6 +291,30 @@ T 0.0 1.0 0.0 11.0
 1.0
 \end{minted}
 The total number of substitutions between C's and T's in the alignment is 1.0 + 1.0 = 2.
+
+\subsection{Alignments as arrays}
+
+Using NumPy, you can turn the \verb+alignment+ object into an array of letters. In particular, this may be useful for fast calculations on the alignment content.
+%cont-doctest
+\begin{minted}{pycon}
+>>> align_array = np.array(alignment)
+>>> align_array.shape
+(3, 8)
+>>> align_array  # doctest: +NORMALIZE_WHITESPACE
+array([[b'C', b'G', b'-', b'T', b'T', b'T', b'T', b'T'],
+       [b'C', b'G', b'A', b'T', b'T', b'T', b'T', b'T'],
+       [b'T', b'G', b'G', b'T', b'T', b'T', b'-', b'-']], dtype='|S1')
+\end{minted}
+By default, this will give you an array of \verb|bytes| characters (with data type \verb+dtype='|S1'+). You can create an array of Unicode (Python string) characters by using \verb+dtype='U'+:
+% % cont-doctest
+\begin{minted}{pycon}
+>>> align_array = np.array(alignment, dtype="U")
+>>> align_array  # doctest: +NORMALIZE_WHITESPACE
+array([['C', 'G', '-', 'T', 'T', 'T', 'T', 'T'],
+       ['C', 'G', 'A', 'T', 'T', 'T', 'T', 'T'],
+       ['T', 'G', 'G', 'T', 'T', 'T', '-', '-']], dtype='<U1')
+\end{minted}
+Note that the \verb+alignment+ object and the NumPy array \verb|align_array| are separate objects in memory - editing one will not update the other!
 
 \section{Operations on alignments}
 
