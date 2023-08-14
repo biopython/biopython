@@ -300,10 +300,10 @@ Using NumPy, you can turn the \verb+alignment+ object into an array of letters. 
 >>> align_array = np.array(alignment)
 >>> align_array.shape
 (3, 8)
->>> align_array
+>>> align_array  # doctest: +ELLIPSIS
 array([[b'C', b'G', b'-', b'T', b'T', b'T', b'T', b'T'],
        [b'C', b'G', b'A', b'T', b'T', b'T', b'T', b'T'],
-       [b'T', b'G', b'G', b'T', b'T', b'T', b'-', b'-']], dtype='|S1')
+       [b'T', b'G', b'G', b'T', b'T', b'T', b'-', b'-']], dtype=...)
 \end{minted}
 By default, this will give you an array of \verb|bytes| characters (with data type \verb+dtype='|S1'+). You can create an array of Unicode (Python string) characters by using \verb+dtype='U'+:
 % % % cont-doctest
