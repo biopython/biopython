@@ -22,7 +22,7 @@ import warnings
 from Bio import File
 from Bio.Data import IUPACData
 from Bio.Seq import Seq
-from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonDeprecationWarning, BiopythonWarning
 
 
 from Bio.Nexus.StandardData import StandardData
@@ -2133,8 +2133,12 @@ class Nexus:
 
 
 try:
-    import cnexus  # type: ignore
-except ImportError:
+    from . import cnexus  # type: ignore
+except ImportError as ex:
+    warnings.warn(
+        f"Import of C module failed ({ex}). Falling back to slow Python implementation",
+        BiopythonWarning,
+    )
 
     def _get_command_lines(file_contents):
         lines = _kill_comments_and_break_lines(file_contents)
