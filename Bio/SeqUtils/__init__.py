@@ -668,7 +668,7 @@ class CodonAdaptationIndex(dict):
 
         return exp(cai_value / cai_length)
 
-    def optimize(self, sequence, seq_type="DNA"):
+    def optimize(self, sequence, seq_type="DNA", strict=False):
         """Return a new DNA sequence with preferred codons only.
 
         Uses the codon adaptiveness table defined by the CodonAdaptationIndex
@@ -681,6 +681,8 @@ class CodonAdaptationIndex(dict):
                         Supplied as a str, Seq, or SeqRecord object.
             - seq_type: String specifying type of sequence provided.
                         Options are "DNA", "RNA", and "protein". Default is "DNA".
+            - strict:   Determines whether an exception should be raised when
+                        two codons are equally prefered for a given amino acid.
         Returns:
             Seq object with DNA encoding the same protein as the sequence argument,
             but using only preferred codons as defined by the codon adaptation index.
@@ -697,8 +699,15 @@ class CodonAdaptationIndex(dict):
         for codon, aminoacid in self._table.forward_table.items():
             if self[codon] == 1.0:
                 if aminoacid in pref_codons:
-                    message = f"{pref_codons[aminoacid]} and {codon} are equally preferred. Using {codon}"
-                    warnings.warn(message, RuntimeWarning)
+                    if strict:
+                        raise Exception(
+                            f"{pref_codons[aminoacid]} and \
+                                        {codon} are equally preferred."
+                        )
+                    else:
+                        message = f"{pref_codons[aminoacid]} and {codon} \
+                                    are equally preferred. Using {codon}"
+                        warnings.warn(message, RuntimeWarning)
                 pref_codons[aminoacid] = codon
         for codon in self._table.stop_codons:
             if self[codon] == 1.0:
