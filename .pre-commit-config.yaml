@@ -18,8 +18,8 @@ repos:
     hooks:
     -   id: black
         args: [--check,--target-version,py38]
--   repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.118
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.0.284
     hooks:
     -   id: ruff
         args: ['--extend-ignore=E501,F401,F841']
