@@ -669,7 +669,24 @@ class CodonAdaptationIndex(dict):
         return exp(cai_value / cai_length)
 
     def optimize(self, sequence, seq_type="DNA"):
-        """Return a new DNA sequence with preferred codons only."""
+        """Return a new DNA sequence with preferred codons only.
+
+        Uses the codon adaptiveness table defined by the CodonAdaptationIndex
+        object to generate DNA sequences with only preferred codons.
+        May be useful when designing DNA sequences for transgenic protein
+        expression or codon-optimized proteins like fluorophores.
+
+        Arguments:
+            - sequence: DNA, RNA, or protein sequence to codon-optimize.
+                        Supplied as a str, Seq, or SeqRecord object.
+            - seq_type: String specifying type of sequence provided.
+                        Options are "DNA", "RNA", and "protein". Default is "DNA".
+        Returns:
+            Seq object with DNA encoding the same protein as the sequence argument,
+            but using only preferred codons as defined by the codon adaptation index.
+            If multiple codons are equally preferred, a warning is issued
+            and one codon is chosen for use in the optimzed sequence.
+        """
         try:  # If seq record is provided, convert to sequence
             sequence = sequence.seq
         except AttributeError:  # not a  SeqRecord object
