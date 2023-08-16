@@ -699,15 +699,10 @@ class CodonAdaptationIndex(dict):
         for codon, aminoacid in self._table.forward_table.items():
             if self[codon] == 1.0:
                 if aminoacid in pref_codons:
+                    msg = f"{pref_codons[aminoacid]} and {codon} are equally preferred."
                     if strict:
-                        raise Exception(
-                            f"{pref_codons[aminoacid]} and \
-                                        {codon} are equally preferred."
-                        )
-                    else:
-                        message = f"{pref_codons[aminoacid]} and {codon} \
-                                    are equally preferred. Using {codon}"
-                        warnings.warn(message, RuntimeWarning)
+                        raise Exception(msg)
+                    warnings.warn(f"{msg} Using {codon}", RuntimeWarning)
                 pref_codons[aminoacid] = codon
         for codon in self._table.stop_codons:
             if self[codon] == 1.0:
