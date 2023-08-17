@@ -147,6 +147,7 @@ The following attributes are commonly found on \verb|Alignment| objects:
 \item any other object with a contiguous buffer of format \verb|"c"|, \verb|"B"|, \verb|"i"|, or \verb|"I"|;
 \item lists or tuples of objects defined in the \verb|alphabet| attribute of the \verb|PairwiseAligner| object that created the alignment (see section~\ref{sec:generalized-pairwise}).
 \end{itemize}
+For pairwise alignments (meaning an alignment of two sequences), the properties \verb|target| and \verb|query| return \verb|sequences[0]| and \verb|sequences[1]|, respectively.
 \item \verb|coordinates|: A NumPy array of integers storing the sequence indices defining how the sequences are aligned to each other;
 \item \verb|score|: The alignment score, as found by the parser in the alignment file, or as calculated by the \verb|PairwiseAligner| (see section~\ref{sec:pairwise-basic});
 \item \verb|annotations|: A dictionary storing most other annotations associated with the alignment;
