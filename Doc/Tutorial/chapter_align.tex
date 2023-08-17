@@ -13,7 +13,7 @@ See Chapter~\ref{chapter:msa} for a description of the older \verb|MultipleSeqAl
 The \verb|Alignment| class is defined in \verb|Bio.Align|. Usually you would get an \verb|Alignment| object by parsing the output of alignment programs (section~\ref{sec:alignmentparsers}) or by running Biopython's pairwise aligner (Chapter~\ref{chapter:pairwise}). For the benefit of this section, however, we will create an \verb|Alignment| object from scratch.
 
 \subsection{Creating an Alignment object from sequences and coordinates}
-\label{seq:align_sequences_coordinates}
+\label{subsec:align_sequences_coordinates}
 
 Suppose you have three sequences:
 %doctest . lib:numpy
@@ -72,7 +72,7 @@ Print the \verb+Alignment+ object to show the alignment explicitly:
 with the starting and end coordinate for each sequence are shown to the left and right, respectively, of the alignment.
 
 \subsection{Creating an Alignment object from aligned sequences}
-\label{seq:align_infer_coordinates}
+\label{subsec:align_infer_coordinates}
 
 If you start out with the aligned sequences, with dashes representing gaps, then you can calculate the coordinates using the \verb|infer_coordinates| class method. This method is primarily employed in Biopython's alignment parsers (see Section~\ref{sec:alignmentparsers}), but it may be useful for other purposes. For example, you can construct the \verb|Alignment| object from aligned sequences as follows:
 %cont-doctest
@@ -111,8 +111,48 @@ Now we can create the \verb|Alignment| object:
                   1 TGGTTT-- 7
 <BLANKLINE>
 \end{minted}
-which identical to the \verb|Alignment| object created above in section~\ref{seq:align_sequences_coordinates}.
+which identical to the \verb|Alignment| object created above in section~\ref{subsec:align_sequences_coordinates}.
 
+By default, the \verb|coordinates| argument to the \verb|Alignment| initializer is \verb|None|, which assumes that there are no gaps in the alignment. All sequences in an ungapped alignment must have the same length. If the \verb|coordinates| argument is \verb|None|, then the initializer will fill in the \verb|coordinates| attribute of the \verb|Alignment| object for you:
+%cont-doctest
+\begin{minted}{pycon}
+>>> ungapped_alignment = Alignment(["ACGTACGT", "AAGTACGT", "ACGTACCT"])
+>>> ungapped_alignment  # doctest: +ELLIPSIS
+<Alignment object (3 rows x 8 columns) at ...>
+>>> ungapped_alignment.coordinates
+array([[0, 8],
+       [0, 8],
+       [0, 8]])
+>>> print(ungapped_alignment)
+                  0 ACGTACGT 8
+                  0 AAGTACGT 8
+                  0 ACGTACCT 8
+<BLANKLINE>
+\end{minted}
+
+\subsection{Common alignment attributes}
+\label{subsec:align_common_attributes}
+
+The following attributes are commonly found on \verb|Alignment| objects:
+\begin{itemize}
+\item \verb|sequences|: This is a list of the sequences aligned to each other. Depending on how the alignment was created, the sequences can have the following types:
+\begin{itemize}
+\item plain Python string;
+\item \verb|Seq|;
+\item \verb|MutableSeq|;
+\item \verb|SeqRecord|;
+\item \verb|bytes|;
+\item \verb|bytearray|;
+\item NumPy array with data type \verb|numpy.int32|;
+\item any other object with a contiguous buffer of format \verb|"c"|, \verb|"B"|, \verb|"i"|, or \verb|"I"|;
+\item lists or tuples of objects defined in the \verb|alphabet| attribute of the \verb|PairwiseAligner| object that created the alignment (see section~\ref{sec:generalized-pairwise}).
+\end{itemize}
+\item \verb|coordinates|: A NumPy array of integers storing the sequence indices defining how the sequences are aligned to each other;
+\item \verb|score|: The alignment score, as found by the parser in the alignment file, or as calculated by the \verb|PairwiseAligner| (see section~\ref{sec:pairwise-basic});
+\item \verb|annotations|: A dictionary storing most other annotations associated with the alignment;
+\item \verb|column_annotations|: A dictionary storing annotations that extend along the alignment and have the same length as the alignment, such as a consensus sequence (see section~\ref{subsec:align_clustal} for an example).
+\end{itemize}
+An \verb|Alignment| object created by the parser in \verb|Bio.Align| may have additional attributes, depending on the alignment file format from which the alignment was read.
 
 \section{Slicing and indexing an alignment}
 
