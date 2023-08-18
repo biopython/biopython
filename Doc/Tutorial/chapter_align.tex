@@ -200,6 +200,15 @@ Columns to be included can also be selected using an iterable over integers:
 'CAT'
 \end{minted}
 
+To get the letter at position \verb+[i, j]+ of the printed alignment, use \verb|alignment[i, j]|; this will return \verb|"-"| if a gap is found at that position:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[1, 2]
+'A'
+>>> alignment[2, 6]
+'-'
+\end{minted}
+
 To get specific columns in the alignment, use
 %cont-doctest
 \begin{minted}{pycon}
@@ -209,6 +218,18 @@ To get specific columns in the alignment, use
 'GGG'
 >>> alignment[:, 2]
 '-AG'
+\end{minted}
+
+Slices of the form \verb+alignment[i:j:k]+ return a new \verb+Alignment+ object including only sequences \verb+[i:j:k]+ of the alignment:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[1:]  # doctest:+ELLIPSIS
+<Alignment object (2 rows x 8 columns) at ...>
+>>> print(alignment[1:])
+target            0 CGATTTTT 8
+                  0 .|.|||-- 8
+query             1 TGGTTT-- 7
+<BLANKLINE>
 \end{minted}
 
 Slices of the form \verb+alignment[:, i:j]+, where \verb+i+ and \verb+j+ are integers or are absent, return a new \verb+Alignment+ object that includes only the columns \verb+i+ through \verb+j+ in the printed alignment.
@@ -246,6 +267,7 @@ The column index can also be an iterable of integers:
                   0 GTT 3
 <BLANKLINE>
 \end{minted}
+Calling \verb|alignment[:, :]| returns a copy of the alignment.
 
 \section{Getting information about the alignment}
 
@@ -278,6 +300,90 @@ alignment and the number of columns in the alignment as printed:
 \subsection{Comparing alignments}
 
 Two alignments are equal to each other (meaning that \verb|alignment1 == alignment2| evaluates to \verb|True|) if each of the sequences in \verb|alignment1.sequences| and \verb|alignment2.sequences| are equal to each other, and \verb|alignment1.coordinates| and \verb|alignment2.coordinates| contain the same coordinates. If either of these conditions is not fulfilled, then \verb|alignment1 == alignment2| evaluates to \verb|False|. Inequality of two alignments (e.g., \verb|alignment1 < alignment2|) is established by first comparing \verb|alignment1.sequences| and \verb|alignment2.sequences|, and if they are equal, by comparing \verb|alignment1.coordinates| to \verb|alignment2.coordinates|.
+
+\subsection{Finding the indices of aligned sequences}
+
+For pairwise alignments, the \verb|aligned| property of an alignment returns the start and end indices of subsequences in the target and query sequence that were aligned to each other.  If the alignment between target (t) and query (q) consists of $N$ chunks, you get two tuples of length $N$:
+\begin{minted}{text}
+(((t_start1, t_end1), (t_start2, t_end2), ..., (t_startN, t_endN)),
+ ((q_start1, q_end1), (q_start2, q_end2), ..., (q_startN, q_endN)))
+\end{minted}
+For example,
+%cont-doctest
+\begin{minted}{pycon}
+>>> pairwise_alignment = alignment[::-2, :]
+>>> print(pairwise_alignment)
+target            1 TGGTTT-- 7
+                  0 .|-|||-- 8
+query             0 CG-TTTTT 7
+<BLANKLINE>
+>>> pairwise_alignment.aligned
+array([[[1, 3],
+        [4, 7]],
+<BLANKLINE>
+       [[0, 2],
+        [2, 5]]])
+\end{minted}
+Note that different alignments may have the same subsequences aligned to each other. In particular, this may occur if alignments differ from each other in terms of their gap placement only:
+%cont-doctest
+\begin{minted}{pycon}
+>>> pairwise_alignment1 = Alignment(
+...     ["AAACAAA", "AAAGAAA"], np.array([[0, 3, 4, 4, 7], [0, 3, 3, 4, 7]])
+... )
+>>> pairwise_alignment2 = Alignment(
+...     ["AAACAAA", "AAAGAAA"], np.array([[0, 3, 3, 4, 7], [0, 3, 4, 4, 7]])
+... )
+>>> print(pairwise_alignment1)
+target            0 AAAC-AAA 7
+                  0 |||--||| 8
+query             0 AAA-GAAA 7
+<BLANKLINE>
+>>> print(pairwise_alignment2)
+target            0 AAA-CAAA 7
+                  0 |||--||| 8
+query             0 AAAG-AAA 7
+<BLANKLINE>
+>>> pairwise_alignment1.aligned
+array([[[0, 3],
+        [4, 7]],
+<BLANKLINE>
+       [[0, 3],
+        [4, 7]]])
+>>> pairwise_alignment2.aligned
+array([[[0, 3],
+        [4, 7]],
+<BLANKLINE>
+       [[0, 3],
+        [4, 7]]])
+\end{minted}
+
+The property \verb|indices| returns a 2D NumPy array with the sequence index of each letter in the alignment, with gaps indicated by -1:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment)
+                  0 CG-TTTTT 7
+                  0 CGATTTTT 8
+                  1 TGGTTT-- 7
+<BLANKLINE>
+>>> alignment.indices
+array([[ 0,  1, -1,  2,  3,  4,  5,  6],
+       [ 0,  1,  2,  3,  4,  5,  6,  7],
+       [ 1,  2,  3,  4,  5,  6, -1, -1]])
+\end{minted}
+The property \verb|inverse_indices| returns a list of 1D NumPy arrays, one for each of the aligned sequences, with the column index in the alignment for each letter in the sequence. Letters not included in the alignment are indicated by -1:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.sequences
+['CGTTTTT', 'CGATTTTT', 'GTGGTTT']
+>>> alignment.inverse_indices  # doctest: +NORMALIZE_WHITESPACE
+[array([0, 1, 3, 4, 5, 6, 7]),
+ array([0, 1, 2, 3, 4, 5, 6, 7]),
+ array([-1,  0,  1,  2,  3,  4,  5])]
+\end{minted}
+
+\subsection{Counting identities, mismatches, and gaps}
+
+Use \verb|alignment.counts|.  %TODO
 
 \subsection{Letter frequencies}
 
@@ -361,7 +467,7 @@ array([['C', 'G', '-', 'T', 'T', 'T', 'T', 'T'],
 \end{minted}
 Note that the \verb+alignment+ object and the NumPy array \verb|align_array| are separate objects in memory - editing one will not update the other!
 
-\section{Operations on alignments}
+\section{Operations on an alignment}
 
 \subsection{Sorting an alignment}
 
@@ -437,6 +543,15 @@ Reverse-complementing an alignment will take the reverse complement of each sequ
 \end{minted}
 Reverse-complementing an alignment preserves its column annotations (in reverse order), but discards all other annotations.
 
+\subsection{Mapping alignments}
+
+Use \verb|alignment.map|.  %TODO
+
+\section{The Alignments class}
+\label{sec:alignments}
+
+%TODO
+
 \section{Reading and writing alignments}
 \label{sec:alignmentparsers}
 
@@ -470,7 +585,71 @@ where \verb|alignments| is either a single alignment or a list of alignments, \v
 \subsection{Printing alignments}
 \label{subsec:align_printing}
 
-For text (non-binary) formats, you can call Python's built-in \verb|format| function on an alignment to get a string showing the alignment in the requested format, or use \verb|Alignment| objects in formatted (f-) strings. As optional keyword arguments cannot be used with Python's built-in \verb|format| function or with formatted strings, the \verb|Alignment| class has a \verb|format| method with optional arguments to customize the alignment format, as described in the subsections below. When called with an empty string (which is the default), \verb|format| returns a human-readable representation of the alignment (same as when you \verb|print| the alignment).
+For text (non-binary) formats, you can call Python's built-in \verb|format| function on an alignment to get a string showing the alignment in the requested format, or use \verb|Alignment| objects in formatted (f-) strings. If called without an argument, the \verb|format| function returns the string representation of the alignment:
+%cont-doctest
+\begin{minted}{pycon}
+>>> str(alignment)
+'                  1 TGGTTT-- 7\n                  0 CG-TTTTT 7\n                  0 CGATTTTT 8\n'
+>>> format(alignment)
+'                  1 TGGTTT-- 7\n                  0 CG-TTTTT 7\n                  0 CGATTTTT 8\n'
+>>> print(format(alignment))
+                  1 TGGTTT-- 7
+                  0 CG-TTTTT 7
+                  0 CGATTTTT 8
+<BLANKLINE>
+\end{minted}
+By specifying one of the formats shown in Section~\ref{sec:alignformats}, \verb+format+ will create a string showing the alignment in the requested format:
+%cont-doctest
+\begin{minted}{pycon}
+>>> format(alignment, "clustal")
+'sequence_0                          TGGTTT--\nsequence_1                          CG-TTTTT\nsequence_2                          CGATTTTT\n\n\n'
+>>> print(format(alignment, "clustal"))
+sequence_0                          TGGTTT--
+sequence_1                          CG-TTTTT
+sequence_2                          CGATTTTT
+<BLANKLINE>
+<BLANKLINE>
+<BLANKLINE>
+>>> print(f"*** this is the alignment in Clustal format: ***\n{alignment:clustal}")
+*** this is the alignment in Clustal format: ***
+sequence_0                          TGGTTT--
+sequence_1                          CG-TTTTT
+sequence_2                          CGATTTTT
+<BLANKLINE>
+<BLANKLINE>
+<BLANKLINE>
+>>> format(alignment, "maf")
+'a\ns sequence_0 1 6 + 7 TGGTTT--\ns sequence_1 0 7 + 7 CG-TTTTT\ns sequence_2 0 8 + 8 CGATTTTT\n\n'
+>>> print(format(alignment, "maf"))
+a
+s sequence_0 1 6 + 7 TGGTTT--
+s sequence_1 0 7 + 7 CG-TTTTT
+s sequence_2 0 8 + 8 CGATTTTT
+<BLANKLINE>
+<BLANKLINE>
+\end{minted}
+
+As optional keyword arguments cannot be used with Python's built-in \verb|format| function or with formatted strings, the \verb|Alignment| class has a \verb|format| method with optional arguments to customize the alignment format, as described in the subsections below. For example, we can print the alignment in BED format (see section~\ref{subsec:align_bed}) with a specific number of columns:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(pairwise_alignment)
+target            1 TGGTTT-- 7
+                  0 .|-|||-- 8
+query             0 CG-TTTTT 7
+<BLANKLINE>
+>>> print(format(pairwise_alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
+target	1	7	query	0	+	1	7	0	2	2,3,	0,3,
+<BLANKLINE>
+>>> print(pairwise_alignment.format("bed"))  # doctest: +NORMALIZE_WHITESPACE
+target	1	7	query	0	+	1	7	0	2	2,3,	0,3,
+<BLANKLINE>
+>>> print(pairwise_alignment.format("bed", bedN=3))  # doctest: +NORMALIZE_WHITESPACE
+target	1	7
+<BLANKLINE>
+>>> print(pairwise_alignment.format("bed", bedN=6))  # doctest: +NORMALIZE_WHITESPACE
+target	1	7	query	0	+
+<BLANKLINE>
+\end{minted}
 
 \section{Alignment file formats}
 \label{sec:alignformats}
