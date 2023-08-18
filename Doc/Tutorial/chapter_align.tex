@@ -383,7 +383,25 @@ The property \verb|inverse_indices| returns a list of 1D NumPy arrays, one for e
 
 \subsection{Counting identities, mismatches, and gaps}
 
-Use \verb|alignment.counts|.  %TODO
+The \verb|counts| method calculates the number of identities, mismatches, and gaps of a pairwise alignment.
+For an alignment of more than two sequences, the number of identities, mismatches, and gaps are calculated and summed for all pairs of sequences in the alignment. The three numbers are returned as an \verb|AlignmentCounts| object, which is a \verb|namedtuple| with fields \verb|gaps|, \verb|identities|, and \verb|mismatches|. This method currently takes no arguments, but in the future will likely be modified to accept optional arguments allowing its behavior to be customized.
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(pairwise_alignment)
+target            1 TGGTTT-- 7
+                  0 .|-|||-- 8
+query             0 CG-TTTTT 7
+<BLANKLINE>
+>>> pairwise_alignment.counts()
+AlignmentCounts(gaps=3, identities=4, mismatches=1)
+>>> print(alignment)
+                  0 CG-TTTTT 7
+                  0 CGATTTTT 8
+                  1 TGGTTT-- 7
+<BLANKLINE>
+>>> alignment.counts()
+AlignmentCounts(gaps=6, identities=15, mismatches=3)
+\end{minted}
 
 \subsection{Letter frequencies}
 
