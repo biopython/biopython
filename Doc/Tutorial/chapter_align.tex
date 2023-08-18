@@ -612,7 +612,65 @@ However, mapping the alignment does not depend on the sequence contents; only th
 \section{The Alignments class}
 \label{sec:alignments}
 
-%TODO
+The \verb|Alignments| (plural) class inherits from \verb|AlignmentsAbstractBaseClass| and from \verb|list|, and can be used as a list to store \verb|Alignment| objects. The behavior of \verb|Alignments| objects is different from that of \verb|list| objects in three important ways:
+\begin{itemize}
+\item An \verb|Alignments| object is its own iterator, whereas calling \verb|iter| on a list object creates a new iterator each time. An \verb|Alignments| object iterator will therefore behave the same as an iterator returned by \verb|Bio.Align.parse| (see section~\ref{subsec:align_reading}) or an iterator returned by the pairwise aligner (see Section~\ref{chapter:pairwise}).
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.Align import Alignments
+
+>>> alignment_list = [alignment1, alignment2, alignment3]
+>>> for item in alignment_list:
+...     print(repr(item))  # doctest: +ELLIPSIS
+...
+<Alignment object (2 rows x 24 columns) at ...>
+<Alignment object (2 rows x 8 columns) at ...>
+<Alignment object (2 rows x 19 columns) at ...>
+
+>>> for item in alignment_list:
+...     print(repr(item))  # doctest: +ELLIPSIS
+...
+<Alignment object (2 rows x 24 columns) at ...>
+<Alignment object (2 rows x 8 columns) at ...>
+<Alignment object (2 rows x 19 columns) at ...>
+
+>>> alignments = Alignments([alignment1, alignment2, alignment3])
+>>> for item in alignments:
+...     print(repr(item))  # doctest: +ELLIPSIS
+...
+<Alignment object (2 rows x 24 columns) at ...>
+<Alignment object (2 rows x 8 columns) at ...>
+<Alignment object (2 rows x 19 columns) at ...>
+
+>>> for item in alignments:
+...     print(repr(item))  # doctest: +ELLIPSIS
+...
+\end{minted}
+The last loop does not print anything because the iterator is already exhausted.
+\item The \verb|Alignments| class defines a \verb|rewind| method that resets the iterator to its first item, allowing us to loop over it again:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.rewind()
+>>> for item in alignments:
+...     print(repr(item))  # doctest: +ELLIPSIS
+...
+<Alignment object (2 rows x 24 columns) at ...>
+<Alignment object (2 rows x 8 columns) at ...>
+<Alignment object (2 rows x 19 columns) at ...>
+\end{minted}
+\item Metadata can be stored as attributes on an \verb|Alignments| object, whereas a plain \verb|list| does not accept attributes:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment_list.score = 100
+Traceback (most recent call last):
+ ...
+AttributeError: 'list' object has no attribute 'score'
+>>> alignments.score = 100
+>>> alignments.score
+100
+\end{minted}
+\end{itemize}
+
 
 \section{Reading and writing alignments}
 \label{sec:alignmentparsers}
@@ -620,8 +678,9 @@ However, mapping the alignment does not depend on the sequence contents; only th
 Output from sequence alignment software such as Clustal can be parsed into \verb|Alignment| objects by the \verb|Bio.Align.read| and \verb|Bio.Align.parse| functions. Their usage is analogous to the \verb|read| and \verb|parse| functions in \verb|Bio.SeqIO| (see Section~\ref{sec:Bio.SeqIO-input}): The \verb|read| function is used to read an output file containing a single alignment and returns an \verb|Alignment| object, while the \verb|parse| function returns an iterator to iterate over alignments stored in an output file containing one or more alignments. Section \ref{sec:alignformats} describes  the alignment formats that can be parsed in \verb|Bio.Align|.  \verb|Bio.Align| also provides a \verb|write| function that can write alignments in most of these formats.
 
 \subsection{Reading alignments}
+\label{subsec:align_reading}
 
-The alignments returned by \verb|Bio.Align.parse| inherit from the \verb|AlignmentsAbstractBaseClass| base class. This class defines a \verb|rewind| method that resets the iterator to let it loop over the alignments from the beginning. You can also call \verb|len| on the alignments to obtain the number of alignments. Depending on the file format, the number of alignments may be explicitly stored in the file (for example in the case of bigBed, bigPsl, and bigMaf files), or otherwise the number of alignments is counted by looping over them once (and returning the iterator to its original position). If the file is large, it may therefore take a considerable amount of time for \verb|len| to return. As the number of alignments is cached, subsequent calls to \verb|len| will return quickly.
+The alignments iterator returned by \verb|Bio.Align.parse| inherits from the \verb|AlignmentsAbstractBaseClass| base class. This class defines a \verb|rewind| method that resets the iterator to let it loop over the alignments from the beginning. You can also call \verb|len| on the alignments to obtain the number of alignments. Depending on the file format, the number of alignments may be explicitly stored in the file (for example in the case of bigBed, bigPsl, and bigMaf files), or otherwise the number of alignments is counted by looping over them once (and returning the iterator to its original position). If the file is large, it may therefore take a considerable amount of time for \verb|len| to return. As the number of alignments is cached, subsequent calls to \verb|len| will return quickly.
 
 Depending on the file format, the alignments object returned by \verb|Bio.Align.parse| may contain attributes that store metadata found in the file, such as the version number of the software that was used to create the alignments. The specific attributes stored for each file format are described in Section~\ref{sec:alignformats}.
 
@@ -634,7 +693,7 @@ To write alignments to a file, use
 >>> target = "myfile.txt"
 >>> Align.write(alignments, target, "clustal")
 \end{minted}
-where \verb|alignments| is either a single alignment or a list of alignments, \verb|target| is a file name or an open file-like object, and \verb|"clustal"| is the file format to be used. As some file formats allow or require metadata to be stored with the alignments, you may want to use the \verb|Alignments| (plural) class instead of a plain list of alignments. This class inherits from \verb|AlignmentsAbstractBaseClass| as well as from \verb|list|, and can therefore be used as a list, but also allows you to store metadata as attributes on the \verb|alignments| object:
+where \verb|alignments| is either a single alignment or a list of alignments, \verb|target| is a file name or an open file-like object, and \verb|"clustal"| is the file format to be used. As some file formats allow or require metadata to be stored with the alignments, you may want to use the \verb|Alignments| (plural) class instead of a plain list of alignments (see Section~\ref{sec:alignments}), alloing you to store a metadata dictionary as an attribute on the \verb|alignments| object:
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> alignments = Align.Alignments(alignments)
@@ -955,7 +1014,7 @@ gi|6273284|gb|AF191658.1|AF191      TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG
 gi|6273287|gb|AF191661.1|AF191      TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
 gi|6273286|gb|AF191660.1|AF191      TATACATAAAAGAAG...
 \end{minted}
-Use an \verb|Alignments| (plural) object (see section \ref{subsec:align_writing}) if you are creating alignments by hand, and would like to include metadata information in the output.
+Use an \verb|Alignments| (plural) object (see Section~\ref{sec:alignments}) if you are creating alignments by hand, and would like to include metadata information in the output.
 
 \subsection{Stockholm}
 \label{subsec:align_stockholm}
@@ -2410,7 +2469,7 @@ CTGGCGTCCGGAGCTGGGACGT
 <BLANKLINE>
 \end{minted}
 Python does not allow you to add these attributes to the \verb+alignments+ object directly, as in this example it was converted to a plain list.
-However, you can construct an \verb|Alignments| object (which inherits from \verb+list+) and add the attributes to it:
+However, you can construct an \verb|Alignments| object and add attributes to it (see Section~\ref{sec:alignments}):
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignments = Align.Alignments(alignments)
@@ -2626,7 +2685,7 @@ bytearray(b'MNMNM')
 \end{minted}
 In this alignment, the cigar string \verb|63M1062N75M468N43M| defines 46 aligned nucleotides, an intron of 1827 nucleotides, 82 aligned nucleotides, an intron of 3376 nucleotides, 76 aligned nucleotides, and 12 hard-clipped nucleotides. These operations are shown in the \verb|operations| attribute, except for hard-clipping, which is stored in \verb|alignment.query.annotations["hard_clip_right"]| (or \verb|alignment.query.annotations["hard_clip_left"]|, if applicable) instead.
 
-To write a SAM file with alignments created from scratch, use an \verb|Alignments| (plural) object to store the alignments as well as the metadata and targets:
+To write a SAM file with alignments created from scratch, use an \verb|Alignments| (plural) object (see Section~\ref{sec:alignments}) to store the alignments as well as the metadata and targets:
 %doctest . lib:numpy
 \begin{minted}{pycon}
 >>> from io import StringIO
@@ -3338,7 +3397,7 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
 <BLANKLINE>
 <BLANKLINE>
 \end{minted}
-To write a complete MAF file, use \verb|Bio.Align.write(alignments, "myfilename.maf", fmt="maf")|, where \verb|myfilename.maf| is the name of the output MAF file. Alternatively, you can use a (text) stream for output. File header information will be taken from the \verb|metadata| attribute of the \verb|alignments| object. If you are creating the alignments from scratch, you can use the \verb|Alignments| (plural) class to create a list-like \verb|alignments| object (see section~\ref{subsec:align_writing}) and give it a \verb|metadata| attribute.
+To write a complete MAF file, use \verb|Bio.Align.write(alignments, "myfilename.maf", fmt="maf")|, where \verb|myfilename.maf| is the name of the output MAF file. Alternatively, you can use a (text) stream for output. File header information will be taken from the \verb|metadata| attribute of the \verb|alignments| object. If you are creating the alignments from scratch, you can use the \verb|Alignments| (plural) class to create a list-like \verb|alignments| object (see Section~\ref{sec:alignments}) and give it a \verb|metadata| attribute.
 
 \subsection{bigMaf}
 \label{subsec:align_bigmaf}
@@ -3459,7 +3518,7 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
  (SeqRecord(seq=Seq(None, length=174210431), id='ponAbe2.chr6', name='', description='', dbxrefs=[]), (158048983, 158040939), 'I')]
 \end{minted}
 
-To write a complete bigMaf file, use \verb|Bio.Align.write(alignments, "myfilename.bb", fmt="bigMaf")|, where \verb|myfilename.bb| is the name of the output bigMaf file. Alternatively, you can use a (binary) stream for output. If you are creating the alignments from scratch, you can use the \verb|Alignments| (plural) class to create a list-like \verb|alignments| object (see section~\ref{subsec:align_writing}) and give it a \verb|targets| attribute. The latter must be a list of \verb|SeqRecord| objects for the chromosomes for the reference species in the order in which they appear in the alignments. Alternatively, you can use the \verb|targets| keyword argument when calling \verb|Bio.Align.write|. The \verb|id| of each \verb|SeqRecord| must be of the form \verb|reference.chromosome|, where \verb|reference| refers to the reference species. \verb|Bio.Align.write| has the additional keyword argument \verb|compress| (\verb|True| by default) specifying whether the data should be compressed using zlib.
+To write a complete bigMaf file, use \verb|Bio.Align.write(alignments, "myfilename.bb", fmt="bigMaf")|, where \verb|myfilename.bb| is the name of the output bigMaf file. Alternatively, you can use a (binary) stream for output. If you are creating the alignments from scratch, you can use the \verb|Alignments| (plural) class to create a list-like \verb|alignments| object (see Section~\ref{sec:alignments}) and give it a \verb|targets| attribute. The latter must be a list of \verb|SeqRecord| objects for the chromosomes for the reference species in the order in which they appear in the alignments. Alternatively, you can use the \verb|targets| keyword argument when calling \verb|Bio.Align.write|. The \verb|id| of each \verb|SeqRecord| must be of the form \verb|reference.chromosome|, where \verb|reference| refers to the reference species. \verb|Bio.Align.write| has the additional keyword argument \verb|compress| (\verb|True| by default) specifying whether the data should be compressed using zlib.
 
 As a bigMaf file is a special case of a bigBed file, you can use the \verb|search| method on the \verb|alignments| object to find alignments to specific regions of the reference species. For example, we can look for regions on chr10 between positions 3018000 and 3019000 on chromosome 10:
 
