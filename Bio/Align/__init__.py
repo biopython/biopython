@@ -983,7 +983,7 @@ class Alignment:
     An Alignment object has a `.sequences` attribute storing the sequences
     (Seq, MutableSeq, SeqRecord, or string objects) that were aligned, as well
     as a `.coordinates` attribute storing the sequence coordinates defining the
-    alignment as a numpy array.
+    alignment as a NumPy array.
 
     Other commonly used attributes (which may or may not be present) are:
          - annotations        - A dictionary with annotations describing the
@@ -1003,7 +1003,7 @@ class Alignment:
         For an alignment consisting of N sequences, printed as N lines with
         the same number of columns, where gaps are represented by dashes,
         this method will calculate the sequence coordinates that define the
-        alignment. The coordinates are returned as a numpy array of integers,
+        alignment. The coordinates are returned as a NumPy array of integers,
         and can be used to create an Alignment object.
 
         The argument skipped columns should be None (the default) or an empty
@@ -1397,7 +1397,7 @@ class Alignment:
         """Return the path through the trace matrix."""
         warnings.warn(
             "The path attribute is deprecated; please use the coordinates "
-            "attribute instead. The coordinates attribute is a numpy array "
+            "attribute instead. The coordinates attribute is a NumPy array "
             "containing the same values as the path attributes, after "
             "transposition.",
             BiopythonDeprecationWarning,
@@ -1409,7 +1409,7 @@ class Alignment:
     def path(self, value):
         warnings.warn(
             "The path attribute is deprecated; please use the coordinates "
-            "attribute instead. The coordinates attribute is a numpy array "
+            "attribute instead. The coordinates attribute is a NumPy array "
             "containing the same values as the path attributes, after "
             "transposition.",
             BiopythonDeprecationWarning,
@@ -2716,7 +2716,7 @@ class Alignment:
     def indices(self):
         """Return the sequence index of each lettter in the alignment.
 
-        This property returns a 2D numpy array with the sequence index of each
+        This property returns a 2D NumPy array with the sequence index of each
         letter in the alignment. Gaps are indicated by -1.  The array has the
         same number of rows and columns as the alignment, as given by
         `self.shape`.
@@ -2802,7 +2802,7 @@ class Alignment:
     def inverse_indices(self):
         """Return the alignment column index for each letter in each sequence.
 
-        This property returns a list of 1D numpy arrays; the number of arrays
+        This property returns a list of 1D NumPy arrays; the number of arrays
         is equal to the number of aligned sequences, and the length of each
         array is equal to the length of the corresponding sequence. For each
         letter in each sequence, the array contains the corresponding column
@@ -3733,7 +3733,7 @@ class PairwiseAlignment(Alignment):
         warnings.warn(
             "The PairwiseAlignment class is deprecated; please use the "
             "Alignment class instead.  Note that the coordinates attribute of "
-            "an Alignment object is a numpy array and the transpose of the "
+            "an Alignment object is a NumPy array and the transpose of the "
             "path attribute of a PairwiseAlignment object.",
             BiopythonDeprecationWarning,
             stacklevel=2,
