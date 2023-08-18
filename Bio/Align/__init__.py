@@ -3229,7 +3229,7 @@ class Alignment:
         return m
 
     def counts(self):
-        """Return number of identities, mismatches, and gaps, of a pairwise alignment.
+        """Return number of identities, mismatches, and gaps of a pairwise alignment.
 
         >>> aligner = PairwiseAligner(mode='global', match_score=2, mismatch_score=-1)
         >>> for alignment in aligner.align("TACCG", "ACG"):
@@ -3254,7 +3254,7 @@ class Alignment:
         This classifies each pair of letters in a pairwise alignment into gaps,
         perfect matches, or mismatches. It has been defined as a method (not a
         property) so that it may in future take optional argument(s) allowing
-        the behaviour to be customised. These three values are returned as a
+        the behavior to be customized. These three values are returned as a
         namedtuple. This is calculated for all the pairs of sequences in the
         alignment.
         """
