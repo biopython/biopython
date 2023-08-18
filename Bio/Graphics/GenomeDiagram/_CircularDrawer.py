@@ -25,7 +25,7 @@ from ._AbstractDrawer import _stroke_and_fill_colors
 from ._FeatureSet import FeatureSet
 from ._GraphSet import GraphSet
 
-from math import pi, cos, sin
+from math import pi, cos, sin, atan2, sqrt
 
 
 class CircularDrawer(AbstractDrawer):
@@ -449,8 +449,6 @@ class CircularDrawer(AbstractDrawer):
         trackobjB = cross_link._trackB(list(self._parent.tracks.values()))
         assert trackobjA is not None
         assert trackobjB is not None
-        if trackobjA == trackobjB:
-            raise NotImplementedError()
 
         if trackobjA.start is not None:
             if endA < trackobjA.start:
@@ -476,44 +474,55 @@ class CircularDrawer(AbstractDrawer):
             if track == trackobjB:
                 trackB = track_level
         if trackA == trackB:
-            raise NotImplementedError()
-
-        startangleA, startcosA, startsinA = self.canvas_angle(startA)
-        startangleB, startcosB, startsinB = self.canvas_angle(startB)
-        endangleA, endcosA, endsinA = self.canvas_angle(endA)
-        endangleB, endcosB, endsinB = self.canvas_angle(endB)
-
-        btmA, ctrA, topA = self.track_radii[trackA]
-        btmB, ctrB, topB = self.track_radii[trackB]
-
-        if ctrA < ctrB:
             return [
-                self._draw_arc_poly(
-                    topA,
-                    btmB,
-                    startangleA,
-                    endangleA,
-                    startangleB,
-                    endangleB,
+                self._draw_arc_self(
+                    startA,
+                    startB,
+                    endA,
+                    endB,
+                    trackA,
                     cross_link.color,
                     cross_link.border,
                     cross_link.flip,
                 )
             ]
         else:
-            return [
-                self._draw_arc_poly(
-                    btmA,
-                    topB,
-                    startangleA,
-                    endangleA,
-                    startangleB,
-                    endangleB,
-                    cross_link.color,
-                    cross_link.border,
-                    cross_link.flip,
-                )
-            ]
+            startangleA, startcosA, startsinA = self.canvas_angle(startA)
+            startangleB, startcosB, startsinB = self.canvas_angle(startB)
+            endangleA, endcosA, endsinA = self.canvas_angle(endA)
+            endangleB, endcosB, endsinB = self.canvas_angle(endB)
+
+            btmA, ctrA, topA = self.track_radii[trackA]
+            btmB, ctrB, topB = self.track_radii[trackB]
+
+            if ctrA < ctrB:
+                return [
+                    self._draw_arc_poly(
+                        topA,
+                        btmB,
+                        startangleA,
+                        endangleA,
+                        startangleB,
+                        endangleB,
+                        cross_link.color,
+                        cross_link.border,
+                        cross_link.flip,
+                    )
+                ]
+            else:
+                return [
+                    self._draw_arc_poly(
+                        btmA,
+                        topB,
+                        startangleA,
+                        endangleA,
+                        startangleB,
+                        endangleB,
+                        cross_link.color,
+                        cross_link.border,
+                        cross_link.flip,
+                    )
+                ]
 
     def draw_graph_set(self, set):
         """Return list of graph elements and list of their labels.
@@ -1064,6 +1073,50 @@ class CircularDrawer(AbstractDrawer):
         angle = self.sweep * 2 * pi * (base - self.start) / self.length
         return (angle, cos(angle), sin(angle))
 
+    def _arc_center_radius_angles(self, xA, yA, xB, yB):
+        """Give the center and angles for an arc between the two points.
+
+        A third point is assumed between the middle of two points (0.9) and
+        the point self.xcenter, self.ycenter (0.1).
+        """
+        mtp_x = xA * 0.5 + xB * 0.5
+        mtp_y = yA * 0.5 + yB * 0.5
+
+        # MAximal point of arch
+        x0, y0 = self.xcenter, self.ycenter
+
+        # Calculate third point on the circle
+        xM = mtp_x * 0.9 + x0 * 0.1
+        yM = mtp_y * 0.9 + y0 * 0.1
+
+        # midpoints
+        xAM = 0.5 * (xA + xM)
+        yAM = 0.5 * (yA + yM)
+
+        xMB = 0.5 * (xB + xM)
+        yMB = 0.5 * (yB + yM)
+
+        # Calulate slope of AM and BM
+        mA = (yA - yM) / (xA - xM)
+        mB = (yB - yM) / (xB - xM)
+
+        # Y-Achsen Abschnitt
+        bAM = yAM + xAM / mA
+        bMB = yMB + xMB / mB
+
+        # The center
+        xC = (bMB - bAM) / (1 / mB - 1 / mA)
+        yC = -1 / mB * xC + bMB
+
+        # The radius
+        r = sqrt((xB - xC)**2 + (yB - yC)**2)
+
+        # Calculate beginning and ending angles
+        angleA = atan2(yA - yC, xA - xC)
+        angleB = atan2(yB - yC, xB - xC)
+
+        return xC, yC, r, angleA, angleB
+
     def _draw_sigil_box(
         self, bottom, center, top, startangle, endangle, strand, **kwargs
     ):
@@ -1154,13 +1207,19 @@ class CircularDrawer(AbstractDrawer):
     def _draw_arc_line(
         self, path, start_radius, end_radius, start_angle, end_angle, move=False
     ):
+        x0, y0 = self.xcenter, self.ycenter  # origin of the circle
+        self._draw_arc_line_center(
+            x0, y0, path, start_radius, end_radius, start_angle, end_angle, move)
+
+    def _draw_arc_line_center(
+        self, x0, y0, path, start_radius, end_radius, start_angle, end_angle, move=False
+    ):
         """Add a list of points to a path object (PRIVATE).
 
         Assumes angles given are in degrees!
 
         Represents what would be a straight line on a linear diagram.
         """
-        x0, y0 = self.xcenter, self.ycenter  # origin of the circle
         radius_diff = end_radius - start_radius
         angle_diff = end_angle - start_angle
         dx = 0.01  # heuristic
@@ -1270,6 +1329,81 @@ class CircularDrawer(AbstractDrawer):
                 # default is mitre/miter which can stick out too much:
                 strokeLineJoin=1,  # 1=round
             )
+
+    def _draw_arc_self(
+        self,
+        startA,
+        startB,
+        endA,
+        endB,
+        track,
+        color,
+        border=None,
+        flip=False,
+        **kwargs
+    ):
+        """Return polygon path describing an arc."""
+        strokecolor, color = _stroke_and_fill_colors(color, border)
+
+        startangleA, startcosA, startsinA = self.canvas_angle(startA)
+        startangleB, startcosB, startsinB = self.canvas_angle(startB)
+        endangleA, endcosA, endsinA = self.canvas_angle(endA)
+        endangleB, endcosB, endsinB = self.canvas_angle(endB)
+
+        btm, ctr, top = self.track_radii[track]
+        x0, y0 = self.xcenter, self.ycenter
+
+        startyA = startcosA * btm + y0
+        startxA = startsinA * btm + x0
+        endyA = endcosA * btm + y0
+        endxA = endsinA * btm + x0
+
+        startyB = startcosB * btm + y0
+        startxB = startsinB * btm + x0
+        endyB = endcosB * btm + y0
+        endxB = endsinB * btm + x0
+
+        p = ArcPath(
+            strokeColor=strokecolor,
+            fillColor=color,
+            # default is mitre/miter which can stick out too much:
+            strokeLineJoin=1,  # 1=round
+            strokewidth=0,
+        )
+
+        A_start = 90 - (startangleA * 180 / pi)
+        A_end = 90 - (endangleA * 180 / pi)
+        B_start = 90 - (startangleB * 180 / pi)
+        B_end = 90 - (endangleB * 180 / pi)
+
+        p.addArc(x0, y0, btm, A_end, A_start, moveTo=True, reverse=True)
+        if flip:
+            # Flipped, join end to start,
+            xC, yC, radius, angleA, angleB = self._arc_center_radius_angles(endxA, endyA, endxB, endyB)
+            angleA = (angleA * 180 / pi)
+            angleB = (angleB * 180 / pi)
+            self._draw_arc_line_center(xC, yC, p, radius, radius, angleA, angleB)
+
+            p.addArc(x0, y0, btm, B_end, B_start)
+
+            ctp_x, ctp_y, radius, angleA, angleB = self._arc_center_radius_angles(startxB, startyB, startxA, startyA)
+            angleA = (angleA * 180 / pi)
+            angleB = (angleB * 180 / pi)
+            self._draw_arc_line_center(ctp_x, ctp_y, p, radius, radius, angleA, angleB)
+        else:
+            xC, yC, radius, angleA, angleB = self._arc_center_radius_angles(endxA, endyA, startxB, startyB)
+            angleA = (angleA * 180 / pi)
+            angleB = (angleB * 180 / pi)
+            self._draw_arc_line_center(xC, yC, p, radius, radius, angleA, angleB)
+
+            p.addArc(x0, y0, btm, B_end, B_start, reverse=True)
+
+            ctp_x, ctp_y, radius, angleA, angleB = self._arc_center_radius_angles(endxB, endyB, startxA, startyA)
+            angleA = (angleA * 180 / pi)
+            angleB = (angleB * 180 / pi)
+            self._draw_arc_line_center(ctp_x, ctp_y, p, radius, radius, angleA, angleB)
+        p.closePath()
+        return p
 
     def _draw_sigil_cut_corner_box(
         self,
