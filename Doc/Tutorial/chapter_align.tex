@@ -661,10 +661,10 @@ The last loop does not print anything because the iterator is already exhausted.
 \item Metadata can be stored as attributes on an \verb|Alignments| object, whereas a plain \verb|list| does not accept attributes:
 %cont-doctest
 \begin{minted}{pycon}
->>> alignment_list.score = 100
+>>> alignment_list.score = 100  # doctest: +ELLIPSIS
 Traceback (most recent call last):
  ...
-AttributeError: 'list' object has no attribute 'score'
+AttributeError: 'list' object has no attribute 'score'...
 >>> alignments.score = 100
 >>> alignments.score
 100
