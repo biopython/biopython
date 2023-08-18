@@ -147,7 +147,7 @@ The following attributes are commonly found on \verb|Alignment| objects:
 \item any other object with a contiguous buffer of format \verb|"c"|, \verb|"B"|, \verb|"i"|, or \verb|"I"|;
 \item lists or tuples of objects defined in the \verb|alphabet| attribute of the \verb|PairwiseAligner| object that created the alignment (see section~\ref{sec:generalized-pairwise}).
 \end{itemize}
-For pairwise alignments (meaning an alignment of two sequences), the properties \verb|target| and \verb|query| return \verb|sequences[0]| and \verb|sequences[1]|, respectively.
+For pairwise alignments (meaning an alignment of two sequences), the properties \verb|target| and \verb|query| are aliases for \verb|sequences[0]| and \verb|sequences[1]|, respectively.
 \item \verb|coordinates|: A NumPy array of integers storing the sequence indices defining how the sequences are aligned to each other;
 \item \verb|score|: The alignment score, as found by the parser in the alignment file, or as calculated by the \verb|PairwiseAligner| (see section~\ref{sec:pairwise-basic});
 \item \verb|annotations|: A dictionary storing most other annotations associated with the alignment;
@@ -296,6 +296,10 @@ alignment and the number of columns in the alignment as printed:
 >>> alignment.shape
 (3, 8)
 \end{minted}
+
+\subsection{Comparing alignments}
+
+Two alignments are equal to each other (meaning that \verb|alignment1 == alignment2| evaluates to \verb|True|) if each of the sequences in \verb|alignment1.sequences| and \verb|alignment2.sequences| are equal to each other, and \verb|alignment1.coordinates| and \verb|alignment2.coordinates| contain the same coordinates. If either of these conditions is not fulfilled, then \verb|alignment1 == alignment2| evaluates to \verb|False|. Inequality of two alignments (e.g., \verb|alignment1 < alignment2|) is established by first comparing \verb|alignment1.sequences| and \verb|alignment2.sequences|, and if they are equal, by comparing \verb|alignment1.coordinates| to \verb|alignment2.coordinates|.
 
 \subsection{Finding the indices of aligned sequences}
 
