@@ -563,7 +563,51 @@ Reverse-complementing an alignment preserves its column annotations (in reverse 
 
 \subsection{Mapping alignments}
 
-Use \verb|alignment.map|.  %TODO
+Suppose you have a pairwise alignment of a transcript to a chromosome:
+%cont-doctest
+\begin{minted}{pycon}
+>>> chromosome = "AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA"
+>>> transcript = "CCCCCCCGGGGGG"
+>>> sequences1 = [chromosome, transcript]
+>>> coordinates1 = np.array([[8, 15, 26, 32], [0, 7, 7, 13]])
+>>> alignment1 = Alignment(sequences1, coordinates1)
+>>> print(alignment1)
+target            8 CCCCCCCAAAAAAAAAAAGGGGGG 32
+                  0 |||||||-----------|||||| 24
+query             0 CCCCCCC-----------GGGGGG 13
+<BLANKLINE>
+\end{minted}
+and a pairwise alignment between the transcript and a sequence (e.g., obtained by RNA-seq):
+%cont-doctest
+\begin{minted}{pycon}
+>>> rnaseq = "CCCCGGGG"
+>>> sequences2 = [transcript, rnaseq]
+>>> coordinates2 = np.array([[3, 11], [0, 8]])
+>>> alignment2 = Alignment(sequences2, coordinates2)
+>>> print(alignment2)
+target            3 CCCCGGGG 11
+                  0 ||||||||  8
+query             0 CCCCGGGG  8
+<BLANKLINE>
+\end{minted}
+Use the \verb|map| method on \verb|alignment1|, with \verb|alignment2| as argument, to find the alignment of the RNA-sequence to the genome:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment3 = alignment1.map(alignment2)
+>>> print(alignment3)
+target           11 CCCCAAAAAAAAAAAGGGG 30
+                  0 ||||-----------|||| 19
+query             0 CCCC-----------GGGG  8
+<BLANKLINE>
+>>> alignment3.coordinates
+array([[11, 15, 26, 30],
+       [ 0,  4,  4,  8]])
+>>> format(alignment3, "psl")
+'8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
+\end{minted}
+To be able to print the sequences, in this example  we constructed \verb|alignment1| and \verb|alignment2| using sequences with a defined sequence contents.
+However, mapping the alignment does not depend on the sequence contents; only the coordinates of \verb|alignment1| and \verb|alignment2| are used to construct the coordinates for \verb|alignment3|.
+
 
 \section{The Alignments class}
 \label{sec:alignments}
