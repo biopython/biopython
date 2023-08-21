@@ -23,6 +23,7 @@ class Array(np.ndarray):
             if dims is not None:
                 raise ValueError("dims should be None if data is a dict")
             alphabet = []
+            single_letters = True
             for key in data:
                 if isinstance(key, str):
                     if dims is None:
@@ -31,7 +32,6 @@ class Array(np.ndarray):
                         raise ValueError("inconsistent dimensions in data")
                     alphabet.append(key)
                 elif isinstance(key, tuple):
-                    single_letters = True
                     if dims is None:
                         dims = len(key)
                     elif dims != len(key):
@@ -389,8 +389,9 @@ class Array(np.ndarray):
             for line in header:
                 line = "#  %s\n" % line
                 lines.append(line)
-        width = max(len(c) for c in alphabet)
-        line = " " * width
+        keywidth = max(len(c) for c in alphabet)
+        keyfmt = "%" + str(keywidth) + "s"
+        line = " " * keywidth
         for j, c2 in enumerate(alphabet):
             maxwidth = 0
             for i, c1 in enumerate(alphabet):
@@ -410,7 +411,8 @@ class Array(np.ndarray):
         line = line.rstrip() + "\n"
         lines.append(line)
         for letter, row in zip(alphabet, words):
-            line = letter + "".join(row) + "\n"
+            key = keyfmt % letter
+            line = key + "".join(row) + "\n"
             lines.append(line)
         text = "".join(lines)
         return text
