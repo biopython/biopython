@@ -668,7 +668,7 @@ class CodonAdaptationIndex(dict):
 
         return exp(cai_value / cai_length)
 
-    def optimize(self, sequence, seq_type="DNA", strict=False):
+    def optimize(self, sequence, seq_type="DNA", strict=True):
         """Return a new DNA sequence with preferred codons only.
 
         Uses the codon adaptiveness table defined by the CodonAdaptationIndex
@@ -702,7 +702,6 @@ class CodonAdaptationIndex(dict):
                     msg = f"{pref_codons[aminoacid]} and {codon} are equally preferred."
                     if strict:
                         raise ValueError(msg)
-                    warnings.warn(f"{msg} Using {codon}", RuntimeWarning)
                 pref_codons[aminoacid] = codon
         for codon in self._table.stop_codons:
             if self[codon] == 1.0:
