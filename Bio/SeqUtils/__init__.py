@@ -701,7 +701,7 @@ class CodonAdaptationIndex(dict):
                 if aminoacid in pref_codons:
                     msg = f"{pref_codons[aminoacid]} and {codon} are equally preferred."
                     if strict:
-                        raise Exception(msg)
+                        raise ValueError(msg)
                     warnings.warn(f"{msg} Using {codon}", RuntimeWarning)
                 pref_codons[aminoacid] = codon
         for codon in self._table.stop_codons:
