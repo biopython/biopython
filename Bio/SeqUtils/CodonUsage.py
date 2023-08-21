@@ -160,6 +160,7 @@ class CodonAdaptationIndex:
 
     def _count_codons(self, fasta_file):
         with open(fasta_file) as handle:
+
             # make the codon dictionary local
             self.codon_count = CodonsDict.copy()
 
