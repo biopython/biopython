@@ -80,6 +80,7 @@ If you start out with the aligned sequences, with dashes representing gaps, then
 >>> aligned_sequences = ["CGGTTTTT", "AG-TTT--", "AGGTTT--"]
 >>> sequences = [aligned_sequence.replace("-", "")
 ...              for aligned_sequence in aligned_sequences]  # fmt: skip
+...
 >>> sequences
 ['CGGTTTTT', 'AGTTT', 'AGGTTT']
 >>> coordinates = Alignment.infer_coordinates(aligned_sequences)
