@@ -33,7 +33,6 @@ with warnings.catch_warnings():
 
 
 class SeqUtilsTests(unittest.TestCase):
-
     # Example of crc64 collision from Sebastian Bassi using the
     # immunoglobulin lambda light chain variable region from Homo sapiens
     # Both sequences share the same CRC64 checksum: 44CAAD88706CC153
@@ -266,6 +265,16 @@ TTT	0.886
         )
         value = cai.calculate("ATGCGTATCGATCGCGATACGATTAGGCGGATG")
         self.assertAlmostEqual(value, 0.70246, places=5)
+        optimized_sequence = cai.optimize(
+            "ATGCGTATCGATCGCGATACGATTAGGCGGATG", strict=False
+        )
+        optimized_value = cai.calculate(optimized_sequence)
+        self.assertEqual(optimized_value, 1.0)
+        aa_initial = Seq("ATGCGTATCGATCGCGATACGATTAGGCGGATG").translate()
+        aa_optimized = optimized_sequence.translate()
+        self.assertEqual(aa_initial, aa_optimized)
+        with self.assertRaises(KeyError):
+            cai.optimize("CAU", "protein", strict=False)
         self.maxDiff = None
         self.assertEqual(
             str(cai),
