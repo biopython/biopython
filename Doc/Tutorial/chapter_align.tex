@@ -562,6 +562,84 @@ Reverse-complementing an alignment will take the reverse complement of each sequ
 \end{minted}
 Reverse-complementing an alignment preserves its column annotations (in reverse order), but discards all other annotations.
 
+\subsection{Adding alignments}
+
+Alignments can be added together to form an extended alignment if they have the same number of rows. As an example, let's first create two alignments:
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.Seq import Seq
+>>> from Bio.SeqRecord import SeqRecord
+>>> a1 = SeqRecord(Seq("AAAAC"), id="Alpha")
+>>> b1 = SeqRecord(Seq("AAAC"), id="Beta")
+>>> c1 = SeqRecord(Seq("AAAAG"), id="Gamma")
+>>> a2 = SeqRecord(Seq("GTT"), id="Alpha")
+>>> b2 = SeqRecord(Seq("TT"), id="Beta")
+>>> c2 = SeqRecord(Seq("GT"), id="Gamma")
+>>> left = Alignment(
+...     [a1, b1, c1], coordinates=np.array([[0, 3, 4, 5], [0, 3, 3, 4], [0, 3, 4, 5]])
+... )
+>>> left.annotations = {"tool": "demo", "name": "start"}
+>>> left.column_annotations = {"stats": "CCCXC"}
+>>> right = Alignment(
+...     [a2, b2, c2], coordinates=np.array([[0, 1, 2, 3], [0, 0, 1, 2], [0, 1, 1, 2]])
+... )
+>>> right.annotations = {"tool": "demo", "name": "end"}
+>>> right.column_annotations = {"stats": "CXC"}
+\end{minted}
+Now, let's look at these two alignments:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(left)
+Alpha             0 AAAAC 5
+Beta              0 AAA-C 4
+Gamma             0 AAAAG 5
+<BLANKLINE>
+>>> print(right)
+Alpha             0 GTT 3
+Beta              0 -TT 2
+Gamma             0 G-T 2
+<BLANKLINE>
+\end{minted}
+Adding the two alignments will combine the two alignments row-wise:
+%cont-doctest
+\begin{minted}{pycon}
+>>> combined = left + right
+>>> print(combined)
+Alpha             0 AAAACGTT 8
+Beta              0 AAA-C-TT 6
+Gamma             0 AAAAGG-T 7
+<BLANKLINE>
+\end{minted}
+For this to work, both alignments must have the same number of sequences
+(here they both have 3 rows):
+%cont-doctest
+\begin{minted}{pycon}
+>>> len(left)
+3
+>>> len(right)
+3
+>>> len(combined)
+3
+\end{minted}
+The sequences are \verb|SeqRecord| objects, which can be added together. Refer
+to Chapter~\ref{chapter:seq_annot} for details of how the annotation is handled.
+This example is a special case in that both original alignments shared the same names, meaning when the rows are added they also get the same name.
+
+Any common annotations are preserved, but differing annotation is lost. This is
+the same behavior used in the \verb|SeqRecord| annotations and is designed to
+prevent accidental propagation of inappropriate values:
+%cont-doctest
+\begin{minted}{pycon}
+>>> combined.annotations
+{'tool': 'demo'}
+\end{minted}
+Similarly any common per-column-annotations are combined:
+%cont-doctest
+\begin{minted}{pycon}
+>>> combined.column_annotations
+{'stats': 'CCCXCCXC'}
+\end{minted}
+
 \subsection{Mapping alignments}
 
 Suppose you have a pairwise alignment of a transcript to a chromosome:

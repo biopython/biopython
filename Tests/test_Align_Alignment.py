@@ -1381,13 +1381,48 @@ seqB              0 A-C-GG-AAC--  7
         )
         self.assertEqual(rc_alignment.column_annotations["letter"], "LKJIHGFEDCBA")
 
+    def test_add(self):
+        target = Seq("ACTAGG")
+        query = Seq("ACCTACG")
+        sequences = (target, query)
+        coordinates = np.array([[0, 2, 2, 6], [0, 2, 3, 7]])
+        alignment1 = Align.Alignment(sequences, coordinates)
+        target = Seq("CGTGGGG")
+        query = Seq("CGG")
+        sequences = (target, query)
+        coordinates = np.array([[0, 2, 3, 4, 7], [0, 2, 2, 3, 3]])
+        alignment2 = Align.Alignment(sequences, coordinates)
+        self.assertEqual(
+            str(alignment1),
+            """\
+target            0 AC-TAGG 6
+                  0 ||-||.| 7
+query             0 ACCTACG 7
+""",
+        )
+        self.assertEqual(
+            str(alignment2),
+            """\
+target            0 CGTGGGG 7
+                  0 ||-|--- 7
+query             0 CG-G--- 3
+""",
+        )
+        self.assertEqual(
+            str(alignment1 + alignment2),
+            """\
+target            0 AC-TAGGCGTGGGG 13
+                  0 ||-||.|||-|--- 14
+query             0 ACCTACGCG-G--- 10
+""",
+        )
+
 
 class TestMultipleAlignment(unittest.TestCase):
     def setUp(self):
         path = "Clustalw/opuntia.aln"
         with open(path) as stream:
-            alignments = Align.parse(stream, "clustal")
-            self.alignment = next(alignments)
+            self.alignment = Align.read(stream, "clustal")
 
     def tearDown(self):
         del self.alignment
@@ -2333,6 +2368,45 @@ T    6.0  14.0   0.0 874.0
         )
         self.assertAlmostEqual(m["C", "T"], 14.0)
         self.assertAlmostEqual(m["T", "C"], 14.0)
+
+    def test_add(self):
+        self.assertEqual(
+            str(self.alignment[:, 50:60]),
+            """\
+gi|627328        50 TATATA---- 56
+gi|627328        50 TATATATA-- 58
+gi|627328        50 TATATA---- 56
+gi|627328        50 TATATA---- 56
+gi|627329        50 TATATATATA 60
+gi|627328        50 TATATATATA 60
+gi|627329        50 TATATATATA 60
+""",
+        )
+        self.assertEqual(
+            str(self.alignment[:, 65:75]),
+            """\
+gi|627328        56 -ATATATTTC 65
+gi|627328        58 -ATATATTTC 67
+gi|627328        56 -ATATATTTC 65
+gi|627328        56 -ATATATTTA 65
+gi|627329        60 -ATATATTTC 69
+gi|627328        60 -ATATATTTC 69
+gi|627329        65 AATATATTTC 75
+""",
+        )
+        alignment = self.alignment[:, 50:60] + self.alignment[:, 65:75]
+        self.assertEqual(
+            str(alignment),
+            """\
+gi|627328         0 TATATA-----ATATATTTC 15
+gi|627328         0 TATATATA---ATATATTTC 17
+gi|627328         0 TATATA-----ATATATTTC 15
+gi|627328         0 TATATA-----ATATATTTA 15
+gi|627329         0 TATATATATA-ATATATTTC 19
+gi|627328         0 TATATATATA-ATATATTTC 19
+gi|627329         0 TATATATATAAATATATTTC 20
+""",
+        )
 
 
 class TestAlignment_format(unittest.TestCase):
