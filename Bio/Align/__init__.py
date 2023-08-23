@@ -632,7 +632,7 @@ class MultipleSeqAlignment:
         if len(self) != len(other):
             raise ValueError(
                 "When adding two alignments they must have the same length"
-                " (i.e. same number or rows)"
+                " (i.e. same number of rows)"
             )
         merged = (left + right for left, right in zip(self, other))
         # Take any common annotation:
@@ -1137,6 +1137,134 @@ class Alignment:
         if dtype is not None:
             data = np.array(data, dtype)
         return data
+
+    def __add__(self, other):
+        """Combine two alignments by adding them row-wise.
+
+        For example,
+
+        >>> import numpy as np
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> from Bio.Align import Alignment
+        >>> a1 = SeqRecord(Seq("AAAAC"), id="Alpha")
+        >>> b1 = SeqRecord(Seq("AAAC"), id="Beta")
+        >>> c1 = SeqRecord(Seq("AAAAG"), id="Gamma")
+        >>> a2 = SeqRecord(Seq("GTT"), id="Alpha")
+        >>> b2 = SeqRecord(Seq("TT"), id="Beta")
+        >>> c2 = SeqRecord(Seq("GT"), id="Gamma")
+        >>> left = Alignment([a1, b1, c1],
+        ...                  coordinates=np.array([[0, 3, 4, 5],
+        ...                                        [0, 3, 3, 4],
+        ...                                        [0, 3, 4, 5]]))
+        >>> left.annotations = {"tool": "demo", "name": "start"}
+        >>> left.column_annotations = {"stats": "CCCXC"}
+        >>> right = Alignment([a2, b2, c2],
+        ...                   coordinates=np.array([[0, 1, 2, 3],
+        ...                                         [0, 0, 1, 2],
+        ...                                         [0, 1, 1, 2]]))
+        >>> right.annotations = {"tool": "demo", "name": "end"}
+        >>> right.column_annotations = {"stats": "CXC"}
+
+        Now, let's look at these two alignments:
+
+        >>> print(left)
+        Alpha             0 AAAAC 5
+        Beta              0 AAA-C 4
+        Gamma             0 AAAAG 5
+        <BLANKLINE>
+        >>> print(right)
+        Alpha             0 GTT 3
+        Beta              0 -TT 2
+        Gamma             0 G-T 2
+        <BLANKLINE>
+
+        And add them:
+
+        >>> combined = left + right
+        >>> print(combined)
+        Alpha             0 AAAACGTT 8
+        Beta              0 AAA-C-TT 6
+        Gamma             0 AAAAGG-T 7
+        <BLANKLINE>
+
+        For this to work, both alignments must have the same number of sequences
+        (here they both have 3 rows):
+
+        >>> len(left)
+        3
+        >>> len(right)
+        3
+        >>> len(combined)
+        3
+
+        The sequences are SeqRecord objects, and these can be added together. Refer
+        to the SeqRecord documentation for details of how the annotation is handled. This
+        example is a special case in that both original alignments shared the same names,
+        meaning when the rows are added they also get the same name.
+
+        Any common annotations are preserved, but differing annotation is lost. This is
+        the same behavior used in the SeqRecord annotations and is designed to prevent
+        accidental propagation of inappropriate values:
+
+        >>> combined.annotations
+        {'tool': 'demo'}
+
+        Similarly any common per-column-annotations are combined:
+
+        >>> combined.column_annotations
+        {'stats': 'CCCXCCXC'}
+
+        """
+        if not isinstance(other, Alignment):
+            raise NotImplementedError
+        if len(self) != len(other):
+            raise ValueError(
+                "When adding two alignments they must have the same length"
+                " (i.e. same number of rows)"
+            )
+        starts1 = self.coordinates[:, 0]
+        ends1 = self.coordinates[:, -1]
+        sequences1 = self.sequences
+        starts2 = other.coordinates[:, 0]
+        ends2 = other.coordinates[:, -1]
+        sequences2 = other.sequences
+        sequences = []
+        for start1, end1, seq1, start2, end2, seq2 in zip(
+            starts1, ends1, sequences1, starts2, ends2, sequences2
+        ):
+            sequence = seq1[start1:end1] + seq2[start2:end2]
+            sequences.append(sequence)
+        offset = starts2 - ends1 + starts1
+        coordinates1 = self.coordinates - starts1[:, None]
+        coordinates2 = other.coordinates - offset[:, None]
+        coordinates = np.append(coordinates1, coordinates2, axis=1)
+        alignment = Alignment(sequences, coordinates)
+        # Take any common annotation:
+        annotations = {}
+        try:
+            for k, v in self.annotations.items():
+                try:
+                    if other.annotations[k] == v:
+                        annotations[k] = v
+                except KeyError:
+                    continue
+        except AttributeError:
+            pass
+        else:
+            alignment.annotations = annotations
+        column_annotations = {}
+        try:
+            for k, v in self.column_annotations.items():
+                try:
+                    column_annotations[k] = v + other.column_annotations[k]
+                except KeyError:
+                    continue
+        except AttributeError:
+            pass
+        else:
+            alignment.column_annotations = column_annotations
+        return alignment
 
     @property
     def frequencies(self):
