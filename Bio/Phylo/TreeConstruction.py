@@ -13,6 +13,8 @@ import numbers
 from Bio.Phylo import BaseTree
 from Bio.Align import Alignment, MultipleSeqAlignment
 from Bio.Align import substitution_matrices
+import numpy as np
+import heapq
 
 
 # flake8: noqa
