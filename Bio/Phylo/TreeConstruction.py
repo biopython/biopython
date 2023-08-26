@@ -714,28 +714,29 @@ class DistanceTreeConstructor(TreeConstructor):
         :Parameters:
             distance_matrix : DistanceMatrix
                 The distance matrix for tree construction.
-
         """
+
         if not isinstance(distance_matrix, DistanceMatrix):
             raise TypeError("Must provide a DistanceMatrix object.")
 
-        # make a copy of the distance matrix to be used
-        dm = copy.deepcopy(distance_matrix)
-        # init terminal clades
-        clades = [BaseTree.Clade(None, name) for name in dm.names]
-        # init minimum index
-        min_i = 0
-        min_j = 0
+        dm = np.array(distance_matrix)
+        n = dm.shape[0]
+
+        # Init terminal clades
+        clades = [BaseTree.Clade(None, name) for name in distance_matrix.names]
         inner_count = 0
-        while len(dm) > 1:
-            min_dist = dm[1, 0]
-            # find minimum index
-            for i in range(1, len(dm)):
-                for j in range(0, i):
-                    if min_dist >= dm[i, j]:
-                        min_dist = dm[i, j]
-                        min_i = i
-                        min_j = j
+
+        # Create a list of entries (distance, i, j) for the lower triangle of the matrix
+        matrix_entries = [(dm[i, j], i, j) for i in range(1, n) for j in range(i)]
+        heapq.heapify(matrix_entries)
+
+        while len(matrix_entries) > 0:
+            # Pop the smallest distance from the heap
+            min_dist, min_i, min_j = heapq.heappop(matrix_entries)
+
+            # Check if the smallest distance is valid (clusters haven't been merged yet)
+            if clades[min_i] is None or clades[min_j] is None:
+                continue
 
             # create clade
             clade1 = clades[min_i]
@@ -744,6 +745,7 @@ class DistanceTreeConstructor(TreeConstructor):
             inner_clade = BaseTree.Clade(None, "Inner" + str(inner_count))
             inner_clade.clades.append(clade1)
             inner_clade.clades.append(clade2)
+
             # assign branch length
             if clade1.is_terminal():
                 clade1.branch_length = min_dist / 2
@@ -755,19 +757,19 @@ class DistanceTreeConstructor(TreeConstructor):
             else:
                 clade2.branch_length = min_dist / 2 - self._height_of(clade2)
 
-            # update node list
+            # Update node list
             clades[min_j] = inner_clade
-            del clades[min_i]
+            clades[min_i] = None
 
-            # rebuild distance matrix,
-            # set the distances of new node at the index of min_j
-            for k in range(0, len(dm)):
-                if k != min_i and k != min_j:
-                    dm[min_j, k] = (dm[min_i, k] + dm[min_j, k]) / 2
+            # Update distance matrix for the new cluster
+            for k in range(n):
+                if k != min_i and k != min_j and clades[k] is not None:
+                    new_dist = (dm[min_i, k] + dm[min_j, k]) / 2
+                    dm[min_j, k] = new_dist
+                    dm[k, min_j] = new_dist
+                    # Add the new distances to the heap
+                    heapq.heappush(matrix_entries, (new_dist, min_j, k))
 
-            dm.names[min_j] = "Inner" + str(inner_count)
-
-            del dm[min_i]
         inner_clade.branch_length = 0
         return BaseTree.Tree(inner_clade)
 
