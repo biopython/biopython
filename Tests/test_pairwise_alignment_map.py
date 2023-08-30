@@ -635,8 +635,8 @@ def map_check(alignment1, alignment2):
     handle.close()
     stdout = os.popen("pslMap sequence.psl transcript.psl stdout")
     line = stdout.read()
-    os.remove("transcript.psl")
-    os.remove("sequence.psl")
+    # os.remove("transcript.psl")
+    # os.remove("sequence.psl")
     return line
 
 
@@ -735,6 +735,29 @@ def perform_randomized_tests(n=1000):
         test_random_sequences(aligner, "+", "-")
         test_random_sequences(aligner, "-", "+")
         test_random_sequences(aligner, "-", "-")
+
+
+class TestExtra(unittest.TestCase):
+    def test1(self):
+        from Bio.Align import Alignment
+        from Bio.SeqRecord import SeqRecord
+
+        coordinates = np.array([[0, 9], [0, 9]])
+        sequences = [
+            SeqRecord(Seq(None, 9), id="genome"),
+            SeqRecord(Seq(None, 9), id="mRNA"),
+        ]
+        alignment1 = Alignment(sequences, coordinates)
+        coordinates = np.array([[0, 3, 6, 9], [0, 3, 6, 9]])
+        sequences = [
+            SeqRecord(Seq(None, 9), id="mRNA"),
+            SeqRecord(Seq(None, 9), id="tag"),
+        ]
+        alignment2 = Alignment(sequences, coordinates)
+        alignment = alignment1.map(alignment2)
+        print(alignment.coordinates)
+        line = map_check(alignment1, alignment2)
+        print(line)
 
 
 if __name__ == "__main__":
