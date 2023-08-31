@@ -19,18 +19,17 @@ except ImportError:
     ) from None
 
 from Bio.Seq import Seq
-from Bio.Align import PairwiseAligner
+from Bio.SeqRecord import SeqRecord
+from Bio.Align import PairwiseAligner, Alignment
 
 
 class TestSimple(unittest.TestCase):
-    def setUp(self):
-        aligner = PairwiseAligner()
-        aligner.internal_open_gap_score = -1
-        aligner.internal_extend_gap_score = -0.0
-        aligner.match_score = +1
-        aligner.mismatch_score = -1
-        aligner.mode = "local"
-        self.aligner = aligner
+    aligner = PairwiseAligner()
+    aligner.internal_open_gap_score = -1
+    aligner.internal_extend_gap_score = -0.0
+    aligner.match_score = +1
+    aligner.mismatch_score = -1
+    aligner.mode = "local"
 
     def test_internal(self):
         aligner = self.aligner
@@ -358,14 +357,12 @@ sequence         10 GGCCCCCGGG  0
 
 
 class TestComplex(unittest.TestCase):
-    def setUp(self):
-        aligner = PairwiseAligner()
-        aligner.internal_open_gap_score = -1
-        aligner.internal_extend_gap_score = -0.0
-        aligner.match_score = +1
-        aligner.mismatch_score = -1
-        aligner.mode = "local"
-        self.aligner = aligner
+    aligner = PairwiseAligner()
+    aligner.internal_open_gap_score = -1
+    aligner.internal_extend_gap_score = -0.0
+    aligner.match_score = +1
+    aligner.mismatch_score = -1
+    aligner.mode = "local"
 
     def test1(self):
         aligner = self.aligner
@@ -635,8 +632,8 @@ def map_check(alignment1, alignment2):
     handle.close()
     stdout = os.popen("pslMap sequence.psl transcript.psl stdout")
     line = stdout.read()
-    # os.remove("transcript.psl")
-    # os.remove("sequence.psl")
+    os.remove("transcript.psl")
+    os.remove("sequence.psl")
     return line
 
 
@@ -739,26 +736,64 @@ def perform_randomized_tests(n=1000):
 
 class TestExtra(unittest.TestCase):
     def test1(self):
-        from Bio.Align import Alignment
-        from Bio.SeqRecord import SeqRecord
-
-        coordinates = np.array([[0, 9], [0, 9]])
+        coordinates = np.array([[0, 3, 6, 9], [0, 3, 6, 9]])
         sequences = [
             SeqRecord(Seq(None, 9), id="genome"),
             SeqRecord(Seq(None, 9), id="mRNA"),
         ]
         alignment1 = Alignment(sequences, coordinates)
-        coordinates = np.array([[0, 3, 6, 9], [0, 3, 6, 9]])
+        coordinates = np.array([[0, 9], [0, 9]])
         sequences = [
             SeqRecord(Seq(None, 9), id="mRNA"),
             SeqRecord(Seq(None, 9), id="tag"),
         ]
         alignment2 = Alignment(sequences, coordinates)
         alignment = alignment1.map(alignment2)
-        print(alignment.coordinates)
-        line = map_check(alignment1, alignment2)
-        print(line)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates, np.array([[0, 3, 6, 9], [0, 3, 6, 9]])
+            )
+        )
 
+    def test2(self):
+        coordinates = np.array([[0, 24, 24, 81], [0, 24, 24, 81]])
+        sequences = [
+            SeqRecord(Seq(None, 81), id="genome"),
+            SeqRecord(Seq(None, 81), id="mRNA"),
+        ]
+        alignment1 = Alignment(sequences, coordinates)
+        coordinates = np.array([[0, 81], [0, 81]])
+        sequences = [
+            SeqRecord(Seq(None, 81), id="mRNA"),
+            SeqRecord(Seq(None, 81), id="tag"),
+        ]
+        alignment2 = Alignment(sequences, coordinates)
+        alignment = alignment1.map(alignment2)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 24, 81], [0, 24, 81]]))
+        )
+
+    def test3(self):
+        coordinates = np.array([[0, 24, 24, 81], [0, 24, 23, 80]])
+        sequences = [
+            SeqRecord(Seq(None, 81), id="genome"),
+            SeqRecord(Seq(None, 81), id="mRNA"),
+        ]
+        alignment1 = Alignment(sequences, coordinates)
+        coordinates = np.array([[0, 81], [0, 81]])
+        sequences = [
+            SeqRecord(Seq(None, 81), id="mRNA"),
+            SeqRecord(Seq(None, 81), id="tag"),
+        ]
+        alignment2 = Alignment(sequences, coordinates)
+        alignment = alignment1.map(alignment2)
+        print(alignment.coordinates)
+        self.assertTrue(
+            np.array_equal(alignment.coordinates, np.array([[0, 24, 81], [0, 24, 81]]))
+        )
+
+
+# perform_randomized_tests(n=1000)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

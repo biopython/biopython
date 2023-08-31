@@ -3196,7 +3196,7 @@ class Alignment:
                         else:
                             size = qStart1 - tStart2
                         break
-                    elif tStart2 < qEnd1:
+                    if tStart2 < qEnd1:
                         offset = tStart2 - qStart1
                         if tEnd2 > qEnd1:
                             size = qEnd1 - tStart2
@@ -3208,12 +3208,13 @@ class Alignment:
                             # adding a gap both in target and in query;
                             # add gap to target first:
                             path.append([tStart, qEnd])
+                        if tStart != tEnd or qStart != qEnd:
+                            path.append([tStart, qStart])
                         qEnd = qStart2 + size
                         tEnd = tStart + size
-                        path.append([tStart, qStart])
                         path.append([tEnd, qEnd])
                         break
-                    tStart1, qStart1 = sys.maxsize, sys.maxsize
+                    tStart1, qStart1 = tEnd1, qEnd1
                     for tEnd1, qEnd1 in coordinates1:
                         if tStart1 < tEnd1 and qStart1 < qEnd1:
                             break
