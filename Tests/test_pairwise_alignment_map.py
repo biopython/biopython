@@ -734,7 +734,7 @@ def perform_randomized_tests(n=1000):
         test_random_sequences(aligner, "-", "-")
 
 
-class TestExtra(unittest.TestCase):
+class TestZeroGaps(unittest.TestCase):
     def test1(self):
         coordinates = np.array([[0, 3, 6, 9], [0, 3, 6, 9]])
         sequences = [
@@ -756,41 +756,92 @@ class TestExtra(unittest.TestCase):
         )
 
     def test2(self):
-        coordinates = np.array([[0, 24, 24, 81], [0, 24, 24, 81]])
+        coordinates = np.array([[0, 69], [0, 69]])
         sequences = [
-            SeqRecord(Seq(None, 81), id="genome"),
-            SeqRecord(Seq(None, 81), id="mRNA"),
+            SeqRecord(Seq(None, 69), id="genome"),
+            SeqRecord(Seq(None, 69), id="mRNA"),
         ]
         alignment1 = Alignment(sequences, coordinates)
-        coordinates = np.array([[0, 81], [0, 81]])
+        coordinates = np.array([[0, 24, 24, 69], [0, 24, 24, 69]])
         sequences = [
-            SeqRecord(Seq(None, 81), id="mRNA"),
-            SeqRecord(Seq(None, 81), id="tag"),
+            SeqRecord(Seq(None, 69), id="mRNA"),
+            SeqRecord(Seq(None, 68), id="tag"),
         ]
         alignment2 = Alignment(sequences, coordinates)
         alignment = alignment1.map(alignment2)
+        # fmt: off
         self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 24, 81], [0, 24, 81]]))
+            np.array_equal(alignment.coordinates,
+            np.array([[0, 24, 24, 69],   # noqa: E128
+                      [0, 24, 24, 69]]))
         )
+        # fmt: on
 
     def test3(self):
-        coordinates = np.array([[0, 24, 24, 81], [0, 24, 23, 80]])
+        coordinates = np.array([[0, 69], [0, 69]])
         sequences = [
-            SeqRecord(Seq(None, 81), id="genome"),
-            SeqRecord(Seq(None, 81), id="mRNA"),
+            SeqRecord(Seq(None, 69), id="genome"),
+            SeqRecord(Seq(None, 69), id="mRNA"),
         ]
         alignment1 = Alignment(sequences, coordinates)
-        coordinates = np.array([[0, 81], [0, 81]])
+        coordinates = np.array([[0, 24, 24, 69], [0, 24, 23, 68]])
         sequences = [
-            SeqRecord(Seq(None, 81), id="mRNA"),
-            SeqRecord(Seq(None, 81), id="tag"),
+            SeqRecord(Seq(None, 69), id="mRNA"),
+            SeqRecord(Seq(None, 68), id="tag"),
         ]
         alignment2 = Alignment(sequences, coordinates)
         alignment = alignment1.map(alignment2)
-        print(alignment.coordinates)
+        # fmt: off
         self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 24, 81], [0, 24, 81]]))
+            np.array_equal(alignment.coordinates,
+                           np.array([[0, 24, 24, 69],  # noqa: E128
+                                     [0, 24, 23, 68]]))
         )
+        # fmt: on
+
+    def test4(self):
+        coordinates = np.array([[0, 210], [0, 210]])
+        sequences = [
+            SeqRecord(Seq(None, 210), id="genome"),
+            SeqRecord(Seq(None, 210), id="mRNA"),
+        ]
+        alignment1 = Alignment(sequences, coordinates)
+        coordinates = np.array([[0, 18, 18, 102, 102, 210], [0, 18, 17, 101, 100, 208]])
+        sequences = [
+            SeqRecord(Seq(None, 210), id="mRNA"),
+            SeqRecord(Seq(None, 208), id="tag"),
+        ]
+        alignment2 = Alignment(sequences, coordinates)
+        alignment = alignment1.map(alignment2)
+        # fmt: off
+        self.assertTrue(
+            np.array_equal(alignment.coordinates,
+                           np.array([[0, 18, 18, 102, 102, 210],
+                                     [0, 18, 17, 101, 100, 208]]))
+        )
+        # fmt: on
+
+    def test5(self):
+        coordinates = np.array([[0, 210], [0, 210]])
+        sequences = [
+            SeqRecord(Seq(None, 210), id="genome"),
+            SeqRecord(Seq(None, 210), id="mRNA"),
+        ]
+        alignment1 = Alignment(sequences, coordinates)
+        coordinates = np.array([[0, 51, 51, 210], [0, 51, 49, 208]])
+        sequences = [
+            SeqRecord(Seq(None, 210), id="mRNA"),
+            SeqRecord(Seq(None, 208), id="tag"),
+        ]
+        alignment2 = Alignment(sequences, coordinates)
+        alignment = alignment1.map(alignment2)
+        # fmt: off
+        self.assertTrue(
+            np.array_equal(alignment.coordinates,
+                           np.array([[0, 51, 51, 210],
+                                     [0, 51, 49, 208]]))
+        )
+        # fmt: on
 
 
 # perform_randomized_tests(n=1000)
