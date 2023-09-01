@@ -3198,10 +3198,10 @@ class Alignment:
                         break
                     if tStart2 < qEnd1:
                         offset = tStart2 - qStart1
-                        if tEnd2 > qEnd1:
-                            size = qEnd1 - tStart2
-                        else:
+                        if tEnd2 < qEnd1:
                             size = tEnd2 - tStart2
+                        else:
+                            size = qEnd1 - tStart2
                         qStart = qStart2
                         tStart = tStart1 + offset
                         if tStart > tEnd and qStart > qEnd:

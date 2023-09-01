@@ -844,7 +844,7 @@ class TestZeroGaps(unittest.TestCase):
         # fmt: on
 
 
-# perform_randomized_tests(n=1000)
+perform_randomized_tests(n=1000)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
