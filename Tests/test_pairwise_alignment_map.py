@@ -772,8 +772,8 @@ class TestZeroGaps(unittest.TestCase):
         # fmt: off
         self.assertTrue(
             np.array_equal(alignment.coordinates,
-            np.array([[0, 24, 24, 69],   # noqa: E128
-                      [0, 24, 24, 69]]))
+            np.array([[0, 24, 69],   # noqa: E128
+                      [0, 24, 69]]))
         )
         # fmt: on
 
