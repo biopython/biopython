@@ -3204,11 +3204,11 @@ class Alignment:
                             size = qEnd1 - tStart2
                         qStart = qStart2
                         tStart = tStart1 + offset
-                        if tStart > tEnd and qStart > qEnd:
-                            # adding a gap both in target and in query;
-                            # add gap to target first:
-                            path.append([tStart, qEnd])
                         if tStart != tEnd or qStart != qEnd:
+                            if tStart > tEnd and qStart > qEnd:
+                                # adding a gap both in target and in query;
+                                # add gap to target first:
+                                path.append([tStart, qEnd])
                             path.append([tStart, qStart])
                         qEnd = qStart2 + size
                         tEnd = tStart + size
