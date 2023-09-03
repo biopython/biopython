@@ -220,6 +220,7 @@ Text Mode
 Like the standard library gzip.open(...), the BGZF code defaults to opening
 files in binary mode.
 
+FIXME change docs
 You can request the file be opened in text mode, but beware that this is hard
 coded to the simple "latin1" (aka "iso-8859-1") encoding (which includes all
 the ASCII characters), which works well with most Western European languages.
@@ -246,7 +247,7 @@ Instead, you will get the CR ("\r") and LF ("\n") characters as is.
 If your data is in UTF-8 or any other incompatible encoding, you must use
 binary mode, and decode the appropriate fragments yourself.
 """
-
+import codecs
 import struct
 import sys
 import zlib
@@ -257,11 +258,13 @@ _bgzf_magic = b"\x1f\x8b\x08\x04"
 _bgzf_header = b"\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00\x42\x43\x02\x00"
 _bgzf_eof = b"\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00"
 _bytes_BC = b"BC"
+_supported_encodings = ("utf-8", "iso8859-1")
 
 
-def open(filename, mode="rb"):
+def open(filename, mode="rb", encoding=None):
     r"""Open a BGZF file for reading, writing or appending.
 
+    FIXME docs
     If text mode is requested, in order to avoid multi-byte characters, this is
     hard coded to use the "latin1" encoding, and "\r" and "\n" are passed as is
     (without implementing universal new line mode).
@@ -270,9 +273,9 @@ def open(filename, mode="rb"):
     binary mode, and decode the appropriate fragments yourself.
     """
     if "r" in mode.lower():
-        return BgzfReader(filename, mode)
+        return BgzfReader(filename, mode, encoding=encoding)
     elif "w" in mode.lower() or "a" in mode.lower():
-        return BgzfWriter(filename, mode)
+        return BgzfWriter(filename, mode, encoding=encoding)
     else:
         raise ValueError(f"Bad mode {mode!r}")
 
@@ -429,7 +432,7 @@ def BgzfBlocks(handle):
         data_start += data_len
 
 
-def _load_bgzf_block(handle, text_mode=False):
+def _load_bgzf_block(handle, text_mode=False, encoding=None):
     """Load the next BGZF block of compressed data (PRIVATE).
 
     Returns a tuple (block size and data), or at end of file
@@ -486,7 +489,7 @@ def _load_bgzf_block(handle, text_mode=False):
     if text_mode:
         # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
         # (i.e. ASCII), but critically is a single byte encoding
-        return block_size, data.decode("latin-1")
+        return block_size, data.decode(encoding)
     else:
         return block_size, data
 
@@ -556,7 +559,9 @@ class BgzfReader:
     pass, but is important for improving performance of random access.
     """
 
-    def __init__(self, filename=None, mode="r", fileobj=None, max_cache=100):
+    def __init__(
+        self, filename=None, mode="r", fileobj=None, max_cache=100, encoding=None
+    ):
         r"""Initialize the class for reading a BGZF file.
 
         You would typically use the top level ``bgzf.open(...)`` function
@@ -607,8 +612,12 @@ class BgzfReader:
         self._text = "b" not in mode.lower()
         if self._text:
             self._newline = "\n"
+            self._encoding = codecs.lookup(encoding or "latin1").name
+            if self._encoding not in _supported_encodings:
+                raise ValueError(f"unsupported encoding {encoding}")
         else:
             self._newline = b"\n"
+            self._encoding = None
         self._handle = handle
         self.max_cache = max_cache
         self._buffers = {}
@@ -641,7 +650,9 @@ class BgzfReader:
             handle.seek(start_offset)
         self._block_start_offset = handle.tell()
         try:
-            block_size, self._buffer = _load_bgzf_block(handle, self._text)
+            block_size, self._buffer = _load_bgzf_block(
+                handle, self._text, self._encoding
+            )
         except StopIteration:
             # EOF
             block_size = 0
@@ -795,7 +806,11 @@ class BgzfReader:
 class BgzfWriter:
     """Define a BGZFWriter object."""
 
-    def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):
+    _BLOCK_SIZE = 65536
+
+    def __init__(
+        self, filename=None, mode="w", fileobj=None, compresslevel=6, encoding=None
+    ):
         """Initilize the class."""
         if filename and fileobj:
             raise ValueError("Supply either filename or fileobj, not both")
@@ -812,15 +827,19 @@ class BgzfWriter:
             else:
                 handle = _open(filename, "wb")
         self._text = "b" not in mode.lower()
+        if self._text:
+            self._encoding = codecs.lookup(encoding or "latin1").name
+            if self._encoding not in _supported_encodings:
+                raise ValueError(f"unsupported encoding {encoding}")
+        else:
+            self._encoding = None
         self._handle = handle
         self._buffer = b""
         self.compresslevel = compresslevel
 
     def _write_block(self, block):
         """Write provided data to file as a single BGZF compressed block (PRIVATE)."""
-        # print("Saving %i bytes" % len(block))
-        if len(block) > 65536:
-            raise ValueError(f"{len(block)} Block length > 65536")
+        assert len(block) <= self._BLOCK_SIZE
         # Giving a negative window bits means no gzip/zlib headers,
         # -15 used in samtools
         c = zlib.compressobj(
@@ -828,7 +847,7 @@ class BgzfWriter:
         )
         compressed = c.compress(block) + c.flush()
         del c
-        if len(compressed) > 65536:
+        if len(compressed) > self._BLOCK_SIZE:
             raise RuntimeError(
                 "TODO - Didn't compress enough, try less data in this block"
             )
@@ -852,33 +871,58 @@ class BgzfWriter:
         data = _bgzf_header + bsize + compressed + crc + uncompressed_length
         self._handle.write(data)
 
+    def _write_bytes(self, data):
+        self._buffer += data
+        while len(self._buffer) >= self._BLOCK_SIZE:
+            self._write_block(self._buffer[: self._BLOCK_SIZE])
+            self._buffer = self._buffer[self._BLOCK_SIZE :]
+
+    def _write_str(self, data_str):
+        assert isinstance(data_str, str)
+        data_bytes = data_str.encode(encoding=self._encoding)
+        if len(data_bytes) == len(data_str):
+            # fast case -- 8-bit only
+            self._write_bytes(data_bytes)
+            return
+
+        # When reading we can't cope with multi-byte UTF-8 characters
+        # being split between BGZF blocks. Therefore, if the 64KB block
+        # end "in the middle" of a character, the block is resized down
+        # to the end of the previous character. This can produce block
+        # up to 3 bytes smaller than the full 64KB.
+        assert self._encoding == "utf-8"
+        assert len(self._buffer) < self._BLOCK_SIZE
+        while len(data_bytes):
+            safe_size = self._BLOCK_SIZE - len(self._buffer)
+            if safe_size >= len(data_bytes):
+                safe_size = len(data_bytes)
+            else:
+                while safe_size > 0 and data_bytes[safe_size] >> 6 == 2:
+                    # the byte after the block boundary is not the first octet
+                    # of UTF-8 character (RFC 3629)
+                    safe_size -= 1
+            if len(self._buffer):
+                self._buffer += data_bytes[:safe_size]
+            else:
+                self._buffer = data_bytes[:safe_size]  # avoid copy
+            data_bytes = data_bytes[safe_size:]
+            if len(data_bytes) == 0 and len(self._buffer) < self._BLOCK_SIZE:
+                # do not write the last non-full block out
+                break
+            self._write_block(self._buffer)
+            self._buffer = b""
+
     def write(self, data):
         """Write method for the class."""
-        # TODO - Check bytes vs unicode
         if isinstance(data, str):
-            # When reading we can't cope with multi-byte characters
-            # being split between BGZF blocks, so we restrict to a
-            # single byte encoding - like ASCII or latin-1.
-            # On output we could probably allow any encoding, as we
-            # don't care about splitting unicode characters between blocks
-            data = data.encode("latin-1")
-        # block_size = 2**16 = 65536
-        data_len = len(data)
-        if len(self._buffer) + data_len < 65536:
-            # print("Cached %r" % data)
-            self._buffer += data
+            self._write_str(data)
         else:
-            # print("Got %r, writing out some data..." % data)
-            self._buffer += data
-            while len(self._buffer) >= 65536:
-                self._write_block(self._buffer[:65536])
-                self._buffer = self._buffer[65536:]
+            self._write_bytes(data)
 
     def flush(self):
-        """Flush data explicitally."""
-        while len(self._buffer) >= 65536:
-            self._write_block(self._buffer[:65535])
-            self._buffer = self._buffer[65535:]
+        """Flush data explicitly."""
+        assert len(self._buffer) < self._BLOCK_SIZE
+        # TODO is writing an empty buffer/block an intended behavior?
         self._write_block(self._buffer)
         self._buffer = b""
         self._handle.flush()
