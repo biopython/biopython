@@ -1,7 +1,7 @@
 # Copyright 2000 Andrew Dalke.
 # Copyright 2000-2002 Brad Chapman.
 # Copyright 2004-2005, 2010 by M de Hoon.
-# Copyright 2007-2020 by Peter Cock.
+# Copyright 2007-2023 by Peter Cock.
 # All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
@@ -1912,6 +1912,12 @@ class _SeqAbstractBaseClass(ABC):
     def transcribe(self, inplace=False):
         """Transcribe a DNA sequence into RNA and return the RNA sequence as a new Seq object.
 
+        The actual biological transcription process works from the template
+        strand, doing a reverse complement (TCAG to CUGA) to give the mRNA.
+        However, in Biopython and bioinformatics in general, we typically work
+        directly with the coding strand because this means we can get the mRNA
+        sequence just by switching T to U.
+
         >>> from Bio.Seq import Seq
         >>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
         >>> coding_dna
@@ -2814,6 +2820,12 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
 
 def transcribe(dna):
     """Transcribe a DNA sequence into RNA.
+
+    The actual biological transcription process works from the template
+    strand, doing a reverse complement (TCAG to CUGA) to give the mRNA.
+    However, in Biopython and bioinformatics in general, we typically work
+    directly with the coding strand because this means we can get the mRNA
+    sequence just by switching T to U.
 
     If given a string, returns a new string object.
 
