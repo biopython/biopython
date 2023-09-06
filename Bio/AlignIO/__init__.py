@@ -114,6 +114,7 @@ names are also used in Bio.SeqIO and include the following:
   - phylip    - Interlaced PHYLIP, as used by the PHYLIP tools.
   - phylip-sequential - Sequential PHYLIP.
   - phylip-relaxed - PHYLIP like format allowing longer names.
+  - phylip-relaxed-sequential - Sequential PHYLIP like format allowing longer names.
   - stockholm - A richly annotated alignment file format used by PFAM.
   - mauve - Output from progressiveMauve/Mauve
 
@@ -164,6 +165,7 @@ _FormatToIterator = {  # "fasta" is done via Bio.SeqIO
     "phylip": PhylipIO.PhylipIterator,
     "phylip-sequential": PhylipIO.SequentialPhylipIterator,
     "phylip-relaxed": PhylipIO.RelaxedPhylipIterator,
+    "phylip-relaxed-sequential": PhylipIO.RelaxedSequentialPhylipIterator,
     "stockholm": StockholmIO.StockholmIterator,
 }
 
@@ -175,6 +177,7 @@ _FormatToWriter = {  # "fasta" is done via Bio.SeqIO
     "phylip": PhylipIO.PhylipWriter,
     "phylip-sequential": PhylipIO.SequentialPhylipWriter,
     "phylip-relaxed": PhylipIO.RelaxedPhylipWriter,
+    "phylip-relaxed-sequential": PhylipIO.RelaxedSequentialPhylipWriter,
     "stockholm": StockholmIO.StockholmWriter,
 }
 

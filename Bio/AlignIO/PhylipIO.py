@@ -438,6 +438,33 @@ class SequentialPhylipIterator(PhylipIterator):
         return MultipleSeqAlignment(records)
 
 
+# Relaxed, sequential phylip
+
+class RelaxedSequentialPhylipWriter(SequentialPhylipWriter):
+    """Relaxed Sequential Phylip format writer."""
+
+    def write_alignment(self, alignment):
+        """Write a relaxed phylip alignment."""
+        # Check inputs
+        for name in (s.id.strip() for s in alignment):
+            if any(c in name for c in string.whitespace):
+                raise ValueError(f"Whitespace not allowed in identifier: {name}")
+
+        # Calculate a truncation length - maximum length of sequence ID plus a
+        # single character for padding
+        # If no sequences, set id_width to 1. super(...) call will raise a
+        # ValueError
+        if len(alignment) == 0:
+            id_width = 1
+        else:
+            id_width = max(len(s.id.strip()) for s in alignment) + 1
+        super().write_alignment(alignment, id_width)
+
+class RelaxedSequentialPhylipIterator(RelaxedPhylipIterator, SequentialPhylipIterator):
+
+    pass
+    
+
 def sanitize_name(name, width=None):
     """Sanitise sequence identifier for output.
 
