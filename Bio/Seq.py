@@ -1914,7 +1914,7 @@ class _SeqAbstractBaseClass(ABC):
 
         Following the usual convention, the sequence is interpreted as the
         coding strand of the DNA double helix, not the template strand. This
-        means we can get the mRNA sequence just by switching T to U.
+        means we can get the RNA sequence just by switching T to U.
 
         >>> from Bio.Seq import Seq
         >>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
@@ -2821,7 +2821,7 @@ def transcribe(dna):
 
     Following the usual convention, the sequence is interpreted as the
     coding strand of the DNA double helix, not the template strand. This
-    means we can get the mRNA sequence just by switching T to U.
+    means we can get the RNA sequence just by switching T to U.
 
     If given a string, returns a new string object.
 
