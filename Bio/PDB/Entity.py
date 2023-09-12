@@ -276,10 +276,10 @@ class Entity:
         """Apply rotation and translation to the atomic coordinates.
 
         :param rot: A right multiplying rotation matrix
-        :type rot: 3x3 Numeric array
+        :type rot: 3x3 NumPy array
 
         :param tran: the translation vector
-        :type tran: size 3 Numeric array
+        :type tran: size 3 NumPy array
 
         Examples
         --------
