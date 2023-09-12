@@ -138,7 +138,7 @@ class Fragment:
         """Get the CA coordinates in the fragment.
 
         :return: the CA coords in the fragment
-        :rtype: Numeric (Nx3) array
+        :rtype: NumPy (Nx3) array
         """
         return self.coords_ca
 
@@ -149,7 +149,7 @@ class Fragment:
         :type resname: string
 
         :param ca_coord: the c-alpha coordinates of the residues
-        :type ca_coord: Numeric array with length 3
+        :type ca_coord: NumPy array with length 3
         """
         if self.counter >= self.length:
             raise PDBException("Fragment boundary exceeded.")

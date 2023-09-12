@@ -81,7 +81,7 @@ class NeighborSearch:
         M=models, S=structures).
 
         Arguments:
-         - center - Numeric array
+         - center - NumPy array
          - radius - float
          - level - char (A, R, C, M, S)
 

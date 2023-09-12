@@ -50,7 +50,7 @@ class Atom:
         :type name: string
 
         :param coord: atomic coordinates (x,y,z)
-        :type coord: Numeric array (Float0, size 3)
+        :type coord: NumPy array (Float0, length 3)
 
         :param bfactor: isotropic B factor
         :type bfactor: number
@@ -292,7 +292,7 @@ class Atom:
         deviation.
 
         :param sigatm_array: standard deviations of atomic parameters.
-        :type sigatm_array: Numeric array (length 5)
+        :type sigatm_array: NumPy array (length 5)
         """
         self.sigatm_array = sigatm_array
 
@@ -300,7 +300,7 @@ class Atom:
         """Set standard deviations of anisotropic temperature factors.
 
         :param siguij_array: standard deviations of anisotropic temperature factors.
-        :type siguij_array: Numeric array (length 6)
+        :type siguij_array: NumPy array (length 6)
         """
         self.siguij_array = siguij_array
 
@@ -308,7 +308,7 @@ class Atom:
         """Set anisotropic B factor.
 
         :param anisou_array: anisotropic B factor.
-        :type anisou_array: Numeric array (length 6)
+        :type anisou_array: NumPy array (length 6)
         """
         self.anisou_array = anisou_array
 
@@ -423,10 +423,10 @@ class Atom:
         """Apply rotation and translation to the atomic coordinates.
 
         :param rot: A right multiplying rotation matrix
-        :type rot: 3x3 Numeric array
+        :type rot: 3x3 NumPy array
 
         :param tran: the translation vector
-        :type tran: size 3 Numeric array
+        :type tran: size 3 NumPy array
 
         Examples
         --------
