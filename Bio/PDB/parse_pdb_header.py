@@ -77,7 +77,8 @@ def _format_date(pdb_date):
         "Nov",
         "Dec",
     ]
-    month = str(all_months.index(pdb_date[3:6]))
+    month_name = pdb_date[3:6]
+    month = str(all_months.index(month_name)) if month_name in all_months else "0"
     if len(month) == 1:
         month = "0" + month
     date = date + month + "-" + pdb_date[:2]
