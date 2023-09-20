@@ -146,6 +146,13 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(header["idcode"], "3EFG")
         self.assertEqual(header["deposition_date"], "2008-09-08")
 
+    def test_parse_header_line_non_english_date(self):
+        """Unit test for parsing and converting fields where date is not an english abbreviation."""
+        header = parse_pdb_header("PDB/unrecognized_month_header.pdb")
+        self.assertEqual(header["head"], "structural genomics, unknown function")
+        self.assertEqual(header["idcode"], "3EFG")
+        self.assertEqual(header["deposition_date"], "2008-00-08")
+
     def test_parse_title_line(self):
         """Unit test for correct parsing of multiline title records."""
         header = parse_pdb_header("PDB/1LCD.pdb")
