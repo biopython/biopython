@@ -54,7 +54,7 @@ def _get_references(inl):
 
 
 # bring dates to format: 1909-01-08
-def _format_date(pdb_date, permissive: bool = True):
+def _format_date(pdb_date, permissive: bool = False):
     """Convert dates from DD-Mon-YY to YYYY-MM-DD format (PRIVATE).
 
     Parameters
@@ -62,7 +62,7 @@ def _format_date(pdb_date, permissive: bool = True):
     pdb_date: str
         string for pdb date in form 12-JAN-04
     permissive: bool
-        Default = True
+        Default = False
         permissive parsing of date
     """
     date = ""
