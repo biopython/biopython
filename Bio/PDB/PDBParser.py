@@ -129,7 +129,7 @@ class PDBParser:
         # Return the rest of the coords+trailer for further processing
         self.line_counter = i
         coords_trailer = header_coords_trailer[i:]
-        header_dict = _parse_pdb_header_list(header)
+        header_dict = _parse_pdb_header_list(header, permissive=self.PERMISSIVE)
         return header_dict, coords_trailer
 
     def _parse_coordinates(self, coords_trailer):
