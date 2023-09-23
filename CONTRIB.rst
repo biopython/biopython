@@ -322,6 +322,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Uri Laserson <https://github.com/laserson>
 - Uwe Schmitt <https://github.com/uweschmitt>
 - Valentin Vareškić <https://github.com/valentin994>
+- Vedant Sachdeva <https://github.com/sachdved>
 - Veronika Berman <https://github.com/NikiB>
 - Victor Lin <https://github.com/victorlin>
 - Vini Salazar <https://github.com/vinisalazar>

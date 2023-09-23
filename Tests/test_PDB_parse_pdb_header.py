@@ -59,6 +59,7 @@ class ParseReal(unittest.TestCase):
             "name": "3d structure of alzheimer's abeta(1-42) fibrils",
             "release_date": "2005-11-22",
             "structure_method": "solution nmr",
+            "chain_transformations": "No symmetry operations",
         }
         for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())
@@ -169,6 +170,73 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(header["astral"]["Source-PDB"], "256b")
         self.assertEqual(header["astral"]["Region"], "a:")
         self.assertEqual(header["astral"]["ASTRAL-SPACI"], "0.72")
+
+    def test_parse_pdb_with_remark_350_test_1(self):
+        """Tests that parse_pdb_header accurately pulled out symmetry transformations."""
+        header = parse_pdb_header("PDB/7DDO.pdb")
+        comparison_dict = {
+            1: {
+                "A": [
+                    (
+                        numpy.array(
+                            [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
+                        ),
+                        numpy.array([0.0, 0.0, 0.0]),
+                    )
+                ],
+                "C": [
+                    (
+                        numpy.array(
+                            [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
+                        ),
+                        numpy.array([0.0, 0.0, 0.0]),
+                    )
+                ],
+            }
+        }
+        for biomolecule in header["chain_transformations"].keys():
+            for chain in header["chain_transformations"][biomolecule].keys():
+                for i in range(
+                    len(header["chain_transformations"][biomolecule][chain])
+                ):
+                    for j in range(2):
+                        numpy.testing.assert_array_equal(
+                            header["chain_transformations"][biomolecule][chain][i][j],
+                            comparison_dict[biomolecule][chain][i][j],
+                        )
+
+    def test_parse_pdb_with_remark_350_test_2(self):
+        """Tests that parse_pdb_header accurately pulled out symmetry transformations."""
+        header = parse_pdb_header("PDB/1A8O.pdb")
+        comparison_dict = {
+            1: {
+                "A": [
+                    (
+                        numpy.array(
+                            [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
+                        ),
+                        numpy.array([0.0, 0.0, 0.0]),
+                    ),
+                    (
+                        numpy.array(
+                            [[0.0, -1.0, 0.0], [-1.0, 0.0, 0.0], [0.0, 0.0, -1.0]]
+                        ),
+                        numpy.array([41.98, 41.98, 44.46]),
+                    ),
+                ]
+            }
+        }
+
+        for biomolecule in header["chain_transformations"].keys():
+            for chain in header["chain_transformations"][biomolecule].keys():
+                for i in range(
+                    len(header["chain_transformations"][biomolecule][chain])
+                ):
+                    for j in range(2):
+                        numpy.testing.assert_array_equal(
+                            header["chain_transformations"][biomolecule][chain][i][j],
+                            comparison_dict[biomolecule][chain][i][j],
+                        )
 
 
 if __name__ == "__main__":
