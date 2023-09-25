@@ -90,14 +90,17 @@ def _format_date(pdb_date, permissive: bool = False):
     ]
     month_name = pdb_date[3:6]
 
-    if permissive and month_name not in all_months:
-        month = "0"
+    try:
+        month = "%02d" % all_months.index(month_name)
+    except ValueError:
+        if not permissive:
+            raise ValueError(f"Non-standard month supplied: {month_name}.") from None
+
         warnings.warn(
             f"Non-standard month supplied: {month_name}. Setting month to '00'.",
             BiopythonWarning,
         )
-    else:
-        month = str(all_months.index(month_name))
+        month = "0"
 
     if len(month) == 1:
         month = "0" + month

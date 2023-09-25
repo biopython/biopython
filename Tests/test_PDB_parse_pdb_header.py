@@ -168,7 +168,7 @@ class ParseReal(unittest.TestCase):
             header = parse_pdb_header(
                 "PDB/unrecognized_month_header.pdb", permissive=False
             )
-        self.assertEqual(str(err.exception), "'Okt' is not in list")
+        self.assertEqual(str(err.exception), "Non-standard month supplied: Okt.")
 
     def test_parse_title_line(self):
         """Unit test for correct parsing of multiline title records."""
