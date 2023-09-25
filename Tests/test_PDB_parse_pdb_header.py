@@ -159,7 +159,7 @@ class ParseReal(unittest.TestCase):
 
         self.assertEqual(
             str(bad_date_warning.warning),
-            "Non-standard month supplied: Okt. Setting month to '00'.",
+            "Non-standard month in PDB header: Okt. Setting month to '00'.",
         )
 
     def test_parse_header_line_non_english_date_strict_mode(self):
@@ -168,7 +168,7 @@ class ParseReal(unittest.TestCase):
             header = parse_pdb_header(
                 "PDB/unrecognized_month_header.pdb", permissive=False
             )
-        self.assertEqual(str(err.exception), "Non-standard month supplied: Okt.")
+        self.assertEqual(str(err.exception), "Non-standard month in PDB header: Okt.")
 
     def test_parse_title_line(self):
         """Unit test for correct parsing of multiline title records."""

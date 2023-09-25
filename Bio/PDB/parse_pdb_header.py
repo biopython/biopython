@@ -16,8 +16,7 @@ Kristian Rother.
 
 import re
 import warnings
-from Bio import File
-from Bio.PDB.PDBExceptions import BiopythonWarning
+from Bio import File, BiopythonParserWarning
 
 
 def _get_journal(inl):
@@ -94,11 +93,13 @@ def _format_date(pdb_date, permissive: bool = False):
         month = "%02d" % all_months.index(month_name)
     except ValueError:
         if not permissive:
-            raise ValueError(f"Non-standard month supplied: {month_name}.") from None
+            raise ValueError(
+                f"Non-standard month in PDB header: {month_name}."
+            ) from None
 
         warnings.warn(
-            f"Non-standard month supplied: {month_name}. Setting month to '00'.",
-            BiopythonWarning,
+            f"Non-standard month in PDB header: {month_name}. Setting month to '00'.",
+            BiopythonParserWarning,
         )
         month = "0"
 
