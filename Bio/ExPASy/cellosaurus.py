@@ -104,7 +104,9 @@ class Record(dict):
      HI         Hierarchy                       Optional; once or more
      OI         Originate from same individual  Optional; once or more
      SX         Sex (gender) of cell            Optional; once
+     AG         Age of donor at sampling        Optional; once
      CA         Category                        Once
+     DT         Date (entry history)            Once
      //         Terminator                      Once; ends an entry
 
     """
@@ -126,7 +128,9 @@ class Record(dict):
         self["HI"] = []
         self["OI"] = []
         self["SX"] = ""
+        self["AG"] = ""
         self["CA"] = ""
+        self["DT"] = ""
 
     def __repr__(self):
         """Return the canonical string representation of the Record object."""
@@ -154,7 +158,9 @@ class Record(dict):
         output += " HI: " + repr(self["HI"])
         output += " OI: " + repr(self["OI"])
         output += " SX: " + self["SX"]
+        output += " AG: " + self["AG"]
         output += " CA: " + self["CA"]
+        output += " DT: " + self["DT"]
         return output
 
 
@@ -185,7 +191,9 @@ def __read(handle):
             "HI",
             "OI",
             "SX",
+            "AG",
             "CA",
+            "DT",
         ]:
             record[key].append(value)
         elif key == "DR":
