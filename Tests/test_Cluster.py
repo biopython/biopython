@@ -17,7 +17,6 @@ except ImportError:
 
 
 class TestCluster(unittest.TestCase):
-
     module = "Bio.Cluster"
 
     def test_matrix_parse(self):

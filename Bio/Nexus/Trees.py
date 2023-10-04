@@ -441,8 +441,8 @@ class Tree(Nodes.Chain):
             and tree2.node(n).data.support >= threshold
         ]
         conflict = []
-        for (st1, sup1) in t1:
-            for (st2, sup2) in t2:
+        for st1, sup1 in t1:
+            for st2, sup2 in t2:
                 if not st1.issubset(st2) and not st2.issubset(
                     st1
                 ):  # don't hiccup on upstream nodes
@@ -586,7 +586,7 @@ class Tree(Nodes.Chain):
             terminals.remove(newsplit)
         # distribute taxon labels randomly
         random.shuffle(taxon_list)
-        for (node, name) in zip(terminals, taxon_list):
+        for node, name in zip(terminals, taxon_list):
             self.node(node).data.taxon = name
 
     def display(self):

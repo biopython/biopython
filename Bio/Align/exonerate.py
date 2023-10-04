@@ -543,9 +543,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         coordinates[1, 0] = qs
         operations = bytearray(n)
         i = 0
-        for (operation, query_step, target_step) in zip(
-            ops, words[10::3], words[11::3]
-        ):
+        for operation, query_step, target_step in zip(ops, words[10::3], words[11::3]):
             query_step = int(query_step)
             target_step = int(target_step)
             if operation == "M":  # Match

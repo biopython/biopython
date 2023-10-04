@@ -100,7 +100,6 @@ class Hmmer3TextParser:
         self._read_until(lambda line: line.startswith("Query:"))
 
         while self.line:
-
             regx = re.search(_QRE_ID_LEN, self.line)
 
             while not regx:
@@ -251,7 +250,6 @@ class Hmmer3TextParser:
                     or self.line.startswith("  Alignments for each domain:")
                     or self.line.startswith(">>")
                 ):
-
                     hit_attr = hit_attrs.pop(0)
                     hit = Hit(hsp_list)
                     for attr, value in hit_attr.items():
@@ -348,7 +346,6 @@ class Hmmer3TextParser:
 
             # parse all the alignment blocks in the hsp
             while True:
-
                 regx = None
 
                 # check for hit or query line

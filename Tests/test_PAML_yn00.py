@@ -14,7 +14,6 @@ import glob
 
 
 class ModTest(unittest.TestCase):
-
     align_dir = os.path.join("PAML", "Alignments")
     tree_dir = os.path.join("PAML", "Trees")
     ctl_dir = os.path.join("PAML", "Control_files")

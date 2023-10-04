@@ -226,7 +226,7 @@ class HSExposureCA(_AbstractHSExposure):
             fp.write("obj=[\n")
             fp.write("BEGIN, LINES,\n")
             fp.write(f"COLOR, {1.0:.2f}, {1.0:.2f}, {1.0:.2f},\n")
-            for (ca, cb) in self.ca_cb_list:
+            for ca, cb in self.ca_cb_list:
                 x, y, z = ca.get_array()
                 fp.write(f"VERTEX, {x:.2f}, {y:.2f}, {z:.2f},\n")
                 x, y, z = cb.get_array()

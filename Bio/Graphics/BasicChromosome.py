@@ -350,7 +350,7 @@ class Chromosome(_ChromosomeComponent):
                 "start",
             ),
         ]:
-            for (y1, y2, color, back_color, name) in labels:
+            for y1, y2, color, back_color, name in labels:
                 cur_drawing.add(
                     Line(x1, y1, x2, y2, strokeColor=color, strokeWidth=0.25)
                 )
@@ -494,7 +494,6 @@ class ChromosomeSegment(_ChromosomeComponent):
         This may be overlapped by any sub-feature labels on other segments!
         """
         if self.label is not None:
-
             label_x = 0.5 * (self.start_x_position + self.end_x_position) + (
                 self.chr_percent + 0.05
             ) * (self.end_x_position - self.start_x_position)

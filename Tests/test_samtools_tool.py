@@ -193,7 +193,6 @@ class SamtoolsTestCase(unittest.TestCase):
     # TODO: def test_fixmate(self):
 
     def test_sort(self):
-
         cmdline = SamtoolsVersion0xSortCommandline(samtools_exe)
         cmdline.set_parameter("input", self.bamfile1)
         cmdline.set_parameter("out_prefix", "SamBam/out")

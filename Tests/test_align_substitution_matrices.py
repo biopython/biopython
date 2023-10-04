@@ -279,7 +279,6 @@ Z  0.0
 class TestScoringMatrices(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-
         from Bio import SeqIO
         from Bio.Align import PairwiseAligner
 

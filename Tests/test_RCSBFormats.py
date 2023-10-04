@@ -33,7 +33,6 @@ class CompareStructures(unittest.TestCase):
     """Tests for comparing the same structure parsed by PDB and MMCIF parsers."""
 
     def setUp(self):
-
         # Silence!
         warnings.simplefilter("ignore", PDBConstructionWarning)
 

@@ -200,7 +200,6 @@ def main(argv):
 
 
 class TestRunner(unittest.TextTestRunner):
-
     if __name__ == "__main__":
         file = sys.argv[0]
     else:

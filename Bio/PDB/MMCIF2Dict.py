@@ -72,7 +72,7 @@ class MMCIF2Dict(dict):
         # quote character of the currently open quote, or None if no quote open
         quote_open_char = None
         start_i = 0
-        for (i, c) in enumerate(line):
+        for i, c in enumerate(line):
             if c in self.whitespace_chars:
                 if in_token and not quote_open_char:
                     in_token = False

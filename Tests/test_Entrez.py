@@ -342,7 +342,6 @@ class TestURLConstruction(unittest.TestCase):
             for alt_value in [alt_values[param], None]:
                 # Try both altering global variable and also passing parameter directly
                 for set_global in [False, True]:
-
                     variables = dict(vars_base)
 
                     with patch_urlopen() as patched:
@@ -376,7 +375,6 @@ class TestURLConstruction(unittest.TestCase):
         }
 
         for etool in [Entrez.efetch, Entrez.epost]:  # Make both GET and POST requests
-
             with patch_urlopen() as patched:
                 etool(**variables)
             assert Entrez._has_api_key(get_patched_request(patched, self))

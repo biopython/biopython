@@ -231,7 +231,7 @@ class KGMLCanvas:
             else:
                 self.drawing.setLineWidth(1)
             p.moveTo(x, y)
-            for (x, y) in graphics.coords:
+            for x, y in graphics.coords:
                 p.lineTo(x, y)
             self.drawing.drawPath(p)
             self.drawing.setLineWidth(1)  # Return to default

@@ -111,7 +111,7 @@ class ConvertTestsInsdc(SeqIOConverterTestBaseClass):
             ("GenBank/cor6_6.gb", "genbank"),
         ]
         for filename, fmt in tests:
-            for (in_format, out_format) in self.formats:
+            for in_format, out_format in self.formats:
                 if in_format != fmt:
                     continue
                 self.check_conversion(filename, in_format, out_format)

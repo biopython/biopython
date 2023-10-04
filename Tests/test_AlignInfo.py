@@ -20,7 +20,7 @@ class AlignInfoTests(unittest.TestCase):
 
     def assertAlmostEqualList(self, list1, list2, **kwargs):
         self.assertEqual(len(list1), len(list2))
-        for (v1, v2) in zip(list1, list2):
+        for v1, v2 in zip(list1, list2):
             self.assertAlmostEqual(v1, v2, **kwargs)
 
     def test_nucleotides(self):

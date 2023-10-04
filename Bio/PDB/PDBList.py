@@ -668,7 +668,6 @@ class PDBList:
 
 
 if __name__ == "__main__":
-
     doc = """PDBList.py
     (c) Kristian Rother 2003, Wiktoria Karwicka & Jacek Smietanski 2016
     Contributed to Biopython

@@ -1069,7 +1069,7 @@ class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
             ("Quality/illumina_faked.fastq", "fastq-illumina"),
         ]
         for filename, fmt in tests:
-            for (in_format, out_format) in self.formats:
+            for in_format, out_format in self.formats:
                 if in_format != fmt:
                     continue
                 self.check_conversion(filename, in_format, out_format)
@@ -1100,7 +1100,7 @@ class TestsConverter(SeqIOConverterTestBaseClass, QualityIOTestBaseClass):
             ("Quality/error_double_qual.fastq", "fastq"),
         ]
         for filename, fmt in tests:
-            for (in_format, out_format) in self.formats:
+            for in_format, out_format in self.formats:
                 if in_format != fmt:
                     continue
                 if (

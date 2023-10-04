@@ -184,7 +184,7 @@ def MafIterator(handle, seq_count=None):
                     ref = records[0].seq
                     new = []
 
-                    for (letter, ref_letter) in zip(sequence, ref):
+                    for letter, ref_letter in zip(sequence, ref):
                         new.append(ref_letter if letter == "." else letter)
 
                     sequence = "".join(new)

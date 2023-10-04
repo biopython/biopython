@@ -378,7 +378,7 @@ class SummaryInfo:
         # fill in the ic_vector member: holds IC for each column
         # reset ic_vector to empty list at each call
         self.ic_vector = []
-        for (i, k) in enumerate(info_content):
+        for i, k in enumerate(info_content):
             self.ic_vector.append(info_content[i + start])
         return total_info
 

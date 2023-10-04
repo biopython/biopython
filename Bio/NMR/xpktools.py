@@ -95,7 +95,6 @@ class Peaklist:
     def __init__(self, infn):
         """Initialize the class."""
         with open(infn) as infile:
-
             # Read in the header lines
             self.firstline = infile.readline().split("\012")[0]
             self.axislabels = infile.readline().split("\012")[0]
