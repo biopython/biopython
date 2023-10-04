@@ -82,7 +82,6 @@ file"""
 
 class TestParserSupport(unittest.TestCase):
     def test_TaggingConsumer(self):
-
         h = StringIO()
         tc = ParserSupport.TaggingConsumer(handle=h, colwidth=5)
         tc.start_section()

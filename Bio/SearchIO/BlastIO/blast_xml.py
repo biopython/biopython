@@ -290,7 +290,6 @@ class BlastXmlParser:
             # </Iteration> marks the end of a single query
             # which means we can process it
             if event == "end" and qresult_elem.tag == "Iteration":
-
                 # we'll use the following schema
                 # <!ELEMENT Iteration (
                 #        Iteration_iter-num,
@@ -417,7 +416,6 @@ class BlastXmlParser:
             root_hit_elem = []
 
         for hit_elem in root_hit_elem:
-
             # BLAST sometimes mangles the sequence IDs and descriptions, so we need
             # to extract the actual values.
             raw_hit_id = hit_elem.findtext("Hit_id")

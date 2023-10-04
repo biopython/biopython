@@ -64,7 +64,6 @@ class NeighborTest(unittest.TestCase):
 
 
 class KDTreeTest(unittest.TestCase):
-
     nr_points = 5000  # number of points used in test
     bucket_size = 5  # number of points per tree node
     radius = 0.05  # radius of search (typically 0.05 or so)

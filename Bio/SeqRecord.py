@@ -112,7 +112,7 @@ class _RestrictedDict(Dict[str, Sequence[Any]]):
 
     def update(self, new_dict):
         # Force this to go via our strict __setitem__ method
-        for (key, value) in new_dict.items():
+        for key, value in new_dict.items():
             self[key] = value
 
 

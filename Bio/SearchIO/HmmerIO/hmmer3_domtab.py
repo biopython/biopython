@@ -301,7 +301,6 @@ class Hmmer3DomtabHmmhitWriter:
             qresult_acc = "-"
 
         for hit in qresult:
-
             # try to get hit accession
             try:
                 hit_acc = hit.accession

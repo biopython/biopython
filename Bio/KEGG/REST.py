@@ -200,7 +200,6 @@ def kegg_get(dbentries, option=None):
     #
     # <option> = aaseq | ntseq | mol | kcf | image
     if option in ["aaseq", "ntseq", "mol", "kcf", "image", "kgml", "json"]:
-
         resp = _q("get", dbentries, option)
     elif option:
         raise ValueError("Invalid option arg for kegg get request.")
@@ -265,7 +264,6 @@ def kegg_conv(target_db, source_db, option=None):
             and source_db in ["drug", "compound", "glycan"]
         )
     ):
-
         if option:
             resp = _q("conv", target_db, source_db, option)
         else:

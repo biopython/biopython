@@ -295,7 +295,7 @@ class WriterTests(SeqIOTestBaseClass):
         self.assertEqual(1, SeqIO.write(records, handle, fmt))
 
     def test_alignment_formats(self):
-        for (records, descr, errs) in test_records:
+        for records, descr, errs in test_records:
             for fmt in test_write_read_alignment_formats:
                 for err_formats, err_type, err_msg in errs:
                     if fmt in err_formats:

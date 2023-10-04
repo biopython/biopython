@@ -148,6 +148,8 @@ class WriteTest(unittest.TestCase):
 
     def test_mmcifio_select(self):
         """Write a selection of the structure using a Select subclass."""
+        # This method has an internal class defined
+
         # Selection class to filter all alpha carbons
         class CAonly(Select):
             """Accepts only CA residues."""

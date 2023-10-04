@@ -188,7 +188,6 @@ def _split_fragment(frag):
     abs_pos = 0
     # split according to hit, then query
     while simil:
-
         try:
             shifts = re.search(_RE_SHIFTS, simil).group(1)
             s_start = simil.find(shifts)

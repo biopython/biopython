@@ -369,7 +369,6 @@ class BgzfTests(unittest.TestCase):
             self.assertNotEqual(offset3, h.tell())
 
         with bgzf.open(temp_file, "r") as h:  # Text mode!
-
             h.seek(offset)  # i.e. End of first BGZF block
             self.assertEqual(offset1, h.tell())  # Note *not* seek offset
             # Now at start of second BGZF block

@@ -325,7 +325,6 @@ class FastaM10Parser:
         line = self.line
 
         while True:
-
             # one line before the hit table
             if line.startswith("The best scores are:"):
                 qres_state = state_QRES_HITTAB

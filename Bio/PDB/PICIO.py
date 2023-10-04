@@ -450,6 +450,8 @@ def read_PIC(
 
     def dihedra_check(ric: IC_Residue) -> None:
         """Look for required dihedra in residue, generate defaults if set."""
+        # This method has some internal functions
+
         # rnext should be set
         def ake_recurse(akList: List) -> List:
             """Bulid combinatorics of AtomKey lists."""

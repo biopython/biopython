@@ -27,7 +27,6 @@ class TestSimpleRead(unittest.TestCase):
 
 
 class TestDetailedRead(unittest.TestCase):
-
     records = {}
 
     def setUp(self):
@@ -176,7 +175,6 @@ class TestReadAndWrite(unittest.TestCase):
         self._write_parse_and_compare(read1_records)
 
     def _write_parse_and_compare(self, read1_records):
-
         handle = BytesIO()
 
         SeqIO.write(read1_records, handle, "seqxml")
@@ -221,6 +219,7 @@ class TestReadCorruptFiles(unittest.TestCase):
         # Since one block is likely large enough to cover the first few
         # entries in the file, the ValueError may be raised after we call
         # SeqIO.parse, before we start iterating over the file.
+
         def f(path):
             records = SeqIO.parse(path, "seqxml")
             for record in records:

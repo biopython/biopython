@@ -341,7 +341,7 @@ class PrintFormat:
         resultKeys = sorted(str(x) for x, y in ls)
         map = title or ""
         enzymemap = {}
-        for (enzyme, cut) in ls:
+        for enzyme, cut in ls:
             for c in cut:
                 if c in enzymemap:
                     enzymemap[c].append(str(enzyme))

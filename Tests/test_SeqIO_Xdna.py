@@ -19,7 +19,6 @@ from Bio.SeqRecord import SeqRecord
 
 
 class TestXdna(unittest.TestCase):
-
     sample_data = {
         "sample-a": {
             "file": "Xdna/sample-a.xdna",

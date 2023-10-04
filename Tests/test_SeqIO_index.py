@@ -337,7 +337,6 @@ if sqlite3:
 
 
 class IndexDictTests(SeqRecordTestBaseClass, SeqIOTestBaseClass):
-
     tests = [
         ("Ace/contig1.ace", "ace"),
         ("Ace/consed_sample.ace", "ace"),

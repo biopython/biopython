@@ -13,7 +13,6 @@ from Bio.SearchIO import parse, read
 
 
 class HmmpfamTests(unittest.TestCase):
-
     fmt = "hmmer2-text"
 
     def test_hmmpfam_21(self):
@@ -353,7 +352,6 @@ class HmmpfamTests(unittest.TestCase):
 
 
 class HmmsearchTests(unittest.TestCase):
-
     fmt = "hmmer2-text"
 
     def test_hmmsearch_20(self):
