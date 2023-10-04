@@ -1048,7 +1048,7 @@ entries = [
     ("Chr IV", "CHR_IV/NC_003075.fna"),
     ("Chr V", "CHR_V/NC_003076.fna"),
 ]
-for (name, filename) in entries:
+for name, filename in entries:
     record = SeqIO.read(filename, "fasta")
     print(name, len(record))
 \end{minted}
