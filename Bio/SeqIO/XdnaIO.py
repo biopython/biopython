@@ -303,8 +303,8 @@ class XdnaWriter(SequenceWriter):
         features = [
             f
             for f in record.features
-            if type(f.location.start) == ExactPosition
-            and type(f.location.end) == ExactPosition
+            if isinstance(f.location.start, ExactPosition)
+            and isinstance(f.location.end, ExactPosition)
         ]
         drop = len(record.features) - len(features)
         if drop > 0:

@@ -1037,7 +1037,7 @@ class Record:
         if (
             geneclusters is not None
             and expclusters is not None
-            and type(geneclusters) != type(expclusters)
+            and type(geneclusters) != type(expclusters)  # noqa: E721
         ):
             raise ValueError(
                 "found one k-means and one hierarchical "

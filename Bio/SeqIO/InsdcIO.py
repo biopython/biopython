@@ -380,7 +380,7 @@ class _InsdcWriter(SequenceWriter):
             self.handle.write(f"{self.QUALIFIER_INDENT_STR}/{key}\n")
             return
 
-        if type(value) == str:
+        if isinstance(value, str):
             value = value.replace(
                 '"', '""'
             )  # NCBI says escape " as "" in qualifier values
