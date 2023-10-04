@@ -13,6 +13,9 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.82
 ===============================================
 
+This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
+has also been tested on PyPy3.8 v7.8.16.
+
 We now have basic type hint annotations in various modules including ``Seq``,
 ``SeqRecord``, and ``SeqIO``. This should help anyone using an editor or IDE
 with type-aware autocomplete, or in conjunction with mypy as a pre-commit
