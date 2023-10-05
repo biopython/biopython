@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.10", "3.12"]
+        python-version: ["3.8", "3.10", "3.11"]
 
     steps:
     - uses: actions/checkout@v2
@@ -166,14 +166,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.10", "3.12"]
+        python-version: ["3.8", "3.10", "3.11"]
 
     steps:
 
     # Start MySQL server: required for some tests.
     - run: |
         sudo /etc/init.d/mysql start
-        
+
     - uses: actions/checkout@v2
 
     - name: Set up Python ${{ matrix.python-version }}
@@ -366,7 +366,7 @@ jobs:
       run: |
         make -C Doc/api html
       shell: bash
-    
+
   cleanup_wheels:
     if: always()
     needs: [build_wheels]
