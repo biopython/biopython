@@ -62,14 +62,10 @@ class TestAlign_dna_rna(unittest.TestCase):
             alignments._stream
 
     def check_alignments(self, alignments):
-        self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 175)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 6)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 1711))
         self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.score, 176)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
         self.assertEqual(alignment.target.id, "chr3")
@@ -107,15 +103,6 @@ class TestAlign_dna_rna(unittest.TestCase):
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        matches = sum(
-            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
-        )
-        repMatches = sum(
-            alignment.substitutions[c, c.swapcase()]
-            for c in alignment.substitutions.alphabet
-        )
-        self.assertEqual(matches, alignment.matches)
-        self.assertEqual(repMatches, alignment.repMatches)
         self.assertEqual(
             str(alignment),
             """\
@@ -239,14 +226,14 @@ NR_046654        31 CCAGGTATGCATCTGCTGCCAAGCCAGGGAG        0
         self.assertEqual(
             format(alignment, "chain"),
             """\
-175	0	6	0	0	0	2	1530	-	NR_046654.1	181	0	181	chr3	198295559	42530895	42532606	3	63,75,43,	0,63,138,	42530895,42532020,42532563,
+chain 176 chr3 198295559 + 42530895 42532606 NR_046654.1 181 - 0 181 1
+63	1062	0
+75	468	0
+43
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 172)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 6)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 1714))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -289,16 +276,6 @@ NR_046654        31 CCAGGTATGCATCTGCTGCCAAGCCAGGGAG        0
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        matches = sum(
-            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
-        )
-        repMatches = sum(
-            alignment.substitutions[c, c.swapcase()]
-            for c in alignment.substitutions.alphabet
-            if c != "X"
-        )
-        self.assertEqual(matches, alignment.matches)
-        self.assertEqual(repMatches, alignment.repMatches)
         self.assertEqual(
             str(alignment),
             """\
@@ -422,14 +399,16 @@ NR_046654        37 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGGAG        3
         self.assertEqual(
             format(alignment, "chain"),
             """\
-172	1	6	0	1	3	3	1532	-	NR_046654.1_modified	190	3	185	chr3	198295559	42530895	42532606	5	27,36,17,56,43,	5,35,71,88,144,	42530895,42530922,42532020,42532039,42532563,
+chain 170 chr3 198295559 + 42530895 42532606 NR_046654.1_modified 190 - 5 187 2
+27	0	3
+36	1062	0
+17	2	0
+56	468	0
+43
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 165)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 39)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 5407))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -469,15 +448,6 @@ NR_046654        37 TTCCCAGGTATGCATCTGCTGCCAAGCCAGGGAG        3
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        matches = sum(
-            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
-        )
-        repMatches = sum(
-            alignment.substitutions[c, c.swapcase()]
-            for c in alignment.substitutions.alphabet
-        )
-        self.assertEqual(matches, alignment.matches)
-        self.assertEqual(repMatches, alignment.repMatches)
         self.assertEqual(
             str(alignment),
             """\
@@ -849,14 +819,14 @@ NR_111921       197 TAAAAAA      204
         self.assertEqual(
             format(alignment, "chain"),
             """\
-165	0	39	0	0	0	2	5203	+	NR_111921.1	216	0	204	chr3	198295559	48663767	48669174	3	46,82,76,	0,46,128,	48663767,48665640,48669098,
+chain 182 chr3 198295559 + 48663767 48669174 NR_111921.1 216 + 0 204 3
+46	1827	0
+82	3376	0
+76
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 162)
-        self.assertEqual(alignment.misMatches, 2)
-        self.assertEqual(alignment.repMatches, 39)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 5409))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -899,16 +869,6 @@ NR_111921       197 TAAAAAA      204
             )
         )
         self.assertEqual(alignment.substitutions.alphabet, "ACGTacgt")
-        matches = sum(
-            alignment.substitutions[c, c] for c in alignment.substitutions.alphabet
-        )
-        repMatches = sum(
-            alignment.substitutions[c, c.swapcase()]
-            for c in alignment.substitutions.alphabet
-            if c != "X"
-        )
-        self.assertEqual(matches, alignment.matches)
-        self.assertEqual(repMatches, alignment.repMatches)
         self.assertEqual(
             str(alignment),
             """\
@@ -1280,7 +1240,13 @@ NR_111921       199 ATTAAAAAA      208
         self.assertEqual(
             format(alignment, "chain"),
             """\
-162	2	39	0	1	2	3	5204	+	NR_111921.1_modified	220	3	208	chr3	198295559	48663767	48669174	5	28,17,76,6,76,	3,31,48,126,132,	48663767,48663796,48665640,48665716,48669098,
+chain 175 chr3 198295559 + 48663767 48669174 NR_111921.1_modified 220 + 3 208 4
+28	1	0
+17	1827	0
+76	0	2
+6	3376	0
+76
+
 """,
         )
         self.assertRaises(StopIteration, next, alignments)
@@ -1333,7 +1299,6 @@ class TestAlign_dna(unittest.TestCase):
         """Test parsing psl_34_001.chain."""
         path = "Blat/chain_34_001.psl"
         alignments = Align.parse(path, "chain")
-        self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
         self.assertEqual(alignment.misMatches, 0)
@@ -2200,7 +2165,6 @@ hg19_dna         47 ??????????????????????????????????        13
         """Test parsing psl_34_003.chain."""
         path = "Blat/psl_34_003.chain"
         alignments = Align.parse(path, "chain")
-        self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
         self.assertEqual(alignment.misMatches, 0)
@@ -2332,7 +2296,6 @@ hg18_dna         25 ?????????????????        8
         """Test parsing psl_34_004.chain."""
         path = "Blat/psl_34_004.chain"
         alignments = Align.parse(path, "chain")
-        self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 38)
         self.assertEqual(alignment.misMatches, 3)
@@ -3933,7 +3896,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
         """Test parsing psl_35_001.chain."""
         path = "Blat/psl_35_001.chain"
         alignments = Align.parse(path, "chain")
-        self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 52)
         self.assertEqual(alignment.misMatches, 0)
@@ -4331,7 +4293,6 @@ CAG33136.        60 YEL 63
             self.dna[name] = Seq({start: sequence}, length=end)
         path = "Blat/psl_35_002.chain"
         alignments = Align.parse(path, "chain")
-        self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 210)
         self.assertEqual(alignment.misMatches, 3)
