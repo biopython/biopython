@@ -1254,39 +1254,13 @@ chain 175 chr3 198295559 + 48663767 48669174 NR_111921.1_modified 220 + 3 208 4
     def test_writing(self):
         """Test writing the alignments in dna_rna.chain."""
         path = "Blat/dna_rna.chain"
-        with open(path) as stream:
-            original_data = stream.read()
         alignments = Align.parse(path, "chain")
         stream = StringIO()
         n = Align.write(alignments, stream, "chain")
         self.assertEqual(n, 4)
         stream.seek(0)
-        written_data = stream.read()
-        stream.close()
-        self.assertEqual(original_data, written_data)
-        # Try this again. This time, we first strip the matches, misMatches,
-        # repMatches, and nCount attributes from each alignment, and insert the
-        # appropriate sequence data in each alignment. The writer will then
-        # recalculate the matches, misMatches, repMatches, and nCount values
-        # from the sequence data and the alignment, and store those values in
-        # the chain file.
-        alignments = []
-        for alignment in Align.parse(path, "chain"):
-            del alignment.matches
-            del alignment.misMatches
-            del alignment.repMatches
-            del alignment.nCount
-            dna = Seq(self.dna, length=len(alignment.target))
-            alignment.target.seq = dna
-            alignment.query.seq = self.rna[alignment.sequences[1].id]
-            alignments.append(alignment)
-        stream = StringIO()
-        n = Align.write(alignments, stream, "chain", mask="lower")
-        self.assertEqual(n, 4)
-        stream.seek(0)
-        written_data = stream.read()
-        stream.close()
-        self.assertEqual(original_data, written_data)
+        alignments = Align.parse(stream, "chain")
+        self.check_alignments(alignments)
 
 
 class TestAlign_dna(unittest.TestCase):

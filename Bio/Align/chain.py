@@ -162,8 +162,17 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     fmt = "chain"
 
+    def _read_header(self, stream):
+        try:
+            self._line = next(stream)
+        except StopIteration:
+            self._line = None
+
     def _read_next_alignment(self, stream):
-        line = next(stream)
+        if self._line is None:
+            return
+        line = self._line
+        self._line = None
         words = line.split()
         if len(words) == 12:
             chainID = None
@@ -196,6 +205,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         tStarts = [tPosition]
         for line in stream:
             words = line.split()
+            if words[0] == "chain":
+                self._line = line
+                break
             step = int(words[0])
             qPosition += step
             tPosition += step
@@ -237,4 +249,14 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         alignment.score = score
         if chainID is not None:
             alignment.annotations = {"id": chainID}
+        # There is supposed to be a blank line between chain blocks, but some
+        # tools (e.g. pslToChain) do not include such a blank line in their
+        # output.
+        try:
+            line = next(stream)
+            if line.strip() == "":
+                line = next(stream)
+            self._line = line
+        except StopIteration:
+            self._line = None
         return alignment
