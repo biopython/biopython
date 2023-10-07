@@ -1,4 +1,4 @@
-# Copyright 2022 by Michiel de Hoon.  All rights reserved.
+# Copyright 2023 by Michiel de Hoon.  All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -18,15 +18,13 @@ You are expected to use this module via the Bio.Align functions.
 Coordinates in the chain file format are defined in terms of zero-based start
 positions (like Python) and aligning region sizes.
 """
-from itertools import chain
 import numpy as np
 
 
 from Bio.Align import Alignment
 from Bio.Align import interfaces
-from Bio.Seq import Seq, reverse_complement, UndefinedSequenceError
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import SeqFeature, ExactPosition, SimpleLocation, CompoundLocation
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
@@ -72,14 +70,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         words[3] = str(tSize)
         if coordinates[0, 0] > coordinates[0, -1]:
             tStrand = "-"
-            target = reverse_complement(target, inplace=False)
             coordinates = coordinates.copy()
             coordinates[0, :] = tSize - coordinates[0, :]
         else:
             tStrand = "+"
         if coordinates[1, 0] > coordinates[1, -1]:
             qStrand = "-"
-            query = reverse_complement(query, inplace=False)
             coordinates = coordinates.copy()
             coordinates[1, :] = qSize - coordinates[1, :]
         else:
