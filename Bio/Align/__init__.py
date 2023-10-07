@@ -3880,6 +3880,7 @@ formats = (
     "bigbed",     # bigBed format
     "bigmaf",     # MAF file saved as a bigBed file
     "bigpsl",     # PSL file saved as a bigBed file
+    "chain",      # UCSC chain file format
     "clustal",    # clustal output from CLUSTAL W and other tools.
     "emboss",     # emboss output from EMBOSS tools such as needle, water
     "exonerate",  # Exonerate pairwise alignment output
