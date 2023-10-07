@@ -26,7 +26,7 @@ except ImportError:
 
 
 class TestAlign_dna_rna(unittest.TestCase):
-    # The chain file dna_rna.chain was generated from a PSL file using:
+    # The chain file dna_rna.chain was generated from the PSL file using:
     # pslToChain dna_rna.psl dna_rna.chain
 
     def setUp(self):
@@ -1271,13 +1271,15 @@ class TestAlign_dna(unittest.TestCase):
 
     def test_reading_psl_34_001(self):
         """Test parsing psl_34_001.chain."""
-        path = "Blat/chain_34_001.psl"
+        # The chain file psl_34_001.chain was generated from the PSL file using:
+        # pslToChain psl_34_001.psl psl_34_001.chain
+        path = "Blat/psl_34_001.chain"
         alignments = Align.parse(path, "chain")
+        self.check_reading_psl_34_001(alignments)
+
+    def check_reading_psl_34_001(self, alignments):
+        """Check parsing psl_34_001.chain."""
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 16)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 16))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1307,14 +1309,12 @@ hg18_dna         11 ????????????????       27
         self.assertEqual(
             format(alignment, "chain"),
             """\
-16	0	0	0	0	0	0	0	+	hg18_dna	33	11	27	chr4	191154276	61646095	61646111	1	16,	11,	61646095,
+chain 16 chr4 191154276 + 61646095 61646111 hg18_dna 33 + 11 27 1
+16
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 33)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1344,14 +1344,12 @@ hg18_dna          0 ?????????????????????????????????       33
         self.assertEqual(
             format(alignment, "chain"),
             """\
-33	0	0	0	0	0	0	0	+	hg18_dna	33	0	33	chr1	249250621	10271783	10271816	1	33,	0,	10271783,
+chain 33 chr1 249250621 + 10271783 10271816 hg18_dna 33 + 0 33 2
+33
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 17)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1381,14 +1379,12 @@ hg18_dna         25 ?????????????????        8
         self.assertEqual(
             format(alignment, "chain"),
             """\
-17	0	0	0	0	0	0	0	-	hg18_dna	33	8	25	chr2	243199373	53575980	53575997	1	17,	8,	53575980,
+chain 17 chr2 243199373 + 53575980 53575997 hg18_dna 33 - 8 25 3
+17
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 38)
-        self.assertEqual(alignment.misMatches, 3)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1418,14 +1414,12 @@ hg19_dna          9 ?????????????????????????????????????????       50
         self.assertEqual(
             format(alignment, "chain"),
             """\
-38	3	0	0	0	0	0	0	+	hg19_dna	50	9	50	chr9	141213431	85737865	85737906	1	41,	9,	85737865,
+chain 35 chr9 141213431 + 85737865 85737906 hg19_dna 50 + 9 50 4
+41
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 41)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1455,14 +1449,12 @@ hg19_dna          8 ?????????????????????????????????????????       49
         self.assertEqual(
             format(alignment, "chain"),
             """\
-41	0	0	0	0	0	0	0	+	hg19_dna	50	8	49	chr8	146364022	95160479	95160520	1	41,	8,	95160479,
+chain 41 chr8 146364022 + 95160479 95160520 hg19_dna 50 + 8 49 5
+41
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 33)
-        self.assertEqual(alignment.misMatches, 3)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1492,14 +1484,12 @@ hg19_dna         11 ????????????????????????????????????       47
         self.assertEqual(
             format(alignment, "chain"),
             """\
-33	3	0	0	0	0	0	0	+	hg19_dna	50	11	47	chr22	51304566	42144400	42144436	1	36,	11,	42144400,
+chain 30 chr22 51304566 + 42144400 42144436 hg19_dna 50 + 11 47 6
+36
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 43)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 48))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1529,14 +1519,13 @@ hg19_dna          1 ????????????????????????????????????????????????        49
         self.assertEqual(
             format(alignment, "chain"),
             """\
-43	1	0	0	1	4	0	0	+	hg19_dna	50	1	49	chr2	243199373	183925984	183926028	2	6,38,	1,11,	183925984,183925990,
+chain 41 chr2 243199373 + 183925984 183926028 hg19_dna 50 + 1 49 7
+6	0	4
+38
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 34)
-        self.assertEqual(alignment.misMatches, 2)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1574,14 +1563,13 @@ hg19_dna         35 ---------------------------------------???????????       46
         self.assertEqual(
             format(alignment, "chain"),
             """\
-34	2	0	0	0	0	1	134	+	hg19_dna	50	10	46	chr19	59128983	35483340	35483510	2	25,11,	10,35,	35483340,35483499,
+chain 31 chr19 59128983 + 35483340 35483510 hg19_dna 50 + 10 46 8
+25	134	0
+11
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 39)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1611,14 +1599,12 @@ hg19_dna         10 ???????????????????????????????????????       49
         self.assertEqual(
             format(alignment, "chain"),
             """\
-39	0	0	0	0	0	0	0	+	hg19_dna	50	10	49	chr18	78077248	23891310	23891349	1	39,	10,	23891310,
+chain 39 chr18 78077248 + 23891310 23891349 hg19_dna 50 + 10 49 9
+39
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 27)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1648,14 +1634,12 @@ hg19_dna         21 ????????????????????????????       49
         self.assertEqual(
             format(alignment, "chain"),
             """\
-27	1	0	0	0	0	0	0	+	hg19_dna	50	21	49	chr18	78077248	43252217	43252245	1	28,	21,	43252217,
+chain 26 chr18 78077248 + 43252217 43252245 hg19_dna 50 + 21 49 10
+28
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 44)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 54))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1689,14 +1673,13 @@ hg19_dna         49
         self.assertEqual(
             format(alignment, "chain"),
             """\
-44	1	0	0	1	3	1	6	+	hg19_dna	50	1	49	chr13	115169878	52759147	52759198	2	7,38,	1,11,	52759147,52759160,
+chain 41 chr13 115169878 + 52759147 52759198 hg19_dna 50 + 1 49 11
+7	6	3
+38
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 50)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1726,14 +1709,12 @@ hg19_dna          0 ??????????????????????????????????????????????????      50
         self.assertEqual(
             format(alignment, "chain"),
             """\
-50	0	0	0	0	0	0	0	+	hg19_dna	50	0	50	chr1	249250621	1207056	1207106	1	50,	0,	1207056,
+chain 50 chr1 249250621 + 1207056 1207106 hg19_dna 50 + 0 50 12
+50
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 31)
-        self.assertEqual(alignment.misMatches, 3)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1763,14 +1744,12 @@ hg19_dna          1 ??????????????????????????????????       35
         self.assertEqual(
             format(alignment, "chain"),
             """\
-31	3	0	0	0	0	0	0	+	hg19_dna	50	1	35	chr1	249250621	61700837	61700871	1	34,	1,	61700837,
+chain 28 chr1 249250621 + 61700837 61700871 hg19_dna 50 + 1 35 13
+34
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 28)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 44))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1798,16 +1777,12 @@ hg19_dna         49 ??????????------????????????????????????????       11
             )
         )
         self.assertEqual(
-            format(alignment, "chain"),
+            format(alignment, "psl"),
             """\
 28	0	0	0	1	10	1	6	-	hg19_dna	50	11	49	chr4	191154276	37558157	37558191	2	10,18,	1,21,	37558157,37558173,
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 35)
-        self.assertEqual(alignment.misMatches, 2)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 37))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1837,14 +1812,12 @@ hg19_dna         49 ?????????????????????????????????????       12
         self.assertEqual(
             format(alignment, "chain"),
             """\
-35	2	0	0	0	0	0	0	-	hg19_dna	50	12	49	chr22	51304566	48997405	48997442	1	37,	1,	48997405,
+chain 33 chr22 51304566 + 48997405 48997442 hg19_dna 50 - 1 38 15
+37
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 35)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1874,14 +1847,12 @@ hg19_dna         49 ????????????????????????????????????        13
         self.assertEqual(
             format(alignment, "chain"),
             """\
-35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr2	243199373	120641740	120641776	1	36,	1,	120641740,
+chain 34 chr2 243199373 + 120641740 120641776 hg19_dna 50 - 1 37 16
+36
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 39)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1911,14 +1882,12 @@ hg19_dna         49 ???????????????????????????????????????       10
         self.assertEqual(
             format(alignment, "chain"),
             """\
-39	0	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	54017130	54017169	1	39,	1,	54017130,
+chain 39 chr19 59128983 + 54017130 54017169 hg19_dna 50 - 1 40 17
+39
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 36)
-        self.assertEqual(alignment.misMatches, 3)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1948,14 +1917,12 @@ hg19_dna         49 ???????????????????????????????????????     10
         self.assertEqual(
             format(alignment, "chain"),
             """\
-36	3	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	553742	553781	1	39,	1,	553742,
+chain 33 chr19 59128983 + 553742 553781 hg19_dna 50 - 1 40 18
+39
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 33)
-        self.assertEqual(alignment.misMatches, 3)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -1985,14 +1952,12 @@ hg19_dna         49 ????????????????????????????????????       13
         self.assertEqual(
             format(alignment, "chain"),
             """\
-33	3	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr10	135534747	99388555	99388591	1	36,	1,	99388555,
+chain 30 chr10 135534747 + 99388555 99388591 hg19_dna 50 - 1 37 19
+36
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 24)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2022,14 +1987,12 @@ hg19_dna         35 ?????????????????????????        10
         self.assertEqual(
             format(alignment, "chain"),
             """\
-24	1	0	0	0	0	0	0	-	hg19_dna	50	10	35	chr10	135534747	112178171	112178196	1	25,	15,	112178171,
+chain 23 chr10 135534747 + 112178171 112178196 hg19_dna 50 - 15 40 20
+25
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 35)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2059,14 +2022,12 @@ hg19_dna         49 ????????????????????????????????????       13
         self.assertEqual(
             format(alignment, "chain"),
             """\
-35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr1	249250621	39368490	39368526	1	36,	1,	39368490,
+chain 34 chr1 249250621 + 39368490 39368526 hg19_dna 50 - 1 37 21
+36
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 33)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2096,7 +2057,9 @@ hg19_dna         47 ??????????????????????????????????        13
         self.assertEqual(
             format(alignment, "chain"),
             """\
-33	1	0	0	0	0	0	0	-	hg19_dna	50	13	47	chr1	249250621	220325687	220325721	1	34,	3,	220325687,
+chain 32 chr1 249250621 + 220325687 220325721 hg19_dna 50 - 3 37 22
+34
+
 """,
         )
         self.assertRaises(StopIteration, next, alignments)
@@ -2111,12 +2074,13 @@ hg19_dna         47 ??????????????????????????????????        13
         n = Align.write(alignments, stream, "chain")
         self.assertEqual(n, 22)
         stream.seek(0)
-        written_data = stream.read()
-        stream.close()
-        self.assertEqual(original_data, written_data)
+        alignments = Align.parse(stream, "chain")
+        self.check_reading_psl_34_001(alignments)
 
     def test_reading_chain_34_002(self):
         """Test parsing psl_34_002.chain."""
+        # The chain file psl_34_002.chain was generated from the PSL file using:
+        # pslToChain psl_34_002.psl psl_34_002.chain
         path = "Blat/psl_34_002.chain"
         alignments = Align.parse(path, "chain")
         self.assertRaises(StopIteration, next, alignments)
@@ -2124,26 +2088,25 @@ hg19_dna         47 ??????????????????????????????????        13
     def test_writing_psl_34_002(self):
         """Test writing the alignments in psl_34_002.chain."""
         path = "Blat/psl_34_002.chain"
-        with open(path) as stream:
-            original_data = stream.read()
         alignments = Align.parse(path, "chain")
         stream = StringIO()
         n = Align.write(alignments, stream, "chain")
         self.assertEqual(n, 0)
         stream.seek(0)
-        written_data = stream.read()
-        stream.close()
-        self.assertEqual(original_data, written_data)
+        alignments = Align.parse(stream, "chain")
+        self.assertRaises(StopIteration, next, alignments)
 
     def test_reading_psl_34_003(self):
         """Test parsing psl_34_003.chain."""
+        # The chain file psl_34_003.chain was generated from the PSL file using:
+        # pslToChain psl_34_003.psl psl_34_003.chain
         path = "Blat/psl_34_003.chain"
         alignments = Align.parse(path, "chain")
+        self.check_reading_psl_34_003(alignments)
+
+    def check_reading_psl_34_003(self, alignments):
+        """Check parsing psl_34_003.chain."""
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 16)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 16))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2173,14 +2136,12 @@ hg18_dna         11 ????????????????       27
         self.assertEqual(
             format(alignment, "chain"),
             """\
-16	0	0	0	0	0	0	0	+	hg18_dna	33	11	27	chr4	191154276	61646095	61646111	1	16,	11,	61646095,
+chain 16 chr4 191154276 + 61646095 61646111 hg18_dna 33 + 11 27 1
+16
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 33)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2210,14 +2171,12 @@ hg18_dna          0 ?????????????????????????????????       33
         self.assertEqual(
             format(alignment, "chain"),
             """\
-33	0	0	0	0	0	0	0	+	hg18_dna	33	0	33	chr1	249250621	10271783	10271816	1	33,	0,	10271783,
+chain 33 chr1 249250621 + 10271783 10271816 hg18_dna 33 + 0 33 2
+33
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 17)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2247,7 +2206,9 @@ hg18_dna         25 ?????????????????        8
         self.assertEqual(
             format(alignment, "chain"),
             """\
-17	0	0	0	0	0	0	0	-	hg18_dna	33	8	25	chr2	243199373	53575980	53575997	1	17,	8,	53575980,
+chain 17 chr2 243199373 + 53575980 53575997 hg18_dna 33 - 8 25 3
+17
+
 """,
         )
         self.assertRaises(StopIteration, next, alignments)
@@ -2255,26 +2216,25 @@ hg18_dna         25 ?????????????????        8
     def test_writing_psl_34_003(self):
         """Test writing the alignments in psl_34_003.chain."""
         path = "Blat/psl_34_003.chain"
-        with open(path) as stream:
-            original_data = stream.read()
         alignments = Align.parse(path, "chain")
         stream = StringIO()
         n = Align.write(alignments, stream, "chain")
         self.assertEqual(n, 3)
         stream.seek(0)
-        written_data = stream.read()
-        stream.close()
-        self.assertEqual(original_data, written_data)
+        alignments = Align.parse(stream, "chain")
+        self.check_reading_psl_34_003(alignments)
 
     def test_reading_psl_34_004(self):
         """Test parsing psl_34_004.chain."""
+        # The chain file psl_34_004.chain was generated from the PSL file using:
+        # pslToChain psl_34_004.psl psl_34_004.chain
         path = "Blat/psl_34_004.chain"
         alignments = Align.parse(path, "chain")
+        self.check_reading_psl_34_004(alignments)
+
+    def check_reading_psl_34_004(self, alignments):
+        """Check parsing psl_34_004.chain."""
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 38)
-        self.assertEqual(alignment.misMatches, 3)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2304,14 +2264,12 @@ hg19_dna          9 ?????????????????????????????????????????       50
         self.assertEqual(
             format(alignment, "chain"),
             """\
-38	3	0	0	0	0	0	0	+	hg19_dna	50	9	50	chr9	141213431	85737865	85737906	1	41,	9,	85737865,
+chain 35 chr9 141213431 + 85737865 85737906 hg19_dna 50 + 9 50 1
+41
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 41)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2341,14 +2299,12 @@ hg19_dna          8 ?????????????????????????????????????????       49
         self.assertEqual(
             format(alignment, "chain"),
             """\
-41	0	0	0	0	0	0	0	+	hg19_dna	50	8	49	chr8	146364022	95160479	95160520	1	41,	8,	95160479,
+chain 41 chr8 146364022 + 95160479 95160520 hg19_dna 50 + 8 49 2
+41
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 33)
-        self.assertEqual(alignment.misMatches, 3)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2378,14 +2334,12 @@ hg19_dna         11 ????????????????????????????????????       47
         self.assertEqual(
             format(alignment, "chain"),
             """\
-33	3	0	0	0	0	0	0	+	hg19_dna	50	11	47	chr22	51304566	42144400	42144436	1	36,	11,	42144400,
+chain 30 chr22 51304566 + 42144400 42144436 hg19_dna 50 + 11 47 3
+36
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 43)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 48))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2415,14 +2369,13 @@ hg19_dna          1 ????????????????????????????????????????????????        49
         self.assertEqual(
             format(alignment, "chain"),
             """\
-43	1	0	0	1	4	0	0	+	hg19_dna	50	1	49	chr2	243199373	183925984	183926028	2	6,38,	1,11,	183925984,183925990,
+chain 41 chr2 243199373 + 183925984 183926028 hg19_dna 50 + 1 49 4
+6	0	4
+38
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 34)
-        self.assertEqual(alignment.misMatches, 2)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2460,14 +2413,13 @@ hg19_dna         35 ---------------------------------------???????????       46
         self.assertEqual(
             format(alignment, "chain"),
             """\
-34	2	0	0	0	0	1	134	+	hg19_dna	50	10	46	chr19	59128983	35483340	35483510	2	25,11,	10,35,	35483340,35483499,
+chain 31 chr19 59128983 + 35483340 35483510 hg19_dna 50 + 10 46 5
+25	134	0
+11
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 39)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2497,14 +2449,12 @@ hg19_dna         10 ???????????????????????????????????????       49
         self.assertEqual(
             format(alignment, "chain"),
             """\
-39	0	0	0	0	0	0	0	+	hg19_dna	50	10	49	chr18	78077248	23891310	23891349	1	39,	10,	23891310,
+chain 39 chr18 78077248 + 23891310 23891349 hg19_dna 50 + 10 49 6
+39
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 27)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2534,14 +2484,12 @@ hg19_dna         21 ????????????????????????????       49
         self.assertEqual(
             format(alignment, "chain"),
             """\
-27	1	0	0	0	0	0	0	+	hg19_dna	50	21	49	chr18	78077248	43252217	43252245	1	28,	21,	43252217,
+chain 26 chr18 78077248 + 43252217 43252245 hg19_dna 50 + 21 49 7
+28
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 44)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 54))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2575,14 +2523,13 @@ hg19_dna         49
         self.assertEqual(
             format(alignment, "chain"),
             """\
-44	1	0	0	1	3	1	6	+	hg19_dna	50	1	49	chr13	115169878	52759147	52759198	2	7,38,	1,11,	52759147,52759160,
+chain 41 chr13 115169878 + 52759147 52759198 hg19_dna 50 + 1 49 8
+7	6	3
+38
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 50)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2612,14 +2559,12 @@ hg19_dna          0 ??????????????????????????????????????????????????      50
         self.assertEqual(
             format(alignment, "chain"),
             """\
-50	0	0	0	0	0	0	0	+	hg19_dna	50	0	50	chr1	249250621	1207056	1207106	1	50,	0,	1207056,
+chain 50 chr1 249250621 + 1207056 1207106 hg19_dna 50 + 0 50 9
+50
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 31)
-        self.assertEqual(alignment.misMatches, 3)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2649,14 +2594,12 @@ hg19_dna          1 ??????????????????????????????????       35
         self.assertEqual(
             format(alignment, "chain"),
             """\
-31	3	0	0	0	0	0	0	+	hg19_dna	50	1	35	chr1	249250621	61700837	61700871	1	34,	1,	61700837,
+chain 28 chr1 249250621 + 61700837 61700871 hg19_dna 50 + 1 35 10
+34
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 28)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 44))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2686,14 +2629,13 @@ hg19_dna         49 ??????????------????????????????????????????       11
         self.assertEqual(
             format(alignment, "chain"),
             """\
-28	0	0	0	1	10	1	6	-	hg19_dna	50	11	49	chr4	191154276	37558157	37558191	2	10,18,	1,21,	37558157,37558173,
+chain 26 chr4 191154276 + 37558157 37558191 hg19_dna 50 - 1 39 11
+10	6	10
+18
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 35)
-        self.assertEqual(alignment.misMatches, 2)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 37))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2723,14 +2665,12 @@ hg19_dna         49 ?????????????????????????????????????       12
         self.assertEqual(
             format(alignment, "chain"),
             """\
-35	2	0	0	0	0	0	0	-	hg19_dna	50	12	49	chr22	51304566	48997405	48997442	1	37,	1,	48997405,
+chain 33 chr22 51304566 + 48997405 48997442 hg19_dna 50 - 1 38 12
+37
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 35)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2760,14 +2700,12 @@ hg19_dna         49 ????????????????????????????????????        13
         self.assertEqual(
             format(alignment, "chain"),
             """\
-35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr2	243199373	120641740	120641776	1	36,	1,	120641740,
+chain 34 chr2 243199373 + 120641740 120641776 hg19_dna 50 - 1 37 13
+36
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 39)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2797,14 +2735,12 @@ hg19_dna         49 ???????????????????????????????????????       10
         self.assertEqual(
             format(alignment, "chain"),
             """\
-39	0	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	54017130	54017169	1	39,	1,	54017130,
+chain 39 chr19 59128983 + 54017130 54017169 hg19_dna 50 - 1 40 14
+39
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 36)
-        self.assertEqual(alignment.misMatches, 3)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2834,14 +2770,12 @@ hg19_dna         49 ???????????????????????????????????????     10
         self.assertEqual(
             format(alignment, "chain"),
             """\
-36	3	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	553742	553781	1	39,	1,	553742,
+chain 33 chr19 59128983 + 553742 553781 hg19_dna 50 - 1 40 15
+39
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 33)
-        self.assertEqual(alignment.misMatches, 3)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2871,14 +2805,12 @@ hg19_dna         49 ????????????????????????????????????       13
         self.assertEqual(
             format(alignment, "chain"),
             """\
-33	3	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr10	135534747	99388555	99388591	1	36,	1,	99388555,
+chain 30 chr10 135534747 + 99388555 99388591 hg19_dna 50 - 1 37 16
+36
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 24)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2908,14 +2840,12 @@ hg19_dna         35 ?????????????????????????        10
         self.assertEqual(
             format(alignment, "chain"),
             """\
-24	1	0	0	0	0	0	0	-	hg19_dna	50	10	35	chr10	135534747	112178171	112178196	1	25,	15,	112178171,
+chain 23 chr10 135534747 + 112178171 112178196 hg19_dna 50 - 15 40 17
+25
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 35)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2945,14 +2875,12 @@ hg19_dna         49 ????????????????????????????????????       13
         self.assertEqual(
             format(alignment, "chain"),
             """\
-35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr1	249250621	39368490	39368526	1	36,	1,	39368490,
+chain 34 chr1 249250621 + 39368490 39368526 hg19_dna 50 - 1 37 18
+36
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 33)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -2982,7 +2910,9 @@ hg19_dna         47 ??????????????????????????????????        13
         self.assertEqual(
             format(alignment, "chain"),
             """\
-33	1	0	0	0	0	0	0	-	hg19_dna	50	13	47	chr1	249250621	220325687	220325721	1	34,	3,	220325687,
+chain 32 chr1 249250621 + 220325687 220325721 hg19_dna 50 - 3 37 19
+34
+
 """,
         )
         self.assertRaises(StopIteration, next, alignments)
@@ -2997,19 +2927,20 @@ hg19_dna         47 ??????????????????????????????????        13
         n = Align.write(alignments, stream, "chain")
         self.assertEqual(n, 19)
         stream.seek(0)
-        written_data = stream.read()
-        stream.close()
-        self.assertEqual(original_data, written_data)
+        alignments = Align.parse(stream, "chain")
+        self.check_reading_psl_34_004(alignments)
 
     def test_reading_psl_34_005(self):
         """Test parsing psl_34_005.chain."""
+        # The chain file psl_34_005.chain was generated from the PSL file using:
+        # pslToChain psl_34_005.psl psl_34_005.chain
         path = "Blat/psl_34_005.chain"
         alignments = Align.parse(path, "chain")
+        self.check_reading_psl_34_005(alignments)
+
+    def check_reading_psl_34_005(self, alignments):
+        """Check parsing psl_34_005.chain."""
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 16)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 16))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3039,14 +2970,12 @@ hg18_dna         11 ????????????????       27
         self.assertEqual(
             format(alignment, "chain"),
             """\
-16	0	0	0	0	0	0	0	+	hg18_dna	33	11	27	chr4	191154276	61646095	61646111	1	16,	11,	61646095,
+chain 16 chr4 191154276 + 61646095 61646111 hg18_dna 33 + 11 27 1
+16
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 33)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 33))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3076,14 +3005,12 @@ hg18_dna          0 ?????????????????????????????????       33
         self.assertEqual(
             format(alignment, "chain"),
             """\
-33	0	0	0	0	0	0	0	+	hg18_dna	33	0	33	chr1	249250621	10271783	10271816	1	33,	0,	10271783,
+chain 33 chr1 249250621 + 10271783 10271816 hg18_dna 33 + 0 33 2
+33
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 17)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 17))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3113,14 +3040,12 @@ hg18_dna         25 ?????????????????        8
         self.assertEqual(
             format(alignment, "chain"),
             """\
-17	0	0	0	0	0	0	0	-	hg18_dna	33	8	25	chr2	243199373	53575980	53575997	1	17,	8,	53575980,
+chain 17 chr2 243199373 + 53575980 53575997 hg18_dna 33 - 8 25 3
+17
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 38)
-        self.assertEqual(alignment.misMatches, 3)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3150,14 +3075,12 @@ hg19_dna          9 ?????????????????????????????????????????       50
         self.assertEqual(
             format(alignment, "chain"),
             """\
-38	3	0	0	0	0	0	0	+	hg19_dna	50	9	50	chr9	141213431	85737865	85737906	1	41,	9,	85737865,
+chain 35 chr9 141213431 + 85737865 85737906 hg19_dna 50 + 9 50 4
+41
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 41)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 41))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3187,14 +3110,12 @@ hg19_dna          8 ?????????????????????????????????????????       49
         self.assertEqual(
             format(alignment, "chain"),
             """\
-41	0	0	0	0	0	0	0	+	hg19_dna	50	8	49	chr8	146364022	95160479	95160520	1	41,	8,	95160479,
+chain 41 chr8 146364022 + 95160479 95160520 hg19_dna 50 + 8 49 5
+41
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 33)
-        self.assertEqual(alignment.misMatches, 3)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3224,14 +3145,12 @@ hg19_dna         11 ????????????????????????????????????       47
         self.assertEqual(
             format(alignment, "chain"),
             """\
-33	3	0	0	0	0	0	0	+	hg19_dna	50	11	47	chr22	51304566	42144400	42144436	1	36,	11,	42144400,
+chain 30 chr22 51304566 + 42144400 42144436 hg19_dna 50 + 11 47 6
+36
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 43)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 48))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3261,14 +3180,13 @@ hg19_dna          1 ????????????????????????????????????????????????        49
         self.assertEqual(
             format(alignment, "chain"),
             """\
-43	1	0	0	1	4	0	0	+	hg19_dna	50	1	49	chr2	243199373	183925984	183926028	2	6,38,	1,11,	183925984,183925990,
+chain 41 chr2 243199373 + 183925984 183926028 hg19_dna 50 + 1 49 7
+6	0	4
+38
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 34)
-        self.assertEqual(alignment.misMatches, 2)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 170))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3306,14 +3224,13 @@ hg19_dna         35 ---------------------------------------???????????       46
         self.assertEqual(
             format(alignment, "chain"),
             """\
-34	2	0	0	0	0	1	134	+	hg19_dna	50	10	46	chr19	59128983	35483340	35483510	2	25,11,	10,35,	35483340,35483499,
+chain 31 chr19 59128983 + 35483340 35483510 hg19_dna 50 + 10 46 8
+25	134	0
+11
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 39)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3343,14 +3260,12 @@ hg19_dna         10 ???????????????????????????????????????       49
         self.assertEqual(
             format(alignment, "chain"),
             """\
-39	0	0	0	0	0	0	0	+	hg19_dna	50	10	49	chr18	78077248	23891310	23891349	1	39,	10,	23891310,
+chain 39 chr18 78077248 + 23891310 23891349 hg19_dna 50 + 10 49 9
+39
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 27)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 28))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3380,14 +3295,12 @@ hg19_dna         21 ????????????????????????????       49
         self.assertEqual(
             format(alignment, "chain"),
             """\
-27	1	0	0	0	0	0	0	+	hg19_dna	50	21	49	chr18	78077248	43252217	43252245	1	28,	21,	43252217,
+chain 26 chr18 78077248 + 43252217 43252245 hg19_dna 50 + 21 49 10
+28
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 44)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 54))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3421,14 +3334,13 @@ hg19_dna         49
         self.assertEqual(
             format(alignment, "chain"),
             """\
-44	1	0	0	1	3	1	6	+	hg19_dna	50	1	49	chr13	115169878	52759147	52759198	2	7,38,	1,11,	52759147,52759160,
+chain 41 chr13 115169878 + 52759147 52759198 hg19_dna 50 + 1 49 11
+7	6	3
+38
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 50)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 50))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3458,14 +3370,12 @@ hg19_dna          0 ??????????????????????????????????????????????????      50
         self.assertEqual(
             format(alignment, "chain"),
             """\
-50	0	0	0	0	0	0	0	+	hg19_dna	50	0	50	chr1	249250621	1207056	1207106	1	50,	0,	1207056,
+chain 50 chr1 249250621 + 1207056 1207106 hg19_dna 50 + 0 50 12
+50
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 31)
-        self.assertEqual(alignment.misMatches, 3)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3495,14 +3405,12 @@ hg19_dna          1 ??????????????????????????????????       35
         self.assertEqual(
             format(alignment, "chain"),
             """\
-31	3	0	0	0	0	0	0	+	hg19_dna	50	1	35	chr1	249250621	61700837	61700871	1	34,	1,	61700837,
+chain 28 chr1 249250621 + 61700837 61700871 hg19_dna 50 + 1 35 13
+34
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 28)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 44))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3532,14 +3440,13 @@ hg19_dna         49 ??????????------????????????????????????????       11
         self.assertEqual(
             format(alignment, "chain"),
             """\
-28	0	0	0	1	10	1	6	-	hg19_dna	50	11	49	chr4	191154276	37558157	37558191	2	10,18,	1,21,	37558157,37558173,
+chain 26 chr4 191154276 + 37558157 37558191 hg19_dna 50 - 1 39 14
+10	6	10
+18
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 35)
-        self.assertEqual(alignment.misMatches, 2)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 37))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3569,14 +3476,12 @@ hg19_dna         49 ?????????????????????????????????????       12
         self.assertEqual(
             format(alignment, "chain"),
             """\
-35	2	0	0	0	0	0	0	-	hg19_dna	50	12	49	chr22	51304566	48997405	48997442	1	37,	1,	48997405,
+chain 33 chr22 51304566 + 48997405 48997442 hg19_dna 50 - 1 38 15
+37
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 35)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3606,14 +3511,12 @@ hg19_dna         49 ????????????????????????????????????        13
         self.assertEqual(
             format(alignment, "chain"),
             """\
-35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr2	243199373	120641740	120641776	1	36,	1,	120641740,
+chain 34 chr2 243199373 + 120641740 120641776 hg19_dna 50 - 1 37 16
+36
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 39)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3643,14 +3546,12 @@ hg19_dna         49 ???????????????????????????????????????       10
         self.assertEqual(
             format(alignment, "chain"),
             """\
-39	0	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	54017130	54017169	1	39,	1,	54017130,
+chain 39 chr19 59128983 + 54017130 54017169 hg19_dna 50 - 1 40 17
+39
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 36)
-        self.assertEqual(alignment.misMatches, 3)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 39))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3680,14 +3581,12 @@ hg19_dna         49 ???????????????????????????????????????     10
         self.assertEqual(
             format(alignment, "chain"),
             """\
-36	3	0	0	0	0	0	0	-	hg19_dna	50	10	49	chr19	59128983	553742	553781	1	39,	1,	553742,
+chain 33 chr19 59128983 + 553742 553781 hg19_dna 50 - 1 40 18
+39
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 33)
-        self.assertEqual(alignment.misMatches, 3)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3717,14 +3616,12 @@ hg19_dna         49 ????????????????????????????????????       13
         self.assertEqual(
             format(alignment, "chain"),
             """\
-33	3	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr10	135534747	99388555	99388591	1	36,	1,	99388555,
+chain 30 chr10 135534747 + 99388555 99388591 hg19_dna 50 - 1 37 19
+36
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 24)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 25))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3754,14 +3651,12 @@ hg19_dna         35 ?????????????????????????        10
         self.assertEqual(
             format(alignment, "chain"),
             """\
-24	1	0	0	0	0	0	0	-	hg19_dna	50	10	35	chr10	135534747	112178171	112178196	1	25,	15,	112178171,
+chain 23 chr10 135534747 + 112178171 112178196 hg19_dna 50 - 15 40 20
+25
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 35)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 36))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3790,14 +3685,12 @@ hg19_dna         49 ????????????????????????????????????       13
         self.assertEqual(
             format(alignment, "chain"),
             """\
-35	1	0	0	0	0	0	0	-	hg19_dna	50	13	49	chr1	249250621	39368490	39368526	1	36,	1,	39368490,
+chain 34 chr1 249250621 + 39368490 39368526 hg19_dna 50 - 1 37 21
+36
+
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 33)
-        self.assertEqual(alignment.misMatches, 1)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(alignment.shape, (2, 34))
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
@@ -3827,7 +3720,9 @@ hg19_dna         47 ??????????????????????????????????        13
         self.assertEqual(
             format(alignment, "chain"),
             """\
-33	1	0	0	0	0	0	0	-	hg19_dna	50	13	47	chr1	249250621	220325687	220325721	1	34,	3,	220325687,
+chain 32 chr1 249250621 + 220325687 220325721 hg19_dna 50 - 3 37 22
+34
+
 """,
         )
         self.assertRaises(StopIteration, next, alignments)
@@ -3835,16 +3730,13 @@ hg19_dna         47 ??????????????????????????????????        13
     def test_writing_psl_34_005(self):
         """Test writing the alignments in psl_34_005.chain."""
         path = "Blat/psl_34_005.chain"
-        with open(path) as stream:
-            original_data = stream.read()
         alignments = Align.parse(path, "chain")
         stream = StringIO()
-        n = Align.write(alignments, stream, "chain", header=False)
+        n = Align.write(alignments, stream, "chain")
         self.assertEqual(n, 22)
         stream.seek(0)
-        written_data = stream.read()
-        stream.close()
-        self.assertEqual(original_data, written_data)
+        alignments = Align.parse(stream, "chain")
+        self.check_reading_psl_34_005(alignments)
 
 
 class TestAlign_dnax_prot(unittest.TestCase):
@@ -3871,10 +3763,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
         path = "Blat/psl_35_001.chain"
         alignments = Align.parse(path, "chain")
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 52)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3899,10 +3787,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 44)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3927,10 +3811,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 44)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3955,10 +3835,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 47)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -3983,10 +3859,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 25)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -4011,10 +3883,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 16)
-        self.assertEqual(alignment.misMatches, 0)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -4039,10 +3907,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 26)
-        self.assertEqual(alignment.misMatches, 8)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
@@ -4067,10 +3931,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
 """,
         )
         alignment = next(alignments)
-        self.assertEqual(alignment.matches, 37)
-        self.assertEqual(alignment.misMatches, 26)
-        self.assertEqual(alignment.repMatches, 0)
-        self.assertEqual(alignment.nCount, 0)
         self.assertEqual(len(alignment), 2)
         self.assertIs(alignment.sequences[0], alignment.target)
         self.assertIs(alignment.sequences[1], alignment.query)
