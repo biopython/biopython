@@ -20,6 +20,8 @@ except ImportError:
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio import SeqIO
+from Bio import Align
 from Bio.Align import PairwiseAligner, Alignment
 
 
@@ -772,8 +774,8 @@ class TestZeroGaps(unittest.TestCase):
         # fmt: off
         self.assertTrue(
             np.array_equal(alignment.coordinates,
-            np.array([[0, 24, 69],   # noqa: E128
-                      [0, 24, 69]]))
+                           np.array([[0, 24, 69],   # noqa: E128
+                                     [0, 24, 69]]))
         )
         # fmt: on
 
@@ -842,6 +844,152 @@ class TestZeroGaps(unittest.TestCase):
                                      [0, 51, 49, 208]]))
         )
         # fmt: on
+
+
+class TestLiftOver(unittest.TestCase):
+    def test_chimp(self):
+        chain = Align.read("Blat/panTro5ToPanTro6.over.chain", "chain")
+        alignment = Align.read("Blat/est.panTro5.psl", "psl")
+        self.assertEqual(chain.query.id, alignment.target.id)
+        self.assertEqual(len(chain.query.seq), len(alignment.target.seq))
+        record = SeqIO.read("Blat/est.fa", "fasta")
+        self.assertEqual(record.id, alignment.query.id)
+        self.assertEqual(len(record.seq), len(alignment.query.seq))
+        alignment.query = record.seq
+        record = SeqIO.read("Blat/panTro5.fa", "fasta")
+        chromosome, start_end = record.id.split(":")
+        start, end = start_end.split("-")
+        start = int(start)
+        end = int(end)
+        data = {start: str(record.seq)}
+        length = len(alignment.target.seq)
+        seq = Seq(data, length=length)
+        record = SeqRecord(seq, id="chr1")
+        alignment.target = record
+        text = """^\
+chr1      122835789 AGAGATTATTTTGCAGAGGATGATGGGGAGATGGTACCCAGAACGAGTCACACAGCAGGT
+                  0 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::--
+query            32 AGAGATTATTTTGCAGAGGATGATGGGGAGATGGTACCCAGAACGAGTCACACAGCAG--
+
+chr1      122835849 AAGGATGCTGTGGGCCTTGCCTTGTTAAATTCTTTGtttcttttgtttattcatttggtt
+                 60 ------------------------------------------------------------
+query            90 ------------------------------------------------------------
+((.|\n)*)
+chr1      122840889 TTGTATTTTGCAGAAACTGAATTCTGCTGGAATGTGCCAGTTAGAATGATCCTAGTGCTG
+               5100 ------------------------------------------------------------
+query            90 ------------------------------------------------------------
+
+chr1      122840949 TTATTATATAAACCTTTTTTGTTGTTGTTCTGTTTCATTGACAGCTTTTCTTAGTGACAC
+               5160 --------------------------------------------::::::::::::::::
+query            90 --------------------------------------------CTTTTCTTAGTGACAC
+
+chr1      122841009 TAAAGATCGAGGCCCTCCAGTGCAGTCACAGATCTGGAGAAGTGGTGAAAAGGTCCCGTT
+               5220 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::X:
+query           106 TAAAGATCGAGGCCCTCCAGTGCAGTCACAGATCTGGAGAAGTGGTGAAAAGGTCCCGNT
+
+chr1      122841069 TGTGCAGACATATTCCTTGAGAGCATTTGAGAAACCCCCTCAGGTACAGACCCAGGCTCT
+               5280 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+query           166 TGTGCAGACATATTCCTTGAGAGCATTTGAGAAACCCCCTCAGGTACAGACCCAGGCTCT
+
+chr1      122841129 TCGAGACTTTGAGAAGGTAAGTCATGTGAGTGGATAATTGTTATCCCAATTAGAAGCAGT
+               5340 ::::::::::::::::--------------------------------------------
+query           226 TCGAGACTTTGAGAAG--------------------------------------------
+
+chr1      122841189 ACTATGGAATAGTGATGCCTGATAAAAATATGACCCATGGATTGGTCCGGATTATGGATG
+               5400 ------------------------------------------------------------
+query           242 ------------------------------------------------------------
+((.|\n)*)
+chr1      122907129 GTTCTTGGGTTGAGGGGGCAATCGGGCACGCTCCTCCCCATGGGTTGCCCATCATGTCTA
+              71340 ------------------------------------------------------------
+query           242 ------------------------------------------------------------
+
+chr1      122907189 ATGGATATCGCACTCTGTCCCAGCACCTCAATGACCTGAAGAAGGAGAACTTCAGCCTCA
+              71400 -----------------------:::::::::::::::::::::::::::::::::::::
+query           242 -----------------------CACCTCAATGACCTGAAGAAGGAGAACTTCAGCCTCA
+
+chr1      122907249 AGCTGCGCATCTACTTCCTGGAGGAGCGCATGCAACAGAAGTATGAGGCCAGCCGGGAGG
+              71460 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+query           279 AGCTGCGCATCTACTTCCTGGAGGAGCGCATGCAACAGAAGTATGAGGCCAGCCGGGAGG
+
+chr1      122907309 ACATC 122907314
+              71520 :::::     71525
+query           339 ACATC       344
+$"""
+        self.assertRegex(str(alignment).replace("|", ":").replace(".", "X"), text)
+        lifted_alignment = chain.map(alignment)
+        # fmt: off
+# flake8: noqa
+        self.assertTrue(
+            np.array_equal(lifted_alignment.coordinates,
+                           np.array([[111982717, 111982775, 111987921,
+                                      111988073, 112009200, 112009302],
+                                     [       32,        90,        90,
+                                            242,       242,       344]])
+                          )
+        )
+        # fmt: on
+        record = SeqIO.read("Blat/panTro6.fa", "fasta")
+        chromosome, start_end = record.id.split(":")
+        start, end = start_end.split("-")
+        start = int(start)
+        end = int(end)
+        data = {start: str(record.seq)}
+        length = len(alignment.target.seq)
+        seq = Seq(data, length=length)
+        record = SeqRecord(seq, id="chr1")
+        lifted_alignment.target = record
+        text = """^\
+chr1      111982717 AGAGATTATTTTGCAGAGGATGATGGGGAGATGGTACCCAGAACGAGTCACACAGCAGGT
+                  0 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::--
+query            32 AGAGATTATTTTGCAGAGGATGATGGGGAGATGGTACCCAGAACGAGTCACACAGCAG--
+
+chr1      111982777 AAGGATGCTGTGGGCCTTGCCTTGTTAAATTCTTTGtttcttttgtttattcatttggtt
+                 60 ------------------------------------------------------------
+query            90 ------------------------------------------------------------
+((.|\n)*)
+chr1      111987817 TTGTATTTTGCAGAAACTGAATTCTGCTGGAATGTGCCAGTTAGAATGATCCTAGTGCTG
+               5100 ------------------------------------------------------------
+query            90 ------------------------------------------------------------
+
+chr1      111987877 TTATTATATAAACCTTTTTTGTTGTTGTTCTGTTTCATTGACAGCTTTTCTTAGTGACAC
+               5160 --------------------------------------------::::::::::::::::
+query            90 --------------------------------------------CTTTTCTTAGTGACAC
+
+chr1      111987937 TAAAGATCGAGGCCCTCCAGTGCAGTCACAGATCTGGAGAAGTGGTGAAAAGGTCCCGTT
+               5220 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::X:
+query           106 TAAAGATCGAGGCCCTCCAGTGCAGTCACAGATCTGGAGAAGTGGTGAAAAGGTCCCGNT
+
+chr1      111987997 TGTGCAGACATATTCCTTGAGAGCATTTGAGAAACCCCCTCAGGTACAGACCCAGGCTCT
+               5280 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+query           166 TGTGCAGACATATTCCTTGAGAGCATTTGAGAAACCCCCTCAGGTACAGACCCAGGCTCT
+
+chr1      111988057 TCGAGACTTTGAGAAGGTAAGTCATGTGAGTGGATAATTGTTATCCCAATTAGAAGCAGT
+               5340 ::::::::::::::::--------------------------------------------
+query           226 TCGAGACTTTGAGAAG--------------------------------------------
+
+chr1      111988117 ACTATGGAATAGTGATGCCTGATAAAAATATGACCCATGGATTGGTCCGGATTATGGATG
+               5400 ------------------------------------------------------------
+query           242 ------------------------------------------------------------
+((.|\n)*)
+chr1      112009117 GTTCTTGGGTTGAGGGGGCAATCGGGCACGCTCCTCCCCATGGGTTGCCCATCATGTCTA
+              26400 ------------------------------------------------------------
+query           242 ------------------------------------------------------------
+
+chr1      112009177 ATGGATATCGCACTCTGTCCCAGCACCTCAATGACCTGAAGAAGGAGAACTTCAGCCTCA
+              26460 -----------------------:::::::::::::::::::::::::::::::::::::
+query           242 -----------------------CACCTCAATGACCTGAAGAAGGAGAACTTCAGCCTCA
+
+chr1      112009237 AGCTGCGCATCTACTTCCTGGAGGAGCGCATGCAACAGAAGTATGAGGCCAGCCGGGAGG
+              26520 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+query           279 AGCTGCGCATCTACTTCCTGGAGGAGCGCATGCAACAGAAGTATGAGGCCAGCCGGGAGG
+
+chr1      112009297 ACATC 112009302
+              26580 :::::     26585
+query           339 ACATC       344
+$"""
+        self.assertRegex(
+            str(lifted_alignment).replace("|", ":").replace(".", "X"), text
+        )
 
 
 if __name__ == "__main__":
