@@ -3128,6 +3128,91 @@ class Alignment:
         >>> alignment = alignment1.map(alignment2)
         >>> format(alignment, "psl")
         '8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
+
+        The map method can also be used to lift over an alignment between
+        different genome assemblies. In this case, self is a DNA alignment
+        between two genome assemblies, and the argument is an alignment of a
+        transcript against one of the genome assemblies:
+
+        >>> np.set_printoptions(threshold=5)  # print 5 array elements per row
+        >>> chain = Align.read("Blat/panTro5ToPanTro6.over.chain", "chain")
+        >>> chain.sequences[0].id
+        'chr1'
+        >>> len(chain.sequences[0].seq)
+        228573443
+        >>> chain.sequences[1].id
+        'chr1'
+        >>> len(chain.sequences[1].seq)
+        224244399
+        >>> print(chain.coordinates)
+        [[122250000 122250400 122250400 ... 122909818 122909819 122909835]
+         [111776384 111776784 111776785 ... 112019962 112019962 112019978]]
+
+        showing that the range 122250000:122909835 of chr1 on chimpanzee genome
+        assembly panTro5 aligns to range 111776384:112019978 of chr1 of
+        chimpanzee genome assembly panTro6.
+
+        >>> alignment = Align.read("Blat/est.panTro5.psl", "psl")
+        >>> alignment.sequences[0].id
+        'chr1'
+        >>> len(alignment.sequences[0].seq)
+        228573443
+        >>> alignment.sequences[1].id
+        'DC525629'
+        >>> len(alignment.sequences[1].seq)
+        407
+        >>> print(alignment.coordinates)
+        [[122835789 122835847 122840993 122841145 122907212 122907314]
+         [       32        90        90       242       242       344]]
+
+        This shows that nucleotide range 32:344 of expressed sequence tag
+        DC525629 aligns to range 122835789:122907314 of chr1 of chimpanzee
+        genome assembly panTro5.
+
+        Note that the target sequence chain.sequences[0].seq and the target
+        sequence alignment.sequences[0] have the same length:
+
+        >>> len(chain.sequences[0].seq) == len(alignment.sequences[0].seq)
+        True
+
+        We swap the target and query of the chain such that the query of the
+        chain corresponds to the target of alignment:
+
+        >>> chain = chain[::-1]
+        >>> chain.sequences[0].id
+        'chr1'
+        >>> len(chain.sequences[0].seq)
+        224244399
+        >>> chain.sequences[1].id
+        'chr1'
+        >>> len(chain.sequences[1].seq)
+        228573443
+        >>> print(chain.coordinates)
+        [[111776384 111776784 111776785 ... 112019962 112019962 112019978]
+         [122250000 122250400 122250400 ... 122909818 122909819 122909835]]
+
+        Now we can get the coordinates of DC525629 against chimpanzee genome
+        assembly panTro6 by calling map on the chain, with alignment as the
+        argument:
+
+        >>> lifted_alignment = chain.map(alignment)
+        >>> lifted_alignment.sequences[0].id
+        'chr1'
+        >>> len(lifted_alignment.sequences[0].seq)
+        224244399
+        >>> lifted_alignment.sequences[1].id
+        'DC525629'
+        >>> len(lifted_alignment.sequences[1].seq)
+        407
+        >>> print(lifted_alignment.coordinates)
+        [[111982717 111982775 111987921 111988073 112009200 112009302]
+         [       32        90        90       242       242       344]]
+
+        This shows that nucleotide range 32:344 of expressed sequence tag
+        DC525629 aligns to range 111982717:112009302 of chr1 of chimpanzee
+        genome assembly panTro6. Note that the genome span of DC525629 on
+        chimpanzee genome assembly panTro5 is 122907314 - 122835789 = 71525 bp,
+        while on panTro6 the genome span is 112009302 - 111982717 = 26585 bp.
         """
         alignment1, alignment2 = self, alignment
         if len(alignment1.query) != len(alignment2.target):

@@ -850,8 +850,9 @@ class TestLiftOver(unittest.TestCase):
     def test_chimp(self):
         chain = Align.read("Blat/panTro5ToPanTro6.over.chain", "chain")
         alignment = Align.read("Blat/est.panTro5.psl", "psl")
-        self.assertEqual(chain.query.id, alignment.target.id)
-        self.assertEqual(len(chain.query.seq), len(alignment.target.seq))
+        self.assertEqual(chain.target.id, alignment.target.id)
+        self.assertEqual(len(chain.target.seq), len(alignment.target.seq))
+        chain = chain[::-1]
         record = SeqIO.read("Blat/est.fa", "fasta")
         self.assertEqual(record.id, alignment.query.id)
         self.assertEqual(len(record.seq), len(alignment.query.seq))
