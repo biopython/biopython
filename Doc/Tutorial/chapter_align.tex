@@ -16,7 +16,7 @@ The \verb|Alignment| class is defined in \verb|Bio.Align|. Usually you would get
 \label{subsec:align_sequences_coordinates}
 
 Suppose you have three sequences:
-%doctest . lib:numpy
+%doctest ../Tests/Blat lib:numpy
 \begin{minted}{pycon}
 >>> seqA = "CCGGTTTTT"
 >>> seqB = "AGTTTAA"
@@ -686,6 +686,85 @@ array([[11, 15, 26, 30],
 \end{minted}
 To be able to print the sequences, in this example  we constructed \verb|alignment1| and \verb|alignment2| using sequences with a defined sequence contents.
 However, mapping the alignment does not depend on the sequence contents; only the coordinates of \verb|alignment1| and \verb|alignment2| are used to construct the coordinates for \verb|alignment3|.
+
+The map method can also be used to lift over an alignment between different genome assemblies. In this case, self is a DNA alignment between two genome assemblies, and the argument is an alignment of a transcript against one of the genome assemblies:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> chain = Align.read("panTro5ToPanTro6.over.chain", "chain")
+>>> chain.sequences[0].id
+'chr1'
+>>> len(chain.sequences[0].seq)
+228573443
+>>> chain.sequences[1].id
+'chr1'
+>>> len(chain.sequences[1].seq)
+224244399
+>>> import numpy as np
+>>> np.set_printoptions(threshold=5)  # print 5 array elements per row
+>>> print(chain.coordinates)  # doctest:+ELLIPSIS
+[[122250000 122250400 122250400 ... 122909818 122909819 122909835]
+ [111776384 111776784 111776785 ... 112019962 112019962 112019978]]
+\end{minted}
+showing that the range 122250000:122909835 of chr1 on chimpanzee genome assembly panTro5 aligns to range 111776384:112019978 of chr1 of chimpanzee genome assembly panTro6. See section \ref{subsec:align_chain} for more information about the chain file format.
+%cont-doctest
+\begin{minted}{pycon}
+>>> transcript = Align.read("est.panTro5.psl", "psl")
+>>> transcript.sequences[0].id
+'chr1'
+>>> len(transcript.sequences[0].seq)
+228573443
+>>> transcript.sequences[1].id
+'DC525629'
+>>> len(transcript.sequences[1].seq)
+407
+>>> print(transcript.coordinates)
+[[122835789 122835847 122840993 122841145 122907212 122907314]
+ [       32        90        90       242       242       344]]
+\end{minted}
+This shows that nucleotide range 32:344 of expressed sequence tag DC525629
+aligns to range 122835789:122907314 of chr1 of chimpanzee genome assembly
+panTro5.  Note that the target sequence \verb|chain.sequences[0].seq| and the target sequence \verb|transcript.sequences[0]| have the same length:
+%cont-doctest
+\begin{minted}{pycon}
+>>> len(chain.sequences[0].seq) == len(transcript.sequences[0].seq)
+True
+\end{minted}
+We swap the target and query of the chain such that the query of \verb|chain| corresponds to the target of \verb|transcript|:
+%cont-doctest
+\begin{minted}{pycon}
+>>> chain = chain[::-1]
+>>> chain.sequences[0].id
+'chr1'
+>>> len(chain.sequences[0].seq)
+224244399
+>>> chain.sequences[1].id
+'chr1'
+>>> len(chain.sequences[1].seq)
+228573443
+>>> print(chain.coordinates)  # doctest:+ELLIPSIS
+[[111776384 111776784 111776785 ... 112019962 112019962 112019978]
+ [122250000 122250400 122250400 ... 122909818 122909819 122909835]]
+>>> np.set_printoptions(threshold=1000)  # reset the print options
+\end{minted}
+Now we can get the coordinates of DC525629 against chimpanzee genome assembly panTro6 by calling \verb|chain.map|, with \verb|transcript| as the argument:
+%cont-doctest
+\begin{minted}{pycon}
+>>> lifted_transcript = chain.map(transcript)
+>>> lifted_transcript.sequences[0].id
+'chr1'
+>>> len(lifted_transcript.sequences[0].seq)
+224244399
+>>> lifted_transcript.sequences[1].id
+'DC525629'
+>>> len(lifted_transcript.sequences[1].seq)
+407
+>>> print(lifted_transcript.coordinates)
+[[111982717 111982775 111987921 111988073 112009200 112009302]
+ [       32        90        90       242       242       344]]
+\end{minted}
+This shows that nucleotide range 32:344 of expressed sequence tag DC525629 aligns to range 111982717:112009302 of chr1 of chimpanzee genome assembly panTro6. Note that the genome span of DC525629 on chimpanzee genome assembly panTro5 is 122907314 - 122835789 = 71525 bp, while on panTro6 the genome span is 112009302 - 111982717 = 26585 bp.
 
 
 \section{The Alignments class}
