@@ -211,7 +211,11 @@ def esearch(db, term, **keywds):
 
     >>> from Bio import Entrez
     >>> Entrez.email = "Your.Name.Here@example.org"
-    >>> handle = Entrez.esearch(db="nucleotide", retmax=10, term="opuntia[ORGN] accD", idtype="acc")
+    >>> handle = Entrez.esearch(
+    ...     db="nucleotide", retmax=10, idtype="acc",
+    ...     term="opuntia[ORGN] accD 2007[Publication Date]"
+    ... )
+    ...
     >>> record = Entrez.read(handle)
     >>> handle.close()
     >>> int(record["Count"]) >= 2
