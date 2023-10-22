@@ -300,6 +300,8 @@ def _get_codon2codon_matrix(codon_table):
     Elements in the matrix are number of synonymous and nonsynonymous
     substitutions required for the substitution.
     """
+    import copy
+
     base_tuple = ("A", "T", "C", "G")
     codons = [
         i
@@ -307,7 +309,7 @@ def _get_codon2codon_matrix(codon_table):
         if "U" not in i
     ]
     # set up codon_dict considering stop codons
-    codon_dict = codon_table.forward_table
+    codon_dict = copy.deepcopy(codon_table.forward_table)
     for stop in codon_table.stop_codons:
         codon_dict[stop] = "stop"
     # count site
