@@ -36,13 +36,17 @@ except ImportError:
     ) from None
 
 from Bio import BiopythonDeprecationWarning
-from Bio.Align import _aligners  # type: ignore
+from Bio.Align import _pairwisealigner  # type: ignore
+from Bio.Align import _codonaligner  # type: ignore
 from Bio.Align import substitution_matrices
+from Bio.Data import CodonTable
 from Bio.Seq import Seq, MutableSeq, reverse_complement, UndefinedSequenceError
+from Bio.Seq import translate
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 
-# Import errors may occur here if a compiled aligners.c file
-# (_aligners.pyd or _aligners.so) is missing or if the user is
+# Import errors may occur here if a compiled _pairwisealigner.c file or
+# compiled _codonaligner.c file (_pairwisealigner.pyd or _pairwisealigner.so,
+# or _codonaligner.pyd or _codonaligner.so) is missing or if the user is
 # importing from within the Biopython source tree, see PR #2007:
 # https://github.com/biopython/biopython/pull/2007
 
@@ -3317,6 +3321,72 @@ class Alignment:
         alignment = Alignment(sequences, coordinates)
         return alignment
 
+    def mapall(self, alignments):
+        """Map each of the alignments to self, and return the mapped alignment."""
+        factor = None
+        for alignment in alignments:
+            steps = np.diff(alignment.coordinates, 1)
+            aligned = sum(steps != 0, 0) > 1
+            steps = steps[:, aligned]
+            step1, step2 = steps.sum(1)
+            if step1 == step2:
+                step = 1  # nucleotide-nucleotide or protein-protein alignment
+            elif step2 == 3 * step1:
+                step = 3  # protein-nucleotide alignment
+            else:
+                raise ValueError(f"unexpected steps {step1}, {step2}")
+            if factor is None:
+                factor = step
+            elif factor != step:
+                raise ValueError("inconsistent step sizes in alignments")
+        steps = (self.coordinates[:, 1:] - self.coordinates[:, :-1]).max(0).clip(0)
+        coordinates = np.empty((2, len(steps) + 1), int)
+        coordinates[0, 0] = 0
+        coordinates[0, 1:] = factor * np.cumsum(steps)
+        sequences = [Seq(None, length=coordinates[0, -1]), None]
+        for i, alignment in enumerate(alignments):
+            coordinates[1, :] = factor * self.coordinates[i, :]
+            sequences[1] = Seq(None, length=coordinates[1, -1])
+            alignment1 = Alignment(sequences, coordinates)
+            coordinates2 = alignment.coordinates.copy()
+            coordinates2[0, :] *= factor
+            sequences2 = [sequences[1], alignment.sequences[1]]
+            alignment2 = Alignment(sequences2, coordinates2)
+            alignments[i] = alignment1.map(alignment2)
+        coordinates = [[] for i in range(len(alignments))]
+        done = False
+        while done is False:
+            done = True
+            position = min(
+                alignment.coordinates[0, 0]
+                for alignment in alignments
+                if alignment.coordinates.size
+            )
+            for i, alignment in enumerate(alignments):
+                if alignment.coordinates.size == 0:
+                    coordinates[i].append(coordinates[i][-1])
+                elif alignment.coordinates[0, 0] == position:
+                    coordinates[i].append(alignment.coordinates[1, 0])
+                    alignment.coordinates = alignment.coordinates[:, 1:]
+                    if alignment.coordinates.any():
+                        done = False
+                elif alignment.coordinates[0, 0] > position:
+                    if len(coordinates[i]):
+                        if alignment.coordinates[1, 0] > coordinates[i][-1]:
+                            step = position - previous  # noqa: F821
+                        else:
+                            step = 0
+                        coordinates[i].append(coordinates[i][-1] + step)
+                    else:
+                        coordinates[i].append(alignment.coordinates[1, 0])
+                else:
+                    raise Exception
+            previous = position
+        sequences = [alignment.sequences[1] for alignment in alignments]
+        coordinates = np.array(coordinates)
+        alignment = Alignment(sequences, coordinates)
+        return alignment
+
     @property
     def substitutions(self):
         """Return an Array with the number of substitutions of letters in the alignment.
@@ -3612,7 +3682,8 @@ class PairwiseAlignments(AlignmentsAbstractBaseClass):
                    each path defines one alignment.
 
         You would normally obtain a PairwiseAlignments object by calling
-        aligner.align(seqA, seqB), where aligner is a PairwiseAligner object.
+        aligner.align(seqA, seqB), where aligner is a PairwiseAligner object
+        or a CodonAligner object.
         """
         self.sequences = [seqA, seqB]
         self.score = score
@@ -3659,7 +3730,7 @@ class PairwiseAlignments(AlignmentsAbstractBaseClass):
         self._index = -1
 
 
-class PairwiseAligner(_aligners.PairwiseAligner):
+class PairwiseAligner(_pairwisealigner.PairwiseAligner):
     """Performs pairwise sequence alignment using dynamic programming.
 
     This provides functions to get global and local alignments between two
@@ -3805,7 +3876,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     """
 
     def __init__(self, scoring=None, **kwargs):
-        """Initialize a new PairwiseAligner as specified by the keyword arguments.
+        """Initialize a PairwiseAligner as specified by the keyword arguments.
 
         If scoring is None, use the default scoring scheme match = 1.0,
         mismatch = 0.0, gap score = 0.0
@@ -3841,12 +3912,12 @@ class PairwiseAligner(_aligners.PairwiseAligner):
             setattr(self, name, value)
 
     def __setattr__(self, key, value):
-        if key not in dir(_aligners.PairwiseAligner):
+        if key not in dir(_pairwisealigner.PairwiseAligner):
             # To prevent confusion, don't allow users to create new attributes.
             # On CPython, __slots__ can be used for this, but currently
             # __slots__ does not behave the same way on PyPy at least.
             raise AttributeError("'PairwiseAligner' object has no attribute '%s'" % key)
-        _aligners.PairwiseAligner.__setattr__(self, key, value)
+        _pairwisealigner.PairwiseAligner.__setattr__(self, key, value)
 
     def align(self, seqA, seqB, strand="+"):
         """Return the alignments of two sequences using PairwiseAligner."""
@@ -3860,19 +3931,19 @@ class PairwiseAligner(_aligners.PairwiseAligner):
             sB = reverse_complement(seqB, inplace=False)
         if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             sB = bytes(sB)
-        score, paths = _aligners.PairwiseAligner.align(self, sA, sB, strand)
+        score, paths = super().align(sA, sB, strand)
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
 
     def score(self, seqA, seqB, strand="+"):
-        """Return the alignments score of two sequences using PairwiseAligner."""
+        """Return the alignment score of two sequences using PairwiseAligner."""
         if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
             seqA = bytes(seqA)
         if strand == "-":
             seqB = reverse_complement(seqB, inplace=False)
         if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
             seqB = bytes(seqB)
-        return _aligners.PairwiseAligner.score(self, seqA, seqB, strand)
+        return super().score(seqA, seqB, strand)
 
     def __getstate__(self):
         state = {
@@ -3956,6 +4027,213 @@ class PairwiseAlignment(Alignment):
         coordinates = np.array(path).transpose()
         super().__init__(sequences, coordinates)
         self.score = score
+
+
+class CodonAligner(_codonaligner.CodonAligner):
+    """Aligns a nucleotide sequence to an amino acid sequence.
+
+    This class implements a dynamic programming algorithm to align a nucleotide
+    sequence to an amino acid sequence.
+    """
+
+    def __init__(self, codon_table=None, anchor_len=10):
+        """Initialize a CodonAligner for a specific genetic code.
+
+        Arguments:
+         - codon_table - a CodonTable object representing the genetic code.
+           If codon_table is None, the standard genetic code is used.
+
+        """
+        super().__init__()
+        if codon_table is None:
+            codon_table = CodonTable.generic_by_id[1]
+        elif not isinstance(codon_table, CodonTable.CodonTable):
+            raise TypeError("Input table is not a CodonTable object")
+        self.codon_table = codon_table
+
+    def score(self, seqA, seqB):
+        """Return the alignment score of a protein sequence and nucleotide sequence.
+
+        Arguments:
+         - seqA  - the protein sequence of amino acids (plain string, Seq,
+           MutableSeq, or SeqRecord).
+         - seqB  - the nucleotide sequence (plain string, Seq, MutableSeq, or
+           SeqRecord); both DNA and RNA sequences are accepted.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> aligner = CodonAligner()
+        >>> dna = SeqRecord(Seq('ATGTCTCGT'), id='dna')
+        >>> pro = SeqRecord(Seq('MSR'), id='pro')
+        >>> score = aligner.score(pro, dna)
+        >>> print(score)
+        3.0
+        >>> rna = SeqRecord(Seq('AUGUCUCGU'), id='rna')
+        >>> score = aligner.score(pro, rna)
+        >>> print(score)
+        3.0
+
+        This is an example with a frame shift in the DNA sequence:
+
+        >>> dna = "ATGCTGGGCTCGAACGAGTCCGTGTATGCCCTAAGCTGAGCCCGTCG"
+        >>> pro = "MLGSNESRVCPKLSPS"
+        >>> len(pro)
+        16
+        >>> aligner.frameshift_score = -3.0
+        >>> score = aligner.score(pro, dna)
+        >>> print(score)
+        13.0
+
+        In the following example, the position of the frame shift is ambiguous:
+
+        >>> dna = 'TTTAAAAAAAAAAATTT'
+        >>> pro = 'FKKKKF'
+        >>> len(pro)
+        6
+        >>> aligner.frameshift_score = -1.0
+        >>> alignments = aligner.align(pro, dna)
+        >>> print(alignments.score)
+        5.0
+        >>> len(alignments)
+        3
+        >>> print(next(alignments))
+        target            0 F  K  K  K   4
+        query             0 TTTAAAAAAAAA 12
+        <BLANKLINE>
+        target            4 K  F    6
+        query            11 AAATTT 17
+        <BLANKLINE>
+        >>> print(next(alignments))
+        target            0 F  K  K   3
+        query             0 TTTAAAAAA 9
+        <BLANKLINE>
+        target            3 K  K  F    6
+        query             8 AAAAAATTT 17
+        <BLANKLINE>
+        >>> print(next(alignments))
+        target            0 F  K   2
+        query             0 TTTAAA 6
+        <BLANKLINE>
+        target            2 K  K  K  F    6
+        query             5 AAAAAAAAATTT 17
+        <BLANKLINE>
+        >>> print(next(alignments))
+        Traceback (most recent call last):
+        ...
+        StopIteration
+
+        """
+        codon_table = self.codon_table
+        if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
+            sA = bytes(seqA)
+        elif isinstance(seqA, str):
+            sA = seqA.encode()
+        else:
+            raise ValueError(
+                "seqA must be a string, Seq, MutableSeq, or SeqRecord object"
+            )
+        seqB0 = seqB[: 3 * (len(seqB) // 3)]
+        seqB1 = seqB[1 : 1 + 3 * ((len(seqB) - 1) // 3)]
+        seqB2 = seqB[2 : 2 + 3 * ((len(seqB) - 2) // 3)]
+        if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
+            sB0 = seqB0.translate(codon_table)
+            sB1 = seqB1.translate(codon_table)
+            sB2 = seqB2.translate(codon_table)
+            sB0 = bytes(sB0)
+            sB1 = bytes(sB1)
+            sB2 = bytes(sB2)
+        elif isinstance(seqA, str):
+            sB0 = translate(seqB0, codon_table)
+            sB1 = translate(seqB1, codon_table)
+            sB2 = translate(seqB2, codon_table)
+            sB0 = sB0.encode()
+            sB1 = sB1.encode()
+            sB2 = sB2.encode()
+        else:
+            raise ValueError(
+                "seqB must be a string, Seq, MutableSeq, or SeqRecord object"
+            )
+        return super().score(sA, sB0, sB1, sB2)
+
+    def align(self, seqA, seqB):
+        """Align a nucleotide sequence to its corresponding protein sequence.
+
+        Arguments:
+         - seqA  - the protein sequence of amino acids (plain string, Seq,
+           MutableSeq, or SeqRecord).
+         - seqB  - the nucleotide sequence (plain string, Seq, MutableSeq, or
+           SeqRecord); both DNA and RNA sequences are accepted.
+
+        Returns an iterator of Alignment objects.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> aligner = CodonAligner()
+        >>> dna = SeqRecord(Seq('ATGTCTCGT'), id='dna')
+        >>> pro = SeqRecord(Seq('MSR'), id='pro')
+        >>> alignments = aligner.align(pro, dna)
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        pro               0 M  S  R   3
+        dna               0 ATGTCTCGT 9
+        <BLANKLINE>
+        >>> rna = SeqRecord(Seq('AUGUCUCGU'), id='rna')
+        >>> alignments = aligner.align(pro, rna)
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        pro               0 M  S  R   3
+        rna               0 AUGUCUCGU 9
+        <BLANKLINE>
+
+        This is an example with a frame shift in the DNA sequence:
+
+        >>> dna = "ATGCTGGGCTCGAACGAGTCCGTGTATGCCCTAAGCTGAGCCCGTCG"
+        >>> pro = "MLGSNESRVCPKLSPS"
+        >>> alignments = aligner.align(pro, dna)
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        target            0 M  L  G  S  N  E  S   7
+        query             0 ATGCTGGGCTCGAACGAGTCC 21
+        <BLANKLINE>
+        target            7 R  V  C  P  K  L  S  P  S   16
+        query            20 CGTGTATGCCCTAAGCTGAGCCCGTCG 47
+        <BLANKLINE>
+
+        """
+        codon_table = self.codon_table
+        if isinstance(seqA, (Seq, MutableSeq, SeqRecord)):
+            sA = bytes(seqA)
+        elif isinstance(seqA, str):
+            sA = seqA.encode()
+        else:
+            raise ValueError(
+                "seqA must be a string, Seq, MutableSeq, or SeqRecord object"
+            )
+        seqB0 = seqB[: 3 * (len(seqB) // 3)]
+        seqB1 = seqB[1 : 1 + 3 * ((len(seqB) - 1) // 3)]
+        seqB2 = seqB[2 : 2 + 3 * ((len(seqB) - 2) // 3)]
+        if isinstance(seqB, (Seq, MutableSeq, SeqRecord)):
+            sB0 = seqB0.translate(codon_table)
+            sB1 = seqB1.translate(codon_table)
+            sB2 = seqB2.translate(codon_table)
+            sB0 = bytes(sB0)
+            sB1 = bytes(sB1)
+            sB2 = bytes(sB2)
+        elif isinstance(seqA, str):
+            sB0 = translate(seqB0, codon_table)
+            sB1 = translate(seqB1, codon_table)
+            sB2 = translate(seqB2, codon_table)
+            sB0 = sB0.encode()
+            sB1 = sB1.encode()
+            sB2 = sB2.encode()
+        else:
+            raise ValueError(
+                "seqB must be a string, Seq, MutableSeq, or SeqRecord object"
+            )
+        score, paths = super().align(sA, sB0, sB1, sB2)
+        alignments = PairwiseAlignments(seqA, seqB, score, paths)
+        return alignments
+        # alignment.column_annotations = {"consensus": consensus}
 
 
 # fmt: off

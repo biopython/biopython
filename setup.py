@@ -185,7 +185,8 @@ PACKAGES = [
 ]
 
 EXTENSIONS = [
-    Extension("Bio.Align._aligners", ["Bio/Align/_aligners.c"]),
+    Extension("Bio.Align._codonaligner", ["Bio/Align/_codonaligner.c"]),
+    Extension("Bio.Align._pairwisealigner", ["Bio/Align/_pairwisealigner.c"]),
     Extension("Bio.cpairwise2", ["Bio/cpairwise2module.c"]),
     Extension("Bio.Nexus.cnexus", ["Bio/Nexus/cnexus.c"]),
     Extension(

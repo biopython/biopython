@@ -462,7 +462,7 @@ A & A &  match score \\
 For convenience, \verb+PairwiseAligner+ objects have additional attributes that refer to a number of these values collectively, as shown (hierarchically) in Table~\ref{table:align-meta-attributes}.
 
 \begin{table}
-\caption{Meta-attributes of the pairwise aligner objects.}
+\caption{Meta-attributes of \verb+PairwiseAligner+ objects.}
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Meta-attribute} & \textbf{Attributes it maps to} \\
@@ -1695,3 +1695,130 @@ Integer sequences can also be aligned using a substitution matrix, in this case 
 >>> print(alignments.score)
 2.0
 \end{minted}
+
+\section{Codon alignments}
+
+The \verb+CodonAligner+ class in the \verb+Bio.Align+ module implements a specialized aligner for aligning a nucleotide sequence to the amino acid sequence it encodes. Such alignments are non-trivial if frameshifts occur during translation.
+
+\subsection{Aligning a nucleotide sequence to an amino acid sequence}
+To align a nucleotide sequence to an amino acid sequence, first create a \verb+CodonAligner+ object:
+%doctest
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> aligner = Align.CodonAligner()
+\end{minted}
+The \verb+CodonAligner+ object \verb+aligner+ stores the alignment parameters to be used for the alignments:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(aligner)
+Codon aligner with parameters
+  wildcard: 'X'
+  match_score: 1.0
+  mismatch_score: 0.0
+  frameshift_minus_two_score: -3.0
+  frameshift_minus_one_score: -3.0
+  frameshift_plus_one_score: -3.0
+  frameshift_plus_two_score: -3.0
+<BLANKLINE>
+\end{minted}
+The \verb+wildcard+, \verb+match_score+, and \verb+mismatch_score+ parameters are defined in the same was as for the \verb+PairwiseAligner+ class described above (see Section~\ref{sec:pairwise-aligner}). The values specified by the \verb+frameshift_minus_two_score+, \verb+frameshift_minus_one_score+, \verb+frameshift_plus_one_score+, and \verb+frameshift_plus_two_score+ parameters are added to the alignment score whenever a -2, -1, +1, or +2 frame shift, respectively, occurs in the alignment. By default, the frame shift scores are set to -3.0.
+Similar to the \verb+PairwiseAligner+ class (Table\label{table:align-meta-attributes}), the \verb+CodonAligner+ class defines additional attributes that refer to a number of these values collectively, as shown in Table~\ref{table:codonalign-meta-attributes}.
+\begin{table}
+\caption{Meta-attributes of \verb+CodonAligner+ objects.}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Meta-attribute} & \textbf{Attributes it maps to} \\
+\hline
+\verb+frameshift_minus_score+ & \verb+frameshift_minus_two_score+, \verb+frameshift_minus_one_score+ \\
+\verb+frameshift_plus_score+ & \verb+frameshift_plus_two_score+, \verb+frameshift_plus_one_score+ \\
+\verb+frameshift_two_score+ & \verb+frameshift_minus_two_score+, \verb+frameshift_plus_two_score+ \\
+\verb+frameshift_one_score+ & \verb+frameshift_minus_one_score+, \verb+frameshift_plus_one_score+ \\
+\verb+frameshift_score+ & \verb+frameshift_minus_two_score+, \verb+frameshift_minus_one_score+, \verb+frameshift_plus_one_score+, \verb+frameshift_plus_two_score+ \\
+\hline
+\end{tabular}
+\label{table:codonalign-meta-attributes}
+\end{table}
+Now let's consider two nucleotide sequences and the amino acid sequences they encode:
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.Seq import Seq
+>>> from Bio.SeqRecord import SeqRecord
+>>> nuc1 = Seq("TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG")
+>>> rna1 = SeqRecord(nuc1, id="rna1")
+>>> nuc2 = Seq("TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG")
+>>> rna2 = SeqRecord(nuc2, id="rna2")
+>>> aa1 = Seq("SGTARTKLLLLLAALCAAGGALE")
+>>> aa2 = Seq("SGTSRTKRLLLLAALGAAGGALE")
+>>> pro1 = SeqRecord(aa1, id="pro1")
+>>> pro2 = SeqRecord(aa2, id="pro2")
+\end{minted}
+While the two protein sequences both consist of 23 amino acids, the first nucleotide sequence consists of 3 * 23 = 69 nucleotides while the second nucleotide sequence tonsists of only 68 nucleotides:
+%cont-doctest
+\begin{minted}{pycon}
+>>> len(pro1)
+23
+>>> len(pro2)
+23
+>>> len(rna1)
+69
+>>> len(rna2)
+68
+\end{minted}
+This is due to a -1 frame shift event during translation of the second nucleotide sequence. Use \verb+CodonAligner.align+ to align \verb+rna1+ to \verb+pro1+, and \verb+rna2+ to \verb+pro2+, returning an iterator of \verb+Alignment+ objects:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments1 = aligner.align(pro1, rna1)
+>>> len(alignments1)
+1
+>>> alignment1 = next(alignments1)
+>>> print(alignment1)
+pro1              0 S  G  T  A  R  T  K  L  L  L  L  L  A  A  L  C  A  A  G  G  
+rna1              0 TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGG
+<BLANKLINE>
+pro1             20 A  L  E   23
+rna1             60 GCGCTGGAG 69
+<BLANKLINE>
+>>> alignment1.coordinates
+array([[ 0, 23],
+       [ 0, 69]])
+>>> alignments2 = aligner.align(pro2, rna2)
+>>> len(alignments2)
+1
+>>> alignment2 = next(alignments2)
+>>> print(alignment2)
+pro2              0 S  G  T  S  R  T  K  R   8
+rna2              0 TCAGGGACTTCGAGAACCAAGCGC 24
+<BLANKLINE>
+pro2              8 L  L  L  L  A  A  L  G  A  A  G  G  A  L  E   23
+rna2             23 CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG 68
+<BLANKLINE>
+>>> alignment2.coordinates
+array([[ 0,  8,  8, 23],
+       [ 0, 24, 23, 68]])
+\end{minted}
+While \verb+alignment1+ is a continuous alignment of the 69 nucleotides to the 23 amino acids, in \verb+alignment2+ we find a -1 frame shift after 24 nucleotides.
+
+The alignment score is stored as an attribute on the \verb+alignments1+ and \verb+alignments2+ iterators, and on the individual alignments \verb+alignment1+ and \verb+alignment2+:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments1.score
+23.0
+>>> alignment1.score
+23.0
+>>> alignments2.score
+20.0
+>>> alignment2.score
+20.0
+\end{minted}
+where the score of the \verb+rna1+-\verb+pro1+ alignment is equal to the number of aligned amino acids, and the score of the \verb+rna2+-\verb+pro2+ alignment is 1 less due to the penalty for the frame shift. To calculate the alignment score without calculating the alignment itself, the \verb+score+ method can be used:
+%cont-doctest
+\begin{minted}{pycon}
+>>> score = aligner.score(pro1, rna1)
+>>> print(score)
+23.0
+>>> score = aligner.score(pro2, rna2)
+>>> print(score)
+20.0
+\end{minted}
+
+\subsection{Generating a multiple sequence alignment of codon sequences}

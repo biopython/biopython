@@ -343,7 +343,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     def _create_alignment(self, lines):
         records = []
         strands = []
-        column_annotations = {}
         aligned_sequences = []
         annotations = {}
         line = next(lines)
@@ -453,8 +452,6 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         alignment = Alignment(records, coordinates)
         if annotations is not None:
             alignment.annotations = annotations
-        if column_annotations is not None:
-            alignment.column_annotations = column_annotations
         if score is not None:
             alignment.score = score
         return alignment

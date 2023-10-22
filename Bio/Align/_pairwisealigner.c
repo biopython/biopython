@@ -6896,7 +6896,8 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
 }
 
 static char Aligner_doc[] =
-"Aligner.\n";
+"The PairwiseAligner class implements common algorithms to align two\n"
+"sequences to each other.\n";
 
 static PyMethodDef Aligner_methods[] = {
     {"score",
@@ -6914,7 +6915,7 @@ static PyMethodDef Aligner_methods[] = {
 
 static PyTypeObject AlignerType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "_algorithms.PairwiseAligner", /* tp_name */
+    "_pairwisealigner.PairwiseAligner", /* tp_name */
     sizeof(Aligner),               /* tp_basicsize */
     0,                             /* tp_itemsize */
     (destructor)Aligner_dealloc,   /* tp_dealloc */
@@ -6954,13 +6955,13 @@ static PyTypeObject AlignerType = {
 
 /* Module definition */
 
-static char _aligners__doc__[] =
+static char _pairwisealigner__doc__[] =
 "C extension module implementing pairwise alignment algorithms";
 
 static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
-        "_aligners",
-        _aligners__doc__,
+        "_pairwisealigner",
+        _pairwisealigner__doc__,
         -1,
         NULL,
         NULL,
@@ -6970,7 +6971,7 @@ static struct PyModuleDef moduledef = {
 };
 
 PyObject *
-PyInit__aligners(void)
+PyInit__pairwisealigner(void)
 {
     PyObject* module;
     AlignerType.tp_new = PyType_GenericNew;
