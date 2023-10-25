@@ -1656,7 +1656,7 @@ static PyMethodDef PathGenerator_methods[] = {
      METH_NOARGS,
      PathGenerator_reset__doc__
     },
-    {NULL}  /* Sentinel */
+    {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
 static PySequenceMethods PathGenerator_as_sequence = {
@@ -4024,7 +4024,7 @@ static PyGetSetDef Aligner_getset[] = {
         (getter)Aligner_get_algorithm,
         (setter)NULL,
         Aligner_algorithm__doc__, NULL},
-    {NULL}  /* Sentinel */
+    {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
 #define SELECT_SCORE_GLOBAL(score1, score2, score3) \
@@ -6910,7 +6910,7 @@ static PyMethodDef Aligner_methods[] = {
      METH_VARARGS | METH_KEYWORDS,
      Aligner_align__doc__
     },
-    {NULL}  /* Sentinel */
+    {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
 static PyTypeObject AlignerType = {

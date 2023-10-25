@@ -285,7 +285,7 @@ static PyMethodDef PathGenerator_methods[] = {
      METH_NOARGS,
      PathGenerator_reset__doc__
     },
-    {NULL}  /* Sentinel */
+    {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
 static PySequenceMethods PathGenerator_as_sequence = {
@@ -761,7 +761,7 @@ static PyGetSetDef Aligner_getset[] = {
         (getter)Aligner_get_frameshift_score,
         (setter)Aligner_set_frameshift_score,
         Aligner_frameshift_score__doc__, NULL},
-    {NULL}  /* Sentinel */
+    {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
 /* ----------------- alignment algorithms ----------------- */
@@ -1076,7 +1076,7 @@ static PyMethodDef Aligner_methods[] = {
      METH_VARARGS | METH_KEYWORDS,
      Aligner_align__doc__
     },
-    {NULL}  /* Sentinel */
+    {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
 static PyTypeObject AlignerType = {
