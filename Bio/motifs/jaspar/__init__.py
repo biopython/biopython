@@ -6,13 +6,11 @@
 """JASPAR2014 module."""
 
 from Bio.Seq import Seq
-from Bio.Alphabet.IUPAC import unambiguous_dna as dna
 import re
 import math
 
-from Bio._py3k import range
-
 from Bio import motifs
+from Bio import Align
 
 
 class Motif(motifs.Motif):
@@ -23,13 +21,26 @@ class Motif(motifs.Motif):
     file, a 'jaspar' format file or a JASPAR database).
     """
 
-    def __init__(self, matrix_id, name, alphabet=dna, instances=None,
-                 counts=None, collection=None, tf_class=None, tf_family=None,
-                 species=None, tax_group=None, acc=None, data_type=None,
-                 medline=None, pazar_id=None, comment=None):
+    def __init__(
+        self,
+        matrix_id,
+        name,
+        alphabet="ACGT",
+        alignment=None,
+        counts=None,
+        collection=None,
+        tf_class=None,
+        tf_family=None,
+        species=None,
+        tax_group=None,
+        acc=None,
+        data_type=None,
+        medline=None,
+        pazar_id=None,
+        comment=None,
+    ):
         """Construct a JASPAR Motif instance."""
-
-        motifs.Motif.__init__(self, alphabet, instances, counts)
+        motifs.Motif.__init__(self, alphabet, alignment, counts)
         self.name = name
         self.matrix_id = matrix_id
         self.collection = collection
@@ -40,7 +51,7 @@ class Motif(motifs.Motif):
         # taxonomy IDs.
         self.species = species
         self.tax_group = tax_group
-        self.acc = acc              # May have multiple so acc is a list.
+        self.acc = acc  # May have multiple so acc is a list.
         self.data_type = data_type
         self.medline = medline
         self.pazar_id = pazar_id
@@ -63,40 +74,40 @@ class Motif(motifs.Motif):
 
         We choose to provide only the filled metadata information.
         """
-        tf_name_str = "TF name\t{0}\n".format(self.name)
-        matrix_id_str = "Matrix ID\t{0}\n".format(self.matrix_id)
+        tf_name_str = f"TF name\t{self.name}\n"
+        matrix_id_str = f"Matrix ID\t{self.matrix_id}\n"
         the_string = "".join([tf_name_str, matrix_id_str])
         if self.collection:
-            collection_str = "Collection\t{0}\n".format(self.collection)
+            collection_str = f"Collection\t{self.collection}\n"
             the_string = "".join([the_string, collection_str])
         if self.tf_class:
-            tf_class_str = "TF class\t{0}\n".format(self.tf_class)
+            tf_class_str = f"TF class\t{self.tf_class}\n"
             the_string = "".join([the_string, tf_class_str])
         if self.tf_family:
-            tf_family_str = "TF family\t{0}\n".format(self.tf_family)
+            tf_family_str = f"TF family\t{self.tf_family}\n"
             the_string = "".join([the_string, tf_family_str])
         if self.species:
-            species_str = "Species\t{0}\n".format(",".join(self.species))
+            species_str = f"Species\t{','.join(self.species)}\n"
             the_string = "".join([the_string, species_str])
         if self.tax_group:
-            tax_group_str = "Taxonomic group\t{0}\n".format(self.tax_group)
+            tax_group_str = f"Taxonomic group\t{self.tax_group}\n"
             the_string = "".join([the_string, tax_group_str])
         if self.acc:
-            acc_str = "Accession\t{0}\n".format(self.acc)
+            acc_str = f"Accession\t{self.acc}\n"
             the_string = "".join([the_string, acc_str])
         if self.data_type:
-            data_type_str = "Data type used\t{0}\n".format(self.data_type)
+            data_type_str = f"Data type used\t{self.data_type}\n"
             the_string = "".join([the_string, data_type_str])
         if self.medline:
-            medline_str = "Medline\t{0}\n".format(self.medline)
+            medline_str = f"Medline\t{self.medline}\n"
             the_string = "".join([the_string, medline_str])
         if self.pazar_id:
-            pazar_id_str = "PAZAR ID\t{0}\n".format(self.pazar_id)
+            pazar_id_str = f"PAZAR ID\t{self.pazar_id}\n"
             the_string = "".join([the_string, pazar_id_str])
         if self.comment:
-            comment_str = "Comments\t{0}\n".format(self.comment)
+            comment_str = f"Comments\t{self.comment}\n"
             the_string = "".join([the_string, comment_str])
-        matrix_str = "Matrix:\n{0}\n\n".format(self.counts)
+        matrix_str = f"Matrix:\n{self.counts}\n\n"
         the_string = "".join([the_string, matrix_str])
         return the_string
 
@@ -104,10 +115,12 @@ class Motif(motifs.Motif):
         """Return the hash key corresponding to the JASPAR profile.
 
         :note: We assume the unicity of matrix IDs
+
         """
         return self.matrix_id.__hash__()
 
     def __eq__(self, other):
+        """Return True if matrix IDs are the same."""
         return self.matrix_id == other.matrix_id
 
 
@@ -115,15 +128,16 @@ class Record(list):
     """Represent a list of jaspar motifs.
 
     Attributes:
-
      - version: The JASPAR version used
 
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.version = None
 
     def __str__(self):
+        """Return a string of all motifs in the Record."""
         return "\n".join(str(the_motif) for the_motif in self)
 
     def to_dict(self):
@@ -158,25 +172,25 @@ def write(motifs, format):
     """Return the representation of motifs in "pfm" or "jaspar" format."""
     letters = "ACGT"
     lines = []
-    if format == 'pfm':
+    if format == "pfm":
         motif = motifs[0]
         counts = motif.counts
         for letter in letters:
-            terms = ["{0:6.2f}".format(value) for value in counts[letter]]
-            line = "{0}\n".format(" ".join(terms))
+            terms = [f"{value:6.2f}" for value in counts[letter]]
+            line = f"{' '.join(terms)}\n"
             lines.append(line)
-    elif format == 'jaspar':
+    elif format == "jaspar":
         for m in motifs:
             counts = m.counts
             try:
                 matrix_id = m.matrix_id
             except AttributeError:
                 matrix_id = None
-            line = ">{0} {1}\n".format(matrix_id, m.name)
+            line = f">{matrix_id} {m.name}\n"
             lines.append(line)
             for letter in letters:
-                terms = ["{0:6.2f}".format(value) for value in counts[letter]]
-                line = "{0} [{1}]\n".format(letter, " ".join(terms))
+                terms = [f"{value:6.2f}" for value in counts[letter]]
+                line = f"{letter} [{' '.join(terms)}]\n"
                 lines.append(line)
     else:
         raise ValueError("Unknown JASPAR format %s" % format)
@@ -189,11 +203,10 @@ def write(motifs, format):
 
 def _read_pfm(handle):
     """Read the motif from a JASPAR .pfm file (PRIVATE)."""
-    alphabet = dna
+    alphabet = "ACGT"
     counts = {}
 
-    letters = "ACGT"
-    for letter, line in zip(letters, handle):
+    for letter, line in zip(alphabet, handle):
         words = line.split()
         # if there is a letter in the beginning, ignore it
         if words[0] == letter:
@@ -210,7 +223,7 @@ def _read_pfm(handle):
 
 def _read_sites(handle):
     """Read the motif from JASPAR .sites file (PRIVATE)."""
-    alphabet = dna
+    alphabet = "ACGT"
     instances = []
 
     for line in handle:
@@ -221,15 +234,13 @@ def _read_sites(handle):
         line = next(handle)
         instance = ""
         for c in line.strip():
-            if c == c.upper():
+            if c.isupper():
                 instance += c
-        instance = Seq(instance, alphabet)
+        instance = Seq(instance)
         instances.append(instance)
 
-    instances = motifs.Instances(instances, alphabet)
-    motif = Motif(
-        matrix_id=None, name=None, alphabet=alphabet, instances=instances
-    )
+    alignment = Align.Alignment(instances)
+    motif = Motif(matrix_id=None, name=None, alphabet=alphabet, alignment=alignment)
     motif.mask = "*" * motif.length
     record = Record()
     record.append(motif)
@@ -259,8 +270,7 @@ def _read_jaspar(handle):
                 2	19	11	50	29	47	22	81	1	6
 
     """
-
-    alphabet = dna
+    alphabet = "ACGT"
     counts = {}
 
     record = Record()
@@ -272,7 +282,7 @@ def _read_jaspar(handle):
     identifier = None
     name = None
     row_count = 0
-    nucleotides = ['A', 'C', 'G', 'T']
+    nucleotides = ["A", "C", "G", "T"]
     for line in handle:
         line = line.strip()
 
@@ -292,8 +302,7 @@ def _read_jaspar(handle):
             counts[letter] = [float(x) for x in words]
             row_count += 1
             if row_count == 4:
-                record.append(Motif(identifier, name, alphabet=alphabet,
-                                    counts=counts))
+                record.append(Motif(identifier, name, alphabet=alphabet, counts=counts))
                 identifier = None
                 name = None
                 counts = {}
@@ -303,8 +312,7 @@ def _read_jaspar(handle):
             counts[nucleotides[row_count]] = [float(x) for x in words]
             row_count += 1
             if row_count == 4:
-                record.append(Motif(identifier, name, alphabet=alphabet,
-                                    counts=counts))
+                record.append(Motif(identifier, name, alphabet=alphabet, counts=counts))
                 identifier = None
                 name = None
                 counts = {}
@@ -314,6 +322,11 @@ def _read_jaspar(handle):
 
 
 def calculate_pseudocounts(motif):
+    """Calculate pseudocounts.
+
+    Computes the root square of the total number of sequences multiplied by
+    the background nucleotide.
+    """
     alphabet = motif.alphabet
     background = motif.background
 
@@ -321,8 +334,7 @@ def calculate_pseudocounts(motif):
     # number of instances.
     total = 0
     for i in range(motif.length):
-        total += sum(float(motif.counts[letter][i])
-                     for letter in alphabet.letters)
+        total += sum(motif.counts[letter][i] for letter in alphabet)
 
     avg_nb_instances = total / motif.length
     sq_nb_instances = math.sqrt(avg_nb_instances)
@@ -330,12 +342,12 @@ def calculate_pseudocounts(motif):
     if background:
         background = dict(background)
     else:
-        background = dict.fromkeys(sorted(alphabet.letters), 1.0)
+        background = dict.fromkeys(sorted(alphabet), 1.0)
 
     total = sum(background.values())
     pseudocounts = {}
 
-    for letter in alphabet.letters:
+    for letter in alphabet:
         background[letter] /= total
         pseudocounts[letter] = sq_nb_instances * background[letter]
 
@@ -343,13 +355,12 @@ def calculate_pseudocounts(motif):
 
 
 def split_jaspar_id(id):
-    """Utility function to split a JASPAR matrix ID into its component.
+    """Split a JASPAR matrix ID into its component.
 
     Components are base ID and version number, e.g. 'MA0047.2' is returned as
     ('MA0047', 2).
     """
-
-    id_split = id.split('.')
+    id_split = id.split(".")
 
     base_id = None
     version = None

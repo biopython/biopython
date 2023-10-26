@@ -3,47 +3,47 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
-"""Testing online code for fetching sequences, and parsing them
+"""Testing online code for fetching sequences, and parsing them.
 
 Uses Bio.SeqIO to parse files downloaded with Bio.GenBank, Bio.WWW.NCBI,
 Bio.ExPASy etc.
 
 Goals:
-    Make sure that all retrieval is working as expected.
-    May catch some format changes early too.
+    - Make sure that all retrieval is working as expected.
+    - May catch some format changes early too.
+
 """
 import unittest
 
 import requires_internet
+
+from Bio import Entrez  # Testing this
+from Bio import ExPASy  # Testing this
+from Bio import SeqIO
+from Bio.SeqUtils.CheckSum import seguid
+from Bio.SwissProt import SwissProtParserError
+
 requires_internet.check()
 
-# We want to test these:
-from Bio import Entrez
-from Bio import ExPASy
-
-# In order to check any sequences returned
-from Bio import SeqIO
-from Bio._py3k import StringIO
-from Bio.SeqUtils.CheckSum import seguid
-
-from Bio.File import UndoHandle
-from Bio._py3k import _as_string
-
 # This lets us set the email address to be sent to NCBI Entrez:
-Entrez.email = "biopython-dev@biopython.org"
+Entrez.email = "biopython@biopython.org"
 
 
 class ExPASyTests(unittest.TestCase):
     """Tests for Bio.ExPASy module."""
+
     def test_get_sprot_raw(self):
-        """Bio.ExPASy.get_sprot_raw("O23729")"""
+        """Bio.ExPASy.get_sprot_raw("O23729")."""
         identifier = "O23729"
-        # This is to catch an error page from our proxy:
-        handle = UndoHandle(ExPASy.get_sprot_raw(identifier))
-        if _as_string(handle.peekline()).startswith("<!DOCTYPE HTML"):
-            raise IOError
-        record = SeqIO.read(handle, "swiss")
+        handle = ExPASy.get_sprot_raw(identifier)
+        try:
+            record = SeqIO.read(handle, "swiss")
+        except SwissProtParserError as e:
+            # This is to catch an error page from our proxy
+            if str(e) == "Failed to find ID in first line" and e.line.startswith(
+                "<!DOCTYPE HTML"
+            ):
+                raise OSError from None
         handle.close()
         self.assertEqual(record.id, identifier)
         self.assertEqual(len(record), 394)
@@ -58,30 +58,42 @@ class EntrezTests(unittest.TestCase):
                 f = "gb"
             record = SeqIO.read(handle, f)
             handle.close()
-            self.assertTrue((entry in record.name) or
-                         (entry in record.id) or
-                         ("gi" in record.annotations and
-                          record.annotations["gi"] == entry),
-                         "%s got %s, %s" % (entry, record.name, record.id))
+            # NCBI still takes GI on input, but phasing it out in output
+            gi_to_acc = {"6273291": "AF191665.1", "16130152": "NP_416719.1"}
+            if entry in gi_to_acc:
+                entry = gi_to_acc[entry]
+            self.assertTrue(
+                (entry in record.name)
+                or (entry in record.id)
+                or ("gi" in record.annotations and record.annotations["gi"] == entry),
+                f"{entry} got {record.name}, {record.id}",
+            )
             self.assertEqual(len(record), length)
             self.assertEqual(seguid(record.seq), checksum)
 
-for database, formats, entry, length, checksum in [
-        ("nuccore", ["fasta", "gb"], "X52960", 248,
-         "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU"),
-        ("nucleotide", ["fasta", "gb"], "6273291", 902,
-         "bLhlq4mEFJOoS9PieOx4nhGnjAQ"),
-        ("protein", ["fasta", "gbwithparts"], "16130152", 367,
-         "fCjcjMFeGIrilHAn6h+yju267lg"),
-        ]:
 
-    def funct(d, f, e, l, c):
-        method = lambda x: x.simple(d, f, e, l, c)
-        method.__doc__ = "Bio.Entrez.efetch(%r, id=%r, ...)" % (d, e)
+for database, formats, entry, length, checksum in [
+    ("nuccore", ["fasta", "gb"], "X52960", 248, "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU"),
+    ("nucleotide", ["fasta", "gb"], "6273291", 902, "bLhlq4mEFJOoS9PieOx4nhGnjAQ"),
+    (
+        "protein",
+        ["fasta", "gbwithparts"],
+        "16130152",
+        367,
+        "fCjcjMFeGIrilHAn6h+yju267lg",
+    ),
+]:
+
+    def funct(d, f, e, l, c):  # noqa: E741
+        method = lambda x: x.simple(d, f, e, l, c)  # noqa: E731
+        method.__doc__ = f"Bio.Entrez.efetch({d!r}, id={e!r}, ...)"
         return method
 
-    setattr(EntrezTests, "test_%s_%s" % (database, entry),
-            funct(database, formats, entry, length, checksum))
+    setattr(
+        EntrezTests,
+        f"test_{database}_{entry}",
+        funct(database, formats, entry, length, checksum),
+    )
     del funct
 del database, formats, entry, length, checksum
 

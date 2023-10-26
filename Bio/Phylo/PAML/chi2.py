@@ -1,16 +1,24 @@
 # Copyright (C) 2011 by Brandon Invergo (b.invergo@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 #
 # This code is adapted (with permission) from the C source code of chi2.c,
 # written by Ziheng Yang and included in the PAML software package:
 # http://abacus.gene.ucl.ac.uk/software/paml.html
 
+"""Methods to calculate p-values from a Chi-squared cumulative distribution function.
+
+for likelihood ratio tests.
+"""
+
 from math import log, exp
 
 
 def cdf_chi2(df, stat):
+    """Compute p-value, from distribution function and test statistics."""
     if df < 1:
         raise ValueError("df must be at least 1")
     if stat < 0:
@@ -22,7 +30,7 @@ def cdf_chi2(df, stat):
 
 
 def _ln_gamma_function(alpha):
-    """Compute the log of the gamma function for a given alpha.
+    """Compute the log of the gamma function for a given alpha (PRIVATE).
 
     Comments from Z. Yang:
     Returns ln(gamma(alpha)) for alpha>0, accurate to 10 decimal places.
@@ -43,13 +51,21 @@ def _ln_gamma_function(alpha):
         x = z
         f = -log(f)
     z = 1 / (x * x)
-    return f + (x - 0.5) * log(x) - x + .918938533204673 + \
-           (((-.000595238095238 * z + .000793650793651) * z - .002777777777778) * z +
-            .083333333333333) / x
+    return (
+        f
+        + (x - 0.5) * log(x)
+        - x
+        + 0.918938533204673
+        + (
+            ((-0.000595238095238 * z + 0.000793650793651) * z - 0.002777777777778) * z
+            + 0.083333333333333
+        )
+        / x
+    )
 
 
 def _incomplete_gamma(x, alpha):
-    """Compute an incomplete gamma ratio.
+    """Compute an incomplete gamma ratio (PRIVATE).
 
     Comments from Z. Yang::
 

@@ -1,7 +1,9 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2001 Brad Chapman.  All rights reserved.
 #
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Generic functions which are useful for working with HMMs.
 
@@ -9,28 +11,27 @@ This just collects general functions which you might like to use in
 dealing with HMMs.
 """
 
-from __future__ import print_function
 
-
-def pretty_print_prediction(emissions, real_state, predicted_state,
-                            emission_title="Emissions",
-                            real_title="Real State",
-                            predicted_title="Predicted State",
-                            line_width=75):
+def pretty_print_prediction(
+    emissions,
+    real_state,
+    predicted_state,
+    emission_title="Emissions",
+    real_title="Real State",
+    predicted_title="Predicted State",
+    line_width=75,
+):
     """Print out a state sequence prediction in a nice manner.
 
     Arguments:
+     - emissions -- The sequence of emissions of the sequence you are
+       dealing with.
+     - real_state -- The actual state path that generated the emissions.
+     - predicted_state -- A state path predicted by some kind of HMM model.
 
-    o emissions -- The sequence of emissions of the sequence you are
-    dealing with.
-
-    o real_state -- The actual state path that generated the emissions.
-
-    o predicted_state -- A state path predicted by some kind of HMM model.
     """
     # calculate the length of the titles and sequences
-    title_length = max(len(emission_title), len(real_title),
-                       len(predicted_title)) + 1
+    title_length = max(len(emission_title), len(real_title), len(predicted_title)) + 1
     seq_length = line_width - title_length
 
     # set up the titles so they'll print right
@@ -46,15 +47,17 @@ def pretty_print_prediction(emissions, real_state, predicted_state,
         else:
             extension = len(emissions) - cur_position
 
-        print("%s%s" % (emission_title,
-                        emissions[cur_position:cur_position + seq_length]))
-        print("%s%s" % (real_title,
-                        real_state[cur_position:cur_position + seq_length]))
-        print("%s%s\n" % (predicted_title,
-                          predicted_state[cur_position:
-                                          cur_position + seq_length]))
+        print(f"{emission_title}{emissions[cur_position:cur_position + seq_length]}")
+        print(f"{real_title}{real_state[cur_position : cur_position + seq_length]}")
+        print(
+            "%s%s\n"
+            % (
+                predicted_title,
+                predicted_state[cur_position : cur_position + seq_length],
+            )
+        )
 
-        if (len(emissions) < (cur_position + seq_length)):
+        if len(emissions) < (cur_position + seq_length):
             break
 
         cur_position += seq_length

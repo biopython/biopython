@@ -6,21 +6,24 @@
 """Model class, used in Structure objects."""
 
 from Bio.PDB.Entity import Entity
+from Bio.PDB.internal_coords import IC_Chain
 
 
 class Model(Entity):
-    """
-    The object representing a model in a structure. In a structure
-    derived from an X-ray crystallography experiment, only a single
-    model will be present (with some exceptions). NMR structures
-    normally contain many different models.
+    """The object representing a model in a structure.
+
+    In a structure derived from an X-ray crystallography experiment,
+    only a single model will be present (with some exceptions). NMR
+    structures normally contain many different models.
     """
 
     def __init__(self, id, serial_num=None):
-        """
+        """Initialize.
+
         Arguments:
-        o id - int
-        o serial_num - int
+         - id - int
+         - serial_num - int
+
         """
         self.level = "M"
         if serial_num is None:
@@ -30,44 +33,42 @@ class Model(Entity):
 
         Entity.__init__(self, id)
 
-    # Private methods
-
-    def _sort(self, c1, c2):
-        """Sort the Chains instances in the Model instance.
-
-        Chain instances are sorted alphabetically according to
-        their chain id. Blank chains come last, as they often consist
-        of waters.
-
-        Arguments:
-        o c1, c2 - Chain objects
-        """
-        id1 = c1.get_id()
-        id2 = c2.get_id()
-        # make sure blank chains come last (often waters)
-        if id1 == " " and not id2 == " ":
-            return 1
-        elif id2 == " " and not id1 == " ":
-            return -1
-        return cmp(id1, id2)
-
-    # Special methods
-
     def __repr__(self):
-        return "<Model id=%s>" % self.get_id()
-
-    # Public
+        """Return model identifier."""
+        return f"<Model id={self.get_id()}>"
 
     def get_chains(self):
-        for c in self:
-            yield c
+        """Return chains."""
+        yield from self
 
     def get_residues(self):
+        """Return residues."""
         for c in self.get_chains():
-            for r in c:
-                yield r
+            yield from c
 
     def get_atoms(self):
+        """Return atoms."""
         for r in self.get_residues():
-            for a in r:
-                yield a
+            yield from r
+
+    def atom_to_internal_coordinates(self, verbose: bool = False) -> None:
+        """Create/update internal coordinates from Atom X,Y,Z coordinates.
+
+        Internal coordinates are bond length, angle and dihedral angles.
+
+        :param verbose bool: default False
+            describe runtime problems
+        """
+        for chn in self.get_chains():
+            chn.atom_to_internal_coordinates(verbose)
+
+    def internal_to_atom_coordinates(self, verbose: bool = False) -> None:
+        """Create/update atom coordinates from internal coordinates.
+
+        :param verbose bool: default False
+            describe runtime problems
+
+        :raises Exception: if any chain does not have .pic attribute
+        """
+        for chn in self.get_chains():
+            chn.internal_to_atom_coordinates(verbose)

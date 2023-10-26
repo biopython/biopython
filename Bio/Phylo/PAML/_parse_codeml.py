@@ -1,49 +1,36 @@
 # Copyright (C) 2011, 2016 by Brandon Invergo (b.invergo@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
+"""Methods for parsing codeml results files."""
 
 import re
 
-
-line_floats_re = re.compile("-*\d+\.\d+")
-
-try:
-    float("nan")
-    _nan_float = float
-except ValueError:
-    # Happens prior to Python 2.6 depending on C library, e.g. breaks on WinXP
-    def _nan_float(text):
-        try:
-            return float(text)
-        except ValueError:
-            if text.lower() == "nan":
-                import struct
-                return struct.unpack('d', struct.pack('Q', 0xfff8000000000000))[0]
-            else:
-                raise
+line_floats_re = re.compile(r"-*\d+\.\d+")
 
 
 def parse_basics(lines, results):
-    """Parse the basic information that should be present in most codeml output files.
-    """
+    """Parse the basic information that should be present in most codeml output files."""
     # multi_models is used to designate there being results for more than one
     # model in the file
     multi_models = False
     multi_genes = False
-    version_re = re.compile(".+ \(in paml version (\d+\.\d+[a-z]*).*")
-    model_re = re.compile("Model:\s+(.+)")
-    num_genes_re = re.compile("\(([0-9]+) genes: separate data\)")
+    version_re = re.compile(r".+ \(in paml version (\d+\.\d+[a-z]*).*")
+    model_re = re.compile(r"Model:\s+(.+)")
+    num_genes_re = re.compile(r"\(([0-9]+) genes: separate data\)")
     # In codeml 4.1, the codon substitution model is headed by:
     # "Codon frequencies:"
     # In codeml 4.3+ it is headed by:
     # "Codon frequency model:"
-    codon_freq_re = re.compile("Codon frequenc[a-z\s]{3,7}:\s+(.+)")
-    siteclass_re = re.compile("Site-class models:\s*([^\s]*)")
+    codon_freq_re = re.compile(r"Codon frequenc[a-z\s]{3,7}:\s+(.+)")
+    siteclass_re = re.compile(r"Site-class models:\s*([^\s]*)")
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
-        line_floats = [_nan_float(val) for val in line_floats_res]
+        line_floats = [float(val) for val in line_floats_res]
         # Get the program version number
         version_res = version_re.match(line)
         if version_res is not None:
@@ -87,33 +74,35 @@ def parse_basics(lines, results):
 
 
 def parse_nssites(lines, results, multi_models, multi_genes):
-    """Determine which NSsites models are present and parse them.
-    """
-
+    """Determine which NSsites models are present and parse them."""
     ns_sites = {}
-    model_re = re.compile("Model (\d+):\s+(.+)")
-    gene_re = re.compile("Gene\s+([0-9]+)\s+.+")
+    model_re = re.compile(r"Model (\d+):\s+(.+)")
+    gene_re = re.compile(r"Gene\s+([0-9]+)\s+.+")
     siteclass_model = results.get("site-class model")
     if not multi_models:
         # If there's only one model in the results, find out
         # which one it is and then parse it.
         if siteclass_model is None:
             siteclass_model = "one-ratio"
-        current_model = {"one-ratio": 0,
-                         "NearlyNeutral": 1,
-                         "PositiveSelection": 2,
-                         "discrete": 3,
-                         "beta": 7,
-                         "beta&w>1": 8,
-                         "M2a_rel": 22}[siteclass_model]
+        current_model = {
+            "one-ratio": 0,
+            "NearlyNeutral": 1,
+            "PositiveSelection": 2,
+            "discrete": 3,
+            "beta": 7,
+            "beta&w>1": 8,
+            "M2a_rel": 22,
+        }[siteclass_model]
         if multi_genes:
             genes = results["genes"]
             current_gene = None
             gene_start = None
+            model_results = None
             for line_num, line in enumerate(lines):
                 gene_res = gene_re.match(line)
                 if gene_res:
                     if current_gene is not None:
+                        assert model_results is not None
                         parse_model(lines[gene_start:line_num], model_results)
                         genes[current_gene - 1] = model_results
                     gene_start = line_num
@@ -165,21 +154,20 @@ def parse_nssites(lines, results, multi_models, multi_genes):
 
 
 def parse_model(lines, results):
-    """Parse an individual NSsites model's results.
-    """
+    """Parse an individual NSsites model's results."""
     parameters = {}
     SEs_flag = False
     dS_tree_flag = False
     dN_tree_flag = False
     w_tree_flag = False
     num_params = None
-    tree_re = re.compile("^\([\w #:',.()]*\);\s*$")
-    branch_re = re.compile("\s+(\d+\.\.\d+)[\s+\d+\.\d+]+")
-    model_params_re = re.compile("(?<!\S)([a-z]\d?)\s*=\s+(\d+\.\d+)")
+    tree_re = re.compile(r"^\([\w #:',.()]*\);\s*$")
+    branch_re = re.compile(r"\s+(\d+\.\.\d+)[\s+\d+\.\d+]+")
+    model_params_re = re.compile(r"(?<!\S)([a-z]\d?)\s*=\s+(\d+\.\d+)")
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
-        line_floats = [_nan_float(val) for val in line_floats_res]
+        line_floats = [float(val) for val in line_floats_res]
         # Check if branch-specific results are in the line
         branch_res = branch_re.match(line)
         # Check if additional model parameters are in the line
@@ -189,7 +177,7 @@ def parse_model(lines, results):
         # "lnL(ntime: 19  np: 22):  -2021.348300      +0.000000"
         if "lnL(ntime:" in line and line_floats:
             results["lnL"] = line_floats[0]
-            np_res = re.match("lnL\(ntime:\s+\d+\s+np:\s+(\d+)\)", line)
+            np_res = re.match(r"lnL\(ntime:\s+\d+\s+np:\s+(\d+)\)", line)
             if np_res is not None:
                 num_params = int(np_res.group(1))
         # Get parameter list. This can be useful for specifying starting
@@ -235,7 +223,7 @@ def parse_model(lines, results):
         elif "dN tree:" in line:
             dN_tree_flag = True
         elif "w ratios as labels for TreeView:" in line:
-                w_tree_flag = True
+            w_tree_flag = True
         # Find rates for multiple genes
         # Example match: "rates for 2 genes:     1  2.75551"
         elif "rates for" in line and line_floats:
@@ -254,11 +242,13 @@ def parse_model(lines, results):
         # Find omega and kappa values for multi-gene files
         # Example match: "gene # 1: kappa =   1.72615 omega =   0.39333"
         elif "gene # " in line:
-            gene_num = int(re.match("gene # (\d+)", line).group(1))
+            gene_num = int(re.match(r"gene # (\d+)", line).group(1))
             if parameters.get("genes") is None:
                 parameters["genes"] = {}
-            parameters["genes"][gene_num] = {"kappa": line_floats[0],
-                                             "omega": line_floats[1]}
+            parameters["genes"][gene_num] = {
+                "kappa": line_floats[0],
+                "omega": line_floats[1],
+            }
         # Find dN values.
         # Example match: "tree length for dN:       0.2990"
         elif "tree length for dN" in line and line_floats:
@@ -286,12 +276,13 @@ def parse_model(lines, results):
         # Example match:
         # "branch type 0:    0.31022   1.00000   0.00000"
         elif "branch type " in line:
-            branch_type = re.match("branch type (\d)", line)
+            branch_type = re.match(r"branch type (\d)", line)
             if branch_type:
                 site_classes = parameters.get("site classes")
                 branch_type_no = int(branch_type.group(1))
-                site_classes = parse_clademodelc(branch_type_no, line_floats,
-                                                 site_classes)
+                site_classes = parse_clademodelc(
+                    branch_type_no, line_floats, site_classes
+                )
                 parameters["site classes"] = site_classes
         # Find the omega values of the foreground branch for each site
         # class in the branch site A model
@@ -318,18 +309,17 @@ def parse_model(lines, results):
             branch = branch_res.group(1)
             if parameters.get("branches") is None:
                 parameters["branches"] = {}
-            # Hack for Jython http://bugs.jython.org/issue1762 float("-nan")
-            line = line.replace(" -nan", " nan")
             params = line.strip().split()[1:]
             parameters["branches"][branch] = {
-                "t": _nan_float(params[0].strip()),
-                "N": _nan_float(params[1].strip()),
-                "S": _nan_float(params[2].strip()),
-                "omega": _nan_float(params[3].strip()),
-                "dN": _nan_float(params[4].strip()),
-                "dS": _nan_float(params[5].strip()),
-                "N*dN": _nan_float(params[6].strip()),
-                "S*dS": _nan_float(params[7].strip())}
+                "t": float(params[0].strip()),
+                "N": float(params[1].strip()),
+                "S": float(params[2].strip()),
+                "omega": float(params[3].strip()),
+                "dN": float(params[4].strip()),
+                "dS": float(params[5].strip()),
+                "N*dN": float(params[6].strip()),
+                "S*dS": float(params[7].strip()),
+            }
         # Find model parameters, which can be spread across multiple
         # lines.
         # Example matches:
@@ -338,7 +328,7 @@ def parse_model(lines, results):
         elif model_params:
             float_model_params = []
             for param in model_params:
-                float_model_params.append((param[0], _nan_float(param[1])))
+                float_model_params.append((param[0], float(param[1])))
             parameters.update(dict(float_model_params))
     if parameters:
         results["parameters"] = parameters
@@ -346,7 +336,9 @@ def parse_model(lines, results):
 
 
 def parse_siteclass_proportions(line_floats):
-    """For models which have multiple site classes, find the proportion of the
+    """Find proportion of alignment assigned to each class.
+
+    For models which have multiple site classes, find the proportion of the
     alignment assigned to each class.
     """
     site_classes = {}
@@ -357,7 +349,9 @@ def parse_siteclass_proportions(line_floats):
 
 
 def parse_siteclass_omegas(line, site_classes):
-    """For models which have multiple site classes, find the omega estimated
+    """Find omega estimate for each class.
+
+    For models which have multiple site classes, find the omega estimated
     for each class.
     """
     # The omega results are tabular with strictly 9 characters per column
@@ -365,7 +359,7 @@ def parse_siteclass_omegas(line, site_classes):
     # numbers to sometimes run into each other, so we must use a different
     # regular expression to account for this. i.e.:
     # w:   0.00012  1.00000109.87121
-    line_floats = re.findall("\d{1,3}\.\d{5}", line)
+    line_floats = re.findall(r"\d{1,3}\.\d{5}", line)
     if not site_classes or len(line_floats) == 0:
         return
     for n in range(len(line_floats)):
@@ -374,8 +368,7 @@ def parse_siteclass_omegas(line, site_classes):
 
 
 def parse_clademodelc(branch_type_no, line_floats, site_classes):
-    """Parse results specific to the clade model C.
-    """
+    """Parse results specific to the clade model C."""
     if not site_classes or len(line_floats) == 0:
         return
     for n in range(len(line_floats)):
@@ -386,8 +379,7 @@ def parse_clademodelc(branch_type_no, line_floats, site_classes):
 
 
 def parse_branch_site_a(foreground, line_floats, site_classes):
-    """Parse results specific to the branch site A model.
-    """
+    """Parse results specific to the branch site A model."""
     if not site_classes or len(line_floats) == 0:
         return
     for n in range(len(line_floats)):
@@ -401,8 +393,7 @@ def parse_branch_site_a(foreground, line_floats, site_classes):
 
 
 def parse_pairwise(lines, results):
-    """Parse results from pairwise comparisons.
-    """
+    """Parse results from pairwise comparisons."""
     # Find pairwise comparisons
     # Example:
     # 2 (Pan_troglo) ... 1 (Homo_sapie)
@@ -410,48 +401,53 @@ def parse_pairwise(lines, results):
     #  0.01262 999.00000  0.00100
     #
     # t= 0.0126  S=    81.4  N=   140.6  dN/dS= 0.0010  dN= 0.0000  dS= 0.0115
-    pair_re = re.compile("\d+ \((.+)\) ... \d+ \((.+)\)")
+    pair_re = re.compile(r"\d+ \((.+)\) ... \d+ \((.+)\)")
     pairwise = {}
+    seq1 = None
+    seq2 = None
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
-        line_floats = [_nan_float(val) for val in line_floats_res]
+        line_floats = [float(val) for val in line_floats_res]
         pair_res = pair_re.match(line)
         if pair_res:
             seq1 = pair_res.group(1)
             seq2 = pair_res.group(2)
-            if pairwise.get(seq1) is None:
+            if seq1 not in pairwise:
                 pairwise[seq1] = {}
-            if pairwise.get(seq2) is None:
+            if seq2 not in pairwise:
                 pairwise[seq2] = {}
-            if len(line_floats) == 1:
-                pairwise[seq1][seq2] = {"lnL": line_floats[0]}
-                pairwise[seq2][seq1] = pairwise[seq1][seq2]
-            elif len(line_floats) == 6:
-                pairwise[seq1][seq2] = {"t": line_floats[0],
-                                        "S": line_floats[1],
-                                        "N": line_floats[2],
-                                        "omega": line_floats[3],
-                                        "dN": line_floats[4],
-                                        "dS": line_floats[5]}
-                pairwise[seq2][seq1] = pairwise[seq1][seq2]
+        if len(line_floats) == 1 and seq1 is not None and seq2 is not None:
+            pairwise[seq1][seq2] = {"lnL": line_floats[0]}
+            pairwise[seq2][seq1] = pairwise[seq1][seq2]
+        elif len(line_floats) == 6 and seq1 is not None and seq2 is not None:
+            pairwise[seq1][seq2].update(
+                {
+                    "t": line_floats[0],
+                    "S": line_floats[1],
+                    "N": line_floats[2],
+                    "omega": line_floats[3],
+                    "dN": line_floats[4],
+                    "dS": line_floats[5],
+                }
+            )
+            pairwise[seq2][seq1] = pairwise[seq1][seq2]
     if pairwise:
         results["pairwise"] = pairwise
     return results
 
 
 def parse_distances(lines, results):
-    """Parse amino acid sequence distance results.
-    """
+    """Parse amino acid sequence distance results."""
     distances = {}
     sequences = []
     raw_aa_distances_flag = False
     ml_aa_distances_flag = False
-    matrix_row_re = re.compile("(.+)\s{5,15}")
+    matrix_row_re = re.compile(r"(.+)\s{5,15}")
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
-        line_floats = [_nan_float(val) for val in line_floats_res]
+        line_floats = [float(val) for val in line_floats_res]
         if "AA distances" in line:
             raw_aa_distances_flag = True
             # In current versions, the raw distances always come
@@ -462,8 +458,7 @@ def parse_distances(lines, results):
             raw_aa_distances_flag = False
         # Parse AA distances (raw or ML), in a lower diagonal matrix
         matrix_row_res = matrix_row_re.match(line)
-        if matrix_row_res and (raw_aa_distances_flag or
-                               ml_aa_distances_flag):
+        if matrix_row_res and (raw_aa_distances_flag or ml_aa_distances_flag):
             seq_name = matrix_row_res.group(1).strip()
             if seq_name not in sequences:
                 sequences.append(seq_name)

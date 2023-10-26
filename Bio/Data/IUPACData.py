@@ -1,7 +1,9 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# Copyright 2000 Andrew Dalke.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Information about the IUPAC alphabets."""
 
 
@@ -30,22 +32,36 @@ extended_protein_letters = "ACDEFGHIKLMNPQRSTVWYBXZJUO"
 #   http://www.chem.qmul.ac.uk/iubmb/newsletter/2009.html#item35
 
 protein_letters_1to3 = {
-    'A': 'Ala', 'C': 'Cys', 'D': 'Asp',
-    'E': 'Glu', 'F': 'Phe', 'G': 'Gly', 'H': 'His',
-    'I': 'Ile', 'K': 'Lys', 'L': 'Leu', 'M': 'Met',
-    'N': 'Asn', 'P': 'Pro', 'Q': 'Gln', 'R': 'Arg',
-    'S': 'Ser', 'T': 'Thr', 'V': 'Val', 'W': 'Trp',
-    'Y': 'Tyr',
+    "A": "Ala",
+    "C": "Cys",
+    "D": "Asp",
+    "E": "Glu",
+    "F": "Phe",
+    "G": "Gly",
+    "H": "His",
+    "I": "Ile",
+    "K": "Lys",
+    "L": "Leu",
+    "M": "Met",
+    "N": "Asn",
+    "P": "Pro",
+    "Q": "Gln",
+    "R": "Arg",
+    "S": "Ser",
+    "T": "Thr",
+    "V": "Val",
+    "W": "Trp",
+    "Y": "Tyr",
 }
-protein_letters_1to3_extended = dict(list(protein_letters_1to3.items()) + list({
-    'B': 'Asx', 'X': 'Xaa', 'Z': 'Glx', 'J': 'Xle',
-    'U': 'Sel', 'O': 'Pyl',
-}.items()))
+protein_letters_1to3_extended = {
+    **protein_letters_1to3,
+    **{"B": "Asx", "X": "Xaa", "Z": "Glx", "J": "Xle", "U": "Sec", "O": "Pyl"},
+}
 
-protein_letters_3to1 = dict((x[1], x[0]) for x in
-                            protein_letters_1to3.items())
-protein_letters_3to1_extended = dict((x[1], x[0]) for x in
-                                     protein_letters_1to3_extended.items())
+protein_letters_3to1 = {value: key for key, value in protein_letters_1to3.items()}
+protein_letters_3to1_extended = {
+    value: key for key, value in protein_letters_1to3_extended.items()
+}
 
 ambiguous_dna_letters = "GATCRYWSMKHBVDN"
 unambiguous_dna_letters = "GATC"
@@ -61,6 +77,9 @@ extended_dna_letters = "GATCBDSW"
 # are there extended forms?
 # extended_rna_letters = "GAUCBDSW"
 
+# "X" is included in the following _values and _complement dictionaries,
+# for historical reasons although it is not an IUPAC nucleotide,
+# and so is not in the corresponding _letters strings above
 ambiguous_dna_values = {
     "A": "A",
     "C": "C",
@@ -78,7 +97,7 @@ ambiguous_dna_values = {
     "B": "CGT",
     "X": "GATC",
     "N": "GATC",
-    }
+}
 ambiguous_rna_values = {
     "A": "A",
     "C": "C",
@@ -96,7 +115,7 @@ ambiguous_rna_values = {
     "B": "CGU",
     "X": "GAUC",
     "N": "GAUC",
-    }
+}
 
 ambiguous_dna_complement = {
     "A": "T",
@@ -115,7 +134,7 @@ ambiguous_dna_complement = {
     "B": "V",
     "X": "X",
     "N": "N",
-    }
+}
 
 ambiguous_rna_complement = {
     "A": "U",
@@ -134,7 +153,7 @@ ambiguous_rna_complement = {
     "B": "V",
     "X": "X",
     "N": "N",
-    }
+}
 
 
 def _make_ranges(mydict):
@@ -143,38 +162,30 @@ def _make_ranges(mydict):
         d[key] = (value, value)
     return d
 
+
 # Mass data taken from PubChem
 
+
 # Average masses of monophosphate deoxy nucleotides
-unambiguous_dna_weights = {
-    "A": 331.2218,
-    "C": 307.1971,
-    "G": 347.2212,
-    "T": 322.2085
-    }
+unambiguous_dna_weights = {"A": 331.2218, "C": 307.1971, "G": 347.2212, "T": 322.2085}
 
 # Monoisotopic masses of monophospate deoxy nucleotides
 monoisotopic_unambiguous_dna_weights = {
     "A": 331.06817,
     "C": 307.056936,
     "G": 347.063084,
-    "T": 322.056602
-    }
+    "T": 322.056602,
+}
 
 unambiguous_dna_weight_ranges = _make_ranges(unambiguous_dna_weights)
 
-unambiguous_rna_weights = {
-    "A": 347.2212,
-    "C": 323.1965,
-    "G": 363.2206,
-    "U": 324.1813
-}
+unambiguous_rna_weights = {"A": 347.2212, "C": 323.1965, "G": 363.2206, "U": 324.1813}
 
 monoisotopic_unambiguous_rna_weights = {
     "A": 347.063084,
     "C": 323.051851,
     "G": 363.057999,
-    "U": 324.035867
+    "U": 324.035867,
 }
 
 unambiguous_rna_weight_ranges = _make_ranges(unambiguous_rna_weights)
@@ -196,13 +207,14 @@ def _make_ambiguous_ranges(mydict, weight_table):
         avg_d[letter] = total_w / len(weights)
     return range_d, avg_d
 
-ambiguous_dna_weight_ranges, avg_ambiguous_dna_weights = \
-               _make_ambiguous_ranges(ambiguous_dna_values,
-                                      unambiguous_dna_weights)
 
-ambiguous_rna_weight_ranges, avg_ambiguous_rna_weights = \
-               _make_ambiguous_ranges(ambiguous_rna_values,
-                                      unambiguous_rna_weights)
+ambiguous_dna_weight_ranges, avg_ambiguous_dna_weights = _make_ambiguous_ranges(
+    ambiguous_dna_values, unambiguous_dna_weights
+)
+
+ambiguous_rna_weight_ranges, avg_ambiguous_rna_weights = _make_ambiguous_ranges(
+    ambiguous_rna_values, unambiguous_rna_weights
+)
 
 protein_weights = {
     "A": 89.0932,
@@ -226,8 +238,8 @@ protein_weights = {
     "U": 168.0532,
     "V": 117.1463,
     "W": 204.2252,
-    "Y": 181.1885
-    }
+    "Y": 181.1885,
+}
 
 monoisotopic_protein_weights = {
     "A": 89.047678,
@@ -252,7 +264,7 @@ monoisotopic_protein_weights = {
     "V": 117.078979,
     "W": 204.089878,
     "Y": 181.073893,
-    }
+}
 
 extended_protein_values = {
     "A": "A",
@@ -288,121 +300,122 @@ extended_protein_values = {
 
 protein_weight_ranges = _make_ranges(protein_weights)
 
-extended_protein_weight_ranges, avg_extended_protein_weights = \
-               _make_ambiguous_ranges(extended_protein_values,
-                                      protein_weights)
+extended_protein_weight_ranges, avg_extended_protein_weights = _make_ambiguous_ranges(
+    extended_protein_values, protein_weights
+)
 
 
 # For Center of Mass Calculation.
 # Taken from http://www.chem.qmul.ac.uk/iupac/AtWt/ & PyMol
 atom_weights = {
-    'H': 1.00794,
-    'He': 4.002602,
-    'Li': 6.941,
-    'Be': 9.012182,
-    'B': 10.811,
-    'C': 12.0107,
-    'N': 14.0067,
-    'O': 15.9994,
-    'F': 18.9984032,
-    'Ne': 20.1797,
-    'Na': 22.989770,
-    'Mg': 24.3050,
-    'Al': 26.981538,
-    'Si': 28.0855,
-    'P': 30.973761,
-    'S': 32.065,
-    'Cl': 35.453,
-    'Ar': 39.948,
-    'K': 39.0983,
-    'Ca': 40.078,
-    'Sc': 44.955910,
-    'Ti': 47.867,
-    'V': 50.9415,
-    'Cr': 51.9961,
-    'Mn': 54.938049,
-    'Fe': 55.845,
-    'Co': 58.933200,
-    'Ni': 58.6934,
-    'Cu': 63.546,
-    'Zn': 65.39,
-    'Ga': 69.723,
-    'Ge': 72.64,
-    'As': 74.92160,
-    'Se': 78.96,
-    'Br': 79.904,
-    'Kr': 83.80,
-    'Rb': 85.4678,
-    'Sr': 87.62,
-    'Y': 88.90585,
-    'Zr': 91.224,
-    'Nb': 92.90638,
-    'Mo': 95.94,
-    'Tc': 98.0,
-    'Ru': 101.07,
-    'Rh': 102.90550,
-    'Pd': 106.42,
-    'Ag': 107.8682,
-    'Cd': 112.411,
-    'In': 114.818,
-    'Sn': 118.710,
-    'Sb': 121.760,
-    'Te': 127.60,
-    'I': 126.90447,
-    'Xe': 131.293,
-    'Cs': 132.90545,
-    'Ba': 137.327,
-    'La': 138.9055,
-    'Ce': 140.116,
-    'Pr': 140.90765,
-    'Nd': 144.24,
-    'Pm': 145.0,
-    'Sm': 150.36,
-    'Eu': 151.964,
-    'Gd': 157.25,
-    'Tb': 158.92534,
-    'Dy': 162.50,
-    'Ho': 164.93032,
-    'Er': 167.259,
-    'Tm': 168.93421,
-    'Yb': 173.04,
-    'Lu': 174.967,
-    'Hf': 178.49,
-    'Ta': 180.9479,
-    'W': 183.84,
-    'Re': 186.207,
-    'Os': 190.23,
-    'Ir': 192.217,
-    'Pt': 195.078,
-    'Au': 196.96655,
-    'Hg': 200.59,
-    'Tl': 204.3833,
-    'Pb': 207.2,
-    'Bi': 208.98038,
-    'Po': 208.98,
-    'At': 209.99,
-    'Rn': 222.02,
-    'Fr': 223.02,
-    'Ra': 226.03,
-    'Ac': 227.03,
-    'Th': 232.0381,
-    'Pa': 231.03588,
-    'U': 238.02891,
-    'Np': 237.05,
-    'Pu': 244.06,
-    'Am': 243.06,
-    'Cm': 247.07,
-    'Bk': 247.07,
-    'Cf': 251.08,
-    'Es': 252.08,
-    'Fm': 257.10,
-    'Md': 258.10,
-    'No': 259.10,
-    'Lr': 262.11,
-    'Rf': 261.11,
-    'Db': 262.11,
-    'Sg': 266.12,
-    'Bh': 264.12,
-    'Hs': 269.13,
-    'Mt': 268.14,
+    "H": 1.00794,
+    "D": 2.01410,
+    "He": 4.002602,
+    "Li": 6.941,
+    "Be": 9.012182,
+    "B": 10.811,
+    "C": 12.0107,
+    "N": 14.0067,
+    "O": 15.9994,
+    "F": 18.9984032,
+    "Ne": 20.1797,
+    "Na": 22.989770,
+    "Mg": 24.3050,
+    "Al": 26.981538,
+    "Si": 28.0855,
+    "P": 30.973761,
+    "S": 32.065,
+    "Cl": 35.453,
+    "Ar": 39.948,
+    "K": 39.0983,
+    "Ca": 40.078,
+    "Sc": 44.955910,
+    "Ti": 47.867,
+    "V": 50.9415,
+    "Cr": 51.9961,
+    "Mn": 54.938049,
+    "Fe": 55.845,
+    "Co": 58.933200,
+    "Ni": 58.6934,
+    "Cu": 63.546,
+    "Zn": 65.39,
+    "Ga": 69.723,
+    "Ge": 72.64,
+    "As": 74.92160,
+    "Se": 78.96,
+    "Br": 79.904,
+    "Kr": 83.80,
+    "Rb": 85.4678,
+    "Sr": 87.62,
+    "Y": 88.90585,
+    "Zr": 91.224,
+    "Nb": 92.90638,
+    "Mo": 95.94,
+    "Tc": 98.0,
+    "Ru": 101.07,
+    "Rh": 102.90550,
+    "Pd": 106.42,
+    "Ag": 107.8682,
+    "Cd": 112.411,
+    "In": 114.818,
+    "Sn": 118.710,
+    "Sb": 121.760,
+    "Te": 127.60,
+    "I": 126.90447,
+    "Xe": 131.293,
+    "Cs": 132.90545,
+    "Ba": 137.327,
+    "La": 138.9055,
+    "Ce": 140.116,
+    "Pr": 140.90765,
+    "Nd": 144.24,
+    "Pm": 145.0,
+    "Sm": 150.36,
+    "Eu": 151.964,
+    "Gd": 157.25,
+    "Tb": 158.92534,
+    "Dy": 162.50,
+    "Ho": 164.93032,
+    "Er": 167.259,
+    "Tm": 168.93421,
+    "Yb": 173.04,
+    "Lu": 174.967,
+    "Hf": 178.49,
+    "Ta": 180.9479,
+    "W": 183.84,
+    "Re": 186.207,
+    "Os": 190.23,
+    "Ir": 192.217,
+    "Pt": 195.078,
+    "Au": 196.96655,
+    "Hg": 200.59,
+    "Tl": 204.3833,
+    "Pb": 207.2,
+    "Bi": 208.98038,
+    "Po": 208.98,
+    "At": 209.99,
+    "Rn": 222.02,
+    "Fr": 223.02,
+    "Ra": 226.03,
+    "Ac": 227.03,
+    "Th": 232.0381,
+    "Pa": 231.03588,
+    "U": 238.02891,
+    "Np": 237.05,
+    "Pu": 244.06,
+    "Am": 243.06,
+    "Cm": 247.07,
+    "Bk": 247.07,
+    "Cf": 251.08,
+    "Es": 252.08,
+    "Fm": 257.10,
+    "Md": 258.10,
+    "No": 259.10,
+    "Lr": 262.11,
+    "Rf": 261.11,
+    "Db": 262.11,
+    "Sg": 266.12,
+    "Bh": 264.12,
+    "Hs": 269.13,
+    "Mt": 268.14,
 }

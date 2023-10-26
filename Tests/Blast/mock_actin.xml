@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+
+<!-- This is a mock file mimicking a qblast response for our mock tests -->
+
+<BlastOutput>
+  <BlastOutput_program>blastp</BlastOutput_program>
+  <BlastOutput_query-ID>NP_075631.2</BlastOutput_query-ID>
+  <BlastOutput_query-def>actin-related protein 2/3 complex subunit 1B [Mus musculus]</BlastOutput_query-def>
+  <BlastOutput_param>
+    <Parameters>
+      <Parameters_expect>0.001</Parameters_expect>
+    </Parameters>
+  </BlastOutput_param>
+<BlastOutput_iterations>
+<Iteration>
+<Iteration_hits>
+<Hit>
+  <Hit_num>1</Hit_num>
+  <Hit_id>ref|NP_062162.1|</Hit_id>
+  <Hit_def>actin-related protein 2/3 complex subunit 1B [Rattus norvegicus]</Hit_def>
+  <Hit_accession>NP_062162</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>2</Hit_num>
+  <Hit_id>ref|NP_112408.1|</Hit_id>
+  <Hit_def>actin-related protein 2/3 complex subunit 1A [Rattus norvegicus]</Hit_def>
+  <Hit_accession>NP_112408</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>3</Hit_num>
+  <Hit_id>gb|AAH59131.1|</Hit_id>
+  <Hit_def>Arpc1a protein [Rattus norvegicus]</Hit_def>
+  <Hit_accession>AAH59131</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>4</Hit_num>
+  <Hit_id>gb|EDM14357.1|</Hit_id>
+  <Hit_def>rCG23431 [Rattus norvegicus]</Hit_def>
+  <Hit_accession>EDM14357</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>5</Hit_num>
+  <Hit_id>ref|NP_001008766.1|</Hit_id>
+  <Hit_def>probable cytosolic iron-sulfur protein assembly protein CIAO1 [Rattus norvegicus]</Hit_def>
+  <Hit_accession>NP_001008766</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>6</Hit_num>
+  <Hit_id>ref|NP_001102411.1|</Hit_id>
+  <Hit_def>F-box-like/WD repeat-containing protein TBL1XR1 [Rattus norvegicus]</Hit_def>
+  <Hit_accession>NP_001102411</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>7</Hit_num>
+  <Hit_id>gb|EDL80109.1|</Hit_id>
+  <Hit_def>WD repeat domain 39, isoform CRA_d [Rattus norvegicus]</Hit_def>
+  <Hit_accession>EDL80109</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>8</Hit_num>
+  <Hit_id>gb|EDL80106.1|</Hit_id>
+  <Hit_def>WD repeat domain 39, isoform CRA_a [Rattus norvegicus]</Hit_def>
+  <Hit_accession>EDL80106</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>9</Hit_num>
+  <Hit_id>ref|NP_001100434.1|</Hit_id>
+  <Hit_def>F-box-like/WD repeat-containing protein TBL1X [Rattus norvegicus]</Hit_def>
+  <Hit_accession>NP_001100434</Hit_accession>
+</Hit>
+<Hit>
+  <Hit_num>10</Hit_num>
+  <Hit_id>gb|AAI67084.1|</Hit_id>
+  <Hit_def>Tbl1x protein, partial [Rattus norvegicus]</Hit_def>
+  <Hit_accession>AAI67084</Hit_accession>
+</Hit>
+</Iteration_hits>
+</Iteration>
+</BlastOutput_iterations>
+</BlastOutput>

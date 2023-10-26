@@ -1,0 +1,97 @@
+# See CONTRIBUTING.rst, we expect this to be run via a git pre-commit hook.
+# You can also run the checks directly at the terminal, e.g.
+#
+# $ pre-commit run --all-files
+#
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+    -   id: check-executables-have-shebangs
+        files: \.(py|sh)$
+    -   id: check-json
+    -   id: end-of-file-fixer
+        files: \.py$
+    -   id: mixed-line-ending
+-   repo: https://github.com/psf/black
+    rev: 23.9.1
+    hooks:
+    -   id: black
+        args: [--check,--target-version,py38]
+-   repo: https://github.com/PyCQA/flake8
+    rev: 6.1.0
+    hooks:
+    -   id: flake8
+        additional_dependencies: [
+            'flake8-blind-except',
+            'flake8-bugbear',
+            'flake8-comprehensions',
+            'flake8-docstrings',
+            'flake8-implicit-str-concat',
+            'flake8-rst-docstrings>=0.2.3',
+            'pydocstyle>=6.0.0',
+        ]
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.5.1
+    hooks:
+    -   id: mypy
+        # equivalent to "files" in .mypy.ini
+        files: '^(Bio|BioSQL)/'
+-   repo: https://github.com/asottile/blacken-docs
+    rev: 1.16.0
+    hooks:
+    -   id: blacken-docs
+        additional_dependencies: [black==23.9.1]
+        exclude: ^.github/
+-   repo: https://github.com/rstcheck/rstcheck
+    rev: v6.2.0
+    hooks:
+    -   id: rstcheck
+        args: [
+            --ignore-roles=ref,
+            --ignore-directives=toctree,
+            --report-level=warning
+        ]
+-   repo: https://github.com/PyCQA/doc8
+    rev: v1.1.1
+    hooks:
+    -   id: doc8
+        additional_dependencies: [pygments]
+        args: [--quiet,--ignore-path=Doc/examples/ec_*.txt, --ignore=D004]
+-   repo: https://github.com/codespell-project/codespell
+    rev: v2.2.6
+    hooks:
+    -   id: codespell
+        files: \.(rst|md|tex)$
+        args: [
+            --ignore-regex,
+            '(^|\W)([A-Z]{2,3})(\W|$)',
+            -L,
+            'ser,hsa,hist,fpr,blosum,ags,manuel'
+        ]
+-   repo: local
+    hooks:
+    -   id: doi-link-style
+        name: Enforce https://doi.org/ style
+        description: Check DOI link style, see https://www.crossref.org/display-guidelines/
+        entry: '(?i)(doi:|dx\.doi\.org|http://doi\.org)'
+        language: pygrep
+        files: \.(rst|tex)$
+ci:
+    # Settings for the https://pre-commit.ci/ continuous integration service
+    autofix_prs: false
+    # Default message is more verbose
+    autoupdate_commit_msg: '[pre-commit.ci] autoupdate'
+    # Default is weekly
+    autoupdate_schedule: quarterly
+    # Currently pre-commit.ci checks all files, and all hooks takes too long
+    # and causes a timeout - so as a short-term workaround, skip flake8 etc:
+    skip: [
+        check-json,
+        mixed-line-ending,
+        flake8,
+        rstcheck,
+        doc8,
+        codespell,
+        doi-link-style
+    ]

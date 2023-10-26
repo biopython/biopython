@@ -1,0 +1,381 @@
+ID   DNJC5_MOUSE             Reviewed;         198 AA.
+AC   P60904; P54101;
+DT   13-APR-2004, integrated into UniProtKB/Swiss-Prot.
+DT   13-APR-2004, sequence version 1.
+DT   12-OCT-2022, entry version 158.
+DE   RecName: Full=DnaJ homolog subfamily C member 5 {ECO:0000305};
+DE   AltName: Full=Cysteine string protein {ECO:0000250|UniProtKB:Q9H3Z4};
+DE            Short=CSP {ECO:0000250|UniProtKB:Q9H3Z4};
+DE   AltName: Full=Cysteine-string protein isoform alpha {ECO:0000303|PubMed:20847230};
+GN   Name=Dnajc5 {ECO:0000312|MGI:MGI:892995};
+GN   Synonyms=Cspalpha {ECO:0000303|PubMed:20847230};
+OS   Mus musculus (Mouse).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Glires; Rodentia; Myomorpha; Muroidea; Muridae;
+OC   Murinae; Mus; Mus.
+OX   NCBI_TaxID=10090;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [MRNA].
+RC   TISSUE=Brain;
+RA   Qin N., Lin T., Birnbaumer L.;
+RL   Submitted (OCT-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RC   STRAIN=C57BL/6J; TISSUE=Olfactory bulb, and Skin;
+RX   PubMed=16141072; DOI=10.1126/science.1112014;
+RA   Carninci P., Kasukawa T., Katayama S., Gough J., Frith M.C., Maeda N.,
+RA   Oyama R., Ravasi T., Lenhard B., Wells C., Kodzius R., Shimokawa K.,
+RA   Bajic V.B., Brenner S.E., Batalov S., Forrest A.R., Zavolan M., Davis M.J.,
+RA   Wilming L.G., Aidinis V., Allen J.E., Ambesi-Impiombato A., Apweiler R.,
+RA   Aturaliya R.N., Bailey T.L., Bansal M., Baxter L., Beisel K.W., Bersano T.,
+RA   Bono H., Chalk A.M., Chiu K.P., Choudhary V., Christoffels A.,
+RA   Clutterbuck D.R., Crowe M.L., Dalla E., Dalrymple B.P., de Bono B.,
+RA   Della Gatta G., di Bernardo D., Down T., Engstrom P., Fagiolini M.,
+RA   Faulkner G., Fletcher C.F., Fukushima T., Furuno M., Futaki S.,
+RA   Gariboldi M., Georgii-Hemming P., Gingeras T.R., Gojobori T., Green R.E.,
+RA   Gustincich S., Harbers M., Hayashi Y., Hensch T.K., Hirokawa N., Hill D.,
+RA   Huminiecki L., Iacono M., Ikeo K., Iwama A., Ishikawa T., Jakt M.,
+RA   Kanapin A., Katoh M., Kawasawa Y., Kelso J., Kitamura H., Kitano H.,
+RA   Kollias G., Krishnan S.P., Kruger A., Kummerfeld S.K., Kurochkin I.V.,
+RA   Lareau L.F., Lazarevic D., Lipovich L., Liu J., Liuni S., McWilliam S.,
+RA   Madan Babu M., Madera M., Marchionni L., Matsuda H., Matsuzawa S., Miki H.,
+RA   Mignone F., Miyake S., Morris K., Mottagui-Tabar S., Mulder N., Nakano N.,
+RA   Nakauchi H., Ng P., Nilsson R., Nishiguchi S., Nishikawa S., Nori F.,
+RA   Ohara O., Okazaki Y., Orlando V., Pang K.C., Pavan W.J., Pavesi G.,
+RA   Pesole G., Petrovsky N., Piazza S., Reed J., Reid J.F., Ring B.Z.,
+RA   Ringwald M., Rost B., Ruan Y., Salzberg S.L., Sandelin A., Schneider C.,
+RA   Schoenbach C., Sekiguchi K., Semple C.A., Seno S., Sessa L., Sheng Y.,
+RA   Shibata Y., Shimada H., Shimada K., Silva D., Sinclair B., Sperling S.,
+RA   Stupka E., Sugiura K., Sultana R., Takenaka Y., Taki K., Tammoja K.,
+RA   Tan S.L., Tang S., Taylor M.S., Tegner J., Teichmann S.A., Ueda H.R.,
+RA   van Nimwegen E., Verardo R., Wei C.L., Yagi K., Yamanishi H.,
+RA   Zabarovsky E., Zhu S., Zimmer A., Hide W., Bult C., Grimmond S.M.,
+RA   Teasdale R.D., Liu E.T., Brusic V., Quackenbush J., Wahlestedt C.,
+RA   Mattick J.S., Hume D.A., Kai C., Sasaki D., Tomaru Y., Fukuda S.,
+RA   Kanamori-Katayama M., Suzuki M., Aoki J., Arakawa T., Iida J., Imamura K.,
+RA   Itoh M., Kato T., Kawaji H., Kawagashira N., Kawashima T., Kojima M.,
+RA   Kondo S., Konno H., Nakano K., Ninomiya N., Nishio T., Okada M., Plessy C.,
+RA   Shibata K., Shiraki T., Suzuki S., Tagami M., Waki K., Watahiki A.,
+RA   Okamura-Oho Y., Suzuki H., Kawai J., Hayashizaki Y.;
+RT   "The transcriptional landscape of the mammalian genome.";
+RL   Science 309:1559-1563(2005).
+RN   [3]
+RP   PROTEIN SEQUENCE OF 8-24 AND 42-72, AND IDENTIFICATION BY MASS
+RP   SPECTROMETRY.
+RC   STRAIN=C57BL/6J; TISSUE=Brain;
+RA   Lubec G., Kang S.U.;
+RL   Submitted (APR-2007) to UniProtKB.
+RN   [4]
+RP   INTERACTION WITH HSC70 AND SGTA, SUBCELLULAR LOCATION, PALMITOYLATION, AND
+RP   MUTAGENESIS OF CYS-113; CYS-118; CYS-121; PHE-129 AND LYS-135.
+RX   PubMed=17034881; DOI=10.1016/j.bbamcr.2006.08.054;
+RA   Boal F., Le Pevelen S., Cziepluch C., Scotti P., Lang J.;
+RT   "Cysteine-string protein isoform beta (Cspbeta) is targeted to the trans-
+RT   Golgi network as a non-palmitoylated CSP in clonal beta-cells.";
+RL   Biochim. Biophys. Acta 1773:109-119(2007).
+RN   [5]
+RP   IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS].
+RC   TISSUE=Liver;
+RX   PubMed=17208939; DOI=10.1074/mcp.m600218-mcp200;
+RA   Lee J., Xu Y., Chen Y., Sprung R., Kim S.C., Xie S., Zhao Y.;
+RT   "Mitochondrial phosphoproteome revealed by an improved IMAC method and
+RT   MS/MS/MS.";
+RL   Mol. Cell. Proteomics 6:669-676(2007).
+RN   [6]
+RP   IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS].
+RC   TISSUE=Liver;
+RX   PubMed=17242355; DOI=10.1073/pnas.0609836104;
+RA   Villen J., Beausoleil S.A., Gerber S.A., Gygi S.P.;
+RT   "Large-scale phosphorylation analysis of mouse liver.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 104:1488-1493(2007).
+RN   [7]
+RP   IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS].
+RC   TISSUE=Liver;
+RX   PubMed=18630941; DOI=10.1021/pr800223m;
+RA   Zhou H., Ye M., Dong J., Han G., Jiang X., Wu R., Zou H.;
+RT   "Specific phosphopeptide enrichment with immobilized titanium ion affinity
+RT   chromatography adsorbent for phosphoproteome analysis.";
+RL   J. Proteome Res. 7:3957-3967(2008).
+RN   [8]
+RP   IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS].
+RX   PubMed=19144319; DOI=10.1016/j.immuni.2008.11.006;
+RA   Trost M., English L., Lemieux S., Courcelles M., Desjardins M.,
+RA   Thibault P.;
+RT   "The phagosomal proteome in interferon-gamma-activated macrophages.";
+RL   Immunity 30:143-154(2009).
+RN   [9]
+RP   PHOSPHORYLATION [LARGE SCALE ANALYSIS] AT SER-10, AND IDENTIFICATION BY
+RP   MASS SPECTROMETRY [LARGE SCALE ANALYSIS].
+RC   TISSUE=Embryonic fibroblast;
+RX   PubMed=19131326; DOI=10.1074/mcp.m800451-mcp200;
+RA   Sweet S.M., Bailey C.M., Cunningham D.L., Heath J.K., Cooper H.J.;
+RT   "Large scale localization of protein phosphorylation by use of electron
+RT   capture dissociation mass spectrometry.";
+RL   Mol. Cell. Proteomics 8:904-912(2009).
+RN   [10]
+RP   PHOSPHORYLATION [LARGE SCALE ANALYSIS] AT SER-15 AND SER-151, AND
+RP   IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS].
+RC   TISSUE=Brain, Brown adipose tissue, Heart, Kidney, Liver, Lung,
+RC   Pancreas, Spleen, and Testis;
+RX   PubMed=21183079; DOI=10.1016/j.cell.2010.12.001;
+RA   Huttlin E.L., Jedrychowski M.P., Elias J.E., Goswami T., Rad R.,
+RA   Beausoleil S.A., Villen J., Haas W., Sowa M.E., Gygi S.P.;
+RT   "A tissue-specific atlas of mouse protein phosphorylation and expression.";
+RL   Cell 143:1174-1189(2010).
+RN   [11]
+RP   FUNCTION, INTERACTION WITH SYT1; SYT5; SYT7; SYT9 AND HSC70, MUTAGENESIS OF
+RP   SER-10 AND GLU-93, AND PHOSPHORYLATION AT SER-10.
+RX   PubMed=20847230; DOI=10.1096/fj.09-152033;
+RA   Boal F., Laguerre M., Milochau A., Lang J., Scotti P.A.;
+RT   "A charged prominence in the linker domain of the cysteine-string protein
+RT   Cspalpha mediates its regulated interaction with the calcium sensor
+RT   synaptotagmin 9 during exocytosis.";
+RL   FASEB J. 25:132-143(2011).
+RN   [12]
+RP   FUNCTION, AND DISRUPTION PHENOTYPE.
+RX   PubMed=22187053; DOI=10.1038/emboj.2011.467;
+RA   Sharma M., Burre J., Bronk P., Zhang Y., Xu W., Suedhof T.C.;
+RT   "CSPalpha knockout causes neurodegeneration by impairing SNAP-25
+RT   function.";
+RL   EMBO J. 31:829-841(2012).
+RN   [13]
+RP   INTERACTION WITH ZDHHC13 AND ZDHHC17.
+RX   PubMed=25253725; DOI=10.1091/mbc.e14-06-1169;
+RA   Lemonidis K., Gorleku O.A., Sanchez-Perez M.C., Grefen C.,
+RA   Chamberlain L.H.;
+RT   "The Golgi S-acylation machinery comprises zDHHC enzymes with major
+RT   differences in substrate affinity and S-acylation activity.";
+RL   Mol. Biol. Cell 25:3870-3883(2014).
+RN   [14]
+RP   INTERACTION WITH ZDHHC17 AND ZDHHC13.
+RX   PubMed=26198635; DOI=10.1074/jbc.m115.657668;
+RA   Lemonidis K., Sanchez-Perez M.C., Chamberlain L.H.;
+RT   "Identification of a novel sequence motif recognized by the ankyrin repeat
+RT   domain of zDHHC17/13 S-acyltransferases.";
+RL   J. Biol. Chem. 290:21939-21950(2015).
+RN   [15]
+RP   REVIEW.
+RX   PubMed=25800794; DOI=10.1016/j.semcdb.2015.03.008;
+RA   Burgoyne R.D., Morgan A.;
+RT   "Cysteine string protein (CSP) and its role in preventing
+RT   neurodegeneration.";
+RL   Semin. Cell Dev. Biol. 40:153-159(2015).
+RN   [16]
+RP   STRUCTURE BY NMR OF 5-100.
+RG   RIKEN structural genomics initiative (RSGI);
+RT   "Solution structure of J-domain from mouse DnaJ subfamily C member 5.";
+RL   Submitted (NOV-2005) to the PDB data bank.
+CC   -!- FUNCTION: Acts as a co-chaperone for the SNARE protein SNAP-25
+CC       (PubMed:22187053). Involved in the calcium-mediated control of a late
+CC       stage of exocytosis (PubMed:20847230). Acts as a general chaperone in
+CC       regulated exocytosis (By similarity). May have an important role in
+CC       presynaptic function (By similarity). May be involved in calcium-
+CC       dependent neurotransmitter release at nerve endings (By similarity).
+CC       {ECO:0000250|UniProtKB:Q29455, ECO:0000269|PubMed:20847230,
+CC       ECO:0000269|PubMed:22187053}.
+CC   -!- SUBUNIT: Homodimer (Probable). Interacts with the chaperone complex
+CC       consisting of HSC70 and SGTA (PubMed:17034881, PubMed:20847230).
+CC       Interacts with ZDHHC13 (via ANK repeats) (PubMed:25253725,
+CC       PubMed:26198635). Interacts with ZDHHC17 (via ANK repeats)
+CC       (PubMed:25253725, PubMed:26198635). Interacts with SYT1, SYT5 and SYT7,
+CC       and with SYT9, forming a complex with SNAP25 (PubMed:20847230). The
+CC       interaction with SYT9 is stimulated tenfold in presence of calcium
+CC       (PubMed:20847230). {ECO:0000269|PubMed:17034881,
+CC       ECO:0000269|PubMed:20847230, ECO:0000269|PubMed:25253725,
+CC       ECO:0000269|PubMed:26198635, ECO:0000305}.
+CC   -!- SUBCELLULAR LOCATION: Cytoplasm, cytosol
+CC       {ECO:0000250|UniProtKB:Q29455}. Membrane {ECO:0000269|PubMed:17034881};
+CC       Lipid-anchor {ECO:0000269|PubMed:17034881}. Cytoplasmic vesicle,
+CC       secretory vesicle, chromaffin granule membrane
+CC       {ECO:0000250|UniProtKB:Q29455}. Melanosome
+CC       {ECO:0000250|UniProtKB:Q9H3Z4}. Cell membrane
+CC       {ECO:0000250|UniProtKB:Q9H3Z4}. Note=The association with membranes is
+CC       regulated by palmitoylation (By similarity). Colocalizes with insulin
+CC       granules, when overexpressed in an islet cell line (PubMed:17034881).
+CC       {ECO:0000250|UniProtKB:Q29455, ECO:0000269|PubMed:17034881}.
+CC   -!- PTM: Formation of the chaperone complex DNAJC5/HSC70 is not regulated
+CC       by phosphorylation (PubMed:20847230). Ser-10 phosphorylation induces an
+CC       order-to-disorder transition triggering the interaction with Lys-58 (By
+CC       similarity). This conformational switch modulates DNAJC5's cellular
+CC       functions by reducing binding to syntaxin and synaptogamin without
+CC       altering HSC70 interactions (By similarity).
+CC       {ECO:0000250|UniProtKB:Q9H3Z4, ECO:0000269|PubMed:20847230}.
+CC   -!- PTM: Palmitoylated (PubMed:17034881). Could be palmitoylated by DHHC3,
+CC       DHHC7, DHHC15 and DHHC17 (By similarity). Palmitoylation occurs
+CC       probably in the cysteine-rich domain and regulates DNAJC5 membrane
+CC       attachment (PubMed:17034881). {ECO:0000250|UniProtKB:Q29455,
+CC       ECO:0000269|PubMed:17034881}.
+CC   -!- DISRUPTION PHENOTYPE: Defective SNAP-25 function, which causes
+CC       neurodegeneration by impairing SNARE-complex assembly
+CC       (PubMed:22187053). {ECO:0000269|PubMed:22187053}.
+CC   ---------------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see https://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution (CC BY 4.0) License
+CC   ---------------------------------------------------------------------------
+DR   EMBL; AF032115; AAB87080.1; -; mRNA.
+DR   EMBL; AK029006; BAC26236.1; -; mRNA.
+DR   EMBL; AK032373; BAC27841.1; -; mRNA.
+DR   CCDS; CCDS17215.1; -.
+DR   RefSeq; NP_001258513.1; NM_001271584.1.
+DR   RefSeq; NP_001258514.1; NM_001271585.1.
+DR   RefSeq; NP_058055.1; NM_016775.3.
+DR   RefSeq; XP_011238225.1; XM_011239923.2.
+DR   PDB; 2CTW; NMR; -; A=5-100.
+DR   PDBsum; 2CTW; -.
+DR   AlphaFoldDB; P60904; -.
+DR   SMR; P60904; -.
+DR   BioGRID; 198948; 7.
+DR   CORUM; P60904; -.
+DR   IntAct; P60904; 7.
+DR   MINT; P60904; -.
+DR   STRING; 10090.ENSMUSP00000072175; -.
+DR   TCDB; 8.A.192.1.1; the dnaj homolog (dnaj) family.
+DR   iPTMnet; P60904; -.
+DR   PhosphoSitePlus; P60904; -.
+DR   SwissPalm; P60904; -.
+DR   EPD; P60904; -.
+DR   jPOST; P60904; -.
+DR   MaxQB; P60904; -.
+DR   PaxDb; P60904; -.
+DR   PeptideAtlas; P60904; -.
+DR   PRIDE; P60904; -.
+DR   ProteomicsDB; 277354; -.
+DR   Antibodypedia; 2284; 255 antibodies from 32 providers.
+DR   DNASU; 13002; -.
+DR   Ensembl; ENSMUST00000072334; ENSMUSP00000072175; ENSMUSG00000000826.
+DR   Ensembl; ENSMUST00000108796; ENSMUSP00000104424; ENSMUSG00000000826.
+DR   Ensembl; ENSMUST00000108797; ENSMUSP00000104425; ENSMUSG00000000826.
+DR   GeneID; 13002; -.
+DR   KEGG; mmu:13002; -.
+DR   UCSC; uc008omp.2; mouse.
+DR   CTD; 80331; -.
+DR   MGI; MGI:892995; Dnajc5.
+DR   VEuPathDB; HostDB:ENSMUSG00000000826; -.
+DR   eggNOG; KOG0716; Eukaryota.
+DR   GeneTree; ENSGT00940000155597; -.
+DR   InParanoid; P60904; -.
+DR   OMA; CKPRPRD; -.
+DR   OrthoDB; 1401920at2759; -.
+DR   PhylomeDB; P60904; -.
+DR   TreeFam; TF105164; -.
+DR   Reactome; R-MMU-6798695; Neutrophil degranulation.
+DR   Reactome; R-MMU-888590; GABA synthesis, release, reuptake and degradation.
+DR   BioGRID-ORCS; 13002; 2 hits in 74 CRISPR screens.
+DR   ChiTaRS; Dnajc5; mouse.
+DR   EvolutionaryTrace; P60904; -.
+DR   PRO; PR:P60904; -.
+DR   Proteomes; UP000000589; Chromosome 2.
+DR   RNAct; P60904; protein.
+DR   Bgee; ENSMUSG00000000826; Expressed in barrel cortex and 253 other tissues.
+DR   ExpressionAtlas; P60904; baseline and differential.
+DR   Genevisible; P60904; MM.
+DR   GO; GO:0031225; C:anchored component of membrane; ISS:UniProtKB.
+DR   GO; GO:0098993; C:anchored component of synaptic vesicle membrane; ISO:MGI.
+DR   GO; GO:0042584; C:chromaffin granule membrane; IEA:UniProtKB-SubCell.
+DR   GO; GO:0060203; C:clathrin-sculpted glutamate transport vesicle membrane; TAS:Reactome.
+DR   GO; GO:0005829; C:cytosol; ISS:UniProtKB.
+DR   GO; GO:0005794; C:Golgi apparatus; ISO:MGI.
+DR   GO; GO:0043231; C:intracellular membrane-bounded organelle; ISO:MGI.
+DR   GO; GO:0042470; C:melanosome; IEA:UniProtKB-SubCell.
+DR   GO; GO:0016020; C:membrane; IBA:GO_Central.
+DR   GO; GO:0031594; C:neuromuscular junction; IDA:SynGO.
+DR   GO; GO:0005886; C:plasma membrane; ISS:UniProtKB.
+DR   GO; GO:0098793; C:presynapse; IDA:SynGO.
+DR   GO; GO:0008021; C:synaptic vesicle; IDA:MGI.
+DR   GO; GO:0043008; F:ATP-dependent protein binding; ISO:MGI.
+DR   GO; GO:0061077; P:chaperone-mediated protein folding; IDA:SynGO.
+DR   GO; GO:0043524; P:negative regulation of neuron apoptotic process; IGI:MGI.
+DR   GO; GO:0051402; P:neuron apoptotic process; IGI:MGI.
+DR   GO; GO:0098693; P:regulation of synaptic vesicle cycle; IDA:SynGO.
+DR   CDD; cd06257; DnaJ; 1.
+DR   Gene3D; 1.10.287.110; -; 1.
+DR   InterPro; IPR001623; DnaJ_domain.
+DR   InterPro; IPR018253; DnaJ_domain_CS.
+DR   InterPro; IPR036869; J_dom_sf.
+DR   Pfam; PF00226; DnaJ; 1.
+DR   PRINTS; PR00625; JDOMAIN.
+DR   SMART; SM00271; DnaJ; 1.
+DR   SUPFAM; SSF46565; SSF46565; 1.
+DR   PROSITE; PS00636; DNAJ_1; 1.
+DR   PROSITE; PS50076; DNAJ_2; 1.
+PE   1: Evidence at protein level;
+KW   3D-structure; Acetylation; Cell membrane; Chaperone; Cytoplasm;
+KW   Cytoplasmic vesicle; Direct protein sequencing; Lipoprotein; Membrane;
+KW   Palmitate; Phosphoprotein; Reference proteome.
+FT   CHAIN           1..198
+FT                   /note="DnaJ homolog subfamily C member 5"
+FT                   /id="PRO_0000071053"
+FT   DOMAIN          13..82
+FT                   /note="J"
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU00286"
+FT   MOD_RES         8
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:Q9H3Z4"
+FT   MOD_RES         10
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0007744|PubMed:19131326"
+FT   MOD_RES         12
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0000250|UniProtKB:Q9H3Z4"
+FT   MOD_RES         15
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0007744|PubMed:21183079"
+FT   MOD_RES         17
+FT                   /note="Phosphotyrosine"
+FT                   /evidence="ECO:0000250|UniProtKB:Q9H3Z4"
+FT   MOD_RES         56
+FT                   /note="N6-acetyllysine"
+FT                   /evidence="ECO:0000250|UniProtKB:Q9H3Z4"
+FT   MOD_RES         151
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0007744|PubMed:21183079"
+FT   MUTAGEN         10
+FT                   /note="S->D: Reduced interaction with SYT9, but no effect
+FT                   on the interaction with HSC70."
+FT                   /evidence="ECO:0000269|PubMed:20847230"
+FT   MUTAGEN         93
+FT                   /note="E->V: Reduced interaction with SYT9."
+FT                   /evidence="ECO:0000269|PubMed:20847230"
+FT   MUTAGEN         113
+FT                   /note="C->V: No effect on palmitoylation. No change in
+FT                   subcellular location; when associated with G-118 and
+FT                   F-121."
+FT                   /evidence="ECO:0000269|PubMed:17034881"
+FT   MUTAGEN         118
+FT                   /note="C->G: No effect on palmitoylation. No change in
+FT                   subcellular location; when associated with V-113 and
+FT                   F-121."
+FT                   /evidence="ECO:0000269|PubMed:17034881"
+FT   MUTAGEN         121
+FT                   /note="C->F: No effect on palmitoylation. No change in
+FT                   subcellular location; when associated with V-113 and
+FT                   G-118."
+FT                   /evidence="ECO:0000269|PubMed:17034881"
+FT   MUTAGEN         129
+FT                   /note="F->C: No effect on palmitoylation. No change in
+FT                   subcellular location; when associated with H-135."
+FT                   /evidence="ECO:0000269|PubMed:17034881"
+FT   MUTAGEN         135
+FT                   /note="K->H: No effect on palmitoylation. No change in
+FT                   subcellular location; when associated with C-129."
+FT                   /evidence="ECO:0000269|PubMed:17034881"
+FT   HELIX           16..20
+FT                   /evidence="ECO:0007829|PDB:2CTW"
+FT   HELIX           28..41
+FT                   /evidence="ECO:0007829|PDB:2CTW"
+FT   TURN            44..46
+FT                   /evidence="ECO:0007829|PDB:2CTW"
+FT   HELIX           51..67
+FT                   /evidence="ECO:0007829|PDB:2CTW"
+FT   HELIX           70..78
+FT                   /evidence="ECO:0007829|PDB:2CTW"
+FT   HELIX           81..89
+FT                   /evidence="ECO:0007829|PDB:2CTW"
+FT   HELIX           94..100
+FT                   /evidence="ECO:0007829|PDB:2CTW"
+SQ   SEQUENCE   198 AA;  22101 MW;  52F98261FBAD978F CRC64;
+     MADQRQRSLS TSGESLYHVL GLDKNATSDD IKKSYRKLAL KYHPDKNPDN PEAADKFKEI
+     NNAHAILTDA TKRNIYDKYG SLGLYVAEQF GEENVNTYFV LSSWWAKALF VVCGLLTCCY
+     CCCCLCCCFN CCCGKCKPKA PEGEETEFYV SPEDLEAQLQ SDEREATDTP IVIQPASATE
+     TTQLTADSHP SYHTDGFN
+//

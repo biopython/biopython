@@ -4,20 +4,21 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Extract SCOP domain ATOM and HETATOM records from PDB."""
 
-
-from __future__ import print_function
 
 import getopt
 import sys
 
-from Bio._py3k import urlretrieve as _urlretrieve
+from urllib.request import urlretrieve as _urlretrieve
 
 from Bio.SCOP import Raf, Cla
 
 
 def usage():
-    print("""Extract a SCOP domain's ATOM and HETATOM records from the relevant PDB file.
+    """Print a help message."""
+    print(
+        """Extract a SCOP domain's ATOM and HETATOM records from the relevant PDB file.
 
 For example:
   scop_pdb.py astral-rapid-access-1.55.raf dir.cla.scop.txt_1.55 d3hbib_
@@ -55,14 +56,19 @@ Usage: scop_pdb [-h] [-i file] [-o file] [-p pdb_url_prefix]
               See [http://scop.berkeley.edu/parse/index.html]
 
   sid      -- A SCOP domain identifier. e.g. d3hbib_
-""")
+"""
+    )
 
-default_pdb_url = "http://www.rcsb.org/pdb/cgi/export.cgi/somefile.pdb?" \
+
+default_pdb_url = (
+    "http://www.rcsb.org/pdb/cgi/export.cgi/somefile.pdb?"
     "format=PDB&pdbId=%s&compression=None"
-# default_pdb_url = "file://usr/local/db/pdb/data/010331/snapshot/all/pdb%s.ent"
+)
+# default_pdb_url = "file://usr/local/db/pdb/data/010331/snapshot/all/pdb%s.ent"  # noqa: E501
 
 
 def open_pdb(pdbid, pdb_url=None):
+    """Make a local copy of an online pdb file and return a file handle."""
     if pdb_url is None:
         pdb_url = default_pdb_url
     url = pdb_url % pdbid
@@ -71,9 +77,11 @@ def open_pdb(pdbid, pdb_url=None):
 
 
 def main():
+    """Extract a SCOP domain's ATOM and HETATOM records from a PDB file."""
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hp:o:i:",
-                                   ["help", "usage", "pdb=", "output=", "input="])
+        opts, args = getopt.getopt(
+            sys.argv[1:], "hp:o:i:", ["help", "usage", "pdb=", "output=", "input="]
+        )
     except getopt.GetoptError:
         # show help information and exit:
         usage()
@@ -112,7 +120,7 @@ def main():
 
     if input is None:
         sids = args[2:]
-    elif input == '-':
+    elif input == "-":
         sids = sys.stdin
     else:
         in_handle = open(input)
@@ -120,19 +128,19 @@ def main():
 
     try:
         for sid in sids:
-            if not sid or sid[0:1] == '#':
+            if not sid or sid[0:1] == "#":
                 continue
             id = sid[0:7]
             pdbid = id[1:5]
             s = pdbid[0:1]
-            if s == '0' or s == 's':
-                sys.stderr.write("No coordinates for domain %s\n" % id)
+            if s == "0" or s == "s":
+                sys.stderr.write(f"No coordinates for domain {id}\n")
                 continue
 
             if output is None:
                 filename = id + ".ent"
                 out_handle = open(filename, "w+")
-            elif output == '-':
+            elif output == "-":
                 out_handle = sys.stdout
             else:
                 out_handle = open(output, "w+")
@@ -149,8 +157,8 @@ def main():
                         seqMap.getAtoms(f, out_handle)
                     finally:
                         f.close()
-                except (IOError, KeyError, RuntimeError) as e:
-                    sys.stderr.write("I cannot do SCOP domain %s : %s\n" % (id, e))
+                except (OSError, KeyError, RuntimeError) as e:
+                    sys.stderr.write(f"I cannot do SCOP domain {id} : {e}\n")
             finally:
                 out_handle.close()
     finally:

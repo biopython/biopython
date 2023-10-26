@@ -1,28 +1,34 @@
 # Copyright 2003 by Bartek Wilczynski.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
-"""Parsing AlignACE output files
-"""
+"""Parsing AlignACE output files."""
 
-from Bio.motifs import Motif, Instances
-from Bio.Alphabet import IUPAC
+from Bio.motifs import Motif
+from Bio.Align import Alignment
 from Bio.Seq import Seq
 
 
 class Record(list):
+    """AlignACE record (subclass of Python list)."""
+
     def __init__(self):
+        """Initialize the class."""
         self.parameters = None
 
 
 def read(handle):
-    """read(handle)"""
+    """Parse an AlignACE format handle as a Record object."""
     record = Record()
     line = next(handle)
     record.version = line.strip()
     line = next(handle)
     record.command = line.strip()
+    mask = None
+    number = None
     for line in handle:
         line = line.strip()
         if line == "":
@@ -45,15 +51,15 @@ def read(handle):
             number = int(words[1])
             instances = []
         elif line[:3] == "MAP":
-            alphabet = IUPAC.unambiguous_dna
-            instances = Instances(instances, alphabet)
-            motif = Motif(alphabet, instances)
+            alphabet = "ACGT"
+            alignment = Alignment(instances)
+            motif = Motif(alphabet, alignment)
             motif.score = float(line.split()[-1])
             motif.number = number
             motif.mask = mask
             record.append(motif)
         elif len(line.split("\t")) == 4:
-            seq = Seq(line.split("\t")[0], IUPAC.unambiguous_dna)
+            seq = Seq(line.split("\t")[0])
             instances.append(seq)
         elif "*" in line:
             mask = line.strip("\r\n")

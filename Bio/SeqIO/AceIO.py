@@ -1,26 +1,22 @@
 # Copyright 2008-2015 by Peter Cock.  All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the "ace" file format.
 
 You are expected to use this module via the Bio.SeqIO functions.
 See also the Bio.Sequencing.Ace module which offers more than just accessing
 the contig consensus sequences in an ACE file as SeqRecord objects.
 """
-
-from __future__ import print_function
-
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_nucleotide, generic_dna, generic_rna, Gapped
 from Bio.Sequencing import Ace
 
 
-def AceIterator(handle):
-    """Returns SeqRecord objects from an ACE file.
+def AceIterator(source):
+    """Return SeqRecord objects from an ACE file.
 
     This uses the Bio.Sequencing.Ace module to do the hard work.  Note that
     by iterating over the file in a single pass, we are forced to ignore any
@@ -32,7 +28,7 @@ def AceIterator(handle):
     letter_annotations dictionary under the "phred_quality" key.
 
     >>> from Bio import SeqIO
-    >>> with open("Ace/consed_sample.ace", "rU") as handle:
+    >>> with open("Ace/consed_sample.ace") as handle:
     ...     for record in SeqIO.parse(handle, "ace"):
     ...         print("%s %s... %i" % (record.id, record.seq[:10], len(record)))
     ...         print(max(record.letter_annotations["phred_quality"]))
@@ -47,7 +43,7 @@ def AceIterator(handle):
     prevented output of the gapped sequence as FASTQ format.
 
     >>> from Bio import SeqIO
-    >>> with open("Ace/contig1.ace", "rU") as handle:
+    >>> with open("Ace/contig1.ace") as handle:
     ...     for record in SeqIO.parse(handle, "ace"):
     ...         print("%s ...%s..." % (record.id, record.seq[85:95]))
     ...         print(record.letter_annotations["phred_quality"][85:95])
@@ -60,27 +56,16 @@ def AceIterator(handle):
     90
 
     """
-    for ace_contig in Ace.parse(handle):
+    for ace_contig in Ace.parse(source):
         # Convert the ACE contig record into a SeqRecord...
         consensus_seq_str = ace_contig.sequence
-        # Assume its DNA unless there is a U in it,
-        if "U" in consensus_seq_str:
-            if "T" in consensus_seq_str:
-                # Very odd! Error?
-                alpha = generic_nucleotide
-            else:
-                alpha = generic_rna
-        else:
-            alpha = generic_dna
-
         if "*" in consensus_seq_str:
             # For consistency with most other file formats, map
             # any * gaps into - gaps.
             assert "-" not in consensus_seq_str
-            consensus_seq = Seq(consensus_seq_str.replace("*", "-"),
-                                Gapped(alpha, gap_char="-"))
+            consensus_seq = Seq(consensus_seq_str.replace("*", "-"))
         else:
-            consensus_seq = Seq(consensus_seq_str, alpha)
+            consensus_seq = Seq(consensus_seq_str)
 
         # TODO? - Base segments (BS lines) which indicates which read
         # phrap has chosen to be the consensus at a particular position.
@@ -89,9 +74,7 @@ def AceIterator(handle):
         # TODO - Supporting reads (RD lines, plus perhaps QA and DS lines)
         # Perhaps as SeqFeature objects?
 
-        seq_record = SeqRecord(consensus_seq,
-                               id=ace_contig.name,
-                               name=ace_contig.name)
+        seq_record = SeqRecord(consensus_seq, id=ace_contig.name, name=ace_contig.name)
 
         # Consensus base quality (BQ lines).  Note that any gaps (originally
         # as * characters) in the consensus do not get a quality entry, so
@@ -114,4 +97,5 @@ def AceIterator(handle):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

@@ -3,6 +3,8 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for PAML tools module."""
+
 import unittest
 import os
 import sys
@@ -28,18 +30,21 @@ def which(program):
         # For Windows, the user is instructed to move the programs to a folder
         # and then to add the folder to the system path. Just in case they didn't
         # do that, we can check for it in Program Files.
-        likely_dirs = ["",  # Current dir
-                       prog_files,
-                       os.path.join(prog_files, "paml41"),
-                       os.path.join(prog_files, "paml43"),
-                       os.path.join(prog_files, "paml44"),
-                       os.path.join(prog_files, "paml45")] + sys.path
+        likely_dirs = [
+            "",  # Current dir
+            prog_files,
+            os.path.join(prog_files, "paml41"),
+            os.path.join(prog_files, "paml43"),
+            os.path.join(prog_files, "paml44"),
+            os.path.join(prog_files, "paml45"),
+        ] + sys.path
         os_path.extend(likely_dirs)
     for path in os.environ["PATH"].split(os.pathsep):
         exe_file = os.path.join(path, program)
         if is_exe(exe_file):
             return exe_file
     return None
+
 
 # Find the PAML binaries
 if sys.platform == "win32":
@@ -49,7 +54,8 @@ else:
 for binary in binaries:
     if which(binary) is None:
         raise MissingExternalDependencyError(
-            "Install PAML if you want to use the Bio.Phylo.PAML wrapper.")
+            "Install PAML if you want to use the Bio.Phylo.PAML wrapper."
+        )
 
 
 class Common(unittest.TestCase):
@@ -72,9 +78,7 @@ class CodemlTest(Common):
         self.cml = codeml.Codeml()
 
     def testCodemlBinary(self):
-        """Test that the codeml binary runs and generates correct output
-        and is the correct version.
-        """
+        """Check codeml runs, generates correct output, and is the correct version."""
         ctl_file = os.path.join("PAML", "Control_files", "codeml", "codeml.ctl")
         self.cml.read_ctl_file(ctl_file)
         self.cml.alignment = os.path.join("PAML", "Alignments", "alignment.phylip")
@@ -82,8 +86,8 @@ class CodemlTest(Common):
         self.cml.out_file = os.path.join("PAML", "temp.out")
         self.cml.working_dir = os.path.join("PAML", "codeml_test")
         results = self.cml.run()
-        self.assertTrue(results["version"] > "4.0")
-        self.assertTrue("NSsites" in results)
+        self.assertGreater(results["version"], "4.0")
+        self.assertIn("NSsites", results)
         self.assertEqual(len(results["NSsites"]), 1)
         self.assertEqual(len(results["NSsites"][0]), 5)
 
@@ -95,9 +99,7 @@ class BasemlTest(Common):
         self.bml = baseml.Baseml()
 
     def testBasemlBinary(self):
-        """Test that the baseml binary runs and generates correct output
-        and is the correct version.
-        """
+        """Check baseml runs, generates correct output, and is the correct version."""
         ctl_file = os.path.join("PAML", "Control_files", "baseml", "baseml.ctl")
         self.bml.read_ctl_file(ctl_file)
         self.bml.alignment = os.path.join("PAML", "Alignments", "alignment.phylip")
@@ -105,8 +107,8 @@ class BasemlTest(Common):
         self.bml.out_file = os.path.join("PAML", "temp.out")
         self.bml.working_dir = os.path.join("PAML", "baseml_test")
         results = self.bml.run()
-        self.assertTrue(results["version"] > "4.0")
-        self.assertTrue("parameters" in results)
+        self.assertGreater(results["version"], "4.0")
+        self.assertIn("parameters", results)
         self.assertEqual(len(results["parameters"]), 5)
 
 
@@ -117,7 +119,8 @@ class Yn00Test(Common):
         self.yn = yn00.Yn00()
 
     def testYn00Binary(self):
-        """Test that the yn00 binary runs and generates correct output.
+        """Check yn00 binary runs and generates correct output.
+
         yn00 output does not specify the version number.
         """
         ctl_file = os.path.join("PAML", "Control_files", "yn00", "yn00.ctl")
@@ -132,4 +135,3 @@ class Yn00Test(Common):
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
-    clean_up()

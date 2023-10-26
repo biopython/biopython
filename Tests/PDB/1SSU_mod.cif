@@ -1,0 +1,32 @@
+data_1SSU
+#
+_refine.ls_d_res_high                            . 
+_refine.ls_d_res_low                             ? 
+#
+loop_
+_atom_site.group_PDB
+_atom_site.id
+_atom_site.type_symbol
+_atom_site.label_atom_id
+_atom_site.label_alt_id
+_atom_site.label_comp_id
+_atom_site.label_asym_id
+_atom_site.label_entity_id
+_atom_site.label_seq_id
+_atom_site.pdbx_PDB_ins_code
+_atom_site.Cartn_x
+_atom_site.Cartn_y
+_atom_site.Cartn_z
+_atom_site.occupancy
+_atom_site.B_iso_or_equiv
+_atom_site.pdbx_formal_charge
+_atom_site.auth_seq_id
+_atom_site.auth_comp_id
+_atom_site.auth_asym_id
+_atom_site.auth_atom_id
+_atom_site.pdbx_PDB_model_num
+ATOM 1     N N    . ASP A 1 1  ? -1.058  1.426   -20.149 1.00 0.00 ? 1  ASP A N    1
+ATOM 2     N N    . ASP B 1 1  ? -0.025  1.151   -19.117 1.00 0.00 ? 1  ASP B N    1
+ATOM 757   N N    . ASP A 1 1  ? 7.024   -5.098  -18.103 1.00 0.00 ? 1  ASP A N    2
+ATOM 758   N N    . ASP B 1 1  ? 6.259   -4.102  -17.308 1.00 0.00 ? 1  ASP B N    2
+#

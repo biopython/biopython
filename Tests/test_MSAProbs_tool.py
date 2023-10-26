@@ -4,6 +4,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for MSAProbs tool."""
+
 import os
 import sys
 import unittest
@@ -12,29 +14,28 @@ from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from Bio.Align.Applications import MSAProbsCommandline
 from Bio.Application import ApplicationError
-from Bio._py3k import getoutput
+from subprocess import getoutput
 
 #################################################################
 
 # Try to avoid problems when the OS is in another language
-os.environ['LANG'] = 'C'
+os.environ["LANG"] = "C"
 
 msaprobs_exe = None
 try:
     output = getoutput("msaprobs -version")
     if output.startswith("MSAPROBS version"):
         msaprobs_exe = "msaprobs"
-except OSError:
-    # TODO: Use FileNotFoundError once we drop Python 2
+except FileNotFoundError:
     pass
 
 if not msaprobs_exe:
     raise MissingExternalDependencyError(
-        "Install msaprobs if you want to use MSAProbs from Biopython.")
+        "Install msaprobs if you want to use MSAProbs from Biopython."
+    )
 
 
 class MSAProbsTestCase(unittest.TestCase):
-
     def setUp(self):
         self.files_to_clean = set()
 
@@ -44,8 +45,7 @@ class MSAProbsTestCase(unittest.TestCase):
                 os.remove(filename)
 
     def standard_test_procedure(self, cline):
-        """Standard testing procedure used by all tests."""
-
+        """Shared testing procedure used by all tests."""
         # Mark output files for later cleanup.
         self.add_file_to_clean(cline.outfile)
 
@@ -54,14 +54,14 @@ class MSAProbsTestCase(unittest.TestCase):
         output, error = cline()
 
     def add_file_to_clean(self, filename):
-        """Adds a file for deferred removal by the tearDown routine."""
+        """Add a file for deferred removal by the tearDown routine."""
         self.files_to_clean.add(filename)
+
 
 #################################################################
 
 
 class MSAProbsTestErrorConditions(MSAProbsTestCase):
-
     def test_empty_file(self):
         """Test an empty file."""
         input_file = "does_not_exist.fasta"
@@ -70,11 +70,14 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
-            self.assertTrue("Cannot open sequence file" in str(err) or
-                            "Cannot open input file" in str(err) or
-                            "Non-zero return code " in str(err), str(err))
+            self.assertTrue(
+                "Cannot open sequence file" in str(err)
+                or "Cannot open input file" in str(err)
+                or "Non-zero return code " in str(err),
+                str(err),
+            )
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
     def test_single_sequence(self):
         """Test an input file containing a single sequence."""
@@ -87,11 +90,13 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
         except ApplicationError as err:
             if sys.platform == "win32":
                 expected = 0xC0000005
+            elif sys.platform == "darwin":
+                expected = -11
             else:
                 expected = 139  # TODO: Check return codes on various other platforms
             self.assertEqual(expected, err.returncode)
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
     def test_invalid_format(self):
         """Test an input file in an invalid format."""
@@ -103,22 +108,21 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
         except ApplicationError as err:
             self.assertEqual(err.returncode, 1)
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
+
 
 #################################################################
 
 
 class MSAProbsTestNormalConditions(MSAProbsTestCase):
-
     def test_simple_fasta(self):
         """Test a simple fasta file."""
         input_file = "Registry/seqs.fasta"
         output_file = "temp_test.aln"
 
-        cline = MSAProbsCommandline(msaprobs_exe,
-                                        infile=input_file,
-                                        outfile=output_file,
-                                        clustalw=True)
+        cline = MSAProbsCommandline(
+            msaprobs_exe, infile=input_file, outfile=output_file, clustalw=True
+        )
 
         self.standard_test_procedure(cline)
 
@@ -137,15 +141,13 @@ class MSAProbsTestNormalConditions(MSAProbsTestCase):
     def test_input_filename_with_space(self):
         """Test an input filename containing a space."""
         input_file = "Clustalw/temp horses.fasta"
-        handle = open(input_file, "w")
-        SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
-        handle.close()
+        with open(input_file, "w") as handle:
+            SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
         output_file = "temp_test.aln"
 
-        cline = MSAProbsCommandline(msaprobs_exe,
-                                        infile=input_file,
-                                        outfile=output_file,
-                                        clustalw=True)
+        cline = MSAProbsCommandline(
+            msaprobs_exe, infile=input_file, outfile=output_file, clustalw=True
+        )
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
@@ -155,10 +157,9 @@ class MSAProbsTestNormalConditions(MSAProbsTestCase):
         input_file = "Registry/seqs.fasta"
         output_file = "temp with spaces.aln"
 
-        cline = MSAProbsCommandline(msaprobs_exe,
-                                        infile=input_file,
-                                        outfile=output_file,
-                                        clustalw=True)
+        cline = MSAProbsCommandline(
+            msaprobs_exe, infile=input_file, outfile=output_file, clustalw=True
+        )
 
         self.standard_test_procedure(cline)
 

@@ -1,0 +1,404 @@
+<?xml version="1.0" ?>
+<!DOCTYPE PubmedArticleSet PUBLIC "-//NLM//DTD PubMedArticle, 1st June 2018//EN" "https://dtd.nlm.nih.gov/ncbi/pubmed/out/pubmed_180601.dtd">
+<PubmedArticleSet>
+<PubmedArticle>
+    <MedlineCitation Status="In-Data-Review" Owner="NLM">
+        <PMID Version="1">28775130</PMID>
+        <DateRevised>
+            <Year>2018</Year>
+            <Month>04</Month>
+            <Day>25</Day>
+        </DateRevised>
+        <Article PubModel="Print-Electronic">
+            <Journal>
+                <ISSN IssnType="Electronic">1470-7926</ISSN>
+                <JournalIssue CitedMedium="Internet">
+                    <Volume>75</Volume>
+                    <Issue>2</Issue>
+                    <PubDate>
+                        <Year>2018</Year>
+                        <Month>Feb</Month>
+                    </PubDate>
+                </JournalIssue>
+                <Title>Occupational and environmental medicine</Title>
+                <ISOAbbreviation>Occup Environ Med</ISOAbbreviation>
+            </Journal>
+            <ArticleTitle>Occupational pesticide exposure and subclinical hypothyroidism among male pesticide applicators.</ArticleTitle>
+            <Pagination>
+                <MedlinePgn>79-89</MedlinePgn>
+            </Pagination>
+            <ELocationID EIdType="doi" ValidYN="Y">10.1136/oemed-2017-104431</ELocationID>
+            <Abstract>
+                <AbstractText Label="OBJECTIVES" NlmCategory="OBJECTIVE">Animal studies suggest that exposure to pesticides may alter thyroid function; however, few epidemiologic studies have examined this association. We evaluated the relationship between individual pesticides and thyroid function in 679 men enrolled in a substudy of the Agricultural Health Study, a cohort of licensed pesticide applicators.</AbstractText>
+                <AbstractText Label="METHODS" NlmCategory="METHODS">Self-reported lifetime pesticide use was obtained at cohort enrolment (1993-1997). Intensity-weighted lifetime days were computed for 33 pesticides, which adjusts cumulative days of pesticide use for factors that modify exposure (eg, use of personal protective equipment). Thyroid-stimulating hormone (TSH), thyroxine (T4), triiodothyronine (T3) and antithyroid peroxidase (anti-TPO) autoantibodies were measured in serum collected in 2010-2013. We used multivariate logistic regression to estimate ORs and 95% CIs for subclinical hypothyroidism (TSH &gt;4.5 mIU/L) compared with normal TSH (0.4-<u>&lt;</u>4.5 mIU/L) and for anti-TPO positivity. We also examined pesticide associations with TSH, T4 and T3 in multivariate linear regression models.</AbstractText>
+                <AbstractText Label="RESULTS" NlmCategory="RESULTS">Higher exposure to the insecticide aldrin (third and fourth quartiles of intensity-weighted days vs no exposure) was positively associated with subclinical hypothyroidism (OR<sub>Q3</sub>=4.15, 95% CI 1.56 to 11.01, OR<sub>Q4</sub>=4.76, 95% CI 1.53 to 14.82, p<sub>trend</sub> &lt;0.01), higher TSH (p<sub>trend</sub>=0.01) and lower T4 (p<sub>trend</sub>=0.04). Higher exposure to the herbicide pendimethalin was associated with subclinical hypothyroidism (fourth quartile vs no exposure: OR<sub>Q4</sub>=2.78, 95% CI 1.30 to 5.95, p<sub>trend</sub>=0.02), higher TSH (p<sub>trend</sub>=0.04) and anti-TPO positivity (p<sub>trend</sub>=0.01). The fumigant methyl bromide was inversely associated with TSH (p<sub>trend</sub>=0.02) and positively associated with T4 (p<sub>trend</sub>=0.01).</AbstractText>
+                <AbstractText Label="CONCLUSIONS" NlmCategory="CONCLUSIONS">Our results suggest that long-term exposure to aldrin, pendimethalin and methyl bromide may alter thyroid function among male pesticide applicators.</AbstractText>
+                <CopyrightInformation>© Article author(s) (or their employer(s) unless otherwise stated in the text of the article) 2018. All rights reserved. No commercial use is permitted unless otherwise expressly granted.</CopyrightInformation>
+            </Abstract>
+            <AuthorList CompleteYN="Y">
+                <Author ValidYN="Y">
+                    <LastName>Lerro</LastName>
+                    <ForeName>Catherine C</ForeName>
+                    <Initials>CC</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Division of Cancer Epidemiology and Genetics, National Cancer Institute, Rockville, Maryland, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Beane Freeman</LastName>
+                    <ForeName>Laura E</ForeName>
+                    <Initials>LE</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Division of Cancer Epidemiology and Genetics, National Cancer Institute, Rockville, Maryland, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>DellaValle</LastName>
+                    <ForeName>Curt T</ForeName>
+                    <Initials>CT</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Division of Cancer Epidemiology and Genetics, National Cancer Institute, Rockville, Maryland, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Environmental Working Group, Washington, DC, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Kibriya</LastName>
+                    <ForeName>Muhammad G</ForeName>
+                    <Initials>MG</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Public Health Sciences, The University of Chicago, Chicago, Illinois, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Aschebrook-Kilfoy</LastName>
+                    <ForeName>Briseis</ForeName>
+                    <Initials>B</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Public Health Sciences, The University of Chicago, Chicago, Illinois, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Jasmine</LastName>
+                    <ForeName>Farzana</ForeName>
+                    <Initials>F</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Public Health Sciences, The University of Chicago, Chicago, Illinois, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Koutros</LastName>
+                    <ForeName>Stella</ForeName>
+                    <Initials>S</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Division of Cancer Epidemiology and Genetics, National Cancer Institute, Rockville, Maryland, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Parks</LastName>
+                    <ForeName>Christine G</ForeName>
+                    <Initials>CG</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>National Institute of Environmental Health Sciences, Research Triangle Park, North Carolina, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Sandler</LastName>
+                    <ForeName>Dale P</ForeName>
+                    <Initials>DP</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>National Institute of Environmental Health Sciences, Research Triangle Park, North Carolina, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Alavanja</LastName>
+                    <ForeName>Michael C R</ForeName>
+                    <Initials>MCR</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Division of Cancer Epidemiology and Genetics, National Cancer Institute, Rockville, Maryland, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Biology, Hood College, Frederick, Maryland, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Hofmann</LastName>
+                    <ForeName>Jonathan N</ForeName>
+                    <Initials>JN</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Division of Cancer Epidemiology and Genetics, National Cancer Institute, Rockville, Maryland, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Ward</LastName>
+                    <ForeName>Mary H</ForeName>
+                    <Initials>MH</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Division of Cancer Epidemiology and Genetics, National Cancer Institute, Rockville, Maryland, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+            </AuthorList>
+            <Language>eng</Language>
+            <GrantList CompleteYN="Y">
+                <Grant>
+                    <GrantID>Z01 CP010119</GrantID>
+                    <Acronym>CP</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>Z01 ES049030</GrantID>
+                    <Acronym>ES</Acronym>
+                    <Agency>NIEHS NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>Z99 CA999999</GrantID>
+                    <Acronym>NULL</Acronym>
+                    <Agency>Intramural NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+            </GrantList>
+            <PublicationTypeList>
+                <PublicationType UI="D016428">Journal Article</PublicationType>
+            </PublicationTypeList>
+            <ArticleDate DateType="Electronic">
+                <Year>2017</Year>
+                <Month>08</Month>
+                <Day>03</Day>
+            </ArticleDate>
+        </Article>
+        <MedlineJournalInfo>
+            <Country>England</Country>
+            <MedlineTA>Occup Environ Med</MedlineTA>
+            <NlmUniqueID>9422759</NlmUniqueID>
+            <ISSNLinking>1351-0711</ISSNLinking>
+        </MedlineJournalInfo>
+        <CommentsCorrectionsList>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Toxicol Environ Health A. 2003 Jun 13;66(11):965-86</RefSource>
+                <PMID Version="1">12775511</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Ann Intern Med. 2015 May 5;162(9):641-50</RefSource>
+                <PMID Version="1">25798805</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Cancer Causes Control. 1999 Dec;10(6):583-95</RefSource>
+                <PMID Version="1">10616827</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Thyroid. 2010 Jul;20(7):755-61</RefSource>
+                <PMID Version="1">20578899</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Environ Health Perspect. 1999 Mar;107(3):205-11</RefSource>
+                <PMID Version="1">10064550</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Clin Endocrinol Metab. 2006 Nov;91(11):4295-301</RefSource>
+                <PMID Version="1">16868053</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Endocrinology. 1998 Oct;139(10):4252-63</RefSource>
+                <PMID Version="1">9751507</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Eur J Endocrinol. 2016 Apr;174(4):409-14</RefSource>
+                <PMID Version="1">26863886</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Eur J Endocrinol. 2000 Nov;143(5):639-47</RefSource>
+                <PMID Version="1">11078988</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Environ Res. 2016 Nov;151:389-398</RefSource>
+                <PMID Version="1">27540871</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Am J Epidemiol. 2010 Jan 15;171(2):242-52</RefSource>
+                <PMID Version="1">19951937</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Thyroid. 1998 Sep;8(9):827-56</RefSource>
+                <PMID Version="1">9777756</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Curr Opin Pharmacol. 2001 Dec;1(6):626-31</RefSource>
+                <PMID Version="1">11757819</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Breast Cancer Res Treat. 2012 Jun;133(3):1169-77</RefSource>
+                <PMID Version="1">22434524</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Environ Res Public Health. 2011 Dec;8(12 ):4608-22</RefSource>
+                <PMID Version="1">22408592</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Ann Oncol. 2014 Oct;25(10):2025-30</RefSource>
+                <PMID Version="1">25081899</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Environ Health. 2006 Dec 06;5:32</RefSource>
+                <PMID Version="1">17147831</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Environ Health Perspect. 1998 Aug;106(8):437-45</RefSource>
+                <PMID Version="1">9681970</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Arch Intern Med. 2000 Feb 28;160(4):526-34</RefSource>
+                <PMID Version="1">10695693</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Endocrine. 2011 Jun;39(3):259-65</RefSource>
+                <PMID Version="1">21161440</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Cancer Epidemiol Biomarkers Prev. 2008 Aug;17(8):1880-3</RefSource>
+                <PMID Version="1">18708375</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Am J Epidemiol. 2010 Feb 15;171(4):455-64</RefSource>
+                <PMID Version="1">20061368</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Clin Endocrinol Metab. 2002 Feb;87(2):489-99</RefSource>
+                <PMID Version="1">11836274</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Toxicol Environ Health A. 2015 ;78(21-22):1338-47</RefSource>
+                <PMID Version="1">26555155</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Toxicol Sci. 2002 Jun;67(2):207-18</RefSource>
+                <PMID Version="1">12011480</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Natl Cancer Inst Carcinog Tech Rep Ser. 1978;21:1-184</RefSource>
+                <PMID Version="1">12844187</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Environ Res. 2013 Nov;127:7-15</RefSource>
+                <PMID Version="1">24183346</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>JAMA. 2004 Jan 14;291(2):228-38</RefSource>
+                <PMID Version="1">14722150</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Expo Sci Environ Epidemiol. 2010 Sep;20(6):559-69</RefSource>
+                <PMID Version="1">19888312</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Environ Health Perspect. 1996 Apr;104(4):362-9</RefSource>
+                <PMID Version="1">8732939</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Lancet. 2012 Mar 24;379(9821):1142-54</RefSource>
+                <PMID Version="1">22273398</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>JAMA. 1995 Mar 8;273(10):808-12</RefSource>
+                <PMID Version="1">7532241</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Sci Total Environ. 2002 Aug 5;295(1-3):207-15</RefSource>
+                <PMID Version="1">12186288</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Eur J Endocrinol. 2006 May;154(5):599-611</RefSource>
+                <PMID Version="1">16645005</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Occup Environ Med. 2013 Oct;55(10):1171-8</RefSource>
+                <PMID Version="1">24064777</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Thyroid. 2007 Sep;17(9):811-7</RefSource>
+                <PMID Version="1">17956155</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Rev Environ Contam Toxicol. 1991;120:1-82</RefSource>
+                <PMID Version="1">1899728</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Environ Health Perspect. 1997 Oct;105(10):1126-30</RefSource>
+                <PMID Version="1">9349837</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Biochem Mol Toxicol. 2005;19(3):175</RefSource>
+                <PMID Version="1">15977190</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Immunogenetics. 2002 Jun;54(3):141-57</RefSource>
+                <PMID Version="1">12073143</PMID>
+            </CommentsCorrections>
+        </CommentsCorrectionsList>
+        <KeywordList Owner="NOTNLM">
+            <Keyword MajorTopicYN="N">agriculture</Keyword>
+            <Keyword MajorTopicYN="N">hypothyroidism</Keyword>
+            <Keyword MajorTopicYN="N">pesticides</Keyword>
+            <Keyword MajorTopicYN="N">thyroid disease</Keyword>
+            <Keyword MajorTopicYN="N">thyroid stimulating hormone</Keyword>
+        </KeywordList>
+        <CoiStatement>Competing interests: None declared.</CoiStatement>
+    </MedlineCitation>
+    <PubmedData>
+        <History>
+            <PubMedPubDate PubStatus="received">
+                <Year>2017</Year>
+                <Month>03</Month>
+                <Day>10</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="revised">
+                <Year>2017</Year>
+                <Month>06</Month>
+                <Day>13</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="accepted">
+                <Year>2017</Year>
+                <Month>06</Month>
+                <Day>22</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="pmc-release">
+                <Year>2019</Year>
+                <Month>02</Month>
+                <Day>01</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="pubmed">
+                <Year>2017</Year>
+                <Month>8</Month>
+                <Day>5</Day>
+                <Hour>6</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="medline">
+                <Year>2017</Year>
+                <Month>8</Month>
+                <Day>5</Day>
+                <Hour>6</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="entrez">
+                <Year>2017</Year>
+                <Month>8</Month>
+                <Day>5</Day>
+                <Hour>6</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+        </History>
+        <PublicationStatus>ppublish</PublicationStatus>
+        <ArticleIdList>
+            <ArticleId IdType="pubmed">28775130</ArticleId>
+            <ArticleId IdType="pii">oemed-2017-104431</ArticleId>
+            <ArticleId IdType="doi">10.1136/oemed-2017-104431</ArticleId>
+            <ArticleId IdType="pmc">PMC5771820</ArticleId>
+            <ArticleId IdType="mid">NIHMS932407</ArticleId>
+        </ArticleIdList>
+    </PubmedData>
+</PubmedArticle>
+
+</PubmedArticleSet>

@@ -18,7 +18,7 @@ text_30_hmmscan_006.out      single query, multiple matches, multiple hsps per m
 text_30_hmmscan_007.out      single query, one match, no alignment
 text_30_hmmscan_008.out      single query, multiple matches, no alignment width
 text_30_hmmscan_009.out      single query, alignment block(s) with large gaps (bug 3399 in Redmine)
-text_30_hmmscan_010.out      
+text_30_hmmscan_010.out
 text_31b1_hmmsearch_001.out  multiple queries
 text_30_hmmsearch_001.out    single query, no match
 text_30_hmmsearch_002.out    single query, multiple matches, multiple hsps per match
@@ -26,6 +26,8 @@ text_30_hmmsearch_003.out    single query, multiple matches, multiple hsps per m
 text_30_hmmsearch_004.out    single query, multiple matches, multiple hsps per match, no alignment width
 text_30_hmmsearch_005.out    multiple queries
 text_31b2_phmmer_001.out     multiple queries, with -A flag (issue #588)
+text_31b2_hmmsearch_001.out  single query, comment lines after query section (issue #1126)
+text_31b2_hmmsearch_002.out  multiple queries, multiple comment lines after query section (issue #1126)
 
 tab_31b1_hmmscan_001.out    multiple queries
 tab_30_hmmscan_001.out      multiple queries
@@ -39,7 +41,7 @@ domtab_30_hmmscan_001.out       multiple queries, hmm as hit
 domtab_30_hmmscan_002.out       single query, no match, hmm as hit
 domtab_30_hmmscan_003.out       single query, one match, one hsp per match, hmm as hit
 domtab_30_hmmscan_004.out       single query, multiple matches, one hsp per match, hmm as hit
-domtab_31b1_hmmsearch_001.out   
+domtab_31b1_hmmsearch_001.out
 domtab_30_hmmsearch_001.out     single query, multiple matches, hmm as query
 
 
@@ -50,6 +52,7 @@ text_22_hmmpfam_001.out     single query, one match, bioperl's L77119.hmmer file
 text_23_hmmpfam_001.out     single query, multiple matches, bioperl's hmmpfam_cs.out file
 text_23_hmmpfam_002.out     single query, no match
 text_23_hmmpfam_003.out     single query, one match, missing some consensus content
+text_23_hmmpfam_004.out     single query, one match, line break in the end of sequence marker
 text_24_hmmpfam_001.out     multiple queries
 text_20_hmmsearch_001.out   single query, multiple matches, bioperl's hmmsearch.out file
 text_22_hmmsearch_001.out   single query, multiple matches, bioperl's cysprot1b.hmmsearch file

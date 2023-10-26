@@ -1,21 +1,21 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2000 Andrew Dalke.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Codon tables based on those from the NCBI.
 
 These tables are based on parsing the NCBI file
 ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
 using Scripts/update_ncbi_codon_table.py
 
-Last updated at Version 4.0
+Last updated at Version 4.4 (May 2019)
 """
 
-from __future__ import print_function
-
-from Bio import Alphabet
-from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 
+from typing import Dict, List, Optional
 
 unambiguous_dna_by_name = {}
 unambiguous_dna_by_id = {}
@@ -35,30 +35,37 @@ ambiguous_generic_by_id = {}  # ambiguous DNA or RNA
 standard_dna_table = None
 standard_rna_table = None
 
+
 # In the future, the back_table could return a statistically
 # appropriate distribution of codons, so do not cache the results of
 # back_table lookups!
 
 
 class TranslationError(Exception):
+    """Container for translation specific exceptions."""
+
     pass
 
 
-class CodonTable(object):
+class CodonTable:
     """A codon-table, or genetic code."""
-    nucleotide_alphabet = Alphabet.generic_nucleotide
-    protein_alphabet = Alphabet.generic_protein
 
-    forward_table = {}    # only includes codons which actually code
-    back_table = {}       # for back translations
-    start_codons = []
-    stop_codons = []
+    forward_table: Dict[str, str] = {}  # only includes codons which actually code
+    back_table: Dict[str, str] = {}  # for back translations
+    start_codons: List[str] = []
+    stop_codons: List[str] = []
 
     # Not always called from derived classes!
-    def __init__(self, nucleotide_alphabet=nucleotide_alphabet,
-                 protein_alphabet=protein_alphabet,
-                 forward_table=forward_table, back_table=back_table,
-                 start_codons=start_codons, stop_codons=stop_codons):
+    def __init__(
+        self,
+        nucleotide_alphabet: Optional[str] = None,
+        protein_alphabet: Optional[str] = None,
+        forward_table: Dict[str, str] = forward_table,
+        back_table: Dict[str, str] = back_table,
+        start_codons: List[str] = start_codons,
+        stop_codons: List[str] = stop_codons,
+    ) -> None:
+        """Initialize the class."""
         self.nucleotide_alphabet = nucleotide_alphabet
         self.protein_alphabet = protein_alphabet
         self.forward_table = forward_table
@@ -67,15 +74,34 @@ class CodonTable(object):
         self.stop_codons = stop_codons
 
     def __str__(self):
-        """Returns a simple text representation of the codon table.
+        """Return a simple text representation of the codon table.
 
-        e.g.
+        e.g.::
 
-        >>> import Bio.Data.CodonTable
-        >>> print(Bio.Data.CodonTable.standard_dna_table)
-        >>> print(Bio.Data.CodonTable.generic_by_id[1])
+            >>> import Bio.Data.CodonTable
+            >>> print(Bio.Data.CodonTable.standard_dna_table)
+            Table 1 Standard, SGC0
+            <BLANKLINE>
+              |  T      |  C      |  A      |  G      |
+            --+---------+---------+---------+---------+--
+            T | TTT F   | TCT S   | TAT Y   | TGT C   | T
+            T | TTC F   | TCC S   | TAC Y   | TGC C   | C
+            ...
+            G | GTA V   | GCA A   | GAA E   | GGA G   | A
+            G | GTG V   | GCG A   | GAG E   | GGG G   | G
+            --+---------+---------+---------+---------+--
+            >>> print(Bio.Data.CodonTable.generic_by_id[1])
+            Table 1 Standard, SGC0
+            <BLANKLINE>
+              |  U      |  C      |  A      |  G      |
+            --+---------+---------+---------+---------+--
+            U | UUU F   | UCU S   | UAU Y   | UGU C   | U
+            U | UUC F   | UCC S   | UAC Y   | UGC C   | C
+            ...
+            G | GUA V   | GCA A   | GAA E   | GGA G   | A
+            G | GUG V   | GCG A   | GAG E   | GGG G   | G
+            --+---------+---------+---------+---------+--
         """
-
         if self.id:
             answer = "Table %i" % self.id
         else:
@@ -85,9 +111,8 @@ class CodonTable(object):
 
         # Use the main four letters (and the conventional ordering)
         # even for ambiguous tables
-        letters = self.nucleotide_alphabet.letters
-        if isinstance(self.nucleotide_alphabet, Alphabet.DNAAlphabet) \
-        or (letters is not None and "T" in letters):
+        letters = self.nucleotide_alphabet
+        if letters is not None and "T" in letters:
             letters = "TCAG"
         else:
             # Should be either RNA or generic nucleotides,
@@ -95,14 +120,15 @@ class CodonTable(object):
             letters = "UCAG"
 
         # Build the table...
-        answer += "\n\n  |" + "|".join("  %s      " % c2 for c2 in letters) + "|"
+        answer += "\n\n"
+        answer += "  |" + "|".join(f"  {c2}      " for c2 in letters) + "|"
         answer += "\n--+" + "+".join("---------" for c2 in letters) + "+--"
         for c1 in letters:
             for c3 in letters:
                 line = c1 + " |"
                 for c2 in letters:
                     codon = c1 + c2 + c3
-                    line += " %s" % codon
+                    line += f" {codon}"
                     if codon in self.stop_codons:
                         line += " Stop|"
                     else:
@@ -113,9 +139,9 @@ class CodonTable(object):
                         except TranslationError:
                             amino = "?"
                         if codon in self.start_codons:
-                            line += " %s(s)|" % amino
+                            line += f" {amino}(s)|"
                         else:
-                            line += " %s   |" % amino
+                            line += f" {amino}   |"
                 line += " " + c3
                 answer += "\n" + line
             answer += "\n--+" + "+".join("---------" for c2 in letters) + "+--"
@@ -138,10 +164,13 @@ def make_back_table(table, default_stop_codon):
 
 
 class NCBICodonTable(CodonTable):
-    nucleotide_alphabet = Alphabet.generic_nucleotide
-    protein_alphabet = IUPAC.protein
+    """Codon table for generic nucleotide sequences."""
+
+    nucleotide_alphabet: Optional[str] = None
+    protein_alphabet = IUPACData.protein_letters
 
     def __init__(self, id, names, table, start_codons, stop_codons):
+        """Initialize the class."""
         self.id = id
         self.names = names
         self.forward_table = table
@@ -149,79 +178,102 @@ class NCBICodonTable(CodonTable):
         self.start_codons = start_codons
         self.stop_codons = stop_codons
 
+    def __repr__(self):
+        """Represent the NCBI codon table class as a string for debugging."""
+        return f"{self.__class__.__name__}(id={self.id!r}, names={self.names!r}, ...)"
+
 
 class NCBICodonTableDNA(NCBICodonTable):
-    nucleotide_alphabet = IUPAC.unambiguous_dna
+    """Codon table for unambiguous DNA sequences."""
+
+    nucleotide_alphabet = IUPACData.unambiguous_dna_letters
 
 
 class NCBICodonTableRNA(NCBICodonTable):
-    nucleotide_alphabet = IUPAC.unambiguous_rna
+    """Codon table for unambiguous RNA sequences."""
+
+    nucleotide_alphabet = IUPACData.unambiguous_rna_letters
 
 
 # ########  Deal with ambiguous forward translations
 
-class AmbiguousCodonTable(CodonTable):
-    def __init__(self, codon_table,
-                 ambiguous_nucleotide_alphabet,
-                 ambiguous_nucleotide_values,
-                 ambiguous_protein_alphabet,
-                 ambiguous_protein_values):
-        CodonTable.__init__(self,
-                            ambiguous_nucleotide_alphabet,
-                            ambiguous_protein_alphabet,
-                            AmbiguousForwardTable(codon_table.forward_table,
-                                                  ambiguous_nucleotide_values,
-                                                  ambiguous_protein_values),
-                            codon_table.back_table,
 
-                            # These two are WRONG!  I need to get the
-                            # list of ambiguous codons which code for
-                            # the stop codons  XXX
-                            list_ambiguous_codons(codon_table.start_codons, ambiguous_nucleotide_values),
-                            list_ambiguous_codons(codon_table.stop_codons, ambiguous_nucleotide_values)
-                            )
+class AmbiguousCodonTable(CodonTable):
+    """Base codon table for ambiguous sequences."""
+
+    def __init__(
+        self,
+        codon_table,
+        ambiguous_nucleotide_alphabet,
+        ambiguous_nucleotide_values,
+        ambiguous_protein_alphabet,
+        ambiguous_protein_values,
+    ):
+        """Initialize the class."""
+        CodonTable.__init__(
+            self,
+            ambiguous_nucleotide_alphabet,
+            ambiguous_protein_alphabet,
+            AmbiguousForwardTable(
+                codon_table.forward_table,
+                ambiguous_nucleotide_values,
+                ambiguous_protein_values,
+            ),
+            codon_table.back_table,
+            # These two are WRONG!  I need to get the
+            # list of ambiguous codons which code for
+            # the stop codons  XXX
+            list_ambiguous_codons(
+                codon_table.start_codons, ambiguous_nucleotide_values
+            ),
+            list_ambiguous_codons(codon_table.stop_codons, ambiguous_nucleotide_values),
+        )
         self._codon_table = codon_table
 
     # Be sneaky and forward attribute lookups to the original table.
     # This lets us get the names, if the original table is an NCBI
     # table.
     def __getattr__(self, name):
+        """Forward attribute lookups to the original table."""
         return getattr(self._codon_table, name)
 
 
 def list_possible_proteins(codon, forward_table, ambiguous_nucleotide_values):
-        c1, c2, c3 = codon
-        x1 = ambiguous_nucleotide_values[c1]
-        x2 = ambiguous_nucleotide_values[c2]
-        x3 = ambiguous_nucleotide_values[c3]
-        possible = {}
-        stops = []
-        for y1 in x1:
-            for y2 in x2:
-                for y3 in x3:
-                    try:
-                        possible[forward_table[y1 + y2 + y3]] = 1
-                    except KeyError:
-                        # If tripping over a stop codon
-                        stops.append(y1 + y2 + y3)
-        if stops:
-            if possible:
-                raise TranslationError("ambiguous codon %r codes for both"
-                                       " proteins and stop codons" % codon)
-            # This is a true stop codon - tell the caller about it
-            raise KeyError(codon)
-        return list(possible)
+    """Return all possible encoded amino acids for ambiguous codon."""
+    c1, c2, c3 = codon
+    x1 = ambiguous_nucleotide_values[c1]
+    x2 = ambiguous_nucleotide_values[c2]
+    x3 = ambiguous_nucleotide_values[c3]
+    possible = {}
+    stops = []
+    for y1 in x1:
+        for y2 in x2:
+            for y3 in x3:
+                try:
+                    possible[forward_table[y1 + y2 + y3]] = 1
+                except KeyError:
+                    # If tripping over a stop codon
+                    stops.append(y1 + y2 + y3)
+    if stops:
+        if possible:
+            raise TranslationError(
+                f"ambiguous codon {codon!r} codes for both proteins and stop codons"
+            )
+        # This is a true stop codon - tell the caller about it
+        raise KeyError(codon)
+    return list(possible)
 
 
 def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
-    """Extends a codon list to include all possible ambigous codons.
+    """Extend a codon list to include all possible ambiguous codons.
 
     e.g.::
 
          ['TAG', 'TAA'] -> ['TAG', 'TAA', 'TAR']
          ['UAG', 'UGA'] -> ['UAG', 'UGA', 'URA']
 
-    Note that ['TAG', 'TGA'] -> ['TAG', 'TGA'], this does not add 'TRR'.
+    Note that ['TAG', 'TGA'] -> ['TAG', 'TGA'], this does not add 'TRR'
+    (which could also mean 'TAA' or 'TGG').
     Thus only two more codons are added in the following:
 
     e.g.::
@@ -230,19 +282,24 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
 
     Returns a new (longer) list of codon strings.
     """
-
     # Note ambiguous_nucleotide_values['R'] = 'AG' (etc)
     # This will generate things like 'TRR' from ['TAG', 'TGA'], which
     # we don't want to include:
-    c1_list = sorted(letter for (letter, meanings)
-               in ambiguous_nucleotide_values.items()
-               if set(codon[0] for codon in codons).issuperset(set(meanings)))
-    c2_list = sorted(letter for (letter, meanings)
-               in ambiguous_nucleotide_values.items()
-               if set(codon[1] for codon in codons).issuperset(set(meanings)))
-    c3_list = sorted(letter for (letter, meanings)
-               in ambiguous_nucleotide_values.items()
-               if set(codon[2] for codon in codons).issuperset(set(meanings)))
+    c1_list = sorted(
+        letter
+        for letter, meanings in ambiguous_nucleotide_values.items()
+        if {codon[0] for codon in codons}.issuperset(set(meanings))
+    )
+    c2_list = sorted(
+        letter
+        for letter, meanings in ambiguous_nucleotide_values.items()
+        if {codon[1] for codon in codons}.issuperset(set(meanings))
+    )
+    c3_list = sorted(
+        letter
+        for letter, meanings in ambiguous_nucleotide_values.items()
+        if {codon[2] for codon in codons}.issuperset(set(meanings))
+    )
     # candidates is a list (not a set) to preserve the iteration order
     candidates = []
     for c1 in c1_list:
@@ -252,29 +309,52 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
                 if codon not in candidates and codon not in codons:
                     candidates.append(codon)
     answer = codons[:]  # copy
-    # print "Have %i new candidates" % len(candidates)
+    # print("Have %i new candidates" % len(candidates))
     for ambig_codon in candidates:
         wanted = True
         # e.g. 'TRR' -> 'TAA', 'TAG', 'TGA', 'TGG'
-        for codon in [c1 + c2 + c3
-                      for c1 in ambiguous_nucleotide_values[ambig_codon[0]]
-                      for c2 in ambiguous_nucleotide_values[ambig_codon[1]]
-                      for c3 in ambiguous_nucleotide_values[ambig_codon[2]]]:
+        for codon in [
+            c1 + c2 + c3
+            for c1 in ambiguous_nucleotide_values[ambig_codon[0]]
+            for c2 in ambiguous_nucleotide_values[ambig_codon[1]]
+            for c3 in ambiguous_nucleotide_values[ambig_codon[2]]
+        ]:
             if codon not in codons:
                 # This ambiguous codon can code for a non-stop, exclude it!
                 wanted = False
-                # print "Rejecting %s" % ambig_codon
+                # print("Rejecting %s" % ambig_codon)
                 continue
         if wanted:
             answer.append(ambig_codon)
     return answer
 
-assert list_ambiguous_codons(['TGA', 'TAA'], IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TRA']
-assert list_ambiguous_codons(['TAG', 'TGA'], IUPACData.ambiguous_dna_values) == ['TAG', 'TGA']
-assert list_ambiguous_codons(['TAG', 'TAA'], IUPACData.ambiguous_dna_values) == ['TAG', 'TAA', 'TAR']
-assert list_ambiguous_codons(['UAG', 'UAA'], IUPACData.ambiguous_rna_values) == ['UAG', 'UAA', 'UAR']
-assert list_ambiguous_codons(['TGA', 'TAA', 'TAG'],
-                                 IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TAG', 'TAR', 'TRA']
+
+assert list_ambiguous_codons(["TGA", "TAA"], IUPACData.ambiguous_dna_values) == [
+    "TGA",
+    "TAA",
+    "TRA",
+]
+assert list_ambiguous_codons(["TAG", "TGA"], IUPACData.ambiguous_dna_values) == [
+    "TAG",
+    "TGA",
+]
+assert list_ambiguous_codons(["TAG", "TAA"], IUPACData.ambiguous_dna_values) == [
+    "TAG",
+    "TAA",
+    "TAR",
+]
+assert list_ambiguous_codons(["UAG", "UAA"], IUPACData.ambiguous_rna_values) == [
+    "UAG",
+    "UAA",
+    "UAR",
+]
+assert list_ambiguous_codons(["TGA", "TAA", "TAG"], IUPACData.ambiguous_dna_values) == [
+    "TGA",
+    "TAA",
+    "TAG",
+    "TAR",
+    "TRA",
+]
 
 # Forward translation is "onto", that is, any given codon always maps
 # to the same protein, or it doesn't map at all.  Thus, I can build
@@ -292,8 +372,11 @@ assert list_ambiguous_codons(['TGA', 'TAA', 'TAG'],
 #  'L'
 
 
-class AmbiguousForwardTable(object):
+class AmbiguousForwardTable:
+    """Forward table for translation of ambiguous nucleotide sequences."""
+
     def __init__(self, forward_table, ambiguous_nucleotide, ambiguous_protein):
+        """Initialize the class."""
         self.forward_table = forward_table
 
         self.ambiguous_nucleotide = ambiguous_nucleotide
@@ -311,20 +394,40 @@ class AmbiguousForwardTable(object):
 
         self._cache = {}
 
+    def __contains__(self, codon):
+        """Check if codon works as key for ambiguous forward_table.
+
+        Only returns 'True' if forward_table[codon] returns a value.
+        """
+        try:
+            self.__getitem__(codon)
+            return True
+        except (KeyError, TranslationError):
+            return False
+
     def get(self, codon, failobj=None):
+        """Implement get for dictionary-like behaviour."""
         try:
             return self.__getitem__(codon)
         except KeyError:
             return failobj
 
     def __getitem__(self, codon):
+        """Implement dictionary-like behaviour for AmbiguousForwardTable.
+
+        forward_table[codon] will either return an amino acid letter,
+        or throws a KeyError (if codon does not encode an amino acid)
+        or a TranslationError (if codon does encode for an amino acid,
+        but either is also a stop codon or does encode several amino acids,
+        for which no unique letter is available in the given alphabet.
+        """
         try:
             x = self._cache[codon]
         except KeyError:
             pass
         else:
             if x is TranslationError:
-                raise TranslationError(codon)   # no unique translation
+                raise TranslationError(codon)  # no unique translation
             if x is KeyError:
                 raise KeyError(codon)  # it's a stop codon
             return x
@@ -338,12 +441,12 @@ class AmbiguousForwardTable(object):
         # XXX Need to make part of this into a method which returns
         # a list of all possible encodings for a codon!
         try:
-            possible = list_possible_proteins(codon,
-                                              self.forward_table,
-                                              self.ambiguous_nucleotide)
+            possible = list_possible_proteins(
+                codon, self.forward_table, self.ambiguous_nucleotide
+            )
         except KeyError:
             self._cache[codon] = KeyError
-            raise KeyError(codon)  # stop codon
+            raise KeyError(codon) from None  # stop codon
         except TranslationError:
             self._cache[codon] = TranslationError
             raise TranslationError(codon)  # does not code
@@ -370,7 +473,7 @@ class AmbiguousForwardTable(object):
         # No amino acid encoding for the results
         if len(possible) == 0:
             self._cache[codon] = TranslationError
-            raise TranslationError(codon)   # no valid translation
+            raise TranslationError(codon)  # no valid translation
 
         # All of these are valid, so choose one
         # To be unique, sort by smallet ambiguity then alphabetically
@@ -389,22 +492,26 @@ class AmbiguousForwardTable(object):
         return x
 
 
-def register_ncbi_table(name, alt_name, id,
-                        table, start_codons, stop_codons):
-    """Turns codon table data into objects, and stores them in the dictionaries (PRIVATE)."""
+def register_ncbi_table(name, alt_name, id, table, start_codons, stop_codons):
+    """Turn codon table data into objects (PRIVATE).
+
+    The data is stored in the dictionaries.
+    """
     # In most cases names are divided by "; ", however there is also
     # Table 11 'Bacterial, Archaeal and Plant Plastid Code', previously
     # 'Bacterial and Plant Plastid' which used to be just 'Bacterial'
-    names = [x.strip() for x in name.replace(" and ", "; ").replace(", ", "; ").split("; ")]
+    names = [
+        x.strip() for x in name.replace(" and ", "; ").replace(", ", "; ").split("; ")
+    ]
 
-    dna = NCBICodonTableDNA(id, names + [alt_name], table, start_codons,
-                            stop_codons)
-
-    ambig_dna = AmbiguousCodonTable(dna,
-                                    IUPAC.ambiguous_dna,
-                                    IUPACData.ambiguous_dna_values,
-                                    IUPAC.extended_protein,
-                                    IUPACData.extended_protein_values)
+    dna = NCBICodonTableDNA(id, names + [alt_name], table, start_codons, stop_codons)
+    ambig_dna = AmbiguousCodonTable(
+        dna,
+        IUPACData.ambiguous_dna_letters,
+        IUPACData.ambiguous_dna_values,
+        IUPACData.extended_protein_letters,
+        IUPACData.extended_protein_values,
+    )
 
     # replace all T's with U's for the RNA tables
     rna_table = {}
@@ -418,37 +525,47 @@ def register_ncbi_table(name, alt_name, id,
     generic_start_codons = []
     for codon in start_codons:
         generic_start_codons.append(codon)
-        codon = codon.replace("T", "U")
-        generic_start_codons.append(codon)
+        # We need to check if 'T' is in the codon, otherwise
+        # generic_start_codons may contain duplicates
+        if "T" in codon:
+            codon = codon.replace("T", "U")
+            generic_start_codons.append(codon)
         rna_start_codons.append(codon)
     rna_stop_codons = []
     generic_stop_codons = []
     for codon in stop_codons:
         generic_stop_codons.append(codon)
-        codon = codon.replace("T", "U")
-        generic_stop_codons.append(codon)
+        if "T" in codon:
+            codon = codon.replace("T", "U")
+            generic_stop_codons.append(codon)
         rna_stop_codons.append(codon)
 
-    generic = NCBICodonTable(id, names + [alt_name], generic_table,
-                             generic_start_codons, generic_stop_codons)
+    generic = NCBICodonTable(
+        id, names + [alt_name], generic_table, generic_start_codons, generic_stop_codons
+    )
 
     # The following isn't very elegant, but seems to work nicely.
     _merged_values = dict(IUPACData.ambiguous_rna_values.items())
     _merged_values["T"] = "U"
-    ambig_generic = AmbiguousCodonTable(generic,
-                                        Alphabet.NucleotideAlphabet(),
-                                        _merged_values,
-                                        IUPAC.extended_protein,
-                                        IUPACData.extended_protein_values)
+    ambig_generic = AmbiguousCodonTable(
+        generic,
+        None,
+        _merged_values,
+        IUPACData.extended_protein_letters,
+        IUPACData.extended_protein_values,
+    )
 
-    rna = NCBICodonTableRNA(id, names + [alt_name], rna_table,
-                            rna_start_codons, rna_stop_codons)
+    rna = NCBICodonTableRNA(
+        id, names + [alt_name], rna_table, rna_start_codons, rna_stop_codons
+    )
 
-    ambig_rna = AmbiguousCodonTable(rna,
-                                    IUPAC.ambiguous_rna,
-                                    IUPACData.ambiguous_rna_values,
-                                    IUPAC.extended_protein,
-                                    IUPACData.extended_protein_values)
+    ambig_rna = AmbiguousCodonTable(
+        rna,
+        IUPACData.ambiguous_rna_letters,
+        IUPACData.ambiguous_rna_values,
+        IUPACData.extended_protein_letters,
+        IUPACData.extended_protein_values,
+    )
 
     if id == 1:
         global standard_dna_table, standard_rna_table
@@ -474,443 +591,720 @@ def register_ncbi_table(name, alt_name, id,
         ambiguous_generic_by_name[name] = ambig_generic
 
 
+# The rest of this file is automatically generated, here we turn off
+# black formatting in order to keep the codon tables compact.
+#
+# fmt: off
+
 ##########################################################################
 # Start of auto-generated output from Scripts/update_ncbi_codon_table.py #
 ##########################################################################
 
+# Data from NCBI genetic code table version 4.5
 
-register_ncbi_table(name='Standard',
-                    alt_name='SGC0', id=1,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TGT': 'C', 'TGC': 'C', 'TGG': 'W', 'CTT': 'L', 'CTC': 'L',
-     'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P', 'CCA': 'P',
-     'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
-     'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R', 'ATT': 'I',
-     'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T', 'ACC': 'T',
-     'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N', 'AAA': 'K',
-     'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',
-     'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V', 'GCT': 'A',
-     'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D', 'GAC': 'D',
-     'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G', 'GGA': 'G',
-     'GGG': 'G', },
-                    stop_codons=['TAA', 'TAG', 'TGA'],
-                    start_codons=['TTG', 'CTG', 'ATG'])
+register_ncbi_table(
+    name="Standard",
+    alt_name="SGC0",
+    id=1,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",                           # noqa: E241
+        "TGT": "C", "TGC": "C",             "TGG": "W",   # noqa: E241
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG", "TGA"],
+    start_codons=["TTG", "CTG", "ATG"],
+)
 
-register_ncbi_table(name='Vertebrate Mitochondrial',
-                    alt_name='SGC1', id=2,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W', 'CTT': 'L',
-     'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P',
-     'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q',
-     'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-     'ATT': 'I', 'ATC': 'I', 'ATA': 'M', 'ATG': 'M', 'ACT': 'T',
-     'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
-     'AAA': 'K', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'GTT': 'V',
-     'GTC': 'V', 'GTA': 'V', 'GTG': 'V', 'GCT': 'A', 'GCC': 'A',
-     'GCA': 'A', 'GCG': 'A', 'GAT': 'D', 'GAC': 'D', 'GAA': 'E',
-     'GAG': 'E', 'GGT': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G', },
-                    stop_codons=['TAA', 'TAG', 'AGA', 'AGG'],
-                    start_codons=['ATT', 'ATC', 'ATA', 'ATG', 'GTG'])
+register_ncbi_table(
+    name="Vertebrate Mitochondrial",
+    alt_name="SGC1",
+    id=2,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",                           # noqa: E241
+        "TGT": "C", "TGC": "C", "TGA": "W", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "M", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S",                           # noqa: E241
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG", "AGA", "AGG"],
+    start_codons=["ATT", "ATC", "ATA", "ATG", "GTG"],
+)
 
-register_ncbi_table(name='Yeast Mitochondrial',
-                    alt_name='SGC2', id=3,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W', 'CTT': 'T',
-     'CTC': 'T', 'CTA': 'T', 'CTG': 'T', 'CCT': 'P', 'CCC': 'P',
-     'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q',
-     'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-     'ATT': 'I', 'ATC': 'I', 'ATA': 'M', 'ATG': 'M', 'ACT': 'T',
-     'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
-     'AAA': 'K', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'R',
-     'AGG': 'R', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
-     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D',
-     'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
-     'GGA': 'G', 'GGG': 'G', },
-                    stop_codons=['TAA', 'TAG'],
-                    start_codons=['ATA', 'ATG'])
+register_ncbi_table(
+    name="Yeast Mitochondrial",
+    alt_name="SGC2",
+    id=3,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",                           # noqa: E241
+        "TGT": "C", "TGC": "C", "TGA": "W", "TGG": "W",
+        "CTT": "T", "CTC": "T", "CTA": "T", "CTG": "T",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "M", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG"],
+    start_codons=["ATA", "ATG", "GTG"],
+)
 
-register_ncbi_table(name='Mold Mitochondrial; Protozoan Mitochondrial; Coelenterate Mitochondrial; Mycoplasma; Spiroplasma',
-                    alt_name='SGC3', id=4,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W', 'CTT': 'L',
-     'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P',
-     'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q',
-     'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-     'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T',
-     'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
-     'AAA': 'K', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'R',
-     'AGG': 'R', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
-     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D',
-     'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
-     'GGA': 'G', 'GGG': 'G', },
-                    stop_codons=['TAA', 'TAG'],
-                    start_codons=['TTA', 'TTG', 'CTG', 'ATT', 'ATC', 'ATA',
-                                  'ATG', 'GTG'])
+register_ncbi_table(
+    name="Mold Mitochondrial; Protozoan Mitochondrial; Coelenterate "
+    "Mitochondrial; Mycoplasma; Spiroplasma",
+    alt_name="SGC3",
+    id=4,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",                           # noqa: E241
+        "TGT": "C", "TGC": "C", "TGA": "W", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG"],
+    start_codons=["TTA", "TTG", "CTG", "ATT", "ATC", "ATA", "ATG", "GTG"],
+)
 
-register_ncbi_table(name='Invertebrate Mitochondrial',
-                    alt_name='SGC4', id=5,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W', 'CTT': 'L',
-     'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P',
-     'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q',
-     'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-     'ATT': 'I', 'ATC': 'I', 'ATA': 'M', 'ATG': 'M', 'ACT': 'T',
-     'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
-     'AAA': 'K', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'S',
-     'AGG': 'S', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
-     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D',
-     'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
-     'GGA': 'G', 'GGG': 'G', },
-                    stop_codons=['TAA', 'TAG'],
-                    start_codons=['TTG', 'ATT', 'ATC', 'ATA', 'ATG', 'GTG'])
+register_ncbi_table(
+    name="Invertebrate Mitochondrial",
+    alt_name="SGC4",
+    id=5,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",                           # noqa: E241
+        "TGT": "C", "TGC": "C", "TGA": "W", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "M", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "S", "AGG": "S",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG"],
+    start_codons=["TTG", "ATT", "ATC", "ATA", "ATG", "GTG"],
+)
 
-register_ncbi_table(name='Ciliate Nuclear; Dasycladacean Nuclear; Hexamita Nuclear',
-                    alt_name='SGC5', id=6,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TAA': 'Q', 'TAG': 'Q', 'TGT': 'C', 'TGC': 'C', 'TGG': 'W',
-     'CTT': 'L', 'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P',
-     'CCC': 'P', 'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H',
-     'CAA': 'Q', 'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R',
-     'CGG': 'R', 'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M',
-     'ACT': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N',
-     'AAC': 'N', 'AAA': 'K', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S',
-     'AGA': 'R', 'AGG': 'R', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V',
-     'GTG': 'V', 'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
-     'GAT': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G',
-     'GGC': 'G', 'GGA': 'G', 'GGG': 'G', },
-                    stop_codons=['TGA'],
-                    start_codons=['ATG'])
+register_ncbi_table(
+    name="Ciliate Nuclear; Dasycladacean Nuclear; Hexamita Nuclear",
+    alt_name="SGC5",
+    id=6,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y", "TAA": "Q", "TAG": "Q",
+        "TGT": "C", "TGC": "C",             "TGG": "W",   # noqa: E241
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TGA"],
+    start_codons=["ATG"],
+)
 
-register_ncbi_table(name='Echinoderm Mitochondrial; Flatworm Mitochondrial',
-                    alt_name='SGC8', id=9,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W', 'CTT': 'L',
-     'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P',
-     'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q',
-     'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-     'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T',
-     'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
-     'AAA': 'N', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'S',
-     'AGG': 'S', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
-     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D',
-     'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
-     'GGA': 'G', 'GGG': 'G', },
-                    stop_codons=['TAA', 'TAG'],
-                    start_codons=['ATG', 'GTG'])
+register_ncbi_table(
+    name="Echinoderm Mitochondrial; Flatworm Mitochondrial",
+    alt_name="SGC8",
+    id=9,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",                           # noqa: E241
+        "TGT": "C", "TGC": "C", "TGA": "W", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "N", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "S", "AGG": "S",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG"],
+    start_codons=["ATG", "GTG"],
+)
 
-register_ncbi_table(name='Euplotid Nuclear',
-                    alt_name='SGC9', id=10,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TGT': 'C', 'TGC': 'C', 'TGA': 'C', 'TGG': 'W', 'CTT': 'L',
-     'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P',
-     'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q',
-     'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-     'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T',
-     'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
-     'AAA': 'K', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'R',
-     'AGG': 'R', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
-     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D',
-     'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
-     'GGA': 'G', 'GGG': 'G', },
-                    stop_codons=['TAA', 'TAG'],
-                    start_codons=['ATG'])
+register_ncbi_table(
+    name="Euplotid Nuclear",
+    alt_name="SGC9",
+    id=10,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",                           # noqa: E241
+        "TGT": "C", "TGC": "C", "TGA": "C", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG"],
+    start_codons=["ATG"],
+)
 
-register_ncbi_table(name='Bacterial, Archaeal and Plant Plastid',
-                    alt_name=None, id=11,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TGT': 'C', 'TGC': 'C', 'TGG': 'W', 'CTT': 'L', 'CTC': 'L',
-     'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P', 'CCA': 'P',
-     'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
-     'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R', 'ATT': 'I',
-     'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T', 'ACC': 'T',
-     'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N', 'AAA': 'K',
-     'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',
-     'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V', 'GCT': 'A',
-     'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D', 'GAC': 'D',
-     'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G', 'GGA': 'G',
-     'GGG': 'G', },
-                    stop_codons=['TAA', 'TAG', 'TGA'],
-                    start_codons=['TTG', 'CTG', 'ATT', 'ATC', 'ATA', 'ATG',
-                                  'GTG'])
+register_ncbi_table(
+    name="Bacterial, Archaeal and Plant Plastid",
+    alt_name=None,
+    id=11,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",                           # noqa: E241
+        "TGT": "C", "TGC": "C",             "TGG": "W",   # noqa: E241
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG", "TGA"],
+    start_codons=["TTG", "CTG", "ATT", "ATC", "ATA", "ATG", "GTG"],
+)
 
-register_ncbi_table(name='Alternative Yeast Nuclear',
-                    alt_name=None, id=12,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TGT': 'C', 'TGC': 'C', 'TGG': 'W', 'CTT': 'L', 'CTC': 'L',
-     'CTA': 'L', 'CTG': 'S', 'CCT': 'P', 'CCC': 'P', 'CCA': 'P',
-     'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
-     'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R', 'ATT': 'I',
-     'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T', 'ACC': 'T',
-     'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N', 'AAA': 'K',
-     'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',
-     'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V', 'GCT': 'A',
-     'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D', 'GAC': 'D',
-     'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G', 'GGA': 'G',
-     'GGG': 'G', },
-                    stop_codons=['TAA', 'TAG', 'TGA'],
-                    start_codons=['CTG', 'ATG'])
+register_ncbi_table(
+    name="Alternative Yeast Nuclear",
+    alt_name=None,
+    id=12,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",                           # noqa: E241
+        "TGT": "C", "TGC": "C",             "TGG": "W",   # noqa: E241
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "S",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG", "TGA"],
+    start_codons=["CTG", "ATG"],
+)
 
-register_ncbi_table(name='Ascidian Mitochondrial',
-                    alt_name=None, id=13,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W', 'CTT': 'L',
-     'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P',
-     'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q',
-     'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-     'ATT': 'I', 'ATC': 'I', 'ATA': 'M', 'ATG': 'M', 'ACT': 'T',
-     'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
-     'AAA': 'K', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'G',
-     'AGG': 'G', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
-     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D',
-     'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
-     'GGA': 'G', 'GGG': 'G', },
-                    stop_codons=['TAA', 'TAG'],
-                    start_codons=['TTG', 'ATA', 'ATG', 'GTG'])
+register_ncbi_table(
+    name="Ascidian Mitochondrial",
+    alt_name=None,
+    id=13,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",                           # noqa: E241
+        "TGT": "C", "TGC": "C", "TGA": "W", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "M", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "G", "AGG": "G",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG"],
+    start_codons=["TTG", "ATA", "ATG", "GTG"],
+)
 
-register_ncbi_table(name='Alternative Flatworm Mitochondrial',
-                    alt_name=None, id=14,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TAA': 'Y', 'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W',
-     'CTT': 'L', 'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P',
-     'CCC': 'P', 'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H',
-     'CAA': 'Q', 'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R',
-     'CGG': 'R', 'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M',
-     'ACT': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N',
-     'AAC': 'N', 'AAA': 'N', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S',
-     'AGA': 'S', 'AGG': 'S', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V',
-     'GTG': 'V', 'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
-     'GAT': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G',
-     'GGC': 'G', 'GGA': 'G', 'GGG': 'G', },
-                    stop_codons=['TAG'],
-                    start_codons=['ATG'])
+register_ncbi_table(
+    name="Alternative Flatworm Mitochondrial",
+    alt_name=None,
+    id=14,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y", "TAA": "Y",               # noqa: E241
+        "TGT": "C", "TGC": "C", "TGA": "W", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "N", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "S", "AGG": "S",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAG"],
+    start_codons=["ATG"],
+)
 
-register_ncbi_table(name='Blepharisma Macronuclear',
-                    alt_name=None, id=15,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TAG': 'Q', 'TGT': 'C', 'TGC': 'C', 'TGG': 'W', 'CTT': 'L',
-     'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P',
-     'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q',
-     'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-     'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T',
-     'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
-     'AAA': 'K', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'R',
-     'AGG': 'R', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
-     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D',
-     'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
-     'GGA': 'G', 'GGG': 'G', },
-                    stop_codons=['TAA', 'TGA'],
-                    start_codons=['ATG'])
+register_ncbi_table(
+    name="Blepharisma Macronuclear",
+    alt_name=None,
+    id=15,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",             "TAG": "Q",   # noqa: E241
+        "TGT": "C", "TGC": "C",             "TGG": "W",   # noqa: E241
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TGA"],
+    start_codons=["ATG"],
+)
 
-register_ncbi_table(name='Chlorophycean Mitochondrial',
-                    alt_name=None, id=16,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TAG': 'L', 'TGT': 'C', 'TGC': 'C', 'TGG': 'W', 'CTT': 'L',
-     'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P',
-     'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q',
-     'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-     'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T',
-     'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
-     'AAA': 'K', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'R',
-     'AGG': 'R', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
-     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D',
-     'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
-     'GGA': 'G', 'GGG': 'G', },
-                    stop_codons=['TAA', 'TGA'],
-                    start_codons=['ATG'])
+register_ncbi_table(
+    name="Chlorophycean Mitochondrial",
+    alt_name=None,
+    id=16,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",             "TAG": "L",   # noqa: E241
+        "TGT": "C", "TGC": "C",             "TGG": "W",   # noqa: E241
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TGA"],
+    start_codons=["ATG"],
+)
 
-register_ncbi_table(name='Trematode Mitochondrial',
-                    alt_name=None, id=21,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W', 'CTT': 'L',
-     'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P',
-     'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q',
-     'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-     'ATT': 'I', 'ATC': 'I', 'ATA': 'M', 'ATG': 'M', 'ACT': 'T',
-     'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
-     'AAA': 'N', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'S',
-     'AGG': 'S', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
-     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D',
-     'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
-     'GGA': 'G', 'GGG': 'G', },
-                    stop_codons=['TAA', 'TAG'],
-                    start_codons=['ATG', 'GTG'])
+register_ncbi_table(
+    name="Trematode Mitochondrial",
+    alt_name=None,
+    id=21,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",                           # noqa: E241
+        "TGT": "C", "TGC": "C", "TGA": "W", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "M", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "N", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "S", "AGG": "S",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG"],
+    start_codons=["ATG", "GTG"],
+)
 
-register_ncbi_table(name='Scenedesmus obliquus Mitochondrial',
-                    alt_name=None, id=22,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y', 'TAG': 'L',
-     'TGT': 'C', 'TGC': 'C', 'TGG': 'W', 'CTT': 'L', 'CTC': 'L',
-     'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P', 'CCA': 'P',
-     'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
-     'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R', 'ATT': 'I',
-     'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T', 'ACC': 'T',
-     'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N', 'AAA': 'K',
-     'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',
-     'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V', 'GCT': 'A',
-     'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D', 'GAC': 'D',
-     'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G', 'GGA': 'G',
-     'GGG': 'G', },
-                    stop_codons=['TCA', 'TAA', 'TGA'],
-                    start_codons=['ATG'])
+register_ncbi_table(
+    name="Scenedesmus obliquus Mitochondrial",
+    alt_name=None,
+    id=22,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S",             "TCG": "S",   # noqa: E241
+        "TAT": "Y", "TAC": "Y",             "TAG": "L",   # noqa: E241
+        "TGT": "C", "TGC": "C",             "TGG": "W",   # noqa: E241
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TCA", "TAA", "TGA"],
+    start_codons=["ATG"],
+)
 
-register_ncbi_table(name='Thraustochytrium Mitochondrial',
-                    alt_name=None, id=23,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTG': 'L', 'TCT': 'S', 'TCC': 'S',
-     'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y', 'TGT': 'C',
-     'TGC': 'C', 'TGG': 'W', 'CTT': 'L', 'CTC': 'L', 'CTA': 'L',
-     'CTG': 'L', 'CCT': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
-     'CAT': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q', 'CGT': 'R',
-     'CGC': 'R', 'CGA': 'R', 'CGG': 'R', 'ATT': 'I', 'ATC': 'I',
-     'ATA': 'I', 'ATG': 'M', 'ACT': 'T', 'ACC': 'T', 'ACA': 'T',
-     'ACG': 'T', 'AAT': 'N', 'AAC': 'N', 'AAA': 'K', 'AAG': 'K',
-     'AGT': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R', 'GTT': 'V',
-     'GTC': 'V', 'GTA': 'V', 'GTG': 'V', 'GCT': 'A', 'GCC': 'A',
-     'GCA': 'A', 'GCG': 'A', 'GAT': 'D', 'GAC': 'D', 'GAA': 'E',
-     'GAG': 'E', 'GGT': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G', },
-                    stop_codons=['TTA', 'TAA', 'TAG', 'TGA'],
-                    start_codons=['ATT', 'ATG', 'GTG'])
+register_ncbi_table(
+    name="Thraustochytrium Mitochondrial",
+    alt_name=None,
+    id=23,
+    table={
+        "TTT": "F", "TTC": "F",             "TTG": "L",   # noqa: E241
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",                           # noqa: E241
+        "TGT": "C", "TGC": "C",             "TGG": "W",   # noqa: E241
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TTA", "TAA", "TAG", "TGA"],
+    start_codons=["ATT", "ATG", "GTG"],
+)
 
-register_ncbi_table(name='Pterobranchia Mitochondrial',
-                    alt_name=None, id=24,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W', 'CTT': 'L',
-     'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P',
-     'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q',
-     'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-     'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T',
-     'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
-     'AAA': 'K', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'S',
-     'AGG': 'K', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
-     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D',
-     'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
-     'GGA': 'G', 'GGG': 'G', },
-                    stop_codons=['TAA', 'TAG'],
-                    start_codons=['TTG', 'CTG', 'ATG', 'GTG'])
+register_ncbi_table(
+    name="Pterobranchia Mitochondrial",
+    alt_name=None,
+    id=24,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",                           # noqa: E241
+        "TGT": "C", "TGC": "C", "TGA": "W", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "S", "AGG": "K",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG"],
+    start_codons=["TTG", "CTG", "ATG", "GTG"],
+)
 
-register_ncbi_table(name='Candidate Division SR1 and Gracilibacteria',
-                    alt_name=None, id=25,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TGT': 'C', 'TGC': 'C', 'TGA': 'G', 'TGG': 'W', 'CTT': 'L',
-     'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P',
-     'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q',
-     'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-     'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T',
-     'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
-     'AAA': 'K', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'R',
-     'AGG': 'R', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
-     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D',
-     'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
-     'GGA': 'G', 'GGG': 'G', },
-                    stop_codons=['TAA', 'TAG'],
-                    start_codons=['TTG', 'ATG', 'GTG'])
+register_ncbi_table(
+    name="Candidate Division SR1 and Gracilibacteria",
+    alt_name=None,
+    id=25,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",                           # noqa: E241
+        "TGT": "C", "TGC": "C", "TGA": "G", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG"],
+    start_codons=["TTG", "ATG", "GTG"],
+)
 
+register_ncbi_table(
+    name="Pachysolen tannophilus Nuclear",
+    alt_name=None,
+    id=26,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",                           # noqa: E241
+        "TGT": "C", "TGC": "C",             "TGG": "W",   # noqa: E241
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "A",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG", "TGA"],
+    start_codons=["CTG", "ATG"],
+)
+
+register_ncbi_table(
+    name="Karyorelict Nuclear",
+    alt_name=None,
+    id=27,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y", "TAA": "Q", "TAG": "Q",
+        "TGT": "C", "TGC": "C", "TGA": "W", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TGA"],
+    start_codons=["ATG"],
+)
+
+register_ncbi_table(
+    name="Condylostoma Nuclear",
+    alt_name=None,
+    id=28,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y", "TAA": "Q", "TAG": "Q",
+        "TGT": "C", "TGC": "C", "TGA": "W", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG", "TGA"],
+    start_codons=["ATG"],
+)
+
+register_ncbi_table(
+    name="Mesodinium Nuclear",
+    alt_name=None,
+    id=29,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y", "TAA": "Y", "TAG": "Y",
+        "TGT": "C", "TGC": "C",             "TGG": "W",   # noqa: E241
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TGA"],
+    start_codons=["ATG"],
+)
+
+register_ncbi_table(
+    name="Peritrich Nuclear",
+    alt_name=None,
+    id=30,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y", "TAA": "E", "TAG": "E",
+        "TGT": "C", "TGC": "C",             "TGG": "W",   # noqa: E241
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TGA"],
+    start_codons=["ATG"],
+)
+
+register_ncbi_table(
+    name="Blastocrithidia Nuclear",
+    alt_name=None,
+    id=31,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y", "TAA": "E", "TAG": "E",
+        "TGT": "C", "TGC": "C", "TGA": "W", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TAG"],
+    start_codons=["ATG"],
+)
+
+register_ncbi_table(
+    name="Balanophoraceae Plastid",
+    alt_name=None,
+    id=32,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y",             "TAG": "W",   # noqa: E241
+        "TGT": "C", "TGC": "C",             "TGG": "W",   # noqa: E241
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAA", "TGA"],
+    start_codons=["TTG", "CTG", "ATT", "ATC", "ATA", "ATG", "GTG"],
+)
+
+register_ncbi_table(
+    name="Cephalodiscidae Mitochondrial",
+    alt_name=None,
+    id=33,
+    table={
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y", "TAA": "Y",               # noqa: E241
+        "TGT": "C", "TGC": "C", "TGA": "W", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "S", "AGG": "K",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    },
+    stop_codons=["TAG"],
+    start_codons=["TTG", "CTG", "ATG", "GTG"],
+)
 
 ########################################################################
 # End of auto-generated output from Scripts/update_ncbi_codon_table.py #
 ########################################################################
-
-
-# This is currently missing in Version 4.0 of
-# ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
-# and was entered by hand based on
-# http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG26
-#
-# Code 26 is used so far only for the ascomycete fungus Pachysolen
-# tannophilus. The only difference to the standard code is the
-# translation of CUG as alanine (as opposed to leucine). As of
-# April 2016, there is no publication documenting this code.
-register_ncbi_table(name='Pachysolen tannophilus Nuclear Code',
-                    alt_name=None, id=26,
-                    table={
-     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
-     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
-     'TGT': 'C', 'TGC': 'C', 'TGG': 'W', 'CTT': 'L', 'CTC': 'L',
-     'CTA': 'L', 'CTG': 'A', 'CCT': 'P', 'CCC': 'P', 'CCA': 'P',
-     'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
-     'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R', 'ATT': 'I',
-     'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T', 'ACC': 'T',
-     'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N', 'AAA': 'K',
-     'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',
-     'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V', 'GCT': 'A',
-     'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D', 'GAC': 'D',
-     'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G', 'GGA': 'G',
-     'GGG': 'G', },
-                    stop_codons=['TAA', 'TAG', 'TGA'],
-                    start_codons=['TTG', 'CTG', 'ATG'])
-
-
-# Basic sanity test,
-for key, val in generic_by_name.items():
-    assert key in ambiguous_generic_by_name[key].names
-for key, val in generic_by_id.items():
-    assert ambiguous_generic_by_id[key].id == key
-del key, val
-
-for n in ambiguous_generic_by_id:
-    assert ambiguous_rna_by_id[n].forward_table["GUU"] == "V"
-    assert ambiguous_rna_by_id[n].forward_table["GUN"] == "V"
-    if n != 23:
-        # For table 23, UUN = F, L or stop.
-        assert ambiguous_rna_by_id[n].forward_table["UUN"] == "X"  # F or L
-    # R = A or G, so URR = UAA or UGA / TRA = TAA or TGA = stop codons
-    if "UAA" in unambiguous_rna_by_id[n].stop_codons \
-    and "UGA" in unambiguous_rna_by_id[n].stop_codons:
-        try:
-            print(ambiguous_dna_by_id[n].forward_table["TRA"])
-            assert False, "Should be a stop only"
-        except KeyError:
-            pass
-        assert "URA" in ambiguous_generic_by_id[n].stop_codons
-        assert "URA" in ambiguous_rna_by_id[n].stop_codons
-        assert "TRA" in ambiguous_generic_by_id[n].stop_codons
-        assert "TRA" in ambiguous_dna_by_id[n].stop_codons
-del n
-assert ambiguous_generic_by_id[1] == ambiguous_generic_by_name["Standard"]
-assert ambiguous_generic_by_id[4] == ambiguous_generic_by_name["SGC3"]
-assert ambiguous_generic_by_id[11] == ambiguous_generic_by_name["Bacterial"]
-assert ambiguous_generic_by_id[11] == ambiguous_generic_by_name["Archaeal"]
-assert ambiguous_generic_by_id[11] == ambiguous_generic_by_name["Plant Plastid"]
-assert ambiguous_generic_by_id[15] == ambiguous_generic_by_name['Blepharisma Macronuclear']
-assert ambiguous_generic_by_id[24] == ambiguous_generic_by_name["Pterobranchia Mitochondrial"]
-assert generic_by_id[1] == generic_by_name["Standard"]
-assert generic_by_id[4] == generic_by_name["SGC3"]
-assert generic_by_id[11] == generic_by_name["Bacterial"]
-assert generic_by_id[11] == generic_by_name["Plant Plastid"]
-assert generic_by_id[15] == generic_by_name['Blepharisma Macronuclear']
-assert generic_by_id[24] == generic_by_name["Pterobranchia Mitochondrial"]

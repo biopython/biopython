@@ -1,8 +1,10 @@
 # Copyright 2006-2016 by Peter Cock.  All rights reserved.
 # Revisions copyright 2011 Brandon Invergo. All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """AlignIO support for "phylip" format from Joe Felsenstein's PHYLIP tools.
 
 You are expected to use this module via the Bio.AlignIO functions (or the
@@ -32,16 +34,14 @@ because it sometimes is used in different senses in other programs"
 Biopython 1.58 or later treats dots/periods in the sequence as invalid, both
 for reading and writing. Older versions did nothing special with a dot/period.
 """
-from __future__ import print_function
-
 import string
 
-from Bio._py3k import range
-
+from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
-from .Interfaces import AlignmentIterator, SequentialAlignmentWriter
+
+from .Interfaces import AlignmentIterator
+from .Interfaces import SequentialAlignmentWriter
 
 
 _PHYLIP_ID_WIDTH = 10
@@ -96,18 +96,12 @@ class PhylipWriter(SequentialAlignmentWriter):
             Note that Tab characters count as only one character in the
             species names. Their inclusion can cause trouble.
             """
-            name = record.id.strip()
-            # Either remove the banned characters, or map them to something
-            # else like an underscore "_" or pipe "|" character...
-            for char in "[](),":
-                name = name.replace(char, "")
-            for char in ":;":
-                name = name.replace(char, "|")
-            name = name[:id_width]
+            name = sanitize_name(record.id, id_width)
             if name in names:
-                raise ValueError("Repeated name %r (originally %r), "
-                                 "possibly due to truncation"
-                                 % (name, record.id))
+                raise ValueError(
+                    "Repeated name %r (originally %r), possibly due to truncation"
+                    % (name, record.id)
+                )
             names.append(name)
             sequence = str(record.seq)
             if "." in sequence:
@@ -134,16 +128,15 @@ class PhylipWriter(SequentialAlignmentWriter):
                 # Write five chunks of ten letters per line...
                 for chunk in range(0, 5):
                     i = block * 50 + chunk * 10
-                    seq_segment = sequence[i:i + 10]
-                    # TODO - Force any gaps to be '-' character?  Look at the
-                    # alphabet...
+                    seq_segment = sequence[i : i + 10]
+                    # TODO - Force any gaps to be '-' character?
                     # TODO - How to cope with '?' or '.' in the sequence?
-                    handle.write(" %s" % seq_segment)
+                    handle.write(f" {seq_segment}")
                     if i + 10 > length_of_seqs:
                         break
                 handle.write("\n")
             block += 1
-            if block * 50 > length_of_seqs:
+            if block * 50 >= length_of_seqs:
                 break
             handle.write("\n")
 
@@ -179,18 +172,19 @@ class PhylipIterator(AlignmentIterator):
             return False  # First line should have two integers
 
     def _split_id(self, line):
-        """Extracts the sequence ID from a Phylip line (PRIVATE).
+        """Extract the sequence ID from a Phylip line (PRIVATE).
 
         Returning a tuple containing: (sequence_id, sequence_residues)
 
         The first 10 characters in the line are are the sequence id, the
         remainder are sequence data.
         """
-        seq_id = line[:self.id_width].strip()
-        seq = line[self.id_width:].strip().replace(' ', '')
+        seq_id = line[: self.id_width].strip()
+        seq = line[self.id_width :].strip().replace(" ", "")
         return seq_id, seq
 
     def __next__(self):
+        """Parse the next alignment from the handle."""
         handle = self.handle
 
         if self._header is None:
@@ -211,15 +205,18 @@ class PhylipIterator(AlignmentIterator):
             number_of_seqs = int(parts[0])
             length_of_seqs = int(parts[1])
         except ValueError:
-            raise ValueError("First line should have two integers")
+            raise ValueError("First line should have two integers") from None
 
         assert self._is_header(line)
 
-        if self.records_per_alignment is not None and \
-                self.records_per_alignment != number_of_seqs:
-            raise ValueError("Found %i records in this alignment, "
-                             "told to expect %i"
-                             % (number_of_seqs, self.records_per_alignment))
+        if (
+            self.records_per_alignment is not None
+            and self.records_per_alignment != number_of_seqs
+        ):
+            raise ValueError(
+                "Found %i records in this alignment, told to expect %i"
+                % (number_of_seqs, self.records_per_alignment)
+            )
 
         ids = []
         seqs = []
@@ -250,7 +247,7 @@ class PhylipIterator(AlignmentIterator):
                 self._header = line
                 break
 
-            # print "New block..."
+            # print("New block...")
             for i in range(number_of_seqs):
                 s = line.strip().replace(" ", "")
                 if "." in s:
@@ -262,27 +259,23 @@ class PhylipIterator(AlignmentIterator):
             if not line:
                 break  # end of file
 
-        records = (SeqRecord(Seq("".join(s), self.alphabet),
-                             id=i, name=i, description=i)
-                   for (i, s) in zip(ids, seqs))
-        return MultipleSeqAlignment(records, self.alphabet)
+        records = (
+            SeqRecord(Seq("".join(s)), id=i, name=i, description=i)
+            for (i, s) in zip(ids, seqs)
+        )
+        return MultipleSeqAlignment(records)
 
 
 # Relaxed Phylip
 class RelaxedPhylipWriter(PhylipWriter):
-    """
-    Relaxed Phylip format writer
-    """
+    """Relaxed Phylip format writer."""
 
     def write_alignment(self, alignment):
-        """
-        Write a relaxed phylip alignment
-        """
+        """Write a relaxed phylip alignment."""
         # Check inputs
         for name in (s.id.strip() for s in alignment):
             if any(c in name for c in string.whitespace):
-                raise ValueError("Whitespace not allowed in identifier: %s"
-                                 % name)
+                raise ValueError(f"Whitespace not allowed in identifier: {name}")
 
         # Calculate a truncation length - maximum length of sequence ID plus a
         # single character for padding
@@ -291,15 +284,15 @@ class RelaxedPhylipWriter(PhylipWriter):
         if len(alignment) == 0:
             id_width = 1
         else:
-            id_width = max((len(s.id.strip()) for s in alignment)) + 1
-        super(RelaxedPhylipWriter, self).write_alignment(alignment, id_width)
+            id_width = max(len(s.id.strip()) for s in alignment) + 1
+        super().write_alignment(alignment, id_width)
 
 
 class RelaxedPhylipIterator(PhylipIterator):
     """Relaxed Phylip format Iterator."""
 
     def _split_id(self, line):
-        """Extracts the sequence ID from a Phylip line (PRIVATE).
+        """Extract the sequence ID from a Phylip line (PRIVATE).
 
         Returns a tuple containing: (sequence_id, sequence_residues)
 
@@ -314,6 +307,7 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
     """Sequential Phylip format Writer."""
 
     def write_alignment(self, alignment, id_width=_PHYLIP_ID_WIDTH):
+        """Write a Phylip alignment to the handle."""
         handle = self.handle
 
         if len(alignment) == 0:
@@ -329,18 +323,14 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
         # Apply this test *after* cleaning the identifiers
         names = []
         for record in alignment:
-            name = record.id.strip()
             # Either remove the banned characters, or map them to something
             # else like an underscore "_" or pipe "|" character...
-            for char in "[](),":
-                name = name.replace(char, "")
-            for char in ":;":
-                name = name.replace(char, "|")
-            name = name[:id_width]
+            name = sanitize_name(record.id, id_width)
             if name in names:
-                raise ValueError("Repeated name %r (originally %r), "
-                                 "possibly due to truncation"
-                                 % (name, record.id))
+                raise ValueError(
+                    "Repeated name %r (originally %r), possibly due to truncation"
+                    % (name, record.id)
+                )
             names.append(name)
 
         # From experimentation, the use of tabs is not understood by the
@@ -374,6 +364,7 @@ class SequentialPhylipIterator(PhylipIterator):
     _header = None  # for caching lines between __next__ calls
 
     def __next__(self):
+        """Parse the next alignment from the handle."""
         handle = self.handle
 
         if self._header is None:
@@ -394,15 +385,18 @@ class SequentialPhylipIterator(PhylipIterator):
             number_of_seqs = int(parts[0])
             length_of_seqs = int(parts[1])
         except ValueError:
-            raise ValueError("First line should have two integers")
+            raise ValueError("First line should have two integers") from None
 
         assert self._is_header(line)
 
-        if self.records_per_alignment is not None and \
-                self.records_per_alignment != number_of_seqs:
-            raise ValueError("Found %i records in this alignment, "
-                             "told to expect %i"
-                             % (number_of_seqs, self.records_per_alignment))
+        if (
+            self.records_per_alignment is not None
+            and self.records_per_alignment != number_of_seqs
+        ):
+            raise ValueError(
+                "Found %i records in this alignment, told to expect %i"
+                % (number_of_seqs, self.records_per_alignment)
+            )
 
         ids = []
         seqs = []
@@ -422,9 +416,10 @@ class SequentialPhylipIterator(PhylipIterator):
                     continue
                 s = "".join([s, line.strip().replace(" ", "")])
                 if len(s) > length_of_seqs:
-                    raise ValueError("Found a record of length %i, "
-                                     "should be %i"
-                                     % (len(s), length_of_seqs))
+                    raise ValueError(
+                        "Found a record of length %i, "
+                        "should be %i" % (len(s), length_of_seqs)
+                    )
             if "." in s:
                 raise ValueError(_NO_DOTS)
             seqs.append(s)
@@ -437,7 +432,23 @@ class SequentialPhylipIterator(PhylipIterator):
                 self._header = line
                 break
 
-        records = (SeqRecord(Seq(s, self.alphabet),
-                             id=i, name=i, description=i)
-                   for (i, s) in zip(ids, seqs))
-        return MultipleSeqAlignment(records, self.alphabet)
+        records = (
+            SeqRecord(Seq(s), id=i, name=i, description=i) for (i, s) in zip(ids, seqs)
+        )
+        return MultipleSeqAlignment(records)
+
+
+def sanitize_name(name, width=None):
+    """Sanitise sequence identifier for output.
+
+    Removes the banned characters "[]()" and replaces the characters ":;"
+    with "|". The name is truncated to "width" characters if specified.
+    """
+    name = name.strip()
+    for char in "[](),":
+        name = name.replace(char, "")
+    for char in ":;":
+        name = name.replace(char, "|")
+    if width is not None:
+        name = name[:width]
+    return name

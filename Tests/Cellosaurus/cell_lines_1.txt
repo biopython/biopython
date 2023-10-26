@@ -1,0 +1,14 @@
+ID   #15310-LN
+AC   CVCL_E548
+SY   15310-LN; TER461
+DR   dbMHC; 48439
+DR   ECACC; 94050311
+DR   IHW; IHW9326
+DR   IMGT/HLA; 10074
+WW   http://bioinformatics.hsanmartino.it/ecbr/cl326.html
+CC   Part of: 12th International Histocompatibility Workshop (12IHW) cell line panel.
+CC   Transformant: EBV.
+OX   NCBI_TaxID=9606; ! Homo sapiens
+SX   Female
+CA   Transformed cell line
+//

@@ -1,0 +1,234 @@
+# hmmsearch :: search profile(s) against a sequence database
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query HMM file:                  ../params/infile_hmm
+# target sequence database:        /r_arc70
+# output directed to file:         ../results/outfile
+# MSA of all hits saved to file:   ../results/outfile_multi_sto
+# per-seq hits tabular output:     ../results/tbl
+# per-dom hits tabular output:     ../results/domtbl
+# sequence reporting threshold:    E-value <= 1
+# number of worker threads:        12
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       infile_sto  [M=46]
+Scores for complete sequences (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Sequence       Description
+    ------- ------ -----    ------- ------ -----   ---- --  --------       -----------
+  ------ inclusion threshold ------
+      0.017   20.1   0.6       0.03   19.3   0.6    1.3  1  KYH38259.1      alanine acetyltransferase [Candidatus Bathyar
+       0.13   17.3   0.7       0.27   16.3   0.1    1.7  2  WP_054299021.1  ribosomal-protein-alanine N-acetyltransferase
+       0.14   17.3   0.1       0.23   16.5   0.1    1.3  1  WP_054584921.1  hypothetical protein [Halolamina pelagica]KP
+       0.18   16.9   0.7       0.35   15.9   0.7    1.5  1  WP_052883773.1  hypothetical protein [Thermofilum sp. 1807-2]
+       0.39   15.8   0.0    1.3e+02    7.7   0.0    2.5  2  KYK22897.1      hypothetical protein AYK24_08245 [Thermoplasm
+       0.41   15.7   0.2         26    9.9   0.0    3.2  3  AIF02201.1      GTPase domain-containing protein [uncultured 
+       0.48   15.5   0.7    1.1e+03    4.8   0.1    3.9  4  WP_062399658.1  hypothetical protein [Methanogenium cariaci]
+       0.48   15.5   0.0         51    9.0   0.0    2.5  2  KYK32494.1      hypothetical protein AYK19_02995 [Thermoplasm
+       0.69   15.0   0.1        9.8   11.3   0.0    2.5  2  KUO39566.1      hypothetical protein APZ16_01915 [Hadesarchae
+        0.9   14.6   0.1        1.7   13.7   0.1    1.4  1  OGD45671.1      hypothetical protein A3K79_06915 [Candidatus 
+
+
+Domain annotation for each sequence (and alignments):
+>> KYH38259.1  alanine acetyltransferase [Candidatus Bathyarchaeota archaeon B23]
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   19.3   0.6   4.4e-07      0.03       5      27 ..      49      71 ..      47      75 .. 0.91
+
+  Alignments for each domain:
+  == domain 1  score: 19.3 bits;  conditional E-value: 4.4e-07
+  infile_sto  5 aDGeivGfvwGtpgganeGkviG 27
+                +DG++vG+v+G+ +ga +G vi 
+  KYH38259.1 49 VDGRVVGYVMGEMEGAKVGHVIN 71
+                7******************9996 PP
+
+>> WP_054299021.1  ribosomal-protein-alanine N-acetyltransferase RimI [Methanosarcina flavescens]KPL45943.1 ribosomal-p
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   16.3   0.1   3.9e-06      0.27       4      25 ..      44      65 ..      43      71 .. 0.87
+   2 ?   -2.3   0.0       2.6   1.8e+05       4       9 ..     132     137 ..     130     139 .. 0.54
+
+  Alignments for each domain:
+  == domain 1  score: 16.3 bits;  conditional E-value: 3.9e-06
+      infile_sto  4 eaDGeivGfvwGtpgganeGkv 25
+                    e DG++vG+v G+   +neG +
+  WP_054299021.1 44 EQDGKVVGYVVGYRSAENEGHI 65
+                    78******************76 PP
+
+  == domain 2  score: -2.3 bits;  conditional E-value: 2.6
+      infile_sto   4 eaDGei 9  
+                     ++DG +
+  WP_054299021.1 132 GEDGMV 137
+                     555554 PP
+
+>> WP_054584921.1  hypothetical protein [Halolamina pelagica]KPN29154.1 hypothetical protein SY89_03388 [Halolamina pel
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   16.5   0.1   3.3e-06      0.23      14      37 ..      14      38 ..      10      42 .. 0.86
+
+  Alignments for each domain:
+  == domain 1  score: 16.5 bits;  conditional E-value: 3.3e-06
+      infile_sto 14 wGtpgganeGkviGfevrlEdGs.e 37
+                    +G+  +a+ G ++G +vr+EdG+  
+  WP_054584921.1 14 EGKHVLAPDGEMVGEVVRTEDGTaF 38
+                    799999****************944 PP
+
+>> WP_052883773.1  hypothetical protein [Thermofilum sp. 1807-2]AKG38376.1 hypothetical protein MA03_02555 [Thermofilum
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   15.9   0.7   5.2e-06      0.35      15      43 ..     290     321 ..     279     323 .. 0.74
+
+  Alignments for each domain:
+  == domain 1  score: 15.9 bits;  conditional E-value: 5.2e-06
+      infile_sto  15 GtpgganeG..kviGf.evrlEdGsevnasGi 43 
+                     G+  g++e+  + iG+ +vrl dG+ev+++Gi
+  WP_052883773.1 290 GEVVGEFENsfRSIGYlTVRLADGREVTVGGI 321
+                     4444555552245******************9 PP
+
+>> KYK22897.1  hypothetical protein AYK24_08245 [Thermoplasmatales archaeon SG8-52-4]
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?    5.4   0.0      0.01     7e+02      19      37 ..      94     112 ..      90     114 .. 0.88
+   2 ?    7.7   0.0     0.002   1.3e+02       5      26 ..     185     206 ..     178     209 .. 0.92
+
+  Alignments for each domain:
+  == domain 1  score: 5.4 bits;  conditional E-value: 0.01
+  infile_sto  19 ganeGkviGf.evrlEdGse 37 
+                  an G viG+ + r+ dG +
+  KYK22897.1  94 HANNG-VIGSkSWRFHDGKT 112
+                 5999*.***********976 PP
+
+  == domain 2  score: 7.7 bits;  conditional E-value: 0.002
+  infile_sto   5 aDGeivGfvwGtpgganeGkvi 26 
+                  DG+i+ + w + + ++ +kvi
+  KYK22897.1 185 PDGKIISYKWSYHDVKTPNKVI 206
+                 6******************998 PP
+
+>> AIF02201.1  GTPase domain-containing protein [uncultured marine group II/III euryarchaeote KM3_155_E06]
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?    1.9   0.1      0.13   8.7e+03       2      15 ..      71      84 ..      70      89 .. 0.86
+   2 ?   -2.9   0.0         4   2.7e+05      10      18 ..     295     303 ..     294     310 .. 0.82
+   3 ?    9.9   0.0   0.00038        26      11      39 ..     397     423 ..     397     426 .. 0.88
+
+  Alignments for each domain:
+  == domain 1  score: 1.9 bits;  conditional E-value: 0.13
+  infile_sto  2 edeaDGeivGfvwG 15
+                +de+DG i+  + G
+  AIF02201.1 71 DDERDGSICQPNTG 84
+                89******998888 PP
+
+  == domain 2  score: -2.9 bits;  conditional E-value: 4
+  infile_sto  10 vGfvwGtpg 18 
+                 + +v+G+p+
+  AIF02201.1 295 IAYVPGEPE 303
+                 689999976 PP
+
+  == domain 3  score: 9.9 bits;  conditional E-value: 0.00038
+  infile_sto  11 GfvwGtpgganeGkviGfevrlEdGsevn 39 
+                 Gf ++t  +a  +++iG e +lEdG +v 
+  AIF02201.1 397 GFIRAT--DARTNRIIGAEHELEDGAVVK 423
+                 677788..8999***************97 PP
+
+>> WP_062399658.1  hypothetical protein [Methanogenium cariaci]
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   -1.3   0.0       1.3   8.7e+04      31      38 ..      87      94 ..      86      97 .. 0.74
+   2 ?    2.1   0.0      0.11   7.4e+03      31      43 ..     125     137 ..     124     139 .. 0.85
+   3 ?    3.7   0.0     0.035   2.4e+03      31      45 ..     165     179 ..     164     180 .. 0.83
+   4 ?    4.8   0.1     0.016   1.1e+03      31      43 ..     205     217 ..     202     220 .. 0.82
+
+  Alignments for each domain:
+  == domain 1  score: -1.3 bits;  conditional E-value: 1.3
+      infile_sto 31 rlEdGsev 38
+                    ++EdGs++
+  WP_062399658.1 87 LTEDGSIF 94
+                    57999876 PP
+
+  == domain 2  score: 2.1 bits;  conditional E-value: 0.11
+      infile_sto  31 rlEdGsevnasGi 43 
+                     ++E+Gs+v+ +G 
+  WP_062399658.1 125 LTENGSIVAWGGW 137
+                     68******99985 PP
+
+  == domain 3  score: 3.7 bits;  conditional E-value: 0.035
+      infile_sto  31 rlEdGsevnasGisk 45 
+                     ++EdG++v+ +G ++
+  WP_062399658.1 165 LTEDGMIVAWGGWDR 179
+                     68******9999765 PP
+
+  == domain 4  score: 4.8 bits;  conditional E-value: 0.016
+      infile_sto  31 rlEdGsevnasGi 43 
+                     ++EdG++v+ +G 
+  WP_062399658.1 205 LTEDGTIVAWGGG 217
+                     6899999999986 PP
+
+>> KYK32494.1  hypothetical protein AYK19_02995 [Thermoplasmatales archaeon DG-70-1]
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?    3.9   0.0      0.03     2e+03       8      23 ..      24      39 ..      24      41 .. 0.91
+   2 ?    9.0   0.0   0.00075        51      14      39 ..     228     251 ..     225     255 .. 0.84
+
+  Alignments for each domain:
+  == domain 1  score: 3.9 bits;  conditional E-value: 0.03
+  infile_sto  8 eivGfvwGtpgganeG 23
+                +i+++  Gt+g+an +
+  KYK32494.1 24 RIIDVKTGTAGKANQD 39
+                69************97 PP
+
+  == domain 2  score: 9.0 bits;  conditional E-value: 0.00075
+  infile_sto  14 wGtpgganeGkviGf.evrlEdGsevn 39 
+                 +G+  + +e+ vi + +++ E+G++v+
+  KYK32494.1 228 RGK--DTFEK-VIKSiSLLIENGMKVR 251
+                 688..45999.**************97 PP
+
+>> KUO39566.1  hypothetical protein APZ16_01915 [Hadesarchaea archaeon YNP_45]
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?    0.6   0.0      0.33   2.2e+04      32      44 ..      36      48 ..      33      50 .. 0.86
+   2 ?   11.3   0.0   0.00014       9.8      28      44 ..     163     179 ..     155     181 .. 0.88
+
+  Alignments for each domain:
+  == domain 1  score: 0.6 bits;  conditional E-value: 0.33
+  infile_sto 32 lEdGsevnasGis 44
+                 EdG +++a+ ++
+  KUO39566.1 36 SEDGPVTAAGAFT 48
+                59********998 PP
+
+  == domain 2  score: 11.3 bits;  conditional E-value: 0.00014
+  infile_sto  28 fevrlEdGsevnasGis 44 
+                  +++lEdG+ vn++Gi 
+  KUO39566.1 163 VQIELEDGTPVNIGGIA 179
+                 589************96 PP
+
+>> OGD45671.1  hypothetical protein A3K79_06915 [Candidatus Bathyarchaeota archaeon RBG_13_46_16b]
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   13.7   0.1   2.6e-05       1.7       4      16 ..      65      77 ..      64      81 .. 0.89
+
+  Alignments for each domain:
+  == domain 1  score: 13.7 bits;  conditional E-value: 2.6e-05
+  infile_sto  4 eaDGeivGfvwGt 16
+                eaDGei+G+v+G+
+  OGD45671.1 65 EADGEIIGYVQGE 77
+                89**********8 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query model(s):                              1  (46 nodes)
+Target sequences:                       679520  (173599232 residues searched)
+Passed MSV filter:                     26202  (0.0385596); expected 13590.4 (0.02)
+Passed bias filter:                    18222  (0.026816); expected 13590.4 (0.02)
+Passed Vit filter:                      1432  (0.00210737); expected 679.5 (0.001)
+Passed Fwd filter:                        51  (7.5053e-05); expected 6.8 (1e-05)
+Initial search space (Z):             679520  [actual number of targets]
+Domain search space  (domZ):              10  [number of targets reported over threshold]
+# CPU time: 5.29u 0.50s 00:00:05.79 Elapsed: 00:00:05.83
+# Mc/sec: 1369.74
+//
+# No hits satisfy inclusion thresholds; no alignment saved
+[ok]

@@ -1,7 +1,9 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2001 Brad Chapman.  All rights reserved.
 #
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Provide trainers which estimate parameters based on training sequences.
 
@@ -11,11 +13,11 @@ to work from, these classes will estimate parameters of the model.
 
 This aims to estimate two parameters:
 
-    - a_{kl} -- the number of times there is a transition from k to l in the
-      training data.
+- a_{kl} -- the number of times there is a transition from k to l in the
+  training data.
+- e_{k}(b) -- the number of emissions of the state b from the letter k
+  in the training data.
 
-    - e_{k}(b) -- the number of emissions of the state b from the letter k
-      in the training data.
 """
 # standard modules
 import math
@@ -24,42 +26,41 @@ import math
 from .DynamicProgramming import ScaledDPAlgorithms
 
 
-class TrainingSequence(object):
-    """Hold a training sequence with emissions and optionally, a state path.
-    """
+class TrainingSequence:
+    """Hold a training sequence with emissions and optionally, a state path."""
+
     def __init__(self, emissions, state_path):
         """Initialize a training sequence.
 
         Arguments:
+         - emissions - An iterable (e.g., a tuple, list, or Seq object)
+           containing the sequence of emissions in the training sequence.
+         - state_path - An iterable (e.g., a tuple or list) containing the
+           sequence of states. If there is no known state path, then the
+           sequence of states should be an empty iterable.
 
-        o emissions - A Seq object containing the sequence of emissions in
-        the training sequence, and the alphabet of the sequence.
-
-        o state_path - A Seq object containing the sequence of states and
-        the alphabet of the states. If there is no known state path, then
-        the sequence of states should be an empty string.
         """
-        if len(state_path) > 0:
-            assert len(emissions) == len(state_path), \
-                   "State path does not match associated emissions."
+        if len(state_path) > 0 and len(emissions) != len(state_path):
+            raise ValueError("State path does not match associated emissions.")
         self.emissions = emissions
         self.states = state_path
 
 
-class AbstractTrainer(object):
-    """Provide generic functionality needed in all trainers.
-    """
+class AbstractTrainer:
+    """Provide generic functionality needed in all trainers."""
+
     def __init__(self, markov_model):
+        """Initialize the class."""
         self._markov_model = markov_model
 
     def log_likelihood(self, probabilities):
         """Calculate the log likelihood of the training seqs.
 
         Arguments:
+         - probabilities -- A list of the probabilities of each training
+           sequence under the current parameters, calculated using the
+           forward algorithm.
 
-        o probabilities -- A list of the probabilities of each training
-        sequence under the current parameters, calculated using the forward
-        algorithm.
         """
         total_likelihood = 0
         for probability in probabilities:
@@ -71,23 +72,22 @@ class AbstractTrainer(object):
         """Get a maximum likelihood estimation of transition and emmission.
 
         Arguments:
-
-        o transition_counts -- A dictionary with the total number of counts
-        of transitions between two states.
-
-        o emissions_counts -- A dictionary with the total number of counts
-        of emmissions of a particular emission letter by a state letter.
+         - transition_counts -- A dictionary with the total number of counts
+           of transitions between two states.
+         - emissions_counts -- A dictionary with the total number of counts
+           of emmissions of a particular emission letter by a state letter.
 
         This then returns the maximum likelihood estimators for the
         transitions and emissions, estimated by formulas 3.18 in
-        Durbin et al:
+        Durbin et al::
 
-        a_{kl} = A_{kl} / sum(A_{kl'})
-        e_{k}(b) = E_{k}(b) / sum(E_{k}(b'))
+            a_{kl} = A_{kl} / sum(A_{kl'})
+            e_{k}(b) = E_{k}(b) / sum(E_{k}(b'))
 
         Returns:
         Transition and emission dictionaries containing the maximum
         likelihood estimators.
+
         """
         # now calculate the information
         ml_transitions = self.ml_estimator(transition_counts)
@@ -102,11 +102,11 @@ class AbstractTrainer(object):
         and emissions.
 
         Arguments:
-
-        o counts -- A dictionary of the counts for each item.
+         - counts -- A dictionary of the counts for each item.
 
         See estimate_params for a description of the formula used for
         calculation.
+
         """
         # get an ordered list of all items
         all_ordered = sorted(counts)
@@ -131,8 +131,10 @@ class AbstractTrainer(object):
 
                 # keep adding while we have the same first letter or until
                 # we get to the end of the ordered list
-                while (cur_position < len(all_ordered) and
-                       all_ordered[cur_position][0] == cur_item[0]):
+                while (
+                    cur_position < len(all_ordered)
+                    and all_ordered[cur_position][0] == cur_item[0]
+                ):
                     cur_letter_counts += counts[all_ordered[cur_position]]
                     cur_position += 1
             # otherwise we've already got the total counts for this letter
@@ -140,7 +142,7 @@ class AbstractTrainer(object):
                 pass
 
             # now calculate the ml and add it to the estimation
-            cur_ml = float(counts[cur_item]) / float(cur_letter_counts)
+            cur_ml = counts[cur_item] / cur_letter_counts
             ml_estimation[cur_item] = cur_ml
 
         return ml_estimation
@@ -161,36 +163,34 @@ class BaumWelchTrainer(AbstractTrainer):
     This algorithm is guaranteed to converge to a local maximum, but not
     necessarily to the global maxima, so use with care!
     """
+
     def __init__(self, markov_model):
         """Initialize the trainer.
 
         Arguments:
+         - markov_model - The model we are going to estimate parameters for.
+           This should have the parameters with some initial estimates, that
+           we can build from.
 
-        o markov_model - The model we are going to estimate parameters for.
-        This should have the parameters with some initial estimates, that
-        we can build from.
         """
         AbstractTrainer.__init__(self, markov_model)
 
-    def train(self, training_seqs, stopping_criteria,
-              dp_method=ScaledDPAlgorithms):
+    def train(self, training_seqs, stopping_criteria, dp_method=ScaledDPAlgorithms):
         """Estimate the parameters using training sequences.
 
         The algorithm for this is taken from Durbin et al. p64, so this
         is a good place to go for a reference on what is going on.
 
         Arguments:
+         - training_seqs -- A list of TrainingSequence objects to be used
+           for estimating the parameters.
+         - stopping_criteria -- A function, that when passed the change
+           in log likelihood and threshold, will indicate if we should stop
+           the estimation iterations.
+         - dp_method -- A class instance specifying the dynamic programming
+           implementation we should use to calculate the forward and
+           backward variables. By default, we use the scaling method.
 
-        o training_seqs -- A list of TrainingSequence objects to be used
-        for estimating the parameters.
-
-        o stopping_criteria -- A function, that when passed the change
-        in log likelihood and threshold, will indicate if we should stop
-        the estimation iterations.
-
-        o dp_method -- A class instance specifying the dynamic programming
-        implementation we should use to calculate the forward and
-        backward variables. By default, we use the scaling method.
         """
         prev_log_likelihood = None
         num_iterations = 1
@@ -211,20 +211,17 @@ class BaumWelchTrainer(AbstractTrainer):
                 all_probabilities.append(seq_prob)
 
                 # update the counts for transitions and emissions
-                transition_count = self.update_transitions(transition_count,
-                                                           training_seq,
-                                                           forward_var,
-                                                           backward_var,
-                                                           seq_prob)
-                emission_count = self.update_emissions(emission_count,
-                                                       training_seq,
-                                                       forward_var,
-                                                       backward_var,
-                                                       seq_prob)
+                transition_count = self.update_transitions(
+                    transition_count, training_seq, forward_var, backward_var, seq_prob
+                )
+                emission_count = self.update_emissions(
+                    emission_count, training_seq, forward_var, backward_var, seq_prob
+                )
 
             # update the markov model with the new probabilities
-            ml_transitions, ml_emissions = \
-                self.estimate_params(transition_count, emission_count)
+            ml_transitions, ml_emissions = self.estimate_params(
+                transition_count, emission_count
+            )
             self._markov_model.transition_prob = ml_transitions
             self._markov_model.emission_prob = ml_emissions
 
@@ -236,8 +233,9 @@ class BaumWelchTrainer(AbstractTrainer):
                 # XXX log likelihoods are negatives -- am I calculating
                 # the change properly, or should I use the negatives...
                 # I'm not sure at all if this is right.
-                log_likelihood_change = abs(abs(cur_log_likelihood) -
-                                            abs(prev_log_likelihood))
+                log_likelihood_change = abs(
+                    abs(cur_log_likelihood) - abs(prev_log_likelihood)
+                )
 
                 # check whether we have completed enough iterations to have
                 # a good estimation
@@ -250,35 +248,37 @@ class BaumWelchTrainer(AbstractTrainer):
 
         return self._markov_model
 
-    def update_transitions(self, transition_counts, training_seq,
-                           forward_vars, backward_vars, training_seq_prob):
+    def update_transitions(
+        self,
+        transition_counts,
+        training_seq,
+        forward_vars,
+        backward_vars,
+        training_seq_prob,
+    ):
         """Add the contribution of a new training sequence to the transitions.
 
         Arguments:
-
-        o transition_counts -- A dictionary of the current counts for the
-        transitions
-
-        o training_seq -- The training sequence we are working with
-
-        o forward_vars -- Probabilities calculated using the forward
-        algorithm.
-
-        o backward_vars -- Probabilities calculated using the backwards
-        algorithm.
-
-        o training_seq_prob - The probability of the current sequence.
+         - transition_counts -- A dictionary of the current counts for the
+           transitions
+         - training_seq -- The training sequence we are working with
+         - forward_vars -- Probabilities calculated using the forward
+           algorithm.
+         - backward_vars -- Probabilities calculated using the backwards
+           algorithm.
+         - training_seq_prob - The probability of the current sequence.
 
         This calculates A_{kl} (the estimated transition counts from state
         k to state l) using formula 3.20 in Durbin et al.
+
         """
         # set up the transition and emission probabilities we are using
         transitions = self._markov_model.transition_prob
         emissions = self._markov_model.emission_prob
 
         # loop over the possible combinations of state path letters
-        for k in training_seq.states.alphabet.letters:
-            for l in self._markov_model.transitions_from(k):
+        for k in self._markov_model.state_alphabet:
+            for l in self._markov_model.transitions_from(k):  # noqa: E741
                 estimated_counts = 0
                 # now loop over the entire training sequence
                 for i in range(len(training_seq.emissions) - 1):
@@ -294,41 +294,43 @@ class BaumWelchTrainer(AbstractTrainer):
                     # the probability of getting the emission at the next pos
                     emm_value = emissions[(l, training_seq.emissions[i + 1])]
 
-                    estimated_counts += (forward_value * trans_value *
-                                         emm_value * backward_value)
+                    estimated_counts += (
+                        forward_value * trans_value * emm_value * backward_value
+                    )
 
                 # update the transition approximation
-                transition_counts[(k, l)] += (float(estimated_counts) /
-                                              training_seq_prob)
+                transition_counts[(k, l)] += estimated_counts / training_seq_prob
 
         return transition_counts
 
-    def update_emissions(self, emission_counts, training_seq,
-                           forward_vars, backward_vars, training_seq_prob):
-        """Add the contribution of a new training sequence to the emissions
+    def update_emissions(
+        self,
+        emission_counts,
+        training_seq,
+        forward_vars,
+        backward_vars,
+        training_seq_prob,
+    ):
+        """Add the contribution of a new training sequence to the emissions.
 
         Arguments:
-
-        o emission_counts -- A dictionary of the current counts for the
-        emissions
-
-        o training_seq -- The training sequence we are working with
-
-        o forward_vars -- Probabilities calculated using the forward
-        algorithm.
-
-        o backward_vars -- Probabilities calculated using the backwards
-        algorithm.
-
-        o training_seq_prob - The probability of the current sequence.
+         - emission_counts -- A dictionary of the current counts for the
+           emissions
+         - training_seq -- The training sequence we are working with
+         - forward_vars -- Probabilities calculated using the forward
+           algorithm.
+         - backward_vars -- Probabilities calculated using the backwards
+           algorithm.
+         - training_seq_prob - The probability of the current sequence.
 
         This calculates E_{k}(b) (the estimated emission probability for
         emission letter b from state k) using formula 3.21 in Durbin et al.
+
         """
         # loop over the possible combinations of state path letters
-        for k in training_seq.states.alphabet.letters:
+        for k in self._markov_model.state_alphabet:
             # now loop over all of the possible emissions
-            for b in training_seq.emissions.alphabet.letters:
+            for b in self._markov_model.emission_alphabet:
                 expected_times = 0
                 # finally loop over the entire training sequence
                 for i in range(len(training_seq.emissions)):
@@ -336,12 +338,10 @@ class BaumWelchTrainer(AbstractTrainer):
                     # emission at the position is the same as b
                     if training_seq.emissions[i] == b:
                         # f_{k}(i) b_{k}(i)
-                        expected_times += (forward_vars[(k, i)] *
-                                           backward_vars[(k, i)])
+                        expected_times += forward_vars[(k, i)] * backward_vars[(k, i)]
 
                 # add to E_{k}(b)
-                emission_counts[(k, b)] += (float(expected_times) /
-                                            training_seq_prob)
+                emission_counts[(k, b)] += expected_times / training_seq_prob
 
         return emission_counts
 
@@ -353,7 +353,9 @@ class KnownStateTrainer(AbstractTrainer):
     probabilities when both the state path and emission sequence are
     known for the training examples.
     """
+
     def __init__(self, markov_model):
+        """Initialize the class."""
         AbstractTrainer.__init__(self, markov_model)
 
     def train(self, training_seqs):
@@ -370,29 +372,28 @@ class KnownStateTrainer(AbstractTrainer):
         emission_counts = self._markov_model.get_blank_emissions()
 
         for training_seq in training_seqs:
-            emission_counts = self._count_emissions(training_seq,
-                                                    emission_counts)
-            transition_counts = self._count_transitions(training_seq.states,
-                                                        transition_counts)
+            emission_counts = self._count_emissions(training_seq, emission_counts)
+            transition_counts = self._count_transitions(
+                training_seq.states, transition_counts
+            )
 
         # update the markov model from the counts
-        ml_transitions, ml_emissions = \
-                        self.estimate_params(transition_counts,
-                                             emission_counts)
+        ml_transitions, ml_emissions = self.estimate_params(
+            transition_counts, emission_counts
+        )
         self._markov_model.transition_prob = ml_transitions
         self._markov_model.emission_prob = ml_emissions
 
         return self._markov_model
 
     def _count_emissions(self, training_seq, emission_counts):
-        """Add emissions from the training sequence to the current counts.
+        """Add emissions from the training sequence to the current counts (PRIVATE).
 
         Arguments:
+         - training_seq -- A TrainingSequence with states and emissions
+           to get the counts from
+         - emission_counts -- The current emission counts to add to.
 
-        o training_seq -- A TrainingSequence with states and emissions
-        to get the counts from
-
-        o emission_counts -- The current emission counts to add to.
         """
         for index in range(len(training_seq.emissions)):
             cur_state = training_seq.states[index]
@@ -401,19 +402,17 @@ class KnownStateTrainer(AbstractTrainer):
             try:
                 emission_counts[(cur_state, cur_emission)] += 1
             except KeyError:
-                raise KeyError("Unexpected emission (%s, %s)"
-                               % (cur_state, cur_emission))
+                raise KeyError(f"Unexpected emission ({cur_state}, {cur_emission})")
         return emission_counts
 
     def _count_transitions(self, state_seq, transition_counts):
-        """Add transitions from the training sequence to the current counts.
+        """Add transitions from the training sequence to the current counts (PRIVATE).
 
         Arguments:
+         - state_seq -- A Seq object with the states of the current training
+           sequence.
+         - transition_counts -- The current transition counts to add to.
 
-        o state_seq -- A Seq object with the states of the current training
-        sequence.
-
-        o transition_counts -- The current transition counts to add to.
         """
         for cur_pos in range(len(state_seq) - 1):
             cur_state = state_seq[cur_pos]
@@ -422,7 +421,6 @@ class KnownStateTrainer(AbstractTrainer):
             try:
                 transition_counts[(cur_state, next_state)] += 1
             except KeyError:
-                raise KeyError("Unexpected transition (%s, %s)" %
-                               (cur_state, next_state))
+                raise KeyError(f"Unexpected transition ({cur_state}, {next_state})")
 
         return transition_counts

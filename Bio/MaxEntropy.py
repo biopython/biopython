@@ -1,29 +1,30 @@
 # Copyright 2001 by Jeffrey Chang.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Maximum Entropy code.
 
 Uses Improved Iterative Scaling.
 """
 # TODO Define terminology
 
-from __future__ import print_function
 from functools import reduce
 
-from Bio._py3k import map
-
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
+
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.MaxEntropy.")
+        "Please install NumPy if you want to use Bio.MaxEntropy. "
+        "See http://www.numpy.org/"
+    ) from None
 
 
-class MaxEntropy(object):
-    """Holds information for a Maximum Entropy classifier.
+class MaxEntropy:
+    """Hold information for a Maximum Entropy classifier.
 
     Members:
     classes      List of the possible classes of data.
@@ -74,22 +75,21 @@ class MaxEntropy(object):
     Pred: ['Yellow', 'SUV', 'Domestic'] gives No y is No
     Pred: ['Red', 'SUV', 'Imported'] gives No y is No
     Pred: ['Red', 'Sports', 'Imported'] gives No y is Yes
-
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.classes = []
         self.alphas = []
         self.feature_fns = []
 
 
 def calculate(me, observation):
-    """calculate(me, observation) -> list of log probs
+    """Calculate the log of the probability for each class.
 
-    Calculate the log of the probability for each class.  me is a
-    MaxEntropy object that has been trained.  observation is a vector
+    me is a MaxEntropy object that has been trained.  observation is a vector
     representing the observed data.  The return value is a list of
     unnormalized log probabilities for each class.
-
     """
     scores = []
     assert len(me.feature_fns) == len(me.alphas)
@@ -102,11 +102,7 @@ def calculate(me, observation):
 
 
 def classify(me, observation):
-    """classify(me, observation) -> class
-
-    Classify an observation into a class.
-
-    """
+    """Classify an observation into a class."""
     scores = calculate(me, observation)
     max_score, klass = scores[0], me.classes[0]
     for i in range(1, len(scores)):
@@ -116,14 +112,12 @@ def classify(me, observation):
 
 
 def _eval_feature_fn(fn, xs, classes):
-    """_eval_feature_fn(fn, xs, classes) -> dict of values
+    """Evaluate a feature function on every instance of the training set and class (PRIVATE).
 
-    Evaluate a feature function on every instance of the training set
-    and class.  fn is a callback function that takes two parameters: a
+    fn is a callback function that takes two parameters: a
     training instance and a class.  Return a dictionary of (training
     set index, class index) -> non-zero value.  Values of 0 are not
     stored in the dictionary.
-
     """
     values = {}
     for i in range(len(xs)):
@@ -135,12 +129,10 @@ def _eval_feature_fn(fn, xs, classes):
 
 
 def _calc_empirical_expects(xs, ys, classes, features):
-    """_calc_empirical_expects(xs, ys, classes, features) -> list of expectations
+    """Calculate the expectation of each function from the data (PRIVATE).
 
-    Calculate the expectation of each function from the data.  This is
-    the constraint for the maximum entropy distribution.  Return a
+    This is the constraint for the maximum entropy distribution. Return a
     list of expectations, parallel to the list of features.
-
     """
     # E[f_i] = SUM_x,y P(x, y) f(x, y)
     #        = 1/N f(x, y)
@@ -155,17 +147,15 @@ def _calc_empirical_expects(xs, ys, classes, features):
         s = 0
         for i in range(N):
             s += feature.get((i, ys_i[i]), 0)
-        expect.append(float(s) / N)
+        expect.append(s / N)
     return expect
 
 
 def _calc_model_expects(xs, classes, features, alphas):
-    """_calc_model_expects(xs, classes, features, alphas) -> list of expectations.
+    """Calculate the expectation of each feature from the model (PRIVATE).
 
-    Calculate the expectation of each feature from the model.  This is
-    not used in maximum entropy training, but provides a good function
+    This is not used in maximum entropy training, but provides a good function
     for debugging.
-
     """
     # SUM_X P(x) SUM_Y P(Y|X) F(X, Y)
     # = 1/N SUM_X SUM_Y P(Y|X) F(X, Y)
@@ -181,13 +171,12 @@ def _calc_model_expects(xs, classes, features, alphas):
 
 
 def _calc_p_class_given_x(xs, classes, features, alphas):
-    """_calc_p_class_given_x(xs, classes, features, alphas) -> matrix
+    """Calculate conditional probability P(y|x) (PRIVATE).
 
-    Calculate P(y|x), where y is the class and x is an instance from
-    the training set.  Return a XSxCLASSES matrix of probabilities.
-
+    y is the class and x is an instance from the training set.
+    Return a XSxCLASSES matrix of probabilities.
     """
-    prob_yx = numpy.zeros((len(xs), len(classes)))
+    prob_yx = np.zeros((len(xs), len(classes)))
 
     # Calculate log P(y, x).
     assert len(features) == len(alphas)
@@ -195,7 +184,7 @@ def _calc_p_class_given_x(xs, classes, features, alphas):
         for (x, y), f in feature.items():
             prob_yx[x][y] += alpha * f
     # Take an exponent to get P(y, x)
-    prob_yx = numpy.exp(prob_yx)
+    prob_yx = np.exp(prob_yx)
     # Divide out the probability over each class, so we get P(y|x).
     for i in range(len(xs)):
         z = sum(prob_yx[i])
@@ -204,32 +193,33 @@ def _calc_p_class_given_x(xs, classes, features, alphas):
 
 
 def _calc_f_sharp(N, nclasses, features):
-    """_calc_f_sharp(N, nclasses, features) -> matrix of f sharp values."""
+    """Calculate a matrix of f sharp values (PRIVATE)."""
     # f#(x, y) = SUM_i feature(x, y)
-    f_sharp = numpy.zeros((N, nclasses))
+    f_sharp = np.zeros((N, nclasses))
     for feature in features:
         for (i, j), f in feature.items():
             f_sharp[i][j] += f
     return f_sharp
 
 
-def _iis_solve_delta(N, feature, f_sharp, empirical, prob_yx,
-                     max_newton_iterations, newton_converge):
-    # Solve delta using Newton's method for:
+def _iis_solve_delta(
+    N, feature, f_sharp, empirical, prob_yx, max_newton_iterations, newton_converge
+):
+    """Solve delta using Newton's method (PRIVATE)."""
     # SUM_x P(x) * SUM_c P(c|x) f_i(x, c) e^[delta_i * f#(x, c)] = 0
     delta = 0.0
     iters = 0
     while iters < max_newton_iterations:  # iterate for Newton's method
         f_newton = df_newton = 0.0  # evaluate the function and derivative
         for (i, j), f in feature.items():
-            prod = prob_yx[i][j] * f * numpy.exp(delta * f_sharp[i][j])
+            prod = prob_yx[i][j] * f * np.exp(delta * f_sharp[i][j])
             f_newton += prod
             df_newton += prod * f_sharp[i][j]
         f_newton, df_newton = empirical - f_newton / N, -df_newton / N
 
         ratio = f_newton / df_newton
         delta -= ratio
-        if numpy.fabs(ratio) < newton_converge:  # converged
+        if np.fabs(ratio) < newton_converge:  # converged
             break
         iters = iters + 1
     else:
@@ -237,8 +227,16 @@ def _iis_solve_delta(N, feature, f_sharp, empirical, prob_yx,
     return delta
 
 
-def _train_iis(xs, classes, features, f_sharp, alphas, e_empirical,
-               max_newton_iterations, newton_converge):
+def _train_iis(
+    xs,
+    classes,
+    features,
+    f_sharp,
+    alphas,
+    e_empirical,
+    max_newton_iterations,
+    newton_converge,
+):
     """Do one iteration of hill climbing to find better alphas (PRIVATE)."""
     # This is a good function to parallelize.
 
@@ -248,15 +246,29 @@ def _train_iis(xs, classes, features, f_sharp, alphas, e_empirical,
     N = len(xs)
     newalphas = alphas[:]
     for i in range(len(alphas)):
-        delta = _iis_solve_delta(N, features[i], f_sharp, e_empirical[i], p_yx,
-                                 max_newton_iterations, newton_converge)
+        delta = _iis_solve_delta(
+            N,
+            features[i],
+            f_sharp,
+            e_empirical[i],
+            p_yx,
+            max_newton_iterations,
+            newton_converge,
+        )
         newalphas[i] += delta
     return newalphas
 
 
-def train(training_set, results, feature_fns, update_fn=None,
-          max_iis_iterations=10000, iis_converge=1.0e-5,
-          max_newton_iterations=100, newton_converge=1.0e-10):
+def train(
+    training_set,
+    results,
+    feature_fns,
+    update_fn=None,
+    max_iis_iterations=10000,
+    iis_converge=1.0e-5,
+    max_newton_iterations=100,
+    newton_converge=1.0e-10,
+):
     """Train a maximum entropy classifier, returns MaxEntropy object.
 
     Train a maximum entropy classifier on a training set.
@@ -285,8 +297,7 @@ def train(training_set, results, feature_fns, update_fn=None,
     classes = sorted(set(results))
 
     # Cache values for all features.
-    features = [_eval_feature_fn(fn, training_set, classes)
-                for fn in feature_fns]
+    features = [_eval_feature_fn(fn, training_set, classes) for fn in feature_fns]
     # Cache values for f#.
     f_sharp = _calc_f_sharp(len(training_set), len(classes), features)
 
@@ -297,11 +308,18 @@ def train(training_set, results, feature_fns, update_fn=None,
     alphas = [0.0] * len(features)
     iters = 0
     while iters < max_iis_iterations:
-        nalphas = _train_iis(xs, classes, features, f_sharp,
-                             alphas, e_empirical,
-                             max_newton_iterations, newton_converge)
-        diff = map(lambda x, y: numpy.fabs(x - y), alphas, nalphas)
-        diff = reduce(lambda x, y: x + y, diff, 0)
+        nalphas = _train_iis(
+            xs,
+            classes,
+            features,
+            f_sharp,
+            alphas,
+            e_empirical,
+            max_newton_iterations,
+            newton_converge,
+        )
+        diff = [np.fabs(x - y) for x, y in zip(alphas, nalphas)]
+        diff = reduce(np.add, diff, 0)
         alphas = nalphas
 
         me = MaxEntropy()
@@ -309,13 +327,15 @@ def train(training_set, results, feature_fns, update_fn=None,
         if update_fn is not None:
             update_fn(me)
 
-        if diff < iis_converge:   # converged
+        if diff < iis_converge:  # converged
             break
     else:
         raise RuntimeError("IIS did not converge")
 
     return me
 
+
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

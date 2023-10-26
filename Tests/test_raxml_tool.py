@@ -5,7 +5,6 @@
 
 """Unit tests for Bio.Phylo.Applications wrappers."""
 
-import sys
 import os
 import unittest
 
@@ -15,20 +14,23 @@ from Bio import MissingExternalDependencyError
 
 raxml_exe = None
 try:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
+
     output = getoutput("raxmlHPC -v")
-    if "not found" not in output and "This is RAxML" in output:
-        raxml_exe = "raxmlHPC"
-except OSError:
-    # TODO: Use FileNotFoundError once we drop Python 2
+    if "not found" not in output and "not recognized" not in output:
+        if "This is RAxML" in output:
+            raxml_exe = "raxmlHPC"
+except FileNotFoundError:
     pass
 
 if not raxml_exe:
     raise MissingExternalDependencyError(
-        "Install RAxML (binary raxmlHPC) if you want to test the Bio.Phylo.Applications wrapper.")
+        "Install RAxML (binary raxmlHPC) if you want"
+        " to test the Bio.Phylo.Applications wrapper."
+    )
 
 # Example Phylip file with 4 aligned protein sequences
-EX_PHYLIP = 'Phylip/interlaced2.phy'
+EX_PHYLIP = "Phylip/interlaced2.phy"
 
 
 class AppTests(unittest.TestCase):
@@ -36,35 +38,36 @@ class AppTests(unittest.TestCase):
 
     def test_raxml(self):
         """Run RAxML using the wrapper."""
-        cmd = RaxmlCommandline(raxml_exe,
-                               sequences=EX_PHYLIP, model="PROTCATWAG",
-                               name="test")
+        cmd = RaxmlCommandline(
+            raxml_exe, sequences=EX_PHYLIP, model="PROTCATWAG", name="test"
+        )
         # The parsimony seed should be set automatically
-        self.assertTrue('-p' in str(cmd))
+        self.assertIn("-p", str(cmd))
         # Smoke test
         try:
             out, err = cmd()
-            self.assertTrue(len(out) > 0)
+            self.assertGreater(len(out), 0)
             self.assertEqual(len(err), 0)
             # Check the output tree
-            tree = Phylo.read('RAxML_result.test', 'newick')
+            tree = Phylo.read("RAxML_result.test", "newick")
             self.assertEqual(tree.count_terminals(), 4)
         finally:
             # Remove RAxML-generated files, or RAxML will complain bitterly
             # during the next run
-            for fname in ['RAxML_info.test',
-                          'RAxML_log.test',
-                          'RAxML_parsimonyTree.test',
-                          'RAxML_result.test',
-                          # Present in 7.2.X+  but not 7.0.4:
-                          'RAxML_bestTree.test',
-                          ]:
+            for fname in [
+                "RAxML_info.test",
+                "RAxML_log.test",
+                "RAxML_parsimonyTree.test",
+                "RAxML_result.test",
+                # Present in 7.2.X+  but not 7.0.4:
+                "RAxML_bestTree.test",
+            ]:
                 if os.path.isfile(fname):
                     os.remove(fname)
 
 
 # ---------------------------------------------------------
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

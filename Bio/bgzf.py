@@ -1,9 +1,11 @@
 #!/usr/bin/env python
-# Copyright 2010-2015 by Peter Cock.
+# Copyright 2010-2018 by Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 r"""Read and write BGZF compressed files (the GZIP variant used in BAM).
 
 The SAM/BAM file format (Sequence Alignment/Map) comes in a plain text
@@ -11,15 +13,13 @@ format (SAM), and a compressed binary format (BAM). The latter uses a
 modified form of gzip compression called BGZF (Blocked GNU Zip Format),
 which can be applied to any file format to provide compression with
 efficient random access. BGZF is described together with the SAM/BAM
-file format at http://samtools.sourceforge.net/SAM1.pdf
+file format at https://samtools.sourceforge.net/SAM1.pdf
 
 Please read the text below about 'virtual offsets' before using BGZF
 files for random access.
 
-
 Aim of this module
 ------------------
-
 The Python gzip library can be used to read BGZF files, since for
 decompression they are just (specialised) gzip files. What this
 module aims to facilitate is random access to BGZF files (using the
@@ -36,13 +36,11 @@ FASTQ, GenBank, etc) or large MAF alignments.
 
 The Bio.SeqIO indexing functions use this module to support BGZF files.
 
-
 Technical Introduction to BGZF
 ------------------------------
-
 The gzip file format allows multiple compressed blocks, each of which
 could be a stand alone gzip file. As an interesting bonus, this means
-you can use Unix "cat" to combined to gzip files into one by
+you can use Unix ``cat`` to combine two or more gzip files into one by
 concatenating them. Also, each block can have one of several compression
 levels (including uncompressed, which actually takes up a little bit
 more space due to the gzip header).
@@ -70,9 +68,9 @@ how big it is from this 'BC' header, and thus seek immediately to
 the second block, and so on.
 
 The BAM indexing scheme records read positions using a 64 bit
-'virtual offset', comprising coffset << 16 | uoffset, where coffset
+'virtual offset', comprising ``coffset << 16 | uoffset``, where ``coffset``
 is the file offset of the BGZF block containing the start of the read
-(unsigned integer using up to 64-16 = 48 bits), and uoffset is the
+(unsigned integer using up to 64-16 = 48 bits), and ``uoffset`` is the
 offset within the (decompressed) block (unsigned 16 bit integer).
 
 This limits you to BAM files where the last block starts by 2^48
@@ -80,13 +78,11 @@ bytes, or 256 petabytes, and the decompressed size of each block
 is at most 2^16 bytes, or 64kb. Note that this matches the BGZF
 'BC' field size which limits the compressed size of each block to
 2^16 bytes, allowing for BAM files to use BGZF with no gzip
-compression (useful for intermediate files in memory to reduced
+compression (useful for intermediate files in memory to reduce
 CPU load).
-
 
 Warning about namespaces
 ------------------------
-
 It is considered a bad idea to use "from XXX import ``*``" in Python, because
 it pollutes the namespace. This is a real issue with Bio.bgzf (and the
 standard Python library gzip) because they contain a function called open
@@ -105,11 +101,7 @@ gzip
 Notice that the open function has been replaced. You can "fix" this if you
 need to by importing the built-in open function:
 
->>> try:
-...     from __builtin__ import open # Python 2
-... except ImportError:
-...     from builtins import open # Python 3
-...
+>>> from builtins import open
 
 However, what we recommend instead is to use the explicit namespace, e.g.
 
@@ -118,9 +110,8 @@ However, what we recommend instead is to use the explicit namespace, e.g.
 Bio.bgzf
 
 
-Example
--------
-
+Examples
+--------
 This is an ordinary GenBank file compressed using BGZF, so it can
 be decompressed using gzip,
 
@@ -223,20 +214,45 @@ you want to index BGZF compressed sequence files:
 >>> print(record.id)
 NC_000932.1
 
+Text Mode
+---------
+
+Like the standard library gzip.open(...), the BGZF code defaults to opening
+files in binary mode.
+
+You can request the file be opened in text mode, but beware that this is hard
+coded to the simple "latin1" (aka "iso-8859-1") encoding (which includes all
+the ASCII characters), which works well with most Western European languages.
+However, it is not fully compatible with the more widely used UTF-8 encoding.
+
+In variable width encodings like UTF-8, some single characters in the unicode
+text output are represented by multiple bytes in the raw binary form. This is
+problematic with BGZF, as we cannot always decode each block in isolation - a
+single unicode character could be split over two blocks. This can even happen
+with fixed width unicode encodings, as the BGZF block size is not fixed.
+
+Therefore, this module is currently restricted to only support single byte
+unicode encodings, such as ASCII, "latin1" (which is a superset of ASCII), or
+potentially other character maps (not implemented).
+
+Furthermore, unlike the default text mode on Python 3, we do not attempt to
+implement universal new line mode. This transforms the various operating system
+new line conventions like Windows (CR LF or "\r\n"), Unix (just LF, "\n"), or
+old Macs (just CR, "\r"), into just LF ("\n"). Here we have the same problem -
+is "\r" at the end of a block an incomplete Windows style new line?
+
+Instead, you will get the CR ("\r") and LF ("\n") characters as is.
+
+If your data is in UTF-8 or any other incompatible encoding, you must use
+binary mode, and decode the appropriate fragments yourself.
 """
 
-from __future__ import print_function
-
+import struct
 import sys
 import zlib
-import struct
 
-from Bio._py3k import _as_bytes, _as_string
-from Bio._py3k import open as _open
+from builtins import open as _open
 
-
-# For Python 2 can just use: _bgzf_magic = '\x1f\x8b\x08\x04'
-# but need to use bytes on Python 3
 _bgzf_magic = b"\x1f\x8b\x08\x04"
 _bgzf_header = b"\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00\x42\x43\x02\x00"
 _bgzf_eof = b"\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00"
@@ -244,13 +260,21 @@ _bytes_BC = b"BC"
 
 
 def open(filename, mode="rb"):
-    """Open a BGZF file for reading, writing or appending."""
+    r"""Open a BGZF file for reading, writing or appending.
+
+    If text mode is requested, in order to avoid multi-byte characters, this is
+    hard coded to use the "latin1" encoding, and "\r" and "\n" are passed as is
+    (without implementing universal new line mode).
+
+    If your data is in UTF-8 or any other incompatible encoding, you must use
+    binary mode, and decode the appropriate fragments yourself.
+    """
     if "r" in mode.lower():
         return BgzfReader(filename, mode)
     elif "w" in mode.lower() or "a" in mode.lower():
         return BgzfWriter(filename, mode)
     else:
-        raise ValueError("Bad mode %r" % mode)
+        raise ValueError(f"Bad mode {mode!r}")
 
 
 def make_virtual_offset(block_start_offset, within_block_offset):
@@ -298,11 +322,13 @@ def make_virtual_offset(block_start_offset, within_block_offset):
 
     """
     if within_block_offset < 0 or within_block_offset >= 65536:
-        raise ValueError("Require 0 <= within_block_offset < 2**16, got %i" %
-                         within_block_offset)
+        raise ValueError(
+            "Require 0 <= within_block_offset < 2**16, got %i" % within_block_offset
+        )
     if block_start_offset < 0 or block_start_offset >= 281474976710656:
-        raise ValueError("Require 0 <= block_start_offset < 2**48, got %i" %
-                         block_start_offset)
+        raise ValueError(
+            "Require 0 <= block_start_offset < 2**48, got %i" % block_start_offset
+        )
     return (block_start_offset << 16) | within_block_offset
 
 
@@ -332,11 +358,7 @@ def BgzfBlocks(handle):
     decompressed length of the blocks contents (limited to 65536 in
     BGZF), as an iterator - one tuple per BGZF block.
 
-    >>> try:
-    ...     from __builtin__ import open # Python 2
-    ... except ImportError:
-    ...     from builtins import open # Python 3
-    ...
+    >>> from builtins import open
     >>> handle = open("SamBam/ex1.bam", "rb")
     >>> for values in BgzfBlocks(handle):
     ...     print("Raw start %i, raw length %i; data start %i, data length %i" % values)
@@ -393,28 +415,40 @@ def BgzfBlocks(handle):
     >>> handle.close()
 
     """
+    if isinstance(handle, BgzfReader):
+        raise TypeError("Function BgzfBlocks expects a binary handle")
     data_start = 0
     while True:
         start_offset = handle.tell()
-        # This may raise StopIteration which is perfect here
-        block_length, data = _load_bgzf_block(handle)
+        try:
+            block_length, data = _load_bgzf_block(handle)
+        except StopIteration:
+            break
         data_len = len(data)
         yield start_offset, block_length, data_start, data_len
         data_start += data_len
 
 
 def _load_bgzf_block(handle, text_mode=False):
-    """Internal function to load the next BGZF function (PRIVATE)."""
+    """Load the next BGZF block of compressed data (PRIVATE).
+
+    Returns a tuple (block size and data), or at end of file
+    will raise StopIteration.
+    """
     magic = handle.read(4)
     if not magic:
-        # End of file
+        # End of file - should we signal this differently now?
+        # See https://www.python.org/dev/peps/pep-0479/
         raise StopIteration
     if magic != _bgzf_magic:
-        raise ValueError(r"A BGZF (e.g. a BAM file) block should start with "
-                         r"%r, not %r; handle.tell() now says %r"
-                         % (_bgzf_magic, magic, handle.tell()))
-    gzip_mod_time, gzip_extra_flags, gzip_os, extra_len = \
-        struct.unpack("<LBBH", handle.read(8))
+        raise ValueError(
+            r"A BGZF (e.g. a BAM file) block should start with "
+            r"%r, not %r; handle.tell() now says %r"
+            % (_bgzf_magic, magic, handle.tell())
+        )
+    gzip_mod_time, gzip_extra_flags, gzip_os, extra_len = struct.unpack(
+        "<LBBH", handle.read(8)
+    )
 
     block_size = None
     x_len = 0
@@ -424,44 +458,46 @@ def _load_bgzf_block(handle, text_mode=False):
         subfield_data = handle.read(subfield_len)
         x_len += subfield_len + 4
         if subfield_id == _bytes_BC:
-            assert subfield_len == 2, "Wrong BC payload length"
-            assert block_size is None, "Two BC subfields?"
+            if subfield_len != 2:
+                raise ValueError("Wrong BC payload length")
+            if block_size is not None:
+                raise ValueError("Two BC subfields?")
             block_size = struct.unpack("<H", subfield_data)[0] + 1  # uint16_t
-    assert x_len == extra_len, (x_len, extra_len)
-    assert block_size is not None, "Missing BC, this isn't a BGZF file!"
+    if x_len != extra_len:
+        raise ValueError(f"x_len and extra_len differ {x_len}, {extra_len}")
+    if block_size is None:
+        raise ValueError("Missing BC, this isn't a BGZF file!")
     # Now comes the compressed data, CRC, and length of uncompressed data.
     deflate_size = block_size - 1 - extra_len - 19
     d = zlib.decompressobj(-15)  # Negative window size means no headers
     data = d.decompress(handle.read(deflate_size)) + d.flush()
     expected_crc = handle.read(4)
     expected_size = struct.unpack("<I", handle.read(4))[0]
-    assert expected_size == len(data), \
-        "Decompressed to %i, not %i" % (len(data), expected_size)
+    if expected_size != len(data):
+        raise RuntimeError("Decompressed to %i, not %i" % (len(data), expected_size))
     # Should cope with a mix of Python platforms...
     crc = zlib.crc32(data)
     if crc < 0:
         crc = struct.pack("<i", crc)
     else:
         crc = struct.pack("<I", crc)
-    assert expected_crc == crc, \
-        "CRC is %s, not %s" % (crc, expected_crc)
+    if expected_crc != crc:
+        raise RuntimeError(f"CRC is {crc}, not {expected_crc}")
     if text_mode:
-        return block_size, _as_string(data)
+        # Note ISO-8859-1 aka Latin-1 preserves first 256 chars
+        # (i.e. ASCII), but critically is a single byte encoding
+        return block_size, data.decode("latin-1")
     else:
         return block_size, data
 
 
-class BgzfReader(object):
+class BgzfReader:
     r"""BGZF reader, acts like a read only handle but seek/tell differ.
 
-    Let's use the BgzfBlocks function to have a peak at the BGZF blocks
+    Let's use the BgzfBlocks function to have a peek at the BGZF blocks
     in an example BAM file,
 
-    >>> try:
-    ...     from __builtin__ import open # Python 2
-    ... except ImportError:
-    ...     from builtins import open # Python 3
-    ...
+    >>> from builtins import open
     >>> handle = open("SamBam/ex1.bam", "rb")
     >>> for values in BgzfBlocks(handle):
     ...     print("Raw start %i, raw length %i; data start %i, data length %i" % values)
@@ -521,6 +557,32 @@ class BgzfReader(object):
     """
 
     def __init__(self, filename=None, mode="r", fileobj=None, max_cache=100):
+        r"""Initialize the class for reading a BGZF file.
+
+        You would typically use the top level ``bgzf.open(...)`` function
+        which will call this class internally. Direct use is discouraged.
+
+        Either the ``filename`` (string) or ``fileobj`` (input file object in
+        binary mode) arguments must be supplied, but not both.
+
+        Argument ``mode`` controls if the data will be returned as strings in
+        text mode ("rt", "tr", or default "r"), or bytes binary mode ("rb"
+        or "br"). The argument name matches the built-in ``open(...)`` and
+        standard library ``gzip.open(...)`` function.
+
+        If text mode is requested, in order to avoid multi-byte characters,
+        this is hard coded to use the "latin1" encoding, and "\r" and "\n"
+        are passed as is (without implementing universal new line mode). There
+        is no ``encoding`` argument.
+
+        If your data is in UTF-8 or any other incompatible encoding, you must
+        use binary mode, and decode the appropriate fragments yourself.
+
+        Argument ``max_cache`` controls the maximum number of BGZF blocks to
+        cache in memory. Each can be up to 64kb thus the default of 100 blocks
+        could take up to 6MB of RAM. This is important for efficient random
+        access, a small value is fine for reading the file in one pass.
+        """
         # TODO - Assuming we can seek, check for 28 bytes EOF empty block
         # and if missing warn about possible truncation (as in samtools)?
         if max_cache < 1:
@@ -528,13 +590,19 @@ class BgzfReader(object):
         # Must open the BGZF file in binary mode, but we may want to
         # treat the contents as either text or binary (unicode or
         # bytes under Python 3)
+        if filename and fileobj:
+            raise ValueError("Supply either filename or fileobj, not both")
+        # Want to reject output modes like w, a, x, +
+        if mode.lower() not in ("r", "tr", "rt", "rb", "br"):
+            raise ValueError(
+                "Must use a read mode like 'r' (default), 'rt', or 'rb' for binary"
+            )
+        # If an open file was passed, make sure it was opened in binary mode.
         if fileobj:
-            assert filename is None
+            if fileobj.read(0) != b"":
+                raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
-            assert "b" in handle.mode.lower()
         else:
-            if "w" in mode.lower() or "a" in mode.lower():
-                raise ValueError("Must use read mode (default), not write or append mode")
             handle = _open(filename, "rb")
         self._text = "b" not in mode.lower()
         if self._text:
@@ -565,7 +633,7 @@ class BgzfReader(object):
             return
         # Must hit the disk... first check cache limits,
         while len(self._buffers) >= self.max_cache:
-            # TODO - Implemente LRU cache removal?
+            # TODO - Implement LRU cache removal?
             self._buffers.popitem()
         # Now load the block
         handle = self._handle
@@ -587,9 +655,10 @@ class BgzfReader(object):
         self._buffers[self._block_start_offset] = self._buffer, block_size
 
     def tell(self):
-        """Returns a 64-bit unsigned BGZF virtual offset."""
-        if 0 < self._within_block_offset and \
-                self._within_block_offset == len(self._buffer):
+        """Return a 64-bit unsigned BGZF virtual offset."""
+        if 0 < self._within_block_offset and self._within_block_offset == len(
+            self._buffer
+        ):
             # Special case where we're right at the end of a (non empty) block.
             # For non-maximal blocks could give two possible virtual offsets,
             # but for a maximal block can't use 65536 as the within block
@@ -612,11 +681,14 @@ class BgzfReader(object):
             # Don't need to load the block if already there
             # (this avoids a function call since _load_block would do nothing)
             self._load_block(start_offset)
-            assert start_offset == self._block_start_offset
+            if start_offset != self._block_start_offset:
+                raise ValueError("start_offset not loaded correctly")
         if within_block > len(self._buffer):
             if not (within_block == 0 and len(self._buffer) == 0):
-                raise ValueError("Within offset %i but block size only %i"
-                                 % (within_block, len(self._buffer)))
+                raise ValueError(
+                    "Within offset %i but block size only %i"
+                    % (within_block, len(self._buffer))
+                )
         self._within_block_offset = within_block
         # assert virtual_offset == self.tell(), \
         #    "Did seek to %i (%i, %i), but tell says %i (%i, %i)" \
@@ -626,106 +698,115 @@ class BgzfReader(object):
         return virtual_offset
 
     def read(self, size=-1):
+        """Read method for the BGZF module."""
         if size < 0:
             raise NotImplementedError("Don't be greedy, that could be massive!")
-        elif size == 0:
-            if self._text:
-                return ""
+
+        result = "" if self._text else b""
+        while size and self._block_raw_length:
+            if self._within_block_offset + size <= len(self._buffer):
+                # This may leave us right at the end of a block
+                # (lazy loading, don't load the next block unless we have too)
+                data = self._buffer[
+                    self._within_block_offset : self._within_block_offset + size
+                ]
+                self._within_block_offset += size
+                if not data:
+                    raise ValueError("Must be at least 1 byte")
+                result += data
+                break
             else:
-                return b""
-        elif self._within_block_offset + size <= len(self._buffer):
-            # This may leave us right at the end of a block
-            # (lazy loading, don't load the next block unless we have too)
-            data = self._buffer[self._within_block_offset:self._within_block_offset + size]
-            self._within_block_offset += size
-            assert data  # Must be at least 1 byte
-            return data
-        else:
-            data = self._buffer[self._within_block_offset:]
-            size -= len(data)
-            self._load_block()  # will reset offsets
-            # TODO - Test with corner case of an empty block followed by
-            # a non-empty block
-            if not self._buffer:
-                return data  # EOF
-            elif size:
-                # TODO - Avoid recursion
-                return data + self.read(size)
-            else:
-                # Only needed the end of the last block
-                return data
+                data = self._buffer[self._within_block_offset :]
+                size -= len(data)
+                self._load_block()  # will reset offsets
+                result += data
+
+        return result
 
     def readline(self):
-        i = self._buffer.find(self._newline, self._within_block_offset)
-        # Three cases to consider,
-        if i == -1:
-            # No newline, need to read in more data
-            data = self._buffer[self._within_block_offset:]
-            self._load_block()  # will reset offsets
-            if not self._buffer:
-                return data  # EOF
+        """Read a single line for the BGZF file."""
+        result = "" if self._text else b""
+        while self._block_raw_length:
+            i = self._buffer.find(self._newline, self._within_block_offset)
+            # Three cases to consider,
+            if i == -1:
+                # No newline, need to read in more data
+                data = self._buffer[self._within_block_offset :]
+                self._load_block()  # will reset offsets
+                result += data
+            elif i + 1 == len(self._buffer):
+                # Found new line, but right at end of block (SPECIAL)
+                data = self._buffer[self._within_block_offset :]
+                # Must now load the next block to ensure tell() works
+                self._load_block()  # will reset offsets
+                if not data:
+                    raise ValueError("Must be at least 1 byte")
+                result += data
+                break
             else:
-                # TODO - Avoid recursion
-                return data + self.readline()
-        elif i + 1 == len(self._buffer):
-            # Found new line, but right at end of block (SPECIAL)
-            data = self._buffer[self._within_block_offset:]
-            # Must now load the next block to ensure tell() works
-            self._load_block()  # will reset offsets
-            assert data
-            return data
-        else:
-            # Found new line, not at end of block (easy case, no IO)
-            data = self._buffer[self._within_block_offset:i + 1]
-            self._within_block_offset = i + 1
-            # assert data.endswith(self._newline)
-            return data
+                # Found new line, not at end of block (easy case, no IO)
+                data = self._buffer[self._within_block_offset : i + 1]
+                self._within_block_offset = i + 1
+                # assert data.endswith(self._newline)
+                result += data
+                break
+
+        return result
 
     def __next__(self):
+        """Return the next line."""
         line = self.readline()
         if not line:
             raise StopIteration
         return line
 
-    if sys.version_info[0] < 3:
-        def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
-            return self.__next__()
-
     def __iter__(self):
+        """Iterate over the lines in the BGZF file."""
         return self
 
     def close(self):
+        """Close BGZF file."""
         self._handle.close()
         self._buffer = None
         self._block_start_offset = None
         self._buffers = None
 
     def seekable(self):
+        """Return True indicating the BGZF supports random access."""
         return True
 
     def isatty(self):
+        """Return True if connected to a TTY device."""
         return False
 
     def fileno(self):
+        """Return integer file descriptor."""
         return self._handle.fileno()
 
     def __enter__(self):
+        """Open a file operable with WITH statement."""
         return self
 
     def __exit__(self, type, value, traceback):
+        """Close a file with WITH statement."""
         self.close()
 
 
-class BgzfWriter(object):
+class BgzfWriter:
+    """Define a BGZFWriter object."""
 
     def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):
+        """Initilize the class."""
+        if filename and fileobj:
+            raise ValueError("Supply either filename or fileobj, not both")
+        # If an open file was passed, make sure it was opened in binary mode.
         if fileobj:
-            assert filename is None
+            if fileobj.read(0) != b"":
+                raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
             if "w" not in mode.lower() and "a" not in mode.lower():
-                raise ValueError("Must use write or append mode, not %r" % mode)
+                raise ValueError(f"Must use write or append mode, not {mode!r}")
             if "a" in mode.lower():
                 handle = _open(filename, "ab")
             else:
@@ -736,20 +817,21 @@ class BgzfWriter(object):
         self.compresslevel = compresslevel
 
     def _write_block(self, block):
+        """Write provided data to file as a single BGZF compressed block (PRIVATE)."""
         # print("Saving %i bytes" % len(block))
-        start_offset = self._handle.tell()
-        assert len(block) <= 65536
+        if len(block) > 65536:
+            raise ValueError(f"{len(block)} Block length > 65536")
         # Giving a negative window bits means no gzip/zlib headers,
         # -15 used in samtools
-        c = zlib.compressobj(self.compresslevel,
-                             zlib.DEFLATED,
-                             -15,
-                             zlib.DEF_MEM_LEVEL,
-                             0)
+        c = zlib.compressobj(
+            self.compresslevel, zlib.DEFLATED, -15, zlib.DEF_MEM_LEVEL, 0
+        )
         compressed = c.compress(block) + c.flush()
         del c
-        assert len(compressed) < 65536, \
-            "TODO - Didn't compress enough, try less data in this block"
+        if len(compressed) > 65536:
+            raise RuntimeError(
+                "TODO - Didn't compress enough, try less data in this block"
+            )
         crc = zlib.crc32(block)
         # Should cope with a mix of Python platforms...
         if crc < 0:
@@ -757,7 +839,7 @@ class BgzfWriter(object):
         else:
             crc = struct.pack("<I", crc)
         bsize = struct.pack("<H", len(compressed) + 25)  # includes -1
-        crc = struct.pack("<I", zlib.crc32(block) & 0xffffffff)
+        crc = struct.pack("<I", zlib.crc32(block) & 0xFFFFFFFF)
         uncompressed_length = struct.pack("<I", len(block))
         # Fixed 16 bytes,
         # gzip magic bytes (4) mod time (4),
@@ -771,14 +853,20 @@ class BgzfWriter(object):
         self._handle.write(data)
 
     def write(self, data):
+        """Write method for the class."""
         # TODO - Check bytes vs unicode
-        data = _as_bytes(data)
+        if isinstance(data, str):
+            # When reading we can't cope with multi-byte characters
+            # being split between BGZF blocks, so we restrict to a
+            # single byte encoding - like ASCII or latin-1.
+            # On output we could probably allow any encoding, as we
+            # don't care about splitting unicode characters between blocks
+            data = data.encode("latin-1")
         # block_size = 2**16 = 65536
         data_len = len(data)
         if len(self._buffer) + data_len < 65536:
             # print("Cached %r" % data)
             self._buffer += data
-            return
         else:
             # print("Got %r, writing out some data..." % data)
             self._buffer += data
@@ -787,6 +875,7 @@ class BgzfWriter(object):
                 self._buffer = self._buffer[65536:]
 
     def flush(self):
+        """Flush data explicitally."""
         while len(self._buffer) >= 65536:
             self._write_block(self._buffer[:65535])
             self._buffer = self._buffer[65535:]
@@ -809,23 +898,28 @@ class BgzfWriter(object):
         self._handle.close()
 
     def tell(self):
-        """Returns a BGZF 64-bit virtual offset."""
+        """Return a BGZF 64-bit virtual offset."""
         return make_virtual_offset(self._handle.tell(), len(self._buffer))
 
     def seekable(self):
+        """Return True indicating the BGZF supports random access."""
         # Not seekable, but we do support tell...
         return False
 
     def isatty(self):
+        """Return True if connected to a TTY device."""
         return False
 
     def fileno(self):
+        """Return integer file descriptor."""
         return self._handle.fileno()
 
     def __enter__(self):
+        """Open a file operable with WITH statement."""
         return self
 
     def __exit__(self, type, value, traceback):
+        """Close a file with WITH statement."""
         self.close()
 
 
@@ -846,13 +940,18 @@ if __name__ == "__main__":
         print("See also the tool bgzip that comes with samtools")
         sys.exit(0)
 
+    # Ensure we have binary mode handles
+    # (leave stderr as default text mode)
+    stdin = sys.stdin.buffer
+    stdout = sys.stdout.buffer
+
     sys.stderr.write("Producing BGZF output from stdin...\n")
-    w = BgzfWriter(fileobj=sys.stdout)
+    w = BgzfWriter(fileobj=stdout)
     while True:
-        data = sys.stdin.read(65536)
+        data = stdin.read(65536)
         w.write(data)
         if not data:
             break
-    # Doing close with write an empty BGZF block as EOF marker:
+    # Doing close will write an empty BGZF block as EOF marker:
     w.close()
     sys.stderr.write("BGZF data produced\n")

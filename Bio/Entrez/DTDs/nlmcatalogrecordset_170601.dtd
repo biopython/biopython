@@ -1,0 +1,280 @@
+<!--   NLMCatalogRecordSet DTD
+
+       Comments and suggestions are welcome.
+       June 1, 2017 
+
+        **THIS IS THE CURRENT DTD FOR 2017 CURRENTLY IN USE.**
+                            
+       This is the DTD which NLM has written for Internal and External Use. 
+       If you are a data Licensee, use the information
+       from the NLMCatalogRecordSet. 
+       
+    
+* = 0 or more occurrences (optional element, repeatable)
+? = 0 or 1 occurrences (optional element, at most 1)
++ = 1 or more occurrences (required element, repeatable)
+| = choice, one or the other but not both 
+no symbol = required element
+
+-->
+<!-- ================================================================= -->
+<!--   Revision Notes Section 
+
+  The following changes were made in the nlmcatalogrecordset_170101.dtd:
+  
+       a. Changed nlmcatalogrecordset_170101.dtd to nlmcatalogrecordset_170601.dtd.
+       b. Added URI attribute to MeshHeading to accommodate MeSH RDF URIs
+       
+See http://www.nlm.nih.gov/databases/dtd/history_dtd_nlmcatalogrecord.html  
+for historic Revision Notes for previous versions of NLMCatalogRecordSet DTD.
+-->
+<!-- ================================================================= -->
+<!ELEMENT NLMCatalogRecordSet (NLMCatalogRecord+, DeleteCatalogRecord?)>
+<!ELEMENT NLMCatalogRecord (NlmUniqueID, DateCreated, DateRevised, DateAuthorized?, 
+          DateCompleted?, DateRevisedMajor?, CollaborativePartnerDate*, TitleMain, 
+          MedlineTA?,TitleAlternate*, TitleRelated*, AuthorList?, InvestigatorList?, ResourceInfo,
+          ResourceCharacteristics*, PublicationTypeList?, GenreList?, PublicationInfo,
+          Language*, PhysicalDescription?, Abstract?, 
+          OtherAbstract*, ContentsNote*, IndexingSourceList?, 
+          GeneralNote*, LocalNote*, PersonalNameSubjectList?, MeshHeadingList?, 
+          OtherSubjectList*, SpaceFlightMission*, KeywordList*, 
+          BroadJournalHeadingList?, Classification*, 
+          GovDocClassNumber*, ELocationList?, Host*, LCCN*, ISBN*, ISSN*, 
+          ISSNLinking*, NCBIIssnAlias*, STRN*, Coden*, OtherID*, 
+          AcquisitionInfoList?, ReportNumber*)>
+<!ATTLIST NLMCatalogRecord
+	Owner (CIT | HMD | HSR | IHM | KIE | NASA | NCBI | NLM | 
+               NOTNLM | NYA | PIP | Undetermined) "Undetermined"
+	Status (Brief | Cataloging-In-Publication | Completed | In-Process |
+                Not-Our-Cataloging | On-Order | Undetermined | Withdrawn) #REQUIRED>
+<!ELEMENT Abstract (AbstractText)>
+<!ELEMENT AbstractText (#PCDATA)>
+<!ELEMENT AcquisitionInfo (StockNumber?, AcquisitionSource?)>
+<!ELEMENT AcquisitionInfoList (AcquisitionInfo+)>
+<!ELEMENT AcquisitionSource (#PCDATA)>
+<!ELEMENT Affiliation (#PCDATA)>
+<!ELEMENT Author (((LastName, ForeName?, Initials?, Suffix?) | CollectiveName),
+                    Affiliation?, DatesAssociatedWithName?, Identifier*,
+                    NameQualifier?, OtherInformation?, TitleAssociatedWithName?,Role*)>
+<!ELEMENT AuthorList (Author+)>
+<!ATTLIST AuthorList
+	CompleteYN (Y | N) "Y">
+<!ELEMENT BookFormat (#PCDATA)>
+<!ELEMENT BroadJournalHeading (#PCDATA)>
+<!ELEMENT BroadJournalHeadingList (BroadJournalHeading+)>
+<!ELEMENT CarrierType (#PCDATA)>
+<!ELEMENT ChapterPgn (#PCDATA)>
+<!ELEMENT Classification (#PCDATA)>
+<!ATTLIST Classification
+	NLMCallNumberYN (Y | N) "Y"
+	Authority (KIE | MARC | NLM | Other | Undetermined) "Undetermined"
+	CallNumberType (NLMClass | Other | ShelvingNumber) "Other">
+<!ELEMENT Coden (#PCDATA)>
+<!ELEMENT CollaborativePartnerDate (#PCDATA)>
+<!ATTLIST CollaborativePartnerDate
+	Owner (CIT | HMD | HSR | IHM | KIE | NASA | NCBI | NLM | NOTNLM | 
+               NYA | PIP | Undetermined) "Undetermined"
+	CollaborativeStatus (Create | In-House-Review | Other | 
+                             Released | Review) "Other">
+<!ELEMENT CollectiveName (#PCDATA)>
+<!ELEMENT ContentsNote (#PCDATA)>
+<!ELEMENT ContentType (#PCDATA)>
+<!ELEMENT CopyrightDate (#PCDATA)>
+<!ELEMENT Country (#PCDATA)>
+<!ELEMENT Coverage (#PCDATA)>
+<!ELEMENT DateAuthorized (Year, Month, Day)>
+<!ELEMENT DateCompleted (Year, Month, Day)>
+<!ELEMENT DateCreated (Year, Month, Day)>
+<!ELEMENT DateIssued (#PCDATA)>
+<!ELEMENT DateRevised (Year, Month, Day)>
+<!ELEMENT DateRevisedMajor (Year, Month, Day)>
+<!ELEMENT DatesAssociatedWithName (#PCDATA)>
+<!ELEMENT DatesOfSerialPublication (#PCDATA)>
+<!ELEMENT Day (#PCDATA)>
+<!ELEMENT DescriptiveInformation (#PCDATA)>
+<!ELEMENT DescriptorName (#PCDATA)>
+<!ATTLIST DescriptorName
+	MajorTopicYN (Y | N) "N"
+            Type (Geographic) #IMPLIED
+            UI  CDATA #IMPLIED>
+<!ELEMENT Edition (#PCDATA)>
+<!ELEMENT ELocation ((ELocationID, DescriptiveInformation?) | 
+                      DescriptiveInformation)>
+<!ELEMENT ELocationID (#PCDATA)>
+<!ATTLIST ELocationID
+	EIdType (url) #REQUIRED
+	ValidYN (Y | N) "Y">
+<!ELEMENT ELocationList (ELocation+)>
+<!ELEMENT Entity (#PCDATA)>
+<!ELEMENT Extent (#PCDATA)>
+<!ELEMENT ForeName (#PCDATA)>
+<!ELEMENT Form (#PCDATA)>
+<!ELEMENT Frequency (#PCDATA)>
+<!ATTLIST Frequency
+	FrequencyType (Current | Former) "Current">
+<!ELEMENT GeneralNote (#PCDATA)>
+<!ATTLIST GeneralNote
+	Owner (CIT | HMD | HSR | IHM | KIE | NASA | NCBI | NLM | NOTNLM | 
+               NYA | PIP | Undetermined) "Undetermined"
+	NoteType (Binding | Biography | BoundWith |CiteAs | Dissertation |
+                  FindingAid | LinkComplexNote | Provenance |
+                  ProvHistory | Restriction | CopyrightStatus | 
+                  CopyrightHolder) #IMPLIED>
+<!ELEMENT Generation (#PCDATA)>
+<!ELEMENT Genre (#PCDATA)>
+<!ELEMENT GenreList (Genre+)>
+<!ELEMENT GovDocClassNumber (#PCDATA)>
+<!ATTLIST GovDocClassNumber
+	ValidYN (Y | N) "Y">
+<!ELEMENT Host (#PCDATA)>
+<!ELEMENT Identifier (#PCDATA)>
+<!ATTLIST Identifier 
+          Source CDATA #IMPLIED>
+<!ELEMENT Imprint (Place*, Entity*, DateIssued*, ImprintFull)>
+<!ATTLIST Imprint
+	ImprintType (Current | Original) #REQUIRED
+        FunctionType (UnpublishedProduction | Publication | Distribution | 
+                      Manufacture) #REQUIRED>
+<!ELEMENT ImprintFull (#PCDATA)>
+<!ELEMENT IndexingSource (IndexingSourceName, Coverage?)>
+<!ELEMENT IndexingSourceList (IndexingSource+)>
+<!ELEMENT IndexingSourceName (#PCDATA)>
+<!ATTLIST IndexingSourceName
+	IndexingTreatment (Unknown | Full | Selective | ReferencedIn |
+                     ReferencedInNoDetails) #IMPLIED
+	IndexingStatus (Ceased-publication | Continued-by-another-title | 
+                     Currently-indexed | Deselected) #IMPLIED>
+<!ELEMENT Initials (#PCDATA)>
+<!ELEMENT Investigator (LastName, ForeName?, Initials?, Suffix?, Affiliation?)>
+<!ATTLIST Investigator
+	ValidYN (Y | N) "Y">
+<!ELEMENT InvestigatorList (Investigator+)>
+<!ELEMENT ISBN (#PCDATA)>
+<!ATTLIST ISBN
+	ValidYN (Y | N) "Y">
+<!ELEMENT ISSN (#PCDATA)>
+<!ATTLIST ISSN
+	IssnType (Electronic | Print | Undetermined) #REQUIRED
+	ValidYN (Y | N) "Y">
+<!ELEMENT ISSNLinking (#PCDATA)>
+<!ATTLIST ISSNLinking
+	ValidYN (Y | N) "Y">
+<!ELEMENT Issuance (#PCDATA)>
+<!ELEMENT Keyword (#PCDATA)>
+<!ATTLIST Keyword
+	MajorTopicYN (Y | N) "N">
+<!ELEMENT KeywordList (Keyword+)>
+<!ATTLIST KeywordList
+	Owner (CIT | HMD | HSR | IHM | KIE | NASA | NCBI | NLM |
+               NOTNLM | NYA | PIP | Undetermined) "NLM">
+<!ELEMENT Language (#PCDATA)>
+<!ATTLIST Language
+	LangType (Primary | Original | Summary | TableOfContents | Captions) #REQUIRED>
+<!ELEMENT LastName (#PCDATA)>
+<!ELEMENT LCCN (#PCDATA)>
+<!ATTLIST LCCN
+	ValidYN (Y | N) "Y">
+<!ELEMENT LocalNote (#PCDATA)>
+<!ATTLIST LocalNote
+	LocalNoteType (DashedOn | Other | PreservationAction) "Other">
+<!ELEMENT MaterialSpecified (#PCDATA)>
+<!ELEMENT MediaType (#PCDATA)>
+<!-- NOTE: The use of "Medline" in the MedlineTA element name does not mean the data 
+     represents a Medline-selected journal.  -->
+<!ELEMENT MedlineTA (#PCDATA)>
+<!ELEMENT MeshHeading (DescriptorName, QualifierName*)>
+<!ATTLIST MeshHeading 
+            URI CDATA #IMPLIED>
+<!ELEMENT MeshHeadingList (MeshHeading+)>
+<!ELEMENT Month (#PCDATA)>
+<!ELEMENT NameQualifier (#PCDATA)>
+<!ELEMENT NCBIIssnAlias (#PCDATA)>
+<!ELEMENT NlmUniqueID (#PCDATA)>
+<!ELEMENT OtherAbstract (AbstractText)>
+<!ATTLIST OtherAbstract
+	Type (AAMC | HMD | HSR | KIE | NASA | NCBI | NLM | NTIS |
+              NYA | PIP | Producer | Undetermined) #REQUIRED>
+<!ELEMENT OtherID (#PCDATA)>
+<!ATTLIST OtherID
+	Prefix CDATA #IMPLIED
+	Source (CIT | HMD | HSR | IDM | IHM | KIE | NASA | NLM | 
+                NYA | OCLC | PIP | Undetermined) #REQUIRED>
+<!ELEMENT OtherInformation (#PCDATA)>
+<!ELEMENT OtherSubject (OtherSubjectName, OtherInformation?, TitleAssociatedWithName?)>
+<!ELEMENT OtherSubjectList (OtherSubject+)>
+<!ATTLIST OtherSubjectList
+	Owner (CIT | HMD | HSR | IHM | KIE | NASA | NCBI | NLM | 
+               NOTNLM | NYA | PIP | Undetermined) "Undetermined">
+<!ELEMENT OtherSubjectName (#PCDATA)>
+<!ATTLIST OtherSubjectName
+	MajorTopicYN (Y | N) "N"
+	SubjectType (CorpName | Title | Other) #REQUIRED>
+<!ELEMENT PersonalNameSubject ((LastName, ForeName?, Initials?, Suffix?), 
+          DatesAssociatedWithName?, NameQualifier?, OtherInformation?, 
+          TitleAssociatedWithName?)>
+<!ELEMENT PersonalNameSubjectList (PersonalNameSubject+)>
+<!ELEMENT PhysicalDescription (Form*, Extent*, Runtime?, Generation*, 
+                               BookFormat*, Polarity*, ChapterPgn?)>
+<!ELEMENT Place (#PCDATA)>
+<!ELEMENT PlaceCode (#PCDATA)>
+<!ATTLIST PlaceCode
+	Authority (KIE | MARC | NLM | Other | Undetermined) "Undetermined">
+<!ELEMENT Polarity (#PCDATA)>
+<!ELEMENT ProjectedPublicationDate (#PCDATA)>
+<!ELEMENT PublicationEndYear (#PCDATA)>
+<!ELEMENT PublicationFirstYear (#PCDATA)>
+<!ELEMENT PublicationInfo (Country?, PlaceCode?, Imprint*,  
+                           ProjectedPublicationDate?, CopyrightDate?,
+                           PublicationFirstYear?, PublicationEndYear?, Edition?,
+                           DatesOfSerialPublication*, Frequency*)>
+<!ELEMENT PublicationType (#PCDATA)>
+<!ATTLIST PublicationType
+	UI  CDATA #IMPLIED>
+<!ELEMENT PublicationTypeList (PublicationType+)>
+<!ELEMENT QualifierName (#PCDATA)>
+<!ATTLIST QualifierName
+	MajorTopicYN (Y | N) "N"
+	UI  CDATA #IMPLIED>
+<!ELEMENT RecordID (#PCDATA)>
+<!ATTLIST RecordID
+	Source (NLM | LC | OCLC) #REQUIRED>
+<!ELEMENT ReportNumber (#PCDATA)>
+<!ATTLIST ReportNumber
+	ValidYN (Y | N) "Y">
+<!ELEMENT Resource (ContentType*, MediaType*, CarrierType*)>
+<!ELEMENT ResourceCharacteristics (#PCDATA)>
+<!ATTLIST ResourceCharacteristics
+          Format (Sound | Video | ProjectedMovingImage | DigitalFile) #REQUIRED>
+<!ELEMENT ResourceInfo (TypeOfResource, Issuance, ResourceUnit*, Resource*)>
+<!ELEMENT ResourceUnit (#PCDATA)>
+<!ELEMENT Role (#PCDATA)>
+<!ATTLIST Role
+          CodedYN (Y | N) #REQUIRED>
+<!ELEMENT Runtime (#PCDATA)>
+<!ELEMENT SpaceFlightMission (#PCDATA)>
+<!ELEMENT StockNumber (#PCDATA)>
+<!ELEMENT STRN (#PCDATA)>
+<!ELEMENT Suffix (#PCDATA)>
+<!ELEMENT Title (#PCDATA)>
+<!ATTLIST Title
+	Sort (0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | N) #REQUIRED>
+<!ELEMENT TitleAlternate (Title, MaterialSpecified?, OtherInformation?)>
+<!ATTLIST TitleAlternate
+	Owner (CIT | HMD | HSR | IHM | KIE | NASA | NCBI | NLM |
+               NOTNLM | NYA | PIP | Undetermined) "Undetermined"
+	TitleType (Former | Key |  Other | OtherTA | Translated | 
+	   Undetermined | Uniform) "Undetermined">
+<!ELEMENT TitleAssociatedWithName (#PCDATA)>
+<!ELEMENT TitleMain (Title, OtherInformation?)>
+<!ELEMENT TitleRelated (Title, OtherInformation?, RecordID*, ISSN?)>
+<!ATTLIST TitleRelated
+	Owner (CIT | HMD | HSR | IHM | KIE | NASA | NCBI | NLM |
+               NOTNLM | NYA | PIP | Undetermined) "Undetermined"
+	TitleType (Absorbed | AbsorbedBy | AbsorbedInPart | AbsorbedInPartBy | 
+                   Analytic | MergedTo | MergerOf | Other | Preceding | PrecedingInPart | 
+                   Related | Reversion | Series | SeriesAuthority | SplitFrom | SplitTo | Succeeding |
+                   SucceedingInPart | SupersededBy | SupersededInPartBy | 
+                   Supersedes | SupersedesInPart | Translated | Undetermined) "Undetermined">
+<!ELEMENT TypeOfResource (#PCDATA)>
+<!ELEMENT Year (#PCDATA)>
+<!ELEMENT DeleteCatalogRecord (NlmUniqueID+)>

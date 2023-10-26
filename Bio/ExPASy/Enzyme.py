@@ -4,21 +4,18 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-This module provides code to work with the enzyme.dat file from
-Enzyme.
-http://www.expasy.ch/enzyme/
+"""Parse the enzyme.dat file from Enzyme at ExPASy.
+
+See https://www.expasy.org/enzyme/
 
 Tested with the release of 03-Mar-2009.
 
 Functions:
-
-    - read       Reads a file containing one ENZYME entry
-    - parse      Reads a file containing multiple ENZYME entries
+ - read       Reads a file containing one ENZYME entry
+ - parse      Reads a file containing multiple ENZYME entries
 
 Classes:
-
-    - Record     Holds ENZYME data.
+ - Record     Holds ENZYME data.
 
 """
 
@@ -29,8 +26,10 @@ def parse(handle):
     This function is for parsing ENZYME files containing multiple
     records.
 
-    handle   - handle to the file."""
+    Arguments:
+     - handle   - handle to the file.
 
+    """
     while True:
         record = __read(handle)
         if not record:
@@ -44,8 +43,10 @@ def read(handle):
     This function is for parsing ENZYME files containing
     exactly one record.
 
-    handle   - handle to the file."""
+    Arguments:
+     - handle   - handle to the file.
 
+    """
     record = __read(handle)
     # We should have reached the end of the record by now
     remainder = handle.read()
@@ -55,54 +56,59 @@ def read(handle):
 
 
 class Record(dict):
-    """\
-Holds information from an ExPASy ENZYME record as a Python dictionary.
+    """Holds information from an ExPASy ENZYME record as a Python dictionary.
 
-Each record contains the following keys:
+    Each record contains the following keys:
+
     - ID: EC number
     - DE: Recommended name
     - AN: Alternative names (if any)
     - CA: Catalytic activity
     - CF: Cofactors (if any)
-    - PR: Pointers to the Prosite documentation entrie(s) that
-      correspond to the enzyme (if any)
-    - DR: Pointers to the Swiss-Prot protein sequence entrie(s)
-      that correspond to the enzyme (if any)
+    - PR: Pointers to any Prosite documentation entries that correspond to the
+      enzyme
+    - DR: Pointers to any Swiss-Prot protein sequence entries that correspond
+      to the enzyme
     - CC: Comments
-"""
+
+    """
 
     def __init__(self):
+        """Initialize the class."""
         dict.__init__(self)
-        self["ID"] = ''
-        self["DE"] = ''
+        self["ID"] = ""
+        self["DE"] = ""
         self["AN"] = []
-        self["CA"] = ''
-        self["CF"] = ''
-        self["CC"] = []   # one comment per line
+        self["CA"] = ""
+        self["CF"] = ""
+        self["CC"] = []  # one comment per line
         self["PR"] = []
         self["DR"] = []
 
     def __repr__(self):
+        """Return the canonical string representation of the Record object."""
         if self["ID"]:
             if self["DE"]:
-                return "%s (%s, %s)" % (self.__class__.__name__,
-                                        self["ID"], self["DE"])
+                return f"{self.__class__.__name__} ({self['ID']}, {self['DE']})"
             else:
-                return "%s (%s)" % (self.__class__.__name__,
-                                       self["ID"])
+                return f"{self.__class__.__name__} ({self['ID']})"
         else:
-            return "%s ( )" % (self.__class__.__name__)
+            return f"{self.__class__.__name__} ( )"
 
     def __str__(self):
-        output = "ID: " + self["ID"]
-        output += " DE: " + self["DE"]
-        output += " AN: " + repr(self["AN"])
-        output += " CA: '" + self["CA"] + "'"
-        output += " CF: " + self["CF"]
-        output += " CC: " + repr(self["CC"])
-        output += " PR: " + repr(self["PR"])
-        output += " DR: %d Records" % len(self["DR"])
-        return output
+        """Return a readable string representation of the Record object."""
+        output = [
+            "ID: " + self["ID"],
+            "DE: " + self["DE"],
+            "AN: " + repr(self["AN"]),
+            "CA: '" + self["CA"] + "'",
+            "CF: " + self["CF"],
+            "CC: " + repr(self["CC"]),
+            "PR: " + repr(self["PR"]),
+            "DR: %d Records" % len(self["DR"]),
+        ]
+        return "\n".join(output)
+
 
 # Everything below is private
 
@@ -124,9 +130,9 @@ def __read(handle):
         elif key == "CA":
             record["CA"] += value
         elif key == "DR":
-            pair_data = value.rstrip(";").split(';')
+            pair_data = value.rstrip(";").split(";")
             for pair in pair_data:
-                t1, t2 = pair.split(',')
+                t1, t2 = pair.split(",")
                 row = [t1.strip(), t2.strip()]
                 record["DR"].append(row)
         elif key == "CF":
@@ -138,7 +144,7 @@ def __read(handle):
             assert value.startswith("PROSITE; ")
             value = value[9:].rstrip(";")
             record["PR"].append(value)
-        elif key == 'CC':
+        elif key == "CC":
             if value.startswith("-!- "):
                 record["CC"].append(value[4:])
             elif value.startswith("    ") and record["CC"]:

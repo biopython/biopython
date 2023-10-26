@@ -12,12 +12,11 @@ from search_tests_common import CheckRaw, CheckIndex
 
 
 class Hmmer2TextRawCases(CheckRaw):
-
-    fmt = 'hmmer2-text'
+    fmt = "hmmer2-text"
 
     def test_hmmer2text_22_single_hmmsearch(self):
-        """Test hmmer2-text raw string retrieval, single query, hmmsearch"""
-        filename = os.path.join('Hmmer', 'text_22_hmmsearch_001.out')
+        """Test hmmer2-text raw string retrieval, single query, hmmsearch."""
+        filename = os.path.join("Hmmer", "text_22_hmmsearch_001.out")
         raw = """hmmsearch - search a sequence database with a profile HMM
 HMMER 2.2g (August 2001)
 Copyright (C) 1992-2001 HHMI/Washington University School of Medicine
@@ -195,12 +194,12 @@ tophits_s report:
      Total hits:           4
      Satisfying E cutoff:  4
      Total memory:         20K
-"""  # noqa for pep8 W291 trailing whitespace
-        self.check_raw(filename, 'Peptidase_C1', raw)
+"""  # noqa : W291
+        self.check_raw(filename, "Peptidase_C1", raw)
 
     def test_hmmer2text_22_single_hmmpfam(self):
-        """Test hmmer2-text raw string retrieval, single query, hmmpfam"""
-        filename = os.path.join('Hmmer', 'text_22_hmmpfam_001.out')
+        """Test hmmer2-text raw string retrieval, single query, hmmpfam."""
+        filename = os.path.join("Hmmer", "text_22_hmmpfam_001.out")
         raw = """hmmpfam - search one or more sequences against HMM database
 HMMER 2.2g (August 2001)
 Copyright (C) 1992-2001 HHMI/Washington University School of Medicine
@@ -251,12 +250,12 @@ Methylase_M: domain 1 of 1, from 280 to 481: score -105.2, E = 0.0022
   gi|1522636   464 ---------RFKEIIK--NWKINDINF----ST    481  
 
 //
-"""  # noqa for pep8 W291 trailing whitespace
-        self.check_raw(filename, 'gi|1522636|gb|AAC37060.1|', raw)
+"""  # noqa : W291
+        self.check_raw(filename, "gi|1522636|gb|AAC37060.1|", raw)
 
     def test_hmmer2text_22_multiple_first_hmmpfam(self):
-        """Test hmmer2-text raw string retrieval, multiple queries, hmmpfam"""
-        filename = os.path.join('Hmmer', 'text_24_hmmpfam_001.out')
+        """Test hmmer2-text raw string retrieval, multiple queries, hmmpfam."""
+        filename = os.path.join("Hmmer", "text_24_hmmpfam_001.out")
         raw = """hmmpfam - search one or more sequences against HMM database
 HMMER 2.4i (December 2006)
 Copyright (C) 1992-2006 HHMI Janelia Farm
@@ -283,12 +282,12 @@ Model           Domain  seq-f seq-t    hmm-f hmm-t      score  E-value
 Alignments of top-scoring domains:
 	[no hits above thresholds]
 //
-"""  # noqa for pep8 W291 trailing whitespace
-        self.check_raw(filename, 'random_s00', raw)
+"""  # noqa : W291
+        self.check_raw(filename, "random_s00", raw)  # noqa : E101
 
     def test_hmmer2text_22_multiple_middle_hmmpfam(self):
-        """Test hmmer2-text raw string retrieval, multiple queries, hmmpfam"""
-        filename = os.path.join('Hmmer', 'text_24_hmmpfam_001.out')
+        """Test hmmer2-text raw string retrieval, multiple queries, hmmpfam."""
+        filename = os.path.join("Hmmer", "text_24_hmmpfam_001.out")
         raw = """hmmpfam - search one or more sequences against HMM database
 HMMER 2.4i (December 2006)
 Copyright (C) 1992-2006 HHMI Janelia Farm
@@ -352,12 +351,12 @@ Rotavirus_VP3: domain 1 of 1, from 134 to 147: score -1.2, E = 7.9
   gi|4885477   134    -KALELFRKDMASNY    147  
 
 //
-"""  # noqa for pep8 W291 trailing whitespace
-        self.check_raw(filename, 'gi|4885477|ref|NP_005359.1|', raw)
+"""  # noqa : W291
+        self.check_raw(filename, "gi|4885477|ref|NP_005359.1|", raw)
 
     def test_hmmer2text_22_multiple_last_hmmpfam(self):
-        """Test hmmer2-text raw string retrieval, multiple queries, hmmpfam"""
-        filename = os.path.join('Hmmer', 'text_24_hmmpfam_001.out')
+        """Test hmmer2-text raw string retrieval, multiple queries, hmmpfam."""
+        filename = os.path.join("Hmmer", "text_24_hmmpfam_001.out")
         raw = """hmmpfam - search one or more sequences against HMM database
 HMMER 2.4i (December 2006)
 Copyright (C) 1992-2006 HHMI Janelia Farm
@@ -473,37 +472,36 @@ TFIIB: domain 1 of 1, from 253 to 268: score 2.6, E = 6.1
   gi|1254903   253    ITHIANQLGLEK---DVVR    268  
 
 //
-"""  # noqa for pep8 W291 trailing whitespace
-        self.check_raw(filename, 'gi|125490392|ref|NP_038661.2|', raw)
+"""  # noqa : W291
+        self.check_raw(filename, "gi|125490392|ref|NP_038661.2|", raw)
 
 
 class Hmmer2TextIndexCases(CheckIndex):
-
-    fmt = 'hmmer2-text'
+    fmt = "hmmer2-text"
 
     def test_hmmertext_text_21_hmmpfam_001(self):
-        """Test hmmer2-text indexing, HMMER 2.1"""
-        filename = os.path.join('Hmmer', 'text_21_hmmpfam_001.out')
+        """Test hmmer2-text indexing, HMMER 2.1."""
+        filename = os.path.join("Hmmer", "text_21_hmmpfam_001.out")
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_22_hmmpfam_001(self):
-        """Test hmmer2-text indexing, HMMER 2.2"""
-        filename = os.path.join('Hmmer', 'text_22_hmmpfam_001.out')
+        """Test hmmer2-text indexing, HMMER 2.2."""
+        filename = os.path.join("Hmmer", "text_22_hmmpfam_001.out")
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_23_hmmpfam_001(self):
-        """Test hmmer2-text indexing, HMMER 2.3"""
-        filename = os.path.join('Hmmer', 'text_23_hmmpfam_001.out')
+        """Test hmmer2-text indexing, HMMER 2.3."""
+        filename = os.path.join("Hmmer", "text_23_hmmpfam_001.out")
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_24_hmmpfam_001(self):
-        """Test hmmer2-text indexing, HMMER 2.4"""
-        filename = os.path.join('Hmmer', 'text_24_hmmpfam_001.out')
+        """Test hmmer2-text indexing, HMMER 2.4."""
+        filename = os.path.join("Hmmer", "text_24_hmmpfam_001.out")
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_22_hmmsearch_001(self):
-        """Test hmmer2-text indexing, HMMER 2.2"""
-        filename = os.path.join('Hmmer', 'text_22_hmmsearch_001.out')
+        """Test hmmer2-text indexing, HMMER 2.2."""
+        filename = os.path.join("Hmmer", "text_22_hmmsearch_001.out")
         self.check_index(filename, self.fmt)
 
 

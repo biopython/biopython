@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<protein-matches xmlns="http://www.ebi.ac.uk/interpro/resources/schemas/interproscan5" interproscan-version="5.26-65.0">
+    <protein>
+        <sequence md5="fd17e73db0deb5f461347ec2eda4e559">MDPMDIVGKSKEDASLPKATMTKIIKEMLPPDVRVARDAQDLLIECCVEFINLVSSESNDVCNKEDKRTIAPEHVLKALQVLGFGEYIEEVYAAYEQHKYETMDTQRSVKWNPGAQMTEEEAAAEQQRMFAEARARMNGGVSVPQPEHPETDQRSPQS</sequence>
+        <xref id="AT5G23090.4" name="pacid=19665592 transcript=AT5G23090.4 locus=AT5G23090 ID=AT5G23090.4.TAIR10 annot-version=TAIR10"/>
+        <matches>
+            <hmmer3-match evalue="5.7E-22" score="77.7">
+                <signature ac="PF00808" desc="Histone-like transcription factor (CBF/NF-Y) and archaeal histone" name="CBFD_NFYB_HMF">
+                    <entry ac="IPR003958" desc="Transcription factor CBF/NF-Y/archaeal histone domain" name="CBFA_NFYB_domain" type="DOMAIN">
+                        <go-xref category="MOLECULAR_FUNCTION" db="GO" id="GO:0050660" name="flavin adenine dinucleotide binding"/>
+                        <go-xref category="BIOLOGICAL_PROCESS" db="GO" id="GO:0055114" name="oxidation-reduction process"/>
+                        <go-xref category="MOLECULAR_FUNCTION" db="GO" id="GO:0016627" name="oxidoreductase activity, acting on the CH-CH group of donors"/>
+                        <go-xref category="BIOLOGICAL_PROCESS" db="GO" id="GO:0006099" name="tricarboxylic acid cycle"/>
+                        <pathway-xref db="KEGG" id="00720+1.3.5.1" name="Carbon fixation pathways in prokaryotes"/>
+                        <pathway-xref db="MetaCyc" id="PWY-7279" name="Aerobic respiration II (cytochrome c) (yeast)"/>
+                        <pathway-xref db="KEGG" id="00020+1.3.5.1" name="Citrate cycle (TCA cycle)"/>
+                        <pathway-xref db="MetaCyc" id="PWY-4302" name="Aerobic respiration III (alternative oxidase pathway)"/>
+                        <pathway-xref db="MetaCyc" id="PWY-7254" name="TCA cycle VII (acetate-producers)"/>
+                        <pathway-xref db="MetaCyc" id="PWY-6728" name="Methylaspartate cycle"/>
+                        <pathway-xref db="MetaCyc" id="PWY-561" name="Superpathway of glyoxylate cycle and fatty acid degradation"/>
+                        <pathway-xref db="Reactome" id="R-HSA-71403" name="Citric acid cycle (TCA cycle)"/>
+                        <pathway-xref db="KEGG" id="00190+1.3.5.1" name="Oxidative phosphorylation"/>
+                        <pathway-xref db="MetaCyc" id="PWY-5690" name="TCA cycle II (plants and fungi)"/>
+                        <pathway-xref db="KEGG" id="00650+1.3.5.1" name="Butanoate metabolism"/>
+                        <pathway-xref db="MetaCyc" id="PWY-6969" name="TCA cycle V (2-oxoglutarate:ferredoxin oxidoreductase)"/>
+                        <pathway-xref db="Reactome" id="R-HSA-611105" name="Respiratory electron transport"/>
+                        <pathway-xref db="MetaCyc" id="PWY-3781" name="Aerobic respiration I (cytochrome c)"/>
+                    </entry>
+                    <models>
+                        <model ac="PF00808" desc="Histone-like transcription factor (CBF/NF-Y) and archaeal histone" name="CBFD_NFYB_HMF"/>
+                    </models>
+                    <signature-library-release library="PFAM" version="31.0"/>
+                </signature>
+                <locations>
+                    <hmmer3-location env-end="79" env-start="14" score="76.7" evalue="1.1E-21" hmm-start="1" hmm-end="65" start="14" end="79"/>
+                    <hmmer3-location env-end="89" env-start="24" score="76.7" evalue="1.1E-21" hmm-start="11" hmm-end="75" start="24" end="89"/>
+                </locations>
+            </hmmer3-match>
+            <hmmer3-match evalue="2.4E-25" score="88.4">
+                <signature ac="G3DSA:1.10.20.10">
+                    <models>
+                        <model ac="4g92B00"/>
+                        <model ac="1f1eA00"/>
+                        <model ac="1wwiA00"/>
+                        <model ac="4khaB00"/>
+                        <model ac="3v9rA00"/>
+                        <model ac="1b67A00"/>
+                        <model ac="3nqjA00"/>
+                        <model ac="1tzyF00"/>
+                        <model ac="1bh9B00"/>
+                        <model ac="1bh9A00"/>
+                        <model ac="1q9cA01"/>
+                        <model ac="1h3oA00"/>
+                        <model ac="1tzyC00"/>
+                        <model ac="4drbA00"/>
+                        <model ac="2nqbG00"/>
+                        <model ac="4ne3A00"/>
+                        <model ac="2bykD00"/>
+                        <model ac="1ulyA02"/>
+                        <model ac="1tafB00"/>
+                        <model ac="1tzyE00"/>
+                        <model ac="1h3oB00"/>
+                        <model ac="1eqzH00"/>
+                        <model ac="1n1jB00"/>
+                        <model ac="2hueC00"/>
+                        <model ac="3b0dB00"/>
+                        <model ac="4cayA00"/>
+                        <model ac="4cayB00"/>
+                        <model ac="1tafA00"/>
+                        <model ac="1jfiB00"/>
+                        <model ac="2bykA00"/>
+                        <model ac="2hueB00"/>
+                        <model ac="1kx5A00"/>
+                        <model ac="1kx5D00"/>
+                        <model ac="1kx5B00"/>
+                        <model ac="1r4vA00"/>
+                        <model ac="4m6bA00"/>
+                        <model ac="1jfiA00"/>
+                        <model ac="3b0dC00"/>
+                    </models>
+                    <signature-library-release library="GENE3D" version="4.1.0"/>
+                </signature>
+                <locations>
+                    <hmmer3-location env-end="143" env-start="7" score="88.0" evalue="3.1E-25" hmm-start="9" hmm-end="137" start="7" end="143"/>
+                </locations>
+            </hmmer3-match>
+            <mobidblite-match>
+                <signature ac="mobidb-lite" desc="consensus disorder prediction" name="disorder_prediction">
+                    <signature-library-release library="MOBIDB_LITE" version="1.0"/>
+                </signature>
+                <locations>
+                    <mobidblite-location start="136" end="158"/>
+                </locations>
+            </mobidblite-match>
+            <mobidblite-match>
+                <signature ac="mobidb-lite" desc="consensus disorder prediction" name="disorder_prediction">
+                    <signature-library-release library="MOBIDB_LITE" version="1.0"/>
+                </signature>
+                <locations>
+                    <mobidblite-location start="36" end="58"/>
+                </locations>
+            </mobidblite-match>
+            <superfamilyhmmer3-match evalue="2.48E-35">
+                <signature ac="SSF47113" name="Histone-fold">
+                    <entry ac="IPR009072" desc="Histone-fold" name="Histone-fold" type="HOMOLOGOUS_SUPERFAMILY">
+                        <go-xref category="MOLECULAR_FUNCTION" db="GO" id="GO:0046982" name="protein heterodimerization activity"/>
+                    </entry>
+                    <models>
+                        <model ac="0035368" name="Histone-fold"/>
+                        <model ac="0047349" name="Histone-fold"/>
+                        <model ac="0047348" name="Histone-fold"/>
+                        <model ac="0034938" name="Histone-fold"/>
+                        <model ac="0040265" name="Histone-fold"/>
+                        <model ac="0042675" name="Histone-fold"/>
+                        <model ac="0038404" name="Histone-fold"/>
+                        <model ac="0054243" name="Histone-fold"/>
+                        <model ac="0040304" name="Histone-fold"/>
+                        <model ac="0049583" name="Histone-fold"/>
+                        <model ac="0037139" name="Histone-fold"/>
+                        <model ac="0047574" name="Histone-fold"/>
+                        <model ac="0049584" name="Histone-fold"/>
+                        <model ac="0037328" name="Histone-fold"/>
+                        <model ac="0049779" name="Histone-fold"/>
+                        <model ac="0038979" name="Histone-fold"/>
+                        <model ac="0041190" name="Histone-fold"/>
+                        <model ac="0039520" name="Histone-fold"/>
+                        <model ac="0040306" name="Histone-fold"/>
+                        <model ac="0043120" name="Histone-fold"/>
+                        <model ac="0047118" name="Histone-fold"/>
+                        <model ac="0035550" name="Histone-fold"/>
+                        <model ac="0041191" name="Histone-fold"/>
+                        <model ac="0047904" name="Histone-fold"/>
+                        <model ac="0038978" name="Histone-fold"/>
+                        <model ac="0052079" name="Histone-fold"/>
+                        <model ac="0035549" name="Histone-fold"/>
+                        <model ac="0052078" name="Histone-fold"/>
+                        <model ac="0037410" name="Histone-fold"/>
+                        <model ac="0050728" name="Histone-fold"/>
+                        <model ac="0047903" name="Histone-fold"/>
+                        <model ac="0046611" name="Histone-fold"/>
+                    </models>
+                    <signature-library-release library="SUPERFAMILY" version="1.75"/>
+                </signature>
+                <locations>
+                    <superfamilyhmmer3-location start="12" end="141"/>
+                </locations>
+            </superfamilyhmmer3-match>
+        </matches>
+    </protein>
+    <protein>
+        <sequence md5="f09fabef7feaf88b2964da0045856024">MASTSIMLSSFFSFFFLTFFVTYAQQNVTVHTICYYDGGNFTSNTSYSLNLNRLISSLPDLTPTINGFYNISINGEVNAIALCRGDVKPNQDCISCITTAAKQLVESCPNIIEANIWLEKCMFRYTSRIILGQMEPVPFSYTSSNVSVTDKEGFSKGLGDLLDSLGAKIDAANETKEVKFAAGVKGTIYALAQCTPDLSESDCRICLAQIFAGVPTCCDGKTGGWWTNPSCYFRFEVYPFFDLSVTSEQKQPLSSHNNNTRRSDQGKSKDRSKTLIFAVVPIVAIILGLVFLFIYLKRRRKKKTLKENAENEFESTDSLHFDFETIRVATDDFSLTNKIGEGGFGVVYKGHLPDGLEIAVKRLSIHSGQGNAEFKTEVLLMTKLQHKNLVKLFGFSIKESERLLVYEFIPNTSLDRFLFDPIKQKQLDWEKRYNIIVGVSRGLLYLHEGSEFPIIHRDLKSSNVLLDEQMLPKISDFGMARQFDFDNTQAVTRRVVGTYGYMAPEYAMHGRFSVKTDVYSFGVLVLEIITGKRNSGLGLGEGTDLPTFAWQNWIEGTSMELIDPVLLQTHDKKESMQCLEIALSCVQENPTKRPTMDSVVSMLSSDSESRQLPKPSQPGFFRRSASFSISLNDVSLTDLSAR</sequence>
+        <xref id="AT4G21230.1" name="pacid=19647625 transcript=AT4G21230.1 locus=AT4G21230 ID=AT4G21230.1.TAIR10 annot-version=TAIR10"/>
+        <matches>
+            <coils-match>
+                <signature ac="Coil" name="Coil">
+                    <signature-library-release library="COILS" version="2.2.1"/>
+                </signature>
+                <locations>
+                    <coils-location start="636" end="642"/>
+                </locations>
+            </coils-match>
+            <hmmer2-match evalue="8.4E-35" score="131.6">
+                <signature ac="SM00220" name="serkin_6">
+                    <entry ac="IPR000719" desc="Protein kinase domain" name="Prot_kinase_dom" type="DOMAIN">
+                        <go-xref category="MOLECULAR_FUNCTION" db="GO" id="GO:0004672" name="protein kinase activity"/>
+                        <go-xref category="BIOLOGICAL_PROCESS" db="GO" id="GO:0006468" name="protein phosphorylation"/>
+                        <go-xref category="MOLECULAR_FUNCTION" db="GO" id="GO:0005524" name="ATP binding"/>
+                    </entry>
+                    <models>
+                        <model ac="SM00220" name="serkin_6"/>
+                    </models>
+                    <signature-library-release library="SMART" version="7.1"/>
+                </signature>
+                <locations>
+                    <hmmer2-location score="131.6" evalue="8.4E-35" hmm-start="1" hmm-end="231" start="333" end="603"/>
+                </locations>
+            </hmmer2-match>
+            <hmmer3-match evalue="2.5E-50" score="171.1">
+                <signature ac="PF07714" desc="Protein tyrosine kinase" name="Pkinase_Tyr">
+                    <entry ac="IPR001245" desc="Serine-threonine/tyrosine-protein kinase, catalytic domain" name="Ser-Thr/Tyr_kinase_cat_dom" type="DOMAIN">
+                        <go-xref category="MOLECULAR_FUNCTION" db="GO" id="GO:0004672" name="protein kinase activity"/>
+                        <go-xref category="BIOLOGICAL_PROCESS" db="GO" id="GO:0006468" name="protein phosphorylation"/>
+                    </entry>
+                    <signature-library-release library="PFAM" version="31.0"/>
+                </signature>
+                <locations>
+                    <hmmer3-location env-end="603" env-start="333" score="170.6" evalue="3.5E-50" hmm-start="2" hmm-end="260" start="334" end="603"/>
+                </locations>
+            </hmmer3-match>
+        </matches>
+    </protein>
+    <protein>
+        <sequence md5="ebc9372577bb293872fd313988a7bc82">MKNLSIFLFVVGLCMISDVYGKKSTITVKNELNPKNKNILKVHCKSKNNDIGVKYLKIGEVMSFSFKTNFWGTTEFWCNLYKGPDYKRYRGITAYQAIGLFAKDGSSYNWLARDDGIYFHKDSLPSYYKTYWL</sequence>
+        <xref id="AT3G26880.1" name="pacid=19659241 transcript=AT3G26880.1 locus=AT3G26880 ID=AT3G26880.1.TAIR10 annot-version=TAIR10"/>
+        <matches>
+            <hmmer3-match evalue="1.4E-26" score="92.9">
+                <signature ac="PF05938" desc="Plant self-incompatibility protein S1" name="Self-incomp_S1">
+                    <models>
+                        <model ac="PF05938" desc="Plant self-incompatibility protein S1" name="Self-incomp_S1"/>
+                    </models>
+                    <signature-library-release library="PFAM" version="31.0"/>
+                </signature>
+                <locations>
+                    <hmmer3-location env-end="132" env-start="25" score="92.7" evalue="1.6E-26" hmm-start="1" hmm-end="102" start="25" end="131"/>
+                </locations>
+            </hmmer3-match>
+        </matches>
+    </protein>
+    <protein>
+        <sequence md5="532b059748db0acbd94e31c6ea953223">MLKIKRVPTVVSNYQKDDGAEDPVGCGRNCLGACCLNGARLPLYACKNLVKSGEKLVISHEAIEPPVAFLESLVLGEWEDRFQRGLFRYDVTACETKVIPGKYGFVAQLNEGRHLKKRPTEFRVDKVLQSFDGSKFNFTKVGQEELLFQFEAGEDAQVQFFPCMPIDPENSPSVVAINVSPIEYGHVLLIPRVLDCLPQRIDHKSLLLAVHMAAEAANPYFRLGYNSLGAFATINHLHFQAYYLAMPFPLEKAPTKKITTTVSGVKISELLSYPVRSLLFEGGSSMQELSDTVSDCCVCLQNNNIPFNILISDCGRQIFLMPQCYAEKQALGEVSPEVLETQVNPAVWEISGHMVLKRKEDYEGASEDNAWRLLAEASLSEERFKEVTALAFEAIGCSNQEEDLEGTIVHQQNSSGNVNQKSNRTHGGPITNGTAAECLVLQ</sequence>
+        <xref id="AT4G26850.1" name="pacid=19647214 transcript=AT4G26850.1 locus=AT4G26850 ID=AT4G26850.1.TAIR10 annot-version=TAIR10"/>
+        <matches/>
+    </protein>
+</protein-matches>

@@ -3,7 +3,8 @@
 # as part of this package.
 #
 
-from __future__ import print_function
+"""Example of using GenomeDiagram cross-links to mimic ACT."""
+
 
 import sys
 import os
@@ -11,7 +12,7 @@ from reportlab.lib import colors
 from reportlab.lib.units import cm
 
 from Bio.Graphics.GenomeDiagram import Diagram, CrossLink
-from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqFeature import SeqFeature, SimpleLocation
 from Bio import SeqIO
 
 # Modify this line to point at the Artemis/ACT example data which is online at:
@@ -40,15 +41,21 @@ comparisons = [os.path.join(input_folder, file_a_vs_b)]
 # Create diagram with tracks, each with a feature set
 assert len(genomes) >= 2 and len(genomes) == len(comparisons) + 1
 gd_diagram = Diagram(name, track_size=0.35, circular=False)
-tracks = dict()
-feature_sets = dict()
-records = dict()
+tracks = {}
+feature_sets = {}
+records = {}
 for f, format in genomes:
     records[f] = SeqIO.read(f, format)
-    tracks[f] = gd_diagram.new_track(1, name=f, start=0, end=len(records[f]),
-                                     scale_smalltick_interval=1000,
-                                     scale_largetick_interval=10000,
-                                     greytrack=True, greytrack_labels=0)
+    tracks[f] = gd_diagram.new_track(
+        1,
+        name=f,
+        start=0,
+        end=len(records[f]),
+        scale_smalltick_interval=1000,
+        scale_largetick_interval=10000,
+        greytrack=True,
+        greytrack_labels=0,
+    )
     feature_sets[f] = tracks[f].new_set()
 
 print("Drawing matches...")
@@ -90,13 +97,15 @@ for i, crunch_file in enumerate(comparisons):
             else:
                 c = colors.Color(1, 0, 0, alpha=0.25)
                 b = False
-            q_feature = q_set.add_feature(SeqFeature(FeatureLocation(q_start - 1, q_end)),
-                                          color=c, border=b)
-            s_feature = s_set.add_feature(SeqFeature(FeatureLocation(s_start - 1, s_end)),
-                                          color=c, border=b)
+            q_feature = q_set.add_feature(
+                SeqFeature(SimpleLocation(q_start - 1, q_end)), color=c, border=b
+            )
+            s_feature = s_set.add_feature(
+                SeqFeature(SimpleLocation(s_start - 1, s_end)), color=c, border=b
+            )
             gd_diagram.cross_track_links.append(CrossLink(q_feature, s_feature, c, b))
             # NOTE: We are using the same colour for all the matches,
-            # with transparency. This means overlayed matches will appear darker.
+            # with transparency. This means overlaid matches will appear darker.
             # It also means the drawing order not very important.
             # Note ACT puts long hits at the back, and colours by hit score
 
@@ -108,14 +117,14 @@ for f, format in genomes:
     for cds in record.features:
         if cds.type != "CDS":
             continue
-        feature_set.add_feature(cds, sigil="ARROW",
-                                color=colors.lightblue,
-                                border=colors.blue)
+        feature_set.add_feature(
+            cds, sigil="ARROW", color=colors.lightblue, border=colors.blue
+        )
 
-gd_diagram.draw(format="linear", fragments=3,
-                orientation="landscape", pagesize=(20 * cm, 10 * cm))
+gd_diagram.draw(
+    format="linear", fragments=3, orientation="landscape", pagesize=(20 * cm, 10 * cm)
+)
 gd_diagram.write(name + ".pdf", "PDF")
 
-gd_diagram.draw(format="circular",
-                orientation="landscape", pagesize=(20 * cm, 20 * cm))
+gd_diagram.draw(format="circular", orientation="landscape", pagesize=(20 * cm, 20 * cm))
 gd_diagram.write(name + "_c.pdf", "PDF")

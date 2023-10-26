@@ -1,0 +1,102 @@
+# =================================================
+# flake8:
+#   pycodestyle: E### (error), W### (warning)
+#   pyflake:     F### (error)
+# pydocstyle: D1## - Missing Docstrings
+#             D2## - Whitespace Issues
+#             D4## - Docstring Content issues
+# flake8-blind-except: B###
+# flake8-bugbear: B###
+# flake8-quotes: Q###
+# flake8-black : BLK###
+# flake8-commas: C8## (in case installed locally)
+# flake8-pie : PIE### (in case installed locally)
+# flake8-sfs : SFS### (in case installed locally)
+# =================================================
+
+[flake8]
+doctests = True
+rst-roles =
+    class,
+    func,
+    meth,
+    mod,
+    data,
+rst-directives =
+    seealso,
+    todo,
+# Exclude some file types and folders that shouldn't be checked:
+exclude = .svn,CVS,.bzr,.hg,.git,__pycache__,.tox,.github,build
+ignore =
+    # =============================================================
+    # Biopython's 'standard' ignores we can agree to always accept:
+    # =============================================================
+    W503,
+    # line-break before binary operator
+    # deliberately ignore (in favour of enforcing W504)
+    # ===========================================
+    # Ignores that we have to accept for a while:
+    # ===========================================
+    E203,
+    # whitespace before ':'
+    # gives false positives after running black, see
+    # https://github.com/PyCQA/pycodestyle/issues/373
+    E501,
+    # line too long
+    # Maybe we find a sensible limit, e.g. 88 (black) and enforce it
+    B007,
+    # Loop control variable not used within the loop body.
+    # If this is intended, start the name with an underscore
+    B028,
+    # No explicit stacklevel keyword argument found.
+    # The warn method from the warnings module uses a stacklevel of 1
+    # by default... It is therefore recommended to use a stacklevel of
+    # 2 or greater to provide more information to the user
+    B902,
+    # blind except Exception: statement
+    # =========================================
+    # Optional ignores for local installations:
+    # =========================================
+    PIE781,
+    # Assigning to temp variable and then returning, not enforcing
+    SFS101,SFS301,
+    # typical string formatting
+    C8,
+    # everything from flake8-commas - just use black
+
+# ========================
+# Folder specific ignores:
+# ========================
+per-file-ignores =
+    Bio/*:F401,F841,D105,B009,B010
+    Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B015
+
+    # Due to a bug in flake8, we need the following lines for running the
+    # pre-commit hook. If you made edits above, please change also here!
+    /Bio/*:F401,F841,D105,B009,B010
+    /Tests/*:F401,F841,D101,D102,D103,B009,B010,B015
+
+#Explanation of the codes being ignored in Bio/ and Tests/:
+#
+#Bio/*:F401 module imported but unused TODO? (97 occurrences)
+#      F841 local variable is assigned to but never used TODO? (58 occurrences)
+#      B009 do not call getattr with a constant attribute value (5 occurrences),
+#           it is not any safer than normal property access
+#      B010 do not call setattr with a constant attribute value (11 occurrences),
+#           it is not any safer than normal property access
+#Tests/*:F401 module imported but unused TODO? (115 occurrences)
+#        F841 local variable is assigned to but never used TODO? (93 occurrences)
+#        D101 missing docstring in public class (244 occurrences)
+#        D102 missing docstring in public method (1368 occurrences)
+#        D103 missing docstring in public functions (20 occurrences)
+#        B009 do not call getattr with a constant attribute value (10 occurrences),
+#             it is not any safer than normal property access
+#        B010 do not call setattr with a constant attribute value (7 occurrences),
+#             it is not any safer than normal property access
+#        B015 Pointless comparison. This comparison does nothing ... (108 occurrences)
+#             (Intended to trigger exceptions in our tests)
+
+# =======================
+# flake8-quotes settings:
+# =======================
+inline-quotes = double

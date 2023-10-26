@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+# Copyright 2000 Brad Chapman.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Check for the ability to read and write identical GenBank records.
 
 This script takes as input a single file to be tested for reading records.
@@ -9,16 +14,10 @@ Usage:
 python check_output.py <name of file to parse>
 """
 # standard modules
-from __future__ import print_function
-
 import sys
 import os
 import gzip
-
-try:
-    from StringIO import StringIO  # Python 2
-except ImportError:
-    from io import StringIO  # Python 3
+from io import StringIO
 
 # biopython
 from Bio import GenBank
@@ -27,7 +26,7 @@ from Bio import GenBank
 def do_comparison(good_record, test_record):
     """Compare two records to see if they are the same.
 
-    Ths compares the two GenBank record, and will raise an AssertionError
+    This compares the two GenBank record, and will raise an AssertionError
     if two lines do not match, showing the non-matching lines.
     """
     good_handle = StringIO(good_record)
@@ -37,33 +36,34 @@ def do_comparison(good_record, test_record):
         good_line = good_handle.readline()
         test_line = test_handle.readline()
 
-        if not(good_line) and not(test_line):
+        if not good_line and not test_line:
             break
 
-        if not(good_line):
+        if not good_line:
             if good_line.strip():
-                raise AssertionError("Extra info in Test: `%s`" % test_line)
-        if not(test_line):
+                raise AssertionError(f"Extra info in Test: `{test_line}`")
+        if not test_line:
             if test_line.strip():
-                raise AssertionError("Extra info in Expected: `%s`"
-                                     % good_line)
+                raise AssertionError(f"Extra info in Expected: `{good_line}`")
 
-        assert test_line == good_line, \
-            "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
-            (good_line, test_line)
+        assert test_line == good_line, (
+            "Expected does not match Test.\n"
+            f"Expect:`{good_line}`\nTest  :`{test_line}`\n"
+        )
 
 
 def write_format(file):
+    """Write a GenBank record from a Genbank file and compare them."""
     record_parser = GenBank.RecordParser(debug_level=2)
 
     print("Testing GenBank writing for %s..." % os.path.basename(file))
     # be able to handle gzipped files
-    if '.gz' in file:
-        cur_handle = gzip.open(file, "r")
-        compare_handle = gzip.open(file, "r")
+    if ".gz" in file:
+        cur_handle = gzip.open(file, "rb")
+        compare_handle = gzip.open(file, "rb")
     else:
-        cur_handle = open(file, "r")
-        compare_handle = open(file, "r")
+        cur_handle = open(file)
+        compare_handle = open(file)
 
     iterator = GenBank.Iterator(cur_handle, record_parser)
     compare_iterator = GenBank.Iterator(compare_handle)
@@ -81,11 +81,12 @@ def write_format(file):
         try:
             do_comparison(compare_record, output_record)
         except AssertionError as msg:
-            print("\tTesting for %s" % cur_record.version)
+            print(f"\tTesting for {cur_record.version}")
             print(msg)
 
     cur_handle.close()
     compare_handle.close()
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

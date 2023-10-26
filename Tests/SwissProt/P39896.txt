@@ -1,0 +1,85 @@
+ID   TCMO_STRGA              Reviewed;         339 AA.
+AC   P39896;
+DT   01-FEB-1995, integrated into UniProtKB/Swiss-Prot.
+DT   01-FEB-1995, sequence version 1.
+DT   03-AUG-2022, entry version 75.
+DE   RecName: Full=Tetracenomycin polyketide synthesis 8-O-methyl transferase TcmO;
+DE            EC=2.1.1.-;
+GN   Name=tcmO;
+OS   Streptomyces glaucescens.
+OC   Bacteria; Actinobacteria; Streptomycetales; Streptomycetaceae;
+OC   Streptomyces.
+OX   NCBI_TaxID=1907;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RC   STRAIN=DSM 40716 / ETH 22794 / Tue 49;
+RX   PubMed=1548230; DOI=10.1128/jb.174.6.1810-1820.1992;
+RA   Summers R.G., Wendt-Pienkowski E., Motamedi H., Hutchinson C.R.;
+RT   "Nucleotide sequence of the tcmII-tcmIV region of the tetracenomycin C
+RT   biosynthetic gene cluster of Streptomyces glaucescens and evidence that the
+RT   tcmN gene encodes a multifunctional cyclase-dehydratase-O-methyl
+RT   transferase.";
+RL   J. Bacteriol. 174:1810-1820(1992).
+CC   -!- PATHWAY: Antibiotic biosynthesis; tetracenomycin C biosynthesis.
+CC   -!- SIMILARITY: Belongs to the class I-like SAM-binding methyltransferase
+CC       superfamily. Cation-independent O-methyltransferase family.
+CC       {ECO:0000255|PROSITE-ProRule:PRU01020}.
+CC   ---------------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see https://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution (CC BY 4.0) License
+CC   ---------------------------------------------------------------------------
+DR   EMBL; M80674; AAA67519.1; -; Genomic_DNA.
+DR   PIR; C42276; C42276.
+DR   RefSeq; WP_043504920.1; NZ_CP009438.1.
+DR   AlphaFoldDB; P39896; -.
+DR   SMR; P39896; -.
+DR   STRING; 1907.SGLAU_26375; -.
+DR   eggNOG; COG2345; Bacteria.
+DR   OMA; NTNHGEL; -.
+DR   OrthoDB; 1213908at2; -.
+DR   BioCyc; MetaCyc:MON-18605; -.
+DR   UniPathway; UPA00174; -.
+DR   GO; GO:0008171; F:O-methyltransferase activity; IEA:InterPro.
+DR   GO; GO:0017000; P:antibiotic biosynthetic process; IEA:UniProtKB-KW.
+DR   GO; GO:0032259; P:methylation; IEA:UniProtKB-KW.
+DR   Gene3D; 1.10.10.10; -; 1.
+DR   Gene3D; 3.40.50.150; -; 1.
+DR   InterPro; IPR031725; ASMT_dimerisation.
+DR   InterPro; IPR016461; COMT-like.
+DR   InterPro; IPR001077; O_MeTrfase_dom.
+DR   InterPro; IPR029063; SAM-dependent_MTases_sf.
+DR   InterPro; IPR036388; WH-like_DNA-bd_sf.
+DR   InterPro; IPR036390; WH_DNA-bd_sf.
+DR   PANTHER; PTHR11746; PTHR11746; 1.
+DR   Pfam; PF16864; Dimerisation2; 1.
+DR   Pfam; PF00891; Methyltransf_2; 1.
+DR   PIRSF; PIRSF005739; O-mtase; 1.
+DR   SUPFAM; SSF46785; SSF46785; 1.
+DR   SUPFAM; SSF53335; SSF53335; 1.
+DR   PROSITE; PS51683; SAM_OMT_II; 1.
+PE   3: Inferred from homology;
+KW   Antibiotic biosynthesis; Methyltransferase; S-adenosyl-L-methionine;
+KW   Transferase.
+FT   CHAIN           1..339
+FT                   /note="Tetracenomycin polyketide synthesis 8-O-methyl
+FT                   transferase TcmO"
+FT                   /id="PRO_0000072457"
+FT   ACT_SITE        246
+FT                   /note="Proton acceptor"
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU01020"
+FT   BINDING         200
+FT                   /ligand="S-adenosyl-L-methionine"
+FT                   /ligand_id="ChEBI:CHEBI:59789"
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU01020"
+FT   BINDING         226..228
+FT                   /ligand="S-adenosyl-L-methionine"
+FT                   /ligand_id="ChEBI:CHEBI:59789"
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU01020"
+SQ   SEQUENCE   339 AA;  37035 MW;  B228B66B24217F80 CRC64;
+     MTPHTHVRGP GDILQLTMAF YGSRALISAV ELDLFTLLAG KPLPLGELCE RAGIHPRGAR
+     DFLDALVALG LLEREGEDTY RNSPAADRHL DRRKPGYVGG YARLADTKLF PVWARLTEAL
+     RTGEKQVPSQ GGFFGGYADP EAARGFLGAM DAVNGGVGHS LAGALDWTEY SSFVDLGGAR
+     GNLAAHLHRA HPHLRATCFD LPEMEPFFQE HMKSLETTDQ VRFAGGDFFT DPLPRADVFI
+     VGHILHYFGL RQREALIARI HQALTPGGAV LVYDRMIDDD RRSAALSLLG SLNMLLTSDE
+     GREYTPAECV RWLSDAGFTD VRTTAVSGPD TLAIGRKPR
+//

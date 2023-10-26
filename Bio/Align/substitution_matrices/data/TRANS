@@ -1,0 +1,12 @@
+#  David Wheeler,
+#  Department of Cell Biology, Baylor College of Medicine, Houston, Texas:
+#  "Weight matrices for sequence similarity scoring."
+#  Version 2.0, May 1996.
+#  David Wheeler defined the Transition/Transversion Matrix as a penalty
+#  matrix; the matrix below is a similarity matrix where
+#  similarity = 5 - penalty.
+   A  T  C  G
+A  5  0  0  4
+T  0  5  4  0
+C  0  4  5  0
+G  4  0  0  5

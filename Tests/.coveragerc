@@ -1,0 +1,18 @@
+# This is a configuration file for the Python testing tool
+# "coverage", see https://bitbucket.org/ned/coveragepy
+#
+# Biopython uses this via TravisCI/Tox to report test coverage
+# to https://codecov.io/gh/biopython/biopython
+
+[report]
+# Regexes for lines to exclude from consideration
+exclude_lines =
+    # Have to re-enable the standard pragma
+    pragma: no cover
+
+    # Don't complain about missing debug-only code:
+    if __debug__:
+
+    # Don't complain about any self-tests or the handful
+    # of files with a directly executable bit of code:
+    if __name__ == .__main__.:

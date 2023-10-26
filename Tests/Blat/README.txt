@@ -19,3 +19,11 @@ pslx_34_002.pslx      PSLX format, single query, no hits
 pslx_34_003.pslx      PSLX format, single query, hits with single HSP
 pslx_34_004.pslx      PSLX format, single query, hits with multiple HSPs
 pslx_34_005.pslx      PSLX format, multiple queries, no header
+
+
+BLAT v35
+--------
+psl_35_001.psl      PSL format, protein query
+psl_35_002.psl      PSL format, protein query with hits on negative strand
+
+psl_35_002.pslx       PSLX format, protein query with hits on negative strand

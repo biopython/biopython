@@ -1,10 +1,9 @@
 # Copyright 2001 by Gavin E. Crooks.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
-
-""" Handle the SCOP DEScription file.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Handle the SCOP DEScription file.
 
 The file format is described in the scop
 "release notes.":http://scop.berkeley.edu/release-notes-1.55.html
@@ -15,11 +14,10 @@ The latest DES file can be found
 """
 
 
-class Record(object):
+class Record:
     """Holds information for one node in the SCOP hierarchy.
 
     Attributes:
-
      - sunid - SCOP unique identifiers
      - nodetype - One of 'cl' (class), 'cf' (fold), 'sf' (superfamily),
        'fa' (family), 'dm' (protein), 'sp' (species), 'px' (domain).
@@ -29,17 +27,19 @@ class Record(object):
      - description - e.g. "All beta proteins","Fibronectin type III",
 
     """
+
     def __init__(self, line=None):
-        self.sunid = ''
-        self.nodetype = ''
-        self.sccs = ''
-        self.name = ''
-        self.description = ''
+        """Initialize the class."""
+        self.sunid = ""
+        self.nodetype = ""
+        self.sccs = ""
+        self.name = ""
+        self.description = ""
         if line:
             self._process(line)
 
     def _process(self, line):
-        """Parses DES records.
+        """Parse DES records (PRIVATE).
 
         Records consist of 5 tab deliminated fields,
         sunid, node type, sccs, node name, node description.
@@ -55,14 +55,15 @@ class Record(object):
         line = line.rstrip()  # no trailing whitespace
         columns = line.split("\t")  # separate the tab-delineated cols
         if len(columns) != 5:
-            raise ValueError("I don't understand the format of %s" % line)
+            raise ValueError(f"I don't understand the format of {line}")
 
         sunid, self.nodetype, self.sccs, self.name, self.description = columns
-        if self.name == '-':
-            self.name = ''
+        if self.name == "-":
+            self.name = ""
         self.sunid = int(sunid)
 
     def __str__(self):
+        """Represent the SCOP description record as a tab-separated string."""
         s = []
         s.append(self.sunid)
         s.append(self.nodetype)
@@ -76,13 +77,13 @@ class Record(object):
 
 
 def parse(handle):
-    """Iterates over a DES file as a Des record for each line
+    """Iterate over a DES file as a Des record for each line.
 
     Arguments:
-
      - handle - file-like object
+
     """
     for line in handle:
-        if line.startswith('#'):
+        if line.startswith("#"):
             continue
         yield Record(line)

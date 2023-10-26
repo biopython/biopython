@@ -19,7 +19,8 @@ testdb=biosql_test
 
 [pg]
 # Covers DBDRIVER="psycopg2" etc
+# The database and user below are created in .travis.yml
 dbhost=localhost
-dbuser=postgres
-dbpasswd=
+dbuser=biosql_user
+dbpasswd=biosql_pass
 testdb=biosql_test

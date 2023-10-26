@@ -1,11 +1,11 @@
 # Copyright 2001 by Gavin E. Crooks.  All rights reserved.
-# Modifications Copyright 2010 Jeffrey Finkelstein. All rights reserved.
+# Revisions copyright 2010 Jeffrey Finkelstein. All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
-""" Handle the SCOP CLAssification file, which describes SCOP domains.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Handle the SCOP CLAssification file, which describes SCOP domains.
 
 The file format is described in the scop
 "release notes.":http://scop.mrc-lmb.cam.ac.uk/scop/release-notes.html
@@ -20,11 +20,10 @@ The latest CLA file can be found
 from . import Residues
 
 
-class Record(object):
+class Record:
     """Holds information for one SCOP domain.
 
     Attributes:
-
      - sid - SCOP identifier. e.g. d1danl2
      - residues - The domain definition as a Residues object
      - sccs - SCOP concise classification strings.  e.g. b.1.2.1
@@ -34,21 +33,24 @@ class Record(object):
        the Scop module for a description of nodetypes. This used to be a
        list of (key,value) tuples in older versions of Biopython (see
        Bug 3109).
+
     """
+
     def __init__(self, line=None):
-        self.sid = ''
+        """Initialize the class."""
+        self.sid = ""
         self.residues = None
-        self.sccs = ''
-        self.sunid = ''
+        self.sccs = ""
+        self.sunid = ""
         self.hierarchy = {}
         if line:
             self._process(line)
 
     def _process(self, line):
-        line = line.rstrip()         # no trailing whitespace
-        columns = line.split('\t')   # separate the tab-delineated cols
+        line = line.rstrip()  # no trailing whitespace
+        columns = line.split("\t")  # separate the tab-delineated cols
         if len(columns) != 6:
-            raise ValueError("I don't understand the format of %s" % line)
+            raise ValueError(f"I don't understand the format of {line}")
 
         self.sid, pdbid, residues, self.sccs, self.sunid, hierarchy = columns
         self.residues = Residues.Residues(residues)
@@ -56,53 +58,58 @@ class Record(object):
         self.sunid = int(self.sunid)
 
         for ht in hierarchy.split(","):
-            key, value = ht.split('=')
+            key, value = ht.split("=")
             self.hierarchy[key] = int(value)
 
     def __str__(self):
+        """Represent the SCOP classification record as a tab-separated string."""
         s = []
         s.append(self.sid)
         s += str(self.residues).split(" ")
         s.append(self.sccs)
         s.append(self.sunid)
 
-        s.append(','.join('='.join((key, str(value))) for key, value
-                          in self.hierarchy.items()))
+        s.append(
+            ",".join(
+                "=".join((key, str(value))) for key, value in self.hierarchy.items()
+            )
+        )
 
         return "\t".join(map(str, s)) + "\n"
 
 
 def parse(handle):
-    """Iterates over a CLA file as Cla records for each line.
+    """Iterate over a CLA file as Cla records for each line.
 
     Arguments:
-
      - handle - file-like object.
+
     """
     for line in handle:
-        if line.startswith('#'):
+        if line.startswith("#"):
             continue
         yield Record(line)
 
 
 class Index(dict):
     """A CLA file indexed by SCOP identifiers for rapid random access."""
+
     def __init__(self, filename):
         """Create CLA index.
 
         Arguments:
-
          - filename - The file to index
+
         """
         dict.__init__(self)
         self.filename = filename
-        with open(self.filename, "rU") as f:
+        with open(self.filename) as f:
             position = 0
             while True:
                 line = f.readline()
                 if not line:
                     break
-                if line.startswith('#'):
+                if line.startswith("#"):
                     continue
                 record = Record(line)
                 key = record.sid
@@ -114,7 +121,7 @@ class Index(dict):
         """Return an item from the indexed file."""
         position = dict.__getitem__(self, key)
 
-        with open(self.filename, "rU") as f:
+        with open(self.filename) as f:
             f.seek(position)
             line = f.readline()
             record = Record(line)

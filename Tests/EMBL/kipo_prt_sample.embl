@@ -1,0 +1,596 @@
+ID   DI500001       STANDARD;      PRT;   111 AA.
+XX
+AC   DI500001;
+XX
+DT   21-FEB-2008
+XX
+DE   KR 1020047013665-A/4: INTERNALIZING ANTI-CD-74 ANTIBODIES AND
+DE   METHODS OF USE.
+XX
+KW   KR 1020047013665-A/4.
+XX
+OS   Mus musculus (house mouse)
+OC   Mus musculus
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Glires; Rodentia;
+OC   Sciurognathi; Muroidea; Muridae; Murinae; Mus; Mus.
+XX
+RN   []
+RP   [-]
+RA   Hansen,H., Leung,S., Qu,Z. and Goldenberg,D.M.;
+RT   "INTERNALIZING ANTI-CD-74 ANTIBODIES AND METHODS OF USE";
+RL   Patent: KR 1020047013665-A/4 01-SEP-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..111
+XX
+SQ   SEQUENCE   111 AA;  749F21BE CRC32;
+     DVVMTQTPLS LPVSLGDQAS ISCRSSQSLV HRNGNTYLHW YLQKPGQSPK LLIYTVSNRF        60
+     SGVPDRFSGS GSGTDFTLKI SRVEAEDLGL YFCSQSSHVP PTFGAGTKLE I                111
+//
+ID   DI500002       STANDARD;      PRT;    27 AA.
+XX
+AC   DI500002;
+XX
+DT   30-APR-2009
+XX
+DE   KR 1020047013597-A/36: Conjugates of Therapeutic or Cytotoxic
+DE   Agents and Biologically Active Peptides.
+XX
+KW   KR 1020047013597-A/36.
+XX
+OS   synthetic construct
+OC   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   []
+RP   [-]
+RA   Fuselier,J.A. and Coy,D.H.;
+RT   "Conjugates of Therapeutic or Cytotoxic Agents and Biologically
+RT   Active Peptides";
+RL   Patent: KR 1020047013597-A/36 31-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..27
+XX
+SQ   SEQUENCE    27 AA;  78E70892 CRC32;
+     GSSSSSSSSS SSSSSSSXYS CFWKTCT                                            27
+//
+ID   DI500003   standard; PRT;  7 AA.
+XX
+AC   DI500003;
+XX
+DT   21-FEB-2008
+XX
+DE   KR 1020047013038-A/161: Anti A-beta antibodies and their use.
+XX
+KW   KR 1020047013038-A/161.
+XX
+OS   synthetic construct
+OC   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   []
+RP   [-]
+RA   Bardroff,M., Bohrmann,B., Brockhaus,M., Huber,W., Kretzschmar,T.,
+RA   Loehning,C., Roetscher,H., Nordstedt,C. and Rothe,C.;
+RT   "Anti A-beta antibodies and their use";
+RL   Patent: KR 1020047013038-A/161 20-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FH   Key             Location/Qualifiers
+FT   source            1..7
+FT                   /db_xref="taxon:32630"
+FT                   /organism="synthetic construct"
+XX
+SQ   Sequence 7 AA;
+     GSSNRAT                                                                   7
+//
+ID   DI500004       STANDARD;      PRT;   141 AA.
+XX
+AC   DI500004;
+XX
+DT   21-FEB-2008
+XX
+DE   KR 1020047013224-A/144: METHOD FOR THE RECOMBINATION OF GENETIC
+DE   ELEMENTS.
+XX
+KW   KR 1020047013224-A/144.
+XX
+OS   Klebsiella pneumoniae
+OC   Klebsiella pneumoniae
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Klebsiella.
+XX
+RN   []
+RP   [-]
+RA   Milano,J. and Tang,X.;
+RT   "METHOD FOR THE RECOMBINATION OF GENETIC ELEMENTS";
+RL   Patent: KR 1020047013224-A/144 25-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..141
+XX
+SQ   SEQUENCE   141 AA;  B10429EF CRC32;
+     MSEKTMRVQD YPLATRCPEH ILTPTGKPLT DITLEKVLSG EVGPQDVRIS RQTLEYQAQI        60
+     AEQMQRHAVA RNFRRAAELI AIPDERILAI YNALRPFRSS QAELLAIADE LEHTWHATVN       120
+     AAFVRESAEV YQQRHKLRKG S                                                 141
+//
+ID   DI500005       STANDARD;      PRT;    31 AA.
+XX
+AC   DI500005;
+XX
+DT   21-FEB-2008
+XX
+DE   KR 1020047012920-A/1: METHOD FOR ADMINISTERING GLP-1 MOLECULES.
+XX
+KW   KR 1020047012920-A/1.
+XX
+OS   synthetic construct
+OC   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   []
+RP   [-]
+RA   Khan,M.A., Jones,B.E. and Mcgill,J.M.;
+RT   "METHOD FOR ADMINISTERING GLP-1 MOLECULES";
+RL   Patent: KR 1020047012920-A/1 19-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..31
+XX
+SQ   SEQUENCE    31 AA;  91FF0930 CRC32;
+     HAEGTFTSDV SSYLEGQAAK EFIAWLVKGR X                                       31
+//
+ID   DI500006       STANDARD;      PRT;    17 AA.
+XX
+AC   DI500006;
+XX
+DT   21-FEB-2008
+XX
+DE   KR 1020047013038-A/181: Anti A-beta antibodies and their use.
+XX
+KW   KR 1020047013038-A/181.
+XX
+OS   synthetic construct
+OC   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   []
+RP   [-]
+RA   Bardroff,M., Bohrmann,B., Brockhaus,M., Huber,W., Kretzschmar,T.,
+RA   Loehning,C., Roetscher,H., Nordstedt,C. and Rothe,C.;
+RT   "Anti A-beta antibodies and their use";
+RL   Patent: KR 1020047013038-A/181 20-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..17
+XX
+SQ   SEQUENCE    17 AA;  2DE10526 CRC32;
+     AINATGYRTY YADSVKG                                                       17
+//
+ID   DI500007       STANDARD;      PRT;    22 AA.
+XX
+AC   DI500007;
+XX
+DT   30-APR-2009
+XX
+DE   KR 1020047013597-A/31: Conjugates of Therapeutic or Cytotoxic
+DE   Agents and Biologically Active Peptides.
+XX
+KW   KR 1020047013597-A/31.
+XX
+OS   synthetic construct
+OC   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   []
+RP   [-]
+RA   Fuselier,J.A. and Coy,D.H.;
+RT   "Conjugates of Therapeutic or Cytotoxic Agents and Biologically
+RT   Active Peptides";
+RL   Patent: KR 1020047013597-A/31 31-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..22
+XX
+SQ   SEQUENCE    22 AA;  509706F3 CRC32;
+     GSSSSSSSSS SSXYSCFWKT CT                                                 22
+//
+ID   DI500008       STANDARD;      PRT;     3 AA.
+XX
+AC   DI500008;
+XX
+DT   30-APR-2009
+XX
+DE   KR 1020047013597-A/12: Conjugates of Therapeutic or Cytotoxic
+DE   Agents and Biologically Active Peptides.
+XX
+KW   KR 1020047013597-A/12.
+XX
+OS   synthetic construct
+OC   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   []
+RP   [-]
+RA   Fuselier,J.A. and Coy,D.H.;
+RT   "Conjugates of Therapeutic or Cytotoxic Agents and Biologically
+RT   Active Peptides";
+RL   Patent: KR 1020047013597-A/12 31-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..3
+XX
+SQ   SEQUENCE     3 AA;   1E900F8 CRC32;
+     KYS                                                                       3
+//
+ID   DI500009       STANDARD;      PRT;    17 AA.
+XX
+AC   DI500009;
+XX
+DT   21-FEB-2008
+XX
+DE   KR 1020047013038-A/379: Anti A-beta antibodies and their use.
+XX
+KW   KR 1020047013038-A/379.
+XX
+OS   synthetic construct
+OC   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   []
+RP   [-]
+RA   Bardroff,M., Bohrmann,B., Brockhaus,M., Huber,W., Kretzschmar,T.,
+RA   Loehning,C., Roetscher,H., Nordstedt,C. and Rothe,C.;
+RT   "Anti A-beta antibodies and their use";
+RL   Patent: KR 1020047013038-A/379 20-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..17
+XX
+SQ   SEQUENCE    17 AA;  2E5C0539 CRC32;
+     GKGNTHKPYG YVRYFDV                                                       17
+//
+ID   DI500010       STANDARD;      PRT;     8 AA.
+XX
+AC   DI500010;
+XX
+DT   21-FEB-2008
+XX
+DE   KR 1020047013038-A/107: Anti A-beta antibodies and their use.
+XX
+KW   KR 1020047013038-A/107.
+XX
+OS   synthetic construct
+OC   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   []
+RP   [-]
+RA   Bardroff,M., Bohrmann,B., Brockhaus,M., Huber,W., Kretzschmar,T.,
+RA   Loehning,C., Roetscher,H., Nordstedt,C. and Rothe,C.;
+RT   "Anti A-beta antibodies and their use";
+RL   Patent: KR 1020047013038-A/107 20-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..8
+XX
+SQ   SEQUENCE     8 AA;   BAF0297 CRC32;
+     QQTYNYPP                                                                  8
+//
+ID   DI500011       STANDARD;      PRT;   716 AA.
+XX
+AC   DI500011;
+XX
+DT   21-FEB-2008
+XX
+DE   KR 1020047013224-A/14: METHOD FOR THE RECOMBINATION OF GENETIC
+DE   ELEMENTS.
+XX
+KW   KR 1020047013224-A/14.
+XX
+OS   unidentified
+OC   unidentified
+OC   unclassified sequences.
+XX
+RN   []
+RP   [-]
+RA   Milano,J. and Tang,X.;
+RT   "METHOD FOR THE RECOMBINATION OF GENETIC ELEMENTS";
+RL   Patent: KR 1020047013224-A/14 25-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..716
+XX
+SQ   SEQUENCE   716 AA;  96B3D52B CRC32;
+     MAPSLDSISH SFANGVASAK QAVNGASTNL AVAGSHLPTT QVTQVDIVEK MLAAPTDSTL        60
+     ELDGYSLNLG DVVSAARKGR PVRVKDSDEI RSKIDKSVEF LRSQLSMSVY GVTTGFGGSA       120
+     DTRTEDAISL QKALLEHQLC GVLPSSFDSF RLGRGLENSL PLEVVRGAMT IRVNSLTRGH       180
+     SAVRLVVLEA LTNFLNHGIT PIVPLRGTIS ASGDLSPLSY IAAAISGHPD SKVHVVHEGK       240
+     EKILYAREAM ALFNLEPVVL GPKEGLGLVN GTAVSASMAT LALHDAHMLS LLSQSLTAMT       300
+     VEAMVGHAGS FHPFLHDVTR PHPTQIEVAG NIRKLLEGSR FAVHHEEEVK VKDDEGILRQ       360
+     DRYPLRTSPQ WLGPLVSDLI HAHAVLTIEA GQSTTDNPLI DVENKTSHRG GNFQAAAVAN       420
+     TMEKTRLGLA QIGKLNFTQL TEMLNAGMNR GLPSCLAAED PSLSYHCKGL DIAAAAYTSE       480
+     LGHLANPVTT HVQPAEMANQ AVNSLALISA RRTTESNDVL SLLLATHLYC VLQAIDLRAT       540
+     EFEFKKQFGP AIVSLIDQHF GSAMTGSNLR DELVEKVNKT LAKRLEQTNS YDLVPRWHDA       600
+     FSFAAGTVVE VLSSTSLSLA AVNAWKVAAA ESAISLTRQV RETFWSAAST SSPALSYLSP       660
+     RTQILYAFVR EELGVKARRG DVFLGKQEVT IGSNVSKIYE AIKSGRINNV LLKMLA           716
+//
+ID   DI500012       STANDARD;      PRT;     8 AA.
+XX
+AC   DI500012;
+XX
+DT   21-FEB-2008
+XX
+DE   KR 1020047013038-A/105: Anti A-beta antibodies and their use.
+XX
+KW   KR 1020047013038-A/105.
+XX
+OS   synthetic construct
+OC   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   []
+RP   [-]
+RA   Bardroff,M., Bohrmann,B., Brockhaus,M., Huber,W., Kretzschmar,T.,
+RA   Loehning,C., Roetscher,H., Nordstedt,C. and Rothe,C.;
+RT   "Anti A-beta antibodies and their use";
+RL   Patent: KR 1020047013038-A/105 20-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..8
+XX
+SQ   SEQUENCE     8 AA;   B87028D CRC32;
+     QQTYDYPP                                                                  8
+//
+ID   DI500013       STANDARD;      PRT;   111 AA.
+XX
+AC   DI500013;
+XX
+DT   21-FEB-2008
+XX
+DE   KR 1020047013038-A/229: Anti A-beta antibodies and their use.
+XX
+KW   KR 1020047013038-A/229.
+XX
+OS   synthetic construct
+OC   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   []
+RP   [-]
+RA   Bardroff,M., Bohrmann,B., Brockhaus,M., Huber,W., Kretzschmar,T.,
+RA   Loehning,C., Roetscher,H., Nordstedt,C. and Rothe,C.;
+RT   "Anti A-beta antibodies and their use";
+RL   Patent: KR 1020047013038-A/229 20-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..111
+XX
+SQ   SEQUENCE   111 AA;  72F521FD CRC32;
+     DIVLTQPPSV SGAPGQRVTI SCSGSSSNIG SNYVSWYQQL PGTAPKLLIY DNNQRPSGVP        60
+     DRFSGSKSGT SASLAITGLQ SEDEADYYCQ SXDXXXXXXV FGGGTKLTVL G                111
+//
+ID   DI500014       STANDARD;      PRT;   141 AA.
+XX
+AC   DI500014;
+XX
+DT   21-FEB-2008
+XX
+DE   KR 1020047013224-A/90: METHOD FOR THE RECOMBINATION OF GENETIC
+DE   ELEMENTS.
+XX
+KW   KR 1020047013224-A/90.
+XX
+OS   Klebsiella pneumoniae
+OC   Klebsiella pneumoniae
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Klebsiella.
+XX
+RN   []
+RP   [-]
+RA   Milano,J. and Tang,X.;
+RT   "METHOD FOR THE RECOMBINATION OF GENETIC ELEMENTS";
+RL   Patent: KR 1020047013224-A/90 25-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..141
+XX
+SQ   SEQUENCE   141 AA;  B10429EF CRC32;
+     MSEKTMRVQD YPLATRCPEH ILTPTGKPLT DITLEKVLSG EVGPQDVRIS RQTLEYQAQI        60
+     AEQMQRHAVA RNFRRAAELI AIPDERILAI YNALRPFRSS QAELLAIADE LEHTWHATVN       120
+     AAFVRESAEV YQQRHKLRKG S                                                 141
+//
+ID   DI500015       STANDARD;      PRT;   644 AA.
+XX
+AC   DI500015;
+XX
+DT   21-FEB-2008
+XX
+DE   KR 1020047015479-A/4: GENES ENCODING ACETOLACTATE SYNTHASE.
+XX
+KW   KR 1020047015479-A/4.
+XX
+OS   unidentified
+OC   unidentified
+OC   unclassified sequences.
+XX
+RN   []
+RP   [-]
+RA   Kaku,K., Shimizu,T., Kawai,K., Nagayama,K., Fukuda,A. and Tanaka,Y.;
+RT   "GENES ENCODING ACETOLACTATE SYNTHASE";
+RL   Patent: KR 1020047015479-A/4 30-SEP-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..644
+XX
+SQ   SEQUENCE   644 AA;  973ABF27 CRC32;
+     MATTAAAAAA ALSAAATAKT GRKNHQRHHV LPARGRVGAA AVRCSAVSPV TPPSPAPPAT        60
+     PLRPWGPAEP RKGADILVEA LERCGVSDVF AYPGGASMEI HQALTRSPVI TNHLFRHEQG       120
+     EAFAASGYAR ASGRVGVCVA TSGPGATNLV SALADALLDS VPMVAITGQV HRRMIGTDAF       180
+     QETPIVEVTR SITKHNYLVL DVEDIPRVIQ EAFFLASSGR PGPVLVDIPK DIQQQMAVPV       240
+     WDTSMNLPGY IARLPKPPAT ELLEQVLRLV GESRRPILYV GGGCSASGDE LRWFVELTGI       300
+     PVTTTLMGLG NFPSDDPLSL RMLGMHGTVY ANYAVDKADL LLAFGVRFDD RVTGKIEAFA       360
+     SRAKIVHIDI DPAEIGKNKQ PHVSICADVK LALQGLNALL QQSTTKTSSD FSAWHNELDQ       420
+     QKREFPLGYK TFGEEIPPQY AIQVLDELTK GEAIIATGVG QHQMWAAQYY TYKRPRQWLS       480
+     SAGLGAMGFG LPAAAGASVA NPGVTVVDID GDGSFLMNIQ ELALIRIENL PVKVMVLNNQ       540
+     HLGMVVQLED RFYKANRAHT YLGNPECESE IYPDFVTIAK GFNIPAVRVT KKSEVRAAIK       600
+     KMLETPGPYL LDIIVPHQEH VLPMIPSGGA FKDMILDGDG RTVY                        644
+//
+ID   DI500016       STANDARD;      PRT;    17 AA.
+XX
+AC   DI500016;
+XX
+DT   21-FEB-2008
+XX
+DE   KR 1020047013038-A/116: Anti A-beta antibodies and their use.
+XX
+KW   KR 1020047013038-A/116.
+XX
+OS   synthetic construct
+OC   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   []
+RP   [-]
+RA   Bardroff,M., Bohrmann,B., Brockhaus,M., Huber,W., Kretzschmar,T.,
+RA   Loehning,C., Roetscher,H., Nordstedt,C. and Rothe,C.;
+RT   "Anti A-beta antibodies and their use";
+RL   Patent: KR 1020047013038-A/116 20-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..17
+XX
+SQ   SEQUENCE    17 AA;  2D19050E CRC32;
+     AISETGMHIY YADSVKG                                                       17
+//
+ID   DI500017       STANDARD;      PRT;     3 AA.
+XX
+AC   DI500017;
+XX
+DT   30-APR-2009
+XX
+DE   KR 1020047013597-A/13: Conjugates of Therapeutic or Cytotoxic
+DE   Agents and Biologically Active Peptides.
+XX
+KW   KR 1020047013597-A/13.
+XX
+OS   synthetic construct
+OC   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   []
+RP   [-]
+RA   Fuselier,J.A. and Coy,D.H.;
+RT   "Conjugates of Therapeutic or Cytotoxic Agents and Biologically
+RT   Active Peptides";
+RL   Patent: KR 1020047013597-A/13 31-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..3
+XX
+SQ   SEQUENCE     3 AA;   1F400F7 CRC32;
+     XKS                                                                       3
+//
+ID   DI500018       STANDARD;      PRT;   131 AA.
+XX
+AC   DI500018;
+XX
+DT   30-APR-2009
+XX
+DE   KR 1020030021065-A/6: Agent for inhibiting angiogenesis, containing
+DE   peptides which comprise YH motif as effective component.
+XX
+KW   KR 1020030021065-A/6.
+XX
+OS   Homo sapiens (human)
+OC   Homo sapiens
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+XX
+RN   []
+RP   [-]
+RA   Kim,I. and Nam,J.;
+RT   "Agent for inhibiting angiogenesis, containing peptides which
+RT   comprise YH motif as effective component";
+RL   Patent: KR 1020030021065-A/6 03-APR-2003.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..131
+XX
+SQ   SEQUENCE   131 AA;   A372711 CRC32;
+     MGTVMDVLKG DNRFSMLVAA IQSAGLTETL NREGVYTVFA PTNEAFRALP PRERSRLLGD        60
+     AKELANILKY HIGDEILVSG GIGALVRLKS LQGDKLEVSL KNNVVSVNKE PVAEPDIMAT       120
+     NGVVHVITNV L                                                            131
+//
+ID   DI500019       STANDARD;      PRT;   124 AA.
+XX
+AC   DI500019;
+XX
+DT   21-FEB-2008
+XX
+DE   KR 1020047013038-A/39: Anti A-beta antibodies and their use.
+XX
+KW   KR 1020047013038-A/39.
+XX
+OS   synthetic construct
+OC   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   []
+RP   [-]
+RA   Bardroff,M., Bohrmann,B., Brockhaus,M., Huber,W., Kretzschmar,T.,
+RA   Loehning,C., Roetscher,H., Nordstedt,C. and Rothe,C.;
+RT   "Anti A-beta antibodies and their use";
+RL   Patent: KR 1020047013038-A/39 20-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..124
+XX
+SQ   SEQUENCE   124 AA;  1C4E2598 CRC32;
+     QLVESGGGLV QPGGSLRLSC AASGFTFSSY AMSWVRQAPG KGLEWVSAIN ADGNRKYYAD        60
+     SVKGRFTISR DNSKNTLYLQ MNSLRAEDTA VYYCARGKGN THKPYGYVRY FDVWGQGTLV       120
+     TVSS                                                                    124
+//
+ID   DI500020       STANDARD;      PRT;   754 AA.
+XX
+AC   DI500020;
+XX
+DT   21-FEB-2008
+XX
+DE   KR 1020047013224-A/164: METHOD FOR THE RECOMBINATION OF GENETIC
+DE   ELEMENTS.
+XX
+KW   KR 1020047013224-A/164.
+XX
+OS   Klebsiella pneumoniae
+OC   Klebsiella pneumoniae
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Klebsiella.
+XX
+RN   []
+RP   [-]
+RA   Milano,J. and Tang,X.;
+RT   "METHOD FOR THE RECOMBINATION OF GENETIC ELEMENTS";
+RL   Patent: KR 1020047013224-A/164 25-AUG-2004.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..754
+XX
+SQ   SEQUENCE   754 AA;  5633DF80 CRC32;
+     MKRSKRFAVL AQRPVNQDGL IGEWPEEGLI AMDSPFDPVS SVKVDNGLIV ELDGKRRDQF        60
+     DMIDRFIADY AINVERTEQA MRLEAVEIAR MLVDIHVSRE EIIAITTAIT PAKAVEVMAQ       120
+     MNVVEMMMAL QKMRARRTPS NQCHVTNLKD NPVQIAADAA EAGIRGFSEQ ETTVGIARYA       180
+     PFNALALLVG SQCGRPGVLT QCSVEEATEL ELGMRGLTSY AETVSVYGTE AVFTDGDDTP       240
+     WSKAFLASAY ASRGLKMRYT SGTGSEALMG YSESKSMLYL ESRCIFITKG AGVQGLQNGA       300
+     VSCIGMTGAV PSGIRAVLAE NLIASMLDLE VASANDQTFS HSDIRRTART LMQMLPGTDF       360
+     IFSGYSAVPN YDNMFAGSNF DAEDFDDYNI LQRDLMVDGG LRPVTEAETI AIRQKAARAI       420
+     QAVFRELGLP PIADEEVEAA TYAHGSNEMP PRNVVEDLSA VEEMMKRNIT GLDIVGALSR       480
+     SGFEDIASNI LNMLRQRVTG DYLQTSAIFD RQFEVVSAVN DINDYQGPGT GYRISAERWA       540
+     EIKNIPGVVQ PDTIEQGGIP VQQTTQIQPS FTLKTREGGV ASADERADEV VIGVGPAFDK       600
+     HQHHTLIDMP HGAILKELIA GVEEEGLHAR VVRILRTSDV SFMAWDAANL SGSGIGIGIQ       660
+     SKGTTVIHQR DLLPLSNLEL FSQAPLLTLE TYRQIGKNAA RYARKESPSP VPVVNDQMVR       720
+     PKFMAKAALF HIKETKHVVQ DAEPVTLHID LVRE                                   754
+//

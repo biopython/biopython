@@ -1,0 +1,33 @@
+LOCUS       NP_034640                182 aa                     ROD 01-NOV-2000
+DEFINITION  interferon beta, fibroblast [Mus musculus].
+ACCESSION   NP_034640
+VERSION     NP_034640.1  GI:6754304
+KEYWORDS    .
+SOURCE      house mouse
+  ORGANISM  Mus musculus
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Rodentia; Sciurognathi; Muridae; Murinae; Mus.
+REFERENCE   1  (residues 1 to 182)
+  AUTHORS   Higashi,Y., Sokawa,Y., Watanabe,Y., Kawade,Y., Ohno,S., Takaoka,C.
+            and Taniguchi,T.
+  TITLE     structure and expression of a cloned cdna for mouse interferon-beta
+  JOURNAL   J. Biol. Chem. 258, 9522-9529 (1983)
+  MEDLINE   83265757
+COMMENT     PROVISIONAL REFSEQ: This record has not yet been subject to final
+            NCBI review. The reference sequence was derived from K00020.1.
+FEATURES             Location/Qualifiers
+     source          1..182
+                     /organism="Mus musculus"
+                     /db_xref="taxon:10090"
+                     /chromosome="4"
+                     /map="4 42.6 cM"
+                     /note="""Should"" now ""be"" escaped in ""file"""
+     Protein         1..182
+                     /product="interferon beta, fibroblast"
+                     /note="""Should also be escaped in file"""
+ORIGIN
+        1 mnnrwilhaa fllcfsttal sinykqlqlq ertnirkcqe lleqlngkin ltyradfkip
+       61 memtekmqks ytafaiqeml qnvflvfrnn fsstgwneti vvrlldelhq qtvflktvle
+      121 ekqeerltwe msstalhlks yywrvqrylk lmkynsyawm vvraeifrnf liirrltrnf
+      181 qn
+//

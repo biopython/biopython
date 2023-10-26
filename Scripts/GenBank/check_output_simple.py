@@ -1,4 +1,10 @@
 #!/usr/bin/env python
+# Copyright 2000 Brad Chapman.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """Display the SeqFeatures produced by the parser.
 
 This produces a ton of output so it is possible to hand check what is
@@ -10,7 +16,6 @@ Usage:
 
 """
 # standard library
-from __future__ import print_function
 
 import sys
 
@@ -24,8 +29,7 @@ if len(sys.argv) != 2:
 
 parser = GenBank.FeatureParser(debug_level=2)
 
-with open(sys.argv[1], 'r') as handle:
-
+with open(sys.argv[1]) as handle:
     iterator = GenBank.Iterator(handle, parser)
 
     while True:
@@ -35,19 +39,19 @@ with open(sys.argv[1], 'r') as handle:
             break
 
         print("***Record")
-        print("Seq: %s" % cur_record.seq)
-        print("Id: %s" % cur_record.id)
-        print("Name: %s" % cur_record.name)
-        print("Description: %s" % cur_record.description)
+        print(f"Seq: {cur_record.seq}")
+        print(f"Id: {cur_record.id}")
+        print(f"Name: {cur_record.name}")
+        print(f"Description: {cur_record.description}")
         print("Annotations****")
         for annotation_key in cur_record.annotations:
-            if annotation_key != 'references':
-                print("Key: %s" % annotation_key)
-                print("Value: %s" % cur_record.annotations[annotation_key])
+            if annotation_key != "references":
+                print(f"Key: {annotation_key}")
+                print(f"Value: {cur_record.annotations[annotation_key]}")
             else:
                 print("References*")
                 for reference in cur_record.annotations[annotation_key]:
-                    print(str(reference))
-        print("Feaures")
+                    print(reference)
+        print("Features")
         for feature in cur_record.features:
             print(feature)

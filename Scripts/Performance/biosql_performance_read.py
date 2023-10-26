@@ -1,16 +1,21 @@
 #!/usr/bin/env python
-"""Small script to test timing of getting records from a BioSQL database.
-"""
-from __future__ import print_function
+# Copyright 2002 Brad Chapman.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
+"""Test timing of getting records from a BioSQL database."""
 
 import time
+
 # set up the connection
 from BioSQL import BioSeqDatabase
 
-__docformat__ = "restructuredtext en"
 
-server = BioSeqDatabase.open_database(host="192.168.0.192", user="root",
-                                      passwd="", db="test_biosql")
+server = BioSeqDatabase.open_database(
+    host="192.168.0.192", user="root", passwd="", db="test_biosql"
+)
 db = server["embl_rod"]
 
 # -- do the fasta-only timing part
@@ -26,8 +31,10 @@ for junk_id, record in db.items():
 end_time = time.time()
 elapsed_time = end_time - start_time
 print("Fasta")
-print("\tDid %s records in %s seconds for\n\t%f records per second" %
-      (num_records, elapsed_time, float(num_records) / float(elapsed_time)))
+print(
+    "\tDid %s records in %s seconds for\n\t%f records per second"
+    % (num_records, elapsed_time, num_records / elapsed_time)
+)
 
 # -- do the "EMBL" timing part
 start_time = time.time()
@@ -46,5 +53,7 @@ for junk_id, record in db.items():
 end_time = time.time()
 elapsed_time = end_time - start_time
 print("EMBL")
-print("\tDid %s records in %s seconds for\n\t%f records per second" %
-      (num_records, elapsed_time, float(num_records) / float(elapsed_time)))
+print(
+    "\tDid %s records in %s seconds for\n\t%f records per second"
+    % (num_records, elapsed_time, num_records / elapsed_time)
+)

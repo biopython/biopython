@@ -3,8 +3,9 @@ build
 
 #Ignore the distribution directory
 dist
- 
+
 #Ignore backup files from some Unix editors,
+\#*\#
 *~
 *.swp
 *.bak
@@ -20,22 +21,28 @@ dist
 
 #Ignore hidden files from Dolphin window manager
 .directory
- 
+
 #Ignore all compiled python files (e.g. from running the unit tests):
 *.pyc
 *.pyo
-*.py{}
 *.py-e
+*.pyd
 
 #Ignore all Jython class files (present if using Jython)
 *.class
+
+#Ignore any compiled C code
+*.so
+
+#Ignore the .tox directory from running tox locally
+.tox/
 
 #Ignore the MANIFEST file created automatically from MANIFEST.in
 MANIFEST
 
 #Ignore potential directory created during install:
 biopython.egg-info
- 
+
 #The graphics unit tests produce output files for human inspection
 #(at the time of writing, only PDF and PNG files are created)
 Tests/Graphics/*.pdf
@@ -43,15 +50,27 @@ Tests/Graphics/*.eps
 Tests/Graphics/*.svg
 Tests/Graphics/*.png
 
+# This file is downloaded when testing the Bio.SeqIO.GckIO module.
+Tests/Gck/DGVC_GCK.zip
+
 #Ignore the local BioSQL test settings:
 Tests/biosql.ini
 
 #TODO - The unit tests shouldn't leave temp files after running:
 Tests/BioSQL/temp_sqlite.db
 Tests/BioSQL/temp_sqlite.db-journal
+Tests/Cluster/cyano_result*
+# Created by Tests/test_BWA_tool.py:
+Tests/out.bam
+
+#TODO - The Tutorial doctests should leave example files after
+#running Tests/test_Tutorial.py
+Doc/examples/other_trees.nwk
+Doc/examples/tree1.nwk
 
 #Ignore LaTeX temp files, and compiled output
 Doc/*.aux
+Doc/*.gz
 Doc/*.log
 Doc/*.out
 Doc/*.toc
@@ -69,10 +88,13 @@ Doc/*/*/*.out
 Doc/*/*/*.toc
 Doc/*/*/*.haux
 Doc/*/*/*.htoc
+Doc/_minted-Tutorial/
 Doc/Tutorial.txt
 Doc/Tutorial.pdf
 Doc/Tutorial.html
+Doc/Tutorial.pyg
 Doc/biopdb_faq.pdf
+Doc/version.sh
 Doc/install/Installation.txt
 Doc/install/Installation.pdf
 Doc/install/Installation.html
@@ -84,6 +106,29 @@ Doc/hevea.sty
 Doc/*/hevea.sty
 Doc/*/*/hevea.sty
 
+#Ignore artifacts of building the docs
+_build
+Doc/api/*.rst
+
 #Ignore IntelliJ IDEA directory and project files
 .idea
 *.iml
+
+#Ignore unittest cache directory
+.cache/
+
+#Ignore vscode directory
+.vscode
+
+#Ignore mypy cache directory
+.mypy_cache
+
+#Ignore virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Testing
+**/.coverage

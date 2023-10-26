@@ -1,8 +1,8 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO objects to model similarity search program outputs.
 
 The SearchIO object model consists of a hierarchy of four nested objects:
@@ -49,10 +49,11 @@ from .hit import Hit
 from .hsp import HSP, HSPFragment
 
 
-__all__ = ['QueryResult', 'Hit', 'HSP', 'HSPFragment']
+__all__ = ("QueryResult", "Hit", "HSP", "HSPFragment")
 
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

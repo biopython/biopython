@@ -6,25 +6,34 @@ NAME        Toluate;
             Toluenecarboxylic acid;
             Crithminic acid
 FORMULA     C8H8O2
-MASS        136.0524
+EXACT_MASS  136.0524
+MOL_WEIGHT  136.1479
 REACTION    R05289 R05290 R05291
-PATHWAY     PATH: map00622  Toluene and xylene degradation
-ENZYME      1.2.1.7         1.14.12.-
+PATHWAY     map00622  Xylene degradation
+            map01100  Metabolic pathways
+            map01120  Microbial metabolism in diverse environments
+            map01220  Degradation of aromatic compounds
+MODULE      M00537  Xylene degradation, xylene => methylbenzoate
+            M00551  Benzoate degradation, benzoate => catechol / methylbenzoate => methylcatechol
+ENZYME      1.2.1.7         1.2.1.28        1.14.12.-
 DBLINKS     CAS: 99-94-5
             PubChem: 4631
-            ChEBI: 36635
+            ChEBI: 28856 36635
+            ChEMBL: CHEMBL21708
+            PDB-CCD: 4MA
             3DMET: B00292
+            NIKKAJI: J5.162D
 ATOM        10
-            1   C8y C    -0.3586    0.2069
-            2   C6a C    -1.0793    0.6138
-            3   C8x C    -0.3552   -0.6241
-            4   C8x C     0.3517    0.6207
-            5   O6a O    -1.7966    0.1966
-            6   O6a O    -1.0828    1.4448
-            7   C8x C     0.3621   -1.0379
-            8   C8x C     1.0724    0.2138
-            9   C8y C     1.0793   -0.6138
-            10  C1a C     1.8035   -1.0207
+            1   C8y C    28.2343  -16.9405
+            2   C6a C    27.0170  -16.2533
+            3   C8x C    28.2401  -18.3441
+            4   C8x C    29.4340  -16.2416
+            5   O6a O    25.8055  -16.9579
+            6   O6a O    27.0111  -14.8497
+            7   C8x C    29.4516  -19.0431
+            8   C8x C    30.6513  -16.9289
+            9   C8y C    30.6630  -18.3267
+            10  C1a C    31.8862  -19.0140
 BOND        10
             1     1   2 1
             2     1   3 1
@@ -40,13 +49,19 @@ BOND        10
 ENTRY       C06876                      Compound
 NAME        Nitrosobenzene
 FORMULA     C6H5NO
-MASS        107.0371
+EXACT_MASS  107.0371
+MOL_WEIGHT  107.11
 REACTION    R05400 R05401
-PATHWAY     PATH: map00626  Naphthalene and anthracene degradation
-ENZYME      1.6.6.-
+PATHWAY     map00627  Aminobenzoate degradation
+            map01120  Microbial metabolism in diverse environments
+ENZYME      1.7.1.-
 DBLINKS     CAS: 586-96-9
             PubChem: 9093
+            ChEBI: 27986
+            ChEMBL: CHEMBL98797
+            PDB-CCD: NBE
             3DMET: B01057
+            NIKKAJI: J71.610C
 ATOM        8
             1   C8y C    -0.0897    0.3621
             2   C8x C    -0.8034   -0.0517

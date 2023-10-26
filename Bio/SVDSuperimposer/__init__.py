@@ -1,7 +1,9 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@vub.ac.be)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Align on protein structure onto another using SVD alignment.
 
 SVDSuperimposer finds the best rotation and translation to put
@@ -10,19 +12,20 @@ eg. useful to superimpose crystal structures. SVD stands for singular
 value decomposition, which is used in the algorithm.
 """
 
-from __future__ import print_function
 
 try:
     from numpy import dot, transpose, sqrt
     from numpy.linalg import svd, det
 except ImportError:
     from Bio import MissingPythonDependencyError
+
     raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.SVDSuperimposer.")
+        "Install NumPy if you want to use Bio.SVDSuperimposer."
+    )
 
 
-class SVDSuperimposer(object):
-    """Class to run SVD alignment,
+class SVDSuperimposer:
+    """Class to run SVD alignment.
 
     SVDSuperimposer finds the best rotation and translation to put
     two point sets on top of each other (minimizing the RMSD). This is
@@ -94,7 +97,9 @@ class SVDSuperimposer(object):
     0.00
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         self._clear()
 
     # Private methods
@@ -109,10 +114,9 @@ class SVDSuperimposer(object):
         self.init_rms = None
 
     def _rms(self, coords1, coords2):
-        """Return rms deviations between coords1 and coords2."""
+        """Return rms deviations between coords1 and coords2 (PRIVATE)."""
         diff = coords1 - coords2
-        l = coords1.shape[0]
-        return sqrt(sum(sum(diff * diff)) / l)
+        return sqrt(sum(sum(diff * diff)) / coords1.shape[0])
 
     # Public methods
 
@@ -129,12 +133,12 @@ class SVDSuperimposer(object):
         """
         # clear everything from previous runs
         self._clear()
-        # store cordinates
+        # store coordinates
         self.reference_coords = reference_coords
         self.coords = coords
         n = reference_coords.shape
         m = coords.shape
-        if n != m or not(n[1] == m[1] == 3):
+        if n != m or not (n[1] == m[1] == 3):
             raise Exception("Coordinate number/dimension mismatch.")
         self.n = n[0]
 
@@ -193,4 +197,5 @@ class SVDSuperimposer(object):
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest(verbose=0)

@@ -21,17 +21,20 @@ from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
-class StructureBuilder(object):
+class StructureBuilder:
+    """Deals with constructing the Structure object.
+
+    The StructureBuilder class is used by the PDBParser classes to
+    translate a file to a Structure object.
     """
-    Deals with contructing the Structure object. The StructureBuilder class is used
-    by the PDBParser classes to translate a file to a Structure object.
-    """
+
     def __init__(self):
+        """Initialize the class."""
         self.line_counter = 0
         self.header = {}
 
     def _is_completely_disordered(self, residue):
-        "Return 1 if all atoms in the residue have a non blank altloc."
+        """Return 1 if all atoms in the residue have a non blank altloc (PRIVATE)."""
         atom_list = residue.get_unpacked_list()
         for atom in atom_list:
             altloc = atom.get_altloc()
@@ -42,47 +45,52 @@ class StructureBuilder(object):
     # Public methods called by the Parser classes
 
     def set_header(self, header):
+        """Set header."""
         self.header = header
 
     def set_line_counter(self, line_counter):
-        """
-        The line counter keeps track of the line in the PDB file that
-        is being parsed.
+        """Tracks line in the PDB file that is being parsed.
 
         Arguments:
-        o line_counter - int
+         - line_counter - int
+
         """
         self.line_counter = line_counter
 
     def init_structure(self, structure_id):
-        """Initiate a new Structure object with given id.
+        """Initialize a new Structure object with given id.
 
         Arguments:
-        o id - string
+         - id - string
+
         """
         self.structure = Structure(structure_id)
 
     def init_model(self, model_id, serial_num=None):
-        """Initiate a new Model object with given id.
+        """Create a new Model object with given id.
 
         Arguments:
-        o id - int
-        o serial_num - int
+         - id - int
+         - serial_num - int
+
         """
         self.model = Model(model_id, serial_num)
         self.structure.add(self.model)
 
     def init_chain(self, chain_id):
-        """Initiate a new Chain object with given id.
+        """Create a new Chain object with given id.
 
         Arguments:
-        o chain_id - string
+         - chain_id - string
+
         """
         if self.model.has_id(chain_id):
             self.chain = self.model[chain_id]
-            warnings.warn("WARNING: Chain %s is discontinuous at line %i."
-                          % (chain_id, self.line_counter),
-                          PDBConstructionWarning)
+            warnings.warn(
+                "WARNING: Chain %s is discontinuous at line %i."
+                % (chain_id, self.line_counter),
+                PDBConstructionWarning,
+            )
         else:
             self.chain = Chain(chain_id)
             self.model.add(self.chain)
@@ -91,21 +99,21 @@ class StructureBuilder(object):
         """Flag a change in segid.
 
         Arguments:
-        o segid - string
+         - segid - string
+
         """
         self.segid = segid
 
     def init_residue(self, resname, field, resseq, icode):
-        """
-        Initiate a new Residue object.
+        """Create a new Residue object.
 
         Arguments:
+         - resname - string, e.g. "ASN"
+         - field - hetero flag, "W" for waters, "H" for
+           hetero residues, otherwise blank.
+         - resseq - int, sequence identifier
+         - icode - string, insertion code
 
-            - resname - string, e.g. "ASN"
-            - field - hetero flag, "W" for waters, "H" for
-              hetero residues, otherwise blank.
-            - resseq - int, sequence identifier
-            - icode - string, insertion code
         """
         if field != " ":
             if field == "H":
@@ -116,10 +124,11 @@ class StructureBuilder(object):
             if self.chain.has_id(res_id):
                 # There already is a residue with the id (field, resseq, icode).
                 # This only makes sense in the case of a point mutation.
-                warnings.warn("WARNING: Residue ('%s', %i, '%s') "
-                              "redefined at line %i."
-                              % (field, resseq, icode, self.line_counter),
-                              PDBConstructionWarning)
+                warnings.warn(
+                    "WARNING: Residue ('%s', %i, '%s') redefined at line %i."
+                    % (field, resseq, icode, self.line_counter),
+                    PDBConstructionWarning,
+                )
                 duplicate_residue = self.chain[res_id]
                 if duplicate_residue.is_disordered() == 2:
                     # The residue in the chain is a DisorderedResidue object.
@@ -137,10 +146,12 @@ class StructureBuilder(object):
                         return
                 else:
                     if resname == duplicate_residue.resname:
-                        warnings.warn("WARNING: Residue ('%s', %i, '%s','%s')"
-                                      " already defined with the same name at line  %i."
-                              % (field, resseq, icode, resname, self.line_counter),
-                              PDBConstructionWarning)
+                        warnings.warn(
+                            "WARNING: Residue ('%s', %i, '%s','%s') already defined "
+                            "with the same name at line  %i."
+                            % (field, resseq, icode, resname, self.line_counter),
+                            PDBConstructionWarning,
+                        )
                         self.residue = duplicate_residue
                         return
                     # Make a new DisorderedResidue object and put all
@@ -152,7 +163,8 @@ class StructureBuilder(object):
                         self.residue = None
                         raise PDBConstructionException(
                             "Blank altlocs in duplicate residue %s ('%s', %i, '%s')"
-                            % (resname, field, resseq, icode))
+                            % (resname, field, resseq, icode)
+                        )
                     self.chain.detach_child(res_id)
                     new_residue = Residue(res_id, resname, self.segid)
                     disordered_residue = DisorderedResidue(res_id)
@@ -164,19 +176,34 @@ class StructureBuilder(object):
         self.residue = Residue(res_id, resname, self.segid)
         self.chain.add(self.residue)
 
-    def init_atom(self, name, coord, b_factor, occupancy, altloc, fullname,
-                  serial_number=None, element=None):
-        """
-        Initiate a new Atom object.
+    def init_atom(
+        self,
+        name,
+        coord,
+        b_factor,
+        occupancy,
+        altloc,
+        fullname,
+        serial_number=None,
+        element=None,
+        pqr_charge=None,
+        radius=None,
+        is_pqr=False,
+    ):
+        """Create a new Atom object.
 
         Arguments:
-        o name - string, atom name, e.g. CA, spaces should be stripped
-        o coord - Numeric array (Float0, size 3), atomic coordinates
-        o b_factor - float, B factor
-        o occupancy - float
-        o altloc - string, alternative location specifier
-        o fullname - string, atom name including spaces, e.g. " CA "
-        o element - string, upper case, e.g. "HG" for mercury
+         - name - string, atom name, e.g. CA, spaces should be stripped
+         - coord - NumPy array (Float0, length 3), atomic coordinates
+         - b_factor - float, B factor
+         - occupancy - float
+         - altloc - string, alternative location specifier
+         - fullname - string, atom name including spaces, e.g. " CA "
+         - element - string, upper case, e.g. "HG" for mercury
+         - pqr_charge - float, atom charge (PQR format)
+         - radius - float, atom radius (PQR format)
+         - is_pqr - boolean, flag to specify if a .pqr file is being parsed
+
         """
         residue = self.residue
         # if residue is None, an exception was generated during
@@ -195,13 +222,35 @@ class StructureBuilder(object):
             if duplicate_fullname != fullname:
                 # name of current atom now includes spaces
                 name = fullname
-                warnings.warn("Atom names %r and %r differ "
-                              "only in spaces at line %i."
-                              % (duplicate_fullname, fullname,
-                                 self.line_counter),
-                              PDBConstructionWarning)
-        self.atom = Atom(name, coord, b_factor, occupancy, altloc,
-                         fullname, serial_number, element)
+                warnings.warn(
+                    "Atom names %r and %r differ only in spaces at line %i."
+                    % (duplicate_fullname, fullname, self.line_counter),
+                    PDBConstructionWarning,
+                )
+        if not is_pqr:
+            self.atom = Atom(
+                name,
+                coord,
+                b_factor,
+                occupancy,
+                altloc,
+                fullname,
+                serial_number,
+                element,
+            )
+        elif is_pqr:
+            self.atom = Atom(
+                name,
+                coord,
+                None,
+                None,
+                altloc,
+                fullname,
+                serial_number,
+                element,
+                pqr_charge,
+                radius,
+            )
         if altloc != " ":
             # The atom is disordered
             if residue.has_id(name):
@@ -221,10 +270,11 @@ class StructureBuilder(object):
                     disordered_atom.disordered_add(self.atom)
                     disordered_atom.disordered_add(duplicate_atom)
                     residue.flag_disordered()
-                    warnings.warn("WARNING: disordered atom found "
-                                  "with blank altloc before line %i.\n"
-                                  % self.line_counter,
-                                  PDBConstructionWarning)
+                    warnings.warn(
+                        "WARNING: disordered atom found with blank altloc before "
+                        "line %i.\n" % self.line_counter,
+                        PDBConstructionWarning,
+                    )
             else:
                 # The residue does not contain this disordered atom
                 # so we create a new one.
@@ -239,19 +289,19 @@ class StructureBuilder(object):
             residue.add(self.atom)
 
     def set_anisou(self, anisou_array):
-        "Set anisotropic B factor of current Atom."
+        """Set anisotropic B factor of current Atom."""
         self.atom.set_anisou(anisou_array)
 
     def set_siguij(self, siguij_array):
-        "Set standard deviation of anisotropic B factor of current Atom."
+        """Set standard deviation of anisotropic B factor of current Atom."""
         self.atom.set_siguij(siguij_array)
 
     def set_sigatm(self, sigatm_array):
-        "Set standard deviation of atom position of current Atom."
+        """Set standard deviation of atom position of current Atom."""
         self.atom.set_sigatm(sigatm_array)
 
     def get_structure(self):
-        "Return the structure."
+        """Return the structure."""
         # first sort everything
         # self.structure.sort()
         # Add the header dict
@@ -259,4 +309,5 @@ class StructureBuilder(object):
         return self.structure
 
     def set_symmetry(self, spacegroup, cell):
+        """Set symmetry."""
         pass

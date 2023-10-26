@@ -4,6 +4,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for XXmotif tool."""
+
 import glob
 import os
 import shutil
@@ -16,25 +18,28 @@ from Bio.motifs.applications import XXmotifCommandline
 
 
 # Try to avoid problems when the OS is in another language
-os.environ['LANG'] = 'C'
+os.environ["LANG"] = "C"
 
 xxmotif_exe = None
 if sys.platform == "win32":
     # TODO
-    raise MissingExternalDependencyError("Testing this on Windows is not implemented yet")
+    raise MissingExternalDependencyError(
+        "Testing this on Windows is not implemented yet"
+    )
 else:
-    from Bio._py3k import getoutput
+    from subprocess import getoutput
+
     output = getoutput("XXmotif")
     if output.find("== XXmotif version") != -1:
         xxmotif_exe = "XXmotif"
 
 if not xxmotif_exe:
     raise MissingExternalDependencyError(
-        "Install XXmotif if you want to use XXmotif from Biopython.")
+        "Install XXmotif if you want to use XXmotif from Biopython."
+    )
 
 
 class XXmotifTestCase(unittest.TestCase):
-
     def setUp(self):
         self.out_dir = "xxmotif-temp"
         self.files_to_clean = set()
@@ -48,7 +53,7 @@ class XXmotifTestCase(unittest.TestCase):
             shutil.rmtree(self.out_dir)
 
     def standard_test_procedure(self, cline):
-        """Standard testing procedure used by all tests."""
+        """Shared test procedure used by all tests."""
         output, error = cline()
 
         self.assertTrue(os.path.isdir(self.out_dir))
@@ -63,7 +68,8 @@ class XXmotifTestCase(unittest.TestCase):
         # MEME parser does not like what XXmotif produces yet.
 
     def copy_and_mark_for_cleanup(self, path):
-        """
+        """Copy file to working directory and marks it for removal.
+
         XXmotif currently only handles a canonical filename as input, no paths.
         This method copies the specified file in the specified path to the
         current working directory and marks it for removal.
@@ -76,40 +82,37 @@ class XXmotifTestCase(unittest.TestCase):
         return filename
 
     def add_file_to_clean(self, filename):
-        """Adds a file for deferred removal by the tearDown routine."""
+        """Add a file for deferred removal by the tearDown routine."""
         self.files_to_clean.add(filename)
 
 
 class XXmotifTestErrorConditions(XXmotifTestCase):
-
     def test_empty_file(self):
         """Test a non-existing input file."""
         input_file = "does_not_exist.fasta"
         self.assertFalse(os.path.isfile(input_file))
 
-        cline = XXmotifCommandline(outdir=self.out_dir,
-                                   seqfile=input_file)
+        cline = XXmotifCommandline(outdir=self.out_dir, seqfile=input_file)
 
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
             self.assertEqual(err.returncode, 255)
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
     def test_invalid_format(self):
         """Test an input file in an invalid format."""
         input_file = self.copy_and_mark_for_cleanup("Medline/pubmed_result1.txt")
 
-        cline = XXmotifCommandline(outdir=self.out_dir,
-                                   seqfile=input_file)
+        cline = XXmotifCommandline(outdir=self.out_dir, seqfile=input_file)
 
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
             self.assertEqual(err.returncode, 255)
         else:
-            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail(f"Should have failed, returned:\n{stdout}\n{stderr}")
 
     def test_output_directory_with_space(self):
         """Test an output directory containing a space."""
@@ -117,8 +120,7 @@ class XXmotifTestErrorConditions(XXmotifTestCase):
         input_file = self.copy_and_mark_for_cleanup("Fasta/f002")
 
         try:
-            cline = XXmotifCommandline(outdir=temp_out_dir,
-                                       seqfile=input_file)
+            XXmotifCommandline(outdir=temp_out_dir, seqfile=input_file)
         except ValueError:
             pass
         else:
@@ -126,18 +128,14 @@ class XXmotifTestErrorConditions(XXmotifTestCase):
 
 
 class XXmotifTestNormalConditions(XXmotifTestCase):
-
     def test_fasta_one_sequence(self):
         """Test a fasta input file containing only one sequence."""
-        input_file = "seq.fasta"
-        handle = open(input_file, "w")
         record = list(SeqIO.parse("Registry/seqs.fasta", "fasta"))[0]
-        SeqIO.write(record, handle, "fasta")
-        handle.close()
-        del handle, record
+        input_file = "seq.fasta"
+        with open(input_file, "w") as handle:
+            SeqIO.write(record, handle, "fasta")
 
-        cline = XXmotifCommandline(outdir=self.out_dir,
-                                   seqfile=input_file)
+        cline = XXmotifCommandline(outdir=self.out_dir, seqfile=input_file)
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
@@ -146,8 +144,7 @@ class XXmotifTestNormalConditions(XXmotifTestCase):
         """Test setting options via properties."""
         input_file = self.copy_and_mark_for_cleanup("Fasta/f002")
 
-        cline = XXmotifCommandline(outdir=self.out_dir,
-                                   seqfile=input_file)
+        cline = XXmotifCommandline(outdir=self.out_dir, seqfile=input_file)
 
         cline.revcomp = True
         cline.pseudo = 20
@@ -157,28 +154,24 @@ class XXmotifTestNormalConditions(XXmotifTestCase):
 
     def test_large_fasta_file(self):
         """Test a large fasta input file."""
-        input_file = "temp_b_nuc.fasta"
-        handle = open(input_file, "w")
         records = list(SeqIO.parse("NBRF/B_nuc.pir", "pir"))
-        SeqIO.write(records, handle, "fasta")
-        handle.close()
-        del handle, records
+        input_file = "temp_b_nuc.fasta"
+        with open(input_file, "w") as handle:
+            SeqIO.write(records, handle, "fasta")
 
-        cline = XXmotifCommandline(outdir=self.out_dir,
-                                   seqfile=input_file)
+        cline = XXmotifCommandline(outdir=self.out_dir, seqfile=input_file)
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
 
     def test_input_filename_with_space(self):
         """Test an input filename containing a space."""
+        records = SeqIO.parse("Phylip/hennigian.phy", "phylip")
         input_file = "temp horses.fasta"
-        handle = open(input_file, "w")
-        SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
-        handle.close()
+        with open(input_file, "w") as handle:
+            SeqIO.write(records, handle, "fasta")
 
-        cline = XXmotifCommandline(outdir=self.out_dir,
-                                   seqfile=input_file)
+        cline = XXmotifCommandline(outdir=self.out_dir, seqfile=input_file)
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)

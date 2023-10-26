@@ -1,25 +1,25 @@
-#!/usr/bin/env python
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Run BioSQL tests using SQLite"""
-from Bio import MissingExternalDependencyError
-from BioSQL import BioSeqDatabase
+"""Run BioSQL tests using MySQL."""
 
-from common_BioSQL import *
+import unittest
 
-DBDRIVER = 'mysql.connector'
-DBTYPE = 'mysql'
+# Really do want "import *" to get all the test clases:
+from common_BioSQL import *  # noqa: F403
+
+# Import these explicitly to avoid flake8 F405 below:
+from common_BioSQL import load_biosql_ini, check_config
+
+
+DBDRIVER = "mysql.connector"
+DBTYPE = "mysql"
 
 DBHOST, DBUSER, DBPASSWD, TESTDB = load_biosql_ini(DBTYPE)
 
 # This will abort if driver not installed etc:
 TESTDB = check_config(DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB)
-
-# Some of the unit tests don't create their own database,
-# so just in case there is no database already:
-create_database()
 
 if __name__ == "__main__":
     # Run the test cases

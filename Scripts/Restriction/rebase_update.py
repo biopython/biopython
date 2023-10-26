@@ -7,119 +7,59 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
+"""Update the Rebase EMBOSS files and NCBI LinkOut files.
 
-"""Update the Rebase emboss files used by Restriction to build the
-Restriction_Dictionary.py module."""
+These two sets of files are used by ``ranacompiler.py`` to build the updated
+``Restriction_Dictionary.py`` module for ``Bio.Restriction``.
 
-from __future__ import print_function
+"""
+
 
 import os
-import sys
-import time
-import optparse
+from datetime import date
+from urllib.request import urlretrieve, urlcleanup
 
 
-try:
-    from urllib import FancyURLopener
-except ImportError:
-    # Python 3
-    from urllib.request import FancyURLopener
+# Rebase ftp location, do not modify these addresses:
+ftp_Rebase = "ftp://ftp.neb.com/"
+ftp_emb_e = ftp_Rebase + "pub/rebase/emboss_e.###"
+ftp_emb_s = ftp_Rebase + "pub/rebase/emboss_s.###"
+ftp_emb_r = ftp_Rebase + "pub/rebase/emboss_r.###"
+ftp_bairoch = ftp_Rebase + "pub/rebase/bairoch.###"
 
-from Bio.Restriction.RanaConfig import *
+# Generate 'time stamp' of type ymm to add to Rebase file names.
+# This is the 3 digit number REBASE release number (e.g. 312).
+# The first digit is the last digit of the year (e.g. 3 for 2013)
+# and the two last the month (e.g. 12 for December)
+release_number = date.today().strftime("%y%m")[1:]
+
+# Replace '###' with the 'time stamp'
+files = [
+    x.replace("###", release_number)
+    for x in [ftp_emb_e, ftp_emb_s, ftp_emb_r, ftp_bairoch]
+]
 
 
-class RebaseUpdate(FancyURLopener):
-
-    def __init__(self, ftpproxy=''):
-        """RebaseUpdate([ftpproxy]]) -> new RebaseUpdate instance.
-
-        if ftpproxy is not given RebaseUpdate uses the corresponding
-        variable from RanaConfig.
-
-        ftpproxy is the proxy to use if any.
-        """
-        proxy = {'ftp': ftpproxy or ftp_proxy}
-        if not Rebase_name:
-            raise FtpNameError('Rebase')
-        if not proxy['ftp']:
-            proxy = {}
-        FancyURLopener.__init__(self, proxy)
-
-    def openRebase(self, name=ftp_Rebase):
-        print('\n Please wait, trying to connect to Rebase\n')
+def get_files():
+    """Download Rebase and LinkOut files."""
+    print(f"Preparing to download {len(files)} files")
+    for file in files:
+        print(f"copying {file}")
+        fn = os.path.basename(file)
+        filename = os.path.join(os.getcwd(), fn)
+        print(f"to {filename}")
         try:
-            self.open(name)
-        except:
-            raise ConnectionError('Rebase')
-        return
-
-    def getfiles(self, *files):
-        for file in self.update(*files):
-            print('copying %s' % file)
-            fn = os.path.basename(file)
-            # filename = os.path.join(Rebase, fn)
-            filename = os.path.join(os.getcwd(), fn)
-            print('to %s' % filename)
-            self.retrieve(file, filename)
-        self.close()
-        return
-
-    def localtime(self):
-        t = time.gmtime()
-        year = str(t.tm_year)[-1]
-        month = str(t.tm_mon)
-        if len(month) == 1:
-            month = '0' + month
-        return year + month
-
-    def update(self, *files):
-        if not files:
-            files = [ftp_emb_e, ftp_emb_s, ftp_emb_r]
-        return [x.replace('###', self.localtime()) for x in files]
-
-    def __del__(self):
-        if hasattr(self, 'tmpcache'):
-            self.close()
-        #
-        #   self.tmpcache is created by URLopener.__init__ method.
-        #
-        return
+            urlretrieve(file, filename)
+            urlcleanup()
+        except OSError as e:
+            print(e)
+            print(
+                "Download of Rebase files failed. Please download the files "
+                '"emboss_e.{0}", "emboss_s.{0}", "emboss_r.{0}", and "bairoch.{0}" manually '
+                "from: ftp://ftp.neb.com/pub/rebase.".format(release_number)
+            )
+            return
 
 
-class FtpNameError(ValueError):
-
-    def __init__(self, which_server):
-        print(" In order to connect to %s ftp server, you must provide a name.\
-        \n Please edit Bio.Restriction.RanaConfig\n" % which_server)
-        sys.exit()
-
-
-class ConnectionError(IOError):
-
-    def __init__(self, which_server):
-        print('\
-        \n Unable to connect to the %s ftp server, make sure your computer\
-        \n is connected to the internet and that you have correctly configured\
-        \n the ftp proxy.\
-        \n Use the --proxy switch to enter the address of your proxy\
-        \n' % which_server)
-        sys.exit()
-
-
-if __name__ == '__main__':
-    parser = optparse.OptionParser()
-    add = parser.add_option
-
-    add('-p', '--proxy',
-        action="store",
-        dest='ftp_proxy',
-        default='',
-        help="set the proxy to be used by the ftp connection.")
-
-    (option, args) = parser.parse_args()
-
-    Getfiles = RebaseUpdate(option.ftp_proxy)
-    Getfiles.openRebase()
-    Getfiles.getfiles()
-    Getfiles.close()
-    sys.exit()
+if __name__ == "__main__":
+    get_files()

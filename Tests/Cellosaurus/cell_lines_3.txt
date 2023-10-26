@@ -1,0 +1,9 @@
+ID   ZZ-R 127
+AC   CVCL_5418
+SY   ZZ-R
+DR   CCLV; CCLV-RIE 0127
+RX   PubMed=19656987;
+RX   PubMed=19941903;
+OX   NCBI_TaxID=9925; ! Capra hircus
+CA   Spontaneously immortalized cell line
+//

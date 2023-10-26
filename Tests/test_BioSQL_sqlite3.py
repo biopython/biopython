@@ -1,32 +1,34 @@
-#!/usr/bin/env python
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Run BioSQL tests using SQLite"""
-import os
+"""Run BioSQL tests using SQLite."""
 
-from Bio import MissingExternalDependencyError
+import os
+import unittest
+
 from Bio import SeqIO
 from BioSQL import BioSeqDatabase
 
-from common_BioSQL import *
+from seq_tests_common import SeqRecordTestBaseClass
+
+# Really do want "import *" to get all the test classes:
+from common_BioSQL import *  # noqa: F403
+
+# Import these explicitly to avoid flake8 F405 below:
+from common_BioSQL import load_biosql_ini, check_config, temp_db_filename
 
 # Constants for the database driver
-DBDRIVER = 'sqlite3'
-DBTYPE = 'sqlite'
+DBDRIVER = "sqlite3"
+DBTYPE = "sqlite"
 
 DBHOST = None
-DBUSER = 'root'
+DBUSER = "root"
 DBPASSWD = None
 TESTDB = temp_db_filename()
 
 # This will abort if driver not installed etc:
 check_config(DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB)
-
-# Some of the unit tests don't create their own database,
-# so just in case there is no database already:
-TESTDB = create_database()
 
 
 if False:
@@ -35,8 +37,7 @@ if False:
     # catch any regressions in how we map GenBank entries to
     # the database.
     assert not os.path.isfile("BioSQL/cor6_6.db")
-    server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                          db="BioSQL/cor6_6.db")
+    server = BioSeqDatabase.open_database(driver=DBDRIVER, db="BioSQL/cor6_6.db")
     DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"
     SQL_FILE = os.path.join(os.getcwd(), "BioSQL", DBSCHEMA)
     assert os.path.isfile(SQL_FILE), SQL_FILE
@@ -50,21 +51,24 @@ if False:
     server.close()
 
 
-class BackwardsCompatibilityTest(unittest.TestCase):
+class BackwardsCompatibilityTest(SeqRecordTestBaseClass):
     def test_backwards_compatibility(self):
         """Check can re-use an old BioSQL SQLite3 database."""
-        original_records = list(SeqIO.parse("GenBank/cor6_6.gb", "gb"))
+        original_records = []
+        for record in SeqIO.parse("GenBank/cor6_6.gb", "gb"):
+            if record.annotations["molecule_type"] == "mRNA":
+                record.annotations["molecule_type"] = "DNA"
+            original_records.append(record)
         # now open a connection to load the database
-        server = BioSeqDatabase.open_database(driver=DBDRIVER,
-                                              db="BioSQL/cor6_6.db")
+        server = BioSeqDatabase.open_database(driver=DBDRIVER, db="BioSQL/cor6_6.db")
         db = server["OLD"]
         self.assertEqual(len(db), len(original_records))
         # Now read them back...
-        biosql_records = [db.lookup(name=rec.name)
-                          for rec in original_records]
+        biosql_records = [db.lookup(name=rec.name) for rec in original_records]
         # And check they agree
-        self.assertTrue(compare_records(original_records, biosql_records))
+        self.compare_records(original_records, biosql_records)
         server.close()
+
 
 if __name__ == "__main__":
     # Run the test cases

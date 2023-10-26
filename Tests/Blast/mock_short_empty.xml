@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm
+.nih.gov/dtd/NCBI_BlastOutput.dtd">
+
+<!-- This is a mock file mimicking a qblast response for our mock tests -->
+
+<BlastOutput>
+  <BlastOutput_program>blastp</BlastOutput_program>
+  <BlastOutput_query-ID>Query_13259</BlastOutput_query-ID>
+  <BlastOutput_query-def>unnamed protein product</BlastOutput_query-def>
+  <BlastOutput_param>
+    <Parameters>
+      <Parameters_expect>200000</Parameters_expect>
+    </Parameters>
+  </BlastOutput_param>
+<BlastOutput_iterations>
+<Iteration>
+  <Iteration_iter-num>1</Iteration_iter-num>
+  <Iteration_query-ID>Query_13259</Iteration_query-ID>
+  <Iteration_query-def>unnamed protein product</Iteration_query-def>
+<Iteration_hits>
+</Iteration_hits>
+</Iteration>
+</BlastOutput_iterations>
+</BlastOutput>

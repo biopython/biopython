@@ -1,11 +1,11 @@
 # Adapted from Bio.AlignIO.FastaIO copyright 2008-2011 by Peter Cock.
 # Copyright 2012 by Wibowo Arindrarto.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
-"""Bio.SearchIO support for Bill Pearson's FASTA tools.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+r"""Bio.SearchIO support for Bill Pearson's FASTA tools.
 
 This module adds support for parsing FASTA outputs. FASTA is a suite of
 programs that finds regions of local or global similarity between protein
@@ -107,41 +107,38 @@ The following object attributes are provided:
 
 import re
 
-from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.Alphabet import generic_dna, generic_protein
-from Bio.File import UndoHandle
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 
-__all__ = ['FastaM10Parser', 'FastaM10Indexer']
+__all__ = ("FastaM10Parser", "FastaM10Indexer")
 
 
 # precompile regex patterns
 # regex for program name
-_RE_FLAVS = re.compile(r't?fast[afmsxy]|pr[sf][sx]|lalign|[gs]?[glso]search')
+_RE_FLAVS = re.compile(r"t?fast[afmsxy]|pr[sf][sx]|lalign|[gs]?[glso]search")
 # regex for sequence ID and length ~ deals with both \n and \r\n
-_PTR_ID_DESC_SEQLEN = r'>>>(.+?)\s+(.*?) *- (\d+) (?:aa|nt)\s*$'
+_PTR_ID_DESC_SEQLEN = r">>>(.+?)\s+(.*?) *- (\d+) (?:aa|nt)\s*$"
 _RE_ID_DESC_SEQLEN = re.compile(_PTR_ID_DESC_SEQLEN)
-_RE_ID_DESC_SEQLEN_IDX = re.compile(_as_bytes(_PTR_ID_DESC_SEQLEN))
+_RE_ID_DESC_SEQLEN_IDX = re.compile(_PTR_ID_DESC_SEQLEN.encode())
 # regex for qresult, hit, or hsp attribute value
-_RE_ATTR = re.compile(r'^; [a-z]+(_[ \w-]+):\s+(.*)$')
+_RE_ATTR = re.compile(r"^; [a-z]+(_[ \w-]+):\s+(.*)$")
 # regex for capturing excess start and end sequences in alignments
-_RE_START_EXC = re.compile(r'^-*')
-_RE_END_EXC = re.compile(r'-*$')
+_RE_START_EXC = re.compile(r"^-*")
+_RE_END_EXC = re.compile(r"-*$")
 
 # attribute name mappings
 _HSP_ATTR_MAP = {
-    '_initn': ('initn_score', int),
-    '_init1': ('init1_score', int),
-    '_opt': ('opt_score', int),
-    '_s-w opt': ('opt_score', int),
-    '_z-score': ('z_score', float),
-    '_bits': ('bitscore', float),
-    '_expect': ('evalue', float),
-    '_score': ('sw_score', int),
-    '_ident': ('ident_pct', float),
-    '_sim': ('pos_pct', float),
+    "_initn": ("initn_score", int),
+    "_init1": ("init1_score", int),
+    "_opt": ("opt_score", int),
+    "_s-w opt": ("opt_score", int),
+    "_z-score": ("z_score", float),
+    "_bits": ("bitscore", float),
+    "_expect": ("evalue", float),
+    "_score": ("sw_score", int),
+    "_ident": ("ident_pct", float),
+    "_sim": ("pos_pct", float),
 }
 
 # state flags
@@ -152,9 +149,9 @@ _STATE_CONS_BLOCK = 3
 
 
 def _set_qresult_hits(qresult, hit_rows=()):
-    """Helper function for appending Hits without alignments into QueryResults."""
+    """Append Hits without alignments into QueryResults (PRIVATE)."""
     for hit_row in hit_rows:
-        hit_id, remainder = hit_row.split(' ', 1)
+        hit_id, remainder = hit_row.split(" ", 1)
         # TODO: parse hit and hsp properties properly; by dealing with:
         #   - any character in the description (brackets, spaces, etc.)
         #   - possible [f] or [r] presence (for frame info)
@@ -171,7 +168,7 @@ def _set_qresult_hits(qresult, hit_rows=()):
 
 
 def _set_hsp_seqs(hsp, parsed, program):
-    """Helper function for the main parsing code.
+    """Set HSPs sequences (PRIVATE).
 
     :param hsp: HSP whose properties will be set
     :type hsp: HSP
@@ -183,55 +180,58 @@ def _set_hsp_seqs(hsp, parsed, program):
     """
     # get aligned sequences and check if they have equal lengths
     start = 0
-    for seq_type in ('hit', 'query'):
-        if 'tfast' not in program:
+    for seq_type in ("hit", "query"):
+        if "tfast" not in program:
             pseq = parsed[seq_type]
             # adjust start and end coordinates based on the amount of
             # filler characters
             start, stop = _get_aln_slice_coords(pseq)
-            start_adj = len(re.search(_RE_START_EXC, pseq['seq']).group(0))
-            stop_adj = len(re.search(_RE_END_EXC, pseq['seq']).group(0))
+            start_adj = len(re.search(_RE_START_EXC, pseq["seq"]).group(0))
+            stop_adj = len(re.search(_RE_END_EXC, pseq["seq"]).group(0))
             start = start + start_adj
             stop = stop + start_adj - stop_adj
-            parsed[seq_type]['seq'] = pseq['seq'][start:stop]
-    assert len(parsed['query']['seq']) == len(parsed['hit']['seq']), "%r %r" \
-            % (len(parsed['query']['seq']), len(parsed['hit']['seq']))
-    if 'similarity' in hsp.aln_annotation:
+            parsed[seq_type]["seq"] = pseq["seq"][start:stop]
+    if len(parsed["query"]["seq"]) != len(parsed["hit"]["seq"]):
+        raise ValueError(
+            "Length mismatch: %r %r"
+            % (len(parsed["query"]["seq"]), len(parsed["hit"]["seq"]))
+        )
+    if "similarity" in hsp.aln_annotation:
         # only using 'start' since FASTA seems to have trimmed the 'excess'
         # end part
-        hsp.aln_annotation['similarity'] = hsp.aln_annotation['similarity'][start:]
+        hsp.aln_annotation["similarity"] = hsp.aln_annotation["similarity"][start:]
         # hit or query works equally well here
-        assert len(hsp.aln_annotation['similarity']) == len(parsed['hit']['seq'])
+        assert len(hsp.aln_annotation["similarity"]) == len(parsed["hit"]["seq"])
 
     # query and hit sequence types must be the same
-    assert parsed['query']['_type'] == parsed['hit']['_type']
-    type_val = parsed['query']['_type']  # hit works fine too
-    alphabet = generic_dna if type_val == 'D' else generic_protein
-    setattr(hsp.fragment, 'alphabet', alphabet)
+    assert parsed["query"]["_type"] == parsed["hit"]["_type"]
+    type_val = parsed["query"]["_type"]  # hit works fine too
+    molecule_type = "DNA" if type_val == "D" else "protein"
+    setattr(hsp.fragment, "molecule_type", molecule_type)
 
-    for seq_type in ('hit', 'query'):
+    for seq_type in ("hit", "query"):
         # get and set start and end coordinates
-        start = int(parsed[seq_type]['_start'])
-        end = int(parsed[seq_type]['_stop'])
+        start = int(parsed[seq_type]["_start"])
+        end = int(parsed[seq_type]["_stop"])
 
-        setattr(hsp.fragment, seq_type + '_start', min(start, end) - 1)
-        setattr(hsp.fragment, seq_type + '_end', max(start, end))
-        # set seq and alphabet
-        setattr(hsp.fragment, seq_type, parsed[seq_type]['seq'])
+        setattr(hsp.fragment, seq_type + "_start", min(start, end) - 1)
+        setattr(hsp.fragment, seq_type + "_end", max(start, end))
+        # set seq and molecule type
+        setattr(hsp.fragment, seq_type, parsed[seq_type]["seq"])
 
-        if alphabet is not generic_protein:
+        if molecule_type != "protein":
             # get strand from coordinate; start <= end is plus
             # start > end is minus
             if start <= end:
-                setattr(hsp.fragment, seq_type + '_strand', 1)
+                setattr(hsp.fragment, seq_type + "_strand", 1)
             else:
-                setattr(hsp.fragment, seq_type + '_strand', -1)
+                setattr(hsp.fragment, seq_type + "_strand", -1)
         else:
-            setattr(hsp.fragment, seq_type + '_strand', 0)
+            setattr(hsp.fragment, seq_type + "_strand", 0)
 
 
 def _get_aln_slice_coords(parsed_hsp):
-    """Helper function for the main parsing code.
+    """Get HSPs sequences (PRIVATE).
 
     To get the actual pairwise alignment sequences, we must first
     translate the un-gapped sequence based coordinates into positions
@@ -241,13 +241,13 @@ def _get_aln_slice_coords(parsed_hsp):
     following code should also cope with that.
 
     Note that this code seems to work fine even when the "sq_offset"
-    entries are prsent as a result of using the -X command line option.
+    entries are present as a result of using the -X command line option.
     """
-    seq = parsed_hsp['seq']
-    seq_stripped = seq.strip('-')
-    disp_start = int(parsed_hsp['_display_start'])
-    start = int(parsed_hsp['_start'])
-    stop = int(parsed_hsp['_stop'])
+    seq = parsed_hsp["seq"]
+    seq_stripped = seq.strip("-")
+    disp_start = int(parsed_hsp["_display_start"])
+    start = int(parsed_hsp["_start"])
+    stop = int(parsed_hsp["_stop"])
 
     if start <= stop:
         start = start - disp_start
@@ -255,57 +255,64 @@ def _get_aln_slice_coords(parsed_hsp):
     else:
         start = disp_start - start
         stop = disp_start - stop + 1
-    stop += seq_stripped.count('-')
-    assert 0 <= start and start < stop and stop <= len(seq_stripped), \
-           "Problem with sequence start/stop,\n%s[%i:%i]\n%s" \
-           % (seq, start, stop, parsed_hsp)
+    stop += seq_stripped.count("-")
+    if not (0 <= start and start < stop and stop <= len(seq_stripped)):
+        raise ValueError(
+            "Problem with sequence start/stop,\n%s[%i:%i]\n%s"
+            % (seq, start, stop, parsed_hsp)
+        )
     return start, stop
 
 
-class FastaM10Parser(object):
+class FastaM10Parser:
     """Parser for Bill Pearson's FASTA suite's -m 10 output."""
 
     def __init__(self, handle, __parse_hit_table=False):
-        self.handle = UndoHandle(handle)
+        """Initialize the class."""
+        self.handle = handle
         self._preamble = self._parse_preamble()
 
     def __iter__(self):
+        """Iterate over FastaM10Parser object yields query results."""
         for qresult in self._parse_qresult():
             # re-set desc, for hsp query description
             qresult.description = qresult.description
             yield qresult
 
     def _parse_preamble(self):
-        """Parses the Fasta preamble for Fasta flavor and version."""
+        """Parse the Fasta preamble for Fasta flavor and version (PRIVATE)."""
         preamble = {}
         while True:
-            self.line = self.handle.readline()
+            line = self.handle.readline()
             # this should be the line just before the first qresult
-            if self.line.startswith('Query'):
+            if line.startswith("Query"):
                 break
             # try to match for version line
-            elif self.line.startswith(' version'):
-                preamble['version'] = self.line.split(' ')[2]
+            elif line.startswith(" version"):
+                preamble["version"] = line.split(" ")[2]
             else:
                 # try to match for flavor line
-                flav_match = re.match(_RE_FLAVS, self.line.lower())
+                flav_match = re.match(_RE_FLAVS, line.lower())
                 if flav_match:
-                    preamble['program'] = flav_match.group(0)
+                    preamble["program"] = flav_match.group(0)
+        self.line = line
 
         return preamble
 
     def __parse_hit_table(self):
-        """Parses hit table rows."""
-        # move to the first row
-        self.line = self.handle.readline()
+        """Parse hit table rows."""
         # parse hit table until we see an empty line
         hit_rows = []
-        while self.line and not self.line.strip():
-            hit_rows.append(self.line.strip())
-            self.line = self.handle.readline()
+        while True:
+            line = self.handle.readline()
+            if (not line) or line.strip():
+                break
+            hit_rows.append("")
+        self.line = line
         return hit_rows
 
     def _parse_qresult(self):
+        """Parse query result (PRIVATE)."""
         # initial qresult value
         qresult = None
         hit_rows = []
@@ -315,20 +322,20 @@ class FastaM10Parser(object):
         state_QRES_CONTENT = 5
         state_QRES_END = 7
 
-        while True:
+        line = self.line
 
+        while True:
             # one line before the hit table
-            if self.line.startswith('The best scores are:'):
+            if line.startswith("The best scores are:"):
                 qres_state = state_QRES_HITTAB
             # the end of a query or the file altogether
-            elif self.line.strip() == '>>>///' or not self.line:
+            elif line.strip() == ">>>///" or not line:
                 qres_state = state_QRES_END
             # the beginning of a new query
-            elif not self.line.startswith('>>>') and '>>>' in self.line:
+            elif not line.startswith(">>>") and ">>>" in line:
                 qres_state = state_QRES_NEW
             # the beginning of the query info and its hits + hsps
-            elif self.line.startswith('>>>') and not \
-                    self.line.strip() == '>>><<<':
+            elif line.startswith(">>>") and not line.strip() == ">>><<<":
                 qres_state = state_QRES_CONTENT
             # default qres mark
             else:
@@ -338,6 +345,7 @@ class FastaM10Parser(object):
                 if qres_state == state_QRES_HITTAB:
                     # parse hit table if flag is set
                     hit_rows = self.__parse_hit_table()
+                    line = self.handle.readline()
 
                 elif qres_state == state_QRES_END:
                     yield _set_qresult_hits(qresult, hit_rows)
@@ -347,23 +355,24 @@ class FastaM10Parser(object):
                     # if qresult is filled, yield it first
                     if qresult is not None:
                         yield _set_qresult_hits(qresult, hit_rows)
-                    regx = re.search(_RE_ID_DESC_SEQLEN, self.line)
+                    regx = re.search(_RE_ID_DESC_SEQLEN, line)
                     query_id = regx.group(1)
                     seq_len = regx.group(3)
                     desc = regx.group(2)
                     qresult = QueryResult(id=query_id)
                     qresult.seq_len = int(seq_len)
                     # get target from the next line
-                    self.line = self.handle.readline()
-                    qresult.target = [x for x in self.line.split(' ') if x][1].strip()
+                    line = self.handle.readline()
+                    qresult.target = [x for x in line.split(" ") if x][1].strip()
                     if desc is not None:
                         qresult.description = desc
                     # set values from preamble
                     for key, value in self._preamble.items():
                         setattr(qresult, key, value)
+                    line = self.handle.readline()
 
                 elif qres_state == state_QRES_CONTENT:
-                    assert self.line[3:].startswith(qresult.id), self.line
+                    assert line[3:].startswith(qresult.id), line
                     for hit, strand in self._parse_hit(query_id):
                         # HACK: re-set desc, for hsp hit and query description
                         hit.description = hit.description
@@ -378,32 +387,41 @@ class FastaM10Parser(object):
                             for hsp in hit.hsps:
                                 assert strand != hsp.query_strand
                                 qresult[hit.id].append(hsp)
+                    line = self.line
 
-            self.line = self.handle.readline()
+            else:
+                line = self.handle.readline()
+
+        self.line = line
 
     def _parse_hit(self, query_id):
+        """Parse hit on query identifier (PRIVATE)."""
         while True:
-            self.line = self.handle.readline()
-            if self.line.startswith('>>'):
+            line = self.handle.readline()
+            if line.startswith(">>"):
                 break
 
         state = _STATE_NONE
         strand = None
         hsp_list = []
+        hsp = None
+        parsed_hsp = None
+        hit_desc = None
+        seq_len = None
         while True:
-            peekline = self.handle.peekline()
             # yield hit if we've reached the start of a new query or
             # the end of the search
-            if peekline.strip() in [">>><<<", ">>>///"] or \
-                    (not peekline.startswith('>>>') and '>>>' in peekline):
+            self.line = self.handle.readline()
+            if self.line.strip() in [">>><<<", ">>>///"] or (
+                not self.line.startswith(">>>") and ">>>" in self.line
+            ):
                 # append last parsed_hsp['hit']['seq'] line
                 if state == _STATE_HIT_BLOCK:
-                    parsed_hsp['hit']['seq'] += self.line.strip()
+                    parsed_hsp["hit"]["seq"] += line.strip()
                 elif state == _STATE_CONS_BLOCK:
-                    hsp.aln_annotation['similarity'] += \
-                            self.line.strip('\r\n')
+                    hsp.aln_annotation["similarity"] += line.strip("\r\n")
                 # process HSP alignment and coordinates
-                _set_hsp_seqs(hsp, parsed_hsp, self._preamble['program'])
+                _set_hsp_seqs(hsp, parsed_hsp, self._preamble["program"])
                 hit = Hit(hsp_list)
                 hit.description = hit_desc
                 hit.seq_len = seq_len
@@ -411,10 +429,10 @@ class FastaM10Parser(object):
                 hsp_list = []
                 break
             # yield hit and create a new one if we're still in the same query
-            elif self.line.startswith('>>'):
+            elif line.startswith(">>"):
                 # try yielding,  if we have hsps
                 if hsp_list:
-                    _set_hsp_seqs(hsp, parsed_hsp, self._preamble['program'])
+                    _set_hsp_seqs(hsp, parsed_hsp, self._preamble["program"])
                     hit = Hit(hsp_list)
                     hit.description = hit_desc
                     hit.seq_len = seq_len
@@ -422,50 +440,50 @@ class FastaM10Parser(object):
                     hsp_list = []
                 # try to get the hit id and desc, and handle cases without descs
                 try:
-                    hit_id, hit_desc = self.line[2:].strip().split(' ', 1)
+                    hit_id, hit_desc = line[2:].strip().split(" ", 1)
                 except ValueError:
-                    hit_id = self.line[2:].strip().split(' ', 1)[0]
-                    hit_desc = ''
+                    hit_id = line[2:].strip().split(" ", 1)[0]
+                    hit_desc = ""
                 # create the HSP object for Hit
                 frag = HSPFragment(hit_id, query_id)
                 hsp = HSP([frag])
                 hsp_list.append(hsp)
                 # set or reset the state to none
                 state = _STATE_NONE
-                parsed_hsp = {'query': {}, 'hit': {}}
+                parsed_hsp = {"query": {}, "hit": {}}
             # create and append a new HSP if line starts with '>--'
-            elif self.line.startswith('>--'):
+            elif line.startswith(">--"):
                 # set seq attributes of previous hsp
-                _set_hsp_seqs(hsp, parsed_hsp, self._preamble['program'])
+                _set_hsp_seqs(hsp, parsed_hsp, self._preamble["program"])
                 # and create a new one
                 frag = HSPFragment(hit_id, query_id)
                 hsp = HSP([frag])
                 hsp_list.append(hsp)
                 # set the state ~ none yet
                 state = _STATE_NONE
-                parsed_hsp = {'query': {}, 'hit': {}}
+                parsed_hsp = {"query": {}, "hit": {}}
             # this is either query or hit data in the HSP, depending on the state
-            elif self.line.startswith('>'):
+            elif line.startswith(">"):
                 if state == _STATE_NONE:
                     # make sure it's the correct query
-                    assert query_id.startswith(self.line[1:].split(' ')[0]), \
-                            "%r vs %r" % (query_id, self.line)
+                    if not query_id.startswith(line[1:].split(" ")[0]):
+                        raise ValueError(f"{query_id!r} vs {line!r}")
                     state = _STATE_QUERY_BLOCK
-                    parsed_hsp['query']['seq'] = ''
+                    parsed_hsp["query"]["seq"] = ""
                 elif state == _STATE_QUERY_BLOCK:
                     # make sure it's the correct hit
-                    assert hit_id.startswith(self.line[1:].split(' ')[0])
+                    assert hit_id.startswith(line[1:].split(" ")[0])
                     state = _STATE_HIT_BLOCK
-                    parsed_hsp['hit']['seq'] = ''
+                    parsed_hsp["hit"]["seq"] = ""
             # check for conservation block
-            elif self.line.startswith('; al_cons'):
+            elif line.startswith("; al_cons"):
                 state = _STATE_CONS_BLOCK
-                hsp.fragment.aln_annotation['similarity'] = ''
-            elif self.line.startswith(';'):
+                hsp.fragment.aln_annotation["similarity"] = ""
+            elif line.startswith(";"):
                 # Fasta outputs do not make a clear distinction between Hit
                 # and HSPs, so we check the attribute names to determine
                 # whether it belongs to a Hit or HSP
-                regx = re.search(_RE_ATTR, self.line.strip())
+                regx = re.search(_RE_ATTR, line.strip())
                 name = regx.group(1)
                 value = regx.group(2)
 
@@ -475,36 +493,34 @@ class FastaM10Parser(object):
                         attr_name, caster = _HSP_ATTR_MAP[name]
                         if caster is not str:
                             value = caster(value)
-                        if name in ['_ident', '_sim']:
+                        if name in ["_ident", "_sim"]:
                             value *= 100
                         setattr(hsp, attr_name, value)
                 # otherwise, pool the values for processing later
                 elif state == _STATE_QUERY_BLOCK:
-                    parsed_hsp['query'][name] = value
+                    parsed_hsp["query"][name] = value
                 elif state == _STATE_HIT_BLOCK:
-                    if name == '_len':
+                    if name == "_len":
                         seq_len = int(value)
                     else:
-                        parsed_hsp['hit'][name] = value
+                        parsed_hsp["hit"][name] = value
                 # for values in the hit block
                 else:
-                    raise ValueError("Unexpected line: %r" % self.line)
+                    raise ValueError("Unexpected line: %r" % line)
             # otherwise, it must be lines containing the sequences
             else:
-                assert '>' not in self.line
+                assert ">" not in line
                 # if we're in hit, parse into hsp.hit
                 if state == _STATE_HIT_BLOCK:
-                    parsed_hsp['hit']['seq'] += self.line.strip()
+                    parsed_hsp["hit"]["seq"] += line.strip()
                 elif state == _STATE_QUERY_BLOCK:
-                    parsed_hsp['query']['seq'] += self.line.strip()
+                    parsed_hsp["query"]["seq"] += line.strip()
                 elif state == _STATE_CONS_BLOCK:
-                    hsp.fragment.aln_annotation['similarity'] += \
-                            self.line.strip('\r\n')
+                    hsp.fragment.aln_annotation["similarity"] += line.strip("\r\n")
                 # we should not get here!
                 else:
-                    raise ValueError("Unexpected line: %r" % self.line)
-
-            self.line = self.handle.readline()
+                    raise ValueError("Unexpected line: %r" % line)
+            line = self.line
 
 
 class FastaM10Indexer(SearchIndexer):
@@ -513,33 +529,36 @@ class FastaM10Indexer(SearchIndexer):
     _parser = FastaM10Parser
 
     def __init__(self, filename):
+        """Initialize the class."""
         SearchIndexer.__init__(self, filename)
-        self._handle = UndoHandle(self._handle)
 
     def __iter__(self):
+        """Iterate over FastaM10Indexer; yields query results' keys, start offsets, offset lengths."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()
         qresult_key = None
         query_mark = b">>>"
 
+        line = handle.readline()
         while True:
-            line = handle.readline()
-            peekline = handle.peekline()
             end_offset = handle.tell()
 
             if not line.startswith(query_mark) and query_mark in line:
                 regx = re.search(_RE_ID_DESC_SEQLEN_IDX, line)
-                qresult_key = _bytes_to_string(regx.group(1))
+                qresult_key = regx.group(1).decode()
                 start_offset = end_offset - len(line)
             # yield whenever we encounter a new query or at the end of the file
             if qresult_key is not None:
-                if (not peekline.startswith(query_mark) and
-                    query_mark in peekline) or not line:
+                if not line:
                     yield qresult_key, start_offset, end_offset - start_offset
-                    if not line:
-                        break
+                    break
+                line = handle.readline()
+                if not line.startswith(query_mark) and query_mark in line:
+                    yield qresult_key, start_offset, end_offset - start_offset
                     start_offset = end_offset
+            else:
+                line = handle.readline()
 
     def get_raw(self, offset):
         """Return the raw record from the file as a bytes string."""
@@ -549,24 +568,25 @@ class FastaM10Indexer(SearchIndexer):
 
         # read header first
         handle.seek(0)
+        line = handle.readline()
         while True:
-            line = handle.readline()
-            peekline = handle.peekline()
             qresult_raw += line
-            if not peekline.startswith(query_mark) and query_mark in peekline:
+            line = handle.readline()
+            if not line.startswith(query_mark) and query_mark in line:
                 break
 
         # and read the qresult raw string
         handle.seek(offset)
+        line = handle.readline()
         while True:
             # preserve whitespace, don't use read_forward
-            line = handle.readline()
-            peekline = handle.peekline()
+            if not line:
+                break
             qresult_raw += line
 
+            line = handle.readline()
             # break when we've reached qresult end
-            if (not peekline.startswith(query_mark) and query_mark in peekline) or \
-                    not line:
+            if not line.startswith(query_mark) and query_mark in line:
                 break
 
         # append mock end marker to qresult_raw, since it's not always present
@@ -576,4 +596,5 @@ class FastaM10Indexer(SearchIndexer):
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

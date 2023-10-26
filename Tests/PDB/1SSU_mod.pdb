@@ -1,0 +1,8 @@
+MODEL        1
+ATOM      1  N   ASP A   1      -1.058   1.426 -20.149  1.00  0.00           N
+ATOM      1  N   ASP B   1      -0.025   1.151 -19.117  1.00  0.00           N
+ENDMDL
+MODEL        2
+ATOM      1  N   ASP A   1       7.024  -5.098 -18.103  1.00  0.00           N
+ATOM      1  N   ASP B   1       6.259  -4.102 -17.308  1.00  0.00           N
+ENDMDL

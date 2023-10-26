@@ -1,19 +1,13 @@
 
 <!--
-     File isonum.ent produced by the XSL script mmldtd.xsl
+     File isonum.ent produced by the XSL script characters.xsl
      from input data in unicode.xml.
 
-     Please report any errors to 
-     David Carlisle <davidc@nag.co.uk>.
+     Please report any errors to David Carlisle
+     via the public W3C list www-math@w3.org.
 
      The numeric character values assigned to each entity
-     (should) match either official Unicode assignments
-     or assignments provisionally allocated by the
-     Unicode Consortium based on the characters in the `STIX'
-     propsal for mathematics. Note that these assignments
-     have not been ratified by the corresponding ISO
-     committee and thus should be considered liable to
-     change.
+     (should) match the Unicode assignments in Unicode 4.0.
 
      Entity names in this file are derived from files carrying the
      following notice:
@@ -25,7 +19,7 @@
 
 -->
 
-<!ENTITY amp              "&#x26;#x00026;" ><!--=ampersand -->
+<!ENTITY amp              "&#38;#38;" ><!--=ampersand -->
 <!ENTITY apos             "&#x00027;" ><!--=apostrophe -->
 <!ENTITY ast              "&#x0002A;" ><!--/ast B: =asterisk -->
 <!ENTITY brvbar           "&#x000A6;" ><!--=broken (vertical) bar -->
@@ -63,7 +57,7 @@
 <!ENTITY lpar             "&#x00028;" ><!--O: =left parenthesis -->
 <!ENTITY lsqb             "&#x0005B;" ><!--/lbrack O: =left square bracket -->
 <!ENTITY lsquo            "&#x02018;" ><!--=single quotation mark, left -->
-<!ENTITY lt               "&#x26;#x0003C;" ><!--=less-than sign R: -->
+<!ENTITY lt               "&#38;#60;" ><!--=less-than sign R: -->
 <!ENTITY micro            "&#x000B5;" ><!--=micro sign -->
 <!ENTITY middot           "&#x000B7;" ><!--/centerdot B: =middle dot -->
 <!ENTITY nbsp             "&#x000A0;" ><!--=no break (required) space -->
@@ -101,4 +95,3 @@
 <!ENTITY uarr             "&#x02191;" ><!--/uparrow A: =upward arrow -->
 <!ENTITY verbar           "&#x0007C;" ><!--/vert =vertical bar -->
 <!ENTITY yen              "&#x000A5;" ><!--/yen =yen sign -->
-

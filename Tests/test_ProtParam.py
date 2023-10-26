@@ -5,69 +5,91 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Tests for Bio.SeqUtils.ProtParam and related code."""
 
 import unittest
 from Bio.Seq import Seq
-from Bio.Alphabet import IUPAC
+from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import ProtParam, ProtParamData
 from Bio.SeqUtils import molecular_weight
 
 
 class ProtParamTest(unittest.TestCase):
+    """Tests for ProtParam."""
+
     def setUp(self):
-        self.seq_text = "MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGTRDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV"
-        self.analysis = ProtParam.ProteinAnalysis(self.seq_text)
+        """Initialise objects."""
+        text = "MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGTRDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV"
+        seq = Seq(text)
+        record = SeqRecord(seq)
+        analysis_text = ProtParam.ProteinAnalysis(text)
+        analysis_seq = ProtParam.ProteinAnalysis(seq)
+        analysis_record = ProtParam.ProteinAnalysis(record)
+        self.text = text
+        self.sequences = (text, seq, record)
+        self.analyses = (analysis_text, analysis_seq, analysis_record)
 
     def test_count_amino_acids(self):
-        "Test getting amino acid counts"
-        count_dict = self.analysis.count_amino_acids()
-        for i in sorted(count_dict):
-            self.assertEqual(count_dict[i], self.seq_text.count(i))
+        """Calculate amino acid counts."""
+        for analysis in self.analyses:
+            count_dict = analysis.count_amino_acids()
+            for i in count_dict:
+                self.assertEqual(count_dict[i], self.text.count(i))
 
     def test_get_amino_acids_percent(self):
-        "Test getting amino acid percentage"
-        percent_dict = self.analysis.get_amino_acids_percent()
-        seq_len = len(self.seq_text)
-        for i in sorted(percent_dict):
-            self.assertAlmostEqual(percent_dict[i], self.seq_text.count(i) / float(seq_len))
+        """Calculate amino acid percentages."""
+        for analysis in self.analyses:
+            percent_dict = analysis.get_amino_acids_percent()
+            seq_len = len(self.text)
+            for i in percent_dict:
+                self.assertAlmostEqual(percent_dict[i], self.text.count(i) / seq_len)
 
     def test_get_molecular_weight(self):
-        "Test calculating protein molecular weight"
-        self.assertAlmostEqual(round(self.analysis.molecular_weight(), 2),
-                               17103.16)
+        """Calculate protein molecular weight."""
+        for analysis in self.analyses:
+            self.assertAlmostEqual(analysis.molecular_weight(), 17103.16, 2)
 
     def test_get_monoisotopic_molecular_weight(self):
-        "Test calculating the monoisotopic molecular weight"
-        self.analysis = ProtParam.ProteinAnalysis(self.seq_text, monoisotopic=True)
-        self.assertAlmostEqual(round(self.analysis.molecular_weight(), 2),
-                               17092.61)
+        """Calculate monoisotopic molecular weight."""
+        for sequence in self.sequences:
+            analysis = ProtParam.ProteinAnalysis(sequence, monoisotopic=True)
+            self.assertAlmostEqual(analysis.molecular_weight(), 17092.61, 2)
 
     def test_get_molecular_weight_identical(self):
-        "Test calculating the protein molecular weight agrees with calculation from Bio.SeqUtils"
-        mw_1 = self.analysis.molecular_weight()
-        mw_2 = molecular_weight(Seq(self.seq_text, IUPAC.protein))
-        self.assertAlmostEqual(mw_1, mw_2)
+        """Confirm protein molecular weight agrees with calculation from Bio.SeqUtils."""
+        # This test is somehow useless, since ProteinAnalysis.molecular_weight
+        # is internally calling SeqUtils.molecular_weight.
+        mw_2 = molecular_weight(self.text, seq_type="protein")
+        for analysis in self.analyses:
+            mw_1 = analysis.molecular_weight()
+            self.assertAlmostEqual(mw_1, mw_2)
 
     def test_get_monoisotopic_molecular_weight_identical(self):
-        "Test calculating the protein molecular weight agrees with calculation from Bio.SeqUtils"
-        self.analysis = ProtParam.ProteinAnalysis(self.seq_text, monoisotopic=True)
-        mw_1 = self.analysis.molecular_weight()
-        mw_2 = molecular_weight(Seq(self.seq_text, IUPAC.protein), monoisotopic=True)
-        self.assertAlmostEqual(mw_1, mw_2)
+        """Confirm protein molecular weight agrees with calculation from Bio.SeqUtils."""
+        # This test is somehow useless, since ProteinAnalysis.molecular_weight
+        # is internally calling SeqUtils.molecular_weight.
+        mw_2 = molecular_weight(self.text, seq_type="protein", monoisotopic=True)
+        for sequence in self.sequences:
+            analysis = ProtParam.ProteinAnalysis(sequence, monoisotopic=True)
+            mw_1 = analysis.molecular_weight()
+            self.assertAlmostEqual(mw_1, mw_2)
 
     def test_aromaticity(self):
-        "Test calculating protein aromaticity"
-        # Old test used a number rounded to two digits, so use the same
-        self.assertEqual(round(self.analysis.aromaticity(), 2), 0.10)
+        """Calculate protein aromaticity."""
+        for analysis in self.analyses:
+            # Old test used a number rounded to two digits, so use the same
+            self.assertAlmostEqual(analysis.aromaticity(), 0.10, 2)
 
     def test_instability_index(self):
-        "Test calculating protein instability index"
-        # Old test used a number rounded to two digits, so use the same
-        self.assertEqual(round(self.analysis.instability_index(), 2), 41.98)
+        """Calculate protein instability index."""
+        for analysis in self.analyses:
+            # Old test used a number rounded to two digits, so use the same
+            self.assertAlmostEqual(analysis.instability_index(), 41.98, 2)
 
     def test_flexibility(self):
-        "Test calculating protein flexibility"
-        flexibility = self.analysis.flexibility()
+        """Calculate protein flexibility."""
+        # Turn black code style off
+        # fmt: off
         expected_flexibility = [
             0.9825119047619049, 1.0166904761904763, 0.9947857142857144,
             0.9660238095238095, 0.9890714285714285, 0.9737261904761906,
@@ -116,26 +138,41 @@ class ProtParamTest(unittest.TestCase):
             1.003297619047619, 1.0161666666666667, 0.977440476190476,
             0.9762738095238096, 0.9785833333333332, 0.9609642857142857,
             0.9650833333333334]
+        # Turn black code style on
+        # fmt: on
 
-        self.assertEqual(len(flexibility), len(expected_flexibility), "Output length differs")
-        for f, e in zip(flexibility, expected_flexibility):
-            self.assertAlmostEqual(f, e)
+        for analysis in self.analyses:
+            flexibility = analysis.flexibility()
+            self.assertEqual(
+                len(flexibility), len(expected_flexibility), "Output length differs"
+            )
+            for f, e in zip(flexibility, expected_flexibility):
+                self.assertAlmostEqual(f, e)
 
     def test_isoelectric_point(self):
-        "Test calculating the isoelectric point"
-        # Old test used a number rounded to two digits, so use the same
-        self.assertAlmostEqual(round(self.analysis.isoelectric_point(), 2), 7.72)
+        """Calculate the isoelectric point."""
+        for analysis in self.analyses:
+            # Old test used a number rounded to two digits, so use the same
+            self.assertAlmostEqual(analysis.isoelectric_point(), 7.72, 2)
+
+    def test_charge_at_pH(self):
+        """Test charge_at_pH function."""
+        for analysis in self.analyses:
+            self.assertAlmostEqual(analysis.charge_at_pH(7.72), 0.00, 2)
 
     def test_secondary_structure_fraction(self):
-        "Test calculating secondary structure fractions"
-        helix, turn, sheet = self.analysis.secondary_structure_fraction()
-        # Old test used numbers rounded to two digits, so use the same
-        self.assertAlmostEqual(round(helix, 2), 0.28)
-        self.assertAlmostEqual(round(turn, 2), 0.26)
-        self.assertAlmostEqual(round(sheet, 2), 0.25)
+        """Calculate secondary structure fractions."""
+        for analysis in self.analyses:
+            helix, turn, sheet = analysis.secondary_structure_fraction()
+            # Old test used numbers rounded to two digits, so use the same
+            self.assertAlmostEqual(helix, 0.33, 2)
+            self.assertAlmostEqual(turn, 0.29, 2)
+            self.assertAlmostEqual(sheet, 0.37, 2)
 
     def test_protein_scale(self):
-        "Test calculating the Kite Doolittle scale"
+        """Calculate the Kite Doolittle scale."""
+        # Turn black code style off
+        # fmt: off
         expected = [-0.0783, +0.0358, +0.1258, +0.6950, +0.8775, +0.8350, +0.2925, +0.3383,
                     -0.1733, -0.4142, -0.5292, -0.6108, -0.8308, -0.8100, -0.8208, -1.0283,
                     -1.6300, -1.8233, -2.4267, -2.2292, -1.7817, -1.4742, -0.7467, -0.1608,
@@ -154,13 +191,63 @@ class ProtParamTest(unittest.TestCase):
                     +0.0317, -0.0917, -0.6375, -0.9650, -1.4500, -1.6008, -1.7558, -1.5450,
                     -1.7900, -1.8133, -2.0125, -2.1383, -2.3142, -2.1525, -2.1425, -1.9733,
                     -1.4742, -0.8083, -0.2100, +0.8067, +1.3092, +1.8367, +2.0283, +2.3558]
-        for i, e in zip(self.analysis.protein_scale(ProtParamData.kd, 9, 0.4), expected):
-            # Expected values have 4 decimal places, so restrict to that exactness
-            self.assertAlmostEqual(i, e, places=4)
+        # Turn black code style on
+        # fmt: on
+        for analysis in self.analyses:
+            for i, e in zip(analysis.protein_scale(ProtParamData.kd, 9, 0.4), expected):
+                # Expected values have 4 decimal places, so restrict to that exactness
+                self.assertAlmostEqual(i, e, places=4)
 
     def test_gravy(self):
-        "Test calculating gravy"
-        self.assertAlmostEqual(self.analysis.gravy(), -0.5974, places=4)
+        """Calculate gravy. Tests all pre-defined scales."""
+        expected_values = {
+            "KyteDoolitle": -0.5974,
+            "Aboderin": 4.5671,
+            "AbrahamLeo": 0.2378,
+            "Argos": 0.8607,
+            "BlackMould": 0.5074,
+            "BullBreese": -0.0445,
+            "Casari": -0.2414,
+            "Cid": -0.0678,
+            "Cowan3.4": 0.0234,
+            "Cowan7.5": -0.0733,
+            "Eisenberg": -0.0435,
+            "Engelman": 1.600,
+            "Fasman": -0.3614,
+            "Fauchere": 0.327,
+            "GoldSack": 1.1564,
+            "Guy": 0.0675,
+            "Jones": 1.223,
+            "Juretic": -0.6672,
+            "Kidera": 0.1383,
+            "Miyazawa": 5.3109,
+            "Parker": 1.7487,
+            "Ponnuswamy": 0.3491,
+            "Rose": 0.7147,
+            "Roseman": -0.4729,
+            "Sweet": -0.0791,
+            "Tanford": 0.0625,
+            "Wilson": 1.5493,
+            "Zimmerman": 1.2841,
+        }
+
+        for analysis in self.analyses:
+            for scale, exp_v in expected_values.items():
+                self.assertAlmostEqual(analysis.gravy(scale=scale), exp_v, places=4)
+
+            with self.assertRaises(ValueError) as cm:
+                analysis.gravy("Wrong Scale")
+            self.assertEqual("scale: Wrong Scale not known", str(cm.exception))
+
+    def test_molar_extinction_coefficient(self):
+        """Molar extinction coefficient."""
+        for analysis in self.analyses:
+            self.assertAlmostEqual(
+                analysis.molar_extinction_coefficient()[0], 17420, places=5
+            )
+            self.assertAlmostEqual(
+                analysis.molar_extinction_coefficient()[1], 17545, places=5
+            )
 
 
 if __name__ == "__main__":

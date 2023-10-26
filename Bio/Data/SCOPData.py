@@ -1,13 +1,30 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright Lenna Peterson (2012)
+# All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Additional protein alphabets used in the SCOP database and PDB files.
 
-See Bio.SCOP for more information about SCOP and Biopython"s SCOP module.
+See Bio.SCOP for more information about SCOP and Biopython's SCOP module.
 """
 
+import warnings
 
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn(
+    "The 'Bio.Data.SCOPData' module will be deprecated in a future release "
+    "of Biopython in favor of 'Bio.Data.PDBData.",
+    BiopythonDeprecationWarning,
+)
+
+
+# This file was automatically generated from PDB data.
+# Black would reformat this to one entry per line, so tell it not to:
+# fmt: off
 protein_letters_3to1 = {
     "00C": "C", "01W": "X", "02K": "A", "03Y": "C", "07O": "C",
     "08P": "C", "0A0": "D", "0A1": "Y", "0A2": "K", "0A8": "C",
@@ -31,7 +48,7 @@ protein_letters_3to1 = {
     "2TL": "T", "2TY": "Y", "2VA": "V", "2XA": "C", "32S": "X",
     "32T": "X", "3AH": "H", "3AR": "X", "3CF": "F", "3DA": "A",
     "3DR": "N", "3GA": "A", "3MD": "D", "3ME": "U", "3NF": "Y",
-    "3QN": "K", "3TY": "X", "3XH": "G", "4AC": "N", "4BF": "Y",
+    "3QN": "K", "3TY": "X", "3XH": "G", "4AC": "N", "4BF": "F",
     "4CF": "F", "4CY": "M", "4DP": "W", "4F3": "GYG", "4FB": "P",
     "4FW": "W", "4HT": "W", "4IN": "W", "4MF": "N", "4MM": "X",
     "4OC": "C", "4PC": "C", "4PD": "C", "4PE": "C", "4PH": "F",

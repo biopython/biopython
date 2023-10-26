@@ -1,10 +1,9 @@
 # Copyright 2000 by Jeffrey Chang.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
-# Gavin E. Crooks 2001-11-03
-# Minor extensions, some bug fixes, and major changes to the interface
+# Revisions copyright 2001 by Gavin E. Crooks. All rights reserved.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """A collection of residues from a PDB structure."""
 
 import re
@@ -14,7 +13,7 @@ _pdbid_re = re.compile(r"^(\w\w\w\w)(?:$|\s+|_)(.*)")
 _fragment_re = re.compile(r"\(?(\w:)?(-?\w*)-?(-?\w*)\)?(.*)")
 
 
-class Residues(object):
+class Residues:
     """A collection of residues from a PDB structure.
 
     This class provides code to work with SCOP domain definitions. These
@@ -35,7 +34,8 @@ class Residues(object):
     """
 
     def __init__(self, str=None):
-        self.pdbid = ''
+        """Initialize the class."""
+        self.pdbid = ""
         self.fragments = ()
         if str is not None:
             self._parse(str)
@@ -49,23 +49,23 @@ class Residues(object):
             self.pdbid = m.group(1)
             str = m.group(2)  # Everything else
 
-        if str == '' or str == '-' or str == '(-)':  # no fragments, whole sequence
+        if str == "" or str == "-" or str == "(-)":  # no fragments, whole sequence
             return
 
         fragments = []
-        for l in str.split(","):
-            m = _fragment_re.match(l)
+        for fragment in str.split(","):
+            m = _fragment_re.match(fragment)
             if m is None:
-                raise ValueError("I don't understand the format of %s" % l)
+                raise ValueError(f"I don't understand the format of {fragment}")
             chain, start, end, postfix = m.groups()
 
             if postfix != "":
-                raise ValueError("I don't understand the format of %s" % l)
+                raise ValueError(f"I don't understand the format of {fragment}")
 
             if chain:
-                if chain[-1] != ':':
-                    raise ValueError("I don't understand the chain in %s" % l)
-                chain = chain[:-1]   # chop off the ':'
+                if chain[-1] != ":":
+                    raise ValueError(f"I don't understand the chain in {fragment}")
+                chain = chain[:-1]  # chop off the ':'
             else:
                 chain = ""
 
@@ -73,18 +73,19 @@ class Residues(object):
         self.fragments = tuple(fragments)
 
     def __str__(self):
+        """Represent the SCOP residues record as a string."""
         prefix = ""
         if self.pdbid:
-            prefix = self.pdbid + ' '
+            prefix = self.pdbid + " "
 
         if not self.fragments:
-            return prefix + '-'
+            return prefix + "-"
         strs = []
         for chain, start, end in self.fragments:
             s = []
             if chain:
-                s.append("%s:" % chain)
+                s.append(f"{chain}:")
             if start:
-                s.append("%s-%s" % (start, end))
+                s.append(f"{start}-{end}")
             strs.append("".join(s))
         return prefix + ",".join(strs)

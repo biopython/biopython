@@ -1,53 +1,56 @@
 # Copyright 2010 by Tiago Antao.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
-"""
-Large file parsing of Genepop files
+"""Large file parsing of Genepop files.
 
 The standard parser loads the whole file into memory. This parser
 provides an iterator over data.
 
 Classes:
-LargeRecord           Holds GenePop data.
+- LargeRecord - Holds GenePop data.
 
 Functions:
-read             Parses a GenePop record (file) into a Record object.
+- read - Parses a GenePop record (file) into a Record object.
 
 """
 
 
 def get_indiv(line):
-    indiv_name, marker_line = line.split(',')
-    markers = marker_line.replace('\t', ' ').split(' ')
-    markers = [marker for marker in markers if marker != '']
+    """Get individual's data from line."""
+    indiv_name, marker_line = line.split(",")
+    markers = marker_line.replace("\t", " ").split(" ")
+    markers = [marker for marker in markers if marker != ""]
     if len(markers[0]) in [2, 4]:  # 2 digits per allele
         marker_len = 2
     else:
         marker_len = 3
     try:
-        allele_list = [(int(marker[0:marker_len]),
-                       int(marker[marker_len:]))
-                   for marker in markers]
+        allele_list = [
+            (int(marker[0:marker_len]), int(marker[marker_len:])) for marker in markers
+        ]
     except ValueError:  # Haploid
-        allele_list = [(int(marker[0:marker_len]),)
-                   for marker in markers]
+        allele_list = [(int(marker[0:marker_len]),) for marker in markers]
     return indiv_name, allele_list, marker_len
 
 
 def read(handle):
-    """Parses a handle containing a GenePop file.
+    """Parse a handle containing a GenePop file.
 
-       handle is a file-like object that contains a GenePop record.
+    Arguments:
+    - handle is a file-like object that contains a GenePop record.
+
     """
     record = Record(handle)
-    record.comment_line = str(handle.readline()).rstrip()
+    record.comment_line = next(handle).rstrip()
     # We can now have one loci per line or all loci in a single line
     # separated by either space or comma+space...
     # We will remove all commas on loci... that should not be a problem
-    sample_loci_line = str(handle.readline()).rstrip().replace(',', '')
-    all_loci = sample_loci_line.split(' ')
+    sample_loci_line = next(handle).rstrip().replace(",", "")
+    all_loci = sample_loci_line.split(" ")
     record.loci_list.extend(all_loci)
     line = handle.readline()
     while line != "":
@@ -63,8 +66,8 @@ def read(handle):
     return record
 
 
-class Record(object):
-    """Holds information from a GenePop record.
+class Record:
+    """Hold information from a GenePop record.
 
     Members:
     marker_len         The marker length (2 or 3 digit code per allele).
@@ -86,7 +89,9 @@ class Record(object):
     is unknown.
 
     """
+
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
         self.marker_len = 0
         self.comment_line = ""
@@ -95,10 +100,11 @@ class Record(object):
         self.stack = []
 
     def data_generator(self):
+        """Extract population data."""
         for handle in [self.stack, self.handle]:
             for line in handle:
                 line = line.rstrip()
-                if line.upper() == 'POP':
+                if line.upper() == "POP":
                     yield ()
                 else:
                     indiv_name, allele_list, marker_len = get_indiv(line)
@@ -112,4 +118,3 @@ class Record(object):
                                 mk_real.append(al)
                         clean_list.append(tuple(mk_real))
                     yield indiv_name, clean_list
-        raise StopIteration()

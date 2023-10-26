@@ -1,16 +1,18 @@
 # Copyright 2001 by Tarjei Mikkelsen.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Code to work with data from the KEGG database.
 
 References:
-
 Kanehisa, M. and Goto, S.; KEGG: Kyoto Encyclopedia of Genes and Genomes.
 Nucleic Acids Res. 28, 29-34 (2000).
 
 URL: http://www.genome.ad.jp/kegg/
+
 """
 
 
@@ -18,20 +20,31 @@ KEGG_ITEM_LENGTH = 12
 KEGG_LINE_LENGTH = 80
 KEGG_DATA_LENGTH = KEGG_LINE_LENGTH - KEGG_ITEM_LENGTH
 
-# wrap rule = [indent, connect, (splitstr, connect, splitafter, keep), ...]
-_default_wrap = lambda indent: [indent, "", (" ", "", 1, 0)]
+
+def _default_wrap(indent):
+    """Return default wrap rule for _wrap_kegg (PRIVATE).
+
+    A wrap rule is a list with the following elements:
+    [indent, connect, (splitstr, connect, splitafter, keep), ...]
+    """
+    return [indent, "", (" ", "", 1, 0)]
+
+
+def _struct_wrap(indent):
+    """Return wrap rule for KEGG STRUCTURE (PRIVATE)."""
+    return [indent, "", ("  ", "", 1, 1)]
 
 
 def _wrap_kegg(line, max_width=KEGG_DATA_LENGTH, wrap_rule=_default_wrap):
-    """Wraps the input line  for KEGG output.
+    """Wrap the input line for KEGG output (PRIVATE).
 
     Arguments:
+     - info - String holding the information we want wrapped
+       for KEGG output.
+     - max_width - Maximum width of a line.
+     - wrap_rule - A wrap rule (see above) for deciding how to split
+       strings that must be wrapped.
 
-    o info - String holding the information we want wrapped
-    for KEGG output.
-    o max_width - Maximum width of a line.
-    o wrap_rule - A wrap rule (see above) for deciding how to split
-    strings that must be wrapped.
     """
     s = ""
     wrapped_line = ""
@@ -66,19 +79,19 @@ def _wrap_kegg(line, max_width=KEGG_DATA_LENGTH, wrap_rule=_default_wrap):
 
 
 def _write_kegg(item, info, indent=KEGG_ITEM_LENGTH):
-    """Write a indented KEGG record item.
+    """Write a indented KEGG record item (PRIVATE).
 
     Arguments:
+     - item - The name of the item to be written.
+     - info - The (wrapped) information to write.
+     - indent - Width of item field.
 
-    o item - The name of the item to be written.
-    o info - The (wrapped) information to write.
-    o indent - Width of item field.
     """
     s = ""
     for line in info:
         partial_lines = line.splitlines()
-        for l in partial_lines:
-            s = s + item.ljust(indent) + l + "\n"
-            if item is not "":  # ensure item is only written on first line
+        for partial in partial_lines:
+            s += item.ljust(indent) + partial + "\n"
+            if item:  # ensure item is only written on first line
                 item = ""
     return s

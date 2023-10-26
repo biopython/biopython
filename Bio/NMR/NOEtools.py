@@ -14,7 +14,7 @@ from . import xpktools
 
 
 def predictNOE(peaklist, originNuc, detectedNuc, originResNum, toResNum):
-    """Predict the i->j NOE position based on self peak (diagonal) assignments
+    """Predict the i->j NOE position based on self peak (diagonal) assignments.
 
     Parameters
     ----------
@@ -51,8 +51,8 @@ def predictNOE(peaklist, originNuc, detectedNuc, originResNum, toResNum):
     and currently there is no checking done to insure that this
     assumption holds true.  Check your peaklist for errors and
     off diagonal peaks before attempting to use predictNOE.
-    """
 
+    """
     returnLine = ""  # The modified line to be returned to the caller
 
     datamap = _data_map(peaklist.datalabels)
@@ -63,8 +63,9 @@ def predictNOE(peaklist, originNuc, detectedNuc, originResNum, toResNum):
     detectedPPMCol = datamap[detectedNuc + ".P"] + 1
 
     # Make a list of the data lines involving the detected
-    if str(toResNum) in peaklist.residue_dict(detectedNuc) \
-    and str(originResNum) in peaklist.residue_dict(detectedNuc):
+    if (str(toResNum) in peaklist.residue_dict(detectedNuc)) and (
+        str(originResNum) in peaklist.residue_dict(detectedNuc)
+    ):
         detectedList = peaklist.residue_dict(detectedNuc)[str(toResNum)]
         originList = peaklist.residue_dict(detectedNuc)[str(originResNum)]
         returnLine = detectedList[0]
@@ -83,22 +84,17 @@ def predictNOE(peaklist, originNuc, detectedNuc, originResNum, toResNum):
 def _data_map(labelline):
     # Generate a map between datalabels and column number
     #   based on a labelline
-    i = 0  # A counter
-    datamap = {}  # The data map dictionary
     labelList = labelline.split()  # Get the label line
 
     # Get the column number for each label
-    for i in range(len(labelList)):
-        datamap[labelList[i]] = i
+    datamap = {label: i for i, label in enumerate(labelList)}
 
     return datamap
 
 
-def _col_ave(list, col):
+def _col_ave(elements, col):
     # Compute average values from a particular column in a string list
     total = 0.0
-    n = 0
-    for element in list:
+    for element in elements:
         total += float(element.split()[col])
-        n += 1
-    return total / n
+    return total / len(elements)

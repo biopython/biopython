@@ -211,3 +211,17 @@ text_2010L_blastx_002.txt    no hits
 text_2010L_tblastn_001.txt   multiple hits @ single hsp
 text_2010L_tblastn_002.txt   no hits
 text_2010L_tblastx_001.txt   multiple hits @ multiple hsps
+
+
+Mock files for mocked qblast searches
+-------------------------------------
+This are minimal xml/html files mimicking NCBI qblast responses
+for our mocked online tests in test_NCBI_qlast_mock.py:
+
+mock_actin.xml
+mock_disco.xml
+mock_orchid.xml
+mock_pcr.xml
+mock_short_empty.xml
+mock_short_result.xml
+mock_wait.html

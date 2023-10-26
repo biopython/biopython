@@ -1,8 +1,8 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO support for Exonerate output formats.
 
 This module adds support for handling Exonerate outputs. Exonerate is a generic
@@ -22,7 +22,7 @@ models:
 
 Although model testing were not exhaustive, ExonerateIO should be able to cope
 with all Exonerate models. Please file a bug report if you stumble upon an
-unparseable file.
+unparsable file.
 
 More information on Exonerate is available on its home page at
 www.ebi.ac.uk/~guy/exonerate/
@@ -248,4 +248,5 @@ from .exonerate_cigar import ExonerateCigarParser, ExonerateCigarIndexer
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

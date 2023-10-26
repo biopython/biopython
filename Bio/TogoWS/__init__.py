@@ -1,8 +1,9 @@
-# Copyright 2010-2011 by Peter Cock.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# Copyright 2010-2011, 2013-2014, 2016-2018 by Peter Cock.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Provides code to access the TogoWS integrated websevices of DBCLS, Japan.
 
 This module aims to make the TogoWS (from DBCLS, Japan) easier to use. See:
@@ -30,14 +31,16 @@ http://togows.dbcls.jp/site/en/soap.html
 http://soapy.sourceforge.net/
 """
 
-from __future__ import print_function
 
+import io
 import time
-from Bio._py3k import _binary_to_string_handle, _as_bytes
 
-# Importing these functions with leading underscore as not intended for reuse
-from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import quote as _quote
+from urllib.request import urlopen
+from urllib.parse import quote
+
+from typing import Dict, List
+
+from Bio._utils import function_with_previous
 
 
 # Constant
@@ -46,13 +49,13 @@ _BASE_URL = "http://togows.dbcls.jp"
 # Caches:
 _search_db_names = None
 _entry_db_names = None
-_entry_db_fields = {}
-_entry_db_formats = {}
-_convert_formats = []
+_entry_db_fields: Dict[str, str] = {}
+_entry_db_formats: Dict[str, str] = {}
+_convert_formats: List[str] = []
 
 
 def _get_fields(url):
-    """Queries a TogoWS URL for a plain text list of values (PRIVATE)."""
+    """Query a TogoWS URL for a plain text list of values (PRIVATE)."""
     handle = _open(url)
     fields = handle.read().strip().split()
     handle.close()
@@ -64,28 +67,28 @@ def _get_entry_dbs():
 
 
 def _get_entry_fields(db):
-    return _get_fields(_BASE_URL + "/entry/%s?fields" % db)
+    return _get_fields(_BASE_URL + f"/entry/{db}?fields")
 
 
 def _get_entry_formats(db):
-    return _get_fields(_BASE_URL + "/entry/%s?formats" % db)
+    return _get_fields(_BASE_URL + f"/entry/{db}?formats")
 
 
 def _get_convert_formats():
-    return [pair.split(".") for pair in
-            _get_fields(_BASE_URL + "/convert/")]
+    return [pair.split(".") for pair in _get_fields(_BASE_URL + "/convert/")]
 
 
 def entry(db, id, format=None, field=None):
-    """TogoWS fetch entry (returns a handle).
+    """Call TogoWS 'entry' to fetch a record.
 
-        - db - database (string), see list below.
-        - id - identier (string) or a list of identifiers (either as a list of
-          strings or a single string with comma separators).
-        - format - return data file format (string), options depend on the database
-          e.g. "xml", "json", "gff", "fasta", "ttl" (RDF Turtle)
-        - field - specific field from within the database record (string)
-          e.g. "au" or "authors" for pubmed.
+    Arguments:
+     - db - database (string), see list below.
+     - id - identier (string) or a list of identifiers (either as a list of
+       strings or a single string with comma separators).
+     - format - return data file format (string), options depend on the database
+       e.g. "xml", "json", "gff", "fasta", "ttl" (RDF Turtle)
+     - field - specific field from within the database record (string)
+       e.g. "au" or "authors" for pubmed.
 
     At the time of writing, this includes the following::
 
@@ -106,8 +109,9 @@ def entry(db, id, format=None, field=None):
     if _entry_db_names is None:
         _entry_db_names = _get_entry_dbs()
     if db not in _entry_db_names:
-        raise ValueError("TogoWS entry fetch does not officially support "
-                         "database '%s'." % db)
+        raise ValueError(
+            f"TogoWS entry fetch does not officially support database '{db}'."
+        )
     if field:
         try:
             fields = _entry_db_fields[db]
@@ -118,11 +122,16 @@ def entry(db, id, format=None, field=None):
             # Backwards compatibility fix for TogoWS change Nov/Dec 2013
             field = "title"
             import warnings
-            warnings.warn("TogoWS dropped 'pubmed' field alias 'ti', please use 'title' instead.")
+
+            warnings.warn(
+                "TogoWS dropped 'pubmed' field alias 'ti', please use 'title' instead."
+            )
         if field not in fields:
-            raise ValueError("TogoWS entry fetch does not explicitly support "
-                             "field '%s' for database '%s'. Only: %s"
-                             % (field, db, ", ".join(sorted(fields))))
+            raise ValueError(
+                "TogoWS entry fetch does not explicitly support "
+                "field '%s' for database '%s'. Only: %s"
+                % (field, db, ", ".join(sorted(fields)))
+            )
     if format:
         try:
             formats = _entry_db_formats[db]
@@ -130,13 +139,15 @@ def entry(db, id, format=None, field=None):
             formats = _get_entry_formats(db)
             _entry_db_formats[db] = formats
         if format not in formats:
-            raise ValueError("TogoWS entry fetch does not explicitly support "
-                             "format '%s' for database '%s'. Only: %s"
-                             % (format, db, ", ".join(sorted(formats))))
+            raise ValueError(
+                "TogoWS entry fetch does not explicitly support "
+                "format '%s' for database '%s'. Only: %s"
+                % (format, db, ", ".join(sorted(formats)))
+            )
 
     if isinstance(id, list):
         id = ",".join(id)
-    url = _BASE_URL + "/entry/%s/%s" % (db, _quote(id))
+    url = _BASE_URL + f"/entry/{db}/{quote(id)}"
     if field:
         url += "/" + field
     if format:
@@ -145,10 +156,11 @@ def entry(db, id, format=None, field=None):
 
 
 def search_count(db, query):
-    """TogoWS search count (returns an integer).
+    """Call TogoWS search count to see how many matches a search gives.
 
-    db - database (string), see http://togows.dbcls.jp/search
-    query - search term (string)
+    Arguments:
+     - db - database (string), see http://togows.dbcls.jp/search
+     - query - search term (string)
 
     You could then use the count to download a large set of search results in
     batches using the offset and limit options to Bio.TogoWS.search(). In
@@ -161,39 +173,46 @@ def search_count(db, query):
         # TODO - Make this a ValueError? Right now despite the HTML website
         # claiming to, the "gene" or "ncbi-gene" don't work and are not listed.
         import warnings
-        warnings.warn("TogoWS search does not officially support database '%s'. "
-                      "See %s/search/ for options." % (db, _BASE_URL))
-    url = _BASE_URL + "/search/%s/%s/count" % (db, _quote(query))
+
+        warnings.warn(
+            "TogoWS search does not officially support database '%s'. "
+            "See %s/search/ for options." % (db, _BASE_URL)
+        )
+    url = _BASE_URL + f"/search/{db}/{quote(query)}/count"
     handle = _open(url)
     data = handle.read()
     handle.close()
+    if not data:
+        raise ValueError(f"TogoWS returned no data from URL {url}")
     try:
-        count = int(data.strip())
+        return int(data.strip())
     except ValueError:
-        raise ValueError("Expected an integer from URL %s, got: %r" % (url, data))
-    return count
+        raise ValueError(f"Expected an integer from URL {url}, got: {data!r}") from None
 
 
 def search_iter(db, query, limit=None, batch=100):
-    """TogoWS search iteratating over the results (generator function).
+    """Call TogoWS search iterating over the results (generator function).
 
-        - db - database (string), see http://togows.dbcls.jp/search
-        - query - search term (string)
-        - limit - optional upper bound on number of search results
-        - batch - number of search results to pull back each time talk to
-          TogoWS (currently limited to 100).
+    Arguments:
+     - db - database (string), see http://togows.dbcls.jp/search
+     - query - search term (string)
+     - limit - optional upper bound on number of search results
+     - batch - number of search results to pull back each time talk to
+       TogoWS (currently limited to 100).
 
     You would use this function within a for loop, e.g.
 
-    >>> for id in search_iter("pubmed", "lung+cancer+drug", limit=10):
-    ...     print(id) # maybe fetch data with entry?
+    >>> from Bio import TogoWS
+    >>> for id in TogoWS.search_iter("pubmed", "diabetes+human", limit=10):
+    ...     print("PubMed ID: %s" %id) # maybe fetch data with entry?
+    PubMed ID: ...
 
     Internally this first calls the Bio.TogoWS.search_count() and then
     uses Bio.TogoWS.search() to get the results in batches.
     """
     count = search_count(db, query)
     if not count:
-        raise StopIteration
+        return
     # NOTE - We leave it to TogoWS to enforce any upper bound on each
     # batch, they currently return an HTTP 400 Bad Request if above 100.
     remain = count
@@ -211,8 +230,7 @@ def search_iter(db, query, limit=None, batch=100):
             raise RuntimeError("Same search results for previous offset")
         for identifier in ids:
             if identifier in prev_ids:
-                raise RuntimeError("Result %s was in previous batch"
-                                   % identifier)
+                raise RuntimeError(f"Result {identifier} was in previous batch")
             yield identifier
         offset += batch
         remain -= batch
@@ -220,18 +238,19 @@ def search_iter(db, query, limit=None, batch=100):
 
 
 def search(db, query, offset=None, limit=None, format=None):
-    """TogoWS search (returns a handle).
+    """Call TogoWS search.
 
     This is a low level wrapper for the TogoWS search function, which
     can return results in a several formats. In general, the search_iter
     function is more suitable for end users.
 
-        - db - database (string), see http://togows.dbcls.jp/search/
-        - query - search term (string)
-        - offset, limit - optional integers specifying which result to start from
-          (1 based) and the number of results to return.
-        - format - return data file format (string), e.g. "json", "ttl" (RDF)
-          By default plain text is returned, one result per line.
+    Arguments:
+     - db - database (string), see http://togows.dbcls.jp/search/
+     - query - search term (string)
+     - offset, limit - optional integers specifying which result to start from
+       (1 based) and the number of results to return.
+     - format - return data file format (string), e.g. "json", "ttl" (RDF)
+       By default plain text is returned, one result per line.
 
     At the time of writing, TogoWS applies a default count limit of 100
     search results, and this is an upper bound. To access more results,
@@ -257,18 +276,25 @@ def search(db, query, offset=None, limit=None, format=None):
         # TODO - Make this a ValueError? Right now despite the HTML website
         # claiming to, the "gene" or "ncbi-gene" don't work and are not listed.
         import warnings
-        warnings.warn("TogoWS search does not explicitly support database '%s'. "
-                      "See %s/search/ for options." % (db, _BASE_URL))
-    url = _BASE_URL + "/search/%s/%s" % (db, _quote(query))
+
+        warnings.warn(
+            "TogoWS search does not explicitly support database '%s'. "
+            "See %s/search/ for options." % (db, _BASE_URL)
+        )
+    url = _BASE_URL + f"/search/{db}/{quote(query)}"
     if offset is not None and limit is not None:
         try:
             offset = int(offset)
-        except:
-            raise ValueError("Offset should be an integer (at least one), not %r" % offset)
+        except ValueError:
+            raise ValueError(
+                f"Offset should be an integer (at least one), not {offset!r}"
+            ) from None
         try:
             limit = int(limit)
-        except:
-            raise ValueError("Limit should be an integer (at least one), not %r" % limit)
+        except ValueError:
+            raise ValueError(
+                f"Limit should be an integer (at least one), not {limit!r}"
+            ) from None
         if offset <= 0:
             raise ValueError("Offset should be at least one, not %i" % offset)
         if limit <= 0:
@@ -283,11 +309,12 @@ def search(db, query, offset=None, limit=None, format=None):
 
 
 def convert(data, in_format, out_format):
-    """TogoWS convert (returns a handle).
+    """Call TogoWS for file format conversion.
 
-    data - string or handle containing input record(s)
-    in_format - string describing the input file format (e.g. "genbank")
-    out_format - string describing the requested output format (e.g. "fasta")
+    Arguments:
+     - data - string or handle containing input record(s)
+     - in_format - string describing the input file format (e.g. "genbank")
+     - out_format - string describing the requested output format (e.g. "fasta")
 
     For a list of supported conversions (e.g. "genbank" to "fasta"), see
     http://togows.dbcls.jp/convert/
@@ -300,19 +327,21 @@ def convert(data, in_format, out_format):
         _convert_formats = _get_convert_formats()
     if [in_format, out_format] not in _convert_formats:
         msg = "\n".join("%s -> %s" % tuple(pair) for pair in _convert_formats)
-        raise ValueError("Unsupported conversion. Choose from:\n%s" % msg)
-    url = _BASE_URL + "/convert/%s.%s" % (in_format, out_format)
+        raise ValueError(f"Unsupported conversion. Choose from:\n{msg}")
+    url = _BASE_URL + f"/convert/{in_format}.{out_format}"
     # TODO - Should we just accept a string not a handle? What about a filename?
-    if hasattr(data, "read"):
+    try:
         # Handle
-        return _open(url, post=data.read())
-    else:
+        data = data.read()
+    except AttributeError:
         # String
-        return _open(url, post=data)
+        pass
+    return _open(url, post=data)
 
 
+@function_with_previous
 def _open(url, post=None):
-    """Helper function to build the URL and open a handle to it (PRIVATE).
+    """Build the URL and open a handle to it (PRIVATE).
 
     Open a handle to TogoWS, will raise an IOError if it encounters an error.
 
@@ -328,15 +357,23 @@ def _open(url, post=None):
     else:
         _open.previous = current
 
-    # print(url)
     if post:
-        handle = _urlopen(url, _as_bytes(post))
+        handle = urlopen(url, post.encode())
     else:
-        handle = _urlopen(url)
+        handle = urlopen(url)
 
     # We now trust TogoWS to have set an HTTP error code, that
     # suffices for my current unit tests. Previously we would
     # examine the start of the data returned back.
-    return _binary_to_string_handle(handle)
+    text_handle = io.TextIOWrapper(handle, encoding="UTF-8")
+    text_handle.url = handle.url
+    return text_handle
+
 
 _open.previous = 0
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest(verbose=0)

@@ -1,0 +1,72 @@
+# See https://help.github.com/articles/about-codeowners/
+# and https://github.com/blog/2392-introducing-code-owners
+#
+# Lines starting with '#' are comments.
+# Each line is a file pattern followed by one or more owners.
+#
+# These owners will be the default owners for everything in the repo.
+# *       @defunkt
+#
+# Order is important. The last matching pattern has the most precedence.
+# So if a pull request only touches javascript files, only these owners
+# will be requested to review.
+# *.js    @octocat @github/js
+#
+# You can also use email addresses if you prefer.
+# docs/*  docs@example.com
+#
+
+Bio/Alphabet @peterjc
+
+Bio/Align/* @mdehoon
+Tests/test_Align_* @mdehoon
+Bio/AlignIO/* @peterjc
+Tests/test_AlignIO* @peterjc
+
+Bio/bgzf.py @peterjc
+Tests/test_bgzf*.py @peterjc
+
+Bio/phenotype/* @mgalardini
+Tests/test_phenotype*.py @mgalardini
+
+Bio/Cluster/* @mdehoon
+Tests/test_Cluster*.py @mdehoon
+
+Bio/codonalign/* @zruan
+Tests/test_codonalign*.py @zruan
+
+Bio/Entrez/* @mdehoon
+Tests/test_Entrez*.py @mdehoon
+
+Bio/GenBank/* @peterjc
+Tests/test_GenBank*.py @peterjc
+Tests/test_EMBL*.py @peterjc
+
+Bio/Graphics/GenomeDiagram/* @widdowquinn @peterjc
+Tests/test_GenomeDiagram*.py @widdowquinn @peterjc
+
+Bio/motifs/* @mdehoon
+Tests/test_motifs*.py @mdehoon
+
+Bio/PDB/* @joaorodrigues @lennax
+Tests/test_PDB*.py @joaorodrigues @lennax
+
+Bio/Phylo/* @etal
+Tests/test_Phylo*.py @etal
+
+Bio/PopGen/* @tiagoantao
+Tests/test_PopGen*.py @tiagoantao
+
+Bio/SearchIO/* @bow
+Tests/test_SearchIO*.py @bow
+
+Bio/Seq*.py @peterjc @mdehoon
+Bio/SeqIO/* @peterjc
+Tests/test_Seq* @peterjc
+Tests/test_seq* @peterjc
+
+Bio/SeqIO/AbiIO.py @peterjc @bow
+Tests/test_SeqIO_AbiIO.py @peterjc @bow
+
+Bio/TogoWS/* @peterjc
+Tests/test_TogoWS*.py @peterjc

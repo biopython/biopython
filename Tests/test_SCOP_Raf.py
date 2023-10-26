@@ -3,13 +3,12 @@
 # as part of this package.
 #
 
-
-"""Unit test for Raf"""
+"""Unit test for Raf."""
 
 import unittest
 
 from Bio.SCOP import Raf
-from Bio._py3k import StringIO
+from io import StringIO
 
 
 class RafTests(unittest.TestCase):
@@ -20,7 +19,7 @@ class RafTests(unittest.TestCase):
     rafLine3 = "101mB 0.01 38 010301 111011    0  153   90 mm  91 vv  92 ll  939ss  94 ee  95 gg"
 
     def testParse(self):
-        """Can we parse a RAF record?"""
+        """Parse a RAF record."""
         r = Raf.SeqMap(self.rafLine)
 
         self.assertEqual(r.pdbid, "101m")
@@ -43,22 +42,22 @@ class RafTests(unittest.TestCase):
         r2 = Raf.SeqMap(self.rafLine2)
         r3 = Raf.SeqMap(self.rafLine3)
 
-        l = len(r2.res) + len(r3.res)
+        length = len(r2.res) + len(r3.res)
         r2 += r3
-        self.assertEqual(len(r2.res), l)
+        self.assertEqual(len(r2.res), length)
 
         r2.extend(r2)
-        self.assertEqual(len(r2.res), l * 2)
+        self.assertEqual(len(r2.res), length * 2)
 
         r4 = r2 + r2
-        self.assertEqual(len(r4.res), l * 4)
+        self.assertEqual(len(r4.res), length * 4)
 
         r4.append(Raf.Res())
-        self.assertEqual(len(r4.res), (l * 4) + 1)
+        self.assertEqual(len(r4.res), (length * 4) + 1)
 
     def testSeqMapSlice(self):
         r = Raf.SeqMap(self.rafLine)
-        r = r[r.index("124"): r.index("135") + 1]
+        r = r[r.index("124") : r.index("135") + 1]
         self.assertEqual(len(r.res), 12)
 
     def test_SeqMap_getAtoms_err(self):
@@ -66,11 +65,10 @@ class RafTests(unittest.TestCase):
         # There is no overlap with this PDB file...
         with open("PDB/1A8O.pdb") as pdb_handle:
             out_handle = StringIO()
-            self.assertRaises(RuntimeError, r.getAtoms,
-                              *(pdb_handle, out_handle))
+            self.assertRaises(RuntimeError, r.getAtoms, *(pdb_handle, out_handle))
 
     def testSeqMapIndex(self):
-        filename = ("./SCOP/raftest.txt")
+        filename = "./SCOP/raftest.txt"
 
         index = Raf.SeqMapIndex(filename)
         r = index.getSeqMap("103m")
@@ -80,7 +78,7 @@ class RafTests(unittest.TestCase):
         self.assertEqual(r.flags, "111011")
 
         r = index.getSeqMap("103m 1-10")
-        self.assertEqual(r.pdbid, "103m",)
+        self.assertEqual(r.pdbid, "103m")
         self.assertEqual(len(r.res), 10)
         self.assertEqual(r.pdb_datestamp, "010301")
         self.assertEqual(r.flags, "111011")
@@ -97,6 +95,6 @@ class RafTests(unittest.TestCase):
         self.assertEqual(len(r.res), 5)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

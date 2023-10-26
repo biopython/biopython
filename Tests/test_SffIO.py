@@ -4,7 +4,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import sys
+"""Tests for SffIO module."""
+
 import re
 import unittest
 from io import BytesIO
@@ -59,35 +60,45 @@ test_data = """
 
 
 class TestUAN(unittest.TestCase):
+    """Test annotations."""
+
     def setUp(self):
-        self.records = [record for record in SeqIO.parse('Roche/E3MFGYR02_random_10_reads.sff', 'sff')]
+        self.records = list(SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff"))
         self.test_annotations = {}
         for line in test_data.splitlines():
             fields = re.split(r"\s+", line.strip())
-            if '>' in line:
-                current_name = fields[0].lstrip('>')
+            if ">" in line:
+                current_name = fields[0].lstrip(">")
                 self.test_annotations[current_name] = {}
-            elif 'Prefix' in line:
-                time_list = [int(v) for v in fields[2].split('_')[1:-1]]
+            elif "Prefix" in line:
+                time_list = [int(v) for v in fields[2].split("_")[1:-1]]
                 self.test_annotations[current_name]["time"] = time_list
-            elif 'Region' in line:
+            elif "Region" in line:
                 region = int(fields[-1])
                 self.test_annotations[current_name]["region"] = region
-            elif 'XY' in line:
-                x, y = [int(v) for v in fields[-1].split('_')]
+            elif "XY" in line:
+                x, y = (int(v) for v in fields[-1].split("_"))
                 self.test_annotations[current_name]["coords"] = (x, y)
 
     def test_time(self):
         for record in self.records:
-            self.assertEqual(record.annotations["time"], self.test_annotations[record.name]["time"])
+            self.assertEqual(
+                record.annotations["time"], self.test_annotations[record.name]["time"]
+            )
 
     def test_region(self):
         for record in self.records:
-            self.assertEqual(record.annotations["region"], self.test_annotations[record.name]["region"])
+            self.assertEqual(
+                record.annotations["region"],
+                self.test_annotations[record.name]["region"],
+            )
 
     def test_coords(self):
         for record in self.records:
-            self.assertEqual(record.annotations["coords"], self.test_annotations[record.name]["coords"])
+            self.assertEqual(
+                record.annotations["coords"],
+                self.test_annotations[record.name]["coords"],
+            )
 
 
 class TestErrors(unittest.TestCase):
@@ -96,61 +107,63 @@ class TestErrors(unittest.TestCase):
 
     def test_empty(self):
         fh = BytesIO()
-        try:
+        with self.assertRaises(ValueError) as cm:
             records = list(SeqIO.parse(fh, "sff"))
-        except ValueError as err:
-            self.assertEqual(str(err), "Empty file.")
-        else:
-            self.assertTrue(False, "Empty file did not raise exception")
+        self.assertEqual(str(cm.exception), "Empty file.")
 
     def check_bad_header(self, header, msg):
-        try:
+        with self.assertRaises(ValueError) as cm:
             records = list(SeqIO.parse(BytesIO(header), "sff"))
-        except ValueError as err:
-            if isinstance(msg, (tuple, list)):
-                self.assertTrue(str(err) in msg, "Unexpected error: %s" % err)
-            else:
-                self.assertEqual(str(err), msg)
+        err = str(cm.exception)
+        if isinstance(msg, (tuple, list)):
+            self.assertIn(err, msg, f"Unexpected error: {err}")
         else:
-            self.assertTrue(False, "Test SFF header only did not raise exception")
+            self.assertEqual(err, msg)
 
     def test_30bytes(self):
-        self.check_bad_header(b"x" * 30,
-                              "File too small to hold a valid SFF header.")
+        self.check_bad_header(b"x" * 30, "File too small to hold a valid SFF header.")
 
     def test_31bytes(self):
-        self.check_bad_header(b"x" * 31,
-                              ("SFF file did not start '.sff', but 'xxxx'",
-                               "SFF file did not start '.sff', but b'xxxx'"))
+        self.check_bad_header(
+            b"x" * 31,
+            (
+                "SFF file did not start '.sff', but 'xxxx'",
+                "SFF file did not start '.sff', but b'xxxx'",
+            ),
+        )
 
     def test_31bytes_index_header(self):
-        self.check_bad_header(b".srt" + b"x" * 27,
-                              "Handle seems to be at SFF index block, not start")
+        self.check_bad_header(
+            b".srt" + b"x" * 27, "Handle seems to be at SFF index block, not start"
+        )
 
     def test_31bytes_bad_ver(self):
-        self.check_bad_header(b".sff1.00" + b"x" * 23,
-                              "Unsupported SFF version in header, 49.46.48.48")
+        self.check_bad_header(
+            b".sff1.00" + b"x" * 23, "Unsupported SFF version in header, 49.46.48.48"
+        )
 
     def test_31bytes_bad_flowgram(self):
-        self.check_bad_header(b".sff\x00\x00\x00\x01" + b"x" * 23,
-                              "Flowgram format code 120 not supported")
+        self.check_bad_header(
+            b".sff\x00\x00\x00\x01" + b"x" * 23,
+            "Flowgram format code 120 not supported",
+        )
 
     def test_bad_index_offset(self):
         bad = self.good[:12] + b"\x00\x00\x00\x00" + self.good[16:]
-        self.check_bad_header(bad,
-                              "Index offset 0 but index length 764")
+        self.check_bad_header(bad, "Index offset 0 but index length 764")
 
     def test_bad_index_length(self):
         bad = self.good[:16] + b"\x00\x00\x00\x00" + self.good[20:]
-        self.check_bad_header(bad,
-                              "Index offset 16824 but index length 0")
+        self.check_bad_header(bad, "Index offset 16824 but index length 0")
 
     def test_bad_index_eof(self):
         # Semi-random edit to the index offset value,
         bad = self.good[:13] + b"\x01" + self.good[14:]
-        self.check_bad_header(bad,
-                              "Gap of 65536 bytes after final record end 16824, "
-                              "before 82360 where index starts?")
+        self.check_bad_header(
+            bad,
+            "Gap of 65536 bytes after final record end 16824, "
+            "before 82360 where index starts?",
+        )
 
     def test_no_index(self):
         # Does a lot of work to create a no-index SFF file
@@ -166,70 +179,73 @@ class TestErrors(unittest.TestCase):
             for a, b in zip(records, new):
                 self.assertEqual(a.id, b.id)
             handle.seek(0)
-            try:
+            with self.assertRaises(ValueError) as cm:
                 values = _sff_find_roche_index(handle)
-            except ValueError as err:
-                self.assertEqual(str(err), "No index present in this SFF file")
-            else:
-                self.assertTrue(False, "Test _sff_find_roche_index did not raise exception")
+            err = str(cm.exception)
+            self.assertEqual(err, "No index present in this SFF file")
 
     def test_unknown_index(self):
         # TODO - Add SFF file with no index,
         # self.assertEqual(str(err), "No index present in this SFF file")
         with open("Roche/E3MFGYR02_alt_index_in_middle.sff", "rb") as handle:
-            try:
+            with self.assertRaises(ValueError) as cm:
                 values = _sff_find_roche_index(handle)
-            except ValueError as err:
-                self.assertTrue(str(err) in ("Unknown magic number '.diy' in SFF index header:\n'.diy1.00'",
-                                             "Unknown magic number b'.diy' in SFF index header:\nb'.diy1.00'"))
-            else:
-                self.assertTrue(False, "Test _sff_find_roche_index did not raise exception")
+        self.assertIn(
+            str(cm.exception),
+            (
+                "Unknown magic number '.diy' in SFF index header:\n'.diy1.00'",
+                "Unknown magic number b'.diy' in SFF index header:\nb'.diy1.00'",
+            ),
+        )
 
     def check_sff_read_roche_index(self, data, msg):
         handle = BytesIO(data)
-        try:
+        with self.assertRaises(ValueError) as cm:
             index = list(_sff_read_roche_index(handle))
-        except ValueError as err:
-            self.assertEqual(str(err), msg)
-        else:
-            self.assertTrue(False, "_sff_read_roche_index did not raise exception")
+        self.assertEqual(str(cm.exception), msg)
 
     def test_premature_end_of_index(self):
-        self.check_sff_read_roche_index(self.good[:-50],
-                                        "Premature end of file!")
+        self.check_sff_read_roche_index(self.good[:-50], "Premature end of file!")
 
     def test_index_name_no_null(self):
         self.assertEqual(self.good[17502:17503], b"\x00")
-        self.check_sff_read_roche_index(self.good[:17502] + b"x" + self.good[17503:],
-                                        "Expected a null terminator to the read name.")
+        self.check_sff_read_roche_index(
+            self.good[:17502] + b"x" + self.good[17503:],
+            "Expected a null terminator to the read name.",
+        )
 
     def test_index_mft_version(self):
         self.assertEqual(self.good[16824:16832], b".mft1.00")
-        self.check_sff_read_roche_index(self.good[:16828] + b"\x01\x02\x03\x04" + self.good[16832:],
-                                        "Unsupported version in .mft index header, 1.2.3.4")
+        self.check_sff_read_roche_index(
+            self.good[:16828] + b"\x01\x02\x03\x04" + self.good[16832:],
+            "Unsupported version in .mft index header, 1.2.3.4",
+        )
 
     def test_index_mft_data_size(self):
         self.assertEqual(self.good[16824:16832], b".mft1.00")
-        self.check_sff_read_roche_index(self.good[:16836] + b"\x00\x00\x00\x00" + self.good[16840:],
-                                        "Problem understanding .mft index header, 764 != 8 + 8 + 548 + 0")
+        self.check_sff_read_roche_index(
+            self.good[:16836] + b"\x00\x00\x00\x00" + self.good[16840:],
+            "Problem understanding .mft index header, 764 != 8 + 8 + 548 + 0",
+        )
 
     def test_index_lengths(self):
         # Reduce the number of reads from 10 to 9 so index loading fails...
         self.assertEqual(self.good[20:24], b"\x00\x00\x00\x0A")
-        self.check_sff_read_roche_index(self.good[:20] + b"\x00\x00\x00\x09" + self.good[24:],
-                                        "Problem with index length? 17568 vs 17588")
+        self.check_sff_read_roche_index(
+            self.good[:20] + b"\x00\x00\x00\x09" + self.good[24:],
+            "Problem with index length? 17568 vs 17588",
+        )
 
     def test_no_manifest_xml(self):
         with open("Roche/E3MFGYR02_no_manifest.sff", "rb") as handle:
-            try:
+            with self.assertRaises(ValueError) as cm:
                 xml = ReadRocheXmlManifest(handle)
-            except ValueError as err:
-                self.assertEqual(str(err), "No XML manifest found")
-            else:
-                self.assertTrue(False, "ReadRocheXmlManifest did not raise exception")
+            self.assertEqual(str(cm.exception), "No XML manifest found")
 
 
 class TestIndex(unittest.TestCase):
+    """Test SFF index."""
+
     def test_manifest(self):
         filename = "Roche/E3MFGYR02_random_10_reads.sff"
         with open(filename, "rb") as handle:
@@ -245,22 +261,9 @@ class TestIndex(unittest.TestCase):
         with open(filename, "rb") as handle:
             self.assertEqual(len(index1), len(list(SffIterator(handle))))
         with open(filename, "rb") as handle:
-            self.assertEqual(len(index1), len(list(SffIterator(BytesIO(handle.read())))))
-
-        if sys.platform != "win32" and sys.version_info[0] < 3:
-            # Can be lazy and treat as binary...
-            with open(filename, "r") as handle:
-                self.assertEqual(len(index1), len(list(SffIterator(handle))))
-            with open(filename) as handle:
-                index2 = sorted(_sff_read_roche_index(handle))
-            self.assertEqual(index1, index2)
-            with open(filename, "r") as handle:
-                index2 = sorted(_sff_do_slow_index(handle))
-            self.assertEqual(index1, index2)
-            with open(filename, "r") as handle:
-                self.assertEqual(len(index1), len(list(SffIterator(handle))))
-            with open(filename, "r") as handle:
-                self.assertEqual(len(index1), len(list(SffIterator(BytesIO(handle.read())))))
+            self.assertEqual(
+                len(index1), len(list(SffIterator(BytesIO(handle.read()))))
+            )
 
 
 class TestAlternativeIndexes(unittest.TestCase):
@@ -272,7 +275,7 @@ class TestAlternativeIndexes(unittest.TestCase):
         self.assertEqual(len(self.sff), len(new_sff))
         for old, new in zip(self.sff, new_sff):
             self.assertEqual(old.id, new.id)
-            self.assertEqual(str(old.seq), str(new.seq))
+            self.assertEqual(old.seq, new.seq)
 
     def test_alt_index_at_end(self):
         with open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb") as handle:
@@ -308,12 +311,15 @@ class TestAlternativeIndexes(unittest.TestCase):
 
 
 class TestConcatenated(unittest.TestCase):
+    """Test concatenated SFF files."""
+
     def test_parses_gzipped_stream(self):
         import gzip
+
         count = 0
-        fh = gzip.open("Roche/E3MFGYR02_random_10_reads.sff.gz", 'rb')
-        for record in SeqIO.parse(fh, 'sff'):
-            count += 1
+        with gzip.open("Roche/E3MFGYR02_random_10_reads.sff.gz", "rb") as fh:
+            for record in SeqIO.parse(fh, "sff"):
+                count += 1
         self.assertEqual(10, count)
 
     def test_parse1(self):
@@ -323,22 +329,26 @@ class TestConcatenated(unittest.TestCase):
             for record in SeqIO.parse("Roche/invalid_greek_E3MFGYR02.sff", "sff"):
                 count += 1
         except ValueError as err:
-            self.assertTrue("Additional data at end of SFF file, perhaps "
-                            "multiple SFF files concatenated? "
-                            "See offset 65296" in str(err), err)
+            self.assertIn(
+                "Additional data at end of SFF file, perhaps "
+                "multiple SFF files concatenated? "
+                "See offset 65296",
+                str(err),
+                err,
+            )
             caught = True
         self.assertTrue(caught, "Didn't spot concatenation")
         self.assertEqual(count, 24)
 
     def test_index1(self):
-        try:
+        with self.assertRaises(ValueError) as cm:
             d = SeqIO.index("Roche/invalid_greek_E3MFGYR02.sff", "sff")
-        except ValueError as err:
-            self.assertTrue("Additional data at end of SFF file, perhaps "
-                            "multiple SFF files concatenated? "
-                            "See offset 65296" in str(err), err)
-        else:
-            raise ValueError("Indxing Roche/invalid_greek_E3MFGYR02.sff should fail")
+        err = str(cm.exception)
+        self.assertIn(
+            "Additional data at end of SFF file, perhaps "
+            "multiple SFF files concatenated? See offset 65296",
+            err,
+        )
 
     def test_parse2(self):
         count = 0
@@ -347,28 +357,32 @@ class TestConcatenated(unittest.TestCase):
             for record in SeqIO.parse("Roche/invalid_paired_E3MFGYR02.sff", "sff"):
                 count += 1
         except ValueError as err:
-            self.assertTrue("Your SFF file is invalid, post index 5 byte "
-                            "null padding region ended '.sff' which could "
-                            "be the start of a concatenated SFF file? "
-                            "See offset 54371" in str(err), err)
+            self.assertIn(
+                "Your SFF file is invalid, post index 5 byte "
+                "null padding region ended '.sff' which could "
+                "be the start of a concatenated SFF file? "
+                "See offset 54371",
+                str(err),
+                err,
+            )
             caught = True
         self.assertTrue(caught, "Didn't spot concatenation")
         self.assertEqual(count, 20)
 
     def test_index2(self):
-        try:
+        with self.assertRaises(ValueError) as cm:
             d = SeqIO.index("Roche/invalid_paired_E3MFGYR02.sff", "sff")
-        except ValueError as err:
-            self.assertTrue("Your SFF file is invalid, post index 5 byte "
-                            "null padding region ended '.sff' which could "
-                            "be the start of a concatenated SFF file? "
-                            "See offset 54371" in str(err), err)
-        else:
-            raise ValueError("Indxing Roche/invalid_paired_E3MFGYR02.sff should fail")
+        self.assertIn(
+            "Your SFF file is invalid, post index 5 byte "
+            "null padding region ended '.sff' which could "
+            "be the start of a concatenated SFF file? "
+            "See offset 54371",
+            str(cm.exception),
+        )
 
 
 class TestSelf(unittest.TestCase):
-    """ These tests were originally self-tests run in SffIO.py """
+    """These tests were originally defined in SffIO.py as self-tests."""
 
     def test_read(self):
         filename = "Roche/E3MFGYR02_random_10_reads.sff"
@@ -387,13 +401,23 @@ class TestSelf(unittest.TestCase):
         filename = "Roche/E3MFGYR02_random_10_reads.qual"
         qual_trim = list(SeqIO.parse(filename, "qual"))
 
-        for s, sT, f, q, fT, qT in zip(sff, sff_trim, fasta_no_trim, qual_no_trim, fasta_trim, qual_trim):
+        for s, sT, f, q, fT, qT in zip(
+            sff, sff_trim, fasta_no_trim, qual_no_trim, fasta_trim, qual_trim
+        ):
             self.assertEqual(len({s.id, f.id, q.id}), 1)  # All values are the same
-            self.assertEqual(str(s.seq), str(f.seq))
-            self.assertEqual(s.letter_annotations["phred_quality"], q.letter_annotations["phred_quality"])
-            self.assertEqual(len({s.id, sT.id, fT.id, qT.id}), 1)  # All values are the same
-            self.assertEqual(str(sT.seq), str(fT.seq))
-            self.assertEqual(sT.letter_annotations["phred_quality"], qT.letter_annotations["phred_quality"])
+            self.assertEqual(s.seq, f.seq)
+            self.assertEqual(
+                s.letter_annotations["phred_quality"],
+                q.letter_annotations["phred_quality"],
+            )
+            self.assertEqual(
+                len({s.id, sT.id, fT.id, qT.id}), 1
+            )  # All values are the same
+            self.assertEqual(sT.seq, fT.seq)
+            self.assertEqual(
+                sT.letter_annotations["phred_quality"],
+                qT.letter_annotations["phred_quality"],
+            )
 
     def test_write(self):
         filename = "Roche/E3MFGYR02_random_10_reads.sff"
@@ -419,9 +443,6 @@ class TestSelf(unittest.TestCase):
 
     def test_index(self):
         filename = "Roche/greek.sff"
-        # with open(filename, "rb") as handle:
-        #     for record in SffIterator(handle):
-        #         print(record.id)
         with open(filename, "rb") as a_handle, open(filename, "rb") as b_handle:
             index1 = sorted(_sff_read_roche_index(a_handle))
             index2 = sorted(_sff_do_slow_index(b_handle))
@@ -430,7 +451,6 @@ class TestSelf(unittest.TestCase):
     def test_read_wrong(self):
         filename = "Roche/greek.sff"
         with open(filename, "rb") as handle:
-            # print(ReadRocheXmlManifest(handle))
             self.assertRaises(ValueError, ReadRocheXmlManifest, handle)
 
         with open(filename, "rb") as handle:
@@ -439,7 +459,6 @@ class TestSelf(unittest.TestCase):
 
             def fileiter(handle):
                 for record in SffIterator(handle):
-                    # print(record.id)
                     i = record.id
 
             self.assertRaises(ValueError, fileiter, handle)
@@ -450,24 +469,23 @@ if __name__ == "__main__":
     unittest.main(testRunner=runner)
 
 if False:
-        # Ugly code to make test files...
-        index = ".diy1.00This is a fake index block (DIY = Do It Yourself), which is allowed under the SFF standard.\0"
-        padding = len(index) % 8
-        if padding:
-            padding = 8 - padding
-        index += chr(0) * padding
-        assert len(index) % 8 == 0
+    # Ugly code to make test files...
+    index = ".diy1.00This is a fake index block (DIY = Do It Yourself), which is allowed under the SFF standard.\0"
+    padding = len(index) % 8
+    if padding:
+        padding = 8 - padding
+    index += chr(0) * padding
+    assert len(index) % 8 == 0
 
-        # Ugly bit of code to make a fake index at start
-        records = list(SffIterator(
-            open("Roche/E3MFGYR02_random_10_reads.sff", "rb")))
-        out_handle = open(
-            "Roche/E3MFGYR02_alt_index_at_start.sff", "w")
-        index = ".diy1.00This is a fake index block (DIY = Do It Yourself), which is allowed under the SFF standard.\0"
-        padding = len(index) % 8
-        if padding:
-            padding = 8 - padding
-        index += chr(0) * padding
+    # Ugly bit of code to make a fake index at start
+    index = ".diy1.00This is a fake index block (DIY = Do It Yourself), which is allowed under the SFF standard.\0"
+    padding = len(index) % 8
+    if padding:
+        padding = 8 - padding
+    index += chr(0) * padding
+    with open("Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
+        records = list(SffIterator(handle))
+    with open("Roche/E3MFGYR02_alt_index_at_start.sff", "w") as out_handle:
         w = SffWriter(out_handle, index=False, xml=None)
         # Fake the header...
         w._number_of_reads = len(records)
@@ -484,24 +502,22 @@ if False:
         w.handle.write(index)
         for record in records:
             w.write_record(record)
-        out_handle.close()
-        records2 = list(SffIterator(
-            open("Roche/E3MFGYR02_alt_index_at_start.sff", "rb")))
-        for old, new in zip(records, records2):
-            assert str(old.seq) == str(new.seq)
-        i = list(_sff_do_slow_index(
-            open("Roche/E3MFGYR02_alt_index_at_start.sff", "rb")))
+    with open("Roche/E3MFGYR02_alt_index_at_start.sff", "rb") as handle:
+        records2 = list(SffIterator(handle))
+    for old, new in zip(records, records2):
+        assert old.seq == new.seq
+    with open("Roche/E3MFGYR02_alt_index_at_start.sff", "rb") as handle:
+        i = list(_sff_do_slow_index(handle))
 
-        # Ugly bit of code to make a fake index in middle
-        records = list(SffIterator(
-            open("Roche/E3MFGYR02_random_10_reads.sff", "rb")))
-        out_handle = open(
-            "Roche/E3MFGYR02_alt_index_in_middle.sff", "w")
-        index = ".diy1.00This is a fake index block (DIY = Do It Yourself), which is allowed under the SFF standard.\0"
-        padding = len(index) % 8
-        if padding:
-            padding = 8 - padding
-        index += chr(0) * padding
+    # Ugly bit of code to make a fake index in middle
+    index = ".diy1.00This is a fake index block (DIY = Do It Yourself), which is allowed under the SFF standard.\0"
+    padding = len(index) % 8
+    if padding:
+        padding = 8 - padding
+    index += chr(0) * padding
+    with open("Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
+        records = list(SffIterator(handle))
+    with open("Roche/E3MFGYR02_alt_index_in_middle.sff", "w") as out_handle:
         w = SffWriter(out_handle, index=False, xml=None)
         # Fake the header...
         w._number_of_reads = len(records)
@@ -520,44 +536,40 @@ if False:
             w.write_record(record)
         out_handle.seek(0)
         w.write_header()  # this time with index info
-        out_handle.close()
-        records2 = list(SffIterator(
-            open("Roche/E3MFGYR02_alt_index_in_middle.sff", "rb")))
-        for old, new in zip(records, records2):
-            assert str(old.seq) == str(new.seq)
-        j = list(_sff_do_slow_index(
-            open("Roche/E3MFGYR02_alt_index_in_middle.sff", "rb")))
+    with open("Roche/E3MFGYR02_alt_index_in_middle.sff", "rb") as handle:
+        records2 = list(SffIterator(handle))
+    for old, new in zip(records, records2):
+        assert old.seq == new.seq
+    with open("Roche/E3MFGYR02_alt_index_in_middle.sff", "rb") as handle:
+        j = list(_sff_do_slow_index(handle))
 
-        # Ugly bit of code to make a fake index at end
-        records = list(SffIterator(
-            open("Roche/E3MFGYR02_random_10_reads.sff", "rb")))
-        with open("Roche/E3MFGYR02_alt_index_at_end.sff", "w") as out_handle:
-            w = SffWriter(out_handle, index=False, xml=None)
-            # Fake the header...
-            w._number_of_reads = len(records)
-            w._index_start = 0
-            w._index_length = 0
-            w._key_sequence = records[0].annotations["flow_key"]
-            w._flow_chars = records[0].annotations["flow_chars"]
-            w._number_of_flows_per_read = len(w._flow_chars)
-            w.write_header()
-            for record in records:
-                w.write_record(record)
-            w._index_start = out_handle.tell()
-            w._index_length = len(index)
-            out_handle.write(index)
-            out_handle.seek(0)
-            w.write_header()  # this time with index info
-        records2 = list(SffIterator(
-            open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
-        for old, new in zip(records, records2):
-            assert str(old.seq) == str(new.seq)
-        try:
-            print(ReadRocheXmlManifest(
-                open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
-            assert False, "Should fail!"
-        except ValueError:
-            pass
-        k = list(_sff_do_slow_index(
-            open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
-        print("Done")
+    # Ugly bit of code to make a fake index at end
+    with open("Roche/E3MFGYR02_random_10_reads.sff", "rb") as handle:
+        records = list(SffIterator(handle))
+    with open("Roche/E3MFGYR02_alt_index_at_end.sff", "w") as out_handle:
+        w = SffWriter(out_handle, index=False, xml=None)
+        # Fake the header...
+        w._number_of_reads = len(records)
+        w._index_start = 0
+        w._index_length = 0
+        w._key_sequence = records[0].annotations["flow_key"]
+        w._flow_chars = records[0].annotations["flow_chars"]
+        w._number_of_flows_per_read = len(w._flow_chars)
+        w.write_header()
+        for record in records:
+            w.write_record(record)
+        w._index_start = out_handle.tell()
+        w._index_length = len(index)
+        out_handle.write(index)
+        out_handle.seek(0)
+        w.write_header()  # this time with index info
+    with open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb") as handle:
+        records2 = list(SffIterator(handle))
+    for old, new in zip(records, records2):
+        assert old.seq == new.seq
+    with unittest.TestCase.assertRaises(None, ValueError):
+        with open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb") as handle:
+            print(ReadRocheXmlManifest(handle))
+    with open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb") as handle:
+        k = list(_sff_do_slow_index(handle))
+    print("Done")

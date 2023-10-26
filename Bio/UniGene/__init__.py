@@ -1,15 +1,10 @@
-# Copyright 2006 by Sean Davis.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2006 by Sean Davis, National Cancer Institute, NIH.
+# All rights reserved.
 #
-# $Id: __init__.py,v 1.12 2009-04-24 12:03:45 mdehoon Exp $
-# Sean Davis <sdavis2 at mail dot nih dot gov>
-# National Cancer Institute
-# National Institutes of Health
-# Bethesda, MD, USA
-#
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Parse Unigene flat file format files such as the Hs.data file.
 
 Here is an overview of the flat file format that this parser deals with:
@@ -76,68 +71,71 @@ Here is an overview of the flat file format that this parser deals with:
                          Possible values are mRNA, EST and HTC.
            TRACE=        The Trace ID of the EST sequence, as provided by
                          NCBI Trace Archive
+
 """
 
 
-class SequenceLine(object):
-    """Store the information for one SEQUENCE line from a Unigene file
+class SequenceLine:
+    """Store the information for one SEQUENCE line from a Unigene file.
 
     Initialize with the text part of the SEQUENCE line, or nothing.
 
     Attributes and descriptions (access as LOWER CASE):
+     - ACC=         GenBank/EMBL/DDBJ accession number of sequence
+     - NID=         Unique nucleotide sequence identifier (gi)
+     - PID=         Unique protein sequence identifier (used for non-ESTs)
+     - CLONE=       Clone identifier (used for ESTs only)
+     - END=         End (5'/3') of clone insert read (used for ESTs only)
+     - LID=         Library ID; see Hs.lib.info for library name and tissue
+     - MGC=         5' CDS-completeness indicator; if present,
+       the clone associated with this sequence
+       is believed CDS-complete. A value greater than 511
+       is the gi of the CDS-complete mRNA matched by the EST,
+       otherwise the value is an indicator of the reliability
+       of the test indicating CDS completeness;
+       higher values indicate more reliable CDS-completeness
+       predictions.
+     - SEQTYPE=     Description of the nucleotide sequence. Possible values
+       are mRNA, EST and HTC.
+     - TRACE=       The Trace ID of the EST sequence, as provided by NCBI
+       Trace Archive
 
-        - ACC=         GenBank/EMBL/DDBJ accession number of sequence
-        - NID=         Unique nucleotide sequence identifier (gi)
-        - PID=         Unique protein sequence identifier (used for non-ESTs)
-        - CLONE=       Clone identifier (used for ESTs only)
-        - END=         End (5'/3') of clone insert read (used for ESTs only)
-        - LID=         Library ID; see Hs.lib.info for library name and tissue
-        - MGC=         5' CDS-completeness indicator; if present,
-          the clone associated with this sequence
-          is believed CDS-complete. A value greater than 511
-          is the gi of the CDS-complete mRNA matched by the EST,
-          otherwise the value is an indicator of the reliability
-          of the test indicating CDS completeness;
-          higher values indicate more reliable CDS-completeness
-          predictions.
-        - SEQTYPE=     Description of the nucleotide sequence. Possible values
-          are mRNA, EST and HTC.
-        - TRACE=       The Trace ID of the EST sequence, as provided by NCBI
-          Trace Archive
     """
 
     def __init__(self, text=None):
-        self.acc = ''
-        self.nid = ''
-        self.lid = ''
-        self.pid = ''
-        self.clone = ''
-        self.image = ''
+        """Initialize the class."""
+        self.acc = ""
+        self.nid = ""
+        self.lid = ""
+        self.pid = ""
+        self.clone = ""
+        self.image = ""
         self.is_image = False
-        self.end = ''
-        self.mgc = ''
-        self.seqtype = ''
-        self.trace = ''
+        self.end = ""
+        self.mgc = ""
+        self.seqtype = ""
+        self.trace = ""
         if text is not None:
             self.text = text
             self._init_from_text(text)
 
     def _init_from_text(self, text):
-        parts = text.split('; ')
+        parts = text.split("; ")
         for part in parts:
             key, val = part.split("=")
-            if key == 'CLONE':
-                if val[:5] == 'IMAGE':
+            if key == "CLONE":
+                if val[:5] == "IMAGE":
                     self.is_image = True
                     self.image = val[6:]
             setattr(self, key.lower(), val)
 
     def __repr__(self):
+        """Return UniGene SequenceLine object as a string."""
         return self.text
 
 
-class ProtsimLine(object):
-    """Store the information for one PROTSIM line from a Unigene file
+class ProtsimLine:
+    """Store the information for one PROTSIM line from a Unigene file.
 
     Initialize with the text part of the PROTSIM line, or nothing.
 
@@ -150,28 +148,30 @@ class ProtsimLine(object):
     """
 
     def __init__(self, text=None):
-        self.org = ''
-        self.protgi = ''
-        self.protid = ''
-        self.pct = ''
-        self.aln = ''
+        """Initialize the class."""
+        self.org = ""
+        self.protgi = ""
+        self.protid = ""
+        self.pct = ""
+        self.aln = ""
         if text is not None:
             self.text = text
             self._init_from_text(text)
 
     def _init_from_text(self, text):
-        parts = text.split('; ')
+        parts = text.split("; ")
 
         for part in parts:
             key, val = part.split("=")
             setattr(self, key.lower(), val)
 
     def __repr__(self):
+        """Return UniGene ProtsimLine object as a string."""
         return self.text
 
 
-class STSLine(object):
-    """Store the information for one STS line from a Unigene file
+class STSLine:
+    """Store the information for one STS line from a Unigene file.
 
     Initialize with the text part of the STS line, or nothing.
 
@@ -182,25 +182,27 @@ class STSLine(object):
     """
 
     def __init__(self, text=None):
-        self.acc = ''
-        self.unists = ''
+        """Initialize the class."""
+        self.acc = ""
+        self.unists = ""
         if text is not None:
             self.text = text
             self._init_from_text(text)
 
     def _init_from_text(self, text):
-        parts = text.split(' ')
+        parts = text.split(" ")
 
         for part in parts:
             key, val = part.split("=")
             setattr(self, key.lower(), val)
 
     def __repr__(self):
+        """Return UniGene STSLine object as a string."""
         return self.text
 
 
-class Record(object):
-    """Store a Unigene record
+class Record:
+    """Store a Unigene record.
 
     Here is what is stored::
 
@@ -224,32 +226,35 @@ class Record(object):
         self.sts          = []  # STS entries, array of STS entries
                                 # Type STSLine
         self.txmap        = []  # TXMAP entries, array of TXMap entries
+
     """
 
     def __init__(self):
-        self.ID = ''  # ID line
-        self.species = ''  # Hs, Bt, etc.
-        self.title = ''  # TITLE line
-        self.symbol = ''  # GENE line
-        self.cytoband = ''  # CYTOBAND line
+        """Initialize the class."""
+        self.ID = ""  # ID line
+        self.species = ""  # Hs, Bt, etc.
+        self.title = ""  # TITLE line
+        self.symbol = ""  # GENE line
+        self.cytoband = ""  # CYTOBAND line
         self.express = []  # EXPRESS line, parsed on ';'
-        self.restr_expr = ''  # RESTR_EXPR line
-        self.gnm_terminus = ''  # GNM_TERMINUS line
-        self.gene_id = ''  # GENE_ID line
-        self.locuslink = ''  # LOCUSLINK line
-        self.homol = ''  # HOMOL line
-        self.chromosome = ''  # CHROMOSOME line
+        self.restr_expr = ""  # RESTR_EXPR line
+        self.gnm_terminus = ""  # GNM_TERMINUS line
+        self.gene_id = ""  # GENE_ID line
+        self.locuslink = ""  # LOCUSLINK line
+        self.homol = ""  # HOMOL line
+        self.chromosome = ""  # CHROMOSOME line
         self.protsim = []  # PROTSIM entries, array of Protsims
         self.sequence = []  # SEQUENCE entries, array of Sequence entries
         self.sts = []  # STS entries, array of STS entries
         self.txmap = []  # TXMAP entries, array of TXMap entries
 
     def __repr__(self):
-        return "<%s> %s %s\n%s" % (self.__class__.__name__,
-                          self.ID, self.symbol, self.title)
+        """Represent the UniGene Record object as a string for debugging."""
+        return f"<{self.__class__.__name__}> {self.ID} {self.symbol} {self.title}"
 
 
 def parse(handle):
+    """Read and load a UniGene records, for files containing multiple records."""
     while True:
         record = _read(handle)
         if not record:
@@ -258,6 +263,7 @@ def parse(handle):
 
 
 def read(handle):
+    """Read and load a UniGene record, one record per file."""
     record = _read(handle)
     if not record:
         raise ValueError("No SwissProt record found")
@@ -280,7 +286,7 @@ def _read(handle):
         if tag == "ID":
             record = Record()
             record.ID = value
-            record.species = record.ID.split('.')[0]
+            record.species = record.ID.split(".")[0]
         elif tag == "TITLE":
             record.title = value
         elif tag == "GENE":
@@ -295,7 +301,7 @@ def _read(handle):
             elif value == "NO":
                 record.homol = True
             else:
-                raise ValueError("Cannot parse HOMOL line %s" % line)
+                raise ValueError(f"Cannot parse HOMOL line {line}")
         elif tag == "EXPRESS":
             record.express = [word.strip() for word in value.split("|")]
         elif tag == "RESTR_EXPR":
@@ -315,12 +321,15 @@ def _read(handle):
         elif tag == "STS":
             sts = STSLine(value)
             record.sts.append(sts)
-        elif tag == '//':
+        elif tag == "//":
             if len(record.sequence) != scount:
-                raise ValueError("The number of sequences specified in the record"
-                                 " (%d) does not agree with the number of sequences found (%d)" % (scount, len(record.sequence)))
+                raise ValueError(
+                    "The number of sequences specified in the record "
+                    "(%d) does not agree with the number of sequences found (%d)"
+                    % (scount, len(record.sequence))
+                )
             return record
         else:
-            raise ValueError("Unknown tag %s" % tag)
+            raise ValueError(f"Unknown tag {tag}")
     if record:
         raise ValueError("Unexpected end of stream.")

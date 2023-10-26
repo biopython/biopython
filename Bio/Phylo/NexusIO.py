@@ -1,9 +1,11 @@
 # Copyright (C) 2009 by Eric Talevich (eric.talevich@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
-"""I/O function wrappers for `Bio.Nexus` trees."""
+"""I/O function wrappers for ``Bio.Nexus`` trees."""
 
 from itertools import chain
 
@@ -47,12 +49,14 @@ def parse(handle):
             name=node.data.taxon,
             clades=subclades,
             confidence=node.data.support,
-            comment=node.data.comment)
+            comment=node.data.comment,
+        )
 
     for nxtree in nex.trees:
         newroot = node2clade(nxtree, nxtree.node(nxtree.root))
-        yield Newick.Tree(root=newroot, rooted=nxtree.rooted, name=nxtree.name,
-                          weight=nxtree.weight)
+        yield Newick.Tree(
+            root=newroot, rooted=nxtree.rooted, name=nxtree.name, weight=nxtree.weight
+        )
 
 
 def write(obj, handle, **kwargs):
@@ -63,15 +67,17 @@ def write(obj, handle, **kwargs):
     """
     trees = list(obj)
     writer = NewickIO.Writer(trees)
-    nexus_trees = [TREE_TEMPLATE % {'index': idx + 1, 'tree': nwk}
-                   for idx, nwk in enumerate(
-        writer.to_strings(plain=False, plain_newick=True,
-                          **kwargs))]
+    nexus_trees = [
+        TREE_TEMPLATE % {"index": idx + 1, "tree": nwk}
+        for idx, nwk in enumerate(
+            writer.to_strings(plain=False, plain_newick=True, **kwargs)
+        )
+    ]
     tax_labels = [str(x.name) for x in chain(*(t.get_terminals() for t in trees))]
     text = NEX_TEMPLATE % {
-        'count': len(tax_labels),
-        'labels': ' '.join(tax_labels),
-        'trees': '\n'.join(nexus_trees),
+        "count": len(tax_labels),
+        "labels": " ".join(tax_labels),
+        "trees": "\n".join(nexus_trees),
     }
     handle.write(text)
     return len(nexus_trees)

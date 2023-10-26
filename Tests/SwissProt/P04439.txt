@@ -1,0 +1,3124 @@
+ID   HLAA_HUMAN              Reviewed;         365 AA.
+AC   P04439; B1PKZ3; O02939; O02954; O02955; O02963; O19509; O19546; O19598;
+AC   O19605; O19606; O19619; O19647; O19673; O19687; O19695; O19756; O19794;
+AC   O19795; O43906; O43907; O46874; O62921; O62924; O77937; O77938; O77964;
+AC   O78073; O78171; O98009; O98010; O98011; O98137; P01891; P01892; P05534;
+AC   P06338; P10313; P10314; P10315; P10316; P13746; P16188; P16189; P16190;
+AC   P18462; P30443; P30444; P30445; P30446; P30447; P30448; P30449; P30450;
+AC   P30451; P30452; P30453; P30454; P30455; P30456; P30457; P30458; P30459;
+AC   P30512; P30514; P79505; P79562; P79563; Q09160; Q29680; Q29747; Q29835;
+AC   Q29837; Q29838; Q29899; Q29908; Q29909; Q29910; Q30208; Q31623; Q5S3G1;
+AC   Q65A82; Q8MHM1; Q8MHN9; Q95352; Q95355; Q95362; Q95377; Q95380; Q95IZ5;
+AC   Q9BCN0; Q9BD15; Q9BD19; Q9GJE6; Q9GJE7; Q9GJE8; Q9MW42; Q9MY89; Q9MYA3;
+AC   Q9MYA5; Q9MYC4; Q9MYE6; Q9MYE9; Q9MYG4; Q9MYG5; Q9MYI5; Q9TP25; Q9TPQ3;
+AC   Q9TPR8; Q9TPX8; Q9TPX9; Q9TPY0; Q9TQ24; Q9TQE8; Q9TQE9; Q9TQF1; Q9TQF5;
+AC   Q9TQF8; Q9TQF9; Q9TQG0; Q9TQG5; Q9TQG7; Q9TQH5; Q9TQI3; Q9TQK5; Q9TQM6;
+AC   Q9TQN5; Q9TQP5; Q9TQP6; Q9TQP7; Q9UIN1; Q9UIN2; Q9UIP7; Q9UQU3; Q9UQU6;
+AC   Q9UQU7;
+DT   13-AUG-1987, integrated into UniProtKB/Swiss-Prot.
+DT   22-AUG-2003, sequence version 2.
+DT   12-OCT-2022, entry version 208.
+DE   RecName: Full=HLA class I histocompatibility antigen, A alpha chain;
+DE   AltName: Full=Human leukocyte antigen A;
+DE            Short=HLA-A;
+DE   Flags: Precursor;
+GN   Name=HLA-A {ECO:0000312|HGNC:HGNC:4931}; Synonyms=HLAA;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE OF 25-298 (ALLELE A*32:01).
+RX   PubMed=2431040;
+RA   Wan A.M., Ennis P., Parham P., Holmes N.;
+RT   "The primary structure of HLA-A32 suggests a region involved in formation
+RT   of the Bw4/Bw6 epitopes.";
+RL   J. Immunol. 137:3671-3674(1986).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELE A*02:05).
+RX   PubMed=3496393;
+RA   Holmes N., Ennis P., Wan A.M., Denney D.W., Parham P.;
+RT   "Multiple genetic mechanisms have contributed to the generation of the HLA-
+RT   A2/A28 family of class I MHC molecules.";
+RL   J. Immunol. 139:936-941(1987).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELE A*11:01).
+RX   PubMed=2460344; DOI=10.1002/j.1460-2075.1988.tb03131.x;
+RA   Mayer W.E., Jonker M., Klein D., Ivanyi P., van Seventer G., Klein J.;
+RT   "Nucleotide sequences of chimpanzee MHC class I alleles: evidence for
+RT   trans-species mode of evolution.";
+RL   EMBO J. 7:2765-2774(1988).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELE A*29:01).
+RX   PubMed=2461903; DOI=10.1007/bf02341610;
+RA   Trapani J.A., Mizuno S., Kang S.H., Yang S.Y., Dupont B.;
+RT   "Molecular mapping of a new public HLA class I epitope shared by all HLA-B
+RT   and HLA-C antigens and defined by a monoclonal antibody.";
+RL   Immunogenetics 29:25-32(1989).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA / MRNA] (ALLELES A*30:01; A*31:01 AND
+RP   A*33:01).
+RX   PubMed=2478623;
+RA   Kato K., Trapani J.A., Allopenna J., Dupont B., Yang S.Y.;
+RT   "Molecular analysis of the serologically defined HLA-Aw19 antigens. A
+RT   genetically distinct family of HLA-A antigens comprising A29, A31, A32, and
+RT   Aw33, but probably not A30.";
+RL   J. Immunol. 143:3371-3378(1989).
+RN   [6]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA / MRNA] (ALLELE A*01:01).
+RX   PubMed=2715640;
+RA   Parham P., Lawlor D.A., Lomen C.E., Ennis P.D.;
+RT   "Diversity and diversification of HLA-A,B,C alleles.";
+RL   J. Immunol. 142:3937-3950(1989).
+RN   [7]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELES A*02:01 AND A*25:01).
+RX   PubMed=2320591; DOI=10.1073/pnas.87.7.2833;
+RA   Ennis P.D., Zemmour J., Salter R.D., Parham P.;
+RT   "Rapid cloning of HLA-A,B cDNA by using the polymerase chain reaction:
+RT   frequency and nature of errors produced in amplification.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 87:2833-2837(1990).
+RN   [8]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELE A*29:02).
+RX   PubMed=1782566;
+RA   Tabary T., Prochnicka-Chalufour A., Cornillet P., Lehoang P., Betuel H.,
+RA   Cohen H.M.;
+RT   "HLA-A29 sub-types and 'Birdshot' choroido-retinopathy susceptibility: a
+RT   possible 'resistance motif' in the HLA-A29.1 molecule.";
+RL   C. R. Acad. Sci. III, Sci. Vie 313:599-605(1991).
+RN   [9]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELES A*23:01 AND A*24:02).
+RX   PubMed=1729171; DOI=10.1007/bf00216625;
+RA   Little A.-M., Madrigal J.A., Parham P.;
+RT   "Molecular definition of an elusive third HLA-A9 molecule: HLA-A9.3.";
+RL   Immunogenetics 35:41-45(1992).
+RN   [10]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELES A*34:01; A*36:01; A*43:01; A*66:01 AND
+RP   A*74:01).
+RX   PubMed=1431115;
+RA   Madrigal J.A., Belich M.P., Hildebrand W.H., Benjamin R.J., Little A.-M.,
+RA   Zemmour J., Ennis P.D., Ward F.E., Petzl-Erler M.L., Martell R.W.,
+RA   du Toit E.D., Parham P.;
+RT   "Distinctive HLA-A,B antigens of black populations formed by interallelic
+RT   conversion.";
+RL   J. Immunol. 149:3411-3415(1992).
+RN   [11]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELE A*31:01).
+RX   PubMed=1317015; DOI=10.1038/357326a0;
+RA   Belich M.P., Madrigal J.A., Hildebrand W.H., Zemmour J., Williams R.C.,
+RA   Luz R., Petzl-Erler M.L., Parham P.;
+RT   "Unusual HLA-B alleles in two tribes of Brazilian Indians.";
+RL   Nature 357:326-329(1992).
+RN   [12]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELE A*26:01).
+RX   PubMed=8475492; DOI=10.1111/j.1399-0039.1993.tb01982.x;
+RA   Madrigal J.A., Hildebrand W.H., Belich M.P., Benjamin R.J., Little A.-M.,
+RA   Zemmour J., Ennis P.D., Ward F.E., Petzl-Erler M.L., du Toit E.D.,
+RA   Parham P.;
+RT   "Structural diversity in the HLA-A10 family of alleles: correlations with
+RT   serology.";
+RL   Tissue Antigens 41:72-80(1993).
+RN   [13]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELE A*80:01).
+RX   PubMed=8284791; DOI=10.1111/j.1399-0039.1993.tb02186.x;
+RA   Domena J.D., Hildebrand W.H., Bias W.B., Parham P.;
+RT   "A sixth family of HLA-A alleles defined by HLA-A*8001.";
+RL   Tissue Antigens 42:156-159(1993).
+RN   [14]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELES A*26:01).
+RC   TISSUE=Blood;
+RX   PubMed=8026990; DOI=10.1016/0198-8859(94)90263-1;
+RA   Ishikawa Y., Tokunaga K., Lin L., Imanishi T., Saitou S., Kashiwase K.,
+RA   Akaza T., Tadokoro K., Juji T.;
+RT   "Sequences of four splits of HLA-A10 group. Implications for serologic
+RT   cross-reactivities and their evolution.";
+RL   Hum. Immunol. 39:220-224(1994).
+RN   [15]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELE A*80:01).
+RX   PubMed=8188325; DOI=10.1007/bf00176169;
+RA   Balas A., Garcia-Sanchez F., Gomez-Reino F., Vicario J.L.;
+RT   "Characterization of a new and highly distinguishable HLA-A allele in a
+RT   Spanish family.";
+RL   Immunogenetics 39:452-452(1994).
+RN   [16]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELE A*11:01).
+RX   PubMed=8016845; DOI=10.1111/j.1399-0039.1994.tb02304.x;
+RA   Lin L., Tokunaga K., Ishikawa Y., Bannai M., Kashiwase K., Kuwata S.,
+RA   Akaza T., Tadokoro K., Shibata Y., Juji T.;
+RT   "Sequence analysis of serological HLA-A11 split antigens, A11.1 and
+RT   A11.2.";
+RL   Tissue Antigens 43:78-82(1994).
+RN   [17]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELE A*30:01).
+RX   PubMed=7871528; DOI=10.1111/j.1399-0039.1994.tb02393.x;
+RA   Olerup O., Daniels T.J., Baxter-Lowe L.;
+RT   "Correct sequence of the A*3001 allele obtained by PCR-SSP typing and
+RT   automated nucleotide sequencing.";
+RL   Tissue Antigens 44:265-267(1994).
+RN   [18]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELE A*11:01) (ISOFORM 2).
+RX   PubMed=17092262; DOI=10.1111/j.1399-0039.2006.00687.x;
+RA   Sun Y., Liu S., Luo Y., Liang F., Xi Y.;
+RT   "Identification and frequency of a novel HLA-A allele, A*110104.";
+RL   Tissue Antigens 68:453-454(2006).
+RN   [19]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (ALLELE A*03:01).
+RX   PubMed=6609814; DOI=10.1002/j.1460-2075.1984.tb01901.x;
+RA   Strachan T., Sodoyer R., Damotte M., Jordan B.R.;
+RT   "Complete nucleotide sequence of a functional class I HLA gene, HLA-A3:
+RT   implications for the evolution of HLA genes.";
+RL   EMBO J. 3:887-894(1984).
+RN   [20]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 26-297 (ALLELES A*68:01 AND A*69:01).
+RX   PubMed=3877632; DOI=10.1002/j.1460-2075.1985.tb04013.x;
+RA   Holmes N., Parham P.;
+RT   "Exon shuffling in vivo can generate novel HLA class I molecules.";
+RL   EMBO J. 4:2849-2854(1985).
+RN   [21]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (ALLELE A*02:01).
+RX   PubMed=2982951;
+RA   Koller B.H., Orr H.T.;
+RT   "Cloning and complete sequence of an HLA-A2 gene: analysis of two HLA-A
+RT   alleles at the nucleotide level.";
+RL   J. Immunol. 134:2727-2733(1985).
+RN   [22]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 26-365 (ALLELE A*11:01).
+RX   PubMed=2437024; DOI=10.1007/bf00404694;
+RA   Cowan E.P., Jelachich M.L., Biddison W.E., Coligan J.E.;
+RT   "DNA sequence of HLA-A11: remarkable homology with HLA-A3 allows
+RT   identification of residues involved in epitopes recognized by antibodies
+RT   and T cells.";
+RL   Immunogenetics 25:241-250(1987).
+RN   [23]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (ALLELE A*01:01).
+RX   PubMed=2251137; DOI=10.1093/nar/18.22.6701;
+RA   Girdlestone J.;
+RT   "Nucleotide sequence of an HLA-A1 gene.";
+RL   Nucleic Acids Res. 18:6701-6701(1990).
+RN   [24]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (ALLELE A*02:01).
+RC   TISSUE=Blood;
+RX   PubMed=7836067; DOI=10.1016/0198-8859(94)90087-6;
+RA   Balas A., Garcia-Sanchez F., Gomez-Reino F., Vicario J.L.;
+RT   "HLA class I allele (HLA-A2) expression defect associated with a mutation
+RT   in its enhancer B inverted CAT box in two families.";
+RL   Hum. Immunol. 41:69-73(1994).
+RN   [25]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (ALLELE A*31:01).
+RX   PubMed=8795145; DOI=10.1111/j.1399-0039.1996.tb02580.x;
+RA   Arnett K.L., Adams E.J., Parham P.;
+RT   "On the sequence of A*3101.";
+RL   Tissue Antigens 47:428-430(1996).
+RN   [26]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (ALLELE A*24:02).
+RX   PubMed=9349616; DOI=10.1111/j.1399-0039.1997.tb02884.x;
+RA   Laforet M., Froelich N., Parissiadis A., Bausinger H., Pfeiffer B.,
+RA   Tongio M.M.;
+RT   "An intronic mutation responsible for a low level of expression of an HLA-
+RT   A*24 allele.";
+RL   Tissue Antigens 50:340-346(1997).
+RN   [27]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (ALLELE A*01:01).
+RX   PubMed=9349617; DOI=10.1111/j.1399-0039.1997.tb02885.x;
+RA   Laforet M., Froelich N., Parissiadis A., Pfeiffer B., Schell A., Faller B.,
+RA   Woehl-Jaegle M.L., Cazenave J.-P., Tongio M.M.;
+RT   "A nucleotide insertion in exon 4 is responsible for the absence of
+RT   expression of an HLA-A*01 allele.";
+RL   Tissue Antigens 50:347-350(1997).
+RN   [28]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (ALLELE A*69:01).
+RX   PubMed=19735485; DOI=10.1111/j.1744-313x.2009.00874.x;
+RA   Zhu F., He Y., Zhang W., He J., He J., Xu X., Yan L.;
+RT   "Analysis of the complete genomic sequence of HLA-A alleles in the Chinese
+RT   Han population.";
+RL   Int. J. Immunogenet. 36:351-360(2009).
+RN   [29]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELE A*32:01).
+RA   Domena J.D.;
+RL   Submitted (DEC-1993) to the EMBL/GenBank/DDBJ databases.
+RN   [30]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELE A*74:01).
+RA   Hurley C.K.;
+RL   Submitted (NOV-1994) to the EMBL/GenBank/DDBJ databases.
+RN   [31]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ALLELE A*03:01).
+RA   Ellexson M.E., Hildebrand W.H.;
+RL   Submitted (JUL-1995) to the EMBL/GenBank/DDBJ databases.
+RN   [32]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] (ALLELE A*03:01).
+RA   Mayor N.P.;
+RT   "Full length sequence of an HLA-A*0301 intron 2 variant.";
+RL   Submitted (SEP-2004) to the EMBL/GenBank/DDBJ databases.
+RN   [33]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RC   TISSUE=Brain;
+RX   PubMed=15489334; DOI=10.1101/gr.2596504;
+RG   The MGC Project Team;
+RT   "The status, quality, and expansion of the NIH full-length cDNA project:
+RT   the Mammalian Gene Collection (MGC).";
+RL   Genome Res. 14:2121-2127(2004).
+RN   [34]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RX   PubMed=14574404; DOI=10.1038/nature02055;
+RA   Mungall A.J., Palmer S.A., Sims S.K., Edwards C.A., Ashurst J.L.,
+RA   Wilming L., Jones M.C., Horton R., Hunt S.E., Scott C.E., Gilbert J.G.R.,
+RA   Clamp M.E., Bethel G., Milne S., Ainscough R., Almeida J.P., Ambrose K.D.,
+RA   Andrews T.D., Ashwell R.I.S., Babbage A.K., Bagguley C.L., Bailey J.,
+RA   Banerjee R., Barker D.J., Barlow K.F., Bates K., Beare D.M., Beasley H.,
+RA   Beasley O., Bird C.P., Blakey S.E., Bray-Allen S., Brook J., Brown A.J.,
+RA   Brown J.Y., Burford D.C., Burrill W., Burton J., Carder C., Carter N.P.,
+RA   Chapman J.C., Clark S.Y., Clark G., Clee C.M., Clegg S., Cobley V.,
+RA   Collier R.E., Collins J.E., Colman L.K., Corby N.R., Coville G.J.,
+RA   Culley K.M., Dhami P., Davies J., Dunn M., Earthrowl M.E., Ellington A.E.,
+RA   Evans K.A., Faulkner L., Francis M.D., Frankish A., Frankland J.,
+RA   French L., Garner P., Garnett J., Ghori M.J., Gilby L.M., Gillson C.J.,
+RA   Glithero R.J., Grafham D.V., Grant M., Gribble S., Griffiths C.,
+RA   Griffiths M.N.D., Hall R., Halls K.S., Hammond S., Harley J.L., Hart E.A.,
+RA   Heath P.D., Heathcott R., Holmes S.J., Howden P.J., Howe K.L., Howell G.R.,
+RA   Huckle E., Humphray S.J., Humphries M.D., Hunt A.R., Johnson C.M.,
+RA   Joy A.A., Kay M., Keenan S.J., Kimberley A.M., King A., Laird G.K.,
+RA   Langford C., Lawlor S., Leongamornlert D.A., Leversha M., Lloyd C.R.,
+RA   Lloyd D.M., Loveland J.E., Lovell J., Martin S., Mashreghi-Mohammadi M.,
+RA   Maslen G.L., Matthews L., McCann O.T., McLaren S.J., McLay K., McMurray A.,
+RA   Moore M.J.F., Mullikin J.C., Niblett D., Nickerson T., Novik K.L.,
+RA   Oliver K., Overton-Larty E.K., Parker A., Patel R., Pearce A.V., Peck A.I.,
+RA   Phillimore B.J.C.T., Phillips S., Plumb R.W., Porter K.M., Ramsey Y.,
+RA   Ranby S.A., Rice C.M., Ross M.T., Searle S.M., Sehra H.K., Sheridan E.,
+RA   Skuce C.D., Smith S., Smith M., Spraggon L., Squares S.L., Steward C.A.,
+RA   Sycamore N., Tamlyn-Hall G., Tester J., Theaker A.J., Thomas D.W.,
+RA   Thorpe A., Tracey A., Tromans A., Tubby B., Wall M., Wallis J.M.,
+RA   West A.P., White S.S., Whitehead S.L., Whittaker H., Wild A., Willey D.J.,
+RA   Wilmer T.E., Wood J.M., Wray P.W., Wyatt J.C., Young L., Younger R.M.,
+RA   Bentley D.R., Coulson A., Durbin R.M., Hubbard T., Sulston J.E., Dunham I.,
+RA   Rogers J., Beck S.;
+RT   "The DNA sequence and analysis of human chromosome 6.";
+RL   Nature 425:805-811(2003).
+RN   [35]
+RP   PROTEIN SEQUENCE OF 25-295 (ALLELE A*02:01).
+RX   PubMed=92029; DOI=10.1073/pnas.76.9.4395;
+RA   Orr H.T., Lopez de Castro J.A., Parham P., Ploegh H.L., Strominger J.L.;
+RT   "Comparison of amino acid sequences of two human histocompatibility
+RT   antigens, HLA-A2 and HLA-B7: location of putative alloantigenic sites.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 76:4395-4399(1979).
+RN   [36]
+RP   PROTEIN SEQUENCE OF 25-294 (ALLELE A*68:01).
+RX   PubMed=6179086; DOI=10.1073/pnas.79.12.3813;
+RA   Lopez de Castro J.A., Strominger J.L., Strong D.M., Orr H.T.;
+RT   "Structure of crossreactive human histocompatibility antigens HLA-A28 and
+RT   HLA-A2: possible implications for the generation of HLA polymorphism.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 79:3813-3817(1982).
+RN   [37]
+RP   FUNCTION (ALLELE A*03:01), AND CHARACTERIZATION OF VARIANT VAL-176.
+RX   PubMed=2456340;
+RA   Jelachich M.L., Cowan E.P., Turner R.V., Coligan J.E., Biddison W.E.;
+RT   "Analysis of the molecular basis of HLA-A3 recognition by cytotoxic T cells
+RT   using defined mutants of the HLA-A3 molecule.";
+RL   J. Immunol. 141:1108-1113(1988).
+RN   [38]
+RP   FUNCTION (ALLELES A*02:01 AND A*68:01), INTERACTION WITH CD8A, DOMAIN, AND
+RP   CHARACTERIZATION OF VARIANT VAL-269.
+RX   PubMed=2784196; DOI=10.1038/338345a0;
+RA   Salter R.D., Norment A.M., Chen B.P., Clayberger C., Krensky A.M.,
+RA   Littman D.R., Parham P.;
+RT   "Polymorphism in the alpha 3 domain of HLA-A molecules affects binding to
+RT   CD8.";
+RL   Nature 338:345-347(1989).
+RN   [39]
+RP   FUNCTION (ALLELE A*01:01).
+RX   PubMed=1402688; DOI=10.1084/jem.176.5.1453;
+RA   Traversari C., van der Bruggen P., Luescher I.F., Lurquin C., Chomez P.,
+RA   Van Pel A., De Plaen E., Amar-Costesec A., Boon T.;
+RT   "A nonapeptide encoded by human gene MAGE-1 is recognized on HLA-A1 by
+RT   cytolytic T lymphocytes directed against tumor antigen MZ2-E.";
+RL   J. Exp. Med. 176:1453-1457(1992).
+RN   [40]
+RP   FUNCTION (ALLELES A*01:01 AND A*03:01), AND INTERACTION WITH B2M AND
+RP   PEPTIDE.
+RX   PubMed=7504010;
+RA   DiBrino M., Tsuchida T., Turner R.V., Parker K.C., Coligan J.E.,
+RA   Biddison W.E.;
+RT   "HLA-A1 and HLA-A3 T cell epitopes derived from influenza virus proteins
+RT   predicted from peptide binding motifs.";
+RL   J. Immunol. 151:5930-5935(1993).
+RN   [41]
+RP   FUNCTION (ALLELE A*03:01), AND INTERACTION WITH B2M AND PEPTIDE.
+RX   PubMed=7679507; DOI=10.1073/pnas.90.4.1508;
+RA   DiBrino M., Parker K.C., Shiloach J., Knierman M., Lukszo J., Turner R.V.,
+RA   Biddison W.E., Coligan J.E.;
+RT   "Endogenous peptides bound to HLA-A3 possess a specific combination of
+RT   anchor residues that permit identification of potential antigenic
+RT   peptides.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 90:1508-1512(1993).
+RN   [42]
+RP   FUNCTION (ALLELE A*01:01), AND INTERACTION WITH B2M AND PEPTIDE.
+RX   PubMed=7506728;
+RA   DiBrino M., Parker K.C., Shiloach J., Turner R.V., Tsuchida T.,
+RA   Garfield M., Biddison W.E., Coligan J.E.;
+RT   "Endogenous peptides with distinct amino acid anchor residue motifs bind to
+RT   HLA-A1 and HLA-B8.";
+RL   J. Immunol. 152:620-631(1994).
+RN   [43]
+RP   FUNCTION (ALLELE A*02:01), MUTAGENESIS OF SER-156 AND THR-158, DOMAIN,
+RP   INTERACTION WITH B2M, INTERACTION WITH TAP1-TAP2 COMPLEX, AND SUBCELLULAR
+RP   LOCATION.
+RX   PubMed=8805302; DOI=10.1016/s0960-9822(02)00611-5;
+RA   Lewis J.W., Neisig A., Neefjes J., Elliott T.;
+RT   "Point mutations in the alpha 2 domain of HLA-A2.1 define a functionally
+RT   relevant interaction with TAP.";
+RL   Curr. Biol. 6:873-883(1996).
+RN   [44]
+RP   FUNCTION (ALLELE A*02:01), INTERACTION WITH TAP1-TAP2 COMPLEX, AND
+RP   MUTAGENESIS OF THR-158.
+RX   PubMed=8630735; DOI=10.1016/s1074-7613(00)80416-1;
+RA   Peace-Brewer A.L., Tussey L.G., Matsui M., Li G., Quinn D.G.,
+RA   Frelinger J.A.;
+RT   "A point mutation in HLA-A*0201 results in failure to bind the TAP complex
+RT   and to present virus-derived peptides to CTL.";
+RL   Immunity 4:505-514(1996).
+RN   [45]
+RP   FUNCTION (ALLELE A*29:02).
+RX   PubMed=8622959; DOI=10.1073/pnas.93.8.3466;
+RA   Boisgerault F., Khalil I., Tieng V., Connan F., Tabary T., Cohen J.H.,
+RA   Choppin J., Charron D., Toubert A.;
+RT   "Definition of the HLA-A29 peptide ligand motif allows prediction of
+RT   potential T-cell epitopes from the retinal soluble antigen, a candidate
+RT   autoantigen in birdshot retinopathy.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 93:3466-3470(1996).
+RN   [46]
+RP   FUNCTION (ALLELE A*24:02).
+RX   PubMed=9047241; DOI=10.1016/s1074-7613(00)80426-4;
+RA   Ikeda H., Lethe B.G., Lehmann F., van Baren N., Baurain J.-F., de Smet C.,
+RA   Chambost H., Vitale M., Moretta A., Boon T., Coulie P.G.;
+RT   "Characterization of an antigen that is recognized on a melanoma showing
+RT   partial HLA loss by CTL expressing an NK inhibitory receptor.";
+RL   Immunity 6:199-208(1997).
+RN   [47]
+RP   FUNCTION (ALLELE A*03:01).
+RX   PubMed=9862734;
+RA   Kawakami Y., Robbins P.F., Wang X., Tupesis J.P., Parkhurst M.R., Kang X.,
+RA   Sakaguchi K., Appella E., Rosenberg S.A.;
+RT   "Identification of new melanoma epitopes on melanosomal proteins recognized
+RT   by tumor infiltrating T lymphocytes restricted by HLA-A1, -A2, and -A3
+RT   alleles.";
+RL   J. Immunol. 161:6985-6992(1998).
+RN   [48]
+RP   FUNCTION (ALLELE A*11:01).
+RX   PubMed=10449296; DOI=10.1097/00002030-199907300-00021;
+RA   Fukada K., Chujoh Y., Tomiyama H., Miwa K., Kaneko Y., Oka S.,
+RA   Takiguchi M.;
+RT   "HLA-A*1101-restricted cytotoxic T lymphocyte recognition of HIV-1 Pol
+RT   protein.";
+RL   AIDS 13:1413-1414(1999).
+RN   [49]
+RP   INTERACTION WITH HTLV-1 ACCESSORY PROTEIN P12I (MICROBIAL INFECTION).
+RX   PubMed=11390610; DOI=10.1128/jvi.75.13.6086-6094.2001;
+RA   Johnson J.M., Nicot C., Fullen J., Ciminale V., Casareto L., Mulloy J.C.,
+RA   Jacobson S., Franchini G.;
+RT   "Free major histocompatibility complex class I heavy chain is
+RT   preferentially targeted for degradation by human T-cell
+RT   leukemia/lymphotropic virus type 1 p12(I) protein.";
+RL   J. Virol. 75:6086-6094(2001).
+RN   [50]
+RP   INTERACTION WITH HUMAN HERPESVIRUS 8 MIR1 PROTEIN (MICROBIAL INFECTION),
+RP   AND UBIQUITINATION (MICROBIAL INFECTION).
+RX   PubMed=12006494; DOI=10.1093/emboj/21.10.2418;
+RA   Hewitt E.W., Duncan L., Mufti D., Baker J., Stevenson P.G., Lehner P.J.;
+RT   "Ubiquitylation of MHC class I by the K3 viral protein signals
+RT   internalization and TSG101-dependent degradation.";
+RL   EMBO J. 21:2418-2429(2002).
+RN   [51]
+RP   FUNCTION (ALLELE A*02:01).
+RX   PubMed=12138174; DOI=10.1073/pnas.112331099;
+RA   Nagata Y., Ono S., Matsuo M., Gnjatic S., Valmori D., Ritter G.,
+RA   Garrett W., Old L.J., Mellman I.;
+RT   "Differential presentation of a soluble exogenous tumor antigen, NY-ESO-1,
+RT   by distinct human dendritic cell populations.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 99:10629-10634(2002).
+RN   [52]
+RP   FUNCTION (ALLELE A*24:02).
+RX   PubMed=12393434; DOI=10.1182/blood-2002-04-1240;
+RA   Kuzushima K., Hayashi N., Kudoh A., Akatsuka Y., Tsujimura K.,
+RA   Morishima Y., Tsurumi T.;
+RT   "Tetramer-assisted identification and characterization of epitopes
+RT   recognized by HLA A*2402-restricted Epstein-Barr virus-specific CD8+ T
+RT   cells.";
+RL   Blood 101:1460-1468(2003).
+RN   [53]
+RP   FUNCTION (ALLELE A*26:01).
+RX   PubMed=15893615; DOI=10.1016/j.vaccine.2005.02.022;
+RA   Satoh M., Takamiya Y., Oka S., Tokunaga K., Takiguchi M.;
+RT   "Identification and characterization of HIV-1-specific CD8+ T cell epitopes
+RT   presented by HLA-A*2601.";
+RL   Vaccine 23:3783-3790(2005).
+RN   [54]
+RP   FUNCTION (ALLELE A*01:01).
+RX   PubMed=17189421; DOI=10.1158/1078-0432.ccr-06-1337;
+RA   Asemissen A.M., Keilholz U., Tenzer S., Mueller M., Walter S.,
+RA   Stevanovic S., Schild H., Letsch A., Thiel E., Rammensee H.G.,
+RA   Scheibenbogen C.;
+RT   "Identification of a highly immunogenic HLA-A*01-binding T cell epitope of
+RT   WT1.";
+RL   Clin. Cancer Res. 12:7476-7482(2006).
+RN   [55]
+RP   FUNCTION (ALLELES A*23:01; A*24:02 AND A*32:01), AND INTERACTION WITH
+RP   KIR3DL1.
+RX   PubMed=17182537; DOI=10.4049/jimmunol.178.1.33;
+RA   Thananchai H., Gillespie G., Martin M.P., Bashirova A., Yawata N.,
+RA   Yawata M., Easterbrook P., McVicar D.W., Maenaka K., Parham P.,
+RA   Carrington M., Dong T., Rowland-Jones S.;
+RT   "Cutting Edge: Allele-specific and peptide-dependent interactions between
+RT   KIR3DL1 and HLA-A and HLA-B.";
+RL   J. Immunol. 178:33-37(2007).
+RN   [56]
+RP   FUNCTION (ALLELE A*02:01).
+RX   PubMed=17079320; DOI=10.1128/jvi.01779-06;
+RA   Robek M.D., Garcia M.L., Boyd B.S., Chisari F.V.;
+RT   "Role of immunoproteasome catalytic subunits in the immune response to
+RT   hepatitis B virus.";
+RL   J. Virol. 81:483-491(2007).
+RN   [57]
+RP   FUNCTION (ALLELE A*24:02), AND INTERACTION WITH KIR3DL1.
+RX   PubMed=18502829; DOI=10.1182/blood-2008-02-137521;
+RA   Stern M., Ruggeri L., Capanni M., Mancusi A., Velardi A.;
+RT   "Human leukocyte antigens A23, A24, and A32 but not A25 are ligands for
+RT   KIR3DL1.";
+RL   Blood 112:708-710(2008).
+RN   [58]
+RP   FUNCTION (ALLELE A*01:01).
+RX   PubMed=18779413; DOI=10.1182/blood-2008-06-162883;
+RA   Brennan R.M., Burrows S.R.;
+RT   "A mechanism for the HLA-A*01-associated risk for EBV+ Hodgkin lymphoma and
+RT   infectious mononucleosis.";
+RL   Blood 112:2589-2590(2008).
+RN   [59]
+RP   GLYCOSYLATION [LARGE SCALE ANALYSIS] AT ASN-110.
+RC   TISSUE=Liver;
+RX   PubMed=19159218; DOI=10.1021/pr8008012;
+RA   Chen R., Jiang X., Sun D., Han G., Wang F., Ye M., Wang L., Zou H.;
+RT   "Glycoproteomics analysis of human liver tissue by combination of multiple
+RT   enzyme digestion and hydrazide chemistry.";
+RL   J. Proteome Res. 8:651-661(2009).
+RN   [60]
+RP   FUNCTION (ALLELE A*03:01).
+RX   PubMed=19543285; DOI=10.1038/nmeth.1345;
+RA   Hadrup S.R., Bakker A.H., Shu C.J., Andersen R.S., van Veluw J.,
+RA   Hombrink P., Castermans E., Thor Straten P., Blank C., Haanen J.B.,
+RA   Heemskerk M.H., Schumacher T.N.;
+RT   "Parallel detection of antigen-specific T-cell responses by
+RT   multidimensional encoding of MHC multimers.";
+RL   Nat. Methods 6:520-526(2009).
+RN   [61]
+RP   FUNCTION (ALLELE A*01:01).
+RX   PubMed=20364150; DOI=10.1038/ni.1862;
+RA   Parmentier N., Stroobant V., Colau D., de Diesbach P., Morel S.,
+RA   Chapiro J., van Endert P., Van den Eynde B.J.;
+RT   "Production of an antigenic peptide by insulin-degrading enzyme.";
+RL   Nat. Immunol. 11:449-454(2010).
+RN   [62]
+RP   NOMENCLATURE.
+RX   PubMed=20356336; DOI=10.1111/j.1399-0039.2010.01466.x;
+RA   Marsh S.G., Albert E.D., Bodmer W.F., Bontrop R.E., Dupont B., Erlich H.A.,
+RA   Fernandez-Vina M., Geraghty D.E., Holdsworth R., Hurley C.K., Lau M.,
+RA   Lee K.W., Mach B., Maiers M., Mayr W.R., Mueller C.R., Parham P.,
+RA   Petersdorf E.W., Sasazuki T., Strominger J.L., Svejgaard A., Terasaki P.I.,
+RA   Tiercy J.M., Trowsdale J.;
+RT   "Nomenclature for factors of the HLA system, 2010.";
+RL   Tissue Antigens 75:291-455(2010).
+RN   [63]
+RP   INDUCTION BY IFNG, GLYCOSYLATION AT ASN-110, MUTAGENESIS OF ASN-110,
+RP   SUBCELLULAR LOCATION, AND INTERACTION WITH TAPBP.
+RX   PubMed=21263072; DOI=10.4049/jimmunol.1002959;
+RA   Rizvi S.M., Del Cid N., Lybarger L., Raghavan M.;
+RT   "Distinct functions for the glycans of tapasin and heavy chains in the
+RT   assembly of MHC class I molecules.";
+RL   J. Immunol. 186:2309-2320(2011).
+RN   [64]
+RP   FUNCTION (ALLELE A*74:01).
+RX   PubMed=21498667; DOI=10.4049/jimmunol.1003711;
+RA   Matthews P.C., Adland E., Listgarten J., Leslie A., Mkhwanazi N.,
+RA   Carlson J.M., Harndahl M., Stryhn A., Payne R.P., Ogwu A., Huang K.H.,
+RA   Frater J., Paioni P., Kloverpris H., Jooste P., Goedhals D., van Vuuren C.,
+RA   Steyn D., Riddell L., Chen F., Luzzi G., Balachandran T., Ndung'u T.,
+RA   Buus S., Carrington M., Shapiro R., Heckerman D., Goulder P.J.;
+RT   "HLA-A*7401-mediated control of HIV viremia is independent of its linkage
+RT   disequilibrium with HLA-B*5703.";
+RL   J. Immunol. 186:5675-5686(2011).
+RN   [65]
+RP   PHOSPHORYLATION [LARGE SCALE ANALYSIS] AT SER-356 AND SER-359, AND
+RP   IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS].
+RC   TISSUE=Cervix carcinoma;
+RX   PubMed=23186163; DOI=10.1021/pr300630k;
+RA   Zhou H., Di Palma S., Preisinger C., Peng M., Polat A.N., Heck A.J.,
+RA   Mohammed S.;
+RT   "Toward a comprehensive characterization of a human cancer cell
+RT   phosphoproteome.";
+RL   J. Proteome Res. 12:260-271(2013).
+RN   [66]
+RP   FUNCTION (ALLELE A*24:02).
+RX   PubMed=24192765; DOI=10.1038/srep03097;
+RA   Shimizu A., Kawana-Tachikawa A., Yamagata A., Han C., Zhu D., Sato Y.,
+RA   Nakamura H., Koibuchi T., Carlson J., Martin E., Brumme C.J., Shi Y.,
+RA   Gao G.F., Brumme Z.L., Fukai S., Iwamoto A.;
+RT   "Structure of TCR and antigen complexes at an immunodominant CTL epitope in
+RT   HIV-1 infection.";
+RL   Sci. Rep. 3:3097-3097(2013).
+RN   [67]
+RP   PHOSPHORYLATION [LARGE SCALE ANALYSIS] AT SER-343; TYR-344; SER-349;
+RP   SER-350; SER-352; SER-356 AND SER-359, AND IDENTIFICATION BY MASS
+RP   SPECTROMETRY [LARGE SCALE ANALYSIS].
+RC   TISSUE=Liver;
+RX   PubMed=24275569; DOI=10.1016/j.jprot.2013.11.014;
+RA   Bian Y., Song C., Cheng K., Dong M., Wang F., Huang J., Sun D., Wang L.,
+RA   Ye M., Zou H.;
+RT   "An enzyme assisted RP-RPLC approach for in-depth analysis of human liver
+RT   phosphoproteome.";
+RL   J. Proteomics 96:253-262(2014).
+RN   [68]
+RP   IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS].
+RX   PubMed=25944712; DOI=10.1002/pmic.201400617;
+RA   Vaca Jacome A.S., Rabilloud T., Schaeffer-Reiss C., Rompais M., Ayoub D.,
+RA   Lane L., Bairoch A., Van Dorsselaer A., Carapito C.;
+RT   "N-terminome analysis of the human mitochondrial proteome.";
+RL   Proteomics 15:2519-2524(2015).
+RN   [69]
+RP   FUNCTION (ALLELE A*01:01), AND SUBCELLULAR LOCATION.
+RX   PubMed=25880248; DOI=10.1111/tan.12565;
+RA   Giam K., Ayala-Perez R., Illing P.T., Schittenhelm R.B., Croft N.P.,
+RA   Purcell A.W., Dudek N.L.;
+RT   "A comprehensive analysis of peptides presented by HLA-A1.";
+RL   Tissue Antigens 85:492-496(2015).
+RN   [70]
+RP   INTERACTION WITH TAPBPL.
+RX   PubMed=26869717; DOI=10.1073/pnas.1519894113;
+RA   Morozov G.I., Zhao H., Mage M.G., Boyd L.F., Jiang J., Dolan M.A.,
+RA   Venna R., Norcross M.A., McMurtrey C.P., Hildebrand W., Schuck P.,
+RA   Natarajan K., Margulies D.H.;
+RT   "Interaction of TAPBPR, a tapasin homolog, with MHC-I molecules promotes
+RT   peptide editing.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 113:E1006-E1015(2016).
+RN   [71]
+RP   FUNCTION (ALLELE A*02:01).
+RX   PubMed=26929325; DOI=10.1073/pnas.1521812113;
+RA   Tripathi S.C., Peters H.L., Taguchi A., Katayama H., Wang H., Momin A.,
+RA   Jolly M.K., Celiktas M., Rodriguez-Canales J., Liu H., Behrens C.,
+RA   Wistuba I.I., Ben-Jacob E., Levine H., Molldrem J.J., Hanash S.M.,
+RA   Ostrin E.J.;
+RT   "Immunoproteasome deficiency is a feature of non-small cell lung cancer
+RT   with a mesenchymal phenotype and is associated with a poor outcome.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 113:E1555-E1564(2016).
+RN   [72]
+RP   FUNCTION (ALLELE A*03:01).
+RX   PubMed=27049119; DOI=10.1038/srep24032;
+RA   Ebstein F., Textoris-Taube K., Keller C., Golnik R., Vigneron N.,
+RA   Van den Eynde B.J., Schuler-Thurner B., Schadendorf D., Lorenz F.K.,
+RA   Uckert W., Urban S., Lehmann A., Albrecht-Koepke N., Janek K., Henklein P.,
+RA   Niewienda A., Kloetzel P.M., Mishto M.;
+RT   "Proteasomes generate spliced epitopes by two different mechanisms and as
+RT   efficiently as non-spliced epitopes.";
+RL   Sci. Rep. 6:24032-24032(2016).
+RN   [73]
+RP   FUNCTION (ALLELE A*01:01).
+RX   PubMed=30530481; DOI=10.4049/jimmunol.1801003;
+RA   Keib A., Mei Y.F., Cicin-Sain L., Busch D.H., Dennehy K.M.;
+RT   "Measuring Antiviral Capacity of T Cell Responses to Adenovirus.";
+RL   J. Immunol. 202:618-624(2019).
+RN   [74]
+RP   FUNCTION (ALLELES A*01:01; A*03:01 AND A*11:01).
+RX   PubMed=32887977; DOI=10.1038/s41590-020-0782-6;
+RG   Oxford Immunology Network Covid-19 Response T cell Consortium;
+RG   ISARIC4C Investigators;
+RA   Peng Y., Mentzer A.J., Liu G., Yao X., Yin Z., Dong D., Dejnirattisai W.,
+RA   Rostron T., Supasa P., Liu C., Lopez-Camacho C., Slon-Campos J., Zhao Y.,
+RA   Stuart D.I., Paesen G.C., Grimes J.M., Antson A.A., Bayfield O.W.,
+RA   Hawkins D.E.D.P., Ker D.S., Wang B., Turtle L., Subramaniam K., Thomson P.,
+RA   Zhang P., Dold C., Ratcliff J., Simmonds P., de Silva T., Sopp P.,
+RA   Wellington D., Rajapaksa U., Chen Y.L., Salio M., Napolitani G., Paes W.,
+RA   Borrow P., Kessler B.M., Fry J.W., Schwabe N.F., Semple M.G., Baillie J.K.,
+RA   Moore S.C., Openshaw P.J.M., Ansari M.A., Dunachie S., Barnes E.,
+RA   Frater J., Kerr G., Goulder P., Lockett T., Levin R., Zhang Y., Jing R.,
+RA   Ho L.P., Cornall R.J., Conlon C.P., Klenerman P., Screaton G.R.,
+RA   Mongkolsapaya J., McMichael A., Knight J.C., Ogg G., Dong T.;
+RT   "Broad and strong memory CD4+ and CD8+ T cells induced by SARS-CoV-2 in UK
+RT   convalescent individuals following COVID-19.";
+RL   Nat. Immunol. 21:1336-1345(2020).
+RN   [75]
+RP   X-RAY CRYSTALLOGRAPHY (1.9 ANGSTROMS) OF 25-294 (ALLELE A*68:01), AND
+RP   FUNCTION (ALLELE A*68:01).
+RX   PubMed=1448153; DOI=10.1038/360364a0;
+RA   Guo H.-C., Jardetzky T.S., Garrett T.P.J., Lane W.S., Strominger J.L.,
+RA   Wiley D.C.;
+RT   "Different length peptides bind to HLA-Aw68 similarly at their ends but
+RT   bulge out in the middle.";
+RL   Nature 360:364-366(1992).
+RN   [76]
+RP   X-RAY CRYSTALLOGRAPHY (1.9 ANGSTROMS) OF 25-294 (ALLELE A*68:01), AND
+RP   FUNCTION (ALLELE A*68:01).
+RX   PubMed=1448154; DOI=10.1038/360367a0;
+RA   Silver M.L., Guo H.-C., Strominger J.L., Wiley D.C.;
+RT   "Atomic structure of a human MHC molecule presenting an influenza virus
+RT   peptide.";
+RL   Nature 360:367-369(1992).
+RN   [77]
+RP   X-RAY CRYSTALLOGRAPHY (2.50 ANGSTROMS) OF 25-299 (ALLELE A*02:01) IN
+RP   COMPLEX WITH B2M AND PEPTIDE, FUNCTION (ALLELE A*02:01), DISULFIDE BOND,
+RP   AND DOMAIN.
+RX   PubMed=7694806; DOI=10.1016/0092-8674(93)90490-h;
+RA   Madden D.R., Garboczi D.N., Wiley D.C.;
+RT   "The antigenic identity of peptide-MHC complexes: a comparison of the
+RT   conformations of five viral peptides presented by HLA-A2.";
+RL   Cell 75:693-708(1993).
+RN   [78]
+RP   X-RAY CRYSTALLOGRAPHY (2.00 ANGSTROMS) OF 25-299 (ALLELE A*02:01) IN
+RP   COMPLEX WITH B2M AND PEPTIDE, AND FUNCTION (ALLELE A*02:01).
+RX   PubMed=7935798; DOI=10.1038/371626a0;
+RA   Collins E.J., Garboczi D.N., Wiley D.C.;
+RT   "Three-dimensional structure of a peptide extending from one end of a class
+RT   I MHC binding site.";
+RL   Nature 371:626-629(1994).
+RN   [79]
+RP   X-RAY CRYSTALLOGRAPHY (2.60 ANGSTROMS) OF 25-299 (ALLELE A*02:01) IN
+RP   COMPLEX WITH B2M AND PEPTIDE, FUNCTION (ALLELE A*02:01), AND DOMAIN.
+RX   PubMed=8906788; DOI=10.1038/384134a0;
+RA   Garboczi D.N., Ghosh P., Utz U., Fan Q.R., Biddison W.E., Wiley D.C.;
+RT   "Structure of the complex between human T-cell receptor, viral peptide and
+RT   HLA-A2.";
+RL   Nature 384:134-141(1996).
+RN   [80]
+RP   X-RAY CRYSTALLOGRAPHY (2.65 ANGSTROMS) OF 25-300 (ALLELE A*02:01) IN
+RP   COMPLEX WITH B2M AND PEPTIDE, INTERACTION WITH CD8A, AND FUNCTION (ALLELE
+RP   A*02:01).
+RX   PubMed=9177355; DOI=10.1038/42523;
+RA   Gao G.F., Tormo J., Gerth U.C., Wyer J.R., McMichael A.J., Stuart D.I.,
+RA   Bell J.I., Jones E.Y., Jakobsen B.K.;
+RT   "Crystal structure of the complex between human CD8alpha(alpha) and HLA-
+RT   A2.";
+RL   Nature 387:630-634(1997).
+RN   [81]
+RP   X-RAY CRYSTALLOGRAPHY (1.40 ANGSTROMS) OF 25-299 (ALLELE A*02:01) IN
+RP   COMPLEX WITH B2M AND PEPTIDE, AND FUNCTION (ALLELE A*02:01).
+RX   PubMed=11502003; DOI=10.1006/jmbi.2001.4816;
+RA   Hillig R.C., Coulie P.G., Stroobant V., Saenger W., Ziegler A.,
+RA   Hulsmeyer M.;
+RT   "High-resolution structure of HLA-A*0201 in complex with a tumour-specific
+RT   antigenic peptide encoded by the MAGE-A4 gene.";
+RL   J. Mol. Biol. 310:1167-1176(2001).
+RN   [82]
+RP   X-RAY CRYSTALLOGRAPHY (1.40 ANGSTROMS) OF 25-300 (ALLELE A*02:01) IN
+RP   COMPLEX WITH B2M AND PEPTIDE, INTERACTION WITH TCR, AND FUNCTION (ALLELE
+RP   A*02:01).
+RX   PubMed=12796775; DOI=10.1038/ni942;
+RA   Stewart-Jones G.B.E., McMichael A.J., Bell J.I., Stuart D.I., Jones E.Y.;
+RT   "A structural basis for immunodominant human T cell receptor recognition.";
+RL   Nat. Immunol. 4:657-663(2003).
+RN   [83]
+RP   X-RAY CRYSTALLOGRAPHY (1.45 ANGSTROMS) OF 25-299 (ALLELE A*11:01) IN
+RP   COMPLEX WITH SARS NUCLEOCAPSID PEPTIDE, AND DISULFIDE BONDS.
+RX   PubMed=16041067; DOI=10.1107/s0907444905013090;
+RA   Blicher T., Kastrup J.S., Buus S., Gajhede M.;
+RT   "High-resolution structure of HLA-A*1101 in complex with SARS nucleocapsid
+RT   peptide.";
+RL   Acta Crystallogr. D 61:1031-1040(2005).
+RN   [84]
+RP   X-RAY CRYSTALLOGRAPHY (1.60 ANGSTROMS) OF 25-300 (ALLELE A*02:01) IN
+RP   COMPLEX WITH B2M AND PEPTIDE, INTERACTION WITH TCR, AND FUNCTION (ALLELE
+RP   A*02:01).
+RX   PubMed=18275829; DOI=10.1016/j.immuni.2007.12.018;
+RA   Ishizuka J., Stewart-Jones G.B., van der Merwe A., Bell J.I.,
+RA   McMichael A.J., Jones E.Y.;
+RT   "The structural dynamics and energetics of an immunodominant T cell
+RT   receptor are programmed by its Vbeta domain.";
+RL   Immunity 28:171-182(2008).
+RN   [85]
+RP   X-RAY CRYSTALLOGRAPHY (1.60 ANGSTROMS) OF 25-298 (ALLELE A*02:01) IN
+RP   COMPLEX WITH B2M AND PEPTIDE, FUNCTION (ALLELE A*02:01), AND DOMAIN.
+RX   PubMed=19542454; DOI=10.4049/jimmunol.0900556;
+RA   Gras S., Saulquin X., Reiser J.B., Debeaupuis E., Echasserieau K.,
+RA   Kissenpfennig A., Legoux F., Chouquet A., Le Gorrec M., Machillot P.,
+RA   Neveu B., Thielens N., Malissen B., Bonneville M., Housset D.;
+RT   "Structural bases for the affinity-driven selection of a public TCR against
+RT   a dominant human cytomegalovirus epitope.";
+RL   J. Immunol. 183:430-437(2009).
+RN   [86]
+RP   X-RAY CRYSTALLOGRAPHY (1.80 ANGSTROMS) OF 25-298 (ALLELE A*01:01) IN
+RP   COMPLEX WITH B2M AND PEPTIDE, FUNCTION (ALLELE A*01:01), DOMAIN, AND
+RP   DISULFIDE BOND.
+RX   PubMed=19177349; DOI=10.1002/pro.4;
+RA   Kumar P., Vahedi-Faridi A., Saenger W., Ziegler A., Uchanska-Ziegler B.;
+RT   "Conformational changes within the HLA-A1:MAGE-A1 complex induced by
+RT   binding of a recombinant antibody fragment with TCR-like specificity.";
+RL   Protein Sci. 18:37-49(2009).
+RN   [87]
+RP   X-RAY CRYSTALLOGRAPHY (2.4 ANGSTROMS) OF 25-298 (ALLELE A*24:02) IN COMPLEX
+RP   WITH B2M AND WITH SARS NUCLEOCAPSID PEPTIDE, DISULFIDE BONDS, FUNCTION
+RP   (ALLELE A*24:02), AND DOMAIN.
+RX   PubMed=20844028; DOI=10.1128/jvi.01464-10;
+RA   Liu J., Wu P., Gao F., Qi J., Kawana-Tachikawa A., Xie J., Vavricka C.J.,
+RA   Iwamoto A., Li T., Gao G.F.;
+RT   "Novel immunodominant peptide presentation strategy: a featured HLA-A*2402-
+RT   restricted cytotoxic T-lymphocyte epitope stabilized by intrachain hydrogen
+RT   bonds from severe acute respiratory syndrome coronavirus nucleocapsid
+RT   protein.";
+RL   J. Virol. 84:11849-11857(2010).
+RN   [88]
+RP   X-RAY CRYSTALLOGRAPHY (1.89 ANGSTROMS) OF 25-299 (ALLELE A*02:01) IN
+RP   COMPLEX WITH B2M AND PEPTIDE, FUNCTION (ALLELE A*02:01), AND DOMAIN.
+RX   PubMed=20619457; DOI=10.1016/j.molimm.2010.06.005;
+RA   Borbulevych O.Y., Do P., Baker B.M.;
+RT   "Structures of native and affinity-enhanced WT1 epitopes bound to HLA-
+RT   A*0201: implications for WT1-based cancer therapeutics.";
+RL   Mol. Immunol. 47:2519-2524(2010).
+RN   [89]
+RP   X-RAY CRYSTALLOGRAPHY (2.6 ANGSTROMS) OF 25-298 (ALLELE A*03:01) IN COMPLEX
+RP   WITH B2M AND PLP1 ANTIGENIC PEPTIDE, DISULFIDE BONDS, AND DOMAIN.
+RX   PubMed=21543847; DOI=10.1107/s0907444911007888;
+RA   McMahon R.M., Friis L., Siebold C., Friese M.A., Fugger L., Jones E.Y.;
+RT   "Structure of HLA-A*0301 in complex with a peptide of proteolipid protein:
+RT   insights into the role of HLA-A alleles in susceptibility to multiple
+RT   sclerosis.";
+RL   Acta Crystallogr. D 67:447-454(2011).
+RN   [90]
+RP   X-RAY CRYSTALLOGRAPHY (2.00 ANGSTROMS) OF 25-298 (ALLELE A*03:01) IN
+RP   COMPLEX WITH B2M AND PEPTIDE, DISULFIDE BOND, DOMAIN, AND FUNCTION (ALLELE
+RP   A*03:01).
+RX   PubMed=21943705; DOI=10.1016/j.molimm.2011.08.015;
+RA   Zhang S., Liu J., Cheng H., Tan S., Qi J., Yan J., Gao G.F.;
+RT   "Structural basis of cross-allele presentation by HLA-A*0301 and HLA-A*1101
+RT   revealed by two HIV-derived peptide complexes.";
+RL   Mol. Immunol. 49:395-401(2011).
+RN   [91]
+RP   X-RAY CRYSTALLOGRAPHY (1.67 ANGSTROMS) OF 25-300 (ALLELE A*02:01) IN
+RP   COMPLEX WITH B2M AND PEPTIDE, INTERACTION WITH TCR, FUNCTION (ALLELE
+RP   A*02:01), DOMAIN, INDUCTION BY CYTOKINES, AND INVOLVEMENT IN IDDM (ALLELE
+RP   A*02:01).
+RX   PubMed=22245737; DOI=10.1038/ni.2206;
+RA   Bulek A.M., Cole D.K., Skowera A., Dolton G., Gras S., Madura F.,
+RA   Fuller A., Miles J.J., Gostick E., Price D.A., Drijfhout J.W., Knight R.R.,
+RA   Huang G.C., Lissin N., Molloy P.E., Wooldridge L., Jakobsen B.K.,
+RA   Rossjohn J., Peakman M., Rizkallah P.J., Sewell A.K.;
+RT   "Structural basis for the killing of human beta cells by CD8(+) T cells in
+RT   type 1 diabetes.";
+RL   Nat. Immunol. 13:283-289(2012).
+RN   [92]
+RP   X-RAY CRYSTALLOGRAPHY (2.00 ANGSTROMS) OF 25-308 (ALLELE A*01:01) IN
+RP   COMPLEX WITH B2M AND PEPTIDE, FUNCTION (ALLELE A*01:01), AND DOMAIN.
+RX   PubMed=24395804; DOI=10.1073/pnas.1322229111;
+RA   Quinones-Parra S., Grant E., Loh L., Nguyen T.H., Campbell K.A., Tong S.Y.,
+RA   Miller A., Doherty P.C., Vijaykrishna D., Rossjohn J., Gras S.,
+RA   Kedzierska K.;
+RT   "Preexisting CD8+ T-cell immunity to the H7N9 influenza A virus varies
+RT   across ethnicities.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 111:1049-1054(2014).
+RN   [93]
+RP   X-RAY CRYSTALLOGRAPHY (2.40 ANGSTROMS) OF 25-298 (ALLELE A*01:01) IN
+RP   COMPLEX WITH B2M AND PEPTIDE, FUNCTION (ALLELE A*01:01), DOMAIN, AND
+RP   DISULFIDE BOND.
+RX   PubMed=26758806; DOI=10.1038/srep18851;
+RA   Raman M.C., Rizkallah P.J., Simmons R., Donnellan Z., Dukes J., Bossi G.,
+RA   Le Provost G.S., Todorov P., Baston E., Hickman E., Mahon T., Hassan N.,
+RA   Vuidepot A., Sami M., Cole D.K., Jakobsen B.K.;
+RT   "Direct molecular mimicry enables off-target cardiovascular toxicity by an
+RT   enhanced affinity TCR designed for cancer immunotherapy.";
+RL   Sci. Rep. 6:18851-18851(2016).
+RN   [94]
+RP   X-RAY CRYSTALLOGRAPHY (2.06 ANGSTROMS) OF 25-299 (ALLELE A*02:01) IN
+RP   COMPLEX WITH B2M AND PEPTIDE, FUNCTION (ALLELE A*02:01), DOMAIN, AND
+RP   DISULFIDE BOND.
+RX   PubMed=28250417; DOI=10.1038/nsmb.3383;
+RA   Song I., Gil A., Mishra R., Ghersi D., Selin L.K., Stern L.J.;
+RT   "Broad TCR repertoire and diverse structural solutions for recognition of
+RT   an immunodominant CD8+ T cell epitope.";
+RL   Nat. Struct. Mol. Biol. 24:395-406(2017).
+RN   [95]
+RP   ASSOCIATION OF ALLELE A*29:02 WITH BIRDSHOT CHORIORETINOPATHY.
+RX   PubMed=1728143; DOI=10.1016/s0002-9394(14)75749-6;
+RA   LeHoang P., Ozdemir N., Benhamou A., Tabary T., Edelson C., Betuel H.,
+RA   Semiglia R., Cohen J.H.;
+RT   "HLA-A29.2 subtype associated with birdshot retinochoroidopathy.";
+RL   Am. J. Ophthalmol. 113:33-35(1992).
+RN   [96]
+RP   ASSOCIATION OF ALLELE A*03:01 WITH MULTIPLE SCLEROSIS.
+RX   PubMed=10746785; DOI=10.1034/j.1399-0039.2000.550205.x;
+RA   Fogdell-Hahn A., Ligers A., Groenning M., Hillert J., Olerup O.;
+RT   "Multiple sclerosis: a modifying influence of HLA class I genes in an HLA
+RT   class II associated autoimmune disease.";
+RL   Tissue Antigens 55:140-148(2000).
+RN   [97]
+RP   ASSOCIATION OF ALLELE A*24:02 WITH IDDM.
+RX   PubMed=16731854; DOI=10.2337/db05-1049;
+RA   Nakanishi K., Inoko H.;
+RT   "Combination of HLA-A24, -DQA1*03, and -DR9 contributes to acute-onset and
+RT   early complete beta-cell destruction in type 1 diabetes: longitudinal study
+RT   of residual beta-cell function.";
+RL   Diabetes 55:1862-1868(2006).
+RN   [98]
+RP   ASSOCIATION OF ALLELE A*02:01 WITH IDDM.
+RX   PubMed=18802479; DOI=10.1172/jci35449;
+RA   Skowera A., Ellis R.J., Varela-Calvino R., Arif S., Huang G.C.,
+RA   Van-Krinks C., Zaremba A., Rackham C., Allen J.S., Tree T.I., Zhao M.,
+RA   Dayan C.M., Sewell A.K., Unger W.W., Unger W., Drijfhout J.W.,
+RA   Ossendorp F., Roep B.O., Peakman M.;
+RT   "CTLs are targeted to kill beta cells in patients with type 1 diabetes
+RT   through recognition of a glucose-regulated preproinsulin epitope.";
+RL   J. Clin. Invest. 118:3390-3402(2008).
+RN   [99]
+RP   ASSOCIATION OF ALLELE A*03:01 WITH MULTIPLE SCLEROSIS.
+RX   PubMed=18953350; DOI=10.1038/nm.1881;
+RA   Friese M.A., Jakobsen K.B., Friis L., Etzensperger R., Craner M.J.,
+RA   McMahon R.M., Jensen L.T., Huygelen V., Jones E.Y., Bell J.I., Fugger L.;
+RT   "Opposing effects of HLA class I molecules in tuning autoreactive CD8+ T
+RT   cells in multiple sclerosis.";
+RL   Nat. Med. 14:1227-1235(2008).
+RN   [100]
+RP   ASSOCIATION OF ALLELE A*24:02 WITH IDDM.
+RX   PubMed=22522618; DOI=10.2337/db11-1520;
+RA   Kronenberg D., Knight R.R., Estorninho M., Ellis R.J., Kester M.G.,
+RA   de Ru A., Eichmann M., Huang G.C., Powrie J., Dayan C.M., Skowera A.,
+RA   van Veelen P.A., Peakman M.;
+RT   "Circulating preproinsulin signal peptide-specific CD8 T cells restricted
+RT   by the susceptibility molecule HLA-A24 are expanded at onset of type 1
+RT   diabetes and kill beta-cells.";
+RL   Diabetes 61:1752-1759(2012).
+RN   [101]
+RP   ASSOCIATION OF ALLELE A*31:01 WITH CARBAMAZEPINE-INDUCED HYPERSENSITIVITY
+RP   REACTIONS.
+RX   PubMed=21428769; DOI=10.1056/nejmoa1013297;
+RA   McCormack M., Alfirevic A., Bourgeois S., Farrell J.J., Kasperaviciute D.,
+RA   Carrington M., Sills G.J., Marson T., Jia X., de Bakker P.I.,
+RA   Chinthapalli K., Molokhia M., Johnson M.R., O'Connor G.D., Chaila E.,
+RA   Alhusaini S., Shianna K.V., Radtke R.A., Heinzen E.L., Walley N.,
+RA   Pandolfo M., Pichler W., Park B.K., Depondt C., Sisodiya S.M.,
+RA   Goldstein D.B., Deloukas P., Delanty N., Cavalleri G.L., Pirmohamed M.;
+RT   "HLA-A*3101 and carbamazepine-induced hypersensitivity reactions in
+RT   Europeans.";
+RL   N. Engl. J. Med. 364:1134-1143(2011).
+RN   [102]
+RP   ASSOCIATION OF ALLELE A*26:01 WITH BEHCET DISEASE.
+RX   PubMed=30872678; DOI=10.1038/s41598-019-40824-y;
+RA   Nakamura J., Meguro A., Ishii G., Mihara T., Takeuchi M., Mizuki Y.,
+RA   Yuda K., Yamane T., Kawagoe T., Ota M., Mizuki N.;
+RT   "The association analysis between HLA-A*26 and Behcet's disease.";
+RL   Sci. Rep. 9:4426-4426(2019).
+RN   [103]
+RP   POLYMORPHISM.
+RX   PubMed=28650991; DOI=10.1371/journal.pgen.1006862;
+RA   Robinson J., Guethlein L.A., Cereb N., Yang S.Y., Norman P.J.,
+RA   Marsh S.G.E., Parham P.;
+RT   "Distinguishing functional polymorphism from random variation in the
+RT   sequences of >10,000 HLA-A, -B and -C alleles.";
+RL   PLoS Genet. 13:E1006862-E1006862(2017).
+CC   -!- FUNCTION: Antigen-presenting major histocompatibility complex class I
+CC       (MHCI) molecule. In complex with B2M/beta 2 microglobulin displays
+CC       primarily viral and tumor-derived peptides on antigen-presenting cells
+CC       for recognition by alpha-beta T cell receptor (TCR) on HLA-A-restricted
+CC       CD8-positive T cells, guiding antigen-specific T cell immune response
+CC       to eliminate infected or transformed cells (PubMed:2456340,
+CC       PubMed:2784196, PubMed:1402688, PubMed:7504010, PubMed:9862734,
+CC       PubMed:10449296, PubMed:12138174, PubMed:12393434, PubMed:15893615,
+CC       PubMed:17189421, PubMed:19543285, PubMed:21498667, PubMed:24192765,
+CC       PubMed:7694806, PubMed:24395804, PubMed:28250417). May also present
+CC       self-peptides derived from the signal sequence of secreted or membrane
+CC       proteins, although T cells specific for these peptides are usually
+CC       inactivated to prevent autoreactivity (PubMed:25880248, PubMed:7506728,
+CC       PubMed:7679507). Both the peptide and the MHC molecule are recognized
+CC       by TCR, the peptide is responsible for the fine specificity of antigen
+CC       recognition and MHC residues account for the MHC restriction of T cells
+CC       (PubMed:12796775, PubMed:18275829, PubMed:19542454, PubMed:28250417).
+CC       Typically presents intracellular peptide antigens of 8 to 13 amino
+CC       acids that arise from cytosolic proteolysis via IFNG-induced
+CC       immunoproteasome or via endopeptidase IDE/insulin-degrading enzyme
+CC       (PubMed:17189421, PubMed:20364150, PubMed:17079320, PubMed:26929325,
+CC       PubMed:27049119). Can bind different peptides containing allele-
+CC       specific binding motifs, which are mainly defined by anchor residues at
+CC       position 2 and 9 (PubMed:7504010, PubMed:9862734).
+CC       {ECO:0000269|PubMed:10449296, ECO:0000269|PubMed:12138174,
+CC       ECO:0000269|PubMed:12393434, ECO:0000269|PubMed:12796775,
+CC       ECO:0000269|PubMed:1402688, ECO:0000269|PubMed:15893615,
+CC       ECO:0000269|PubMed:17079320, ECO:0000269|PubMed:17189421,
+CC       ECO:0000269|PubMed:18275829, ECO:0000269|PubMed:19542454,
+CC       ECO:0000269|PubMed:19543285, ECO:0000269|PubMed:20364150,
+CC       ECO:0000269|PubMed:21498667, ECO:0000269|PubMed:24192765,
+CC       ECO:0000269|PubMed:24395804, ECO:0000269|PubMed:2456340,
+CC       ECO:0000269|PubMed:25880248, ECO:0000269|PubMed:26929325,
+CC       ECO:0000269|PubMed:27049119, ECO:0000269|PubMed:2784196,
+CC       ECO:0000269|PubMed:28250417, ECO:0000269|PubMed:7504010,
+CC       ECO:0000269|PubMed:7506728, ECO:0000269|PubMed:7679507,
+CC       ECO:0000269|PubMed:7694806, ECO:0000269|PubMed:9862734}.
+CC   -!- FUNCTION: Allele A*01:01: Presents a restricted peptide repertoire
+CC       including viral epitopes derived from IAV NP/nucleoprotein (CTELKLSDY),
+CC       IAV PB1/polymerase basic protein 1 (VSDGGPNLY), HAdV-11 capsid L3/hexon
+CC       protein (LTDLGQNLLY), SARS-CoV-2 3a/ORF3a (FTSDYYQLY) as well as tumor
+CC       peptide antigens including MAGE1 (EADPTGHSY), MAGEA3 (EVDPIGHLY) and
+CC       WT1 (TSEKRPFMCAY), all having in common a canonical motif with a
+CC       negatively charged Asp or Glu residue at position 3 and a Tyr anchor
+CC       residue at the C-terminus (PubMed:1402688, PubMed:7504010,
+CC       PubMed:17189421, PubMed:20364150, PubMed:25880248, PubMed:30530481,
+CC       PubMed:19177349, PubMed:24395804, PubMed:26758806, PubMed:32887977). A
+CC       number of HLA-A*01:01-restricted peptides carry a post-translational
+CC       modification with oxidation and N-terminal acetylation being the most
+CC       frequent (PubMed:25880248). Fails to present highly immunogenic
+CC       peptides from the EBV latent antigens (PubMed:18779413).
+CC       {ECO:0000269|PubMed:1402688, ECO:0000269|PubMed:17189421,
+CC       ECO:0000269|PubMed:18779413, ECO:0000269|PubMed:19177349,
+CC       ECO:0000269|PubMed:20364150, ECO:0000269|PubMed:24395804,
+CC       ECO:0000269|PubMed:25880248, ECO:0000269|PubMed:26758806,
+CC       ECO:0000269|PubMed:30530481, ECO:0000269|PubMed:7504010}.
+CC   -!- FUNCTION: Allele A*02:01: A major allele in human populations, presents
+CC       immunodominant viral epitopes derived from IAV M/matrix protein 1
+CC       (GILGFVFTL), HIV-1 env (TLTSCNTSV), HIV-1 gag-pol (ILKEPVHGV), HTLV-1
+CC       Tax (LLFGYPVYV), HBV C/core antigen (FLPSDFFPS), HCMV UL83/pp65
+CC       (NLVPMVATV) as well as tumor peptide antigens including MAGEA4
+CC       (GVYDGREHTV), WT1 (RMFPNAPYL) and CTAG1A/NY-ESO-1 (SLLMWITQC), all
+CC       having in common hydrophobic amino acids at position 2 and at the C-
+CC       terminal anchors. {ECO:0000269|PubMed:11502003,
+CC       ECO:0000269|PubMed:12138174, ECO:0000269|PubMed:12796775,
+CC       ECO:0000269|PubMed:17079320, ECO:0000269|PubMed:18275829,
+CC       ECO:0000269|PubMed:19542454, ECO:0000269|PubMed:20619457,
+CC       ECO:0000269|PubMed:22245737, ECO:0000269|PubMed:26929325,
+CC       ECO:0000269|PubMed:2784196, ECO:0000269|PubMed:28250417,
+CC       ECO:0000269|PubMed:7694806, ECO:0000269|PubMed:7935798,
+CC       ECO:0000269|PubMed:8630735, ECO:0000269|PubMed:8805302,
+CC       ECO:0000269|PubMed:8906788, ECO:0000269|PubMed:9177355}.
+CC   -!- FUNCTION: Allele A*03:01: Presents viral epitopes derived from IAV NP
+CC       (ILRGSVAHK), HIV-1 nef (QVPLRPMTYK), HIV-1 gag-pol (AIFQSSMTK), SARS-
+CC       CoV-2 N/nucleoprotein (KTFPPTEPK) as well as tumor peptide antigens
+CC       including PMEL (LIYRRRLMK), NODAL (HAYIQSLLK), TRP-2 (RMYNMVPFF), all
+CC       having in common hydrophobic amino acids at position 2 and Lys or Arg
+CC       anchor residues at the C-terminus (PubMed:7504010, PubMed:7679507,
+CC       PubMed:9862734, PubMed:19543285, PubMed:21943705, PubMed:2456340,
+CC       PubMed:32887977). May also display spliced peptides resulting from the
+CC       ligation of two separate proteasomal cleavage products that are not
+CC       contiguous in the parental protein (PubMed:27049119).
+CC       {ECO:0000269|PubMed:19543285, ECO:0000269|PubMed:21943705,
+CC       ECO:0000269|PubMed:2456340, ECO:0000269|PubMed:27049119,
+CC       ECO:0000269|PubMed:7504010, ECO:0000269|PubMed:7679507,
+CC       ECO:0000269|PubMed:9862734}.
+CC   -!- FUNCTION: Allele A*11:01: Presents several immunodominant epitopes
+CC       derived from HIV-1 gag-pol and HHV-4 EBNA4, containing the peptide
+CC       motif with Val, Ile, Thr, Leu, Tyr or Phe at position 2 and Lys anchor
+CC       residue at the C-terminus. Important in the control of HIV-1, EBV and
+CC       HBV infections (PubMed:10449296). Presents an immunodominant epitope
+CC       derived from SARS-CoV-2 N/nucleoprotein (KTFPPTEPK) (PubMed:32887977).
+CC       {ECO:0000269|PubMed:10449296, ECO:0000269|PubMed:32887977}.
+CC   -!- FUNCTION: Allele A*23:01: Interacts with natural killer (NK) cell
+CC       receptor KIR3DL1 and may contribute to functional maturation of NK
+CC       cells and self-nonself discrimination during innate immune response.
+CC       {ECO:0000269|PubMed:17182537}.
+CC   -!- FUNCTION: Allele A*24:02: Presents viral epitopes derived from HIV-1
+CC       nef (RYPLTFGWCF), EBV lytic- and latent-cycle antigens BRLF1
+CC       (TYPVLEEMF), BMLF1 (DYNFVKQLF) and LMP2 (IYVLVMLVL), SARS-CoV
+CC       nucleocapsid/N (QFKDNVILL), as well as tumor peptide antigens including
+CC       PRAME (LYVDSLFFL), all sharing a common signature motif, namely an
+CC       aromatic residue Tyr or Phe at position 2 and a nonhydrophobic anchor
+CC       residue Phe, Leu or Iso at the C-terminus (PubMed:9047241,
+CC       PubMed:12393434, PubMed:24192765, PubMed:20844028). Interacts with
+CC       natural killer (NK) cell receptor KIR3DL1 and may contribute to
+CC       functional maturation of NK cells and self-nonself discrimination
+CC       during innate immune response (PubMed:17182537, PubMed:18502829).
+CC       {ECO:0000269|PubMed:12393434, ECO:0000269|PubMed:17182537,
+CC       ECO:0000269|PubMed:18502829, ECO:0000269|PubMed:20844028,
+CC       ECO:0000269|PubMed:24192765, ECO:0000269|PubMed:9047241}.
+CC   -!- FUNCTION: Allele A*26:01: Presents several epitopes derived from HIV-1
+CC       gag-pol (EVIPMFSAL, ETKLGKAGY) and env (LVSDGGPNLY), carrying as anchor
+CC       residues preferentially Glu at position 1, Val or Thr at position 2 and
+CC       Tyr at the C-terminus. {ECO:0000269|PubMed:15893615}.
+CC   -!- FUNCTION: Allele A*29:02: Presents peptides having a common motif,
+CC       namely a Glu residue at position 2 and Tyr or Leu anchor residues at
+CC       the C-terminus. {ECO:0000269|PubMed:8622959}.
+CC   -!- FUNCTION: Allele A*32:01: Interacts with natural killer (NK) cell
+CC       receptor KIR3DL1 and may contribute to functional maturation of NK
+CC       cells and self-nonself discrimination during innate immune response.
+CC       {ECO:0000269|PubMed:17182537}.
+CC   -!- FUNCTION: Allele A*68:01: Presents viral epitopes derived from IAV NP
+CC       (KTGGPIYKR) and HIV-1 tat (ITKGLGISYGR), having a common signature
+CC       motif namely, Val or Thr at position 2 and positively charged residues
+CC       Arg or Lys at the C-terminal anchor. {ECO:0000269|PubMed:1448153,
+CC       ECO:0000269|PubMed:1448154, ECO:0000269|PubMed:2784196}.
+CC   -!- FUNCTION: Allele A*74:01: Presents immunodominant HIV-1 epitopes
+CC       derived from gag-pol (GQMVHQAISPR, QIYPGIKVR) and rev (RQIHSISER),
+CC       carrying an aliphatic residue at position 2 and Arg anchor residue at
+CC       the C-terminus. May contribute to viral load control in chronic HIV-1
+CC       infection. {ECO:0000269|PubMed:21498667}.
+CC   -!- SUBUNIT: Heterotrimer that consists of an alpha chain HLA-A, a beta
+CC       chain B2M and a peptide (peptide-HLA-A-B2M) (PubMed:7504010,
+CC       PubMed:7679507, PubMed:21943705, PubMed:19177349, PubMed:24395804,
+CC       PubMed:26758806, PubMed:7504010, PubMed:7506728, PubMed:8805302,
+CC       PubMed:7694806, PubMed:7935798, PubMed:9177355, PubMed:18275829,
+CC       PubMed:22245737, PubMed:28250417, PubMed:11502003, PubMed:8906788,
+CC       PubMed:19542454). Early in biogenesis, HLA-A-B2M dimer interacts with
+CC       the components of the peptide-loading complex composed of TAPBP, TAP1-
+CC       TAP2, TAPBPL, PDIA3/ERP57 and CALR (PubMed:21263072). Interacts with
+CC       TAP1-TAP2 transporter via TAPBP; this interaction is obligatory for the
+CC       loading of peptide epitopes delivered to the ER by TAP1-TAP2
+CC       transporter (PubMed:8805302, PubMed:8630735, PubMed:21263072).
+CC       Interacts with TAPBPL; TAPBPL binds peptide-free HLA-A-B2M complexes or
+CC       those loaded with low affinity peptides, likely facilitating peptide
+CC       exchange for higher affinity peptides (PubMed:26869717). Only optimally
+CC       assembled peptide-HLA-B2M trimer translocates to the surface of
+CC       antigen-presenting cells, where it interacts with TCR and CD8
+CC       coreceptor on the surface of T cells. HLA-A (via polymorphic alpha-1
+CC       and alpha-2 domains) interacts with antigen-specific TCR (via CDR3
+CC       domains) (PubMed:22245737, PubMed:12796775, PubMed:18275829). One HLA-A
+CC       molecule (mainly via nonpolymorphic alpha-3 domain) interacts with one
+CC       CD8A homodimer (via CDR-like loop); this interaction insures peptide-
+CC       HLA-A-B2M recognition by CD8-positive T cells only (PubMed:9177355,
+CC       PubMed:2784196). Alleles A*23:01; A*24:02 and A*32:01 interact (via Bw4
+CC       motif) with KIR3DL1 on NK cells; this interaction is direct.
+CC       {ECO:0000269|PubMed:11502003, ECO:0000269|PubMed:12796775,
+CC       ECO:0000269|PubMed:17182537, ECO:0000269|PubMed:18275829,
+CC       ECO:0000269|PubMed:18502829, ECO:0000269|PubMed:19177349,
+CC       ECO:0000269|PubMed:21263072, ECO:0000269|PubMed:21943705,
+CC       ECO:0000269|PubMed:22245737, ECO:0000269|PubMed:24395804,
+CC       ECO:0000269|PubMed:26758806, ECO:0000269|PubMed:26869717,
+CC       ECO:0000269|PubMed:2784196, ECO:0000269|PubMed:28250417,
+CC       ECO:0000269|PubMed:7504010, ECO:0000269|PubMed:7506728,
+CC       ECO:0000269|PubMed:7679507, ECO:0000269|PubMed:7694806,
+CC       ECO:0000269|PubMed:7935798, ECO:0000269|PubMed:8630735,
+CC       ECO:0000269|PubMed:8805302, ECO:0000269|PubMed:9177355}.
+CC   -!- SUBUNIT: (Microbial infection) Interacts with HHV-8 MIR1 protein.
+CC       {ECO:0000269|PubMed:12006494}.
+CC   -!- SUBUNIT: (Microbial infection) Interacts with HTLV-1 accessory protein
+CC       p12I. {ECO:0000269|PubMed:11390610}.
+CC   -!- SUBCELLULAR LOCATION: Cell membrane {ECO:0000269|PubMed:21263072,
+CC       ECO:0000269|PubMed:25880248, ECO:0000269|PubMed:8805302}; Single-pass
+CC       type I membrane protein {ECO:0000255}. Endoplasmic reticulum membrane
+CC       {ECO:0000305|PubMed:8805302}; Single-pass type I membrane protein
+CC       {ECO:0000255}.
+CC   -!- ALTERNATIVE PRODUCTS:
+CC       Event=Alternative splicing; Named isoforms=2;
+CC       Name=1;
+CC         IsoId=P04439-1; Sequence=Displayed;
+CC       Name=2;
+CC         IsoId=P04439-2; Sequence=VSP_060391, VSP_060392;
+CC   -!- TISSUE SPECIFICITY: Ubiquitous. {ECO:0000305}.
+CC   -!- INDUCTION: Up-regulated by IFNG, and pro-inflammatory cytokines IL1B
+CC       and TNF. {ECO:0000269|PubMed:21263072, ECO:0000269|PubMed:22245737}.
+CC   -!- DOMAIN: The alpha-1 domain is a structural part of the peptide-binding
+CC       cleft. {ECO:0000269|PubMed:19177349, ECO:0000269|PubMed:19542454,
+CC       ECO:0000269|PubMed:20619457, ECO:0000269|PubMed:20844028,
+CC       ECO:0000269|PubMed:21943705, ECO:0000269|PubMed:22245737,
+CC       ECO:0000269|PubMed:24395804, ECO:0000269|PubMed:26758806,
+CC       ECO:0000269|PubMed:2784196, ECO:0000269|PubMed:7694806,
+CC       ECO:0000269|PubMed:8906788}.
+CC   -!- DOMAIN: The alpha-2 domain is a structural part of the peptide-binding
+CC       cleft (PubMed:21543847, PubMed:21943705, PubMed:19177349,
+CC       PubMed:26758806, PubMed:24395804, PubMed:7694806, PubMed:8906788,
+CC       PubMed:2784196, PubMed:28250417, PubMed:22245737, PubMed:19542454,
+CC       PubMed:20619457, PubMed:20844028). Mediates the interaction with TAP1-
+CC       TAP2 complex (PubMed:8805302). {ECO:0000269|PubMed:19177349,
+CC       ECO:0000269|PubMed:19542454, ECO:0000269|PubMed:20619457,
+CC       ECO:0000269|PubMed:20844028, ECO:0000269|PubMed:21543847,
+CC       ECO:0000269|PubMed:21943705, ECO:0000269|PubMed:22245737,
+CC       ECO:0000269|PubMed:24395804, ECO:0000269|PubMed:26758806,
+CC       ECO:0000269|PubMed:2784196, ECO:0000269|PubMed:28250417,
+CC       ECO:0000269|PubMed:7694806, ECO:0000269|PubMed:8805302,
+CC       ECO:0000269|PubMed:8906788}.
+CC   -!- DOMAIN: The alpha-3 Ig-like domain mediates the interaction with CD8
+CC       coreceptor. {ECO:0000269|PubMed:2784196}.
+CC   -!- PTM: (Microbial infection) Polyubiquitinated in a post ER compartment
+CC       by interaction with human herpesvirus 8 MIR1 protein. This targets the
+CC       protein for rapid degradation via the ubiquitin system.
+CC       {ECO:0000269|PubMed:12006494}.
+CC   -!- PTM: N-linked glycosylation at Asn-110. {ECO:0000269|PubMed:19159218,
+CC       ECO:0000269|PubMed:21263072}.
+CC   -!- POLYMORPHISM: Highly polymorphic. Polymorphic residues encode for
+CC       alpha-1 and alpha-2 domains of the peptide-binding cleft, where they
+CC       contribute to variations in peptide binding and TCR recognition among
+CC       different alleles. The human population is estimated to have millions
+CC       of HLA-A alleles. But only 11 common HLA-A alleles are considered core
+CC       alleles, representing all functionally significant variation
+CC       (polymorphism) in alpha-1 and alpha-2 domains. These are: A*01:01;
+CC       A*02:01; A*02:05; A*03:01; A*11:01; A*24:02; A*26:01; A*29:02; A*30:01;
+CC       A*74:01 and A*80:01. Among these, A*02:01; A*11:01; A*24:02 and
+CC       A*26:01, were likely passed by introgression from archaic to modern
+CC       humans. Functional alleles of more recent origin (non-core) were
+CC       derived by recombination (PubMed:28650991). The sequence shown is that
+CC       of A*03:01. The sequences of core alleles and common representative
+CC       alleles of serologically distinct allele groups are described as
+CC       variants of A*03:01 (PubMed:28650991). Allele A*31:01 is associated
+CC       with carbamazepine-induced hypersensitivity reactions among subjects of
+CC       Northern European ancestry [MIM:608579] (PubMed:21428769).
+CC       {ECO:0000269|PubMed:21428769, ECO:0000269|PubMed:28650991}.
+CC   -!- DISEASE: Note=Alleles A*02:01 and A*24:02 are associated with increased
+CC       susceptibility to diabetes mellitus, insulin-dependent (IDDM)
+CC       (PubMed:22245737, PubMed:18802479, PubMed:16731854, PubMed:22522618).
+CC       In a glucose-dependent way, allele A*02:01 may aberrantly present the
+CC       signal peptide of preproinsulin (ALWGPDPAAA) on the surface of
+CC       pancreatic beta cells to autoreactive CD8-positive T cells, potentially
+CC       driving T-cell mediated cytotoxicity in pancreatic islets
+CC       (PubMed:22245737, PubMed:18802479). Allele A*24:02 may present the
+CC       signal peptide of preproinsulin (LWMRLLPLL) and contribute to acute
+CC       pancreatic beta-cell destruction and early onset of IDDM
+CC       (PubMed:16731854, PubMed:22522618). {ECO:0000269|PubMed:16731854,
+CC       ECO:0000269|PubMed:18802479, ECO:0000269|PubMed:22245737,
+CC       ECO:0000269|PubMed:22522618}.
+CC   -!- DISEASE: Note=Allele A*03:01 is associated with increased
+CC       susceptibility to multiple sclerosis (MS), an autoimmune disease of the
+CC       central nervous system (PubMed:10746785). May contribute to the
+CC       initiation phase of the disease by presenting myelin PLP1 self-peptide
+CC       (KLIETYFSK) to autoreactive CD8-positive T cells capable of initiating
+CC       the first autoimmune attacks (PubMed:18953350).
+CC       {ECO:0000269|PubMed:10746785, ECO:0000269|PubMed:18953350}.
+CC   -!- DISEASE: Note=Allele A*26:01 is associated with increased
+CC       susceptibility to Behcet disease (BD) in the Northeast Asian
+CC       population. Especially in the HLA-B*51-negative BD populations, HLA-
+CC       A*26 is significantly associated with the onset of BD.
+CC       {ECO:0000269|PubMed:30872678}.
+CC   -!- DISEASE: Note=Allele A*29:02 is associated with increased
+CC       susceptibility to birdshot chorioretinopathy (BSCR). May aberrantly
+CC       present retinal autoantigens and induce autoimmune uveitis.
+CC       {ECO:0000269|PubMed:1728143}.
+CC   -!- SIMILARITY: Belongs to the MHC class I family. {ECO:0000305}.
+CC   -!- SEQUENCE CAUTION:
+CC       Sequence=CAA25162.1; Type=Erroneous gene model prediction; Evidence={ECO:0000305|PubMed:6609814};
+CC   ---------------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see https://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution (CC BY 4.0) License
+CC   ---------------------------------------------------------------------------
+DR   EMBL; U03862; AAA03603.1; -; mRNA.
+DR   EMBL; X13111; CAA31503.1; -; mRNA.
+DR   EMBL; M23739; AAB47873.1; -; mRNA.
+DR   EMBL; U83415; AAB53373.1; -; mRNA.
+DR   EMBL; U83416; AAB53374.1; -; mRNA.
+DR   EMBL; M30576; AAA59612.1; -; Genomic_DNA.
+DR   EMBL; M30580; AAB47870.1; -; Genomic_DNA.
+DR   EMBL; M24043; AAA59652.1; -; Genomic_DNA.
+DR   EMBL; M84379; AAA59606.1; -; mRNA.
+DR   EMBL; M32321; AAA36234.1; -; mRNA.
+DR   EMBL; X60108; CAA42702.1; -; mRNA.
+DR   EMBL; M64740; AAA59600.1; -; mRNA.
+DR   EMBL; M64742; AAA03662.1; -; mRNA.
+DR   EMBL; X61700; CAA43869.1; -; mRNA.
+DR   EMBL; X61701; CAA43870.1; -; mRNA.
+DR   EMBL; X61703; CAA43872.1; -; mRNA.
+DR   EMBL; X61704; CAA43873.1; -; mRNA.
+DR   EMBL; X61711; CAA43880.1; -; mRNA.
+DR   EMBL; M84375; AAA59599.1; -; mRNA.
+DR   EMBL; U03697; AAA03720.1; -; mRNA.
+DR   EMBL; L18898; AAA17012.1; -; mRNA.
+DR   EMBL; D14350; BAA03279.1; -; mRNA.
+DR   EMBL; U03754; AAC04322.1; -; mRNA.
+DR   EMBL; D16841; BAA04117.1; -; mRNA.
+DR   EMBL; U07234; AAA70162.1; -; mRNA.
+DR   EMBL; AY786587; AAV53345.1; -; mRNA.
+DR   EMBL; X00492; CAA25162.1; ALT_SEQ; Genomic_DNA.
+DR   EMBL; X03070; CAB56605.1; -; Genomic_DNA.
+DR   EMBL; X03071; CAB56606.1; -; Genomic_DNA.
+DR   EMBL; X03158; CAB56607.1; -; Genomic_DNA.
+DR   EMBL; X03159; CAB56608.1; -; Genomic_DNA.
+DR   EMBL; K02883; AAA98727.1; -; Genomic_DNA.
+DR   EMBL; AH003070; AAA65449.1; -; Genomic_DNA.
+DR   EMBL; X55710; CAA39243.1; -; Genomic_DNA.
+DR   EMBL; U02935; AAA76608.2; -; Genomic_DNA.
+DR   EMBL; L78918; AAB05976.1; -; Genomic_DNA.
+DR   EMBL; Z72422; CAA96532.1; -; Genomic_DNA.
+DR   EMBL; Z93949; CAB07989.1; -; Genomic_DNA.
+DR   EMBL; EU445484; ACA35004.1; -; Genomic_DNA.
+DR   EMBL; U03907; AAA03605.1; -; mRNA.
+DR   EMBL; U17569; AAA56779.1; -; mRNA.
+DR   EMBL; U17570; AAA56780.1; -; mRNA.
+DR   EMBL; U32184; AAB63980.1; -; mRNA.
+DR   EMBL; AJ748743; CAG38621.1; -; Genomic_DNA.
+DR   EMBL; BC003069; AAH03069.1; -; mRNA.
+DR   EMBL; BC008611; AAH08611.1; -; mRNA.
+DR   EMBL; AL671277; -; NOT_ANNOTATED_CDS; Genomic_DNA.
+DR   CCDS; CCDS34373.1; -. [P04439-1]
+DR   RefSeq; NP_001229687.1; NM_001242758.1.
+DR   RefSeq; NP_002107.3; NM_002116.7. [P04439-1]
+DR   PDB; 1AKJ; X-ray; 2.65 A; A=25-300.
+DR   PDB; 1AO7; X-ray; 2.60 A; A=25-299.
+DR   PDB; 1AQD; X-ray; 2.45 A; C/F/I/L=127-141.
+DR   PDB; 1B0G; X-ray; 2.50 A; A/D=25-299.
+DR   PDB; 1B0R; X-ray; 2.90 A; A=25-299.
+DR   PDB; 1BD2; X-ray; 2.50 A; A=25-299.
+DR   PDB; 1DUY; X-ray; 2.15 A; A/D=25-299.
+DR   PDB; 1DUZ; X-ray; 1.80 A; A/D=25-299.
+DR   PDB; 1EEY; X-ray; 2.25 A; A/D=25-299.
+DR   PDB; 1EEZ; X-ray; 2.30 A; A/D=25-299.
+DR   PDB; 1HHG; X-ray; 2.60 A; A/D=25-299.
+DR   PDB; 1HHH; X-ray; 3.00 A; A=25-299.
+DR   PDB; 1HHI; X-ray; 2.50 A; A/D=25-299.
+DR   PDB; 1HHJ; X-ray; 2.50 A; A/D=25-299.
+DR   PDB; 1HHK; X-ray; 2.50 A; A/D=25-299.
+DR   PDB; 1HLA; X-ray; 3.50 A; A=25-294.
+DR   PDB; 1HSB; X-ray; 1.90 A; A=25-294.
+DR   PDB; 1I1F; X-ray; 2.80 A; A/D=25-299.
+DR   PDB; 1I1Y; X-ray; 2.20 A; A/D=25-299.
+DR   PDB; 1I4F; X-ray; 1.40 A; A=25-299.
+DR   PDB; 1I7R; X-ray; 2.20 A; A/D=25-299.
+DR   PDB; 1I7T; X-ray; 2.80 A; A/D=25-299.
+DR   PDB; 1I7U; X-ray; 1.80 A; A/D=25-299.
+DR   PDB; 1IM3; X-ray; 2.20 A; A/E/I/M=25-299.
+DR   PDB; 1JF1; X-ray; 1.85 A; A=25-299.
+DR   PDB; 1JHT; X-ray; 2.15 A; A=25-299.
+DR   PDB; 1LP9; X-ray; 2.00 A; A/H=25-299.
+DR   PDB; 1OGA; X-ray; 1.40 A; A=25-300.
+DR   PDB; 1P7Q; X-ray; 3.40 A; A=25-300.
+DR   PDB; 1Q94; X-ray; 2.40 A; A/D=25-299.
+DR   PDB; 1QEW; X-ray; 2.20 A; A=25-299.
+DR   PDB; 1QR1; X-ray; 2.40 A; A/D=25-299.
+DR   PDB; 1QRN; X-ray; 2.80 A; A=25-298.
+DR   PDB; 1QSE; X-ray; 2.80 A; A=25-298.
+DR   PDB; 1QSF; X-ray; 2.80 A; A=25-298.
+DR   PDB; 1QVO; X-ray; 2.22 A; A/D=25-299.
+DR   PDB; 1S8D; X-ray; 2.20 A; A=25-299.
+DR   PDB; 1S9W; X-ray; 2.20 A; A=25-298.
+DR   PDB; 1S9X; X-ray; 2.50 A; A=25-298.
+DR   PDB; 1S9Y; X-ray; 2.30 A; A=25-298.
+DR   PDB; 1T1W; X-ray; 2.20 A; A=25-299.
+DR   PDB; 1T1X; X-ray; 2.20 A; A=25-299.
+DR   PDB; 1T1Y; X-ray; 2.00 A; A=25-299.
+DR   PDB; 1T1Z; X-ray; 1.90 A; A=25-299.
+DR   PDB; 1T20; X-ray; 2.20 A; A=25-299.
+DR   PDB; 1T21; X-ray; 2.19 A; A=25-299.
+DR   PDB; 1T22; X-ray; 2.20 A; A=25-299.
+DR   PDB; 1TMC; X-ray; 2.30 A; A=25-199.
+DR   PDB; 1TVB; X-ray; 1.80 A; A/D=25-299.
+DR   PDB; 1TVH; X-ray; 1.80 A; A/D=25-299.
+DR   PDB; 1W72; X-ray; 2.15 A; A/D=25-298.
+DR   PDB; 1X7Q; X-ray; 1.45 A; A=25-299.
+DR   PDB; 2AV1; X-ray; 1.95 A; A/D=25-299.
+DR   PDB; 2AV7; X-ray; 2.05 A; A/D=25-299.
+DR   PDB; 2BCK; X-ray; 2.80 A; A/D=25-300.
+DR   PDB; 2BNQ; X-ray; 1.70 A; A=25-300.
+DR   PDB; 2BNR; X-ray; 1.90 A; A=25-300.
+DR   PDB; 2C7U; X-ray; 2.38 A; A/D=25-300.
+DR   PDB; 2CLR; X-ray; 2.00 A; A/D=25-299.
+DR   PDB; 2F53; X-ray; 2.10 A; A=25-299.
+DR   PDB; 2F54; X-ray; 2.70 A; A/F=25-298.
+DR   PDB; 2GIT; X-ray; 1.70 A; A/D=25-299.
+DR   PDB; 2GJ6; X-ray; 2.56 A; A=25-299.
+DR   PDB; 2GT9; X-ray; 1.75 A; A/D=25-299.
+DR   PDB; 2GTW; X-ray; 1.55 A; A/D=25-299.
+DR   PDB; 2GTZ; X-ray; 1.70 A; A/D=25-299.
+DR   PDB; 2GUO; X-ray; 1.90 A; A/D=25-299.
+DR   PDB; 2HLA; X-ray; 2.60 A; A=25-294.
+DR   PDB; 2HN7; X-ray; 1.60 A; A=25-299.
+DR   PDB; 2J8U; X-ray; 2.88 A; A/H=25-299.
+DR   PDB; 2JCC; X-ray; 2.50 A; A/H=25-299.
+DR   PDB; 2P5E; X-ray; 1.89 A; A=25-300.
+DR   PDB; 2P5W; X-ray; 2.20 A; A=25-300.
+DR   PDB; 2PYE; X-ray; 2.30 A; A=25-300.
+DR   PDB; 2UWE; X-ray; 2.40 A; A/H=25-299.
+DR   PDB; 2V2W; X-ray; 1.60 A; A/D=25-300.
+DR   PDB; 2V2X; X-ray; 1.60 A; A/D=25-300.
+DR   PDB; 2VLJ; X-ray; 2.40 A; A=25-300.
+DR   PDB; 2VLK; X-ray; 2.50 A; A=25-300.
+DR   PDB; 2VLL; X-ray; 1.60 A; A/D=25-300.
+DR   PDB; 2VLR; X-ray; 2.30 A; A/F=25-300.
+DR   PDB; 2X4N; X-ray; 2.34 A; A/D=25-299.
+DR   PDB; 2X4O; X-ray; 2.30 A; A/D=25-299.
+DR   PDB; 2X4P; X-ray; 2.30 A; A/D=25-299.
+DR   PDB; 2X4Q; X-ray; 1.90 A; A/D=25-299.
+DR   PDB; 2X4R; X-ray; 2.30 A; A/D=25-299.
+DR   PDB; 2X4S; X-ray; 2.55 A; A/D=25-299.
+DR   PDB; 2X4T; X-ray; 2.30 A; A/D=25-299.
+DR   PDB; 2X4U; X-ray; 2.10 A; A/D=25-299.
+DR   PDB; 2X70; X-ray; 2.00 A; A/D=25-299.
+DR   PDB; 2XPG; X-ray; 2.60 A; A=25-298.
+DR   PDB; 3BGM; X-ray; 1.60 A; A=25-298.
+DR   PDB; 3BH8; X-ray; 1.65 A; A=25-298.
+DR   PDB; 3BH9; X-ray; 1.70 A; A=25-299.
+DR   PDB; 3BHB; X-ray; 2.20 A; A=25-298.
+DR   PDB; 3BO8; X-ray; 1.80 A; A=25-298.
+DR   PDB; 3D25; X-ray; 1.30 A; A=25-298.
+DR   PDB; 3D39; X-ray; 2.81 A; A=25-299.
+DR   PDB; 3D3V; X-ray; 2.80 A; A=25-299.
+DR   PDB; 3FQN; X-ray; 1.65 A; A=25-299.
+DR   PDB; 3FQR; X-ray; 1.70 A; A=25-299.
+DR   PDB; 3FQT; X-ray; 1.80 A; A=25-299.
+DR   PDB; 3FQU; X-ray; 1.80 A; A=25-299.
+DR   PDB; 3FQW; X-ray; 1.93 A; A=25-299.
+DR   PDB; 3FQX; X-ray; 1.70 A; A=25-299.
+DR   PDB; 3FT2; X-ray; 1.80 A; A=25-299.
+DR   PDB; 3FT3; X-ray; 1.95 A; A=25-299.
+DR   PDB; 3FT4; X-ray; 1.90 A; A=25-299.
+DR   PDB; 3GIV; X-ray; 2.00 A; A/D=25-299.
+DR   PDB; 3GJF; X-ray; 1.90 A; A/D=25-300.
+DR   PDB; 3GSN; X-ray; 2.80 A; H=25-298.
+DR   PDB; 3GSO; X-ray; 1.60 A; A=25-298.
+DR   PDB; 3GSQ; X-ray; 2.12 A; A=25-298.
+DR   PDB; 3GSR; X-ray; 1.95 A; A=25-298.
+DR   PDB; 3GSU; X-ray; 1.80 A; A=25-299.
+DR   PDB; 3GSV; X-ray; 1.90 A; A=25-299.
+DR   PDB; 3GSW; X-ray; 1.81 A; A=25-298.
+DR   PDB; 3GSX; X-ray; 2.10 A; A=25-298.
+DR   PDB; 3H7B; X-ray; 1.88 A; A/D=25-299.
+DR   PDB; 3H9H; X-ray; 2.00 A; A/D=25-299.
+DR   PDB; 3H9S; X-ray; 2.70 A; A=25-299.
+DR   PDB; 3HAE; X-ray; 2.90 A; A/D/J/P=25-300.
+DR   PDB; 3HLA; X-ray; 2.60 A; A=25-294.
+DR   PDB; 3HPJ; X-ray; 2.00 A; A/D=25-299.
+DR   PDB; 3I6G; X-ray; 2.20 A; A/D=25-299.
+DR   PDB; 3I6K; X-ray; 2.80 A; A/E=25-299.
+DR   PDB; 3I6L; X-ray; 2.40 A; D=25-298.
+DR   PDB; 3IXA; X-ray; 2.10 A; A/D=25-299.
+DR   PDB; 3KLA; X-ray; 1.65 A; A/D=25-299.
+DR   PDB; 3MGO; X-ray; 2.30 A; A/D/G/J=25-299.
+DR   PDB; 3MGT; X-ray; 2.20 A; A/D/G/J=25-299.
+DR   PDB; 3MR9; X-ray; 1.93 A; A=25-300.
+DR   PDB; 3MRB; X-ray; 1.40 A; A=25-300.
+DR   PDB; 3MRC; X-ray; 1.80 A; A=25-300.
+DR   PDB; 3MRD; X-ray; 1.70 A; A=25-300.
+DR   PDB; 3MRE; X-ray; 1.10 A; A=25-300.
+DR   PDB; 3MRF; X-ray; 2.30 A; A=25-300.
+DR   PDB; 3MRG; X-ray; 1.30 A; A=25-300.
+DR   PDB; 3MRH; X-ray; 2.40 A; A=25-300.
+DR   PDB; 3MRI; X-ray; 2.10 A; A=25-300.
+DR   PDB; 3MRJ; X-ray; 1.87 A; A=25-300.
+DR   PDB; 3MRK; X-ray; 1.40 A; A=25-300.
+DR   PDB; 3MRL; X-ray; 2.41 A; A=25-300.
+DR   PDB; 3MRM; X-ray; 1.90 A; A=25-300.
+DR   PDB; 3MRN; X-ray; 2.30 A; A=25-300.
+DR   PDB; 3MRO; X-ray; 2.35 A; A=25-300.
+DR   PDB; 3MRP; X-ray; 2.10 A; A=25-300.
+DR   PDB; 3MRQ; X-ray; 2.20 A; A=25-300.
+DR   PDB; 3MRR; X-ray; 1.60 A; A=25-300.
+DR   PDB; 3MYJ; X-ray; 1.89 A; A/D=25-299.
+DR   PDB; 3NFN; X-ray; 2.39 A; A=25-298.
+DR   PDB; 3O3A; X-ray; 1.80 A; A/D=25-299.
+DR   PDB; 3O3B; X-ray; 1.90 A; A/D=25-299.
+DR   PDB; 3O3D; X-ray; 1.70 A; A/D=25-299.
+DR   PDB; 3O3E; X-ray; 1.85 A; A/D=25-299.
+DR   PDB; 3O4L; X-ray; 2.54 A; A=25-300.
+DR   PDB; 3PWJ; X-ray; 1.70 A; A/D=25-299.
+DR   PDB; 3PWL; X-ray; 1.65 A; A/D=25-299.
+DR   PDB; 3PWN; X-ray; 1.60 A; A/D=25-299.
+DR   PDB; 3PWP; X-ray; 2.69 A; A=25-299.
+DR   PDB; 3QDG; X-ray; 2.69 A; A=25-299.
+DR   PDB; 3QDJ; X-ray; 2.30 A; A=25-299.
+DR   PDB; 3QDM; X-ray; 2.80 A; A=25-299.
+DR   PDB; 3QEQ; X-ray; 2.59 A; A=25-299.
+DR   PDB; 3QFD; X-ray; 1.68 A; A/D=25-299.
+DR   PDB; 3QFJ; X-ray; 2.29 A; A=25-299.
+DR   PDB; 3QZW; X-ray; 2.80 A; A/D=25-298.
+DR   PDB; 3REW; X-ray; 1.90 A; A/D=25-299.
+DR   PDB; 3RL1; X-ray; 2.00 A; A=25-298.
+DR   PDB; 3RL2; X-ray; 2.39 A; A=25-298.
+DR   PDB; 3TO2; X-ray; 2.60 A; A=25-299.
+DR   PDB; 3UTQ; X-ray; 1.67 A; A=25-300.
+DR   PDB; 3UTS; X-ray; 2.71 A; A/F=25-300.
+DR   PDB; 3UTT; X-ray; 2.60 A; A/F=25-299.
+DR   PDB; 3V5D; X-ray; 2.00 A; A/D=25-299.
+DR   PDB; 3V5H; X-ray; 1.63 A; A/D=25-299.
+DR   PDB; 3V5K; X-ray; 2.31 A; A/D=25-299.
+DR   PDB; 3VXM; X-ray; 2.50 A; A=25-298.
+DR   PDB; 3VXN; X-ray; 1.95 A; A=25-298.
+DR   PDB; 3VXO; X-ray; 2.61 A; A/D=25-298.
+DR   PDB; 3VXP; X-ray; 2.50 A; A/D=25-298.
+DR   PDB; 3VXR; X-ray; 2.40 A; A=25-298.
+DR   PDB; 3VXS; X-ray; 1.80 A; A=25-298.
+DR   PDB; 3VXU; X-ray; 2.70 A; A/F=25-298.
+DR   PDB; 3W0W; X-ray; 2.60 A; A=25-298.
+DR   PDB; 3WL9; X-ray; 1.66 A; A=25-298.
+DR   PDB; 3WLB; X-ray; 2.00 A; A=25-298.
+DR   PDB; 4E5X; X-ray; 1.95 A; A/D=25-299.
+DR   PDB; 4EMZ; X-ray; 2.90 A; D/E=338-365.
+DR   PDB; 4EN2; X-ray; 2.58 A; D/E=338-365.
+DR   PDB; 4EUP; X-ray; 2.88 A; A/D=25-299.
+DR   PDB; 4F7M; X-ray; 2.40 A; A/D=25-298.
+DR   PDB; 4F7P; X-ray; 1.90 A; A=25-298.
+DR   PDB; 4F7T; X-ray; 1.70 A; A/D=25-298.
+DR   PDB; 4FTV; X-ray; 2.74 A; A=25-299.
+DR   PDB; 4GKN; X-ray; 2.75 A; A/D=25-300.
+DR   PDB; 4GKS; X-ray; 2.35 A; A/D=25-300.
+DR   PDB; 4HWZ; X-ray; 2.40 A; A=25-298.
+DR   PDB; 4HX1; X-ray; 1.80 A; A=25-296.
+DR   PDB; 4I48; X-ray; 2.80 A; A=25-296.
+DR   PDB; 4I4W; X-ray; 1.77 A; A=25-300.
+DR   PDB; 4JFD; X-ray; 2.46 A; A=25-300.
+DR   PDB; 4JFE; X-ray; 2.70 A; A=25-300.
+DR   PDB; 4JFF; X-ray; 2.43 A; A=25-300.
+DR   PDB; 4JFO; X-ray; 2.11 A; A/D=25-299.
+DR   PDB; 4JFP; X-ray; 1.91 A; A/D=25-300.
+DR   PDB; 4JFQ; X-ray; 1.90 A; A/D=25-300.
+DR   PDB; 4K7F; X-ray; 2.00 A; A/D=25-299.
+DR   PDB; 4L29; X-ray; 3.09 A; A/C/E/G/I/K/M/O/Q/S/U/W/Y/a=25-300.
+DR   PDB; 4L3C; X-ray; 2.64 A; A/C/E/G/I/K/M/O/Q/S/U/W/Y/a=25-300.
+DR   PDB; 4L3E; X-ray; 2.56 A; A=25-299.
+DR   PDB; 4MJ5; X-ray; 2.40 A; A=25-298.
+DR   PDB; 4MJ6; X-ray; 2.57 A; A=25-298.
+DR   PDB; 4MNQ; X-ray; 2.74 A; A=25-300.
+DR   PDB; 4N8V; X-ray; 2.50 A; A/D=25-298.
+DR   PDB; 4NNX; X-ray; 2.10 A; A=25-298.
+DR   PDB; 4NNY; X-ray; 1.90 A; A=25-298.
+DR   PDB; 4NO0; X-ray; 2.70 A; A=25-300.
+DR   PDB; 4NO2; X-ray; 2.00 A; A=25-298.
+DR   PDB; 4NO3; X-ray; 1.70 A; A=25-298.
+DR   PDB; 4NO5; X-ray; 2.10 A; A=25-299.
+DR   PDB; 4NQV; X-ray; 2.39 A; A/C/E/G/I/K=25-298.
+DR   PDB; 4NQX; X-ray; 2.00 A; A/C/E/G/I/K=25-308.
+DR   PDB; 4OV5; X-ray; 2.20 A; C/F/I/L/O/R=128-141.
+DR   PDB; 4QOK; X-ray; 3.00 A; A=25-300.
+DR   PDB; 4U6X; X-ray; 1.68 A; A=25-300.
+DR   PDB; 4U6Y; X-ray; 1.47 A; A=25-300.
+DR   PDB; 4UQ2; X-ray; 2.43 A; A/C=25-299.
+DR   PDB; 4UQ3; X-ray; 2.10 A; A/C=25-299.
+DR   PDB; 4WJ5; X-ray; 1.65 A; A/D=25-299.
+DR   PDB; 4WU5; X-ray; 2.40 A; A/D=25-298.
+DR   PDB; 4WU7; X-ray; 2.30 A; A/D=25-298.
+DR   PDB; 4WUU; X-ray; 3.05 A; A=25-300.
+DR   PDB; 5BRZ; X-ray; 2.62 A; A=25-298.
+DR   PDB; 5BS0; X-ray; 2.40 A; A=25-298.
+DR   PDB; 5C07; X-ray; 2.11 A; A/F=25-300.
+DR   PDB; 5C08; X-ray; 2.33 A; A/F=25-300.
+DR   PDB; 5C09; X-ray; 2.48 A; A/F=25-300.
+DR   PDB; 5C0A; X-ray; 2.46 A; A/F=25-300.
+DR   PDB; 5C0B; X-ray; 2.03 A; A/F=25-299.
+DR   PDB; 5C0C; X-ray; 1.97 A; A/F=25-300.
+DR   PDB; 5C0D; X-ray; 1.68 A; A=25-300.
+DR   PDB; 5C0E; X-ray; 1.49 A; A=25-300.
+DR   PDB; 5C0F; X-ray; 1.46 A; A=25-300.
+DR   PDB; 5C0G; X-ray; 1.37 A; A=25-300.
+DR   PDB; 5C0I; X-ray; 1.53 A; A=25-300.
+DR   PDB; 5C0J; X-ray; 1.64 A; A=25-300.
+DR   PDB; 5D2L; X-ray; 3.51 A; A/C/G/M=25-299.
+DR   PDB; 5D2N; X-ray; 2.10 A; A/H=25-299.
+DR   PDB; 5D9S; X-ray; 1.87 A; A=25-298.
+DR   PDB; 5DDH; X-ray; 1.50 A; A=25-298.
+DR   PDB; 5E00; X-ray; 1.70 A; A=25-299.
+DR   PDB; 5E6I; X-ray; 4.00 A; C/I/M/R=25-299.
+DR   PDB; 5E9D; X-ray; 2.51 A; A/F=25-299.
+DR   PDB; 5ENW; X-ray; 1.85 A; A=25-298.
+DR   PDB; 5EOT; X-ray; 2.10 A; A=26-298.
+DR   PDB; 5EU3; X-ray; 1.97 A; A=25-300.
+DR   PDB; 5EU4; X-ray; 2.12 A; A/D=25-300.
+DR   PDB; 5EU5; X-ray; 1.54 A; A=25-300.
+DR   PDB; 5EU6; X-ray; 2.02 A; A=25-300.
+DR   PDB; 5EUO; X-ray; 2.10 A; A/C=25-299.
+DR   PDB; 5F7D; X-ray; 2.30 A; A=26-298.
+DR   PDB; 5F9J; X-ray; 2.51 A; A=25-298.
+DR   PDB; 5FA3; X-ray; 1.86 A; A=26-298.
+DR   PDB; 5FA4; X-ray; 2.40 A; A=25-298.
+DR   PDB; 5FDW; X-ray; 2.70 A; A=25-298.
+DR   PDB; 5GRD; X-ray; 1.80 A; A=25-299.
+DR   PDB; 5GRG; X-ray; 1.94 A; A=25-299.
+DR   PDB; 5GSD; X-ray; 2.30 A; A=25-299.
+DR   PDB; 5HGA; X-ray; 2.20 A; A/D=25-298.
+DR   PDB; 5HGB; X-ray; 2.40 A; A/D/G/J=25-298.
+DR   PDB; 5HGD; X-ray; 2.07 A; A/D=25-298.
+DR   PDB; 5HGH; X-ray; 2.39 A; A=25-298.
+DR   PDB; 5HHM; X-ray; 2.50 A; A/F=25-300.
+DR   PDB; 5HHN; X-ray; 2.03 A; A=25-298.
+DR   PDB; 5HHO; X-ray; 2.95 A; A=25-300.
+DR   PDB; 5HHP; X-ray; 1.90 A; A=25-298.
+DR   PDB; 5HHQ; X-ray; 2.10 A; A=25-298.
+DR   PDB; 5HYJ; X-ray; 3.06 A; A/F=25-300.
+DR   PDB; 5IRO; X-ray; 2.64 A; A/E/I/M/Q/U=25-299.
+DR   PDB; 5ISZ; X-ray; 2.06 A; A=25-299.
+DR   PDB; 5JHD; X-ray; 2.46 A; A/F=25-299.
+DR   PDB; 5JZI; X-ray; 2.50 A; A/F=25-299.
+DR   PDB; 5MEN; X-ray; 2.81 A; A=25-300.
+DR   PDB; 5MEO; X-ray; 1.77 A; A=25-300.
+DR   PDB; 5MEP; X-ray; 2.71 A; A/D=25-300.
+DR   PDB; 5MEQ; X-ray; 2.27 A; A=25-300.
+DR   PDB; 5MER; X-ray; 1.88 A; A/D=25-300.
+DR   PDB; 5N1Y; X-ray; 1.39 A; A=25-300.
+DR   PDB; 5N6B; X-ray; 1.71 A; A/D=25-300.
+DR   PDB; 5NHT; X-ray; 3.20 A; H=25-300.
+DR   PDB; 5NME; X-ray; 2.94 A; A/F=25-300.
+DR   PDB; 5NMF; X-ray; 2.89 A; A/F=25-300.
+DR   PDB; 5NMG; X-ray; 2.75 A; A/F=25-300.
+DR   PDB; 5NMH; X-ray; 1.55 A; A=25-300.
+DR   PDB; 5NMK; X-ray; 1.66 A; A=25-300.
+DR   PDB; 5NQK; X-ray; 3.25 A; H=25-300.
+DR   PDB; 5SWQ; X-ray; 2.00 A; A=25-300.
+DR   PDB; 5TEZ; X-ray; 1.70 A; A=25-299.
+DR   PDB; 5W1W; X-ray; 3.10 A; C/H/M/R=3-11.
+DR   PDB; 5WJL; X-ray; 3.15 A; A/D/G=25-298.
+DR   PDB; 5WJN; X-ray; 2.85 A; A/D/G=25-298.
+DR   PDB; 5WKF; X-ray; 2.95 A; A/F=25-298.
+DR   PDB; 5WKH; X-ray; 3.20 A; A/F=25-298.
+DR   PDB; 5WSH; X-ray; 2.00 A; A=25-299.
+DR   PDB; 5WWI; X-ray; 3.19 A; A=25-298.
+DR   PDB; 5WWJ; X-ray; 2.29 A; A/C=25-298.
+DR   PDB; 5WWU; X-ray; 2.79 A; A=25-298.
+DR   PDB; 5WXC; X-ray; 2.29 A; A/C=25-298.
+DR   PDB; 5WXD; X-ray; 3.29 A; A=25-298.
+DR   PDB; 5XOV; X-ray; 2.68 A; A/D=25-298.
+DR   PDB; 5YXN; X-ray; 2.03 A; C=25-299.
+DR   PDB; 5YXU; X-ray; 2.70 A; C/E=25-299.
+DR   PDB; 6AM5; X-ray; 2.39 A; A=25-299.
+DR   PDB; 6AMT; X-ray; 2.50 A; A/D=25-299.
+DR   PDB; 6AMU; X-ray; 2.15 A; A=26-298.
+DR   PDB; 6APN; X-ray; 2.22 A; A/B=26-301.
+DR   PDB; 6AT9; X-ray; 2.95 A; A=25-304.
+DR   PDB; 6D78; X-ray; 2.35 A; A=25-299.
+DR   PDB; 6D7G; X-ray; 2.75 A; A=25-299.
+DR   PDB; 6DKP; X-ray; 2.97 A; A=25-299.
+DR   PDB; 6EI2; X-ray; 1.61 A; A=25-299.
+DR   PDB; 6ENY; EM; 5.80 A; F=25-365.
+DR   PDB; 6EQA; X-ray; 3.16 A; A=25-300.
+DR   PDB; 6EQB; X-ray; 2.81 A; A=25-300.
+DR   PDB; 6EWA; X-ray; 2.39 A; A/E=25-300.
+DR   PDB; 6EWC; X-ray; 3.20 A; A/E=25-300.
+DR   PDB; 6EWO; X-ray; 2.30 A; A/E=25-300.
+DR   PDB; 6G3J; X-ray; 2.45 A; A/D=25-300.
+DR   PDB; 6G3K; X-ray; 2.90 A; A/D=25-300.
+DR   PDB; 6ID4; X-ray; 2.40 A; A/E=25-299.
+DR   PDB; 6J1W; X-ray; 1.50 A; A=25-298.
+DR   PDB; 6J29; X-ray; 1.60 A; A=25-298.
+DR   PDB; 6J2A; X-ray; 1.40 A; A=25-298.
+DR   PDB; 6JOZ; X-ray; 1.35 A; A=25-299.
+DR   PDB; 6JP3; X-ray; 1.66 A; A=25-299.
+DR   PDB; 6MPP; NMR; -; A=25-303.
+DR   PDB; 6NCA; X-ray; 3.30 A; A/B/C/D/E/F/G/H/I/J/K/L/M/N/O/P/Q/R/S/T=25-299.
+DR   PDB; 6O9B; X-ray; 2.20 A; A=25-304.
+DR   PDB; 6O9C; X-ray; 2.45 A; A=25-304.
+DR   PDB; 6OPD; X-ray; 1.79 A; A=25-299.
+DR   PDB; 6PBH; X-ray; 1.89 A; A=25-302.
+DR   PDB; 6PTB; X-ray; 2.15 A; A/D=25-299.
+DR   PDB; 6PTE; X-ray; 1.90 A; A/E/H/K=25-299.
+DR   PDB; 6Q3K; X-ray; 1.50 A; A=24-299.
+DR   PDB; 6Q3S; X-ray; 2.50 A; A=25-300.
+DR   PDB; 6R2L; X-ray; 2.30 A; A=25-299.
+DR   PDB; 6RP9; X-ray; 3.12 A; A/F=25-299.
+DR   PDB; 6RPA; X-ray; 2.56 A; A=25-299.
+DR   PDB; 6RPB; X-ray; 2.50 A; A/F/K/P=25-299.
+DR   PDB; 6RSY; X-ray; 2.95 A; A/F=25-299.
+DR   PDB; 6SS7; X-ray; 2.50 A; A/D=25-299.
+DR   PDB; 6SS8; X-ray; 2.24 A; A/D=25-299.
+DR   PDB; 6SS9; X-ray; 2.70 A; A/D=25-299.
+DR   PDB; 6SSA; X-ray; 2.11 A; A/D/G/J=25-299.
+DR   PDB; 7L1B; X-ray; 2.04 A; A=25-298.
+DR   PDB; 7L1C; X-ray; 1.96 A; A=25-298.
+DR   PDB; 7L1D; X-ray; 3.11 A; A=25-298.
+DR   PDB; 7MLE; X-ray; 2.20 A; A=25-301.
+DR   PDB; 7RM4; X-ray; 3.33 A; A/F/K/P=25-299.
+DR   PDB; 7RRG; X-ray; 2.12 A; A=25-298.
+DR   PDBsum; 1AKJ; -.
+DR   PDBsum; 1AO7; -.
+DR   PDBsum; 1AQD; -.
+DR   PDBsum; 1B0G; -.
+DR   PDBsum; 1B0R; -.
+DR   PDBsum; 1BD2; -.
+DR   PDBsum; 1DUY; -.
+DR   PDBsum; 1DUZ; -.
+DR   PDBsum; 1EEY; -.
+DR   PDBsum; 1EEZ; -.
+DR   PDBsum; 1HHG; -.
+DR   PDBsum; 1HHH; -.
+DR   PDBsum; 1HHI; -.
+DR   PDBsum; 1HHJ; -.
+DR   PDBsum; 1HHK; -.
+DR   PDBsum; 1HLA; -.
+DR   PDBsum; 1HSB; -.
+DR   PDBsum; 1I1F; -.
+DR   PDBsum; 1I1Y; -.
+DR   PDBsum; 1I4F; -.
+DR   PDBsum; 1I7R; -.
+DR   PDBsum; 1I7T; -.
+DR   PDBsum; 1I7U; -.
+DR   PDBsum; 1IM3; -.
+DR   PDBsum; 1JF1; -.
+DR   PDBsum; 1JHT; -.
+DR   PDBsum; 1LP9; -.
+DR   PDBsum; 1OGA; -.
+DR   PDBsum; 1P7Q; -.
+DR   PDBsum; 1Q94; -.
+DR   PDBsum; 1QEW; -.
+DR   PDBsum; 1QR1; -.
+DR   PDBsum; 1QRN; -.
+DR   PDBsum; 1QSE; -.
+DR   PDBsum; 1QSF; -.
+DR   PDBsum; 1QVO; -.
+DR   PDBsum; 1S8D; -.
+DR   PDBsum; 1S9W; -.
+DR   PDBsum; 1S9X; -.
+DR   PDBsum; 1S9Y; -.
+DR   PDBsum; 1T1W; -.
+DR   PDBsum; 1T1X; -.
+DR   PDBsum; 1T1Y; -.
+DR   PDBsum; 1T1Z; -.
+DR   PDBsum; 1T20; -.
+DR   PDBsum; 1T21; -.
+DR   PDBsum; 1T22; -.
+DR   PDBsum; 1TMC; -.
+DR   PDBsum; 1TVB; -.
+DR   PDBsum; 1TVH; -.
+DR   PDBsum; 1W72; -.
+DR   PDBsum; 1X7Q; -.
+DR   PDBsum; 2AV1; -.
+DR   PDBsum; 2AV7; -.
+DR   PDBsum; 2BCK; -.
+DR   PDBsum; 2BNQ; -.
+DR   PDBsum; 2BNR; -.
+DR   PDBsum; 2C7U; -.
+DR   PDBsum; 2CLR; -.
+DR   PDBsum; 2F53; -.
+DR   PDBsum; 2F54; -.
+DR   PDBsum; 2GIT; -.
+DR   PDBsum; 2GJ6; -.
+DR   PDBsum; 2GT9; -.
+DR   PDBsum; 2GTW; -.
+DR   PDBsum; 2GTZ; -.
+DR   PDBsum; 2GUO; -.
+DR   PDBsum; 2HLA; -.
+DR   PDBsum; 2HN7; -.
+DR   PDBsum; 2J8U; -.
+DR   PDBsum; 2JCC; -.
+DR   PDBsum; 2P5E; -.
+DR   PDBsum; 2P5W; -.
+DR   PDBsum; 2PYE; -.
+DR   PDBsum; 2UWE; -.
+DR   PDBsum; 2V2W; -.
+DR   PDBsum; 2V2X; -.
+DR   PDBsum; 2VLJ; -.
+DR   PDBsum; 2VLK; -.
+DR   PDBsum; 2VLL; -.
+DR   PDBsum; 2VLR; -.
+DR   PDBsum; 2X4N; -.
+DR   PDBsum; 2X4O; -.
+DR   PDBsum; 2X4P; -.
+DR   PDBsum; 2X4Q; -.
+DR   PDBsum; 2X4R; -.
+DR   PDBsum; 2X4S; -.
+DR   PDBsum; 2X4T; -.
+DR   PDBsum; 2X4U; -.
+DR   PDBsum; 2X70; -.
+DR   PDBsum; 2XPG; -.
+DR   PDBsum; 3BGM; -.
+DR   PDBsum; 3BH8; -.
+DR   PDBsum; 3BH9; -.
+DR   PDBsum; 3BHB; -.
+DR   PDBsum; 3BO8; -.
+DR   PDBsum; 3D25; -.
+DR   PDBsum; 3D39; -.
+DR   PDBsum; 3D3V; -.
+DR   PDBsum; 3FQN; -.
+DR   PDBsum; 3FQR; -.
+DR   PDBsum; 3FQT; -.
+DR   PDBsum; 3FQU; -.
+DR   PDBsum; 3FQW; -.
+DR   PDBsum; 3FQX; -.
+DR   PDBsum; 3FT2; -.
+DR   PDBsum; 3FT3; -.
+DR   PDBsum; 3FT4; -.
+DR   PDBsum; 3GIV; -.
+DR   PDBsum; 3GJF; -.
+DR   PDBsum; 3GSN; -.
+DR   PDBsum; 3GSO; -.
+DR   PDBsum; 3GSQ; -.
+DR   PDBsum; 3GSR; -.
+DR   PDBsum; 3GSU; -.
+DR   PDBsum; 3GSV; -.
+DR   PDBsum; 3GSW; -.
+DR   PDBsum; 3GSX; -.
+DR   PDBsum; 3H7B; -.
+DR   PDBsum; 3H9H; -.
+DR   PDBsum; 3H9S; -.
+DR   PDBsum; 3HAE; -.
+DR   PDBsum; 3HLA; -.
+DR   PDBsum; 3HPJ; -.
+DR   PDBsum; 3I6G; -.
+DR   PDBsum; 3I6K; -.
+DR   PDBsum; 3I6L; -.
+DR   PDBsum; 3IXA; -.
+DR   PDBsum; 3KLA; -.
+DR   PDBsum; 3MGO; -.
+DR   PDBsum; 3MGT; -.
+DR   PDBsum; 3MR9; -.
+DR   PDBsum; 3MRB; -.
+DR   PDBsum; 3MRC; -.
+DR   PDBsum; 3MRD; -.
+DR   PDBsum; 3MRE; -.
+DR   PDBsum; 3MRF; -.
+DR   PDBsum; 3MRG; -.
+DR   PDBsum; 3MRH; -.
+DR   PDBsum; 3MRI; -.
+DR   PDBsum; 3MRJ; -.
+DR   PDBsum; 3MRK; -.
+DR   PDBsum; 3MRL; -.
+DR   PDBsum; 3MRM; -.
+DR   PDBsum; 3MRN; -.
+DR   PDBsum; 3MRO; -.
+DR   PDBsum; 3MRP; -.
+DR   PDBsum; 3MRQ; -.
+DR   PDBsum; 3MRR; -.
+DR   PDBsum; 3MYJ; -.
+DR   PDBsum; 3NFN; -.
+DR   PDBsum; 3O3A; -.
+DR   PDBsum; 3O3B; -.
+DR   PDBsum; 3O3D; -.
+DR   PDBsum; 3O3E; -.
+DR   PDBsum; 3O4L; -.
+DR   PDBsum; 3PWJ; -.
+DR   PDBsum; 3PWL; -.
+DR   PDBsum; 3PWN; -.
+DR   PDBsum; 3PWP; -.
+DR   PDBsum; 3QDG; -.
+DR   PDBsum; 3QDJ; -.
+DR   PDBsum; 3QDM; -.
+DR   PDBsum; 3QEQ; -.
+DR   PDBsum; 3QFD; -.
+DR   PDBsum; 3QFJ; -.
+DR   PDBsum; 3QZW; -.
+DR   PDBsum; 3REW; -.
+DR   PDBsum; 3RL1; -.
+DR   PDBsum; 3RL2; -.
+DR   PDBsum; 3TO2; -.
+DR   PDBsum; 3UTQ; -.
+DR   PDBsum; 3UTS; -.
+DR   PDBsum; 3UTT; -.
+DR   PDBsum; 3V5D; -.
+DR   PDBsum; 3V5H; -.
+DR   PDBsum; 3V5K; -.
+DR   PDBsum; 3VXM; -.
+DR   PDBsum; 3VXN; -.
+DR   PDBsum; 3VXO; -.
+DR   PDBsum; 3VXP; -.
+DR   PDBsum; 3VXR; -.
+DR   PDBsum; 3VXS; -.
+DR   PDBsum; 3VXU; -.
+DR   PDBsum; 3W0W; -.
+DR   PDBsum; 3WL9; -.
+DR   PDBsum; 3WLB; -.
+DR   PDBsum; 4E5X; -.
+DR   PDBsum; 4EMZ; -.
+DR   PDBsum; 4EN2; -.
+DR   PDBsum; 4EUP; -.
+DR   PDBsum; 4F7M; -.
+DR   PDBsum; 4F7P; -.
+DR   PDBsum; 4F7T; -.
+DR   PDBsum; 4FTV; -.
+DR   PDBsum; 4GKN; -.
+DR   PDBsum; 4GKS; -.
+DR   PDBsum; 4HWZ; -.
+DR   PDBsum; 4HX1; -.
+DR   PDBsum; 4I48; -.
+DR   PDBsum; 4I4W; -.
+DR   PDBsum; 4JFD; -.
+DR   PDBsum; 4JFE; -.
+DR   PDBsum; 4JFF; -.
+DR   PDBsum; 4JFO; -.
+DR   PDBsum; 4JFP; -.
+DR   PDBsum; 4JFQ; -.
+DR   PDBsum; 4K7F; -.
+DR   PDBsum; 4L29; -.
+DR   PDBsum; 4L3C; -.
+DR   PDBsum; 4L3E; -.
+DR   PDBsum; 4MJ5; -.
+DR   PDBsum; 4MJ6; -.
+DR   PDBsum; 4MNQ; -.
+DR   PDBsum; 4N8V; -.
+DR   PDBsum; 4NNX; -.
+DR   PDBsum; 4NNY; -.
+DR   PDBsum; 4NO0; -.
+DR   PDBsum; 4NO2; -.
+DR   PDBsum; 4NO3; -.
+DR   PDBsum; 4NO5; -.
+DR   PDBsum; 4NQV; -.
+DR   PDBsum; 4NQX; -.
+DR   PDBsum; 4OV5; -.
+DR   PDBsum; 4QOK; -.
+DR   PDBsum; 4U6X; -.
+DR   PDBsum; 4U6Y; -.
+DR   PDBsum; 4UQ2; -.
+DR   PDBsum; 4UQ3; -.
+DR   PDBsum; 4WJ5; -.
+DR   PDBsum; 4WU5; -.
+DR   PDBsum; 4WU7; -.
+DR   PDBsum; 4WUU; -.
+DR   PDBsum; 5BRZ; -.
+DR   PDBsum; 5BS0; -.
+DR   PDBsum; 5C07; -.
+DR   PDBsum; 5C08; -.
+DR   PDBsum; 5C09; -.
+DR   PDBsum; 5C0A; -.
+DR   PDBsum; 5C0B; -.
+DR   PDBsum; 5C0C; -.
+DR   PDBsum; 5C0D; -.
+DR   PDBsum; 5C0E; -.
+DR   PDBsum; 5C0F; -.
+DR   PDBsum; 5C0G; -.
+DR   PDBsum; 5C0I; -.
+DR   PDBsum; 5C0J; -.
+DR   PDBsum; 5D2L; -.
+DR   PDBsum; 5D2N; -.
+DR   PDBsum; 5D9S; -.
+DR   PDBsum; 5DDH; -.
+DR   PDBsum; 5E00; -.
+DR   PDBsum; 5E6I; -.
+DR   PDBsum; 5E9D; -.
+DR   PDBsum; 5ENW; -.
+DR   PDBsum; 5EOT; -.
+DR   PDBsum; 5EU3; -.
+DR   PDBsum; 5EU4; -.
+DR   PDBsum; 5EU5; -.
+DR   PDBsum; 5EU6; -.
+DR   PDBsum; 5EUO; -.
+DR   PDBsum; 5F7D; -.
+DR   PDBsum; 5F9J; -.
+DR   PDBsum; 5FA3; -.
+DR   PDBsum; 5FA4; -.
+DR   PDBsum; 5FDW; -.
+DR   PDBsum; 5GRD; -.
+DR   PDBsum; 5GRG; -.
+DR   PDBsum; 5GSD; -.
+DR   PDBsum; 5HGA; -.
+DR   PDBsum; 5HGB; -.
+DR   PDBsum; 5HGD; -.
+DR   PDBsum; 5HGH; -.
+DR   PDBsum; 5HHM; -.
+DR   PDBsum; 5HHN; -.
+DR   PDBsum; 5HHO; -.
+DR   PDBsum; 5HHP; -.
+DR   PDBsum; 5HHQ; -.
+DR   PDBsum; 5HYJ; -.
+DR   PDBsum; 5IRO; -.
+DR   PDBsum; 5ISZ; -.
+DR   PDBsum; 5JHD; -.
+DR   PDBsum; 5JZI; -.
+DR   PDBsum; 5MEN; -.
+DR   PDBsum; 5MEO; -.
+DR   PDBsum; 5MEP; -.
+DR   PDBsum; 5MEQ; -.
+DR   PDBsum; 5MER; -.
+DR   PDBsum; 5N1Y; -.
+DR   PDBsum; 5N6B; -.
+DR   PDBsum; 5NHT; -.
+DR   PDBsum; 5NME; -.
+DR   PDBsum; 5NMF; -.
+DR   PDBsum; 5NMG; -.
+DR   PDBsum; 5NMH; -.
+DR   PDBsum; 5NMK; -.
+DR   PDBsum; 5NQK; -.
+DR   PDBsum; 5SWQ; -.
+DR   PDBsum; 5TEZ; -.
+DR   PDBsum; 5W1W; -.
+DR   PDBsum; 5WJL; -.
+DR   PDBsum; 5WJN; -.
+DR   PDBsum; 5WKF; -.
+DR   PDBsum; 5WKH; -.
+DR   PDBsum; 5WSH; -.
+DR   PDBsum; 5WWI; -.
+DR   PDBsum; 5WWJ; -.
+DR   PDBsum; 5WWU; -.
+DR   PDBsum; 5WXC; -.
+DR   PDBsum; 5WXD; -.
+DR   PDBsum; 5XOV; -.
+DR   PDBsum; 5YXN; -.
+DR   PDBsum; 5YXU; -.
+DR   PDBsum; 6AM5; -.
+DR   PDBsum; 6AMT; -.
+DR   PDBsum; 6AMU; -.
+DR   PDBsum; 6APN; -.
+DR   PDBsum; 6AT9; -.
+DR   PDBsum; 6D78; -.
+DR   PDBsum; 6D7G; -.
+DR   PDBsum; 6DKP; -.
+DR   PDBsum; 6EI2; -.
+DR   PDBsum; 6ENY; -.
+DR   PDBsum; 6EQA; -.
+DR   PDBsum; 6EQB; -.
+DR   PDBsum; 6EWA; -.
+DR   PDBsum; 6EWC; -.
+DR   PDBsum; 6EWO; -.
+DR   PDBsum; 6G3J; -.
+DR   PDBsum; 6G3K; -.
+DR   PDBsum; 6ID4; -.
+DR   PDBsum; 6J1W; -.
+DR   PDBsum; 6J29; -.
+DR   PDBsum; 6J2A; -.
+DR   PDBsum; 6JOZ; -.
+DR   PDBsum; 6JP3; -.
+DR   PDBsum; 6MPP; -.
+DR   PDBsum; 6NCA; -.
+DR   PDBsum; 6O9B; -.
+DR   PDBsum; 6O9C; -.
+DR   PDBsum; 6OPD; -.
+DR   PDBsum; 6PBH; -.
+DR   PDBsum; 6PTB; -.
+DR   PDBsum; 6PTE; -.
+DR   PDBsum; 6Q3K; -.
+DR   PDBsum; 6Q3S; -.
+DR   PDBsum; 6R2L; -.
+DR   PDBsum; 6RP9; -.
+DR   PDBsum; 6RPA; -.
+DR   PDBsum; 6RPB; -.
+DR   PDBsum; 6RSY; -.
+DR   PDBsum; 6SS7; -.
+DR   PDBsum; 6SS8; -.
+DR   PDBsum; 6SS9; -.
+DR   PDBsum; 6SSA; -.
+DR   PDBsum; 7L1B; -.
+DR   PDBsum; 7L1C; -.
+DR   PDBsum; 7L1D; -.
+DR   PDBsum; 7MLE; -.
+DR   PDBsum; 7RM4; -.
+DR   PDBsum; 7RRG; -.
+DR   AlphaFoldDB; P04439; -.
+DR   SMR; P04439; -.
+DR   BioGRID; 109350; 351.
+DR   IntAct; P04439; 115.
+DR   MINT; P04439; -.
+DR   STRING; 9606.ENSP00000379873; -.
+DR   BindingDB; P04439; -.
+DR   ChEMBL; CHEMBL2632; -.
+DR   DrugBank; DB02740; 3-Indolebutyric Acid.
+DR   DrugBank; DB11294; Coccidioides immitis spherule.
+DR   DrugBank; DB06226; Nelipepimut-S.
+DR   TCDB; 9.A.75.1.2; the mhc ii receptor (mhc2r) family.
+DR   GlyConnect; 1315; 3 N-Linked glycans (1 site).
+DR   GlyConnect; 1316; 3 N-Linked glycans (1 site).
+DR   GlyConnect; 1317; 4 N-Linked glycans (1 site).
+DR   GlyConnect; 1318; 1 N-Linked glycan (1 site).
+DR   GlyConnect; 1319; 3 N-Linked glycans (1 site).
+DR   GlyConnect; 1320; 3 N-Linked glycans (1 site).
+DR   GlyConnect; 1321; 1 N-Linked glycan (1 site).
+DR   GlyConnect; 1322; 1 N-Linked glycan (1 site).
+DR   GlyConnect; 1323; 4 N-Linked glycans (1 site).
+DR   GlyConnect; 1324; 3 N-Linked glycans (1 site).
+DR   GlyConnect; 1325; 4 N-Linked glycans (1 site).
+DR   GlyConnect; 1326; 4 N-Linked glycans (1 site).
+DR   GlyConnect; 1327; 1 N-Linked glycan (1 site).
+DR   GlyConnect; 1328; 3 N-Linked glycans (1 site).
+DR   GlyConnect; 1329; 1 N-Linked glycan (1 site).
+DR   GlyGen; P04439; 2 sites, 2 N-linked glycans (1 site), 1 O-linked glycan (1 site).
+DR   iPTMnet; P04439; -.
+DR   PhosphoSitePlus; P04439; -.
+DR   SwissPalm; P04439; -.
+DR   BioMuta; HLA-A; -.
+DR   DMDM; 13124681; -.
+DR   EPD; P04439; -.
+DR   jPOST; P04439; -.
+DR   MassIVE; P04439; -.
+DR   MaxQB; P04439; -.
+DR   PaxDb; P04439; -.
+DR   PeptideAtlas; P04439; -.
+DR   PRIDE; P04439; -.
+DR   ProteomicsDB; 51505; -.
+DR   ProteomicsDB; 51506; -.
+DR   ProteomicsDB; 51714; -.
+DR   ProteomicsDB; 51843; -.
+DR   ProteomicsDB; 52596; -.
+DR   ProteomicsDB; 52597; -.
+DR   ProteomicsDB; 52979; -.
+DR   ProteomicsDB; 52980; -.
+DR   ProteomicsDB; 53320; -.
+DR   ProteomicsDB; 53321; -.
+DR   ProteomicsDB; 53322; -.
+DR   ProteomicsDB; 53564; -.
+DR   ProteomicsDB; 54669; -.
+DR   ProteomicsDB; 54670; -.
+DR   ProteomicsDB; 54671; -.
+DR   ProteomicsDB; 54672; -.
+DR   ProteomicsDB; 54673; -.
+DR   ProteomicsDB; 54674; -.
+DR   ProteomicsDB; 54675; -.
+DR   ProteomicsDB; 54676; -.
+DR   ProteomicsDB; 54707; -.
+DR   ProteomicsDB; 58716; -.
+DR   ABCD; P04439; 62 sequenced antibodies.
+DR   Antibodypedia; 26136; 1336 antibodies from 31 providers.
+DR   CPTC; P04439; 1 antibody.
+DR   DNASU; 3105; -.
+DR   Ensembl; ENST00000376809.10; ENSP00000366005.5; ENSG00000206503.13. [P04439-1]
+DR   Ensembl; ENST00000396634.5; ENSP00000379873.1; ENSG00000206503.13. [P04439-1]
+DR   GeneID; 3105; -.
+DR   KEGG; hsa:3105; -.
+DR   MANE-Select; ENST00000376809.10; ENSP00000366005.5; NM_002116.8; NP_002107.3.
+DR   UCSC; uc021zos.2; human.
+DR   CTD; 3105; -.
+DR   DisGeNET; 3105; -.
+DR   GeneCards; HLA-A; -.
+DR   HGNC; HGNC:4931; HLA-A.
+DR   HPA; ENSG00000206503; Low tissue specificity.
+DR   MalaCards; HLA-A; -.
+DR   MIM; 126200; phenotype.
+DR   MIM; 142800; gene.
+DR   MIM; 222100; phenotype.
+DR   neXtProt; NX_P04439; -.
+DR   OpenTargets; ENSG00000206503; -.
+DR   Orphanet; 179; Birdshot chorioretinopathy.
+DR   Orphanet; 414750; Prediction of phenytoin or carbamazepine toxicity.
+DR   Orphanet; 619246; Selection of immunotherapy in solid cancer.
+DR   PharmGKB; PA35055; -.
+DR   VEuPathDB; HostDB:ENSG00000206503; -.
+DR   eggNOG; ENOG502RQEK; Eukaryota.
+DR   GeneTree; ENSGT00980000198488; -.
+DR   OMA; TPPKTHM; -.
+DR   OrthoDB; 1390181at2759; -.
+DR   PhylomeDB; P04439; -.
+DR   TreeFam; TF336617; -.
+DR   PathwayCommons; P04439; -.
+DR   Reactome; R-HSA-1236974; ER-Phagosome pathway.
+DR   Reactome; R-HSA-1236977; Endosomal/Vacuolar pathway.
+DR   Reactome; R-HSA-164940; Nef mediated downregulation of MHC class I complex cell surface expression.
+DR   Reactome; R-HSA-198933; Immunoregulatory interactions between a Lymphoid and a non-Lymphoid cell.
+DR   Reactome; R-HSA-6798695; Neutrophil degranulation.
+DR   Reactome; R-HSA-877300; Interferon gamma signaling.
+DR   Reactome; R-HSA-8866654; E3 ubiquitin ligases ubiquitinate target proteins.
+DR   Reactome; R-HSA-909733; Interferon alpha/beta signaling.
+DR   Reactome; R-HSA-9705671; SARS-CoV-2 activates/modulates innate and adaptive immune responses.
+DR   Reactome; R-HSA-983170; Antigen Presentation: Folding, assembly and peptide loading of class I MHC.
+DR   SignaLink; P04439; -.
+DR   BioGRID-ORCS; 3105; 27 hits in 1003 CRISPR screens.
+DR   ChiTaRS; HLA-A; human.
+DR   GeneWiki; HLA-A; -.
+DR   GenomeRNAi; 3105; -.
+DR   Pharos; P04439; Tbio.
+DR   Proteomes; UP000005640; Chromosome 6.
+DR   Bgee; ENSG00000206503; Expressed in blood and 102 other tissues.
+DR   ExpressionAtlas; P04439; baseline and differential.
+DR   GO; GO:0009986; C:cell surface; IDA:UniProtKB.
+DR   GO; GO:0031901; C:early endosome membrane; TAS:Reactome.
+DR   GO; GO:0005783; C:endoplasmic reticulum; IDA:UniProtKB.
+DR   GO; GO:0070971; C:endoplasmic reticulum exit site; IDA:UniProtKB.
+DR   GO; GO:0005789; C:endoplasmic reticulum membrane; TAS:Reactome.
+DR   GO; GO:0012507; C:ER to Golgi transport vesicle membrane; TAS:Reactome.
+DR   GO; GO:0070062; C:extracellular exosome; HDA:UniProtKB.
+DR   GO; GO:0005794; C:Golgi apparatus; IDA:UniProtKB.
+DR   GO; GO:0005797; C:Golgi medial cisterna; IDA:UniProtKB.
+DR   GO; GO:0000139; C:Golgi membrane; TAS:Reactome.
+DR   GO; GO:0071556; C:integral component of lumenal side of endoplasmic reticulum membrane; TAS:Reactome.
+DR   GO; GO:0005887; C:integral component of plasma membrane; NAS:UniProtKB.
+DR   GO; GO:0016020; C:membrane; HDA:UniProtKB.
+DR   GO; GO:0042824; C:MHC class I peptide loading complex; IDA:UniProtKB.
+DR   GO; GO:0042612; C:MHC class I protein complex; IDA:UniProtKB.
+DR   GO; GO:0030670; C:phagocytic vesicle membrane; TAS:Reactome.
+DR   GO; GO:0005886; C:plasma membrane; IDA:UniProtKB.
+DR   GO; GO:0055038; C:recycling endosome membrane; TAS:Reactome.
+DR   GO; GO:0030881; F:beta-2-microglobulin binding; IDA:UniProtKB.
+DR   GO; GO:0042610; F:CD8 receptor binding; IDA:UniProtKB.
+DR   GO; GO:0042605; F:peptide antigen binding; IDA:UniProtKB.
+DR   GO; GO:0003723; F:RNA binding; HDA:UniProtKB.
+DR   GO; GO:0005102; F:signaling receptor binding; IPI:BHF-UCL.
+DR   GO; GO:0042608; F:T cell receptor binding; IDA:UniProtKB.
+DR   GO; GO:0046977; F:TAP binding; IDA:UniProtKB.
+DR   GO; GO:0062061; F:TAP complex binding; IDA:UniProtKB.
+DR   GO; GO:0019731; P:antibacterial humoral response; IDA:UniProtKB.
+DR   GO; GO:0019885; P:antigen processing and presentation of endogenous peptide antigen via MHC class I; IDA:UniProtKB.
+DR   GO; GO:0002485; P:antigen processing and presentation of endogenous peptide antigen via MHC class I via ER pathway, TAP-dependent; IMP:UniProtKB.
+DR   GO; GO:0002486; P:antigen processing and presentation of endogenous peptide antigen via MHC class I via ER pathway, TAP-independent; IDA:UniProtKB.
+DR   GO; GO:0042590; P:antigen processing and presentation of exogenous peptide antigen via MHC class I; IDA:UniProtKB.
+DR   GO; GO:0036037; P:CD8-positive, alpha-beta T cell activation; IDA:UniProtKB.
+DR   GO; GO:0050830; P:defense response to Gram-positive bacterium; IDA:UniProtKB.
+DR   GO; GO:0016045; P:detection of bacterium; IMP:UniProtKB.
+DR   GO; GO:0006955; P:immune response; IMP:UniProtKB.
+DR   GO; GO:0045087; P:innate immune response; IEA:UniProtKB-KW.
+DR   GO; GO:2001187; P:positive regulation of CD8-positive, alpha-beta T cell activation; IDA:BHF-UCL.
+DR   GO; GO:2000566; P:positive regulation of CD8-positive, alpha-beta T cell proliferation; IDA:UniProtKB.
+DR   GO; GO:0032729; P:positive regulation of interferon-gamma production; IDA:UniProtKB.
+DR   GO; GO:2000568; P:positive regulation of memory T cell activation; IDA:UniProtKB.
+DR   GO; GO:0002726; P:positive regulation of T cell cytokine production; IDA:BHF-UCL.
+DR   GO; GO:0001916; P:positive regulation of T cell mediated cytotoxicity; IDA:UniProtKB.
+DR   GO; GO:0042270; P:protection from natural killer cell mediated cytotoxicity; IDA:UniProtKB.
+DR   GO; GO:0001913; P:T cell mediated cytotoxicity; IDA:UniProtKB.
+DR   GO; GO:0002419; P:T cell mediated cytotoxicity directed against tumor cell target; IDA:UniProtKB.
+DR   GO; GO:0050852; P:T cell receptor signaling pathway; IDA:UniProtKB.
+DR   Gene3D; 2.60.40.10; -; 1.
+DR   Gene3D; 3.30.500.10; -; 1.
+DR   InterPro; IPR007110; Ig-like_dom.
+DR   InterPro; IPR036179; Ig-like_dom_sf.
+DR   InterPro; IPR013783; Ig-like_fold.
+DR   InterPro; IPR003006; Ig/MHC_CS.
+DR   InterPro; IPR003597; Ig_C1-set.
+DR   InterPro; IPR011161; MHC_I-like_Ag-recog.
+DR   InterPro; IPR037055; MHC_I-like_Ag-recog_sf.
+DR   InterPro; IPR011162; MHC_I/II-like_Ag-recog.
+DR   InterPro; IPR001039; MHC_I_a_a1/a2.
+DR   InterPro; IPR010579; MHC_I_a_C.
+DR   Pfam; PF07654; C1-set; 1.
+DR   Pfam; PF00129; MHC_I; 1.
+DR   Pfam; PF06623; MHC_I_C; 1.
+DR   PRINTS; PR01638; MHCCLASSI.
+DR   SMART; SM00407; IGc1; 1.
+DR   SUPFAM; SSF48726; SSF48726; 1.
+DR   SUPFAM; SSF54452; SSF54452; 1.
+PE   1: Evidence at protein level;
+KW   3D-structure; Adaptive immunity; Alternative splicing; Cell membrane;
+KW   Direct protein sequencing; Disulfide bond; Endoplasmic reticulum;
+KW   Glycoprotein; Host-virus interaction; Immunity; Immunoglobulin domain;
+KW   Innate immunity; Membrane; MHC I; Phosphoprotein; Reference proteome;
+KW   Signal; Sulfation; Transmembrane; Transmembrane helix; Ubl conjugation.
+FT   SIGNAL          1..24
+FT                   /evidence="ECO:0000269|PubMed:92029"
+FT   CHAIN           25..365
+FT                   /note="HLA class I histocompatibility antigen, A alpha
+FT                   chain"
+FT                   /id="PRO_0000018815"
+FT   TOPO_DOM        25..308
+FT                   /note="Extracellular"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        309..332
+FT                   /note="Helical"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        333..365
+FT                   /note="Cytoplasmic"
+FT                   /evidence="ECO:0000255"
+FT   DOMAIN          209..295
+FT                   /note="Ig-like C1-type"
+FT                   /evidence="ECO:0000255"
+FT   REGION          25..114
+FT                   /note="Alpha-1"
+FT                   /evidence="ECO:0000255"
+FT   REGION          115..206
+FT                   /note="Alpha-2"
+FT                   /evidence="ECO:0000255"
+FT   REGION          207..298
+FT                   /note="Alpha-3"
+FT                   /evidence="ECO:0000255"
+FT   REGION          299..308
+FT                   /note="Connecting peptide"
+FT                   /evidence="ECO:0000255"
+FT   REGION          339..365
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   COMPBIAS        341..359
+FT                   /note="Polar residues"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   BINDING         31
+FT                   /ligand="a peptide antigen"
+FT                   /ligand_id="ChEBI:CHEBI:166823"
+FT                   /ligand_label="1"
+FT                   /ligand_note="pathogen-derived peptide antigen"
+FT                   /evidence="ECO:0000269|PubMed:21943705"
+FT   BINDING         97
+FT                   /ligand="a peptide antigen"
+FT                   /ligand_id="ChEBI:CHEBI:166823"
+FT                   /ligand_label="1"
+FT                   /ligand_note="pathogen-derived peptide antigen"
+FT                   /evidence="ECO:0000269|PubMed:21943705"
+FT   BINDING         108
+FT                   /ligand="a peptide antigen"
+FT                   /ligand_id="ChEBI:CHEBI:166823"
+FT                   /ligand_label="1"
+FT                   /ligand_note="pathogen-derived peptide antigen"
+FT                   /evidence="ECO:0000269|PubMed:21943705"
+FT   BINDING         140
+FT                   /ligand="a peptide antigen"
+FT                   /ligand_id="ChEBI:CHEBI:166823"
+FT                   /ligand_label="2"
+FT                   /ligand_note="self-peptide antigen"
+FT                   /evidence="ECO:0000269|PubMed:21543847"
+FT   BINDING         167
+FT                   /ligand="a peptide antigen"
+FT                   /ligand_id="ChEBI:CHEBI:166823"
+FT                   /ligand_label="1"
+FT                   /ligand_note="pathogen-derived peptide antigen"
+FT                   /evidence="ECO:0000269|PubMed:21943705"
+FT   BINDING         170
+FT                   /ligand="a peptide antigen"
+FT                   /ligand_id="ChEBI:CHEBI:166823"
+FT                   /ligand_label="1"
+FT                   /ligand_note="pathogen-derived peptide antigen"
+FT                   /evidence="ECO:0000269|PubMed:21943705"
+FT   BINDING         183
+FT                   /ligand="a peptide antigen"
+FT                   /ligand_id="ChEBI:CHEBI:166823"
+FT                   /ligand_label="1"
+FT                   /ligand_note="pathogen-derived peptide antigen"
+FT                   /evidence="ECO:0000269|PubMed:21943705"
+FT   BINDING         183
+FT                   /ligand="a peptide antigen"
+FT                   /ligand_id="ChEBI:CHEBI:166823"
+FT                   /ligand_label="2"
+FT                   /ligand_note="self-peptide antigen"
+FT                   /evidence="ECO:0000269|PubMed:21543847"
+FT   BINDING         195
+FT                   /ligand="a peptide antigen"
+FT                   /ligand_id="ChEBI:CHEBI:166823"
+FT                   /ligand_label="1"
+FT                   /ligand_note="pathogen-derived peptide antigen"
+FT                   /evidence="ECO:0000269|PubMed:21943705"
+FT   MOD_RES         83
+FT                   /note="Sulfotyrosine"
+FT                   /evidence="ECO:0000255"
+FT   MOD_RES         343
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0007744|PubMed:24275569"
+FT   MOD_RES         344
+FT                   /note="Phosphotyrosine"
+FT                   /evidence="ECO:0007744|PubMed:24275569"
+FT   MOD_RES         349
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0007744|PubMed:24275569"
+FT   MOD_RES         350
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0007744|PubMed:24275569"
+FT   MOD_RES         352
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0007744|PubMed:24275569"
+FT   MOD_RES         356
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0007744|PubMed:23186163,
+FT                   ECO:0007744|PubMed:24275569"
+FT   MOD_RES         359
+FT                   /note="Phosphoserine"
+FT                   /evidence="ECO:0007744|PubMed:23186163,
+FT                   ECO:0007744|PubMed:24275569"
+FT   CARBOHYD        110
+FT                   /note="N-linked (GlcNAc...) asparagine"
+FT                   /evidence="ECO:0000269|PubMed:19159218"
+FT   DISULFID        125..188
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU00114,
+FT                   ECO:0000269|PubMed:16041067, ECO:0000269|PubMed:19177349,
+FT                   ECO:0000269|PubMed:20844028, ECO:0000269|PubMed:21543847,
+FT                   ECO:0000269|PubMed:21943705, ECO:0000269|PubMed:26758806,
+FT                   ECO:0000269|PubMed:28250417, ECO:0000269|PubMed:7694806"
+FT   DISULFID        227..283
+FT                   /evidence="ECO:0000255|PROSITE-ProRule:PRU00114,
+FT                   ECO:0000269|PubMed:16041067, ECO:0000269|PubMed:19177349,
+FT                   ECO:0000269|PubMed:20844028, ECO:0000269|PubMed:21543847,
+FT                   ECO:0000269|PubMed:21943705, ECO:0000269|PubMed:26758806,
+FT                   ECO:0000269|PubMed:28250417, ECO:0000269|PubMed:7694806"
+FT   VAR_SEQ         176..187
+FT                   /note="EAEQLRAYLDGT -> AAEQQRAYLEGR (in isoform 2)"
+FT                   /id="VSP_060391"
+FT   VAR_SEQ         337
+FT                   /note="S -> SGGEGVK (in isoform 2)"
+FT                   /id="VSP_060392"
+FT   VARIANT         3
+FT                   /note="V -> I (in allele A*34:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115"
+FT                   /id="VAR_082315"
+FT   VARIANT         5
+FT                   /note="A -> P (in allele A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791"
+FT                   /id="VAR_082316"
+FT   VARIANT         10
+FT                   /note="L -> V (in allele A*02:01, allele A*02:05, allele
+FT                   A*23:01, allele A*24:02, allele A*25:01, allele A*26:01,
+FT                   allele A*34:01, allele A*43:01, allele A*66:01, allele
+FT                   A*68:01 and allele A*69:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:1729171, ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2982951, ECO:0000269|PubMed:3496393,
+FT                   ECO:0000269|PubMed:3877632, ECO:0000269|PubMed:7836067,
+FT                   ECO:0000269|PubMed:8026990, ECO:0000269|PubMed:8475492,
+FT                   ECO:0000269|PubMed:9349616"
+FT                   /id="VAR_082317"
+FT   VARIANT         14
+FT                   /note="S -> L (in allele A*29:02, allele A*31:01, allele
+FT                   A*32:01, allele A*33:01 and allele A*74:01)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1782566,
+FT                   ECO:0000269|PubMed:2431040, ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:8795145, ECO:0000269|Ref.29"
+FT                   /id="VAR_082318"
+FT   VARIANT         23
+FT                   /note="W -> R (in allele A*74:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115"
+FT                   /id="VAR_082319"
+FT   VARIANT         33
+FT                   /note="F -> S (in allele A*23:01, allele A*24:02 and allele
+FT                   A*30:01; dbSNP:rs2075684)"
+FT                   /evidence="ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:2478623, ECO:0000269|PubMed:7871528,
+FT                   ECO:0000269|PubMed:9349616"
+FT                   /id="VAR_082320"
+FT   VARIANT         33
+FT                   /note="F -> T (in allele A*29:02, allele A*31:01 and allele
+FT                   A*33:01; requires 2 nucleotide substitutions)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1782566, ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:8795145"
+FT                   /id="VAR_082321"
+FT   VARIANT         33
+FT                   /note="F -> Y (in allele A*02:05, allele A*11:01, allele
+FT                   A*25:01, allele A*26:01, allele A*34:01, allele A*43:01,
+FT                   allele A*66:01, allele A*68:01 and allele A*69:01;
+FT                   dbSNP:rs2075684)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2437024,
+FT                   ECO:0000269|PubMed:2460344, ECO:0000269|PubMed:3496393,
+FT                   ECO:0000269|PubMed:3877632, ECO:0000269|PubMed:8016845,
+FT                   ECO:0000269|PubMed:8026990, ECO:0000269|PubMed:8475492"
+FT                   /id="VAR_082322"
+FT   VARIANT         41
+FT                   /note="R -> S (in allele A*30:01; dbSNP:rs1059423)"
+FT                   /evidence="ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:7871528"
+FT                   /id="VAR_082323"
+FT   VARIANT         55
+FT                   /note="T -> S (in allele A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791"
+FT                   /id="VAR_082324"
+FT   VARIANT         59
+FT                   /note="R -> Q (in allele A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791"
+FT                   /id="VAR_082325"
+FT   VARIANT         67
+FT                   /note="Q -> R (in allele A*02:05; dbSNP:rs41559117)"
+FT                   /evidence="ECO:0000269|PubMed:3496393"
+FT                   /id="VAR_082326"
+FT   VARIANT         68
+FT                   /note="R -> K (in alleles A*01:01 and allele A*36:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2251137, ECO:0000269|PubMed:2715640,
+FT                   ECO:0000269|PubMed:9349617"
+FT                   /id="VAR_082327"
+FT   VARIANT         80
+FT                   /note="G -> E (in allele A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791"
+FT                   /id="VAR_082328"
+FT   VARIANT         80
+FT                   /note="G -> R (in allele A*30:01 and allele A*31:01;
+FT                   dbSNP:rs1059449)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:2478623, ECO:0000269|PubMed:7871528,
+FT                   ECO:0000269|PubMed:8795145"
+FT                   /id="VAR_082329"
+FT   VARIANT         86
+FT                   /note="Q -> E (in allele A*23:01, allele 24:02 and allele
+FT                   A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:8188325, ECO:0000269|PubMed:8284791,
+FT                   ECO:0000269|PubMed:9349616"
+FT                   /id="VAR_082330"
+FT   VARIANT         86
+FT                   /note="Q -> G (in allele A*02:01 and allele A*02:05;
+FT                   requires 2 nucleotide substitutions)"
+FT                   /evidence="ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2982951, ECO:0000269|PubMed:3496393,
+FT                   ECO:0000269|PubMed:7836067"
+FT                   /id="VAR_082331"
+FT   VARIANT         86
+FT                   /note="Q -> L (in alleles A*29:02 and allele A*43:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:1782566"
+FT                   /id="VAR_082332"
+FT   VARIANT         86
+FT                   /note="Q -> R (in allele A*25:01, allele A*26:01, allele
+FT                   A*33:01, allele A*34:01, allele A*66:01, allele A*68:01 and
+FT                   allele A*69:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:3877632, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8475492"
+FT                   /id="VAR_082333"
+FT   VARIANT         87
+FT                   /note="E -> N (in alleles A*25:01, allele A*26:01, allele
+FT                   A*33:01, allele A*34:01, allele A*66:01, allele A*68:01 and
+FT                   allele A*69:01; requires 2 nucleotide substitutions)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:3877632, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8475492"
+FT                   /id="VAR_082334"
+FT   VARIANT         87
+FT                   /note="E -> Q (in allele A*29:02 and allele A*43:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:1782566"
+FT                   /id="VAR_082335"
+FT   VARIANT         89
+FT                   /note="R -> G (in allele A*23:01 and allele 24:02;
+FT                   dbSNP:rs199474430)"
+FT                   /evidence="ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:9349616"
+FT                   /id="VAR_082336"
+FT   VARIANT         90
+FT                   /note="N -> K (in allele A*02:01, allele A*02:05, allele
+FT                   A*23:01, allele 24:02 and allele A*34:01;
+FT                   dbSNP:rs199474436)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:1729171, ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2982951, ECO:0000269|PubMed:3496393,
+FT                   ECO:0000269|PubMed:7836067, ECO:0000269|PubMed:9349616"
+FT                   /id="VAR_082337"
+FT   VARIANT         91
+FT                   /note="V -> M (in allele A*01:01 and allele A*36:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2251137, ECO:0000269|PubMed:2715640,
+FT                   ECO:0000269|PubMed:9349617"
+FT                   /id="VAR_082338"
+FT   VARIANT         94
+FT                   /note="Q -> H (in allele A*01:01, allele A*02:01, allele
+FT                   A*02:05, allele A*23:01, allele 24:02, allele A*25:01,
+FT                   allele A*26:01, allele A*31:01, allele A*32:01, allele
+FT                   A*33:01, allele A*36:01, allele A*43:01, allele A*74:01 and
+FT                   allele A*80:01; dbSNP:rs78306866)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:2251137, ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2431040, ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:2715640, ECO:0000269|PubMed:2982951,
+FT                   ECO:0000269|PubMed:3496393, ECO:0000269|PubMed:7836067,
+FT                   ECO:0000269|PubMed:8026990, ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791, ECO:0000269|PubMed:8475492,
+FT                   ECO:0000269|PubMed:8795145, ECO:0000269|PubMed:9349616,
+FT                   ECO:0000269|PubMed:9349617, ECO:0000269|Ref.29"
+FT                   /id="VAR_082339"
+FT   VARIANT         97
+FT                   /note="T -> I (in allele A*31:01 and allele A*33:01;
+FT                   dbSNP:rs199474457)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:2478623, ECO:0000269|PubMed:8795145"
+FT                   /id="VAR_082340"
+FT   VARIANT         98
+FT                   /note="D -> H (in allele A*02:01 and allele A*02:05)"
+FT                   /evidence="ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2982951, ECO:0000269|PubMed:3496393,
+FT                   ECO:0000269|PubMed:7836067"
+FT                   /id="VAR_082341"
+FT   VARIANT         98
+FT                   /note="D -> N (in allele A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791"
+FT                   /id="VAR_082342"
+FT   VARIANT         100
+FT                   /note="V -> A (in allele A*01:01, allele A*26:01, allele
+FT                   A*29:02, allele A*36:01, allele A*43:01 and allele
+FT                   A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:1782566, ECO:0000269|PubMed:2251137,
+FT                   ECO:0000269|PubMed:2715640, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8188325, ECO:0000269|PubMed:8284791,
+FT                   ECO:0000269|PubMed:8475492, ECO:0000269|PubMed:9349617"
+FT                   /id="VAR_082343"
+FT   VARIANT         100
+FT                   /note="V -> E (in allele A*23:01, allele A*24:02, allele
+FT                   A*25:01 and allele A*32:01; dbSNP:rs1071742)"
+FT                   /evidence="ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2431040,
+FT                   ECO:0000269|PubMed:9349616, ECO:0000269|Ref.29"
+FT                   /id="VAR_082344"
+FT   VARIANT         101
+FT                   /note="D -> N (allele A*01:01, allele A*23:01, allele
+FT                   A*24:02, allele A*26:01, allele A*29:02, allele A*36:01,
+FT                   allele A*43:01 and allele A*80:01; dbSNP:rs1136688)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:1729171, ECO:0000269|PubMed:1782566,
+FT                   ECO:0000269|PubMed:2251137, ECO:0000269|PubMed:2715640,
+FT                   ECO:0000269|PubMed:8026990, ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791, ECO:0000269|PubMed:8475492,
+FT                   ECO:0000269|PubMed:9349616, ECO:0000269|PubMed:9349617"
+FT                   /id="VAR_082345"
+FT   VARIANT         101
+FT                   /note="D -> S (in allele A*25:01 and allele A*32:01;
+FT                   requires 2 nucleotide substitutions)"
+FT                   /evidence="ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2431040, ECO:0000269|Ref.29"
+FT                   /id="VAR_082346"
+FT   VARIANT         103..107
+FT                   /note="GTLRG -> RIALR (in allele A*23:01, allele A*24:02,
+FT                   allele A*25:01 and allele A*32:01; Bw4 motif RIALR is
+FT                   involved in the recognition of NK cell inhibitory receptor
+FT                   KIR3DL1)"
+FT                   /evidence="ECO:0000269|PubMed:17182537,
+FT                   ECO:0000269|PubMed:1729171, ECO:0000269|PubMed:18502829,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2431040,
+FT                   ECO:0000269|PubMed:9349616, ECO:0000269|Ref.29"
+FT                   /id="VAR_082347"
+FT   VARIANT         114
+FT                   /note="A -> D (in allele A*01:01, allele A*11:01, allele
+FT                   A*25:01, allele A*26:01, allele A*34:01, allele A*36:01,
+FT                   allele A*43:01, allele A*66:01 and allele A*80:01;
+FT                   dbSNP:rs1136692)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2251137, ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2437024, ECO:0000269|PubMed:2460344,
+FT                   ECO:0000269|PubMed:2715640, ECO:0000269|PubMed:8016845,
+FT                   ECO:0000269|PubMed:8026990, ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791, ECO:0000269|PubMed:8475492,
+FT                   ECO:0000269|PubMed:9349617"
+FT                   /id="VAR_082348"
+FT   VARIANT         119
+FT                   /note="I -> L (in allele A*02:05, allele A*23:01 and allele
+FT                   24:02; dbSNP:rs1071743)"
+FT                   /evidence="ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:3496393, ECO:0000269|PubMed:9349616"
+FT                   /id="VAR_082349"
+FT   VARIANT         119
+FT                   /note="I -> V (in allele A*02:01 and allele A*69:01)"
+FT                   /evidence="ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2982951, ECO:0000269|PubMed:3877632,
+FT                   ECO:0000269|PubMed:7836067"
+FT                   /id="VAR_082350"
+FT   VARIANT         121
+FT                   /note="I -> M (in allele A*23:01, allele 24:02, allele
+FT                   A*29:02, allele A*31:01, allele A*32:01, allele A*33:01,
+FT                   allele A*68:01 and allele A*74:01; dbSNP:rs1136695)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:1782566, ECO:0000269|PubMed:2431040,
+FT                   ECO:0000269|PubMed:2478623, ECO:0000269|PubMed:3877632,
+FT                   ECO:0000269|PubMed:8795145, ECO:0000269|PubMed:9349616,
+FT                   ECO:0000269|Ref.29"
+FT                   /id="VAR_082351"
+FT   VARIANT         121
+FT                   /note="I -> R (in allele A*02:01, allele A*02:05, allele
+FT                   A*25:01, allele A*26:01, allele A*34:01, allele A*43:01,
+FT                   allele A*66:01 and allele A*69:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2982951,
+FT                   ECO:0000269|PubMed:3496393, ECO:0000269|PubMed:3877632,
+FT                   ECO:0000269|PubMed:7836067, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8475492"
+FT                   /id="VAR_082352"
+FT   VARIANT         123
+FT                   /note="Y -> F (in allele A*23:01, allele 24:02;
+FT                   dbSNP:rs1136697)"
+FT                   /evidence="ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:9349616"
+FT                   /id="VAR_082353"
+FT   VARIANT         129
+FT                   /note="S -> P (in allele A*01:01, allele A*11:01, allele
+FT                   A*25:01, allele A*26:01, allele A*32:01, allele A*34:01,
+FT                   allele A*36:01, allele A*43:01, allele A*66:01 and allele
+FT                   A*74:01; dbSNP:rs1136700)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2251137, ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2431040, ECO:0000269|PubMed:2437024,
+FT                   ECO:0000269|PubMed:2460344, ECO:0000269|PubMed:2715640,
+FT                   ECO:0000269|PubMed:8016845, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8475492, ECO:0000269|PubMed:9349617,
+FT                   ECO:0000269|Ref.29"
+FT                   /id="VAR_082354"
+FT   VARIANT         131
+FT                   /note="G -> W (in allele A*02:01, allele A*02:05 and allele
+FT                   A*69:01; dbSNP:rs1136702)"
+FT                   /evidence="ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2982951, ECO:0000269|PubMed:3496393,
+FT                   ECO:0000269|PubMed:3877632, ECO:0000269|PubMed:7836067"
+FT                   /id="VAR_082355"
+FT   VARIANT         133
+FT                   /note="F -> L (in allele A*32:01 and allele A*74:01;
+FT                   dbSNP:rs1059488)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2431040, ECO:0000269|Ref.29"
+FT                   /id="VAR_082356"
+FT   VARIANT         138
+FT                   /note="R -> E (in allele A*30:01; requires 2 nucleotide
+FT                   substitutions)"
+FT                   /evidence="ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:7871528"
+FT                   /id="VAR_082357"
+FT   VARIANT         138
+FT                   /note="R -> H (in allele A*02:01, allele A*02:05, allele
+FT                   A*23:01, allele A*24:02, allele A*69:01)"
+FT                   /evidence="ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2982951,
+FT                   ECO:0000269|PubMed:3496393, ECO:0000269|PubMed:3877632,
+FT                   ECO:0000269|PubMed:7836067, ECO:0000269|PubMed:9349616"
+FT                   /id="VAR_082358"
+FT   VARIANT         138
+FT                   /note="R -> Q (in allele A*25:01, allele A*26:01, allele
+FT                   A*31:01, allele A*32:01, allele A*33:01, allele A*34:01,
+FT                   allele A*43:01, allele A*66:01, allele A*74:01)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2431040, ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:8026990, ECO:0000269|PubMed:8475492,
+FT                   ECO:0000269|PubMed:8795145, ECO:0000269|Ref.29"
+FT                   /id="VAR_082359"
+FT   VARIANT         140
+FT                   /note="D -> H (in allele A*30:01)"
+FT                   /evidence="ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:7871528"
+FT                   /id="VAR_082360"
+FT   VARIANT         140
+FT                   /note="D -> Y (in allele A*02:01, allele A*02:05, allele
+FT                   A*23:01, allele A*24:02 and allele A*69:01)"
+FT                   /evidence="ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2982951,
+FT                   ECO:0000269|PubMed:3496393, ECO:0000269|PubMed:3877632,
+FT                   ECO:0000269|PubMed:7836067, ECO:0000269|PubMed:9349616"
+FT                   /id="VAR_082361"
+FT   VARIANT         151
+FT                   /note="N -> K (in allele A*02:01, allele A*02:05, allele
+FT                   A*23:01, allele A*24:02, allele A*68:01 and allele A*69:01;
+FT                   dbSNP:rs1059509)"
+FT                   /evidence="ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2982951,
+FT                   ECO:0000269|PubMed:3496393, ECO:0000269|PubMed:3877632,
+FT                   ECO:0000269|PubMed:7836067, ECO:0000269|PubMed:9349616"
+FT                   /id="VAR_082362"
+FT   VARIANT         166
+FT                   /note="I -> T (in allele A*02:01, allele A*02:05, allele
+FT                   A*68:01 and allele A*69:01; dbSNP:rs1059516)"
+FT                   /evidence="ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2982951, ECO:0000269|PubMed:3496393,
+FT                   ECO:0000269|PubMed:3877632, ECO:0000269|PubMed:7836067"
+FT                   /id="VAR_082363"
+FT   VARIANT         168
+FT                   /note="K -> Q (in allele A*23:01, allele A*25:01, allele
+FT                   A*26:01, allele A*29:02, allele A*30:01, allele A*31:01,
+FT                   allele A*32:01, allele A*33:01, allele A*34:01, allele
+FT                   A*43:01, allele A*66:01 and allele A*74:01)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:1782566, ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2431040, ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:7871528, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8475492, ECO:0000269|PubMed:8795145,
+FT                   ECO:0000269|Ref.29"
+FT                   /id="VAR_082364"
+FT   VARIANT         169
+FT                   /note="R -> H (in allele A*02:01, allele A*02:05, allele
+FT                   A*68:01 and allele A*69:01; dbSNP:rs1059520)"
+FT                   /evidence="ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2982951, ECO:0000269|PubMed:3496393,
+FT                   ECO:0000269|PubMed:3877632, ECO:0000269|PubMed:7836067"
+FT                   /id="VAR_082365"
+FT   VARIANT         173
+FT                   /note="A -> T (in allele A*25:01, allele A*26:01, allele
+FT                   A*34:01, allele A*43:01 and allele A*66:01;
+FT                   dbSNP:rs1059526)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8475492"
+FT                   /id="VAR_082366"
+FT   VARIANT         174
+FT                   /note="A -> V (in allele A*01:01 and allele A*36:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2251137, ECO:0000269|PubMed:2715640,
+FT                   ECO:0000269|PubMed:9349617"
+FT                   /id="VAR_082367"
+FT   VARIANT         175
+FT                   /note="H -> R (in allele A*23:01, allele A*29:02, allele
+FT                   A*30:01, allele A*31:01, allele A*32:01, allele A*33:01,
+FT                   allele A*74:01 and allele A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:1782566, ECO:0000269|PubMed:2431040,
+FT                   ECO:0000269|PubMed:2478623, ECO:0000269|PubMed:7871528,
+FT                   ECO:0000269|PubMed:8188325, ECO:0000269|PubMed:8284791,
+FT                   ECO:0000269|PubMed:8795145, ECO:0000269|Ref.29"
+FT                   /id="VAR_082368"
+FT   VARIANT         176
+FT                   /note="E -> A (in allele A*01:01, allele A*11:01 and allele
+FT                   A*36:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2251137, ECO:0000269|PubMed:2437024,
+FT                   ECO:0000269|PubMed:2460344, ECO:0000269|PubMed:2715640,
+FT                   ECO:0000269|PubMed:8016845, ECO:0000269|PubMed:9349617"
+FT                   /id="VAR_082369"
+FT   VARIANT         176
+FT                   /note="E -> R (in allele A*80:01; requires 2 nucleotide
+FT                   substitutions)"
+FT                   /evidence="ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791"
+FT                   /id="VAR_082370"
+FT   VARIANT         176
+FT                   /note="E -> V (in allele A*02:01, allele A*02:05, allele
+FT                   A*23:01, allele A*24:02, allele A*29:02, allele A*31:01,
+FT                   allele A*32:01, allele A*33:01, allele A*68:01, allele
+FT                   A*69:01 and allele A*74:01; results in inefficient T cell
+FT                   recognition of epitopes derived from influenza A virus.;
+FT                   dbSNP:rs9256983)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:1782566, ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2431040, ECO:0000269|PubMed:2456340,
+FT                   ECO:0000269|PubMed:2478623, ECO:0000269|PubMed:2982951,
+FT                   ECO:0000269|PubMed:3496393, ECO:0000269|PubMed:3877632,
+FT                   ECO:0000269|PubMed:7836067, ECO:0000269|PubMed:8795145,
+FT                   ECO:0000269|PubMed:9349616, ECO:0000269|Ref.29"
+FT                   /id="VAR_082371"
+FT   VARIANT         176
+FT                   /note="E -> W (in allele A*30:01; requires 2 nucleotide
+FT                   substitutions)"
+FT                   /evidence="ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:7871528"
+FT                   /id="VAR_082372"
+FT   VARIANT         180
+FT                   /note="L -> Q (in allele A*11:01 and allele A*24:02)"
+FT                   /evidence="ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:2437024, ECO:0000269|PubMed:2460344,
+FT                   ECO:0000269|PubMed:8016845, ECO:0000269|PubMed:9349616"
+FT                   /id="VAR_082373"
+FT   VARIANT         180
+FT                   /note="L -> R (in allele A*01:01 and allele A*36:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2251137, ECO:0000269|PubMed:2715640,
+FT                   ECO:0000269|PubMed:9349617"
+FT                   /id="VAR_082374"
+FT   VARIANT         180
+FT                   /note="L -> W (in allele A*02:05, allele A*25:01, allele
+FT                   A*26:01, allele A*34:01, allele A*43:01, allele A*66:01,
+FT                   allele A*68:01; dbSNP:rs9260156)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:3496393,
+FT                   ECO:0000269|PubMed:3877632, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8475492"
+FT                   /id="VAR_082375"
+FT   VARIANT         182
+FT                   /note="A -> V (in allele A*01:01 and allele A*36:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2251137, ECO:0000269|PubMed:2715640,
+FT                   ECO:0000269|PubMed:9349617"
+FT                   /id="VAR_082376"
+FT   VARIANT         185
+FT                   /note="D -> E (in allele A*01:01, allele A*02:01, allele
+FT                   A*02:05, allele A*11:01, allele A*23:01, allele A*24:02,
+FT                   allele A*25:01, allele A*26:01, allele A*29:02, allele
+FT                   A*30:01, allele A*31:01, allele A*32:01, allele A*33:01,
+FT                   allele A*34:01, allele A*36:01, allele A*43:01, allele
+FT                   A*66:01, allele A*68:01, allele A*69:01, allele A*74:01 and
+FT                   allele A*80:01; dbSNP:rs1059542)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:1782566, ECO:0000269|PubMed:2251137,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2431040,
+FT                   ECO:0000269|PubMed:2437024, ECO:0000269|PubMed:2460344,
+FT                   ECO:0000269|PubMed:2478623, ECO:0000269|PubMed:2715640,
+FT                   ECO:0000269|PubMed:2982951, ECO:0000269|PubMed:3496393,
+FT                   ECO:0000269|PubMed:3877632, ECO:0000269|PubMed:7836067,
+FT                   ECO:0000269|PubMed:7871528, ECO:0000269|PubMed:8016845,
+FT                   ECO:0000269|PubMed:8026990, ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791, ECO:0000269|PubMed:8475492,
+FT                   ECO:0000269|PubMed:8795145, ECO:0000269|PubMed:9349616,
+FT                   ECO:0000269|PubMed:9349617, ECO:0000269|Ref.29"
+FT                   /id="VAR_082377"
+FT   VARIANT         187
+FT                   /note="T -> E (in allele A*80:01; requires 2 nucleotide
+FT                   substitutions)"
+FT                   /evidence="ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791"
+FT                   /id="VAR_082378"
+FT   VARIANT         187
+FT                   /note="T -> R (in allele A*01:01, allele A*11:01, allele
+FT                   A*25:01, allele A*26:01, allele A*43:01 and allele
+FT                   A*66:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2251137, ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2437024, ECO:0000269|PubMed:2460344,
+FT                   ECO:0000269|PubMed:2715640, ECO:0000269|PubMed:8016845,
+FT                   ECO:0000269|PubMed:8026990, ECO:0000269|PubMed:8475492,
+FT                   ECO:0000269|PubMed:9349617"
+FT                   /id="VAR_082379"
+FT   VARIANT         190
+FT                   /note="E -> D (in allele A*01:01, allele A*23:01, allele
+FT                   A*24:02 and allele A*80:01; dbSNP:rs879577815)"
+FT                   /evidence="ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:2251137, ECO:0000269|PubMed:2715640,
+FT                   ECO:0000269|PubMed:8188325, ECO:0000269|PubMed:8284791,
+FT                   ECO:0000269|PubMed:9349616, ECO:0000269|PubMed:9349617"
+FT                   /id="VAR_082380"
+FT   VARIANT         191
+FT                   /note="W -> G (in allele A*01:01, allele A*23:01, allele
+FT                   A*24:02 and allele A*80:01; dbSNP:rs3098019)"
+FT                   /evidence="ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:2251137, ECO:0000269|PubMed:2715640,
+FT                   ECO:0000269|PubMed:8188325, ECO:0000269|PubMed:8284791,
+FT                   ECO:0000269|PubMed:9349616, ECO:0000269|PubMed:9349617"
+FT                   /id="VAR_082381"
+FT   VARIANT         195
+FT                   /note="Y -> H (in allele A*33:01)"
+FT                   /evidence="ECO:0000269|PubMed:2478623"
+FT                   /id="VAR_082382"
+FT   VARIANT         208
+FT                   /note="P -> A (in allele A*02:01, allele A*02:05, allele
+FT                   A*25:01, allele A*26:01, allele A*29:02, allele A*32:01,
+FT                   allele A*34:01, allele A*43:01, allele A*66:01, allele
+FT                   A*68:01, allele A*69:01 and allele A*74:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:1782566, ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2431040, ECO:0000269|PubMed:2982951,
+FT                   ECO:0000269|PubMed:3496393, ECO:0000269|PubMed:3877632,
+FT                   ECO:0000269|PubMed:7836067, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8475492, ECO:0000269|Ref.29"
+FT                   /id="VAR_082383"
+FT   VARIANT         210
+FT                   /note="K -> R (in allele A*33:01)"
+FT                   /evidence="ECO:0000269|PubMed:2478623"
+FT                   /id="VAR_082384"
+FT   VARIANT         217
+FT                   /note="P -> A (in allele A*02:01, allele A*02:05, allele
+FT                   A*25:01, allele A*26:01, allele A*29:02, allele A*31:01,
+FT                   allele A*32:01, allele A*33:01, allele A*34:01, allele
+FT                   A*43:01, allele A*66:01, allele A*68:01, allele A*69:01,
+FT                   allele A*74:01)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1782566,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2431040,
+FT                   ECO:0000269|PubMed:2478623, ECO:0000269|PubMed:2982951,
+FT                   ECO:0000269|PubMed:3496393, ECO:0000269|PubMed:3877632,
+FT                   ECO:0000269|PubMed:7836067, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8475492, ECO:0000269|PubMed:8795145,
+FT                   ECO:0000269|Ref.29"
+FT                   /id="VAR_082385"
+FT   VARIANT         218
+FT                   /note="I -> V (in allele A*02:01, allele A*02:05, allele
+FT                   A*25:01, allele A*26:01, allele A*29:02, allele A*31:01,
+FT                   allele A*32:01, allele A*33:01, allele A*34:01, allele
+FT                   A*43:01, allele A*66:01, allele A*68:01, allele A*69:01 and
+FT                   allele A*74:01)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1782566,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2431040,
+FT                   ECO:0000269|PubMed:2478623, ECO:0000269|PubMed:2982951,
+FT                   ECO:0000269|PubMed:3496393, ECO:0000269|PubMed:3877632,
+FT                   ECO:0000269|PubMed:7836067, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8475492, ECO:0000269|PubMed:8795145,
+FT                   ECO:0000269|Ref.29"
+FT                   /id="VAR_082386"
+FT   VARIANT         231
+FT                   /note="G -> S (in allele A*02:01, allele A*02:05, allele
+FT                   A*25:01, allele A*26:01, allele A*29:02, allele A*31:01,
+FT                   allele A*32:01, allele A*33:01, allele A*34:01, allele
+FT                   A*43:01, allele A*66:01, allele A*68:01, allele A*69:01,
+FT                   allele A*74:01 and allele A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1782566,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2431040,
+FT                   ECO:0000269|PubMed:2478623, ECO:0000269|PubMed:2982951,
+FT                   ECO:0000269|PubMed:3496393, ECO:0000269|PubMed:3877632,
+FT                   ECO:0000269|PubMed:7836067, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8188325, ECO:0000269|PubMed:8284791,
+FT                   ECO:0000269|PubMed:8475492, ECO:0000269|PubMed:8795145,
+FT                   ECO:0000269|Ref.29"
+FT                   /id="VAR_082387"
+FT   VARIANT         269
+FT                   /note="A -> V (in allele A*68:01; impairs binding to CD8A
+FT                   and reduces recognition by antigen-specific CD8-positive T
+FT                   cells)"
+FT                   /evidence="ECO:0000269|PubMed:2784196,
+FT                   ECO:0000269|PubMed:3877632"
+FT                   /id="VAR_082388"
+FT   VARIANT         270
+FT                   /note="A -> S (in allele A*25:01, allele A*26:01, allele
+FT                   A*29:02, allele A*31:01, allele A*32:01, allele A*33:01,
+FT                   allele A*34:01, allele A*43:01, allele A*66:01 and allele
+FT                   A*74:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:1782566, ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2431040, ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:8026990, ECO:0000269|PubMed:8475492,
+FT                   ECO:0000269|Ref.29"
+FT                   /id="VAR_082389"
+FT   VARIANT         277
+FT                   /note="E -> K (in allele A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791"
+FT                   /id="VAR_082390"
+FT   VARIANT         277
+FT                   /note="E -> Q (in allele A*02:01, allele A*02:05, allele
+FT                   A*25:01, allele A*26:01, allele A*29:02, allele A*31:01,
+FT                   allele A*32:01, allele A*33:01, allele A*34:01, allele
+FT                   A*43:01, allele A*66:01, allele A*68:01, allele A*69:01 and
+FT                   allele A*74:01)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1782566,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2431040,
+FT                   ECO:0000269|PubMed:2478623, ECO:0000269|PubMed:2982951,
+FT                   ECO:0000269|PubMed:3496393, ECO:0000269|PubMed:3877632,
+FT                   ECO:0000269|PubMed:7836067, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8475492, ECO:0000269|PubMed:8795145,
+FT                   ECO:0000269|Ref.29"
+FT                   /id="VAR_082391"
+FT   VARIANT         279
+FT                   /note="Q -> K (in allele A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791"
+FT                   /id="VAR_082392"
+FT   VARIANT         292
+FT                   /note="K -> E (in allele A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791"
+FT                   /id="VAR_082393"
+FT   VARIANT         300
+FT                   /note="L -> P (in allele A*02:01, allele A*02:05, allele
+FT                   A*23:01, allele A*24:02, allele A*25:01, allele A*26:01,
+FT                   allele A*29:02, allele A*31:01, allele A*32:01, allele
+FT                   A*33:01, allele A*34:01, allele A*43:01, allele A*66:01,
+FT                   allele A*68:01, allele A*69:01, allele A*74:01 and allele
+FT                   A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:1782566, ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2431040, ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:2982951, ECO:0000269|PubMed:3496393,
+FT                   ECO:0000269|PubMed:3877632, ECO:0000269|PubMed:7836067,
+FT                   ECO:0000269|PubMed:8026990, ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791, ECO:0000269|PubMed:8475492,
+FT                   ECO:0000269|PubMed:8795145, ECO:0000269|PubMed:9349616,
+FT                   ECO:0000269|Ref.29"
+FT                   /id="VAR_082394"
+FT   VARIANT         306
+FT                   /note="I -> V (in allele A*23:01 and allele A*24:02)"
+FT                   /evidence="ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:9349616"
+FT                   /id="VAR_082395"
+FT   VARIANT         307
+FT                   /note="P -> H (in allele A*23:01)"
+FT                   /evidence="ECO:0000269|PubMed:1729171"
+FT                   /id="VAR_082396"
+FT   VARIANT         312
+FT                   /note="I -> L (in allele A*34:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115"
+FT                   /id="VAR_082397"
+FT   VARIANT         318
+FT                   /note="L -> F (in allele A*02:01, allele A*02:05, allele
+FT                   A*25:01, allele A*26:01, allele A*29:02, allele A*31:01,
+FT                   allele A*32:01, allele A*33:01, allele A*34:01, allele
+FT                   A*43:01, allele A*66:01, allele A*68:01, allele A*69:01 and
+FT                   allele A*74:01)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1782566,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2431040,
+FT                   ECO:0000269|PubMed:2478623, ECO:0000269|PubMed:2982951,
+FT                   ECO:0000269|PubMed:3496393, ECO:0000269|PubMed:3877632,
+FT                   ECO:0000269|PubMed:7836067, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8475492, ECO:0000269|PubMed:8795145,
+FT                   ECO:0000269|Ref.29"
+FT                   /id="VAR_082398"
+FT   VARIANT         321
+FT                   /note="V -> M (in allele A*32:01 and allele A*74:01)"
+FT                   /evidence="ECO:0000269|PubMed:1431115,
+FT                   ECO:0000269|PubMed:2431040, ECO:0000269|Ref.29"
+FT                   /id="VAR_082399"
+FT   VARIANT         322
+FT                   /note="I -> F (in allele A*29:02, allele A*31:01, allele
+FT                   A*32:01, allele A*33:01 and allele A*74:01)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1782566,
+FT                   ECO:0000269|PubMed:2431040, ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:8795145, ECO:0000269|Ref.29"
+FT                   /id="VAR_082400"
+FT   VARIANT         323
+FT                   /note="T -> A (in allele A*25:01, allele A*26:01, allele
+FT                   A*29:02, allele A*31:01, allele A*32:01, allele A*33:01,
+FT                   allele A*34:01, allele A*43:01, allele A*66:01, allele
+FT                   A*74:01 and allele A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1782566,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2431040,
+FT                   ECO:0000269|PubMed:2478623, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8188325, ECO:0000269|PubMed:8284791,
+FT                   ECO:0000269|PubMed:8475492, ECO:0000269|PubMed:8795145,
+FT                   ECO:0000269|Ref.29"
+FT                   /id="VAR_082401"
+FT   VARIANT         331
+FT                   /note="M -> R (in allele A*29:02, allele A*31:01, allele
+FT                   A*32:01, allele A*33:01 and allele A*74:01)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1782566,
+FT                   ECO:0000269|PubMed:2431040, ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:8795145, ECO:0000269|Ref.29"
+FT                   /id="VAR_082402"
+FT   VARIANT         334
+FT                   /note="R -> K (allele A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791"
+FT                   /id="VAR_082403"
+FT   VARIANT         335
+FT                   /note="K -> N (in allele A*23:01 and allele A*24:02)"
+FT                   /evidence="ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:9349616"
+FT                   /id="VAR_082404"
+FT   VARIANT         338
+FT                   /note="D -> V (allele A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791"
+FT                   /id="VAR_082405"
+FT   VARIANT         345
+FT                   /note="T -> S (in allele A*02:01, allele A*02:05, allele
+FT                   A*23:01, allele A*24:02, allele A*25:01, allele A*26:01,
+FT                   allele A*29:02, allele A*31:01, allele A*32:01, allele
+FT                   A*33:01, allele A*34:01, allele A*43:01, allele A*66:01,
+FT                   allele A*68:01 allele A*69:01, allele A*74:01 and allele
+FT                   A*80:01)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1729171,
+FT                   ECO:0000269|PubMed:1782566, ECO:0000269|PubMed:2320591,
+FT                   ECO:0000269|PubMed:2431040, ECO:0000269|PubMed:2478623,
+FT                   ECO:0000269|PubMed:2982951, ECO:0000269|PubMed:3496393,
+FT                   ECO:0000269|PubMed:3877632, ECO:0000269|PubMed:7836067,
+FT                   ECO:0000269|PubMed:8026990, ECO:0000269|PubMed:8188325,
+FT                   ECO:0000269|PubMed:8284791, ECO:0000269|PubMed:8475492,
+FT                   ECO:0000269|PubMed:8795145, ECO:0000269|PubMed:9349616,
+FT                   ECO:0000269|Ref.29"
+FT                   /id="VAR_082406"
+FT   VARIANT         358
+FT                   /note="V -> M (in allele A*25:01, allele A*26:01, allele
+FT                   A*29:02, allele A*31:01, allele A*32:01, allele A*33:01,
+FT                   allele A*34:01, allele A*43:01, allele A*66:01 and allele
+FT                   A*74:01)"
+FT                   /evidence="ECO:0000269|PubMed:1317015,
+FT                   ECO:0000269|PubMed:1431115, ECO:0000269|PubMed:1782566,
+FT                   ECO:0000269|PubMed:2320591, ECO:0000269|PubMed:2431040,
+FT                   ECO:0000269|PubMed:2478623, ECO:0000269|PubMed:8026990,
+FT                   ECO:0000269|PubMed:8475492, ECO:0000269|PubMed:8795145,
+FT                   ECO:0000269|Ref.29"
+FT                   /id="VAR_082407"
+FT   MUTAGEN         110
+FT                   /note="N->Q: Impairs the recruitment of HLA-A*02 in the
+FT                   peptide-loading complex."
+FT                   /evidence="ECO:0000269|PubMed:21263072"
+FT   MUTAGEN         156
+FT                   /note="S->C: Impairs the maturation of a peptide-receptive
+FT                   HLA-A*02-B2M complex."
+FT                   /evidence="ECO:0000269|PubMed:8805302"
+FT   MUTAGEN         158
+FT                   /note="T->K: Impairs binding to TAP1-TAP2 transporter,
+FT                   resulting in impaired presentation of intracellular
+FT                   peptides."
+FT                   /evidence="ECO:0000269|PubMed:8630735,
+FT                   ECO:0000269|PubMed:8805302"
+FT   STRAND          27..36
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          41..43
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          45..52
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          55..61
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          64..66
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          70..73
+FT                   /evidence="ECO:0007829|PDB:4F7T"
+FT   HELIX           74..78
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   HELIX           81..108
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          113..115
+FT                   /evidence="ECO:0007829|PDB:3D25"
+FT   STRAND          118..127
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          131..142
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          145..150
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          152..155
+FT                   /evidence="ECO:0007829|PDB:6EWA"
+FT   STRAND          157..159
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   HELIX           162..173
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   HELIX           176..184
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   HELIX           187..198
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   HELIX           200..203
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          210..235
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          238..243
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          246..248
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   HELIX           249..251
+FT                   /evidence="ECO:0007829|PDB:2GTW"
+FT   STRAND          252..254
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          261..263
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          265..274
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          275..277
+FT                   /evidence="ECO:0007829|PDB:4JFD"
+FT   HELIX           278..280
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          281..286
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          290..292
+FT                   /evidence="ECO:0007829|PDB:2V2X"
+FT   STRAND          294..297
+FT                   /evidence="ECO:0007829|PDB:3MRE"
+FT   STRAND          348..350
+FT                   /evidence="ECO:0007829|PDB:4EN2"
+SQ   SEQUENCE   365 AA;  40841 MW;  DEDFCEC4450E0580 CRC64;
+     MAVMAPRTLL LLLSGALALT QTWAGSHSMR YFFTSVSRPG RGEPRFIAVG YVDDTQFVRF
+     DSDAASQRME PRAPWIEQEG PEYWDQETRN VKAQSQTDRV DLGTLRGYYN QSEAGSHTIQ
+     IMYGCDVGSD GRFLRGYRQD AYDGKDYIAL NEDLRSWTAA DMAAQITKRK WEAAHEAEQL
+     RAYLDGTCVE WLRRYLENGK ETLQRTDPPK THMTHHPISD HEATLRCWAL GFYPAEITLT
+     WQRDGEDQTQ DTELVETRPA GDGTFQKWAA VVVPSGEEQR YTCHVQHEGL PKPLTLRWEL
+     SSQPTIPIVG IIAGLVLLGA VITGAVVAAV MWRRKSSDRK GGSYTQAASS DSAQGSDVSL
+     TACKV
+//

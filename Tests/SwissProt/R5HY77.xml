@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<uniprot xmlns="http://uniprot.org/uniprot" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/support/docs/uniprot.xsd">
+<entry dataset="TrEMBL" created="2013-07-24" modified="2016-09-07" version="15">
+<accession>R5HY77</accession>
+<name>R5HY77_9BACT</name>
+<protein>
+<recommendedName>
+<fullName evidence="1">Elongation factor Ts</fullName>
+<shortName evidence="1">EF-Ts</shortName>
+</recommendedName>
+</protein>
+<gene>
+<name type="primary" evidence="1">tsf</name>
+<name type="ORF" evidence="3">BN796_01519</name>
+</gene>
+<organism evidence="3 4">
+<name type="scientific">Alistipes sp. CAG:831</name>
+<dbReference type="NCBI Taxonomy" id="1262698"/>
+<lineage>
+<taxon>Bacteria</taxon>
+<taxon>Bacteroidetes</taxon>
+<taxon>Bacteroidia</taxon>
+<taxon>Bacteroidales</taxon>
+<taxon>Rikenellaceae</taxon>
+<taxon>Alistipes</taxon>
+<taxon>environmental samples</taxon>
+</lineage>
+</organism>
+<reference key="1" evidence="3 4">
+<citation type="submission" date="2012-11" db="EMBL/GenBank/DDBJ databases">
+<title>Dependencies among metagenomic species, viruses, plasmids and units of genetic variation.</title>
+<authorList>
+<person name="Nielsen H.B."/>
+<person name="Almeida M."/>
+<person name="Juncker A.S."/>
+<person name="Rasmussen S."/>
+<person name="Li J."/>
+<person name="Sunagawa S."/>
+<person name="Plichta D."/>
+<person name="Gautier L."/>
+<person name="Le Chatelier E."/>
+<person name="Peletier E."/>
+<person name="Bonde I."/>
+<person name="Nielsen T."/>
+<person name="Manichanh C."/>
+<person name="Arumugam M."/>
+<person name="Batto J."/>
+<person name="Santos M.B.Q.D."/>
+<person name="Blom N."/>
+<person name="Borruel N."/>
+<person name="Burgdorf K.S."/>
+<person name="Boumezbeur F."/>
+<person name="Casellas F."/>
+<person name="Dore J."/>
+<person name="Guarner F."/>
+<person name="Hansen T."/>
+<person name="Hildebrand F."/>
+<person name="Kaas R.S."/>
+<person name="Kennedy S."/>
+<person name="Kristiansen K."/>
+<person name="Kultima J.R."/>
+<person name="Leonard P."/>
+<person name="Levenez F."/>
+<person name="Lund O."/>
+<person name="Moumen B."/>
+<person name="Le Paslier D."/>
+<person name="Pons N."/>
+<person name="Pedersen O."/>
+<person name="Prifti E."/>
+<person name="Qin J."/>
+<person name="Raes J."/>
+<person name="Tap J."/>
+<person name="Tims S."/>
+<person name="Ussery D.W."/>
+<person name="Yamada T."/>
+<person name="MetaHit consortium"/>
+<person name="Renault P."/>
+<person name="Sicheritz-Ponten T."/>
+<person name="Bork P."/>
+<person name="Wang J."/>
+<person name="Brunak S."/>
+<person name="Ehrlich S.D."/>
+</authorList>
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]</scope>
+<source>
+<strain evidence="4">MGS:831</strain>
+</source>
+</reference>
+<comment type="function">
+<text evidence="1">Associates with the EF-Tu.GDP complex and induces the exchange of GDP to GTP. It remains bound to the aminoacyl-tRNA.EF-Tu.GTP complex up to the GTP hydrolysis stage on the ribosome.</text>
+</comment>
+<comment type="subcellular location">
+<subcellularLocation>
+<location evidence="1">Cytoplasm</location>
+</subcellularLocation>
+</comment>
+<comment type="similarity">
+<text evidence="1">Belongs to the EF-Ts family.</text>
+</comment>
+<comment type="caution">
+<text evidence="3">The sequence shown here is derived from an EMBL/GenBank/DDBJ whole genome shotgun (WGS) entry which is preliminary data.</text>
+</comment>
+<dbReference type="EMBL" id="CAYB010000029">
+<property type="protein sequence ID" value="CCY34813.1"/>
+<property type="molecule type" value="Genomic_DNA"/>
+</dbReference>
+<dbReference type="Proteomes" id="UP000018094">
+<property type="component" value="Unassembled WGS sequence"/>
+</dbReference>
+<dbReference type="GO" id="GO:0005737">
+<property type="term" value="C:cytoplasm"/>
+<property type="evidence" value="ECO:0000501"/>
+<property type="project" value="UniProtKB-SubCell"/>
+</dbReference>
+<dbReference type="GO" id="GO:0003746">
+<property type="term" value="F:translation elongation factor activity"/>
+<property type="evidence" value="ECO:0000501"/>
+<property type="project" value="UniProtKB-HAMAP"/>
+</dbReference>
+<dbReference type="Gene3D" id="3.30.479.20">
+<property type="match status" value="3"/>
+</dbReference>
+<dbReference type="HAMAP" id="MF_00050">
+<property type="entry name" value="EF_Ts"/>
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="InterPro" id="IPR001816">
+<property type="entry name" value="Transl_elong_EFTs/EF1B"/>
+</dbReference>
+<dbReference type="InterPro" id="IPR014039">
+<property type="entry name" value="Transl_elong_EFTs/EF1B_dimer"/>
+</dbReference>
+<dbReference type="InterPro" id="IPR018101">
+<property type="entry name" value="Transl_elong_Ts_CS"/>
+</dbReference>
+<dbReference type="InterPro" id="IPR009060">
+<property type="entry name" value="UBA-like"/>
+</dbReference>
+<dbReference type="PANTHER" id="PTHR11741">
+<property type="entry name" value="PTHR11741"/>
+<property type="match status" value="2"/>
+</dbReference>
+<dbReference type="Pfam" id="PF00889">
+<property type="entry name" value="EF_TS"/>
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="SUPFAM" id="SSF46934">
+<property type="entry name" value="SSF46934"/>
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="SUPFAM" id="SSF54713">
+<property type="entry name" value="SSF54713"/>
+<property type="match status" value="4"/>
+</dbReference>
+<dbReference type="TIGRFAMs" id="TIGR00116">
+<property type="entry name" value="tsf"/>
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="PROSITE" id="PS01126">
+<property type="entry name" value="EF_TS_1"/>
+<property type="match status" value="1"/>
+</dbReference>
+<proteinExistence type="inferred from homology"/>
+<keyword id="KW-0181" evidence="4">Complete proteome</keyword>
+<keyword id="KW-0963" evidence="1">Cytoplasm</keyword>
+<keyword id="KW-0251" evidence="1 3">Elongation factor</keyword>
+<keyword id="KW-0648" evidence="1 3">Protein biosynthesis</keyword>
+<keyword id="KW-1185" evidence="4">Reference proteome</keyword>
+<feature type="domain" description="EF_TS" evidence="2">
+<location>
+<begin position="71"/>
+<end position="328"/>
+</location>
+</feature>
+<feature type="region of interest" description="Involved in Mg(2+) ion dislocation from EF-Tu" evidence="1">
+<location>
+<begin position="79"/>
+<end position="82"/>
+</location>
+</feature>
+<evidence key="1" type="ECO:0000256">
+<source>
+<dbReference type="HAMAP-Rule" id="MF_00050"/>
+</source>
+</evidence>
+<evidence key="2" type="ECO:0000259">
+<source>
+<dbReference type="Pfam" id="PF00889"/>
+</source>
+</evidence>
+<evidence key="3" type="ECO:0000313">
+<source>
+<dbReference type="EMBL" id="CCY34813.1"/>
+</source>
+</evidence>
+<evidence key="4" type="ECO:0000313">
+<source>
+<dbReference type="Proteomes" id="UP000018094"/>
+</source>
+</evidence>
+<sequence length="331" mass="35648" checksum="ECF3BC99C5D8BFF1" modified="2013-07-24" version="1">
+MEIKAIDVQKLRKMTGAGMMDCKKALIEANGDYERAKEIIREKGKLVAAKRADRETSEGA
+VVAKVDGSKGILLCLGCETDFVAKNEEFQALANAIADAAIKALPADMEALKACTIADGRT
+VEAAITEQIGKTGEKHSLVAYEKVEAPYIISYIHTINGKLGAIVGFNKEVPVDLAKGVAM
+QVASMNPVAVNKEAVPQNVIDEELKVAVEKTKEELVKKAVDAALSKAGINPAHVDSEDHI
+QSNTAKGWLTPEQADQAREIIRTVSAEKAANLQEAMVNNIANGRLNKFFKENTLEEQEYQ
+MGDGKTSVKAAIAAVDKDAKVTVFKRISLVD
+</sequence>
+</entry>
+<copyright>
+Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+Distributed under the Creative Commons Attribution-NoDerivs License
+</copyright>
+</uniprot>

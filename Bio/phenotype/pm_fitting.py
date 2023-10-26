@@ -1,8 +1,10 @@
 # Copyright 2014-2016 by Marco Galardini.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-"""Growth curves fitting and parameters extraction for phenotype data
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Growth curves fitting and parameters extraction for phenotype data.
 
 This module provides functions to perform sigmoid functions fitting to
 Phenotype Microarray data. This module depends on scipy curve_fit function.
@@ -15,7 +17,8 @@ richards           Richards growth model.
 guess_plateau      Guess the plateau point to improve sigmoid fitting.
 guess_lag          Guess the lag point to improve sigmoid fitting.
 fit                Sigmoid functions fit.
-get_area           Calculate the area under the PM curve."""
+get_area           Calculate the area under the PM curve.
+"""
 
 import numpy as np
 
@@ -24,12 +27,12 @@ try:
     from scipy.integrate import trapz
 except ImportError:
     from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(
-        'Install scipy to extract curve parameters.')
+
+    raise MissingPythonDependencyError("Install scipy to extract curve parameters.")
 
 
 def logistic(x, A, u, d, v, y0):
-    """Logistic growth model
+    """Logistic growth model.
 
     Proposed in Zwietering et al., 1990 (PMID: 16348228)
     """
@@ -38,7 +41,7 @@ def logistic(x, A, u, d, v, y0):
 
 
 def gompertz(x, A, u, d, v, y0):
-    """Gompertz growth model
+    """Gompertz growth model.
 
     Proposed in Zwietering et al., 1990 (PMID: 16348228)
     """
@@ -47,12 +50,21 @@ def gompertz(x, A, u, d, v, y0):
 
 
 def richards(x, A, u, d, v, y0):
-    """Gompertz growth model (equivalent to Stannard)
+    """Richards growth model (equivalent to Stannard).
 
     Proposed in Zwietering et al., 1990 (PMID: 16348228)
     """
-    y = (A * pow(1 + (v + (np.exp(1 + v) * np.exp((u / A) *
-                                                  (1 + v) * (1 + (1 / v)) * (d - x)))), -(1 / v))) + y0
+    y = (
+        A
+        * pow(
+            1
+            + (
+                v
+                + (np.exp(1 + v) * np.exp((u / A) * (1 + v) * (1 + (1 / v)) * (d - x)))
+            ),
+            -(1 / v),
+        )
+    ) + y0
     return y
 
 
@@ -117,9 +129,10 @@ def guess_plateau(x, y):
 
 
 def fit(function, x, y):
-    """Fit the provided functrion to the x and y values.
+    """Fit the provided function to the x and y values.
 
-    The function parameters and the parameters covariance."""
+    The function parameters and the parameters covariance.
+    """
     # Compute guesses for the parameters
     # This is necessary to get significant fits
     p0 = [guess_plateau(x, y), 4.0, guess_lag(x, y), 0.1, min(y)]
@@ -129,5 +142,5 @@ def fit(function, x, y):
 
 
 def get_area(y, x):
-    """Get the area under the curve"""
+    """Get the area under the curve."""
     return trapz(y=y, x=x)

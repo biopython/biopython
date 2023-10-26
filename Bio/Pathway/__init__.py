@@ -1,7 +1,9 @@
 # Copyright 2001 by Tarjei Mikkelsen.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """BioPython Pathway module.
 
@@ -28,25 +30,26 @@ graph theoretic and numeric analysis.
 
 Note: This module should be regarded as a prototype only. API changes are likely.
       Comments and feature requests are most welcome.
+
 """
 
 from functools import reduce
 
-from Bio.Pathway.Rep.MultiGraph import *
+from Bio.Pathway.Rep.MultiGraph import MultiGraph
 
 
-class Reaction(object):
+class Reaction:
     """Abstraction for a biochemical transformation.
 
     This class represents a (potentially reversible) biochemical
-    transformation of the type:
+    transformation of the type::
 
       a S1 + b S2 + ... --> c P1 + d P2 + ...
 
-    where
-        - a, b, c, d ... are positive numeric stochiometric coefficients,
-        - S1, S2, ... are substrates
-        - P1, P2, ... are products
+    where:
+     - a, b, c, d ... are positive numeric stochiometric coefficients,
+     - S1, S2, ... are substrates
+     - P1, P2, ... are products
 
     A Reaction should be viewed as the net result of one or more individual
     reaction steps, where each step is potentially facilitated by a different
@@ -54,23 +57,20 @@ class Reaction(object):
     the future.
 
     Attributes:
-
-        - reactants   -- dict of involved species to their stochiometric coefficients:
-          reactants[S] = stochiometric constant for S
-        - catalysts   -- list/tuple of tuples of catalysts required for this reaction
-        - reversible  -- true iff reaction is reversible
-        - data        -- reference to arbitrary additional data
+     - reactants   -- dict of involved species to their stochiometric coefficients:
+       reactants[S] = stochiometric constant for S
+     - catalysts   -- list/tuple of tuples of catalysts required for this reaction
+     - reversible  -- true iff reaction is reversible
+     - data        -- reference to arbitrary additional data
 
     Invariants:
-
-        - for all S in reactants: reactants[S] != 0
-        - for all C in catalysts: catalysts[C] != 0
+     - for all S in reactants: reactants[S] != 0
+     - for all C in catalysts: catalysts[C] != 0
 
     """
 
-    def __init__(self, reactants=None, catalysts=(),
-                 reversible=0, data=None):
-        """Initializes a new Reaction object."""
+    def __init__(self, reactants=None, catalysts=(), reversible=0, data=None):
+        """Initialize a new Reaction object."""
         # enforce invariants on reactants:
         if reactants is None:
             self.reactants = {}
@@ -85,32 +85,31 @@ class Reaction(object):
         self.reversible = reversible
 
     def __eq__(self, r):
-        """Returns true iff self is equal to r."""
-        return isinstance(r, Reaction) and \
-               self.reactants == r.reactants and \
-               self.catalysts == r.catalysts and \
-               self.data == r.data and \
-               self.reversible == r.reversible
-
-    def __ne__(self, r):
-        """Returns true iff self is not equal to r."""
-        return not self.__eq__(r)
+        """Return true iff self is equal to r."""
+        return (
+            isinstance(r, Reaction)
+            and self.reactants == r.reactants
+            and self.catalysts == r.catalysts
+            and self.data == r.data
+            and self.reversible == r.reversible
+        )
 
     def __hash__(self):
-        """Returns a hashcode for self."""
+        """Return a hashcode for self."""
         t = tuple(self.species())
         return hash(t)
 
     def __repr__(self):
-        """Returns a debugging string representation of self."""
-        return "Reaction(" + \
-               ",".join(map(repr, [self.reactants,
-                                  self.catalysts,
-                                  self.data,
-                                  self.reversible])) + ")"
+        """Return a debugging string representation of self."""
+        return "Reaction(%r, %r, %r, %r)" % (
+            self.reactants,
+            self.catalysts,
+            self.reversible,
+            self.data,
+        )
 
     def __str__(self):
-        """Returns a string representation of self."""
+        """Return a string representation of self."""
         substrates = ""
         products = ""
         all_species = sorted(self.reactants)
@@ -138,53 +137,56 @@ class Reaction(object):
             return substrates + " --> " + products
 
     def reverse(self):
-        """Returns a new Reaction that is the reverse of self."""
+        """Return a new Reaction that is the reverse of self."""
         reactants = {}
         for r in self.reactants:
-            reactants[r] = - self.reactants[r]
-        return Reaction(reactants, self.catalysts,
-                        self.reversible, self.data)
+            reactants[r] = -self.reactants[r]
+        return Reaction(reactants, self.catalysts, self.reversible, self.data)
 
     def species(self):
-        """Returns a list of all Species involved in self."""
+        """Return a list of all Species involved in self."""
         return list(self.reactants)
 
 
-class System(object):
+class System:
     """Abstraction for a collection of reactions.
 
     This class is used in the Bio.Pathway framework to represent an arbitrary
     collection of reactions without explicitly defined links.
 
     Attributes:
+     - None
 
-    None
     """
 
     def __init__(self, reactions=()):
-        """Initializes a new System object."""
+        """Initialize a new System object."""
         self.__reactions = set(reactions)
 
     def __repr__(self):
-        """Returns a debugging string representation of self."""
+        """Return a debugging string representation of self."""
         return "System(" + ",".join(map(repr, self.__reactions)) + ")"
 
     def __str__(self):
-        """Returns a string representation of self."""
-        return "System of " + str(len(self.__reactions)) + \
-               " reactions involving " + str(len(self.species())) + \
-               " species"
+        """Return a string representation of self."""
+        return (
+            "System of "
+            + str(len(self.__reactions))
+            + " reactions involving "
+            + str(len(self.species()))
+            + " species"
+        )
 
     def add_reaction(self, reaction):
-        """Adds reaction to self."""
+        """Add reaction to self."""
         self.__reactions.add(reaction)
 
     def remove_reaction(self, reaction):
-        """Removes reaction from self."""
+        """Remove reaction from self."""
         self.__reactions.remove(reaction)
 
     def reactions(self):
-        """Returns a list of the reactions in this system.
+        """Return a list of the reactions in this system.
 
         Note the order is arbitrary!
         """
@@ -192,20 +194,21 @@ class System(object):
         return list(self.__reactions)
 
     def species(self):
-        """Returns a list of the species in this system."""
-        return sorted(set(reduce(lambda s, x: s + x,
-                          [x.species() for x in self.reactions()], [])))
+        """Return a list of the species in this system."""
+        return sorted(
+            set(reduce(lambda s, x: s + x, [x.species() for x in self.reactions()], []))
+        )
 
     def stochiometry(self):
-        """Computes the stoichiometry matrix for self.
+        """Compute the stoichiometry matrix for self.
 
-        Returns (species, reactions, stoch) where
+        Returns (species, reactions, stoch) where:
+         - species    = ordered list of species in this system
+         - reactions  = ordered list of reactions in this system
+         - stoch      = 2D array where stoch[i][j] is coef of the
+           jth species in the ith reaction, as defined
+           by species and reactions above
 
-            - species    = ordered list of species in this system
-            - reactions  = ordered list of reactions in this system
-            - stoch      = 2D array where stoch[i][j] is coef of the
-              jth species in the ith reaction, as defined
-              by species and reactions above
         """
         # Note: This an inefficient and ugly temporary implementation.
         #       To be practical, stochiometric matrices should probably
@@ -223,34 +226,34 @@ class System(object):
         return (species, reactions, stoch)
 
 
-class Interaction(object):
+class Interaction:
     """An arbitrary interaction between any number of species.
 
     This class definition is intended solely as a minimal wrapper interface that should
     be implemented and extended by more specific abstractions.
 
     Attributes:
+     - data      -- reference to arbitrary additional data
 
-        - data      -- reference to arbitrary additional data
     """
 
     def __init_(self, data):
         self.data = data
 
     def __hash__(self):
-        """Returns a hashcode for self."""
+        """Return a hashcode for self."""
         return hash(self.data)
 
     def __repr__(self):
-        """Returns a debugging string representation of self."""
+        """Return a debugging string representation of self."""
         return "Interaction(" + repr(self.data) + ")"
 
     def __str__(self):
-        """Returns a string representation of self."""
+        """Return a string representation of self."""
         return "<" + str(self.data) + ">"
 
 
-class Network(object):
+class Network:
     """A set of species that are explicitly linked by interactions.
 
     The network is a directed multigraph with labeled edges. The nodes in the graph
@@ -259,51 +262,53 @@ class Network(object):
     object.
 
     Attributes:
+     - None
 
-    None
     """
 
     def __init__(self, species=()):
-        """Initializes a new Network object."""
+        """Initialize a new Network object."""
         self.__graph = MultiGraph(species)
 
     def __repr__(self):
-        """Returns a debugging string representation of this network."""
+        """Return a debugging string representation of this network."""
         return "<Network: __graph: " + repr(self.__graph) + ">"
 
     def __str__(self):
-        """Returns a string representation of this network."""
-        return "Network of " + str(len(self.species())) + " species and " + \
-               str(len(self.interactions())) + " interactions."
+        """Return a string representation of this network."""
+        return "Network of %i species and %i interactions." % (
+            len(self.species()),
+            len(self.interactions()),
+        )
 
     def add_species(self, species):
-        """Adds species to this network."""
+        """Add species to this network."""
         self.__graph.add_node(species)
 
     def add_interaction(self, source, sink, interaction):
-        """Adds interaction to this network."""
+        """Add interaction to this network."""
         self.__graph.add_edge(source, sink, interaction)
 
     def source(self, species):
-        """Returns list of unique sources for species."""
+        """Return list of unique sources for species."""
         return self.__graph.parents(species)
 
     def source_interactions(self, species):
-        """Returns list of (source, interaction) pairs for species."""
+        """Return list of (source, interaction) pairs for species."""
         return self.__graph.parent_edges(species)
 
     def sink(self, species):
-        """Returns list of unique sinks for species."""
+        """Return list of unique sinks for species."""
         return self.__graph.children(species)
 
     def sink_interactions(self, species):
-        """Returns list of (sink, interaction) pairs for species."""
+        """Return list of (sink, interaction) pairs for species."""
         return self.__graph.child_edges(species)
 
     def species(self):
-        """Returns list of the species in this network."""
+        """Return list of the species in this network."""
         return self.__graph.nodes()
 
     def interactions(self):
-        """Returns list of the unique interactions in this network."""
+        """Return list of the unique interactions in this network."""
         return self.__graph.labels()

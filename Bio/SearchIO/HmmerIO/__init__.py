@@ -1,8 +1,8 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO support for HMMER output formats.
 
 This module adds support for parsing HMMER outputs. HMMER is a
@@ -286,7 +286,11 @@ The following SearchIO objects attributes are provided:
 """
 
 from .hmmer2_text import Hmmer2TextParser, Hmmer2TextIndexer
-from .hmmer3_domtab import Hmmer3DomtabParser, Hmmer3DomtabHmmhitParser, Hmmer3DomtabHmmqueryParser
+from .hmmer3_domtab import (
+    Hmmer3DomtabParser,
+    Hmmer3DomtabHmmhitParser,
+    Hmmer3DomtabHmmqueryParser,
+)
 from .hmmer3_domtab import Hmmer3DomtabHmmhitIndexer, Hmmer3DomtabHmmqueryIndexer
 from .hmmer3_domtab import Hmmer3DomtabHmmhitWriter, Hmmer3DomtabHmmqueryWriter
 from .hmmer3_text import Hmmer3TextParser, Hmmer3TextIndexer
@@ -296,4 +300,5 @@ from .hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer, Hmmer3TabWriter
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio._utils import run_doctest
+
     run_doctest()

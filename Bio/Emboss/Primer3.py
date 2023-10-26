@@ -2,9 +2,11 @@
 # Revisions copyright 2009 Leighton Pritchard.
 # Revisions copyright 2010 Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Code to parse output from the EMBOSS eprimer3 program.
 
 As elsewhere in Biopython there are two input functions, read and parse,
@@ -21,7 +23,7 @@ function to iterate over the retsults.
 # --- primer3
 
 
-class Record(object):
+class Record:
     """Represent information from a primer3 run finding primers.
 
     Members:
@@ -31,12 +33,14 @@ class Record(object):
         - comments - the comment line(s) for the record
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.comments = ""
         self.primers = []
 
 
-class Primers(object):
+class Primers:
     """A primer set designed by Primer3.
 
     Members:
@@ -63,7 +67,9 @@ class Primers(object):
         - internal_gc
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.size = 0
         self.forward_seq = ""
         self.forward_start = 0
@@ -87,8 +93,7 @@ class Primers(object):
 
 
 def parse(handle):
-    """Iterate over primer3 output as Bio.Emboss.Primer3.Record objects.
-    """
+    """Iterate over primer3 output as Bio.Emboss.Primer3.Record objects."""
     # Skip blank lines at head of file
     while True:
         line = handle.readline()
@@ -99,15 +104,18 @@ def parse(handle):
     record = None
     primer = None
     while True:
-        if line.startswith('# EPRIMER3') or line.startswith('# PRIMER3'):
+        if line.startswith("# EPRIMER3") or line.startswith("# PRIMER3"):
             # Record data
             if record is not None:
                 yield record
             record = Record()
             record.comments += line
             primer = None
-        elif line.startswith('#'):
-            if line.strip() != '#                      Start  Len   Tm     GC%   Sequence':
+        elif line.startswith("#"):
+            if (
+                line.strip()
+                != "#                      Start  Len   Tm     GC%   Sequence"
+            ):
                 record.comments += line
         elif not line.strip():
             pass
@@ -147,7 +155,7 @@ def parse(handle):
             try:
                 primer.internal_seq = words[6]
             except IndexError:  # eprimer3 reports oligo without sequence
-                primer.internal_seq = ''
+                primer.internal_seq = ""
         try:
             line = next(handle)
         except StopIteration:
@@ -164,13 +172,12 @@ def read(handle):
     """
     iterator = parse(handle)
     try:
-        first = next(iterator)
+        record = next(iterator)
     except StopIteration:
-        raise ValueError("No records found in handle")
+        raise ValueError("No records found in handle") from None
     try:
-        second = next(iterator)
-    except StopIteration:
-        second = None
-    if second is not None:
+        next(iterator)
         raise ValueError("More than one record found in handle")
-    return first
+    except StopIteration:
+        pass
+    return record

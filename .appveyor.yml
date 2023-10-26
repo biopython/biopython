@@ -1,0 +1,52 @@
+skip_tags: true
+clone_depth: 1
+
+os: Visual Studio 2015
+
+environment:
+  matrix:
+    - PY_MAJOR_VER: 3
+      PYTHON_ARCH: "x86"
+    - PY_MAJOR_VER: 3
+      PYTHON_ARCH: "x86_64"
+
+matrix:
+  fast_finish: true
+
+# Enable MySQL and PostgreSQL for BioSQL tests
+services:
+  - postgresql
+  - mysql
+
+before_build:
+  - SET PGUSER=postgres
+  - SET PGPASSWORD=Password12!
+  - SET PATH=C:\Program Files\PostgreSQL\9.6\bin\;%PATH%
+  - psql -U postgres -c "CREATE USER biosql_user WITH PASSWORD 'biosql_pass';"
+  - psql -U postgres -c "CREATE DATABASE biosql_test OWNER biosql_user;"
+
+build_script:
+# If there's a newer build queued for the same PR, cancel this one
+  - ps: if ($env:APPVEYOR_PULL_REQUEST_NUMBER -and $env:APPVEYOR_BUILD_NUMBER -ne ((Invoke-RestMethod `
+        https://ci.appveyor.com/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=50).builds | `
+        Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
+        throw "There are newer queued builds for this pull request, failing early." }
+  - ps: Start-FileDownload "https://repo.continuum.io/miniconda/Miniconda$env:PY_MAJOR_VER-latest-Windows-$env:PYTHON_ARCH.exe" C:\Miniconda.exe; echo "Finished downloading miniconda"
+  - cmd: C:\Miniconda.exe /S /D=C:\Py
+  - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
+  - conda config --set always_yes yes
+  - conda update conda
+  - python -m pip install --upgrade coverage setuptools numpy
+  - python -m pip install .
+
+test_script:
+  - python -c "import sys; print(sys.version)"
+  - cd Tests
+  - cp biosql.ini.appveyor biosql.ini
+  - coverage run run_tests.py --offline
+  - coverage xml
+  - cd ..
+
+after_test:
+  - conda install -c conda-forge codecov
+  - codecov --file Tests/coverage.xml -X pycov -X gcov

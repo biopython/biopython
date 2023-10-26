@@ -3,9 +3,9 @@
 # as part of this package.
 #
 
-"""Code for working with NMR data
+"""Code for working with NMR data.
 
-This directory currently contains contributions from
+This directory currently contains contributions from:
+ - Bob Bussell <rgb2003@med.cornell.edu> -- NOEtools and xpktools
 
-Bob Bussell <rgb2003@med.cornell.edu> -- NOEtools and xpktools
 """
