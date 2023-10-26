@@ -1657,8 +1657,10 @@ class HmmscanCases(unittest.TestCase):
     def test_30_hmmscan_011(self):
         """Parsing hmmscan 3.0 (text_30_hmmscan_011)."""
         hmmer_file = get_file("text_30_hmmscan_011.out")
-        qresults = list(parse(hmmer_file, FMT))
-        assert qresults
+        # Test getting program name when preamble contains full path and whitespace
+        for qresult in parse(hmmer_file, FMT):
+            assert qresult.program == "hmmscan"
+
 
 class HmmersearchCases(unittest.TestCase):
     """Test hmmsearch output."""
