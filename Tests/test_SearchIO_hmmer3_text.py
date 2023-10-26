@@ -1654,6 +1654,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(0, hit.domain_obs_num)
         self.assertEqual(0, len(hit))
 
+    def test_30_hmmscan_011(self):
+        """Parsing hmmscan 3.0 (text_30_hmmscan_011)."""
+        hmmer_file = get_file("text_30_hmmscan_011.out")
+        qresults = list(parse(hmmer_file, FMT))
+        assert qresults
 
 class HmmersearchCases(unittest.TestCase):
     """Test hmmsearch output."""
