@@ -17,7 +17,7 @@ __all__ = ("Hmmer3TextParser", "Hmmer3TextIndexer")
 
 # precompile regex patterns for faster processing
 # regex for program name capture
-_RE_PROGRAM = re.compile(r"^# .*(hmm\w+) :: .*$")
+_RE_PROGRAM = re.compile(r"^# .*?(\w?hmm\w+) :: .*$")
 # regex for version string capture
 _RE_VERSION = re.compile(r"# \w+ ([\w+\.]+) .*; http.*$")
 # regex for option string capture
