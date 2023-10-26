@@ -5,44 +5,76 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""CoordinateMapper -- map between genomic, cds, and protein coordinates
-Examples:
-AB026906.1:g.7872G>T
-AB026906.1:c.274G>T
-BA...:p.Asp92Tyr
+r"""CoordinateMapper -- map between genomic, cds, and protein coordinates.
+
+Examples::
+    AB026906.1:g.7872G>T
+    AB026906.1:c.274G>T
+    BA...:p.Asp92Tyr
 
 All refer to congruent variants. A coordinate mapper is needed to
 translate between at least these three coordinate frames.  The mapper
-should deal with specialized syntax for splicing and UTR (e.g., 88+1,
-89-2, -14, *46). In addition, care should be taken to ensure consistent 0-
+should deal with specialized syntax for splicing and UTR (e.g., `88+1`,
+`89-2`, `-14`, `*46`). In addition, care should be taken to ensure consistent 0-
 or 1-based numbering (0 internally, as with Python/BioPython and
 Perl/BioPerl).
 
-g   -----------00000000000-----1111111----------22222222222*222-----
-               s0        e0    s1    e1         s2            e2
-               \         \     |     |          /             /
-                +--+      +--+ |     | +-------+     +-------+
-                    \         \|     |/             /
-c                   00000000000111111122222222222*222
-                              c0     c1             c2
-                    aaabbbcccdddeeefffggghhhiiijj*kkk
-p                     A  B  C  D  E  F  G  H  I  J  K
-                      p0 p1 p2 ...                  pn
+.. code-block::
+
+    g   -----------00000000000-----1111111----------22222222222*222-----
+                   s0        e0    s1    e1         s2            e2
+                   \         \     |     |          /             /
+                    +--+      +--+ |     | +-------+     +-------+
+                        \         \|     |/             /
+    c                   00000000000111111122222222222*222
+                                  c0     c1             c2
+                        aaabbbcccdddeeefffggghhhiiijj*kkk
+    p                     A  B  C  D  E  F  G  H  I  J  K
+                          p0 p1 p2 ...                  pn
 
 """
 
-from __future__ import print_function
 from functools import wraps
 from math import floor
+import typing
 import warnings
 
-from Bio._py3k import range
 from Bio import BiopythonParserWarning
 from Bio.SeqFeature import FeatureLocation
 from Bio.SeqUtils.Mapper import GenomePosition, CDSPosition, ProteinPosition
-from Bio.SeqUtils.Mapper.MapPositions import CDSPositionError, \
-        ProteinPositionError
+from Bio.SeqUtils.Mapper.MapPositions import CDSPositionError, ProteinPositionError
 from Bio.SeqUtils.Mapper import MapPositions  # for decorator
+
+
+def pos_factory(pos_type: str) -> typing.Callable:
+    """
+    Convert string or int pos to appropriate Position object.
+
+    Parameters
+    ----------
+    pos_type : str
+        Position type (Genome, CDS, Protein)
+    """
+
+    def wrapper(fn):
+        @wraps(fn)
+        def make_pos(self, pos, dialect=None):
+            # retrieve Position object
+            _obj = getattr(MapPositions, pos_type + "Position")
+            # if pos is not already Position object, make it one
+            if not isinstance(pos, _obj):
+                # no dialect: use default constructor
+                if dialect is None:
+                    pos = _obj(pos)
+                # use dialect alternate constructor
+                else:
+                    pos = _obj.from_dialect(dialect, pos)
+            # call function with new pos
+            return fn(self, pos, dialect)
+
+        return make_pos
+
+    return wrapper
 
 
 class CoordinateMapper(object):
@@ -72,58 +104,34 @@ class CoordinateMapper(object):
         SeqFeature.FeatureLocation
         """
         # Try as SeqRecord
-        if hasattr(seq, 'features'):
+        if hasattr(seq, "features"):
             # generator
-            cdsf = next(f for f in seq.features if f.type == 'CDS')
+            cdsf = next(f for f in seq.features if f.type == "CDS")
             return cdsf.location
         # Try as SeqFeature
-        elif hasattr(seq, 'location'):
-            if seq.type != 'CDS':
+        elif hasattr(seq, "location"):
+            if seq.type != "CDS":
                 # FIXME should this be a fatal error?
-                warnings.warn("Provided SeqFeature should be CDS",
-                              BiopythonParserWarning)
+                warnings.warn(
+                    "Provided SeqFeature should be CDS", BiopythonParserWarning
+                )
             return seq.location
         # Try as list of pairs
         return sum([FeatureLocation(s, e) for s, e in seq])
 
     @property  # read-only
     def exons(self):
+        """Get exons."""
         return self._exons
 
     @property  # read-only
     def exon_list(self):
+        """Get list of exons."""
         return list(self.exons)
-
-    def pos_factory(pos_type):
-        """
-        Convert string or int pos to appropriate Position object
-
-        Parameters
-        ----------
-        pos_type : str
-            Position type (Genome, CDS, Protein)
-        """
-        def wrapper(fn):
-            @wraps(fn)
-            def make_pos(self, pos, dialect=None):
-                # retrieve Position object
-                _obj = getattr(MapPositions, pos_type + "Position")
-                # if pos is not already Position object, make it one
-                if not isinstance(pos, _obj):
-                    # no dialect: use default constructor
-                    if dialect is None:
-                        pos = _obj(pos)
-                    # use dialect alternate constructor
-                    else:
-                        pos = _obj.from_dialect(dialect, pos)
-                # call function with new pos
-                return fn(self, pos, dialect)
-            return make_pos
-        return wrapper
 
     @pos_factory("Genome")
     def g2c(self, gpos, dialect=None):
-        """Convert integer from genomic to CDS coordinates
+        """Convert integer from genomic to CDS coordinates.
 
         Parameters
         ----------
@@ -147,10 +155,10 @@ class CoordinateMapper(object):
             return CDSPosition(_simple_g2c(gpos))
         # before CDS
         if gpos < self.exons.start:
-            return CDSPosition(fmts['post-CDS'].format(offset=gpos - self.exons.start))
+            return CDSPosition(fmts["post-CDS"].format(offset=gpos - self.exons.start))
         # after CDS
         if gpos >= self.exons.end:
-            return CDSPosition(fmts['pre-CDS'].format(offset=gpos - self.exons.end + 1))
+            return CDSPosition(fmts["pre-CDS"].format(offset=gpos - self.exons.end + 1))
         # intron
         # set start of first intron
         prev_end = self.exons.parts[0].end
@@ -172,10 +180,9 @@ class CoordinateMapper(object):
                 offset = gpos - prev_end + 1
                 assert offset > 0
             assert self.check_intron(anchor, offset)
-            return CDSPosition(fmts['intron'].format(pos=anchor,
-                                                     offset=offset))
+            return CDSPosition(fmts["intron"].format(pos=anchor, offset=offset))
 
-        assert False  # function should return for every integer
+        raise AssertionError  # function should return for every integer
 
     # TODO verify that values of offset are sane
     def check_intron(self, anchor, offset):
@@ -198,18 +205,22 @@ class CoordinateMapper(object):
             if anchor == start:
                 if offset > 0:
                     raise CDSPositionError(
-                "Invalid intron: offset from exon start must be negative.")
+                        "Invalid intron: offset from exon start must be negative."
+                    )
                 return True
             end = int(self.g2c(exon.end - 1))
             if anchor == end:
                 if offset < 0:
                     raise CDSPositionError(
-                "Invalid intron: offset from exon end must be positive.")
+                        "Invalid intron: offset from exon end must be positive."
+                    )
                 return True
         raise CDSPositionError(
-            "Invalid intron: anchor must be start or end of an exon.")
+            "Invalid intron: anchor must be start or end of an exon."
+        )
 
     def get_strand(self, gpos):
+        """Get strand."""
         for exon in self.exons.parts:
             if gpos in exon:
                 return exon.strand
@@ -217,7 +228,7 @@ class CoordinateMapper(object):
 
     @pos_factory("CDS")
     def c2g(self, cpos, dialect=None):
-        """Convert from CDS to genomic coordinates
+        """Convert from CDS to genomic coordinates.
 
         Parameters
         ----------
@@ -244,11 +255,11 @@ class CoordinateMapper(object):
             if self.check_intron(cpos.anchor, offset):
                 return GenomePosition(g_anchor + offset)
 
-        assert False  # all positions should be one of the 4 types
+        raise AssertionError  # all positions should be one of the 4 types
 
     @pos_factory("CDS")
     def c2p(self, cpos, dialect=None):
-        """Convert from CDS to protein coordinates
+        """Convert from CDS to protein coordinates.
 
         Parameters
         ----------
@@ -264,13 +275,12 @@ class CoordinateMapper(object):
         try:
             cpos = int(cpos)
         except TypeError:
-            raise CDSPositionError("'%s' does not correspond to a protein"
-                                   % repr(cpos))
+            raise CDSPositionError("'%s' does not correspond to a protein" % repr(cpos))
         return ProteinPosition(int(cpos / 3.0))
 
     @pos_factory("Genome")
     def g2p(self, gpos, dialect=None):
-        """Convert integer from genomic to protein coordinates
+        """Convert integer from genomic to protein coordinates.
 
         Parameters
         ----------
@@ -287,7 +297,7 @@ class CoordinateMapper(object):
 
     @pos_factory("Protein")
     def p2c(self, ppos, dialect=None):
-        """Convert integer from protein coordinate to CDS closed range
+        """Convert integer from protein coordinate to CDS closed range.
 
         Parameters
         ----------
@@ -315,7 +325,7 @@ class CoordinateMapper(object):
 
     @pos_factory("Protein")
     def p2g(self, ppos, dialect=None):
-        """Convert integer from protein to genomic coordinates
+        """Convert integer from protein to genomic coordinates.
 
         Parameters
         ----------
@@ -331,13 +341,14 @@ class CoordinateMapper(object):
         return tuple(self.c2g(x) for x in self.p2c(ppos))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # The following exons are from AB026906.1.
     # test case: g.7872 -> c.274 -> p.92
     # N.B. These are python counting coordinates (0-based)
     exons = [(5808, 5860), (6757, 6874), (7767, 7912), (13709, 13785)]
 
     def test_list(g_range):
+        """Test a list."""
         cm = CoordinateMapper(exons)
         for g1 in g_range:
             print(g1, end=" ")
@@ -349,7 +360,7 @@ if __name__ == '__main__':
                 c2 = cm.p2c(p1)[0]
             else:
                 c2 = c1
-            print(' | ', c2, end=" ")
+            print(" | ", c2, end=" ")
             g2 = cm.c2g(c2)
             print(g2)
 
@@ -357,10 +368,16 @@ if __name__ == '__main__':
         print(cm.p2g(92))
 
     def test_simple():
+        """Simple test."""
         from Bio.SeqFeature import SeqFeature
-        location = sum([FeatureLocation(2, 4, +1),
-                        FeatureLocation(8, 11, +1),
-                        FeatureLocation(16, 18, +1)])
+
+        location = sum(
+            [
+                FeatureLocation(2, 4, +1),
+                FeatureLocation(8, 11, +1),
+                FeatureLocation(16, 18, +1),
+            ]
+        )
         simple_exons = SeqFeature(location, type="CDS")
         cm = CoordinateMapper(simple_exons)
         print(cm.exons)
@@ -377,11 +394,24 @@ if __name__ == '__main__':
         print()
 
     r1 = (7870, 7871, 7872, 7873, 7874)
-    r2 = (5807, 5808, 5809,
-          6871, 6872, 6873, 6874, 6875,
-          7766, 7767, 7768, 7769,
-          13784, 13785, 13786)
+    r2 = (
+        5807,
+        5808,
+        5809,
+        6871,
+        6872,
+        6873,
+        6874,
+        6875,
+        7766,
+        7767,
+        7768,
+        7769,
+        13784,
+        13785,
+        13786,
+    )
     test_list(r1)
-    #test_list(r2)
+    # test_list(r2)
     print()
     test_simple()

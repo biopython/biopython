@@ -7,12 +7,20 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Coordinate mapper for transformation of positions between genomic,
-CDS, and protein coordinates.
+"""Coordinate mapper for transformation of positions.
+
+Transforms between genomic, CDS, and protein coordinates.
 Includes methods for converting locations to and from HGVS conventions.
 Genbank locations can be parsed with SeqIO.
 """
 
-from .MapPositions import MapPosition, \
-        GenomePosition, CDSPosition, ProteinPosition
-from .CoordinateMapper import CoordinateMapper
+__all__ = [
+    "MapPosition",
+    "GenomePosition",
+    "CDSPosition",
+    "ProteinPosition",
+    "CoordinateMapper",
+]
+
+from .MapPositions import MapPosition, GenomePosition, CDSPosition, ProteinPosition
+from ._CoordinateMapper import CoordinateMapper
