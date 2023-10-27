@@ -3331,6 +3331,8 @@ class Alignment:
             step1, step2 = steps.sum(1)
             if step1 == step2:
                 step = 1  # nucleotide-nucleotide or protein-protein alignment
+            elif step1 == -step2:
+                step = 1  # nucleotide-nucleotide alignment on reverse strand
             elif step2 == 3 * step1:
                 step = 3  # protein-nucleotide alignment
             else:
@@ -3339,7 +3341,7 @@ class Alignment:
                 factor = step
             elif factor != step:
                 raise ValueError("inconsistent step sizes in alignments")
-        steps = (self.coordinates[:, 1:] - self.coordinates[:, :-1]).max(0).clip(0)
+        steps = abs(self.coordinates[:, 1:] - self.coordinates[:, :-1]).max(0).clip(0)
         coordinates = np.empty((2, len(steps) + 1), int)
         coordinates[0, 0] = 0
         coordinates[0, 1:] = factor * np.cumsum(steps)
