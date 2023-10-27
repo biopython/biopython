@@ -1657,9 +1657,31 @@ class HmmscanCases(unittest.TestCase):
     def test_30_hmmscan_011(self):
         """Parsing hmmscan 3.0 (text_30_hmmscan_011)."""
         hmmer_file = get_file("text_30_hmmscan_011.out")
+        qresults = list(parse(hmmer_file, FMT))
+        assert len(qresults) == 2
+
+        result = qresults[0]
+        hit = result[-1]
+        assert len(result) == 29
+        assert hit.hsps[0].bitscore == 22.4
+
+        result = qresults[1]
+        hit = result[-1]
+        assert len(result) == 29
+        assert hit.hsps[0].bitscore == 20.8
+
         # Test getting program name when preamble contains full path and whitespace
-        for qresult in parse(hmmer_file, FMT):
-            assert qresult.program == "hmmscan"
+        expected_db_target = (
+            "C:\\msys64\\scr\\byerly\\builds\\NB\\20231025 _\\internal\\lib\\"
+            "site-packages\\anarci\\dat\\HMMs\\ALL.hmm"
+        )
+        for idx, qresult in enumerate(qresults):
+            assert qresult.program == "hmmscan", (
+                "Expected program 'hmmscan' for item at index "
+                f"{idx}, found {qresult.program}"
+            )
+            # hmm db path also contains space
+            assert qresult.target == expected_db_target
 
 
 class HmmersearchCases(unittest.TestCase):
