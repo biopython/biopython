@@ -16,6 +16,10 @@ The latest news is at the top of this file.
 This release of Biopython supports Python 3.8, 3.9, 3.10, 3.11 and 3.12. It
 has also been tested on PyPy3.8 v7.8.16.
 
+HMMER results with the full path to the hmmer executable in the banner are
+now parsed correctly. This should help Windows users and users with python
+installations in non-default locations.
+
 We now have basic type hint annotations in various modules including ``Seq``,
 ``SeqRecord``, and ``SeqIO``. This should help anyone using an editor or IDE
 with type-aware autocomplete, or in conjunction with mypy as a pre-commit
@@ -79,6 +83,7 @@ possible, especially the following contributors:
 - Arpan Sahoo (first contribution)
 - Benedict Carling (first contribution)
 - Cam McMenamie (first contribution)
+- Jacob Byerly (first contribution)
 - João Rodrigues
 - Joe Greener
 - Michael R. Crusoe
