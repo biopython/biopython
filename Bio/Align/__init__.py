@@ -3324,6 +3324,7 @@ class Alignment:
     def mapall(self, alignments):
         """Map each of the alignments to self, and return the mapped alignment."""
         factor = None
+        alignments = list(alignments)
         for alignment in alignments:
             steps = np.diff(alignment.coordinates, 1)
             aligned = sum(steps != 0, 0) > 1
