@@ -8,15 +8,20 @@
 
 from functools import wraps
 import unittest
+import warnings
 
-from Bio.SeqFeature import FeatureLocation, SeqFeature
-from Bio.SeqRecord import SeqRecord
-from Bio.SeqUtils.Mapper import CoordinateMapper, CDSPosition
-from Bio.SeqUtils.Mapper.MapPositions import (
-    CDSPositionError,
-    GenomePositionError,
-    ProteinPositionError,
-)
+from Bio import BiopythonExperimentalWarning
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
+    from Bio.SeqFeature import FeatureLocation, SeqFeature
+    from Bio.SeqRecord import SeqRecord
+    from Bio.SeqUtils.Mapper import CoordinateMapper, CDSPosition
+    from Bio.SeqUtils.Mapper.MapPositions import (
+        CDSPositionError,
+        GenomePositionError,
+        ProteinPositionError,
+    )
 
 
 # Test data

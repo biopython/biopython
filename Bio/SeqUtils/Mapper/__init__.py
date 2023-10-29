@@ -22,5 +22,15 @@ __all__ = [
     "CoordinateMapper",
 ]
 
+import warnings
+
+from Bio import BiopythonExperimentalWarning
+
 from .MapPositions import MapPosition, GenomePosition, CDSPosition, ProteinPosition
 from ._CoordinateMapper import CoordinateMapper
+
+warnings.warn(
+    "Bio.SeqUtils.Mapper is an experimental module which may undergo "
+    "significant changes prior to its future official release.",
+    BiopythonExperimentalWarning,
+)
