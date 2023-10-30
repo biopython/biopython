@@ -455,7 +455,6 @@ class Array(np.ndarray):
 
 def read(handle, dtype=float):
     """Parse the file and return an Array object."""
-
     try:
         fp = open(handle)
     except TypeError:
