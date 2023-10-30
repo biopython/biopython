@@ -1826,4 +1826,59 @@ where the score of the \verb+rna1+-\verb+pro1+ alignment is equal to the number 
 \subsection{Generating a multiple sequence alignment of codon sequences}
 \label{sec:msa_codons}
 
+Suppose we have a third related amino acid sequence and its associated nucleotide sequence:
+%cont-doctest
+\begin{minted}{pycon}
+>>> aa3 = Seq("MGTALLLLLAALCAAGGALE")
+>>> pro3 = SeqRecord(aa3, id="pro3")
+>>> nuc3 = Seq("ATGGGAACCGCGCTGCTTTTGCTACTGGCCGCGCTCTGCGCCGCAGGTGGGGCCCTGGAGGA")
+>>> rna3 = SeqRecord(nuc3, id="rna3")
+>>> nuc3.translate() == aa3
+True
+\end{minted}
+As above, we use the \verb+CodonAligner+ to align the nucleotide sequence to the amino acid sequence:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments3 = aligner.align(pro3, rna3)
+>>> len(alignments3)
+1
+>>> alignment3 = next(alignments3)
+>>> print(alignment3)
+pro3              0 M  G  T  A  L  L  L  L  L  A  A  L  C  A  A  G  G  A  L  E  
+rna3              0 ATGGGAACCGCGCTGCTTTTGCTACTGGCCGCGCTCTGCGCCGCAGGTGGGGCCCTGGAG
+<BLANKLINE>
+pro3             20 
+rna3             60 
+<BLANKLINE>
+\end{minted}
 
+The three amino acid sequences can be aligned to each other, for example using ClustalW. Here, we create the alignment by hand:
+%cont-doctest
+\begin{minted}{pycon}
+>>> import numpy as np
+>>> from Bio.Align import Alignment
+>>> sequences = [pro1, pro2, pro3]
+>>> protein_alignment = Alignment(sequences,
+...                               coordinates=np.array([[ 0,  4,  7, 23],
+...                                                     [ 0,  4,  7, 23],
+...                                                     [ 0,  4,  4, 20]]))
+>>> print(protein_alignment)
+pro1              0 SGTARTKLLLLLAALCAAGGALE 23
+pro2              0 SGTSRTKRLLLLAALGAAGGALE 23
+pro3              0 MGTA---LLLLLAALCAAGGALE 20
+<BLANKLINE>
+\end{minted}
+Now we can use the \verb+mapall+ method on the protein alignment, with the nucleotide-to-protein pairwise alignments as the argument, to obtain the corresponding codon alignment:
+%cont-doctest
+\begin{minted}{pycon}
+>>> codon_alignment = protein_alignment.mapall([alignment1, alignment2, alignment3])
+>>> print(codon_alignment)
+rna1              0 TCAGGGACTGCGAGAACCAAGCTA 24
+rna2              0 TCAGGGACTTCGAGAACCAAGCGC 24
+rna3              0 ATGGGAACCGCG---------CTG 15
+<BLANKLINE>
+rna1             24 CTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG 69
+rna2             23 CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG 68
+rna3             15 CTTTTGCTACTGGCCGCGCTCTGCGCCGCAGGTGGGGCCCTGGAG 60
+<BLANKLINE>
+\end{minted}
