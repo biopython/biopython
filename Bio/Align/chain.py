@@ -106,37 +106,162 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         qGap = 0
         tGap = 0
         for tEnd, qEnd in coordinates[:, 1:].transpose():
-            if tStart == tEnd:
-                if qGap > 0:
+            if step == 0 and tGap == 0 and qGap == 0:
+                if tStart == tEnd:
+                    qGap = qEnd - qStart
+                    qStart = qEnd
+                elif qStart == qEnd:
+                    tGap = tEnd - tStart
+                    tStart = tEnd
+                else:
+                    tStep = tEnd - tStart
+                    qStep = qEnd - qStart
+                    if tStep != qStep:
+                        raise ValueError(
+                            f"Expected equal step size in target and query (found {tStep} and {qStep})"
+                        )
+                    step = tStep
+                    tStart = tEnd
+                    qStart = qEnd
+            elif step == 0 and tGap == 0 and qGap > 0:
+                if tStart == tEnd:
+                    line = f"{step}\t{tGap}\t{qGap}"
+                    lines.append(line)
+                    qGap = qEnd - qStart
+                    qStart = qEnd
+                elif qStart == qEnd:
+                    tGap = tEnd - tStart
+                    line = f"{step}\t{tGap}\t{qGap}"
+                    lines.append(line)
+                    tGap = 0
+                    qGap = 0
+                    tStart = tEnd
+                else:
+                    tStep = tEnd - tStart
+                    qStep = qEnd - qStart
+                    if tStep != qStep:
+                        raise ValueError(
+                            f"Expected equal step size in target and query (found {tStep} and {qStep})"
+                        )
+                    step = tStep
                     line = f"{step}\t{tGap}\t{qGap}"
                     lines.append(line)
                     step = 0
                     tGap = 0
-                qGap = qEnd - qStart
-                qStart = qEnd
-            elif qStart == qEnd:
-                if tGap > 0:
-                    line = f"{step}\t{tGap}\t{qGap}"
-                    lines.append(line)
-                    step = 0
                     qGap = 0
-                tGap = tEnd - tStart
-                tStart = tEnd
-            else:
-                tStep = tEnd - tStart
-                qStep = qEnd - qStart
-                if tStep != qStep:
-                    raise ValueError(
-                        f"Expected equal step size in target and query (found {tStep} and {qStep})"
-                    )
-                if step > 0:
+                    tStart = tEnd
+                    qStart = qEnd
+            elif step == 0 and tGap > 0 and qGap == 0:
+                if tStart == tEnd:
+                    qGap = qEnd - qStart
                     line = f"{step}\t{tGap}\t{qGap}"
                     lines.append(line)
                     tGap = 0
                     qGap = 0
-                step = tStep
-                tStart = tEnd
-                qStart = qEnd
+                    qStart = qEnd
+                elif qStart == qEnd:
+                    line = f"{step}\t{tGap}\t{qGap}"
+                    lines.append(line)
+                    tGap = tEnd - tStart
+                    tStart = tEnd
+                else:
+                    tStep = tEnd - tStart
+                    qStep = qEnd - qStart
+                    if tStep != qStep:
+                        raise ValueError(
+                            f"Expected equal step size in target and query (found {tStep} and {qStep})"
+                        )
+                    step = tStep
+                    line = f"{step}\t{tGap}\t{qGap}"
+                    lines.append(line)
+                    step = 0
+                    tGap = 0
+                    qGap = 0
+                    tStart = tEnd
+                    qStart = qEnd
+            elif step == 0 and tGap > 0 and qGap > 0:
+                raise RuntimeError("never get here")
+            elif step > 0 and tGap == 0 and qGap == 0:
+                if tStart == tEnd:
+                    qGap = qEnd - qStart
+                    tGap = 0
+                    qStart = qEnd
+                elif qStart == qEnd:
+                    tGap = tEnd - tStart
+                    qGap = 0
+                    tStart = tEnd
+                else:
+                    line = f"{step}\t{tGap}\t{qGap}"
+                    lines.append(line)
+                    tStep = tEnd - tStart
+                    qStep = qEnd - qStart
+                    if tStep != qStep:
+                        raise ValueError(
+                            f"Expected equal step size in target and query (found {tStep} and {qStep})"
+                        )
+                    step = tStep
+                    tGap = 0
+                    qGap = 0
+                    tStart = tEnd
+                    qStart = qEnd
+            elif step > 0 and tGap == 0 and qGap > 0:
+                if tStart == tEnd:
+                    line = f"{step}\t{tGap}\t{qGap}"
+                    lines.append(line)
+                    step = 0
+                    qGap = qEnd - qStart
+                    qStart = qEnd
+                elif qStart == qEnd:
+                    tGap = tEnd - tStart
+                    line = f"{step}\t{tGap}\t{qGap}"
+                    lines.append(line)
+                    step = 0
+                    tGap = 0
+                    qGap = 0
+                    tStart = tEnd
+                else:
+                    line = f"{step}\t{tGap}\t{qGap}"
+                    lines.append(line)
+                    tStep = tEnd - tStart
+                    qStep = qEnd - qStart
+                    if tStep != qStep:
+                        raise ValueError(
+                            f"Expected equal step size in target and query (found {tStep} and {qStep})"
+                        )
+                    step = tStep
+                    tGap = 0
+                    qGap = 0
+                    tStart = tEnd
+                    qStart = qEnd
+            elif step > 0 and tGap > 0 and qGap == 0:
+                if tStart == tEnd:
+                    qGap = qEnd - qStart
+                    line = f"{step}\t{tGap}\t{qGap}"
+                    lines.append(line)
+                    step = 0
+                    tGap = 0
+                    qGap = 0
+                    qStart = qEnd
+                elif qStart == qEnd:
+                    line = f"{step}\t{tGap}\t{qGap}"
+                    lines.append(line)
+                    step = 0
+                    tGap = tEnd - tStart
+                    tStart = tEnd
+                else:
+                    line = f"{step}\t{tGap}\t{qGap}"
+                    lines.append(line)
+                    tStep = tEnd - tStart
+                    qStep = qEnd - qStart
+                    if tStep != qStep:
+                        raise ValueError(
+                            f"Expected equal step size in target and query (found {tStep} and {qStep})"
+                        )
+                    step = tStep
+                    tGap = 0
+                    qGap = 0
+                    tStart = tEnd
+                    qStart = qEnd
         if tGap > 0 or qGap > 0:
             line = f"0\t{tGap}\t{qGap}"
             lines.append(line)
