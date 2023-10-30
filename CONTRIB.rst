@@ -152,6 +152,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
 - Jacob Beal <https://github.com/jakebeal>
+- Jacob Byerly <https://github.com/byerlyj>
 - Jakub Lipinski <https://github.com/jakublipinski>
 - James Baker <https://github.com/JamesABaker>
 - James Casbon <https://github.com/jamescasbon>
