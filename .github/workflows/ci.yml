@@ -31,7 +31,7 @@ jobs:
         fileOutput: ' '
 
     # Cache CI packages
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       id: cache-precommit
       with:
         path: ~/.cache/pre-commit
@@ -73,7 +73,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       id: cache-pip
       with:
         path: ${{ env.pythonLocation }}
@@ -182,7 +182,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     # Retrieve cache to speed things up
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       id: cache-pip
       with:
         path: ${{ env.pythonLocation }}
@@ -339,7 +339,7 @@ jobs:
       with:
         python-version: 3.9
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       id: cache-pip
       with:
         path: ${{ env.pythonLocation }}
