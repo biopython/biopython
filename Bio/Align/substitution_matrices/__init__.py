@@ -455,17 +455,15 @@ class Array(np.ndarray):
 
 def read(handle, dtype=float):
     """Parse the file and return an Array object."""
+
     try:
         fp = open(handle)
-        lines = fp.readlines()
     except TypeError:
         fp = handle
-        try:
-            lines = fp.readlines()
-        except Exception as e:
-            raise e from None
-        finally:
-            fp.close()
+
+    with fp:
+        lines = fp.readlines()
+
     header = []
     for i, line in enumerate(lines):
         if not line.startswith("#"):
