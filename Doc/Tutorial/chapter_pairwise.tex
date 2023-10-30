@@ -462,7 +462,7 @@ A & A &  match score \\
 For convenience, \verb+PairwiseAligner+ objects have additional attributes that refer to a number of these values collectively, as shown (hierarchically) in Table~\ref{table:align-meta-attributes}.
 
 \begin{table}
-\caption{Meta-attributes of \verb+PairwiseAligner+ objects.}
+\caption{Meta-attributes of PairwiseAligner objects.}
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Meta-attribute} & \textbf{Attributes it maps to} \\
@@ -1697,6 +1697,7 @@ Integer sequences can also be aligned using a substitution matrix, in this case 
 \end{minted}
 
 \section{Codon alignments}
+\label{sec:codon_alignments}
 
 The \verb+CodonAligner+ class in the \verb+Bio.Align+ module implements a specialized aligner for aligning a nucleotide sequence to the amino acid sequence it encodes. Such alignments are non-trivial if frameshifts occur during translation.
 
@@ -1724,7 +1725,7 @@ Codon aligner with parameters
 The \verb+wildcard+, \verb+match_score+, and \verb+mismatch_score+ parameters are defined in the same was as for the \verb+PairwiseAligner+ class described above (see Section~\ref{sec:pairwise-aligner}). The values specified by the \verb+frameshift_minus_two_score+, \verb+frameshift_minus_one_score+, \verb+frameshift_plus_one_score+, and \verb+frameshift_plus_two_score+ parameters are added to the alignment score whenever a -2, -1, +1, or +2 frame shift, respectively, occurs in the alignment. By default, the frame shift scores are set to -3.0.
 Similar to the \verb+PairwiseAligner+ class (Table\label{table:align-meta-attributes}), the \verb+CodonAligner+ class defines additional attributes that refer to a number of these values collectively, as shown in Table~\ref{table:codonalign-meta-attributes}.
 \begin{table}
-\caption{Meta-attributes of \verb+CodonAligner+ objects.}
+\caption{Meta-attributes of CodonAligner objects.}
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Meta-attribute} & \textbf{Attributes it maps to} \\
@@ -1733,7 +1734,8 @@ Similar to the \verb+PairwiseAligner+ class (Table\label{table:align-meta-attrib
 \verb+frameshift_plus_score+ & \verb+frameshift_plus_two_score+, \verb+frameshift_plus_one_score+ \\
 \verb+frameshift_two_score+ & \verb+frameshift_minus_two_score+, \verb+frameshift_plus_two_score+ \\
 \verb+frameshift_one_score+ & \verb+frameshift_minus_one_score+, \verb+frameshift_plus_one_score+ \\
-\verb+frameshift_score+ & \verb+frameshift_minus_two_score+, \verb+frameshift_minus_one_score+, \verb+frameshift_plus_one_score+, \verb+frameshift_plus_two_score+ \\
+\verb+frameshift_score+ & \verb+frameshift_minus_two_score+, \verb+frameshift_minus_one_score+, \\
+ & \verb+frameshift_plus_one_score+, \verb+frameshift_plus_two_score+ \\
 \hline
 \end{tabular}
 \label{table:codonalign-meta-attributes}
@@ -1822,3 +1824,6 @@ where the score of the \verb+rna1+-\verb+pro1+ alignment is equal to the number 
 \end{minted}
 
 \subsection{Generating a multiple sequence alignment of codon sequences}
+\label{sec:msa_codons}
+
+

@@ -158,5 +158,6 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
         stream = StringIO()
         stream.write(data)
         stream.seek(0)
-        alignment = maf.AlignmentIterator._create_alignment(self, stream)
+        line = next(stream)
+        alignment = maf.AlignmentIterator._create_alignment(self, line, stream)
         return alignment
