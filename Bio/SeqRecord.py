@@ -224,6 +224,13 @@ class SeqRecord:
             raise TypeError("name argument should be a string")
         if not isinstance(description, str):
             raise TypeError("description argument should be a string")
+        
+        # If seq is a string, other operations (such as saving from AlignIO)
+        # will fail. Either convert to Seq or raise an error
+        # see "Bio/SeqIO/Interfaces.py:_get_seq_string" for example.
+        if isinstance(seq, str):
+            seq = Seq(seq)
+
         self._seq = seq
         self.id = id
         self.name = name
