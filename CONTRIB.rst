@@ -345,3 +345,4 @@ please open an issue on GitHub or mention it on the mailing list.
 - Zaid Ur-Rehman <https://github.com/zaidurrehman>
 - Zheng Ruan <https://github.com/zruan>
 - Farhan Khan <https://github.com/BabaYaga1221>
+- Ernesto Rodriguez <https://github.com/netogallo>

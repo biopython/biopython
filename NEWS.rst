@@ -94,6 +94,7 @@ possible, especially the following contributors:
 - Thomas Holder
 - Vladislav Kuznetsov (first contribution)
 - Yiming Qu (first contribution)
+- Ernesto Rodriguez (first contribution)
 
 12 February 2023: Biopython 1.81
 ================================
