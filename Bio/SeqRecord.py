@@ -30,7 +30,7 @@ from typing import (
 )
 
 from Bio import StreamModeError
-from Bio.Seq import UndefinedSequenceError
+from Bio.Seq import Seq, UndefinedSequenceError
 
 if TYPE_CHECKING:
     from Bio.Seq import Seq, MutableSeq
