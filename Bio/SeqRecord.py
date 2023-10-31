@@ -33,7 +33,7 @@ from Bio import StreamModeError
 from Bio.Seq import Seq, UndefinedSequenceError
 
 if TYPE_CHECKING:
-    from Bio.Seq import Seq, MutableSeq
+    from Bio.Seq import MutableSeq
     from Bio.SeqFeature import SeqFeature
 
 _NO_SEQRECORD_COMPARISON = "SeqRecord comparison is deliberately not implemented. Explicitly compare the attributes of interest."
