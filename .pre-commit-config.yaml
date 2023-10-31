@@ -90,6 +90,13 @@ repos:
         entry: '(?i)(doi:|dx\.doi\.org|http://doi\.org)'
         language: pygrep
         files: \.(rst|tex)$
+    -   id: contrib-sort
+        name: Contributor sorting
+        description: Confirms alphabetical sorting of the CONTRIB.rst file
+        entry: bash -c 'for n in $(seq 0 "$#"); do grep "^- " "${!n}" | LC_ALL=C sort -u -c -f; done'
+        #entry: 'grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f'
+        language: system
+        files: ^CONTRIB\.rst$
 ci:
     # Settings for the https://pre-commit.ci/ continuous integration service
     autofix_prs: true
