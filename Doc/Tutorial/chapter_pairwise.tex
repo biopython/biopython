@@ -1827,7 +1827,7 @@ where the score of the \verb+rna1+-\verb+pro1+ alignment is equal to the number 
 \label{sec:msa_codons}
 
 Suppose we have a third related amino acid sequence and its associated nucleotide sequence:
-% skip %cont-doctest
+%cont-doctest
 \begin{minted}{pycon}
 >>> aa3 = Seq("MGTALLLLLAALCAAGGALE")
 >>> pro3 = SeqRecord(aa3, id="pro3")
@@ -1837,7 +1837,7 @@ Suppose we have a third related amino acid sequence and its associated nucleotid
 True
 \end{minted}
 As above, we use the \verb+CodonAligner+ to align the nucleotide sequence to the amino acid sequence:
-% skip %cont-doctest
+%cont-doctest
 \begin{minted}{pycon}
 >>> alignments3 = aligner.align(pro3, rna3)
 >>> len(alignments3)
@@ -1853,7 +1853,7 @@ rna3             60
 \end{minted}
 
 The three amino acid sequences can be aligned to each other, for example using ClustalW. Here, we create the alignment by hand:
-% skip %cont-doctest
+%cont-doctest
 \begin{minted}{pycon}
 >>> import numpy as np
 >>> from Bio.Align import Alignment
