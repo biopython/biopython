@@ -71,19 +71,19 @@ class ProbconsCommandline(AbstractCommandline):
             _Option(
                 ["-c", "c", "--consistency", "consistency"],
                 "Use 0 <= REPS <= 5 (default: 2) passes of consistency transformation",
-                checker_function=lambda x: x in range(0, 6),
+                checker_function=lambda x: x in range(6),
                 equate=False,
             ),
             _Option(
                 ["-ir", "--iterative-refinement", "iterative-refinement", "ir"],
                 "Use 0 <= REPS <= 1000 (default: 100) passes of iterative-refinement",
-                checker_function=lambda x: x in range(0, 1001),
+                checker_function=lambda x: x in range(1001),
                 equate=False,
             ),
             _Option(
                 ["-pre", "--pre-training", "pre-training", "pre"],
                 "Use 0 <= REPS <= 20 (default: 0) rounds of pretraining",
-                checker_function=lambda x: x in range(0, 21),
+                checker_function=lambda x: x in range(21),
                 equate=False,
             ),
             _Switch(["-pairs", "pairs"], "Generate all-pairs pairwise alignments"),

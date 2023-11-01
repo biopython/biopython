@@ -56,7 +56,7 @@ class _AbstractHSExposure(AbstractPropertyMap):
         hse_list = []
         hse_keys = []
         for pp1 in ppl:
-            for i in range(0, len(pp1)):
+            for i in range(len(pp1)):
                 if i == 0:
                     r1 = None
                 else:
@@ -76,7 +76,7 @@ class _AbstractHSExposure(AbstractPropertyMap):
                 hse_d = 0
                 ca2 = r2["CA"].get_vector()
                 for pp2 in ppl:
-                    for j in range(0, len(pp2)):
+                    for j in range(len(pp2)):
                         if pp1 is pp2 and abs(i - j) <= offset:
                             # neighboring residues in the chain are ignored
                             continue
@@ -299,14 +299,14 @@ class ExposureCN(AbstractPropertyMap):
         fs_list = []
         fs_keys = []
         for pp1 in ppl:
-            for i in range(0, len(pp1)):
+            for i in range(len(pp1)):
                 fs = 0
                 r1 = pp1[i]
                 if not is_aa(r1) or not r1.has_id("CA"):
                     continue
                 ca1 = r1["CA"]
                 for pp2 in ppl:
-                    for j in range(0, len(pp2)):
+                    for j in range(len(pp2)):
                         if pp1 is pp2 and abs(i - j) <= offset:
                             continue
                         r2 = pp2[j]

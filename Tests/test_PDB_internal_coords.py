@@ -392,7 +392,7 @@ class Rebuild(unittest.TestCase):
                         r"\s+(-?\d+\.\d+)\s+\]", aline
                     )
                     if ms:
-                        for i in range(0, 3):
+                        for i in range(3):
                             self.assertAlmostEqual(float(ms[i]), target[i], places=0)
                     else:
                         self.fail("transform not found")
@@ -438,7 +438,7 @@ class Rebuild(unittest.TestCase):
                     target = [15.33630, 110.17513, 15.13861]
                     ms = re.findall(r"\s+(-?\d+\.\d+)", aline)
                     if ms:
-                        for i in range(0, 3):
+                        for i in range(3):
                             self.assertAlmostEqual(float(ms[i]), target[i], places=0)
                     else:
                         self.fail("Cbeta internal coords not found")

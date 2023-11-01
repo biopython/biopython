@@ -206,7 +206,7 @@ class DialignCommandline(AbstractCommandline):
                 r"Maximum number of '\*' characters indicating degree "
                 "of local similarity among sequences. By default, no "
                 "stars are used but numbers between 0 and 9, instead.",
-                checker_function=lambda x: x in range(0, 10),
+                checker_function=lambda x: x in range(10),
                 equate=False,
             ),
             _Switch(["-stdo", "stdo"], "Results written to standard output."),

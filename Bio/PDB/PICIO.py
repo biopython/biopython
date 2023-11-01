@@ -372,7 +372,7 @@ def read_PIC(
                 prnum = pr.akl[0][resPos]
                 paKey = [
                     AtomKey(prnum, None, prname, primAngle[x], None, None)
-                    for x in range(0, 2)
+                    for x in range(2)
                 ]
                 paKey.add(
                     [

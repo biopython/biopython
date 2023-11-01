@@ -756,7 +756,7 @@ class MafIndex:
             real_pos = rec_start
 
             # loop over the alignment to fill split_by_position
-            for gapped_pos in range(0, rec_length):
+            for gapped_pos in range(rec_length):
                 for seqrec in multiseq:
                     # keep track of this position's value for the target seqname
                     if seqrec.id == self._target_seqname:

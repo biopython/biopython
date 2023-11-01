@@ -73,7 +73,7 @@ d3_to_index = {}
 dindex_to_3 = {}
 
 # Create some lookup tables
-for i in range(0, 20):
+for i in range(20):
     n1 = aa1[i]
     n3 = aa3[i]
     d1_to_index[n1] = i
@@ -246,7 +246,7 @@ class Polypeptide(list):
         """Return the list of phi/psi dihedral angles."""
         ppl = []
         lng = len(self)
-        for i in range(0, lng):
+        for i in range(lng):
             res = self[i]
             try:
                 n = res["N"].get_vector()
@@ -291,7 +291,7 @@ class Polypeptide(list):
         """List of tau torsions angles for all 4 consecutive Calpha atoms."""
         ca_list = self.get_ca_list()
         tau_list = []
-        for i in range(0, len(ca_list) - 3):
+        for i in range(len(ca_list) - 3):
             atom_list = (ca_list[i], ca_list[i + 1], ca_list[i + 2], ca_list[i + 3])
             v1, v2, v3, v4 = (a.get_vector() for a in atom_list)
             tau = calc_dihedral(v1, v2, v3, v4)
@@ -305,7 +305,7 @@ class Polypeptide(list):
         """List of theta angles for all 3 consecutive Calpha atoms."""
         theta_list = []
         ca_list = self.get_ca_list()
-        for i in range(0, len(ca_list) - 2):
+        for i in range(len(ca_list) - 2):
             atom_list = (ca_list[i], ca_list[i + 1], ca_list[i + 2])
             v1, v2, v3 = (a.get_vector() for a in atom_list)
             theta = calc_angle(v1, v2, v3)
