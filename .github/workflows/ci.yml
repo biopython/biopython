@@ -21,24 +21,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     # Check for changes only on files changed by the PR/push
-    - uses: trilom/file-changes-action@v1.2.4
-      with:
-        # Creates 'files.txt' by default
-        output: ' '
-        fileOutput: ' '
+    - uses: tj-actions/changed-files@v40
+      id: changed-files
 
     # Cache CI packages
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       id: cache-precommit
       with:
         path: ~/.cache/pre-commit
         key: ${{ runner.os }}-precommit-hooks-v2-${{ hashFiles('**/.pre-commit-config.yaml') }}
 
     - name: Setup Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.9
 
@@ -53,7 +50,7 @@ jobs:
 
     - name: Run style checking via pre-commit
       run: |
-        pre-commit run --files $( cat ${HOME}/files.txt )
+        pre-commit run --files ${{ steps.changed-files.outputs.all_changed_files }}
 
   # Cache pip & python dependencies for Linux runner
   # since it is used in most actions.
@@ -66,14 +63,14 @@ jobs:
         python-version: ["3.8", "3.10", "3.11"]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Setup Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       id: cache-pip
       with:
         path: ${{ env.pythonLocation }}
@@ -96,10 +93,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.9
 
@@ -121,9 +118,9 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -174,15 +171,15 @@ jobs:
     - run: |
         sudo /etc/init.d/mysql start
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
 
     # Retrieve cache to speed things up
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       id: cache-pip
       with:
         path: ${{ env.pythonLocation }}
@@ -218,9 +215,9 @@ jobs:
         python-version: ["3.8", "3.12"]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -256,9 +253,9 @@ jobs:
         python-version: ["3.8", "3.10", "3.12"]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -292,9 +289,9 @@ jobs:
         python-version: [pypy-3.8]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -332,14 +329,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.9
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       id: cache-pip
       with:
         path: ${{ env.pythonLocation }}
@@ -372,6 +369,6 @@ jobs:
     needs: [build_wheels]
     runs-on: ubuntu-latest
     steps:
-      - uses: geekyeggo/delete-artifact@v1
+      - uses: geekyeggo/delete-artifact@v2
         with:
           name: biopython_wheels

@@ -31,6 +31,10 @@ the ``Bio.codonalign`` module, but uses the standard ``Alignment`` class, and
 does not rely on regular expression searching to align a nucleotide sequence to
 an amino acid sequence.
 
+HMMER results with the full path to the hmmer executable in the banner are
+now parsed correctly. This should help Windows users and users with python
+installations in non-default locations.
+
 We now have basic type hint annotations in various modules including ``Seq``,
 ``SeqRecord``, and ``SeqIO``. This should help anyone using an editor or IDE
 with type-aware autocomplete, or in conjunction with mypy as a pre-commit
@@ -94,6 +98,7 @@ possible, especially the following contributors:
 - Arpan Sahoo (first contribution)
 - Benedict Carling (first contribution)
 - Cam McMenamie (first contribution)
+- Jacob Byerly (first contribution)
 - João Rodrigues
 - Joe Greener
 - Michael R. Crusoe

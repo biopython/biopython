@@ -2921,10 +2921,10 @@ class Alignment:
             starts = ends
             ends = self.coordinates[:, k]
             for row, start, end, rc in zip(a, starts, ends, rcs):
-                if rc == False and start < end:  # noqa: 712
+                if rc == False and start < end:  # noqa: E712
                     j = i + end - start
                     row[i:j] = range(start, end)
-                elif rc == True and start > end:  # noqa: 712
+                elif rc == True and start > end:  # noqa: E712
                     j = i + start - end
                     row[i:j] = range(start - 1, end - 1, -1)
             i = j
@@ -3003,10 +3003,10 @@ class Alignment:
             starts = self.coordinates[:, k]
             ends = self.coordinates[:, k + 1]
             for row, start, end, rc in zip(a, starts, ends, rcs):
-                if rc == False and start < end:  # noqa: 712
+                if rc == False and start < end:  # noqa: E712
                     j = i + end - start
                     row[start:end] = range(i, j)
-                elif rc == True and start > end:  # noqa: 712
+                elif rc == True and start > end:  # noqa: E712
                     j = i + start - end
                     if end > 0:
                         row[start - 1 : end - 1 : -1] = range(i, j)

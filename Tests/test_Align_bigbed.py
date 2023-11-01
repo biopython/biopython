@@ -2293,7 +2293,7 @@ table bed
             self.assertEqual(alignment.itemRgb, "0,255,0", msg=msg)
         with self.assertRaises(StopIteration) as cm:
             next(alignments)
-            self.fail(f"More than two alignments reported in {filename}")
+            self.fail("More than two alignments reported")
 
     def test_reading(self):
         """Test parsing alignments in file formats BED3 through BED12."""
