@@ -3335,7 +3335,7 @@ class TestAlign_mapall(unittest.TestCase):
         for old_assembly, new_assembly in assemblies:
             new_assembly_capitalized = new_assembly[0].upper() + new_assembly[1:]
             filename = f"{old_assembly}To{new_assembly_capitalized}.chain"
-            path = os.path.join("Align", filename)
+            path = os.path.join("Blat", filename)
             alignment = Align.read(path, "chain")
             alignments.append(alignment)
             filename = "%s.fa" % new_assembly
@@ -3351,7 +3351,7 @@ class TestAlign_mapall(unittest.TestCase):
             name = "%s.%s" % (new_assembly, chromosome)
             record = SeqRecord(seq, id=name)
             records.append(record)
-        path = os.path.join("Align", "panTro5.maf")
+        path = os.path.join("Blat", "panTro5.maf")
         alignment = Align.read(path, "maf")
         self.assertEqual(
             str(alignment),

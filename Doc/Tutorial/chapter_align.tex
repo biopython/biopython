@@ -771,7 +771,8 @@ This shows that nucleotide range 32:344 of expressed sequence tag DC525629 align
 Consider a multiple alignment of genomic sequences of chimpanzee, human, macaque, marmoset, mouse, and rat:
 %cont-doctest
 \begin{minted}{pycon}
->>> path = "../Align/panTro5.maf"
+>>> from Bio import Align
+>>> path = "panTro5.maf"
 >>> genome_alignment = Align.read(path, "maf")
 >>> for record in genome_alignment.sequences:
 ...     print(record.id, len(record.seq))
@@ -823,12 +824,12 @@ To lift over the genome assembly for each species, we read in the corresponding 
 %cont-doctest
 \begin{minted}{pycon}
 >>> paths = [
-...     "../Align/panTro5ToPanTro6.chain",
-...     "../Align/hg19ToHg38.chain",
-...     "../Align/rheMac8ToRheMac10.chain",
-...     "../Align/calJac3ToCalJac4.chain",
-...     "../Align/mm10ToMm39.chain",
-...     "../Align/rn6ToRn7.chain",
+...     "panTro5ToPanTro6.chain",
+...     "hg19ToHg38.chain",
+...     "rheMac8ToRheMac10.chain",
+...     "calJac3ToCalJac4.chain",
+...     "mm10ToMm39.chain",
+...     "rn6ToRn7.chain",
 ... ]
 >>> liftover_alignments = [Align.read(path, "chain") for path in paths]
 >>> for liftover_alignment in liftover_alignments:
