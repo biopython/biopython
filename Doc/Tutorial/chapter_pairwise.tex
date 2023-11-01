@@ -1813,7 +1813,7 @@ The alignment score is stored as an attribute on the \verb+alignments1+ and \ver
 20.0
 \end{minted}
 where the score of the \verb+rna1+-\verb+pro1+ alignment is equal to the number of aligned amino acids, and the score of the \verb+rna2+-\verb+pro2+ alignment is 1 less due to the penalty for the frame shift. To calculate the alignment score without calculating the alignment itself, the \verb+score+ method can be used:
-%cont-doctest
+% skip %cont-doctest
 \begin{minted}{pycon}
 >>> score = aligner.score(pro1, rna1)
 >>> print(score)
@@ -1827,7 +1827,7 @@ where the score of the \verb+rna1+-\verb+pro1+ alignment is equal to the number 
 \label{sec:msa_codons}
 
 Suppose we have a third related amino acid sequence and its associated nucleotide sequence:
-%cont-doctest
+% skip %cont-doctest
 \begin{minted}{pycon}
 >>> aa3 = Seq("MGTALLLLLAALCAAGGALE")
 >>> pro3 = SeqRecord(aa3, id="pro3")
@@ -1837,7 +1837,7 @@ Suppose we have a third related amino acid sequence and its associated nucleotid
 True
 \end{minted}
 As above, we use the \verb+CodonAligner+ to align the nucleotide sequence to the amino acid sequence:
-%cont-doctest
+% skip %cont-doctest
 \begin{minted}{pycon}
 >>> alignments3 = aligner.align(pro3, rna3)
 >>> len(alignments3)
@@ -1853,7 +1853,7 @@ rna3             60
 \end{minted}
 
 The three amino acid sequences can be aligned to each other, for example using ClustalW. Here, we create the alignment by hand:
-%cont-doctest
+% skip %cont-doctest
 \begin{minted}{pycon}
 >>> import numpy as np
 >>> from Bio.Align import Alignment
@@ -1868,7 +1868,7 @@ pro3              0 MGTA---LLLLLAALCAAGGALE 20
 <BLANKLINE>
 \end{minted}
 Now we can use the \verb+mapall+ method on the protein alignment, with the nucleotide-to-protein pairwise alignments as the argument, to obtain the corresponding codon alignment:
-%cont-doctest
+% skip %cont-doctest
 \begin{minted}{pycon}
 >>> codon_alignment = protein_alignment.mapall([alignment1, alignment2, alignment3])
 >>> print(codon_alignment)
@@ -1899,7 +1899,7 @@ The most important application of a codon alignment is to estimate the number of
 \end{itemize}
 \end{itemize}
 The \verb+calculate_dN_dS+ method can be applied to a pairwise codon alignment. In general, the different calculation methods will result in slightly different estimates for dN and dS:
-%cont-doctest
+% skip %cont-doctest
 \begin{minted}{pycon}
 >>> from Bio.Align import analysis
 >>> pairwise_codon_alignment = codon_alignment[:2]
@@ -1927,7 +1927,7 @@ rna2             23 CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG 68
 \end{minted}
 
 For a multiple alignment of codon sequences, you can calculate a matrix of dN and dS values:
-%cont-doctest
+% skip %cont-doctest
 \begin{minted}{pycon}
 >>> dN, dS = analysis.calculate_dn_ds_matrix(codon_alignment, method="NG86")
 >>> print(dN)
@@ -1945,7 +1945,7 @@ The objects \verb+dN+ and \verb+dS+ returned by \verb+calculate_dn_ds_matrix+ ar
 This function only takes \verb+codon_table+ as an optional argument.
 
 From these two sequences, you can create a dN tree and a dS tree using \verb+Bio.Phylo.TreeConstruction+:
-%cont-doctest
+% skip %cont-doctest
 \begin{minted}{pycon}
 >>> from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 >>> dn_constructor = DistanceTreeConstructor()
