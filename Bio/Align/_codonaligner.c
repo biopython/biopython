@@ -954,8 +954,8 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
     paths = (PathGenerator*)PyType_GenericAlloc(&PathGenerator_Type, 0);
     if (!paths) goto exit;
 
-    paths->nA = nA;
-    paths->nB = nB;
+    paths->nA = (int)nA;
+    paths->nB = (int)nB;
     paths->M = NULL;
     paths->length = 0;
 
@@ -980,7 +980,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
     M = paths->M;
     for (i = 1; i <= nA; i++) {
         cA = sA[i-1];
-        for (j = nB; j > 0; j--) {
+        for (j = (int)nB; j > 0; j--) {
             score = -DBL_MAX;
             trace = 0;
             if (j >= 3) {
