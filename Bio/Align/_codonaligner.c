@@ -835,7 +835,7 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
 
     row = PyMem_Malloc((nB+1)*sizeof(double));
     if (!row) goto exit;
-    bzero(row, (nB+1)*sizeof(double));
+    memset(row, '\0', (nB+1)*sizeof(double));
 
     for (i = 1; i <= nA; i++) {
         cA = sA[i-1];
@@ -971,11 +971,11 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
         }
         M[i][0].trace = 0;
     }
-    bzero(M[0], (nB+1)*sizeof(Trace));
+    memset(M[0], '\0', (nB+1)*sizeof(Trace));
 
     row = PyMem_Malloc((nB+1)*sizeof(double));
     if (!row) goto exit;
-    bzero(row, (nB+1)*sizeof(double));
+    memset(row, '\0', (nB+1)*sizeof(double));
 
     M = paths->M;
     for (i = 1; i <= nA; i++) {
