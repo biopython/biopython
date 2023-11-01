@@ -16,7 +16,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Data import CodonTable
 from Bio.Align import Alignment
 from Bio.Align import CodonAligner
-from Bio.Align.analysis import cal_dn_ds, get_dn_ds_matrix, mktest
+from Bio.Align.analysis import cal_dn_ds, cal_dn_ds_matrix, mktest
 
 
 class TestBasic(unittest.TestCase):
@@ -8306,7 +8306,7 @@ gi|6478867|gb|M37394.2|RATEGFR      AGAGTACCTGCGGGTGGCACCGCCAAGCAGTGAGTTTAGTGGAG
             0.843182957978177,
             0,
         ]
-        dn, ds = get_dn_ds_matrix(alignment)
+        dn, ds = cal_dn_ds_matrix(alignment)
         dn_list = []
         for i in dn.matrix:
             dn_list.extend(i)
@@ -8364,7 +8364,7 @@ gi|6478867|gb|M37394.2|RATEGFR      AGAGTACCTGCGGGTGGCACCGCCAAGCAGTGAGTTTAGTGGAG
             0.6509203399899367,
             0,
         ]
-        dn, ds = get_dn_ds_matrix(
+        dn, ds = cal_dn_ds_matrix(
             alignment, method="LWL85", codon_table=CodonTable.unambiguous_dna_by_id[3]
         )
         dn_list = []
@@ -8389,7 +8389,7 @@ if numpy:
     class Test_MK(unittest.TestCase):
         def test_mk(self):
             aligner = CodonAligner()
-            nucleotide_records = SeqIO.index("codonalign/drosophilla.fasta", "fasta")
+            nucleotide_records = SeqIO.index("codonalign/drosophila.fasta", "fasta")
             protein_alignment = Align.read("codonalign/adh.aln", "clustal")
             self.assertEqual(len(protein_alignment.sequences), 27)
             codon_alignments = []

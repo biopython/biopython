@@ -17,7 +17,7 @@ from Bio.Align import Alignment
 from Bio.Data import CodonTable
 
 
-def cal_dn_ds(alignment, method="NG86", codon_table=None, k=1, cfreq=None):
+def calculate_dn_ds(alignment, method="NG86", codon_table=None, k=1, cfreq=None):
     """Calculate dN and dS of the given two sequences.
 
     Available methods:
@@ -994,15 +994,15 @@ def _likelihood_func(t, k, w, pi, codon_cnt, codons, codon_table):
     return likelihood
 
 
-def get_dn_ds_matrix(alignment, method="NG86", codon_table=None):
-    """Available methods include NG86, LWL85, YN00 and ML.
+def calculate_dn_ds_matrix(alignment, method="NG86", codon_table=None):
+    """Calculate dN and dS pairwise for the multiple alignment, and return as matrices.
 
     Argument:
      - method       - Available methods include NG86, LWL85, YN00 and ML.
      - codon_table  - Codon table to use for forward translation.
 
     """
-    from Bio.Phylo.TreeConstruction import DistanceMatrix as DM
+    from Bio.Phylo.TreeConstruction import DistanceMatrix
 
     if codon_table is None:
         codon_table = CodonTable.generic_by_id[1]
@@ -1019,48 +1019,16 @@ def get_dn_ds_matrix(alignment, method="NG86", codon_table=None):
             pairwise_sequences = [sequences[i], sequences[j]]
             pairwise_coordinates = coordinates[(i, j), :]
             pairwise_alignment = Alignment(pairwise_sequences, pairwise_coordinates)
-            dn, ds = cal_dn_ds(
+            dn, ds = calculate_dn_ds(
                 pairwise_alignment, method=method, codon_table=codon_table
             )
             dn_matrix[i].append(dn)
             ds_matrix[i].append(ds)
         dn_matrix[i].append(0.0)
         ds_matrix[i].append(0.0)
-    dn_dm = DM(names, matrix=dn_matrix)
-    ds_dm = DM(names, matrix=ds_matrix)
+    dn_dm = DistanceMatrix(names, matrix=dn_matrix)
+    ds_dm = DistanceMatrix(names, matrix=ds_matrix)
     return dn_dm, ds_dm
-
-
-def get_dn_ds_tree(
-    alignment, dn_ds_method="NG86", tree_method="UPGMA", codon_table=None
-):
-    """Construct dn tree and ds tree.
-
-    Argument:
-     - dn_ds_method - Available methods include NG86, LWL85, YN00 and ML.
-     - tree_method  - Available methods include UPGMA and NJ.
-
-    """
-    from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
-
-    if codon_table is None:
-        codon_table = CodonTable.generic_by_id[1]
-    dn_dm, ds_dm = alignment.get_dn_ds_matrix(
-        method=dn_ds_method, codon_table=codon_table
-    )
-    dn_constructor = DistanceTreeConstructor()
-    ds_constructor = DistanceTreeConstructor()
-    if tree_method == "UPGMA":
-        dn_tree = dn_constructor.upgma(dn_dm)
-        ds_tree = ds_constructor.upgma(ds_dm)
-    elif tree_method == "NJ":
-        dn_tree = dn_constructor.nj(dn_dm)
-        ds_tree = ds_constructor.nj(ds_dm)
-    else:
-        raise ValueError(
-            f"Unknown tree method ({tree_method}). Only NJ and UPGMA are accepted."
-        )
-    return dn_tree, ds_tree
 
 
 def mktest(alignment, species=None, codon_table=None):
