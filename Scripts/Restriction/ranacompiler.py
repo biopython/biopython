@@ -395,7 +395,7 @@ class TypeCompiler:
             n += 1
 
 
-start = '''#!/usr/bin/env python
+start = f'''#!/usr/bin/env python
 #      Copyright (C) 2004. Frederic Sohm.
 #
 # This code is part of the Biopython distribution and governed by its
@@ -409,12 +409,10 @@ start = '''#!/usr/bin/env python
 
 """Restriction Analysis Libraries.
 
-Used REBASE emboss files version {} ({}).
+Used REBASE emboss files version {release_number} ({time.gmtime().tm_year}).
 """
 
-'''.format(
-    release_number, time.gmtime().tm_year
-)
+'''
 
 
 class DictionaryBuilder:
