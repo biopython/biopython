@@ -1835,7 +1835,7 @@ class Nexus:
         with open(filename, "w") as fh:
             fh.write("%d %d\n" % (self.ntax, self.nchar))
             for taxon in self.taxlabels:
-                fh.write(f"{safename(taxon)} {str(self.matrix[taxon])}\n")
+                fh.write(f"{safename(taxon)} {self.matrix[taxon]!s}\n")
         return filename
 
     def constant(self, matrix=None, delete=(), exclude=()):

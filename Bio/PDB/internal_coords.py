@@ -1843,8 +1843,7 @@ class IC_Chain:
                 if i == 1:
                     cma = "," if started else ""
                     fp.write(
-                        f"{cma}\n       // {str(ric.residue.id)} {ric.lc}"
-                        " sidechain\n"
+                        f"{cma}\n       // {ric.residue.id!s} {ric.lc} sidechain\n"
                     )
                 started = False
                 for dk, d in sorted(ric.dihedra.items()):
@@ -2703,7 +2702,7 @@ class IC_Residue:
     def pretty_str(self) -> str:
         """Nice string for residue ID."""
         id = self.residue.id
-        return f"{self.residue.resname} {id[0]}{str(id[1])}{id[2]}"
+        return f"{self.residue.resname} {id[0]}{id[1]!s}{id[2]}"
 
     def _link_dihedra(self, verbose: bool = False) -> None:
         """Housekeeping after loading all residues and dihedra.
@@ -4187,8 +4186,8 @@ class Hedron(Edron):
     def __repr__(self) -> str:
         """Print string for Hedron object."""
         return (
-            f"3-{self.id} {self.re_class} {str(self.len12)} "
-            f"{str(self.angle)} {str(self.len23)}"
+            f"3-{self.id} {self.re_class} {self.len12!s} "
+            f"{self.angle!s} {self.len23!s}"
         )
 
     @property
@@ -4263,7 +4262,7 @@ class Hedron(Edron):
             Pair of atoms in this Hedron
         """
         if 2 > len(ak_tpl):
-            raise TypeError(f"Require exactly 2 AtomKeys: {str(ak_tpl)}")
+            raise TypeError(f"Require exactly 2 AtomKeys: {ak_tpl!s}")
         elif all(ak in self.atomkeys[:2] for ak in ak_tpl):
             self.cic.hedraL12[self.ndx] = newLength
         elif all(ak in self.atomkeys[1:] for ak in ak_tpl):
@@ -4341,7 +4340,7 @@ class Dihedron(Edron):
 
     def __repr__(self) -> str:
         """Print string for Dihedron object."""
-        return f"4-{str(self.id)} {self.re_class} {str(self.angle)} {str(self.ric)}"
+        return f"4-{self.id!s} {self.re_class} {self.angle!s} {self.ric!s}"
 
     @staticmethod
     def _get_hedron(ic_res: IC_Residue, id3: HKT) -> Optional[Hedron]:
