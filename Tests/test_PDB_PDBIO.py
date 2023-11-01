@@ -22,7 +22,6 @@ from Bio import BiopythonWarning
 from Bio.PDB import PDBParser, PDBIO, Select
 from Bio.PDB import Atom, Residue
 from Bio.PDB.PDBExceptions import (
-    PDBConstructionException,
     PDBConstructionWarning,
     PDBIOException,
 )

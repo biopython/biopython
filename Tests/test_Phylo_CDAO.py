@@ -12,7 +12,6 @@ import unittest
 from Bio import MissingExternalDependencyError
 
 import Bio.Phylo as bp
-from Bio.Phylo import CDAO
 
 try:
     from Bio.Phylo import CDAOIO

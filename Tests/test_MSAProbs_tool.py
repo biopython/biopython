@@ -9,7 +9,6 @@
 import os
 import sys
 import unittest
-from Bio import AlignIO
 from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from Bio.Align.Applications import MSAProbsCommandline

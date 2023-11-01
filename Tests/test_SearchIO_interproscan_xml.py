@@ -5,11 +5,8 @@
 """Tests for SearchIO InterproscanIO parsers."""
 
 import os
-import sys
 import unittest
-import warnings
 
-from Bio import BiopythonParserWarning
 from Bio.SearchIO import parse
 
 
