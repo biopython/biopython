@@ -21,7 +21,7 @@ for path in os.environ["PATH"].split(os.pathsep):
         for filename in os.listdir(path):
             if filename.startswith("Genepop"):
                 found = True
-    except os.error:
+    except OSError:
         pass  # Path doesn't exist - correct to pass
 if not found:
     raise MissingExternalDependencyError(
