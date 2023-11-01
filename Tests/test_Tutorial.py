@@ -174,8 +174,6 @@ def extract_doctests(latex_filename):
 class TutorialDocTestHolder:
     """Python doctests extracted from the Biopython Tutorial."""
 
-    pass
-
 
 def check_deps(dependencies):
     """Check 'lib:XXX' and 'internet' dependencies are met."""

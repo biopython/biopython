@@ -67,7 +67,6 @@ class MMCIFIO(StructureIO):
 
     def __init__(self):
         """Initialise."""
-        pass
 
     def set_dict(self, dic):
         """Set the mmCIF dictionary to be written out."""

@@ -22,13 +22,9 @@ from typing import Dict, List, Optional
 class ChainException(Exception):
     """Provision for the management of Chain exceptions."""
 
-    pass
-
 
 class NodeException(Exception):
     """Provision for the management of Node exceptions."""
-
-    pass
 
 
 class Chain:

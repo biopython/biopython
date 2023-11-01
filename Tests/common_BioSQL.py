@@ -204,7 +204,6 @@ def create_database():
                     # Seen this with PyPy 2.1 (and older) on Windows -
                     # which suggests an open handle still exists?
                     print(f"Could not remove {TESTDB!r}")
-                    pass
         # Now pick a new filename - just in case there is a stale handle
         # (which might be happening under Windows...)
         TESTDB = temp_db_filename()

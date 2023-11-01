@@ -64,8 +64,6 @@ DEFAULTNEXUS = (
 class NexusError(Exception):
     """Provision for the management of Nexus exceptions."""
 
-    pass
-
 
 class CharBuffer:
     """Helps reading NEXUS-words and characters from a buffer (semi-PRIVATE).
@@ -905,7 +903,6 @@ class Nexus:
         Thus, we ignore the taxlabels command to make handling of duplicate
         taxon names easier.
         """
-        pass
         # self.taxlabels = []
         # opts = CharBuffer(options)
         # while True:

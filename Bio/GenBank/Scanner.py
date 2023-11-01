@@ -399,7 +399,6 @@ class InsdcScanner:
 
         Used by the parse_records() and parse() methods.
         """
-        pass
 
     def _feed_header_lines(self, consumer, lines):
         """Handle the header lines (list of strings), passing data to the consumer (PRIVATE).
@@ -408,7 +407,6 @@ class InsdcScanner:
 
         Used by the parse_records() and parse() methods.
         """
-        pass
 
     @staticmethod
     def _feed_feature_table(consumer, feature_tuples):
@@ -433,7 +431,6 @@ class InsdcScanner:
 
         Used by the parse_records() and parse() methods.
         """
-        pass
 
     def feed(self, handle, consumer, do_features=True):
         """Feed a set of data into the consumer.

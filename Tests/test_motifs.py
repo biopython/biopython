@@ -4940,7 +4940,6 @@ class TestMEME(unittest.TestCase):
 
     def test_meme_parser_rna(self):
         """Test if Bio.motifs can parse MEME output files using RNA."""
-        pass
 
 
 class TestMAST(unittest.TestCase):
