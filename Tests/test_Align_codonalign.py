@@ -16,7 +16,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Data import CodonTable
 from Bio.Align import Alignment
 from Bio.Align import CodonAligner
-from Bio.Align.analysis import cal_dn_ds, cal_dn_ds_matrix, mktest
+from Bio.Align.analysis import calculate_dn_ds, calculate_dn_ds_matrix, mktest
 
 
 class TestBasic(unittest.TestCase):
@@ -8229,10 +8229,10 @@ gi|6478867|gb|M37394.2|RATEGFR      AGAGTACCTGCGGGTGGCACCGCCAAGCAGTGAGTTTAGTGGAG
         )
 
         pairwise_alignment = alignment[:2]
-        dN, dS = cal_dn_ds(pairwise_alignment, method="NG86")
+        dN, dS = calculate_dn_ds(pairwise_alignment, method="NG86")
         self.assertAlmostEqual(dN, 0.0209, places=4)
         self.assertAlmostEqual(dS, 0.0178, places=4)
-        dN, dS = cal_dn_ds(pairwise_alignment, method="LWL85")
+        dN, dS = calculate_dn_ds(pairwise_alignment, method="LWL85")
         self.assertAlmostEqual(dN, 0.0203, places=4)
         self.assertAlmostEqual(dS, 0.0164, places=4)
 
@@ -8245,7 +8245,7 @@ gi|6478867|gb|M37394.2|RATEGFR      AGAGTACCTGCGGGTGGCACCGCCAAGCAGTGAGTTTAGTGGAG
         # This should be present:
         from scipy.linalg import expm
 
-        dN, dS = cal_dn_ds(pairwise_alignment, method="YN00")
+        dN, dS = calculate_dn_ds(pairwise_alignment, method="YN00")
         self.assertAlmostEqual(dN, 0.0198, places=4)
         self.assertAlmostEqual(dS, 0.0222, places=4)
 
@@ -8253,7 +8253,7 @@ gi|6478867|gb|M37394.2|RATEGFR      AGAGTACCTGCGGGTGGCACCGCCAAGCAGTGAGTTTAGTGGAG
             # New in scipy v0.11
             from scipy.optimize import minimize
 
-            dN, dS = cal_dn_ds(pairwise_alignment, method="ML")
+            dN, dS = calculate_dn_ds(pairwise_alignment, method="ML")
             self.assertAlmostEqual(dN, 0.0194, places=4)
             self.assertAlmostEqual(dS, 0.0217, places=4)
         except ImportError:
@@ -8306,7 +8306,7 @@ gi|6478867|gb|M37394.2|RATEGFR      AGAGTACCTGCGGGTGGCACCGCCAAGCAGTGAGTTTAGTGGAG
             0.843182957978177,
             0,
         ]
-        dn, ds = cal_dn_ds_matrix(alignment)
+        dn, ds = calculate_dn_ds_matrix(alignment)
         dn_list = []
         for i in dn.matrix:
             dn_list.extend(i)
@@ -8364,7 +8364,7 @@ gi|6478867|gb|M37394.2|RATEGFR      AGAGTACCTGCGGGTGGCACCGCCAAGCAGTGAGTTTAGTGGAG
             0.6509203399899367,
             0,
         ]
-        dn, ds = cal_dn_ds_matrix(
+        dn, ds = calculate_dn_ds_matrix(
             alignment, method="LWL85", codon_table=CodonTable.unambiguous_dna_by_id[3]
         )
         dn_list = []
