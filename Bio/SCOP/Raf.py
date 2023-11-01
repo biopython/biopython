@@ -266,7 +266,7 @@ class SeqMap:
 
         resFound = {}
         for line in pdb_handle:
-            if line.startswith("ATOM  ") or line.startswith("HETATM"):
+            if line.startswith(("ATOM  ", "HETATM")):
                 chainid = line[21:22]
                 resid = line[22:27].strip()
                 key = (chainid, resid)
