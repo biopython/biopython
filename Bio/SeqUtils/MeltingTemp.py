@@ -532,7 +532,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
     Mon = Na + K + Tris / 2.0  # Note: all these values are millimolar
     mg = Mg * 1e-3  # Lowercase ions (mg, mon, dntps) are molar
     # Na equivalent according to von Ahsen et al. (2001):
-    if sum((K, Mg, Tris, dNTPs)) > 0 and not method == 7 and dNTPs < Mg:
+    if sum((K, Mg, Tris, dNTPs)) > 0 and method != 7 and dNTPs < Mg:
         # dNTPs bind Mg2+ strongly. If [dNTPs] is larger or equal than
         # [Mg2+], free Mg2+ is considered not to be relevant.
         Mon += 120 * math.sqrt(Mg - dNTPs)
