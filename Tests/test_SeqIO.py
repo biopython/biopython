@@ -5,7 +5,6 @@
 """Tests for SeqIO module."""
 import copy
 import gzip
-import sys
 import unittest
 import warnings
 

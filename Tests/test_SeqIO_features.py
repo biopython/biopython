@@ -9,7 +9,6 @@ and confirms they are consistent using our different parsers.
 """
 import os
 import unittest
-import warnings
 
 from io import StringIO
 

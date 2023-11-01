@@ -7,7 +7,6 @@
 
 """Tests for ClustalOmega tool."""
 
-import sys
 import os
 import unittest
 

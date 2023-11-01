@@ -4,7 +4,6 @@
 
 """Tests for seq module."""
 
-import array
 import copy
 import unittest
 import warnings

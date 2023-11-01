@@ -8,7 +8,6 @@
 
 """Tests for motifs module."""
 
-import os
 import tempfile
 import unittest
 import math
@@ -25,7 +24,6 @@ except ImportError:
 from Bio import BiopythonDeprecationWarning
 from Bio import motifs
 from Bio.Seq import Seq
-from Bio.Align import Alignment
 
 
 class TestBasic(unittest.TestCase):

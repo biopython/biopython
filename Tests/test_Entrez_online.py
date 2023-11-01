@@ -17,7 +17,6 @@ from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
 import doctest
-import os
 import sys
 import unittest
 

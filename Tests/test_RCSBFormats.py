@@ -26,7 +26,7 @@ except ImportError:
 
 from Bio.PDB.MMCIFParser import MMCIFParser
 from Bio.PDB import PDBParser
-from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 class CompareStructures(unittest.TestCase):
