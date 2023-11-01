@@ -645,7 +645,7 @@ def _copy_and_check(matrix, desired_shape):
 def _logsum(matrix):
     """Implement logsum for a matrix object (PRIVATE)."""
     if len(matrix.shape) > 1:
-        vec = np.reshape(matrix, (np.product(matrix.shape),))
+        vec = np.reshape(matrix, (np.prod(matrix.shape),))
     else:
         vec = matrix
     sum = LOG0
