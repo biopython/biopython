@@ -102,7 +102,7 @@ class xbb_translations:
         anti = self.reverse(comp)
         length = len(seq)
         frames = {}
-        for i in range(0, 3):
+        for i in range(3):
             frames[i + 1] = self.frame1(seq[i:], translation_table)
             frames[-(i + 1)] = self.reverse(self.frame1(anti[i:], translation_table))
 

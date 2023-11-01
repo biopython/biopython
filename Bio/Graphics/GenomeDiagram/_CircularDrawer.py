@@ -1680,7 +1680,7 @@ class CircularDrawer(AbstractDrawer):
             90 - (tailangle * 180 / pi),
             moveTo=True,
         )
-        for i in range(0, teeth):
+        for i in range(teeth):
             p.addArc(
                 self.xcenter,
                 self.ycenter,
@@ -1704,7 +1704,7 @@ class CircularDrawer(AbstractDrawer):
             90 - (tailangle * 180 / pi),
             reverse=True,
         )
-        for i in range(0, teeth):
+        for i in range(teeth):
             p.addArc(
                 self.xcenter,
                 self.ycenter,

@@ -126,7 +126,7 @@ class PhylipWriter(SequentialAlignmentWriter):
                     # write indent
                     handle.write(" " * id_width)
                 # Write five chunks of ten letters per line...
-                for chunk in range(0, 5):
+                for chunk in range(5):
                     i = block * 50 + chunk * 10
                     seq_segment = sequence[i : i + 10]
                     # TODO - Force any gaps to be '-' character?

@@ -1172,7 +1172,7 @@ class EmblWriter(_InsdcWriter):
         else:
             handle.write("SQ   \n")
 
-        for line_number in range(0, seq_len // self.LETTERS_PER_LINE):
+        for line_number in range(seq_len // self.LETTERS_PER_LINE):
             handle.write("    ")  # Just four, not five
             for block in range(self.BLOCKS_PER_LINE):
                 index = (

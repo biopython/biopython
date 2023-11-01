@@ -263,7 +263,7 @@ class Instances(list):
             """instances.search(sequence) has been deprecated. Please use sequence.search(instances) instead, where sequence is a Seq object.""",
             BiopythonDeprecationWarning,
         )
-        for pos in range(0, len(sequence) - self.length + 1):
+        for pos in range(len(sequence) - self.length + 1):
             for instance in self:
                 if instance == sequence[pos : pos + self.length]:
                     yield (pos, instance)

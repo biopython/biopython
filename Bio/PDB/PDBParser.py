@@ -119,7 +119,7 @@ class PDBParser:
         """Get the header of the PDB file, return the rest (PRIVATE)."""
         structure_builder = self.structure_builder
         i = 0
-        for i in range(0, len(header_coords_trailer)):
+        for i in range(len(header_coords_trailer)):
             structure_builder.set_line_counter(i + 1)
             line = header_coords_trailer[i]
             record_type = line[0:6]
@@ -158,7 +158,7 @@ class PDBParser:
         current_residue_id = None
         current_resname = None
 
-        for i in range(0, len(coords_trailer)):
+        for i in range(len(coords_trailer)):
             line = coords_trailer[i].rstrip("\n")
             record_type = line[0:6]
             global_line_counter = self.line_counter + local_line_counter + 1

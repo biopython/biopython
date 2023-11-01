@@ -580,7 +580,7 @@ class HiddenMarkovModel:
         # NOTE: My index numbers are one less than what is given in Durbin
         # et al, since we are indexing the sequence going from 0 to
         # (Length - 1) not 1 to Length, like in Durbin et al.
-        for i in range(0, len(sequence)):
+        for i in range(len(sequence)):
             # loop over all of the possible i-th states in the state path
             for cur_state in state_alphabet:
                 # e_{l}(x_{i})
