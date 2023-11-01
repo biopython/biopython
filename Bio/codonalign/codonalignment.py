@@ -398,7 +398,7 @@ def _dijkstra(graph, start, end):
     node = end
     distance = 0
     # While we are not arrived at the beginning
-    while not (node == start):
+    while node != start:
         if path.count(node) == 0:
             path.insert(0, node)  # Insert the predecessor of the current node
             node = P[node]  # The current node becomes its predecessor

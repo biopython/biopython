@@ -520,7 +520,7 @@ def read_PIC(
         try:
             for edron in ic_data_sidechains[ric.lc]:
                 if len(edron) > 3:  # dihedra only
-                    if all(not atm[0] == "H" for atm in edron):
+                    if all(atm[0] != "H" for atm in edron):
                         akl = [AtomKey(ric, atm) for atm in edron[0:4]]
                         chkLst.append(akl)
         except KeyError:
