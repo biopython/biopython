@@ -839,7 +839,7 @@ Aligner_score(Aligner* self, PyObject* args, PyObject* keywords)
 
     for (i = 1; i <= nA; i++) {
         cA = sA[i-1];
-        for (j = nB; j > 0; j--) {
+        for (j = (int)nB; j > 0; j--) {
             score = -DBL_MAX;
             if (j >= 3) {
                 div = (j - 3) / 3;
