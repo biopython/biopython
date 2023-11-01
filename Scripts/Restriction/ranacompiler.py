@@ -109,7 +109,7 @@ def read_enzyme_record(handle):
 
 def load_enzyme_ids(file) -> dict[str, int]:
     """Load enzyme identifiers from bairoch-format file."""
-    with open(file, "r") as in_file:
+    with open(file) as in_file:
         return {
             record["ID"]: int(record["AC"].removeprefix("RB").removesuffix(";"))
             for record in parse_enzyme_records(in_file)
