@@ -38,7 +38,7 @@ def run_psea(fname, verbose=False):
     base = last.split(".")[0]
     cmd = ["psea", fname]
 
-    p = subprocess.run(cmd, capture_output=True, universal_newlines=True)
+    p = subprocess.run(cmd, capture_output=True, text=True)
 
     if verbose:
         print(p.stdout)
