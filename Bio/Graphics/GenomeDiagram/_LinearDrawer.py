@@ -617,7 +617,9 @@ class LinearDrawer(AbstractDrawer):
             else:
                 x2 = self.xlim
             box = draw_box(
-                (x1, tbtm), (x2, ttop), colors.Color(0.96, 0.96, 0.96)  # Grey track bg
+                (x1, tbtm),
+                (x2, ttop),
+                colors.Color(0.96, 0.96, 0.96),  # Grey track bg
             )  # is just a box
             greytrack_bgs.append(box)
 
