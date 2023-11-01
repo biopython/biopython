@@ -216,9 +216,7 @@ class Hmmer3TextParser:
     def _create_hits(self, hit_attrs, qid, qdesc):
         """Parse a HMMER3 hsp block, beginning with the hsp table (PRIVATE)."""
         # read through until the beginning of the hsp block
-        self._read_until(
-            lambda line: line.startswith("Internal pipeline") or line.startswith(">>")
-        )
+        self._read_until(lambda line: line.startswith(("Internal pipeline", ">>")))
 
         # start parsing the hsp block
         hit_list = []
@@ -233,8 +231,9 @@ class Hmmer3TextParser:
 
             # read through the hsp table header and move one more line
             self._read_until(
-                lambda line: line.startswith(" ---   ------ ----- --------")
-                or line.startswith("   [No individual domains")
+                lambda line: line.startswith(
+                    (" ---   ------ ----- --------", "   [No individual domains")
+                )
             )
             self.line = read_forward(self.handle)
 

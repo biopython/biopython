@@ -318,7 +318,7 @@ class BlastXmlParser:
                 # 'Query_' marks the beginning of a BLAST+-generated ID,
                 # 'lcl|' marks the beginning of a BLAST legacy-generated ID
                 if not self._use_raw_query_ids and (
-                    query_id.startswith("Query_") or query_id.startswith("lcl|")
+                    query_id.startswith(("Query_", "lcl|"))
                 ):
                     # store the Blast-generated query ID
                     id_desc = query_desc.split(" ", 1)
@@ -498,7 +498,7 @@ class BlastXmlParser:
 
                 # adjust 'from' and 'to' coordinates to 0-based ones
                 if value is not None:
-                    if key.endswith("-from") or key.endswith("-to"):
+                    if key.endswith(("-from", "-to")):
                         # store coordinates for further processing
                         coords[val_info[0]] = caster(value)
                         continue
