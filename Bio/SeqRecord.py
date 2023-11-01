@@ -683,7 +683,7 @@ class SeqRecord:
             lines.append("Database cross-references: " + ", ".join(self.dbxrefs))
         lines.append(f"Number of features: {len(self.features)}")
         for a in self.annotations:
-            lines.append(f"/{a}={str(self.annotations[a])}")
+            lines.append(f"/{a}={self.annotations[a]!s}")
         if self.letter_annotations:
             lines.append(
                 "Per letter annotation for: " + ", ".join(self.letter_annotations)
