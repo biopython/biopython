@@ -1813,7 +1813,7 @@ The alignment score is stored as an attribute on the \verb+alignments1+ and \ver
 20.0
 \end{minted}
 where the score of the \verb+rna1+-\verb+pro1+ alignment is equal to the number of aligned amino acids, and the score of the \verb+rna2+-\verb+pro2+ alignment is 1 less due to the penalty for the frame shift. To calculate the alignment score without calculating the alignment itself, the \verb+score+ method can be used:
-% skip %cont-doctest
+%cont-doctest
 \begin{minted}{pycon}
 >>> score = aligner.score(pro1, rna1)
 >>> print(score)
