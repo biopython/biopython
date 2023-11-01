@@ -1919,6 +1919,7 @@ rna2             23 CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG 68
 >>> print(dN, dS)  # doctest: +ELLIPSIS
 0.068728... 0.207551...
 \end{minted}
+% skip the doctests for the methods that require on SciPy
 \begin{minted}{pycon}
 >>> dN, dS = analysis.calculate_dn_ds(pairwise_codon_alignment, method="YN00")
 >>> print(dN, dS)  # doctest: +ELLIPSIS
@@ -1929,7 +1930,7 @@ rna2             23 CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG 68
 \end{minted}
 
 For a multiple alignment of codon sequences, you can calculate a matrix of dN and dS values:
-% skip %cont-doctest
+%cont-doctest
 \begin{minted}{pycon}
 >>> dN, dS = analysis.calculate_dn_ds_matrix(codon_alignment, method="NG86")
 >>> print(dN)
@@ -1947,7 +1948,7 @@ The objects \verb+dN+ and \verb+dS+ returned by \verb+calculate_dn_ds_matrix+ ar
 This function only takes \verb+codon_table+ as an optional argument.
 
 From these two sequences, you can create a dN tree and a dS tree using \verb+Bio.Phylo.TreeConstruction+:
-% skip %cont-doctest
+%cont-doctest
 \begin{minted}{pycon}
 >>> from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 >>> dn_constructor = DistanceTreeConstructor()
