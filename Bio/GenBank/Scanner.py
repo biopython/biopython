@@ -1768,9 +1768,7 @@ class GenBankScanner(InsdcScanner):
                         data = line[self.GENBANK_INDENT :]
                         if line[0 : self.GENBANK_INDENT] == self.GENBANK_SPACER:
                             if self.STRUCTURED_COMMENT_START in data:
-                                regex = r"([^#]+){}$".format(
-                                    self.STRUCTURED_COMMENT_START
-                                )
+                                regex = rf"([^#]+){self.STRUCTURED_COMMENT_START}$"
                                 structured_comment_key = re.search(regex, data)
                                 if structured_comment_key is not None:
                                     structured_comment_key = (
@@ -1783,9 +1781,7 @@ class GenBankScanner(InsdcScanner):
                                 and self.STRUCTURED_COMMENT_DELIM in data
                             ):
                                 match = re.search(
-                                    r"(.+?)\s*{}\s*(.+)".format(
-                                        self.STRUCTURED_COMMENT_DELIM
-                                    ),
+                                    rf"(.+?)\s*{self.STRUCTURED_COMMENT_DELIM}\s*(.+)",
                                     data,
                                 )
                                 structured_comment_dict[structured_comment_key][
