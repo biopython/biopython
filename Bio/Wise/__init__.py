@@ -145,7 +145,6 @@ def all_pairs(singles):
 
 def main():
     """Provision for command line testing."""
-    pass
 
 
 def _test(*args, **keywds):

@@ -44,8 +44,6 @@ standard_rna_table = None
 class TranslationError(Exception):
     """Container for translation specific exceptions."""
 
-    pass
-
 
 class CodonTable:
     """A codon-table, or genetic code."""

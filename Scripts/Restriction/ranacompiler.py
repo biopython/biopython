@@ -140,8 +140,6 @@ def double_quote_repr(value):  # TODO similar not to produce long horizontal lis
 class OverhangError(ValueError):
     """Exception for dealing with overhang."""
 
-    pass
-
 
 def regex(site):
     """Construct a regular expression (string) from a DNA sequence.
@@ -327,7 +325,6 @@ class TypeCompiler:
 
     def __init__(self):
         """TypeCompiler() -> new TypeCompiler instance."""
-        pass
 
     def buildtype(self):
         """Build new types that will be needed for constructing the enzymes."""

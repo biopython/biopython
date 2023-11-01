@@ -163,8 +163,6 @@ _re_location_category = re.compile(
 class LocationParserError(ValueError):
     """Could not parse a feature location string."""
 
-    pass
-
 
 class SeqFeature:
     """Represent a Sequence Feature on an object.
@@ -2119,8 +2117,6 @@ class UncertainPosition(ExactPosition):
     This is used in UniProt, e.g. ?222 for uncertain position 222, or in the
     XML format explicitly marked as uncertain. Does not apply to GenBank/EMBL.
     """
-
-    pass
 
 
 class UnknownPosition(Position):

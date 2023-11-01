@@ -28,8 +28,6 @@ NODECOMMENT_END = "]"
 class TreeError(Exception):
     """Provision for the management of Tree exceptions."""
 
-    pass
-
 
 class NodeData:
     """Store tree-relevant data associated with nodes (e.g. branches or otus)."""

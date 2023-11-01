@@ -196,7 +196,6 @@ class StructureDecoder:
         :param experimnetal_methods: the list of experimental methods in the structure
 
         """
-        pass
 
     def set_bio_assembly_trans(
         self, bio_assembly_index, input_chain_indices, input_transform
@@ -208,11 +207,9 @@ class StructureDecoder:
         :param input_transform: the list of doubles for  the transform of this bioassmbly transform.
 
         """
-        pass
 
     def finalize_structure(self):
         """Any functions needed to cleanup the structure."""
-        pass
 
     def set_group_bond(self, atom_index_one, atom_index_two, bond_order):
         """Add bonds within a group.
@@ -222,7 +219,6 @@ class StructureDecoder:
         :param bond_order: the integer bond order
 
         """
-        pass
 
     def set_inter_group_bond(self, atom_index_one, atom_index_two, bond_order):
         """Add bonds between groups.
@@ -232,4 +228,3 @@ class StructureDecoder:
         :param bond_order: the bond order
 
         """
-        pass

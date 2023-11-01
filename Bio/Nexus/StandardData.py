@@ -13,8 +13,6 @@
 class NexusError(Exception):
     """Provision for the management of Nexus exceptions."""
 
-    pass
-
 
 class StandardData:
     """Create a StandardData iterable object.

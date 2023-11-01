@@ -53,8 +53,6 @@ class LowQualityBlastError(Exception):
     in this case.
     """
 
-    pass
-
 
 class ShortQueryBlastError(Exception):
     """Error caused by running a short query sequence through BLAST.
@@ -68,8 +66,6 @@ class ShortQueryBlastError(Exception):
 
     This exception is raised when that condition is detected.
     """
-
-    pass
 
 
 class _Scanner:

@@ -23,7 +23,6 @@ class xbb_translations:
 
     def __init__(self):
         """Initialize the class."""
-        pass
 
     def frame1(self, seq, translation_table=1):
         """Translate first reading frame."""
