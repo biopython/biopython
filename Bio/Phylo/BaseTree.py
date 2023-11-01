@@ -215,10 +215,7 @@ def _combine_args(first, *rest):
     # of cases where either style is more convenient, so let's support both
     # (for backward compatibility and consistency between methods).
     if hasattr(first, "__iter__") and not (
-        isinstance(first, TreeElement)
-        or isinstance(first, type)
-        or isinstance(first, str)
-        or isinstance(first, dict)
+        isinstance(first, (TreeElement, dict, str, type))
     ):
         # terminals is an iterable of targets
         if rest:

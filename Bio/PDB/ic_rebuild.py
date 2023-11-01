@@ -105,9 +105,7 @@ def report_IC(
     try:
         if "A" == entity.level:
             raise PDBException("No IC output at Atom level")
-        elif isinstance(entity, Residue) or isinstance(
-            entity, DisorderedResidue
-        ):  # "R" == entity.level:
+        elif isinstance(entity, (DisorderedResidue, Residue)):  # "R" == entity.level:
             if entity.internal_coord:
                 reportDict["res"] += 1
                 dlen = len(entity.internal_coord.dihedra)

@@ -176,14 +176,14 @@ class PrankCommandline(AbstractCommandline):
             _Option(
                 ["-matresize", "matresize"],
                 "Matrix resizing multiplier",
-                checker_function=lambda x: (isinstance(x, float) or isinstance(x, int)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             # -matinitsize=# [matrix initial size multiplier]
             # Doesn't specify type but Float and Int work
             _Option(
                 ["-matinitsize", "matinitsize"],
                 "Matrix initial size multiplier",
-                checker_function=lambda x: (isinstance(x, float) or isinstance(x, int)),
+                checker_function=lambda x: (isinstance(x, (float, int))),
             ),
             _Switch(["-longseq", "longseq"], "Save space in pairwise alignments"),
             _Switch(["-pwgenomic", "pwgenomic"], "Do pairwise alignment, no guidetree"),
