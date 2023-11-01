@@ -80,7 +80,7 @@ class Array(np.ndarray):
             return obj
         if alphabet is None:
             alphabet = string.ascii_uppercase
-        elif not (isinstance(alphabet, str) or isinstance(alphabet, tuple)):
+        elif not (isinstance(alphabet, (str, tuple))):
             raise ValueError("alphabet should be a string or a tuple")
         n = len(alphabet)
         if data is None:

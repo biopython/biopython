@@ -4676,7 +4676,7 @@ class AtomKey:
                     akl.append(str(occ) if occ != 1.00 else None)
                 else:
                     akl += [None, None]
-            elif isinstance(arg, list) or isinstance(arg, tuple):
+            elif isinstance(arg, (list, tuple)):
                 akl += arg
             elif isinstance(arg, dict):
                 for k in AtomKey.fieldNames:
