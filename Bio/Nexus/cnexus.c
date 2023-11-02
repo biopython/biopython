@@ -103,10 +103,10 @@ static PyObject * cnexus_scanfile(PyObject *self, PyObject *args)
     }
 }
 
-static PyMethodDef cNexusMethods[]=
+static PyMethodDef cNexusMethods[] =
 {
     {"scanfile",cnexus_scanfile,METH_VARARGS,"Scan file and deal with comments and quotes."},
-    {NULL,NULL,0,NULL}
+    {NULL, NULL, 0, NULL}
 };
 
 static struct PyModuleDef moduledef = {

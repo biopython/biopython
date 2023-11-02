@@ -1132,7 +1132,7 @@ static PyMethodDef PyTree_methods[] = {
     {"scale", (PyCFunction)PyTree_scale, METH_NOARGS, PyTree_scale__doc__},
     {"cut", (PyCFunction)PyTree_cut, METH_VARARGS, PyTree_cut__doc__},
     {"sort", (PyCFunction)PyTree_sort, METH_VARARGS, PyTree_sort__doc__},
-    {NULL}  /* Sentinel */
+    {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
 static char PyTree_doc[] =
