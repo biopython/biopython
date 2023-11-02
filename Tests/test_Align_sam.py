@@ -327,7 +327,6 @@ class TestAlign_dna_rna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[42530895, 42530958, 42532020, 42532095, 42532563, 42532606],
                           [     181,      118,      118,       43,       43,        0]])
                 # fmt: on
@@ -337,7 +336,6 @@ class TestAlign_dna_rna(unittest.TestCase):
             np.array_equal(
                 alignment.substitutions,
                 # fmt: off
-# flake8: noqa
                 np.array([[38.,  0.,  0.,  0.],
                           [ 0., 41.,  0.,  0.],
                           [ 0.,  0., 60.,  0.],
@@ -503,7 +501,6 @@ NR_046654.1	16	chr3	42530896	0	63M1062N75M468N43M	*	0	0	CGGAAGTACTTCTGGGGGTACATA
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[42530895, 42530922, 42530922, 42530958, 42532020,
                            42532037, 42532039, 42532095, 42532563, 42532606],
                           [     185,      158,      155,      119,      119,
@@ -516,7 +513,6 @@ NR_046654.1	16	chr3	42530896	0	63M1062N75M468N43M	*	0	0	CGGAAGTACTTCTGGGGGTACATA
             np.array_equal(
                 alignment.substitutions,
                 # fmt: off
-# flake8: noqa
                 np.array([[36.,  0.,  0.,  1.],
                           [ 0., 41.,  0.,  0.],
                           [ 0.,  0., 60.,  0.],
@@ -679,7 +675,6 @@ NR_046654.1_modified	16	chr3	42530896	0	5S27M3I36M1062N17M2D56M468N43M3S	*	0	0	A
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array( [[48663767, 48663813, 48665640, 48665722, 48669098, 48669174],
                               [       0,        46,      46,      128,      128,      204]]),
                 # fmt: on
@@ -689,7 +684,6 @@ NR_046654.1_modified	16	chr3	42530896	0	5S27M3I36M1062N17M2D56M468N43M3S	*	0	0	A
             np.array_equal(
                 alignment.substitutions,
                 # fmt: off
-# flake8: noqa
                 np.array([[62.,  0.,  0.,  0.],
                           [ 0., 42.,  0.,  0.],
                           [ 0.,  0., 66.,  0.],
@@ -1100,7 +1094,6 @@ NR_111921.1	0	chr3	48663768	0	46M1827N82M3376N76M12H	*	0	0	CACGAGAGGAGCGGAGGCGAG
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[48663767, 48663795, 48663796, 48663813, 48665640,
                            48665716, 48665716, 48665722, 48669098, 48669174],
                           [       3,       31,       31,       48,       48,
@@ -1113,7 +1106,6 @@ NR_111921.1	0	chr3	48663768	0	46M1827N82M3376N76M12H	*	0	0	CACGAGAGGAGCGGAGGCGAG
             np.array_equal(
                 alignment.substitutions,
                 # fmt: off
-# flake8: noqa
                 np.array([[62.,  0.,  0.,  0.],
                           [ 0., 41.,  0.,  0.],
                           [ 0.,  2., 64.,  0.],
@@ -1641,7 +1633,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61646095, 61646111],
                           [       0,       16]]),
                 # fmt: on
@@ -1676,7 +1667,6 @@ hg18_dna	0	chr4	61646096	0	11H16M6H	*	0	0	*	*	AS:i:16
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[10271783, 10271816],
                           [       0,       33]]),
                 # fmt: on
@@ -1711,7 +1701,6 @@ hg18_dna	0	chr1	10271784	0	33M	*	0	0	*	*	AS:i:33
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[53575980, 53575997],
                           [      17,        0]]),
                 # fmt: on
@@ -1746,7 +1735,6 @@ hg18_dna	16	chr2	53575981	0	8H17M8H	*	0	0	*	*	AS:i:17
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[85737865, 85737906],
                           [       0,       41]]),
                 # fmt: on
@@ -1781,7 +1769,6 @@ hg19_dna	0	chr9	85737866	0	9H41M	*	0	0	*	*	AS:i:29
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[95160479, 95160520],
                           [       0,       41]]),
                 # fmt: on
@@ -1816,7 +1803,6 @@ hg19_dna	0	chr8	95160480	0	8H41M1H	*	0	0	*	*	AS:i:41
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[42144400, 42144436],
                           [       0,       36]]),
                 # fmt: on
@@ -1850,7 +1836,6 @@ hg19_dna	0	chr22	42144401	0	11H36M3H	*	0	0	*	*	AS:i:24
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[183925984, 183925990, 183925990, 183926028],
                           [        0,         6,        10,        48]]),
                 # fmt: on
@@ -1885,7 +1870,6 @@ hg19_dna	0	chr2	183925985	0	1H6M4I38M1H	*	0	0	*	*	AS:i:27
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[35483340, 35483365, 35483499, 35483510],
                           [       0,       25,       25,       36]]),
                 # fmt: on
@@ -1928,7 +1912,6 @@ hg19_dna	0	chr19	35483341	0	10H25M134D11M4H	*	0	0	*	*	AS:i:0
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[23891310, 23891349],
                           [       0,       39]]),
                 # fmt: on
@@ -1963,7 +1946,6 @@ hg19_dna	0	chr18	23891311	0	10H39M1H	*	0	0	*	*	AS:i:39
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[43252217, 43252245],
                           [       0,       28]]),
                 # fmt: on
@@ -1998,7 +1980,6 @@ hg19_dna	0	chr18	43252218	0	21H28M1H	*	0	0	*	*	AS:i:24
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[52759147, 52759157, 52759160, 52759198],
                           [       0,       10,       10,       48]]),
                 # fmt: on
@@ -2033,7 +2014,6 @@ hg19_dna	0	chr13	52759148	0	1H10M3D38M1H	*	0	0	*	*	AS:i:30
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1207056, 1207106],
                           [      0,      50]]),
                 # fmt: on
@@ -2068,7 +2048,6 @@ hg19_dna	0	chr1	1207057	0	50M	*	0	0	*	*	AS:i:50
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61700837, 61700871],
                           [       0,       34]]),
                 # fmt: on
@@ -2103,7 +2082,6 @@ hg19_dna	0	chr1	61700838	0	1H34M15H	*	0	0	*	*	AS:i:22
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[37558157, 37558173, 37558173, 37558191],
                           [      38,       22,       18,        0]]),
                 # fmt: on
@@ -2137,7 +2115,6 @@ hg19_dna	16	chr4	37558158	0	1H16M4I18M11H	*	0	0	*	*	AS:i:15
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[48997405, 48997442],
                           [      37,        0]]),
                 # fmt: on
@@ -2172,7 +2149,6 @@ hg19_dna	16	chr22	48997406	0	1H37M12H	*	0	0	*	*	AS:i:29
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[120641740, 120641776],
                           [       36,         0]]),
                 # fmt: on
@@ -2207,7 +2183,6 @@ hg19_dna	16	chr2	120641741	0	1H36M13H	*	0	0	*	*	AS:i:32
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[54017130, 54017169],
                           [      39,        0]]),
                 # fmt: on
@@ -2242,7 +2217,6 @@ hg19_dna	16	chr19	54017131	0	1H39M10H	*	0	0	*	*	AS:i:39
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[553742, 553781],
                           [    39,      0]]),
                 # fmt: on
@@ -2277,7 +2251,6 @@ hg19_dna	16	chr19	553743	0	1H39M10H	*	0	0	*	*	AS:i:27
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[99388555, 99388591],
                           [      36,        0]]),
                 # fmt: on
@@ -2312,7 +2285,6 @@ hg19_dna	16	chr10	99388556	0	1H36M13H	*	0	0	*	*	AS:i:24
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[112178171, 112178196],
                           [       25,         0]]),
                 # fmt: on
@@ -2347,7 +2319,6 @@ hg19_dna	16	chr10	112178172	0	15H25M10H	*	0	0	*	*	AS:i:21
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[39368490, 39368526],
                           [      36,        0]]),
                 # fmt: on
@@ -2382,7 +2353,6 @@ hg19_dna	16	chr1	39368491	0	1H36M13H	*	0	0	*	*	AS:i:32
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[220325687, 220325721],
                           [       34,         0]]),
                 # fmt: on
@@ -2502,7 +2472,6 @@ hg19_dna	16	chr1	220325688	0	3H34M13H	*	0	0	*	*	AS:i:30
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61646095, 61646111],
                           [       0,       16]]),
                 # fmt: on
@@ -2537,7 +2506,6 @@ hg18_dna	0	chr4	61646096	0	11H16M6H	*	0	0	*	*	AS:i:16
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[10271783, 10271816],
                           [       0,       33]]),
                 # fmt: on
@@ -2572,7 +2540,6 @@ hg18_dna	0	chr1	10271784	0	33M	*	0	0	*	*	AS:i:33
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[53575980, 53575997],
                           [      17,        0]]),
                 # fmt: on
@@ -2692,7 +2659,6 @@ hg18_dna	16	chr2	53575981	0	8H17M8H	*	0	0	*	*	AS:i:17
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[85737865, 85737906],
                           [       0,       41]]),
                 # fmt: on
@@ -2727,7 +2693,6 @@ hg19_dna	0	chr9	85737866	0	9H41M	*	0	0	*	*	AS:i:29
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[95160479, 95160520],
                           [       0,       41]]),
                 # fmt: on
@@ -2762,7 +2727,6 @@ hg19_dna	0	chr8	95160480	0	8H41M1H	*	0	0	*	*	AS:i:41
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[42144400, 42144436],
                           [       0,       36]]),
                 # fmt: on
@@ -2797,7 +2761,6 @@ hg19_dna	0	chr22	42144401	0	11H36M3H	*	0	0	*	*	AS:i:24
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[183925984, 183925990, 183925990, 183926028],
                           [        0,         6,        10,        48]]),
                 # fmt: on
@@ -2832,7 +2795,6 @@ hg19_dna	0	chr2	183925985	0	1H6M4I38M1H	*	0	0	*	*	AS:i:27
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[35483340, 35483365, 35483499, 35483510],
                           [       0,       25,       25,       36]]),
                 # fmt: on
@@ -2875,7 +2837,6 @@ hg19_dna	0	chr19	35483341	0	10H25M134D11M4H	*	0	0	*	*	AS:i:0
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[23891310, 23891349],
                           [       0,       39]]),
                 # fmt: on
@@ -2910,7 +2871,6 @@ hg19_dna	0	chr18	23891311	0	10H39M1H	*	0	0	*	*	AS:i:39
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[43252217, 43252245],
                           [       0,       28]]),
                 # fmt: on
@@ -2945,7 +2905,6 @@ hg19_dna	0	chr18	43252218	0	21H28M1H	*	0	0	*	*	AS:i:24
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[52759147, 52759157, 52759160, 52759198],
                           [       0,       10,       10,       48]]),
                 # fmt: on
@@ -2980,7 +2939,6 @@ hg19_dna	0	chr13	52759148	0	1H10M3D38M1H	*	0	0	*	*	AS:i:30
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1207056, 1207106],
                           [      0,      50]]),
                 # fmt: on
@@ -3015,7 +2973,6 @@ hg19_dna	0	chr1	1207057	0	50M	*	0	0	*	*	AS:i:50
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61700837, 61700871],
                           [       0,       34]]),
                 # fmt: on
@@ -3050,7 +3007,6 @@ hg19_dna	0	chr1	61700838	0	1H34M15H	*	0	0	*	*	AS:i:22
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[37558157, 37558173, 37558173, 37558191],
                           [      38,       22,       18,        0]]),
                 # fmt: on
@@ -3085,7 +3041,6 @@ hg19_dna	16	chr4	37558158	0	1H16M4I18M11H	*	0	0	*	*	AS:i:15
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[48997405, 48997442],
                           [      37,        0]]),
                 # fmt: on
@@ -3120,7 +3075,6 @@ hg19_dna	16	chr22	48997406	0	1H37M12H	*	0	0	*	*	AS:i:29
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[120641740, 120641776],
                           [       36,         0]]),
                 # fmt: on
@@ -3155,7 +3109,6 @@ hg19_dna	16	chr2	120641741	0	1H36M13H	*	0	0	*	*	AS:i:32
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[54017130, 54017169],
                           [      39,        0]]),
                 # fmt: on
@@ -3190,7 +3143,6 @@ hg19_dna	16	chr19	54017131	0	1H39M10H	*	0	0	*	*	AS:i:39
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[553742, 553781],
                           [    39,      0]]),
                 # fmt: on
@@ -3225,7 +3177,6 @@ hg19_dna	16	chr19	553743	0	1H39M10H	*	0	0	*	*	AS:i:27
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[99388555, 99388591],
                           [      36,        0]]),
                 # fmt: on
@@ -3260,7 +3211,6 @@ hg19_dna	16	chr10	99388556	0	1H36M13H	*	0	0	*	*	AS:i:24
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[112178171, 112178196],
                           [       25,         0]]),
                 # fmt: on
@@ -3295,7 +3245,6 @@ hg19_dna	16	chr10	112178172	0	15H25M10H	*	0	0	*	*	AS:i:21
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[39368490, 39368526],
                           [      36,        0]]),
                 # fmt: on
@@ -3330,7 +3279,6 @@ hg19_dna	16	chr1	39368491	0	1H36M13H	*	0	0	*	*	AS:i:32
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[220325687, 220325721],
                           [       34,         0]]),
                 # fmt: on
@@ -3450,7 +3398,6 @@ hg19_dna	16	chr1	220325688	0	3H34M13H	*	0	0	*	*	AS:i:30
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61646095, 61646111],
                           [      11,       27]]),
                 # fmt: on
@@ -3485,7 +3432,6 @@ hg18_dna	0	chr4	61646096	0	11S16M6S	*	0	0	*	*	AS:i:16
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[10271783, 10271816],
                           [       0,       33]]),
                 # fmt: on
@@ -3520,7 +3466,6 @@ hg18_dna	0	chr1	10271784	0	33M	*	0	0	*	*	AS:i:33
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[53575980, 53575997],
                           [      25,        8]]),
                 # fmt: on
@@ -3555,7 +3500,6 @@ hg18_dna	16	chr2	53575981	0	8S17M8S	*	0	0	*	*	AS:i:17
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[85737865, 85737906],
                           [       9,       50]]),
                 # fmt: on
@@ -3590,7 +3534,6 @@ hg19_dna	0	chr9	85737866	0	9S41M	*	0	0	*	*	AS:i:29
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[95160479, 95160520],
                           [       8,       49]]),
                 # fmt: on
@@ -3625,7 +3568,6 @@ hg19_dna	0	chr8	95160480	0	8S41M1S	*	0	0	*	*	AS:i:41
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[42144400, 42144436],
                           [      11,       47]]),
                 # fmt: on
@@ -3660,7 +3602,6 @@ hg19_dna	0	chr22	42144401	0	11S36M3S	*	0	0	*	*	AS:i:24
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[183925984, 183925990, 183925990, 183926028],
                           [        1,         7,        11,        49]]),
                 # fmt: on
@@ -3695,7 +3636,6 @@ hg19_dna	0	chr2	183925985	0	1S6M4I38M1S	*	0	0	*	*	AS:i:27
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[35483340, 35483365, 35483499, 35483510],
                           [      10,       35,       35,       46]]),
                 # fmt: on
@@ -3738,7 +3678,6 @@ hg19_dna	0	chr19	35483341	0	10S25M134D11M4S	*	0	0	*	*	AS:i:0
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[23891310, 23891349],
                           [      10,       49]]),
                 # fmt: on
@@ -3773,7 +3712,6 @@ hg19_dna	0	chr18	23891311	0	10S39M1S	*	0	0	*	*	AS:i:39
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[43252217, 43252245],
                           [      21,       49]]),
                 # fmt: on
@@ -3808,7 +3746,6 @@ hg19_dna	0	chr18	43252218	0	21S28M1S	*	0	0	*	*	AS:i:24
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[52759147, 52759157, 52759160, 52759198],
                           [       1,       11,       11,       49]]),
                 # fmt: on
@@ -3843,7 +3780,6 @@ hg19_dna	0	chr13	52759148	0	1S10M3D38M1S	*	0	0	*	*	AS:i:30
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1207056, 1207106],
                           [      0,      50]]),
                 # fmt: on
@@ -3878,7 +3814,6 @@ hg19_dna	0	chr1	1207057	0	50M	*	0	0	*	*	AS:i:50
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61700837, 61700871],
                           [       1,       35]]),
                 # fmt: on
@@ -3913,7 +3848,6 @@ hg19_dna	0	chr1	61700838	0	1S34M15S	*	0	0	*	*	AS:i:22
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[37558157, 37558173, 37558173, 37558191],
                           [      49,       33,       29,       11]]),
                 # fmt: on
@@ -3948,7 +3882,6 @@ hg19_dna	16	chr4	37558158	0	1S16M4I18M11S	*	0	0	*	*	AS:i:15
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[48997405, 48997442],
                           [      49,       12]]),
                 # fmt: on
@@ -3983,7 +3916,6 @@ hg19_dna	16	chr22	48997406	0	1S37M12S	*	0	0	*	*	AS:i:29
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[120641740, 120641776],
                           [       49,        13]]),
                 # fmt: on
@@ -4018,7 +3950,6 @@ hg19_dna	16	chr2	120641741	0	1S36M13S	*	0	0	*	*	AS:i:32
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[54017130, 54017169],
                           [      49,       10]]),
                 # fmt: on
@@ -4053,7 +3984,6 @@ hg19_dna	16	chr19	54017131	0	1S39M10S	*	0	0	*	*	AS:i:39
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[553742, 553781],
                           [    49,     10]]),
                 # fmt: on
@@ -4088,7 +4018,6 @@ hg19_dna	16	chr19	553743	0	1S39M10S	*	0	0	*	*	AS:i:27
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[99388555, 99388591],
                           [      49,       13]]),
                 # fmt: on
@@ -4123,7 +4052,6 @@ hg19_dna	16	chr10	99388556	0	1S36M13S	*	0	0	*	*	AS:i:24
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[112178171, 112178196],
                           [       35,        10]]),
                 # fmt: on
@@ -4192,7 +4120,6 @@ hg19_dna	16	chr1	39368491	0	1S36M13S	*	0	0	*	*	AS:i:32
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[220325687, 220325721],
                           [       47,        13]]),
                 # fmt: on
@@ -4558,7 +4485,6 @@ query             0 CCCCCC  6
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', 'C', 'C', 'C', 'C', 'C'],
           ['C', 'C', 'C', 'C', 'C', 'C']], dtype='U')
                 # fmt: on
@@ -4598,7 +4524,6 @@ query             0 --------CCCCCC  6
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
            'C'],
           ['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
@@ -4640,7 +4565,6 @@ query             0 --------CCCCCC  6
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
            'C'],
           ['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
@@ -4684,7 +4608,6 @@ query             0 AAAAAAAACCCCCC 14
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
            'C'],
           ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
@@ -4728,7 +4651,6 @@ query             0 AAAAAAAACCCCCC 14
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
            'C'],
           ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
@@ -4772,7 +4694,6 @@ query             8 CCCCCC 14
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', 'C', 'C', 'C', 'C', 'C'],
           ['C', 'C', 'C', 'C', 'C', 'C']], dtype='U')
                 # fmt: on
@@ -4814,7 +4735,6 @@ query             4 --------CCCCCC 10
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
            'C'],
           ['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
@@ -4858,7 +4778,6 @@ query             0 GGGG--------CCCCCC 10
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['-', '-', '-', '-', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C',
            'C', 'C', 'C', 'C', 'C'],
           ['G', 'G', 'G', 'G', '-', '-', '-', '-', '-', '-', '-', '-', 'C',
@@ -4902,7 +4821,6 @@ query             4 CCCCCC 10
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', 'C', 'C', 'C', 'C', 'C'],
           ['C', 'C', 'C', 'C', 'C', 'C']], dtype='U')
                 # fmt: on
@@ -4944,7 +4862,6 @@ query             0 ----AAAAAAAACCCCCC 14
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['G', 'G', 'G', 'G', '-', '-', '-', '-', '-', '-', '-', '-', 'C',
            'C', 'C', 'C', 'C', 'C'],
           ['-', '-', '-', '-', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C',
@@ -4988,7 +4905,6 @@ query             4 AAAAAAAACCCCCC 18
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['-', '-', '-', '-', '-', '-', '-', '-', 'C', 'C', 'C', 'C', 'C',
            'C'],
           ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'C', 'C', 'C', 'C',
