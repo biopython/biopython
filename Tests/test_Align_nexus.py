@@ -124,7 +124,6 @@ t9                0 cccccccccccccccccccNc-ccccccccccccccccccccNc-c 44
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 0,  1,  1,  2,  2,  3,  3,  4,  5,  6,  8, 12,
                            13, 14, 16, 16, 17, 17, 18, 18, 18, 18, 19, 20,
                            21, 23, 27, 28, 29, 31, 31, 32, 32, 33],
@@ -195,7 +194,6 @@ end;
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['A', '-', 'C', '-', 'G', '-', 'T', 'c', 'g', 't', 'g', 't', 'g',
            't', 'g', 'c', 't', 'c', 't', '-', 't', '-', 't', '-', '-', '-',
            '-', '-', '-', 'a', 'c', 'g', 't', 'g', 't', 'g', 't', 'g', 'c',
@@ -281,7 +279,6 @@ end;
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['A', 'A', 'A', 'A', 'A', 'G', 'G', 'C', 'A', 'T', 'T', 'G', 'T',
            'G', 'G', 'T', 'G', 'G', 'G', 'A', 'A', 'T'],
           ['?', '?', '?', '?', '?', '?', '?', '?', '?', 'T', 'T', 'G', 'T',

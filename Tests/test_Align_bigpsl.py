@@ -108,7 +108,6 @@ class TestAlign_dna_rna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[42530895, 42530958, 42532020, 42532095, 42532563, 42532606],
                           [     181,      118,      118,       43,       43,        0]])
                 # fmt: on
@@ -121,7 +120,6 @@ class TestAlign_dna_rna(unittest.TestCase):
             np.array_equal(
                 alignment.substitutions,
                 # fmt: off
-# flake8: noqa
             np.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                       [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
                       [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
@@ -166,7 +164,6 @@ class TestAlign_dna_rna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[42530895, 42530922, 42530922, 42530958, 42532020,
                            42532037, 42532039, 42532095, 42532563, 42532606],
                           [     185,      158,      155,      119,      119,
@@ -182,7 +179,6 @@ class TestAlign_dna_rna(unittest.TestCase):
             np.array_equal(
                 alignment.substitutions,
                 # fmt: off
-# flake8: noqa
             np.array([[34.,  0.,  0.,  1.,  0.,  0.,  0.,  0.],
                       [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
                       [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
@@ -228,7 +224,6 @@ class TestAlign_dna_rna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array( [[48663767, 48663813, 48665640, 48665722, 48669098, 48669174],
                            [       0,        46,      46,      128,      128,      204]]),
                 # fmt: on
@@ -241,7 +236,6 @@ class TestAlign_dna_rna(unittest.TestCase):
             np.array_equal(
                 alignment.substitutions,
                 # fmt: off
-# flake8: noqa
             np.array([[53.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                       [ 0., 35.,  0.,  0.,  0.,  0.,  0.,  0.],
                       [ 0.,  0., 50.,  0.,  0.,  0.,  0.,  0.],
@@ -286,7 +280,6 @@ class TestAlign_dna_rna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[48663767, 48663795, 48663796, 48663813, 48665640,
                            48665716, 48665716, 48665722, 48669098, 48669174],
                           [       3,       31,       31,       48,       48,
@@ -302,7 +295,6 @@ class TestAlign_dna_rna(unittest.TestCase):
             np.array_equal(
                 alignment.substitutions,
                 # fmt: off
-# flake8: noqa
             np.array([[53.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                       [ 0., 34.,  0.,  0.,  0.,  0.,  0.,  0.],
                       [ 0.,  2., 48.,  0.,  0.,  0.,  0.,  0.],
@@ -403,7 +395,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1207056, 1207106],
                           [      0,      50]]),
                 # fmt: on
@@ -433,7 +424,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[10271783, 10271816],
                           [       0,       33]]),
                 # fmt: on
@@ -463,7 +453,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[39368490, 39368526],
                           [      49,       13]]),
                 # fmt: on
@@ -493,7 +482,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61700837, 61700871],
                           [       1,       35]]),
                 # fmt: on
@@ -523,7 +511,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[220325687, 220325721],
                           [       47,        13]]),
                 # fmt: on
@@ -553,7 +540,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[99388555, 99388591],
                           [      49,       13]]),
                 # fmt: on
@@ -583,7 +569,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[112178171, 112178196],
                           [       35,        10]]),
                 # fmt: on
@@ -613,7 +598,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[52759147, 52759154, 52759160, 52759160, 52759198],
                           [       1,        8,        8,       11,       49]]),
                 # fmt: on
@@ -643,7 +627,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[23891310, 23891349],
                           [      10,       49]]),
                 # fmt: on
@@ -673,7 +656,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[43252217, 43252245],
                           [      21,       49]]),
                 # fmt: on
@@ -703,7 +685,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[553742, 553781],
                           [    49,     10]]),
                 # fmt: on
@@ -733,7 +714,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[35483340, 35483365, 35483499, 35483510],
                           [      10,       35,       35,       46]]),
                 # fmt: on
@@ -763,7 +743,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[54017130, 54017169],
                           [      49,       10]]),
                 # fmt: on
@@ -793,7 +772,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[53575980, 53575997],
                           [      25,        8]]),
                 # fmt: on
@@ -823,7 +801,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[120641740, 120641776],
                           [       49,        13]]),
                 # fmt: on
@@ -853,7 +830,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[183925984, 183925990, 183925990, 183926028],
                           [        1,         7,        11,        49]]),
                 # fmt: on
@@ -883,7 +859,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[42144400, 42144436],
                           [      11,       47]]),
                 # fmt: on
@@ -913,7 +888,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[48997405, 48997442],
                           [      49,       12]]),
                 # fmt: on
@@ -943,7 +917,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[37558157, 37558167, 37558173, 37558173, 37558191],
                           [      49,       39,       39,       29,       11]]),
                 # fmt: on
@@ -973,7 +946,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61646095, 61646111],
                           [      11,       27]]),
                 # fmt: on
@@ -1003,7 +975,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[95160479, 95160520],
                           [       8,       49]]),
                 # fmt: on
@@ -1033,7 +1004,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[85737865, 85737906],
                           [       9,       50]]),
                 # fmt: on
@@ -1097,7 +1067,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[10271783, 10271816],
                           [       0,       33]]),
                 # fmt: on
@@ -1127,7 +1096,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[53575980, 53575997],
                           [      25,        8]]),
                 # fmt: on
@@ -1157,7 +1125,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61646095, 61646111],
                           [      11,       27]]),
                 # fmt: on
@@ -1235,7 +1202,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1207056, 1207106],
                           [      0,      50]]),
                 # fmt: on
@@ -1265,7 +1231,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[39368490, 39368526],
                           [      49,       13]]),
                 # fmt: on
@@ -1295,7 +1260,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61700837, 61700871],
                           [       1,       35]]),
                 # fmt: on
@@ -1325,7 +1289,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[220325687, 220325721],
                           [       47,        13]]),
                 # fmt: on
@@ -1355,7 +1318,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[99388555, 99388591],
                           [      49,       13]]),
                 # fmt: on
@@ -1385,7 +1347,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[112178171, 112178196],
                           [       35,        10]]),
                 # fmt: on
@@ -1415,7 +1376,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[52759147, 52759154, 52759160, 52759160, 52759198],
                           [       1,        8,        8,       11,       49]]),
                 # fmt: on
@@ -1445,7 +1405,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[23891310, 23891349],
                           [      10,       49]]),
                 # fmt: on
@@ -1475,7 +1434,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[43252217, 43252245],
                           [      21,       49]]),
                 # fmt: on
@@ -1505,7 +1463,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[553742, 553781],
                           [    49,     10]]),
                 # fmt: on
@@ -1535,7 +1492,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[35483340, 35483365, 35483499, 35483510],
                           [      10,       35,       35,       46]]),
                 # fmt: on
@@ -1565,7 +1521,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[54017130, 54017169],
                           [      49,       10]]),
                 # fmt: on
@@ -1595,7 +1550,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[120641740, 120641776],
                           [       49,        13]]),
                 # fmt: on
@@ -1625,7 +1579,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[183925984, 183925990, 183925990, 183926028],
                           [        1,         7,        11,        49]]),
                 # fmt: on
@@ -1655,7 +1608,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[42144400, 42144436],
                           [      11,       47]]),
                 # fmt: on
@@ -1685,7 +1637,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[48997405, 48997442],
                           [      49,       12]]),
                 # fmt: on
@@ -1715,7 +1666,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[37558157, 37558167, 37558173, 37558173, 37558191],
                           [      49,       39,       39,       29,       11]]),
                 # fmt: on
@@ -1745,7 +1695,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[95160479, 95160520],
                           [       8,       49]]),
                 # fmt: on
@@ -1775,7 +1724,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[85737865, 85737906],
                           [       9,       50]]),
                 # fmt: on
@@ -1853,7 +1801,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1207056, 1207106],
                           [      0,      50]]),
                 # fmt: on
@@ -1883,7 +1830,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[10271783, 10271816],
                           [       0,       33]]),
                 # fmt: on
@@ -1942,7 +1888,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61700837, 61700871],
                           [       1,       35]]),
                 # fmt: on
@@ -1972,7 +1917,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[220325687, 220325721],
                           [       47,        13]]),
                 # fmt: on
@@ -2002,7 +1946,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[99388555, 99388591],
                           [      49,       13]]),
                 # fmt: on
@@ -2032,7 +1975,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[112178171, 112178196],
                           [       35,        10]]),
                 # fmt: on
@@ -2062,7 +2004,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[52759147, 52759154, 52759160, 52759160, 52759198],
                           [       1,        8,        8,       11,       49]]),
                 # fmt: on
@@ -2092,7 +2033,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[23891310, 23891349],
                           [      10,       49]]),
                 # fmt: on
@@ -2122,7 +2062,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[43252217, 43252245],
                           [      21,       49]]),
                 # fmt: on
@@ -2152,7 +2091,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[553742, 553781],
                           [    49,     10]]),
                 # fmt: on
@@ -2182,7 +2120,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[35483340, 35483365, 35483499, 35483510],
                           [      10,       35,       35,       46]]),
                 # fmt: on
@@ -2212,7 +2149,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[54017130, 54017169],
                           [      49,       10]]),
                 # fmt: on
@@ -2242,7 +2178,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[53575980, 53575997],
                           [      25,        8]]),
                 # fmt: on
@@ -2272,7 +2207,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[120641740, 120641776],
                           [       49,        13]]),
                 # fmt: on
@@ -2302,7 +2236,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[183925984, 183925990, 183925990, 183926028],
                           [        1,         7,        11,        49]]),
                 # fmt: on
@@ -2332,7 +2265,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[42144400, 42144436],
                           [      11,       47]]),
                 # fmt: on
@@ -2362,7 +2294,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[48997405, 48997442],
                           [      49,       12]]),
                 # fmt: on
@@ -2392,7 +2323,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[37558157, 37558167, 37558173, 37558173, 37558191],
                           [      49,       39,       39,       29,       11]]),
                 # fmt: on
@@ -2422,7 +2352,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61646095, 61646111],
                           [      11,       27]]),
                 # fmt: on
@@ -2452,7 +2381,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[95160479, 95160520],
                           [       8,       49]]),
                 # fmt: on
@@ -2482,7 +2410,6 @@ class TestAlign_dna(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[85737865, 85737906],
                           [       9,       50]]),
                 # fmt: on
@@ -2550,7 +2477,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[75549820, 75549865, 75567225, 75567225, 75567312],
                           [       0,       15,       15,      113,      142]]),
                 # fmt: on
@@ -2579,7 +2505,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[75560749, 75560881],
                           [      17,       61]]),
                 # fmt: on
@@ -2608,7 +2533,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[75566694, 75566850],
                           [      61,      113]]),
                 # fmt: on
@@ -2637,7 +2561,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[75569459, 75569507],
                           [     142,      158]]),
                 # fmt: on
@@ -2666,7 +2589,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[75594914, 75594989],
                           [     158,      183]]),
                 # fmt: on
@@ -2695,7 +2617,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[75604767, 75604827, 75605728, 75605809],
                           [     183,      203,      203,      230]]),
                 # fmt: on
@@ -2724,7 +2645,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[41257605, 41257731, 41263227, 41263227, 41263290],
                           [      17,       59,       59,      162,      183]]),
                 # fmt: on
@@ -2753,7 +2673,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[41260685, 41260787],
                           [      76,      110]]),
                 # fmt: on
@@ -2791,7 +2710,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[20873021, 20872472, 20872471, 20872471, 20872390],
                           [       0,      183,      183,      203,      230]]),
                 # fmt: on
@@ -2819,7 +2737,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[9712654, 9712786, 9715941, 9716097, 9716445, 9716532,
                            9718374, 9718422, 9739264, 9739339, 9743706, 9743766,
                            9744511, 9744592],
@@ -2917,7 +2834,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[11873, 12227, 12612, 12721, 13220, 14361],
                           [    0,   354,   354,   463,   463,  1604]])
                 # fmt: on
@@ -2937,7 +2853,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[11873, 12227, 12594, 12721, 13402, 14361],
                               [0,   354,   354,   481,   481,  1440]])
                 # fmt: on
@@ -2957,7 +2872,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[11873, 12227, 12645, 12697, 13220, 13656, 13658,
                            13957, 13958, 14362],
                           [    0,   354,   354,   406,   406,   842,   842,
@@ -2979,7 +2893,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[11873, 12227, 12612, 12721, 13220, 14362],
                           [    0,   354,   354,   463,   463,  1605]])
                 # fmt: on
@@ -2999,7 +2912,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[11873, 12227, 12612, 12721, 13220, 14409],
                           [    0,   354,   354,   463,   463,  1652]])
                 # fmt: on
@@ -3019,7 +2931,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[11873, 12227, 12612, 12721, 13220, 14409],
                           [    0,   354,   354,   463,   463,  1652]])
                 # fmt: on
@@ -3039,7 +2950,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[11873, 12227, 12612, 12721, 13220, 14409],
                           [    0,   354,   354,   463,   463,  1652]])
                 # fmt: on
@@ -3059,7 +2969,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[11873, 12227, 12594, 12721, 13402, 14409],
                           [    0,   354,   354,   481,   481,  1488]])
                 # fmt: on
@@ -3072,7 +2981,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[11873, 12227, 12612, 12721, 13220, 13957, 13958,
                            14258, 14270, 14409],
                           [    0,   354,   354,   463,   463,  1200,  1200,
@@ -3094,7 +3002,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[12612, 12721, 13220, 13656, 13658, 13957, 13958, 14362],
                           [    0,   109,   109,   545,   545,   844,   844,  1248]])
                 # fmt: on
@@ -3131,7 +3038,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[13420, 13957, 13958, 14259, 14271, 14407],
                           [    0,   537,   537,   838,   838,   974]])
                 # fmt: on
@@ -3198,7 +3104,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[14404, 14455, 14455, 14829, 14969, 15038, 15795,
                            15905, 15906, 15906, 15947, 16606, 16765, 16857,
                            17055, 17232, 17742, 17914, 18061, 18267, 18369,
@@ -3217,7 +3122,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[14404, 14511, 14513, 14829, 14969, 15038, 15795,
                            15903, 15903, 15947, 16606, 16765, 16857, 17055,
                            17232, 17358, 17361, 17742, 17914, 18061, 18267,
@@ -3236,7 +3140,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[14404, 14455, 14455, 14829, 14969, 15038, 15795,
                            15905, 15906, 15906, 15947, 16606, 16765, 16857,
                            17055, 17232, 17368, 17605, 17742, 17914, 18061,
@@ -3278,7 +3181,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 14404,  14511,  14513,  14829,  14969,  15250, 185765,
                            186064, 186064, 186623, 186626, 187287, 187379, 187577,
                            187754, 188266, 188438, 188485, 188485, 188584, 188790,
@@ -3297,7 +3199,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[14404, 14455, 14455, 14829, 14969, 15038, 15795, 15905,
                            15906, 15906, 15947, 16606, 16722, 16722, 16768, 16856,
                            17055, 17232, 17368, 17605, 17742, 17914, 18061, 18267,
@@ -3316,7 +3217,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[14404, 14455, 14455, 14829, 15795, 15905, 15906,
                            15906, 15947, 16606, 16765, 16857, 17055, 17605,
                            18061, 24737, 24891, 29320, 29346],
@@ -3353,7 +3253,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[14404, 14495, 14559, 14571, 15004, 15038, 15795, 15903,
                            15903, 15947, 16606, 16765, 16857, 17055, 17232, 17368,
                            17605, 17742, 17914, 18061, 18267, 18366, 24737, 24891,
@@ -3379,7 +3278,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[14406, 15905, 15906, 15906, 16765, 16857, 18733],
                           [ 4236,  2737,  2737,  2735,  1876,  1876,     0]])
                 # fmt: on
@@ -3392,7 +3290,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 14406,  14829,  14969,  15038,  15795,  15903,  15903,
                             15947,  16606,  16768,  16856,  17055,  17232,  17368,
                             17605,  17745,  18036,  18061,  18267,  18366,  24737,
@@ -3420,7 +3317,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[14406, 14455, 14455, 15905, 15906, 15906, 16765,
                            16857, 17055, 17232, 17368, 17605, 17742, 17914,
                            18061, 24737, 24891, 29320, 29344],
@@ -3437,7 +3333,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[14406, 14455, 14455, 15905, 15906, 15906, 16765,
                            16857, 17055, 17232, 17368, 17605, 17742, 17914,
                            18061, 24737, 24891, 29320, 29344],
@@ -3454,7 +3349,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[14406, 14455, 14455, 14829, 14969, 15038, 15795,
                            15905, 15906, 15906, 15947, 16606, 16768, 16856,
                            17055, 17232, 17368, 17605, 17742, 17914, 18061,
@@ -3475,7 +3369,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[14407, 14455, 14455, 14829, 14969, 15038, 15795,
                            15905, 15906, 15906, 15947, 16606, 16765, 16857,
                            17055, 17232, 17742, 17914, 18061, 18267, 19108],
@@ -3492,7 +3385,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[14407, 14455, 14455, 14829, 14969, 15038, 15795,
                            15905, 15906, 15906, 15947, 16606, 16722, 16731,
                            16768, 16856, 17055, 17232, 17368, 17605, 17742,
@@ -3520,7 +3412,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[14407, 14455, 14455, 14829, 14969, 15038, 15795,
                            15905, 15906, 15906, 15947, 16606, 16722, 16731,
                            16768, 16856, 17055, 17232, 17368, 17605, 17742,
@@ -3582,7 +3473,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[14570, 14829, 14969, 15038, 15795, 15905, 15906,
                            15906, 15947, 16606, 16722, 16722, 16768, 16856,
                            17055, 17232, 17368, 17605, 17742, 17914, 18061,
@@ -3856,7 +3746,6 @@ class TestAlign_bigpsl(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[15870, 15903, 15903, 16027, 16606, 16765, 16857,
                            17055, 17232, 17364, 17521, 17742, 17914, 18061,
                            18267, 18366, 29320, 29359],

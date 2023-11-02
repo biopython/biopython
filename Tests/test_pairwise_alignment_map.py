@@ -919,7 +919,6 @@ $"""
         self.assertRegex(str(alignment).replace("|", ":").replace(".", "X"), text)
         lifted_alignment = chain.map(alignment)
         # fmt: off
-# flake8: noqa
         self.assertTrue(
             np.array_equal(lifted_alignment.coordinates,
                            np.array([[111982717, 111982775, 111987921,
