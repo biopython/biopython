@@ -11,6 +11,8 @@ import os
 import string
 import numpy as np
 
+from Bio.File import as_handle
+
 
 class Array(np.ndarray):
     """numpy array subclass indexed by integers and by letters."""
@@ -455,12 +457,7 @@ class Array(np.ndarray):
 
 def read(handle, dtype=float):
     """Parse the file and return an Array object."""
-    try:
-        fp = open(handle)
-    except TypeError:
-        fp = handle
-
-    with fp:
+    with as_handle(handle) as fp:
         lines = fp.readlines()
 
     header = []

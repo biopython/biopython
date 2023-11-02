@@ -2423,14 +2423,15 @@ class TestLoading(unittest.TestCase):
         matrix_path = os.path.join(sub_mx_dir, matrix_name)
 
         fname_matrix = substitution_matrices.read(matrix_path)
-        self.assertEqual(fname_matrix["A"]["A"], 4.0)
+        self.assertAlmostEqual(fname_matrix["A"]["A"], 4.0)
         self.assertEqual(len(fname_matrix), 24)
         self.assertEqual(len(fname_matrix[0]), 24)
 
         with open(matrix_path, "r") as handle:
             handle_matrix = substitution_matrices.read(handle)
+            self.assertFalse(handle.closed)
         self.assertTrue(handle.closed)
-        self.assertEqual(handle_matrix["A"]["A"], 4.0)
+        self.assertAlmostEqual(handle_matrix["A"]["A"], 4.0)
         self.assertEqual(len(handle_matrix), 24)
         self.assertEqual(len(handle_matrix[0]), 24)
 
