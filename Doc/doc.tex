@@ -433,7 +433,7 @@ the test.
 >>> from Bio.codonalign import build
 >>> from Bio.codonalign.codonalignment import mktest
 >>> pro_aln = AlignIO.read("adh.aln", "clustal")
->>> p = SeqIO.index("drosophilla.fasta", "fasta")
+>>> p = SeqIO.index("drosophila.fasta", "fasta")
 >>> codon_aln = build(pro_aln, p)
 >>> print(codon_aln)
 CodonAlignment with 27 rows and 768 columns (256 codons)
