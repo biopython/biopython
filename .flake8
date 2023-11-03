@@ -80,12 +80,12 @@ ignore =
 # ========================
 per-file-ignores =
     Bio/*:F401,F841,D105,B009,B010
-    Tests/*:F401,F841,D101,D102,D103,W504,B009,B010,B015
+    Tests/*:F401,F841,D101,D102,D103,W291,B009,B010,B015
 
     # Due to a bug in flake8, we need the following lines for running the
     # pre-commit hook. If you made edits above, please change also here!
     /Bio/*:F401,F841,D105,B009,B010
-    /Tests/*:F401,F841,D101,D102,D103,B009,B010,B015
+    /Tests/*:F401,F841,D101,D102,D103,W291,B009,B010,B015
 
 #Explanation of the codes being ignored in Bio/ and Tests/:
 #
@@ -100,6 +100,7 @@ per-file-ignores =
 #        D101 missing docstring in public class (244 occurrences)
 #        D102 missing docstring in public method (1368 occurrences)
 #        D103 missing docstring in public functions (20 occurrences)
+#        W291 trailing whitespace (due to alignment tests)
 #        B009 do not call getattr with a constant attribute value (10 occurrences),
 #             it is not any safer than normal property access
 #        B010 do not call setattr with a constant attribute value (7 occurrences),
