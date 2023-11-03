@@ -2230,16 +2230,14 @@ class Alignment:
             aligned_steps = steps[i, aligned]
             if len(aligned_steps) == 0:
                 aligned_steps = steps[i]
-            if (aligned_steps >= 0).all():
+            if sum(aligned_steps) >= 0:
                 start = min(positions)
                 row[:] = positions - start
-            elif (aligned_steps <= 0).all():
+            else:
                 steps[i, :] = -steps[i, :]
                 seq = reverse_complement(seq, inplace=False)
                 end = max(positions)
                 row[:] = end - positions
-            else:
-                raise ValueError(f"Inconsistent steps in row {i}")
             if isinstance(seq, str):
                 if not seq.isascii():
                     return self._format_unicode()
