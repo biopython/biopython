@@ -25,11 +25,9 @@ class TestAlign_ucsc_test(unittest.TestCase):
 
     def test_reading(self):
         """Test reading ucsc_test.bb."""
-
         # BigMaf file ucsc_test.bb was created using the commands
         # tail -n +2 ucsc_test.maf | mafToBigMaf hg16 stdin stdout | sort -k1,1 -k2,2n > ucsc_test.txt
         # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab ucsc_test.txt hg16.chrom.sizes ucsc_test.bb
-
         alignments = Align.parse(self.path, "bigmaf")
         self.check_alignments(alignments)
         alignments.rewind()
@@ -295,11 +293,9 @@ class TestAlign_bundle_without_target(unittest.TestCase):
 
     def test_reading(self):
         """Test parsing bundle_without_target.bb."""
-
         # BigMaf file bundle_without_target.bb was created using the commands
         # mafToBigMaf mm8 bundle_without_target.maf stdout | sort -k1,1 -k2,2n > bundle_without_target.txt
         # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bundle_without_target.txt mm8.chrom.sizes bundle_without_target.bb
-
         alignments = Align.parse(self.path, "bigmaf")
         self.check_alignments(alignments)
         alignments.rewind()
@@ -440,7 +436,6 @@ class TestAlign_ucsc_mm9_chr10(unittest.TestCase):
 
     def test_reading(self):
         """Test parsing file ucsc_mm9_chr10.bb."""
-
         # BigMaf file ucsc_mm9_chr10.bb was created using the commands
         # mafToBigMaf mm9 ucsc_mm9_chr10.maf stdout | sort -k1,1 -k2,2n > ucsc_mm9_chr10.txt
         # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab ucsc_mm9_chr10.txt mm9.chrom.sizes ucsc_mm9_chr10.bb

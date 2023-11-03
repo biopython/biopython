@@ -327,7 +327,6 @@ class TestAlign_dna(unittest.TestCase):
 
     def test_reading_psl_34_001(self):
         """Test parsing psl_34_001.psl.bb."""
-
         # The bigPsl file psl_34_001.psl.bb was generated using these commands:
         # pslToBigPsl -fa=fasta_34.fa psl_34_001.psl stdout | sort -k1,1 -k2,2n > psl_34_001.bigPslInput
         # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_34_001.bigPslInput hg19.chrom.sizes psl_34_001.psl.bb
@@ -1013,7 +1012,6 @@ class TestAlign_dna(unittest.TestCase):
 
     def test_reading_psl_34_003(self):
         """Test parsing psl_34_003.psl.bb."""
-
         # The bigPsl file psl_34_003.psl.bb was generated using these commands:
         # pslToBigPsl -fa=fasta_34.fa psl_34_003.psl stdout | sort -k1,1 -k2,2n > psl_34_003.bigPslInput
         # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_34_003.bigPslInput hg19.chrom.sizes psl_34_003.psl.bb
@@ -1134,11 +1132,9 @@ class TestAlign_dna(unittest.TestCase):
 
     def test_reading_psl_34_004(self):
         """Test parsing psl_34_004.psl.bb."""
-
         # The bigPsl file psl_34_004.psl.bb was generated using these commands:
         # pslToBigPsl -fa=fasta_34.fa psl_34_004.psl stdout | sort -k1,1 -k2,2n > psl_34_004.bigPslInput
         # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_34_004.bigPslInput hg19.chrom.sizes psl_34_004.psl.bb
-
         path = "Blat/psl_34_004.psl.bb"
         alignments = Align.parse(path, "bigpsl")
         self.check_psl_34_004(alignments)
@@ -1733,7 +1729,6 @@ class TestAlign_dna(unittest.TestCase):
 
     def test_reading_psl_34_005(self):
         """Test parsing psl_34_005.psl.bb."""
-
         # The bigPsl file psl_34_005.psl.bb was generated using these commands:
         # pslToBigPsl -fa=fasta_34.fa psl_34_005.psl stdout | sort -k1,1 -k2,2n > psl_34_005.bigPslInput
         # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_34_005.bigPslInput hg19.chrom.sizes psl_34_005.psl.bb
@@ -2426,7 +2421,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
 
     def test_reading_psl_35_001(self):
         """Test parsing psl_35_001.psl.bb."""
-
         # The bigPsl file psl_35_001.psl.bb was generated using these commands:
         # pslToBigPsl -fa=CAG33136.1.fasta psl_35_001.psl stdout | sort -k1,1 -k2,2n > psl_35_001.bigPslInput
         # bedToBigBed -type=bed12+13 -tab -as=bigPsl.as psl_35_001.bigPslInput hg38.chrom.sizes psl_35_001.psl.bb
@@ -2750,7 +2744,6 @@ class TestAlign_dnax_prot(unittest.TestCase):
 
     def test_reading_psl_35_002(self):
         """Test parsing psl_35_002.psl.bb."""
-
         # The bigPsl file psl_35_002.psl.bb was generated using these commands:
         # pslToBigPsl -fa=CAG33136.1.fasta psl_35_002.psl stdout | grep -v KI538594 | sort -k1,1 -k2,2n > psl_35_002.bigPslInput
         # (where we excluded KI538594 because its alignment has a negative gap)
