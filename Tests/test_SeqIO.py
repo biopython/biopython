@@ -5,7 +5,6 @@
 """Tests for SeqIO module."""
 import copy
 import gzip
-import sys
 import unittest
 import warnings
 
@@ -366,7 +365,7 @@ class TestSeqIO(SeqIOTestBaseClass):
                 # I want to see the output when called from the test harness,
                 # run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
-                message = f"{str(e)}\n\n{handle.read()!r}\n\n{records1!r}"
+                message = f"{e!s}\n\n{handle.read()!r}\n\n{records1!r}"
                 self.fail(message)
 
             self.assertEqual(len(records2), t_count)

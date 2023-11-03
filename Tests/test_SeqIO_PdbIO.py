@@ -89,13 +89,9 @@ def SeqresTestGenerator(extension, parser):
 class TestPdbSeqres(SeqresTestGenerator("pdb", "pdb-seqres")):
     """Test pdb-seqres SeqIO driver."""
 
-    pass
-
 
 class TestCifSeqres(SeqresTestGenerator("cif", "cif-seqres")):
     """Test cif-seqres SeqIO driver."""
-
-    pass
 
 
 def AtomTestGenerator(extension, parser):

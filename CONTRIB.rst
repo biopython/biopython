@@ -39,10 +39,10 @@ please open an issue on GitHub or mention it on the mailing list.
 - Andrey Raspopov <https://github.com/Andrey-Raspopov>
 - Andrius Merkys <https://github.com/merkys>
 - Anne Pajon <ap one two at sanger ac uk>
-- Antonio Jesús Gálvez Muñoz <https://github.com/PyCreatine>
 - Anthony Bradley <https://github.com/abradle>
-- Antony Lee <https://github.com/anntzer>
+- Antonio Jesús Gálvez Muñoz <https://github.com/PyCreatine>
 - Antonio Trande <https://github.com/sagitter>
+- Antony Lee <https://github.com/anntzer>
 - Anuj Sharma <https://github.com/xulesc>
 - Ariel Aptekmann <https://github.com/aralap>
 - Arpan Sahoo <https://github.com/arpansahoo>
@@ -83,7 +83,6 @@ please open an issue on GitHub or mention it on the mailing list.
 - Chaitanya Gupta <https://github.com/iCHAIT>
 - Cheng Soon Ong <chengsoon.ong at tuebingen.mpg.de>
 - Chenghao Zhu <zhuchcn@gmail.com>
-- Christian Balbin <christian at domain balbin.com>
 - Chris Daley <https://github.com/chebizarro>
 - Chris Jackson <https://github.com/chrisjackson-pellicle>
 - Chris Lasher <chris.lasher at gmail.com>
@@ -92,6 +91,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Chris Rands <https://github.com/chris-rands>
 - Chris Warth <https://github.com/cswarth>
 - Christiam Camacho <https://github.com/christiam>
+- Christian Balbin <christian at domain balbin.com>
 - Christian Brueffer <christian at domain brueffer.de>
 - Christian Zmasek <https://github.com/cmzmasek>
 - Chunlei Wu <https://github.com/newgene>
@@ -120,7 +120,9 @@ please open an issue on GitHub or mention it on the mailing list.
 - Erik Cederstrand <https://github.com/ecederstrand>
 - Erik Weßels <https://github.com/BioNij>
 - Erik Whiting <https://github.com/erik-whiting>
+- Ernesto Rodriguez <https://github.com/netogallo>
 - Fabian Egli <https://github.com/fabianegli>
+- Farhan Khan <https://github.com/BabaYaga1221>
 - Fei Qi <https://github.com/qifei9>
 - Foen Peng <https://github.com/foenpeng>
 - Francesco Gastaldello <https://github.com/Gasta88>
@@ -171,9 +173,6 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jian-Long Huang <https://github.com/jlhg>
 - Jimmy O'Donnell <https://github.com/jimmyodonnell>
 - Joanna & Dominik Kasprzak
-- João D Ferreira <https://github.com/jdferreira>
-- João Rodrigues <https://github.com/joaorodrigues>
-- João Vitor F Cavalcante <https://github.com/jvfe>
 - Joe Cora <https://github.com/JoeCora>
 - Joe Greener <https://github.com/jgreener64>
 - Joel Ibaceta <https://github.com/joelibaceta>
@@ -187,6 +186,9 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jose Blanca <https://github.com/JoseBlanca>
 - Josha Inglis <https://github.com/joshainglis>
 - Joshua Meyers <https://github.com/JoshuaMeyers>
+- João D Ferreira <https://github.com/jdferreira>
+- João Rodrigues <https://github.com/joaorodrigues>
+- João Vitor F Cavalcante <https://github.com/jvfe>
 - Jun Aruga <https://github.com/junaruga>
 - Juraj Szász <https:/github.com/sars1492>
 - Kai Blin <https://github.com/kblin>
@@ -344,5 +346,3 @@ please open an issue on GitHub or mention it on the mailing list.
 - Zachary Sailer <https://github.com/Zsailer>
 - Zaid Ur-Rehman <https://github.com/zaidurrehman>
 - Zheng Ruan <https://github.com/zruan>
-- Farhan Khan <https://github.com/BabaYaga1221>
-- Ernesto Rodriguez <https://github.com/netogallo>

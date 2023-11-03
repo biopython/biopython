@@ -25,7 +25,6 @@ from Bio import SeqIO
 from Bio.SeqIO._index import _FormatToRandomAccess
 
 from Bio import BiopythonParserWarning
-from Bio import MissingPythonDependencyError
 
 from seq_tests_common import SeqRecordTestBaseClass
 from test_SeqIO import SeqIOTestBaseClass

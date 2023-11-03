@@ -457,7 +457,7 @@ static struct PyMethodDef _twoBitIO_methods[] = {
      METH_VARARGS | METH_KEYWORDS,
      TwoBit_convert__doc__
     },
-    {NULL,          NULL, 0, NULL} /* sentinel */
+    {NULL, NULL, 0, NULL} /* sentinel */
 };
 
 

@@ -561,7 +561,7 @@ def _get_phred_quality(record: SeqRecord) -> Union[List[float], List[int]]:
 
 # Only map 0 to 93, we need to give a warning on truncating at 93
 _phred_to_sanger_quality_str = {
-    qp: chr(min(126, qp + SANGER_SCORE_OFFSET)) for qp in range(0, 93 + 1)
+    qp: chr(min(126, qp + SANGER_SCORE_OFFSET)) for qp in range(93 + 1)
 }
 # Only map -5 to 93, we need to give a warning on truncating at 93
 _solexa_to_sanger_quality_str = {
@@ -687,7 +687,7 @@ def _get_sanger_quality_str(record: SeqRecord) -> str:
 # Only map 0 to 62, we need to give a warning on truncating at 62
 assert 62 + SOLEXA_SCORE_OFFSET == 126
 _phred_to_illumina_quality_str = {
-    qp: chr(qp + SOLEXA_SCORE_OFFSET) for qp in range(0, 62 + 1)
+    qp: chr(qp + SOLEXA_SCORE_OFFSET) for qp in range(62 + 1)
 }
 # Only map -5 to 62, we need to give a warning on truncating at 62
 _solexa_to_illumina_quality_str = {
@@ -767,7 +767,7 @@ _solexa_to_solexa_quality_str = {
 # Only map -5 to 62, we need to give a warning on truncating at 62
 _phred_to_solexa_quality_str = {
     qp: chr(min(126, int(round(solexa_quality_from_phred(qp))) + SOLEXA_SCORE_OFFSET))
-    for qp in range(0, 62 + 1)
+    for qp in range(62 + 1)
 }
 
 
@@ -2108,7 +2108,7 @@ def _fastq_sanger_convert_fastq_sanger(
     """
     # Map unexpected chars to null
     mapping = "".join(
-        [chr(0) for ascii in range(0, 33)]
+        [chr(0) for ascii in range(33)]
         + [chr(ascii) for ascii in range(33, 127)]
         + [chr(0) for ascii in range(127, 256)]
     )
@@ -2128,7 +2128,7 @@ def _fastq_solexa_convert_fastq_solexa(
     """
     # Map unexpected chars to null
     mapping = "".join(
-        [chr(0) for ascii in range(0, 59)]
+        [chr(0) for ascii in range(59)]
         + [chr(ascii) for ascii in range(59, 127)]
         + [chr(0) for ascii in range(127, 256)]
     )
@@ -2148,7 +2148,7 @@ def _fastq_illumina_convert_fastq_illumina(
     """
     # Map unexpected chars to null
     mapping = "".join(
-        [chr(0) for ascii in range(0, 64)]
+        [chr(0) for ascii in range(64)]
         + [chr(ascii) for ascii in range(64, 127)]
         + [chr(0) for ascii in range(127, 256)]
     )
@@ -2166,8 +2166,8 @@ def _fastq_illumina_convert_fastq_sanger(
     """
     # Map unexpected chars to null
     mapping = "".join(
-        [chr(0) for ascii in range(0, 64)]
-        + [chr(33 + q) for q in range(0, 62 + 1)]
+        [chr(0) for ascii in range(64)]
+        + [chr(33 + q) for q in range(62 + 1)]
         + [chr(0) for ascii in range(127, 256)]
     )
     assert len(mapping) == 256
@@ -2186,8 +2186,8 @@ def _fastq_sanger_convert_fastq_illumina(
     # Map unexpected chars to null
     trunc_char = chr(1)
     mapping = "".join(
-        [chr(0) for ascii in range(0, 33)]
-        + [chr(64 + q) for q in range(0, 62 + 1)]
+        [chr(0) for ascii in range(33)]
+        + [chr(64 + q) for q in range(62 + 1)]
         + [trunc_char for ascii in range(96, 127)]
         + [chr(0) for ascii in range(127, 256)]
     )
@@ -2211,7 +2211,7 @@ def _fastq_solexa_convert_fastq_sanger(
     """
     # Map unexpected chars to null
     mapping = "".join(
-        [chr(0) for ascii in range(0, 59)]
+        [chr(0) for ascii in range(59)]
         + [
             chr(33 + int(round(phred_quality_from_solexa(q))))
             for q in range(-5, 62 + 1)
@@ -2234,8 +2234,8 @@ def _fastq_sanger_convert_fastq_solexa(
     # Map unexpected chars to null
     trunc_char = chr(1)
     mapping = "".join(
-        [chr(0) for ascii in range(0, 33)]
-        + [chr(64 + int(round(solexa_quality_from_phred(q)))) for q in range(0, 62 + 1)]
+        [chr(0) for ascii in range(33)]
+        + [chr(64 + int(round(solexa_quality_from_phred(q)))) for q in range(62 + 1)]
         + [trunc_char for ascii in range(96, 127)]
         + [chr(0) for ascii in range(127, 256)]
     )
@@ -2259,7 +2259,7 @@ def _fastq_solexa_convert_fastq_illumina(
     """
     # Map unexpected chars to null
     mapping = "".join(
-        [chr(0) for ascii in range(0, 59)]
+        [chr(0) for ascii in range(59)]
         + [
             chr(64 + int(round(phred_quality_from_solexa(q))))
             for q in range(-5, 62 + 1)
@@ -2280,8 +2280,8 @@ def _fastq_illumina_convert_fastq_solexa(
     """
     # Map unexpected chars to null
     mapping = "".join(
-        [chr(0) for ascii in range(0, 64)]
-        + [chr(64 + int(round(solexa_quality_from_phred(q)))) for q in range(0, 62 + 1)]
+        [chr(0) for ascii in range(64)]
+        + [chr(64 + int(round(solexa_quality_from_phred(q)))) for q in range(62 + 1)]
         + [chr(0) for ascii in range(127, 256)]
     )
     assert len(mapping) == 256
@@ -2368,7 +2368,7 @@ def _fastq_convert_qual(
 
 def _fastq_sanger_convert_qual(in_file: _TextIOSource, out_file: _TextIOSource) -> int:
     """Fast Sanger FASTQ to QUAL conversion (PRIVATE)."""
-    mapping = {chr(q + 33): str(q) for q in range(0, 93 + 1)}
+    mapping = {chr(q + 33): str(q) for q in range(93 + 1)}
     return _fastq_convert_qual(in_file, out_file, mapping)
 
 
@@ -2385,7 +2385,7 @@ def _fastq_illumina_convert_qual(
     in_file: _TextIOSource, out_file: _TextIOSource
 ) -> int:
     """Fast Illumina 1.3+ FASTQ to QUAL conversion (PRIVATE)."""
-    mapping = {chr(q + 64): str(q) for q in range(0, 62 + 1)}
+    mapping = {chr(q + 64): str(q) for q in range(62 + 1)}
     return _fastq_convert_qual(in_file, out_file, mapping)
 
 

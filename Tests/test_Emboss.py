@@ -869,9 +869,9 @@ class TranslationTests(unittest.TestCase):
         cline += " -auto"  # no prompting
         cline += " -filter"  # use stdout
         if table is not None:
-            cline += f" -table {str(table)}"
+            cline += f" -table {table!s}"
         if frame is not None:
-            cline += f" -frame {str(frame)}"
+            cline += f" -frame {frame!s}"
         # Run the tool,
         child = subprocess.Popen(
             str(cline),

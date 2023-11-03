@@ -2412,6 +2412,29 @@ class TestLoading(unittest.TestCase):
             except Exception:
                 self.fail(f"Failed to load subsitution matrix '{name}'")
 
+    def test_reading(self):
+        """Confirm matrix reading works with filename or handle."""
+        matrix_name = "BLOSUM62"
+        test_path = os.path.dirname(__file__)
+        parent_dir = os.path.dirname(test_path)
+        sub_mx_dir = os.path.join(
+            parent_dir, "Bio", "Align", "substitution_matrices", "data"
+        )
+        matrix_path = os.path.join(sub_mx_dir, matrix_name)
+
+        fname_matrix = substitution_matrices.read(matrix_path)
+        self.assertAlmostEqual(fname_matrix["A"]["A"], 4.0)
+        self.assertEqual(len(fname_matrix), 24)
+        self.assertEqual(len(fname_matrix[0]), 24)
+
+        with open(matrix_path, "r") as handle:
+            handle_matrix = substitution_matrices.read(handle)
+            self.assertFalse(handle.closed)
+        self.assertTrue(handle.closed)
+        self.assertAlmostEqual(handle_matrix["A"]["A"], 4.0)
+        self.assertEqual(len(handle_matrix), 24)
+        self.assertEqual(len(handle_matrix[0]), 24)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

@@ -8,7 +8,6 @@
 
 """Tests for motifs module."""
 
-import os
 import tempfile
 import unittest
 import math
@@ -25,7 +24,6 @@ except ImportError:
 from Bio import BiopythonDeprecationWarning
 from Bio import motifs
 from Bio.Seq import Seq
-from Bio.Align import Alignment
 
 
 class TestBasic(unittest.TestCase):
@@ -4940,7 +4938,6 @@ class TestMEME(unittest.TestCase):
 
     def test_meme_parser_rna(self):
         """Test if Bio.motifs can parse MEME output files using RNA."""
-        pass
 
 
 class TestMAST(unittest.TestCase):

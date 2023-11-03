@@ -106,7 +106,7 @@ class DisorderedResidue(DisorderedEntityWrapper):
     def add(self, atom):
         """Add atom to residue."""
         residue = self.disordered_get()
-        if not atom.is_disordered() == 2:
+        if atom.is_disordered() != 2:
             # Atoms in disordered residues should have non-blank
             # altlocs, and are thus represented by DisorderedAtom objects.
             resname = residue.get_resname()

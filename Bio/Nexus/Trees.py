@@ -28,8 +28,6 @@ NODECOMMENT_END = "]"
 class TreeError(Exception):
     """Provision for the management of Tree exceptions."""
 
-    pass
-
 
 class NodeData:
     """Store tree-relevant data associated with nodes (e.g. branches or otus)."""
@@ -724,7 +722,7 @@ class Tree(Nodes.Chain):
             treeline.append("a_tree")
         treeline.append("=")
         if self.weight != 1:
-            treeline.append(f"[&W{str(round(float(self.weight), 3))}]")
+            treeline.append(f"[&W{round(float(self.weight), 3)!s}]")
         if self.rooted:
             treeline.append("[&R]")
         succnodes = ladderize_nodes(self.node(self.root).succ)

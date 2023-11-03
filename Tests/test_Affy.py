@@ -8,7 +8,6 @@ import unittest
 
 import struct
 import os
-import sys
 
 try:
     from numpy import array

@@ -178,7 +178,6 @@ class Organism(_ChromosomeComponent):
         Subclasses should implement this (see also self._legend_height) to
         provide specialized legends.
         """
-        pass
 
 
 class Chromosome(_ChromosomeComponent):
@@ -445,7 +444,6 @@ class ChromosomeSegment(_ChromosomeComponent):
         This should be overridden in derived classes if there are
         subcomponents to be drawn.
         """
-        pass
 
     def _draw_segment(self, cur_drawing):
         """Draw the current chromosome segment (PRIVATE)."""
@@ -484,7 +482,6 @@ class ChromosomeSegment(_ChromosomeComponent):
         This should be overridden in derived classes if there are
         subcomponents to be drawn.
         """
-        pass
 
     def _draw_label(self, cur_drawing):
         """Add a label to the chromosome segment (PRIVATE).
@@ -817,4 +814,3 @@ class SpacerSegment(ChromosomeSegment):
         so this method therefore does nothing, but is defined
         to match the expected API of the other segment objects.
         """
-        pass

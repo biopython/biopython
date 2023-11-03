@@ -6,11 +6,10 @@
 """Testing code for Bio.Entrez parsers."""
 
 import unittest
-import sys
 import os
 import pickle
 
-from io import BytesIO, StringIO
+from io import BytesIO
 
 from Bio import Entrez
 

@@ -183,7 +183,6 @@ class SequenceWriter:
 
     def write_header(self):
         """Write the file header to the output file."""
-        pass
         ##################################################
         # You MUST implement this method in the subclass #
         # if the file format defines a file header.      #
@@ -191,7 +190,6 @@ class SequenceWriter:
 
     def write_footer(self):
         """Write the file footer to the output file."""
-        pass
         ##################################################
         # You MUST implement this method in the subclass #
         # if the file format defines a file footer.      #

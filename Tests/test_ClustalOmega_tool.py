@@ -7,7 +7,6 @@
 
 """Tests for ClustalOmega tool."""
 
-import sys
 import os
 import unittest
 
@@ -65,8 +64,12 @@ class ClustalOmegaTestCase(unittest.TestCase):
         # Test if ClustalOmega executed successfully.
         self.assertTrue(
             error.strip() == ""
-            or error.startswith("WARNING: Sequence type is DNA.")
-            or error.startswith("WARNING: DNA alignment is still experimental.")
+            or error.startswith(
+                (
+                    "WARNING: Sequence type is DNA.",
+                    "WARNING: DNA alignment is still experimental.",
+                )
+            )
         )
 
         # TODO - Try and parse this with Bio.Nexus?

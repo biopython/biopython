@@ -53,8 +53,6 @@ class LowQualityBlastError(Exception):
     in this case.
     """
 
-    pass
-
 
 class ShortQueryBlastError(Exception):
     """Error caused by running a short query sequence through BLAST.
@@ -68,8 +66,6 @@ class ShortQueryBlastError(Exception):
 
     This exception is raised when that condition is detected.
     """
-
-    pass
 
 
 class _Scanner:
@@ -395,7 +391,7 @@ class _Scanner:
         if not line:
             # EOF
             return
-        elif line.startswith("  Database") or line.startswith("Lambda"):
+        elif line.startswith(("  Database", "Lambda")):
             return
         elif line[0] == ">":
             # XXX make a better check here between pairwise and masterslave
@@ -506,7 +502,7 @@ class _Scanner:
                 break
             line = safe_peekline(uhandle)
             # Alignment continues if I see a 'Query' or the spaces for Blastn.
-            if not (line.startswith("Query") or line.startswith("     ")):
+            if not (line.startswith(("Query", "     "))):
                 break
 
     def _scan_masterslave_alignment(self, uhandle, consumer):
@@ -518,7 +514,7 @@ class _Scanner:
             # round, which can also be a 'Results from round' if no
             # searching line is present
             # patch by chapmanb
-            if line.startswith("Searching") or line.startswith("Results from round"):
+            if line.startswith(("Searching", "Results from round")):
                 uhandle.saveline(line)
                 break
             elif line.startswith("  Database"):
@@ -1035,7 +1031,7 @@ class _AlignmentConsumer:
 
     def multalign(self, line):
         # Standalone version uses 'QUERY', while WWW version uses blast_tmp.
-        if line.startswith("QUERY") or line.startswith("blast_tmp"):
+        if line.startswith(("QUERY", "blast_tmp")):
             # If this is the first line of the multiple alignment,
             # then I need to figure out how the line is formatted.
 
@@ -1747,9 +1743,7 @@ class Iterator:
                 break
             # If I've reached the next one, then put the line back and stop.
             if lines and (
-                line.startswith("BLAST")
-                or line.startswith("BLAST", 1)
-                or line.startswith("<?xml ")
+                line.startswith(("BLAST", "<?xml ")) or line.startswith("BLAST", 1)
             ):
                 self._uhandle.saveline(line)
                 break

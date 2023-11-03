@@ -30,9 +30,7 @@ import time
 import traceback
 import unittest
 import doctest
-import distutils.util
 import gc
-from io import BytesIO
 from pkgutil import iter_modules
 from setuptools import find_packages
 from io import StringIO

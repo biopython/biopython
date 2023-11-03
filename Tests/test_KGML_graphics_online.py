@@ -11,7 +11,6 @@ import os
 import unittest
 
 # Biopython
-from Bio.Graphics.ColorSpiral import ColorSpiral
 
 # Do we have ReportLab?  Raise error if not present.
 from Bio import MissingExternalDependencyError

@@ -690,7 +690,7 @@ class SeqRecord:
             lines.append("Database cross-references: " + ", ".join(self.dbxrefs))
         lines.append(f"Number of features: {len(self.features)}")
         for a in self.annotations:
-            lines.append(f"/{a}={str(self.annotations[a])}")
+            lines.append(f"/{a}={self.annotations[a]!s}")
         if self.letter_annotations:
             lines.append(
                 "Per letter annotation for: " + ", ".join(self.letter_annotations)
@@ -836,11 +836,11 @@ class SeqRecord:
         """Define the less-than-or-equal-to operand (not implemented)."""
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 
-    def __eq__(self, other: Any) -> NoReturn:
+    def __eq__(self, other: object) -> NoReturn:
         """Define the equal-to operand (not implemented)."""
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 
-    def __ne__(self, other: Any) -> NoReturn:
+    def __ne__(self, other: object) -> NoReturn:
         """Define the not-equal-to operand (not implemented)."""
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 

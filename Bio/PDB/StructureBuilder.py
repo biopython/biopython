@@ -310,4 +310,3 @@ class StructureBuilder:
 
     def set_symmetry(self, spacegroup, cell):
         """Set symmetry."""
-        pass

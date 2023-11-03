@@ -438,7 +438,7 @@ class TransformTests(unittest.TestCase):
             o.transform(rotation, translation)
             newpos = self.get_pos(o)
             newpos_check = numpy.dot(oldpos, rotation) + translation
-            for i in range(0, 3):
+            for i in range(3):
                 self.assertAlmostEqual(newpos[i], newpos_check[i])
 
 

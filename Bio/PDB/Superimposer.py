@@ -37,7 +37,7 @@ class Superimposer:
         length = len(fixed)
         fixed_coord = np.zeros((length, 3))
         moving_coord = np.zeros((length, 3))
-        for i in range(0, length):
+        for i in range(length):
             fixed_coord[i] = fixed[i].get_coord()
             moving_coord[i] = moving[i].get_coord()
         sup = SVDSuperimposer()

@@ -32,7 +32,7 @@ TEST_ALIGN_FILE6 = [
     ("codonalign/egfr_nucl.fa", "codonalign/egfr_pro.aln", "codonalign/egfr_id"),
     "id",
 ]
-TEST_ALIGN_FILE7 = [("codonalign/drosophilla.fasta", "codonalign/adh.aln"), "index"]
+TEST_ALIGN_FILE7 = [("codonalign/drosophila.fasta", "codonalign/adh.aln"), "index"]
 
 temp_dir = tempfile.mkdtemp()
 

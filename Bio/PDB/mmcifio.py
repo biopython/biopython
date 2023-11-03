@@ -67,7 +67,6 @@ class MMCIFIO(StructureIO):
 
     def __init__(self):
         """Initialise."""
-        pass
 
     def set_dict(self, dic):
         """Set the mmCIF dictionary to be written out."""
@@ -253,8 +252,7 @@ class MMCIFIO(StructureIO):
             or "'" in val
             or '"' in val
             or val[0] in ["_", "#", "$", "[", "]", ";"]
-            or val.startswith("data_")
-            or val.startswith("save_")
+            or val.startswith(("data_", "save_"))
             or val in ["loop_", "stop_", "global_"]
         ):
             return True

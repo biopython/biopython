@@ -107,34 +107,60 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         tGap = 0
         for tEnd, qEnd in coordinates[:, 1:].transpose():
             if tStart == tEnd:
-                if qGap > 0:
+                if tGap > 0:
+                    qGap = qEnd - qStart
                     line = f"{step}\t{tGap}\t{qGap}"
                     lines.append(line)
                     step = 0
                     tGap = 0
-                qGap = qEnd - qStart
-                qStart = qEnd
-            elif qStart == qEnd:
-                if tGap > 0:
+                    qGap = 0
+                elif qGap > 0:
                     line = f"{step}\t{tGap}\t{qGap}"
                     lines.append(line)
                     step = 0
+                    qGap = qEnd - qStart
+                else:
+                    qGap = qEnd - qStart
+                qStart = qEnd
+            elif qStart == qEnd:
+                if qGap > 0:
+                    tGap = tEnd - tStart
+                    line = f"{step}\t{tGap}\t{qGap}"
+                    lines.append(line)
+                    step = 0
+                    tGap = 0
                     qGap = 0
-                tGap = tEnd - tStart
+                elif tGap > 0:
+                    line = f"{step}\t{tGap}\t{qGap}"
+                    lines.append(line)
+                    step = 0
+                    tGap = tEnd - tStart
+                else:
+                    tGap = tEnd - tStart
                 tStart = tEnd
             else:
-                tStep = tEnd - tStart
-                qStep = qEnd - qStart
+                if step == 0:
+                    tStep = tEnd - tStart
+                    qStep = qEnd - qStart
+                    if tGap == 0 and qGap == 0:
+                        step = tStep
+                    else:
+                        line = f"{tStep}\t{tGap}\t{qGap}"
+                        lines.append(line)
+                        tGap = 0
+                        qGap = 0
+                else:
+                    line = f"{step}\t{tGap}\t{qGap}"
+                    lines.append(line)
+                    tStep = tEnd - tStart
+                    qStep = qEnd - qStart
+                    step = tStep
+                    tGap = 0
+                    qGap = 0
                 if tStep != qStep:
                     raise ValueError(
                         f"Expected equal step size in target and query (found {tStep} and {qStep})"
                     )
-                if step > 0:
-                    line = f"{step}\t{tGap}\t{qGap}"
-                    lines.append(line)
-                    tGap = 0
-                    qGap = 0
-                step = tStep
                 tStart = tEnd
                 qStart = qEnd
         if tGap > 0 or qGap > 0:

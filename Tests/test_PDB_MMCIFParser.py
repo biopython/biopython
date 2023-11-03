@@ -30,7 +30,6 @@ except ImportError:
 
 from Bio.Seq import Seq
 from Bio.PDB.PDBExceptions import (
-    PDBConstructionException,
     PDBConstructionWarning,
     PDBIOException,
 )

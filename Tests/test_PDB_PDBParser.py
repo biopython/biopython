@@ -14,8 +14,6 @@
 """Unit tests for the Bio.PDB PDBParser module."""
 
 from io import StringIO
-import os
-import tempfile
 import unittest
 import warnings
 
@@ -28,7 +26,6 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB."
     ) from None
 
-from Bio import BiopythonWarning
 from Bio.PDB import PDBParser
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 

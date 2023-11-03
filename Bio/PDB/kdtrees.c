@@ -1318,7 +1318,7 @@ static PyMethodDef KDTree_methods[] = {
      (PyCFunction)PyKDTree_neighbor_simple_search,
       METH_VARARGS,
       PyKDTree_neighbor_simple_search__doc__},
-    {NULL}  /* Sentinel */
+    {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
 PyDoc_STRVAR(KDTree_doc,

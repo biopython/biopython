@@ -3320,6 +3320,84 @@ query           222 GACGGA 228
         )
 
 
+class TestAlign_mapall(unittest.TestCase):
+    def test_mapall(self):
+        assemblies = (
+            ("panTro5", "panTro6"),
+            ("hg19", "hg38"),
+            ("rheMac8", "rheMac10"),
+            ("calJac3", "calJac4"),
+            ("mm10", "mm39"),
+            ("rn6", "rn7"),
+        )
+        alignments = []
+        records = []
+        for old_assembly, new_assembly in assemblies:
+            new_assembly_capitalized = new_assembly[0].upper() + new_assembly[1:]
+            filename = f"{old_assembly}To{new_assembly_capitalized}.chain"
+            path = os.path.join("Blat", filename)
+            alignment = Align.read(path, "chain")
+            alignments.append(alignment)
+            filename = "%s.fa" % new_assembly
+            path = os.path.join("Align", filename)
+            record = SeqIO.read(path, "fasta")
+            chromosome, location = record.id.split(":")
+            start, end = location.split("-")
+            start = int(start)
+            end = int(end)
+            data = {start: str(record.seq)}
+            length = len(alignment.query)
+            seq = Seq(data, length=length)
+            name = "%s.%s" % (new_assembly, chromosome)
+            record = SeqRecord(seq, id=name)
+            records.append(record)
+        path = os.path.join("Blat", "panTro5.maf")
+        alignment = Align.read(path, "maf")
+        self.assertEqual(
+            str(alignment),
+            """\
+panTro5.c 133922962 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAACTTAAAggcc
+hg19.chr1 155784573 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAACTTAAAggcc
+rheMac8.c 130383910 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAACTTAAAggcc
+calJac3.c   9790455 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAGCTTAAAggct
+mm10.chr3  88858039 TATAATAATTGTATATGTCACAGAAAAAAATGAATTTTCAAT---GACTTAATAGCC
+rn6.chr2  188162970 TACAATAATTG--TATGTCATAGAAAAAAATGAATTTTCAAT---AACTTAATAGCC
+
+panTro5.c 133923010
+hg19.chr1 155784621
+rheMac8.c 130383958
+calJac3.c   9790503
+mm10.chr3  88857985
+rn6.chr2  188162918
+""",
+        )
+        alignment = alignment.mapall(alignments)
+        for i, record in enumerate(records):
+            sequence = alignment.sequences[i]
+            self.assertEqual(len(record), len(sequence))
+            name, chromosome = record.id.split(".")
+            self.assertEqual(sequence.id, chromosome)
+            alignment.sequences[i] = record
+        self.assertEqual(
+            str(alignment),
+            """\
+panTro6.c 130611000 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAACTTAAAggcc
+hg38.chr1 155814782 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAACTTAAAggcc
+rheMac10.  95186253 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAACTTAAAggcc
+calJac4.c   9758318 ---ACTAGTTA--CA----GTAACAGAaaataaaatttaaatagaagcttaaaggct
+mm39.chr3  88765346 TATAATAATTGTATATGTCACAGAAAAAAATGAATTTTCAAT---GACTTAATAGCC
+rn7.chr2  174256702 TACAATAATTG--TATGTCATAGAAAAAAATGAATTTTCAAT---AACTTAATAGCC
+
+panTro6.c 130611048
+hg38.chr1 155814830
+rheMac10.  95186205
+calJac4.c   9758366
+mm39.chr3  88765292
+rn7.chr2  174256650
+""",
+        )
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

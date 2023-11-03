@@ -619,7 +619,8 @@ Arguments:\n\
 
 static PyMethodDef CEAlignMethods[] = {
     {"run_cealign", PyCealign, METH_VARARGS, method_doc},
-    {NULL, NULL, 0, NULL}};
+    {NULL, NULL, 0, NULL}
+};
 
 PyDoc_STRVAR(module_doc,
 "Pairwise structure alignment of 3D structures using combinatorial extension.\

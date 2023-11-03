@@ -174,14 +174,14 @@ def GC123(seq):
         codon = seq[i : i + 3]
         if len(codon) < 3:
             codon += "  "
-        for pos in range(0, 3):
+        for pos in range(3):
             for nt in ["A", "T", "G", "C"]:
                 if codon[pos] == nt or codon[pos] == nt.lower():
                     d[nt][pos] += 1
     gc = {}
     gcall = 0
     nall = 0
-    for i in range(0, 3):
+    for i in range(3):
         try:
             n = d["G"][i] + d["C"][i] + d["T"][i] + d["A"][i]
             gc[i] = (d["G"][i] + d["C"][i]) * 100.0 / n
@@ -540,7 +540,7 @@ def six_frame_translations(seq, genetic_code=1):
     comp = anti[::-1]
     length = len(seq)
     frames = {}
-    for i in range(0, 3):
+    for i in range(3):
         fragment_length = 3 * ((length - i) // 3)
         frames[i + 1] = translate(seq[i : i + fragment_length], genetic_code)
         frames[-(i + 1)] = translate(anti[i : i + fragment_length], genetic_code)[::-1]

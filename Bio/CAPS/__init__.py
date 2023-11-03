@@ -48,8 +48,6 @@ class DifferentialCutsite:
 class AlignmentHasDifferentLengthsError(Exception):
     """Exception where sequences in alignment have different lengths."""
 
-    pass
-
 
 class CAPSMap:
     """A map of an alignment showing all possible dcuts.

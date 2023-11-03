@@ -61,7 +61,7 @@ class TestPhylipIO(unittest.TestCase):
         self.assertEqual(len(list3), 1)
         self.assertEqual(len(list3[0]), 5)
 
-        for i in range(0, 5):
+        for i in range(5):
             self.assertEqual(list2[0][i].id, list3[0][i].id)
             self.assertEqual(list2[0][i].seq, list3[0][i].seq)
 

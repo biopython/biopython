@@ -335,7 +335,7 @@ class FastaM10Parser:
             elif not line.startswith(">>>") and ">>>" in line:
                 qres_state = state_QRES_NEW
             # the beginning of the query info and its hits + hsps
-            elif line.startswith(">>>") and not line.strip() == ">>><<<":
+            elif line.startswith(">>>") and line.strip() != ">>><<<":
                 qres_state = state_QRES_CONTENT
             # default qres mark
             else:

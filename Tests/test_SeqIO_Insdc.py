@@ -4,6 +4,7 @@
 # as part of this package.
 """Tests for SeqIO Insdc module."""
 import unittest
+import warnings
 
 from io import StringIO
 
@@ -90,15 +91,21 @@ class TestEmblRewrite(SeqRecordTestBaseClass):
 
     def test_annotation1(self):
         """Check writing-and-parsing EMBL file (1)."""
-        self.check_rewrite("EMBL/TRBG361.embl")
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            self.check_rewrite("EMBL/TRBG361.embl")
 
     def test_annotation2(self):
         """Check writing-and-parsing EMBL file (2)."""
-        self.check_rewrite("EMBL/DD231055_edited.embl")
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            self.check_rewrite("EMBL/DD231055_edited.embl")
 
     def test_annotation3(self):
         """Check writing-and-parsing EMBL file (3)."""
-        self.check_rewrite("EMBL/AE017046.embl")
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            self.check_rewrite("EMBL/AE017046.embl")
 
 
 class ConvertTestsInsdc(SeqIOConverterTestBaseClass):

@@ -198,9 +198,9 @@ def _make_fragment_list(pp, length):
     :type length: int
     """
     frag_list = []
-    for i in range(0, len(pp) - length + 1):
+    for i in range(len(pp) - length + 1):
         f = Fragment(length, -1)
-        for j in range(0, length):
+        for j in range(length):
             residue = pp[i + j]
             resname = residue.get_resname()
             if residue.has_id("CA"):
@@ -231,7 +231,7 @@ def _map_fragment_list(flist, reflist):
     mapped = []
     for f in flist:
         rank = []
-        for i in range(0, len(reflist)):
+        for i in range(len(reflist)):
             rf = reflist[i]
             rms = f - rf
             rank.append((rms, rf))
@@ -287,7 +287,7 @@ class FragmentMapper:
                 flist = _make_fragment_list(pp, self.flength)
                 # classify fragments
                 mflist = _map_fragment_list(flist, self.reflist)
-                for i in range(0, len(pp)):
+                for i in range(len(pp)):
                     res = pp[i]
                     if i < self.edge:
                         # start residues
