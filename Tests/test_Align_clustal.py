@@ -185,7 +185,7 @@ gi|671626|emb|CAA85685.1|           -
                                      
 
 
-""",
+""",  # noqa: W293
         )
 
     def test_msaprobs(self):
@@ -579,7 +579,7 @@ AT3G20900.1-CDS                     CAGCACCGCTGCTGGGGATGGAGAGGGAACAGAGTAG
                                     ***********************************  
 
 
-""",
+""",  # noqa: W293
         )
         self.check_reading_writing(path)
 
