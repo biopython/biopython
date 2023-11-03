@@ -1934,7 +1934,6 @@ table bed
 
     def test_reading_psl_35_001(self):
         """Test parsing psl_35_001.bb."""
-
         alignments = Align.parse(self.path, "bigbed")
         self.check_alignments(alignments)
 
