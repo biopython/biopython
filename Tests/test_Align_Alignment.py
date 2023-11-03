@@ -3332,6 +3332,8 @@ target            0 M  M  A   3
 query             0 ATGATGGCC 9
 """,
         )
+        self.assertEqual(alignment[0], "MMA")
+        self.assertEqual(alignment[1], "ATGATGGCC")
         sequences = [t, t, s]
         coordinates = np.array([[0, 3], [0, 3], [0, 9]])
         alignment = Align.Alignment(sequences, coordinates)
@@ -3343,6 +3345,9 @@ query             0 ATGATGGCC 9
                   0 ATGATGGCC 9
 """,
         )
+        self.assertEqual(alignment[0], "MMA")
+        self.assertEqual(alignment[1], "MMA")
+        self.assertEqual(alignment[2], "ATGATGGCC")
         sequences = [t, t, s, s]
         coordinates = np.array([[0, 3], [0, 3], [0, 9], [0, 9]])
         alignment = Align.Alignment(sequences, coordinates)
@@ -3355,6 +3360,10 @@ query             0 ATGATGGCC 9
                   0 ATGATGGCC 9
 """,
         )
+        self.assertEqual(alignment[0], "MMA")
+        self.assertEqual(alignment[1], "MMA")
+        self.assertEqual(alignment[2], "ATGATGGCC")
+        self.assertEqual(alignment[3], "ATGATGGCC")
         s = "ATGATGCC"
         sequences = [t, s]
         coordinates = np.array([[0, 2, 2, 3], [0, 6, 5, 8]])
@@ -3369,6 +3378,8 @@ target            2 A   3
 query             5 GCC 8
 """,
         )
+        self.assertEqual(alignment[0], "MMA")
+        self.assertEqual(alignment[1], "ATGATGGCC")
         sequences = [t, t, s]
         coordinates = np.array([[0, 2, 2, 3], [0, 2, 2, 3], [0, 6, 5, 8]])
         alignment = Align.Alignment(sequences, coordinates)
@@ -3384,6 +3395,9 @@ query             5 GCC 8
                   5 GCC 8
 """,
         )
+        self.assertEqual(alignment[0], "MMA")
+        self.assertEqual(alignment[1], "MMA")
+        self.assertEqual(alignment[2], "ATGATGGCC")
         sequences = [t, s, s]
         coordinates = np.array([[0, 2, 2, 3], [0, 6, 5, 8], [0, 6, 5, 8]])
         alignment = Align.Alignment(sequences, coordinates)
@@ -3399,6 +3413,9 @@ query             5 GCC 8
                   5 GCC 8
 """,
         )
+        self.assertEqual(alignment[0], "MMA")
+        self.assertEqual(alignment[1], "ATGATGGCC")
+        self.assertEqual(alignment[2], "ATGATGGCC")
         sequences = [t, t, s, s]
         coordinates = np.array([[0, 2, 2, 3], [0, 2, 2, 3], [0, 6, 5, 8], [0, 6, 5, 8]])
         alignment = Align.Alignment(sequences, coordinates)
@@ -3416,6 +3433,10 @@ query             5 GCC 8
                   5 GCC 8
 """,
         )
+        self.assertEqual(alignment[0], "MMA")
+        self.assertEqual(alignment[1], "MMA")
+        self.assertEqual(alignment[2], "ATGATGGCC")
+        self.assertEqual(alignment[3], "ATGATGGCC")
         t = "MMA"
         s = "GGCCATCAT"
         sequences = [t, s]
@@ -3428,6 +3449,8 @@ target            0 M  M  A   3
 query             9 ATGATGGCC 0
 """,
         )
+        self.assertEqual(alignment[0], "MMA")
+        self.assertEqual(alignment[1], "ATGATGGCC")
         sequences = [t, t, s]
         coordinates = np.array([[0, 3], [0, 3], [9, 0]])
         alignment = Align.Alignment(sequences, coordinates)
@@ -3439,6 +3462,9 @@ query             9 ATGATGGCC 0
                   9 ATGATGGCC 0
 """,
         )
+        self.assertEqual(alignment[0], "MMA")
+        self.assertEqual(alignment[1], "MMA")
+        self.assertEqual(alignment[2], "ATGATGGCC")
         sequences = [t, t, s, s]
         coordinates = np.array([[0, 3], [0, 3], [9, 0], [9, 0]])
         alignment = Align.Alignment(sequences, coordinates)
@@ -3451,6 +3477,10 @@ query             9 ATGATGGCC 0
                   9 ATGATGGCC 0
 """,
         )
+        self.assertEqual(alignment[0], "MMA")
+        self.assertEqual(alignment[1], "MMA")
+        self.assertEqual(alignment[2], "ATGATGGCC")
+        self.assertEqual(alignment[3], "ATGATGGCC")
         s = "GGCATCAT"
         sequences = [t, s]
         coordinates = np.array([[0, 2, 2, 3], [8, 2, 3, 0]])
@@ -3465,6 +3495,8 @@ target            2 A   3
 query             3 GCC 0
 """,
         )
+        self.assertEqual(alignment[0], "MMA")
+        self.assertEqual(alignment[1], "ATGATGGCC")
         sequences = [t, t, s]
         coordinates = np.array([[0, 2, 2, 3], [0, 2, 2, 3], [8, 2, 3, 0]])
         alignment = Align.Alignment(sequences, coordinates)
@@ -3480,6 +3512,9 @@ query             3 GCC 0
                   3 GCC 0
 """,
         )
+        self.assertEqual(alignment[0], "MMA")
+        self.assertEqual(alignment[1], "MMA")
+        self.assertEqual(alignment[2], "ATGATGGCC")
         sequences = [t, s, s]
         coordinates = np.array([[0, 2, 2, 3], [8, 2, 3, 0], [8, 2, 3, 0]])
         alignment = Align.Alignment(sequences, coordinates)
@@ -3495,6 +3530,9 @@ query             3 GCC 0
                   3 GCC 0
 """,
         )
+        self.assertEqual(alignment[0], "MMA")
+        self.assertEqual(alignment[1], "ATGATGGCC")
+        self.assertEqual(alignment[2], "ATGATGGCC")
         sequences = [t, t, s, s]
         coordinates = np.array([[0, 2, 2, 3], [0, 2, 2, 3], [8, 2, 3, 0], [8, 2, 3, 0]])
         alignment = Align.Alignment(sequences, coordinates)
@@ -3512,6 +3550,10 @@ query             3 GCC 0
                   3 GCC 0
 """,
         )
+        self.assertEqual(alignment[0], "MMA")
+        self.assertEqual(alignment[1], "MMA")
+        self.assertEqual(alignment[2], "ATGATGGCC")
+        self.assertEqual(alignment[3], "ATGATGGCC")
 
 
 class TestAlign_mapall(unittest.TestCase):

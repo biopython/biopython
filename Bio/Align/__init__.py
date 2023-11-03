@@ -1573,19 +1573,13 @@ class Alignment:
         coordinates = self.coordinates[index, :]
         sequence = self.sequences[index]
         for i in range(n):
-            row = steps[i, aligned]
-            if (row >= 0).all():
-                pass
-            elif (row <= 0).all():
+            aligned_steps = steps[i, aligned]
+            if sum(aligned_steps) < 0:
                 steps[i, :] = -steps[i, :]
                 if i == index:
                     sequence = reverse_complement(sequence, inplace=False)
                     coordinates = len(sequence) - coordinates
-            else:
-                raise ValueError(f"Inconsistent steps in row {index}")
         gaps = steps.max(0)
-        if not ((steps == gaps) | (steps <= 0)).all():
-            raise ValueError("Unequal step sizes in alignment")
         try:
             sequence = sequence.seq  # SeqRecord confusion
         except AttributeError:
