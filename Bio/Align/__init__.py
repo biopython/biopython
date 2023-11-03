@@ -1574,7 +1574,7 @@ class Alignment:
         sequence = self.sequences[index]
         for i in range(n):
             aligned_steps = steps[i, aligned]
-            if sum(aligned_steps) < 0:
+            if sum(aligned_steps > 0) < sum(aligned_steps < 0):
                 steps[i, :] = -steps[i, :]
                 if i == index:
                     sequence = reverse_complement(sequence, inplace=False)
@@ -2224,7 +2224,7 @@ class Alignment:
             aligned_steps = steps[i, aligned]
             if len(aligned_steps) == 0:
                 aligned_steps = steps[i]
-            if sum(aligned_steps) >= 0:
+            if sum(aligned_steps > 0) >= sum(aligned_steps < 0):
                 start = min(positions)
                 row[:] = positions - start
             else:
