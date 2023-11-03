@@ -115,13 +115,6 @@ class _RestrictedDict(Dict[str, Sequence[Any]]):
             self[key] = value
 
 
-SeqType = Union["Seq", "MutableSeq"]
-
-
-def _is_valid_seq_type(seq: Any) -> bool:
-    return isinstance(seq, Seq) or isinstance(seq, MutableSeq)
-
-
 class SeqRecord:
     """A SeqRecord object holds a sequence and information about it.
 
@@ -189,7 +182,7 @@ class SeqRecord:
 
     def __init__(
         self,
-        seq: Optional[SeqType],
+        seq: Optional[Union["Seq", "MutableSeq"]],
         id: Optional[str] = "<unknown id>",
         name: str = "<unknown name>",
         description: str = "<unknown description>",
@@ -234,7 +227,7 @@ class SeqRecord:
         # If seq is a string, other operations (such as saving from AlignIO)
         # will fail. Either convert to Seq or raise an error
         # see "Bio/SeqIO/Interfaces.py:_get_seq_string" for example.
-        if not (seq is None or _is_valid_seq_type(seq)):
+        if not (seq is None or isinstance(seq, (Seq, MutableSeq))):
             raise TypeError("seq argument should be a Seq or MutableSeq")
 
         self._seq = seq
@@ -353,8 +346,8 @@ class SeqRecord:
         """,
     )
 
-    def _set_seq(self, value: SeqType) -> None:
-        if not _is_valid_seq_type(value):
+    def _set_seq(self, value: Union["Seq", "MutableSeq"]) -> None:
+        if not isinstance(value, (Seq, MutableSeq)):
             raise TypeError("The value argument should be Seq or MutableSeq")
 
         # TODO - Add a deprecation warning that the seq should be write only?
