@@ -98,6 +98,7 @@ possible, especially the following contributors:
 - Arpan Sahoo (first contribution)
 - Benedict Carling (first contribution)
 - Cam McMenamie (first contribution)
+- Ernesto Rodriguez (first contribution)
 - Jacob Byerly (first contribution)
 - João Rodrigues
 - Joe Greener
@@ -109,7 +110,6 @@ possible, especially the following contributors:
 - Thomas Holder
 - Vladislav Kuznetsov (first contribution)
 - Yiming Qu (first contribution)
-- Ernesto Rodriguez (first contribution)
 
 12 February 2023: Biopython 1.81
 ================================

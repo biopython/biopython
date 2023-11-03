@@ -30,10 +30,9 @@ from typing import (
 )
 
 from Bio import StreamModeError
-from Bio.Seq import Seq, UndefinedSequenceError
+from Bio.Seq import Seq, MutableSeq, UndefinedSequenceError
 
 if TYPE_CHECKING:
-    from Bio.Seq import MutableSeq
     from Bio.SeqFeature import SeqFeature
 
 _NO_SEQRECORD_COMPARISON = "SeqRecord comparison is deliberately not implemented. Explicitly compare the attributes of interest."
@@ -116,6 +115,13 @@ class _RestrictedDict(Dict[str, Sequence[Any]]):
             self[key] = value
 
 
+SeqType = Union["Seq", "MutableSeq"]
+
+
+def _is_valid_seq_type(seq: Any) -> bool:
+    return isinstance(seq, Seq) or isinstance(seq, MutableSeq)
+
+
 class SeqRecord:
     """A SeqRecord object holds a sequence and information about it.
 
@@ -183,7 +189,7 @@ class SeqRecord:
 
     def __init__(
         self,
-        seq: Optional[Union["Seq", "MutableSeq", str]],
+        seq: Optional[SeqType],
         id: Optional[str] = "<unknown id>",
         name: str = "<unknown name>",
         description: str = "<unknown description>",
@@ -228,8 +234,8 @@ class SeqRecord:
         # If seq is a string, other operations (such as saving from AlignIO)
         # will fail. Either convert to Seq or raise an error
         # see "Bio/SeqIO/Interfaces.py:_get_seq_string" for example.
-        if isinstance(seq, str):
-            seq = Seq(seq)
+        if not (seq is None or _is_valid_seq_type(seq)):
+            raise TypeError("seq argument should be a Seq or MutableSeq")
 
         self._seq = seq
         self.id = id
@@ -347,7 +353,10 @@ class SeqRecord:
         """,
     )
 
-    def _set_seq(self, value: Union["Seq", "MutableSeq"]) -> None:
+    def _set_seq(self, value: SeqType) -> None:
+        if not _is_valid_seq_type(value):
+            raise TypeError("The value argument should be Seq or MutableSeq")
+
         # TODO - Add a deprecation warning that the seq should be write only?
         if self._per_letter_annotations:
             if len(self) != len(value):

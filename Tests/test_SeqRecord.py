@@ -128,6 +128,10 @@ class SeqRecordCreation(unittest.TestCase):
         with self.assertRaises(TypeError):
             SeqRecord(Seq("ACGT"), features={})
 
+    def test_valid_seq(self):
+        with self.assertRaises(TypeError):
+            SeqRecord("ACGT")
+
 
 class SeqRecordMethods(unittest.TestCase):
     """Test SeqRecord methods."""
