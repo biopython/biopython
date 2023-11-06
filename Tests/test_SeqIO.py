@@ -2539,6 +2539,25 @@ class TestSeqIO(SeqIOTestBaseClass):
             messages,
         )
 
+    def test_uniprot_xml_namespace(self):
+        uniref_file_name = (
+            "SwissProt/UniRef90_P99999.xml"  # a related but not uniproot format file
+        )
+        with self.assertRaises(ValueError) as context:
+            records = []
+            for record in SeqIO.parse(uniref_file_name, format="uniprot-xml"):
+                records.append(record)
+        self.assertRegex(
+            str(context.exception),
+            "http://uniprot.org/uniprot",
+            "Correct namespace in error",
+        )
+        self.assertRegex(
+            str(context.exception),
+            "http://uniprot.org/uniref",
+            "Unexpected namespace in error",
+        )
+
     def test_swiss20(self):
         sequences = ["MTMAAAQGKLSPDAIDNEVISNGSAKDYLDPPPAPLVDAG...SNYDAAV"]
         ids = ["F2CXE6"]
