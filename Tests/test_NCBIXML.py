@@ -22,7 +22,13 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
             record = next(records)
             self.assertRaises(StopIteration, next, records)
+        self.check_xml_2212L_blastp_001(record)
 
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+            self.check_xml_2212L_blastp_001(record)
+
+    def check_xml_2212L_blastp_001(self, record):
         alignments = record.alignments
         self.assertEqual(len(alignments), 212)
         self.assertEqual(record.query_id, "gi|49176427|ref|NP_418280.3|")
@@ -2019,9 +2025,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(alignment.hsps), 1)
         self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
 
-        with open(datafile, "rb") as handle:
-            record = NCBIXML.read(handle)
-
     def test_xml_2212L_blastn_001(self):
         """Parsing BLASTN 2.2.12, gi|1348916|gb|G26684.1|G26684 (xml_2212L_blastn_001)."""
         filename = "xml_2212L_blastn_001.xml"
@@ -2030,6 +2033,13 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
             record = next(records)
             self.assertRaises(StopIteration, next, records)
+        self.check_xml_2212L_blastn_001(record)
+
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+        self.check_xml_2212L_blastn_001(record)
+
+    def check_xml_2212L_blastn_001(self, record):
         alignments = record.alignments
 
         self.assertEqual(record.query_id, "gi|1348916|gb|G26684.1|G26684")
@@ -2050,9 +2060,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(alignments[1].hsps), 1)
         self.assertGreater(alignments[1].hsps[0].expect, E_VALUE_THRESH)
 
-        with open(datafile, "rb") as handle:
-            record = NCBIXML.read(handle)
-
     def test_xml_2212L_blastx_001(self):
         """Parsing BLASTX 2.2.12, gi|1347369|gb|G25137.1|G25137 (xml_2212L_blastx_001)."""
         filename = "xml_2212L_blastx_001.xml"
@@ -2062,13 +2069,17 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
             record = next(records)
             self.assertRaises(StopIteration, next, records)
+        self.check_xml_2212L_blastx_001(record)
+
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+        self.check_xml_2212L_blastx_001(record)
+
+    def check_xml_2212L_blastx_001(self, record):
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|1347369|gb|G25137.1|G25137")
         self.assertEqual(len(alignments), 78)
         self.assertEqual(sum(len(a.hsps) for a in alignments), 84)
-
-        with open(datafile, "rb") as handle:
-            record = NCBIXML.read(handle)
 
         hsp = record.alignments[0].hsps[0]
         self.assertEqual(hsp.score, 630.0)
@@ -2083,14 +2094,17 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
             record = next(records)
             self.assertRaises(StopIteration, next, records)
+        self.check_xml_2212L_tblastn_001(record)
 
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+        self.check_xml_2212L_tblastn_001(record)
+
+    def check_xml_2212L_tblastn_001(self, record):
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|729325|sp|P39483|DHG2_BACME")
         self.assertEqual(len(alignments), 100)
         self.assertEqual(sum(len(a.hsps) for a in alignments), 127)
-
-        with open(datafile, "rb") as handle:
-            record = NCBIXML.read(handle)
 
     def test_xml_2212L_tblastx_001(self):
         """Parsing TBLASTX 2.2.12, gi|1348853|gb|G26621.1|G26621, BLOSUM80 (xml_2212L_tblastx_001)."""
@@ -2101,14 +2115,17 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
             record = next(records)
             self.assertRaises(StopIteration, next, records)
+        self.check_xml_2212L_tblastx_001(record)
 
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+        self.check_xml_2212L_tblastx_001(record)
+
+    def check_xml_2212L_tblastx_001(self, record):
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|1348853|gb|G26621.1|G26621")
         self.assertEqual(len(alignments), 10)
         self.assertEqual(sum(len(a.hsps) for a in alignments), 102)
-
-        with open(datafile, "rb") as handle:
-            record = NCBIXML.read(handle)
 
     def test_xml_2218_blastp_001(self):
         """Parsing BLASTP 2.2.18+, gi|160837788|ref|NP_075631.2| (xml_2218_blastp_001)."""
@@ -2121,7 +2138,14 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
             record = next(records)
             self.assertRaises(StopIteration, next, records)
+        self.check_xml_2218_blastp_001(record)
 
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+            handle.close()
+        self.check_xml_2218_blastp_001(record)
+
+    def check_xml_2218_blastp_001(self, record):
         alignments = record.alignments
         self.assertEqual(record.query_id, "31493")
         self.assertEqual(len(alignments), 10)
@@ -2201,10 +2225,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertGreater(alignments[9].hsps[0].expect, E_VALUE_THRESH)
         self.assertGreater(alignments[9].hsps[1].expect, E_VALUE_THRESH)
 
-        with open(datafile, "rb") as handle:
-            record = NCBIXML.read(handle)
-            handle.close()
-
     def test_xml_2218_blastp_002(self):
         """Parsing BLASTP 2.2.18+, SwissProt Q08386 and P07175, no hits (xml_2218_blastp_002)."""
         filename = "xml_2218_blastp_002.xml"
@@ -2228,12 +2248,16 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
             record = next(records)
             self.assertRaises(StopIteration, next, records)
-        self.assertEqual(record.query_id, "lcl|1_0")
-        alignments = record.alignments
-        self.assertEqual(len(alignments), 0)
+        self.check_xml_2218L_blastp_001(record)
 
         with open(datafile, "rb") as handle:
             record = NCBIXML.read(handle)
+        self.check_xml_2218L_blastp_001(record)
+
+    def check_xml_2218L_blastp_001(self, record):
+        self.assertEqual(record.query_id, "lcl|1_0")
+        alignments = record.alignments
+        self.assertEqual(len(alignments), 0)
 
     def test_xml_2222_blastx_001(self):
         """Parsing BLASTX 2.2.22+, multiple queries against NR (xml_2222_blastx_001)."""
