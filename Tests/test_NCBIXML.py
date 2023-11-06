@@ -29,6 +29,11 @@ class TestNCBIXML(unittest.TestCase):
             self.check_xml_2212L_blastp_001(record)
 
     def check_xml_2212L_blastp_001(self, record):
+        self.assertEqual(record.reference, 'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+        self.assertEqual(record.date, 'Aug-07-2005')
+        self.assertEqual(record.version, "2.2.12")
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.application, "BLASTP")
         alignments = record.alignments
         self.assertEqual(len(alignments), 212)
         self.assertEqual(record.query_id, "gi|49176427|ref|NP_418280.3|")
@@ -2040,6 +2045,11 @@ class TestNCBIXML(unittest.TestCase):
         self.check_xml_2212L_blastn_001(record)
 
     def check_xml_2212L_blastn_001(self, record):
+        self.assertEqual(record.reference, 'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+        self.assertEqual(record.date, 'Aug-07-2005')
+        self.assertEqual(record.version, "2.2.12")
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.application, "BLASTN")
         alignments = record.alignments
 
         self.assertEqual(record.query_id, "gi|1348916|gb|G26684.1|G26684")
@@ -2076,6 +2086,11 @@ class TestNCBIXML(unittest.TestCase):
         self.check_xml_2212L_blastx_001(record)
 
     def check_xml_2212L_blastx_001(self, record):
+        self.assertEqual(record.reference, 'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+        self.assertEqual(record.date, 'Aug-07-2005')
+        self.assertEqual(record.version, "2.2.12")
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.application, "BLASTX")
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|1347369|gb|G25137.1|G25137")
         self.assertEqual(len(alignments), 78)
@@ -2101,6 +2116,11 @@ class TestNCBIXML(unittest.TestCase):
         self.check_xml_2212L_tblastn_001(record)
 
     def check_xml_2212L_tblastn_001(self, record):
+        self.assertEqual(record.reference, 'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+        self.assertEqual(record.date, 'Aug-07-2005')
+        self.assertEqual(record.version, "2.2.12")
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.application, "TBLASTN")
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|729325|sp|P39483|DHG2_BACME")
         self.assertEqual(len(alignments), 100)
@@ -2122,6 +2142,11 @@ class TestNCBIXML(unittest.TestCase):
         self.check_xml_2212L_tblastx_001(record)
 
     def check_xml_2212L_tblastx_001(self, record):
+        self.assertEqual(record.reference, 'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+        self.assertEqual(record.date, 'Aug-07-2005')
+        self.assertEqual(record.version, "2.2.12")
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.application, "TBLASTX")
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|1348853|gb|G26621.1|G26621")
         self.assertEqual(len(alignments), 10)
@@ -2146,6 +2171,11 @@ class TestNCBIXML(unittest.TestCase):
         self.check_xml_2218_blastp_001(record)
 
     def check_xml_2218_blastp_001(self, record):
+        self.assertEqual(record.reference, 'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.version, "2.2.18+")
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.application, "BLASTP")
         alignments = record.alignments
         self.assertEqual(record.query_id, "31493")
         self.assertEqual(len(alignments), 10)
@@ -2232,9 +2262,19 @@ class TestNCBIXML(unittest.TestCase):
         with open(datafile, "rb") as handle:
             records = NCBIXML.parse(handle)
             record = next(records)
+            self.assertEqual(record.reference, 'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.date, "")
+            self.assertEqual(record.version, "2.2.18+")
+            self.assertEqual(record.database, "gpipe/9606/Previous/protein")
+            self.assertEqual(record.application, "BLASTP")
             self.assertEqual(record.query_id, "gi|585505|sp|Q08386|MOPB_RHOCA")
             self.assertEqual(len(record.alignments), 0)
             record = next(records)
+            self.assertEqual(record.reference, 'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.date, "")
+            self.assertEqual(record.version, "2.2.18+")
+            self.assertEqual(record.database, "gpipe/9606/Previous/protein")
+            self.assertEqual(record.application, "BLASTP")
             self.assertEqual(record.query_id, "gi|129628|sp|P07175.1|PARA_AGRTU")
             self.assertEqual(len(record.alignments), 0)
             self.assertRaises(StopIteration, next, records)
@@ -2255,6 +2295,11 @@ class TestNCBIXML(unittest.TestCase):
         self.check_xml_2218L_blastp_001(record)
 
     def check_xml_2218L_blastp_001(self, record):
+        self.assertEqual(record.reference, '~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.')
+        self.assertEqual(record.date, "Mar-02-2008")
+        self.assertEqual(record.version, "2.2.18")
+        self.assertEqual(record.database, "/Users/pjcock/Downloads/Software/blast-2.2.18/data/nr")
+        self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.query_id, "lcl|1_0")
         alignments = record.alignments
         self.assertEqual(len(alignments), 0)
@@ -2270,6 +2315,8 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
 
             record = next(records)
+            self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.application, "BLASTX")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
@@ -2278,7 +2325,6 @@ class TestNCBIXML(unittest.TestCase):
                 "gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence",
             )
             self.assertEqual(record.query_letters, 1002)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2288,6 +2334,8 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(record.alignments[0].hsps), 1)
 
             record = next(records)
+            self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.application, "BLASTX")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
@@ -2296,7 +2344,6 @@ class TestNCBIXML(unittest.TestCase):
                 "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
             )
             self.assertEqual(record.query_letters, 2050)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2309,6 +2356,8 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(record.alignments[9].hsps), 2)
 
             record = next(records)
+            self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.application, "BLASTX")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
@@ -2317,7 +2366,6 @@ class TestNCBIXML(unittest.TestCase):
                 "gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose phosphate isomerase (GPI) gene, partial intron sequence",
             )
             self.assertEqual(record.query_letters, 550)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2326,6 +2374,8 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(record.alignments), 0)
 
             record = next(records)
+            self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.application, "BLASTX")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
@@ -2334,7 +2384,6 @@ class TestNCBIXML(unittest.TestCase):
                 "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence",
             )
             self.assertEqual(record.query_letters, 655)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2345,6 +2394,8 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(record.alignments[9].hsps), 1)
 
             record = next(records)
+            self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.application, "BLASTX")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
@@ -2353,7 +2404,6 @@ class TestNCBIXML(unittest.TestCase):
                 "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence",
             )
             self.assertEqual(record.query_letters, 623)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2364,6 +2414,8 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(record.alignments[9].hsps), 1)
 
             record = next(records)
+            self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.application, "BLASTX")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
@@ -2372,7 +2424,6 @@ class TestNCBIXML(unittest.TestCase):
                 "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds",
             )
             self.assertEqual(record.query_letters, 309)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2383,6 +2434,8 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(record.alignments[9].hsps), 1)
 
             record = next(records)
+            self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.application, "BLASTX")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
@@ -2391,7 +2444,6 @@ class TestNCBIXML(unittest.TestCase):
                 "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product",
             )
             self.assertEqual(record.query_letters, 2551)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2417,9 +2469,10 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(record.application, "BLASTP")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
+            self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.query, "gi|3298468|dbj|BAA31520.1| SAMIPF")
             self.assertEqual(record.query_letters, 107)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2429,6 +2482,11 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(record.alignments[0].hsps), 1)
 
             record = next(records)
+            self.assertEqual(record.application, "BLASTP")
+            self.assertEqual(record.version, "2.2.22+")
+            self.assertEqual(record.date, "")
+            self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.database, "nr")
             self.assertEqual(
                 record.query,
                 "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
@@ -2436,6 +2494,11 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(record.query_letters, 304)
 
             record = next(records)
+            self.assertEqual(record.application, "BLASTP")
+            self.assertEqual(record.version, "2.2.22+")
+            self.assertEqual(record.date, "")
+            self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.database, "nr")
             self.assertEqual(
                 record.query,
                 "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
@@ -2443,6 +2506,11 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(record.query_letters, 600)
 
             record = next(records)
+            self.assertEqual(record.application, "BLASTP")
+            self.assertEqual(record.version, "2.2.22+")
+            self.assertEqual(record.date, "")
+            self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.database, "nr")
             self.assertEqual(
                 record.query, "gi|671626|emb|CAA85685.1| rubisco large subunit"
             )
@@ -2464,12 +2532,13 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
 
             record = next(records)
+            self.assertEqual(record.reference, '~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.database, "/opt/BlastDBs/nr")
             self.assertEqual(record.application, "BLASTP")
             self.assertEqual(record.version, "2.2.18")
             self.assertEqual(record.date, "Mar-02-2008")
             self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
             self.assertEqual(record.query_letters, 131)
-            self.assertEqual(record.database, "/opt/BlastDBs/nr")
             self.assertEqual(record.num_sequences_in_database, 2563094)
             self.assertEqual(record.database_sequences, 2563094)
             self.assertEqual(record.database_length, 864488805)
@@ -2523,12 +2592,13 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(hsp.sbjct_end, 76)
 
             record = next(records)
+            self.assertEqual(record.reference, '~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.database, "/opt/BlastDBs/nr")
             self.assertEqual(record.application, "BLASTP")
             self.assertEqual(record.version, "2.2.18")
             self.assertEqual(record.date, "Mar-02-2008")
             self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
             self.assertEqual(record.query_letters, 131)
-            self.assertEqual(record.database, "/opt/BlastDBs/nr")
             self.assertEqual(record.num_sequences_in_database, 2563094)
             self.assertEqual(record.database_sequences, 2563094)
             self.assertEqual(record.database_length, 864488805)
@@ -2559,12 +2629,13 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(hsp.sbjct_end, 131)
 
             record = next(records)
+            self.assertEqual(record.reference, '~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.')
+            self.assertEqual(record.database, "/opt/BlastDBs/nr")
             self.assertEqual(record.application, "BLASTP")
             self.assertEqual(record.version, "2.2.18")
             self.assertEqual(record.date, "Mar-02-2008")
             self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
             self.assertEqual(record.query_letters, 131)
-            self.assertEqual(record.database, "/opt/BlastDBs/nr")
             self.assertEqual(record.num_sequences_in_database, 2563094)
             self.assertEqual(record.database_sequences, 2563094)
             self.assertEqual(record.database_length, 864488805)
@@ -2696,11 +2767,13 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, "2.9.0+")
+        self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.date, "")
         self.assertEqual(
             record.query, "twin argininte translocase protein A [Escherichia coli K12]"
         )
         self.assertEqual(record.query_letters, 103)
-        self.assertEqual(record.database, "nr")
         self.assertEqual(record.num_sequences_in_database, 194611632)
         self.assertEqual(record.database_sequences, 194611632)
         self.assertEqual(record.database_length, 2104817704)
@@ -3049,11 +3122,13 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertEqual(record.application, "BLASTN")
         self.assertEqual(record.version, "2.9.0+")
-        self.assertEqual(record.query, "human STS STS_D11570, sequence tagged site")
-        self.assertEqual(record.query_letters, 285)
+        self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
         self.assertEqual(
             record.database, "GPIPE/10090/current/all_top_level GPIPE/10090/current/rna"
         )
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "human STS STS_D11570, sequence tagged site")
+        self.assertEqual(record.query_letters, 285)
         self.assertEqual(record.num_sequences_in_database, 107382)
         self.assertEqual(record.database_sequences, 107382)
         self.assertEqual(record.database_length, 3164670549)
@@ -3429,12 +3504,14 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, "2.9.0+")
+        self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.date, "")
         self.assertEqual(
             record.query,
             "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
         )
         self.assertEqual(record.query_letters, 365)
-        self.assertEqual(record.database, "nr")
 
         alignment = record.alignments[0]
         self.assertEqual(alignment.hit_id, "gi|1530504495|emb|VDM03167.1|")
@@ -3856,9 +3933,11 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertEqual(record.application, "TBLASTN")
         self.assertEqual(record.version, "2.9.0+")
+        self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.date, "")
         self.assertEqual(record.query, "tim [Helicobacter acinonychis str. Sheeba]")
         self.assertEqual(record.query_letters, 234)
-        self.assertEqual(record.database, "nr")
 
         alignment = record.alignments[4]
         self.assertEqual(alignment.hit_id, "gi|1143706535|gb|CP018823.1|")
@@ -3918,12 +3997,14 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertEqual(record.application, "TBLASTX")
         self.assertEqual(record.version, "2.9.0+")
+        self.assertEqual(record.reference, 'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.')
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.date, "")
         self.assertEqual(
             record.query,
             "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
         )
         self.assertEqual(record.query_letters, 365)
-        self.assertEqual(record.database, "nr")
 
         alignment = record.alignments[4]
         self.assertEqual(alignment.hit_id, "gi|1590279025|ref|XM_028307351.1|")
