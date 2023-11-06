@@ -302,6 +302,7 @@ There were multiple deprecations in Release 1.80:
 * Position attribute ``.extension`` returned the "width", typically
   zero except for ``OneOfPosition``, ``BetweenPosition``, and
   ``WithinPosition`` where this must be handled explicitly now.
+* Base class ``AbstractPosition`` was renamed to ``Position``.
 
 Bio.Motif
 ---------
