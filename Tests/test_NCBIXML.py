@@ -531,7 +531,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 76)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.66928e-10)
 
         alignment = alignments[24]
         self.assertEqual(
