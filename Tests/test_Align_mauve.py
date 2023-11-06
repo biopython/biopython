@@ -137,7 +137,6 @@ AAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTT
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G', 'C',
            'A', 'C', 'A', 'C', 'A', 'C', 'C', 'C', 'G', 'G', 'A', 'G', 'T',
            'G', 'G', '-', 'C', 'C', 'G', 'G', 'G', 'C', 'C', 'G', 'T', 'A',
@@ -243,7 +242,6 @@ GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['G', 'A', 'A', 'G', 'A', 'G', 'G', 'A', 'A', 'A', 'A', 'G', 'T',
            'A', 'G', 'A', 'T', 'C', 'C', 'C', 'T', 'G', 'G', 'C', 'G', 'T',
            'C', 'C', 'G', 'G', 'A', 'G', 'C', 'T', 'G', 'G', 'G', 'A', 'C',
@@ -483,7 +481,6 @@ mm9.fa           19 ---------------------------------GGATCTACTTTTCCTCTTC  0
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[50, 40, 38, 19, 19, 18, 10, 10,  0],
                               [ 0, 10, 10, 29, 30, 31, 39, 39, 49],
                               [19, 19, 19, 19, 19, 19, 11, 10,  0]]),
@@ -506,7 +503,6 @@ CAAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGC-TTTCCTTTTC
                 np.array_equal(
                     np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
 np.array([['T', 'A', 'A', 'G', 'C', 'C', 'C', 'T', 'C', 'C', 'T', 'A', 'G',
            'C', 'A', 'C', 'A', 'C', 'A', 'C', 'C', 'C', 'G', 'G', 'A', 'G',
            'T', 'G', 'G', 'C', 'C', '-', 'G', 'G', 'G', 'C', 'C', 'G', 'T',
@@ -556,7 +552,6 @@ CTGGCGTCCGGAGCTGGGACGT
                 np.array_equal(
                     np.array(alignment, "U"),
                     # fmt: off
-# flake8: noqa
 np.array([['C', 'T', 'G', 'G', 'C', 'G', 'T', 'C', 'C', 'G', 'G',
            'A', 'G', 'C', 'T', 'G', 'G', 'G', 'A', 'C', 'G', 'T']], dtype='U')
                     # fmt: on

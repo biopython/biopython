@@ -196,7 +196,6 @@ HISJ_E_CO       219 GLRKED--NELREALNKAFAEMRADGTYEKLAKKYFDFDVYGG--- 260
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array(
                     [[  0,   0,   0,  13,  13,  16,  17,  17,  17,  17,  17,
                        17,  17,  17,  17,  18,  41,  41,  41,  90,  91, 109,
@@ -364,7 +363,6 @@ Tax5      CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['A', 'A', 'G', 'C', 'T', 'N', 'G', 'G', 'G', 'C', 'A', 'T', 'T',
            'T', 'C', 'A', 'G', 'G', 'G', 'T', 'G', 'A', 'G', 'C', 'C', 'C',
            'G', 'G', 'G', 'C', 'A', 'A', 'T', 'A', 'C', 'A', 'G', 'G', 'G',
@@ -621,7 +619,6 @@ CATH_HUMA       311 YFLIERGKNMCGLAACASYPIPLV 335
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array(
        [[ 0,   0,   1,  18,  18,  18,  26,  26,  40,  40,  63,  67,  93,
          94, 103, 105, 113, 115, 128, 128, 180, 188, 222, 223, 242, 242,
@@ -747,7 +744,6 @@ IXI_237         113 PPAYAGDRSHE 124
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[0, 15, 22, 23, 24, 35, 39, 74, 84, 97, 99, 131],
                           [0, 15, 15, 15, 15, 26, 30, 65, 65, 78, 80, 112],
                           [0, 15, 22, 22, 22, 33, 37, 72, 82, 95, 95, 127],

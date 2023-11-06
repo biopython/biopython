@@ -428,7 +428,6 @@ ENSG00000       306
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[0, 42, 126, 126, 231, 333, 549],
                           [0,  0,  84,  90, 195, 195, 195],
                           [9,  9,  93,  99, 204, 306, 306]])
@@ -942,7 +941,6 @@ ENSG00000      1257
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[   0,   72,  255,  255,  603,  606, 1317, 1530,
                            1530, 1737, 1737, 1902, 1902, 1926, 1926, 2031,
                            2088, 2343, 2346, 2418, 2442, 2556, 2562, 2763,
@@ -2643,7 +2641,6 @@ isotig125      2340 GTACTTCAGGGTGACCGGGATTCAAGAGAAGACCAGAATCAGGCCTCA 2388
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[   0,    0,    0,    0,    0,    0,    0,    0,
                               0,    0,    0,    0,   36,   36,   63,   63,
                             213,  222,  240,  240,  330,  330,  330,  405,
@@ -4914,7 +4911,6 @@ isotig125      2340 GTACTTCAGGGTGACCGGGATTCAAGAGAAGACCAGAATCAGGCCTCA 2388
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[   0,    0,    0,    0,    0,    0,    0,    0,
                               0,    0,    0,    0,   36,   36,   63,   63,
                             213,  222,  240,  240,  330,  330,  330,  405,
@@ -5897,7 +5893,6 @@ ENSG00000       306
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[0, 42, 126, 126, 231, 333, 549],
                           [0,  0,  84,  90, 195, 195, 195],
                           [9,  9,  93,  99, 204, 306, 306]])
@@ -7540,7 +7535,6 @@ gi|647886      3753 CCGCCAAGCAGTGAGTTTAGTGGAGCA 3780
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
             np.array([[  84,  105,  114,  129,  171,  183,  198,  198,  210,
                         234,  366,  369,  492,  507,  531,  531,  741,  741,
                         807,  810, 1038, 1038, 1089, 1089, 1107, 1107, 1161,

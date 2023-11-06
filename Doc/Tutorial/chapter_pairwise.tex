@@ -1754,7 +1754,7 @@ Now let's consider two nucleotide sequences and the amino acid sequences they en
 >>> pro1 = SeqRecord(aa1, id="pro1")
 >>> pro2 = SeqRecord(aa2, id="pro2")
 \end{minted}
-While the two protein sequences both consist of 23 amino acids, the first nucleotide sequence consists of 3 * 23 = 69 nucleotides while the second nucleotide sequence tonsists of only 68 nucleotides:
+While the two protein sequences both consist of 23 amino acids, the first nucleotide sequence consists of $3 \times 23 = 69$ nucleotides while the second nucleotide sequence tonsists of only 68 nucleotides:
 %cont-doctest
 \begin{minted}{pycon}
 >>> len(pro1)
@@ -1783,6 +1783,10 @@ rna1             60 GCGCTGGAG 69
 >>> alignment1.coordinates
 array([[ 0, 23],
        [ 0, 69]])
+>>> alignment1[0]
+'SGTARTKLLLLLAALCAAGGALE'
+>>> alignment1[1]
+'TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG'
 >>> alignments2 = aligner.align(pro2, rna2)
 >>> len(alignments2)
 1
@@ -1794,11 +1798,27 @@ rna2              0 TCAGGGACTTCGAGAACCAAGCGC 24
 pro2              8 L  L  L  L  A  A  L  G  A  A  G  G  A  L  E   23
 rna2             23 CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG 68
 <BLANKLINE>
+>>> alignment2[0]
+'SGTSRTKRLLLLAALGAAGGALE'
+>>> alignment2[1]
+'TCAGGGACTTCGAGAACCAAGCGCCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG'
 >>> alignment2.coordinates
 array([[ 0,  8,  8, 23],
        [ 0, 24, 23, 68]])
 \end{minted}
-While \verb+alignment1+ is a continuous alignment of the 69 nucleotides to the 23 amino acids, in \verb+alignment2+ we find a -1 frame shift after 24 nucleotides.
+While \verb+alignment1+ is a continuous alignment of the 69 nucleotides to the 23 amino acids, in \verb+alignment2+ we find a -1 frame shift after 24 nucleotides. As \verb+alignment2[1]+ contains the nucleotide sequence after applying the -1 frame shift, it is one nucleotide longer than \verb+nuc2+ and can be translated directly, resulting in the amino acid sequence \verb+aa2+:
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.Seq import translate
+>>> len(nuc2)
+68
+>>> len(alignment2[1])
+69
+>>> translate(alignment2[1])
+'SGTSRTKRLLLLAALGAAGGALE'
+>>> _ == aa2
+True
+\end{minted}
 
 The alignment score is stored as an attribute on the \verb+alignments1+ and \verb+alignments2+ iterators, and on the individual alignments \verb+alignment1+ and \verb+alignment2+:
 %cont-doctest
@@ -1812,7 +1832,7 @@ The alignment score is stored as an attribute on the \verb+alignments1+ and \ver
 >>> alignment2.score
 20.0
 \end{minted}
-where the score of the \verb+rna1+-\verb+pro1+ alignment is equal to the number of aligned amino acids, and the score of the \verb+rna2+-\verb+pro2+ alignment is 1 less due to the penalty for the frame shift. To calculate the alignment score without calculating the alignment itself, the \verb+score+ method can be used:
+where the score of the \verb+rna1+-\verb+pro1+ alignment is equal to the number of aligned amino acids, and the score of the \verb+rna2+-\verb+pro2+ alignment is 3 less due to the penalty for the frame shift. To calculate the alignment score without calculating the alignment itself, the \verb+score+ method can be used:
 %cont-doctest
 \begin{minted}{pycon}
 >>> score = aligner.score(pro1, rna1)
