@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm
-.nih.gov/dtd/NCBI_BlastOutput.dtd">
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
 
 <!-- This is a mock file mimicking a qblast response for our mock tests -->
 

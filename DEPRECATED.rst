@@ -347,10 +347,10 @@ which was declared obsolete in Release 1.54, and deprecated in Release 1.63.
 The module was removed in Release 1.72 from the public API. It lives now
 in maintenance mode in Bio.SearchIO._legacy to preserve existing functionality.
 A BiopythonDeprecationWarning was added to this module in Release 1.80.
+The Bio.SearchIO._legacy module was removed from Biopython in Release 1.82.
 
 For some time now, both the NCBI and Biopython have encouraged people to
-parse the XML output instead, however Bio.SearchIO will initially attempt
-to support plain text BLAST output.
+parse the XML output instead.
 
 Bio.Blast.Applications
 ----------------------
