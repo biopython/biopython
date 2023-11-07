@@ -116,7 +116,6 @@ sp|P10649       180 ?????????????????????????????????????? 218
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['M', 'P', 'M', 'I', 'L', 'G', 'Y', 'W', 'D', 'I', 'R', 'G', 'L',
            'A', 'H', 'A', 'I', 'R', 'L', 'L', 'L', 'E', 'Y', 'T', 'D', 'S',
            'S', 'Y', 'E', 'E', 'K', 'K', 'Y', 'T', 'M', 'G', 'D', 'A', 'P',
@@ -191,7 +190,6 @@ sp|P10649       175 ??????????????????????????????????????????? 218
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 5,  33,  33,  46,  48,  58,  59,  62,
                            62, 101, 102, 125, 127, 142, 144, 218],
                           [ 3,  31,  40,  53,  53,  63,  63,  66,
@@ -218,7 +216,6 @@ sp|P10649       175 ??????????????????????????????????????????? 218
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['V', 'L', 'H', 'Y', 'F', 'N', 'A', 'R', 'G', 'R', 'M', 'E', 'C',
            'I', 'R', 'W', 'L', 'L', 'A', 'A', 'A', 'G', 'V', 'E', 'F', 'D',
            'E', 'K', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'F', 'I',
@@ -283,7 +280,6 @@ sp|P10649       176 ????????????????????????-?????????????? 214
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 35,  48,  48,  58,  59,  73],
                           [176, 189, 190, 200, 200, 214]]),
                 # fmt: on
@@ -302,7 +298,6 @@ sp|P10649       176 ????????????????????????-?????????????? 214
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['S', 'F', 'P', 'T', 'T', 'K', 'T', 'Y', 'F', 'P', 'H', 'F', 'D',
            '-', 'L', 'S', 'H', 'G', 'S', 'A', 'Q', 'V', 'K', 'G', 'H', 'G',
            'K', 'K', 'V', 'A', 'D', 'A', 'L', 'T', 'N', 'A', 'V', 'A', 'H'],
@@ -342,7 +337,6 @@ sp|P10649       194 ???????????? 206
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[228, 274, 276, 300],
                           [136, 182, 182, 206]])
                 # fmt: on
@@ -367,7 +361,6 @@ sp|P10649       194 ???????????? 206
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['I', 'Y', 'E', 'M', 'A', 'A', 'G', 'Y', 'P', 'P', 'F', 'F', 'A',
            'D', 'Q', 'P', 'I', 'Q', 'I', 'Y', 'E', 'K', 'I', 'V', 'S', 'G',
            'K', 'V', 'R', 'F', 'P', 'S', 'H', 'F', 'S', 'S', 'D', 'L', 'K',
@@ -420,7 +413,6 @@ sp|P10649         6 ??????? 13
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['Y', 'W', 'D', 'L', 'W', 'G', 'L'],
           ['Y', 'W', 'N', 'V', 'R', 'G', 'L']], dtype='U')
                 # fmt: on
@@ -451,7 +443,6 @@ sp|P10649       149 ??????????????---????????---????--??????????-????? 190
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 15,  29,  32,  40,  43,  47,
                             49,  51,  51,  58,  59,  64],
                           [149, 163, 163, 171, 171, 175,
@@ -476,7 +467,6 @@ sp|P10649       149 ??????????????---????????---????--??????????-????? 190
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['G', 'D', 'R', 'V', 'T', 'I', 'T', 'C', 'Q', 'A', 'S', 'Q', 'D',
            'I', 'N', 'H', 'Y', 'L', 'N', 'W', 'Y', 'Q', 'Q', 'G', 'P', 'K',
            'K', 'A', 'P', 'K', 'I', 'L', 'I', 'Y', 'D', 'A', '-', 'S', 'N',
@@ -518,7 +508,6 @@ sp|P10649       185 ???????? 193
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 27,  47,  50,  58,  58,  68,
                             68,  73,  73,  82,  82,  88],
                           [128, 148, 148, 156, 157, 167,
@@ -545,7 +534,6 @@ sp|P10649       185 ???????? 193
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['K', 'T', 'G', 'P', 'N', 'L', 'H', 'G', 'L', 'F', 'G', 'R', 'K',
            'T', 'G', 'Q', 'A', 'P', 'G', 'Y', 'S', 'Y', 'T', 'A', 'A', 'N',
            'K', 'N', 'K', 'G', 'I', '-', 'I', 'W', 'G', 'E', 'D', 'T', 'L',
@@ -586,7 +574,6 @@ sp|P10649        43 ????????????????????????????--???????????---?????????? 92
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array(
                     [[12, 26, 26, 36, 38, 49, 52, 62],
                      [43, 57, 61, 71, 71, 82, 82, 92]])
@@ -610,7 +597,6 @@ sp|P10649        43 ????????????????????????????--???????????---?????????? 92
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['S', 'E', 'E', 'M', 'I', 'A', 'E', 'F', 'K', 'A', 'A', 'F', 'D',
            'M', '-', '-', '-', '-', 'F', 'D', 'A', 'D', 'G', 'G', 'G', 'D',
            'I', 'S', 'V', 'K', 'E', 'L', 'G', 'T', 'V', 'M', 'R', 'M', 'L',
@@ -649,7 +635,6 @@ sp|P10649       114 ??????????? 125
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 85,  86,  86,  89,  89,  94],
                           [114, 115, 116, 119, 120, 125]])
                 # fmt: on
@@ -668,7 +653,6 @@ sp|P10649       114 ??????????? 125
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', '-', 'N', 'P', 'H', '-', 'P', 'K', 'Q', 'R', 'P'],
           ['C', 'Y', 'N', 'P', 'D', 'F', 'E', 'K', 'Q', 'K', 'P']],
          dtype='U')
@@ -715,7 +699,6 @@ sp|P10649       170 ???? 174
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['K', 'P', 'E', 'C'],
           ['E', 'P', 'K', 'C']], dtype='U')
                 # fmt: on
@@ -761,7 +744,6 @@ sp|P10649        73 ??????????-???????????????????????????? 111
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['N', 'R', 'V', 'I', 'E', 'K', 'T', 'N', 'E', 'K', 'F', 'H', 'Q',
            'I', 'E', 'K', 'E', 'F', 'S', 'E', 'V', 'E', 'G', 'R', 'I', 'Q',
            'D', 'L', 'E', 'K', 'Y', 'V', 'E', 'D', 'T', 'K', 'I', 'D', 'L'],
@@ -801,7 +783,6 @@ sp|P10649       113 ??????????? 124
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[11, 25, 27,  67,  69,  82],
                           [57, 71, 71, 111, 111, 124]])
                 # fmt: on
@@ -825,7 +806,6 @@ sp|P10649       113 ??????????? 124
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['P', 'S', 'D', 'E', 'Q', 'L', 'K', 'S', 'G', 'T', 'A', 'S', 'V',
            'V', 'C', 'L', 'L', 'N', 'N', 'F', 'Y', 'P', 'R', 'E', 'A', 'K',
            'V', 'Q', 'W', 'K', 'V', 'D', 'N', 'A', 'L', 'Q', 'S', 'G', 'N',
@@ -916,7 +896,6 @@ sp|P10649       180 ?????????????????????????????????????? 218
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['M', 'P', 'M', 'I', 'L', 'G', 'Y', 'W', 'D', 'I', 'R', 'G', 'L',
            'A', 'H', 'A', 'I', 'R', 'L', 'L', 'L', 'E', 'Y', 'T', 'D', 'S',
            'S', 'Y', 'E', 'E', 'K', 'K', 'Y', 'T', 'M', 'G', 'D', 'A', 'P',
@@ -991,7 +970,6 @@ sp|P10649       175 ??????????????????????????????????????????? 218
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 5,  33,  33,  46,  48,  58,  59,  62,
                            62, 101, 102, 125, 127, 142, 144, 218],
                           [ 3,  31,  40,  53,  53,  63,  63,  66,
@@ -1018,7 +996,6 @@ sp|P10649       175 ??????????????????????????????????????????? 218
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['V', 'L', 'H', 'Y', 'F', 'N', 'A', 'R', 'G', 'R', 'M', 'E', 'C',
            'I', 'R', 'W', 'L', 'L', 'A', 'A', 'A', 'G', 'V', 'E', 'F', 'D',
            'E', 'K', '-', '-', '-', '-', '-', '-', '-', '-', '-', 'F', 'I',
@@ -1083,7 +1060,6 @@ sp|P10649       176 ????????????????????????-?????????????? 214
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 35,  48,  48,  58,  59,  73],
                           [176, 189, 190, 200, 200, 214]])
                 # fmt: on
@@ -1102,7 +1078,6 @@ sp|P10649       176 ????????????????????????-?????????????? 214
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['S', 'F', 'P', 'T', 'T', 'K', 'T', 'Y', 'F', 'P', 'H', 'F', 'D',
            '-', 'L', 'S', 'H', 'G', 'S', 'A', 'Q', 'V', 'K', 'G', 'H', 'G',
            'K', 'K', 'V', 'A', 'D', 'A', 'L', 'T', 'N', 'A', 'V', 'A', 'H'],
@@ -1142,7 +1117,6 @@ sp|P10649       194 ???????????? 206
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[228, 274, 276, 300],
                           [136, 182, 182, 206]]),
                 # fmt: on
@@ -1167,7 +1141,6 @@ sp|P10649       194 ???????????? 206
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['I', 'Y', 'E', 'M', 'A', 'A', 'G', 'Y', 'P', 'P', 'F', 'F', 'A',
            'D', 'Q', 'P', 'I', 'Q', 'I', 'Y', 'E', 'K', 'I', 'V', 'S', 'G',
            'K', 'V', 'R', 'F', 'P', 'S', 'H', 'F', 'S', 'S', 'D', 'L', 'K',
@@ -1220,7 +1193,6 @@ sp|P10649         6 ??????? 13
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['Y', 'W', 'D', 'L', 'W', 'G', 'L'],
           ['Y', 'W', 'N', 'V', 'R', 'G', 'L']], dtype='U')
                 # fmt: on
@@ -1251,7 +1223,6 @@ sp|P10649       149 ??????????????---????????---????--??????????-????? 190
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[15,  29,  32,  40,  43,  47,
                            49,  51,  51,  58,  59,  64],
                          [149, 163, 163, 171, 171, 175,
@@ -1276,7 +1247,6 @@ sp|P10649       149 ??????????????---????????---????--??????????-????? 190
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['G', 'D', 'R', 'V', 'T', 'I', 'T', 'C', 'Q', 'A', 'S', 'Q', 'D',
            'I', 'N', 'H', 'Y', 'L', 'N', 'W', 'Y', 'Q', 'Q', 'G', 'P', 'K',
            'K', 'A', 'P', 'K', 'I', 'L', 'I', 'Y', 'D', 'A', '-', 'S', 'N',
@@ -1318,7 +1288,6 @@ sp|P10649       185 ???????? 193
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 27,  47,  50,  58,  58,  68,
                             68,  73,  73,  82,  82,  88],
                           [128, 148, 148, 156, 157, 167,
@@ -1345,7 +1314,6 @@ sp|P10649       185 ???????? 193
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['K', 'T', 'G', 'P', 'N', 'L', 'H', 'G', 'L', 'F', 'G', 'R', 'K',
            'T', 'G', 'Q', 'A', 'P', 'G', 'Y', 'S', 'Y', 'T', 'A', 'A', 'N',
            'K', 'N', 'K', 'G', 'I', '-', 'I', 'W', 'G', 'E', 'D', 'T', 'L',
@@ -1386,7 +1354,6 @@ sp|P10649        43 ????????????????????????????--???????????---?????????? 92
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[12, 26, 26, 36, 38, 49, 52, 62],
                           [43, 57, 61, 71, 71, 82, 82, 92]])
                 # fmt: on
@@ -1409,7 +1376,6 @@ sp|P10649        43 ????????????????????????????--???????????---?????????? 92
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['S', 'E', 'E', 'M', 'I', 'A', 'E', 'F', 'K', 'A', 'A', 'F', 'D',
            'M', '-', '-', '-', '-', 'F', 'D', 'A', 'D', 'G', 'G', 'G', 'D',
            'I', 'S', 'V', 'K', 'E', 'L', 'G', 'T', 'V', 'M', 'R', 'M', 'L',
@@ -1448,7 +1414,6 @@ sp|P10649       114 ??????????? 125
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 85,  86,  86,  89,  89,  94],
                           [114, 115, 116, 119, 120, 125]]),
                 # fmt: on
@@ -1467,7 +1432,6 @@ sp|P10649       114 ??????????? 125
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', '-', 'N', 'P', 'H', '-', 'P', 'K', 'Q', 'R', 'P'],
           ['C', 'Y', 'N', 'P', 'D', 'F', 'E', 'K', 'Q', 'K', 'P']],
          dtype='U')
@@ -1499,7 +1463,6 @@ sp|P10649        73 ??????????-???????????????????????????? 111
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[398, 408, 409, 437],
                           [ 73,  83,  83, 111]])
                 # fmt: on
@@ -1518,7 +1481,6 @@ sp|P10649        73 ??????????-???????????????????????????? 111
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['N', 'R', 'V', 'I', 'E', 'K', 'T', 'N', 'E', 'K', 'F', 'H', 'Q',
            'I', 'E', 'K', 'E', 'F', 'S', 'E', 'V', 'E', 'G', 'R', 'I', 'Q',
            'D', 'L', 'E', 'K', 'Y', 'V', 'E', 'D', 'T', 'K', 'I', 'D', 'L'],
@@ -1569,7 +1531,6 @@ sp|P10649       170 ???? 174
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['K', 'P', 'E', 'C'],
           ['E', 'P', 'K', 'C']], dtype='U')
                 # fmt: on
@@ -1604,7 +1565,6 @@ sp|P10649       113 ??????????? 124
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[11, 25, 27,  67,  69,  82],
                           [57, 71, 71, 111, 111, 124]])
                 # fmt: on
@@ -1628,7 +1588,6 @@ sp|P10649       113 ??????????? 124
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['P', 'S', 'D', 'E', 'Q', 'L', 'K', 'S', 'G', 'T', 'A', 'S', 'V',
            'V', 'C', 'L', 'L', 'N', 'N', 'F', 'Y', 'P', 'R', 'E', 'A', 'K',
            'V', 'Q', 'W', 'K', 'V', 'D', 'N', 'A', 'L', 'Q', 'S', 'G', 'N',
@@ -1888,7 +1847,6 @@ pGT875          580 ?????????????? 594
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[227, 376, 376, 383, 384, 401, 401, 461, 466, 472,
                            473, 486, 488, 501, 505, 535, 537, 543, 543, 655],
                           [175, 324, 325, 332, 332, 349, 352, 412, 412, 418,
@@ -1915,7 +1873,6 @@ pGT875          580 ?????????????? 594
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['A', 'G', 'C', 'T', 'C', 'C', 'C', 'C', 'A', 'A', 'G', 'T', 'T',
            'C', 'C', 'A', 'G', 'G', 'A', 'C', 'G', 'G', 'A', 'G', 'A', 'C',
            'C', 'T', 'C', 'A', 'C', 'G', 'C', 'T', 'G', 'T', 'A', 'C', 'C',
@@ -2020,7 +1977,6 @@ pGT875          274 ??????????????? 289
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[156, 171, 173, 190, 190, 201, 202,
                            260, 261, 272, 272, 279, 279, 287],
                           [158, 173, 173, 190, 192, 203, 203,
@@ -2047,7 +2003,6 @@ pGT875          274 ??????????????? 289
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['G', 'G', 'G', 'T', 'A', 'T', 'T', 'G', 'A', 'T', 'G', 'T', 'T',
            'C', 'C', 'A', 'G', 'C', 'A', 'A', 'G', 'T', 'G', 'C', 'C', 'C',
            'A', 'T', 'G', 'G', 'T', 'T', 'G', 'A', '-', '-', 'G', 'A', 'T',
@@ -2098,7 +2053,6 @@ pGT875          265 ????????????????????????  289
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[2302, 2319, 2319, 2325],
                           [ 265,  282,  283,  289]])
                 # fmt: on
@@ -2117,7 +2071,6 @@ pGT875          265 ????????????????????????  289
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['A', 'G', 'A', 'C', 'A', 'G', 'A', 'G', 'G', 'A', 'G', 'G', 'A',
            'G', 'A', 'A', 'G', '-', 'T', 'C', 'T', 'G', 'T', 'G'],
           ['A', 'G', 'A', 'C', 'A', 'G', 'A', 'G', 'G', 'A', 'G', 'G', 'A',
@@ -2151,7 +2104,6 @@ pGT875          240 ????????????????????????????????-?????????????  285
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[4973, 4987, 4987, 4990, 4990, 5002, 5003, 5016],
                           [ 240,  254,  256,  259,  260,  272,  272,  285]])
                 # fmt: on
@@ -2170,7 +2122,6 @@ pGT875          240 ????????????????????????????????-?????????????  285
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['G', 'C', 'T', 'G', 'G', 'A', 'G', 'A', 'G', 'A', 'G', 'C', 'C',
            'A', '-', '-', 'T', 'G', 'G', '-', 'T', 'G', 'G', 'A', 'G', 'G',
            'C', 'T', 'G', 'C', 'G', 'A', 'T', 'G', 'G', 'A', 'G', 'G', 'A',
@@ -2222,7 +2173,6 @@ pGT875          316 ????????????  304
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
           ['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T']],
          dtype='U')
@@ -2269,7 +2219,6 @@ pGT875          316 ????????????  304
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
           ['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T']],
          dtype='U')
@@ -2316,7 +2265,6 @@ pGT875          160 ???????????????? 144
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'G', 'A', 'A', 'C', 'T', 'T',
            'C', 'T', 'C'],
           ['C', 'C', 'A', 'G', 'C', 'T', 'T', 'G', 'A', 'A', 'C', 'T', 'T',
@@ -2374,7 +2322,6 @@ pGT875          182 ????????????????????????  158
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['G', 'C', 'A', 'T', 'G', 'G', 'C', 'T', 'G', 'G', 'G', 'T', 'G',
            'G', 'G', 'G', 'C', 'A', 'G', 'G', 'A', 'T', 'T', 'A', 'G', 'T',
            'G', 'T', 'G', 'G', 'G', 'G', 'G', 'G', 'A', 'G', 'T', 'T', 'G',
@@ -2432,7 +2379,6 @@ pGT875          310 ?????????? 300
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'C', 'T', 'C'],
           ['C', 'C', 'T', 'G', 'G', 'T', 'T', 'C', 'T', 'C']], dtype='U')
                 # fmt: on
@@ -2467,7 +2413,6 @@ pGT875          318 ?????????????? 304
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[280, 304, 304, 312, 312, 351],
                           [378, 354, 353, 345, 343, 304]])
                 # fmt: on
@@ -2491,7 +2436,6 @@ pGT875          318 ?????????????? 304
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', 'T', 'G', 'C', 'G', 'G', 'C', 'A', 'C', 'C', 'T', 'G', 'G',
            'G', 'C', 'C', 'G', 'C', 'A', 'C', 'C', 'C', 'T', 'C', '-', 'G',
            'G', 'G', 'C', 'T', 'G', 'T', 'A', '-', '-', 'T', 'G', 'G', 'G',
@@ -2741,7 +2685,6 @@ pGT875          580 ?????????????? 594
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[227, 376, 376, 383, 384, 401, 401, 461, 466, 472,
                            473, 486, 488, 501, 505, 535, 537, 543, 543, 655],
                           [175, 324, 325, 332, 332, 349, 352, 412, 412, 418,
@@ -2768,7 +2711,6 @@ pGT875          580 ?????????????? 594
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['A', 'G', 'C', 'T', 'C', 'C', 'C', 'C', 'A', 'A', 'G', 'T', 'T',
            'C', 'C', 'A', 'G', 'G', 'A', 'C', 'G', 'G', 'A', 'G', 'A', 'C',
            'C', 'T', 'C', 'A', 'C', 'G', 'C', 'T', 'G', 'T', 'A', 'C', 'C',
@@ -2873,7 +2815,6 @@ pGT875          274 ??????????????? 289
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[156, 171, 173, 190, 190, 201, 202,
                            260, 261, 272, 272, 279, 279, 287],
                           [158, 173, 173, 190, 192, 203, 203,
@@ -2900,7 +2841,6 @@ pGT875          274 ??????????????? 289
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['G', 'G', 'G', 'T', 'A', 'T', 'T', 'G', 'A', 'T', 'G', 'T', 'T',
            'C', 'C', 'A', 'G', 'C', 'A', 'A', 'G', 'T', 'G', 'C', 'C', 'C',
            'A', 'T', 'G', 'G', 'T', 'T', 'G', 'A', '-', '-', 'G', 'A', 'T',
@@ -2951,7 +2891,6 @@ pGT875          265 ????????????????????????  289
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[2302, 2319, 2319, 2325],
                            [265,  282,  283,  289]]),
                 # fmt: on
@@ -2970,7 +2909,6 @@ pGT875          265 ????????????????????????  289
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['A', 'G', 'A', 'C', 'A', 'G', 'A', 'G', 'G', 'A', 'G', 'G', 'A',
            'G', 'A', 'A', 'G', '-', 'T', 'C', 'T', 'G', 'T', 'G'],
           ['A', 'G', 'A', 'C', 'A', 'G', 'A', 'G', 'G', 'A', 'G', 'G', 'A',
@@ -3004,7 +2942,6 @@ pGT875          240 ????????????????????????????????-?????????????  285
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[4973, 4987, 4987, 4990, 4990, 5002, 5003, 5016],
                           [ 240,  254,  256,  259,  260,  272,  272,  285]])
                 # fmt: on
@@ -3023,7 +2960,6 @@ pGT875          240 ????????????????????????????????-?????????????  285
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['G', 'C', 'T', 'G', 'G', 'A', 'G', 'A', 'G', 'A', 'G', 'C', 'C',
            'A', '-', '-', 'T', 'G', 'G', '-', 'T', 'G', 'G', 'A', 'G', 'G',
            'C', 'T', 'G', 'C', 'G', 'A', 'T', 'G', 'G', 'A', 'G', 'G', 'A',
@@ -3075,7 +3011,6 @@ pGT875          316 ????????????  304
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
           ['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T']],
          dtype='U')
@@ -3122,7 +3057,6 @@ pGT875          316 ????????????  304
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T'],
           ['C', 'C', 'A', 'T', 'G', 'A', 'C', 'C', 'T', 'G', 'G', 'T']],
          dtype='U')
@@ -3169,7 +3103,6 @@ pGT875          160 ???????????????? 144
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'G', 'A', 'A', 'C', 'T', 'T',
            'C', 'T', 'C'],
           ['C', 'C', 'A', 'G', 'C', 'T', 'T', 'G', 'A', 'A', 'C', 'T', 'T',
@@ -3227,7 +3160,6 @@ pGT875          182 ????????????????????????  158
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['G', 'C', 'A', 'T', 'G', 'G', 'C', 'T', 'G', 'G', 'G', 'T', 'G',
            'G', 'G', 'G', 'C', 'A', 'G', 'G', 'A', 'T', 'T', 'A', 'G', 'T',
            'G', 'T', 'G', 'G', 'G', 'G', 'G', 'G', 'A', 'G', 'T', 'T', 'G',
@@ -3285,7 +3217,6 @@ pGT875          310 ?????????? 300
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', 'C', 'T', 'G', 'G', 'T', 'T', 'C', 'T', 'C'],
           ['C', 'C', 'T', 'G', 'G', 'T', 'T', 'C', 'T', 'C']], dtype='U')
                 # fmt: on
@@ -3320,7 +3251,6 @@ pGT875          318 ?????????????? 304
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[280, 304, 304, 312, 312, 351],
                           [378, 354, 353, 345, 343, 304]])
                 # fmt: on
@@ -3344,7 +3274,6 @@ pGT875          318 ?????????????? 304
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', 'T', 'G', 'C', 'G', 'G', 'C', 'A', 'C', 'C', 'T', 'G', 'G',
            'G', 'C', 'C', 'G', 'C', 'A', 'C', 'C', 'C', 'T', 'C', '-', 'G',
            'G', 'G', 'C', 'T', 'G', 'T', 'A', '-', '-', 'T', 'G', 'G', 'G',
@@ -3963,7 +3892,6 @@ gi|160806        94
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[ 0, 35, 43, 59],
                               [43, 78, 78, 94]])
                     # fmt: on
@@ -4037,7 +3965,6 @@ gi|160806        94
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[ 0, 35, 43, 59],
                               [43, 78, 78, 94]])
                     # fmt: on
@@ -4168,7 +4095,6 @@ gi|114649        85 RDAWVRDIKKA 96
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[ 0, 25, 26, 39, 42, 71],
                               [29, 54, 54, 67, 67, 96]])
                     # fmt: on
@@ -4302,7 +4228,6 @@ gi|114649        56 QDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[0, 27, 29, 54, 58, 100],
                               [2, 29, 29, 54, 54,  96]])
                     # fmt: on
@@ -4436,7 +4361,6 @@ gi|114649        60 KRMF----VLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[0, 27, 29, 64, 68, 100],
                               [2, 29, 29, 64, 64,  96]])
                     # fmt: on
@@ -4570,7 +4494,6 @@ gi|114649        56 QDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[0, 27, 29, 54, 58, 100],
                               [2, 29, 29, 54, 54,  96]])
                     # fmt: on
@@ -4635,7 +4558,6 @@ gi|114649        11 GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS 54
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[ 0, 15, 24, 52],
                               [11, 26, 26, 54]])
                     # fmt: on
@@ -4953,7 +4875,6 @@ gi|296147        60 SLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 116
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0, 116],
                               [  0, 116]])
                     # fmt: on
@@ -5041,7 +4962,6 @@ gi|296147        60 DVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP 116
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[0, 116],
                               [0, 116]])
                     # fmt: on
@@ -5129,7 +5049,6 @@ gi|296147        60 MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 116
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0, 116],
                               [  0, 116]])
                     # fmt: on
@@ -5217,7 +5136,6 @@ gi|296147        60 PFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS 116
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0, 116],
                               [  0, 116]])
                     # fmt: on
@@ -5305,7 +5223,6 @@ gi|296147        60 GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA 116
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0, 116],
                               [  0, 116]])
                     # fmt: on
@@ -5393,7 +5310,6 @@ gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  85],
                               [  0,  85]])
                     # fmt: on
@@ -5477,7 +5393,6 @@ gi|296147         0 MAMNTGGFDSMQRQ 14
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[ 0, 14],
                               [ 0, 14]])
                     # fmt: on
@@ -5559,7 +5474,6 @@ gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  85],
                               [  0,  85]])
                     # fmt: on
@@ -5640,7 +5554,6 @@ gi|296147         0 FRIEKKKFNHSPC* 14
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[ 0, 14],
                               [ 0, 14]])
                     # fmt: on
@@ -5715,7 +5628,6 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  55],
                               [  0,  55]])
                     # fmt: on
@@ -5796,7 +5708,6 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESN 39
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  39],
                               [  0,  39]])
                     # fmt: on
@@ -5879,7 +5790,6 @@ gi|296147        60 *RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 103
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0, 103],
                               [  0, 103]])
                     # fmt: on
@@ -5964,7 +5874,6 @@ gi|296147        60 FRFGR 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -6049,7 +5958,6 @@ gi|296147        60 PRSRLSEILDAFIEATHLAMEIQLK 85
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  85],
                               [  0,  85]])
                     # fmt: on
@@ -6130,7 +6038,6 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANT 54
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  54],
                               [  0,  54]])
                     # fmt: on
@@ -6211,7 +6118,6 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSC 33
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  33],
                               [  0,  33]])
                     # fmt: on
@@ -6290,7 +6196,6 @@ gi|296147        60 SF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 115
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0, 115],
                               [  0, 115]])
                     # fmt: on
@@ -6375,7 +6280,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  84],
                               [  0,  84]])
                     # fmt: on
@@ -6456,7 +6360,6 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  55],
                               [  0,  55]])
                     # fmt: on
@@ -6541,7 +6444,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  84],
                               [  0,  84]])
                     # fmt: on
@@ -6622,7 +6524,6 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLD 49
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  49],
                               [  0,  49]])
                     # fmt: on
@@ -6702,7 +6603,6 @@ gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPP 42
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  42],
                               [  0,  42]])
                     # fmt: on
@@ -6785,7 +6685,6 @@ gi|296147        60 GNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIK 99
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  99],
                               [  0,  99]])
                     # fmt: on
@@ -6870,7 +6769,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  84],
                               [  0,  84]])
                     # fmt: on
@@ -6955,7 +6853,6 @@ gi|296147        60 SLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K 116
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0, 116],
                               [  0, 116]])
                     # fmt: on
@@ -7040,7 +6937,6 @@ gi|296147        60 MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH 116
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0, 116],
                               [  0, 116]])
                     # fmt: on
@@ -7121,7 +7017,6 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAF 47
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  47],
                               [  0,  47]])
                     # fmt: on
@@ -7204,7 +7099,6 @@ gi|296147        60
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  60],
                               [  0,  60]])
                     # fmt: on
@@ -7289,7 +7183,6 @@ gi|296147        60 *NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS 105
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0, 105],
                               [  0, 105]])
                     # fmt: on
@@ -7370,7 +7263,6 @@ gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSC 34
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  34],
                               [  0,  34]])
                     # fmt: on
@@ -7449,7 +7341,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  84],
                               [  0,  84]])
                     # fmt: on
@@ -7534,7 +7425,6 @@ gi|296147        60 GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL 105
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0, 105],
                               [  0, 105]])
                     # fmt: on
@@ -7619,7 +7509,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  84],
                               [  0,  84]])
                     # fmt: on
@@ -7704,7 +7593,6 @@ gi|296147        60 GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESN 110
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0, 110],
                               [  0, 110]])
                     # fmt: on
@@ -7789,7 +7677,6 @@ gi|296147        60 MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLP 104
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0, 104],
                               [  0, 104]])
                     # fmt: on
@@ -7874,7 +7761,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  84],
                               [  0,  84]])
                     # fmt: on
@@ -7955,7 +7841,6 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFL 48
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  48],
                               [  0,  48]])
                     # fmt: on
@@ -8034,7 +7919,6 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL 34
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  34],
                               [  0,  34]])
                     # fmt: on
@@ -8113,7 +7997,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  84],
                               [  0,  84]])
                     # fmt: on
@@ -8194,7 +8077,6 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  55],
                               [  0,  55]])
                     # fmt: on
@@ -8275,7 +8157,6 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDK 25
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  25],
                               [  0,  25]])
                     # fmt: on
@@ -8354,7 +8235,6 @@ gi|296147        60
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  60],
                               [  0,  60]])
                     # fmt: on
@@ -8439,7 +8319,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  84],
                               [  0,  84]])
                     # fmt: on
@@ -8520,7 +8399,6 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK 55
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  55],
                               [  0,  55]])
                     # fmt: on
@@ -8601,7 +8479,6 @@ gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSED 25
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  25],
                               [  0,  25]])
                     # fmt: on
@@ -8680,7 +8557,6 @@ gi|296147        60 FGR*RTQFCFKL 72
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  72],
                               [  0,  72]])
                     # fmt: on
@@ -8761,7 +8637,6 @@ gi|296147         0 *HSLIGKPTRKGVRNPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRK 50
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  50],
                               [  0,  50]])
                     # fmt: on
@@ -8846,7 +8721,6 @@ gi|296147        60 TGTVNRSIY 69
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  69],
                               [  0,  69]])
                     # fmt: on
@@ -8931,7 +8805,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  84],
                               [  0,  84]])
                     # fmt: on
@@ -9012,7 +8885,6 @@ gi|296147         0 NPDVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQ 54
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  54],
                               [  0,  54]])
                     # fmt: on
@@ -9093,7 +8965,6 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILA 46
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  46],
                               [  0,  46]])
                     # fmt: on
@@ -9176,7 +9047,6 @@ gi|296147        60 TMYSFQYLNGFITSMANG*ISSFRFGR*RTQ 91
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  91],
                               [  0,  91]])
                     # fmt: on
@@ -9257,7 +9127,6 @@ gi|296147         0 QNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRI 42
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[ 0, 42],
                               [ 0, 42]])
                     # fmt: on
@@ -9340,7 +9209,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  84],
                               [  0,  84]])
                     # fmt: on
@@ -9421,7 +9289,6 @@ gi|296147         0 TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQ 51
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  51],
                               [  0,  51]])
                     # fmt: on
@@ -9502,7 +9369,6 @@ gi|296147         0 TLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCL 35
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  35],
                               [  0,  35]])
                     # fmt: on
@@ -9583,7 +9449,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEIQLK 84
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  84],
                               [  0,  84]])
                     # fmt: on
@@ -9668,7 +9533,6 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  78],
                               [  0,  78]])
                     # fmt: on
@@ -9753,7 +9617,6 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  78],
                               [  0,  78]])
                     # fmt: on
@@ -9838,7 +9701,6 @@ gi|296147        60 MEIQLK 66
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  66],
                               [  0,  66]])
                     # fmt: on
@@ -9923,7 +9785,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -10008,7 +9869,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -10093,7 +9953,6 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  78],
                               [  0,  78]])
                     # fmt: on
@@ -10178,7 +10037,6 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  78],
                               [  0,  78]])
                     # fmt: on
@@ -10263,7 +10121,6 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  78],
                               [  0,  78]])
                     # fmt: on
@@ -10348,7 +10205,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -10433,7 +10289,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -10518,7 +10373,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -10603,7 +10457,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -10688,7 +10541,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -10773,7 +10625,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -10858,7 +10709,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -10943,7 +10793,6 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  78],
                               [  0,  78]])
                     # fmt: on
@@ -11028,7 +10877,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -11113,7 +10961,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -11198,7 +11045,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -11283,7 +11129,6 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  78],
                               [  0,  78]])
                     # fmt: on
@@ -11368,7 +11213,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -11453,7 +11297,6 @@ gi|296147        60 MEIQLK 66
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  66],
                               [  0,  66]])
                     # fmt: on
@@ -11538,7 +11381,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -11623,7 +11465,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -11708,7 +11549,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -11793,7 +11633,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -11878,7 +11717,6 @@ gi|296147        60 EIQLK 65
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  65],
                               [  0,  65]])
                     # fmt: on
@@ -11963,7 +11801,6 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  78],
                               [  0,  78]])
                     # fmt: on
@@ -12048,7 +11885,6 @@ gi|296147        60 EATHLAMEIQLK 72
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  72],
                               [  0,  72]])
                     # fmt: on
@@ -12133,7 +11969,6 @@ gi|296147        59
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  59],
                               [  0,  59]])
                     # fmt: on
@@ -12214,7 +12049,6 @@ gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 55
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  55],
                               [  0,  55]])
                     # fmt: on
@@ -12295,7 +12129,6 @@ gi|296147         0 KRVHSFEELERHPDFALPFVLACQSRNAKMTTLAM 35
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  35],
                               [  0,  35]])
                     # fmt: on
@@ -12372,7 +12205,6 @@ gi|296147         0 IPRSRLSEILDAFIEATHLAMEIQLK 26
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  26],
                               [  0,  26]])
                     # fmt: on
@@ -12451,7 +12283,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  80],
                               [  0,  80]])
                     # fmt: on
@@ -12536,7 +12367,6 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  78],
                               [  0,  78]])
                     # fmt: on
@@ -12621,7 +12451,6 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  78],
                               [  0,  78]])
                     # fmt: on
@@ -12702,7 +12531,6 @@ gi|296147         0 ACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 51
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  51],
                               [  0,  51]])
                     # fmt: on
@@ -12787,7 +12615,6 @@ gi|296147        60 ILDAFIEATHLAMEIQLK 78
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  78],
                               [  0,  78]])
                     # fmt: on
@@ -12868,7 +12695,6 @@ gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 55
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  55],
                               [  0,  55]])
                     # fmt: on
@@ -12949,7 +12775,6 @@ gi|296147         0 CVLYLPNRKEEIQPFAM 17
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[ 0, 17],
                               [ 0, 17]])
                     # fmt: on
@@ -13028,7 +12853,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  80],
                               [  0,  80]])
                     # fmt: on
@@ -13113,7 +12937,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEI 81
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  81],
                               [  0,  81]])
                     # fmt: on
@@ -13198,7 +13021,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEI 81
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  81],
                               [  0,  81]])
                     # fmt: on
@@ -13279,7 +13101,6 @@ gi|296147         0 ALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 57
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  57],
                               [  0,  57]])
                     # fmt: on
@@ -13364,7 +13185,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  80],
                               [  0,  80]])
                     # fmt: on
@@ -13449,7 +13269,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  80],
                               [  0,  80]])
                     # fmt: on
@@ -13534,7 +13353,6 @@ gi|296147        60 PRSRLSEIL 69
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  69],
                               [  0,  69]])
                     # fmt: on
@@ -13619,7 +13437,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  80],
                               [  0,  80]])
                     # fmt: on
@@ -13704,7 +13521,6 @@ gi|296147        60 RSRLSEILDAFIEATHLA 78
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  78],
                               [  0,  78]])
                     # fmt: on
@@ -13789,7 +13605,6 @@ gi|296147        60 RSRLSEILDAFIEA 74
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  74],
                               [  0,  74]])
                     # fmt: on
@@ -13870,7 +13685,6 @@ gi|296147         0 ELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 49
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  49],
                               [  0,  49]])
                     # fmt: on
@@ -13954,7 +13768,6 @@ gi|296147        60 PRSRLSEILDAFIEATHLAMEI 82
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  82],
                               [  0,  82]])
                     # fmt: on
@@ -14035,7 +13848,6 @@ gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 55
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  55],
                               [  0,  55]])
                     # fmt: on
@@ -14120,7 +13932,6 @@ gi|296147        59
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  59],
                               [  0,  59]])
                     # fmt: on
@@ -14205,7 +14016,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAME 80
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  80],
                               [  0,  80]])
                     # fmt: on
@@ -14290,7 +14100,6 @@ gi|296147        60 RSRLSEIL 68
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  68],
                               [  0,  68]])
                     # fmt: on
@@ -14375,7 +14184,6 @@ gi|296147        60 RSRLSEILDAFIEATHLAMEI 81
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  81],
                               [  0,  81]])
                     # fmt: on
@@ -14460,7 +14268,6 @@ gi|296147        60 RSRLSEIL 68
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  68],
                               [  0,  68]])
                     # fmt: on
@@ -14545,7 +14352,6 @@ gi|296147        60 RSRLSEIL 68
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  68],
                               [  0,  68]])
                     # fmt: on
@@ -14626,7 +14432,6 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  41],
                               [  0,  41]])
                     # fmt: on
@@ -14705,7 +14510,6 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  41],
                               [  0,  41]])
                     # fmt: on
@@ -14788,7 +14592,6 @@ gi|296147        60 LSEILDAFI 69
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  69],
                               [  0,  69]])
                     # fmt: on
@@ -14869,7 +14672,6 @@ gi|296147         0 VLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEI 50
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  50],
                               [  0,  50]])
                     # fmt: on
@@ -14950,7 +14752,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -15025,7 +14826,6 @@ gi|296147         0 LACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 52
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  52],
                               [  0,  52]])
                     # fmt: on
@@ -15106,7 +14906,6 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  41],
                               [  0,  41]])
                     # fmt: on
@@ -15185,7 +14984,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -15260,7 +15058,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -15335,7 +15132,6 @@ gi|296147         0 LQGLSTVPSIPRSRLSEILDAFIEATHLAMEI 32
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  32],
                               [  0,  32]])
                     # fmt: on
@@ -15410,7 +15206,6 @@ gi|296147         0 SIEILKRVHSFEELERH 17
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  17],
                               [  0,  17]])
                     # fmt: on
@@ -15485,7 +15280,6 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  41],
                               [  0,  41]])
                     # fmt: on
@@ -15564,7 +15358,6 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  41],
                               [  0,  41]])
                     # fmt: on
@@ -15643,7 +15436,6 @@ gi|296147         0 LPFVLACQSRNAKMTTLAMQCLQGL 25
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  25],
                               [  0,  25]])
                     # fmt: on
@@ -15718,7 +15510,6 @@ gi|296147         0 LPFVLACQSRNAKMTTLAMQCLQGL 25
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  25],
                               [  0,  25]])
                     # fmt: on
@@ -15793,7 +15584,6 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  41],
                               [  0,  41]])
                     # fmt: on
@@ -15872,7 +15662,6 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  41],
                               [  0,  41]])
                     # fmt: on
@@ -15951,7 +15740,6 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  41],
                               [  0,  41]])
                     # fmt: on
@@ -16030,7 +15818,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -16109,7 +15896,6 @@ gi|296147        60 RSRLSEIL 68
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  68],
                               [  0,  68]])
                     # fmt: on
@@ -16190,7 +15976,6 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  41],
                               [  0,  41]])
                     # fmt: on
@@ -16269,7 +16054,6 @@ gi|296147         0 TLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK 41
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  41],
                               [  0,  41]])
                     # fmt: on
@@ -16348,7 +16132,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -16423,7 +16206,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -16498,7 +16280,6 @@ gi|296147         0 LQGLSTVPSIPRSRLSEILDAFIEATHLAMEI 32
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  32],
                               [  0,  32]])
                     # fmt: on
@@ -16573,7 +16354,6 @@ gi|296147         0 KSIEILKRVHSFEELERH 18
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  18],
                               [  0,  18]])
                     # fmt: on
@@ -16648,7 +16428,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -16723,7 +16502,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -16798,7 +16576,6 @@ gi|296147         0 PFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEI 38
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  38],
                               [  0,  38]])
                     # fmt: on
@@ -16877,7 +16654,6 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  20],
                               [  0,  20]])
                     # fmt: on
@@ -16952,7 +16728,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -17027,7 +16802,6 @@ gi|296147         0 EGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LAS 38
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  38],
                               [  0,  38]])
                     # fmt: on
@@ -17106,7 +16880,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -17181,7 +16954,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -17256,7 +17028,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -17331,7 +17102,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -17406,7 +17176,6 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  20],
                               [  0,  20]])
                     # fmt: on
@@ -17481,7 +17250,6 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  20],
                               [  0,  20]])
                     # fmt: on
@@ -17556,7 +17324,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -17631,7 +17398,6 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  20],
                               [  0,  20]])
                     # fmt: on
@@ -17706,7 +17472,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -17781,7 +17546,6 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  20],
                               [  0,  20]])
                     # fmt: on
@@ -17856,7 +17620,6 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  20],
                               [  0,  20]])
                     # fmt: on
@@ -17931,7 +17694,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -18006,7 +17768,6 @@ gi|296147         0 PWQCNAYRDCQPFHLFLEAGCLKFWMPSL 29
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  29],
                               [  0,  29]])
                     # fmt: on
@@ -18081,7 +17842,6 @@ gi|296147         0 SFEELERHPDFALPFVLACQSRNAKM 26
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  26],
                               [  0,  26]])
                     # fmt: on
@@ -18156,7 +17916,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -18231,7 +17990,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -18306,7 +18064,6 @@ gi|296147         0 DFALPFVLACQSRNAKMTTLAMQCLQGL 28
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  28],
                               [  0,  28]])
                     # fmt: on
@@ -18381,7 +18138,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -18456,7 +18212,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -18531,7 +18286,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -18606,7 +18360,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -18681,7 +18434,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -18756,7 +18508,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -18831,7 +18582,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -18906,7 +18656,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -18981,7 +18730,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -19056,7 +18804,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -19131,7 +18878,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -19206,7 +18952,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -19281,7 +19026,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -19356,7 +19100,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -19431,7 +19174,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -19506,7 +19248,6 @@ gi|296147         0 YVLFSISQWIYH*HGEWLNFFFS 23
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  23],
                               [  0,  23]])
                     # fmt: on
@@ -19581,7 +19322,6 @@ gi|296147         0 GEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSW 33
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  33],
                               [  0,  33]])
                     # fmt: on
@@ -19656,7 +19396,6 @@ gi|296147         0 CQPFHLFLEAGCLKFWMPSLRLL 23
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  23],
                               [  0,  23]])
                     # fmt: on
@@ -19731,7 +19470,6 @@ gi|296147         0 RNAKMTTLAMQCLQGLSTVPSI 22
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  22],
                               [  0,  22]])
                     # fmt: on
@@ -19806,7 +19544,6 @@ gi|296147         0 CQPFHLFLEAGCLKFWMPSLRLL 23
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  23],
                               [  0,  23]])
                     # fmt: on
@@ -19881,7 +19618,6 @@ gi|296147         0 RNAKMTTLAMQCLQGLSTVPSI 22
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  22],
                               [  0,  22]])
                     # fmt: on
@@ -19956,7 +19692,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -20031,7 +19766,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -20106,7 +19840,6 @@ gi|296147         0 FVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSE 36
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  36],
                               [  0,  36]])
                     # fmt: on
@@ -20185,7 +19918,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -20260,7 +19992,6 @@ gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  37],
                               [  0,  37]])
                     # fmt: on
@@ -20339,7 +20070,6 @@ gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  37],
                               [  0,  37]])
                     # fmt: on
@@ -20418,7 +20148,6 @@ gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  37],
                               [  0,  37]])
                     # fmt: on
@@ -20497,7 +20226,6 @@ gi|296147         0 RKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSL 37
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  37],
                               [  0,  37]])
                     # fmt: on
@@ -20576,7 +20304,6 @@ gi|296147         0 CWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWM 38
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  38],
                               [  0,  38]])
                     # fmt: on
@@ -20655,7 +20382,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -20730,7 +20456,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -20805,7 +20530,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -20880,7 +20604,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -20955,7 +20678,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -21030,7 +20752,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -21105,7 +20826,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -21180,7 +20900,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -21255,7 +20974,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -21330,7 +21048,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -21405,7 +21122,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -21480,7 +21196,6 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  20],
                               [  0,  20]])
                     # fmt: on
@@ -21555,7 +21270,6 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  20],
                               [  0,  20]])
                     # fmt: on
@@ -21630,7 +21344,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -21705,7 +21418,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -21780,7 +21492,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -21855,7 +21566,6 @@ gi|296147         0 AGCLKFWMPSLRLLISRWRF 20
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  20],
                               [  0,  20]])
                     # fmt: on
@@ -21930,7 +21640,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -22005,7 +21714,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -22080,7 +21788,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -22155,7 +21862,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -22230,7 +21936,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -22305,7 +22010,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -22380,7 +22084,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -22455,7 +22158,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -22530,7 +22232,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -22605,7 +22306,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -22680,7 +22380,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -22755,7 +22454,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -22830,7 +22528,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -22905,7 +22602,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -22980,7 +22676,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -23055,7 +22750,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -23133,7 +22827,6 @@ gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  55],
                               [  0,  55]])
                     # fmt: on
@@ -23214,7 +22907,6 @@ gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  55],
                               [  0,  55]])
                     # fmt: on
@@ -23295,7 +22987,6 @@ gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  55],
                               [  0,  55]])
                     # fmt: on
@@ -23376,7 +23067,6 @@ gi|296147         0 RVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEIL 55
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  55],
                               [  0,  55]])
                     # fmt: on
@@ -23457,7 +23147,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -23532,7 +23221,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -23607,7 +23295,6 @@ gi|296147         0 NISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA 43
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  43],
                               [  0,  43]])
                     # fmt: on
@@ -23686,7 +23373,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -23761,7 +23447,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -23836,7 +23521,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -23911,7 +23595,6 @@ gi|296147         0 FALPFVLACQSRNAKMTTLAMQCLQGL 27
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  27],
                               [  0,  27]])
                     # fmt: on
@@ -23986,7 +23669,6 @@ gi|296147         0 QSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFI 37
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  37],
                               [  0,  37]])
                     # fmt: on
@@ -24065,7 +23747,6 @@ gi|296147         0 QSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFI 37
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  37],
                               [  0,  37]])
                     # fmt: on
@@ -24144,7 +23825,6 @@ gi|296147         0 HSLIGKPTRKGVRNPDVFLAPQNYVLFSIS 30
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  30],
                               [  0,  30]])
                     # fmt: on
@@ -24219,7 +23899,6 @@ gi|296147         0 LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMES 38
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[  0,  38],
                               [  0,  38]])
                     # fmt: on

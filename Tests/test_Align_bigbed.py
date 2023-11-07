@@ -125,7 +125,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[42530895, 42530958, 42532020,
                            42532095, 42532563, 42532606],
                           [     181,      118,      118,
@@ -139,7 +138,6 @@ table bed
             np.array_equal(
                 alignment.substitutions,
                 # fmt: off
-# flake8: noqa
             np.array([[36.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                       [ 0., 40.,  0.,  0.,  0.,  0.,  0.,  0.],
                       [ 0.,  0., 57.,  0.,  0.,  0.,  0.,  0.],
@@ -168,7 +166,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[42530895, 42530922, 42530958, 42532020, 42532037,
                            42532039, 42532095, 42532563, 42532606],
                           [     179,      152,      116,      116,       99,
@@ -190,7 +187,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[48663767, 48663813, 48665640,
                            48665722, 48669098, 48669174],
                           [       0,       46,       46,
@@ -204,7 +200,6 @@ table bed
             np.array_equal(
                 alignment.substitutions,
                 # fmt: off
-# flake8: noqa
             np.array([[53.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                       [ 0., 35.,  0.,  0.,  0.,  0.,  0.,  0.],
                       [ 0.,  0., 50.,  0.,  0.,  0.,  0.,  0.],
@@ -231,7 +226,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[48663767, 48663795, 48663796, 48663813, 48665640,
                            48665716, 48665722, 48669098, 48669174],
                           [       0,       28,       28,       45,       45,
@@ -321,7 +315,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1207056, 1207106],
                           [      0,      50]]),
                 # fmt: on
@@ -341,7 +334,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[10271783, 10271816],
                           [       0,       33]]),
                 # fmt: on
@@ -361,7 +353,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[39368490, 39368526],
                           [      36,        0]]),
                 # fmt: on
@@ -381,7 +372,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61700837, 61700871],
                           [       0,       34]]),
                 # fmt: on
@@ -401,7 +391,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[220325687, 220325721],
                           [       34,         0]]),
                 # fmt: on
@@ -421,7 +410,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[99388555, 99388591],
                           [      36,        0]]),
                 # fmt: on
@@ -441,7 +429,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[112178171, 112178196],
                           [       25,         0]]),
                 # fmt: on
@@ -461,7 +448,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[52759147, 52759154, 52759160, 52759198],
                           [       0,        7,        7,       45]]),
                 # fmt: on
@@ -481,7 +467,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[23891310, 23891349],
                           [       0,       39]]),
                 # fmt: on
@@ -501,7 +486,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[43252217, 43252245],
                           [       0,       28]]),
                 # fmt: on
@@ -521,7 +505,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[553742, 553781],
                           [    39,      0]]),
                 # fmt: on
@@ -541,7 +524,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[35483340, 35483365, 35483499, 35483510],
                           [       0,       25,       25,       36]]),
                 # fmt: on
@@ -561,7 +543,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[54017130, 54017169],
                           [      39,        0]]),
                 # fmt: on
@@ -581,7 +562,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[53575980, 53575997],
                           [      17,        0]]),
                 # fmt: on
@@ -601,7 +581,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[120641740, 120641776],
                           [       36,         0]]),
                 # fmt: on
@@ -621,7 +600,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[183925984, 183925990, 183926028],
                           [        0,         6,        44]]),
                 # fmt: on
@@ -641,7 +619,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[42144400, 42144436],
                           [       0,       36]]),
                 # fmt: on
@@ -661,7 +638,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[48997405, 48997442],
                           [      37,        0]]),
                 # fmt: on
@@ -681,7 +657,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[37558157, 37558167, 37558173, 37558191],
                           [      28,       18,       18,        0]]),
                 # fmt: on
@@ -701,7 +676,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61646095, 61646111],
                           [       0,       16]]),
                 # fmt: on
@@ -721,7 +695,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[95160479, 95160520],
                           [       0,       41]]),
                 # fmt: on
@@ -741,7 +714,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[85737865, 85737906],
                           [       0,       41]]),
                 # fmt: on
@@ -810,7 +782,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[10271783, 10271816],
                           [       0,       33]]),
                 # fmt: on
@@ -830,7 +801,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[53575980, 53575997],
                           [      17,        0]]),
                 # fmt: on
@@ -850,7 +820,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61646095, 61646111],
                           [       0,       16]]),
                 # fmt: on
@@ -933,7 +902,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1207056, 1207106],
                           [      0,      50]]),
                 # fmt: on
@@ -953,7 +921,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[39368490, 39368526],
                           [      36,        0]]),
                 # fmt: on
@@ -973,7 +940,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61700837, 61700871],
                           [       0,       34]]),
                 # fmt: on
@@ -993,7 +959,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[220325687, 220325721],
                           [       34,         0]]),
                 # fmt: on
@@ -1013,7 +978,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[99388555, 99388591],
                           [      36,        0]]),
                 # fmt: on
@@ -1033,7 +997,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[112178171, 112178196],
                           [       25,         0]]),
                 # fmt: on
@@ -1053,7 +1016,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[52759147, 52759154, 52759160, 52759198],
                           [       0,        7,        7,       45]]),
                 # fmt: on
@@ -1073,7 +1035,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[23891310, 23891349],
                           [       0,       39]]),
                 # fmt: on
@@ -1093,7 +1054,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[43252217, 43252245],
                           [       0,       28]]),
                 # fmt: on
@@ -1113,7 +1073,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[553742, 553781],
                           [    39,      0]]),
                 # fmt: on
@@ -1133,7 +1092,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[35483340, 35483365, 35483499, 35483510],
                           [       0,       25,       25,       36]]),
                 # fmt: on
@@ -1153,7 +1111,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[54017130, 54017169],
                           [      39,        0]]),
                 # fmt: on
@@ -1173,7 +1130,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[120641740, 120641776],
                           [       36,         0]]),
                 # fmt: on
@@ -1193,7 +1149,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[183925984, 183925990, 183926028],
                           [        0,         6,        44]]),
                 # fmt: on
@@ -1213,7 +1168,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[42144400, 42144436],
                           [       0,       36]]),
                 # fmt: on
@@ -1233,7 +1187,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[48997405, 48997442],
                           [      37,        0]]),
                 # fmt: on
@@ -1253,7 +1206,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[37558157, 37558167, 37558173, 37558191],
                           [      28,       18,       18,        0]]),
                 # fmt: on
@@ -1273,7 +1225,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[95160479, 95160520],
                           [       0,       41]]),
                 # fmt: on
@@ -1293,7 +1244,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[85737865, 85737906],
                           [       0,       41]]),
                 # fmt: on
@@ -1376,7 +1326,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1207056, 1207106],
                           [      0,      50]]),
                 # fmt: on
@@ -1396,7 +1345,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[10271783, 10271816],
                           [       0,       33]]),
                 # fmt: on
@@ -1435,7 +1383,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61700837, 61700871],
                           [       0,       34]]),
                 # fmt: on
@@ -1455,7 +1402,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[220325687, 220325721],
                           [       34,         0]]),
                 # fmt: on
@@ -1475,7 +1421,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[99388555, 99388591],
                           [      36,        0]]),
                 # fmt: on
@@ -1495,7 +1440,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[112178171, 112178196],
                           [       25,         0]]),
                 # fmt: on
@@ -1515,7 +1459,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[52759147, 52759154, 52759160, 52759198],
                           [       0,        7,        7,       45]]),
                 # fmt: on
@@ -1535,7 +1478,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[23891310, 23891349],
                           [       0,       39]]),
                 # fmt: on
@@ -1555,7 +1497,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[43252217, 43252245],
                           [       0,       28]]),
                 # fmt: on
@@ -1575,7 +1516,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[553742, 553781],
                           [    39,      0]]),
                 # fmt: on
@@ -1595,7 +1535,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[35483340, 35483365, 35483499, 35483510],
                           [       0,       25,       25,       36]]),
                 # fmt: on
@@ -1615,7 +1554,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[54017130, 54017169],
                           [      39,        0]]),
                 # fmt: on
@@ -1635,7 +1573,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[53575980, 53575997],
                           [      17,        0]]),
                 # fmt: on
@@ -1655,7 +1592,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[120641740, 120641776],
                           [       36,         0]]),
                 # fmt: on
@@ -1675,7 +1611,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[183925984, 183925990, 183926028],
                           [        0,         6,        44]]),
                 # fmt: on
@@ -1695,7 +1630,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[42144400, 42144436],
                           [       0,       36]]),
                 # fmt: on
@@ -1715,7 +1649,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[48997405, 48997442],
                           [      37,        0]]),
                 # fmt: on
@@ -1735,7 +1668,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[37558157, 37558167, 37558173, 37558191],
                           [      28,       18,       18,        0]]),
                 # fmt: on
@@ -1755,7 +1687,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[61646095, 61646111],
                           [       0,       16]]),
                 # fmt: on
@@ -1775,7 +1706,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[95160479, 95160520],
                           [       0,       41]]),
                 # fmt: on
@@ -1795,7 +1725,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[85737865, 85737906],
                           [       0,       41]]),
                 # fmt: on
@@ -1870,7 +1799,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[75549820, 75549865, 75567225, 75567312],
                           [       0,       45,       45,      132]]),
                 # fmt: on
@@ -1889,7 +1817,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[75560749, 75560881],
                           [       0,      132]]),
                 # fmt: on
@@ -1908,7 +1835,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[75566694, 75566850],
                           [       0,      156]]),
                 # fmt: on
@@ -1927,7 +1853,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[75569459, 75569507],
                           [       0,       48]]),
                 # fmt: on
@@ -1946,7 +1871,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[75594914, 75594989],
                           [       0,       75]]),
                 # fmt: on
@@ -1965,7 +1889,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[75604767, 75604827, 75605728, 75605809],
                           [       0,       60,       60,      141]]),
                 # fmt: on
@@ -1984,7 +1907,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[41257605, 41257731, 41263227, 41263290],
                           [       0,      126,      126,      189]]),
                 # fmt: on
@@ -2003,7 +1925,6 @@ table bed
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[41260685, 41260787],
                           [       0,      102]]),
                 # fmt: on
@@ -2013,7 +1934,6 @@ table bed
 
     def test_reading_psl_35_001(self):
         """Test parsing psl_35_001.bb."""
-
         alignments = Align.parse(self.path, "bigbed")
         self.check_alignments(alignments)
 
@@ -2209,7 +2129,6 @@ table bed
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[1000, 1567, 4512, 5000],
                               [   0,  567,  567, 1055]]),
                     # fmt: on
@@ -2262,7 +2181,6 @@ table bed
                 np.array_equal(
                     alignment.coordinates,
                     # fmt: off
-# flake8: noqa
                     np.array([[2000, 2433, 5601, 6000],
                               [ 832,  399,  399,    0]])
                     # fmt: on
