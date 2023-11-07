@@ -16,23 +16,23 @@
 from Bio import StreamModeError
 
 
-class Records:
+class Records(list):
     def __init__(self, stream):
         from ._parser import DataHandler
         handler = DataHandler(stream)
-        self.header = handler.read_header(stream)
-        self.handler = handler
+        self.header = handler.read_header()
+        self._handler = handler
 
     def __next__(self):
         try:
             handler = self._handler
         except AttributeError:
             raise StopIteration from None
-        hit = _handler._read_next_hit()
-        if hit is None:
+        record = handler.read_next_record()
+        if record is None:
             del self._handler
             raise StopIteration
-        return hit
+        return record
 
 
 def parse(source):
