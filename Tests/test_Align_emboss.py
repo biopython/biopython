@@ -88,7 +88,6 @@ IXI_235         101 PPAWAGDRSHE 112
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S', 'S',
            'R', 'P', 'A', 'M', 'V', 'S', 'S', 'R', 'R', 'T', 'R', 'P', 'S', 'P',
            'P', 'G', 'P', 'R', 'R', 'P', 'T', 'G', 'R', 'P', 'C', 'C', 'S', 'A',
@@ -167,7 +166,6 @@ asis              0 CGTTTGAGTACTGGGATG 18
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['C', 'G', 'T', 'T', 'T', 'G', 'A', 'G', 'T', '-', 'C', 'T', 'G',
            'G', 'G', 'A', 'T', 'G'],
           ['C', 'G', 'T', 'T', 'T', 'G', 'A', 'G', 'T', 'A', 'C', 'T', 'G',
@@ -231,7 +229,6 @@ CAA85685.        46 GVPPEEAGAAVAAESS 62
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['G', 'P', 'P', 'P', 'Q', 'S', 'P', 'D', 'E', 'N', 'R', 'A', 'G',
            'E', 'S', 'S'],
           ['G', 'V', 'P', 'P', 'E', 'E', 'A', 'G', 'A', 'A', 'V', 'A', 'A',
@@ -334,7 +331,6 @@ HBB_HUMAN       121 EFTPPVQAAYQKVVAGVANALAHKY 146
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['L', 'S', 'P', 'A', 'D', 'K', 'T', 'N', 'V', 'K', 'A', 'A', 'W',
            'G', 'K', 'V', 'G', 'A', 'H', 'A', 'G', 'E', 'Y', 'G', 'A', 'E',
            'A', 'L', 'E', 'R', 'M', 'F', 'L', 'S', 'F', 'P', 'T', 'T', 'K',
@@ -404,7 +400,6 @@ HBB_HUMAN       131 QKVVAGVANALAH 144
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['K', 'K', 'V', 'A', 'D', 'A', 'L', 'T', 'N', 'A', 'V', 'A', 'H'],
           ['Q', 'K', 'V', 'V', 'A', 'G', 'V', 'A', 'N', 'A', 'L', 'A', 'H']],
          dtype='U')
@@ -453,7 +448,6 @@ HBB_HUMAN        17 KVNVDEVGGEALGRLLVV  35
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['K', 'L', 'R', 'V', 'D', 'P', 'V', 'N', 'F', 'K', 'L', 'L', 'S',
            'H', 'C', 'L', 'L', 'V'],
           ['K', 'V', 'N', 'V', 'D', 'E', 'V', 'G', 'G', 'E', 'A', 'L', 'G',
@@ -501,7 +495,6 @@ HBB_HUMAN        68 LGAFSDGLAH 78
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['L', 'S', 'A', 'L', 'S', 'D', 'L', 'H', 'A', 'H'],
           ['L', 'G', 'A', 'F', 'S', 'D', 'G', 'L', 'A', 'H']], dtype='U')
                 # fmt: on
@@ -547,7 +540,6 @@ HBB_HUMAN       126 VQAAYQKVVA 136
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['V', 'K', 'A', 'A', 'W', 'G', 'K', 'V', 'G', 'A'],
           ['V', 'Q', 'A', 'A', 'Y', 'Q', 'K', 'V', 'V', 'A']], dtype='U')
                 # fmt: on
@@ -633,7 +625,6 @@ IXI_235         101 PPAWAGDRSHE 112
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
            'S', 'R', 'P', 'A', 'M', 'V', 'S', 'S', 'R', 'R', 'T', 'R', 'P',
            'S', 'P', 'P', 'G', 'P', 'R', 'R', 'P', 'T', 'G', 'R', 'P', 'C',
@@ -721,7 +712,6 @@ IXI_236         116 PPPPAGDRSHE 127
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
            'S', 'R', 'P', 'A', 'M', 'V', 'S', 'S', 'R', 'R', 'T', 'R', 'P',
            'S', 'P', 'P', 'G', 'P', 'R', 'R', 'P', 'T', 'G', 'R', 'P', 'C',
@@ -811,7 +801,6 @@ IXI_237         113 PPAYAGDRSHE 124
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['T', 'S', 'P', 'A', 'S', 'I', 'R', 'P', 'P', 'A', 'G', 'P', 'S',
            'S', 'R', 'P', 'A', 'M', 'V', 'S', 'S', 'R', 'R', 'T', 'R', 'P',
            'S', 'P', 'P', 'G', 'P', 'R', 'R', 'P', 'T', 'G', 'R', 'P', 'C',
@@ -914,7 +903,6 @@ gi|949687       116 NGET 120
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', '-', '-', '-', '-', 'Q', 'Y',
            'G', 'I', 'R', 'I', 'L', 'L', 'N', 'E', 'V', 'F', 'N', 'K', 'E',
            'G', 'Y', 'Q', 'T', 'F', 'Q', 'A', 'A', 'N', 'G', 'L', 'Q', 'A',
@@ -995,7 +983,6 @@ gi|949687       118
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
            'L', 'L', 'N', 'E', 'V', 'F', 'N', 'K', 'E', 'G', 'Y', 'Q', 'T',
            'F', 'Q', 'A', 'A', 'N', 'G', 'L', 'Q', 'A', 'L', 'D', 'I', 'V',
@@ -1076,7 +1063,6 @@ gi|949675       120
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['-', 'K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R',
            'I', 'L', 'L', 'N', 'E', 'V', 'F', 'N', 'K', 'E', 'G', 'Y', 'Q',
            'T', 'F', 'Q', 'A', 'A', 'N', 'G', 'L', 'Q', 'A', 'L', 'D', 'I',
@@ -1163,7 +1149,6 @@ gi|949700       116
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
            'L', 'L', 'N', 'E', 'V', 'F', 'N', 'K', 'E', 'G', 'Y', 'Q', 'T',
            'F', 'Q', 'A', 'A', 'N', 'G', 'L', 'Q', 'A', 'L', 'D', 'I', 'V',
@@ -1250,7 +1235,6 @@ gi|949700       116 LQKRQ 121
             np.array_equal(
                 np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
 np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
            'L', 'L', 'N', 'E', 'V', 'F', 'N', 'K', 'E', 'G', 'Y', 'Q', 'T',
            'F', 'Q', 'A', 'A', 'N', 'G', 'L', 'Q', 'A', 'L', 'D', 'I', 'V',
@@ -1312,7 +1296,6 @@ np.array([['K', 'I', 'L', 'I', 'V', 'D', 'D', 'Q', 'Y', 'G', 'I', 'R', 'I',
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[  0, 162, 169, 201, 210, 210, 220, 222, 236, 240,
                            244, 253, 277, 277, 278, 279, 300, 300, 310, 310,
                            314, 320, 334, 351, 357, 357, 379, 379, 390, 403,
@@ -1428,7 +1411,6 @@ asis            311 ------- 311
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[   0,  958,  965,  997, 1006, 1006, 1016, 1018,
                            1032, 1036, 1040, 1049, 1073, 1073, 1074, 1075,
                            1096, 1096, 1106, 1106, 1110, 1116, 1130, 1147,
@@ -1766,7 +1748,6 @@ asis           2507 CTTAATTTTAGAGG--ATGTTTATTTTTATTCTAATAAAAAGGATCCGTTGAA 2558
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[121, 102, 13,  0],
                           [  0,  19, 19, 32]])
                 # fmt: on
@@ -1912,7 +1893,6 @@ seqB              1 C   0
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[20, 13, 11, 10, 10,  2],
                           [ 2,  9,  9, 10, 11, 19]])
                 # fmt: on
@@ -1971,7 +1951,6 @@ seqB              2 TTTTTTT--ACCCGGGCCC 19
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 2, 10, 12, 12, 20],
                           [19, 11, 11, 10,  2]])
                 # fmt: on
@@ -2033,7 +2012,6 @@ seqB             19 GGGCCCGG--GTAAAAAAA  2
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[   0,    1,   27,   45,   49,   54,   61,   68,
                              79,   91,   93,  101,  105,  113,  133,  145,
                             157,  163,  168,  174,  180,  199,  224,  236,
