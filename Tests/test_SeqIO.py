@@ -2541,7 +2541,7 @@ class TestSeqIO(SeqIOTestBaseClass):
 
     def test_uniprot_xml_namespace(self):
         uniref_file_name = (
-            "SwissProt/UniRef90_P99999.xml"  # a related but not uniproot format file
+            "SwissProt/UniRef90_P99999.xml"  # non-uniprot file (related uniref format)
         )
         with self.assertRaises(ValueError) as context:
             records = []
