@@ -60,14 +60,12 @@ class Hit(dict):
 
 class DataHandler:
 
-    def __init__(self, stream):
+    def __init__(self):
         self.parser = expat.ParserCreate()
         self.parser.XmlDeclHandler = self.xmlDeclHandler
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
-        self.stream = stream
 
-    def read_header(self):
-        stream = self.stream
+    def read_header(self, stream):
         self.done = False
         self.header = {}
         BLOCK= 2048
@@ -160,7 +158,6 @@ class DataHandler:
 
     def _start_iteration(self, name, attrs):
         record = Record()
-        self.cache.append(record)
         self.record = record
 
     def _start_iteration_iter_num(self, name, attrs):
@@ -182,7 +179,7 @@ class DataHandler:
     def _start_iteration_hits(self, name, attrs):
         assert self.characters.strip() == ""
         self.characters = ""
-        self.record.hits = []
+        self.hits = []
 
     def _start_hit(self, name, attrs):
         assert self.characters.strip() == ""
@@ -214,10 +211,119 @@ class DataHandler:
         assert self.characters.strip() == ""
         self.characters = ""
 
+    def _start_hsp(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+        self.hsp = {}
+
+    def _start_hsp_num(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_bit_score(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_score(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_evalue(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_query_from(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_query_to(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_hit_from(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_hit_to(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_query_frame(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_hit_frame(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_identity(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_positive(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_gaps(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_align_len(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_qseq(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_hseq(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_hsp_midline(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_iteration_stat(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_statistics(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+        self.statistics = {}
+
+    def _start_statistics_db_num(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_statistics_db_len(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_statistics_hsp_len(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_statistics_eff_space(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_statistics_kappa(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_statistics_lambda(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _start_statistics_entropy(self, name, attrs):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
     def _end_blastoutput(self, name):
         assert self.characters.strip() == ""
         del self.characters
-        del self.stream
 
     def _end_blastoutput_program(self, name):
         self.header["program"] = self.characters
@@ -314,7 +420,7 @@ class DataHandler:
         assert self.characters.strip() == ""
         self.characters = ""
         hit = self.hit
-        self.record.hits.append(hit)
+        self.hits.append(hit)
         del self.hit
 
     def _end_hit_num(self, name):
@@ -342,6 +448,120 @@ class DataHandler:
 
     def _end_hit_accession(self, name):
         self.hit["accession"] = self.characters
+        self.characters = ""
+
+    def _end_hsp_num(self, name):
+        self.hsp["num"] = int(self.characters)
+        self.characters = ""
+
+    def _end_hsp_bit_score(self, name):
+        self.hsp["bit-score"] = float(self.characters)
+        self.characters = ""
+
+    def _end_hsp_score(self, name):
+        self.hsp["score"] = float(self.characters)
+        self.characters = ""
+
+    def _end_hsp_evalue(self, name):
+        self.hsp["evalue"] = float(self.characters)
+        self.characters = ""
+
+    def _end_hsp_query_from(self, name):
+        self.hsp["query-from"] = int(self.characters)
+        self.characters = ""
+
+    def _end_hsp_query_to(self, name):
+        self.hsp["query-to"] = int(self.characters)
+        self.characters = ""
+
+    def _end_hsp_hit_from(self, name):
+        self.hsp["hit-from"] = int(self.characters)
+        self.characters = ""
+
+    def _end_hsp_hit_to(self, name):
+        self.hsp["hit-to"] = int(self.characters)
+        self.characters = ""
+
+    def _end_hsp_query_frame(self, name):
+        self.hsp["query-frame"] = int(self.characters)
+        self.characters = ""
+
+    def _end_hsp_hit_frame(self, name):
+        self.hsp["hit-frame"] = int(self.characters)
+        self.characters = ""
+
+    def _end_hsp_identity(self, name):
+        self.hsp["identity"] = int(self.characters)
+        self.characters = ""
+
+    def _end_hsp_positive(self, name):
+        self.hsp["positive"] = int(self.characters)
+        self.characters = ""
+
+    def _end_hsp_gaps(self, name):
+        self.hsp["gaps"] = int(self.characters)
+        self.characters = ""
+
+    def _end_hsp_align_len(self, name):
+        self.hsp["align-len"] = int(self.characters)
+        self.characters = ""
+
+    def _end_hsp_qseq(self, name):
+        self.hsp["qseq"] = self.characters
+        self.characters = ""
+
+    def _end_hsp_hseq(self, name):
+        self.hsp["hseq"] = self.characters
+        self.characters = ""
+
+    def _end_hsp_midline(self, name):
+        self.hsp["midline"] = self.characters
+        self.characters = ""
+
+    def _end_hsp(self, name):
+        assert self.characters.strip() == ""
+        self.characters = ""
+        hsp = self.hsp
+        self.hsps.append(hsp)
+        del self.hsp
+
+    def _end_iteration_stat(self, name):
+        assert self.characters.strip() == ""
+        self.characters = ""
+
+    def _end_statistics(self, name):
+        assert self.characters.strip() == ""
+        self.characters = ""
+        statistics = self.statistics
+        self.record["stat"] = statistics
+        del self.statistics
+
+    def _end_statistics_db_num(self, name):
+        self.statistics["db-num"] = int(self.characters)
+        self.characters = ""
+
+    def _end_statistics_db_len(self, name):
+        self.statistics["db-len"] = int(self.characters)
+        self.characters = ""
+
+    def _end_statistics_hsp_len(self, name):
+        self.statistics["hsp-len"] = int(self.characters)
+        self.characters = ""
+
+    def _end_statistics_eff_space(self, name):
+        self.statistics["eff-space"] = float(self.characters)
+        self.characters = ""
+
+    def _end_statistics_kappa(self, name):
+        self.statistics["kappa"] = float(self.characters)
+        self.characters = ""
+
+    def _end_statistics_lambda(self, name):
+        self.statistics["lambda"] = float(self.characters)
+        self.characters = ""
+
+    def _end_statistics_entropy(self, name):
+        self.statistics["entropy"] = float(self.characters)
         self.characters = ""
 
     def xmlDeclHandler(self, version, encoding, standalone):
@@ -395,6 +615,33 @@ class DataHandler:
                      "Hit_accession",
                      "Hit_len",
                      "Hit_hsps",
+                     "Hsp",
+                     "Hsp_num",
+                     "Hsp_bit-score",
+                     "Hsp_score",
+                     "Hsp_evalue",
+                     "Hsp_query-from",
+                     "Hsp_query-to",
+                     "Hsp_hit-from",
+                     "Hsp_hit-to",
+                     "Hsp_query-frame",
+                     "Hsp_hit-frame",
+                     "Hsp_identity",
+                     "Hsp_positive",
+                     "Hsp_gaps",
+                     "Hsp_align-len",
+                     "Hsp_qseq",
+                     "Hsp_hseq",
+                     "Hsp_midline",
+                     "Iteration_stat",
+                     "Statistics",
+                     "Statistics_db-num",
+                     "Statistics_db-len",
+                     "Statistics_hsp-len",
+                     "Statistics_eff-space",
+                     "Statistics_kappa",
+                     "Statistics_lambda",
+                     "Statistics_entropy",
                     ]
             for name in names:
                 method_name = name.lower().replace("-", "_")
@@ -443,10 +690,9 @@ class DataHandler:
         """
         self.characters += characters
 
-    def read_next_record(self):
+    def read_next_record(self, stream):
         BLOCK = 2048  # default block size from expat
         BLOCK = 1220  # default block size from expat
-        stream = self.stream
         try:
             cache = self.cache
         except AttributeError:
@@ -460,7 +706,7 @@ class DataHandler:
                 return record
             # Read in another block of data from the file.
             data = stream.read(BLOCK)
-            if data == "":
+            if data == b"":
                 assert len(cache) == 0
                 del self.cache
                 return None

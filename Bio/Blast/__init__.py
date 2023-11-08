@@ -19,16 +19,18 @@ from Bio import StreamModeError
 class Records(list):
     def __init__(self, stream):
         from ._parser import DataHandler
-        handler = DataHandler(stream)
-        self.header = handler.read_header()
+        handler = DataHandler()
+        self.header = handler.read_header(stream)
         self._handler = handler
+        self._stream = stream
 
     def __next__(self):
         try:
             handler = self._handler
         except AttributeError:
             raise StopIteration from None
-        record = handler.read_next_record()
+        stream = self._stream
+        record = handler.read_next_record(stream)
         if record is None:
             del self._handler
             raise StopIteration
