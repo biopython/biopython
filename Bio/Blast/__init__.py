@@ -99,7 +99,7 @@ def read(source):
     Use the Bio.Blast.parse function if you want to read a file containing
     BLAST output for more than one query.
     """
-    records = parse(handle, fmt)
+    records = parse(source)
     try:
         record = next(records)
     except StopIteration:
