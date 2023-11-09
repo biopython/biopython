@@ -19,6 +19,9 @@ ftp://ftp.ncbi.nlm.nih.gov/blast/documents/xml/NCBI_BlastOutput.dtd
 from xml.parsers import expat
 from collections import deque
 
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+
 
 class NotXMLError(ValueError):
     """Failed to parse file as XML."""
@@ -149,6 +152,15 @@ class DataHandler:
     def _start_blastoutput_iterations(self, name, attrs):
         assert self.characters.strip() == ""
         self.characters = ""
+        query_len = self.query_len
+        query_id = self.query_id
+        query_def = self.query_def
+        del self.query_id
+        del self.query_def
+        del self.query_len
+        sequence = Seq(None, length=query_len)
+        query = SeqRecord(sequence, query_id, description=query_def)
+        self.header["query"] = query
         self.done = True
         self.cache = deque()
 
@@ -342,15 +354,15 @@ class DataHandler:
         self.characters = ""
 
     def _end_blastoutput_query_id(self, name):
-        self.header["query-ID"] = self.characters
+        self.query_id = self.characters
         self.characters = ""
 
     def _end_blastoutput_query_def(self, name):
-        self.header["query-def"] = self.characters
+        self.query_def = self.characters
         self.characters = ""
 
     def _end_blastoutput_query_len(self, name):
-        self.header["query-len"] = int(self.characters)
+        self.query_len = int(self.characters)
         self.characters = ""
 
     def _end_blastoutput_param(self, name):
@@ -420,19 +432,32 @@ class DataHandler:
         assert self.characters.strip() == ""
         self.characters = ""
         hit = self.hit
+        hit_id = self.hit_id
+        hit_def = self.hit_def
+        hit_len = self.hit_len
+        hit_accession = self.hit_accession
+        del self.hit_id
+        del self.hit_def
+        del self.hit_len
+        del self.hit_accession
+        sequence = Seq(None, length=hit_len)
+        target = SeqRecord(sequence, hit_id, hit_accession)
+        target.description = hit_def
+        self.hit.target = target
         self.hits.append(hit)
-        del self.hit
 
     def _end_hit_num(self, name):
-        self.hit["num"] = int(self.characters)
+        num = int(self.characters)
+        if num != len(self.hits) + 1:
+            raise ValueError(f"unexpected value found in tag <Hit_num> (found f{num}, expected {len(self.hits) + 1})")
         self.characters = ""
 
     def _end_hit_id(self, name):
-        self.hit["id"] = self.characters
+        self.hit_id = self.characters
         self.characters = ""
 
     def _end_hit_def(self, name):
-        self.hit["def"] = self.characters
+        self.hit_def = self.characters
         self.characters = ""
 
     def _end_hit_hsps(self, name):
@@ -443,11 +468,11 @@ class DataHandler:
         del self.hsps
 
     def _end_hit_len(self, name):
-        self.hit["len"] = int(self.characters)
+        self.hit_len = int(self.characters)
         self.characters = ""
 
     def _end_hit_accession(self, name):
-        self.hit["accession"] = self.characters
+        self.hit_accession = self.characters
         self.characters = ""
 
     def _end_hsp_num(self, name):
