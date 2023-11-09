@@ -20,7 +20,7 @@ class Records(list):
     def __init__(self, stream):
         from ._parser import DataHandler
         handler = DataHandler()
-        self.header = handler.read_header(stream)
+        handler.read_header(self, stream)
         self._handler = handler
         self._stream = stream
 

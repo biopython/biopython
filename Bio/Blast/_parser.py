@@ -21,6 +21,7 @@ from collections import deque
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.Align import Alignments
 
 
 class NotXMLError(ValueError):
@@ -57,22 +58,19 @@ class Record(dict):
     pass
 
 
-class Hit(list):
-    pass
-
-
 class DataHandler:
 
     def __init__(self):
         self.parser = expat.ParserCreate()
         self.parser.XmlDeclHandler = self.xmlDeclHandler
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
+        self.cache = {}
 
-    def read_header(self, stream):
-        self.done = False
-        self.header = {}
+    def read_header(self, records, stream):
         BLOCK= 2048
         BLOCK = 1220  # default block size from expat
+        self.records = records
+        self.done = False
         while self.done is False:
             data = stream.read(BLOCK)
             try:
@@ -87,10 +85,6 @@ class DataHandler:
                     # We have not seen the initial <!xml declaration, so
                     # probably the input data is not in XML format.
                     raise NotXMLError(e) from None
-        del self.done
-        header = self.header
-        del self.header
-        return header
 
     def _start_blastoutput(self, name, attrs):
         assert self.characters.strip() == ""
@@ -127,7 +121,7 @@ class DataHandler:
     def _start_parameters(self, name, attrs):
         assert self.characters.strip() == ""
         self.characters = ""
-        self.parameters = {}
+        self.records.param = {}
 
     def _start_parameters_matrix(self, name, attrs):
         assert self.characters.strip() == ""
@@ -152,17 +146,17 @@ class DataHandler:
     def _start_blastoutput_iterations(self, name, attrs):
         assert self.characters.strip() == ""
         self.characters = ""
-        query_len = self.query_len
-        query_id = self.query_id
-        query_def = self.query_def
-        del self.query_id
-        del self.query_def
-        del self.query_len
+        query_len = self.cache["BlastOutput_query-len"]
+        query_id = self.cache["BlastOutput_query-ID"]
+        query_def = self.cache["BlastOutput_query-def"]
+        del self.cache["BlastOutput_query-len"]
+        del self.cache["BlastOutput_query-ID"]
+        del self.cache["BlastOutput_query-def"]
         sequence = Seq(None, length=query_len)
         query = SeqRecord(sequence, query_id, description=query_def)
-        self.header["query"] = query
+        self.records.query = query
+        self.records = deque()
         self.done = True
-        self.cache = deque()
 
     def _start_blastoutput_query_len(self, name, attrs):
         assert self.characters.strip() == ""
@@ -196,7 +190,7 @@ class DataHandler:
     def _start_hit(self, name, attrs):
         assert self.characters.strip() == ""
         self.characters = ""
-        self.hit = Hit()
+        self.hit = Alignments()
 
     def _start_hit_num(self, name, attrs):
         assert self.characters.strip() == ""
@@ -335,33 +329,34 @@ class DataHandler:
     def _end_blastoutput(self, name):
         assert self.characters.strip() == ""
         del self.characters
+        assert len(self.cache) == 0
 
     def _end_blastoutput_program(self, name):
-        self.header["program"] = self.characters
+        self.records.program = self.characters
         self.characters = ""
 
     def _end_blastoutput_version(self, name):
-        self.header["version"] = self.characters
+        self.records.version = self.characters
         self.characters = ""
 
     def _end_blastoutput_reference(self, name):
-        self.header["reference"] = self.characters
+        self.records.reference = self.characters
         self.characters = ""
 
     def _end_blastoutput_db(self, name):
-        self.header["db"] = self.characters
+        self.records.db = self.characters
         self.characters = ""
 
     def _end_blastoutput_query_id(self, name):
-        self.query_id = self.characters
+        self.cache["BlastOutput_query-ID"] = self.characters
         self.characters = ""
 
     def _end_blastoutput_query_def(self, name):
-        self.query_def = self.characters
+        self.cache["BlastOutput_query-def"] = self.characters
         self.characters = ""
 
     def _end_blastoutput_query_len(self, name):
-        self.query_len = int(self.characters)
+        self.cache["BlastOutput_query-len"] = int(self.characters)
         self.characters = ""
 
     def _end_blastoutput_param(self, name):
@@ -371,27 +366,25 @@ class DataHandler:
     def _end_parameters(self, name):
         assert self.characters.strip() == ""
         self.characters = ""
-        self.header["param"] = self.parameters
-        del self.parameters
 
     def _end_parameters_matrix(self, name):
-        self.parameters["matrix"] = self.characters
+        self.records.param["matrix"] = self.characters
         self.characters = ""
 
     def _end_parameters_expect(self, name):
-        self.parameters["expect"] = float(self.characters)
+        self.records.param["expect"] = float(self.characters)
         self.characters = ""
 
     def _end_parameters_gap_open(self, name):
-        self.parameters["gap-open"] = int(self.characters)
+        self.records.param["gap-open"] = int(self.characters)
         self.characters = ""
 
     def _end_parameters_gap_extend(self, name):
-        self.parameters["gap-extend"] = int(self.characters)
+        self.records.param["gap-extend"] = int(self.characters)
         self.characters = ""
 
     def _end_parameters_filter(self, name):
-        self.parameters["filter"] = self.characters
+        self.records.param["filter"] = self.characters
         self.characters = ""
 
     def _end_blastoutput_iterations(self, name):
@@ -401,7 +394,7 @@ class DataHandler:
     def _end_iteration(self, name):
         assert self.characters.strip() == ""
         self.characters = ""
-        self.cache.append(self.record)
+        self.records.append(self.record)
         del self.record
 
     def _end_iteration_iter_num(self, name):
@@ -431,17 +424,17 @@ class DataHandler:
         assert self.characters.strip() == ""
         self.characters = ""
         hit = self.hit
-        hit_id = self.hit_id
-        hit_def = self.hit_def
-        hit_len = self.hit_len
-        hit_accession = self.hit_accession
-        del self.hit_id
-        del self.hit_def
-        del self.hit_len
-        del self.hit_accession
+        hit_id = self.cache["Hit_id"]
+        hit_def = self.cache["Hit_def"]
+        hit_len = self.cache["Hit_len"]
+        hit_accession = self.cache["Hit_accession"]
+        del self.cache["Hit_id"]
+        del self.cache["Hit_def"]
+        del self.cache["Hit_len"]
+        del self.cache["Hit_accession"]
         sequence = Seq(None, length=hit_len)
         target = SeqRecord(sequence, hit_id, hit_accession, hit_def)
-        self.hit.target = target
+        hit.target = target
         self.hits.append(hit)
 
     def _end_hit_num(self, name):
@@ -451,23 +444,23 @@ class DataHandler:
         self.characters = ""
 
     def _end_hit_id(self, name):
-        self.hit_id = self.characters
+        self.cache["Hit_id"] = self.characters
         self.characters = ""
 
     def _end_hit_def(self, name):
-        self.hit_def = self.characters
+        self.cache["Hit_def"] = self.characters
+        self.characters = ""
+
+    def _end_hit_accession(self, name):
+        self.cache["Hit_accession"] = self.characters
+        self.characters = ""
+
+    def _end_hit_len(self, name):
+        self.cache["Hit_len"] = int(self.characters)
         self.characters = ""
 
     def _end_hit_hsps(self, name):
         assert self.characters.strip() == ""
-        self.characters = ""
-
-    def _end_hit_len(self, name):
-        self.hit_len = int(self.characters)
-        self.characters = ""
-
-    def _end_hit_accession(self, name):
-        self.hit_accession = self.characters
         self.characters = ""
 
     def _end_hsp_num(self, name):
@@ -714,21 +707,20 @@ class DataHandler:
         BLOCK = 2048  # default block size from expat
         BLOCK = 1220  # default block size from expat
         try:
-            cache = self.cache
+            records = self.records
         except AttributeError:
             return None
         while True:
             try:
-                record = cache.popleft()
-            except IndexError:  # no record in cache
+                record = records.popleft()
+            except IndexError:  # no record ready to be returned
                 pass
             else:
                 return record
             # Read in another block of data from the file.
             data = stream.read(BLOCK)
             if data == b"":
-                assert len(cache) == 0
-                del self.cache
+                del self.records
                 return None
             try:
                 self.parser.Parse(data, False)
