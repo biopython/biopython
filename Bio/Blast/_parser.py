@@ -57,7 +57,7 @@ class Record(dict):
     pass
 
 
-class Hit(dict):
+class Hit(list):
     pass
 
 
@@ -213,7 +213,6 @@ class DataHandler:
     def _start_hit_hsps(self, name, attrs):
         assert self.characters.strip() == ""
         self.characters = ""
-        self.hsps = []
 
     def _start_hit_len(self, name, attrs):
         assert self.characters.strip() == ""
@@ -441,8 +440,7 @@ class DataHandler:
         del self.hit_len
         del self.hit_accession
         sequence = Seq(None, length=hit_len)
-        target = SeqRecord(sequence, hit_id, hit_accession)
-        target.description = hit_def
+        target = SeqRecord(sequence, hit_id, hit_accession, hit_def)
         self.hit.target = target
         self.hits.append(hit)
 
@@ -463,9 +461,6 @@ class DataHandler:
     def _end_hit_hsps(self, name):
         assert self.characters.strip() == ""
         self.characters = ""
-        hsps = self.hsps
-        self.hit["hsps"] = hsps
-        del self.hsps
 
     def _end_hit_len(self, name):
         self.hit_len = int(self.characters)
@@ -547,7 +542,7 @@ class DataHandler:
         assert self.characters.strip() == ""
         self.characters = ""
         hsp = self.hsp
-        self.hsps.append(hsp)
+        self.hit.append(hsp)
         del self.hsp
 
     def _end_iteration_stat(self, name):
