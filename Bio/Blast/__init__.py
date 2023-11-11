@@ -722,6 +722,9 @@ class Records:
         """
         self._characters += characters
 
+    def __iter__(self):
+        return self
+
     def __next__(self):
         stream = self._stream
         BLOCK = self.BLOCK
