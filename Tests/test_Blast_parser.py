@@ -13194,6 +13194,166 @@ gi|491764        54 KAMSDDEPKQD---KTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQ 102
 """,
         )
 
+    def test_xml_2212L_blastn_001(self):
+        filename = "xml_2212L_blastn_001.xml"
+        datafile = os.path.join("Blast", filename)
+        with open(datafile, "rb") as handle:
+            records = Blast.parse(handle)
+            self.assertEqual(records.program, "blastn")
+            self.assertEqual(records.version, "BLASTN 2.2.12 [Aug-07-2005]")
+            self.assertEqual(
+                records.reference,
+                'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(records.db, "nr")
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "gi|1348916|gb|G26684.1|G26684")
+            self.assertEqual(
+                records.query.description, "human STS STS_D11570, sequence tagged site"
+            )
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=285)")
+            self.assertEqual(len(records.param), 5)
+            self.assertAlmostEqual(records.param["expect"], 10.0)
+            self.assertEqual(records.param["sc-match"], 1)
+            self.assertEqual(records.param["sc-mismatch"], -3)
+            self.assertEqual(records.param["gap-open"], 5)
+            self.assertEqual(records.param["gap-extend"], 2)
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
+        self.check_xml_2212L_blastn_001(record)
+
+        with open(datafile, "rb") as handle:
+            record = Blast.read(handle)
+            self.check_xml_2212L_blastn_001(record)
+
+    def check_xml_2212L_blastn_001(self, record):
+        self.assertEqual(record.num, 1)
+        self.assertIsInstance(record.query, SeqRecord)
+        self.assertEqual(record.query.id, "gi|1348916|gb|G26684.1|G26684")
+        self.assertEqual(
+            record.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(repr(record.query.seq), "Seq(None, length=285)")
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 371021)
+        self.assertEqual(record.stat["db-len"], 1233631384)
+        self.assertEqual(record.stat["hsp-len"], 0)
+        self.assertAlmostEqual(record.stat["eff-space"], 0)
+        self.assertAlmostEqual(record.stat["kappa"], 0.710603)
+        self.assertAlmostEqual(record.stat["lambda"], 1.37406)
+        self.assertAlmostEqual(record.stat["entropy"], 1.30725)
+        hits = record.hits
+        self.assertEqual(len(hits), 2)
+
+        hit = hits[0]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|9950606|gb|AE004854.1|")
+        self.assertEqual(hit.target.name, "AE004854")
+        self.assertEqual(
+            hit.target.description,
+            "Pseudomonas aeruginosa PAO1, section 415 of 529 of the complete genome",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=11884)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 19.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 38.1576)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.0598)
+        self.assertEqual(hsp.annotations["identity"], 19)
+        self.assertEqual(hsp.annotations["positive"], 19)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[6011, 6030],
+                          [  67,   86]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["frame"], 1)
+        self.assertEqual(hsp.shape, (2, 19))
+        self.assertEqual(
+            repr(hsp.query.seq), "Seq({67: 'CAGGCCAGCGACTTCTGGG'}, length=285)"
+        )
+        self.assertEqual(hsp.query.id, "gi|1348916|gb|G26684.1|G26684")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq), "Seq({6011: 'CAGGCCAGCGACTTCTGGG'}, length=11884)"
+        )
+        self.assertEqual(hsp.target.id, "gi|9950606|gb|AE004854.1|")
+        self.assertEqual(hsp.target.name, "AE004854")
+        self.assertEqual(
+            hsp.target.description,
+            "Pseudomonas aeruginosa PAO1, section 415 of 529 of the complete genome",
+        )
+        self.assertEqual(hsp.annotations["midline"], "|||||||||||||||||||")
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|995060      6011 CAGGCCAGCGACTTCTGGG 6030
+                  0 |||||||||||||||||||   19
+gi|134891        67 CAGGCCAGCGACTTCTGGG   86
+""",
+        )
+        hit = hits[1]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|15073988|emb|AL591786.1|SME591786")
+        self.assertEqual(hit.target.name, "AL591786")
+        self.assertEqual(
+            hit.target.description,
+            "Sinorhizobium meliloti 1021 complete chromosome; segment 5/12",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=299350)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 18.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 36.1753)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.18768)
+        self.assertEqual(hsp.annotations["identity"], 20)
+        self.assertEqual(hsp.annotations["positive"], 20)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[83648, 83627],
+                          [  203,   224]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["frame"], -1)
+        self.assertEqual(hsp.shape, (2, 21))
+        self.assertEqual(
+            repr(hsp.query.seq), "Seq({203: 'TGAAAGGAAATNAAAATGGAA'}, length=285)"
+        )
+        self.assertEqual(hsp.query.id, "gi|1348916|gb|G26684.1|G26684")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq), "Seq({83627: 'TTCCATTTTGATTTCCTTTCA'}, length=299350)"
+        )
+        self.assertEqual(hsp.target.id, "gi|15073988|emb|AL591786.1|SME591786")
+        self.assertEqual(hsp.target.name, "AL591786")
+        self.assertEqual(
+            hsp.target.description,
+            "Sinorhizobium meliloti 1021 complete chromosome; segment 5/12",
+        )
+        self.assertEqual(hsp.annotations["midline"], "||||||||||| |||||||||")
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|150739     83648 TGAAAGGAAATCAAAATGGAA 83627
+                  0 |||||||||||.|||||||||    21
+gi|134891       203 TGAAAGGAAATNAAAATGGAA   224
+""",
+        )
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
