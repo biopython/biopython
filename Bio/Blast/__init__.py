@@ -192,7 +192,7 @@ class Records:
     def _start_hit(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
-        self.hit = Alignments()
+        self._hit = Alignments()
 
     def _start_hit_num(self, name, attrs):
         assert self._characters.strip() == ""
@@ -431,20 +431,9 @@ class Records:
     def _end_hit(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
-        hit = self.hit
-        cache = self._cache
-        hit_id = cache["Hit_id"]
-        hit_def = cache["Hit_def"]
-        hit_len = cache["Hit_len"]
-        hit_accession = cache["Hit_accession"]
-        del cache["Hit_id"]
-        del cache["Hit_def"]
-        del cache["Hit_len"]
-        del cache["Hit_accession"]
-        sequence = Seq(None, length=hit_len)
-        target = SeqRecord(sequence, hit_id, hit_accession, hit_def)
-        hit.target = target
+        hit = self._hit
         self.hits.append(hit)
+        del self._hit
 
     def _end_hit_num(self, name):
         num = int(self._characters)
@@ -453,19 +442,23 @@ class Records:
         self._characters = ""
 
     def _end_hit_id(self, name):
-        self._cache["Hit_id"] = self._characters
+        hit_id = self._characters
+        self._hit.target = SeqRecord(None, hit_id)
         self._characters = ""
 
     def _end_hit_def(self, name):
-        self._cache["Hit_def"] = self._characters
+        description = self._characters
+        self._hit.target.description = description
         self._characters = ""
 
     def _end_hit_accession(self, name):
-        self._cache["Hit_accession"] = self._characters
+        accession = self._characters
+        self._hit.target.name = accession
         self._characters = ""
 
     def _end_hit_len(self, name):
-        self._cache["Hit_len"] = int(self._characters)
+        length = int(self._characters)
+        self._hit.target.seq = Seq(None, length=length)
         self._characters = ""
 
     def _end_hit_hsps(self, name):
@@ -544,7 +537,7 @@ class Records:
         assert self._characters.strip() == ""
         self._characters = ""
         hsp = self.hsp
-        self.hit.append(hsp)
+        self._hit.append(hsp)
         del self.hsp
 
     def _end_iteration_stat(self, name):
