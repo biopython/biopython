@@ -153,6 +153,10 @@ class Records:
         assert self._characters.strip() == ""
         self._characters = ""
 
+    def _start_parameters_include(self, name, attrs):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
     def _start_parameters_gap_open(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
@@ -399,6 +403,10 @@ class Records:
 
     def _end_parameters_sc_mismatch(self, name):
         self.param["sc-mismatch"] = int(self._characters)
+        self._characters = ""
+
+    def _end_parameters_include(self, name):
+        self.param["include"] = float(self._characters)
         self._characters = ""
 
     def _end_parameters_gap_open(self, name):
@@ -787,6 +795,7 @@ class Records:
              "Parameters_gap-open",
              "Parameters_gap-extend",
              "Parameters_filter",
+	     "Parameters_include",
              "BlastOutput_iterations",
              "Iteration",
              "Iteration_iter-num",
