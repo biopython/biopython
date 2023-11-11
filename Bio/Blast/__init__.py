@@ -304,6 +304,10 @@ class Records:
         assert self._characters.strip() == ""
         self._characters = ""
 
+    def _start_iteration_message(self, name, attrs):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
     def _start_statistics(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
@@ -633,6 +637,10 @@ class Records:
         assert self._characters.strip() == ""
         self._characters = ""
 
+    def _end_iteration_message(self, name):
+        self._record.message = self._characters
+        self._characters = ""
+
     def _end_statistics(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
@@ -812,6 +820,7 @@ class Records:
              "Hsp_hseq",
              "Hsp_midline",
              "Iteration_stat",
+             "Iteration_message",
              "Statistics",
              "Statistics_db-num",
              "Statistics_db-len",

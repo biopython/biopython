@@ -20018,6 +20018,4630 @@ gi|151567        22 RMATCSSDKTIKIFEVEGETHKLIDTLTGHEGPVWRVDWA 62
         hits = record.hits
         self.assertEqual(len(hits), 0)
 
+    def test_xml_2222_blastx_001(self):
+        """Parsing BLASTX 2.2.22+ (xml_2222_blastx_001.xml)."""
+        filename = "xml_2222_blastx_001.xml"
+        datafile = os.path.join("Blast", filename)
+        with open(datafile, "rb") as handle:
+            records = Blast.parse(handle)
+            self.assertEqual(records.program, "blastx")
+            self.assertEqual(records.version, "BLASTX 2.2.22+")
+            self.assertEqual(
+                records.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(records.db, "nr")
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "1")
+            self.assertEqual(
+                records.query.description,
+                "gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence",
+            )
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=1002)")
+            self.assertEqual(len(records.param), 5)
+            self.assertEqual(records.param["matrix"], "BLOSUM62")
+            self.assertAlmostEqual(records.param["expect"], 0.0001)
+            self.assertEqual(records.param["gap-open"], 11)
+            self.assertEqual(records.param["gap-extend"], 1)
+            self.assertEqual(records.param["filter"], "L;")
+            record = next(records)
+            self.assertEqual(record.num, 1)
+            self.assertIsInstance(record.query, SeqRecord)
+            self.assertEqual(record.query.id, "1")
+            self.assertEqual(
+                record.query.description,
+                "gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence",
+            )
+            self.assertEqual(repr(record.query.seq), "Seq(None, length=1002)")
+            self.assertEqual(len(record.stat), 7)
+            self.assertEqual(record.stat["db-num"], 8994603)
+            self.assertEqual(record.stat["db-len"], -1216159329)
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertAlmostEqual(record.stat["eff-space"], 367397307882.0)
+            self.assertAlmostEqual(record.stat["kappa"], 0.041)
+            self.assertAlmostEqual(record.stat["lambda"], 0.267)
+            self.assertAlmostEqual(record.stat["entropy"], 0.14)
+            hits = record.hits
+            self.assertEqual(len(hits), 1)
+            hit = hits[0]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|149390769|gb|ABR25402.1|")
+            self.assertEqual(hit.target.name, "ABR25402")
+            self.assertEqual(
+                hit.target.description, "unknown [Oryza sativa (indica cultivar-group)]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=26)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 129.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 54.2989775733826)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.83262460293058e-05)
+            self.assertEqual(hsp.annotations["identity"], 24)
+            self.assertEqual(hsp.annotations["positive"], 25)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 0, 26],
+                          [ 0, 26]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 910)
+            self.assertEqual(hsp.query.annotations["end"], 988)
+            self.assertEqual(hsp.query.annotations["frame"], 2)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 26)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 26))
+            self.assertEqual(repr(hsp.query.seq), "Seq('HMLVSKIKPCMCKYEQIQTVKLRMAH')")
+            self.assertEqual(hsp.query.id, "1")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence",
+            )
+            self.assertEqual(repr(hsp.target.seq), "Seq('HMLVSKIKPCMCKYELIRTVKLRMAH')")
+            self.assertEqual(hsp.target.id, "gi|149390769|gb|ABR25402.1|")
+            self.assertEqual(hsp.target.name, "ABR25402")
+            self.assertEqual(
+                hsp.target.description, "unknown [Oryza sativa (indica cultivar-group)]"
+            )
+            self.assertEqual(hsp.annotations["midline"], "HMLVSKIKPCMCKYE I+TVKLRMAH")
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|149390         0 HMLVSKIKPCMCKYELIRTVKLRMAH 26
+                  0 |||||||||||||||.|.|||||||| 26
+1                 0 HMLVSKIKPCMCKYEQIQTVKLRMAH 26
+""",
+            )
+            record = next(records)
+            self.assertEqual(record.num, 2)
+            self.assertIsInstance(record.query, SeqRecord)
+            self.assertEqual(record.query.id, "2")
+            self.assertEqual(
+                record.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(repr(record.query.seq), "Seq(None, length=2050)")
+            self.assertEqual(len(record.stat), 7)
+            self.assertEqual(record.stat["db-num"], 8994603)
+            self.assertEqual(record.stat["db-len"], -1216159329)
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertAlmostEqual(record.stat["eff-space"], 967993058520.0)
+            self.assertAlmostEqual(record.stat["kappa"], 0.041)
+            self.assertAlmostEqual(record.stat["lambda"], 0.267)
+            self.assertAlmostEqual(record.stat["entropy"], 0.14)
+            hits = record.hits
+            self.assertEqual(len(hits), 10)
+            hit = hits[0]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|4218936|gb|AAD12237.1|")
+            self.assertEqual(hit.target.name, "AAD12237")
+            self.assertEqual(
+                hit.target.description, "hevein-like protein HLPf [Sambucus nigra]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=333)")
+            self.assertEqual(len(hit), 2)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1053.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 410.223385721017)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 3.48406066731465e-112)
+            self.assertEqual(hsp.annotations["identity"], 199)
+            self.assertEqual(hsp.annotations["positive"], 200)
+            self.assertEqual(hsp.annotations["gaps"], 33)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 148, 148, 205],
+                          [  0, 148, 181, 238]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 714)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 205)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 238))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGS...QLT')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGS...QLT'}, length=333)",
+            )
+            self.assertEqual(hsp.target.id, "gi|4218936|gb|AAD12237.1|")
+            self.assertEqual(hsp.target.name, "AAD12237")
+            self.assertEqual(
+                hsp.target.description, "hevein-like protein HLPf [Sambucus nigra]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCEDGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSYEAFITAARSFPGFCTSGDVATRKREPAAFLS                                 +T     GGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNRRGPIQLT",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|421893         0 MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                 0 MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE
+
+gi|421893        60 DGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSYEAF
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                60 DGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSYEAF
+
+gi|421893       120 ITAARSFPGFCTSGDVATRKREPAAFLS--------------------------------
+                120 |||||||||||||||||||||||||||.--------------------------------
+2               120 ITAARSFPGFCTSGDVATRKREPAAFLXXXXXXXXXXXXNLNIYLC*EIISTIYICFEIN
+
+gi|421893       148 -QTSQATTGGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNRRGPIQLT
+                180 -.|.....||||||||||||||||||||||||||||||||||||||||||||||||||
+2               180 LRTWMLGVGGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNRRGPIQLT
+
+gi|421893       205
+                238
+2               238
+""",
+            )
+            hsp = hit[1]
+            self.assertAlmostEqual(hsp.score, 683.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 267.699542631596)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 2.79278546744412e-69)
+            self.assertEqual(hsp.annotations["identity"], 127)
+            self.assertEqual(hsp.annotations["positive"], 127)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[206, 333],
+                          [  0, 127]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 1668)
+            self.assertEqual(hsp.query.annotations["end"], 2049)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 206)
+            self.assertEqual(hsp.target.annotations["end"], 333)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 127))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({206: 'NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...SVV'}, length=333)",
+            )
+            self.assertEqual(hsp.target.id, "gi|4218936|gb|AAD12237.1|")
+            self.assertEqual(hsp.target.name, "AAD12237")
+            self.assertEqual(
+                hsp.target.description, "hevein-like protein HLPf [Sambucus nigra]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASDQVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVAHIKMSVV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|421893       206 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
+
+gi|421893       266 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVA
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                60 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVA
+
+gi|421893       326 HIKMSVV 333
+                120 ||||||| 127
+2               120 HIKMSVV 127
+""",
+            )
+            hit = hits[1]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|4206074|gb|AAD11408.1|")
+            self.assertEqual(hit.target.name, "AAD11408")
+            self.assertEqual(
+                hit.target.description, "hevein-like protein [Sambucus nigra]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=333)")
+            self.assertEqual(len(hit), 2)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1043.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 406.371389961843)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 5.03097287018806e-111)
+            self.assertEqual(hsp.annotations["identity"], 198)
+            self.assertEqual(hsp.annotations["positive"], 199)
+            self.assertEqual(hsp.annotations["gaps"], 33)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 148, 148, 205],
+                          [  0, 148, 181, 238]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 714)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 205)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 238))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGS...QLT')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGS...QLT'}, length=333)",
+            )
+            self.assertEqual(hsp.target.id, "gi|4206074|gb|AAD11408.1|")
+            self.assertEqual(hsp.target.name, "AAD11408")
+            self.assertEqual(
+                hsp.target.description, "hevein-like protein [Sambucus nigra]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCEDGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSYEAFITAARSFPGFCTSGDVATRKRE AAFLS                                 +T     GGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNRRGPIQLT",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|420607         0 MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                 0 MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE
+
+gi|420607        60 DGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSYEAF
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                60 DGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSYEAF
+
+gi|420607       120 ITAARSFPGFCTSGDVATRKRELAAFLS--------------------------------
+                120 ||||||||||||||||||||||.||||.--------------------------------
+2               120 ITAARSFPGFCTSGDVATRKREPAAFLXXXXXXXXXXXXNLNIYLC*EIISTIYICFEIN
+
+gi|420607       148 -QTSQATTGGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNRRGPIQLT
+                180 -.|.....||||||||||||||||||||||||||||||||||||||||||||||||||
+2               180 LRTWMLGVGGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNRRGPIQLT
+
+gi|420607       205
+                238
+2               238
+""",
+            )
+            hsp = hit[1]
+            self.assertAlmostEqual(hsp.score, 672.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 263.462347296505)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 5.26696544712228e-68)
+            self.assertEqual(hsp.annotations["identity"], 125)
+            self.assertEqual(hsp.annotations["positive"], 126)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[206, 333],
+                          [  0, 127]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 1668)
+            self.assertEqual(hsp.query.annotations["end"], 2049)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 206)
+            self.assertEqual(hsp.target.annotations["end"], 333)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 127))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({206: 'NYYYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...SLV'}, length=333)",
+            )
+            self.assertEqual(hsp.target.id, "gi|4206074|gb|AAD11408.1|")
+            self.assertEqual(hsp.target.name, "AAD11408")
+            self.assertEqual(
+                hsp.target.description, "hevein-like protein [Sambucus nigra]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "NY YGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASDQVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVAHIKMS+V",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|420607       206 NYYYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
+                  0 ||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
+
+gi|420607       266 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVA
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                60 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVA
+
+gi|420607       326 HIKMSLV 333
+                120 |||||.| 127
+2               120 HIKMSVV 127
+""",
+            )
+            hit = hits[2]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|4206070|gb|AAD11406.1|")
+            self.assertEqual(hit.target.name, "AAD11406")
+            self.assertEqual(
+                hit.target.description, "hevein-like protein [Sambucus nigra]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=333)")
+            self.assertEqual(len(hit), 2)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1043.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 406.371389961843)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 5.03097287018806e-111)
+            self.assertEqual(hsp.annotations["identity"], 198)
+            self.assertEqual(hsp.annotations["positive"], 199)
+            self.assertEqual(hsp.annotations["gaps"], 33)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 148, 148, 205],
+                          [  0, 148, 181, 238]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 714)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 205)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 238))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGS...QLT')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGS...QLT'}, length=333)",
+            )
+            self.assertEqual(hsp.target.id, "gi|4206070|gb|AAD11406.1|")
+            self.assertEqual(hsp.target.name, "AAD11406")
+            self.assertEqual(
+                hsp.target.description, "hevein-like protein [Sambucus nigra]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCEDGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSYEAFITAARSFPGFCTSGDVATRKRE AAFLS                                 +T     GGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNRRGPIQLT",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|420607         0 MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                 0 MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE
+
+gi|420607        60 DGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSYEAF
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                60 DGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSYEAF
+
+gi|420607       120 ITAARSFPGFCTSGDVATRKRELAAFLS--------------------------------
+                120 ||||||||||||||||||||||.||||.--------------------------------
+2               120 ITAARSFPGFCTSGDVATRKREPAAFLXXXXXXXXXXXXNLNIYLC*EIISTIYICFEIN
+
+gi|420607       148 -QTSQATTGGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNRRGPIQLT
+                180 -.|.....||||||||||||||||||||||||||||||||||||||||||||||||||
+2               180 LRTWMLGVGGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNRRGPIQLT
+
+gi|420607       205
+                238
+2               238
+""",
+            )
+            hsp = hit[1]
+            self.assertAlmostEqual(hsp.score, 680.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 266.543943903844)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 6.22167692942359e-69)
+            self.assertEqual(hsp.annotations["identity"], 126)
+            self.assertEqual(hsp.annotations["positive"], 127)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[206, 333],
+                          [  0, 127]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 1668)
+            self.assertEqual(hsp.query.annotations["end"], 2049)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 206)
+            self.assertEqual(hsp.target.annotations["end"], 333)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 127))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({206: 'NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...SLV'}, length=333)",
+            )
+            self.assertEqual(hsp.target.id, "gi|4206070|gb|AAD11406.1|")
+            self.assertEqual(hsp.target.name, "AAD11406")
+            self.assertEqual(
+                hsp.target.description, "hevein-like protein [Sambucus nigra]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASDQVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVAHIKMS+V",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|420607       206 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
+
+gi|420607       266 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVA
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                60 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVA
+
+gi|420607       326 HIKMSLV 333
+                120 |||||.| 127
+2               120 HIKMSVV 127
+""",
+            )
+            hit = hits[3]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|4206072|gb|AAD11407.1|")
+            self.assertEqual(hit.target.name, "AAD11407")
+            self.assertEqual(
+                hit.target.description, "hevein-like protein [Sambucus nigra]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=333)")
+            self.assertEqual(len(hit), 2)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1016.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 395.971001412075)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 6.7995613312017e-108)
+            self.assertEqual(hsp.annotations["identity"], 193)
+            self.assertEqual(hsp.annotations["positive"], 195)
+            self.assertEqual(hsp.annotations["gaps"], 33)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 148, 148, 205],
+                          [  0, 148, 181, 238]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 714)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 205)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 238))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGS...QLT')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGS...QLT'}, length=333)",
+            )
+            self.assertEqual(hsp.target.id, "gi|4206072|gb|AAD11407.1|")
+            self.assertEqual(hsp.target.name, "AAD11407")
+            self.assertEqual(
+                hsp.target.description, "hevein-like protein [Sambucus nigra]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCEDGCQSQCRDT+RLTDLPRALLRPTNNRNAISKMISKSLFNEMFKH  DCPSRGFYSYEAFITAA SFPGFCTSGDVATRKRE AAFLS                                 +T     GGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYN RGPIQLT",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|420607         0 MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                 0 MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE
+
+gi|420607        60 DGCQSQCRDTARLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHRNDCPSRGFYSYEAF
+                 60 ||||||||||.||||||||||||||||||||||||||||||||||..|||||||||||||
+2                60 DGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSYEAF
+
+gi|420607       120 ITAAGSFPGFCTSGDVATRKRELAAFLS--------------------------------
+                120 ||||.|||||||||||||||||.||||.--------------------------------
+2               120 ITAARSFPGFCTSGDVATRKREPAAFLXXXXXXXXXXXXNLNIYLC*EIISTIYICFEIN
+
+gi|420607       148 -QTSQATTGGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNSRGPIQLT
+                180 -.|.....||||||||||||||||||||||||||||||||||||||||||.|||||||
+2               180 LRTWMLGVGGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNRRGPIQLT
+
+gi|420607       205
+                238
+2               238
+""",
+            )
+            hsp = hit[1]
+            self.assertAlmostEqual(hsp.score, 646.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 253.447158322654)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 5.45045505347399e-65)
+            self.assertEqual(hsp.annotations["identity"], 120)
+            self.assertEqual(hsp.annotations["positive"], 124)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[206, 333],
+                          [  0, 127]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 1668)
+            self.assertEqual(hsp.query.annotations["end"], 2049)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 206)
+            self.assertEqual(hsp.target.annotations["end"], 333)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 127))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({206: 'NYYYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...SVV'}, length=333)",
+            )
+            self.assertEqual(hsp.target.id, "gi|4206072|gb|AAD11407.1|")
+            self.assertEqual(hsp.target.name, "AAD11407")
+            self.assertEqual(
+                hsp.target.description, "hevein-like protein [Sambucus nigra]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "NY YGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASDQVPSYGVIS+II+SN GHQS LDTITTSIGYYKRYCDMLEVSYGDNL+NWFDETPF+KVAHIKMSVV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|420607       206 NYYYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
+                  0 ||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
+
+gi|420607       266 QVPSYGVISEIIDSNIGHQSSLDTITTSIGYYKRYCDMLEVSYGDNLKNWFDETPFSKVA
+                 60 |||||||||.||.||.||||.||||||||||||||||||||||||||.||||||||.|||
+2                60 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVA
+
+gi|420607       326 HIKMSVV 333
+                120 ||||||| 127
+2               120 HIKMSVV 127
+""",
+            )
+            hit = hits[4]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|16903131|gb|AAL30421.1|AF434174_1")
+            self.assertEqual(hit.target.name, "AAL30421")
+            self.assertEqual(
+                hit.target.description, "hevein-like protein [Sambucus nigra]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=330)")
+            self.assertEqual(len(hit), 2)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 986.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 384.415014134554)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 2.04729155722083e-104)
+            self.assertEqual(hsp.annotations["identity"], 190)
+            self.assertEqual(hsp.annotations["positive"], 191)
+            self.assertEqual(hsp.annotations["gaps"], 36)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0,  22,  22, 145, 145, 202],
+                          [  0,  22,  25, 148, 181, 238]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 714)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 202)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 238))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGS...QLT')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MKLSTLLILSFPFLLGTIVFADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQ...QLT'}, length=330)",
+            )
+            self.assertEqual(hsp.target.id, "gi|16903131|gb|AAL30421.1|AF434174_1")
+            self.assertEqual(hsp.target.name, "AAL30421")
+            self.assertEqual(
+                hsp.target.description, "hevein-like protein [Sambucus nigra]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKLSTLLILSFPFLLGTIVFAD   NGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCEDGCQSQCRDT RLTDLPRALLRPTNNRNAISKMISKSLFNEMFKH  DCPSRGFYSYEAFITAARSFP FCTSGDVATRKRE AAFLS                                 +T     GGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYN RGPIQLT",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|169031         0 MKLSTLLILSFPFLLGTIVFAD---NGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE
+                  0 ||||||||||||||||||||||---|||||||||||||||||||||||||||||||||||
+2                 0 MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE
+
+gi|169031        57 DGCQSQCRDTGRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHRNDCPSRGFYSYEAF
+                 60 ||||||||||.||||||||||||||||||||||||||||||||||..|||||||||||||
+2                60 DGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSYEAF
+
+gi|169031       117 ITAARSFPSFCTSGDVATRKRELAAFLS--------------------------------
+                120 ||||||||.|||||||||||||.||||.--------------------------------
+2               120 ITAARSFPGFCTSGDVATRKREPAAFLXXXXXXXXXXXXNLNIYLC*EIISTIYICFEIN
+
+gi|169031       145 -QTSQATTGGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNSRGPIQLT
+                180 -.|.....||||||||||||||||||||||||||||||||||||||||||.|||||||
+2               180 LRTWMLGVGGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNRRGPIQLT
+
+gi|169031       202
+                238
+2               238
+""",
+            )
+            hsp = hit[1]
+            self.assertAlmostEqual(hsp.score, 679.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 266.158744327927)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 8.12576171382949e-69)
+            self.assertEqual(hsp.annotations["identity"], 126)
+            self.assertEqual(hsp.annotations["positive"], 126)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[203, 330],
+                          [  0, 127]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 1668)
+            self.assertEqual(hsp.query.annotations["end"], 2049)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 203)
+            self.assertEqual(hsp.target.annotations["end"], 330)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 127))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({203: 'NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...SVV'}, length=330)",
+            )
+            self.assertEqual(hsp.target.id, "gi|16903131|gb|AAL30421.1|AF434174_1")
+            self.assertEqual(hsp.target.name, "AAL30421")
+            self.assertEqual(
+                hsp.target.description, "hevein-like protein [Sambucus nigra]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASDQVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKV HIKMSVV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|169031       203 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
+
+gi|169031       263 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVV
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||.
+2                60 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVA
+
+gi|169031       323 HIKMSVV 330
+                120 ||||||| 127
+2               120 HIKMSVV 127
+""",
+            )
+            hit = hits[5]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|16903133|gb|AAL30422.1|AF434175_1")
+            self.assertEqual(hit.target.name, "AAL30422")
+            self.assertEqual(
+                hit.target.description, "hevein-like protein [Sambucus nigra]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=336)")
+            self.assertEqual(len(hit), 2)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 713.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 279.255529909117)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 9.27553088557319e-73)
+            self.assertEqual(hsp.annotations["identity"], 148)
+            self.assertEqual(hsp.annotations["positive"], 162)
+            self.assertEqual(hsp.annotations["gaps"], 40)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0,  27,  27,  58,  59, 147, 147, 177, 181, 208],
+                          [  0,  27,  29,  60,  60, 148, 181, 211, 211, 238]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 714)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 208)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 243))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGS...QLT')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MKLSTLLIFSFPFLLGTIVIADERPDHRCGSSVGNPPCAPGRCCSIFGWCGGGP...QLT'}, length=336)",
+            )
+            self.assertEqual(hsp.target.id, "gi|16903133|gb|AAL30422.1|AF434175_1")
+            self.assertEqual(hsp.target.name, "AAL30422")
+            self.assertEqual(
+                hsp.target.description, "hevein-like protein [Sambucus nigra]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKLSTLLI SFPFLLGTIV AD+  +   +CG   G   C    CCS +G+CG    YC    CQ  C + +R TDLPRALLRPTNN N ISKMIS+SLFNEMFKH KDCPSRGFYSYEAFITAARSFPGFCTSGDVATRKRE AAFLS                                 +T     G R DS VVDPHAWGYC++NGTT    +E+YCTSSNWPCASGK+YN RGPIQLT",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|169031         0 MKLSTLLIFSFPFLLGTIVIADERPDH--RCGSSVGNPPCAPGRCCSIFGWCGGGPSYCS
+                  0 ||||||||.||||||||||.||.....--.||...|...|....|||..|.||....||.
+2                 0 MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE
+
+gi|169031        58 GSNCQYSCSNGARSTDLPRALLRPTNNLNDISKMISESLFNEMFKHRKDCPSRGFYSYEA
+                 60 -..||..|....|.|||||||||||||.|.||||||.|||||||||.|||||||||||||
+2                60 -DGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSYEA
+
+gi|169031       118 FITAARSFPGFCTSGDVATRKRELAAFLS-------------------------------
+                120 |||||||||||||||||||||||.||||.-------------------------------
+2               119 FITAARSFPGFCTSGDVATRKREPAAFLXXXXXXXXXXXXNLNIYLC*EIISTIYICFEI
+
+gi|169031       147 --QTSQATTGQRFDSVVVDPHAWGYCHINGTTNGNENERYCTSSNWPCASGKKYNSRGPI
+                180 --.|.....|.|.||.||||||||||..||||----.|.|||||||||||||.||.||||
+2               179 NLRTWMLGVGGRLDSAVVDPHAWGYCYVNGTT----DEQYCTSSNWPCASGKQYNRRGPI
+
+gi|169031       205 QLT 208
+                240 ||| 243
+2               235 QLT 238
+""",
+            )
+            hsp = hit[1]
+            self.assertAlmostEqual(hsp.score, 620.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 243.431969348803)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 5.64033703812707e-62)
+            self.assertEqual(hsp.annotations["identity"], 115)
+            self.assertEqual(hsp.annotations["positive"], 120)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[209, 336],
+                          [  0, 127]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 1668)
+            self.assertEqual(hsp.query.annotations["end"], 2049)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 209)
+            self.assertEqual(hsp.target.annotations["end"], 336)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 127))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({209: 'NYNYGLAGEAIGIDLVNDPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...HVV'}, length=336)",
+            )
+            self.assertEqual(hsp.target.id, "gi|16903133|gb|AAL30422.1|AF434175_1")
+            self.assertEqual(hsp.target.name, "AAL30422")
+            self.assertEqual(
+                hsp.target.description, "hevein-like protein [Sambucus nigra]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "NYNYGLAGEA+GIDLVN PDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINAN EASDQVPSYGV+S IINSN GH+SGLD ITTSIGYYKRYCDMLEVSYGDNL+NWFDETPF+KVA IKM VV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|169031       209 NYNYGLAGEAIGIDLVNDPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANYEASD
+                  0 ||||||||||.||||||.|||||||||||||||||||||||||||||||||||||.||||
+2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
+
+gi|169031       269 QVPSYGVLSNIINSNSGHKSGLDIITTSIGYYKRYCDMLEVSYGDNLKNWFDETPFSKVA
+                 60 |||||||.|.|||||.||.||||.|||||||||||||||||||||||.||||||||.|||
+2                60 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVA
+
+gi|169031       329 RIKMHVV 336
+                120 .|||.|| 127
+2               120 HIKMSVV 127
+""",
+            )
+            hit = hits[6]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|30691147|gb|AAO17294.1|")
+            self.assertEqual(hit.target.name, "AAO17294")
+            self.assertEqual(hit.target.description, "chitinase [Ficus carica]")
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=321)")
+            self.assertEqual(len(hit), 2)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 481.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 189.889228296291)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 7.40075731140555e-46)
+            self.assertEqual(hsp.annotations["identity"], 113)
+            self.assertEqual(hsp.annotations["positive"], 138)
+            self.assertEqual(hsp.annotations["gaps"], 49)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0,  18,  19,  27,  27,  60,  61,  66,  66,  73,  74, 142, 142,
+                           157, 157, 170, 173, 201],
+                          [  0,  18,  18,  26,  29,  62,  62,  67,  72,  79,  79, 147, 180,
+                           195, 197, 210, 210, 238]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 714)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 201)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 244))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGS...QLT')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MKLITLTILSLGFLFGIISVYCERSDHRCGPNYGNPGCSEGRCCSVHGWCGGGA...QLT'}, length=321)",
+            )
+            self.assertEqual(hsp.target.id, "gi|30691147|gb|AAO17294.1|")
+            self.assertEqual(hsp.target.name, "AAO17294")
+            self.assertEqual(hsp.target.description, "chitinase [Ficus carica]")
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKL TL ILS  FL G I V+ + +D+   +CG + G   C +  CCS  G+CG    YC  G C  QC        L R+ LL   NN  ++  ++S+SLFNEMFKH KDCPS+GFYSY+AFITAA SFPGFC++GDVATRKRE AAFL                                  +T     G R DS   D +AWGYC++N T    +  YCTS +WPCA GK+YN RGPIQLT",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|306911         0 MKLITLTILSLGFLFGIISVYCERSDH---RCGPNYGNPGCSEGRCCSVHGWCGGGANYC
+                  0 |||.||.|||..||.|.|-|.....|.---.||...|...|....|||..|.||....||
+2                 0 MKLSTLLILSFPFLLGTI-VFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYC
+
+gi|306911        57 SGGNCDYQC-----WVYLSRSPLLNNNNNVASVRNIVSESLFNEMFKHRKDCPSQGFYSY
+                 60 ..|-|..||-----...|.|.-||...||........|.|||||||||.|||||.|||||
+2                59 EDG-CQSQCRDTSRLTDLPRA-LLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSY
+
+gi|306911       112 DAFITAATSFPGFCSTGDVATRKRELAAFL------------------------------
+                120 .||||||.||||||..|||||||||.||||------------------------------
+2               117 EAFITAARSFPGFCTSGDVATRKREPAAFLXXXXXXXXXXXXNLNIYLC*EIISTIYICF
+
+gi|306911       142 ---AQTSQATTGQRSDSE--DVYAWGYCHINTTIVGDENDYCTSPDWPCAWGKKYNSRGP
+                180 ---..|.....|.|.||.--|..|||||..|.|---....||||..||||.||.||.|||
+2               177 EINLRTWMLGVGGRLDSAVVDPHAWGYCYVNGT---TDEQYCTSSNWPCASGKQYNRRGP
+
+gi|306911       197 IQLT 201
+                240 |||| 244
+2               234 IQLT 238
+""",
+            )
+            hsp = hit[1]
+            self.assertAlmostEqual(hsp.score, 426.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 168.703251620836)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.76559312729927e-39)
+            self.assertEqual(hsp.annotations["identity"], 81)
+            self.assertEqual(hsp.annotations["positive"], 99)
+            self.assertEqual(hsp.annotations["gaps"], 10)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[202, 261, 261, 266, 266, 308, 309, 320],
+                          [  0,  59,  60,  65,  73, 115, 115, 126]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 1668)
+            self.assertEqual(hsp.query.annotations["end"], 2046)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 202)
+            self.assertEqual(hsp.target.annotations["end"], 320)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 127))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...MSV')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({202: 'NHNYGLVGEALGIDLINNPDLVATDPVVSFKTAIWFWMTRHQNKPSFHGVIINA...MPV'}, length=321)",
+            )
+            self.assertEqual(hsp.target.id, "gi|30691147|gb|AAO17294.1|")
+            self.assertEqual(hsp.target.name, "AAO17294")
+            self.assertEqual(hsp.target.description, "chitinase [Ficus carica]")
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "N+NYGL GEALGIDL+N+PDLVATDP+VSFKTAIWFWMT+H N PS H ++INANSE S  +P++        SNFG +S LD +  SIGYYKRYCDML+VS+GDNL+ W+D TP F+ V+ I M V",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|306911       202 NHNYGLVGEALGIDLINNPDLVATDPVVSFKTAIWFWMTRHQNKPSFHGVIINANSEPS-
+                  0 |.||||.||||||||.|.||||||||.||||||||||||.|.|.||.|...||||||.|-
+2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
+
+gi|306911       261 HIPNH--------SNFGQESVLDVVNRSIGYYKRYCDMLKVSFGDNLKYWYDGTPNFSDV
+                 60 ..|..--------||||..|.||....||||||||||||.||.||||..|.|.||-|..|
+2                60 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETP-FTKV
+
+gi|306911       313 SRIGMPV 320
+                120 ..|.|.| 127
+2               119 AHIKMSV 126
+""",
+            )
+            hit = hits[7]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|222139388|gb|ACM45713.1|")
+            self.assertEqual(hit.target.name, "ACM45713")
+            self.assertEqual(
+                hit.target.description, "class I chitinase [Pyrus pyrifolia]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=317)")
+            self.assertEqual(len(hit), 2)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 469.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 185.266833385283)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.82286993845418e-44)
+            self.assertEqual(hsp.annotations["identity"], 111)
+            self.assertEqual(hsp.annotations["positive"], 137)
+            self.assertEqual(hsp.annotations["gaps"], 50)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0,  16,  16,  20,  20,  68,  68,  95,  97, 142, 142, 172, 173,
+                           194],
+                          [  0,  16,  18,  22,  29,  77,  81, 108, 108, 153, 187, 217, 217,
+                           238]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 714)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 194)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 241))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGS...QLT')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MKLQTLIILSLSLLLGISAEQCGRQAGGAVCPNGLCCSQFGWCGTTSDYCTTGC...QLT'}, length=317)",
+            )
+            self.assertEqual(hsp.target.id, "gi|222139388|gb|ACM45713.1|")
+            self.assertEqual(hsp.target.name, "ACM45713")
+            self.assertEqual(
+                hsp.target.description, "class I chitinase [Pyrus pyrifolia]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKL TL+ILS   LLG  + A+       QCGR AGGA+C + LCCS +G+CG+T  YC  GCQSQC  T + T  P     P+     +S +IS S+F++M K+  D  CPS GFY Y+AFITAARSF GF T+GDVATRK+E  AFL+QTS                                      G   SA   P+AWGYC+VN    + YCT SS +PCA+GK+Y  RGPIQLT",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|222139         0 MKLQTLIILSLSLLLG--ISAE-------QCGRQAGGAVCPNGLCCSQFGWCGTTSDYCT
+                  0 |||.||.|||...|||--..|.-------||||.||||.|...||||..|.||.|..||.
+2                 0 MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE
+
+gi|222139        51 TGCQSQCSSTPKPTPTP----TPSGGGGDVSSLISSSVFDQMLKYRNDGRCPSNGFYKYD
+                 60 .||||||..|...|..|----.|.......|..||.|.|..|.|...|--|||.|||.|.
+2                60 DGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKD--CPSRGFYSYE
+
+gi|222139       107 AFITAARSFNGFGTTGDVATRKKELVAFLAQTSHE-------------------------
+                120 |||||||||.||.|.|||||||.|..|||......-------------------------
+2               118 AFITAARSFPGFCTSGDVATRKREPAAFLXXXXXXXXXXXXNLNIYLC*EIISTIYICFE
+
+gi|222139       142 ---------TTGGWASAPDGPYAWGYCFVNERNQDVYCTPSSQYPCAAGKKYYGRGPIQL
+                180 ---------..|...||...|.|||||.||......|||-||..|||.||.|..||||||
+2               178 INLRTWMLGVGGRLDSAVVDPHAWGYCYVNGTTDEQYCT-SSNWPCASGKQYNRRGPIQL
+
+gi|222139       193 T 194
+                240 | 241
+2               237 T 238
+""",
+            )
+            hsp = hit[1]
+            self.assertAlmostEqual(hsp.score, 318.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 127.101697421762)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 5.89123449548921e-27)
+            self.assertEqual(hsp.annotations["identity"], 62)
+            self.assertEqual(hsp.annotations["positive"], 84)
+            self.assertEqual(hsp.annotations["gaps"], 7)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[195, 247, 252, 284, 285, 309, 309, 316],
+                          [  0,  52,  52,  84,  84, 108, 109, 116]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 1668)
+            self.assertEqual(hsp.query.annotations["end"], 2016)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 195)
+            self.assertEqual(hsp.target.annotations["end"], 316)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 122))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...TPF')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({195: 'NYNYGQAGKAIGKDLINNPDLVATDPVVSFKTAIWFWMTPQGNKPSSHDVITGR...RPF'}, length=317)",
+            )
+            self.assertEqual(hsp.target.id, "gi|222139388|gb|ACM45713.1|")
+            self.assertEqual(hsp.target.name, "ACM45713")
+            self.assertEqual(
+                hsp.target.description, "class I chitinase [Pyrus pyrifolia]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "NYNYG AG+A+G DL+N+PDLVATDP+VSFKTAIWFWMT   N PS HD++      +    ++ +VP YGVI+ IIN       G D  + + IG+Y+RYC +L V+ GDNL+  +++ PF",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|222139       195 NYNYGQAGKAIGKDLINNPDLVATDPVVSFKTAIWFWMTPQGNKPSSHDVITGRWSPSTA
+                  0 |||||.||.|.|.||.|.||||||||.||||||||||||...|.||.||...-----...
+2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILI-----NAN
+
+gi|222139       255 DRSAGRVPGYGVITNIINGGVECGKGQDARVASRIGFYRRYCQILGVNPGDNLD-CYNQR
+                 60 ......||.||||..|||.......|.|.-....||.|.|||..|.|..||||.-.....
+2                55 SEASDQVPSYGVISKIINSNFGHQSGLDT-ITTSIGYYKRYCDMLEVSYGDNLENWFDET
+
+gi|222139       314 PF 316
+                120 || 122
+2               114 PF 116
+""",
+            )
+            hit = hits[8]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|23496435|dbj|BAB40817.2|")
+            self.assertEqual(hit.target.name, "BAB40817")
+            self.assertEqual(
+                hit.target.description, "endochitinase MCHT-2 [Cucumis melo]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=311)")
+            self.assertEqual(len(hit), 2)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 460.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 181.800037202027)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 2.01541888137674e-43)
+            self.assertEqual(hsp.annotations["identity"], 109)
+            self.assertEqual(hsp.annotations["positive"], 132)
+            self.assertEqual(hsp.annotations["gaps"], 54)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0,  16,  16,  21,  21,  63,  63,  91,  93, 138, 138, 168, 169,
+                           190],
+                          [  0,  16,  20,  25,  29,  71,  80, 108, 108, 153, 187, 217, 217,
+                           238]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 714)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 190)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 241))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGS...QLT')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MKTYSLIILSFAFLLGAASAEQCGRQANGALCPNNLCCSQFGFCGDTDDYCKNG...QLT'}, length=311)",
+            )
+            self.assertEqual(hsp.target.id, "gi|23496435|dbj|BAB40817.2|")
+            self.assertEqual(hsp.target.name, "BAB40817")
+            self.assertEqual(
+                hsp.target.description, "endochitinase MCHT-2 [Cucumis melo]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MK  +L+ILSF FLLG    A  A+    QCGR A GALC +NLCCS +GFCG T  YC++GCQSQCR +S           P +    +  +IS+SL+N+M K+ +D  CPS GFY+Y AFITAARSFP F T+GD  TRKRE AAF  QTS                                      G   +A   P+AWGY Y+     + YCT S  WPCA G+QY  RGPIQLT",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|234964         0 MKTYSLIILSFAFLLG----AASAE----QCGRQANGALCPNNLCCSQFGFCGDTDDYCK
+                  0 ||...|.||||.||||----|..|.----||||.|.||||..|||||..||||.|..||.
+2                 0 MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE
+
+gi|234964        52 NGCQSQCRGSS---------TPPPSGGRGVGSIISESLYNQMLKYSRDPRCPSNGFYTYN
+                 60 .|||||||..|---------..|..........||.||.|.|.|...|--|||.|||.|.
+2                60 DGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKD--CPSRGFYSYE
+
+gi|234964       103 AFITAARSFPTFGTTGDATTRKREIAAFFGQTSHE-------------------------
+                120 ||||||||||.|.|.||..|||||.|||.......-------------------------
+2               118 AFITAARSFPGFCTSGDVATRKREPAAFLXXXXXXXXXXXXNLNIYLC*EIISTIYICFE
+
+gi|234964       138 ---------TTGGWSTAPDGPYAWGYWYIRERNQQTYCTPSQQWPCAPGQQYYGRGPIQL
+                180 ---------..|....|...|.||||.|........|||-|..||||.|.||..||||||
+2               178 INLRTWMLGVGGRLDSAVVDPHAWGYCYVNGTTDEQYCT-SSNWPCASGKQYNRRGPIQL
+
+gi|234964       189 T 190
+                240 | 241
+2               237 T 238
+""",
+            )
+            hsp = hit[1]
+            self.assertAlmostEqual(hsp.score, 285.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 114.39011141649)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 3.95161831690075e-23)
+            self.assertEqual(hsp.annotations["identity"], 56)
+            self.assertEqual(hsp.annotations["positive"], 75)
+            self.assertEqual(hsp.annotations["gaps"], 7)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[191, 211, 211, 242, 247, 277, 278, 304],
+                          [  0,  20,  21,  52,  52,  82,  82, 108]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 1668)
+            self.assertEqual(hsp.query.annotations["end"], 1992)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 191)
+            self.assertEqual(hsp.target.annotations["end"], 304)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 114))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...NLE')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({191: 'NYNYGPAGKAIGAPLLTNPDTATDPVTSFKTALWFWMTAQGNKPSCHNVITGNW...NLD'}, length=311)",
+            )
+            self.assertEqual(hsp.target.id, "gi|23496435|dbj|BAB40817.2|")
+            self.assertEqual(hsp.target.name, "BAB40817")
+            self.assertEqual(
+                hsp.target.description, "endochitinase MCHT-2 [Cucumis melo]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "NYNYG AG+A+G  L+ +PD  ATDP+ SFKTA+WFWMT   N PS H+++      ++   A+ +VP YGVI+ IIN       G  D +   IG+YKRYCDML + YG+NL+",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|234964       191 NYNYGPAGKAIGAPLLTNPD-TATDPVTSFKTALWFWMTAQGNKPSCHNVITGNWQPSSA
+                  0 |||||.||.|.|..|...||-.||||..|||||.|||||...|.||.|....-----...
+2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILI-----NAN
+
+gi|234964       250 DNAAGRVPGYGVITNIINGGLECGRGPDDRVKDRIGFYKRYCDMLGIGYGNNLD 304
+                 60 ..|...||.||||..|||.......|.-|.....||.||||||||...||.||. 114
+2                55 SEASDQVPSYGVISKIINSNFGHQSGL-DTITTSIGYYKRYCDMLEVSYGDNLE 108
+""",
+            )
+            hit = hits[9]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|82621253|gb|ABB86300.1|")
+            self.assertEqual(hit.target.name, "ABB86300")
+            self.assertEqual(hit.target.description, "chitinase [Ficus awkeotsang]")
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=301)")
+            self.assertEqual(len(hit), 2)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 459.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 181.414837626109)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 2.6322185753765e-43)
+            self.assertEqual(hsp.annotations["identity"], 114)
+            self.assertEqual(hsp.annotations["positive"], 134)
+            self.assertEqual(hsp.annotations["gaps"], 50)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0,  18,  19,  27,  27,  60,  61,  66,  66,  85,  87, 143, 143,
+                           158, 158, 171, 174, 202],
+                          [  0,  18,  18,  26,  29,  62,  62,  67,  72,  91,  91, 147, 180,
+                           195, 197, 210, 210, 238]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 714)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 202)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 245))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGS...QLT')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MKLITLTILSPGFLFGIISVYCERPDHRCGPNYGNPGCSEGRCCSIHGWCGGDA...QLT'}, length=301)",
+            )
+            self.assertEqual(hsp.target.id, "gi|82621253|gb|ABB86300.1|")
+            self.assertEqual(hsp.target.name, "ABB86300")
+            self.assertEqual(hsp.target.description, "chitinase [Ficus awkeotsang]")
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKL TL ILS  FL G I V+ +  D+   +CG + G   C +  CCS  G+CG    YC  G C  QC        L R+ L  TNN N  S  K++ +SLFNEM KH KDCPS+GFYSY+AFITAA SFPGFC++GDVATRKRE AAFL                                  +T     G R DS   D +A GYC++N T       YCTS + PCASGK YNRRGPIQLT",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|826212         0 MKLITLTILSPGFLFGIISVYCERPDH---RCGPNYGNPGCSEGRCCSIHGWCGGDANYC
+                  0 |||.||.|||..||.|.|-|.....|.---.||...|...|....|||..|.||....||
+2                 0 MKLSTLLILSFPFLLGTI-VFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYC
+
+gi|826212        57 SGGNCDYQC-----WVYLSRSPLPNTNNNNVASVRKIVGESLFNEMLKHRKDCPSQGFYS
+                 60 ..|-|..||-----...|.|..|..|||.|..|--|....||||||.||.|||||.||||
+2                59 EDG-CQSQCRDTSRLTDLPRALLRPTNNRNAIS--KMISKSLFNEMFKHMKDCPSRGFYS
+
+gi|826212       112 YDAFITAAASFPGFCSTGDVATRKRELAAFL-----------------------------
+                120 |.||||||.||||||..|||||||||.||||-----------------------------
+2               116 YEAFITAARSFPGFCTSGDVATRKREPAAFLXXXXXXXXXXXXNLNIYLC*EIISTIYIC
+
+gi|826212       143 ----AQTSQATTGQRSDSE--DVYARGYCHINTTIVGDKNDYCTSPDSPCASGKNYNRRG
+                180 ----..|.....|.|.||.--|..|.|||..|.|---....||||...||||||.|||||
+2               176 FEINLRTWMLGVGGRLDSAVVDPHAWGYCYVNGT---TDEQYCTSSNWPCASGKQYNRRG
+
+gi|826212       197 PIQLT 202
+                240 ||||| 245
+2               233 PIQLT 238
+""",
+            )
+            hsp = hit[1]
+            self.assertAlmostEqual(hsp.score, 359.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 142.894880034374)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.03749166509001e-31)
+            self.assertEqual(hsp.annotations["identity"], 67)
+            self.assertEqual(hsp.annotations["positive"], 83)
+            self.assertEqual(hsp.annotations["gaps"], 9)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[203, 263, 263, 268, 268, 301],
+                          [  0,  60,  61,  66,  74, 107]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 1668)
+            self.assertEqual(hsp.query.annotations["end"], 1989)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 203)
+            self.assertEqual(hsp.target.annotations["end"], 301)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 107))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINA...DNL')",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({203: 'NHNYGLVGEALGIDLINNPELVATDPVISFKTAIWFWMARYEDKPSFHDVIINA...DNL'}, length=301)",
+            )
+            self.assertEqual(hsp.target.id, "gi|82621253|gb|ABB86300.1|")
+            self.assertEqual(hsp.target.name, "ABB86300")
+            self.assertEqual(hsp.target.description, "chitinase [Ficus awkeotsang]")
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "N+NYGL GEALGIDL+N+P+LVATDP++SFKTAIWFWM ++++ PS HD++INAN EASD +P +G        N G +S LD +  SIGYYKRYCDML VS  DNL",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|826212       203 NHNYGLVGEALGIDLINNPELVATDPVISFKTAIWFWMARYEDKPSFHDVIINANFEASD
+                  0 |.||||.||||||||.|.|.||||||..||||||||||......||.||..||||.||||
+2                 0 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
+
+gi|826212       263 -IPYHG--------NSGQESSLDVVNRSIGYYKRYCDMLGVSCEDNL 301
+                 60 -.|..|--------|.|..|.||....||||||||||||.||..||| 107
+2                60 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNL 107
+""",
+            )
+            record = next(records)
+            self.assertEqual(record.num, 3)
+            self.assertIsInstance(record.query, SeqRecord)
+            self.assertEqual(record.query.id, "3")
+            self.assertEqual(
+                record.query.description,
+                "gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose phosphate isomerase (GPI) gene, partial intron sequence",
+            )
+            self.assertEqual(repr(record.query.seq), "Seq(None, length=550)")
+            self.assertEqual(len(record.stat), 7)
+            self.assertEqual(record.stat["db-num"], 8994603)
+            self.assertEqual(record.stat["db-len"], -1216159329)
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertAlmostEqual(record.stat["eff-space"], 108443629616.0)
+            self.assertAlmostEqual(record.stat["kappa"], 0.041)
+            self.assertAlmostEqual(record.stat["lambda"], 0.267)
+            self.assertAlmostEqual(record.stat["entropy"], 0.14)
+            hits = record.hits
+            self.assertEqual(len(hits), 0)
+            self.assertEqual(record.message, "No hits found")
+            record = next(records)
+            self.assertEqual(record.num, 4)
+            self.assertIsInstance(record.query, SeqRecord)
+            self.assertEqual(record.query.id, "4")
+            self.assertEqual(
+                record.query.description,
+                "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence",
+            )
+            self.assertEqual(repr(record.query.seq), "Seq(None, length=655)")
+            self.assertEqual(len(record.stat), 7)
+            self.assertEqual(record.stat["db-num"], 8994603)
+            self.assertEqual(record.stat["db-len"], -1216159329)
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertAlmostEqual(record.stat["eff-space"], 165344802738.0)
+            self.assertAlmostEqual(record.stat["kappa"], 0.041)
+            self.assertAlmostEqual(record.stat["lambda"], 0.267)
+            self.assertAlmostEqual(record.stat["entropy"], 0.14)
+            hits = record.hits
+            self.assertEqual(len(hits), 10)
+            hit = hits[0]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|166343825|gb|ABY86655.1|")
+            self.assertEqual(hit.target.name, "ABY86655")
+            self.assertEqual(
+                hit.target.description, "beta-tubulin 4 [Gossypium hirsutum]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=448)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1048.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 408.29738784143)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 2.26145081918239e-112)
+            self.assertEqual(hsp.annotations["identity"], 196)
+            self.assertEqual(hsp.annotations["positive"], 197)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 201],
+                          [  0, 201]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 49)
+            self.assertEqual(hsp.query.annotations["end"], 652)
+            self.assertEqual(hsp.query.annotations["frame"], 2)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 201)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 201))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEA...CMV')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MREILHIQAGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDNDLQLERVNVYYNEA...CMV'}, length=448)",
+            )
+            self.assertEqual(hsp.target.id, "gi|166343825|gb|ABY86655.1|")
+            self.assertEqual(hsp.target.name, "ABY86655")
+            self.assertEqual(
+                hsp.target.description, "beta-tubulin 4 [Gossypium hirsutum]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MREILHIQAGQCGNQIGA FWEVVCAEHGI+STGRYQGDNDLQLERVNVYYNEASCGRFVPRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDS LDVVRKEAENCDCLQGFQVCHSLG GTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVVEPYNATLSVH LVENADECMV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|166343         0 MREILHIQAGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDNDLQLERVNVYYNEASCGRFV
+                  0 ||||||||||||||||||.|||||||||||.|||||||||||||||||||||||||||||
+4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
+
+gi|166343        60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSVLDVV
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||.||||
+4                60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSXLDVV
+
+gi|166343       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+                120 ||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||
+4               120 RKEAENCDCLQGFQVCHSLGRGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+
+gi|166343       180 EPYNATLSVHQLVENADECMV 201
+                180 ||||||||||.|||||||||| 201
+4               180 EPYNATLSVHXLVENADECMV 201
+""",
+            )
+            hit = hits[1]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|223549899|gb|EEF51386.1|")
+            self.assertEqual(hit.target.name, "EEF51386")
+            self.assertEqual(
+                hit.target.description,
+                "tubulin beta chain, putative [Ricinus communis]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=448)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1044.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 406.756589537761)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 6.57981456092236e-112)
+            self.assertEqual(hsp.annotations["identity"], 195)
+            self.assertEqual(hsp.annotations["positive"], 196)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 201],
+                          [  0, 201]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 49)
+            self.assertEqual(hsp.query.annotations["end"], 652)
+            self.assertEqual(hsp.query.annotations["frame"], 2)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 201)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 201))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEA...CMV')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDNDLQLERVNVYYNEA...CMV'}, length=448)",
+            )
+            self.assertEqual(hsp.target.id, "gi|223549899|gb|EEF51386.1|")
+            self.assertEqual(hsp.target.name, "EEF51386")
+            self.assertEqual(
+                hsp.target.description,
+                "tubulin beta chain, putative [Ricinus communis]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MREILHIQ GQCGNQIGA FWEVVCAEHGI+STGRYQGDNDLQLERVNVYYNEASCGRFVPRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDS LDVVRKEAENCDCLQGFQVCHSLG GTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVVEPYNATLSVH LVENADECMV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|223549         0 MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDNDLQLERVNVYYNEASCGRFV
+                  0 ||||||||.|||||||||.|||||||||||.|||||||||||||||||||||||||||||
+4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
+
+gi|223549        60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSVLDVV
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||.||||
+4                60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSXLDVV
+
+gi|223549       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+                120 ||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||
+4               120 RKEAENCDCLQGFQVCHSLGRGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+
+gi|223549       180 EPYNATLSVHQLVENADECMV 201
+                180 ||||||||||.|||||||||| 201
+4               180 EPYNATLSVHXLVENADECMV 201
+""",
+            )
+            hit = hits[2]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|18420724|ref|NP_568437.1|")
+            self.assertEqual(hit.target.name, "NP_568437")
+            self.assertEqual(
+                hit.target.description,
+                "TUB8 (tubulin beta-8) [Arabidopsis thaliana] >gi|27735261|sp|P29516.2|TBB8_ARATH RecName: Full=Tubulin beta-8 chain; AltName: Full=Beta-8-tubulin >gi|10176853|dbj|BAB10059.1| beta tubulin [Arabidopsis thaliana]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=449)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1040.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 405.215791234091)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.91443295113426e-111)
+            self.assertEqual(hsp.annotations["identity"], 194)
+            self.assertEqual(hsp.annotations["positive"], 196)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 201],
+                          [  0, 201]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 49)
+            self.assertEqual(hsp.query.annotations["end"], 652)
+            self.assertEqual(hsp.query.annotations["frame"], 2)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 201)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 201))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEA...CMV')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGENDLQLERVNVYYNEA...CMV'}, length=449)",
+            )
+            self.assertEqual(hsp.target.id, "gi|18420724|ref|NP_568437.1|")
+            self.assertEqual(hsp.target.name, "NP_568437")
+            self.assertEqual(
+                hsp.target.description,
+                "TUB8 (tubulin beta-8) [Arabidopsis thaliana] >gi|27735261|sp|P29516.2|TBB8_ARATH RecName: Full=Tubulin beta-8 chain; AltName: Full=Beta-8-tubulin >gi|10176853|dbj|BAB10059.1| beta tubulin [Arabidopsis thaliana]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MREILHIQ GQCGNQIGA FWEVVCAEHGI+STGRYQG+NDLQLERVNVYYNEASCGRFVPRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDS LDVVRKEAENCDCLQGFQVCHSLG GTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVVEPYNATLSVH LVENADECMV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|184207         0 MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGENDLQLERVNVYYNEASCGRFV
+                  0 ||||||||.|||||||||.|||||||||||.|||||||.|||||||||||||||||||||
+4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
+
+gi|184207        60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSVLDVV
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||.||||
+4                60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSXLDVV
+
+gi|184207       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+                120 ||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||
+4               120 RKEAENCDCLQGFQVCHSLGRGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+
+gi|184207       180 EPYNATLSVHQLVENADECMV 201
+                180 ||||||||||.|||||||||| 201
+4               180 EPYNATLSVHXLVENADECMV 201
+""",
+            )
+            hit = hits[3]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|225426385|ref|XP_002271992.1|")
+            self.assertEqual(hit.target.name, "XP_002271992")
+            self.assertEqual(
+                hit.target.description,
+                "PREDICTED: hypothetical protein [Vitis vinifera] >gi|157356601|emb|CAO62796.1| unnamed protein product [Vitis vinifera]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=447)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1034.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 402.904593778587)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 9.50123195540709e-111)
+            self.assertEqual(hsp.annotations["identity"], 193)
+            self.assertEqual(hsp.annotations["positive"], 195)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 201],
+                          [  0, 201]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 49)
+            self.assertEqual(hsp.query.annotations["end"], 652)
+            self.assertEqual(hsp.query.annotations["frame"], 2)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 201)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 201))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEA...CMV')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYHGDSDLQLERVNVYYNEA...CMV'}, length=447)",
+            )
+            self.assertEqual(hsp.target.id, "gi|225426385|ref|XP_002271992.1|")
+            self.assertEqual(hsp.target.name, "XP_002271992")
+            self.assertEqual(
+                hsp.target.description,
+                "PREDICTED: hypothetical protein [Vitis vinifera] >gi|157356601|emb|CAO62796.1| unnamed protein product [Vitis vinifera]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MREILHIQ GQCGNQIGA FWEVVCAEHGI+STGRY GD+DLQLERVNVYYNEASCGRFVPRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDS LDVVRKEAENCDCLQGFQVCHSLG GTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVVEPYNATLSVH LVENADECMV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|225426         0 MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYHGDSDLQLERVNVYYNEASCGRFV
+                  0 ||||||||.|||||||||.|||||||||||.|||||.||.||||||||||||||||||||
+4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
+
+gi|225426        60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSVLDVV
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||.||||
+4                60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSXLDVV
+
+gi|225426       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+                120 ||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||
+4               120 RKEAENCDCLQGFQVCHSLGRGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+
+gi|225426       180 EPYNATLSVHQLVENADECMV 201
+                180 ||||||||||.|||||||||| 201
+4               180 EPYNATLSVHXLVENADECMV 201
+""",
+            )
+            hit = hits[4]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|15451226|gb|AAK96884.1|")
+            self.assertEqual(hit.target.name, "AAK96884")
+            self.assertEqual(
+                hit.target.description,
+                "beta tubulin [Arabidopsis thaliana] >gi|20148289|gb|AAM10035.1| beta tubulin [Arabidopsis thaliana]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=449)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1034.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 402.904593778587)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 9.50123195540709e-111)
+            self.assertEqual(hsp.annotations["identity"], 193)
+            self.assertEqual(hsp.annotations["positive"], 195)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 201],
+                          [  0, 201]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 49)
+            self.assertEqual(hsp.query.annotations["end"], 652)
+            self.assertEqual(hsp.query.annotations["frame"], 2)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 201)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 201))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEA...CMV')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGEKDLQLERVNVYYNEA...CMV'}, length=449)",
+            )
+            self.assertEqual(hsp.target.id, "gi|15451226|gb|AAK96884.1|")
+            self.assertEqual(hsp.target.name, "AAK96884")
+            self.assertEqual(
+                hsp.target.description,
+                "beta tubulin [Arabidopsis thaliana] >gi|20148289|gb|AAM10035.1| beta tubulin [Arabidopsis thaliana]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MREILHIQ GQCGNQIGA FWEVVCAEHGI+STGRYQG+ DLQLERVNVYYNEASCGRFVPRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDS LDVVRKEAENCDCLQGFQVCHSLG GTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVVEPYNATLSVH LVENADECMV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|154512         0 MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGEKDLQLERVNVYYNEASCGRFV
+                  0 ||||||||.|||||||||.|||||||||||.|||||||..||||||||||||||||||||
+4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
+
+gi|154512        60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSVLDVV
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||.||||
+4                60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSXLDVV
+
+gi|154512       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+                120 ||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||
+4               120 RKEAENCDCLQGFQVCHSLGRGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+
+gi|154512       180 EPYNATLSVHQLVENADECMV 201
+                180 ||||||||||.|||||||||| 201
+4               180 EPYNATLSVHXLVENADECMV 201
+""",
+            )
+            hit = hits[5]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|225470745|ref|XP_002267380.1|")
+            self.assertEqual(hit.target.name, "XP_002267380")
+            self.assertEqual(
+                hit.target.description,
+                "PREDICTED: hypothetical protein [Vitis vinifera] >gi|157327486|emb|CAO15467.1| unnamed protein product [Vitis vinifera]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=449)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1033.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 402.51939420267)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.24089932237309e-110)
+            self.assertEqual(hsp.annotations["identity"], 192)
+            self.assertEqual(hsp.annotations["positive"], 195)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 201],
+                          [  0, 201]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 49)
+            self.assertEqual(hsp.query.annotations["end"], 652)
+            self.assertEqual(hsp.query.annotations["frame"], 2)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 201)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 201))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEA...CMV')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MREILHVQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDTELQLERVNVYYNEA...CMV'}, length=449)",
+            )
+            self.assertEqual(hsp.target.id, "gi|225470745|ref|XP_002267380.1|")
+            self.assertEqual(hsp.target.name, "XP_002267380")
+            self.assertEqual(
+                hsp.target.description,
+                "PREDICTED: hypothetical protein [Vitis vinifera] >gi|157327486|emb|CAO15467.1| unnamed protein product [Vitis vinifera]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MREILH+Q GQCGNQIGA FWEVVCAEHGI+STGRYQGD +LQLERVNVYYNEASCGRFVPRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDS LDVVRKEAENCDCLQGFQVCHSLG GTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVVEPYNATLSVH LVENADECMV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|225470         0 MREILHVQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDTELQLERVNVYYNEASCGRFV
+                  0 ||||||.|.|||||||||.|||||||||||.||||||||..|||||||||||||||||||
+4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
+
+gi|225470        60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSVLDVV
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||.||||
+4                60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSXLDVV
+
+gi|225470       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+                120 ||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||
+4               120 RKEAENCDCLQGFQVCHSLGRGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+
+gi|225470       180 EPYNATLSVHQLVENADECMV 201
+                180 ||||||||||.|||||||||| 201
+4               180 EPYNATLSVHXLVENADECMV 201
+""",
+            )
+            hit = hits[6]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|586076|sp|P37392.1|TBB1_LUPAL")
+            self.assertEqual(hit.target.name, "P37392")
+            self.assertEqual(
+                hit.target.description,
+                "RecName: Full=Tubulin beta-1 chain; AltName: Full=Beta-1-tubulin >gi|402636|emb|CAA49736.1| Beta tubulin 1 [Lupinus albus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=447)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1033.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 402.51939420267)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.24089932237309e-110)
+            self.assertEqual(hsp.annotations["identity"], 193)
+            self.assertEqual(hsp.annotations["positive"], 195)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 201],
+                          [  0, 201]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 49)
+            self.assertEqual(hsp.query.annotations["end"], 652)
+            self.assertEqual(hsp.query.annotations["frame"], 2)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 201)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 201))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEA...CMV')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYGGDNELQLERVNVYYNEA...CMV'}, length=447)",
+            )
+            self.assertEqual(hsp.target.id, "gi|586076|sp|P37392.1|TBB1_LUPAL")
+            self.assertEqual(hsp.target.name, "P37392")
+            self.assertEqual(
+                hsp.target.description,
+                "RecName: Full=Tubulin beta-1 chain; AltName: Full=Beta-1-tubulin >gi|402636|emb|CAA49736.1| Beta tubulin 1 [Lupinus albus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MREILHIQ GQCGNQIGA FWEVVCAEHGI+STGRY GDN+LQLERVNVYYNEASCGRFVPRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDS LDVVRKEAENCDCLQGFQVCHSLG GTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVVEPYNATLSVH LVENADECMV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|586076         0 MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYGGDNELQLERVNVYYNEASCGRFV
+                  0 ||||||||.|||||||||.|||||||||||.|||||.|||.|||||||||||||||||||
+4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
+
+gi|586076        60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSVLDVV
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||.||||
+4                60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSXLDVV
+
+gi|586076       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+                120 ||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||
+4               120 RKEAENCDCLQGFQVCHSLGRGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+
+gi|586076       180 EPYNATLSVHQLVENADECMV 201
+                180 ||||||||||.|||||||||| 201
+4               180 EPYNATLSVHXLVENADECMV 201
+""",
+            )
+            hit = hits[7]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|224104341|ref|XP_002313404.1|")
+            self.assertEqual(hit.target.name, "XP_002313404")
+            self.assertEqual(
+                hit.target.description,
+                "tubulin, beta chain [Populus trichocarpa] >gi|222849812|gb|EEE87359.1| tubulin, beta chain [Populus trichocarpa]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=451)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1031.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 401.748995050835)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 2.1166536544662e-110)
+            self.assertEqual(hsp.annotations["identity"], 192)
+            self.assertEqual(hsp.annotations["positive"], 195)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 201],
+                          [  0, 201]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 49)
+            self.assertEqual(hsp.query.annotations["end"], 652)
+            self.assertEqual(hsp.query.annotations["frame"], 2)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 201)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 201))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEA...CMV')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDSPLQLERINVYYNEA...CMV'}, length=451)",
+            )
+            self.assertEqual(hsp.target.id, "gi|224104341|ref|XP_002313404.1|")
+            self.assertEqual(hsp.target.name, "XP_002313404")
+            self.assertEqual(
+                hsp.target.description,
+                "tubulin, beta chain [Populus trichocarpa] >gi|222849812|gb|EEE87359.1| tubulin, beta chain [Populus trichocarpa]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MREILHIQ GQCGNQIGA FWEVVCAEHGI+STGRYQGD+ LQLER+NVYYNEASCGRFVPRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDS LDVVRKEAENCDCLQGFQVCHSLG GTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVVEPYNATLSVH LVENADECMV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|224104         0 MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDSPLQLERINVYYNEASCGRFV
+                  0 ||||||||.|||||||||.|||||||||||.||||||||..|||||.|||||||||||||
+4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
+
+gi|224104        60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSVLDVV
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||.||||
+4                60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSXLDVV
+
+gi|224104       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+                120 ||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||
+4               120 RKEAENCDCLQGFQVCHSLGRGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+
+gi|224104       180 EPYNATLSVHQLVENADECMV 201
+                180 ||||||||||.|||||||||| 201
+4               180 EPYNATLSVHXLVENADECMV 201
+""",
+            )
+            hit = hits[8]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|223549679|gb|EEF51167.1|")
+            self.assertEqual(hit.target.name, "EEF51167")
+            self.assertEqual(
+                hit.target.description,
+                "tubulin beta chain, putative [Ricinus communis]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=446)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1029.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 400.978595899)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 3.61046429165375e-110)
+            self.assertEqual(hsp.annotations["identity"], 191)
+            self.assertEqual(hsp.annotations["positive"], 194)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 201],
+                          [  0, 201]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 49)
+            self.assertEqual(hsp.query.annotations["end"], 652)
+            self.assertEqual(hsp.query.annotations["frame"], 2)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 201)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 201))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEA...CMV')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MREILHVQGGQCGNQIGAKFWEVVCAEHGIDSTGRYHGDTDLQLERVNVYYNEA...CMV'}, length=446)",
+            )
+            self.assertEqual(hsp.target.id, "gi|223549679|gb|EEF51167.1|")
+            self.assertEqual(hsp.target.name, "EEF51167")
+            self.assertEqual(
+                hsp.target.description,
+                "tubulin beta chain, putative [Ricinus communis]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MREILH+Q GQCGNQIGA FWEVVCAEHGI+STGRY GD DLQLERVNVYYNEASCGRFVPRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDS LDVVRKEAENCDCLQGFQVCHSLG GTGSGMGTLLISK+REEYPDRMMLTFSVFPSPKVSDTVVEPYNATLSVH LVENADECMV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|223549         0 MREILHVQGGQCGNQIGAKFWEVVCAEHGIDSTGRYHGDTDLQLERVNVYYNEASCGRFV
+                  0 ||||||.|.|||||||||.|||||||||||.|||||.||.||||||||||||||||||||
+4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
+
+gi|223549        60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSVLDVV
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||.||||
+4                60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSXLDVV
+
+gi|223549       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKMREEYPDRMMLTFSVFPSPKVSDTVV
+                120 ||||||||||||||||||||.|||||||||||||.|||||||||||||||||||||||||
+4               120 RKEAENCDCLQGFQVCHSLGRGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+
+gi|223549       180 EPYNATLSVHQLVENADECMV 201
+                180 ||||||||||.|||||||||| 201
+4               180 EPYNATLSVHXLVENADECMV 201
+""",
+            )
+            hit = hits[9]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|224058553|ref|XP_002299541.1|")
+            self.assertEqual(hit.target.name, "XP_002299541")
+            self.assertEqual(
+                hit.target.description,
+                "tubulin, beta chain [Populus trichocarpa] >gi|222846799|gb|EEE84346.1| tubulin, beta chain [Populus trichocarpa]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=447)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1029.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 400.978595899)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 3.61046429165375e-110)
+            self.assertEqual(hsp.annotations["identity"], 192)
+            self.assertEqual(hsp.annotations["positive"], 195)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 201],
+                          [  0, 201]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 49)
+            self.assertEqual(hsp.query.annotations["end"], 652)
+            self.assertEqual(hsp.query.annotations["frame"], 2)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 201)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 201))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEA...CMV')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDSALQIERVNVYYNEA...CMV'}, length=447)",
+            )
+            self.assertEqual(hsp.target.id, "gi|224058553|ref|XP_002299541.1|")
+            self.assertEqual(hsp.target.name, "XP_002299541")
+            self.assertEqual(
+                hsp.target.description,
+                "tubulin, beta chain [Populus trichocarpa] >gi|222846799|gb|EEE84346.1| tubulin, beta chain [Populus trichocarpa]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MREILHIQ GQCGNQIGA FWEVVCAEHGI+STGRYQGD+ LQ+ERVNVYYNEASCGRFVPRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDS LDVVRKEAENCDCLQGFQVCHSLG GTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVVEPYNATLSVH LVENADECMV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|224058         0 MREILHIQGGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDSALQIERVNVYYNEASCGRFV
+                  0 ||||||||.|||||||||.|||||||||||.||||||||..||.||||||||||||||||
+4                 0 MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV
+
+gi|224058        60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSVLDVV
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||||.||||
+4                60 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSXLDVV
+
+gi|224058       120 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+                120 ||||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||
+4               120 RKEAENCDCLQGFQVCHSLGRGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+
+gi|224058       180 EPYNATLSVHQLVENADECMV 201
+                180 ||||||||||.|||||||||| 201
+4               180 EPYNATLSVHXLVENADECMV 201
+""",
+            )
+            record = next(records)
+            self.assertEqual(record.num, 5)
+            self.assertIsInstance(record.query, SeqRecord)
+            self.assertEqual(record.query.id, "5")
+            self.assertEqual(
+                record.query.description,
+                "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence",
+            )
+            self.assertEqual(repr(record.query.seq), "Seq(None, length=623)")
+            self.assertEqual(len(record.stat), 7)
+            self.assertEqual(record.stat["db-num"], 8994603)
+            self.assertEqual(record.stat["db-len"], -1216159329)
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertAlmostEqual(record.stat["eff-space"], 147032237429.0)
+            self.assertAlmostEqual(record.stat["kappa"], 0.041)
+            self.assertAlmostEqual(record.stat["lambda"], 0.267)
+            self.assertAlmostEqual(record.stat["entropy"], 0.14)
+            hits = record.hits
+            self.assertEqual(len(hits), 10)
+            hit = hits[0]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|110740644|dbj|BAE98425.1|")
+            self.assertEqual(hit.target.name, "BAE98425")
+            self.assertEqual(
+                hit.target.description, "hypothetical protein [Arabidopsis thaliana]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=80)")
+            self.assertEqual(len(hit), 2)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 231.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 93.5893343169526)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 5.57283114448317e-19)
+            self.assertEqual(hsp.annotations["identity"], 42)
+            self.assertEqual(hsp.annotations["positive"], 45)
+            self.assertEqual(hsp.annotations["gaps"], 1)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 0, 43, 43, 47],
+                          [ 0, 43, 44, 48]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 282)
+            self.assertEqual(hsp.query.annotations["end"], 426)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 47)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 48))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKNVAKCDTWCELQNPVNHRVFERKLRPKPLGRGHVCLGVSHRVAPNP')",
+            )
+            self.assertEqual(hsp.query.id, "5")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MKNVAKCDTWCELQNPVNHRVFERKLRPKPSGRGHVCLGVTNRRPSP'}, length=80)",
+            )
+            self.assertEqual(hsp.target.id, "gi|110740644|dbj|BAE98425.1|")
+            self.assertEqual(hsp.target.name, "BAE98425")
+            self.assertEqual(
+                hsp.target.description, "hypothetical protein [Arabidopsis thaliana]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKNVAKCDTWCELQNPVNHRVFERKLRPKP GRGHVCLGV++R  P+P",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|110740         0 MKNVAKCDTWCELQNPVNHRVFERKLRPKPSGRGHVCLGVTNR-RPSP 47
+                  0 ||||||||||||||||||||||||||||||.|||||||||..|-.|.| 48
+5                 0 MKNVAKCDTWCELQNPVNHRVFERKLRPKPLGRGHVCLGVSHRVAPNP 48
+""",
+            )
+            hsp = hit[1]
+            self.assertAlmostEqual(hsp.score, 53.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 25.0238098036637)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 5.57283114448317e-19)
+            self.assertEqual(hsp.annotations["identity"], 13)
+            self.assertEqual(hsp.annotations["positive"], 13)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[53, 70],
+                          [ 0, 17]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 454)
+            self.assertEqual(hsp.query.annotations["end"], 505)
+            self.assertEqual(hsp.query.annotations["frame"], 2)
+            self.assertEqual(hsp.target.annotations["start"], 53)
+            self.assertEqual(hsp.target.annotations["end"], 70)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 17))
+            self.assertEqual(repr(hsp.query.seq), "Seq('RKLVSRALRCAVGLNKS')")
+            self.assertEqual(hsp.query.id, "5")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq), "Seq({53: 'RKLVSRVLPHAVGLNPS'}, length=80)"
+            )
+            self.assertEqual(hsp.target.id, "gi|110740644|dbj|BAE98425.1|")
+            self.assertEqual(hsp.target.name, "BAE98425")
+            self.assertEqual(
+                hsp.target.description, "hypothetical protein [Arabidopsis thaliana]"
+            )
+            self.assertEqual(hsp.annotations["midline"], "RKLVSR L  AVGLN S")
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|110740        53 RKLVSRVLPHAVGLNPS 70
+                  0 ||||||.|..|||||.| 17
+5                 0 RKLVSRALRCAVGLNKS 17
+""",
+            )
+            hit = hits[1]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|226453533|gb|EEH50844.1|")
+            self.assertEqual(hit.target.name, "EEH50844")
+            self.assertEqual(
+                hit.target.description,
+                "predicted protein [Micromonas pusilla CCMP1545]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=81)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 238.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 96.2857313483741)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.69151855577931e-18)
+            self.assertEqual(hsp.annotations["identity"], 42)
+            self.assertEqual(hsp.annotations["positive"], 45)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 0, 49],
+                          [ 0, 49]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 282)
+            self.assertEqual(hsp.query.annotations["end"], 429)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 49)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 49))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKNVAKCDTWCELQNPVNHRVFERKLRPKPLGRGHVCLGVSHRVAPNPF')",
+            )
+            self.assertEqual(hsp.query.id, "5")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'MKNVAKCDTWCELQNPVNHRVFERKLRPKPSGRGHVCLGVTNRRPPSSF'}, length=81)",
+            )
+            self.assertEqual(hsp.target.id, "gi|226453533|gb|EEH50844.1|")
+            self.assertEqual(hsp.target.name, "EEH50844")
+            self.assertEqual(
+                hsp.target.description,
+                "predicted protein [Micromonas pusilla CCMP1545]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKNVAKCDTWCELQNPVNHRVFERKLRPKP GRGHVCLGV++R  P+ F",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|226453         0 MKNVAKCDTWCELQNPVNHRVFERKLRPKPSGRGHVCLGVTNRRPPSSF 49
+                  0 ||||||||||||||||||||||||||||||.|||||||||..|..|..| 49
+5                 0 MKNVAKCDTWCELQNPVNHRVFERKLRPKPLGRGHVCLGVSHRVAPNPF 49
+""",
+            )
+            hit = hits[2]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|168069582|ref|XP_001786502.1|")
+            self.assertEqual(hit.target.name, "XP_001786502")
+            self.assertEqual(
+                hit.target.description,
+                "predicted protein [Physcomitrella patens subsp. patens] >gi|162661153|gb|EDQ48685.1| predicted protein [Physcomitrella patens subsp. patens]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=88)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 183.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 75.0997546729196)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 4.03544314604194e-12)
+            self.assertEqual(hsp.annotations["identity"], 37)
+            self.assertEqual(hsp.annotations["positive"], 39)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 2, 44],
+                          [ 0, 42]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 244)
+            self.assertEqual(hsp.query.annotations["end"], 370)
+            self.assertEqual(hsp.query.annotations["frame"], -2)
+            self.assertEqual(hsp.target.annotations["start"], 2)
+            self.assertEqual(hsp.target.annotations["end"], 44)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 42))
+            self.assertEqual(
+                repr(hsp.query.seq), "Seq('ASGATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV')"
+            )
+            self.assertEqual(hsp.query.id, "5")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({2: 'ASGATCVQKLDDSRDSAIHTTYRISLRSSSLQEPRYPLLRVV'}, length=88)",
+            )
+            self.assertEqual(hsp.target.id, "gi|168069582|ref|XP_001786502.1|")
+            self.assertEqual(hsp.target.name, "XP_001786502")
+            self.assertEqual(
+                hsp.target.description,
+                "predicted protein [Physcomitrella patens subsp. patens] >gi|162661153|gb|EDQ48685.1| predicted protein [Physcomitrella patens subsp. patens]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"], "ASGATCVQKLD SRDSAIHT YRISLRSSS++EPRYPL RVV"
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|168069         2 ASGATCVQKLDDSRDSAIHTTYRISLRSSSLQEPRYPLLRVV 44
+                  0 |||||||||||.||||||||.|||||||||..||||||.||| 42
+5                 0 ASGATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV 42
+""",
+            )
+            hit = hits[3]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|168068558|ref|XP_001786120.1|")
+            self.assertEqual(hit.target.name, "XP_001786120")
+            self.assertEqual(
+                hit.target.description,
+                "predicted protein [Physcomitrella patens subsp. patens] >gi|162662102|gb|EDQ49068.1| predicted protein [Physcomitrella patens subsp. patens]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=130)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 178.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 73.1737567933329)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.53346675969648e-11)
+            self.assertEqual(hsp.annotations["identity"], 36)
+            self.assertEqual(hsp.annotations["positive"], 39)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 2, 44],
+                          [ 0, 42]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 244)
+            self.assertEqual(hsp.query.annotations["end"], 370)
+            self.assertEqual(hsp.query.annotations["frame"], -2)
+            self.assertEqual(hsp.target.annotations["start"], 2)
+            self.assertEqual(hsp.target.annotations["end"], 44)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 42))
+            self.assertEqual(
+                repr(hsp.query.seq), "Seq('ASGATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV')"
+            )
+            self.assertEqual(hsp.query.id, "5")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({2: 'ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV'}, length=130)",
+            )
+            self.assertEqual(hsp.target.id, "gi|168068558|ref|XP_001786120.1|")
+            self.assertEqual(hsp.target.name, "XP_001786120")
+            self.assertEqual(
+                hsp.target.description,
+                "predicted protein [Physcomitrella patens subsp. patens] >gi|162662102|gb|EDQ49068.1| predicted protein [Physcomitrella patens subsp. patens]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"], "ASGATCVQKLD SR+SAIHT YRISLRSSS++EPRYPL RVV"
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|168068         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
+                  0 |||||||||||.||.|||||.|||||||||..||||||.||| 42
+5                 0 ASGATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV 42
+""",
+            )
+            hit = hits[4]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|168068926|ref|XP_001786259.1|")
+            self.assertEqual(hit.target.name, "XP_001786259")
+            self.assertEqual(
+                hit.target.description,
+                "predicted protein [Physcomitrella patens subsp. patens] >gi|168069965|ref|XP_001786641.1| predicted protein [Physcomitrella patens subsp. patens] >gi|162660807|gb|EDQ48545.1| predicted protein [Physcomitrella patens subsp. patens] >gi|162661808|gb|EDQ48929.1| predicted protein [Physcomitrella patens subsp. patens]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=148)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 178.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 73.1737567933329)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.53346675969648e-11)
+            self.assertEqual(hsp.annotations["identity"], 36)
+            self.assertEqual(hsp.annotations["positive"], 39)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 2, 44],
+                          [ 0, 42]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 244)
+            self.assertEqual(hsp.query.annotations["end"], 370)
+            self.assertEqual(hsp.query.annotations["frame"], -2)
+            self.assertEqual(hsp.target.annotations["start"], 2)
+            self.assertEqual(hsp.target.annotations["end"], 44)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 42))
+            self.assertEqual(
+                repr(hsp.query.seq), "Seq('ASGATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV')"
+            )
+            self.assertEqual(hsp.query.id, "5")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({2: 'ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV'}, length=148)",
+            )
+            self.assertEqual(hsp.target.id, "gi|168068926|ref|XP_001786259.1|")
+            self.assertEqual(hsp.target.name, "XP_001786259")
+            self.assertEqual(
+                hsp.target.description,
+                "predicted protein [Physcomitrella patens subsp. patens] >gi|168069965|ref|XP_001786641.1| predicted protein [Physcomitrella patens subsp. patens] >gi|162660807|gb|EDQ48545.1| predicted protein [Physcomitrella patens subsp. patens] >gi|162661808|gb|EDQ48929.1| predicted protein [Physcomitrella patens subsp. patens]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"], "ASGATCVQKLD SR+SAIHT YRISLRSSS++EPRYPL RVV"
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|168068         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
+                  0 |||||||||||.||.|||||.|||||||||..||||||.||| 42
+5                 0 ASGATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV 42
+""",
+            )
+            hit = hits[5]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|168070288|ref|XP_001786759.1|")
+            self.assertEqual(hit.target.name, "XP_001786759")
+            self.assertEqual(
+                hit.target.description,
+                "predicted protein [Physcomitrella patens subsp. patens] >gi|162660550|gb|EDQ48427.1| predicted protein [Physcomitrella patens subsp. patens]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=148)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 178.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 73.1737567933329)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.53346675969648e-11)
+            self.assertEqual(hsp.annotations["identity"], 36)
+            self.assertEqual(hsp.annotations["positive"], 39)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 2, 44],
+                          [ 0, 42]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 244)
+            self.assertEqual(hsp.query.annotations["end"], 370)
+            self.assertEqual(hsp.query.annotations["frame"], -2)
+            self.assertEqual(hsp.target.annotations["start"], 2)
+            self.assertEqual(hsp.target.annotations["end"], 44)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 42))
+            self.assertEqual(
+                repr(hsp.query.seq), "Seq('ASGATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV')"
+            )
+            self.assertEqual(hsp.query.id, "5")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({2: 'ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV'}, length=148)",
+            )
+            self.assertEqual(hsp.target.id, "gi|168070288|ref|XP_001786759.1|")
+            self.assertEqual(hsp.target.name, "XP_001786759")
+            self.assertEqual(
+                hsp.target.description,
+                "predicted protein [Physcomitrella patens subsp. patens] >gi|162660550|gb|EDQ48427.1| predicted protein [Physcomitrella patens subsp. patens]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"], "ASGATCVQKLD SR+SAIHT YRISLRSSS++EPRYPL RVV"
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|168070         2 ASGATCVQKLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 44
+                  0 |||||||||||.||.|||||.|||||||||..||||||.||| 42
+5                 0 ASGATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV 42
+""",
+            )
+            hit = hits[6]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|168068591|ref|XP_001786133.1|")
+            self.assertEqual(hit.target.name, "XP_001786133")
+            self.assertEqual(
+                hit.target.description,
+                "predicted protein [Physcomitrella patens subsp. patens] >gi|162662081|gb|EDQ49057.1| predicted protein [Physcomitrella patens subsp. patens]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=220)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 172.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 70.8625593378288)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 7.61051640442713e-11)
+            self.assertEqual(hsp.annotations["identity"], 42)
+            self.assertEqual(hsp.annotations["positive"], 50)
+            self.assertEqual(hsp.annotations["gaps"], 8)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[142, 169, 172, 183, 183, 220],
+                          [  0,  27,  27,  38,  43,  80]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 255)
+            self.assertEqual(hsp.query.annotations["end"], 495)
+            self.assertEqual(hsp.query.annotations["frame"], -3)
+            self.assertEqual(hsp.target.annotations["start"], 142)
+            self.assertEqual(hsp.target.annotations["end"], 220)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 83))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('RPTAHRSARETNFRSQTVESRRKWVGGDAM*DAQADVPSA*WLRAQLAFKNSMV...IRC')",
+            )
+            self.assertEqual(hsp.query.id, "5")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({142: 'RGLCHHADSDGQFHSTLPIKDIKRIGGCRDDALAGMPSDEPRAQLAFKNSMIHG...IRC'}, length=220)",
+            )
+            self.assertEqual(hsp.target.id, "gi|168068591|ref|XP_001786133.1|")
+            self.assertEqual(hsp.target.name, "XP_001786133")
+            self.assertEqual(
+                hsp.target.description,
+                "predicted protein [Physcomitrella patens subsp. patens] >gi|162662081|gb|EDQ49057.1| predicted protein [Physcomitrella patens subsp. patens]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "R   H +  +  F S       K +GG   DA+    +D P     RAQLAFKNSM+HGILQFT  IAFR VLHRC+S+DIRC",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|168068       142 RGLCHHADSDGQFHSTLPIKDIKRIGGCRDDALAGMPSDEP-----RAQLAFKNSMIHGI
+                  0 |...|.......|.|.......|..||---||......|.|-----||||||||||.|||
+5                 0 RPTAHRSARETNFRSQTVESRRKWVGG---DAM*DAQADVPSA*WLRAQLAFKNSMVHGI
+
+gi|168068       197 LQFTLRIAFRCVLHRCKSQDIRC 220
+                 60 ||||..||||.|||||.|.||||  83
+5                57 LQFTPSIAFRYVLHRCESRDIRC  80
+""",
+            )
+            hit = hits[7]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|74622391|sp|Q8TGM5|ART3_YEAST")
+            self.assertEqual(hit.target.name, "Q8TGM5")
+            self.assertEqual(
+                hit.target.description,
+                "Uncharacterized protein ART3 (Antisense to ribosomal RNA transcript protein 3) >gi|18767126|gb|AAL79278.1| unknown [Saccharomyces cerevisiae]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=67)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 141.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 58.9213724843908)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 2.99274389212967e-07)
+            self.assertEqual(hsp.annotations["identity"], 29)
+            self.assertEqual(hsp.annotations["positive"], 32)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 7, 46],
+                          [ 0, 39]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 247)
+            self.assertEqual(hsp.query.annotations["end"], 364)
+            self.assertEqual(hsp.query.annotations["frame"], -2)
+            self.assertEqual(hsp.target.annotations["start"], 7)
+            self.assertEqual(hsp.target.annotations["end"], 46)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 39))
+            self.assertEqual(
+                repr(hsp.query.seq), "Seq('GATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRV')"
+            )
+            self.assertEqual(hsp.query.id, "5")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({7: 'GAMCVQRFDDSRNSAIHITYRISLRSSSMREPRDPLLKV'}, length=67)",
+            )
+            self.assertEqual(hsp.target.id, "gi|74622391|sp|Q8TGM5|ART3_YEAST")
+            self.assertEqual(hsp.target.name, "Q8TGM5")
+            self.assertEqual(
+                hsp.target.description,
+                "Uncharacterized protein ART3 (Antisense to ribosomal RNA transcript protein 3) >gi|18767126|gb|AAL79278.1| unknown [Saccharomyces cerevisiae]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"], "GA CVQ+ D SR+SAIH  YRISLRSSSMREPR PL +V"
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|746223         7 GAMCVQRFDDSRNSAIHITYRISLRSSSMREPRDPLLKV 46
+                  0 ||.|||..|.||.||||..||||||||||||||.||..| 39
+5                 0 GATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRV 39
+""",
+            )
+            hit = hits[8]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|168069944|ref|XP_001786634.1|")
+            self.assertEqual(hit.target.name, "XP_001786634")
+            self.assertEqual(
+                hit.target.description,
+                "predicted protein [Physcomitrella patens subsp. patens] >gi|162660825|gb|EDQ48552.1| predicted protein [Physcomitrella patens subsp. patens]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=138)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 137.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 57.3805741807214)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 8.70755166175354e-07)
+            self.assertEqual(hsp.annotations["identity"], 28)
+            self.assertEqual(hsp.annotations["positive"], 31)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 0, 34],
+                          [ 0, 34]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 244)
+            self.assertEqual(hsp.query.annotations["end"], 346)
+            self.assertEqual(hsp.query.annotations["frame"], -2)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 34)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 34))
+            self.assertEqual(
+                repr(hsp.query.seq), "Seq('KLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV')"
+            )
+            self.assertEqual(hsp.query.id, "5")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({0: 'KLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV'}, length=138)",
+            )
+            self.assertEqual(hsp.target.id, "gi|168069944|ref|XP_001786634.1|")
+            self.assertEqual(hsp.target.name, "XP_001786634")
+            self.assertEqual(
+                hsp.target.description,
+                "predicted protein [Physcomitrella patens subsp. patens] >gi|162660825|gb|EDQ48552.1| predicted protein [Physcomitrella patens subsp. patens]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"], "KLD SR+SAIHT YRISLRSSS++EPRYPL RVV"
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|168069         0 KLDDSRNSAIHTTYRISLRSSSLQEPRYPLLRVV 34
+                  0 |||.||.|||||.|||||||||..||||||.||| 34
+5                 0 KLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV 34
+""",
+            )
+            hit = hits[9]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|50307717|ref|XP_453851.1|")
+            self.assertEqual(hit.target.name, "XP_453851")
+            self.assertEqual(
+                hit.target.description, "unnamed protein product [Kluyveromyces lactis]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=54)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 134.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 56.2249754529693)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.93984013155423e-06)
+            self.assertEqual(hsp.annotations["identity"], 28)
+            self.assertEqual(hsp.annotations["positive"], 31)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 7, 47],
+                          [ 0, 40]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 244)
+            self.assertEqual(hsp.query.annotations["end"], 364)
+            self.assertEqual(hsp.query.annotations["frame"], -2)
+            self.assertEqual(hsp.target.annotations["start"], 7)
+            self.assertEqual(hsp.target.annotations["end"], 47)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 40))
+            self.assertEqual(
+                repr(hsp.query.seq), "Seq('GATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV')"
+            )
+            self.assertEqual(hsp.query.id, "5")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({7: 'GAMCVQRFDDSRKSAIHNTYRNSLRSSSMREPRDPLLKVL'}, length=54)",
+            )
+            self.assertEqual(hsp.target.id, "gi|50307717|ref|XP_453851.1|")
+            self.assertEqual(hsp.target.name, "XP_453851")
+            self.assertEqual(
+                hsp.target.description, "unnamed protein product [Kluyveromyces lactis]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"], "GA CVQ+ D SR SAIH  YR SLRSSSMREPR PL +V+"
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|503077         7 GAMCVQRFDDSRKSAIHNTYRNSLRSSSMREPRDPLLKVL 47
+                  0 ||.|||..|.||.||||..||.|||||||||||.||..|. 40
+5                 0 GATCVQKLDGSRDSAIHTKYRISLRSSSMREPRYPLPRVV 40
+""",
+            )
+            record = next(records)
+            self.assertEqual(record.num, 6)
+            self.assertIsInstance(record.query, SeqRecord)
+            self.assertEqual(record.query.id, "6")
+            self.assertEqual(
+                record.query.description,
+                "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds",
+            )
+            self.assertEqual(repr(record.query.seq), "Seq(None, length=309)")
+            self.assertEqual(len(record.stat), 7)
+            self.assertEqual(record.stat["db-num"], 8994603)
+            self.assertEqual(record.stat["db-len"], -1216159329)
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertAlmostEqual(record.stat["eff-space"], 75367093081.0)
+            self.assertAlmostEqual(record.stat["kappa"], 0.041)
+            self.assertAlmostEqual(record.stat["lambda"], 0.267)
+            self.assertAlmostEqual(record.stat["entropy"], 0.14)
+            hits = record.hits
+            self.assertEqual(len(hits), 10)
+            hit = hits[0]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|3176603|gb|AAC18749.1|")
+            self.assertEqual(hit.target.name, "AAC18749")
+            self.assertEqual(
+                hit.target.description, "phytochrome A [Lathyrus odoratus]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=103)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 543.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 213.771602003167)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 3.7262743863676e-54)
+            self.assertEqual(hsp.annotations["identity"], 103)
+            self.assertEqual(hsp.annotations["positive"], 103)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 103],
+                          [  0, 103]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 309)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 103)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 103))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV')",
+            )
+            self.assertEqual(hsp.query.id, "6")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV')",
+            )
+            self.assertEqual(hsp.target.id, "gi|3176603|gb|AAC18749.1|")
+            self.assertEqual(hsp.target.name, "AAC18749")
+            self.assertEqual(
+                hsp.target.description, "phytochrome A [Lathyrus odoratus]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIASLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|317660         0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+
+gi|317660        60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+                 60 ||||||||||||||||||||||||||||||||||||||||||| 103
+6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+""",
+            )
+            hit = hits[1]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|130188|sp|P15001.1|PHYA_PEA")
+            self.assertEqual(hit.target.name, "P15001")
+            self.assertEqual(
+                hit.target.description,
+                "RecName: Full=Phytochrome A >gi|169132|gb|AAA33682.1| phytochrome [Pisum sativum] >gi|295830|emb|CAA32242.1| phytochrome apoprotein [Pisum sativum] >gi|51173514|gb|AAT97643.1| phytochrome A apoprotein [Pisum sativum] >gi|226757|prf||1604466A phytochrome",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=1124)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 530.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 208.764007516241)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.1987013044853e-52)
+            self.assertEqual(hsp.annotations["identity"], 101)
+            self.assertEqual(hsp.annotations["positive"], 102)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[275, 378],
+                          [  0, 103]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 309)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 275)
+            self.assertEqual(hsp.target.annotations["end"], 378)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 103))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV')",
+            )
+            self.assertEqual(hsp.query.id, "6")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({275: 'QAARFLFMKNKVRMIVDCNAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV'}, length=1124)",
+            )
+            self.assertEqual(hsp.target.id, "gi|130188|sp|P15001.1|PHYA_PEA")
+            self.assertEqual(hsp.target.name, "P15001")
+            self.assertEqual(
+                hsp.target.description,
+                "RecName: Full=Phytochrome A >gi|169132|gb|AAA33682.1| phytochrome [Pisum sativum] >gi|295830|emb|CAA32242.1| phytochrome apoprotein [Pisum sativum] >gi|51173514|gb|AAT97643.1| phytochrome A apoprotein [Pisum sativum] >gi|226757|prf||1604466A phytochrome",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "QAARFLFMKNKVRMIVDC+AKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIASLVMAVVVNDSDEDGDS DAVLPQKKKRLWGLVVCHNTTPRFV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|130188       275 QAARFLFMKNKVRMIVDCNAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+                  0 ||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||||
+6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+
+gi|130188       335 SLVMAVVVNDSDEDGDSADAVLPQKKKRLWGLVVCHNTTPRFV 378
+                 60 |||||||||||||||||.||||||||||||||||||||||||| 103
+6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+""",
+            )
+            hit = hits[2]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|2499555|sp|P93673.1|PHYA_LATSA")
+            self.assertEqual(hit.target.name, "P93673")
+            self.assertEqual(
+                hit.target.description,
+                "RecName: Full=Phytochrome type A >gi|1848273|gb|AAB47994.1| phytochrome type A [Lathyrus sativus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=1124)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 530.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 208.764007516241)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.1987013044853e-52)
+            self.assertEqual(hsp.annotations["identity"], 101)
+            self.assertEqual(hsp.annotations["positive"], 102)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[275, 378],
+                          [  0, 103]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 309)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 275)
+            self.assertEqual(hsp.target.annotations["end"], 378)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 103))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV')",
+            )
+            self.assertEqual(hsp.query.id, "6")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({275: 'QAARFLFMKNKVRMIVDCNAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV'}, length=1124)",
+            )
+            self.assertEqual(hsp.target.id, "gi|2499555|sp|P93673.1|PHYA_LATSA")
+            self.assertEqual(hsp.target.name, "P93673")
+            self.assertEqual(
+                hsp.target.description,
+                "RecName: Full=Phytochrome type A >gi|1848273|gb|AAB47994.1| phytochrome type A [Lathyrus sativus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "QAARFLFMKNKVRMIVDC+AKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIASLVMAVVVNDSDEDGDS DAVLPQKKKRLWGLVVCHNTTPRFV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|249955       275 QAARFLFMKNKVRMIVDCNAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+                  0 ||||||||||||||||||.|||||||||||||||||||||||||||||||||||||||||
+6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+
+gi|249955       335 SLVMAVVVNDSDEDGDSADAVLPQKKKRLWGLVVCHNTTPRFV 378
+                 60 |||||||||||||||||.||||||||||||||||||||||||| 103
+6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+""",
+            )
+            hit = hits[3]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|3176595|gb|AAC18745.1|")
+            self.assertEqual(hit.target.name, "AAC18745")
+            self.assertEqual(
+                hit.target.description,
+                "phytochrome A [Lennea melanocarpa] >gi|3176597|gb|AAC18746.1| phytochrome A [Hebestigma cubense] >gi|3176609|gb|AAC18752.1| phytochrome A [Sesbania cochichinensis] >gi|3176611|gb|AAC18753.1| phytochrome A [Sesbania emerus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=103)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 528.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 207.993608364407)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 2.04467473791515e-52)
+            self.assertEqual(hsp.annotations["identity"], 100)
+            self.assertEqual(hsp.annotations["positive"], 101)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 103],
+                          [  0, 103]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 309)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 103)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 103))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV')",
+            )
+            self.assertEqual(hsp.query.id, "6")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV')",
+            )
+            self.assertEqual(hsp.target.id, "gi|3176595|gb|AAC18745.1|")
+            self.assertEqual(hsp.target.name, "AAC18745")
+            self.assertEqual(
+                hsp.target.description,
+                "phytochrome A [Lennea melanocarpa] >gi|3176597|gb|AAC18746.1| phytochrome A [Hebestigma cubense] >gi|3176609|gb|AAC18752.1| phytochrome A [Sesbania cochichinensis] >gi|3176611|gb|AAC18753.1| phytochrome A [Sesbania emerus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIASLVMAVVVNDSDEDGDS DAV PQK+KRLWGLVVCHNTTPRFV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|317659         0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+
+gi|317659        60 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 103
+                 60 |||||||||||||||||.|||.|||.||||||||||||||||| 103
+6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+""",
+            )
+            hit = hits[4]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|1711106|gb|AAC18675.1|")
+            self.assertEqual(hit.target.name, "AAC18675")
+            self.assertEqual(hit.target.description, "phytochrome A [Sophora affinis]")
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=210)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 528.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 207.993608364407)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 2.04467473791515e-52)
+            self.assertEqual(hsp.annotations["identity"], 100)
+            self.assertEqual(hsp.annotations["positive"], 101)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 40, 143],
+                          [  0, 103]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 309)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 40)
+            self.assertEqual(hsp.target.annotations["end"], 143)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 103))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV')",
+            )
+            self.assertEqual(hsp.query.id, "6")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({40: 'QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV'}, length=210)",
+            )
+            self.assertEqual(hsp.target.id, "gi|1711106|gb|AAC18675.1|")
+            self.assertEqual(hsp.target.name, "AAC18675")
+            self.assertEqual(hsp.target.description, "phytochrome A [Sophora affinis]")
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIASLVMAVVVNDSDEDGDS DAV PQK+KRLWGLVVCHNTTPRFV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|171110        40 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+
+gi|171110       100 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 143
+                 60 |||||||||||||||||.|||.|||.||||||||||||||||| 103
+6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+""",
+            )
+            hit = hits[5]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|1711090|gb|AAC18670.1|")
+            self.assertEqual(hit.target.name, "AAC18670")
+            self.assertEqual(
+                hit.target.description, "phytochrome A [Myrospermum sousanum]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=210)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 525.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 206.838009636654)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 4.55506009801166e-52)
+            self.assertEqual(hsp.annotations["identity"], 99)
+            self.assertEqual(hsp.annotations["positive"], 101)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 40, 143],
+                          [  0, 103]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 309)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 40)
+            self.assertEqual(hsp.target.annotations["end"], 143)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 103))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV')",
+            )
+            self.assertEqual(hsp.query.id, "6")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({40: 'QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV'}, length=210)",
+            )
+            self.assertEqual(hsp.target.id, "gi|1711090|gb|AAC18670.1|")
+            self.assertEqual(hsp.target.name, "AAC18670")
+            self.assertEqual(
+                hsp.target.description, "phytochrome A [Myrospermum sousanum]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIASLV+AVVVNDSDEDGDS DAV PQK+KRLWGLVVCHNTTPRFV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|171109        40 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+
+gi|171109       100 SLVLAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 143
+                 60 |||.|||||||||||||.|||.|||.||||||||||||||||| 103
+6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+""",
+            )
+            hit = hits[6]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|3176605|gb|AAC18750.1|")
+            self.assertEqual(hit.target.name, "AAC18750")
+            self.assertEqual(
+                hit.target.description, "phytochrome A [Hybosema robustum]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=103)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 524.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 206.452810060737)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 5.94909272347008e-52)
+            self.assertEqual(hsp.annotations["identity"], 99)
+            self.assertEqual(hsp.annotations["positive"], 100)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 103],
+                          [  0, 103]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 309)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 103)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 103))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV')",
+            )
+            self.assertEqual(hsp.query.id, "6")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('QATRFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV')",
+            )
+            self.assertEqual(hsp.target.id, "gi|3176605|gb|AAC18750.1|")
+            self.assertEqual(hsp.target.name, "AAC18750")
+            self.assertEqual(
+                hsp.target.description, "phytochrome A [Hybosema robustum]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "QA RFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIASLVMAVVVNDSDEDGDS DAV PQK+KRLWGLVVCHNTTPRFV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|317660         0 QATRFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+                  0 ||.|||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+
+gi|317660        60 SLVMAVVVNDSDEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 103
+                 60 |||||||||||||||||.|||.|||.||||||||||||||||| 103
+6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+""",
+            )
+            hit = hits[7]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|3176454|gb|AAC18668.1|")
+            self.assertEqual(hit.target.name, "AAC18668")
+            self.assertEqual(
+                hit.target.description, "phytochrome A [Cyclolobium nutans]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=207)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 523.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 206.06761048482)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 7.76975571582328e-52)
+            self.assertEqual(hsp.annotations["identity"], 99)
+            self.assertEqual(hsp.annotations["positive"], 101)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 37, 140],
+                          [  0, 103]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 309)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 37)
+            self.assertEqual(hsp.target.annotations["end"], 140)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 103))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV')",
+            )
+            self.assertEqual(hsp.query.id, "6")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({37: 'QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV'}, length=207)",
+            )
+            self.assertEqual(hsp.target.id, "gi|3176454|gb|AAC18668.1|")
+            self.assertEqual(hsp.target.name, "AAC18668")
+            self.assertEqual(
+                hsp.target.description, "phytochrome A [Cyclolobium nutans]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIASLVMAVVVNDSDEDG+S DAV PQK+KRLWGLVVCHNTTPRFV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|317645        37 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+
+gi|317645        97 SLVMAVVVNDSDEDGNSSDAVQPQKRKRLWGLVVCHNTTPRFV 140
+                 60 |||||||||||||||.|.|||.|||.||||||||||||||||| 103
+6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+""",
+            )
+            hit = hits[8]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|3176523|gb|AAC18709.1|")
+            self.assertEqual(hit.target.name, "AAC18709")
+            self.assertEqual(
+                hit.target.description, "phytochrome A [Millettia richardiana]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=139)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 521.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 205.297211332985)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.3253195915005e-51)
+            self.assertEqual(hsp.annotations["identity"], 98)
+            self.assertEqual(hsp.annotations["positive"], 101)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 36, 139],
+                          [  0, 103]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 309)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 36)
+            self.assertEqual(hsp.target.annotations["end"], 139)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 103))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV')",
+            )
+            self.assertEqual(hsp.query.id, "6")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({36: 'QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV'}, length=139)",
+            )
+            self.assertEqual(hsp.target.id, "gi|3176523|gb|AAC18709.1|")
+            self.assertEqual(hsp.target.name, "AAC18709")
+            self.assertEqual(
+                hsp.target.description, "phytochrome A [Millettia richardiana]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIASLVMAVVVND++EDGDS DAV PQK+KRLWGLVVCHNTTPRFV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|317652        36 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+
+gi|317652        96 SLVMAVVVNDNEEDGDSSDAVQPQKRKRLWGLVVCHNTTPRFV 139
+                 60 ||||||||||..|||||.|||.|||.||||||||||||||||| 103
+6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+""",
+            )
+            hit = hits[9]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|3176494|gb|AAC18693.1|")
+            self.assertEqual(hit.target.name, "AAC18693")
+            self.assertEqual(
+                hit.target.description, "phytochrome A [Callerya atropurpurea]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=177)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 520.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 204.912011757068)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.73092099081406e-51)
+            self.assertEqual(hsp.annotations["identity"], 98)
+            self.assertEqual(hsp.annotations["positive"], 101)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  7, 110],
+                          [  0, 103]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 309)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 7)
+            self.assertEqual(hsp.target.annotations["end"], 110)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 103))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV')",
+            )
+            self.assertEqual(hsp.query.id, "6")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({7: 'QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMA...RFV'}, length=177)",
+            )
+            self.assertEqual(hsp.target.id, "gi|3176494|gb|AAC18693.1|")
+            self.assertEqual(hsp.target.name, "AAC18693")
+            self.assertEqual(
+                hsp.target.description, "phytochrome A [Callerya atropurpurea]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIASLVMAVVVNDS+EDGDS +AV PQK+KRLWGLVVCHNTTPRFV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|317649         7 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+6                 0 QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+
+gi|317649        67 SLVMAVVVNDSEEDGDSSEAVQPQKRKRLWGLVVCHNTTPRFV 110
+                 60 |||||||||||.|||||..||.|||.||||||||||||||||| 103
+6                60 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+""",
+            )
+            record = next(records)
+            self.assertEqual(record.num, 7)
+            self.assertIsInstance(record.query, SeqRecord)
+            self.assertEqual(record.query.id, "7")
+            self.assertEqual(
+                record.query.description,
+                "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product",
+            )
+            self.assertEqual(repr(record.query.seq), "Seq(None, length=2551)")
+            self.assertEqual(len(record.stat), 7)
+            self.assertEqual(record.stat["db-num"], 8994603)
+            self.assertEqual(record.stat["db-len"], -1216159329)
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertAlmostEqual(record.stat["eff-space"], 1251086325060.0)
+            self.assertAlmostEqual(record.stat["kappa"], 0.041)
+            self.assertAlmostEqual(record.stat["lambda"], 0.267)
+            self.assertAlmostEqual(record.stat["entropy"], 0.14)
+            hits = record.hits
+            self.assertEqual(len(hits), 10)
+            hit = hits[0]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|27805603|sp|Q9TKP6.1|MATK_WISFR")
+            self.assertEqual(hit.target.name, "Q9TKP6")
+            self.assertEqual(
+                hit.target.description,
+                "RecName: Full=Maturase K; AltName: Full=Intron maturase >gi|5817759|gb|AAD52902.1|AF142731_1 maturase-like protein [Wisteria frutescens]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2451.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 948.732392853477)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 506)
+            self.assertEqual(hsp.annotations["positive"], 506)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 506],
+                          [  0, 506]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 726)
+            self.assertEqual(hsp.query.annotations["end"], 2244)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 506)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 506))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSL...NHE')",
+            )
+            self.assertEqual(hsp.query.id, "7")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSL...NHE')",
+            )
+            self.assertEqual(hsp.target.id, "gi|27805603|sp|Q9TKP6.1|MATK_WISFR")
+            self.assertEqual(hsp.target.name, "Q9TKP6")
+            self.assertEqual(
+                hsp.target.description,
+                "RecName: Full=Maturase K; AltName: Full=Intron maturase >gi|5817759|gb|AAD52902.1|AF142731_1 maturase-like protein [Wisteria frutescens]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRLITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIVKSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASFFHLLRFFLYHFSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSVFFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHYFIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIKKLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSSKKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRTSSTLQRLHRNRIWYLDILFSNDLVNHE",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|278056         0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+
+gi|278056        60 ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7                60 ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+
+gi|278056       120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASFFHLLRFF
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||........
+7               120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASXXXXXXXX
+
+gi|278056       180 LYHFSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+                180 ....||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               180 XXXXSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+
+gi|278056       240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+
+gi|278056       300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+
+gi|278056       360 KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               360 KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+
+gi|278056       420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRTS
+                420 ||||||||||||||||||||||||||||||||||||....................||||
+7               420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGXXXXXXXXXXXXXXXXXXXXPRTS
+
+gi|278056       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+                480 |||||||||||||||||||||||||| 506
+7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+""",
+            )
+            hit = hits[1]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|171909144|gb|ACB58148.1|")
+            self.assertEqual(hit.target.name, "ACB58148")
+            self.assertEqual(hit.target.description, "maturase K [Wisteria frutescens]")
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2445.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 946.421195397973)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 505)
+            self.assertEqual(hsp.annotations["positive"], 505)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 506],
+                          [  0, 506]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 726)
+            self.assertEqual(hsp.query.annotations["end"], 2244)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 506)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 506))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSL...NHE')",
+            )
+            self.assertEqual(hsp.query.id, "7")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKYSL...NHE')",
+            )
+            self.assertEqual(hsp.target.id, "gi|171909144|gb|ACB58148.1|")
+            self.assertEqual(hsp.target.name, "ACB58148")
+            self.assertEqual(hsp.target.description, "maturase K [Wisteria frutescens]")
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNK SLLIVKRLITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIVKSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASFFHLLRFFLYHFSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSVFFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHYFIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIKKLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSSKKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRTSSTLQRLHRNRIWYLDILFSNDLVNHE",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|171909         0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKYSLLIVKRL
+                  0 |||||||||||||||||||||||||||||||||||||||||||||||||||.||||||||
+7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+
+gi|171909        60 ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7                60 ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+
+gi|171909       120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASFFHLLRFF
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||........
+7               120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASXXXXXXXX
+
+gi|171909       180 LYHFSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+                180 ....||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               180 XXXXSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+
+gi|171909       240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+
+gi|171909       300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+
+gi|171909       360 KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               360 KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+
+gi|171909       420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRTS
+                420 ||||||||||||||||||||||||||||||||||||....................||||
+7               420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGXXXXXXXXXXXXXXXXXXXXPRTS
+
+gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+                480 |||||||||||||||||||||||||| 506
+7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+""",
+            )
+            hit = hits[2]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|171909146|gb|ACB58149.1|")
+            self.assertEqual(hit.target.name, "ACB58149")
+            self.assertEqual(
+                hit.target.description,
+                "maturase K [Wisteria frutescens] >gi|171909148|gb|ACB58150.1| maturase K [Wisteria frutescens var. macrostachya]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2443.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 945.650796246138)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 505)
+            self.assertEqual(hsp.annotations["positive"], 505)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 506],
+                          [  0, 506]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 726)
+            self.assertEqual(hsp.query.annotations["end"], 2244)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 506)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 506))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSL...NHE')",
+            )
+            self.assertEqual(hsp.query.id, "7")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSL...NHE')",
+            )
+            self.assertEqual(hsp.target.id, "gi|171909146|gb|ACB58149.1|")
+            self.assertEqual(hsp.target.name, "ACB58149")
+            self.assertEqual(
+                hsp.target.description,
+                "maturase K [Wisteria frutescens] >gi|171909148|gb|ACB58150.1| maturase K [Wisteria frutescens var. macrostachya]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRLITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIVKSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASFFHLLRFFLYHFSNRNSLITP KSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSVFFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHYFIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIKKLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSSKKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRTSSTLQRLHRNRIWYLDILFSNDLVNHE",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|171909         0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+
+gi|171909        60 ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7                60 ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+
+gi|171909       120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASFFHLLRFF
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||........
+7               120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASXXXXXXXX
+
+gi|171909       180 LYHFSNRNSLITPIKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+                180 ....|||||||||.||||||||||||||||||||||||||||||||||||||||||||||
+7               180 XXXXSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+
+gi|171909       240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+
+gi|171909       300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+
+gi|171909       360 KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               360 KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+
+gi|171909       420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRTS
+                420 ||||||||||||||||||||||||||||||||||||....................||||
+7               420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGXXXXXXXXXXXXXXXXXXXXPRTS
+
+gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+                480 |||||||||||||||||||||||||| 506
+7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+""",
+            )
+            hit = hits[3]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|171909132|gb|ACB58142.1|")
+            self.assertEqual(hit.target.name, "ACB58142")
+            self.assertEqual(hit.target.description, "maturase K [Callerya megasperma]")
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2439.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 944.109997942469)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 501)
+            self.assertEqual(hsp.annotations["positive"], 504)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 506],
+                          [  0, 506]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 726)
+            self.assertEqual(hsp.query.annotations["end"], 2244)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 506)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 506))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSL...NHE')",
+            )
+            self.assertEqual(hsp.query.id, "7")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSL...NHE')",
+            )
+            self.assertEqual(hsp.target.id, "gi|171909132|gb|ACB58142.1|")
+            self.assertEqual(hsp.target.name, "ACB58142")
+            self.assertEqual(hsp.target.description, "maturase K [Callerya megasperma]")
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRLITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIVKSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASFFHLLRFFLY++ NRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSVFFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHYFIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIKKLDIIVPIIPLIRSLAKAKFCNVLGHP+SKSVWADSSDFDIIDRFLRICRNLSHYYNGSSKKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPR SSTLQRLHRNRIWYLDILFSNDLVNHE",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|171909         0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+
+gi|171909        60 ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7                60 ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+
+gi|171909       120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASFFHLLRFF
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||........
+7               120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASXXXXXXXX
+
+gi|171909       180 LYNYCNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+                180 .....|||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               180 XXXXSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+
+gi|171909       240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+
+gi|171909       300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+
+gi|171909       360 KLDIIVPIIPLIRSLAKAKFCNVLGHPISKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+                360 |||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||
+7               360 KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+
+gi|171909       420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRAS
+                420 ||||||||||||||||||||||||||||||||||||....................||.|
+7               420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGXXXXXXXXXXXXXXXXXXXXPRTS
+
+gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+                480 |||||||||||||||||||||||||| 506
+7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+""",
+            )
+            hit = hits[4]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|5817760|gb|AAD52903.1|AF142732_1")
+            self.assertEqual(hit.target.name, "AAD52903")
+            self.assertEqual(
+                hit.target.description,
+                "maturase-like protein [Wisteria sinensis] >gi|171909136|gb|ACB58144.1| maturase K [Wisteria brachybotrys] >gi|171909138|gb|ACB58145.1| maturase K [Wisteria floribunda] >gi|171909140|gb|ACB58146.1| maturase K [Wisteria floribunda] >gi|171909142|gb|ACB58147.1| maturase K [Wisteria floribunda] >gi|171909150|gb|ACB58151.1| maturase K [Wisteria sinensis] >gi|171909152|gb|ACB58152.1| maturase K [Wisteria sinensis] >gi|171909154|gb|ACB58153.1| maturase K [Wisteria sinensis] >gi|171909156|gb|ACB58154.1| maturase K [Wisteria villosa] >gi|171909158|gb|ACB58155.1| maturase K [Wisteria villosa] >gi|171909160|gb|ACB58156.1| maturase K [Wisteria villosa]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2418.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 936.020806848204)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 498)
+            self.assertEqual(hsp.annotations["positive"], 500)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 506],
+                          [  0, 506]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 726)
+            self.assertEqual(hsp.query.annotations["end"], 2244)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 506)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 506))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSL...NHE')",
+            )
+            self.assertEqual(hsp.query.id, "7")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDKKSSL...NHE')",
+            )
+            self.assertEqual(hsp.target.id, "gi|5817760|gb|AAD52903.1|AF142732_1")
+            self.assertEqual(hsp.target.name, "AAD52903")
+            self.assertEqual(
+                hsp.target.description,
+                "maturase-like protein [Wisteria sinensis] >gi|171909136|gb|ACB58144.1| maturase K [Wisteria brachybotrys] >gi|171909138|gb|ACB58145.1| maturase K [Wisteria floribunda] >gi|171909140|gb|ACB58146.1| maturase K [Wisteria floribunda] >gi|171909142|gb|ACB58147.1| maturase K [Wisteria floribunda] >gi|171909150|gb|ACB58151.1| maturase K [Wisteria sinensis] >gi|171909152|gb|ACB58152.1| maturase K [Wisteria sinensis] >gi|171909154|gb|ACB58153.1| maturase K [Wisteria sinensis] >gi|171909156|gb|ACB58154.1| maturase K [Wisteria villosa] >gi|171909158|gb|ACB58155.1| maturase K [Wisteria villosa] >gi|171909160|gb|ACB58156.1| maturase K [Wisteria villosa]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYD KSSLLIVKRLITRMYQQNHLIISANDSNKNPFLGYN NFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIVKSYHNLRSIHSIFPFLEDK TY NYVSDIRIPYPIHLEILVQILRYWVKDASFFHLLRFFLY+F NRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSVFFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHYFIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIKKLDIIVPIIPLIRSLAKAKFCNVLGHP+SKSVWADSSDFDIIDRFLRICRNLSHYYNGSSKKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPR SSTLQRLHRNRIWYLDILFSNDLVNHE",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|581776         0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDKKSSLLIVKRL
+                  0 |||||||||||||||||||||||||||||||||||||||||||||||||.||||||||||
+7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+
+gi|581776        60 ITRMYQQNHLIISANDSNKNPFLGYNNNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+                 60 ||||||||||||||||||||||||||.|||||||||||||||||||||||||||||||||
+7                60 ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+
+gi|581776       120 KSYHNLRSIHSIFPFLEDKLTYFNYVSDIRIPYPIHLEILVQILRYWVKDASFFHLLRFF
+                120 |||||||||||||||||||.||.|||||||||||||||||||||||||||||........
+7               120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASXXXXXXXX
+
+gi|581776       180 LYNFCNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+                180 .....|||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               180 XXXXSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+
+gi|581776       240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+
+gi|581776       300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+
+gi|581776       360 KLDIIVPIIPLIRSLAKAKFCNVLGHPISKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+                360 |||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||
+7               360 KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+
+gi|581776       420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRAS
+                420 ||||||||||||||||||||||||||||||||||||....................||.|
+7               420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGXXXXXXXXXXXXXXXXXXXXPRTS
+
+gi|581776       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+                480 |||||||||||||||||||||||||| 506
+7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+""",
+            )
+            hit = hits[5]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|171909134|gb|ACB58143.1|")
+            self.assertEqual(hit.target.name, "ACB58143")
+            self.assertEqual(
+                hit.target.description, "maturase K [Wisteria brachybotrys]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2398.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 928.316815329857)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 496)
+            self.assertEqual(hsp.annotations["positive"], 498)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 506],
+                          [  0, 506]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 726)
+            self.assertEqual(hsp.query.annotations["end"], 2244)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 506)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 506))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSL...NHE')",
+            )
+            self.assertEqual(hsp.query.id, "7")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDKKSSL...NHE')",
+            )
+            self.assertEqual(hsp.target.id, "gi|171909134|gb|ACB58143.1|")
+            self.assertEqual(hsp.target.name, "ACB58143")
+            self.assertEqual(
+                hsp.target.description, "maturase K [Wisteria brachybotrys]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYD KSSLLIVKRLITRMYQQNHLIISANDSNKNPFLGYN  FYSQIISDGFAVVVEIPFFLQLSSSLEEAEIVKSYHNLRSIHSIFPFLEDK TY NYVSDIRIPYPIHLEILVQILRY VKDASFFHLLRFFLY+F NRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSVFFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHYFIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIKKLDIIVPIIPLIRSLAKAKFCNVLGHP+SKSVWADSSDFDIIDRFLRICRNLSHYYNGSSKKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPR SSTLQRLHRNRIWYLDILFSNDLVNHE",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|171909         0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDKKSSLLIVKRL
+                  0 |||||||||||||||||||||||||||||||||||||||||||||||||.||||||||||
+7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+
+gi|171909        60 ITRMYQQNHLIISANDSNKNPFLGYNNKFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+                 60 ||||||||||||||||||||||||||..||||||||||||||||||||||||||||||||
+7                60 ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+
+gi|171909       120 KSYHNLRSIHSIFPFLEDKLTYFNYVSDIRIPYPIHLEILVQILRYRVKDASFFHLLRFF
+                120 |||||||||||||||||||.||.|||||||||||||||||||||||.|||||........
+7               120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASXXXXXXXX
+
+gi|171909       180 LYNFCNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+                180 .....|||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               180 XXXXSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+
+gi|171909       240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+
+gi|171909       300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+
+gi|171909       360 KLDIIVPIIPLIRSLAKAKFCNVLGHPISKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+                360 |||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||
+7               360 KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+
+gi|171909       420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRAS
+                420 ||||||||||||||||||||||||||||||||||||....................||.|
+7               420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGXXXXXXXXXXXXXXXXXXXXPRTS
+
+gi|171909       480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+                480 |||||||||||||||||||||||||| 506
+7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+""",
+            )
+            hit = hits[6]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|5817761|gb|AAD52904.1|AF142733_1")
+            self.assertEqual(hit.target.name, "AAD52904")
+            self.assertEqual(
+                hit.target.description, "maturase-like protein [Callerya reticulata]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2390.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 925.235218722518)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 493)
+            self.assertEqual(hsp.annotations["positive"], 498)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 506],
+                          [  0, 506]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 726)
+            self.assertEqual(hsp.query.annotations["end"], 2244)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 506)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 506))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSL...NHE')",
+            )
+            self.assertEqual(hsp.query.id, "7")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MKEYQAYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSL...NHE')",
+            )
+            self.assertEqual(hsp.target.id, "gi|5817761|gb|AAD52904.1|AF142733_1")
+            self.assertEqual(hsp.target.name, "AAD52904")
+            self.assertEqual(
+                hsp.target.description, "maturase-like protein [Callerya reticulata]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKEYQ YLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRLITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQL+SSLEEAEIVKSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASFFHLLRFFLY+F NRNSLITPKKSISTFSK NPRLFLFLYNFYV EYESIF FLRNQSSHLR KSFSVFFERIFFYAKREHL+KVFPKDFSSTLTFFKDPFIHYVRYQ KSILASKNAPLLMNKWKHYFIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIKKLDIIVPIIPLIRSLAKAKFCNVLGHP+SKSVWADSSDFDIIDRFLRICRNLSHYYNGSSKKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPR SSTL+RLHRNRIWYLDILFSNDLVNHE",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|581776         0 MKEYQAYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+                  0 |||||.||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+
+gi|581776        60 ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLNSSLEEAEIV
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||.|||||||||
+7                60 ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+
+gi|581776       120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASFFHLLRFF
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||........
+7               120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASXXXXXXXX
+
+gi|581776       180 LYNFCNRNSLITPKKSISTFSKCNPRLFLFLYNFYVWEYESIFLFLRNQSSHLRFKSFSV
+                180 .....|||||||||||||||||.|||||||||||||.||||||.||||||||||.|||||
+7               180 XXXXSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+
+gi|581776       240 FFERIFFYAKREHLLKVFPKDFSSTLTFFKDPFIHYVRYQEKSILASKNAPLLMNKWKHY
+                240 ||||||||||||||.|||||||||||||||||||||||||.|||||||||||||||||||
+7               240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+
+gi|581776       300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+
+gi|581776       360 KLDIIVPIIPLIRSLAKAKFCNVLGHPISKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+                360 |||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||
+7               360 KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+
+gi|581776       420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRAS
+                420 ||||||||||||||||||||||||||||||||||||....................||.|
+7               420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGXXXXXXXXXXXXXXXXXXXXPRTS
+
+gi|581776       480 STLKRLHRNRIWYLDILFSNDLVNHE 506
+                480 |||.|||||||||||||||||||||| 506
+7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+""",
+            )
+            hit = hits[7]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|5817762|gb|AAD52905.1|AF142734_1")
+            self.assertEqual(hit.target.name, "AAD52905")
+            self.assertEqual(
+                hit.target.description, "maturase-like protein [Callerya atropurpurea]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2301.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 890.952456465874)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 472)
+            self.assertEqual(hsp.annotations["positive"], 488)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 506],
+                          [  0, 506]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 726)
+            self.assertEqual(hsp.query.annotations["end"], 2244)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 506)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 506))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSL...NHE')",
+            )
+            self.assertEqual(hsp.query.id, "7")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYTYGLAYSHDFNRSIFVENVGYDNKSSL...NHE')",
+            )
+            self.assertEqual(hsp.target.id, "gi|5817762|gb|AAD52905.1|AF142734_1")
+            self.assertEqual(hsp.target.name, "AAD52905")
+            self.assertEqual(
+                hsp.target.description, "maturase-like protein [Callerya atropurpurea]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKEYQVYLERDRSRQQDFLYPLIFREY YGLAYSHDFNRSIFVENVGYDNKSSLLIVKRLITRMYQQNHLIIS NDSNKNPFLGYNKNFYSQIIS+ FA+V EIPFF QLSSSLE+AEIVKSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDA FFHLLR FLY+F N N++ TPKKSISTFS+SNPR FLFLYNFYVCEYESIF FLRN+SSHLRLKSFSVFFERIFFYAKREHLV+VF KDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHYFIHLWQ FFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTF+IEI IKKLDIIVPIIPLIRSLAKAKFCNVLGHP+SK VWADSSDFDII+RFLRICRNLSHYYNGSSKKK+LYRIKYILRLSCIKTLACKHKSTVRAFLK+ GSEELLEEFFTEEEEILSLIFPR SSTLQ+LHRNRIWYLDILF+NDLVNHE",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|581776         0 MKEYQVYLERDRSRQQDFLYPLIFREYTYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+                  0 |||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||
+7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+
+gi|581776        60 ITRMYQQNHLIISPNDSNKNPFLGYNKNFYSQIISEVFAIVAEIPFFRQLSSSLEQAEIV
+                 60 |||||||||||||.|||||||||||||||||||||..||.|.|||||.|||||||.||||
+7                60 ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+
+gi|581776       120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDAPFFHLLRLF
+                120 |||||||||||||||||||||||||||||||||||||||||||||||||||.........
+7               120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASXXXXXXXX
+
+gi|581776       180 LYNFCNWNTVFTPKKSISTFSRSNPRFFLFLYNFYVCEYESIFLFLRNKSSHLRLKSFSV
+                180 .....|.|...||||||||||.||||.||||||||||||||||.||||.|||||||||||
+7               180 XXXXSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+
+gi|581776       240 FFERIFFYAKREHLVEVFAKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+                240 |||||||||||||||.||.|||||||||||||||||||||||||||||||||||||||||
+7               240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+
+gi|581776       300 FIHLWQSFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFIIEIGIK
+                300 ||||||.||||||||||||||||||||||||||||||||||||||||||||||.|||.||
+7               300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+
+gi|581776       360 KLDIIVPIIPLIRSLAKAKFCNVLGHPISKPVWADSSDFDIIERFLRICRNLSHYYNGSS
+                360 |||||||||||||||||||||||||||.||.|||||||||||.|||||||||||||||||
+7               360 KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+
+gi|581776       420 KKKSLYRIKYILRLSCIKTLACKHKSTVRAFLKRLGSEELLEEFFTEEEEILSLIFPRAS
+                420 |||.|||||||||||||||||||||||||||||..|....................||.|
+7               420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGXXXXXXXXXXXXXXXXXXXXPRTS
+
+gi|581776       480 STLQKLHRNRIWYLDILFTNDLVNHE 506
+                480 ||||.|||||||||||||.||||||| 506
+7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+""",
+            )
+            hit = hits[8]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|152014012|gb|ABS20107.1|")
+            self.assertEqual(hit.target.name, "ABS20107")
+            self.assertEqual(
+                hit.target.description, "maturase-like protein [Astragalus uliginosus]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2293.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 887.870859858535)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 470)
+            self.assertEqual(hsp.annotations["positive"], 487)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 506],
+                          [  0, 506]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 726)
+            self.assertEqual(hsp.query.annotations["end"], 2244)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 506)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 506))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSL...NHE')",
+            )
+            self.assertEqual(hsp.query.id, "7")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MKEYQVFLERDRSRQQDFLYPLIFREYVYGLAYSHDFNRSTFVENVGYDNKYSL...NHE')",
+            )
+            self.assertEqual(hsp.target.id, "gi|152014012|gb|ABS20107.1|")
+            self.assertEqual(hsp.target.name, "ABS20107")
+            self.assertEqual(
+                hsp.target.description, "maturase-like protein [Astragalus uliginosus]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKEYQV+LERDRSRQQDFLYPLIFREY+YGLAYSHDFNRS FVENVGYDNK SLLIVKRLITRMYQQNHLIISANDS KNPFLGYNKNFYSQIIS+GFA+VVEIPFFLQ SSSL+EAEIVKSY NLRSIHSIFPFLEDKF YLNYVSDIRIPYPIHLEILVQILRYWVKDA FFHLLR FLY+F NRNS +TPKKSISTFSKSNPRLFLFLYNFYVCEYESIF FLR +SSHLRLKSFSVFFERIFFYAKREHLV+VF KDFSSTLTFFKDP IHYVRYQGKSILASKNAPLLMNKWKHYFIHLW+CFFDVWSQPGTIHI QLSEHSF+ LGYFSNVRLNRSVVRSQMLQNTFLIEIV KKLDIIVPIIP+IRSLAKAKFCNVLGHP+SK+VWADSSDFDIIDRFLRICRNLSHYYNGSSKKK+LYRIKYILRLSCIKTLACKHKSTVRAFLK+SGSEELLEEFFTEEEEILSLIFPR SSTLQ+LH NRIWYLDILFSNDLVNHE",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|152014         0 MKEYQVFLERDRSRQQDFLYPLIFREYVYGLAYSHDFNRSTFVENVGYDNKYSLLIVKRL
+                  0 ||||||.||||||||||||||||||||.||||||||||||.||||||||||.||||||||
+7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+
+gi|152014        60 ITRMYQQNHLIISANDSKKNPFLGYNKNFYSQIISEGFAIVVEIPFFLQFSSSLKEAEIV
+                 60 |||||||||||||||||.|||||||||||||||||.|||.|||||||||.||||.|||||
+7                60 ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+
+gi|152014       120 KSYKNLRSIHSIFPFLEDKFPYLNYVSDIRIPYPIHLEILVQILRYWVKDAPFFHLLRLF
+                120 |||.||||||||||||||||.||||||||||||||||||||||||||||||.........
+7               120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASXXXXXXXX
+
+gi|152014       180 LYNFCNRNSFLTPKKSISTFSKSNPRLFLFLYNFYVCEYESIFLFLRKKSSHLRLKSFSV
+                180 .....||||..||||||||||||||||||||||||||||||||.|||..|||||||||||
+7               180 XXXXSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+
+gi|152014       240 FFERIFFYAKREHLVEVFAKDFSSTLTFFKDPLIHYVRYQGKSILASKNAPLLMNKWKHY
+                240 |||||||||||||||.||.|||||||||||||.|||||||||||||||||||||||||||
+7               240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+
+gi|152014       300 FIHLWECFFDVWSQPGTIHIKQLSEHSFYLLGYFSNVRLNRSVVRSQMLQNTFLIEIVSK
+                300 |||||.||||||||||||||.|||||||..||||||||||||||||||||||||||||.|
+7               300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+
+gi|152014       360 KLDIIVPIIPIIRSLAKAKFCNVLGHPISKAVWADSSDFDIIDRFLRICRNLSHYYNGSS
+                360 ||||||||||.||||||||||||||||.||.|||||||||||||||||||||||||||||
+7               360 KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+
+gi|152014       420 KKKSLYRIKYILRLSCIKTLACKHKSTVRAFLKRSGSEELLEEFFTEEEEILSLIFPRAS
+                420 |||.|||||||||||||||||||||||||||||.||....................||.|
+7               420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGXXXXXXXXXXXXXXXXXXXXPRTS
+
+gi|152014       480 STLQKLHGNRIWYLDILFSNDLVNHE 506
+                480 ||||.||.|||||||||||||||||| 506
+7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+""",
+            )
+            hit = hits[9]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|146197442|dbj|BAF57483.1|")
+            self.assertEqual(hit.target.name, "BAF57483")
+            self.assertEqual(
+                hit.target.description,
+                "maturase [Glycyrrhiza uralensis] >gi|146197444|dbj|BAF57484.1| maturase [Glycyrrhiza glabra] >gi|152014018|gb|ABS20110.1| maturase-like protein [Glycyrrhiza pallidiflora]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=506)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2292.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 887.485660282618)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 471)
+            self.assertEqual(hsp.annotations["positive"], 489)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 506],
+                          [  0, 506]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 726)
+            self.assertEqual(hsp.query.annotations["end"], 2244)
+            self.assertEqual(hsp.query.annotations["frame"], 1)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 506)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 506))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSL...NHE')",
+            )
+            self.assertEqual(hsp.query.id, "7")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MKEYQVYLERDRSRQQDFLYPLIFREYIYGIAYSHNLNRSIFVENVGYDNKFSL...NNE')",
+            )
+            self.assertEqual(hsp.target.id, "gi|146197442|dbj|BAF57483.1|")
+            self.assertEqual(hsp.target.name, "BAF57483")
+            self.assertEqual(
+                hsp.target.description,
+                "maturase [Glycyrrhiza uralensis] >gi|146197444|dbj|BAF57484.1| maturase [Glycyrrhiza glabra] >gi|152014018|gb|ABS20110.1| maturase-like protein [Glycyrrhiza pallidiflora]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MKEYQVYLERDRSRQQDFLYPLIFREYIYG+AYSH+ NRSIFVENVGYDNK SLLIVKRLITRMYQQNHLIISANDSNKNPF GYNKN YSQ+ISDGFAVVVEIPFFLQ SSSLEEAEIVKSY+NLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDA FFHLLR FLY+F N NSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIF FLRN+SSHLRLKSFSVFFERIFFYAKREHLV VF KD+S TLT FKDPFIHYVRYQGK+ILAS+NAPLLMNKWKHYFIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIKKLDIIVPIIPLIRSLAKAKFCNVLGHP+SK VWADSSDF+II+RFLRICRNLSHYY+GSSKKK+LYRIKYILRLSCIKTLACKHKSTVRAFLK+ GSEELLEEFFTEEEEILSLIFP+ SSTLQ+LHRNRIWYLDILFSNDLVN+E",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|146197         0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGIAYSHNLNRSIFVENVGYDNKFSLLIVKRL
+                  0 ||||||||||||||||||||||||||||||.||||..||||||||||||||.||||||||
+7                 0 MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+
+gi|146197        60 ITRMYQQNHLIISANDSNKNPFSGYNKNIYSQLISDGFAVVVEIPFFLQFSSSLEEAEIV
+                 60 ||||||||||||||||||||||.|||||.|||.||||||||||||||||.||||||||||
+7                60 ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+
+gi|146197       120 KSYNNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDAPFFHLLRLF
+                120 |||.|||||||||||||||||||||||||||||||||||||||||||||||.........
+7               120 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASXXXXXXXX
+
+gi|146197       180 LYNFCNWNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFLFLRNKSSHLRLKSFSV
+                180 .....|.||||||||||||||||||||||||||||||||||||.||||.|||||||||||
+7               180 XXXXSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+
+gi|146197       240 FFERIFFYAKREHLVDVFAKDYSPTLTLFKDPFIHYVRYQGKAILASRNAPLLMNKWKHY
+                240 |||||||||||||||.||.||.|.|||.||||||||||||||.||||.||||||||||||
+7               240 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+
+gi|146197       300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+7               300 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+
+gi|146197       360 KLDIIVPIIPLIRSLAKAKFCNVLGHPISKPVWADSSDFEIIERFLRICRNLSHYYSGSS
+                360 |||||||||||||||||||||||||||.||.||||||||.||.|||||||||||||.|||
+7               360 KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+
+gi|146197       420 KKKSLYRIKYILRLSCIKTLACKHKSTVRAFLKRLGSEELLEEFFTEEEEILSLIFPKAS
+                420 |||.|||||||||||||||||||||||||||||..|....................|..|
+7               420 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGXXXXXXXXXXXXXXXXXXXXPRTS
+
+gi|146197       480 STLQKLHRNRIWYLDILFSNDLVNNE 506
+                480 ||||.|||||||||||||||||||.| 506
+7               480 STLQRLHRNRIWYLDILFSNDLVNHE 506
+""",
+            )
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
