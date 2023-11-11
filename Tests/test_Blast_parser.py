@@ -24642,6 +24642,3491 @@ gi|146197       480 STLQKLHRNRIWYLDILFSNDLVNNE 506
 """,
             )
 
+    def test_xml_2222_blastp_001(self):
+        """Parsing BLASTP 2.2.22+ (xml_2222_blastp_001.xml)."""
+        filename = "xml_2222_blastp_001.xml"
+        datafile = os.path.join("Blast", filename)
+        with open(datafile, "rb") as handle:
+            records = Blast.parse(handle)
+            self.assertEqual(records.program, "blastp")
+            self.assertEqual(records.version, "BLASTP 2.2.22+")
+            self.assertEqual(
+                records.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(records.db, "nr")
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "1")
+            self.assertEqual(
+                records.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
+            )
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=107)")
+            self.assertEqual(len(records.param), 5)
+            self.assertEqual(records.param["matrix"], "BLOSUM62")
+            self.assertAlmostEqual(records.param["expect"], 1e-06)
+            self.assertEqual(records.param["gap-open"], 11)
+            self.assertEqual(records.param["gap-extend"], 1)
+            self.assertEqual(records.param["filter"], "F")
+            record = next(records)
+            self.assertEqual(record.num, 1)
+            self.assertIsInstance(record.query, SeqRecord)
+            self.assertEqual(record.query.id, "1")
+            self.assertEqual(
+                record.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
+            )
+            self.assertEqual(repr(record.query.seq), "Seq(None, length=107)")
+            self.assertEqual(len(record.stat), 7)
+            self.assertEqual(record.stat["db-num"], 8994603)
+            self.assertEqual(record.stat["db-len"], -1216159329)
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertAlmostEqual(record.stat["eff-space"], 76934807744.0)
+            self.assertAlmostEqual(record.stat["kappa"], 0.041)
+            self.assertAlmostEqual(record.stat["lambda"], 0.267)
+            self.assertAlmostEqual(record.stat["entropy"], 0.14)
+            hits = record.hits
+            self.assertEqual(len(hits), 10)
+            hit = hits[0]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|3298468|dbj|BAA31520.1|")
+            self.assertEqual(hit.target.name, "BAA31520")
+            self.assertEqual(hit.target.description, "SAMIPF [Aster tripolium]")
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=107)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 520.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 204.912011757068)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.77242652875017e-51)
+            self.assertEqual(hsp.annotations["identity"], 107)
+            self.assertEqual(hsp.annotations["positive"], 107)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 107],
+                          [  0, 107]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 107)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 107)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 107))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+            )
+            self.assertEqual(hsp.query.id, "1")
+            self.assertEqual(hsp.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+            )
+            self.assertEqual(hsp.target.id, "gi|3298468|dbj|BAA31520.1|")
+            self.assertEqual(hsp.target.name, "BAA31520")
+            self.assertEqual(hsp.target.description, "SAMIPF [Aster tripolium]")
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|329846         0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
+
+gi|329846        60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||| 107
+1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
+""",
+            )
+            hit = hits[1]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|227434194|gb|ACP28878.1|")
+            self.assertEqual(hit.target.name, "ACP28878")
+            self.assertEqual(
+                hit.target.description,
+                "tonoplast intrinsic protein [Gossypium hirsutum]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=251)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 473.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 186.807631688952)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 4.63358243494088e-46)
+            self.assertEqual(hsp.annotations["identity"], 95)
+            self.assertEqual(hsp.annotations["positive"], 101)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 80, 187],
+                          [  0, 107]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 107)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 80)
+            self.assertEqual(hsp.target.annotations["end"], 187)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 107))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+            )
+            self.assertEqual(hsp.query.id, "1")
+            self.assertEqual(hsp.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSTVACLLLKFATGDLAVPAFG...ANI'}, length=251)",
+            )
+            self.assertEqual(hsp.target.id, "gi|227434194|gb|ACP28878.1|")
+            self.assertEqual(hsp.target.name, "ACP28878")
+            self.assertEqual(
+                hsp.target.description,
+                "tonoplast intrinsic protein [Gossypium hirsutum]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGSTVACLLLKF T D+AV  F LS+GVGV+NALVFEIVMTFGLVYTVYATA+DPKKGSLGTIAP+AIGFIVGANI",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|227434        80 GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSTVACLLLKFATGDLAVPAFGLSSGVG
+                  0 ||||||||||||||||||||||||.|.||||||||||||||||.|.|.||..|.||.|||
+1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
+
+gi|227434       140 VSNALVFEIVMTFGLVYTVYATAVDPKKGSLGTIAPLAIGFIVGANI 187
+                 60 |.|||||||||||||||||||||.||||||||||||.|||||||||| 107
+1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
+""",
+            )
+            hit = hits[2]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|223541319|gb|EEF42870.1|")
+            self.assertEqual(hit.target.name, "EEF42870")
+            self.assertEqual(
+                hit.target.description,
+                "tonoplast intrinsic protein, putative [Ricinus communis]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=251)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 456.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 180.259238898357)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 4.44682952949506e-44)
+            self.assertEqual(hsp.annotations["identity"], 92)
+            self.assertEqual(hsp.annotations["positive"], 97)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 80, 187],
+                          [  0, 107]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 107)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 80)
+            self.assertEqual(hsp.target.annotations["end"], 187)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 107))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+            )
+            self.assertEqual(hsp.query.id, "1")
+            self.assertEqual(hsp.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSTVACLLLKFSTGGLTTSAFA...ANI'}, length=251)",
+            )
+            self.assertEqual(hsp.target.id, "gi|223541319|gb|EEF42870.1|")
+            self.assertEqual(hsp.target.name, "EEF42870")
+            self.assertEqual(
+                hsp.target.description,
+                "tonoplast intrinsic protein, putative [Ricinus communis]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGSTVACLLLKF T  +    F+LS+GVGV NA VFEIVMTFGLVYTVYATA+DPKKGSLGTIAPIAIGFIVGANI",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|223541        80 GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSTVACLLLKFSTGGLTTSAFALSSGVG
+                  0 ||||||||||||||||||||||||.|.||||||||||||||||.|.......|.||.|||
+1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
+
+gi|223541       140 VWNAFVFEIVMTFGLVYTVYATAVDPKKGSLGTIAPIAIGFIVGANI 187
+                 60 |.||.||||||||||||||||||.||||||||||||||||||||||| 107
+1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
+""",
+            )
+            hit = hits[3]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|225441155|ref|XP_002267788.1|")
+            self.assertEqual(hit.target.name, "XP_002267788")
+            self.assertEqual(
+                hit.target.description,
+                "PREDICTED: hypothetical protein [Vitis vinifera] >gi|157356804|emb|CAO63006.1| unnamed protein product [Vitis vinifera]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=251)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 454.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 179.488839746522)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 6.47313235743007e-44)
+            self.assertEqual(hsp.annotations["identity"], 93)
+            self.assertEqual(hsp.annotations["positive"], 96)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 80, 187],
+                          [  0, 107]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 107)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 80)
+            self.assertEqual(hsp.target.annotations["end"], 187)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 107))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+            )
+            self.assertEqual(hsp.query.id, "1")
+            self.assertEqual(hsp.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSTVACLLLKFSTNGMTTSAFS...ANI'}, length=251)",
+            )
+            self.assertEqual(hsp.target.id, "gi|225441155|ref|XP_002267788.1|")
+            self.assertEqual(hsp.target.name, "XP_002267788")
+            self.assertEqual(
+                hsp.target.description,
+                "PREDICTED: hypothetical protein [Vitis vinifera] >gi|157356804|emb|CAO63006.1| unnamed protein product [Vitis vinifera]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGSTVACLLLKF TN M    FSLS+GV V NA VFEIVMTFGLVYTVYATAIDPKKG+LG IAPIAIGFIVGANI",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|225441        80 GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSTVACLLLKFSTNGMTTSAFSLSSGVT
+                  0 ||||||||||||||||||||||||.|.||||||||||||||||.||.|....||||.||.
+1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
+
+gi|225441       140 VWNAFVFEIVMTFGLVYTVYATAIDPKKGNLGIIAPIAIGFIVGANI 187
+                 60 |.||.||||||||||||||||||||||||.||.|||||||||||||| 107
+1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
+""",
+            )
+            hit = hits[4]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|209892837|gb|ACI95283.1|")
+            self.assertEqual(hit.target.name, "ACI95283")
+            self.assertEqual(
+                hit.target.description, "tonoplast intrinsic protein [Sinapis arvensis]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=251)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 454.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 179.488839746522)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 7.21475963444848e-44)
+            self.assertEqual(hsp.annotations["identity"], 93)
+            self.assertEqual(hsp.annotations["positive"], 97)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 80, 187],
+                          [  0, 107]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 107)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 80)
+            self.assertEqual(hsp.target.annotations["end"], 187)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 107))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+            )
+            self.assertEqual(hsp.query.id, "1")
+            self.assertEqual(hsp.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFG...ANI'}, length=251)",
+            )
+            self.assertEqual(hsp.target.id, "gi|209892837|gb|ACI95283.1|")
+            self.assertEqual(hsp.target.name, "ACI95283")
+            self.assertEqual(
+                hsp.target.description, "tonoplast intrinsic protein [Sinapis arvensis]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGS VACLLLKF T  + V  F LSAGVGV+NALVFEIVMTFGLVYTVYATA+DPK GSLGTIAPIAIGFIVGANI",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|209892        80 GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFGLSAGVG
+                  0 ||||||||||||||||||||||||.|.|||||||.||||||||.|....|..|.||||||
+1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
+
+gi|209892       140 VSNALVFEIVMTFGLVYTVYATAVDPKNGSLGTIAPIAIGFIVGANI 187
+                 60 |.|||||||||||||||||||||.|||.||||||||||||||||||| 107
+1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
+""",
+            )
+            hit = hits[5]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|21284370|gb|AAB51393.2|")
+            self.assertEqual(hit.target.name, "AAB51393")
+            self.assertEqual(
+                hit.target.description,
+                "tonoplast intrinsic protein bobTIP26-1 [Brassica oleracea var. botrytis]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=251)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 454.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 179.488839746522)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 7.27520962424864e-44)
+            self.assertEqual(hsp.annotations["identity"], 93)
+            self.assertEqual(hsp.annotations["positive"], 97)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 80, 187],
+                          [  0, 107]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 107)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 80)
+            self.assertEqual(hsp.target.annotations["end"], 187)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 107))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+            )
+            self.assertEqual(hsp.query.id, "1")
+            self.assertEqual(hsp.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFG...ANI'}, length=251)",
+            )
+            self.assertEqual(hsp.target.id, "gi|21284370|gb|AAB51393.2|")
+            self.assertEqual(hsp.target.name, "AAB51393")
+            self.assertEqual(
+                hsp.target.description,
+                "tonoplast intrinsic protein bobTIP26-1 [Brassica oleracea var. botrytis]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGS VACLLLKF T  + V  F LSAGVGV+NALVFEIVMTFGLVYTVYATA+DPK GSLGTIAPIAIGFIVGANI",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|212843        80 GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFGLSAGVG
+                  0 ||||||||||||||||||||||||.|.|||||||.||||||||.|....|..|.||||||
+1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
+
+gi|212843       140 VSNALVFEIVMTFGLVYTVYATAVDPKNGSLGTIAPIAIGFIVGANI 187
+                 60 |.|||||||||||||||||||||.|||.||||||||||||||||||| 107
+1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
+""",
+            )
+            hit = hits[6]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|22858917|gb|AAN05780.1|")
+            self.assertEqual(hit.target.name, "AAN05780")
+            self.assertEqual(
+                hit.target.description,
+                "tonoplast intrinsic protein bobTIP26-2 [Brassica oleracea var. botrytis]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=251)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 453.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 179.103640170605)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 8.24518074030088e-44)
+            self.assertEqual(hsp.annotations["identity"], 93)
+            self.assertEqual(hsp.annotations["positive"], 97)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 80, 187],
+                          [  0, 107]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 107)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 80)
+            self.assertEqual(hsp.target.annotations["end"], 187)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 107))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+            )
+            self.assertEqual(hsp.query.id, "1")
+            self.assertEqual(hsp.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFG...ANI'}, length=251)",
+            )
+            self.assertEqual(hsp.target.id, "gi|22858917|gb|AAN05780.1|")
+            self.assertEqual(hsp.target.name, "AAN05780")
+            self.assertEqual(
+                hsp.target.description,
+                "tonoplast intrinsic protein bobTIP26-2 [Brassica oleracea var. botrytis]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGS VACLLLKF T  + V  F LSAGVGV+NALVFEIVMTFGLVYTVYATA+DPK GSLGTIAPIAIGFIVGANI",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|228589        80 GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFGLSAGVG
+                  0 ||||||||||||||||||||||||.|.|||||||.||||||||.|....|..|.||||||
+1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
+
+gi|228589       140 VSNALVFEIVMTFGLVYTVYATAVDPKNGSLGTIAPIAIGFIVGANI 187
+                 60 |.|||||||||||||||||||||.|||.||||||||||||||||||| 107
+1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
+""",
+            )
+            hit = hits[7]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|21284372|gb|AAB51394.2|")
+            self.assertEqual(hit.target.name, "AAB51394")
+            self.assertEqual(
+                hit.target.description,
+                "tonoplast intrinsic protein bobTIP26-2 [Brassica oleracea var. botrytis]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=175)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 452.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 178.718440594688)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.26184512406631e-43)
+            self.assertEqual(hsp.annotations["identity"], 93)
+            self.assertEqual(hsp.annotations["positive"], 97)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  4, 111],
+                          [  0, 107]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 107)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 4)
+            self.assertEqual(hsp.target.annotations["end"], 111)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 107))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+            )
+            self.assertEqual(hsp.query.id, "1")
+            self.assertEqual(hsp.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({4: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFG...ANI'}, length=175)",
+            )
+            self.assertEqual(hsp.target.id, "gi|21284372|gb|AAB51394.2|")
+            self.assertEqual(hsp.target.name, "AAB51394")
+            self.assertEqual(
+                hsp.target.description,
+                "tonoplast intrinsic protein bobTIP26-2 [Brassica oleracea var. botrytis]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGS VACLLLKF T  + V  F LSAGVGV+NALVFEIVMTFGLVYTVYATA+DPK GSLGTIAPIAIGFIVGANI",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|212843         4 GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFGLSAGVG
+                  0 ||||||||||||||||||||||||.|.|||||||.||||||||.|....|..|.||||||
+1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
+
+gi|212843        64 VSNALVFEIVMTFGLVYTVYATAVDPKNGSLGTIAPIAIGFIVGANI 111
+                 60 |.|||||||||||||||||||||.|||.||||||||||||||||||| 107
+1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
+""",
+            )
+            hit = hits[8]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|38198150|emb|CAE53881.1|")
+            self.assertEqual(hit.target.name, "CAE53881")
+            self.assertEqual(hit.target.description, "aquaporin [Ricinus communis]")
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=251)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 452.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 178.718440594688)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.39472886444582e-43)
+            self.assertEqual(hsp.annotations["identity"], 91)
+            self.assertEqual(hsp.annotations["positive"], 96)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 80, 187],
+                          [  0, 107]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 107)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 80)
+            self.assertEqual(hsp.target.annotations["end"], 187)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 107))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+            )
+            self.assertEqual(hsp.query.id, "1")
+            self.assertEqual(hsp.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWFAQLLGSTVACLLLKFSTGGLTTSAFA...ANI'}, length=251)",
+            )
+            self.assertEqual(hsp.target.id, "gi|38198150|emb|CAE53881.1|")
+            self.assertEqual(hsp.target.name, "CAE53881")
+            self.assertEqual(hsp.target.description, "aquaporin [Ricinus communis]")
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "GGHVNPAVTFGAFVGGNITLLRGI+Y  AQLLGSTVACLLLKF T  +    F+LS+GVGV NA VFEIVMTFGLVYTVYATA+DPKKGSLGTIAPIAIGFIVGANI",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|381981        80 GGHVNPAVTFGAFVGGNITLLRGILYWFAQLLGSTVACLLLKFSTGGLTTSAFALSSGVG
+                  0 ||||||||||||||||||||||||.|..|||||||||||||||.|.......|.||.|||
+1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
+
+gi|381981       140 VWNAFVFEIVMTFGLVYTVYATAVDPKKGSLGTIAPIAIGFIVGANI 187
+                 60 |.||.||||||||||||||||||.||||||||||||||||||||||| 107
+1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
+""",
+            )
+            hit = hits[9]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|162809290|dbj|BAF95576.1|")
+            self.assertEqual(hit.target.name, "BAF95576")
+            self.assertEqual(
+                hit.target.description,
+                "tonoplast intrinsic protein [Nicotiana tabacum]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=251)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 450.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 177.948041442853)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 2.0302699895292e-43)
+            self.assertEqual(hsp.annotations["identity"], 91)
+            self.assertEqual(hsp.annotations["positive"], 95)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[ 80, 187],
+                          [  0, 107]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 107)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 80)
+            self.assertEqual(hsp.target.annotations["end"], 187)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 107))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+            )
+            self.assertEqual(hsp.query.id, "1")
+            self.assertEqual(hsp.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({80: 'GGHVNPAVTFGAFVGGNITLFRGILYIIAQLLGSTVACFLLEFATGGMSTGAFA...ANI'}, length=251)",
+            )
+            self.assertEqual(hsp.target.id, "gi|162809290|dbj|BAF95576.1|")
+            self.assertEqual(hsp.target.name, "BAF95576")
+            self.assertEqual(
+                hsp.target.description,
+                "tonoplast intrinsic protein [Nicotiana tabacum]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "GGHVNPAVTFGAFVGGNITL RGI+YIIAQLLGSTVAC LL+F T  M+ G F+LSAGV V NA VFEIVMTFGLVYTVYATAIDPKKG LG IAPIAIGFIVGANI",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|162809        80 GGHVNPAVTFGAFVGGNITLFRGILYIIAQLLGSTVACFLLEFATGGMSTGAFALSAGVS
+                  0 ||||||||||||||||||||.|||.|||||||||||||.||.|.|..|..|.|.|||||.
+1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
+
+gi|162809       140 VWNAFVFEIVMTFGLVYTVYATAIDPKKGDLGVIAPIAIGFIVGANI 187
+                 60 |.||.||||||||||||||||||||||||.||.|||||||||||||| 107
+1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
+""",
+            )
+            record = next(records)
+            self.assertEqual(record.num, 2)
+            self.assertIsInstance(record.query, SeqRecord)
+            self.assertEqual(record.query.id, "2")
+            self.assertEqual(
+                record.query.description,
+                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+            )
+            self.assertEqual(repr(record.query.seq), "Seq(None, length=304)")
+            self.assertEqual(len(record.stat), 7)
+            self.assertEqual(record.stat["db-num"], 8994603)
+            self.assertEqual(record.stat["db-len"], -1216159329)
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertAlmostEqual(record.stat["eff-space"], 315106678978.0)
+            self.assertAlmostEqual(record.stat["kappa"], 0.041)
+            self.assertAlmostEqual(record.stat["lambda"], 0.267)
+            self.assertAlmostEqual(record.stat["entropy"], 0.14)
+            hits = record.hits
+            self.assertEqual(len(hits), 10)
+            hit = hits[0]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|157878523|pdb|1JLX|A")
+            self.assertEqual(hit.target.name, "1JLX-A")
+            self.assertEqual(
+                hit.target.description,
+                "Chain A, Agglutinin In Complex With T-Disaccharide >gi|157878524|pdb|1JLX|B Chain B, Agglutinin In Complex With T-Disaccharide >gi|157878525|pdb|1JLY|A Chain A, Crystal Structure Of Amaranthus Caudatus Agglutinin >gi|157878526|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=303)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1638.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 635.565137632669)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.61027401233368e-180)
+            self.assertEqual(hsp.annotations["identity"], 303)
+            self.assertEqual(hsp.annotations["positive"], 303)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 303],
+                          [  1, 304]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 1)
+            self.assertEqual(hsp.query.annotations["end"], 304)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 303)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 303))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq({1: 'AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN'}, length=304)",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN')",
+            )
+            self.assertEqual(hsp.target.id, "gi|157878523|pdb|1JLX|A")
+            self.assertEqual(hsp.target.name, "1JLX-A")
+            self.assertEqual(
+                hsp.target.description,
+                "Chain A, Agglutinin In Complex With T-Disaccharide >gi|157878524|pdb|1JLX|B Chain B, Agglutinin In Complex With T-Disaccharide >gi|157878525|pdb|1JLY|A Chain A, Crystal Structure Of Amaranthus Caudatus Agglutinin >gi|157878526|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYTQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITINQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETNEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELGQNN",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|157878         0 AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                 1 AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
+
+gi|157878        60 SRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHY
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                61 SRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHY
+
+gi|157878       120 TQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITI
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2               121 TQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITI
+
+gi|157878       180 NQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETN
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2               181 NQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETN
+
+gi|157878       240 EAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELG
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2               241 EAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELG
+
+gi|157878       300 QNN 303
+                300 ||| 303
+2               301 QNN 304
+""",
+            )
+            hit = hits[1]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|33308026|gb|AAQ03084.1|AF401479_1")
+            self.assertEqual(hit.target.name, "AAQ03084")
+            self.assertEqual(hit.target.description, "agglutinin [Amaranthus caudatus]")
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=304)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1611.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 625.1647490829)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 2.12254922203683e-177)
+            self.assertEqual(hsp.annotations["identity"], 298)
+            self.assertEqual(hsp.annotations["positive"], 300)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  1, 304],
+                          [  1, 304]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 1)
+            self.assertEqual(hsp.query.annotations["end"], 304)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 1)
+            self.assertEqual(hsp.target.annotations["end"], 304)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 303))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq({1: 'AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN'}, length=304)",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({1: 'AGLPVIMCLKSNNNQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...SNN'}, length=304)",
+            )
+            self.assertEqual(hsp.target.id, "gi|33308026|gb|AAQ03084.1|AF401479_1")
+            self.assertEqual(hsp.target.name, "AAQ03084")
+            self.assertEqual(hsp.target.description, "agglutinin [Amaranthus caudatus]")
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "AGLPVIMCLKSNN+QKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYTQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPK YVTFKGNNGKYLGVITINQLPCLQFGYDNLNDPKVAH+MFVTSNGTICIKS YMNKFWRLSTDDWILVDGNDPRETNEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELG NN",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|333080         1 AGLPVIMCLKSNNNQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
+                  0 |||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||
+2                 1 AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
+
+gi|333080        61 SRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHY
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                61 SRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHY
+
+gi|333080       121 TQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKRYVTFKGNNGKYLGVITI
+                120 ||||||||||||||||||||||||||||||||||||||||||.|||||||||||||||||
+2               121 TQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITI
+
+gi|333080       181 NQLPCLQFGYDNLNDPKVAHEMFVTSNGTICIKSTYMNKFWRLSTDDWILVDGNDPRETN
+                180 ||||||||||||||||||||.|||||||||||||.|||||||||||||||||||||||||
+2               181 NQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETN
+
+gi|333080       241 EAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELG
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2               241 EAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELG
+
+gi|333080       301 SNN 304
+                300 .|| 303
+2               301 QNN 304
+""",
+            )
+            hit = hits[2]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|37359170|gb|AAL05954.1|")
+            self.assertEqual(hit.target.name, "AAL05954")
+            self.assertEqual(hit.target.description, "agglutinin [Amaranthus caudatus]")
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=304)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1603.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 622.083152475561)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.66685561532459e-176)
+            self.assertEqual(hsp.annotations["identity"], 297)
+            self.assertEqual(hsp.annotations["positive"], 299)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  1, 304],
+                          [  1, 304]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 1)
+            self.assertEqual(hsp.query.annotations["end"], 304)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 1)
+            self.assertEqual(hsp.target.annotations["end"], 304)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 303))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq({1: 'AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN'}, length=304)",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({1: 'AGLPVIMCLKSNNNQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...SNN'}, length=304)",
+            )
+            self.assertEqual(hsp.target.id, "gi|37359170|gb|AAL05954.1|")
+            self.assertEqual(hsp.target.name, "AAL05954")
+            self.assertEqual(hsp.target.description, "agglutinin [Amaranthus caudatus]")
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "AGLPVIMCLKSNN+QKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYTQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPK YVTFKGNNGKYLGVITINQLPCLQFGYDNLNDPKVAH+MFVTSNGTICIKS YMNKFWRLSTDDWILVDGNDPRETNEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEII LG NN",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|373591         1 AGLPVIMCLKSNNNQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
+                  0 |||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||
+2                 1 AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
+
+gi|373591        61 SRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHY
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                61 SRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHY
+
+gi|373591       121 TQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKRYVTFKGNNGKYLGVITI
+                120 ||||||||||||||||||||||||||||||||||||||||||.|||||||||||||||||
+2               121 TQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITI
+
+gi|373591       181 NQLPCLQFGYDNLNDPKVAHEMFVTSNGTICIKSTYMNKFWRLSTDDWILVDGNDPRETN
+                180 ||||||||||||||||||||.|||||||||||||.|||||||||||||||||||||||||
+2               181 NQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETN
+
+gi|373591       241 EAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIGLG
+                240 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||.||
+2               241 EAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELG
+
+gi|373591       301 SNN 304
+                300 .|| 303
+2               301 QNN 304
+""",
+            )
+            hit = hits[3]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|4929263|gb|AAD33922.1|AF143954_1")
+            self.assertEqual(hit.target.name, "AAD33922")
+            self.assertEqual(
+                hit.target.description,
+                "agglutinin [Amaranthus hypochondriacus] >gi|15999|emb|CAA77664.1| seed specific protein of balanced nutritional quality [Amaranthus hypochondriacus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=304)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1596.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 619.38675544414)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.10781005546209e-175)
+            self.assertEqual(hsp.annotations["identity"], 296)
+            self.assertEqual(hsp.annotations["positive"], 299)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  1, 304],
+                          [  1, 304]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 1)
+            self.assertEqual(hsp.query.annotations["end"], 304)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 1)
+            self.assertEqual(hsp.target.annotations["end"], 304)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 303))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq({1: 'AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN'}, length=304)",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({1: 'AGLPVIMCLKSNNNQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...SNN'}, length=304)",
+            )
+            self.assertEqual(hsp.target.id, "gi|4929263|gb|AAD33922.1|AF143954_1")
+            self.assertEqual(hsp.target.name, "AAD33922")
+            self.assertEqual(
+                hsp.target.description,
+                "agglutinin [Amaranthus hypochondriacus] >gi|15999|emb|CAA77664.1| seed specific protein of balanced nutritional quality [Amaranthus hypochondriacus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "AGLPVIMCLKSNN+QKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYT+NYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPK YVTFKGNNGKYLGVITINQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTD+WILVDGNDPRETNEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKP FINCMNAATQ VDETAILEIIELG NN",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|492926         1 AGLPVIMCLKSNNNQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
+                  0 |||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||
+2                 1 AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
+
+gi|492926        61 SRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHY
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                61 SRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHY
+
+gi|492926       121 TENYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKTYVTFKGNNGKYLGVITI
+                120 |.||||||||||||||||||||||||||||||||||||||||.|||||||||||||||||
+2               121 TQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITI
+
+gi|492926       181 NQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDNWILVDGNDPRETN
+                180 ||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||
+2               181 NQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETN
+
+gi|492926       241 EAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPEFINCMNAATQIVDETAILEIIELG
+                240 |||||||||||||||||||||||||||||||||||.||||||||||.|||||||||||||
+2               241 EAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELG
+
+gi|492926       301 SNN 304
+                300 .|| 303
+2               301 QNN 304
+""",
+            )
+            hit = hits[4]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|20067185|gb|AAM09540.1|AF491291_1")
+            self.assertEqual(hit.target.name, "AAM09540")
+            self.assertEqual(
+                hit.target.description, "seed protein AmA1 [Amaranthus hypochondriacus]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=304)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 1592.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 617.84595714047)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 3.27747281942883e-175)
+            self.assertEqual(hsp.annotations["identity"], 295)
+            self.assertEqual(hsp.annotations["positive"], 299)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  1, 304],
+                          [  1, 304]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 1)
+            self.assertEqual(hsp.query.annotations["end"], 304)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 1)
+            self.assertEqual(hsp.target.annotations["end"], 304)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 303))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq({1: 'AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN'}, length=304)",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({1: 'AGLPVIMCLKSNNNQEYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...SNN'}, length=304)",
+            )
+            self.assertEqual(hsp.target.id, "gi|20067185|gb|AAM09540.1|AF491291_1")
+            self.assertEqual(hsp.target.name, "AAM09540")
+            self.assertEqual(
+                hsp.target.description, "seed protein AmA1 [Amaranthus hypochondriacus]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "AGLPVIMCLKSNN+Q+YLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYT+NYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPK YVTFKGNNGKYLGVITINQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTD+WILVDGNDPRETNEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKP FINCMNAATQ VDETAILEIIELG NN",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|200671         1 AGLPVIMCLKSNNNQEYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
+                  0 |||||||||||||.|.||||||||||||||||||||||||||||||||||||||||||||
+2                 1 AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
+
+gi|200671        61 SRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHY
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+2                61 SRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHY
+
+gi|200671       121 TENYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKTYVTFKGNNGKYLGVITI
+                120 |.||||||||||||||||||||||||||||||||||||||||.|||||||||||||||||
+2               121 TQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITI
+
+gi|200671       181 NQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDNWILVDGNDPRETN
+                180 ||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||
+2               181 NQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETN
+
+gi|200671       241 EAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPEFINCMNAATQIVDETAILEIIELG
+                240 |||||||||||||||||||||||||||||||||||.||||||||||.|||||||||||||
+2               241 EAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELG
+
+gi|200671       301 SNN 304
+                300 .|| 303
+2               301 QNN 304
+""",
+            )
+            hit = hits[5]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|225465425|ref|XP_002264858.1|")
+            self.assertEqual(hit.target.name, "XP_002264858")
+            self.assertEqual(
+                hit.target.description,
+                "PREDICTED: hypothetical protein [Vitis vinifera]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=465)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 623.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 244.587568076555)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 6.71087757255643e-63)
+            self.assertEqual(hsp.annotations["identity"], 126)
+            self.assertEqual(hsp.annotations["positive"], 187)
+            self.assertEqual(hsp.annotations["gaps"], 6)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  1, 102, 102, 161, 161, 223, 223, 233, 233, 268, 268, 293],
+                          [  2, 103, 104, 163, 164, 226, 227, 237, 238, 273, 275, 300]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 2)
+            self.assertEqual(hsp.query.annotations["end"], 300)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 1)
+            self.assertEqual(hsp.target.annotations["end"], 293)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 298))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq({2: 'GLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDG...IEL'}, length=304)",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({1: 'ALPRYVVLKSKYNNKYLRYIHEDVQIHGFLQFSGEEVVTPYSKYQVERAKNGGG...AEL'}, length=465)",
+            )
+            self.assertEqual(hsp.target.id, "gi|225465425|ref|XP_002264858.1|")
+            self.assertEqual(hsp.target.name, "XP_002264858")
+            self.assertEqual(
+                hsp.target.description,
+                "PREDICTED: hypothetical protein [Vitis vinifera]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                " LP  + LKS  + KYLRY  +++Q +G LQFS ++++ P ++++VE +K   GLVHI+  Y NKY VRWS NH+WI A A+EPDE++S+W+CTLF+P++V +G+ + +R  HVQLGHY   + +   + S LFA S+  D    DV  +IDW+S+   PK ++ FKG+NG YL    I   P L+F   ++ DP V +++F T +G++ IKS+Y  +FWR S  +WI  D +D   TN +  LF     D NV++L N+    F KR T+   G  +C+NAA   +   A LE+ EL",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|225465         1 ALPRYVVLKSKYNNKYLRYIHEDVQIHGFLQFSGEEVVTPYSKYQVERAKNGGGLVHIRC
+                  0 .||....|||....|||||.....|..|.||||......|.....||..|...|||||..
+2                 2 GLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKS
+
+gi|225465        61 CYNNKYWVRWSKNHWWIVAGADEPDEDQSSWSCTLFEPVHV-DGDAQTLRFRHVQLGHYA
+                 60 .|.|||.||||.||.||.|.|.||||..|.|.||||.|..|-.|.....|..|||||||.
+2                62 RYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYT
+
+gi|225465       120 CLWRLPPPYGSCLFAGSTSADNDLCDVCTIIDWESLLILPK-HIAFKGDNGHYLSARKIE
+                120 ..........|.|||.|...|....||...|||.|....||-...|||.||.||....|.
+2               122 QNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITIN
+
+gi|225465       179 GHPYLEFASSDIGDPTVGNEVFTTHDGSVRIKSDYFGRFWRRSP-NWIWADSDDS-TTNN
+                180 ..|.|.|......||.|....|.|..|...|||.|...|||.|.-.||..|..|.-.||.
+2               182 QLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETNE
+
+gi|225465       237 SDTLFWPVRVDNNVVALRNLGNNNFCKRLTT--EGKTSCLNAAVSTISREARLEVAEL
+                240 ...||.....|.||..|.|.....|.||.|.--.|...|.|||.......|.||..||
+2               242 AAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIEL
+
+gi|225465       293
+                298
+2               300
+""",
+            )
+            hit = hits[6]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|225465427|ref|XP_002264911.1|")
+            self.assertEqual(hit.target.name, "XP_002264911")
+            self.assertEqual(
+                hit.target.description,
+                "PREDICTED: hypothetical protein [Vitis vinifera]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=465)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 620.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 243.431969348803)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.66631297328129e-62)
+            self.assertEqual(hsp.annotations["identity"], 126)
+            self.assertEqual(hsp.annotations["positive"], 187)
+            self.assertEqual(hsp.annotations["gaps"], 6)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  1, 102, 102, 161, 161, 223, 223, 232, 232, 268, 268, 293],
+                          [  2, 103, 104, 163, 164, 226, 227, 236, 237, 273, 275, 300]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 2)
+            self.assertEqual(hsp.query.annotations["end"], 300)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 1)
+            self.assertEqual(hsp.target.annotations["end"], 293)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 298))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq({2: 'GLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDG...IEL'}, length=304)",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({1: 'ALPRYVVLKSKYNNKYLRYIHEDVQIHGFLQFSGEEVVTPYSKYQVEMAKNGKG...AEL'}, length=465)",
+            )
+            self.assertEqual(hsp.target.id, "gi|225465427|ref|XP_002264911.1|")
+            self.assertEqual(hsp.target.name, "XP_002264911")
+            self.assertEqual(
+                hsp.target.description,
+                "PREDICTED: hypothetical protein [Vitis vinifera]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                " LP  + LKS  + KYLRY  +++Q +G LQFS ++++ P ++++VE +K   GLVHI+  Y NKY VRWS NH+WI A A+EPDE++S+W+CTLF+P+YV +G+ + ++  HVQLGHY   + +   + S LFA S+  D    DV  +IDW+S+   PK ++ FKG+NG +L   TI   P L+F   ++ DP V +++F T +G++ IKS+Y  +FWR S  +WI  D +D   TN    LF     D NV++L N+    F KR T+   G I+C+NA    +   A LE+ EL",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|225465         1 ALPRYVVLKSKYNNKYLRYIHEDVQIHGFLQFSGEEVVTPYSKYQVEMAKNGKGLVHIRC
+                  0 .||....|||....|||||.....|..|.||||......|.....||..|...|||||..
+2                 2 GLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKS
+
+gi|225465        61 CYNNKYWVRWSKNHWWIVAGADEPDEDQSSWSCTLFEPVYV-DGDAQTLQFRHVQLGHYA
+                 60 .|.|||.||||.||.||.|.|.||||..|.|.||||.|.||-.|........|||||||.
+2                62 RYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYT
+
+gi|225465       120 CLWRLPPPYGSCLFAGSTSPDNDLCDVCTIIDWESLLLLPK-HIAFKGDNGYFLSARTIE
+                120 ..........|.|||.|...|....||...|||.|....||-...|||.||..|...||.
+2               122 QNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITIN
+
+gi|225465       179 GHPYLEFASSDIGDPTVGNEVFTTHDGSVHIKSDYFGRFWRRSP-NWIWADSDD-STTNN
+                180 ..|.|.|......||.|....|.|..|...|||.|...|||.|.-.||..|..|-..||.
+2               182 QLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETNE
+
+gi|225465       237 PDTLFWPVRVDKNVVALRNLGNNNFCKRLTT--EGKISCLNAGVSTISREARLEVAEL
+                240 ...||.....|.||..|.|.....|.||.|.--.|.|.|.||........|.||..||
+2               242 AAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIEL
+
+gi|225465       293
+                298
+2               300
+""",
+            )
+            hit = hits[7]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|147838248|emb|CAN71829.1|")
+            self.assertEqual(hit.target.name, "CAN71829")
+            self.assertEqual(
+                hit.target.description, "hypothetical protein [Vitis vinifera]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=468)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 606.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 238.03917528596)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 7.00082705100501e-61)
+            self.assertEqual(hsp.annotations["identity"], 124)
+            self.assertEqual(hsp.annotations["positive"], 181)
+            self.assertEqual(hsp.annotations["gaps"], 5)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  2, 102, 102, 161, 161, 234, 234, 269, 269, 294],
+                          [  3, 103, 104, 163, 164, 237, 238, 273, 275, 300]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 3)
+            self.assertEqual(hsp.query.annotations["end"], 300)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 2)
+            self.assertEqual(hsp.target.annotations["end"], 294)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 297))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq({3: 'LPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGL...IEL'}, length=304)",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({2: 'LPRYVVFKSKYNNKXLRYIHEDGEIHGFLQFSGEEVMTPYSKYHVEMAKNGKGL...AEL'}, length=468)",
+            )
+            self.assertEqual(hsp.target.id, "gi|147838248|emb|CAN71829.1|")
+            self.assertEqual(hsp.target.name, "CAN71829")
+            self.assertEqual(
+                hsp.target.description, "hypothetical protein [Vitis vinifera]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "LP  +  KS  + K LRY  ++ + +G LQFS ++++ P +++ VE +K   GLVHI+  Y NKY VRWS NH+WI A A+E DE++S W CTLF+P+YV +G+ + +R  HVQLGHY   + +   + S LFA S+  D    DVF +IDW+S+   PK ++ FKG+N  YL   TI   P L+F   ++ DP V +++F T +G+  IKS+Y  +FWR S+ +WIL D +D   TN +  LF     D NV++L N+    F KR T+   G  +C+NA    +   A LE+ EL",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|147838         2 LPRYVVFKSKYNNKXLRYIHEDGEIHGFLQFSGEEVMTPYSKYHVEMAKNGKGLVHIRCC
+                  0 ||.....||....|.|||........|.||||......|.....||..|...|||||...
+2                 3 LPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSR
+
+gi|147838        62 YNNKYWVRWSENHWWIVAGADETDEDQSLWTCTLFEPVYV-DGDAQTLRFRHVQLGHYAC
+                 60 |.|||.||||.||.||.|.|.|.||..|.|.||||.|.||-.|.....|..|||||||..
+2                63 YTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYTQ
+
+gi|147838       121 LWRLPPPYGSCLFAGSASPDKDLYDVFTIIDWESLLILPK-HIAFKGDNDYYLSARTIEG
+                120 .........|.|||.|...|....|||..|||.|....||-...|||.|..||...||..
+2               123 NYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITINQ
+
+gi|147838       180 RPYLEFASTDIGDPTVGNEVFTTQDGSARIKSDYFGRFWRRSSPNWILADSDDS-TTNNS
+                180 .|.|.|......||.|....|.|..|...|||.|...|||.|...|||.|..|.-.||..
+2               183 LPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETNEA
+
+gi|147838       239 NTLFWPVRVDKNVVALRNLGNNNFCKRLTT--EGKTSCLNAGVSTISREARLEVAEL 294
+                240 ..||.....|.||..|.|.....|.||.|.--.|...|.||........|.||..|| 297
+2               243 AALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIEL 300
+""",
+            )
+            hit = hits[8]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|225465417|ref|XP_002264098.1|")
+            self.assertEqual(hit.target.name, "XP_002264098")
+            self.assertEqual(
+                hit.target.description,
+                "PREDICTED: hypothetical protein [Vitis vinifera]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=465)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 602.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 236.498376982291)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 2.30850343103547e-60)
+            self.assertEqual(hsp.annotations["identity"], 124)
+            self.assertEqual(hsp.annotations["positive"], 184)
+            self.assertEqual(hsp.annotations["gaps"], 6)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  1, 102, 102, 161, 161, 223, 223, 233, 233, 268, 268, 293],
+                          [  2, 103, 104, 163, 164, 226, 227, 237, 238, 273, 275, 300]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 2)
+            self.assertEqual(hsp.query.annotations["end"], 300)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 1)
+            self.assertEqual(hsp.target.annotations["end"], 293)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 298))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq({2: 'GLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDG...IEL'}, length=304)",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({1: 'ALPRYVVLKSKYNDKYLRYIHEDVQIHGFLQFSGEEVVTPYSKYQVERAKNGKG...AEL'}, length=465)",
+            )
+            self.assertEqual(hsp.target.id, "gi|225465417|ref|XP_002264098.1|")
+            self.assertEqual(hsp.target.name, "XP_002264098")
+            self.assertEqual(
+                hsp.target.description,
+                "PREDICTED: hypothetical protein [Vitis vinifera]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                " LP  + LKS  + KYLRY  +++Q +G LQFS ++++ P ++++VE +K   GLVHI+  Y NKY VRWS NH+WI A A+EPDE++S+W+CTLF+P++V +GN + +R  HVQLGHY   + +   + S LFA S+  +    DV  +IDW+S+   PK +V FKG+NG YL   TI   P L+F   ++ DP V +++F T + ++ IKS++  +FWR S  +WI  D +D   TN +  LF     D NV++L N     F  R T+   G  +C+NA    +   A LE+ EL",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|225465         1 ALPRYVVLKSKYNDKYLRYIHEDVQIHGFLQFSGEEVVTPYSKYQVERAKNGKGLVHIRC
+                  0 .||....|||....|||||.....|..|.||||......|.....||..|...|||||..
+2                 2 GLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKS
+
+gi|225465        61 CYNNKYWVRWSKNHWWIVAGADEPDEDQSSWSCTLFEPVHV-DGNAQTLRFRHVQLGHYA
+                 60 .|.|||.||||.||.||.|.|.||||..|.|.||||.|..|-.||....|..|||||||.
+2                62 RYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYT
+
+gi|225465       120 CLWRLPPPYGSCLFAGSASPNKDLCDVCTIIDWESLLILPK-HVAFKGDNGNYLSARTIE
+                120 ..........|.|||.|........||...|||.|....||-.|.|||.||.||...||.
+2               122 QNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITIN
+
+gi|225465       179 GHPYLEFASSDIGDPTVGNEVFTTHDRSVRIKSHHFGRFWRRSP-NWIWADSDDS-TTNN
+                180 ..|.|.|......||.|....|.|......|||.....|||.|.-.||..|..|.-.||.
+2               182 QLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETNE
+
+gi|225465       237 SDTLFWPVRVDKNVVALRNFGNNNFCMRLTT--EGKTSCLNAGVSTISREARLEVAEL
+                240 ...||.....|.||..|.|.....|..|.|.--.|...|.||........|.||..||
+2               242 AAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIEL
+
+gi|225465       293
+                298
+2               300
+""",
+            )
+            hit = hits[9]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|225465423|ref|XP_002264775.1|")
+            self.assertEqual(hit.target.name, "XP_002264775")
+            self.assertEqual(
+                hit.target.description,
+                "PREDICTED: hypothetical protein [Vitis vinifera]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=467)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 587.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 230.72038334353)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 1.14603053551379e-58)
+            self.assertEqual(hsp.annotations["identity"], 123)
+            self.assertEqual(hsp.annotations["positive"], 179)
+            self.assertEqual(hsp.annotations["gaps"], 6)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  2, 102, 102, 161, 161, 223, 223, 233, 233, 268, 268, 293],
+                          [  3, 103, 104, 163, 164, 226, 227, 237, 238, 273, 275, 300]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 3)
+            self.assertEqual(hsp.query.annotations["end"], 300)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 2)
+            self.assertEqual(hsp.target.annotations["end"], 293)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 297))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq({3: 'LPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGL...IEL'}, length=304)",
+            )
+            self.assertEqual(hsp.query.id, "2")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq({2: 'LPRYVVFKSKYNNKCLRYIHEDGEIHGFLQFSGEEVMTPYSKYHVEMAKNGKGL...AEL'}, length=467)",
+            )
+            self.assertEqual(hsp.target.id, "gi|225465423|ref|XP_002264775.1|")
+            self.assertEqual(hsp.target.name, "XP_002264775")
+            self.assertEqual(
+                hsp.target.description,
+                "PREDICTED: hypothetical protein [Vitis vinifera]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "LP  +  KS  + K LRY  ++ + +G LQFS ++++ P +++ VE +K   GLVHI+  Y NKY VRWS NH+WI A A+E DE++S W CTLF+P+YV +G+ + +R  HVQLGHY   + +   + S LFA S+  D    DVF +IDW+S+   PK ++ FKG+N  YL   TI   P L+F   ++ DP V +++F T +G+  IKS+Y  +FWR S  +WIL D +D    N +  LF     D NV++L N+    F KR T+   G  +C+NA    +   A LE+ EL",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|225465         2 LPRYVVFKSKYNNKCLRYIHEDGEIHGFLQFSGEEVMTPYSKYHVEMAKNGKGLVHIRCC
+                  0 ||.....||....|.|||........|.||||......|.....||..|...|||||...
+2                 3 LPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSR
+
+gi|225465        62 YNNKYWVRWSENHWWIVAGADETDEDQSLWTCTLFEPVYV-DGDAQTLRFRHVQLGHYAC
+                 60 |.|||.||||.||.||.|.|.|.||..|.|.||||.|.||-.|.....|..|||||||..
+2                63 YTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYTQ
+
+gi|225465       121 LWRLPPPYGSCLFAGSASPDKDLYDVFTIIDWESLLILPK-HIAFKGDNDYYLSARTIEG
+                120 .........|.|||.|...|....|||..|||.|....||-...|||.|..||...||..
+2               123 NYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITINQ
+
+gi|225465       180 RPYLEFASTDIGDPTVGNEVFTTQDGSARIKSDYFGRFWRRSP-NWILADSDDS-TNNNS
+                180 .|.|.|......||.|....|.|..|...|||.|...|||.|.-.|||.|..|.-..|..
+2               183 LPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETNEA
+
+gi|225465       238 NTLFWPVRVDKNVVALRNLGNNNFCKRLTT--EGKTSCLNAGVSTISREARLEVAEL 293
+                240 ..||.....|.||..|.|.....|.||.|.--.|...|.||........|.||..|| 297
+2               243 AALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIEL 300
+""",
+            )
+            record = next(records)
+            self.assertEqual(record.num, 3)
+            self.assertIsInstance(record.query, SeqRecord)
+            self.assertEqual(record.query.id, "3")
+            self.assertEqual(
+                record.query.description,
+                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+            )
+            self.assertEqual(repr(record.query.seq), "Seq(None, length=600)")
+            self.assertEqual(len(record.stat), 7)
+            self.assertEqual(record.stat["db-num"], 8994603)
+            self.assertEqual(record.stat["db-len"], -1216159329)
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertAlmostEqual(record.stat["eff-space"], 825121048178.0)
+            self.assertAlmostEqual(record.stat["kappa"], 0.041)
+            self.assertAlmostEqual(record.stat["lambda"], 0.267)
+            self.assertAlmostEqual(record.stat["entropy"], 0.14)
+            hits = record.hits
+            self.assertEqual(len(hits), 10)
+            hit = hits[0]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|13124535|sp|Q9WTV7.1|RNF12_MOUSE")
+            self.assertEqual(hit.target.name, "Q9WTV7")
+            self.assertEqual(
+                hit.target.description,
+                "RecName: Full=E3 ubiquitin-protein ligase RNF12; AltName: Full=RING finger protein 12; AltName: Full=LIM domain-interacting RING finger protein; AltName: Full=RING finger LIM domain-binding protein; Short=R-LIM >gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein [Mus musculus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=600)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 3103.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 1199.88251635159)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 600)
+            self.assertEqual(hsp.annotations["positive"], 600)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 600],
+                          [  0, 600]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 600)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 600)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 600))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "3")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+            )
+            self.assertEqual(hsp.target.id, "gi|13124535|sp|Q9WTV7.1|RNF12_MOUSE")
+            self.assertEqual(hsp.target.name, "Q9WTV7")
+            self.assertEqual(
+                hsp.target.description,
+                "RecName: Full=E3 ubiquitin-protein ligase RNF12; AltName: Full=RING finger protein 12; AltName: Full=LIM domain-interacting RING finger protein; AltName: Full=RING finger LIM domain-binding protein; Short=R-LIM >gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein [Mus musculus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNSTEAVTEVPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIPRRAPTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSSKMFEGSSEGGSSGPSRKDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPICRRAVLSSGNRESVV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|131245         0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3                 0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
+
+gi|131245        60 EELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQS
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3                60 EELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQS
+
+gi|131245       120 WRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSAS
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               120 WRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSAS
+
+gi|131245       180 ESASARPSRAERNSTEAVTEVPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIPRR
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               180 ESASARPSRAERNSTEAVTEVPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIPRR
+
+gi|131245       240 APTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNS
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               240 APTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNS
+
+gi|131245       300 ESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTF
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               300 ESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTF
+
+gi|131245       360 SRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSE
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               360 SRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSE
+
+gi|131245       420 PSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSSKMFEGSSEGGS
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               420 PSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSSKMFEGSSEGGS
+
+gi|131245       480 SGPSRKDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGEN
+                480 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               480 SGPSRKDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGEN
+
+gi|131245       540 DALKTCSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPICRRAVLSSGNRESVV
+                540 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               540 DALKTCSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPICRRAVLSSGNRESVV
+
+gi|131245       600 
+                600 
+3               600 
+""",
+            )
+            hit = hits[1]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|47078289|ref|NP_035406.3|")
+            self.assertEqual(hit.target.name, "NP_035406")
+            self.assertEqual(
+                hit.target.description,
+                "ring finger protein, LIM domain interacting [Mus musculus] >gi|15277964|gb|AAH12960.1| Ring finger protein, LIM domain interacting [Mus musculus] >gi|123229168|emb|CAM26768.1| ring finger protein 12 [Mus musculus] >gi|148682142|gb|EDL14089.1| ring finger protein 12, isoform CRA_a [Mus musculus] >gi|148682143|gb|EDL14090.1| ring finger protein 12, isoform CRA_a [Mus musculus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=600)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 3058.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 1182.54853543531)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 592)
+            self.assertEqual(hsp.annotations["positive"], 596)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 600],
+                          [  0, 600]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 600)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 600)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 600))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "3")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+            )
+            self.assertEqual(hsp.target.id, "gi|47078289|ref|NP_035406.3|")
+            self.assertEqual(hsp.target.name, "NP_035406")
+            self.assertEqual(
+                hsp.target.description,
+                "ring finger protein, LIM domain interacting [Mus musculus] >gi|15277964|gb|AAH12960.1| Ring finger protein, LIM domain interacting [Mus musculus] >gi|123229168|emb|CAM26768.1| ring finger protein 12 [Mus musculus] >gi|148682142|gb|EDL14089.1| ring finger protein 12, isoform CRA_a [Mus musculus] >gi|148682143|gb|EDL14090.1| ring finger protein 12, isoform CRA_a [Mus musculus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNS EAVTEVPTTRAQRRARSRSPEHRRTRARAERS SPLQPTSEIPRRAPTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSS+MFEGSSEGGSSGPSR+DGRHRAPVTFDESGSLPF SLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVLSSGNRESVV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|470782         0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3                 0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
+
+gi|470782        60 EELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSGQRGNQS
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||.||||||
+3                60 EELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQS
+
+gi|470782       120 WRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSAS
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               120 WRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSAS
+
+gi|470782       180 ESASARPSRAERNSAEAVTEVPTTRAQRRARSRSPEHRRTRARAERSRSPLQPTSEIPRR
+                180 ||||||||||||||.||||||||||||||||||||||||||||||||.||||||||||||
+3               180 ESASARPSRAERNSTEAVTEVPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIPRR
+
+gi|470782       240 APTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNS
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               240 APTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNS
+
+gi|470782       300 ESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTF
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               300 ESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTF
+
+gi|470782       360 SRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSE
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               360 SRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSE
+
+gi|470782       420 PSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSSEMFEGSSEGGS
+                420 |||||||||||||||||||||||||||||||||||||||||||||||||.||||||||||
+3               420 PSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSSKMFEGSSEGGS
+
+gi|470782       480 SGPSRRDGRHRAPVTFDESGSLPFLSLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGEN
+                480 |||||.||||||||||||||||||.|||||||||||||||||||||||||||||||||||
+3               480 SGPSRKDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGEN
+
+gi|470782       540 DALKTCSVCITEYTEGNKLRKLPCSHEYHVHCIDRWLSENSTCPICRRAVLSSGNRESVV
+                540 ||||||||||||||||.||||||||||.||||||||||||||||||||||||||||||||
+3               540 DALKTCSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPICRRAVLSSGNRESVV
+
+gi|470782       600 
+                600 
+3               600 
+""",
+            )
+            hit = hits[2]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|12850423|dbj|BAB28712.1|")
+            self.assertEqual(hit.target.name, "BAB28712")
+            self.assertEqual(
+                hit.target.description, "unnamed protein product [Mus musculus]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=600)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 3054.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 1181.00773713164)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 591)
+            self.assertEqual(hsp.annotations["positive"], 595)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 600],
+                          [  0, 600]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 600)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 600)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 600))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "3")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+            )
+            self.assertEqual(hsp.target.id, "gi|12850423|dbj|BAB28712.1|")
+            self.assertEqual(hsp.target.name, "BAB28712")
+            self.assertEqual(
+                hsp.target.description, "unnamed protein product [Mus musculus]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNS EAVTEVPTTRAQRRARSRSPEHRRTRARAERS SPLQPTSEIPRRAPTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTFS SERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSS+MFEGSSEGGSSGPSR+DGRHRAPVTFDESGSLPF SLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVLSSGNRESVV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|128504         0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3                 0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
+
+gi|128504        60 EELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSGQRGNQS
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||.||||||
+3                60 EELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQS
+
+gi|128504       120 WRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSAS
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               120 WRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSAS
+
+gi|128504       180 ESASARPSRAERNSAEAVTEVPTTRAQRRARSRSPEHRRTRARAERSRSPLQPTSEIPRR
+                180 ||||||||||||||.||||||||||||||||||||||||||||||||.||||||||||||
+3               180 ESASARPSRAERNSTEAVTEVPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIPRR
+
+gi|128504       240 APTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNS
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               240 APTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNS
+
+gi|128504       300 ESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTF
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               300 ESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTF
+
+gi|128504       360 SSSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSE
+                360 |.||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               360 SRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSE
+
+gi|128504       420 PSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSSEMFEGSSEGGS
+                420 |||||||||||||||||||||||||||||||||||||||||||||||||.||||||||||
+3               420 PSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSSKMFEGSSEGGS
+
+gi|128504       480 SGPSRRDGRHRAPVTFDESGSLPFLSLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGEN
+                480 |||||.||||||||||||||||||.|||||||||||||||||||||||||||||||||||
+3               480 SGPSRKDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGEN
+
+gi|128504       540 DALKTCSVCITEYTEGNKLRKLPCSHEYHVHCIDRWLSENSTCPICRRAVLSSGNRESVV
+                540 ||||||||||||||||.||||||||||.||||||||||||||||||||||||||||||||
+3               540 DALKTCSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPICRRAVLSSGNRESVV
+
+gi|128504       600 
+                600 
+3               600 
+""",
+            )
+            hit = hits[3]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|26325250|dbj|BAC26379.1|")
+            self.assertEqual(hit.target.name, "BAC26379")
+            self.assertEqual(
+                hit.target.description, "unnamed protein product [Mus musculus]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=600)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 3047.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 1178.31134010022)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 590)
+            self.assertEqual(hsp.annotations["positive"], 595)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 600],
+                          [  0, 600]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 600)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 600)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 600))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "3")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+            )
+            self.assertEqual(hsp.target.id, "gi|26325250|dbj|BAC26379.1|")
+            self.assertEqual(hsp.target.name, "BAC26379")
+            self.assertEqual(
+                hsp.target.description, "unnamed protein product [Mus musculus]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRN+GSQTSENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNS EAVTEVPTTRAQRRARSRSPEHRRTRARAERS SPLQPTSEIPRRAPTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVR VRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSS+MFEGSSEGGSSGPSR+DGRHRAPVTFDESGSLPF SLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVLSSGNRESVV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|263252         0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3                 0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
+
+gi|263252        60 EELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSGQRGNQS
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||||||||.||||||
+3                60 EELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQS
+
+gi|263252       120 WRAVSRTNPNSGDFRFSLEINVNRNSGSQTSENESEPSTRRLSVENMESSSQRQMENSAS
+                120 |||||||||||||||||||||||||.||||||||||||||||||||||||||||||||||
+3               120 WRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSAS
+
+gi|263252       180 ESASARPSRAERNSAEAVTEVPTTRAQRRARSRSPEHRRTRARAERSRSPLQPTSEIPRR
+                180 ||||||||||||||.||||||||||||||||||||||||||||||||.||||||||||||
+3               180 ESASARPSRAERNSTEAVTEVPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIPRR
+
+gi|263252       240 APTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNS
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               240 APTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNS
+
+gi|263252       300 ESSGSGQRPPTIVLDLQVRGVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTF
+                300 |||||||||||||||||||.||||||||||||||||||||||||||||||||||||||||
+3               300 ESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTF
+
+gi|263252       360 SRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSE
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               360 SRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSE
+
+gi|263252       420 PSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSSEMFEGSSEGGS
+                420 |||||||||||||||||||||||||||||||||||||||||||||||||.||||||||||
+3               420 PSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSSKMFEGSSEGGS
+
+gi|263252       480 SGPSRRDGRHRAPVTFDESGSLPFLSLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGEN
+                480 |||||.||||||||||||||||||.|||||||||||||||||||||||||||||||||||
+3               480 SGPSRKDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGEN
+
+gi|263252       540 DALKTCSVCITEYTEGNKLRKLPCSHEYHVHCIDRWLSENSTCPICRRAVLSSGNRESVV
+                540 ||||||||||||||||.||||||||||.||||||||||||||||||||||||||||||||
+3               540 DALKTCSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPICRRAVLSSGNRESVV
+
+gi|263252       600 
+                600 
+3               600 
+""",
+            )
+            hit = hits[4]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|67846064|ref|NP_001020063.1|")
+            self.assertEqual(hit.target.name, "NP_001020063")
+            self.assertEqual(
+                hit.target.description,
+                "ring finger protein, LIM domain interacting [Rattus norvegicus] >gi|66910661|gb|AAH97491.1| Ring finger protein 12 [Rattus norvegicus] >gi|149055585|gb|EDM07169.1| ring finger protein 12, isoform CRA_b [Rattus norvegicus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=603)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2644.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 1023.07591100553)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 561)
+            self.assertEqual(hsp.annotations["positive"], 575)
+            self.assertEqual(hsp.annotations["gaps"], 9)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 198, 198, 240, 246, 447, 447, 603],
+                          [  0, 198, 199, 241, 241, 442, 444, 600]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 600)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 603)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 606))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "3")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+            )
+            self.assertEqual(hsp.target.id, "gi|67846064|ref|NP_001020063.1|")
+            self.assertEqual(hsp.target.name, "NP_001020063")
+            self.assertEqual(
+                hsp.target.description,
+                "ring finger protein, LIM domain interacting [Rattus norvegicus] >gi|66910661|gb|AAH97491.1| Ring finger protein 12 [Rattus norvegicus] >gi|149055585|gb|EDM07169.1| ring finger protein 12, isoform CRA_b [Rattus norvegicus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQS DENRAGESSDDV+NSDSIIDWLNSVRQ+GNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENE+EPSTRRLSVE+MESSSQRQME+ ASES SARPSRAERNSTEA+ EVP TR QRRARSRSPEHRRTRARAERS SPL PT EIPRRA       TLEQ  ENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSASVSSRN ER ESRNGRGSS  G  + S+SSSSPSPSS+GESSESSS +FEG+SEGG SGPSR+DGRHRAPV FDESGSLPF SLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVLSSGNRESVV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|678460         0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3                 0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
+
+gi|678460        60 EELLRRLQQIKEGPPPQSSDENRAGESSDDVSNSDSIIDWLNSVRQSGNTTRSGQRGNQS
+                 60 ||||||||||||||||||.||||||||||||.||||||||||||||.||||||.||||||
+3                60 EELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQS
+
+gi|678460       120 WRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENENEPSTRRLSVESMESSSQRQMESHAS
+                120 ||||||||||||||||||||||||||||||||||.||||||||||.||||||||||..||
+3               120 WRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSAS
+
+gi|678460       180 ESTSARPSRAERNSTEAL-EVPLTRGQRRARSRSPEHRRTRARAERSRSPLHPTIEIPRR
+                180 ||.||||||||||||||.-|||.||.|||||||||||||||||||||.|||.||.|||||
+3               180 ESASARPSRAERNSTEAVTEVPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIPRR
+
+gi|678460       239 AHHNISPQTLEQPLENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSS
+                240 |------.||||..||||||||||||||||||||||||||||||||||||||||||||||
+3               240 A------PTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSS
+
+gi|678460       299 DTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQTPNNTVTYESERG
+                300 |||||||||||||||||||||||||||||||||||||||||||||||.||||||||||||
+3               294 DTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERG
+
+gi|678460       359 GFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMY
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               354 GFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMY
+
+gi|678460       419 SDSDSEPSASVSSRNTERAESRNGRGSS--GAGNSSASSSSPSPSSNGESSESSSDLFEG
+                420 |||||||||||||||.||.|||||||||--|....|.|||||||||.||||||||..|||
+3               414 SDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSSKMFEG
+
+gi|678460       477 TSEGGPSGPSRRDGRHRAPVAFDESGSLPFLSLAQFFLLNEDDEDQPRGLTKEQIDNLAM
+                480 .||||.|||||.||||||||.|||||||||.|||||||||||||||||||||||||||||
+3               474 SSEGGSSGPSRKDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNLAM
+
+gi|678460       537 RSFGENDALKTCSVCITEYTEGNKLRKLPCSHEYHVHCIDRWLSENSTCPICRRAVLSSG
+                540 ||||||||||||||||||||||.||||||||||.||||||||||||||||||||||||||
+3               534 RSFGENDALKTCSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPICRRAVLSSG
+
+gi|678460       597 NRESVV 603
+                600 |||||| 606
+3               594 NRESVV 600
+""",
+            )
+            hit = hits[5]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|74007742|ref|XP_849701.1|")
+            self.assertEqual(hit.target.name, "XP_849701")
+            self.assertEqual(
+                hit.target.description,
+                "PREDICTED: similar to ring finger protein 12 isoform 2 [Canis familiaris]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=599)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2497.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 966.451573345675)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 502)
+            self.assertEqual(hsp.annotations["positive"], 526)
+            self.assertEqual(hsp.annotations["gaps"], 17)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0,  11,  12, 200, 201, 243, 249, 478, 478, 599],
+                          [  0,  11,  11, 199, 199, 241, 241, 470, 479, 600]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 600)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 599)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 608))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "3")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLG...SVV')",
+            )
+            self.assertEqual(hsp.target.id, "gi|74007742|ref|XP_849701.1|")
+            self.assertEqual(hsp.target.name, "XP_849701")
+            self.assertEqual(
+                hsp.target.description,
+                "PREDICTED: similar to ring finger protein 12 isoform 2 [Canis familiaris]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "ME+SDSNDKGS DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQ+ DENR G+SSDDV+N DSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQ  ENE+EPS RR   EN ++SSQRQ+EN  SE  S RPSR+ERNSTEA+T EV  TR QRRARSRSP+HRRTRARAERS SPL P SEIPRR+       T E    NE EGSSRTRHHVTLRQQISGP+LL RGLFAASG+RN SQG  SSDT S+ ES+GSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPS SVSSRNVER ESRNGRG S             P     G +  SSS           S  +R++GRHRAPVTFDESGSLPF SLAQFFLLNEDD+DQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVL+SGNRESVV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|740077         0 MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
+                  0 ||.||||||||-||||||||||||||||||||||||||||||||||||||||||||||||
+3                 0 MENSDSNDKGS-DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
+
+gi|740077        60 EEELLRRLQQIKEGPPPQNSDENRGGDSSDDVSNGDSIIDWLNSVRQTGNTTRSGQRGNQ
+                 60 ||||||||||||||||||..||||.|.|||||.|.|||||||||||||||||||.|||||
+3                59 EEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQ
+
+gi|740077       120 SWRAVSRTNPNSGDFRFSLEINVNRNNGSQNPENENEPSARRSGGENTDNSSQRQVENPR
+                120 ||||||||||||||||||||||||||||||..|||.|||.||...||...|||||.||..
+3               119 SWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSA
+
+gi|740077       180 SEPTSTRPSRSERNSTEALTGEVAPTRGQRRARSRSPDHRRTRARAERSRSPLHPMSEIP
+                180 ||..|.||||.|||||||.|-||..||.|||||||||.|||||||||||.|||.|.||||
+3               179 SESASARPSRAERNSTEAVT-EVPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIP
+
+gi|740077       240 RRSHHSISSQTFEHPLVNETEGSSRTRHHVTLRQQISGPDLLSRGLFAASGTRNASQGAG
+                240 ||.------.|.|....||.|||||||||||||||||||.||.||||||||.||.|||..
+3               238 RRA------PTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTS
+
+gi|740077       300 SSDTASSGESTGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQTPNNTVTYESE
+                300 ||||.|..||.||||||||||||||||||||||||||||||||||||||.||||||||||
+3               292 SSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESE
+
+gi|740077       360 RGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYF
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               352 RGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYF
+
+gi|740077       420 MYSDSDSEPSGSVSSRNVERAESRNGRGGSVRVPVQAPVLVPVPVLVFEGSNEGSSSS--
+                420 ||||||||||.|||||||||.|||||||.|.............|.....|....|||.--
+3               412 MYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSSKMF
+
+gi|740077       478 -------GSSGARREGRHRAPVTFDESGSLPFLSLAQFFLLNEDDDDQPRGLTKEQIDNL
+                480 -------.|...|..|||||||||||||||||.||||||||||||.||||||||||||||
+3               472 EGSSEGGSSGPSRKDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNL
+
+gi|740077       531 AMRSFGENDALKTCSVCITEYTEGNKLRKLPCSHEYHVHCIDRWLSENSTCPICRRAVLA
+                540 ||||||||||||||||||||||||.||||||||||.|||||||||||||||||||||||.
+3               532 AMRSFGENDALKTCSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPICRRAVLS
+
+gi|740077       591 SGNRESVV 599
+                600 |||||||| 608
+3               592 SGNRESVV 600
+""",
+            )
+            hit = hits[6]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|149757523|ref|XP_001505028.1|")
+            self.assertEqual(hit.target.name, "XP_001505028")
+            self.assertEqual(
+                hit.target.description,
+                "PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 2 [Equus caballus] >gi|149757525|ref|XP_001505027.1| PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 1 [Equus caballus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=616)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2481.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 960.288380130997)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 517)
+            self.assertEqual(hsp.annotations["positive"], 547)
+            self.assertEqual(hsp.annotations["gaps"], 16)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0,  11,  12, 241, 247, 441, 447, 485, 488, 616],
+                          [  0,  11,  11, 240, 240, 434, 434, 472, 472, 600]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 600)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 616)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 616))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "3")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLG...SVV')",
+            )
+            self.assertEqual(hsp.target.id, "gi|149757523|ref|XP_001505028.1|")
+            self.assertEqual(hsp.target.name, "XP_001505028")
+            self.assertEqual(
+                hsp.target.description,
+                "PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 2 [Equus caballus] >gi|149757525|ref|XP_001505027.1| PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 1 [Equus caballus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "ME+SDSNDKGS DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQ+ DENR G+SSDDV+N DSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQ  ENE+EPS RR S ENM+++SQRQ+EN+ SESA ARPSR+ERNSTEA+TEV  TR QRRARSRSP+HRRTRARAERS SPL P SEIPRR      + T E    NE EGSSRTRHHVTLRQQISGP+LL RGLFAASG+RN SQGT SSDT  + ES+GSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEP  SVSSRN+ER E         G  SSG  +SS SSSSSSPS SSSGESSE+SS++F      S    S  +R++GRHRAPVTFDESGSLPF SLAQFFLLNEDD+DQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVL+SGNRESVV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|149757         0 MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
+                  0 ||.||||||||-||||||||||||||||||||||||||||||||||||||||||||||||
+3                 0 MENSDSNDKGS-DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
+
+gi|149757        60 EEELLRRLQQIKEGPPPQNSDENRGGDSSDDVSNGDSIIDWLNSVRQTGNTTRSGQRGNQ
+                 60 ||||||||||||||||||..||||.|.|||||.|.|||||||||||||||||||.|||||
+3                59 EEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQ
+
+gi|149757       120 SWRAVSRTNPNSGDFRFSLEINVNRNNGSQNPENENEPSARRSSGENMDNNSQRQVENAQ
+                120 ||||||||||||||||||||||||||||||..|||.|||.||.|.|||...||||.||..
+3               119 SWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSA
+
+gi|149757       180 SESAPARPSRSERNSTEALTEVAPTRGQRRARSRSPDHRRTRARAERSRSPLHPMSEIPR
+                180 ||||.|||||.|||||||.|||..||.|||||||||.|||||||||||.|||.|.|||||
+3               179 SESASARPSRAERNSTEAVTEVPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIPR
+
+gi|149757       240 RSHHSISSQTFEHPLVNETEGSSRTRHHVTLRQQISGPDLLSRGLFAASGTRNASQGTGS
+                240 |------..|.|....||.|||||||||||||||||||.||.||||||||.||.||||.|
+3               239 R------APTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSS
+
+gi|149757       300 SDTAGSGESTGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQTPNNTVTYESER
+                300 |||....||.||||||||||||||||||||||||||||||||||||||.|||||||||||
+3               293 SDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESER
+
+gi|149757       360 GGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFM
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               353 GGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFM
+
+gi|149757       420 YSDSDSEPGGSVSSRNMERAESRNGRGGSGGGSSSGSSSSSNSSSSSSPSSSSSGESSET
+                420 ||||||||..||||||.||.|------...|..|||...||.||||||||.||||||||.
+3               413 YSDSDSEPSASVSSRNVERVE------SRNGRGSSGGGNSSGSSSSSSPSPSSSGESSES
+
+gi|149757       480 SSEVFEGSNEGSSSSGSAGARREGRHRAPVTFDESGSLPFLSLAQFFLLNEDDDDQPRGL
+                480 ||..|---...|....|...|..|||||||||||||||||.||||||||||||.||||||
+3               467 SSKMF---EGSSEGGSSGPSRKDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGL
+
+gi|149757       540 TKEQIDNLAMRSFGENDALKTCSVCITEYTEGNKLRKLPCSHEYHVHCIDRWLSENSTCP
+                540 ||||||||||||||||||||||||||||||||.||||||||||.||||||||||||||||
+3               524 TKEQIDNLAMRSFGENDALKTCSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCP
+
+gi|149757       600 ICRRAVLASGNRESVV 616
+                600 |||||||.|||||||| 616
+3               584 ICRRAVLSSGNRESVV 600
+""",
+            )
+            hit = hits[7]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|74007736|ref|XP_859444.1|")
+            self.assertEqual(hit.target.name, "XP_859444")
+            self.assertEqual(
+                hit.target.description,
+                "PREDICTED: similar to ring finger protein 12 isoform 3 [Canis familiaris]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=605)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2480.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 959.90318055508)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 502)
+            self.assertEqual(hsp.annotations["positive"], 526)
+            self.assertEqual(hsp.annotations["gaps"], 23)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0,  11,  12,  85,  91, 206, 207, 249, 255, 484, 484, 605],
+                          [  0,  11,  11,  84,  84, 199, 199, 241, 241, 470, 479, 600]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 600)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 605)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 614))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "3")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLG...SVV')",
+            )
+            self.assertEqual(hsp.target.id, "gi|74007736|ref|XP_859444.1|")
+            self.assertEqual(hsp.target.name, "XP_859444")
+            self.assertEqual(
+                hsp.target.description,
+                "PREDICTED: similar to ring finger protein 12 isoform 3 [Canis familiaris]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "ME+SDSNDKGS DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQ+ DENR       G+SSDDV+N DSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQ  ENE+EPS RR   EN ++SSQRQ+EN  SE  S RPSR+ERNSTEA+T EV  TR QRRARSRSP+HRRTRARAERS SPL P SEIPRR+       T E    NE EGSSRTRHHVTLRQQISGP+LL RGLFAASG+RN SQG  SSDT S+ ES+GSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPS SVSSRNVER ESRNGRG S             P     G +  SSS           S  +R++GRHRAPVTFDESGSLPF SLAQFFLLNEDD+DQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVL+SGNRESVV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|740077         0 MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
+                  0 ||.||||||||-||||||||||||||||||||||||||||||||||||||||||||||||
+3                 0 MENSDSNDKGS-DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
+
+gi|740077        60 EEELLRRLQQIKEGPPPQNSDENRGANCSFGGDSSDDVSNGDSIIDWLNSVRQTGNTTRS
+                 60 ||||||||||||||||||..||||.------|.|||||.|.|||||||||||||||||||
+3                59 EEELLRRLQQIKEGPPPQSPDENRA------GESSDDVTNSDSIIDWLNSVRQTGNTTRS
+
+gi|740077       120 GQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQNPENENEPSARRSGGENTDNSSQR
+                120 .|||||||||||||||||||||||||||||||||||..|||.|||.||...||...||||
+3               113 RQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQR
+
+gi|740077       180 QVENPRSEPTSTRPSRSERNSTEALTGEVAPTRGQRRARSRSPDHRRTRARAERSRSPLH
+                180 |.||..||..|.||||.|||||||.|-||..||.|||||||||.|||||||||||.|||.
+3               173 QMENSASESASARPSRAERNSTEAVT-EVPTTRAQRRARSRSPEHRRTRARAERSMSPLQ
+
+gi|740077       240 PMSEIPRRSHHSISSQTFEHPLVNETEGSSRTRHHVTLRQQISGPDLLSRGLFAASGTRN
+                240 |.||||||.------.|.|....||.|||||||||||||||||||.||.||||||||.||
+3               232 PTSEIPRRA------PTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRN
+
+gi|740077       300 ASQGAGSSDTASSGESTGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQTPNNT
+                300 .|||..||||.|..||.||||||||||||||||||||||||||||||||||||||.||||
+3               286 PSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNT
+
+gi|740077       360 VTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGF
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               346 VTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGF
+
+gi|740077       420 GELSYFMYSDSDSEPSGSVSSRNVERAESRNGRGGSVRVPVQAPVLVPVPVLVFEGSNEG
+                420 ||||||||||||||||.|||||||||.|||||||.|.............|.....|....
+3               406 GELSYFMYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSE
+
+gi|740077       480 SSSS---------GSSGARREGRHRAPVTFDESGSLPFLSLAQFFLLNEDDDDQPRGLTK
+                480 |||.---------.|...|..|||||||||||||||||.||||||||||||.||||||||
+3               466 SSSKMFEGSSEGGSSGPSRKDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTK
+
+gi|740077       531 EQIDNLAMRSFGENDALKTCSVCITEYTEGNKLRKLPCSHEYHVHCIDRWLSENSTCPIC
+                540 ||||||||||||||||||||||||||||||.||||||||||.||||||||||||||||||
+3               526 EQIDNLAMRSFGENDALKTCSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPIC
+
+gi|740077       591 RRAVLASGNRESVV 605
+                600 |||||.|||||||| 614
+3               586 RRAVLSSGNRESVV 600
+""",
+            )
+            hit = hits[8]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|76659189|ref|XP_589983.2|")
+            self.assertEqual(hit.target.name, "XP_589983")
+            self.assertEqual(
+                hit.target.description,
+                "PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 1 [Bos taurus] >gi|119920248|ref|XP_001251830.1| PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) [Bos taurus]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=611)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2473.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 957.206783523659)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 519)
+            self.assertEqual(hsp.annotations["positive"], 550)
+            self.assertEqual(hsp.annotations["gaps"], 11)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0,  11,  12, 200, 201, 243, 249, 480, 483, 611],
+                          [  0,  11,  11, 199, 199, 241, 241, 472, 472, 600]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 600)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 611)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 611))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "3")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MESSDCNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLG...SIV')",
+            )
+            self.assertEqual(hsp.target.id, "gi|76659189|ref|XP_589983.2|")
+            self.assertEqual(hsp.target.name, "XP_589983")
+            self.assertEqual(
+                hsp.target.description,
+                "PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 1 [Bos taurus] >gi|119920248|ref|XP_001251830.1| PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) [Bos taurus]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "ME+SD NDKGS DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQ+ DENR G+SSDDV+N DSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQ  ENE+EPS RR S E+M+++SQRQMEN  SE+ SARP R+ERNSTEA+T E P TR QRRARSRSP+HRRTRARAERS SPL P SEIPRR+       T E    NE EGSSRTRHHVTLRQQISGP+LL RGLFAASG+RN SQG  SSDT  N ES+GSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPS SVSSRN+ER ESRNGRG SGG +SSGSSSSSSPS SS+GESSE+SS++F      S    S  +R++GRHRAPVTFDESGSLPF SLAQFFLLNEDD+DQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVL+SGNRES+V",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|766591         0 MESSDCNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
+                  0 ||.||.|||||-||||||||||||||||||||||||||||||||||||||||||||||||
+3                 0 MENSDSNDKGS-DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
+
+gi|766591        60 EEELLRRLQQIKEGPPPQNSDENRGGDSSDDVSNGDSIIDWLNSVRQTGNTTRSGQRGNQ
+                 60 ||||||||||||||||||..||||.|.|||||.|.|||||||||||||||||||.|||||
+3                59 EEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQ
+
+gi|766591       120 SWRAVSRTNPNSGDFRFSLEINVNRNNGSQNPENENEPSARRSSGESMDNNSQRQMENPR
+                120 ||||||||||||||||||||||||||||||..|||.|||.||.|.|.|...|||||||..
+3               119 SWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSA
+
+gi|766591       180 SETTSARPPRSERNSTEALTGEAPPTRGQRRARSRSPDHRRTRARAERSRSPLHPMSEIP
+                180 ||..||||.|.|||||||.|-|.|.||.|||||||||.|||||||||||.|||.|.||||
+3               179 SESASARPSRAERNSTEAVT-EVPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIP
+
+gi|766591       240 RRSHHSISSQTFEHPLVNETEGSSRTRHHVTLRQQISGPDLLTRGLFAASGTRNASQGAG
+                240 ||.------.|.|....||.|||||||||||||||||||.||.||||||||.||.|||..
+3               238 RRA------PTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTS
+
+gi|766591       300 SSDTTGNGESTGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQTPNNTVTYESE
+                300 ||||..|.||.||||||||||||||||||||||||||||||||||||||.||||||||||
+3               292 SSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESE
+
+gi|766591       360 RGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYF
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               352 RGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYF
+
+gi|766591       420 MYSDSDSEPSGSVSSRNMERSESRNGRGGSGGSSSSGSSSSSSPSSSSNGESSETSSEVF
+                420 ||||||||||.||||||.||.|||||||.|||..|||||||||||.||.|||||.||..|
+3               412 MYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSSKMF
+
+gi|766591       480 EGSNEGSSSSGSSGARREGRHRAPVTFDESGSLPFLSLAQFFLLNEDDDDQPRGLTKEQI
+                480 ---...|....|...|..|||||||||||||||||.||||||||||||.|||||||||||
+3               472 ---EGSSEGGSSGPSRKDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQI
+
+gi|766591       540 DNLAMRSFGENDALKTCSVCITEYTEGNKLRKLPCSHEYHVHCIDRWLSENSTCPICRRA
+                540 |||||||||||||||||||||||||||.||||||||||.|||||||||||||||||||||
+3               529 DNLAMRSFGENDALKTCSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPICRRA
+
+gi|766591       600 VLASGNRESIV 611
+                600 ||.||||||.| 611
+3               589 VLSSGNRESVV 600
+""",
+            )
+            hit = hits[9]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|74007740|ref|XP_859515.1|")
+            self.assertEqual(hit.target.name, "XP_859515")
+            self.assertEqual(
+                hit.target.description,
+                "PREDICTED: similar to ring finger protein 12 isoform 5 [Canis familiaris]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=594)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2464.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 953.739987340402)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 497)
+            self.assertEqual(hsp.annotations["positive"], 523)
+            self.assertEqual(hsp.annotations["gaps"], 22)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0,  11,  12, 200, 201, 243, 249, 443, 443, 594],
+                          [  0,  11,  11, 199, 199, 241, 241, 435, 449, 600]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 600)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 594)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 608))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+            )
+            self.assertEqual(hsp.query.id, "3")
+            self.assertEqual(
+                hsp.query.description,
+                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLG...SVV')",
+            )
+            self.assertEqual(hsp.target.id, "gi|74007740|ref|XP_859515.1|")
+            self.assertEqual(hsp.target.name, "XP_859515")
+            self.assertEqual(
+                hsp.target.description,
+                "PREDICTED: similar to ring finger protein 12 isoform 5 [Canis familiaris]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "ME+SDSNDKGS DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQ+ DENR G+SSDDV+N DSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQ  ENE+EPS RR   EN ++SSQRQ+EN  SE  S RPSR+ERNSTEA+T EV  TR QRRARSRSP+HRRTRARAERS SPL P SEIPRR+       T E    NE EGSSRTRHHVTLRQQISGP+LL RGLFAASG+RN SQG  SSDT S+ ES+GSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPS SVSSRNVER ES               +       SSS E+S    +     S    S  +R++GRHRAPVTFDESGSLPF SLAQFFLLNEDD+DQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVL+SGNRESVV",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|740077         0 MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
+                  0 ||.||||||||-||||||||||||||||||||||||||||||||||||||||||||||||
+3                 0 MENSDSNDKGS-DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
+
+gi|740077        60 EEELLRRLQQIKEGPPPQNSDENRGGDSSDDVSNGDSIIDWLNSVRQTGNTTRSGQRGNQ
+                 60 ||||||||||||||||||..||||.|.|||||.|.|||||||||||||||||||.|||||
+3                59 EEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQ
+
+gi|740077       120 SWRAVSRTNPNSGDFRFSLEINVNRNNGSQNPENENEPSARRSGGENTDNSSQRQVENPR
+                120 ||||||||||||||||||||||||||||||..|||.|||.||...||...|||||.||..
+3               119 SWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSA
+
+gi|740077       180 SEPTSTRPSRSERNSTEALTGEVAPTRGQRRARSRSPDHRRTRARAERSRSPLHPMSEIP
+                180 ||..|.||||.|||||||.|-||..||.|||||||||.|||||||||||.|||.|.||||
+3               179 SESASARPSRAERNSTEAVT-EVPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIP
+
+gi|740077       240 RRSHHSISSQTFEHPLVNETEGSSRTRHHVTLRQQISGPDLLSRGLFAASGTRNASQGAG
+                240 ||.------.|.|....||.|||||||||||||||||||.||.||||||||.||.|||..
+3               238 RRA------PTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTS
+
+gi|740077       300 SSDTASSGESTGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQTPNNTVTYESE
+                300 ||||.|..||.||||||||||||||||||||||||||||||||||||||.||||||||||
+3               292 SSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESE
+
+gi|740077       360 RGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYF
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+3               352 RGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYF
+
+gi|740077       420 MYSDSDSEPSGSVSSRNVERAES--------------RNGRGGSGGSSSSETSSEVFEGS
+                420 ||||||||||.|||||||||.||--------------.........|||.|.|.......
+3               412 MYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSSKMF
+
+gi|740077       466 NEGSSSSGSSGARREGRHRAPVTFDESGSLPFLSLAQFFLLNEDDDDQPRGLTKEQIDNL
+                480 ...|....|...|..|||||||||||||||||.||||||||||||.||||||||||||||
+3               472 EGSSEGGSSGPSRKDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNL
+
+gi|740077       526 AMRSFGENDALKTCSVCITEYTEGNKLRKLPCSHEYHVHCIDRWLSENSTCPICRRAVLA
+                540 ||||||||||||||||||||||||.||||||||||.|||||||||||||||||||||||.
+3               532 AMRSFGENDALKTCSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPICRRAVLS
+
+gi|740077       586 SGNRESVV 594
+                600 |||||||| 608
+3               592 SGNRESVV 600
+""",
+            )
+            record = next(records)
+            self.assertEqual(record.num, 4)
+            self.assertIsInstance(record.query, SeqRecord)
+            self.assertEqual(record.query.id, "4")
+            self.assertEqual(
+                record.query.description,
+                "gi|671626|emb|CAA85685.1| rubisco large subunit",
+            )
+            self.assertEqual(repr(record.query.seq), "Seq(None, length=473)")
+            self.assertEqual(len(record.stat), 7)
+            self.assertEqual(record.stat["db-num"], 8994603)
+            self.assertEqual(record.stat["db-len"], -1216159329)
+            self.assertEqual(record.stat["hsp-len"], 0)
+            self.assertAlmostEqual(record.stat["eff-space"], 605914661151.0)
+            self.assertAlmostEqual(record.stat["kappa"], 0.041)
+            self.assertAlmostEqual(record.stat["lambda"], 0.267)
+            self.assertAlmostEqual(record.stat["entropy"], 0.14)
+            hits = record.hits
+            self.assertEqual(len(hits), 10)
+            hit = hits[0]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|671626|emb|CAA85685.1|")
+            self.assertEqual(hit.target.name, "CAA85685")
+            self.assertEqual(
+                hit.target.description, "rubisco large subunit [Rosmarinus officinalis]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=473)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2543.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 984.170753837873)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 473)
+            self.assertEqual(hsp.annotations["positive"], 473)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 473],
+                          [  0, 473]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 473)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 473)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 473))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description, "gi|671626|emb|CAA85685.1| rubisco large subunit"
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.target.id, "gi|671626|emb|CAA85685.1|")
+            self.assertEqual(hsp.target.name, "CAA85685")
+            self.assertEqual(
+                hsp.target.description, "rubisco large subunit [Rosmarinus officinalis]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|671626         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+
+gi|671626        60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSI
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4                60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSI
+
+gi|671626       120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+
+gi|671626       180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+
+gi|671626       240 NATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               240 NATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+
+gi|671626       300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+
+gi|671626       360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+
+gi|671626       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
+4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+""",
+            )
+            hit = hits[1]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|671654|emb|CAA85698.1|")
+            self.assertEqual(hit.target.name, "CAA85698")
+            self.assertEqual(
+                hit.target.description,
+                "rubisco large subunit [Salvia sclarea] >gi|1419246|emb|CAA85693.1| rubisco large subunit [Salvia indica] >gi|1480421|emb|CAA85719.1| rubisco large subunit [Thymus vulgaris] >gi|1480423|emb|CAA85720.1| rubisco large subunit [Thymus vulgaris]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=473)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2530.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 979.163159350948)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 471)
+            self.assertEqual(hsp.annotations["positive"], 472)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 473],
+                          [  0, 473]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 473)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 473)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 473))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description, "gi|671626|emb|CAA85685.1| rubisco large subunit"
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.target.id, "gi|671654|emb|CAA85698.1|")
+            self.assertEqual(hsp.target.name, "CAA85698")
+            self.assertEqual(
+                hsp.target.description,
+                "rubisco large subunit [Salvia sclarea] >gi|1419246|emb|CAA85693.1| rubisco large subunit [Salvia indica] >gi|1480421|emb|CAA85719.1| rubisco large subunit [Thymus vulgaris] >gi|1480423|emb|CAA85720.1| rubisco large subunit [Thymus vulgaris]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|671654         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+
+gi|671654        60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQYICYVAYPLDLFEEGSVTNMFTSI
+                 60 ||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||
+4                60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSI
+
+gi|671654       120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+
+gi|671654       180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+
+gi|671654       240 NATAGTCEEMMKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+                240 ||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||
+4               240 NATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+
+gi|671654       300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+
+gi|671654       360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+
+gi|671654       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
+4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+""",
+            )
+            hit = hits[2]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|671568|emb|CAA85667.1|")
+            self.assertEqual(hit.target.name, "CAA85667")
+            self.assertEqual(
+                hit.target.description, "rubisco large subunit [Mentha suaveolens]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=473)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2528.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 978.392760199113)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 470)
+            self.assertEqual(hsp.annotations["positive"], 472)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 473],
+                          [  0, 473]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 473)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 473)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 473))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description, "gi|671626|emb|CAA85685.1| rubisco large subunit"
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.target.id, "gi|671568|emb|CAA85667.1|")
+            self.assertEqual(hsp.target.name, "CAA85667")
+            self.assertEqual(
+                hsp.target.description, "rubisco large subunit [Mentha suaveolens]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYK+QAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|671568         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+
+gi|671568        60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQYICYVAYPLDLFEEGSVTNMFTSI
+                 60 ||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||
+4                60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSI
+
+gi|671568       120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+
+gi|671568       180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKSQAETGEIKGHYL
+                180 |||||||||||||||||||||||||||||||||||||||||||||||.||||||||||||
+4               180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+
+gi|671568       240 NATAGTCEEMMKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+                240 ||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||
+4               240 NATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+
+gi|671568       300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+
+gi|671568       360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+
+gi|671568       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
+4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+""",
+            )
+            hit = hits[3]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|1419217|emb|CAA85688.1|")
+            self.assertEqual(hit.target.name, "CAA85688")
+            self.assertEqual(
+                hit.target.description,
+                "rubisco large subunit [Salvia bucharica] >gi|1419237|emb|CAA85689.1| rubisco large subunit [Salvia canariensis]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=473)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2528.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 978.392760199113)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 470)
+            self.assertEqual(hsp.annotations["positive"], 472)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 473],
+                          [  0, 473]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 473)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 473)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 473))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description, "gi|671626|emb|CAA85685.1| rubisco large subunit"
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.target.id, "gi|1419217|emb|CAA85688.1|")
+            self.assertEqual(hsp.target.name, "CAA85688")
+            self.assertEqual(
+                hsp.target.description,
+                "rubisco large subunit [Salvia bucharica] >gi|1419237|emb|CAA85689.1| rubisco large subunit [Salvia canariensis]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDF+EKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|141921         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+
+gi|141921        60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQYICYVAYPLDLFEEGSVTNMFTSI
+                 60 ||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||
+4                60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSI
+
+gi|141921       120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+
+gi|141921       180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+
+gi|141921       240 NATAGTCEEMMKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+                240 ||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||
+4               240 NATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+
+gi|141921       300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFVEKDRSR
+                300 |||||||||||||||||||||||||||||||||||||||||||||||||||||.||||||
+4               300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+
+gi|141921       360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+
+gi|141921       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
+4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+""",
+            )
+            hit = hits[4]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|671558|emb|CAA85670.1|")
+            self.assertEqual(hit.target.name, "CAA85670")
+            self.assertEqual(
+                hit.target.description, "rubisco large subunit [Monarda menthaefolia]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=473)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2528.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 978.392760199113)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 470)
+            self.assertEqual(hsp.annotations["positive"], 472)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 473],
+                          [  0, 473]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 473)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 473)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 473))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description, "gi|671626|emb|CAA85685.1| rubisco large subunit"
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPQYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.target.id, "gi|671558|emb|CAA85670.1|")
+            self.assertEqual(hsp.target.name, "CAA85670")
+            self.assertEqual(
+                hsp.target.description, "rubisco large subunit [Monarda menthaefolia]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MSPQTETKASVGFKAGVKEYKLTYYTP+YETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYK+QAETGEIKGHYLNATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|671558         0 MSPQTETKASVGFKAGVKEYKLTYYTPQYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+                  0 |||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||
+4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+
+gi|671558        60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQYICYVAYPLDLFEEGSVTNMFTSI
+                 60 ||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||
+4                60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSI
+
+gi|671558       120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+
+gi|671558       180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKSQAETGEIKGHYL
+                180 |||||||||||||||||||||||||||||||||||||||||||||||.||||||||||||
+4               180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+
+gi|671558       240 NATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+                240 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               240 NATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+
+gi|671558       300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+
+gi|671558       360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+
+gi|671558       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
+4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+""",
+            )
+            hit = hits[5]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|1419213|emb|CAA85687.1|")
+            self.assertEqual(hit.target.name, "CAA85687")
+            self.assertEqual(
+                hit.target.description, "rubisco large subunit [Salvia argentea]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=473)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2525.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 977.237161471361)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 470)
+            self.assertEqual(hsp.annotations["positive"], 471)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 473],
+                          [  0, 473]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 473)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 473)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 473))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description, "gi|671626|emb|CAA85685.1| rubisco large subunit"
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.target.id, "gi|1419213|emb|CAA85687.1|")
+            self.assertEqual(hsp.target.name, "CAA85687")
+            self.assertEqual(
+                hsp.target.description, "rubisco large subunit [Salvia argentea]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPV GEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|141921         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+
+gi|141921        60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVTGEKDQYICYVAYPLDLFEEGSVTNMFTSI
+                 60 ||||||||||||||||||||||||||||||.|||||.|||||||||||||||||||||||
+4                60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSI
+
+gi|141921       120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+
+gi|141921       180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+
+gi|141921       240 NATAGTCEEMMKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+                240 ||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||
+4               240 NATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+
+gi|141921       300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+
+gi|141921       360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+
+gi|141921       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
+4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+""",
+            )
+            hit = hits[6]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|671589|emb|CAA85676.1|")
+            self.assertEqual(hit.target.name, "CAA85676")
+            self.assertEqual(
+                hit.target.description,
+                "rubisco large subunit [Origanum laevigatum] >gi|671593|emb|CAA85677.1| rubisco large subunit [Origanum vulgare]",
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=473)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2525.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 977.237161471361)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 470)
+            self.assertEqual(hsp.annotations["positive"], 471)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 473],
+                          [  0, 473]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 473)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 473)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 473))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description, "gi|671626|emb|CAA85685.1| rubisco large subunit"
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.target.id, "gi|671589|emb|CAA85676.1|")
+            self.assertEqual(hsp.target.name, "CAA85676")
+            self.assertEqual(
+                hsp.target.description,
+                "rubisco large subunit [Origanum laevigatum] >gi|671593|emb|CAA85677.1| rubisco large subunit [Origanum vulgare]",
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLG VDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|671589         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+
+gi|671589        60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQYICYVAYPLDLFEEGSVTNMFTSI
+                 60 ||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||
+4                60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSI
+
+gi|671589       120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+
+gi|671589       180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+
+gi|671589       240 NATAGTCEEMMKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+                240 ||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||
+4               240 NATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+
+gi|671589       300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGLVDLLRDDFIEKDRSR
+                300 ||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||||
+4               300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+
+gi|671589       360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+
+gi|671589       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
+4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+""",
+            )
+            hit = hits[7]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|1480419|emb|CAA85718.1|")
+            self.assertEqual(hit.target.name, "CAA85718")
+            self.assertEqual(
+                hit.target.description, "rubisco large subunit [Thymus alsinoides]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=473)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2523.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 976.466762319526)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 470)
+            self.assertEqual(hsp.annotations["positive"], 471)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 473],
+                          [  0, 473]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 473)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 473)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 473))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description, "gi|671626|emb|CAA85685.1| rubisco large subunit"
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.target.id, "gi|1480419|emb|CAA85718.1|")
+            self.assertEqual(hsp.target.name, "CAA85718")
+            self.assertEqual(
+                hsp.target.description, "rubisco large subunit [Thymus alsinoides]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDS LQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|148041         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+
+gi|148041        60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQYICYVAYPLDLFEEGSVTNMFTSI
+                 60 ||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||
+4                60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSI
+
+gi|148041       120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+
+gi|148041       180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+
+gi|148041       240 NATAGTCEEMMKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+                240 ||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||
+4               240 NATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+
+gi|148041       300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+                300 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+
+gi|148041       360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSGLQFGGGTLGHPWGNAPGAVAN
+                360 ||||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||
+4               360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+
+gi|148041       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
+4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+""",
+            )
+            hit = hits[8]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|671624|emb|CAA85684.1|")
+            self.assertEqual(hit.target.name, "CAA85684")
+            self.assertEqual(
+                hit.target.description, "rubisco large subunit [Rosmarinus officinalis]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=473)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2523.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 976.466762319526)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 469)
+            self.assertEqual(hsp.annotations["positive"], 471)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 473],
+                          [  0, 473]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 473)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 473)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 473))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description, "gi|671626|emb|CAA85685.1| rubisco large subunit"
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.target.id, "gi|671624|emb|CAA85684.1|")
+            self.assertEqual(hsp.target.name, "CAA85684")
+            self.assertEqual(
+                hsp.target.description, "rubisco large subunit [Rosmarinus officinalis]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDK NKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGF+DLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|671624         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+
+gi|671624        60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQYICYVAYPLDLFEEGSVTNMFTSI
+                 60 ||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||
+4                60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSI
+
+gi|671624       120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKSNKYGRPLLGCTIKPKLGL
+                120 |||||||||||||||||||||||||||||||||||||||||.||||||||||||||||||
+4               120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+
+gi|671624       180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+
+gi|671624       240 NATAGTCEEMMKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+                240 ||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||
+4               240 NATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+
+gi|671624       300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFIDLLRDDFIEKDRSR
+                300 |||||||||||||||||||||||||||||||||||||||||||||.||||||||||||||
+4               300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+
+gi|671624       360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+
+gi|671624       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+                420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
+4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+""",
+            )
+            hit = hits[9]
+            self.assertIsInstance(hit.target, SeqRecord)
+            self.assertEqual(hit.target.id, "gi|1419211|emb|CAA85686.1|")
+            self.assertEqual(hit.target.name, "CAA85686")
+            self.assertEqual(
+                hit.target.description, "rubisco large subunit [Salvia aethiopis]"
+            )
+            self.assertEqual(repr(hit.target.seq), "Seq(None, length=473)")
+            self.assertEqual(len(hit), 1)
+            hsp = hit[0]
+            self.assertAlmostEqual(hsp.score, 2523.0)
+            self.assertAlmostEqual(hsp.annotations["bit score"], 976.466762319526)
+            self.assertAlmostEqual(hsp.annotations["evalue"], 0.0)
+            self.assertEqual(hsp.annotations["identity"], 469)
+            self.assertEqual(hsp.annotations["positive"], 471)
+            self.assertEqual(hsp.annotations["gaps"], 0)
+            self.assertTrue(
+                np.array_equal(
+                    hsp.coordinates,
+                    # fmt: off
+                    np.array([[  0, 473],
+                          [  0, 473]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(hsp.query.annotations["start"], 0)
+            self.assertEqual(hsp.query.annotations["end"], 473)
+            self.assertEqual(hsp.query.annotations["frame"], 0)
+            self.assertEqual(hsp.target.annotations["start"], 0)
+            self.assertEqual(hsp.target.annotations["end"], 473)
+            self.assertEqual(hsp.target.annotations["frame"], 0)
+            self.assertEqual(hsp.shape, (2, 473))
+            self.assertEqual(
+                repr(hsp.query.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.query.id, "4")
+            self.assertEqual(
+                hsp.query.description, "gi|671626|emb|CAA85685.1| rubisco large subunit"
+            )
+            self.assertEqual(
+                repr(hsp.target.seq),
+                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+            )
+            self.assertEqual(hsp.target.id, "gi|1419211|emb|CAA85686.1|")
+            self.assertEqual(hsp.target.name, "CAA85686")
+            self.assertEqual(
+                hsp.target.description, "rubisco large subunit [Salvia aethiopis]"
+            )
+            self.assertEqual(
+                hsp.annotations["midline"],
+                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDF+EKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACV ARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+            )
+            self.assertEqual(
+                str(hsp),
+                """\
+gi|141921         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
+
+gi|141921        60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQYICYVAYPLDLFEEGSVTNMFTSI
+                 60 ||||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||
+4                60 SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSI
+
+gi|141921       120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               120 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+
+gi|141921       180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+                180 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               180 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+
+gi|141921       240 NATAGTCEEMMKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+                240 ||||||||||.|||||||||||||||||||||||||||||||||||||||||||||||||
+4               240 NATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+
+gi|141921       300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFVEKDRSR
+                300 |||||||||||||||||||||||||||||||||||||||||||||||||||||.||||||
+4               300 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+
+gi|141921       360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+                360 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+4               360 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+
+gi|141921       420 RVAVEACVLARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+                420 ||||||||.|||||||||||||||||||||||||||||||||||||||||||| 473
+4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+""",
+            )
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
