@@ -19971,6 +19971,53 @@ gi|151567        22 RMATCSSDKTIKIFEVEGETHKLIDTLTGHEGPVWRVDWA 62
             hits = record.hits
             self.assertEqual(len(hits), 0)
 
+    def test_xml_2218L_blastp_001(self):
+        """Parsing blastp 2.2.18 [Mar-02-2008] (xml_2218L_blastp_001.xml)."""
+        filename = "xml_2218L_blastp_001.xml"
+        datafile = os.path.join("Blast", filename)
+        with open(datafile, "rb") as handle:
+            records = Blast.parse(handle)
+            self.assertEqual(records.program, "blastp")
+            self.assertEqual(records.version, "blastp 2.2.18 [Mar-02-2008]")
+            self.assertEqual(
+                records.reference,
+                '~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(
+                records.db, "/Users/pjcock/Downloads/Software/blast-2.2.18/data/nr"
+            )
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "lcl|1_0")
+            self.assertEqual(records.query.description, "Fake")
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=9)")
+            self.assertEqual(len(records.param), 5)
+            self.assertEqual(records.param["matrix"], "BLOSUM62")
+            self.assertAlmostEqual(records.param["expect"], 1e-05)
+            self.assertEqual(records.param["gap-open"], 11)
+            self.assertEqual(records.param["gap-extend"], 1)
+            self.assertEqual(records.param["filter"], "F")
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
+        self.check_xml_2218L_blastp_001(record)
+
+        with open(datafile, "rb") as handle:
+            record = Blast.read(handle)
+            self.check_xml_2218L_blastp_001(record)
+
+    def check_xml_2218L_blastp_001(self, record):
+        self.assertEqual(record.num, 1)
+        self.assertIsNone(record.query)
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 6589360)
+        self.assertEqual(record.stat["db-len"], 2253133281)
+        self.assertEqual(record.stat["hsp-len"], 0)
+        self.assertAlmostEqual(record.stat["eff-space"], 20278200000.0)
+        self.assertAlmostEqual(record.stat["kappa"], 0.041)
+        self.assertAlmostEqual(record.stat["lambda"], 0.267)
+        self.assertAlmostEqual(record.stat["entropy"], 0.14)
+        hits = record.hits
+        self.assertEqual(len(hits), 0)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

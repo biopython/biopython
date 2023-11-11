@@ -60,7 +60,9 @@ class CorruptedXMLError(ValueError):
 
 
 class Record:
-    pass
+    def __init__(self):
+        self.query = None
+        self.hits = []
 
 
 class Records:
@@ -195,7 +197,6 @@ class Records:
     def _start_iteration_hits(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
-        self._hits = []
 
     def _start_hit(self, name, attrs):
         assert self._characters.strip() == ""
@@ -440,21 +441,18 @@ class Records:
     def _end_iteration_hits(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
-        hits = self._hits
-        self._record.hits = hits
-        del self._hits
 
     def _end_hit(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
         hit = self._hit
         del self._hit
-        self._hits.append(hit)
+        self._record.hits.append(hit)
 
     def _end_hit_num(self, name):
         num = int(self._characters)
-        if num != len(self._hits) + 1:
-            raise ValueError(f"unexpected value in tag <Hit_num> (found {num}, expected {len(self._hits) + 1})")
+        if num != len(self._record.hits) + 1:
+            raise ValueError(f"unexpected value in tag <Hit_num> (found {num}, expected {len(self._record.hits) + 1})")
         self._characters = ""
 
     def _end_hit_id(self, name):
@@ -681,7 +679,8 @@ class Records:
         """
         assert context is None
         assert base is None
-        if systemId != "NCBI_BlastOutput.dtd":
+        if systemId not in ("NCBI_BlastOutput.dtd",
+                            "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd"):
             raise ValueError("output from legacy BLAST program")
         assert publicId == "-//NCBI//NCBI BlastOutput/EN"
         return 1
