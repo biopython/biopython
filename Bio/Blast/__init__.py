@@ -527,7 +527,7 @@ class Records:
 
     def _end_hsp_query_frame(self, name):
         query_frame = int(self._characters)
-        if self.program == "blastx" and query_frame in (-3, -2, -1, +1, +2, +3):
+        if self.program in ("blastx", "tblastx") and query_frame in (-3, -2, -1, 1, 2, 3):
             pass
         elif self.program in ("blastp", "tblastn") and query_frame == 0:
             pass
@@ -540,11 +540,9 @@ class Records:
 
     def _end_hsp_hit_frame(self, name):
         hit_frame = int(self._characters)
-        if self.program == "blastx" and hit_frame in (0, ):
+        if self.program in ("blastp", "blastx") and hit_frame == 0:
             pass
-        elif self.program == "blastp" and hit_frame == 0:
-            pass
-        elif self.program == "tblastn" and hit_frame in (-3, -2, -1, 1, 2, 3):
+        elif self.program in ("tblastn", "tblastx") and hit_frame in (-3, -2, -1, 1, 2, 3):
             pass
         elif self.program == "blastn" and hit_frame in (-1, 1):
             pass
@@ -598,7 +596,7 @@ class Records:
         coordinates = Alignment.infer_coordinates([target_seq_aligned, query_seq_aligned])
         query_seq_data = query_seq_aligned.replace("-", "")
         query_frame =  hsp["query-frame"]
-        if self.program == "blastx":
+        if self.program in ("blastx", "tblastx"):
             query_start = hsp["query-from"] - 1
             query_end = hsp["query-to"]
             assert query_end - query_start == 3 * len(query_seq_data)
@@ -620,7 +618,7 @@ class Records:
         target_length = len(target.seq)
         target_seq_data = target_seq_aligned.replace("-", "")
         target_frame =  hsp["hit-frame"]
-        if self.program == "tblastn":
+        if self.program in ("tblastn", "tblastx"):
             target_start = hsp["hit-from"] - 1
             target_end = hsp["hit-to"]
             assert target_end - target_start == 3 * len(target_seq_data)
