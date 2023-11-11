@@ -74,7 +74,6 @@ class Records:
         parser.XmlDeclHandler = self._xmlDeclHandler
         parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         self._parser = parser
-        self._cache = {}
         self._stream = stream
         BLOCK = self.BLOCK
         while True:
@@ -92,7 +91,7 @@ class Records:
                     # probably the input data is not in XML format.
                     raise NotXMLError(e) from None
             try:
-                self._pending
+                self._cache
             except AttributeError:
                 continue
             else:
@@ -158,7 +157,7 @@ class Records:
     def _start_blastoutput_iterations(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
-        self._pending = deque()
+        self._cache = deque()
 
     def _start_blastoutput_query_len(self, name, attrs):
         assert self._characters.strip() == ""
@@ -331,7 +330,7 @@ class Records:
     def _end_blastoutput(self, name):
         assert self._characters.strip() == ""
         del self._characters
-        assert len(self._cache) == 0
+        del self._parser
 
     def _end_blastoutput_program(self, name):
         self.program = self._characters
@@ -399,7 +398,7 @@ class Records:
     def _end_iteration(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
-        self._pending.append(self._record)
+        self._cache.append(self._record)
         del self._record
 
     def _end_iteration_iter_num(self, name):
@@ -632,19 +631,19 @@ class Records:
         self._characters += characters
 
     def __next__(self):
-        try:
-            stream = self._stream
-        except AttributeError:
-            raise StopIteration from None
+        stream = self._stream
         BLOCK = self.BLOCK
         try:
-            pending = self._pending
+            cache = self._cache
         except AttributeError:
-            return None
-        parser = self._parser
+            raise StopIteration from None
+        try:
+            parser = self._parser
+        except AttributeError:
+            parser = None
         while True:
             try:
-                record = pending.popleft()
+                record = cache.popleft()
             except IndexError:  # no record ready to be returned
                 pass
             else:
@@ -652,8 +651,9 @@ class Records:
             # Read in another block of data from the file.
             data = stream.read(BLOCK)
             if data == b"":
-                del self._pending
-                del self._stream
+                del self._cache
+                if parser is not None:
+                    raise ValueError("premature end of XML file")
                 raise StopIteration
             try:
                 parser.Parse(data, False)
