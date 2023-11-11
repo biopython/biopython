@@ -75,7 +75,6 @@ class Records:
         parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         self._parser = parser
         self._cache = {}
-        self._pending = deque()
         self._stream = stream
         BLOCK = self.BLOCK
         while True:
@@ -93,7 +92,7 @@ class Records:
                     # probably the input data is not in XML format.
                     raise NotXMLError(e) from None
             try:
-                self.query
+                self._pending
             except AttributeError:
                 continue
             else:
@@ -159,16 +158,7 @@ class Records:
     def _start_blastoutput_iterations(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
-        cache = self._cache
-        query_len = cache["BlastOutput_query-len"]
-        query_id = cache["BlastOutput_query-ID"]
-        query_def = cache["BlastOutput_query-def"]
-        del cache["BlastOutput_query-len"]
-        del cache["BlastOutput_query-ID"]
-        del cache["BlastOutput_query-def"]
-        sequence = Seq(None, length=query_len)
-        query = SeqRecord(sequence, query_id, description=query_def)
-        self.query = query
+        self._pending = deque()
 
     def _start_blastoutput_query_len(self, name, attrs):
         assert self._characters.strip() == ""
@@ -360,15 +350,18 @@ class Records:
         self._characters = ""
 
     def _end_blastoutput_query_id(self, name):
-        self._cache["BlastOutput_query-ID"] = self._characters
+        query_id = self._characters
+        self.query = SeqRecord(None, query_id)
         self._characters = ""
 
     def _end_blastoutput_query_def(self, name):
-        self._cache["BlastOutput_query-def"] = self._characters
+        query_def = self._characters
+        self.query.description = query_def
         self._characters = ""
 
     def _end_blastoutput_query_len(self, name):
-        self._cache["BlastOutput_query-len"] = int(self._characters)
+        length = int(self._characters)
+        self.query.seq = Seq(None, length=length)
         self._characters = ""
 
     def _end_blastoutput_param(self, name):
@@ -414,15 +407,18 @@ class Records:
         self._characters = ""
 
     def _end_iteration_query_id(self, name):
-        self._record["query-ID"] = self._characters
+        query_id = self._characters
+        self._record.query = SeqRecord(None, query_id)
         self._characters = ""
 
     def _end_iteration_query_def(self, name):
-        self._record["query-def"] = self._characters
+        query_def = self._characters
+        self._record.query.description = query_def
         self._characters = ""
 
     def _end_iteration_query_len(self, name):
-        self._record["query-len"] = int(self._characters)
+        length = int(self._characters)
+        self._record.query.seq = Seq(None, length=length)
         self._characters = ""
 
     def _end_iteration_hits(self, name):
