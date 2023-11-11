@@ -128,6 +128,11 @@ class Records:
         assert self._characters.strip() == ""
         self._characters = ""
 
+    def _start_blastoutput_mbstat(self, name, attrs):
+        # ignore for now
+        assert self._characters.strip() == ""
+        self._characters = ""
+
     def _start_blastoutput_param(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
@@ -169,12 +174,24 @@ class Records:
         assert self._characters.strip() == ""
         self._characters = ""
 
+    def _start_parameters_pattern(self, name, attrs):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
+    def _start_parameters_entrez_query(self, name, attrs):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
     def _start_blastoutput_iterations(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
         self._cache = deque()
 
     def _start_blastoutput_query_len(self, name, attrs):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
+    def _start_blastoutput_query_seq(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -268,6 +285,14 @@ class Records:
         assert self._characters.strip() == ""
         self._characters = ""
 
+    def _start_hsp_pattern_from(self, name, attrs):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
+    def _start_hsp_pattern_to(self, name, attrs):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
     def _start_hsp_query_frame(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
@@ -289,6 +314,10 @@ class Records:
         self._characters = ""
 
     def _start_hsp_align_len(self, name, attrs):
+        assert self._characters.strip() == ""
+        self._characters = ""
+
+    def _start_hsp_density(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -381,6 +410,16 @@ class Records:
         self.query.seq = Seq(None, length=length)
         self._characters = ""
 
+    def _end_blastoutput_query_seq(self, name):
+        seq = Seq(self._characters)
+        self._characters = ""
+        assert len(seq) == len(query.seq)
+        self.query.seq = seq
+
+    def _end_blastoutput_mbstat(self, name):
+        # ignore for now
+        self._characters = ""
+
     def _end_blastoutput_param(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
@@ -419,6 +458,14 @@ class Records:
 
     def _end_parameters_filter(self, name):
         self.param["filter"] = self._characters
+        self._characters = ""
+
+    def _end_parameters_pattern(self, name, attrs):
+        self.param["pattern"] = self._characters
+        self._characters = ""
+
+    def _end_parameters_entrez_query(self, name, attrs):
+        self.param["entrez-query"] = self._characters
         self._characters = ""
 
     def _end_blastoutput_iterations(self, name):
@@ -525,6 +572,16 @@ class Records:
         self._hsp["hit-to"] = int(self._characters)
         self._characters = ""
 
+    def _end_hsp_pattern_from(self, name):
+        # ignore for now
+        assert self._characters.strip() == ""
+        self._characters = ""
+
+    def _end_hsp_pattern_to(self, name):
+        # ignore for now
+        assert self._characters.strip() == ""
+        self._characters = ""
+
     def _end_hsp_query_frame(self, name):
         query_frame = int(self._characters)
         if self.program in ("blastx", "tblastx") and query_frame in (-3, -2, -1, 1, 2, 3):
@@ -565,6 +622,10 @@ class Records:
 
     def _end_hsp_align_len(self, name):
         self._hsp["align-len"] = int(self._characters)
+        self._characters = ""
+
+    def _end_hsp_density(self, name):
+        self._hsp["density"] = int(self._characters)
         self._characters = ""
 
     def _end_hsp_qseq(self, name):
@@ -806,7 +867,7 @@ class Records:
              "Parameters_gap-open",
              "Parameters_gap-extend",
              "Parameters_filter",
-	     "Parameters_include",
+             "Parameters_include",
              "BlastOutput_iterations",
              "Iteration",
              "Iteration_iter-num",
@@ -856,6 +917,7 @@ class Records:
         _start_methods[name] = method
         method = eval("_end_" + method_name)
         _end_methods[name] = method
+
     del name
     del names
     del method
