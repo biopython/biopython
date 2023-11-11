@@ -58,7 +58,7 @@ class CorruptedXMLError(ValueError):
         )
 
 
-class Record(dict):
+class Record:
     pass
 
 
@@ -403,7 +403,7 @@ class Records:
         del self._record
 
     def _end_iteration_iter_num(self, name):
-        self._record["iter-num"] = int(self._characters)
+        self._record.num = int(self._characters)
         self._characters = ""
 
     def _end_iteration_query_id(self, name):
