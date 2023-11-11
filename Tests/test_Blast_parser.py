@@ -19050,6 +19050,864 @@ gi|134736        57 EHGVVPQ  64
 """,
         )
 
+    def test_xml_2218_blastp_001(self):
+        """Parsing BLASTP 2.2.18+ (xml_2218_blastp_001.xml)."""
+        filename = "xml_2218_blastp_001.xml"
+        datafile = os.path.join("Blast", filename)
+        with open(datafile, "rb") as handle:
+            records = Blast.parse(handle)
+            self.assertEqual(records.program, "blastp")
+            self.assertEqual(records.version, "BLASTP 2.2.18+")
+            self.assertEqual(
+                records.reference,
+                'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(records.db, "nr")
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "31493")
+            self.assertEqual(records.query.description, "unnamed protein product")
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=70)")
+            self.assertEqual(len(records.param), 4)
+            self.assertEqual(records.param["matrix"], "BLOSUM62")
+            self.assertAlmostEqual(records.param["expect"], 10.0)
+            self.assertEqual(records.param["gap-open"], 11)
+            self.assertEqual(records.param["gap-extend"], 1)
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
+        self.check_xml_2218_blastp_001(record)
+
+        with open(datafile, "rb") as handle:
+            record = Blast.read(handle)
+            self.check_xml_2218_blastp_001(record)
+
+    def check_xml_2218_blastp_001(self, record):
+        self.assertEqual(record.num, 1)
+        self.assertIsInstance(record.query, SeqRecord)
+        self.assertEqual(record.query.id, "31493")
+        self.assertEqual(record.query.description, "unnamed protein product")
+        self.assertEqual(repr(record.query.seq), "Seq(None, length=70)")
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 15287)
+        self.assertEqual(record.stat["db-len"], 7033566)
+        self.assertEqual(record.stat["hsp-len"], 0)
+        self.assertAlmostEqual(record.stat["eff-space"], 0)
+        self.assertAlmostEqual(record.stat["kappa"], 0.041)
+        self.assertAlmostEqual(record.stat["lambda"], 0.267)
+        self.assertAlmostEqual(record.stat["entropy"], 0.14)
+        hits = record.hits
+        self.assertEqual(len(hits), 10)
+
+        hit = hits[0]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|151942244|gb|EDN60600.1|")
+        self.assertEqual(hit.target.name, "EDN60600")
+        self.assertEqual(
+            hit.target.description,
+            "cytosolic iron-sulfur protein assembly protein [Saccharomyces cerevisiae YJM789]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=330)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 74.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 33.113)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.0185319)
+        self.assertEqual(hsp.annotations["identity"], 16)
+        self.assertEqual(hsp.annotations["positive"], 27)
+        self.assertEqual(hsp.annotations["gaps"], 2)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[113, 135, 137, 163],
+                          [ 14,  36,  36,  62]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 14)
+        self.assertEqual(hsp.query.annotations["end"], 62)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 113)
+        self.assertEqual(hsp.target.annotations["end"], 163)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 50))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({14: 'AWNKDRTQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAP'}, length=70)",
+        )
+        self.assertEqual(hsp.query.id, "31493")
+        self.assertEqual(hsp.query.description, "unnamed protein product")
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({113: 'AWSNDGYYLATCSRDKSVWIWETDESGEEYECISVLQEHSQDVKHVIWHP'}, length=330)",
+        )
+        self.assertEqual(hsp.target.id, "gi|151942244|gb|EDN60600.1|")
+        self.assertEqual(hsp.target.name, "EDN60600")
+        self.assertEqual(
+            hsp.target.description,
+            "cytosolic iron-sulfur protein assembly protein [Saccharomyces cerevisiae YJM789]",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "AW+ D   +A C  +  V I+E  +SG ++  +  L+EH+  V  + W P",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|151942       113 AWSNDGYYLATCSRDKSVWIWETDESGEEYECISVLQEHSQDVKHVIWHP 163
+                  0 ||..|....|.|.....|.|.|--.||........|.||...|....|.|  50
+31493            14 AWNKDRTQIAICPNNHEVHIYE--KSGAKWNKVHELKEHNGQVTGIDWAP  62
+""",
+        )
+        hit = hits[1]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|476059|emb|CAA55606.1|")
+        self.assertEqual(hit.target.name, "CAA55606")
+        self.assertEqual(hit.target.description, "YBR0832 [Saccharomyces cerevisiae]")
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=535)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 74.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 33.113)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.0185319)
+        self.assertEqual(hsp.annotations["identity"], 15)
+        self.assertEqual(hsp.annotations["positive"], 27)
+        self.assertEqual(hsp.annotations["gaps"], 3)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[222, 255, 255, 278],
+                          [ 10,  43,  46,  69]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 10)
+        self.assertEqual(hsp.query.annotations["end"], 69)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 222)
+        self.assertEqual(hsp.target.annotations["end"], 278)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 59))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({10: 'ISCHAWNKDRTQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAPESNRIVT'}, length=70)",
+        )
+        self.assertEqual(hsp.query.id, "31493")
+        self.assertEqual(hsp.query.description, "unnamed protein product")
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({222: 'VTCLAWSHDGNSIVTGVENGELRLWNKTGALLNVLNFHRAPIVSVKWNKDGTHIIS'}, length=535)",
+        )
+        self.assertEqual(hsp.target.id, "gi|476059|emb|CAA55606.1|")
+        self.assertEqual(hsp.target.name, "CAA55606")
+        self.assertEqual(hsp.target.description, "YBR0832 [Saccharomyces cerevisiae]")
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "++C AW+ D   I     N E+ ++ K+GA  N    L  H   +  + W  +   I++",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|476059       222 VTCLAWSHDGNSIVTGVENGELRLWNKTGALLN---VLNFHRAPIVSVKWNKDGTHIIS
+                  0 ..|.||..|...|.....|.|.....|.||..|---.|..|........|......|..
+31493            10 ISCHAWNKDRTQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAPESNRIVT
+
+gi|476059       278
+                 59
+31493            69
+""",
+        )
+        hit = hits[2]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|6320473|ref|NP_010553.1|")
+        self.assertEqual(hit.target.name, "NP_010553")
+        self.assertEqual(
+            hit.target.description,
+            "Essential protein involved in assembly of cytosolic and nuclear iron-sulfur proteins; Cia1p [Saccharomyces cerevisiae] >gi|74676366|sp|Q05583|CIA1_YEAST Cytosolic iron-sulfur protein assembly protein 1 >gi|151567598|pdb|2HES|X Chain X, Cytosolic Iron-Sulphur Assembly Protein- 1 >gi|1230640|gb|AAB64456.1| Ydr267cp [Saccharomyces cerevisiae]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=330)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 74.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 33.113)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.0185319)
+        self.assertEqual(hsp.annotations["identity"], 16)
+        self.assertEqual(hsp.annotations["positive"], 27)
+        self.assertEqual(hsp.annotations["gaps"], 2)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[113, 135, 137, 163],
+                          [ 14,  36,  36,  62]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 14)
+        self.assertEqual(hsp.query.annotations["end"], 62)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 113)
+        self.assertEqual(hsp.target.annotations["end"], 163)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 50))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({14: 'AWNKDRTQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAP'}, length=70)",
+        )
+        self.assertEqual(hsp.query.id, "31493")
+        self.assertEqual(hsp.query.description, "unnamed protein product")
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({113: 'AWSNDGYYLATCSRDKSVWIWETDESGEEYECISVLQEHSQDVKHVIWHP'}, length=330)",
+        )
+        self.assertEqual(hsp.target.id, "gi|6320473|ref|NP_010553.1|")
+        self.assertEqual(hsp.target.name, "NP_010553")
+        self.assertEqual(
+            hsp.target.description,
+            "Essential protein involved in assembly of cytosolic and nuclear iron-sulfur proteins; Cia1p [Saccharomyces cerevisiae] >gi|74676366|sp|Q05583|CIA1_YEAST Cytosolic iron-sulfur protein assembly protein 1 >gi|151567598|pdb|2HES|X Chain X, Cytosolic Iron-Sulphur Assembly Protein- 1 >gi|1230640|gb|AAB64456.1| Ydr267cp [Saccharomyces cerevisiae]",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "AW+ D   +A C  +  V I+E  +SG ++  +  L+EH+  V  + W P",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|632047       113 AWSNDGYYLATCSRDKSVWIWETDESGEEYECISVLQEHSQDVKHVIWHP 163
+                  0 ||..|....|.|.....|.|.|--.||........|.||...|....|.|  50
+31493            14 AWNKDRTQIAICPNNHEVHIYE--KSGAKWNKVHELKEHNGQVTGIDWAP  62
+""",
+        )
+        hit = hits[3]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|61679798|pdb|1R5M|A")
+        self.assertEqual(hit.target.name, "1R5M-A")
+        self.assertEqual(
+            hit.target.description,
+            "Chain A, Crystal Structure Of The C-Terminal Wd40 Domain Of Sif2",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=425)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 74.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 33.113)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.0185319)
+        self.assertEqual(hsp.annotations["identity"], 15)
+        self.assertEqual(hsp.annotations["positive"], 27)
+        self.assertEqual(hsp.annotations["gaps"], 3)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[110, 143, 143, 166],
+                          [ 10,  43,  46,  69]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 10)
+        self.assertEqual(hsp.query.annotations["end"], 69)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 110)
+        self.assertEqual(hsp.target.annotations["end"], 166)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 59))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({10: 'ISCHAWNKDRTQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAPESNRIVT'}, length=70)",
+        )
+        self.assertEqual(hsp.query.id, "31493")
+        self.assertEqual(hsp.query.description, "unnamed protein product")
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({110: 'VTCLAWSHDGNSIVTGVENGELRLWNKTGALLNVLNFHRAPIVSVKWNKDGTHIIS'}, length=425)",
+        )
+        self.assertEqual(hsp.target.id, "gi|61679798|pdb|1R5M|A")
+        self.assertEqual(hsp.target.name, "1R5M-A")
+        self.assertEqual(
+            hsp.target.description,
+            "Chain A, Crystal Structure Of The C-Terminal Wd40 Domain Of Sif2",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "++C AW+ D   I     N E+ ++ K+GA  N    L  H   +  + W  +   I++",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|616797       110 VTCLAWSHDGNSIVTGVENGELRLWNKTGALLN---VLNFHRAPIVSVKWNKDGTHIIS
+                  0 ..|.||..|...|.....|.|.....|.||..|---.|..|........|......|..
+31493            10 ISCHAWNKDRTQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAPESNRIVT
+
+gi|616797       166
+                 59
+31493            69
+""",
+        )
+        hit = hits[4]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|6319579|ref|NP_009661.1|")
+        self.assertEqual(hit.target.name, "NP_009661")
+        self.assertEqual(
+            hit.target.description,
+            "WD40 repeat-containing subunit of the Set3C histone deacetylase complex, which represses early/middle sporulation genes; antagonizes telomeric silencing; binds specifically to the Sir4p N-terminus; Sif2p [Saccharomyces cerevisiae] >gi|57014129|sp|P38262|SIF2_YEAST SIR4-interacting protein SIF2 >gi|1870107|emb|CAA85058.1| unnamed protein product [Saccharomyces cerevisiae] >gi|51013557|gb|AAT93072.1| YBR103W [Saccharomyces cerevisiae]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=535)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 74.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 33.113)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.0185319)
+        self.assertEqual(hsp.annotations["identity"], 15)
+        self.assertEqual(hsp.annotations["positive"], 27)
+        self.assertEqual(hsp.annotations["gaps"], 3)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[222, 255, 255, 278],
+                          [ 10,  43,  46,  69]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 10)
+        self.assertEqual(hsp.query.annotations["end"], 69)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 222)
+        self.assertEqual(hsp.target.annotations["end"], 278)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 59))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({10: 'ISCHAWNKDRTQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAPESNRIVT'}, length=70)",
+        )
+        self.assertEqual(hsp.query.id, "31493")
+        self.assertEqual(hsp.query.description, "unnamed protein product")
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({222: 'VTCLAWSHDGNSIVTGVENGELRLWNKTGALLNVLNFHRAPIVSVKWNKDGTHIIS'}, length=535)",
+        )
+        self.assertEqual(hsp.target.id, "gi|6319579|ref|NP_009661.1|")
+        self.assertEqual(hsp.target.name, "NP_009661")
+        self.assertEqual(
+            hsp.target.description,
+            "WD40 repeat-containing subunit of the Set3C histone deacetylase complex, which represses early/middle sporulation genes; antagonizes telomeric silencing; binds specifically to the Sir4p N-terminus; Sif2p [Saccharomyces cerevisiae] >gi|57014129|sp|P38262|SIF2_YEAST SIR4-interacting protein SIF2 >gi|1870107|emb|CAA85058.1| unnamed protein product [Saccharomyces cerevisiae] >gi|51013557|gb|AAT93072.1| YBR103W [Saccharomyces cerevisiae]",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "++C AW+ D   I     N E+ ++ K+GA  N    L  H   +  + W  +   I++",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|631957       222 VTCLAWSHDGNSIVTGVENGELRLWNKTGALLN---VLNFHRAPIVSVKWNKDGTHIIS
+                  0 ..|.||..|...|.....|.|.....|.||..|---.|..|........|......|..
+31493            10 ISCHAWNKDRTQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAPESNRIVT
+
+gi|631957       278
+                 59
+31493            69
+""",
+        )
+        hit = hits[5]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|151946495|gb|EDN64717.1|")
+        self.assertEqual(hit.target.name, "EDN64717")
+        self.assertEqual(
+            hit.target.description,
+            "Sir4p-interacting factor [Saccharomyces cerevisiae YJM789]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=535)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 71.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 31.9574)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.0412849)
+        self.assertEqual(hsp.annotations["identity"], 15)
+        self.assertEqual(hsp.annotations["positive"], 26)
+        self.assertEqual(hsp.annotations["gaps"], 3)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[222, 255, 255, 278],
+                          [ 10,  43,  46,  69]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 10)
+        self.assertEqual(hsp.query.annotations["end"], 69)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 222)
+        self.assertEqual(hsp.target.annotations["end"], 278)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 59))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({10: 'ISCHAWNKDRTQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAPESNRIVT'}, length=70)",
+        )
+        self.assertEqual(hsp.query.id, "31493")
+        self.assertEqual(hsp.query.description, "unnamed protein product")
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({222: 'VTCLAWSHDGNSIVTGVENGELRLWNKTGALLNVLNFHRAPIVSFKWNKDGTHIIS'}, length=535)",
+        )
+        self.assertEqual(hsp.target.id, "gi|151946495|gb|EDN64717.1|")
+        self.assertEqual(hsp.target.name, "EDN64717")
+        self.assertEqual(
+            hsp.target.description,
+            "Sir4p-interacting factor [Saccharomyces cerevisiae YJM789]",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "++C AW+ D   I     N E+ ++ K+GA  N    L  H   +    W  +   I++",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|151946       222 VTCLAWSHDGNSIVTGVENGELRLWNKTGALLN---VLNFHRAPIVSFKWNKDGTHIIS
+                  0 ..|.||..|...|.....|.|.....|.||..|---.|..|........|......|..
+31493            10 ISCHAWNKDRTQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAPESNRIVT
+
+gi|151946       278
+                 59
+31493            69
+""",
+        )
+        hit = hits[6]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|151943708|gb|EDN62018.1|")
+        self.assertEqual(hit.target.name, "EDN62018")
+        self.assertEqual(
+            hit.target.description,
+            "nuclear pore complex subunit [Saccharomyces cerevisiae YJM789]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=349)")
+        self.assertEqual(len(hit), 2)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 69.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 31.187)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.0704213)
+        self.assertEqual(hsp.annotations["identity"], 13)
+        self.assertEqual(hsp.annotations["positive"], 25)
+        self.assertEqual(hsp.annotations["gaps"], 3)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[23, 36, 38, 64, 65, 72],
+                          [22, 35, 35, 61, 61, 68]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 22)
+        self.assertEqual(hsp.query.annotations["end"], 68)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 23)
+        self.assertEqual(hsp.target.annotations["end"], 72)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 49))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({22: 'IAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAPESNRIV'}, length=70)",
+        )
+        self.assertEqual(hsp.query.id, "31493")
+        self.assertEqual(hsp.query.description, "unnamed protein product")
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({23: 'VATCSSDQHIKVFKLDKDTSNWELSDSWRAHDSSIVAIDWASPEYGRII'}, length=349)",
+        )
+        self.assertEqual(hsp.target.id, "gi|151943708|gb|EDN62018.1|")
+        self.assertEqual(hsp.target.name, "EDN62018")
+        self.assertEqual(
+            hsp.target.description,
+            "nuclear pore complex subunit [Saccharomyces cerevisiae YJM789]",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "+A C ++  + ++  +K  + W      + H+  +  IDWA PE  RI+",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|151943        23 VATCSSDQHIKVFKLDKDTSNWELSDSWRAHDSSIVAIDWASPEYGRII 72
+                  0 .|.|.........--.|....|........|......||||-||..||. 49
+31493            22 IAICPNNHEVHIY--EKSGAKWNKVHELKEHNGQVTGIDWA-PESNRIV 68
+""",
+        )
+        hsp = hit[1]
+        self.assertAlmostEqual(hsp.score, 56.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 26.1794)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 2.26538)
+        self.assertEqual(hsp.annotations["identity"], 10)
+        self.assertEqual(hsp.annotations["positive"], 16)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 91, 118],
+                          [ 35,  62]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 35)
+        self.assertEqual(hsp.query.annotations["end"], 62)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 91)
+        self.assertEqual(hsp.target.annotations["end"], 118)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 27))
+        self.assertEqual(
+            repr(hsp.query.seq), "Seq({35: 'EKSGAKWNKVHELKEHNGQVTGIDWAP'}, length=70)"
+        )
+        self.assertEqual(hsp.query.id, "31493")
+        self.assertEqual(hsp.query.description, "unnamed protein product")
+        self.assertEqual(
+            repr(hsp.target.seq), "Seq({91: 'ECSGRRWNKLCTLNDSKGSLYSVKFAP'}, length=349)"
+        )
+        self.assertEqual(hsp.target.id, "gi|151943708|gb|EDN62018.1|")
+        self.assertEqual(hsp.target.name, "EDN62018")
+        self.assertEqual(
+            hsp.target.description,
+            "nuclear pore complex subunit [Saccharomyces cerevisiae YJM789]",
+        )
+        self.assertEqual(hsp.annotations["midline"], "E SG +WNK+  L +  G +  + +AP")
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|151943        91 ECSGRRWNKLCTLNDSKGSLYSVKFAP 118
+                  0 |.||..|||...|....|.......||  27
+31493            35 EKSGAKWNKVHELKEHNGQVTGIDWAP  62
+""",
+        )
+        hit = hits[7]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|151567866|pdb|2PM7|B")
+        self.assertEqual(hit.target.name, "2PM7-B")
+        self.assertEqual(
+            hit.target.description,
+            "Chain B, Crystal Structure Of Yeast Sec1331 EDGE ELEMENT OF THE Copii Vesicular Coat, Selenomethionine Version >gi|151567868|pdb|2PM7|D Chain D, Crystal Structure Of Yeast Sec1331 EDGE ELEMENT OF THE Copii Vesicular Coat, Selenomethionine Version",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=297)")
+        self.assertEqual(len(hit), 2)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 69.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 31.187)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.0704213)
+        self.assertEqual(hsp.annotations["identity"], 11)
+        self.assertEqual(hsp.annotations["positive"], 23)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 67, 109],
+                          [ 20,  62]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 20)
+        self.assertEqual(hsp.query.annotations["end"], 62)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 67)
+        self.assertEqual(hsp.target.annotations["end"], 109)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 42))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({20: 'TQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAP'}, length=70)",
+        )
+        self.assertEqual(hsp.query.id, "31493")
+        self.assertEqual(hsp.query.description, "unnamed protein product")
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({67: 'TILASCSYDGKVXIWKEENGRWSQIAVHAVHSASVNSVQWAP'}, length=297)",
+        )
+        self.assertEqual(hsp.target.id, "gi|151567866|pdb|2PM7|B")
+        self.assertEqual(hsp.target.name, "2PM7-B")
+        self.assertEqual(
+            hsp.target.description,
+            "Chain B, Crystal Structure Of Yeast Sec1331 EDGE ELEMENT OF THE Copii Vesicular Coat, Selenomethionine Version >gi|151567868|pdb|2PM7|D Chain D, Crystal Structure Of Yeast Sec1331 EDGE ELEMENT OF THE Copii Vesicular Coat, Selenomethionine Version",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"], "T +A C  + +V I+++   +W+++     H+  V  + WAP"
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|151567        67 TILASCSYDGKVXIWKEENGRWSQIAVHAVHSASVNSVQWAP 109
+                  0 |..|.|.....|.|.......|........|...|....|||  42
+31493            20 TQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAP  62
+""",
+        )
+        hsp = hit[1]
+        self.assertAlmostEqual(hsp.score, 62.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 28.4906)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.456458)
+        self.assertEqual(hsp.annotations["identity"], 12)
+        self.assertEqual(hsp.annotations["positive"], 18)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[24, 62],
+                          [23, 61]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 23)
+        self.assertEqual(hsp.query.annotations["end"], 61)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 24)
+        self.assertEqual(hsp.target.annotations["end"], 62)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 38))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({23: 'AICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWA'}, length=70)",
+        )
+        self.assertEqual(hsp.query.id, "31493")
+        self.assertEqual(hsp.query.description, "unnamed protein product")
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({24: 'ATCSSDKTIKIFEVEGETHKLIDTLTGHEGPVWRVDWA'}, length=297)",
+        )
+        self.assertEqual(hsp.target.id, "gi|151567866|pdb|2PM7|B")
+        self.assertEqual(hsp.target.name, "2PM7-B")
+        self.assertEqual(
+            hsp.target.description,
+            "Chain B, Crystal Structure Of Yeast Sec1331 EDGE ELEMENT OF THE Copii Vesicular Coat, Selenomethionine Version >gi|151567868|pdb|2PM7|D Chain D, Crystal Structure Of Yeast Sec1331 EDGE ELEMENT OF THE Copii Vesicular Coat, Selenomethionine Version",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"], "A C ++  + I+E  G     +  L  H G V  +DWA"
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|151567        24 ATCSSDKTIKIFEVEGETHKLIDTLTGHEGPVWRVDWA 62
+                  0 |.|.......|.|..|........|..|.|.|...||| 38
+31493            23 AICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWA 61
+""",
+        )
+        hit = hits[8]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|6321338|ref|NP_011415.1|")
+        self.assertEqual(hit.target.name, "NP_011415")
+        self.assertEqual(
+            hit.target.description,
+            "Nuclear pore protein that is part of the evolutionarily conserved Nup84p complex (Nup84p, Nup85p, Nup120p, Nup145p, and Seh1p); homologous to Sec13p; Seh1p [Saccharomyces cerevisiae] >gi|1711370|sp|P53011|SEH1_YEAST Nucleoporin SEH1 (Nuclear pore protein SEH1) (SEC13 homolog 1) >gi|1177640|emb|CAA62480.1| Sec13p-like protein [Saccharomyces cerevisiae] >gi|1322639|emb|CAA96806.1| SEH1 [Saccharomyces cerevisiae] >gi|45270884|gb|AAS56823.1| YGL100W [Saccharomyces cerevisiae]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=349)")
+        self.assertEqual(len(hit), 2)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 69.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 31.187)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.0704213)
+        self.assertEqual(hsp.annotations["identity"], 13)
+        self.assertEqual(hsp.annotations["positive"], 25)
+        self.assertEqual(hsp.annotations["gaps"], 3)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[23, 36, 38, 64, 65, 72],
+                          [22, 35, 35, 61, 61, 68]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 22)
+        self.assertEqual(hsp.query.annotations["end"], 68)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 23)
+        self.assertEqual(hsp.target.annotations["end"], 72)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 49))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({22: 'IAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAPESNRIV'}, length=70)",
+        )
+        self.assertEqual(hsp.query.id, "31493")
+        self.assertEqual(hsp.query.description, "unnamed protein product")
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({23: 'VATCSSDQHIKVFKLDKDTSNWELSDSWRAHDSSIVAIDWASPEYGRII'}, length=349)",
+        )
+        self.assertEqual(hsp.target.id, "gi|6321338|ref|NP_011415.1|")
+        self.assertEqual(hsp.target.name, "NP_011415")
+        self.assertEqual(
+            hsp.target.description,
+            "Nuclear pore protein that is part of the evolutionarily conserved Nup84p complex (Nup84p, Nup85p, Nup120p, Nup145p, and Seh1p); homologous to Sec13p; Seh1p [Saccharomyces cerevisiae] >gi|1711370|sp|P53011|SEH1_YEAST Nucleoporin SEH1 (Nuclear pore protein SEH1) (SEC13 homolog 1) >gi|1177640|emb|CAA62480.1| Sec13p-like protein [Saccharomyces cerevisiae] >gi|1322639|emb|CAA96806.1| SEH1 [Saccharomyces cerevisiae] >gi|45270884|gb|AAS56823.1| YGL100W [Saccharomyces cerevisiae]",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "+A C ++  + ++  +K  + W      + H+  +  IDWA PE  RI+",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|632133        23 VATCSSDQHIKVFKLDKDTSNWELSDSWRAHDSSIVAIDWASPEYGRII 72
+                  0 .|.|.........--.|....|........|......||||-||..||. 49
+31493            22 IAICPNNHEVHIY--EKSGAKWNKVHELKEHNGQVTGIDWA-PESNRIV 68
+""",
+        )
+        hsp = hit[1]
+        self.assertAlmostEqual(hsp.score, 56.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 26.1794)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 2.26538)
+        self.assertEqual(hsp.annotations["identity"], 10)
+        self.assertEqual(hsp.annotations["positive"], 16)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 91, 118],
+                          [ 35,  62]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 35)
+        self.assertEqual(hsp.query.annotations["end"], 62)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 91)
+        self.assertEqual(hsp.target.annotations["end"], 118)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 27))
+        self.assertEqual(
+            repr(hsp.query.seq), "Seq({35: 'EKSGAKWNKVHELKEHNGQVTGIDWAP'}, length=70)"
+        )
+        self.assertEqual(hsp.query.id, "31493")
+        self.assertEqual(hsp.query.description, "unnamed protein product")
+        self.assertEqual(
+            repr(hsp.target.seq), "Seq({91: 'ECSGRRWNKLCTLNDSKGSLYSVKFAP'}, length=349)"
+        )
+        self.assertEqual(hsp.target.id, "gi|6321338|ref|NP_011415.1|")
+        self.assertEqual(hsp.target.name, "NP_011415")
+        self.assertEqual(
+            hsp.target.description,
+            "Nuclear pore protein that is part of the evolutionarily conserved Nup84p complex (Nup84p, Nup85p, Nup120p, Nup145p, and Seh1p); homologous to Sec13p; Seh1p [Saccharomyces cerevisiae] >gi|1711370|sp|P53011|SEH1_YEAST Nucleoporin SEH1 (Nuclear pore protein SEH1) (SEC13 homolog 1) >gi|1177640|emb|CAA62480.1| Sec13p-like protein [Saccharomyces cerevisiae] >gi|1322639|emb|CAA96806.1| SEH1 [Saccharomyces cerevisiae] >gi|45270884|gb|AAS56823.1| YGL100W [Saccharomyces cerevisiae]",
+        )
+        self.assertEqual(hsp.annotations["midline"], "E SG +WNK+  L +  G +  + +AP")
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|632133        91 ECSGRRWNKLCTLNDSKGSLYSVKFAP 118
+                  0 |.||..|||...|....|.......||  27
+31493            35 EKSGAKWNKVHELKEHNGQVTGIDWAP  62
+""",
+        )
+        hit = hits[9]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|151567870|pdb|2PM9|B")
+        self.assertEqual(hit.target.name, "2PM9-B")
+        self.assertEqual(
+            hit.target.description,
+            "Chain B, Crystal Structure Of Yeast Sec1331 VERTEX ELEMENT OF THE Copii Vesicular Coat",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=297)")
+        self.assertEqual(len(hit), 2)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 68.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 30.8018)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.0919731)
+        self.assertEqual(hsp.annotations["identity"], 11)
+        self.assertEqual(hsp.annotations["positive"], 23)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[ 67, 109],
+                          [ 20,  62]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 20)
+        self.assertEqual(hsp.query.annotations["end"], 62)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 67)
+        self.assertEqual(hsp.target.annotations["end"], 109)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 42))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({20: 'TQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAP'}, length=70)",
+        )
+        self.assertEqual(hsp.query.id, "31493")
+        self.assertEqual(hsp.query.description, "unnamed protein product")
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({67: 'TILASCSYDGKVMIWKEENGRWSQIAVHAVHSASVNSVQWAP'}, length=297)",
+        )
+        self.assertEqual(hsp.target.id, "gi|151567870|pdb|2PM9|B")
+        self.assertEqual(hsp.target.name, "2PM9-B")
+        self.assertEqual(
+            hsp.target.description,
+            "Chain B, Crystal Structure Of Yeast Sec1331 VERTEX ELEMENT OF THE Copii Vesicular Coat",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"], "T +A C  + +V I+++   +W+++     H+  V  + WAP"
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|151567        67 TILASCSYDGKVMIWKEENGRWSQIAVHAVHSASVNSVQWAP 109
+                  0 |..|.|.....|.|.......|........|...|....|||  42
+31493            20 TQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAP  62
+""",
+        )
+        hsp = hit[1]
+        self.assertAlmostEqual(hsp.score, 64.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 29.261)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.267601)
+        self.assertEqual(hsp.annotations["identity"], 12)
+        self.assertEqual(hsp.annotations["positive"], 20)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[22, 62],
+                          [21, 61]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 21)
+        self.assertEqual(hsp.query.annotations["end"], 61)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 22)
+        self.assertEqual(hsp.target.annotations["end"], 62)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 40))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({21: 'QIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWA'}, length=70)",
+        )
+        self.assertEqual(hsp.query.id, "31493")
+        self.assertEqual(hsp.query.description, "unnamed protein product")
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({22: 'RMATCSSDKTIKIFEVEGETHKLIDTLTGHEGPVWRVDWA'}, length=297)",
+        )
+        self.assertEqual(hsp.target.id, "gi|151567870|pdb|2PM9|B")
+        self.assertEqual(hsp.target.name, "2PM9-B")
+        self.assertEqual(
+            hsp.target.description,
+            "Chain B, Crystal Structure Of Yeast Sec1331 VERTEX ELEMENT OF THE Copii Vesicular Coat",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"], "++A C ++  + I+E  G     +  L  H G V  +DWA"
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|151567        22 RMATCSSDKTIKIFEVEGETHKLIDTLTGHEGPVWRVDWA 62
+                  0 ..|.|.......|.|..|........|..|.|.|...||| 40
+31493            21 QIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWA 61
+""",
+        )
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
