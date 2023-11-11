@@ -527,15 +527,27 @@ class Records:
 
     def _end_hsp_query_frame(self, name):
         query_frame = int(self._characters)
-        if query_frame not in (-3, -2, -1, 0, +1, +2, +3):
-            raise ValueError(f"unexpected value {query_frame} in tag <Hsp_query-frame>")
+        if self.program == "blastx" and query_frame in (-3, -2, -1, +1, +2, +3):
+            pass
+        elif self.program == "blastp" and query_frame == 0:
+            pass
+        elif self.program == "blastn" and query_frame in (0, +1):
+            pass
+        else:
+            raise ValueError(f"unexpected value {query_frame} in tag <Hsp_query-frame> for program {self.program}")
         self._hsp["query-frame"] = query_frame
         self._characters = ""
 
     def _end_hsp_hit_frame(self, name):
         hit_frame = int(self._characters)
-        if hit_frame not in (-3, -2, -1, 0, +1, +2, +3):
-            raise ValueError(f"unexpected value {fit_frame} in tag <Hsp_hit-frame>")
+        if self.program == "blastx" and hit_frame in (0, ):
+            pass
+        elif self.program == "blastp" and hit_frame == 0:
+            pass
+        elif self.program == "blastn" and hit_frame in (-1, 1):
+            pass
+        else:
+            raise ValueError(f"unexpected value {hit_frame} in tag <Hsp_hit-frame> for program {self.program}")
         self._hsp["hit-frame"] = hit_frame
         self._characters = ""
 
@@ -589,17 +601,11 @@ class Records:
             query_end = hsp["query-to"]
             assert query_end - query_start == 3 * len(query_seq_data)
         else:
-            if query_frame == +1 or query_frame == 0:
-                query_start = hsp["query-from"] - 1
-                query_end = hsp["query-to"]
-            elif query_frame == -1:
-                query_start = hsp["query-to"] - 1
-                query_end = hsp["query-from"]
-                query_seq_data = reverse_complement(query_seq_data)
-                coordinates[1, :] = coordinates[1, ::-1]
+            query_start = hsp["query-from"] - 1
+            query_end = hsp["query-to"]
+            coordinates[1, :] += query_start
             assert query_end - query_start == len(query_seq_data)
             query_seq_data = {query_start: query_seq_data}
-            coordinates[1, :] += query_start
         query_seq = Seq(query_seq_data, query_length)
         query = SeqRecord(query_seq, query_id, description=query_description)
         query.annotations["start"] = query_start
@@ -615,19 +621,18 @@ class Records:
         if target_frame == +1 or target_frame == 0:
             target_start = hsp["hit-from"] - 1
             target_end = hsp["hit-to"]
+            coordinates[0, :] += target_start
         elif target_frame == -1:
             target_start = hsp["hit-to"] - 1
             target_end = hsp["hit-from"]
             target_seq_data = reverse_complement(target_seq_data)
+            coordinates[0, :] = target_end - coordinates[0, :]
         assert target_end - target_start == len(target_seq_data)
         target_seq = Seq({target_start: target_seq_data}, target_length)
         target = SeqRecord(target_seq, target_id, target_name, description=target_description)
         target.annotations["start"] = target_start
         target.annotations["end"] = target_end
         target.annotations["frame"] = target_frame
-        coordinates[0, :] += target_start
-        if target_frame == -1:
-            coordinates[0, :] = coordinates[0, ::-1]
         sequences = [target, query]
         alignment = Alignment(sequences, coordinates)
         alignment.score = hsp["score"]

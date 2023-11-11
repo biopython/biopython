@@ -28864,6 +28864,878 @@ NP_418280        74 AKTIADKQADTNQEQAKTEDAKRHDKEQV 103
 """,
         )
 
+    def test_xml_2900_blastn_001(self):
+        """Parsing BLASTN 2.9.0+ (xml_2900_blastn_001.xml)."""
+        filename = "xml_2900_blastn_001.xml"
+        datafile = os.path.join("Blast", filename)
+        with open(datafile, "rb") as handle:
+            records = Blast.parse(handle)
+            self.assertEqual(records.program, "blastn")
+            self.assertEqual(records.version, "BLASTN 2.9.0+")
+            self.assertEqual(
+                records.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(
+                records.db, "GPIPE/10090/current/all_top_level GPIPE/10090/current/rna"
+            )
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "G26684.1")
+            self.assertEqual(
+                records.query.description, "human STS STS_D11570, sequence tagged site"
+            )
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=285)")
+            self.assertEqual(len(records.param), 6)
+            self.assertAlmostEqual(records.param["expect"], 10.0)
+            self.assertEqual(records.param["sc-match"], 2)
+            self.assertEqual(records.param["sc-mismatch"], -3)
+            self.assertEqual(records.param["gap-open"], 5)
+            self.assertEqual(records.param["gap-extend"], 2)
+            self.assertEqual(
+                records.param["filter"], "R -d repeatmasker/repeat_9989;m;F;"
+            )
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
+        self.check_xml_2900_blastn_001(record)
+
+        with open(datafile, "rb") as handle:
+            record = Blast.read(handle)
+            self.check_xml_2900_blastn_001(record)
+
+    def check_xml_2900_blastn_001(self, record):
+        self.assertEqual(record.num, 1)
+
+        self.assertIsInstance(record.query, SeqRecord)
+        self.assertEqual(record.query.id, "G26684.1")
+        self.assertEqual(
+            record.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(repr(record.query.seq), "Seq(None, length=285)")
+
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 107382)
+        self.assertEqual(record.stat["db-len"], 3164670549)
+        self.assertEqual(record.stat["hsp-len"], 0)
+        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        self.assertAlmostEqual(record.stat["kappa"], 0.41)
+        self.assertAlmostEqual(record.stat["lambda"], 0.625)
+        self.assertAlmostEqual(record.stat["entropy"], 0.78)
+        hits = record.hits
+        self.assertEqual(len(hits), 10)
+
+        hit = hits[0]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|372099107|ref|NC_000069.6|")
+        self.assertEqual(hit.target.name, "NC_000069")
+        self.assertEqual(
+            hit.target.description,
+            "Mus musculus strain C57BL/6J chromosome 3, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=160039680)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 44.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 40.9604)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.375311)
+        self.assertEqual(hsp.annotations["identity"], 30)
+        self.assertEqual(hsp.annotations["positive"], 30)
+        self.assertEqual(hsp.annotations["gaps"], 1)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[101449177, 101449150, 101449149, 101449143],
+                          [      133,       160,       160,       166]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 133)
+        self.assertEqual(hsp.query.annotations["end"], 166)
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["start"], 101449143)
+        self.assertEqual(hsp.target.annotations["end"], 101449177)
+        self.assertEqual(hsp.target.annotations["frame"], -1)
+        self.assertEqual(hsp.shape, (2, 34))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({133: 'GAATCCTAGAGGCTTGATTGGCCCAGGCTGCTG'}, length=285)",
+        )
+        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({101449143: 'CAGCAGGCCAGGGCCAGTCCAGCCTCTAGGATTC'}, length=160039680)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099107|ref|NC_000069.6|")
+        self.assertEqual(hsp.target.name, "NC_000069")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain C57BL/6J chromosome 3, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"], "|||||||||||||| || |||||| || ||||||"
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|372099 101449177 GAATCCTAGAGGCTGGACTGGCCCTGGCCTGCTG 101449143
+                  0 ||||||||||||||.||.||||||.||-||||||        34
+G26684.1        133 GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG       166
+""",
+        )
+        hit = hits[1]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|372099103|ref|NC_000073.6|")
+        self.assertEqual(hit.target.name, "NC_000073")
+        self.assertEqual(
+            hit.target.description,
+            "Mus musculus strain C57BL/6J chromosome 7, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=145441459)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 44.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 40.9604)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 0.375311)
+        self.assertEqual(hsp.annotations["identity"], 26)
+        self.assertEqual(hsp.annotations["positive"], 26)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[131772185, 131772156],
+                          [      204,       233]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 204)
+        self.assertEqual(hsp.query.annotations["end"], 233)
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["start"], 131772156)
+        self.assertEqual(hsp.target.annotations["end"], 131772185)
+        self.assertEqual(hsp.target.annotations["frame"], -1)
+        self.assertEqual(hsp.shape, (2, 29))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({204: 'GAAAGGAAATNAAAATGGAAAGTTCTTGT'}, length=285)",
+        )
+        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({131772156: 'ACCAGAACTTTCCATTTTTTTTTCCTTTC'}, length=145441459)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099103|ref|NC_000073.6|")
+        self.assertEqual(hsp.target.name, "NC_000073")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain C57BL/6J chromosome 7, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(hsp.annotations["midline"], "|||||||||  ||||||||||||||| ||")
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|372099 131772185 GAAAGGAAAAAAAAATGGAAAGTTCTGGT 131772156
+                  0 |||||||||..|||||||||||||||.||        29
+G26684.1        204 GAAAGGAAATNAAAATGGAAAGTTCTTGT       233
+""",
+        )
+        hit = hits[2]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|372099106|ref|NC_000070.6|")
+        self.assertEqual(hit.target.name, "NC_000070")
+        self.assertEqual(
+            hit.target.description,
+            "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=156508116)")
+        self.assertEqual(len(hit), 2)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 43.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 40.0587)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.30996)
+        self.assertEqual(hsp.annotations["identity"], 23)
+        self.assertEqual(hsp.annotations["positive"], 23)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[9607562, 9607538],
+                          [     61,      85]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 61)
+        self.assertEqual(hsp.query.annotations["end"], 85)
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["start"], 9607538)
+        self.assertEqual(hsp.target.annotations["end"], 9607562)
+        self.assertEqual(hsp.target.annotations["frame"], -1)
+        self.assertEqual(hsp.shape, (2, 24))
+        self.assertEqual(
+            repr(hsp.query.seq), "Seq({61: 'CCAACACAGGCCAGCGACTTCTGG'}, length=285)"
+        )
+        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({9607538: 'CCAGAAGCCGCTGGCCTGTGTTGG'}, length=156508116)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099106|ref|NC_000070.6|")
+        self.assertEqual(hsp.target.name, "NC_000070")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(hsp.annotations["midline"], "|||||||||||||||| |||||||")
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|372099   9607562 CCAACACAGGCCAGCGGCTTCTGG 9607538
+                  0 ||||||||||||||||.|||||||      24
+G26684.1         61 CCAACACAGGCCAGCGACTTCTGG      85
+""",
+        )
+        hsp = hit[1]
+        self.assertAlmostEqual(hsp.score, 40.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertEqual(hsp.annotations["identity"], 28)
+        self.assertEqual(hsp.annotations["positive"], 28)
+        self.assertEqual(hsp.annotations["gaps"], 1)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[142902531, 142902542, 142902543, 142902563],
+                          [      241,       252,       252,       272]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 241)
+        self.assertEqual(hsp.query.annotations["end"], 272)
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["start"], 142902531)
+        self.assertEqual(hsp.target.annotations["end"], 142902563)
+        self.assertEqual(hsp.target.annotations["frame"], 1)
+        self.assertEqual(hsp.shape, (2, 32))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({241: 'GCCTGACATGGGTAGCTGCTCAATAAATGCT'}, length=285)",
+        )
+        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({142902531: 'GCCTGGCATGAAGTAACTGCTCAATAAATGCT'}, length=156508116)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099106|ref|NC_000070.6|")
+        self.assertEqual(hsp.target.name, "NC_000070")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(hsp.annotations["midline"], "||||| ||||  ||| ||||||||||||||||")
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|372099 142902531 GCCTGGCATGAAGTAACTGCTCAATAAATGCT 142902563
+                  0 |||||.||||.-|||.||||||||||||||||        32
+G26684.1        241 GCCTGACATGG-GTAGCTGCTCAATAAATGCT       272
+""",
+        )
+        hit = hits[3]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|372099108|ref|NC_000068.7|")
+        self.assertEqual(hit.target.name, "NC_000068")
+        self.assertEqual(
+            hit.target.description,
+            "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=182113224)")
+        self.assertEqual(len(hit), 2)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 42.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 39.157)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.30996)
+        self.assertEqual(hsp.annotations["identity"], 27)
+        self.assertEqual(hsp.annotations["positive"], 27)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[3799646, 3799677],
+                          [    238,     269]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 238)
+        self.assertEqual(hsp.query.annotations["end"], 269)
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["start"], 3799646)
+        self.assertEqual(hsp.target.annotations["end"], 3799677)
+        self.assertEqual(hsp.target.annotations["frame"], 1)
+        self.assertEqual(hsp.shape, (2, 31))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({238: 'AAGGCCTGACATGGGTAGCTGCTCAATAAAT'}, length=285)",
+        )
+        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({3799646: 'AAGTCCTGGCATGAGTAGTTGCTCAATAAAT'}, length=182113224)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099108|ref|NC_000068.7|")
+        self.assertEqual(hsp.target.name, "NC_000068")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(hsp.annotations["midline"], "||| |||| |||| |||| ||||||||||||")
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|372099   3799646 AAGTCCTGGCATGAGTAGTTGCTCAATAAAT 3799677
+                  0 |||.||||.||||.||||.||||||||||||      31
+G26684.1        238 AAGGCCTGACATGGGTAGCTGCTCAATAAAT     269
+""",
+        )
+        hsp = hit[1]
+        self.assertAlmostEqual(hsp.score, 41.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 38.2554)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertEqual(hsp.annotations["identity"], 23)
+        self.assertEqual(hsp.annotations["positive"], 23)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[70278959, 70278984],
+                          [     210,      235]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 210)
+        self.assertEqual(hsp.query.annotations["end"], 235)
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["start"], 70278959)
+        self.assertEqual(hsp.target.annotations["end"], 70278984)
+        self.assertEqual(hsp.target.annotations["frame"], 1)
+        self.assertEqual(hsp.shape, (2, 25))
+        self.assertEqual(
+            repr(hsp.query.seq), "Seq({210: 'AAATNAAAATGGAAAGTTCTTGTAG'}, length=285)"
+        )
+        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({70278959: 'AAATGAAAATGGAAAGTTCTTATAG'}, length=182113224)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099108|ref|NC_000068.7|")
+        self.assertEqual(hsp.target.name, "NC_000068")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(hsp.annotations["midline"], "|||| |||||||||||||||| |||")
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|372099  70278959 AAATGAAAATGGAAAGTTCTTATAG 70278984
+                  0 ||||.||||||||||||||||.|||       25
+G26684.1        210 AAATNAAAATGGAAAGTTCTTGTAG      235
+""",
+        )
+        hit = hits[4]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|372099097|ref|NC_000079.6|")
+        self.assertEqual(hit.target.name, "NC_000079")
+        self.assertEqual(
+            hit.target.description,
+            "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=120421639)")
+        self.assertEqual(len(hit), 2)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 42.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 39.157)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.30996)
+        self.assertEqual(hsp.annotations["identity"], 25)
+        self.assertEqual(hsp.annotations["positive"], 25)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[26806584, 26806556],
+                          [     206,      234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 206)
+        self.assertEqual(hsp.query.annotations["end"], 234)
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["start"], 26806556)
+        self.assertEqual(hsp.target.annotations["end"], 26806584)
+        self.assertEqual(hsp.target.annotations["frame"], -1)
+        self.assertEqual(hsp.shape, (2, 28))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({206: 'AAGGAAATNAAAATGGAAAGTTCTTGTA'}, length=285)",
+        )
+        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({26806556: 'TAGAAGAACTTTCCATTTTGATGTCCTT'}, length=120421639)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099097|ref|NC_000079.6|")
+        self.assertEqual(hsp.target.name, "NC_000079")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(hsp.annotations["midline"], "||||| || |||||||||||||||| ||")
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|372099  26806584 AAGGACATCAAAATGGAAAGTTCTTCTA 26806556
+                  0 |||||.||.||||||||||||||||.||       28
+G26684.1        206 AAGGAAATNAAAATGGAAAGTTCTTGTA      234
+""",
+        )
+        hsp = hit[1]
+        self.assertAlmostEqual(hsp.score, 40.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertEqual(hsp.annotations["identity"], 32)
+        self.assertEqual(hsp.annotations["positive"], 32)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[56840340, 56840300],
+                          [     233,      273]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 233)
+        self.assertEqual(hsp.query.annotations["end"], 273)
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["start"], 56840300)
+        self.assertEqual(hsp.target.annotations["end"], 56840340)
+        self.assertEqual(hsp.target.annotations["frame"], -1)
+        self.assertEqual(hsp.shape, (2, 40))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({233: 'AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA'}, length=285)",
+        )
+        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({56840300: 'TAGTATTCACTGAACATTTTCCTATGTCAGGCCTTGCGCT'}, length=120421639)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099097|ref|NC_000079.6|")
+        self.assertEqual(hsp.target.name, "NC_000079")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"], "||||||||||||||||| || |  || ||| | ||| |||"
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|372099  56840340 AGCGCAAGGCCTGACATAGGAAAATGTTCAGTGAATACTA 56840300
+                  0 |||||||||||||||||.||.|..||.|||.|.|||.|||       40
+G26684.1        233 AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA      273
+""",
+        )
+        hit = hits[5]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|372099098|ref|NC_000078.6|")
+        self.assertEqual(hit.target.name, "NC_000078")
+        self.assertEqual(
+            hit.target.description,
+            "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=120129022)")
+        self.assertEqual(len(hit), 2)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 41.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 38.2554)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertEqual(hsp.annotations["identity"], 22)
+        self.assertEqual(hsp.annotations["positive"], 22)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[113030662, 113030685],
+                          [       48,        71]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 48)
+        self.assertEqual(hsp.query.annotations["end"], 71)
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["start"], 113030662)
+        self.assertEqual(hsp.target.annotations["end"], 113030685)
+        self.assertEqual(hsp.target.annotations["frame"], 1)
+        self.assertEqual(hsp.shape, (2, 23))
+        self.assertEqual(
+            repr(hsp.query.seq), "Seq({48: 'CATCCATTCACACCCAACACAGG'}, length=285)"
+        )
+        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({113030662: 'CATCCATTCACACCCAGCACAGG'}, length=120129022)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099098|ref|NC_000078.6|")
+        self.assertEqual(hsp.target.name, "NC_000078")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(hsp.annotations["midline"], "|||||||||||||||| ||||||")
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|372099 113030662 CATCCATTCACACCCAGCACAGG 113030685
+                  0 ||||||||||||||||.||||||        23
+G26684.1         48 CATCCATTCACACCCAACACAGG        71
+""",
+        )
+        hsp = hit[1]
+        self.assertAlmostEqual(hsp.score, 40.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertEqual(hsp.annotations["identity"], 28)
+        self.assertEqual(hsp.annotations["positive"], 28)
+        self.assertEqual(hsp.annotations["gaps"], 1)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[108990272, 108990248, 108990248, 108990241],
+                          [      230,       254,       255,       262]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 230)
+        self.assertEqual(hsp.query.annotations["end"], 262)
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["start"], 108990241)
+        self.assertEqual(hsp.target.annotations["end"], 108990272)
+        self.assertEqual(hsp.target.annotations["frame"], -1)
+        self.assertEqual(hsp.shape, (2, 32))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({230: 'TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC'}, length=285)",
+        )
+        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({108990241: 'GACCAGCACCCATGTCAGGCCTAGAGCTACA'}, length=120129022)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099098|ref|NC_000078.6|")
+        self.assertEqual(hsp.target.name, "NC_000078")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(hsp.annotations["midline"], "|||||| | ||||||||||||||| |||| ||")
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|372099 108990272 TGTAGCTCTAGGCCTGACATGGGT-GCTGGTC 108990241
+                  0 ||||||.|.|||||||||||||||-||||.||        32
+G26684.1        230 TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC       262
+""",
+        )
+        hit = hits[6]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|372099109|ref|NC_000067.6|")
+        self.assertEqual(hit.target.name, "NC_000067")
+        self.assertEqual(
+            hit.target.description,
+            "Mus musculus strain C57BL/6J chromosome 1, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=195471971)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 40.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertEqual(hsp.annotations["identity"], 35)
+        self.assertEqual(hsp.annotations["positive"], 35)
+        self.assertEqual(hsp.annotations["gaps"], 2)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[65190107, 65190128, 65190128, 65190144, 65190144, 65190148],
+                          [      86,      107,      108,      124,      125,      129]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 86)
+        self.assertEqual(hsp.query.annotations["end"], 129)
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["start"], 65190107)
+        self.assertEqual(hsp.target.annotations["end"], 65190148)
+        self.assertEqual(hsp.target.annotations["frame"], 1)
+        self.assertEqual(hsp.shape, (2, 43))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({86: 'GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC'}, length=285)",
+        )
+        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({65190107: 'GCTCAGCCACATACATGGTTTTAAGTGTTGAGGCTCTTTCC'}, length=195471971)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099109|ref|NC_000067.6|")
+        self.assertEqual(hsp.target.name, "NC_000067")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain C57BL/6J chromosome 1, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"], "||||||||||| ||||||||| | | | |||||  ||| ||||"
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|372099  65190107 GCTCAGCCACATACATGGTTT-TAAGTGTTGAGGCTCT-TTCC 65190148
+                  0 |||||||||||.|||||||||-|.|.|.|||||..|||-||||       43
+G26684.1         86 GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC      129
+""",
+        )
+        hit = hits[7]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|372099101|ref|NC_000075.6|")
+        self.assertEqual(hit.target.name, "NC_000075")
+        self.assertEqual(
+            hit.target.description,
+            "Mus musculus strain C57BL/6J chromosome 9, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=124595110)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 40.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertEqual(hsp.annotations["identity"], 36)
+        self.assertEqual(hsp.annotations["positive"], 36)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[58227241, 58227194],
+                          [     237,      284]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 237)
+        self.assertEqual(hsp.query.annotations["end"], 284)
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["start"], 58227194)
+        self.assertEqual(hsp.target.annotations["end"], 58227241)
+        self.assertEqual(hsp.target.annotations["frame"], -1)
+        self.assertEqual(hsp.shape, (2, 47))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({237: 'CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT'}, length=285)",
+        )
+        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({58227194: 'AAAAAAAAAAATAGTATTTATTGAGCAGTCATACCTGTCAGGCTTTG'}, length=124595110)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099101|ref|NC_000075.6|")
+        self.assertEqual(hsp.target.name, "NC_000075")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain C57BL/6J chromosome 9, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "||| |||||||| |  |  ||||||||||||| ||| | | || |||",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|372099  58227241 CAAAGCCTGACAGGTATGACTGCTCAATAAATACTATTTTTTTTTTT 58227194
+                  0 |||.||||||||.|..|..|||||||||||||.|||.|.|.||.|||       47
+G26684.1        237 CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT      284
+""",
+        )
+        hit = hits[8]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|372099100|ref|NC_000076.6|")
+        self.assertEqual(hit.target.name, "NC_000076")
+        self.assertEqual(
+            hit.target.description,
+            "Mus musculus strain C57BL/6J chromosome 10, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=130694993)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 40.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertEqual(hsp.annotations["identity"], 20)
+        self.assertEqual(hsp.annotations["positive"], 20)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[119337185, 119337205],
+                          [      254,       274]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 254)
+        self.assertEqual(hsp.query.annotations["end"], 274)
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["start"], 119337185)
+        self.assertEqual(hsp.target.annotations["end"], 119337205)
+        self.assertEqual(hsp.target.annotations["frame"], 1)
+        self.assertEqual(hsp.shape, (2, 20))
+        self.assertEqual(
+            repr(hsp.query.seq), "Seq({254: 'AGCTGCTCAATAAATGCTAG'}, length=285)"
+        )
+        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({119337185: 'AGCTGCTCAATAAATGCTAG'}, length=130694993)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099100|ref|NC_000076.6|")
+        self.assertEqual(hsp.target.name, "NC_000076")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain C57BL/6J chromosome 10, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(hsp.annotations["midline"], "||||||||||||||||||||")
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|372099 119337185 AGCTGCTCAATAAATGCTAG 119337205
+                  0 ||||||||||||||||||||        20
+G26684.1        254 AGCTGCTCAATAAATGCTAG       274
+""",
+        )
+        hit = hits[9]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|372099094|ref|NC_000082.6|")
+        self.assertEqual(hit.target.name, "NC_000082")
+        self.assertEqual(
+            hit.target.description,
+            "Mus musculus strain C57BL/6J chromosome 16, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=98207768)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 40.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 37.3537)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.57222)
+        self.assertEqual(hsp.annotations["identity"], 43)
+        self.assertEqual(hsp.annotations["positive"], 43)
+        self.assertEqual(hsp.annotations["gaps"], 2)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[18854779, 18854803, 18854804, 18854812, 18854813, 18854835],
+                          [     174,      198,      198,      206,      206,      228]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 174)
+        self.assertEqual(hsp.query.annotations["end"], 228)
+        self.assertEqual(hsp.query.annotations["frame"], 1)
+        self.assertEqual(hsp.target.annotations["start"], 18854779)
+        self.assertEqual(hsp.target.annotations["end"], 18854835)
+        self.assertEqual(hsp.target.annotations["frame"], 1)
+        self.assertEqual(hsp.shape, (2, 56))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq({174: 'GGAGGCAAAGAATCCCTACCTCCTAGGGGTGAAAGGAAATNAAAATGGAAAGTT'}, length=285)",
+        )
+        self.assertEqual(hsp.query.id, "G26684.1")
+        self.assertEqual(
+            hsp.query.description, "human STS STS_D11570, sequence tagged site"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({18854779: 'GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT'}, length=98207768)",
+        )
+        self.assertEqual(hsp.target.id, "gi|372099094|ref|NC_000082.6|")
+        self.assertEqual(hsp.target.name, "NC_000082")
+        self.assertEqual(
+            hsp.target.description,
+            "Mus musculus strain C57BL/6J chromosome 16, GRCm38.p4 C57BL/6J",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "||||||||||||||||||| |  | |  | ||| || |||   |||||||||| ||",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|372099  18854779 GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT
+                  0 |||||||||||||||||||.|..|-|..|.|||-||.|||...||||||||||.||
+G26684.1        174 GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT
+
+gi|372099  18854835
+                 56
+G26684.1        228
+""",
+        )
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
