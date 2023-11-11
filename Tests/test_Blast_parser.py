@@ -29736,6 +29736,735 @@ G26684.1        228
 """,
         )
 
+    def test_xml_2900_blastx_001(self):
+        """Parsing BLASTX 2.9.0+ (xml_2900_blastx_001.xml)."""
+        filename = "xml_2900_blastx_001.xml"
+        datafile = os.path.join("Blast", filename)
+        with open(datafile, "rb") as handle:
+            records = Blast.parse(handle)
+            self.assertEqual(records.program, "blastx")
+            self.assertEqual(records.version, "BLASTX 2.9.0+")
+            self.assertEqual(
+                records.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(records.db, "nr")
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "AI021773.1")
+            self.assertEqual(
+                records.query.description,
+                "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
+            )
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=365)")
+            self.assertEqual(len(records.param), 5)
+            self.assertEqual(records.param["matrix"], "BLOSUM62")
+            self.assertAlmostEqual(records.param["expect"], 10.0)
+            self.assertEqual(records.param["gap-open"], 11)
+            self.assertEqual(records.param["gap-extend"], 1)
+            self.assertEqual(records.param["filter"], "F")
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
+        self.check_xml_2900_blastx_001(record)
+
+        with open(datafile, "rb") as handle:
+            record = Blast.read(handle)
+            self.check_xml_2900_blastx_001(record)
+
+    def check_xml_2900_blastx_001(self, record):
+        self.assertEqual(record.num, 1)
+
+        self.assertIsInstance(record.query, SeqRecord)
+        self.assertEqual(record.query.id, "AI021773.1")
+        self.assertEqual(
+            record.query.description,
+            "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
+        )
+        self.assertEqual(repr(record.query.seq), "Seq(None, length=365)")
+
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 197469652)
+        self.assertEqual(record.stat["db-len"], 71133367251)
+        self.assertEqual(record.stat["hsp-len"], 0)
+        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        self.assertAlmostEqual(record.stat["kappa"], 0.041)
+        self.assertAlmostEqual(record.stat["lambda"], 0.267)
+        self.assertAlmostEqual(record.stat["entropy"], 0.14)
+        hits = record.hits
+        self.assertEqual(len(hits), 10)
+
+        hit = hits[0]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1530504495|emb|VDM03167.1|")
+        self.assertEqual(hit.target.name, "VDM03167")
+        self.assertEqual(
+            hit.target.description,
+            "unnamed protein product, partial [Schistocephalus solidus]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=132)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 408.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 161.77)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 8.11609e-49)
+        self.assertEqual(hsp.annotations["identity"], 81)
+        self.assertEqual(hsp.annotations["positive"], 83)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 108],
+                          [  0, 108]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 19)
+        self.assertEqual(hsp.query.annotations["end"], 343)
+        self.assertEqual(hsp.query.annotations["frame"], 2)
+        self.assertEqual(hsp.target.annotations["start"], 0)
+        self.assertEqual(hsp.target.annotations["end"], 108)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 108))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSY...LTE')",
+        )
+        self.assertEqual(hsp.query.id, "AI021773.1")
+        self.assertEqual(
+            hsp.query.description,
+            "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({0: 'MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=132)",
+        )
+        self.assertEqual(hsp.target.id, "gi|1530504495|emb|VDM03167.1|")
+        self.assertEqual(hsp.target.name, "VDM03167")
+        self.assertEqual(
+            hsp.target.description,
+            "unnamed protein product, partial [Schistocephalus solidus]",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MADEEVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|153050         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+                  0 |||||||||||||||||||||...........|...............|.||||||||||
+AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
+
+gi|153050        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
+AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+""",
+        )
+        hit = hits[1]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|510859078|gb|EPB74633.1|")
+        self.assertEqual(hit.target.name, "EPB74633")
+        self.assertEqual(
+            hit.target.description,
+            "hypothetical protein ANCCEY_06263 [Ancylostoma ceylanicum]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=119)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 405.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 160.614)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.40046e-48)
+        self.assertEqual(hsp.annotations["identity"], 81)
+        self.assertEqual(hsp.annotations["positive"], 85)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 115],
+                          [  0, 115]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 19)
+        self.assertEqual(hsp.query.annotations["end"], 364)
+        self.assertEqual(hsp.query.annotations["frame"], 2)
+        self.assertEqual(hsp.target.annotations["start"], 0)
+        self.assertEqual(hsp.target.annotations["end"], 115)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 115))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSY...RKP')",
+        )
+        self.assertEqual(hsp.query.id, "AI021773.1")
+        self.assertEqual(
+            hsp.query.description,
+            "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({0: 'MCDDDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LKP'}, length=119)",
+        )
+        self.assertEqual(hsp.target.id, "gi|510859078|gb|EPB74633.1|")
+        self.assertEqual(hsp.target.name, "EPB74633")
+        self.assertEqual(
+            hsp.target.description,
+            "hypothetical protein ANCCEY_06263 [Ancylostoma ceylanicum]",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "M D++V ALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE H I KP",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|510859         0 MCDDDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+                  0 |.|..|.||||||||||||||...........|...............|.||||||||||
+AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
+
+gi|510859        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTEAHSILKP 115
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||.|.|.|| 115
+AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP 115
+""",
+        )
+        hit = hits[2]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|684409690|ref|XP_009175831.1|")
+        self.assertEqual(hit.target.name, "XP_009175831")
+        self.assertEqual(
+            hit.target.description,
+            "hypothetical protein T265_11027 [Opisthorchis viverrini] >gi|663044098|gb|KER20427.1| hypothetical protein T265_11027 [Opisthorchis viverrini]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=246)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 413.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 163.696)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 4.40404e-48)
+        self.assertEqual(hsp.annotations["identity"], 81)
+        self.assertEqual(hsp.annotations["positive"], 83)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 108],
+                          [  0, 108]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 19)
+        self.assertEqual(hsp.query.annotations["end"], 343)
+        self.assertEqual(hsp.query.annotations["frame"], 2)
+        self.assertEqual(hsp.target.annotations["start"], 0)
+        self.assertEqual(hsp.target.annotations["end"], 108)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 108))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSY...LTE')",
+        )
+        self.assertEqual(hsp.query.id, "AI021773.1")
+        self.assertEqual(
+            hsp.query.description,
+            "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({0: 'MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=246)",
+        )
+        self.assertEqual(hsp.target.id, "gi|684409690|ref|XP_009175831.1|")
+        self.assertEqual(hsp.target.name, "XP_009175831")
+        self.assertEqual(
+            hsp.target.description,
+            "hypothetical protein T265_11027 [Opisthorchis viverrini] >gi|663044098|gb|KER20427.1| hypothetical protein T265_11027 [Opisthorchis viverrini]",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MADEEVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|684409         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+                  0 |||||||||||||||||||||...........|...............|.||||||||||
+AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
+
+gi|684409        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
+AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+""",
+        )
+        hit = hits[3]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|449710331|gb|EMD49430.1|")
+        self.assertEqual(hit.target.name, "EMD49430")
+        self.assertEqual(
+            hit.target.description,
+            "actin, putative, partial [Entamoeba histolytica KU27]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=124)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 401.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 159.073)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 9.0486e-48)
+        self.assertEqual(hsp.annotations["identity"], 78)
+        self.assertEqual(hsp.annotations["positive"], 81)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 108],
+                          [  0, 108]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 19)
+        self.assertEqual(hsp.query.annotations["end"], 343)
+        self.assertEqual(hsp.query.annotations["frame"], 2)
+        self.assertEqual(hsp.target.annotations["start"], 0)
+        self.assertEqual(hsp.target.annotations["end"], 108)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 108))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSY...LTE')",
+        )
+        self.assertEqual(hsp.query.id, "AI021773.1")
+        self.assertEqual(
+            hsp.query.description,
+            "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({0: 'MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAY...LTE'}, length=124)",
+        )
+        self.assertEqual(hsp.target.id, "gi|449710331|gb|EMD49430.1|")
+        self.assertEqual(hsp.target.name, "EMD49430")
+        self.assertEqual(
+            hsp.target.description,
+            "actin, putative, partial [Entamoeba histolytica KU27]",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "M DEEVQALVVDNGSGMCKAG       ++  P               G KD+YVGDEAQSKRGILTLKYPIEHGIV NWDDMEKIWHHTFYNELRVAPEEHPVLLTE",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|449710         0 MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQ
+                  0 |.|||||||||||||||||||...........|...............|.||.|||||||
+AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
+
+gi|449710        60 SKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+                 60 |||||||||||||||||.|||||||||||||||||||||||||||||| 108
+AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+""",
+        )
+        hit = hits[4]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|257215766|emb|CAX83035.1|")
+        self.assertEqual(hit.target.name, "CAX83035")
+        self.assertEqual(
+            hit.target.description, "Actin-2, partial [Schistosoma japonicum]"
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=252)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 411.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 162.925)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.00219e-47)
+        self.assertEqual(hsp.annotations["identity"], 81)
+        self.assertEqual(hsp.annotations["positive"], 83)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 108],
+                          [  0, 108]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 19)
+        self.assertEqual(hsp.query.annotations["end"], 343)
+        self.assertEqual(hsp.query.annotations["frame"], 2)
+        self.assertEqual(hsp.target.annotations["start"], 0)
+        self.assertEqual(hsp.target.annotations["end"], 108)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 108))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSY...LTE')",
+        )
+        self.assertEqual(hsp.query.id, "AI021773.1")
+        self.assertEqual(
+            hsp.query.description,
+            "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({0: 'MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=252)",
+        )
+        self.assertEqual(hsp.target.id, "gi|257215766|emb|CAX83035.1|")
+        self.assertEqual(hsp.target.name, "CAX83035")
+        self.assertEqual(
+            hsp.target.description, "Actin-2, partial [Schistosoma japonicum]"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MADEEVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|257215         0 MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+                  0 |||||||||||||||||||||...........|...............|.||||||||||
+AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
+
+gi|257215        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
+AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+""",
+        )
+        hit = hits[5]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1535393712|emb|VDP83060.1|")
+        self.assertEqual(hit.target.name, "VDP83060")
+        self.assertEqual(
+            hit.target.description,
+            "unnamed protein product, partial [Echinostoma caproni]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=209)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 407.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 161.384)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.16397e-47)
+        self.assertEqual(hsp.annotations["identity"], 80)
+        self.assertEqual(hsp.annotations["positive"], 83)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 108],
+                          [  0, 108]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 19)
+        self.assertEqual(hsp.query.annotations["end"], 343)
+        self.assertEqual(hsp.query.annotations["frame"], 2)
+        self.assertEqual(hsp.target.annotations["start"], 0)
+        self.assertEqual(hsp.target.annotations["end"], 108)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 108))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSY...LTE')",
+        )
+        self.assertEqual(hsp.query.id, "AI021773.1")
+        self.assertEqual(
+            hsp.query.description,
+            "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({0: 'MADDEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=209)",
+        )
+        self.assertEqual(hsp.target.id, "gi|1535393712|emb|VDP83060.1|")
+        self.assertEqual(hsp.target.name, "VDP83060")
+        self.assertEqual(
+            hsp.target.description,
+            "unnamed protein product, partial [Echinostoma caproni]",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MAD+EVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|153539         0 MADDEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+                  0 |||.|||||||||||||||||...........|...............|.||||||||||
+AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
+
+gi|153539        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
+AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+""",
+        )
+        hit = hits[6]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|312773|emb|CAA50205.1|")
+        self.assertEqual(hit.target.name, "CAA50205")
+        self.assertEqual(
+            hit.target.description, "actin, partial [Entamoeba histolytica]"
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=137)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 401.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 159.073)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.25869e-47)
+        self.assertEqual(hsp.annotations["identity"], 78)
+        self.assertEqual(hsp.annotations["positive"], 81)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 108],
+                          [  0, 108]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 19)
+        self.assertEqual(hsp.query.annotations["end"], 343)
+        self.assertEqual(hsp.query.annotations["frame"], 2)
+        self.assertEqual(hsp.target.annotations["start"], 0)
+        self.assertEqual(hsp.target.annotations["end"], 108)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 108))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSY...LTE')",
+        )
+        self.assertEqual(hsp.query.id, "AI021773.1")
+        self.assertEqual(
+            hsp.query.description,
+            "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({0: 'MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAY...LTE'}, length=137)",
+        )
+        self.assertEqual(hsp.target.id, "gi|312773|emb|CAA50205.1|")
+        self.assertEqual(hsp.target.name, "CAA50205")
+        self.assertEqual(
+            hsp.target.description, "actin, partial [Entamoeba histolytica]"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "M DEEVQALVVDNGSGMCKAG       ++  P               G KD+YVGDEAQSKRGILTLKYPIEHGIV NWDDMEKIWHHTFYNELRVAPEEHPVLLTE",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|312773         0 MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQ
+                  0 |.|||||||||||||||||||...........|...............|.||.|||||||
+AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
+
+gi|312773        60 SKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+                 60 |||||||||||||||||.|||||||||||||||||||||||||||||| 108
+AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+""",
+        )
+        hit = hits[7]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1530341495|emb|VDN44756.1|")
+        self.assertEqual(hit.target.name, "VDN44756")
+        self.assertEqual(
+            hit.target.description,
+            "unnamed protein product, partial [Dibothriocephalus latus]",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=145)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 400.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 158.688)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.78336e-47)
+        self.assertEqual(hsp.annotations["identity"], 78)
+        self.assertEqual(hsp.annotations["positive"], 82)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 108],
+                          [  0, 108]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 19)
+        self.assertEqual(hsp.query.annotations["end"], 343)
+        self.assertEqual(hsp.query.annotations["frame"], 2)
+        self.assertEqual(hsp.target.annotations["start"], 0)
+        self.assertEqual(hsp.target.annotations["end"], 108)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 108))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSY...LTE')",
+        )
+        self.assertEqual(hsp.query.id, "AI021773.1")
+        self.assertEqual(
+            hsp.query.description,
+            "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({0: 'MGDEDVQALVIDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=145)",
+        )
+        self.assertEqual(hsp.target.id, "gi|1530341495|emb|VDN44756.1|")
+        self.assertEqual(hsp.target.name, "VDN44756")
+        self.assertEqual(
+            hsp.target.description,
+            "unnamed protein product, partial [Dibothriocephalus latus]",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "M DE+VQALV+DNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|153034         0 MGDEDVQALVIDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+                  0 |.||.|||||.||||||||||...........|...............|.||||||||||
+AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
+
+gi|153034        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
+AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+""",
+        )
+        hit = hits[8]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1524877828|ref|XP_027046469.1|")
+        self.assertEqual(hit.target.name, "XP_027046469")
+        self.assertEqual(
+            hit.target.description, "actin-1, partial [Pocillopora damicornis]"
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=122)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 398.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 157.918)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.93331e-47)
+        self.assertEqual(hsp.annotations["identity"], 78)
+        self.assertEqual(hsp.annotations["positive"], 82)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 108],
+                          [  0, 108]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 19)
+        self.assertEqual(hsp.query.annotations["end"], 343)
+        self.assertEqual(hsp.query.annotations["frame"], 2)
+        self.assertEqual(hsp.target.annotations["start"], 0)
+        self.assertEqual(hsp.target.annotations["end"], 108)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 108))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSY...LTE')",
+        )
+        self.assertEqual(hsp.query.id, "AI021773.1")
+        self.assertEqual(
+            hsp.query.description,
+            "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({0: 'MADEEVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=122)",
+        )
+        self.assertEqual(hsp.target.id, "gi|1524877828|ref|XP_027046469.1|")
+        self.assertEqual(hsp.target.name, "XP_027046469")
+        self.assertEqual(
+            hsp.target.description, "actin-1, partial [Pocillopora damicornis]"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MADEEV ALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELR+APEEHP+LLTE",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|152487         0 MADEEVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+                  0 ||||||.||||||||||||||...........|...............|.||||||||||
+AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
+
+gi|152487        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRIAPEEHPILLTE 108
+                 60 ||||||||||||||||||||||||||||||||||||.||||||.|||| 108
+AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+""",
+        )
+        hit = hits[9]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1524877860|ref|XP_027046487.1|")
+        self.assertEqual(hit.target.name, "XP_027046487")
+        self.assertEqual(
+            hit.target.description, "actin-1-like [Pocillopora damicornis]"
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=134)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 399.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 158.303)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 2.36088e-47)
+        self.assertEqual(hsp.annotations["identity"], 79)
+        self.assertEqual(hsp.annotations["positive"], 82)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 108],
+                          [  0, 108]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 19)
+        self.assertEqual(hsp.query.annotations["end"], 343)
+        self.assertEqual(hsp.query.annotations["frame"], 2)
+        self.assertEqual(hsp.target.annotations["start"], 0)
+        self.assertEqual(hsp.target.annotations["end"], 108)
+        self.assertEqual(hsp.target.annotations["frame"], 0)
+        self.assertEqual(hsp.shape, (2, 108))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSY...LTE')",
+        )
+        self.assertEqual(hsp.query.id, "AI021773.1")
+        self.assertEqual(
+            hsp.query.description,
+            "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq({0: 'MADEDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSY...LTE'}, length=134)",
+        )
+        self.assertEqual(hsp.target.id, "gi|1524877860|ref|XP_027046487.1|")
+        self.assertEqual(hsp.target.name, "XP_027046487")
+        self.assertEqual(
+            hsp.target.description, "actin-1-like [Pocillopora damicornis]"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MADE+V ALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|152487         0 MADEDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQ
+                  0 ||||.|.||||||||||||||...........|...............|.||||||||||
+AI021773.         0 MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQ
+
+gi|152487        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+                 60 |||||||||||||||||||||||||||||||||||||||||||||||| 108
+AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
+""",
+        )
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

@@ -531,7 +531,7 @@ class Records:
             pass
         elif self.program == "blastp" and query_frame == 0:
             pass
-        elif self.program == "blastn" and query_frame in (0, +1):
+        elif self.program == "blastn" and query_frame == 1:
             pass
         else:
             raise ValueError(f"unexpected value {query_frame} in tag <Hsp_query-frame> for program {self.program}")
