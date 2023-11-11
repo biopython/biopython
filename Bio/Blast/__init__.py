@@ -18,6 +18,7 @@ ftp://ftp.ncbi.nlm.nih.gov/blast/documents/xml/NCBI_BlastOutput.dtd
 # flake8: noqa
 # mypy: ignore-errors
 
+import sys
 from xml.parsers import expat
 from collections import deque
 
@@ -25,7 +26,7 @@ from collections import deque
 from Bio import StreamModeError
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import Alignments
+from Bio.Align import Alignment, Alignments
 
 
 class NotXMLError(ValueError):
@@ -186,7 +187,7 @@ class Records:
     def _start_iteration_hits(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
-        self.hits = []
+        self._hits = []
 
     def _start_hit(self, name, attrs):
         assert self._characters.strip() == ""
@@ -220,7 +221,7 @@ class Records:
     def _start_hsp(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
-        self.hsp = {}
+        self._hsp = {}
 
     def _start_hsp_num(self, name, attrs):
         assert self._characters.strip() == ""
@@ -423,21 +424,21 @@ class Records:
     def _end_iteration_hits(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
-        hits = self.hits
+        hits = self._hits
         self._record.hits = hits
-        del self.hits
+        del self._hits
 
     def _end_hit(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
         hit = self._hit
-        self.hits.append(hit)
         del self._hit
+        self._hits.append(hit)
 
     def _end_hit_num(self, name):
         num = int(self._characters)
-        if num != len(self.hits) + 1:
-            raise ValueError(f"unexpected value found in tag <Hit_num> (found f{num}, expected {len(self.hits) + 1})")
+        if num != len(self._hits) + 1:
+            raise ValueError(f"unexpected value found in tag <Hit_num> (found f{num}, expected {len(self._hits) + 1})")
         self._characters = ""
 
     def _end_hit_id(self, name):
@@ -465,79 +466,123 @@ class Records:
         self._characters = ""
 
     def _end_hsp_num(self, name):
-        self.hsp["num"] = int(self._characters)
+        num = int(self._characters)
+        if num != len(self._hit) + 1:
+            raise ValueError(f"unexpected value found in tag <Hsp_num> (found f{num}, expected {len(self._hit) + 1})")
         self._characters = ""
 
     def _end_hsp_bit_score(self, name):
-        self.hsp["bit-score"] = float(self._characters)
+        self._hsp["bit-score"] = float(self._characters)
         self._characters = ""
 
     def _end_hsp_score(self, name):
-        self.hsp["score"] = float(self._characters)
+        self._hsp["score"] = float(self._characters)
         self._characters = ""
 
     def _end_hsp_evalue(self, name):
-        self.hsp["evalue"] = float(self._characters)
+        self._hsp["evalue"] = float(self._characters)
         self._characters = ""
 
     def _end_hsp_query_from(self, name):
-        self.hsp["query-from"] = int(self._characters)
+        self._hsp["query-from"] = int(self._characters)
         self._characters = ""
 
     def _end_hsp_query_to(self, name):
-        self.hsp["query-to"] = int(self._characters)
+        self._hsp["query-to"] = int(self._characters)
         self._characters = ""
 
     def _end_hsp_hit_from(self, name):
-        self.hsp["hit-from"] = int(self._characters)
+        self._hsp["hit-from"] = int(self._characters)
         self._characters = ""
 
     def _end_hsp_hit_to(self, name):
-        self.hsp["hit-to"] = int(self._characters)
+        self._hsp["hit-to"] = int(self._characters)
         self._characters = ""
 
     def _end_hsp_query_frame(self, name):
-        self.hsp["query-frame"] = int(self._characters)
+        self._hsp["query-frame"] = int(self._characters)
         self._characters = ""
 
     def _end_hsp_hit_frame(self, name):
-        self.hsp["hit-frame"] = int(self._characters)
+        self._hsp["hit-frame"] = int(self._characters)
         self._characters = ""
 
     def _end_hsp_identity(self, name):
-        self.hsp["identity"] = int(self._characters)
+        self._hsp["identity"] = int(self._characters)
         self._characters = ""
 
     def _end_hsp_positive(self, name):
-        self.hsp["positive"] = int(self._characters)
+        self._hsp["positive"] = int(self._characters)
         self._characters = ""
 
     def _end_hsp_gaps(self, name):
-        self.hsp["gaps"] = int(self._characters)
+        self._hsp["gaps"] = int(self._characters)
         self._characters = ""
 
     def _end_hsp_align_len(self, name):
-        self.hsp["align-len"] = int(self._characters)
+        self._hsp["align-len"] = int(self._characters)
         self._characters = ""
 
     def _end_hsp_qseq(self, name):
-        self.hsp["qseq"] = self._characters
+        self._hsp["qseq"] = self._characters
         self._characters = ""
 
     def _end_hsp_hseq(self, name):
-        self.hsp["hseq"] = self._characters
+        self._hsp["hseq"] = self._characters
         self._characters = ""
 
     def _end_hsp_midline(self, name):
-        self.hsp["midline"] = self._characters
+        self._hsp["midline"] = self._characters
         self._characters = ""
 
     def _end_hsp(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
-        hsp = self.hsp
-        self._hit.append(hsp)
-        del self.hsp
+        hsp = self._hsp
+        del self._hsp
+        align_len = hsp["align-len"]
+        query = self._record.query
+        query_id = query.id
+        query_description = query.description
+        query_length = len(query.seq)
+        query_seq_aligned = hsp["qseq"]
+        assert len(query_seq_aligned) == align_len
+        query_seq_data = query_seq_aligned.replace("-", "")
+        query_start = hsp["query-from"] - 1
+        query_end = hsp["query-to"]
+        assert query_end - query_start == len(query_seq_data)
+        query_seq = Seq({query_start: query_seq_data}, query_length)
+        query = SeqRecord(query_seq, query_id, description=query_description)
+        query.annotations["frame"] = hsp["query-frame"]
+        target = self._hit.target
+        target_id = target.id
+        target_name = target.name
+        target_description = target.description
+        target_length = len(target.seq)
+        target_seq_aligned = hsp["hseq"]
+        assert len(target_seq_aligned) == align_len
+        target_seq_data = target_seq_aligned.replace("-", "")
+        target_start = hsp["hit-from"] - 1
+        target_end = hsp["hit-to"]
+        assert target_end - target_start == len(target_seq_data)
+        target_seq = Seq({target_start: target_seq_data}, target_length)
+        target = SeqRecord(target_seq, target_id, target_name, description=target_description)
+        target.annotations["frame"] = hsp["hit-frame"]
+        coordinates = Alignment.infer_coordinates([target_seq_aligned, query_seq_aligned])
+        coordinates[0, :] += target_start
+        coordinates[1, :] += query_start
+        sequences = [target, query]
+        alignment = Alignment(sequences, coordinates)
+        alignment.score = hsp["score"]
+        annotations = {}
+        annotations["bit score"] = hsp["bit-score"]
+        annotations["evalue"] = hsp["evalue"]
+        annotations["identity"] = hsp["identity"]
+        annotations["positive"] = hsp["positive"]
+        annotations["gaps"] = hsp["gaps"]
+        annotations["midline"] = hsp["midline"]
+        alignment.annotations = annotations
+        self._hit.append(alignment)
 
     def _end_iteration_stat(self, name):
         assert self._characters.strip() == ""
