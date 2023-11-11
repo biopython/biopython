@@ -30465,6 +30465,801 @@ AI021773.        60 SKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE 108
 """,
         )
 
+    def test_xml_2900_tblastn_001(self):
+        """Parsing TBLASTN 2.9.0+ (xml_2900_tblastn_001.xml)."""
+        filename = "xml_2900_tblastn_001.xml"
+        datafile = os.path.join("Blast", filename)
+        with open(datafile, "rb") as handle:
+            records = Blast.parse(handle)
+            self.assertEqual(records.program, "tblastn")
+            self.assertEqual(records.version, "TBLASTN 2.9.0+")
+            self.assertEqual(
+                records.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(records.db, "nr")
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "CAJ99216.1")
+            self.assertEqual(
+                records.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+            )
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=234)")
+            self.assertEqual(len(records.param), 5)
+            self.assertEqual(records.param["matrix"], "BLOSUM62")
+            self.assertAlmostEqual(records.param["expect"], 10.0)
+            self.assertEqual(records.param["gap-open"], 11)
+            self.assertEqual(records.param["gap-extend"], 1)
+            self.assertEqual(records.param["filter"], "F")
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
+        self.check_xml_2900_tblastn_001(record)
+
+        with open(datafile, "rb") as handle:
+            record = Blast.read(handle)
+            self.check_xml_2900_tblastn_001(record)
+
+    def check_xml_2900_tblastn_001(self, record):
+        self.assertEqual(record.num, 1)
+
+        self.assertIsInstance(record.query, SeqRecord)
+        self.assertEqual(record.query.id, "CAJ99216.1")
+        self.assertEqual(
+            record.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(repr(record.query.seq), "Seq(None, length=234)")
+
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 51302476)
+        self.assertEqual(record.stat["db-len"], 204305995260)
+        self.assertEqual(record.stat["hsp-len"], 0)
+        self.assertAlmostEqual(record.stat["eff-space"], 0.0)
+        self.assertAlmostEqual(record.stat["kappa"], 0.041)
+        self.assertAlmostEqual(record.stat["lambda"], 0.267)
+        self.assertAlmostEqual(record.stat["entropy"], 0.14)
+        hits = record.hits
+        self.assertEqual(len(hits), 10)
+
+        hit = hits[0]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|109713861|emb|AM260522.1|")
+        self.assertEqual(hit.target.name, "AM260522")
+        self.assertEqual(
+            hit.target.description,
+            "Helicobacter acinonychis str. Sheeba complete genome, strain Sheeba",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1553927)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 1228.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 477.633)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 8.53508e-152)
+        self.assertEqual(hsp.annotations["identity"], 234)
+        self.assertEqual(hsp.annotations["positive"], 234)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 0)
+        self.assertEqual(hsp.query.annotations["end"], 234)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 325801)
+        self.assertEqual(hsp.target.annotations["end"], 326503)
+        self.assertEqual(hsp.target.annotations["frame"], 2)
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|109713861|emb|AM260522.1|")
+        self.assertEqual(hsp.target.name, "AM260522")
+        self.assertEqual(
+            hsp.target.description,
+            "Helicobacter acinonychis str. Sheeba complete genome, strain Sheeba",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|109713         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|109713        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+
+gi|109713       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|109713       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+                180 |||||||||||||||||||||||||||||||||||||||||||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+""",
+        )
+        hit = hits[1]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1336928286|emb|LT900055.1|")
+        self.assertEqual(hit.target.name, "LT900055")
+        self.assertEqual(
+            hit.target.description,
+            "Helicobacter acinonychis isolate 212_9 genome assembly, chromosome: I",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1550239)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 1219.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 474.167)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 1.37046e-150)
+        self.assertEqual(hsp.annotations["identity"], 232)
+        self.assertEqual(hsp.annotations["positive"], 232)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 0)
+        self.assertEqual(hsp.query.annotations["end"], 234)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 325703)
+        self.assertEqual(hsp.target.annotations["end"], 326405)
+        self.assertEqual(hsp.target.annotations["frame"], 3)
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1336928286|emb|LT900055.1|")
+        self.assertEqual(hsp.target.name, "LT900055")
+        self.assertEqual(
+            hsp.target.description,
+            "Helicobacter acinonychis isolate 212_9 genome assembly, chromosome: I",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERR LLKESPNFLKEKFDFFKDKKFKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGS SLELENFKTIISFL",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|133692         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|133692        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRALLKESPNFLKEKFDFFKDKKFKIVY
+                 60 ||||||||||||||||||||||||||||||||||.|||||||||||||||||||||||||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+
+gi|133692       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+                120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|133692       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
+                180 |||||||||||||||||||||||||||||||||||||||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+""",
+        )
+        hit = hits[2]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1033012332|gb|CP011486.1|")
+        self.assertEqual(hit.target.name, "CP011486")
+        self.assertEqual(
+            hit.target.description, "Helicobacter pylori strain K26A1, complete genome"
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1570310)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 1164.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 452.981)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 3.45778e-143)
+        self.assertEqual(hsp.annotations["identity"], 221)
+        self.assertEqual(hsp.annotations["positive"], 224)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 0)
+        self.assertEqual(hsp.query.annotations["end"], 234)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 196042)
+        self.assertEqual(hsp.target.annotations["end"], 196744)
+        self.assertEqual(hsp.target.annotations["frame"], 2)
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1033012332|gb|CP011486.1|")
+        self.assertEqual(hsp.target.name, "CP011486")
+        self.assertEqual(
+            hsp.target.description, "Helicobacter pylori strain K26A1, complete genome"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERR LLKESP+FLKEKFDFFKDK FKI+YCIGEDLKTREKGL AVKEFLNEQLENIDL Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLL+GS SLELENFKTIISFL",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|103301         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|103301        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRTLLKESPSFLKEKFDFFKDKNFKIIY
+                 60 ||||||||||||||||||||||||||||||||||.||||||.||||||||||||.|||.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+
+gi|103301       120 CIGEDLKTREKGLAAVKEFLNEQLENIDLSYHNLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |||||||||||||.|||||||||||||||.|.||||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|103301       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL 234
+                180 ||||.||||.||||||||||||||||||||||||||.||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+""",
+        )
+        hit = hits[3]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1559948212|dbj|AP017633.1|")
+        self.assertEqual(hit.target.name, "AP017633")
+        self.assertEqual(
+            hit.target.description,
+            "Helicobacter pylori DNA, complete genome, strain: PMSS1",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1603093)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 1136.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 442.195)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 2.08706e-139)
+        self.assertEqual(hsp.annotations["identity"], 218)
+        self.assertEqual(hsp.annotations["positive"], 223)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 0)
+        self.assertEqual(hsp.query.annotations["end"], 234)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 1330167)
+        self.assertEqual(hsp.target.annotations["end"], 1330869)
+        self.assertEqual(hsp.target.annotations["frame"], -2)
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1559948212|dbj|AP017633.1|")
+        self.assertEqual(hsp.target.name, "AP017633")
+        self.assertEqual(
+            hsp.target.description,
+            "Helicobacter pylori DNA, complete genome, strain: PMSS1",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPN+FLHFTLGVQNAYP+DCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDK FKIVYCIGEDL TREKG  AVKEFLNEQLENIDL+Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGS S ELENFKTIISFL",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|155994         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHFTLGVQN
+                  0 |||||||||||||||||||||||||||||||||.|||||||||||||||.||||||||||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|155994        60 AYPRDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKNFKIVY
+                 60 |||.|||||||||||||||||||.|||||||||||||||||.||||||||||||.|||||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+
+gi|155994       120 CIGEDLTTREKGFKAVKEFLNEQLENIDLNYSNLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 ||||||.|||||..|||||||||||||||.|.||||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|155994       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASWELENFKTIISFL 234
+                180 ||||.||||.|||||||||||||||||||||||||||||.|.|||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+""",
+        )
+        hit = hits[4]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1143706535|gb|CP018823.1|")
+        self.assertEqual(hit.target.name, "CP018823")
+        self.assertEqual(
+            hit.target.description, "Helicobacter pylori strain PMSS1 complete genome"
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1618480)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 1136.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 442.195)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 2.08707e-139)
+        self.assertEqual(hsp.annotations["identity"], 218)
+        self.assertEqual(hsp.annotations["positive"], 223)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 0)
+        self.assertEqual(hsp.query.annotations["end"], 234)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 190463)
+        self.assertEqual(hsp.target.annotations["end"], 191165)
+        self.assertEqual(hsp.target.annotations["frame"], 3)
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1143706535|gb|CP018823.1|")
+        self.assertEqual(hsp.target.name, "CP018823")
+        self.assertEqual(
+            hsp.target.description, "Helicobacter pylori strain PMSS1 complete genome"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPN+FLHFTLGVQNAYP+DCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDK FKIVYCIGEDL TREKG  AVKEFLNEQLENIDL+Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGS S ELENFKTIISFL",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|114370         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHFTLGVQN
+                  0 |||||||||||||||||||||||||||||||||.|||||||||||||||.||||||||||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|114370        60 AYPRDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKNFKIVY
+                 60 |||.|||||||||||||||||||.|||||||||||||||||.||||||||||||.|||||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+
+gi|114370       120 CIGEDLTTREKGFKAVKEFLNEQLENIDLNYSNLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 ||||||.|||||..|||||||||||||||.|.||||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|114370       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASWELENFKTIISFL 234
+                180 ||||.||||.|||||||||||||||||||||||||||||.|.|||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+""",
+        )
+        hit = hits[5]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1149039824|gb|CP009259.1|")
+        self.assertEqual(hit.target.name, "CP009259")
+        self.assertEqual(
+            hit.target.description, "Helicobacter pylori SS1, complete genome"
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1619098)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 1136.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 442.195)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 2.08707e-139)
+        self.assertEqual(hsp.annotations["identity"], 218)
+        self.assertEqual(hsp.annotations["positive"], 223)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 0)
+        self.assertEqual(hsp.query.annotations["end"], 234)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 190464)
+        self.assertEqual(hsp.target.annotations["end"], 191166)
+        self.assertEqual(hsp.target.annotations["frame"], 1)
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1149039824|gb|CP009259.1|")
+        self.assertEqual(hsp.target.name, "CP009259")
+        self.assertEqual(
+            hsp.target.description, "Helicobacter pylori SS1, complete genome"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPN+FLHFTLGVQNAYP+DCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDK FKIVYCIGEDL TREKG  AVKEFLNEQLENIDL+Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGS S ELENFKTIISFL",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|114903         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHFTLGVQN
+                  0 |||||||||||||||||||||||||||||||||.|||||||||||||||.||||||||||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|114903        60 AYPRDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKNFKIVY
+                 60 |||.|||||||||||||||||||.|||||||||||||||||.||||||||||||.|||||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+
+gi|114903       120 CIGEDLTTREKGFKAVKEFLNEQLENIDLNYSNLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 ||||||.|||||..|||||||||||||||.|.||||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|114903       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASWELENFKTIISFL 234
+                180 ||||.||||.|||||||||||||||||||||||||||||.|.|||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+""",
+        )
+        hit = hits[6]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1560269298|gb|CP035106.1|")
+        self.assertEqual(hit.target.name, "CP035106")
+        self.assertEqual(
+            hit.target.description,
+            "Helicobacter pylori strain Hpbs3 chromosome, complete genome",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1514674)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 1133.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 441.039)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 5.81854e-139)
+        self.assertEqual(hsp.annotations["identity"], 215)
+        self.assertEqual(hsp.annotations["positive"], 224)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 0)
+        self.assertEqual(hsp.query.annotations["end"], 234)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 1231589)
+        self.assertEqual(hsp.target.annotations["end"], 1232291)
+        self.assertEqual(hsp.target.annotations["frame"], -3)
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLEELEKTLKPQHSDRVFVFPDFLGLLPNSFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1560269298|gb|CP035106.1|")
+        self.assertEqual(hsp.target.name, "CP035106")
+        self.assertEqual(
+            hsp.target.description,
+            "Helicobacter pylori strain Hpbs3 chromosome, complete genome",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKSAMPIFKSHAYL+ELEKTLKPQH DRVFVFPDFLGLLPN+FLHFTLGVQNAYP+DCGAFTGEITS+HLEELKINTLLIGHSERR+LLKESP+FLKEKFDFFK K FKIVYCIGE+L TREKG  AVKEFLNEQLENIDL+Y NL+VAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|156026         0 MTKIAMANFKSAMPIFKSHAYLEELEKTLKPQHSDRVFVFPDFLGLLPNSFLHFTLGVQN
+                  0 ||||||||||||||||||||||.||||||||||.|||||||||||||||.||||||||||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|156026        60 AYPRDCGAFTGEITSQHLEELKINTLLIGHSERRLLLKESPSFLKEKFDFFKSKNFKIVY
+                 60 |||.|||||||||||.||||||||||||||||||.||||||.||||||||||.|.|||||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+
+gi|156026       120 CIGEELTTREKGFKAVKEFLNEQLENIDLNYPNLVVAYEPIWAIGTKKSASLEDIYLTHG
+                120 ||||.|.|||||..|||||||||||||||.|.||.|||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|156026       180 FLKQVLNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+                180 ||||.||||.|||||||||||||||||||||||||||||||||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+""",
+        )
+        hit = hits[7]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1540258434|emb|LR134517.1|")
+        self.assertEqual(hit.target.name, "LR134517")
+        self.assertEqual(
+            hit.target.description,
+            "Helicobacter pylori strain NCTC13345 genome assembly, chromosome: 1",
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1644315)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 1131.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 440.269)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 9.62198e-139)
+        self.assertEqual(hsp.annotations["identity"], 216)
+        self.assertEqual(hsp.annotations["positive"], 222)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 0)
+        self.assertEqual(hsp.query.annotations["end"], 234)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 363061)
+        self.assertEqual(hsp.target.annotations["end"], 363763)
+        self.assertEqual(hsp.target.annotations["frame"], 2)
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1540258434|emb|LR134517.1|")
+        self.assertEqual(hsp.target.name, "LR134517")
+        self.assertEqual(
+            hsp.target.description,
+            "Helicobacter pylori strain NCTC13345 genome assembly, chromosome: 1",
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPNAFLHFTLG QNAYP+DCGAFTGEITSKHLEELKI+TLLIGHSERR LLKESP+FLKEKFDFFKDK FKIVYC+GEDL TREKG  AVKEFL+EQLENIDL+Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGS SLELENFKTIISFL",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|154025         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||.|||||||||||||||||||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|154025        60 AYPRDCGAFTGEITSKHLEELKIHTLLIGHSERRALLKESPSFLKEKFDFFKDKNFKIVY
+                 60 |||.|||||||||||||||||||.||||||||||.||||||.||||||||||||.|||||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+
+gi|154025       120 CVGEDLTTREKGFRAVKEFLSEQLENIDLNYSNLIVAYEPIWAIGTKKSASLEDIYLTHG
+                120 |.||||.|||||..||||||.||||||||.|.||||||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|154025       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||||||||||||||||||||||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+""",
+        )
+        hit = hits[8]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1033005233|gb|CP011487.1|")
+        self.assertEqual(hit.target.name, "CP011487")
+        self.assertEqual(
+            hit.target.description, "Helicobacter pylori strain PNG84A, complete genome"
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1531450)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 1129.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 439.499)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 2.21067e-138)
+        self.assertEqual(hsp.annotations["identity"], 215)
+        self.assertEqual(hsp.annotations["positive"], 221)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 0)
+        self.assertEqual(hsp.query.annotations["end"], 234)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 161805)
+        self.assertEqual(hsp.target.annotations["end"], 162507)
+        self.assertEqual(hsp.target.annotations["frame"], 1)
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1033005233|gb|CP011487.1|")
+        self.assertEqual(hsp.target.name, "CP011487")
+        self.assertEqual(
+            hsp.target.description, "Helicobacter pylori strain PNG84A, complete genome"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPNAFLHFTLGVQNAYP+DCGAFTGEITSKHLEELKINTLLIGHSERR+LLKESP+FLKEKFDFFK K FKI+YCIGE+L TREK   AVKEFLNEQLENIDLDY NL+VAYEPIWAIG  KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGS SLELENFKTIISFL",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|103300         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHFTLGVQN
+                  0 |||||||||||||||||||||||||||||||||.||||||||||||||||||||||||||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|103300        60 AYPRDCGAFTGEITSKHLEELKINTLLIGHSERRMLLKESPSFLKEKFDFFKSKNFKIIY
+                 60 |||.||||||||||||||||||||||||||||||.||||||.||||||||||.|.|||.|
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+
+gi|103300       120 CIGEELTTREKSFKAVKEFLNEQLENIDLDYPNLVVAYEPIWAIGAKKSASLEDIYLTHG
+                120 ||||.|.||||...|||||||||||||||||.||.||||||||||..|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|103300       180 FLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||||||||||||||||||||||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+""",
+        )
+        hit = hits[9]
+        self.assertIsInstance(hit.target, SeqRecord)
+        self.assertEqual(hit.target.id, "gi|1509197163|gb|CP025748.1|")
+        self.assertEqual(hit.target.name, "CP025748")
+        self.assertEqual(
+            hit.target.description, "Helicobacter pylori strain Hp_TH2099 chromosome"
+        )
+        self.assertEqual(repr(hit.target.seq), "Seq(None, length=1667396)")
+        self.assertEqual(len(hit), 1)
+        hsp = hit[0]
+        self.assertAlmostEqual(hsp.score, 1128.0)
+        self.assertAlmostEqual(hsp.annotations["bit score"], 439.113)
+        self.assertAlmostEqual(hsp.annotations["evalue"], 2.2539e-138)
+        self.assertEqual(hsp.annotations["identity"], 216)
+        self.assertEqual(hsp.annotations["positive"], 220)
+        self.assertEqual(hsp.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                hsp.coordinates,
+                # fmt: off
+                np.array([[  0, 234],
+                          [  0, 234]])
+                # fmt: on
+            )
+        )
+        self.assertEqual(hsp.query.annotations["start"], 0)
+        self.assertEqual(hsp.query.annotations["end"], 234)
+        self.assertEqual(hsp.query.annotations["frame"], 0)
+        self.assertEqual(hsp.target.annotations["start"], 200717)
+        self.assertEqual(hsp.target.annotations["end"], 201419)
+        self.assertEqual(hsp.target.annotations["frame"], 3)
+        self.assertEqual(hsp.shape, (2, 234))
+        self.assertEqual(
+            repr(hsp.query.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHF...SFL')",
+        )
+        self.assertEqual(hsp.query.id, "CAJ99216.1")
+        self.assertEqual(
+            hsp.query.description, "tim [Helicobacter acinonychis str. Sheeba]"
+        )
+        self.assertEqual(
+            repr(hsp.target.seq),
+            "Seq('MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHF...SFL')",
+        )
+        self.assertEqual(hsp.target.id, "gi|1509197163|gb|CP025748.1|")
+        self.assertEqual(hsp.target.name, "CP025748")
+        self.assertEqual(
+            hsp.target.description, "Helicobacter pylori strain Hp_TH2099 chromosome"
+        )
+        self.assertEqual(
+            hsp.annotations["midline"],
+            "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPN+FLHFTLG QNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERR LLKESPNFLKEKFDFFK K FKIVYCIGE+L TREKG  AVKEFLNEQLENIDL+Y NL+VAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVN QNAKEILGIDSVDGLLIGS SLELENFKTIISFL",
+        )
+        self.assertEqual(
+            str(hsp),
+            """\
+gi|150919         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNSFLHFTLGAQN
+                  0 |||||||||||||||||||||||||||||||||.|||||||||||||||.|||||||.||
+CAJ99216.         0 MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQN
+
+gi|150919        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRALLKESPNFLKEKFDFFKSKNFKIVY
+                 60 ||||||||||||||||||||||||||||||||||.|||||||||||||||||.|.|||||
+CAJ99216.        60 AYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVY
+
+gi|150919       120 CIGEELTTREKGFKAVKEFLNEQLENIDLNYPNLVVAYEPIWAIGTKKSASLEDIYLTHG
+                120 ||||.|.|||||..|||||||||||||||.|.||.|||||||||||.|||||||||||||
+CAJ99216.       120 CIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHG
+
+gi|150919       180 FLKQILNQKTPLLYGGSVNVQNAKEILGIDSVDGLLIGSASLELENFKTIISFL 234
+                180 ||||.||||.|||||||||.|||||||||||||||||||.|||||||||||||| 234
+CAJ99216.       180 FLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL 234
+""",
+        )
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

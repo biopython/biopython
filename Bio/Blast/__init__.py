@@ -529,7 +529,7 @@ class Records:
         query_frame = int(self._characters)
         if self.program == "blastx" and query_frame in (-3, -2, -1, +1, +2, +3):
             pass
-        elif self.program == "blastp" and query_frame == 0:
+        elif self.program in ("blastp", "tblastn") and query_frame == 0:
             pass
         elif self.program == "blastn" and query_frame == 1:
             pass
@@ -543,6 +543,8 @@ class Records:
         if self.program == "blastx" and hit_frame in (0, ):
             pass
         elif self.program == "blastp" and hit_frame == 0:
+            pass
+        elif self.program == "tblastn" and hit_frame in (-3, -2, -1, 1, 2, 3):
             pass
         elif self.program == "blastn" and hit_frame in (-1, 1):
             pass
@@ -618,17 +620,23 @@ class Records:
         target_length = len(target.seq)
         target_seq_data = target_seq_aligned.replace("-", "")
         target_frame =  hsp["hit-frame"]
-        if target_frame == +1 or target_frame == 0:
+        if self.program == "tblastn":
             target_start = hsp["hit-from"] - 1
             target_end = hsp["hit-to"]
-            coordinates[0, :] += target_start
-        elif target_frame == -1:
-            target_start = hsp["hit-to"] - 1
-            target_end = hsp["hit-from"]
-            target_seq_data = reverse_complement(target_seq_data)
-            coordinates[0, :] = target_end - coordinates[0, :]
-        assert target_end - target_start == len(target_seq_data)
-        target_seq = Seq({target_start: target_seq_data}, target_length)
+            assert target_end - target_start == 3 * len(target_seq_data)
+            target_seq = Seq(target_seq_data, target_length)
+        else:
+            if target_frame == +1 or target_frame == 0:
+                target_start = hsp["hit-from"] - 1
+                target_end = hsp["hit-to"]
+                coordinates[0, :] += target_start
+            elif target_frame == -1:
+                target_start = hsp["hit-to"] - 1
+                target_end = hsp["hit-from"]
+                target_seq_data = reverse_complement(target_seq_data)
+                coordinates[0, :] = target_end - coordinates[0, :]
+            assert target_end - target_start == len(target_seq_data)
+            target_seq = Seq({target_start: target_seq_data}, target_length)
         target = SeqRecord(target_seq, target_id, target_name, description=target_description)
         target.annotations["start"] = target_start
         target.annotations["end"] = target_end
