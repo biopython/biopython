@@ -56,7 +56,7 @@ class TestBasics(unittest.TestCase):
         self.assertEqual(msa[0].id, "mixed")
         self.assertEqual(msa[1].id, "lower")
         self.assertEqual(msa[2].id, "upper")
-        for (col, letter) in enumerate(letters):
+        for col, letter in enumerate(letters):
             self.assertEqual(msa[:, col], letter + letter.lower() + letter.upper())
         # Check row extractions:
         self.assertEqual(msa[0].id, "mixed")
@@ -75,7 +75,7 @@ class TestBasics(unittest.TestCase):
         self.assertEqual(alignment.sequences[0].id, "mixed")
         self.assertEqual(alignment.sequences[1].id, "lower")
         self.assertEqual(alignment.sequences[2].id, "upper")
-        for (col, letter) in enumerate(letters):
+        for col, letter in enumerate(letters):
             self.assertEqual(
                 alignment[:, col], letter + letter.lower() + letter.upper()
             )

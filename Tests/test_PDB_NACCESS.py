@@ -18,7 +18,6 @@
 
 import subprocess
 import unittest
-import warnings
 
 try:
     import numpy
@@ -30,7 +29,6 @@ except ImportError:
     ) from None
 
 
-from Bio import MissingExternalDependencyError
 from Bio.PDB import PDBParser
 from Bio.PDB.NACCESS import NACCESS, process_asa_data, process_rsa_data
 

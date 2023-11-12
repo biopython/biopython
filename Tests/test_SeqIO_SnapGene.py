@@ -15,7 +15,6 @@ from Bio.SeqFeature import CompoundLocation
 
 
 class TestSnapGene(unittest.TestCase):
-
     sample_data = {
         "sample-d": {
             "file": "SnapGene/sample-d.dna",

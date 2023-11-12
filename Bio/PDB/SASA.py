@@ -206,7 +206,6 @@ class ShrakeRupley:
         asa_array = np.zeros((n_atoms, 1), dtype=np.int64)
         ptset = set(range(self.n_points))
         for i in range(n_atoms):
-
             r_i = radii[i]
 
             # Move sphere to atom

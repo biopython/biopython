@@ -93,7 +93,7 @@ class GraphData:
 
     def set_data(self, data):
         """Add data as a list of (position, value) tuples."""
-        for (pos, val) in data:  # Fill data dictionary
+        for pos, val in data:  # Fill data dictionary
             self.data[pos] = val
 
     def get_data(self):

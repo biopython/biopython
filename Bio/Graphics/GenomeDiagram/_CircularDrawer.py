@@ -450,7 +450,7 @@ class CircularDrawer(AbstractDrawer):
         assert trackobjA is not None
         assert trackobjB is not None
         if trackobjA == trackobjB:
-            raise NotImplementedError()
+            raise NotImplementedError
 
         if trackobjA.start is not None:
             if endA < trackobjA.start:
@@ -476,7 +476,7 @@ class CircularDrawer(AbstractDrawer):
             if track == trackobjB:
                 trackB = track_level
         if trackA == trackB:
-            raise NotImplementedError()
+            raise NotImplementedError
 
         startangleA, startcosA, startsinA = self.canvas_angle(startA)
         startangleB, startcosB, startsinB = self.canvas_angle(startB)
@@ -1680,7 +1680,7 @@ class CircularDrawer(AbstractDrawer):
             90 - (tailangle * 180 / pi),
             moveTo=True,
         )
-        for i in range(0, teeth):
+        for i in range(teeth):
             p.addArc(
                 self.xcenter,
                 self.ycenter,
@@ -1704,7 +1704,7 @@ class CircularDrawer(AbstractDrawer):
             90 - (tailangle * 180 / pi),
             reverse=True,
         )
-        for i in range(0, teeth):
+        for i in range(teeth):
             p.addArc(
                 self.xcenter,
                 self.ycenter,

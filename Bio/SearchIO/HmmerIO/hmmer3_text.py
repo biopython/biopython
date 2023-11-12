@@ -17,7 +17,7 @@ __all__ = ("Hmmer3TextParser", "Hmmer3TextIndexer")
 
 # precompile regex patterns for faster processing
 # regex for program name capture
-_RE_PROGRAM = re.compile(r"^# (\w*hmm\w+) :: .*$")
+_RE_PROGRAM = re.compile(r"^# .*?(\w?hmm\w+) :: .*$")
 # regex for version string capture
 _RE_VERSION = re.compile(r"# \w+ ([\w+\.]+) .*; http.*$")
 # regex for option string capture
@@ -100,7 +100,6 @@ class Hmmer3TextParser:
         self._read_until(lambda line: line.startswith("Query:"))
 
         while self.line:
-
             regx = re.search(_QRE_ID_LEN, self.line)
 
             while not regx:
@@ -217,9 +216,7 @@ class Hmmer3TextParser:
     def _create_hits(self, hit_attrs, qid, qdesc):
         """Parse a HMMER3 hsp block, beginning with the hsp table (PRIVATE)."""
         # read through until the beginning of the hsp block
-        self._read_until(
-            lambda line: line.startswith("Internal pipeline") or line.startswith(">>")
-        )
+        self._read_until(lambda line: line.startswith(("Internal pipeline", ">>")))
 
         # start parsing the hsp block
         hit_list = []
@@ -234,8 +231,9 @@ class Hmmer3TextParser:
 
             # read through the hsp table header and move one more line
             self._read_until(
-                lambda line: line.startswith(" ---   ------ ----- --------")
-                or line.startswith("   [No individual domains")
+                lambda line: line.startswith(
+                    (" ---   ------ ----- --------", "   [No individual domains")
+                )
             )
             self.line = read_forward(self.handle)
 
@@ -251,7 +249,6 @@ class Hmmer3TextParser:
                     or self.line.startswith("  Alignments for each domain:")
                     or self.line.startswith(">>")
                 ):
-
                     hit_attr = hit_attrs.pop(0)
                     hit = Hit(hsp_list)
                     for attr, value in hit_attr.items():
@@ -348,7 +345,6 @@ class Hmmer3TextParser:
 
             # parse all the alignment blocks in the hsp
             while True:
-
                 regx = None
 
                 # check for hit or query line

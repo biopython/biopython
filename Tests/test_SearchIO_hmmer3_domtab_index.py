@@ -12,7 +12,6 @@ from search_tests_common import CheckRaw, CheckIndex
 
 
 class HmmerDomtabRawCases(CheckRaw):
-
     fmt = "hmmscan3-domtab"
 
     def test_hmmerdomtab_30_multiple_first(self):

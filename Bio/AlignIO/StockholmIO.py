@@ -469,7 +469,6 @@ class StockholmIterator(AlignmentIterator):
         self.seq_col_annotation = gr
 
         if ids and seqs:
-
             if (
                 self.records_per_alignment is not None
                 and self.records_per_alignment != len(ids)

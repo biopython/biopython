@@ -159,7 +159,6 @@ PACKAGES = [
     "Bio.Restriction",
     "Bio.SCOP",
     "Bio.SearchIO",
-    "Bio.SearchIO._legacy",
     "Bio.SearchIO._model",
     "Bio.SearchIO.BlastIO",
     "Bio.SearchIO.HHsuiteIO",
@@ -185,7 +184,8 @@ PACKAGES = [
 ]
 
 EXTENSIONS = [
-    Extension("Bio.Align._aligners", ["Bio/Align/_aligners.c"]),
+    Extension("Bio.Align._codonaligner", ["Bio/Align/_codonaligner.c"]),
+    Extension("Bio.Align._pairwisealigner", ["Bio/Align/_pairwisealigner.c"]),
     Extension("Bio.cpairwise2", ["Bio/cpairwise2module.c"]),
     Extension("Bio.Nexus.cnexus", ["Bio/Nexus/cnexus.c"]),
     Extension(
@@ -251,6 +251,7 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
         "Topic :: Software Development :: Libraries :: Python Modules",

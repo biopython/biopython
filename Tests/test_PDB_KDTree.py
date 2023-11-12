@@ -49,7 +49,7 @@ class NeighborTest(unittest.TestCase):
             def get_coord(self):
                 return self.coord
 
-        for i in range(0, 20):
+        for i in range(20):
             atoms = [RandomAtom() for j in range(100)]
             ns = NeighborSearch(atoms)
             hits = ns.search_all(5.0)
@@ -64,7 +64,6 @@ class NeighborTest(unittest.TestCase):
 
 
 class KDTreeTest(unittest.TestCase):
-
     nr_points = 5000  # number of points used in test
     bucket_size = 5  # number of points per tree node
     radius = 0.05  # radius of search (typically 0.05 or so)
@@ -93,7 +92,7 @@ class KDTreeTest(unittest.TestCase):
         bucket_size = self.bucket_size
         nr_points = self.nr_points
         for radius in (self.radius, 100 * self.radius):
-            for i in range(0, 10):
+            for i in range(10):
                 # kd tree search
                 coords = random((nr_points, 3))
                 center = random(3)
@@ -102,7 +101,7 @@ class KDTreeTest(unittest.TestCase):
                 points1.sort(key=lambda point: point.index)  # noqa: E731
                 # manual search
                 points2 = []
-                for i in range(0, nr_points):
+                for i in range(nr_points):
                     p = coords[i]
                     v = p - center
                     r = sqrt(dot(v, v))
@@ -125,7 +124,7 @@ class KDTreeTest(unittest.TestCase):
         bucket_size = self.bucket_size
         nr_points = self.nr_points
         radius = self.radius
-        for i in range(0, 10):
+        for i in range(10):
             # KD tree search
             coords = random((nr_points, 3))
             kdt = kdtrees.KDTree(coords, bucket_size)
@@ -151,7 +150,7 @@ class KDTreeTest(unittest.TestCase):
         bucket_size = self.bucket_size
         nr_points = self.nr_points // 10  # fewer points to speed up the test
         for radius in (self.radius, 3 * self.radius):
-            for i in range(0, 5):
+            for i in range(5):
                 # KD tree search
                 coords = random((nr_points, 3))
                 kdt = kdtrees.KDTree(coords, bucket_size)

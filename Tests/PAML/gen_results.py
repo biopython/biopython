@@ -65,7 +65,7 @@ def baseml(vers=None, verbose=False):
     else:
         versions = VERSIONS
     tests = [
-        ("model", list(range(0, 9))),
+        ("model", list(range(9))),
         ("nhomo", [1, 3, 4]),
         ("nparK", list(range(1, 5))),
         ("alpha1rho1", None),

@@ -24,7 +24,6 @@ test_write_read_align_with_seq_count = test_write_read_alignment_formats + [
 
 
 class TestAlignIO_exceptions(unittest.TestCase):
-
     t_formats = list(AlignIO._FormatToWriter) + list(SeqIO._FormatToWriter)
 
     def test_phylip_reject_duplicate(self):

@@ -8132,7 +8132,7 @@ class LineOneTests(unittest.TestCase):
                 None,
             ),
         ]
-        for (line, topo, mol_type, div, warning_list) in tests:
+        for line, topo, mol_type, div, warning_list in tests:
             with warnings.catch_warnings(record=True) as caught:
                 warnings.simplefilter("always")
                 scanner = GenBank.Scanner.GenBankScanner()
@@ -8206,7 +8206,7 @@ class LineOneTests(unittest.TestCase):
             ("ID   DI500001       STANDARD;      PRT;   111 AA.", None, None, None),
             ("ID   DI644510   standard; PRT;  1852 AA.", None, None, None),
         ]
-        for (line, topo, mol_type, div) in tests:
+        for line, topo, mol_type, div in tests:
             scanner = GenBank.Scanner.EmblScanner()
             consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
             scanner._feed_first_line(consumer, line)
@@ -8230,7 +8230,7 @@ class LineOneTests(unittest.TestCase):
             ("ID   HLA00001   standard; DNA; HUM; 3503 BP.", None, "DNA", "HUM"),
             ("ID   HLA00001; SV 1; standard; DNA; HUM; 3503 BP.", None, "DNA", "HUM"),
         ]
-        for (line, topo, mol_type, div) in tests:
+        for line, topo, mol_type, div in tests:
             scanner = GenBank.Scanner._ImgtScanner()
             consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
             scanner._feed_first_line(consumer, line)

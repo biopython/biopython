@@ -45,8 +45,6 @@ class PhyloXMLError(Exception):
     specification.
     """
 
-    pass
-
 
 # ---------------------------------------------------------
 # Public API

@@ -109,7 +109,7 @@ def read_enzyme_record(handle):
 
 def load_enzyme_ids(file) -> dict[str, int]:
     """Load enzyme identifiers from bairoch-format file."""
-    with open(file, "r") as in_file:
+    with open(file) as in_file:
         return {
             record["ID"]: int(record["AC"].removeprefix("RB").removesuffix(";"))
             for record in parse_enzyme_records(in_file)
@@ -139,8 +139,6 @@ def double_quote_repr(value):  # TODO similar not to produce long horizontal lis
 
 class OverhangError(ValueError):
     """Exception for dealing with overhang."""
-
-    pass
 
 
 def regex(site):
@@ -327,7 +325,6 @@ class TypeCompiler:
 
     def __init__(self):
         """TypeCompiler() -> new TypeCompiler instance."""
-        pass
 
     def buildtype(self):
         """Build new types that will be needed for constructing the enzymes."""
@@ -395,7 +392,7 @@ class TypeCompiler:
             n += 1
 
 
-start = '''#!/usr/bin/env python
+start = f'''#!/usr/bin/env python
 #      Copyright (C) 2004. Frederic Sohm.
 #
 # This code is part of the Biopython distribution and governed by its
@@ -409,12 +406,10 @@ start = '''#!/usr/bin/env python
 
 """Restriction Analysis Libraries.
 
-Used REBASE emboss files version {} ({}).
+Used REBASE emboss files version {release_number} ({time.gmtime().tm_year}).
 """
 
-'''.format(
-    release_number, time.gmtime().tm_year
-)
+'''
 
 
 class DictionaryBuilder:

@@ -312,7 +312,7 @@ class _CursorWrapper:
         """Decode any bytestrings present in the row (PRIVATE)."""
         tuple_list = list(tuple_)
         for i, elem in enumerate(tuple_list):
-            if type(elem) is bytes:
+            if isinstance(elem, bytes):
                 tuple_list[i] = elem.decode("utf-8")
         return tuple(tuple_list)
 

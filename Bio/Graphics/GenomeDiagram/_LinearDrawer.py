@@ -617,7 +617,9 @@ class LinearDrawer(AbstractDrawer):
             else:
                 x2 = self.xlim
             box = draw_box(
-                (x1, tbtm), (x2, ttop), colors.Color(0.96, 0.96, 0.96)  # Grey track bg
+                (x1, tbtm),
+                (x2, ttop),
+                colors.Color(0.96, 0.96, 0.96),  # Grey track bg
             )  # is just a box
             greytrack_bgs.append(box)
 
@@ -790,7 +792,7 @@ class LinearDrawer(AbstractDrawer):
         assert trackobjA is not None
         assert trackobjB is not None
         if trackobjA == trackobjB:
-            raise NotImplementedError()
+            raise NotImplementedError
 
         if trackobjA.start is not None:
             if endA < trackobjA.start:
@@ -816,7 +818,7 @@ class LinearDrawer(AbstractDrawer):
             if track == trackobjB:
                 trackB = track_level
         if trackA == trackB:
-            raise NotImplementedError()
+            raise NotImplementedError
 
         strokecolor, fillcolor = _stroke_and_fill_colors(
             cross_link.color, cross_link.border

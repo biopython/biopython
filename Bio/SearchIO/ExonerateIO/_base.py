@@ -9,6 +9,8 @@ import re
 from functools import reduce
 from abc import ABC, abstractmethod
 
+from typing import Optional, Type
+
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.SeqUtils import seq1
@@ -186,7 +188,6 @@ def _split_fragment(frag):
     abs_pos = 0
     # split according to hit, then query
     while simil:
-
         try:
             shifts = re.search(_RE_SHIFTS, simil).group(1)
             s_start = simil.find(shifts)
@@ -343,7 +344,7 @@ def _get_strand_from_desc(desc, is_protein, modify_desc=True):
 class _BaseExonerateParser(ABC):
     """Abstract base class iterator for exonerate format."""
 
-    _ALN_MARK = None
+    _ALN_MARK: Optional[str] = None
 
     def __init__(self, handle):
         self.handle = handle
@@ -526,8 +527,10 @@ class _BaseExonerateParser(ABC):
 class _BaseExonerateIndexer(SearchIndexer):
     """Indexer class for Exonerate plain text."""
 
-    _parser = None  # should be defined by subclass
-    _query_mark = None  # this one too
+    _parser: Optional[
+        Type[_BaseExonerateParser]
+    ] = None  # should be defined by subclass
+    _query_mark: Optional[bytes] = None  # this one too
 
     def get_qresult_id(self, pos):
         raise NotImplementedError("Should be defined by subclass")

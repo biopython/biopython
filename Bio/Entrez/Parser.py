@@ -45,7 +45,8 @@ from io import BytesIO
 import xml.etree.ElementTree as ET
 from xml.sax.saxutils import escape
 
-from urllib.request import urlopen, urlparse
+from urllib.request import urlopen
+from urllib.parse import urlparse
 
 
 # The following four classes are used to add a member .attributes to integers,

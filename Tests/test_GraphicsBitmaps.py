@@ -130,7 +130,6 @@ class ComparativeTest(unittest.TestCase):
     def test_simple_scatter_plot(self):
         """Test creation of a simple PNG scatter plot."""
         # Dummy method to show up via run_tests.py
-        pass
 
 
 if __name__ == "__main__":

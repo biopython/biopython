@@ -110,7 +110,7 @@ def rotaxis2m(theta, vector):
     :type vector: L{Vector}
     :param vector: the rotation axis
 
-    :return: The rotation matrix, a 3x3 Numeric array.
+    :return: The rotation matrix, a 3x3 NumPy array.
 
     Examples
     --------
@@ -150,7 +150,7 @@ def refmat(p, q):
     """Return a (left multiplying) matrix that mirrors p onto q.
 
     :type p,q: L{Vector}
-    :return: The mirror operation, a 3x3 Numeric array.
+    :return: The mirror operation, a 3x3 NumPy array.
 
     Examples
     --------
@@ -187,7 +187,7 @@ def rotmat(p, q):
     :type q: L{Vector}
 
     :return: rotation matrix that rotates p onto q
-    :rtype: 3x3 Numeric array
+    :rtype: 3x3 NumPy array
 
     Examples
     --------

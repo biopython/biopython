@@ -1,7 +1,7 @@
 # Copyright 2000 Andrew Dalke.
 # Copyright 2000-2002 Brad Chapman.
 # Copyright 2004-2005, 2010 by M de Hoon.
-# Copyright 2007-2020 by Peter Cock.
+# Copyright 2007-2023 by Peter Cock.
 # All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
@@ -26,6 +26,7 @@ import warnings
 
 from abc import ABC
 from abc import abstractmethod
+from typing import overload, Optional, Union, Dict
 
 from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
@@ -493,6 +494,14 @@ class _SeqAbstractBaseClass(ABC):
     def __iter__(self):
         """Return an iterable of the sequence."""
         return self._data.decode("ASCII").__iter__()
+
+    @overload
+    def __getitem__(self, index: int) -> str:
+        ...
+
+    @overload
+    def __getitem__(self, index: slice) -> "Seq":
+        ...
 
     def __getitem__(self, index):
         """Return a subsequence as a single letter or as a sequence object.
@@ -1903,6 +1912,10 @@ class _SeqAbstractBaseClass(ABC):
     def transcribe(self, inplace=False):
         """Transcribe a DNA sequence into RNA and return the RNA sequence as a new Seq object.
 
+        Following the usual convention, the sequence is interpreted as the
+        coding strand of the DNA double helix, not the template strand. This
+        means we can get the RNA sequence just by switching T to U.
+
         >>> from Bio.Seq import Seq
         >>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
         >>> coding_dna
@@ -2123,7 +2136,21 @@ class Seq(_SeqAbstractBaseClass):
     not applicable to protein sequences).
     """
 
-    def __init__(self, data, length=None):
+    _data: Union[bytes, SequenceDataAbstractBaseClass]
+
+    def __init__(
+        self,
+        data: Union[
+            str,
+            bytes,
+            bytearray,
+            _SeqAbstractBaseClass,
+            SequenceDataAbstractBaseClass,
+            dict,
+            None,
+        ],
+        length: Optional[int] = None,
+    ):
         """Create a Seq object.
 
         Arguments:
@@ -2199,9 +2226,10 @@ class Seq(_SeqAbstractBaseClass):
             elif length < 0:
                 raise ValueError("length must not be negative.")
             else:
+                current = 0  # not needed here, but it keeps mypy happy
                 end = -1
                 starts = sorted(data.keys())
-                _data = {}
+                _data: Dict[int, bytes] = {}
                 for start in starts:
                     seq = data[start]
                     if isinstance(seq, str):
@@ -2470,7 +2498,7 @@ class _UndefinedSequenceData(SequenceDataAbstractBaseClass):
         self._length = length
         super().__init__()
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: slice) -> Union[bytes, "_UndefinedSequenceData"]:
         if isinstance(key, slice):
             start, end, step = key.indices(self._length)
             size = len(range(start, end, step))
@@ -2580,7 +2608,9 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         self._data = data
         super().__init__()
 
-    def __getitem__(self, key):
+    def __getitem__(
+        self, key: Union[slice, int]
+    ) -> Union[bytes, SequenceDataAbstractBaseClass]:
         if isinstance(key, slice):
             start, end, step = key.indices(self._length)
             size = len(range(start, end, step))
@@ -2589,7 +2619,8 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
             data = {}
             for s, d in self._data.items():
                 indices = range(-s, -s + self._length)[key]
-                e = indices.stop
+                e: Optional[int] = indices.stop
+                assert e is not None
                 if step > 0:
                     if e <= 0:
                         continue
@@ -2615,7 +2646,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
                 return _UndefinedSequenceData(size)
             # merge adjacent sequence segments
             end = -1
-            previous = None  # not needed here, but it keeps flake happy
+            previous = 0  # not needed here, but it keeps flake happy
             items = data.items()
             data = {}
             for start, seq in items:
@@ -2700,7 +2731,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
         items = self._data.items()
         data = {}
         end = -1
-        previous = None  # not needed here, but it keeps flake happy
+        previous = 0  # not needed here, but it keeps flake happy
         for i in range(other):
             for start, seq in items:
                 start += i * length
@@ -2787,6 +2818,10 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
 
 def transcribe(dna):
     """Transcribe a DNA sequence into RNA.
+
+    Following the usual convention, the sequence is interpreted as the
+    coding strand of the DNA double helix, not the template strand. This
+    means we can get the RNA sequence just by switching T to U.
 
     If given a string, returns a new string object.
 

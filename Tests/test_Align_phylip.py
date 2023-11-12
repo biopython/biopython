@@ -12,7 +12,7 @@ from Bio import Align
 
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -42,7 +42,7 @@ class TestPhylipReading(unittest.TestCase):
             self.assertEqual(sequence.seq, saved_sequence.seq)
             self.assertEqual(alignment[i], saved_alignment[i])
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, saved_alignment.coordinates)
+            np.array_equal(alignment.coordinates, saved_alignment.coordinates)
         )
 
     def test_one(self):
@@ -193,11 +193,10 @@ HISJ_E_CO       219 GLRKED--NELREALNKAFAEMRADGTYEKLAKKYFDFDVYGG--- 260
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array(
+                np.array(
                     [[  0,   0,   0,  13,  13,  16,  17,  17,  17,  17,  17,
                        17,  17,  17,  17,  18,  41,  41,  41,  90,  91, 109,
                       109, 121, 122, 146, 147, 148, 149, 150, 151, 160, 160,
@@ -317,9 +316,9 @@ HISJ_E_COLMKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIGTDPTYAPFESKNS-QGELVG
             )
             self.check_reading_writing(path)
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
-                    numpy.array([[0, 60], [0, 60], [0, 60], [0, 60], [0, 60]]),
+                    np.array([[0, 60], [0, 60], [0, 60], [0, 60], [0, 60]]),
                 )
             )
             self.assertEqual(
@@ -361,30 +360,29 @@ Tax5      CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT
             with self.assertRaises(StopIteration):
                 next(alignments)
         self.assertTrue(
-            numpy.array_equal(
-                numpy.array(alignment, "U"),
+            np.array_equal(
+                np.array(alignment, "U"),
                 # fmt: off
-# flake8: noqa
-numpy.array([['A', 'A', 'G', 'C', 'T', 'N', 'G', 'G', 'G', 'C', 'A', 'T', 'T',
-              'T', 'C', 'A', 'G', 'G', 'G', 'T', 'G', 'A', 'G', 'C', 'C', 'C',
-              'G', 'G', 'G', 'C', 'A', 'A', 'T', 'A', 'C', 'A', 'G', 'G', 'G',
-              'T', 'A', 'T'],
-             ['A', 'A', 'G', 'C', 'C', 'T', 'T', 'G', 'G', 'C', 'A', 'G', 'T',
-              'G', 'C', 'A', 'G', 'G', 'G', 'T', 'G', 'A', 'G', 'C', 'C', 'G',
-              'T', 'G', 'G', 'C', 'C', 'G', 'G', 'G', 'C', 'A', 'C', 'G', 'G',
-              'T', 'A', 'T'],
-             ['A', 'C', 'C', 'G', 'G', 'T', 'T', 'G', 'G', 'C', 'C', 'G', 'T',
-              'T', 'C', 'A', 'G', 'G', 'G', 'T', 'A', 'C', 'A', 'G', 'G', 'T',
-              'T', 'G', 'G', 'C', 'C', 'G', 'T', 'T', 'C', 'A', 'G', 'G', 'G',
-              'T', 'A', 'A'],
-             ['A', 'A', 'A', 'C', 'C', 'C', 'T', 'T', 'G', 'C', 'C', 'G', 'T',
-              'T', 'A', 'C', 'G', 'C', 'T', 'T', 'A', 'A', 'A', 'C', 'C', 'G',
-              'A', 'G', 'G', 'C', 'C', 'G', 'G', 'G', 'A', 'C', 'A', 'C', 'T',
-              'C', 'A', 'T'],
-             ['A', 'A', 'A', 'C', 'C', 'C', 'T', 'T', 'G', 'C', 'C', 'G', 'G',
-              'T', 'A', 'C', 'G', 'C', 'T', 'T', 'A', 'A', 'A', 'C', 'C', 'A',
-              'T', 'T', 'G', 'C', 'C', 'G', 'G', 'T', 'A', 'C', 'G', 'C', 'T',
-              'T', 'A', 'A']], dtype='U')
+np.array([['A', 'A', 'G', 'C', 'T', 'N', 'G', 'G', 'G', 'C', 'A', 'T', 'T',
+           'T', 'C', 'A', 'G', 'G', 'G', 'T', 'G', 'A', 'G', 'C', 'C', 'C',
+           'G', 'G', 'G', 'C', 'A', 'A', 'T', 'A', 'C', 'A', 'G', 'G', 'G',
+           'T', 'A', 'T'],
+          ['A', 'A', 'G', 'C', 'C', 'T', 'T', 'G', 'G', 'C', 'A', 'G', 'T',
+           'G', 'C', 'A', 'G', 'G', 'G', 'T', 'G', 'A', 'G', 'C', 'C', 'G',
+           'T', 'G', 'G', 'C', 'C', 'G', 'G', 'G', 'C', 'A', 'C', 'G', 'G',
+           'T', 'A', 'T'],
+          ['A', 'C', 'C', 'G', 'G', 'T', 'T', 'G', 'G', 'C', 'C', 'G', 'T',
+           'T', 'C', 'A', 'G', 'G', 'G', 'T', 'A', 'C', 'A', 'G', 'G', 'T',
+           'T', 'G', 'G', 'C', 'C', 'G', 'T', 'T', 'C', 'A', 'G', 'G', 'G',
+           'T', 'A', 'A'],
+          ['A', 'A', 'A', 'C', 'C', 'C', 'T', 'T', 'G', 'C', 'C', 'G', 'T',
+           'T', 'A', 'C', 'G', 'C', 'T', 'T', 'A', 'A', 'A', 'C', 'C', 'G',
+           'A', 'G', 'G', 'C', 'C', 'G', 'G', 'G', 'A', 'C', 'A', 'C', 'T',
+           'C', 'A', 'T'],
+          ['A', 'A', 'A', 'C', 'C', 'C', 'T', 'T', 'G', 'C', 'C', 'G', 'G',
+           'T', 'A', 'C', 'G', 'C', 'T', 'T', 'A', 'A', 'A', 'C', 'C', 'A',
+           'T', 'T', 'G', 'C', 'C', 'G', 'G', 'T', 'A', 'C', 'G', 'C', 'T',
+           'T', 'A', 'A']], dtype='U')
                 # fmt: on
             )
         )
@@ -420,9 +418,9 @@ numpy.array([['A', 'A', 'G', 'C', 'T', 'N', 'G', 'G', 'G', 'C', 'A', 'T', 'T',
         self.assertEqual(alignment[4], "AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA")
         self.check_reading_writing(path)
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array([[0, 42], [0, 42], [0, 42], [0, 42], [0, 42]]),
+                np.array([[0, 42], [0, 42], [0, 42], [0, 42], [0, 42]]),
             )
         )
         self.assertEqual(
@@ -497,9 +495,9 @@ Gorilla           0 AAACCCTTGCCGGTACGCTTAAACCATTGCCGGTACGCTTAA 42
 """,
             )
             self.assertTrue(
-                numpy.array_equal(
+                np.array_equal(
                     alignment.coordinates,
-                    numpy.array([[0, 42], [0, 42], [0, 42], [0, 42], [0, 42]]),
+                    np.array([[0, 42], [0, 42], [0, 42], [0, 42], [0, 42]]),
                 )
             )
             self.assertEqual(
@@ -618,11 +616,10 @@ CATH_HUMA       311 YFLIERGKNMCGLAACASYPIPLV 335
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array(
+                np.array(
        [[ 0,   0,   1,  18,  18,  18,  26,  26,  40,  40,  63,  67,  93,
          94, 103, 105, 113, 115, 128, 128, 180, 188, 222, 223, 242, 242,
         266, 266, 275, 275, 280, 280, 299, 304, 343, 343],
@@ -744,14 +741,13 @@ IXI_237         113 PPAYAGDRSHE 124
 """,
         )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
-                numpy.array([[0, 15, 22, 23, 24, 35, 39, 74, 84, 97, 99, 131],
-                             [0, 15, 15, 15, 15, 26, 30, 65, 65, 78, 80, 112],
-                             [0, 15, 22, 22, 22, 33, 37, 72, 82, 95, 95, 127],
-                             [0, 15, 22, 23, 23, 34, 34, 69, 79, 92, 92, 124]])
+                np.array([[0, 15, 22, 23, 24, 35, 39, 74, 84, 97, 99, 131],
+                          [0, 15, 15, 15, 15, 26, 30, 65, 65, 78, 80, 112],
+                          [0, 15, 22, 22, 22, 33, 37, 72, 82, 95, 95, 127],
+                          [0, 15, 22, 23, 23, 34, 34, 69, 79, 92, 92, 124]])
                 # fmt: on
             )
         )

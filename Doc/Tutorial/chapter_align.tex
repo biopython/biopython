@@ -3,70 +3,276 @@
 
 Sequence alignments are a collection of two or more sequences that have been aligned to each other -- usually with the insertion of gaps, and the addition of leading or trailing gaps -- such that all the sequence strings are the same length.
 
-Alignments may extend over the full length of each sequence, or may be limited to a subsection of each sequence. In Biopython, all sequence alignments are represented by an \verb|Alignment| object, described in section~\ref{sec:alignmentobject}. \verb|Alignment| objects can be obtained by parsing the output of alignment software such as Clustal or BLAT (described in section+\ref{sec:alignmentparsers}. or by using Biopython's pairwise sequence aligner, which can align two sequences to each other (described in chapter~\ref{chapter:pairwise}).
+Alignments may extend over the full length of each sequence, or may be limited to a subsection of each sequence. In Biopython, all sequence alignments are represented by an \verb|Alignment| object, described in section~\ref{sec:alignmentobject}. \verb|Alignment| objects can be obtained by parsing the output of alignment software such as Clustal or BLAT (described in section~\ref{sec:alignmentparsers}. or by using Biopython's pairwise sequence aligner, which can align two sequences to each other (described in Chapter~\ref{chapter:pairwise}).
 
 See Chapter~\ref{chapter:msa} for a description of the older \verb|MultipleSeqAlignment| class and the parsers in \verb|Bio.AlignIO| that parse the output of sequence alignment software, generating \verb|MultipleSeqAlignment| objects.
 
 \section{Alignment objects}
 \label{sec:alignmentobject}
 
-The \verb|Alignment| class is defined in \verb|Bio.Align|. Usually you would get an \verb|Alignment| object by parsing the output of alignment programs (section~\ref{sec:alignmentparsers}) or by running Biopython's pairwise aligner (chapter~\ref{chapter:pairwise}). For the benefit of this section, however, we will create an \verb|Alignment| object from scratch.
+The \verb|Alignment| class is defined in \verb|Bio.Align|. Usually you would get an \verb|Alignment| object by parsing the output of alignment programs (section~\ref{sec:alignmentparsers}) or by running Biopython's pairwise aligner (Chapter~\ref{chapter:pairwise}). For the benefit of this section, however, we will create an \verb|Alignment| object from scratch.
+
+\subsection{Creating an Alignment object from sequences and coordinates}
+\label{subsec:align_sequences_coordinates}
 
 Suppose you have three sequences:
-%doctest . lib:numpy
+%doctest ../Tests/Blat lib:numpy
 \begin{minted}{pycon}
->>> seqA = "CGTTTTT"
->>> seqB = "CGATTTTT"
->>> seqC = "GTGGTTT"
+>>> seqA = "CCGGTTTTT"
+>>> seqB = "AGTTTAA"
+>>> seqC = "AGGTTT"
 >>> sequences = [seqA, seqB, seqC]
 \end{minted}
-These sequences can be plain strings, \verb|bytes| objects, \verb|Seq| objects,  or \verb|SeqRecord| objects. To create an \verb|Alignment| object, we also need the coordinates that define how the sequences are aligned to each other. We use a numpy array for that:
+To create an \verb|Alignment| object, we also need the coordinates that define how the sequences are aligned to each other. We use a NumPy array for that:
 %cont-doctest
 \begin{minted}{pycon}
 >>> import numpy as np
->>> coordinates = np.array([[0, 2, 2, 5, 7], [0, 2, 3, 6, 8], [1, 3, 4, 7, 7]])
+>>> coordinates = np.array([[1, 3, 4, 7, 9], [0, 2, 2, 5, 5], [0, 2, 3, 6, 6]])
 \end{minted}
-These coordinates indicate that the following sequence segments are aligned to each other:
+These coordinates define the alignment for the following sequence segments:
 \begin{itemize}
-\item \verb|SeqA[0:2]|, \verb|SeqB[0:2]|, and \verb|SeqC[1:3]|;
-\item \verb|SeqB[2:3]| and \verb|SeqC[3:4]|, with a gap of one nucleotide in \verb|seqA|;
-\item \verb|SeqA[2:5]|, \verb|SeqB[3:6]|, and \verb|SeqC[4:7]|;
-\item \verb|SeqA[5:7]| and \verb|SeqB[6:8]|, with a gap of two nucleotides in \verb|seqC|.
+\item \verb|SeqA[1:3]|, \verb|SeqB[0:2]|, and \verb|SeqC[0:2]| are aligned to each other;
+\item \verb|SeqA[3:4]| and \verb|SeqC[2:3]| are aligned to each other, with a gap of one nucleotide in \verb|seqB|;
+\item \verb|SeqA[4:7]|, \verb|SeqB[2:5]|, and \verb|SeqC[3:6]| are aligned to each other;
+\item \verb|SeqA[7:9]| is not aligned to \verb|seqB| or \verb|seqC|.
 \end{itemize}
-Note that the alignment does not include the first nucleotide and last two nucleotides of \verb|seqC|.
+Note that the alignment does not include the first nucleotide of \verb|seqA| and last two nucleotides of \verb|seqB|.
 
 Now we can create the \verb|Alignment| object:
 %cont-doctest
 \begin{minted}{pycon}
->>> from Bio import Align
->>> alignment = Align.Alignment(sequences, coordinates)
+>>> from Bio.Align import Alignment
+>>> alignment = Alignment(sequences, coordinates)
 >>> alignment  # doctest: +ELLIPSIS
 <Alignment object (3 rows x 8 columns) at ...>
 \end{minted}
-The alignment object has an attribute \verb|sequences| pointing to the sequences that were aligned:
+The alignment object has an attribute \verb|sequences| pointing to the sequences included in this alignment:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.sequences
-['CGTTTTT', 'CGATTTTT', 'GTGGTTT']
+['CCGGTTTTT', 'AGTTTAA', 'AGGTTT']
 \end{minted}
 and an attribute \verb|coordinates| with the alignment coordinates:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.coordinates
-array([[0, 2, 2, 5, 7],
-       [0, 2, 3, 6, 8],
-       [1, 3, 4, 7, 7]])
+array([[1, 3, 4, 7, 9],
+       [0, 2, 2, 5, 5],
+       [0, 2, 3, 6, 6]])
 \end{minted}
 Print the \verb+Alignment+ object to show the alignment explicitly:
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment)
-                  0 CG-TTTTT 7
-                  0 CGATTTTT 8
-                  1 TGGTTT-- 7
+                  1 CGGTTTTT 9
+                  0 AG-TTT-- 5
+                  0 AGGTTT-- 6
 <BLANKLINE>
 \end{minted}
 with the starting and end coordinate for each sequence are shown to the left and right, respectively, of the alignment.
+
+\subsection{Creating an Alignment object from aligned sequences}
+\label{subsec:align_infer_coordinates}
+
+If you start out with the aligned sequences, with dashes representing gaps, then you can calculate the coordinates using the \verb|infer_coordinates| class method. This method is primarily employed in Biopython's alignment parsers (see Section~\ref{sec:alignmentparsers}), but it may be useful for other purposes. For example, you can construct the \verb|Alignment| object from aligned sequences as follows:
+%cont-doctest
+\begin{minted}{pycon}
+>>> aligned_sequences = ["CGGTTTTT", "AG-TTT--", "AGGTTT--"]
+>>> sequences = [aligned_sequence.replace("-", "")
+...              for aligned_sequence in aligned_sequences]  # fmt: skip
+...
+>>> sequences
+['CGGTTTTT', 'AGTTT', 'AGGTTT']
+>>> coordinates = Alignment.infer_coordinates(aligned_sequences)
+>>> coordinates
+array([[0, 2, 3, 6, 8],
+       [0, 2, 2, 5, 5],
+       [0, 2, 3, 6, 6]])
+\end{minted}
+The initial \verb|G| nucleotide of \verb|seqA| and the final \verb|CC| nucleotides of \verb|seqB| were not included in the alignment and is therefore missing here. But this is easy to fix:
+%cont-doctest
+\begin{minted}{pycon}
+>>> sequences[0] = "C" + sequences[0]
+>>> sequences[1] = sequences[1] + "AA"
+>>> sequences
+['CCGGTTTTT', 'AGTTTAA', 'AGGTTT']
+>>> coordinates[0, :] += 1
+>>> coordinates
+array([[1, 3, 4, 7, 9],
+       [0, 2, 2, 5, 5],
+       [0, 2, 3, 6, 6]])
+\end{minted}
+Now we can create the \verb|Alignment| object:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = Alignment(sequences, coordinates)
+>>> print(alignment)
+                  1 CGGTTTTT 9
+                  0 AG-TTT-- 5
+                  0 AGGTTT-- 6
+<BLANKLINE>
+\end{minted}
+which identical to the \verb|Alignment| object created above in section~\ref{subsec:align_sequences_coordinates}.
+
+By default, the \verb|coordinates| argument to the \verb|Alignment| initializer is \verb|None|, which assumes that there are no gaps in the alignment. All sequences in an ungapped alignment must have the same length. If the \verb|coordinates| argument is \verb|None|, then the initializer will fill in the \verb|coordinates| attribute of the \verb|Alignment| object for you:
+%cont-doctest
+\begin{minted}{pycon}
+>>> ungapped_alignment = Alignment(["ACGTACGT", "AAGTACGT", "ACGTACCT"])
+>>> ungapped_alignment  # doctest: +ELLIPSIS
+<Alignment object (3 rows x 8 columns) at ...>
+>>> ungapped_alignment.coordinates
+array([[0, 8],
+       [0, 8],
+       [0, 8]])
+>>> print(ungapped_alignment)
+                  0 ACGTACGT 8
+                  0 AAGTACGT 8
+                  0 ACGTACCT 8
+<BLANKLINE>
+\end{minted}
+
+\subsection{Common alignment attributes}
+\label{subsec:align_common_attributes}
+
+The following attributes are commonly found on \verb|Alignment| objects:
+\begin{itemize}
+\item \verb|sequences|: This is a list of the sequences aligned to each other. Depending on how the alignment was created, the sequences can have the following types:
+\begin{itemize}
+\item plain Python string;
+\item \verb|Seq|;
+\item \verb|MutableSeq|;
+\item \verb|SeqRecord|;
+\item \verb|bytes|;
+\item \verb|bytearray|;
+\item NumPy array with data type \verb|numpy.int32|;
+\item any other object with a contiguous buffer of format \verb|"c"|, \verb|"B"|, \verb|"i"|, or \verb|"I"|;
+\item lists or tuples of objects defined in the \verb|alphabet| attribute of the \verb|PairwiseAligner| object that created the alignment (see section~\ref{sec:generalized-pairwise}).
+\end{itemize}
+For pairwise alignments (meaning an alignment of two sequences), the properties \verb|target| and \verb|query| are aliases for \verb|sequences[0]| and \verb|sequences[1]|, respectively.
+\item \verb|coordinates|: A NumPy array of integers storing the sequence indices defining how the sequences are aligned to each other;
+\item \verb|score|: The alignment score, as found by the parser in the alignment file, or as calculated by the \verb|PairwiseAligner| (see section~\ref{sec:pairwise-basic});
+\item \verb|annotations|: A dictionary storing most other annotations associated with the alignment;
+\item \verb|column_annotations|: A dictionary storing annotations that extend along the alignment and have the same length as the alignment, such as a consensus sequence (see section~\ref{subsec:align_clustal} for an example).
+\end{itemize}
+An \verb|Alignment| object created by the parser in \verb|Bio.Align| may have additional attributes, depending on the alignment file format from which the alignment was read.
+
+\section{Slicing and indexing an alignment}
+
+Slices of the form \verb+alignment[k, i:j]+, where \verb+k+ is an integer and \verb+i+ and \verb+j+ are integers or are absent, return a string showing the aligned sequence (including gaps) for the target (if \verb+k=0+) or the query (if \verb+k=1+) that includes only the columns \verb+i+ through \verb+j+ in the printed alignment.
+
+To illustrate this, in the following example the printed alignment has 8 columns:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment)
+                  1 CGGTTTTT 9
+                  0 AG-TTT-- 5
+                  0 AGGTTT-- 6
+<BLANKLINE>
+>>> alignment.length
+8
+\end{minted}
+
+To get the aligned sequence strings individually, use
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[0]
+'CGGTTTTT'
+>>> alignment[1]
+'AG-TTT--'
+>>> alignment[2]
+'AGGTTT--'
+>>> alignment[0, :]
+'CGGTTTTT'
+>>> alignment[1, :]
+'AG-TTT--'
+>>> alignment[0, 1:-1]
+'GGTTTT'
+>>> alignment[1, 1:-1]
+'G-TTT-'
+\end{minted}
+
+Columns to be included can also be selected using an iterable over integers:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[0, (1, 2, 4)]
+'GGT'
+>>> alignment[1, range(0, 5, 2)]
+'A-T'
+\end{minted}
+
+To get the letter at position \verb+[i, j]+ of the printed alignment, use \verb|alignment[i, j]|; this will return \verb|"-"| if a gap is found at that position:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[0, 2]
+'G'
+>>> alignment[2, 6]
+'-'
+\end{minted}
+
+To get specific columns in the alignment, use
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[:, 0]
+'CAA'
+>>> alignment[:, 1]
+'GGG'
+>>> alignment[:, 2]
+'G-G'
+\end{minted}
+
+Slices of the form \verb+alignment[i:j:k]+ return a new \verb+Alignment+ object including only sequences \verb+[i:j:k]+ of the alignment:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[1:]  # doctest:+ELLIPSIS
+<Alignment object (2 rows x 6 columns) at ...>
+>>> print(alignment[1:])
+target            0 AG-TTT 5
+                  0 ||-||| 6
+query             0 AGGTTT 6
+<BLANKLINE>
+\end{minted}
+
+Slices of the form \verb+alignment[:, i:j]+, where \verb+i+ and \verb+j+ are integers or are absent, return a new \verb+Alignment+ object that includes only the columns \verb+i+ through \verb+j+ in the printed alignment.
+
+Extracting the first 4 columns for the example alignment above gives:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[:, :4]  # doctest:+ELLIPSIS
+<Alignment object (3 rows x 4 columns) at ...>
+>>> print(alignment[:, :4])
+                  1 CGGT 5
+                  0 AG-T 3
+                  0 AGGT 4
+<BLANKLINE>
+\end{minted}
+
+Similarly, extracting the last 6 columns gives:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[:, -6:]  # doctest:+ELLIPSIS
+<Alignment object (3 rows x 6 columns) at ...>
+>>> print(alignment[:, -6:])
+                  3 GTTTTT 9
+                  2 -TTT-- 5
+                  2 GTTT-- 6
+<BLANKLINE>
+\end{minted}
+
+The column index can also be an iterable of integers:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment[:, (1, 3, 0)])
+                  0 GTC 3
+                  0 GTA 3
+                  0 GTA 3
+<BLANKLINE>
+\end{minted}
+Calling \verb|alignment[:, :]| returns a copy of the alignment.
+
+\section{Getting information about the alignment}
+
+\subsection{Alignment shape}
 
 The number of aligned sequences is returned by \verb+len(alignment)+:
 %cont-doctest
@@ -91,79 +297,150 @@ alignment and the number of columns in the alignment as printed:
 >>> alignment.shape
 (3, 8)
 \end{minted}
-Note that sections that are not aligned are not included in the number of columns.
 
-The \verb+sort+ method sorts the alignment sequences. By default, sorting is done based on the \verb+id+ attribute of each sequence if available, or the sequence contents otherwise.
-%cont-doctest
-\begin{minted}{pycon}
->>> print(alignment)
-                  0 CG-TTTTT 7
-                  0 CGATTTTT 8
-                  1 TGGTTT-- 7
-<BLANKLINE>
->>> alignment.sort()
->>> print(alignment)
-                  0 CGATTTTT 8
-                  0 CG-TTTTT 7
-                  1 TGGTTT-- 7
-<BLANKLINE>
-\end{minted}
-Alternatively, you can supply a \verb+key+ function to determine the sort order. For example, you can sort the sequences by increasing GC content:
-%cont-doctest
-\begin{minted}{pycon}
->>> from Bio.SeqUtils import gc_fraction
->>> alignment.sort(key=gc_fraction)
->>> print(alignment)
-                  0 CGATTTTT 8
-                  0 CG-TTTTT 7
-                  1 TGGTTT-- 7
-<BLANKLINE>
-\end{minted}
-Note that the \verb+key+ function is applied to the full sequence (including the initial G nucleotide of \verb|seqC|), not just to the aligned part.
+\subsection{Comparing alignments}
 
-The \verb+reverse+ argument lets you reverse the sort order to obtain the sequences in decreasing GC content:
+Two alignments are equal to each other (meaning that \verb|alignment1 == alignment2| evaluates to \verb|True|) if each of the sequences in \verb|alignment1.sequences| and \verb|alignment2.sequences| are equal to each other, and \verb|alignment1.coordinates| and \verb|alignment2.coordinates| contain the same coordinates. If either of these conditions is not fulfilled, then \verb|alignment1 == alignment2| evaluates to \verb|False|. Inequality of two alignments (e.g., \verb|alignment1 < alignment2|) is established by first comparing \verb|alignment1.sequences| and \verb|alignment2.sequences|, and if they are equal, by comparing \verb|alignment1.coordinates| to \verb|alignment2.coordinates|.
+
+\subsection{Finding the indices of aligned sequences}
+
+For pairwise alignments, the \verb|aligned| property of an alignment returns the start and end indices of subsequences in the target and query sequence that were aligned to each other.  If the alignment between target (t) and query (q) consists of $N$ chunks, you get two tuples of length $N$:
+\begin{minted}{text}
+(((t_start1, t_end1), (t_start2, t_end2), ..., (t_startN, t_endN)),
+ ((q_start1, q_end1), (q_start2, q_end2), ..., (q_startN, q_endN)))
+\end{minted}
+For example,
 %cont-doctest
 \begin{minted}{pycon}
->>> alignment.sort(key=gc_fraction, reverse=True)
->>> print(alignment)
-                  1 TGGTTT-- 7
-                  0 CG-TTTTT 7
-                  0 CGATTTTT 8
+>>> pairwise_alignment = alignment[:2, :]
+>>> print(pairwise_alignment)
+target            1 CGGTTTTT 9
+                  0 .|-|||-- 8
+query             0 AG-TTT-- 5
 <BLANKLINE>
+>>> pairwise_alignment.aligned
+array([[[1, 3],
+        [4, 7]],
+<BLANKLINE>
+       [[0, 2],
+        [2, 5]]])
 \end{minted}
+Note that different alignments may have the same subsequences aligned to each other. In particular, this may occur if alignments differ from each other in terms of their gap placement only:
+%cont-doctest
+\begin{minted}{pycon}
+>>> pairwise_alignment1 = Alignment(["AAACAAA", "AAAGAAA"],
+...                                 np.array([[0, 3, 4, 4, 7], [0, 3, 3, 4, 7]]))  # fmt: skip
+...
+>>> pairwise_alignment2 = Alignment(["AAACAAA", "AAAGAAA"],
+...                                 np.array([[0, 3, 3, 4, 7], [0, 3, 4, 4, 7]]))  # fmt: skip
+...
+>>> print(pairwise_alignment1)
+target            0 AAAC-AAA 7
+                  0 |||--||| 8
+query             0 AAA-GAAA 7
+<BLANKLINE>
+>>> print(pairwise_alignment2)
+target            0 AAA-CAAA 7
+                  0 |||--||| 8
+query             0 AAAG-AAA 7
+<BLANKLINE>
+>>> pairwise_alignment1.aligned
+array([[[0, 3],
+        [4, 7]],
+<BLANKLINE>
+       [[0, 3],
+        [4, 7]]])
+>>> pairwise_alignment2.aligned
+array([[[0, 3],
+        [4, 7]],
+<BLANKLINE>
+       [[0, 3],
+        [4, 7]]])
+\end{minted}
+
+The property \verb|indices| returns a 2D NumPy array with the sequence index of each letter in the alignment, with gaps indicated by -1:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment)
+                  1 CGGTTTTT 9
+                  0 AG-TTT-- 5
+                  0 AGGTTT-- 6
+<BLANKLINE>
+>>> alignment.indices
+array([[ 1,  2,  3,  4,  5,  6,  7,  8],
+       [ 0,  1, -1,  2,  3,  4, -1, -1],
+       [ 0,  1,  2,  3,  4,  5, -1, -1]])
+\end{minted}
+The property \verb|inverse_indices| returns a list of 1D NumPy arrays, one for each of the aligned sequences, with the column index in the alignment for each letter in the sequence. Letters not included in the alignment are indicated by -1:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.sequences
+['CCGGTTTTT', 'AGTTTAA', 'AGGTTT']
+>>> alignment.inverse_indices  # doctest: +NORMALIZE_WHITESPACE
+[array([-1,  0,  1,  2,  3,  4,  5,  6,  7]),
+ array([ 0,  1,  3,  4,  5, -1, -1]),
+ array([0, 1, 2, 3, 4, 5])]
+\end{minted}
+
+\subsection{Counting identities, mismatches, and gaps}
+
+The \verb|counts| method calculates the number of identities, mismatches, and gaps of a pairwise alignment.
+For an alignment of more than two sequences, the number of identities, mismatches, and gaps are calculated and summed for all pairs of sequences in the alignment. The three numbers are returned as an \verb|AlignmentCounts| object, which is a \verb|namedtuple| with fields \verb|gaps|, \verb|identities|, and \verb|mismatches|. This method currently takes no arguments, but in the future will likely be modified to accept optional arguments allowing its behavior to be customized.
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(pairwise_alignment)
+target            1 CGGTTTTT 9
+                  0 .|-|||-- 8
+query             0 AG-TTT-- 5
+<BLANKLINE>
+>>> pairwise_alignment.counts()
+AlignmentCounts(gaps=3, identities=4, mismatches=1)
+>>> print(alignment)
+                  1 CGGTTTTT 9
+                  0 AG-TTT-- 5
+                  0 AGGTTT-- 6
+<BLANKLINE>
+>>> alignment.counts()
+AlignmentCounts(gaps=8, identities=14, mismatches=2)
+\end{minted}
+
+\subsection{Letter frequencies}
 
 The \verb+frequencies+ method calculates how often each letter appears in each column of the alignment:
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.frequencies  # doctest: +NORMALIZE_WHITESPACE
-{'T': array([1, 0, 0, 3, 3, 3, 2, 2]),
- 'G': array([0, 3, 1, 0, 0, 0, 0, 0]),
- 'C': array([2, 0, 0, 0, 0, 0, 0, 0]),
- 'A': array([0, 0, 1, 0, 0, 0, 0, 0])}
+{'C': array([1, 0, 0, 0, 0, 0, 0, 0]),
+ 'G': array([0, 3, 2, 0, 0, 0, 0, 0]),
+ 'T': array([0, 0, 0, 3, 3, 3, 1, 1]),
+ 'A': array([2, 0, 0, 0, 0, 0, 0, 0])}
 \end{minted}
+
+\subsection{Substitutions}
+
 Use the \verb+substitutions+ method to find the number of substitutions between each pair of nucleotides:
 %cont-doctest
 \begin{minted}{pycon}
 >>> m = alignment.substitutions
 >>> print(m)
-    A   C   G    T
-A 0.0 0.0 0.0  0.0
-C 0.0 1.0 0.0  0.0
-G 1.0 0.0 3.0  0.0
-T 0.0 2.0 0.0 11.0
+    A   C   G   T
+A 1.0 0.0 0.0 0.0
+C 2.0 0.0 0.0 0.0
+G 0.0 0.0 4.0 0.0
+T 0.0 0.0 0.0 9.0
 <BLANKLINE>
 \end{minted}
 
-Note that the matrix is not symmetric: The counts for a row letter R and a column letter C is the number of times letter R in a sequence is replaced by letter C in a sequence appearing below it. For example, the number of T's that are aligned to a C in a later sequence is
+Note that the matrix is not symmetric: The counts for a row letter R and a column letter C is the number of times letter R in a sequence is replaced by letter C in a sequence appearing below it. For example, the number of \verb|C|'s that are aligned to an \verb|A| in a later sequence is
 %cont-doctest
 \begin{minted}{pycon}
->>> m["T", "C"]
+>>> m["C", "A"]
 2.0
 \end{minted}
-while the number of C's that are aligned to a T in a later sequence is
+while the number of A's that are aligned to a C in a later sequence is
 %cont-doctest
 \begin{minted}{pycon}
->>> m["C", "T"]
+>>> m["A", "C"]
 0.0
 \end{minted}
 To get a symmetric matrix, use
@@ -172,181 +449,532 @@ To get a symmetric matrix, use
 >>> m += m.transpose()
 >>> m /= 2.0
 >>> print(m)
-    A   C   G    T
-A 0.0 0.0 0.5  0.0
-C 0.0 1.0 0.0  1.0
-G 0.5 0.0 3.0  0.0
-T 0.0 1.0 0.0 11.0
+    A   C   G   T
+A 1.0 1.0 0.0 0.0
+C 1.0 0.0 0.0 0.0
+G 0.0 0.0 4.0 0.0
+T 0.0 0.0 0.0 9.0
 <BLANKLINE>
->>> m["T", "C"]
+>>> m["A", "C"]
 1.0
->>> m["C", "T"]
+>>> m["C", "A"]
 1.0
 \end{minted}
-The total number of substitutions between C's and T's in the alignment is 1.0 + 1.0 = 2.
+The total number of substitutions between \verb|A|'s and \verb|T|'s in the alignment is 1.0 + 1.0 = 2.
 
-\section{Slicing and indexing an alignment}
+\subsection{Alignments as arrays}
 
-Slices of the form \verb+alignment[k, i:j]+, where \verb+k+ is an integer and \verb+i+ and \verb+j+ are integers or are absent, return a string showing the aligned sequence (including gaps) for the target (if \verb+k=0+) or the query (if \verb+k=1+) that includes only the columns \verb+i+ through \verb+j+ in the printed alignment.
+Using NumPy, you can turn the \verb+alignment+ object into an array of letters. In particular, this may be useful for fast calculations on the alignment content.
+%cont-doctest
+\begin{minted}{pycon}
+>>> align_array = np.array(alignment)
+>>> align_array.shape
+(3, 8)
+>>> align_array  # doctest: +NORMALIZE_WHITESPACE
+array([[b'C', b'G', b'G', b'T', b'T', b'T', b'T', b'T'],
+       [b'A', b'G', b'-', b'T', b'T', b'T', b'-', b'-'],
+       [b'A', b'G', b'G', b'T', b'T', b'T', b'-', b'-']], dtype='|S1')
+\end{minted}
+By default, this will give you an array of \verb|bytes| characters (with data type \verb+dtype='|S1'+). You can create an array of Unicode (Python string) characters by using \verb+dtype='U'+:
+%cont-doctest
+\begin{minted}{pycon}
+>>> align_array = np.array(alignment, dtype="U")
+>>> align_array  # doctest: +NORMALIZE_WHITESPACE
+array([['C', 'G', 'G', 'T', 'T', 'T', 'T', 'T'],
+       ['A', 'G', '-', 'T', 'T', 'T', '-', '-'],
+       ['A', 'G', 'G', 'T', 'T', 'T', '-', '-']], dtype='<U1')
+\end{minted}
+Note that the \verb+alignment+ object and the NumPy array \verb|align_array| are separate objects in memory - editing one will not update the other!
 
-To illustrate this, in the following example the printed alignment has 8 columns:
+\section{Operations on an alignment}
 
+\subsection{Sorting an alignment}
+
+The \verb+sort+ method sorts the alignment sequences. By default, sorting is done based on the \verb+id+ attribute of each sequence if available, or the sequence contents otherwise.
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment)
-                  1 TGGTTT-- 7
-                  0 CG-TTTTT 7
-                  0 CGATTTTT 8
+                  1 CGGTTTTT 9
+                  0 AG-TTT-- 5
+                  0 AGGTTT-- 6
 <BLANKLINE>
->>> alignment.length
-8
+>>> alignment.sort()
+>>> print(alignment)
+                  0 AGGTTT-- 6
+                  0 AG-TTT-- 5
+                  1 CGGTTTTT 9
+<BLANKLINE>
 \end{minted}
-
-To get the aligned sequence strings individually, use
+Alternatively, you can supply a \verb+key+ function to determine the sort order. For example, you can sort the sequences by increasing GC content:
 %cont-doctest
 \begin{minted}{pycon}
->>> alignment[0]
-'TGGTTT--'
->>> alignment[1]
-'CG-TTTTT'
->>> alignment[2]
-'CGATTTTT'
->>> alignment[0, :]
-'TGGTTT--'
->>> alignment[1, :]
-'CG-TTTTT'
->>> alignment[0, 1:-1]
-'GGTTT-'
->>> alignment[1, 1:-1]
-'G-TTTT'
+>>> from Bio.SeqUtils import gc_fraction
+>>> alignment.sort(key=gc_fraction)
+>>> print(alignment)  # CHEEMPIE
+                  0 AG-TTT-- 5
+                  0 AGGTTT-- 6
+                  1 CGGTTTTT 9
+<BLANKLINE>
 \end{minted}
+Note that the \verb+key+ function is applied to the full sequence (including the initial \verb|A| and final \verb|GG| nucleotides of \verb|seqB|), not just to the aligned part.
 
-Columns to be included can also be selected using an iterable over integers:
+The \verb+reverse+ argument lets you reverse the sort order to obtain the sequences in decreasing GC content:
 %cont-doctest
 \begin{minted}{pycon}
->>> alignment[0, (1, 3, 4)]
-'GTT'
->>> alignment[1, range(0, 5, 2)]
-'C-T'
-\end{minted}
-
-To get specific columns in the alignment, use
-%cont-doctest
-\begin{minted}{pycon}
->>> alignment[:, 0]
-'TCC'
->>> alignment[:, 1]
-'GGG'
->>> alignment[:, 2]
-'G-A'
-\end{minted}
-
-Slices of the form \verb+alignment[:, i:j]+, where \verb+i+ and \verb+j+ are integers or are absent, return a new \verb+Alignment+ object that includes only the columns \verb+i+ through \verb+j+ in the printed alignment.
-
-Extracting the first 4 columns for the example alignment above gives:
-%cont-doctest
-\begin{minted}{pycon}
->>> alignment[:, :4]  # doctest:+ELLIPSIS
-<Alignment object (3 rows x 4 columns) at ...>
->>> print(alignment[:, :4])
-                  1 TGGT 5
-                  0 CG-T 3
-                  0 CGAT 4
+>>> alignment.sort(key=gc_fraction, reverse=True)
+>>> print(alignment)
+                  1 CGGTTTTT 9
+                  0 AGGTTT-- 6
+                  0 AG-TTT-- 5
 <BLANKLINE>
 \end{minted}
 
-Similarly, extracting the last 3 columns gives:
-%cont-doctest
-\begin{minted}{pycon}
->>> alignment[:, -3:]  # doctest:+ELLIPSIS
-<Alignment object (3 rows x 3 columns) at ...>
->>> print(alignment[:, -3:])
-                  6 T-- 7
-                  4 TTT 7
-                  5 TTT 8
-<BLANKLINE>
-\end{minted}
-
-The column index can also be an iterable of integers:
-%cont-doctest
-\begin{minted}{pycon}
->>> print(alignment[:, (1, 3, 0)])
-                  0 GTT 3
-                  0 GTC 3
-                  0 GTC 3
-<BLANKLINE>
-\end{minted}
-
-\section{Reverse-complementing the alignment}
+\subsection{Reverse-complementing the alignment}
 
 Reverse-complementing an alignment will take the reverse complement of each sequence, and recalculate the coordinates:
 %cont-doctest
 \begin{minted}{pycon}
->>> print(alignment.sequences)
-['GTGGTTT', 'CGTTTTT', 'CGATTTTT']
+>>> alignment.sequences
+['CCGGTTTTT', 'AGGTTT', 'AGTTTAA']
 >>> rc_alignment = alignment.reverse_complement()
 >>> print(rc_alignment.sequences)
-['AAACCAC', 'AAAAACG', 'AAAAATCG']
+['AAAAACCGG', 'AAACCT', 'TTAAACT']
 >>> print(rc_alignment)
-                  0 --AAACCA 6
-                  0 AAAAA-CG 7
-                  0 AAAAATCG 8
+                  0 AAAAACCG 8
+                  0 --AAACCT 6
+                  2 --AAA-CT 7
 <BLANKLINE>
->>> print(alignment[:, :4].sequences)
-['GTGGTTT', 'CGTTTTT', 'CGATTTTT']
+>>> alignment[:, :4].sequences
+['CCGGTTTTT', 'AGGTTT', 'AGTTTAA']
 >>> print(alignment[:, :4])
-                  1 TGGT 5
-                  0 CG-T 3
-                  0 CGAT 4
+                  1 CGGT 5
+                  0 AGGT 4
+                  0 AG-T 3
 <BLANKLINE>
 >>> rc_alignment = alignment[:, :4].reverse_complement()
->>> print(rc_alignment[:, :4].sequences)
-['AAACCAC', 'AAAAACG', 'AAAAATCG']
+>>> rc_alignment[:, :4].sequences
+['AAAAACCGG', 'AAACCT', 'TTAAACT']
 >>> print(rc_alignment[:, :4])
-                  2 ACCA 6
-                  4 A-CG 7
-                  4 ATCG 8
+                  4 ACCG 8
+                  2 ACCT 6
+                  4 A-CT 7
 <BLANKLINE>
 \end{minted}
 Reverse-complementing an alignment preserves its column annotations (in reverse order), but discards all other annotations.
 
+\subsection{Adding alignments}
+
+Alignments can be added together to form an extended alignment if they have the same number of rows. As an example, let's first create two alignments:
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.Seq import Seq
+>>> from Bio.SeqRecord import SeqRecord
+>>> a1 = SeqRecord(Seq("AAAAC"), id="Alpha")
+>>> b1 = SeqRecord(Seq("AAAC"), id="Beta")
+>>> c1 = SeqRecord(Seq("AAAAG"), id="Gamma")
+>>> a2 = SeqRecord(Seq("GTT"), id="Alpha")
+>>> b2 = SeqRecord(Seq("TT"), id="Beta")
+>>> c2 = SeqRecord(Seq("GT"), id="Gamma")
+>>> left = Alignment(
+...     [a1, b1, c1], coordinates=np.array([[0, 3, 4, 5], [0, 3, 3, 4], [0, 3, 4, 5]])
+... )
+>>> left.annotations = {"tool": "demo", "name": "start"}
+>>> left.column_annotations = {"stats": "CCCXC"}
+>>> right = Alignment(
+...     [a2, b2, c2], coordinates=np.array([[0, 1, 2, 3], [0, 0, 1, 2], [0, 1, 1, 2]])
+... )
+>>> right.annotations = {"tool": "demo", "name": "end"}
+>>> right.column_annotations = {"stats": "CXC"}
+\end{minted}
+Now, let's look at these two alignments:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(left)
+Alpha             0 AAAAC 5
+Beta              0 AAA-C 4
+Gamma             0 AAAAG 5
+<BLANKLINE>
+>>> print(right)
+Alpha             0 GTT 3
+Beta              0 -TT 2
+Gamma             0 G-T 2
+<BLANKLINE>
+\end{minted}
+Adding the two alignments will combine the two alignments row-wise:
+%cont-doctest
+\begin{minted}{pycon}
+>>> combined = left + right
+>>> print(combined)
+Alpha             0 AAAACGTT 8
+Beta              0 AAA-C-TT 6
+Gamma             0 AAAAGG-T 7
+<BLANKLINE>
+\end{minted}
+For this to work, both alignments must have the same number of sequences
+(here they both have 3 rows):
+%cont-doctest
+\begin{minted}{pycon}
+>>> len(left)
+3
+>>> len(right)
+3
+>>> len(combined)
+3
+\end{minted}
+The sequences are \verb|SeqRecord| objects, which can be added together. Refer
+to Chapter~\ref{chapter:seq_annot} for details of how the annotation is handled.
+This example is a special case in that both original alignments shared the same names, meaning when the rows are added they also get the same name.
+
+Any common annotations are preserved, but differing annotation is lost. This is
+the same behavior used in the \verb|SeqRecord| annotations and is designed to
+prevent accidental propagation of inappropriate values:
+%cont-doctest
+\begin{minted}{pycon}
+>>> combined.annotations
+{'tool': 'demo'}
+\end{minted}
+Similarly any common per-column-annotations are combined:
+%cont-doctest
+\begin{minted}{pycon}
+>>> combined.column_annotations
+{'stats': 'CCCXCCXC'}
+\end{minted}
+
+\subsection{Mapping a pairwise sequence alignment}
+
+Suppose you have a pairwise alignment of a transcript to a chromosome:
+%cont-doctest
+\begin{minted}{pycon}
+>>> chromosome = "AAAAAAAACCCCCCCAAAAAAAAAAAGGGGGGAAAAAAAA"
+>>> transcript = "CCCCCCCGGGGGG"
+>>> sequences1 = [chromosome, transcript]
+>>> coordinates1 = np.array([[8, 15, 26, 32], [0, 7, 7, 13]])
+>>> alignment1 = Alignment(sequences1, coordinates1)
+>>> print(alignment1)
+target            8 CCCCCCCAAAAAAAAAAAGGGGGG 32
+                  0 |||||||-----------|||||| 24
+query             0 CCCCCCC-----------GGGGGG 13
+<BLANKLINE>
+\end{minted}
+and a pairwise alignment between the transcript and a sequence (e.g., obtained by RNA-seq):
+%cont-doctest
+\begin{minted}{pycon}
+>>> rnaseq = "CCCCGGGG"
+>>> sequences2 = [transcript, rnaseq]
+>>> coordinates2 = np.array([[3, 11], [0, 8]])
+>>> alignment2 = Alignment(sequences2, coordinates2)
+>>> print(alignment2)
+target            3 CCCCGGGG 11
+                  0 ||||||||  8
+query             0 CCCCGGGG  8
+<BLANKLINE>
+\end{minted}
+Use the \verb|map| method on \verb|alignment1|, with \verb|alignment2| as argument, to find the alignment of the RNA-sequence to the genome:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment3 = alignment1.map(alignment2)
+>>> print(alignment3)
+target           11 CCCCAAAAAAAAAAAGGGG 30
+                  0 ||||-----------|||| 19
+query             0 CCCC-----------GGGG  8
+<BLANKLINE>
+>>> alignment3.coordinates
+array([[11, 15, 26, 30],
+       [ 0,  4,  4,  8]])
+>>> format(alignment3, "psl")
+'8\t0\t0\t0\t0\t0\t1\t11\t+\tquery\t8\t0\t8\ttarget\t40\t11\t30\t2\t4,4,\t0,4,\t11,26,\n'
+\end{minted}
+To be able to print the sequences, in this example  we constructed \verb|alignment1| and \verb|alignment2| using sequences with a defined sequence contents.
+However, mapping the alignment does not depend on the sequence contents; only the coordinates of \verb|alignment1| and \verb|alignment2| are used to construct the coordinates for \verb|alignment3|.
+
+The map method can also be used to lift over an alignment between different genome assemblies. In this case, self is a DNA alignment between two genome assemblies, and the argument is an alignment of a transcript against one of the genome assemblies:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> chain = Align.read("panTro5ToPanTro6.over.chain", "chain")
+>>> chain.sequences[0].id
+'chr1'
+>>> len(chain.sequences[0].seq)
+228573443
+>>> chain.sequences[1].id
+'chr1'
+>>> len(chain.sequences[1].seq)
+224244399
+>>> import numpy as np
+>>> np.set_printoptions(threshold=5)  # print 5 array elements per row
+>>> print(chain.coordinates)  # doctest:+ELLIPSIS
+[[122250000 122250400 122250400 ... 122909818 122909819 122909835]
+ [111776384 111776784 111776785 ... 112019962 112019962 112019978]]
+\end{minted}
+showing that the range 122250000:122909835 of chr1 on chimpanzee genome assembly panTro5 aligns to range 111776384:112019978 of chr1 of chimpanzee genome assembly panTro6. See section \ref{subsec:align_chain} for more information about the chain file format.
+%cont-doctest
+\begin{minted}{pycon}
+>>> transcript = Align.read("est.panTro5.psl", "psl")
+>>> transcript.sequences[0].id
+'chr1'
+>>> len(transcript.sequences[0].seq)
+228573443
+>>> transcript.sequences[1].id
+'DC525629'
+>>> len(transcript.sequences[1].seq)
+407
+>>> print(transcript.coordinates)
+[[122835789 122835847 122840993 122841145 122907212 122907314]
+ [       32        90        90       242       242       344]]
+\end{minted}
+This shows that nucleotide range 32:344 of expressed sequence tag DC525629
+aligns to range 122835789:122907314 of chr1 of chimpanzee genome assembly
+panTro5.  Note that the target sequence \verb|chain.sequences[0].seq| and the target sequence \verb|transcript.sequences[0]| have the same length:
+%cont-doctest
+\begin{minted}{pycon}
+>>> len(chain.sequences[0].seq) == len(transcript.sequences[0].seq)
+True
+\end{minted}
+We swap the target and query of the chain such that the query of \verb|chain| corresponds to the target of \verb|transcript|:
+%cont-doctest
+\begin{minted}{pycon}
+>>> chain = chain[::-1]
+>>> chain.sequences[0].id
+'chr1'
+>>> len(chain.sequences[0].seq)
+224244399
+>>> chain.sequences[1].id
+'chr1'
+>>> len(chain.sequences[1].seq)
+228573443
+>>> print(chain.coordinates)  # doctest:+ELLIPSIS
+[[111776384 111776784 111776785 ... 112019962 112019962 112019978]
+ [122250000 122250400 122250400 ... 122909818 122909819 122909835]]
+>>> np.set_printoptions(threshold=1000)  # reset the print options
+\end{minted}
+Now we can get the coordinates of DC525629 against chimpanzee genome assembly panTro6 by calling \verb|chain.map|, with \verb|transcript| as the argument:
+%cont-doctest
+\begin{minted}{pycon}
+>>> lifted_transcript = chain.map(transcript)
+>>> lifted_transcript.sequences[0].id
+'chr1'
+>>> len(lifted_transcript.sequences[0].seq)
+224244399
+>>> lifted_transcript.sequences[1].id
+'DC525629'
+>>> len(lifted_transcript.sequences[1].seq)
+407
+>>> print(lifted_transcript.coordinates)
+[[111982717 111982775 111987921 111988073 112009200 112009302]
+ [       32        90        90       242       242       344]]
+\end{minted}
+This shows that nucleotide range 32:344 of expressed sequence tag DC525629 aligns to range 111982717:112009302 of chr1 of chimpanzee genome assembly panTro6. Note that the genome span of DC525629 on chimpanzee genome assembly panTro5 is 122907314 - 122835789 = 71525 bp, while on panTro6 the genome span is 112009302 - 111982717 = 26585 bp.
+
+\subsection{Mapping a multiple sequence alignment}
+
+Consider a multiple alignment of genomic sequences of chimpanzee, human, macaque, marmoset, mouse, and rat:
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> path = "panTro5.maf"
+>>> genome_alignment = Align.read(path, "maf")
+>>> for record in genome_alignment.sequences:
+...     print(record.id, len(record.seq))
+...
+panTro5.chr1 228573443
+hg19.chr1 249250621
+rheMac8.chr1 225584828
+calJac3.chr18 47448759
+mm10.chr3 160039680
+rn6.chr2 266435125
+>>> genome_alignment.coordinates
+array([[133922962, 133922962, 133922970, 133922970, 133922972, 133922972,
+        133922995, 133922998, 133923010],
+       [155784573, 155784573, 155784581, 155784581, 155784583, 155784583,
+        155784606, 155784609, 155784621],
+       [130383910, 130383910, 130383918, 130383918, 130383920, 130383920,
+        130383943, 130383946, 130383958],
+       [  9790455,   9790455,   9790463,   9790463,   9790465,   9790465,
+          9790488,   9790491,   9790503],
+       [ 88858039,  88858036,  88858028,  88858026,  88858024,  88858020,
+         88857997,  88857997,  88857985],
+       [188162970, 188162967, 188162959, 188162959, 188162957, 188162953,
+        188162930, 188162930, 188162918]])
+>>> print(genome_alignment)
+panTro5.c 133922962 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAACTTAAAggcc
+hg19.chr1 155784573 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAACTTAAAggcc
+rheMac8.c 130383910 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAACTTAAAggcc
+calJac3.c   9790455 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAGCTTAAAggct
+mm10.chr3  88858039 TATAATAATTGTATATGTCACAGAAAAAAATGAATTTTCAAT---GACTTAATAGCC
+rn6.chr2  188162970 TACAATAATTG--TATGTCATAGAAAAAAATGAATTTTCAAT---AACTTAATAGCC
+<BLANKLINE>
+panTro5.c 133923010
+hg19.chr1 155784621
+rheMac8.c 130383958
+calJac3.c   9790503
+mm10.chr3  88857985
+rn6.chr2  188162918
+<BLANKLINE>
+\end{minted}
+Suppose we want to replace the older versions of the genome assemblies (\verb+panTro5+, \verb+hg19+, \verb+rheMac8+, \verb+calJac3+, \verb+mm10+, and \verb+rn6+) by their current versions (\verb+panTro6+, \verb+hg38+, \verb+rheMac10+, \verb+calJac4+, \verb+mm39+, and \verb+rn7+). To do so, we need the pairwise alignment between the old and the new assembly version for each species. These are provided by UCSC as chain files, typically used for UCSC's \verb+liftOver+ tool. The \verb+.chain+ files in the \verb+Tests/Align+ subdirectory in the Biopython source distribution were extracted from UCSC's \verb+.chain+ files to only include the relevant genomic region. For example, to lift over \verb+panTro5+ to \verb+panTro6+, we use the file \verb+panTro5ToPanTro6.chain+ with the following contents:
+\begin{minted}{text}
+chain 1198066 chr1 228573443 + 133919957 133932620 chr1 224244399 + 130607995 130620657 1
+4990	0	2
+1362	3	0
+6308
+
+\end{minted}
+To lift over the genome assembly for each species, we read in the corresponding \verb+.chain+ file:
+%cont-doctest
+\begin{minted}{pycon}
+>>> paths = [
+...     "panTro5ToPanTro6.chain",
+...     "hg19ToHg38.chain",
+...     "rheMac8ToRheMac10.chain",
+...     "calJac3ToCalJac4.chain",
+...     "mm10ToMm39.chain",
+...     "rn6ToRn7.chain",
+... ]
+>>> liftover_alignments = [Align.read(path, "chain") for path in paths]
+>>> for liftover_alignment in liftover_alignments:
+...     print(liftover_alignment.target.id, liftover_alignment.coordinates[0, :])
+...
+chr1 [133919957 133924947 133924947 133926309 133926312 133932620]
+chr1 [155184381 156354347 156354348 157128497 157128497 157137496]
+chr1 [130382477 130383872 130383872 130384222 130384222 130388520]
+chr18 [9786631 9787941 9788508 9788508 9795062 9795065 9795737]
+chr3 [66807541 74196805 74196831 94707528 94707528 94708176 94708178 94708718]
+chr2 [188111581 188158351 188158351 188171225 188171225 188228261 188228261
+ 188236997]
+\end{minted}
+Note that the order of species is the same in \verb+liftover_alignments+ and \verb+genome_alignment.sequences+. Now we can lift over the multiple sequence alignment to the new genome assembly versions:
+%cont-doctest
+\begin{minted}{pycon}
+>>> genome_alignment = genome_alignment.mapall(liftover_alignments)
+>>> for record in genome_alignment.sequences:
+...     print(record.id, len(record.seq))
+...
+chr1 224244399
+chr1 248956422
+chr1 223616942
+chr18 47031477
+chr3 159745316
+chr2 249053267
+>>> genome_alignment.coordinates
+array([[130611000, 130611000, 130611008, 130611008, 130611010, 130611010,
+        130611033, 130611036, 130611048],
+       [155814782, 155814782, 155814790, 155814790, 155814792, 155814792,
+        155814815, 155814818, 155814830],
+       [ 95186253,  95186253,  95186245,  95186245,  95186243,  95186243,
+         95186220,  95186217,  95186205],
+       [  9758318,   9758318,   9758326,   9758326,   9758328,   9758328,
+          9758351,   9758354,   9758366],
+       [ 88765346,  88765343,  88765335,  88765333,  88765331,  88765327,
+         88765304,  88765304,  88765292],
+       [174256702, 174256699, 174256691, 174256691, 174256689, 174256685,
+        174256662, 174256662, 174256650]])
+\end{minted}
+As the \verb+.chain+ files do not include the sequence contents, we cannot print the sequence alignment directly. Instead, we read in the genomic sequence separately (as a \verb+.2bit+ file, as it allows lazy loading; see section \ref{sec:SeqIO_directionaries}) for each species:
+% This is not included in the doctest as the 2bit files are large. The unit test
+% uses Fasta files with the relevant genomic regions only, but this gets a bit
+% too complicated for inclusion in the documentation.
+\begin{minted}{pycon}
+>>> from Bio import SeqIO
+>>> names = ("panTro6", "hg38", "rheMac10", "calJac4", "mm39", "rn7")
+>>> for i, name in enumerate(names):
+...     filename = f"{name}.2bit"
+...     genome = SeqIO.parse(filename, "twobit")
+...     chromosome = genome_alignment.sequences[i].id
+...     assert len(genome_alignment.sequences[i]) == len(genome[chromosome])
+...     genome_alignment.sequences[i] = genome[chromosome]
+...     genome_alignment.sequences[i].id = f"{name}.{chromosome}"
+...
+>>> print(genome_alignment)
+panTro6.c 130611000 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAACTTAAAggcc
+hg38.chr1 155814782 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAACTTAAAggcc
+rheMac10.  95186253 ---ACTAGTTA--CA----GTAACAGAAAATAAAATTTAAATAGAAACTTAAAggcc
+calJac4.c   9758318 ---ACTAGTTA--CA----GTAACAGAaaataaaatttaaatagaagcttaaaggct
+mm39.chr3  88765346 TATAATAATTGTATATGTCACAGAAAAAAATGAATTTTCAAT---GACTTAATAGCC
+rn7.chr2  174256702 TACAATAATTG--TATGTCATAGAAAAAAATGAATTTTCAAT---AACTTAATAGCC
+<BLANKLINE>
+panTro6.c 130611048
+hg38.chr1 155814830
+rheMac10.  95186205
+calJac4.c   9758366
+mm39.chr3  88765292
+rn7.chr2  174256650
+<BLANKLINE>
+\end{minted}
+The \verb+mapall+ method can also be used to create a multiple alignment of codon sequences from a multiple sequence alignment of the corresponding amino acid sequences (see Section \ref{sec:msa_codons} for details).
+
+\section{The Alignments class}
+\label{sec:alignments}
+
+The \verb|Alignments| (plural) class inherits from \verb|AlignmentsAbstractBaseClass| and from \verb|list|, and can be used as a list to store \verb|Alignment| objects. The behavior of \verb|Alignments| objects is different from that of \verb|list| objects in three important ways:
+\begin{itemize}
+\item An \verb|Alignments| object is its own iterator, whereas calling \verb|iter| on a list object creates a new iterator each time. An \verb|Alignments| object iterator will therefore behave the same as an iterator returned by \verb|Bio.Align.parse| (see section~\ref{subsec:align_reading}) or an iterator returned by the pairwise aligner (see Section~\ref{chapter:pairwise}).
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.Align import Alignments
+
+>>> alignment_list = [alignment1, alignment2, alignment3]
+>>> for item in alignment_list:
+...     print(repr(item))  # doctest: +ELLIPSIS
+...
+<Alignment object (2 rows x 24 columns) at ...>
+<Alignment object (2 rows x 8 columns) at ...>
+<Alignment object (2 rows x 19 columns) at ...>
+
+>>> for item in alignment_list:
+...     print(repr(item))  # doctest: +ELLIPSIS
+...
+<Alignment object (2 rows x 24 columns) at ...>
+<Alignment object (2 rows x 8 columns) at ...>
+<Alignment object (2 rows x 19 columns) at ...>
+
+>>> alignments = Alignments([alignment1, alignment2, alignment3])
+>>> for item in alignments:
+...     print(repr(item))  # doctest: +ELLIPSIS
+...
+<Alignment object (2 rows x 24 columns) at ...>
+<Alignment object (2 rows x 8 columns) at ...>
+<Alignment object (2 rows x 19 columns) at ...>
+
+>>> for item in alignments:
+...     print(repr(item))  # doctest: +ELLIPSIS
+...
+\end{minted}
+The last loop does not print anything because the iterator is already exhausted.
+\item The \verb|Alignments| class defines a \verb|rewind| method that resets the iterator to its first item, allowing us to loop over it again:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.rewind()
+>>> for item in alignments:
+...     print(repr(item))  # doctest: +ELLIPSIS
+...
+<Alignment object (2 rows x 24 columns) at ...>
+<Alignment object (2 rows x 8 columns) at ...>
+<Alignment object (2 rows x 19 columns) at ...>
+\end{minted}
+\item Metadata can be stored as attributes on an \verb|Alignments| object, whereas a plain \verb|list| does not accept attributes:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment_list.score = 100  # doctest: +ELLIPSIS
+Traceback (most recent call last):
+ ...
+AttributeError: 'list' object has no attribute 'score'...
+>>> alignments.score = 100
+>>> alignments.score
+100
+\end{minted}
+\end{itemize}
+
+
 \section{Reading and writing alignments}
 \label{sec:alignmentparsers}
 
-Output from sequence alignment software such as Clustal can be parsed into \verb|Alignment| objects by the \verb|Bio.Align.read| and \verb|Bio.Align.parse| functions. Their usage is analogous to the \verb|read| and \verb|parse| functions in \verb|Bio.SeqIO| (see Section~\ref{sec:Bio.SeqIO-input}): The \verb|read| function is used to read an output file containing a single alignment and returns an \verb|Alignment| object, while the \verb|parse| function returns an iterator to iterate over alignments stored in an output file containing one or more alignments. The table below shows the alignment formats that can be parsed in \verb|Bio.Align|. \verb|Bio.Align| provides a \verb|write| function that can write alignments in most of these formats, as shown in the table.
-
-\begin{table}[!htbp]
-\begin{center}
-\begin{tabular}{|l|l|c|c|c|}
-File format \verb+fmt+ & Description & text / binary & Supported by \verb|write| & Subsection \\
-\verb|a2m| & A2M & text & yes & \ref{subsec:align_a2m} \\
-\verb|bed| & Browser Extensible Data (BED) & text & yes & \ref{subsec:align_bed} \\
-\verb|bigbed| & bigBed & binary & yes & \ref{subsec:align_bigbed} \\
-\verb|bigmaf| & bigMaf & binary & yes & \ref{subsec:align_bigmaf} \\
-\verb|bigpsl| & bigPsl & binary & yes & \ref{subsec:align_bigpsl} \\
-\verb|clustal| & ClustalW & text & yes & \ref{subsec:align_clustal} \\
-\verb|emboss| & EMBOSS & text & no & \ref{subsec:align_emboss} \\
-\verb|exonerate| & Exonerate & text & yes & \ref{subsec:align_exonerate} \\
-\verb|fasta| & Aligned FASTA & text & yes & \ref{subsec:align_fasta} \\
-\verb|hhr| & HH-suite output files & text & no & \ref{subsec:align_hhr} \\
-\verb|maf| & Multiple Alignment Format (MAF) & text & yes & \ref{subsec:align_maf} \\
-\verb|mauve| & Mauve eXtended Multi-FastA (xmfa) format & text & yes & \ref{subsec:align_mauve} \\
-\verb|msf| & GSG Multiple Sequence Format (MSF) & text & no & \ref{subsec:align_msf} \\
-\verb|nexus| & Nexus & text & yes & \ref{subsec:align_nexus} \\
-\verb|phylip| & PHYLIP output files & text & yes & \ref{subsec:align_phylip} \\
-\verb|psl| & Pattern Space Layout (PSL) & text & yes & \ref{subsec:align_psl} \\
-\verb|sam| & Sequence Alignment/Map (SAM) & text & yes & \ref{subseq:align_sam} \\
-\verb|stockholm| & Stockholm & text & yes & \ref{subsec:align_stockholm} \\
-\verb|tabular| & Tabular output from BLAST or FASTA & text & no & \ref{subsec:align_tabular} \\
-\end{tabular}
-\end{center}
-\end{table}
-
-These formats are described in detail in Section~\ref{sec:alignformats}. The format argument \verb|fmt| is case-insensitive.
+Output from sequence alignment software such as Clustal can be parsed into \verb|Alignment| objects by the \verb|Bio.Align.read| and \verb|Bio.Align.parse| functions. Their usage is analogous to the \verb|read| and \verb|parse| functions in \verb|Bio.SeqIO| (see Section~\ref{sec:Bio.SeqIO-input}): The \verb|read| function is used to read an output file containing a single alignment and returns an \verb|Alignment| object, while the \verb|parse| function returns an iterator to iterate over alignments stored in an output file containing one or more alignments. Section \ref{sec:alignformats} describes  the alignment formats that can be parsed in \verb|Bio.Align|.  \verb|Bio.Align| also provides a \verb|write| function that can write alignments in most of these formats.
 
 \subsection{Reading alignments}
+\label{subsec:align_reading}
 
-The alignments returned by \verb|Bio.Align.parse| inherit from the \verb|AlignmentsAbstractBaseClass| base class. This class defines a \verb|rewind| method that resets the iterator to let it loop over the alignments from the beginning. You can also call \verb|len| on the alignments to obtain the number of alignments. Depending on the file format, the number of alignments may be explicitly stored in the file (for example in the case of bigBed, bigPsl, and bigMaf files), or otherwise the number of alignments is counted by looping over them once (and returning the iterator to its original position). If the file is large, it may therefore take a considerable amount of time for \verb|len| to return. As the number of alignments is cached, subsequent calls to \verb|len| will return quickly.
+The alignments iterator returned by \verb|Bio.Align.parse| inherits from the \verb|AlignmentsAbstractBaseClass| base class. This class defines a \verb|rewind| method that resets the iterator to let it loop over the alignments from the beginning. You can also call \verb|len| on the alignments to obtain the number of alignments. Depending on the file format, the number of alignments may be explicitly stored in the file (for example in the case of bigBed, bigPsl, and bigMaf files), or otherwise the number of alignments is counted by looping over them once (and returning the iterator to its original position). If the file is large, it may therefore take a considerable amount of time for \verb|len| to return. As the number of alignments is cached, subsequent calls to \verb|len| will return quickly.
 
 Depending on the file format, the alignments object returned by \verb|Bio.Align.parse| may contain attributes that store metadata found in the file, such as the version number of the software that was used to create the alignments. The specific attributes stored for each file format are described in Section~\ref{sec:alignformats}.
 
@@ -359,7 +987,7 @@ To write alignments to a file, use
 >>> target = "myfile.txt"
 >>> Align.write(alignments, target, "clustal")
 \end{minted}
-where \verb|alignments| is either a single alignment or a list of alignments, \verb|target| is a file name or an open file-like object, and \verb|"clustal"| is the file format to be used. As some file formats allow or require metadata to be stored with the alignments, you may want to use the \verb|Alignments| (plural) class instead of a plain list of alignments. This class inherits from \verb|AlignmentsAbstractBaseClass| as well as from \verb|list|, and can therefore be used as a list, but also allows you to store metadata as attributes on the \verb|alignments| object:
+where \verb|alignments| is either a single alignment or a list of alignments, \verb|target| is a file name or an open file-like object, and \verb|"clustal"| is the file format to be used. As some file formats allow or require metadata to be stored with the alignments, you may want to use the \verb|Alignments| (plural) class instead of a plain list of alignments (see Section~\ref{sec:alignments}), alloing you to store a metadata dictionary as an attribute on the \verb|alignments| object:
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> alignments = Align.Alignments(alignments)
@@ -372,10 +1000,106 @@ where \verb|alignments| is either a single alignment or a list of alignments, \v
 \subsection{Printing alignments}
 \label{subsec:align_printing}
 
-For text (non-binary) formats, you can call Python's built-in \verb|format| function on an alignment to get a string showing the alignment in the requested format, or use \verb|Alignment| objects in formatted (f-) strings. As optional keyword arguments cannot be used with Python's built-in \verb|format| function or with formatted strings, the \verb|Alignment| class has a \verb|format| method with optional arguments to customize the alignment format, as described in the subsections below. When called with an empty string (which is the default), \verb|format| returns a human-readable representation of the alignment (same as when you \verb|print| the alignment).
+For text (non-binary) formats, you can call Python's built-in \verb|format| function on an alignment to get a string showing the alignment in the requested format, or use \verb|Alignment| objects in formatted (f-) strings. If called without an argument, the \verb|format| function returns the string representation of the alignment:
+%cont-doctest
+\begin{minted}{pycon}
+>>> str(alignment)
+'                  1 CGGTTTTT 9\n                  0 AGGTTT-- 6\n                  0 AG-TTT-- 5\n'
+>>> format(alignment)
+'                  1 CGGTTTTT 9\n                  0 AGGTTT-- 6\n                  0 AG-TTT-- 5\n'
+>>> print(format(alignment))
+                  1 CGGTTTTT 9
+                  0 AGGTTT-- 6
+                  0 AG-TTT-- 5
+<BLANKLINE>
+\end{minted}
+By specifying one of the formats shown in Section~\ref{sec:alignformats}, \verb+format+ will create a string showing the alignment in the requested format:
+%cont-doctest
+\begin{minted}{pycon}
+>>> format(alignment, "clustal")
+'sequence_0                          CGGTTTTT\nsequence_1                          AGGTTT--\nsequence_2                          AG-TTT--\n\n\n'
+>>> print(format(alignment, "clustal"))
+sequence_0                          CGGTTTTT
+sequence_1                          AGGTTT--
+sequence_2                          AG-TTT--
+<BLANKLINE>
+<BLANKLINE>
+<BLANKLINE>
+>>> print(f"*** this is the alignment in Clustal format: ***\n{alignment:clustal}\n***")
+*** this is the alignment in Clustal format: ***
+sequence_0                          CGGTTTTT
+sequence_1                          AGGTTT--
+sequence_2                          AG-TTT--
+<BLANKLINE>
+<BLANKLINE>
+<BLANKLINE>
+***
+>>> format(alignment, "maf")
+'a\ns sequence_0 1 8 + 9 CGGTTTTT\ns sequence_1 0 6 + 6 AGGTTT--\ns sequence_2 0 5 + 7 AG-TTT--\n\n'
+>>> print(format(alignment, "maf"))
+a
+s sequence_0 1 8 + 9 CGGTTTTT
+s sequence_1 0 6 + 6 AGGTTT--
+s sequence_2 0 5 + 7 AG-TTT--
+<BLANKLINE>
+<BLANKLINE>
+\end{minted}
+
+As optional keyword arguments cannot be used with Python's built-in \verb|format| function or with formatted strings, the \verb|Alignment| class has a \verb|format| method with optional arguments to customize the alignment format, as described in the subsections below. For example, we can print the alignment in BED format (see section~\ref{subsec:align_bed}) with a specific number of columns:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(pairwise_alignment)
+target            1 CGGTTTTT 9
+                  0 .|-|||-- 8
+query             0 AG-TTT-- 5
+<BLANKLINE>
+>>> print(format(pairwise_alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
+target	1	7	query	0	+	1	7	0	2	2,3,	0,3,
+<BLANKLINE>
+>>> print(pairwise_alignment.format("bed"))  # doctest: +NORMALIZE_WHITESPACE
+target	1	7	query	0	+	1	7	0	2	2,3,	0,3,
+<BLANKLINE>
+>>> print(pairwise_alignment.format("bed", bedN=3))  # doctest: +NORMALIZE_WHITESPACE
+target	1	7
+<BLANKLINE>
+>>> print(pairwise_alignment.format("bed", bedN=6))  # doctest: +NORMALIZE_WHITESPACE
+target	1	7	query	0	+
+<BLANKLINE>
+\end{minted}
 
 \section{Alignment file formats}
 \label{sec:alignformats}
+
+The table below shows the alignment formats that can be parsed in Bio.Align.
+The format argument \verb|fmt| used in \verb|Bio.Align| functions to specify the file format is case-insensitive. Most of these file formats can also be written by \verb|Bio.Align|, as shown in the table.
+
+\begin{table}[!htbp]
+\begin{center}
+\begin{tabular}{|l|l|c|c|c|}
+File format \verb+fmt+ & Description & text / binary & Supported by \verb|write| & Subsection \\
+\verb|a2m| & A2M & text & yes & \ref{subsec:align_a2m} \\
+\verb|bed| & Browser Extensible Data (BED) & text & yes & \ref{subsec:align_bed} \\
+\verb|bigbed| & bigBed & binary & yes & \ref{subsec:align_bigbed} \\
+\verb|bigmaf| & bigMaf & binary & yes & \ref{subsec:align_bigmaf} \\
+\verb|bigpsl| & bigPsl & binary & yes & \ref{subsec:align_bigpsl} \\
+\verb|chain| & UCSC chain file & text & yes & \ref{subsec:align_chain} \\
+\verb|clustal| & ClustalW & text & yes & \ref{subsec:align_clustal} \\
+\verb|emboss| & EMBOSS & text & no & \ref{subsec:align_emboss} \\
+\verb|exonerate| & Exonerate & text & yes & \ref{subsec:align_exonerate} \\
+\verb|fasta| & Aligned FASTA & text & yes & \ref{subsec:align_fasta} \\
+\verb|hhr| & HH-suite output files & text & no & \ref{subsec:align_hhr} \\
+\verb|maf| & Multiple Alignment Format (MAF) & text & yes & \ref{subsec:align_maf} \\
+\verb|mauve| & Mauve eXtended Multi-FastA (xmfa) format & text & yes & \ref{subsec:align_mauve} \\
+\verb|msf| & GCG Multiple Sequence Format (MSF) & text & no & \ref{subsec:align_msf} \\
+\verb|nexus| & NEXUS & text & yes & \ref{subsec:align_nexus} \\
+\verb|phylip| & PHYLIP output files & text & yes & \ref{subsec:align_phylip} \\
+\verb|psl| & Pattern Space Layout (PSL) & text & yes & \ref{subsec:align_psl} \\
+\verb|sam| & Sequence Alignment/Map (SAM) & text & yes & \ref{subsec:align_sam} \\
+\verb|stockholm| & Stockholm & text & yes & \ref{subsec:align_stockholm} \\
+\verb|tabular| & Tabular output from BLAST or FASTA & text & no & \ref{subsec:align_tabular} \\
+\end{tabular}
+\end{center}
+\end{table}
 
 \subsection{Aligned FASTA}
 \label{subsec:align_fasta}
@@ -503,7 +1227,7 @@ Note that \verb|Align.write| returns the number of alignments written (1, in thi
 \subsection{ClustalW}
 \label{subsec:align_clustal}
 
-Clustal is a set of multiple sequence alignment programs that are available both as standalone programs as as web servers. The file \verb|opuntia.aln| (available online or in the Doc/examples subdirectory of the Biopython source code) is an output file generated by Clustal. Its first few lines are
+Clustal is a set of multiple sequence alignment programs that are available both as standalone programs as as web servers. The file \verb|opuntia.aln| (available online or in the \verb|Doc/examples| subdirectory of the Biopython source code) is an output file generated by Clustal. Its first few lines are
 \begin{minted}{text}
 CLUSTAL 2.1 multiple sequence alignment
 
@@ -586,7 +1310,7 @@ gi|6273284|gb|AF191658.1|AF191      TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG
 gi|6273287|gb|AF191661.1|AF191      TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
 gi|6273286|gb|AF191660.1|AF191      TATACATAAAAGAAG...
 \end{minted}
-Use an \verb|Alignments| (plural) object (see section \ref{subsec:align_writing}) if you are creating alignments by hand, and would like to include metadata information in the output.
+Use an \verb|Alignments| (plural) object (see Section~\ref{sec:alignments}) if you are creating alignments by hand, and would like to include metadata information in the output.
 
 \subsection{Stockholm}
 \label{subsec:align_stockholm}
@@ -908,17 +1632,599 @@ True
 \subsection{EMBOSS}
 \label{subsec:align_emboss}
 
-\subsection{GSG Multiple Sequence Format (MSF)}
+EMBOSS (European Molecular Biology Open Software Suite) is a set of open-source software tools for molecular biology and bioinformatics~\cite{rice2000}. It includes software such as \verb|needle| and \verb|water| for pairwise sequence alignment. This is an example of output generated by the \verb|water| program for Smith-Waterman local pairwise sequence alignment (available as \verb|water.txt| in the \verb|Tests/Emboss| directory of the Biopython distribution):
+\begin{minted}{text}
+########################################
+# Program:  water
+# Rundate:  Wed Jan 16 17:23:19 2002
+# Report_file: stdout
+########################################
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: IXI_234
+# 2: IXI_235
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 131
+# Identity:     112/131 (85.5%)
+# Similarity:   112/131 (85.5%)
+# Gaps:          19/131 (14.5%)
+# Score: 591.5
+#
+#
+#=======================================
+
+IXI_234            1 TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQAT     50
+                     |||||||||||||||         ||||||||||||||||||||||||||
+IXI_235            1 TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQAT     41
+
+IXI_234           51 GGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAG    100
+                     ||||||||||||||||||||||||          ||||||||||||||||
+IXI_235           42 GGWKTCSGTCTTSTSTRHRGRSGW----------RASRKSMRAACSRSAG     81
+
+IXI_234          101 SRPNRFAPTLMSSCITSTTGPPAWAGDRSHE    131
+                     |||||||||||||||||||||||||||||||
+IXI_235           82 SRPNRFAPTLMSSCITSTTGPPAWAGDRSHE    112
+
+
+#---------------------------------------
+#---------------------------------------       
+\end{minted}
+As this output file contains only one alignment, we can use \verb|Align.read| to extract it directly. Here, instead we will use \verb|Align.parse| so we can see the metadata of this \verb|water| run:
+%doctest ../Tests/Emboss lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("water.txt", "emboss")
+\end{minted}
+The \verb|metadata| attribute of \verb|alignments| stores the information shown in the header of the file, including the program used to generate the output, the date and time the program was run, the output file name, and the specific alignment file format that was used (assumed to be \verb|srspair| by default):
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.metadata
+{'Align_format': 'srspair', 'Program': 'water', 'Rundate': 'Wed Jan 16 17:23:19 2002', 'Report_file': 'stdout'}
+\end{minted}
+To pull out the alignment, we use
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = next(alignments)
+>>> alignment  # doctest: +ELLIPSIS
+<Alignment object (2 rows x 131 columns) at ...>
+>>> alignment.shape
+(2, 131)
+>>> print(alignment)
+IXI_234           0 TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTC
+                  0 |||||||||||||||---------||||||||||||||||||||||||||||||||||||
+IXI_235           0 TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTC
+<BLANKLINE>
+IXI_234          60 TTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTG
+                 60 ||||||||||||||----------||||||||||||||||||||||||||||||||||||
+IXI_235          51 TTSTSTRHRGRSGW----------RASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTG
+<BLANKLINE>
+IXI_234         120 PPAWAGDRSHE 131
+                120 ||||||||||| 131
+IXI_235         101 PPAWAGDRSHE 112
+<BLANKLINE>
+>>> alignment.coordinates
+array([[  0,  15,  24,  74,  84, 131],
+       [  0,  15,  15,  65,  65, 112]])
+\end{minted}
+We can use indices to extract specific parts of the alignment:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment[0]
+'TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE'
+>>> alignment[1]
+'TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGW----------RASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE'
+>>> alignment[1, 10:30]
+'GPSSR---------RPSPPG'
+\end{minted}
+The \verb|annotations| attribute of the \verb|alignment| stores the information associated with this alignment specifically:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.annotations
+{'Matrix': 'EBLOSUM62', 'Gap_penalty': 10.0, 'Extend_penalty': 0.5, 'Identity': 112, 'Similarity': 112, 'Gaps': 19, 'Score': 591.5}
+\end{minted}
+The number of gaps, identities, and mismatches can also be obtained by calling the \verb|counts| method on the \verb|alignment| object:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.counts()
+AlignmentCounts(gaps=19, identities=112, mismatches=0)
+\end{minted}
+where \verb|AlignmentCounts| is a \verb|namedtuple| in the \verb|collections| module in Python's standard library.
+
+The consensus line shown between the two sequences is stored in the \verb|column_annotations| attribute:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.column_annotations
+{'emboss_consensus': '|||||||||||||||         ||||||||||||||||||||||||||||||||||||||||||||||||||          |||||||||||||||||||||||||||||||||||||||||||||||'}
+\end{minted}
+Use the \verb|format| function (or the \verb|format| method) to print the alignment in other formats, for example in the PHYLIP format (see section~\ref{subsec:align_phylip}):
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "phylip"))
+2 131
+IXI_234   TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE
+IXI_235   TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGW----------RASRKSMRAACSRSAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHE
+<BLANKLINE>
+\end{minted}
+We can use \verb|alignment.sequences| to get the individual sequences. However, as this is a pairwise alignment, we can also use \verb|alignment.target| and \verb|alignment.query| to get the target and query sequences:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.target
+SeqRecord(seq=Seq('TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCCSAAPRRPQATGGWK...SHE'), id='IXI_234', name='<unknown name>', description='<unknown description>', dbxrefs=[])
+>>> alignment.query
+SeqRecord(seq=Seq('TSPASIRPPAGPSSRRPSPPGPRRPTGRPCCSAAPRRPQATGGWKTCSGTCTTS...SHE'), id='IXI_235', name='<unknown name>', description='<unknown description>', dbxrefs=[])
+\end{minted}
+Currently, Biopython does not support writing sequence alignments in the output formats defined by EMBOSS.
+
+\subsection{GCG Multiple Sequence Format (MSF)}
 \label{subsec:align_msf}
+
+The Multiple Sequence Format (MSF) was created to store multiple sequence alignments generated by the GCG (Genetics Computer Group) set of programs. The file \verb|W_prot.msf| in the \verb|Tests/msf| directory of the Biopython distribution is an example of a sequence alignment file in the MSF format This file shows an alignment of 11 protein sequences:
+
+\begin{minted}{text}
+!!AA_MULTIPLE_ALIGNMENT
+
+   MSF: 99  Type: P  Oct 18, 2017  11:35  Check: 0 ..
+
+ Name: W*01:01:01:01    Len:    99  Check: 7236  Weight:  1.00
+ Name: W*01:01:01:02    Len:    99  Check: 7236  Weight:  1.00
+ Name: W*01:01:01:03    Len:    99  Check: 7236  Weight:  1.00
+ Name: W*01:01:01:04    Len:    99  Check: 7236  Weight:  1.00
+ Name: W*01:01:01:05    Len:    99  Check: 7236  Weight:  1.00
+ Name: W*01:01:01:06    Len:    99  Check: 7236  Weight:  1.00
+ Name: W*02:01          Len:    93  Check: 9483  Weight:  1.00
+ Name: W*03:01:01:01    Len:    93  Check: 9974  Weight:  1.00
+ Name: W*03:01:01:02    Len:    93  Check: 9974  Weight:  1.00
+ Name: W*04:01          Len:    93  Check: 9169  Weight:  1.00
+ Name: W*05:01          Len:    99  Check: 7331  Weight:  1.00
+//
+
+  W*01:01:01:01  GLTPFNGYTA ATWTRTAVSS VGMNIPYHGA SYLVRNQELR SWTAADKAAQ
+  W*01:01:01:02  GLTPFNGYTA ATWTRTAVSS VGMNIPYHGA SYLVRNQELR SWTAADKAAQ
+  W*01:01:01:03  GLTPFNGYTA ATWTRTAVSS VGMNIPYHGA SYLVRNQELR SWTAADKAAQ
+  W*01:01:01:04  GLTPFNGYTA ATWTRTAVSS VGMNIPYHGA SYLVRNQELR SWTAADKAAQ
+  W*01:01:01:05  GLTPFNGYTA ATWTRTAVSS VGMNIPYHGA SYLVRNQELR SWTAADKAAQ
+  W*01:01:01:06  GLTPFNGYTA ATWTRTAVSS VGMNIPYHGA SYLVRNQELR SWTAADKAAQ
+        W*02:01  GLTPSNGYTA ATWTRTAASS VGMNIPYDGA SYLVRNQELR SWTAADKAAQ
+  W*03:01:01:01  GLTPSSGYTA ATWTRTAVSS VGMNIPYHGA SYLVRNQELR SWTAADKAAQ
+  W*03:01:01:02  GLTPSSGYTA ATWTRTAVSS VGMNIPYHGA SYLVRNQELR SWTAADKAAQ
+        W*04:01  GLTPSNGYTA ATWTRTAASS VGMNIPYDGA SYLVRNQELR SWTAADKAAQ
+        W*05:01  GLTPSSGYTA ATWTRTAVSS VGMNIPYHGA SYLVRNQELR SWTAADKAAQ
+
+  W*01:01:01:01  MPWRRNRQSC SKPTCREGGR SGSAKSLRMG RRGCSAQNPK DSHDPPPHL
+  W*01:01:01:02  MPWRRNRQSC SKPTCREGGR SGSAKSLRMG RRGCSAQNPK DSHDPPPHL
+  W*01:01:01:03  MPWRRNRQSC SKPTCREGGR SGSAKSLRMG RRGCSAQNPK DSHDPPPHL
+  W*01:01:01:04  MPWRRNRQSC SKPTCREGGR SGSAKSLRMG RRGCSAQNPK DSHDPPPHL
+  W*01:01:01:05  MPWRRNRQSC SKPTCREGGR SGSAKSLRMG RRGCSAQNPK DSHDPPPHL
+  W*01:01:01:06  MPWRRNRQSC SKPTCREGGR SGSAKSLRMG RRGCSAQNPK DSHDPPPHL
+        W*02:01  MPWRRNMQSC SKPTCREGGR SGSAKSLRMG RRRCTAQNPK RLT
+  W*03:01:01:01  MPWRRNRQSC SKPTCREGGR SGSAKSLRMG RRGCSAQNPK RLT
+  W*03:01:01:02  MPWRRNRQSC SKPTCREGGR SGSAKSLRMG RRGCSAQNPK RLT
+        W*04:01  MPWRRNMQSC SKPTCREGGR SGSAKSLRMG RRGCSAQNPK RLT
+        W*05:01  MPWRRNRQSC SKPTCREGGR SGSAKSLRMG RRGCSAQNPK DSHDPPPHL
+\end{minted}
+To parse this file with Biopython, use
+%doctest ../Tests/msf lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignment = Align.read("W_prot.msf", "msf")
+\end{minted}
+The parser skips all lines up to and including the line starting with "\verb|MSF:|". The following lines (until the "\verb|//|" demarcation) are read by the parser to verify the length of each sequence. The alignment section (after the "\verb|//|" demarcation) is read by the parser and stored as an \verb|Alignment| object:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment  # doctest: +ELLIPSIS
+<Alignment object (11 rows x 99 columns) at ...>
+>>> print(alignment)
+W*01:01:0         0 GLTPFNGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*01:01:0         0 GLTPFNGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*01:01:0         0 GLTPFNGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*01:01:0         0 GLTPFNGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*01:01:0         0 GLTPFNGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*01:01:0         0 GLTPFNGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*02:01           0 GLTPSNGYTAATWTRTAASSVGMNIPYDGASYLVRNQELRSWTAADKAAQMPWRRNMQSC
+W*03:01:0         0 GLTPSSGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*03:01:0         0 GLTPSSGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*04:01           0 GLTPSNGYTAATWTRTAASSVGMNIPYDGASYLVRNQELRSWTAADKAAQMPWRRNMQSC
+W*05:01           0 GLTPSSGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+<BLANKLINE>
+W*01:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
+W*01:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
+W*01:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
+W*01:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
+W*01:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
+W*01:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
+W*02:01          60 SKPTCREGGRSGSAKSLRMGRRRCTAQNPKRLT------ 93
+W*03:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKRLT------ 93
+W*03:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKRLT------ 93
+W*04:01          60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKRLT------ 93
+W*05:01          60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
+<BLANKLINE>
+\end{minted}
+The sequences and their names are stored in the \verb|alignment.sequences| attribute:
+%cont-doctest
+\begin{minted}{pycon}
+>>> len(alignment.sequences)
+11
+>>> alignment.sequences[0].id
+'W*01:01:01:01'
+>>> alignment.sequences[0].seq
+Seq('GLTPFNGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWR...PHL')
+\end{minted}
+The alignment coordinates are stored in the \verb|alignment.coordinates| attribute:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.coordinates
+array([[ 0, 93, 99],
+       [ 0, 93, 99],
+       [ 0, 93, 99],
+       [ 0, 93, 99],
+       [ 0, 93, 99],
+       [ 0, 93, 99],
+       [ 0, 93, 93],
+       [ 0, 93, 93],
+       [ 0, 93, 93],
+       [ 0, 93, 93],
+       [ 0, 93, 99]])
+\end{minted}
+Currently, Biopython does not support writing sequence alignments in the MSF format.
 
 \subsection{Exonerate}
 \label{subsec:align_exonerate}
 
-\subsection{Nexus}
+Exonerate is a generic program for pairwise sequence alignments~\cite{slater2005}. The sequence alignments found by Exonerate can be output in a human-readable form, in the "cigar" (Compact Idiosyncratic Gapped Alignment Report) format, or in the "vulgar" (Verbose Useful Labelled Gapped Alignment Report) format. The user can request to include one or more of these formats in the output. The parser in \verb|Bio.Align| can only parse alignments in the cigar or vulgar formats, and will not parse output that includes alignments in human-readable format.
+
+The file \verb|exn_22_m_cdna2genome_vulgar.exn| in the Biopython test suite is an example of an Exonerate output file showing the alignments in vulgar format:
+\begin{minted}{text}
+Command line: [exonerate -m cdna2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes]
+Hostname: [blackbriar]
+vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6146 M 1 1 C 3 3 M 1226 1226
+vulgar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10| 1318045 1319275 + 6146 M 129 129 C 3 3 M 1098 1098
+vulgar: gi|296143771|ref|NM_001180731.1| 0 516 + gi|330443688|ref|NC_001145.3| 85010 667216 + 518 M 11 11 G 1 0 M 15 15 G 2 0 M 4 4 G 1 0 M 1 1 G 1 0 M 8 8 G 4 0 M 17 17 5 0 2 I 0 168904 3 0 2 M 4 4 G 0 1 M 8 8 G 2 0 M 3 3 G 1 0 M 33 33 G 0 2 M 7 7 G 0 1 M 102 102 5 0 2 I 0 96820 3 0 2 M 14 14 G 0 2 M 10 10 G 2 0 M 5 5 G 0 2 M 10 10 G 2 0 M 4 4 G 0 1 M 20 20 G 1 0 M 15 15 G 0 1 M 5 5 G 3 0 M 4 4 5 0 2 I 0 122114 3 0 2 M 20 20 G 0 5 M 6 6 5 0 2 I 0 193835 3 0 2 M 12 12 G 0 2 M 5 5 G 1 0 M 7 7 G 0 2 M 1 1 G 0 1 M 12 12 C 75 75 M 6 6 G 1 0 M 4 4 G 0 1 M 2 2 G 0 1 M 3 3 G 0 1 M 41 41
+-- completed exonerate analysis
+\end{minted}
+This file includes three alignments. To parse this file, use
+%doctest ../Tests/Exonerate lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("exn_22_m_cdna2genome_vulgar.exn", "exonerate")
+\end{minted}
+The dictionary \verb|alignments.metadata| stores general information about these alignments, shown at the top of the output file:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.metadata  # doctest: +NORMALIZE_WHITESPACE
+{'Program': 'exonerate',
+ 'Command line': 'exonerate -m cdna2genome ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar no --showvulgar yes',
+ 'Hostname': 'blackbriar'}
+\end{minted}
+Now we can iterate over the alignments. The first alignment, with alignment score 6146.0, has no gaps:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = next(alignments)
+>>> alignment.score
+6146.0
+>>> alignment.coordinates
+array([[1319275, 1319274, 1319271, 1318045],
+       [      0,       1,       4,    1230]])
+>>> print(alignment)  # doctest: +ELLIPSIS
+gi|330443   1319275 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+gi|296143         0 ????????????????????????????????????????????????????????????
+...
+gi|330443   1318075 ?????????????????????????????? 1318045
+               1200 ||||||||||||||||||||||||||||||    1230
+gi|296143      1200 ??????????????????????????????    1230
+<BLANKLINE>
+\end{minted}
+Printing this alignment in \verb|exonerate| format using Python's built-in \verb|format| function writes a vulgar line:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "exonerate"))
+vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6146 M 1 1 C 3 3 M 1226 1226
+<BLANKLINE>
+\end{minted}
+Using the \verb|format| method allows us to request either a vulgar line (default) or a cigar line:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment.format("exonerate", "vulgar"))
+vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6146 M 1 1 C 3 3 M 1226 1226
+<BLANKLINE>
+>>> print(alignment.format("exonerate", "cigar"))
+cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 6146 M 1 M 3 M 1226
+<BLANKLINE>
+\end{minted}
+The vulgar line contains information about the alignment (in the section \verb|M 1 1 C 3 3 M 1226|) that is missing from the cigar line \verb|M 1 M 3 M 1226|. The vulgar line specifies that the alignment starts with a single aligned nucleotides, followed by three aligned nucleotides that form a codon (\verb|C|), followed by 1226 aligned nucleotides. In the cigar line, we see a single aligned nucleotide, followed by three aligned nucleotides, followed by 1226 aligned nucleotides; it does not specify that the three aligned nucleotides form a codon. This information from the vulgar line is stored in the \verb|operations| attribute:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.operations
+bytearray(b'MCM')
+\end{minted}
+See the Exonerate documentation for the definition of other operation codes.
+
+Similarly, the \verb|"vulgar"| or \verb|"cigar"| argument can be used when callingn \verb|Bio.Align.write| to write a file with vulgar or cigar alignment lines.
+
+Note that the target (the first sequence) in the printed alignment is on the reverse strand while the query (the second sequence) is on the forward strand, with the target coordinate decreasing and the query coordinate increasing:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment)  # doctest: +ELLIPSIS
+gi|330443   1319275 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+gi|296143         0 ????????????????????????????????????????????????????????????
+...
+gi|330443   1318075 ?????????????????????????????? 1318045
+               1200 ||||||||||||||||||||||||||||||    1230
+gi|296143      1200 ??????????????????????????????    1230
+<BLANKLINE>
+\end{minted}
+This prevents us from outputting the alignment in BED (section~\ref{subsec:align_bed}), PSL (section~\ref{subsec:align_psl}), or SAM (section~\ref{subsec:align_sam}) format, which expect the target to be on the forward strand:
+%cont-doctest
+\begin{minted}{pycon}
+>>> format(alignment, "bed")  # doctest: +ELLIPSIS
+Traceback (most recent call last):
+...
+    assert coordinates[0, 0] <= coordinates[0, -1]
+AssertionError
+\end{minted}
+We can fix this by reversing the coordinates for both the target and query.
+This puts the target on the forward strand (with the coordinate increasing) and the query on the reverse strand (with the coordinate decreasing):
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.coordinates = alignment.coordinates[:, ::-1]
+>>> print(alignment)  # doctest: +ELLIPSIS
+gi|330443   1318045 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+gi|296143      1230 ????????????????????????????????????????????????????????????
+...
+gi|330443   1319245 ?????????????????????????????? 1319275
+               1200 ||||||||||||||||||||||||||||||    1230
+gi|296143        30 ??????????????????????????????       0
+<BLANKLINE>
+\end{minted}
+Now we can print the alignment in BED and PSL format:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
+gi|330443520|ref|NC_001136.10|	1318045	1319275	gi|296143771|ref|NM_001180731.1| 6146.0	-	1318045	1319275	0	3	1226,3,1,	0,1226,1229,
+<BLANKLINE>
+>>> print(format(alignment, "psl"))  # doctest: +NORMALIZE_WHITESPACE
+1230	0	0	0	0	0	0	0	-	gi|296143771|ref|NM_001180731.1|	1230	0	1230	gi|330443520|ref|NC_001136.10|	1319275	1318045	1319275	3	1226,3,1,	0,1226,1229,	1318045,1319271,1319274,
+<BLANKLINE>
+\end{minted}
+The SAM format parser defines its own (optional) \verb|operations| attribute (section~\ref{subsec:align_sam}), which is not quite consistent with the \verb|operations| attribute defined in the Exonerate format parser. As the \verb|operations| attribute is optional, we delete it before printing the alignment in SAM format:
+%cont-doctest
+\begin{minted}{pycon}
+>>> del alignment.operations
+>>> print(format(alignment, "sam"))  # doctest: +NORMALIZE_WHITESPACE
+gi|296143771|ref|NM_001180731.1|	16	gi|330443520|ref|NC_001136.10|	1318046	255	1226M3M1M	*	0	0	*	*	AS:i:6146
+<BLANKLINE>
+\end{minted}
+
+The second alignment already has the target on the forward strand and the query on the reverse strand, and can be printed to BED format directly:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = next(alignments)
+>>> alignment.coordinates
+array([[1318045, 1318174, 1318177, 1319275],
+       [   1230,    1101,    1098,       0]])
+>>> print(format(alignment, "BED"))  # doctest: +NORMALIZE_WHITESPACE
+gi|330443520|ref|NC_001136.10|	1318045	1319275	gi|296143771|ref|NM_001180731.1| 6146.0	-	1318045	1319275	0	3	129,3,1098,	0,129,132,
+<BLANKLINE>
+\end{minted}
+The third alignment contains a long gap:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = next(alignments)
+>>> print(alignment)  # doctest: +ELLIPSIS
+gi|330443     85010 ???????????-???????????????--????-?-????????----????????????
+                  0 |||||||||||-|||||||||||||||--||||-|-||||||||----||||||||||||
+gi|296143         0 ????????????????????????????????????????????????????????????
+<BLANKLINE>
+gi|330443     85061 ????????????????????????????????????????????????????????????
+                 60 |||||-------------------------------------------------------
+gi|296143        60 ?????-------------------------------------------------------
+...
+gi|330443    666990 ????????????????????????????????????????????????????????????
+             582000 --------------------------------------------------||||||||||
+gi|296143       346 --------------------------------------------------??????????
+<BLANKLINE>
+gi|330443    667050 ?????????-??????????????????????????????????????????????????
+             582060 ||--|||||-|||||||--|-|||||||||||||||||||||||||||||||||||||||
+gi|296143       356 ??--?????????????--?-???????????????????????????????????????
+<BLANKLINE>
+gi|330443    667109 ??????????????????????????????????????????????????????-?????
+             582120 ||||||||||||||||||||||||||||||||||||||||||||||||||||||-||||-
+gi|296143       411 ???????????????????????????????????????????????????????????-
+<BLANKLINE>
+gi|330443    667168 ???????????????????????????????????????????????? 667216
+             582180 ||-|||-||||||||||||||||||||||||||||||||||||||||| 582228
+gi|296143       470 ??-???-?????????????????????????????????????????    516
+<BLANKLINE>
+\end{minted}
+As the target sequence (and also the query sequence) is on the forward strand, we can print the alignment in BED format directly:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "BED"))  # doctest: +NORMALIZE_WHITESPACE
+gi|330443688|ref|NC_001145.3|	85010	667216	gi|296143771|ref|NM_001180731.1| 518.0	+	85010	667216	0	34	11,15,4,1,8,17,4,8,3,33,7,102,14,10,5,10,4,20,15,5,4,20,6,12,5,7,1,12,75,6,4,2,3,41,	0,11,26,30,31,39,168964,168969,168977,168980,169015,169023,265949,265965,265975,265982,265992,265997,266017,266033,266038,388160,388185,582030,582044,582049,582058,582060,582072,582147,582153,582158,582161,582165,
+<BLANKLINE>
+\end{minted}
+
+
+\subsection{NEXUS}
 \label{subsec:align_nexus}
+
+The NEXUS file format~\cite{maddison1997} is used by several programs to store phylogenetic information. This is an example of a file in the NEXUS format (available as \verb|codonposset.nex| in the \verb|Tests/Nexus| subdirectory in the Biopython distribution):
+\begin{minted}{text}
+#NEXUS
+[MacClade 4.05 registered to Computational Biologist, University]
+
+
+BEGIN DATA;
+       DIMENSIONS  NTAX=2 NCHAR=22;
+       FORMAT DATATYPE=DNA  MISSING=? GAP=- ;
+MATRIX
+[                           10        20 ]
+[                           .         .  ]
+
+Aegotheles         AAAAAGGCATTGTGGTGGGAAT   [22]
+Aerodramus         ?????????TTGTGGTGGGAAT   [13]
+;
+END;
+
+
+BEGIN CODONS;
+       CODONPOSSET * CodonPositions =
+               N: 1-10,
+               1: 11-22\3,
+               2: 12-22\3,
+               3: 13-22\3;
+       CODESET  * UNTITLED = Universal: all ;
+END;
+\end{minted}
+In general, files in the NEXUS format can be much more complex. \verb|Bio.Align| relies heavily on NEXUS parser in \verb|Bio.Nexus| (see Chapter~\ref{chapter:phylo}) to extract \verb|Alignment| objects from NEXUS files.
+
+To read the alignment in this NEXUS file, use
+%doctest ../Tests/Nexus lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignment = Align.read("codonposset.nex", "nexus")
+>>> print(alignment)
+Aegothele         0 AAAAAGGCATTGTGGTGGGAAT 22
+                  0 .........||||||||||||| 22
+Aerodramu         0 ?????????TTGTGGTGGGAAT 22
+<BLANKLINE>
+>>> alignment.shape
+(2, 22)
+\end{minted}
+The sequences are stored under the \verb|sequences| attribute:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.sequences[0].id
+'Aegotheles'
+>>> alignment.sequences[0].seq
+Seq('AAAAAGGCATTGTGGTGGGAAT')
+>>> alignment.sequences[0].annotations
+{'molecule_type': 'DNA'}
+>>> alignment.sequences[1].id
+'Aerodramus'
+>>> alignment.sequences[1].seq
+Seq('?????????TTGTGGTGGGAAT')
+>>> alignment.sequences[1].annotations
+{'molecule_type': 'DNA'}
+\end{minted}
+To print this alignment in the NEXUS format, use
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "nexus"))
+#NEXUS
+begin data;
+dimensions ntax=2 nchar=22;
+format datatype=dna missing=? gap=-;
+matrix
+Aegotheles AAAAAGGCATTGTGGTGGGAAT
+Aerodramus ?????????TTGTGGTGGGAAT
+;
+end;
+<BLANKLINE>
+\end{minted}
+Similarly, you can use \verb|Align.write(alignment, "myfilename.nex", "nexus")| to write the alignment in the NEXUS format to the file \verb|myfilename.nex|.
 
 \subsection{Tabular output from BLAST or FASTA}
 \label{subsec:align_tabular}
+
+Alignment output in tabular output is generated by the FASTA aligner~\cite{pearson1988} run with the \verb|-m 8CB| or  \verb|-m 8CC| argument, or by BLAST~\cite{altschul1990} run with the \verb|-outfmt 7| argument.
+
+The file \verb|nucleotide_m8CC.txt| in the \verb|Tests/Fasta| subdirectory of the Biopython source distribution is an example of an output file generated by FASTA with the \verb|-m 8CC| argument:
+\begin{minted}{text}
+# fasta36 -m 8CC seq/mgstm1.nt seq/gst.nlib
+# FASTA 36.3.8h May, 2020
+# Query: pGT875  - 657 nt
+# Database: seq/gst.nlib
+# Fields: query id, subject id, % identity, alignment length, mismatches, gap opens, q. start, q. end, s. start, s. end, evalue, bit score, aln_code
+# 12 hits found
+pGT875	pGT875	100.00	657	0	0	1	657	38	694	4.6e-191	655.6	657M
+pGT875	RABGLTR	79.10	646	135	0	1	646	34	679	1.6e-116	408.0	646M
+pGT875	BTGST	59.56	413	167	21	176	594	228	655	1.9e-07	45.7	149M1D7M1I17M3D60M5I6M1I13M2I13M4I30M2I6M2D112M
+pGT875	RABGSTB	66.93	127	42	8	159	289	157	287	3.2e-07	45.0	15M2I17M2D11M1I58M1I11M1D7M1D8M
+pGT875	OCDHPR	91.30	23	2	1	266	289	2303	2325	0.012	29.7	17M1D6M
+...
+# FASTA processed 1 queries
+\end{minted}
+To parse this file, use
+%doctest ../Tests/Fasta lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("nucleotide_m8CC.txt", "tabular")
+\end{minted}
+Information shown in the file header is stored in the \verb|metadata| attribute of \verb|alignments|:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.metadata  # doctest: +NORMALIZE_WHITESPACE
+{'Command line': 'fasta36 -m 8CC seq/mgstm1.nt seq/gst.nlib',
+ 'Program': 'FASTA',
+ 'Version': '36.3.8h May, 2020',
+ 'Database': 'seq/gst.nlib'}
+\end{minted}
+Extract a specific alignment by iterating over the \verb|alignments|. As an example, let's go to the fourth alignment:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = next(alignments)
+>>> alignment = next(alignments)
+>>> alignment = next(alignments)
+>>> alignment = next(alignments)
+>>> print(alignment)
+RABGSTB         156 ??????????????????????????????????--????????????????????????
+                  0 |||||||||||||||--|||||||||||||||||--|||||||||||-||||||||||||
+pGT875          158 ???????????????--??????????????????????????????-????????????
+<BLANKLINE>
+RABGSTB         214 ??????????????????????????????????????????????????????????-?
+                 60 ||||||||||||||||||||||||||||||||||||||||||||||-|||||||||||-|
+pGT875          215 ??????????????????????????????????????????????-?????????????
+<BLANKLINE>
+RABGSTB         273 ??????-???????? 287
+                120 ||||||-|||||||| 135
+pGT875          274 ??????????????? 289
+<BLANKLINE>
+>>> alignment.coordinates  # doctest: +NORMALIZE_WHITESPACE
+array([[156, 171, 173, 190, 190, 201, 202, 260, 261, 272, 272, 279, 279, 287],
+       [158, 173, 173, 190, 192, 203, 203, 261, 261, 272, 273, 280, 281, 289]])
+>>> alignment.aligned
+array([[[156, 171],
+        [173, 190],
+        [190, 201],
+        [202, 260],
+        [261, 272],
+        [272, 279],
+        [279, 287]],
+<BLANKLINE>
+       [[158, 173],
+        [173, 190],
+        [192, 203],
+        [203, 261],
+        [261, 272],
+        [273, 280],
+        [281, 289]]])
+\end{minted}
+The sequence information of the target and query sequences is stored in the \verb|target| and \verb|query| attributes (as well as under \verb|alignment.sequences|):
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.target
+SeqRecord(seq=Seq(None, length=287), id='RABGSTB', name='<unknown name>', description='<unknown description>', dbxrefs=[])
+>>> alignment.query
+SeqRecord(seq=Seq(None, length=657), id='pGT875', name='<unknown name>', description='<unknown description>', dbxrefs=[])
+\end{minted}
+Information of the alignment is stored under the \verb|annotations| attribute of the \verb|alignment|:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.annotations  # doctest: +NORMALIZE_WHITESPACE
+{'% identity': 66.93,
+ 'mismatches': 42,
+ 'gap opens': 8,
+ 'evalue': 3.2e-07,
+ 'bit score': 45.0}
+\end{minted}
+BLAST in particular offers many options to customize tabular output by including or excluding specific columns; see the BLAST documentation for details. This information is stored in the dictionaries \verb|alignment.annotations|, \verb|alignment.target.annotations|, or \verb|alignment.query.annotations|, as appropriate.
 
 \subsection{HH-suite output files}
 \label{subsec:align_hhr}
@@ -1173,7 +2479,7 @@ To parse this alignment, use
 >>> alignment = Align.read("probcons.a2m", "a2m")
 >>> alignment  # doctest: +ELLIPSIS
 <Alignment object (5 rows x 101 columns) at ...>
->>> print(alignment)  # doctest: +NORMALIZE_WHITESPACE
+>>> print(alignment)
 plas_horv         0 D-VLLGANGGVLVFEPNDFSVKAGETITFKNNAGYPHNVVFDEDAVPSG-VD-VSKISQE
 plas_chlr         0 --VKLGADSGALEFVPKTLTIKSGETVNFVNNAGFPHNIVFDEDAIPSG-VN-ADAISRD
 plas_anav         0 --VKLGSDKGLLVFEPAKLTIKPGDTVEFLNNKVPPHNVVFDAALNPAKSADLAKSLSHK
@@ -1459,7 +2765,7 @@ CTGGCGTCCGGAGCTGGGACGT
 <BLANKLINE>
 \end{minted}
 Python does not allow you to add these attributes to the \verb+alignments+ object directly, as in this example it was converted to a plain list.
-However, you can construct an \verb|Alignments| object (which inherits from \verb+list+) and add the attributes to it:
+However, you can construct an \verb|Alignments| object and add attributes to it (see Section~\ref{sec:alignments}):
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignments = Align.Alignments(alignments)
@@ -1505,7 +2811,7 @@ CAAGCCCTGC--GCGCTCAGCCGGAGTGTCCCGGGCCCTGC-TTTCCTTTTC
 \end{minted}
 
 \subsection{Sequence Alignment/Map (SAM)}
-\label{subseq:align_sam}
+\label{subsec:align_sam}
 
 Files in the Sequence Alignment/Map (SAM) format \cite{li2009} store pairwise sequence alignments, usually of next-generation sequencing data against a reference genome. The file \verb+ex1.sam+ in Biopython's test suite is an example of a minimal file in the SAM format. Its first few lines are as follows:
 \begin{minted}{text}
@@ -1654,7 +2960,28 @@ HWI-1KL12        60 TGTGAGGCAAGGGCTCACGCTGACCTCTCTCGGCGTGGGAG    101
 <BLANKLINE>
 \end{minted}
 
-To write a SAM file with alignments created from scratch, use an \verb|Alignments| (plural) object to store the alignments as well as the metadata and targets:
+SAM files may include additional information to distinguish simple sequence insertions and deletions from skipped regions of the genome (e.g. introns), hard and soft clipping, and padded sequence regions. As this information cannot be stored in the \verb|coordinates| attribute of an \verb|Alignment| object, and is stored in a dedicated \verb|operations| attribute instead. Let's use the third alignment in this SAM file as an example:
+%doctest ../Tests/Blat lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("dna_rna.sam", "sam")
+>>> alignment = next(alignments)
+>>> alignment = next(alignments)
+>>> alignment = next(alignments)
+>>> print(format(alignment, "SAM"))  # doctest: +NORMALIZE_WHITESPACE
+NR_111921.1	0	chr3	48663768	0	46M1827N82M3376N76M12H	*	0	0	CACGAGAGGAGCGGAGGCGAGGGGTGAACGCGGAGCACTCCAATCGCTCCCAACTAGAGGTCCACCCAGGACCCAGAGACCTGGATTTGAGGCTGCTGGGCGGCAGATGGAGCGATCAGAAGACCAGGAGACGGGAGCTGGAGTGCAGTGGCTGTTCACAAGCGTGAAAGCAAAGATTAAAAAATTTGTTTTTATATTAAAAAA	*	AS:i:1000	NM:i:0
+<BLANKLINE>
+>>> alignment.coordinates
+array([[48663767, 48663813, 48665640, 48665722, 48669098, 48669174],
+       [       0,       46,       46,      128,      128,      204]])
+>>> alignment.operations
+bytearray(b'MNMNM')
+>>> alignment.query.annotations["hard_clip_right"]
+12
+\end{minted}
+In this alignment, the cigar string \verb|63M1062N75M468N43M| defines 46 aligned nucleotides, an intron of 1827 nucleotides, 82 aligned nucleotides, an intron of 3376 nucleotides, 76 aligned nucleotides, and 12 hard-clipped nucleotides. These operations are shown in the \verb|operations| attribute, except for hard-clipping, which is stored in \verb|alignment.query.annotations["hard_clip_right"]| (or \verb|alignment.query.annotations["hard_clip_left"]|, if applicable) instead.
+
+To write a SAM file with alignments created from scratch, use an \verb|Alignments| (plural) object (see Section~\ref{sec:alignments}) to store the alignments as well as the metadata and targets:
 %doctest . lib:numpy
 \begin{minted}{pycon}
 >>> from io import StringIO
@@ -1710,37 +3037,308 @@ readC	0	chr2	12301	255	18M22S	*	0	0	*       *
 \subsection{Browser Extensible Data (BED)}
 \label{subsec:align_bed}
 
-Create a string representing the alignment in the Browser Extensible Data (BED) file format:
-%doctest . lib:numpy
-\begin{minted}{pycon}
->>> import numpy as np
->>> from Bio import Align
->>> from Bio.SeqUtils import gc_fraction
->>> seqA = "CGTTTTT"
->>> seqB = "CGATTTTT"
->>> seqC = "GTGGTTT"
->>> sequences = [seqA, seqB, seqC]
->>> coordinates = np.array([[0, 2, 2, 5, 7], [0, 2, 3, 6, 8], [1, 3, 4, 7, 7]])
->>> alignment = Align.Alignment(sequences, coordinates)
->>> alignment.sort(key=gc_fraction, reverse=True)
->>> alignment = alignment[:2]
->>> format(alignment, "bed")
-'target\t1\t7\tquery\t0\t+\t1\t7\t0\t2\t2,3,\t0,3,\n'
+BED (Browser Extensible Data) files are typically used to store the alignments of gene transcripts to the genome. See the \href{http://genome.cse.ucsc.edu/FAQ/FAQformat.html#format1}{description from UCSC} for a full explanation of the BED format.
+
+BED files have three required fields and nine optional fields. The file \verb|bed12.bed| in subdirectory \verb|Tests/Blat| is an example of a BED file with 12 fields:
+\begin{minted}{text}
+chr22	1000	5000	mRNA1	960	+	1200	4900	255,0,0	2	567,488,	0,3512,
+chr22	2000	6000	mRNA2	900	-	2300	5960	0,255,0	2	433,399,	0,3601,
 \end{minted}
+To parse this file, use
+%doctest ../Tests/Blat lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("bed12.bed", "bed")
+>>> len(alignments)
+2
+>>> for alignment in alignments:
+...     print(alignment.coordinates)
+...
+[[1000 1567 4512 5000]
+ [   0  567  567 1055]]
+[[2000 2433 5601 6000]
+ [ 832  399  399    0]]
+\end{minted}
+Note that the first sequence ("\verb|mRNA1|") was mapped to the forward strand, while the second sequence ("\verb|mRNA2|") was mapped to the reverse strand.
+
+As a BED file does not store the length of each chromosome, the length of the target sequence is set to its maximum:
+% don't include in the doctest, as 32-bit system show a different number
+\begin{minted}{pycon}
+>>> alignment.target
+SeqRecord(seq=Seq(None, length=9223372036854775807), id='chr22', name='<unknown name>', description='', dbxrefs=[])
+\end{minted}
+The length of the query sequence can be inferred from its alignment information:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.query
+SeqRecord(seq=Seq(None, length=832), id='mRNA2', name='<unknown name>', description='', dbxrefs=[])
+\end{minted}
+The alignment score (field 5) and information stored in fields 7-9 (referred to as \verb|thickStart|, \verb|thickEnd|, and \verb|itemRgb| in the BED format specification) are stored as attributes on the \verb|alignment| object:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.score
+900
+>>> alignment.thickStart
+2300
+>>> alignment.thickEnd
+5960
+>>> alignment.itemRgb
+'0,255,0'
+\end{minted}
+
+To print an alignment in the BED format, you can use Python's built-in \verb|format| function:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
+chr22	2000	6000	mRNA2	900	-	2300	5960	0,255,0	2	433,399,	0,3601,
+<BLANKLINE>
+\end{minted}
+or you can use the \verb|format| method of the \verb|alignment| object. This allows you to specify the number of fields to be written as the \verb|bedN| keyword argument:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(alignment.format("bed"))  # doctest: +NORMALIZE_WHITESPACE
+chr22	2000	6000	mRNA2	900	-	2300	5960	0,255,0	2	433,399,	0,3601,
+<BLANKLINE>
+>>> print(alignment.format("bed", 3))  # doctest: +NORMALIZE_WHITESPACE
+chr22	2000	6000
+<BLANKLINE>
+>>> print(alignment.format("bed", 6))  # doctest: +NORMALIZE_WHITESPACE
+chr22	2000	6000	mRNA2	900	-
+<BLANKLINE>
+\end{minted}
+The same keyword argument can be used with \verb|Align.write|:
+\begin{minted}{pycon}
+>>> alignments.rewind()
+>>> Align.write(alignments, "mybed3file.bed", "bed", bedN=3)
+2
+>>> alignments.rewind()
+>>> Align.write(alignments, "mybed6file.bed", "bed", bedN=6)
+2
+>>> alignments.rewind()
+>>> Align.write(alignments, "mybed12file.bed", "bed")
+2
+\end{minted}
+
 
 \subsection{bigBed}
 \label{subsec:align_bigbed}
 
+The bigBed file format is an indexed binary version of a BED file~\ref{subsec:align_bed}. To create a bigBed file, you can either use the \verb+bedToBigBed+ program from UCSC (\href{https://genome.ucsc.edu/goldenPath/help/bigBed.html}). or you can use Biopython for it by calling the \verb|Bio.Align.write| function with \verb|fmt="bigbed"|. While the two methods should result in identical bigBed files, using \verb+bedToBigBed+ is much faster and may be more reliable, as it is the gold standard. As bigBed files come with a built-in index, it allows you to quickly search a specific genomic region.
+
+As an example, let's parse the bigBed file \verb|dna_rna.bb|, available in the \verb|Tests/Blat| subdirectory in the Biopython distribution:
+%doctest ../Tests/Blat lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("dna_rna.bb", "bigbed")
+>>> len(alignments)
+4
+>>> print(alignments.declaration)  # doctest: +NORMALIZE_WHITESPACE
+table bed
+"Browser Extensible Data"
+(
+   string          chrom;          "Reference sequence chromosome or scaffold"
+   uint            chromStart;     "Start position in chromosome"
+   uint            chromEnd;       "End position in chromosome"
+   string          name;           "Name of item."
+   uint            score;          "Score (0-1000)"
+   char[1]         strand;         "+ or - for strand"
+   uint            thickStart;     "Start of where display should be thick (start codon)"
+   uint            thickEnd;       "End of where display should be thick (stop codon)"
+   uint            reserved;       "Used as itemRgb as of 2004-11-22"
+   int             blockCount;     "Number of blocks"
+   int[blockCount] blockSizes;     "Comma separated list of block sizes"
+   int[blockCount] chromStarts;    "Start positions relative to chromStart"
+)
+<BLANKLINE>
+\end{minted}
+The \verb|declaration| contains the specification of the columns, in AutoSql format, that was used to create the bigBed file.
+Target sequences (typically, the chromosomes against which the sequences were aligned) are stored in the \verb|targets| attribute. In the bigBed format, only the identifier and the size of each target is stored. In this example, there is only a single chromosome:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.targets
+[SeqRecord(seq=Seq(None, length=198295559), id='chr3', name='<unknown name>', description='<unknown description>', dbxrefs=[])]
+\end{minted}
+Let's look at the individual alignments. The alignment information is stored in the same way as for a BED file (see section \ref{subsec:align_bed}):
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = next(alignments)
+>>> alignment.target.id
+'chr3'
+>>> alignment.query.id
+'NR_046654.1'
+>>> alignment.coordinates
+array([[42530895, 42530958, 42532020, 42532095, 42532563, 42532606],
+       [     181,      118,      118,       43,       43,        0]])
+>>> alignment.thickStart
+42530895
+>>> alignment.thickEnd
+42532606
+>>> print(alignment)  # doctest: +ELLIPSIS
+chr3       42530895 ????????????????????????????????????????????????????????????
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+NR_046654       181 ????????????????????????????????????????????????????????????
+<BLANKLINE>
+chr3       42530955 ????????????????????????????????????????????????????????????
+                 60 |||---------------------------------------------------------
+NR_046654       121 ???---------------------------------------------------------
+...
+chr3       42532515 ????????????????????????????????????????????????????????????
+               1620 ------------------------------------------------||||||||||||
+NR_046654        43 ------------------------------------------------????????????
+<BLANKLINE>
+chr3       42532575 ??????????????????????????????? 42532606
+               1680 |||||||||||||||||||||||||||||||     1711
+NR_046654        31 ???????????????????????????????        0
+<BLANKLINE>
+\end{minted}
+The default bigBed format does not store the sequence contents of the target and query. If these are available elsewhere (for example, a Fasta file), you can set \verb|alignment.target.seq| and \verb|alignment.query.seq| to show the sequence contents when printing the alignment, or to write the alignment in formats that require the sequence contents (such as Clustal, see section~\ref{subsec:align_clustal}). The test script \verb|test_Align_bigbed.py| in the \verb|Tests| subdirectory in the Biopython distribution gives some examples on how to do that.
+
+Now let's see how to search for a sequence region. These are the sequences stored in the bigBed file, printed in BED format (see section \ref{subsec:align_bed}):
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.rewind()
+>>> for alignment in alignments:
+...     print(format(alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
+...
+chr3	42530895	42532606	NR_046654.1	1000	-	42530895	42532606	0	3	63,75,43,	0,1125,1668,
+<BLANKLINE>
+chr3	42530895	42532606	NR_046654.1_modified	978	-	42530895	42532606	0	5	27,36,17,56,43,	0,27,1125,1144,1668,
+<BLANKLINE>
+chr3	48663767	48669174	NR_111921.1	1000	+	48663767	48669174	0	3	46,82,76,	0,1873,5331,
+<BLANKLINE>
+chr3	48663767	48669174	NR_111921.1_modified	972	+	48663767	48669174	0	5	28,17,76,6,76,	0,29,1873,1949,5331,
+<BLANKLINE>
+\end{minted}
+
+Use the \verb|search| method on the \verb|alignments| object to find regions on chr3 between positions 48000000 and 49000000. This method returns an iterator:
+%cont-doctest
+\begin{minted}{pycon}
+>>> selected_alignments = alignments.search("chr3", 48000000, 49000000)
+>>> for alignment in selected_alignments:
+...     print(alignment.query.id)
+...
+NR_111921.1
+NR_111921.1_modified
+\end{minted}
+The chromosome name may be \verb|None| to include all chromosomes, and the start and end positions may be \verb|None| to start searching from position 0 or to continue searching until the end of the chromosome, respectively.
+
+Writing alignments in the bigBed format is as easy as calling \verb|Bio.Align.write|:
+\begin{minted}{pycon}
+>>> Align.write(alignments, "output.bb", "bigbed")
+\end{minted}
+You can specify the number of BED fields to be included in the bigBed file. For example, to write a BED6 file, use
+\begin{minted}{pycon}
+>>> Align.write(alignments, "output.bb", "bigbed", bedN=6)
+\end{minted}
+Same as for \verb|bedToBigBed|, you can include additional columns in the bigBed output. Suppose the file \verb|bedExample2.as| (available in the \verb|Tests/Blat| subdirectory of the Biopython distribution) stores the declaration of the included BED fields in AutoSql format. We can read this declaration as follows:
+%cont-doctest
+\begin{minted}{pycon}
+>>> from Bio.Align import bigbed
+>>> with open("bedExample2.as") as stream:
+...     autosql_data = stream.read()
+...
+>>> declaration = bigbed.AutoSQLTable.from_string(autosql_data)
+>>> type(declaration)
+<class 'Bio.Align.bigbed.AutoSQLTable'>
+>>> print(declaration)
+table hg18KGchr7
+"UCSC Genes for chr7 with color plus GeneSymbol and SwissProtID"
+(
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position of feature on chromosome"
+   uint    chromEnd;      "End position of feature on chromosome"
+   string  name;          "Name of gene"
+   uint    score;         "Score"
+   char[1] strand;        "+ or - for strand"
+   uint    thickStart;    "Coding region start"
+   uint    thickEnd;      "Coding region end"
+   uint    reserved;      "Green on + strand, Red on - strand"
+   string  geneSymbol;    "Gene Symbol"
+   string  spID;          "SWISS-PROT protein Accession number"
+)
+<BLANKLINE>
+\end{minted}
+Now we can write a bigBed file with the 9 BED fields plus the additional fields \verb|geneSymbol| and \verb|spID| by calling
+\begin{minted}{pycon}
+>>> Align.write(
+...     alignments,
+...     "output.bb",
+...     "bigbed",
+...     bedN=9,
+...     declaration=declaration,
+...     extraIndex=["name", "geneSymbol"],
+... )
+\end{minted}
+Here, we also requested to include additional indices on the \verb|name| and \verb|geneSymbol| in the bigBed file. \verb|Align.write| expects to find the keys \verb|geneSymbol| and \verb|spID| in the \verb|alignment.annotations| dictionary.
+ Please refer to the test script \verb|test_Align_bigbed.py| in the \verb|Tests| subdirectory in the Biopython distribution for more examples of writing alignment files in the bigBed format.
+
+
 \subsection{Pattern Space Layout (PSL)}
 \label{subsec:align_psl}
 
-Create a string representing the alignment in the Pattern Space Layout (PSL) file format as generated by BLAT \cite{kent2002}).
+PSL (Pattern Space Layout) files are are generated by the BLAST-Like Alignment Tool BLAT \cite{kent2002}. Like BED files (see section~\ref{subsec:align_bed}), PSL files are typically used to store alignments of transcripts to genomes.
+This is an example of a short BLAT file (available as \verb|dna_rna.psl| in the \verb|Tests/Blat| subdirectory of the Biopython distribution), with the standard PSL header consisting of 5 lines:
+\begin{minted}{text}
+psLayout version 3
+
+match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T        	T   	T    	T  	block	blockSizes 	qStarts	 tStarts
+     	match	match	   	count	bases	count	bases	      	name     	size	start	end	name     	size	start	end	count
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+165	0	39	0	0	0	2	5203	+	NR_111921.1	216	0	204	chr3	198295559	48663767	48669174	3	46,82,76,	0,46,128,	48663767,48665640,48669098,
+175	0	6	0	0	0	2	1530	-	NR_046654.1	181	0	181	chr3	198295559	42530895	42532606	3	63,75,43,	0,63,138,	42530895,42532020,42532563,
+162	2	39	0	1	2	3	5204	+	NR_111921.1_modified	220	3	208	chr3	198295559	48663767	48669174	5	28,17,76,6,76,	3,31,48,126,132,	48663767,48663796,48665640,48665716,48669098,
+172	1	6	0	1	3	3	1532	-	NR_046654.1_modified	190	3	185	chr3	198295559	42530895	42532606	5	27,36,17,56,43,	5,35,71,88,144,	42530895,42530922,42532020,42532039,42532563,
+\end{minted}
+To parse this file, use
+%doctest ../Tests/Blat lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("dna_rna.psl", "psl")
+>>> alignments.metadata
+{'psLayout version': '3'}
+\end{minted}
+Iterate over the alignments to get one \verb|Alignment| object for each line:
 %cont-doctest
 \begin{minted}{pycon}
->>> alignment.format("psl")
-'4\t1\t0\t0\t0\t0\t1\t1\t+\tquery\t7\t0\t5\ttarget\t7\t1\t7\t2\t2,3,\t0,2,\t1,4,\n'
+>>> for alignment in alignments:
+...     print(alignment.target.id, alignment.query.id)
+...
+chr3 NR_046654.1
+chr3 NR_046654.1_modified
+chr3 NR_111921.1
+chr3 NR_111921.1_modified
 \end{minted}
-The first four columns in the PSL output contain the number of matched and mismatched characters, the number of matches to repeat regions, and the number of matches to unknown nucleotides.
+Let's look at the last alignment in more detail. The first four columns in the PSL file show the number of matches, the number of mismatches, the number of nucleotides aligned to repeat regions, and the number of nucleotides aligned to N (unknown) characters. These values are stored as attributes to the \verb|Alignment| object:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.matches
+162
+>>> alignment.misMatches
+2
+>>> alignment.repMatches
+39
+>>> alignment.nCount
+0
+\end{minted}
+As the sequence data of the target and query are not stored explicitly in the PSL file, the sequence content of \verb|alignment.target| and \verb|alignment.query| is undefined. However, their sequence lengths are known:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.target  # doctest: +ELLIPSIS
+SeqRecord(seq=Seq(None, length=198295559), id='chr3', ...)
+>>> alignment.query  # doctest: +ELLIPSIS
+SeqRecord(seq=Seq(None, length=220), id='NR_111921.1_modified', ...)
+\end{minted}
+We can print the alignment in BED or PSL format:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
+chr3	48663767	48669174	NR_111921.1_modified	0	+	48663767	48669174	0	5	28,17,76,6,76,	0,29,1873,1949,5331,
+<BLANKLINE>
+>>> print(format(alignment, "psl"))  # doctest: +NORMALIZE_WHITESPACE
+162	2	39	0	1	2	3	5204	+	NR_111921.1_modified	220	3	208	chr3	198295559	48663767	48669174	5	28,17,76,6,76,	3,31,48,126,132,	48663767,48663796,48665640,48665716,48669098,
+<BLANKLINE>
+\end{minted}
+Here, the number of matches, mismatches, repeat region matches, and matches to unknown nucleotides were taken from the corresponding attributes of the \verb|Alignment| object. If these attributes are not available, for example if the alignment did not come from a PSL file, then these numbers are calculated using the sequence contents, if available.
 Repeat regions in the target sequence are indicated by masking the sequence as lower-case or upper-case characters, as defined by the following values for the \verb+mask+ keyword argument:
 \begin{itemize}
 \item \verb+False+ (default): Do not count matches to masked sequences separately;
@@ -1750,43 +3348,28 @@ Repeat regions in the target sequence are indicated by masking the sequence as l
 The character used for unknown nucleotides is defined by the \verb+wildcard+ argument. For consistency with BLAT, the wildcard character is \verb+"N"+ by default. Use \verb+wildcard=None+ if you don't want to count matches to any unknown nucleotides separately.
 %doctest . lib:numpy
 \begin{minted}{pycon}
+>>> import numpy
 >>> from Bio import Align
->>> aligner = Align.PairwiseAligner()
->>> aligner.mismatch_score = -1
->>> aligner.internal_gap_score = -5
->>> aligner.wildcard = "N"
->>> target = "AAAAAAAggggGGNGAAAAA"
 >>> query = "GGTGGGGG"
->>> alignments = aligner.align(target.upper(), query)
->>> len(alignments)
-1
->>> alignment = alignments[0]
->>> print(alignment)
-target            0 AAAAAAAGGGGGGNGAAAAA 20
-                  0 -------||.|||.|----- 20
-query             0 -------GGTGGGGG-----  8
-<BLANKLINE>
->>> alignment.score
-5.0
->>> alignment.target
-'AAAAAAAGGGGGGNGAAAAA'
->>> alignment.target = target
->>> alignment.target
-'AAAAAAAggggGGNGAAAAA'
+>>> target = "AAAAAAAggggGGNGAAAAA"
+>>> coordinates = numpy.array([[0, 7, 15, 20], [0, 0, 8, 8]])
+>>> alignment = Align.Alignment([target, query], coordinates)
 >>> print(alignment)
 target            0 AAAAAAAggggGGNGAAAAA 20
                   0 -------....||.|----- 20
 query             0 -------GGTGGGGG-----  8
 <BLANKLINE>
->>> print(alignment.format("psl"))  # doctest: +NORMALIZE_WHITESPACE
+>>> line = alignment.format("psl")
+>>> print(line)  # doctest: +NORMALIZE_WHITESPACE
 6   1   0   1   0   0   0   0   +   query   8   0   8   target   20   7   15   1   8,   0,   7,
->>> print(alignment.format("psl", mask="lower"))  # doctest: +NORMALIZE_WHITESPACE
+>>> line = alignment.format("psl", mask="lower")
+>>> print(line)  # doctest: +NORMALIZE_WHITESPACE
 3   1   3   1   0   0   0   0   +   query   8   0   8   target   20   7   15   1   8,   0,   7,
->>> print(
-...     alignment.format("psl", mask="lower", wildcard=None)
-... )  # doctest: +NORMALIZE_WHITESPACE
+>>> line = alignment.format("psl", mask="lower", wildcard=None)
+>>> print(line)  # doctest: +NORMALIZE_WHITESPACE
 3   2   3   0   0   0   0   0   +   query   8   0   8   target   20   7   15   1   8,   0,   7,
 \end{minted}
+The same arguments can be used when writing alignments to an output file in PSL format using \verb|Bio.Align.write|. This function has an additional keyword \verb|header| (\verb|True| by default) specifying if the PSL header should be written.
 
 In addition to the \verb+format+ method, you can use Python's built-in \verb+format+ function:
 %cont-doctest
@@ -1796,9 +3379,8 @@ In addition to the \verb+format+ method, you can use Python's built-in \verb+for
 \end{minted}
 allowing \verb+Alignment+ objects to be used in formatted (f-) strings in Python:
 \begin{minted}{pycon}
->>> print(
-...     f"The alignment in PSL format is '{alignment:psl}'."
-... )  # doctest: +NORMALIZE_WHITESPACE
+>>> line = f"The alignment in PSL format is '{alignment:psl}'."
+>>> print(line)  # doctest: +NORMALIZE_WHITESPACE
 The alignment in PSL format is '6   1   0   1   0   0   0   0   +   query   8   0   8   target   20   7   15   1   8,   0,   7,
 '
 \end{minted}
@@ -1807,582 +3389,555 @@ Note that optional keyword arguments cannot be used with the \verb+format+ funct
 \subsection{bigPsl}
 \label{subsec:align_bigpsl}
 
+A bigPsl file is a bigBed file with a BED12+13 format consisting of the 12
+predefined BED fields and 13 custom fields defined in the AutoSql file
+\href{https://genome.ucsc.edu/goldenPath/help/bigPsl.html}{bigPsl.as} provided by UCSC, creating an indexed binary version of a PSL file (see section~\ref{subsec:align_psl}). To create a bigPsl file, you can either use the \verb+pslToBigPsl+ and \verb+bedToBigBed+ programs from UCSC. or you can use Biopython by calling the \verb|Bio.Align.write| function with \verb|fmt="bigpsl"|. While the two methods should result in identical bigPsl files, the UCSC tools are much faster and may be more reliable, as it is the gold standard. As bigPsl files are bigBed files, they come with a built-in index, allowing you to quickly search a specific genomic region.
+
+As an example, let's parse the bigBed file \verb|dna_rna.psl.bb|, available in the \verb|Tests/Blat| subdirectory in the Biopython distribution. This file is the bigPsl equivalent of the bigBed file \verb|dna_rna.bb| (see section~\ref{subsec:align_bigbed}) and of the PSL file \verb|dna_rna.psl| (see section~\ref{subsec:align_psl}).
+%doctest ../Tests/Blat lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("dna_rna.psl.bb", "bigpsl")
+>>> len(alignments)
+4
+>>> print(alignments.declaration)  # doctest: +NORMALIZE_WHITESPACE
+table bigPsl
+"bigPsl pairwise alignment"
+(
+   string          chrom;           "Reference sequence chromosome or scaffold"
+   uint            chromStart;      "Start position in chromosome"
+   uint            chromEnd;        "End position in chromosome"
+   string          name;            "Name or ID of item, ideally both human readable and unique"
+   uint            score;           "Score (0-1000)"
+   char[1]         strand;          "+ or - indicates whether the query aligns to the + or - strand on the reference"
+   uint            thickStart;      "Start of where display should be thick (start codon)"
+   uint            thickEnd;        "End of where display should be thick (stop codon)"
+   uint            reserved;        "RGB value (use R,G,B string in input file)"
+   int             blockCount;      "Number of blocks"
+   int[blockCount] blockSizes;      "Comma separated list of block sizes"
+   int[blockCount] chromStarts;     "Start positions relative to chromStart"
+   uint            oChromStart;     "Start position in other chromosome"
+   uint            oChromEnd;       "End position in other chromosome"
+   char[1]         oStrand;         "+ or -, - means that psl was reversed into BED-compatible coordinates"
+   uint            oChromSize;      "Size of other chromosome."
+   int[blockCount] oChromStarts;    "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
+   lstring         oSequence;       "Sequence on other chrom (or edit list, or empty)"
+   string          oCDS;            "CDS in NCBI format"
+   uint            chromSize;       "Size of target chromosome"
+   uint            match;           "Number of bases matched."
+   uint            misMatch;        "Number of bases that don't match"
+   uint            repMatch;        "Number of bases that match but are part of repeats"
+   uint            nCount;          "Number of 'N' bases"
+   uint            seqType;         "0=empty, 1=nucleotide, 2=amino_acid"
+)
+<BLANKLINE>
+\end{minted}
+The declaration contains the specification of the columns as defined by the \verb|bigPsl.as| AutoSql file from UCSC. Target sequences (typically, the chromosomes against which the sequences were aligned) are stored in the \verb|targets| attribute. In the bigBed format, only the identifier and the size of each target is stored. In this example, there is only a single chromosome: 
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.targets
+[SeqRecord(seq=Seq(None, length=198295559), id='chr3', name='<unknown name>', description='<unknown description>', dbxrefs=[])]
+\end{minted}
+Iterating over the alignments gives one Alignment object for each line: 
+%cont-doctest
+\begin{minted}{pycon}
+>>> for alignment in alignments:
+...     print(alignment.target.id, alignment.query.id)
+...
+chr3 NR_046654.1
+chr3 NR_046654.1_modified
+chr3 NR_111921.1
+chr3 NR_111921.1_modified
+\end{minted}
+Let's look at the individual alignments. The alignment information is stored in the same way as for the corresponding PSL file (see section~\ref{subsec:align_psl}):
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.coordinates
+array([[48663767, 48663795, 48663796, 48663813, 48665640, 48665716,
+        48665716, 48665722, 48669098, 48669174],
+       [       3,       31,       31,       48,       48,      124,
+             126,      132,      132,      208]])
+>>> alignment.thickStart
+48663767
+>>> alignment.thickEnd
+48669174
+>>> alignment.matches
+162
+>>> alignment.misMatches
+2
+>>> alignment.repMatches
+39
+>>> alignment.nCount
+0
+\end{minted}
+We can print the alignment in BED or PSL format:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "bed"))  # doctest: +NORMALIZE_WHITESPACE
+chr3	48663767	48669174	NR_111921.1_modified	1000	+	48663767	48669174	0	5	28,17,76,6,76,	0,29,1873,1949,5331,
+<BLANKLINE>
+>>> print(format(alignment, "psl"))  # doctest: +NORMALIZE_WHITESPACE
+162	2	39	0	1	2	3	5204	+	NR_111921.1_modified	220	3	208	chr3	198295559	48663767	48669174	5	28,17,76,6,76,	3,31,48,126,132,	48663767,48663796,48665640,48665716,48669098,
+<BLANKLINE>
+\end{minted}
+
+As a bigPsl file is a special case of a bigBed file, you can use the \verb|search| method on the alignments object to find alignments to specific genomic regions. For example, we can look for regions on chr3 between positions 48000000 and 49000000:
+%cont-doctest
+\begin{minted}{pycon}
+>>> selected_alignments = alignments.search("chr3", 48000000, 49000000)
+>>> for alignment in selected_alignments:
+...     print(alignment.query.id)
+...
+NR_111921.1
+NR_111921.1_modified
+\end{minted}
+The chromosome name may be \verb|None| to include all chromosomes, and the start and end positions may be \verb|None| to start searching from position 0 or to continue searching until the end of the chromosome, respectively.
+
+To write a bigPsl file with Biopython, use \verb|Bio.Align.write(alignments, "myfilename.bb", fmt="bigpsl")|, where \verb|myfilename.bb| is the name of the output bigPsl file. Alternatively, you can use a (binary) stream for output. Additional options are
+\begin{itemize}
+\item \verb|compress|: If \verb|True| (default), compress data using zlib; if \verb|False|, do not compress data.
+\item \verb|extraIndex|: List of strings with the names of extra columns to be indexed.
+\item \verb|cds|: If \verb|True|, look for a query feature of type CDS and write it in NCBI style in the PSL file (default: \verb|False|).
+\item \verb|fa|: If \verb|True|, include the query sequence in the PSL file (default: \verb|False|).
+\item \verb|mask|: Specify if repeat regions in the target sequence are masked and should be reported in the \verb|repMatches| field instead of in the \verb|matches| field.  Acceptable values are
+\begin{itemize}
+\item \verb|None|: no masking (default);
+\item \verb|"lower"|: masking by lower-case characters;
+\item \verb|"upper"|: masking by upper-case characters.
+\end{itemize}
+\item \verb|wildcard|: Report alignments to the wildcard character (representing unknown nucleotides) in the target or query sequence in the \verb|nCount| field instead of in the \verb|matches|, \verb|misMatches|, or \verb|repMatches| fields.  Default value is \verb|"N"|.
+\end{itemize}
+See section~\ref{subsec:align_psl} for an explanation on how the number of matches, mismatches, repeat region matches, and matches to unknown nucleotides are obtained.
+
+
 \subsection{Multiple Alignment Format (MAF)}
 \label{subsec:align_maf}
+
+MAF (Multiple Alignment Format) files store a series of multiple sequence alignments in a human-readable format. MAF files are typically used to store alignment
+s of genomes to each other. The file \verb|ucsc_test.maf| in the \verb|Tests/MAF| subdirectory of the Biopython distribution is an example of a simple MAF file:
+\begin{minted}{text}
+track name=euArc visibility=pack mafDot=off frames="multiz28wayFrames" speciesOrder="hg16 panTro1 baboon mm4 rn3" description="A sample alignment"
+##maf version=1 scoring=tba.v8
+# tba.v8 (((human chimp) baboon) (mouse rat))
+# multiz.v7
+# maf_project.v5 _tba_right.maf3 mouse _tba_C
+# single_cov2.v4 single_cov2 /dev/stdin
+
+a score=23262.0
+s hg16.chr7    27578828 38 + 158545518 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
+s panTro1.chr6 28741140 38 + 161576975 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
+s baboon         116834 38 +   4622798 AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG
+s mm4.chr6     53215344 38 + 151104725 -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG
+s rn3.chr4     81344243 40 + 187371129 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG
+
+a score=5062.0
+s hg16.chr7    27699739 6 + 158545518 TAAAGA
+s panTro1.chr6 28862317 6 + 161576975 TAAAGA
+s baboon         241163 6 +   4622798 TAAAGA
+s mm4.chr6     53303881 6 + 151104725 TAAAGA
+s rn3.chr4     81444246 6 + 187371129 taagga
+
+a score=6636.0
+s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
+s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
+s baboon         249182 13 +   4622798 gcagctgaaaaca
+s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
+
+\end{minted}
+To parse this file, use
+%doctest ../Tests/MAF lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("ucsc_test.maf", "maf")
+\end{minted}
+Information shown in the file header (the track line and subsequent lines starting with "\verb|#|")) is stored in the \verb|metadata| attribute of the \verb|alignments| object:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.metadata  # doctest: +NORMALIZE_WHITESPACE
+{'name': 'euArc',
+ 'visibility': 'pack',
+ 'mafDot': 'off',
+ 'frames': 'multiz28wayFrames',
+ 'speciesOrder': ['hg16', 'panTro1', 'baboon', 'mm4', 'rn3'],
+ 'description': 'A sample alignment',
+ 'MAF Version': '1',
+ 'Scoring': 'tba.v8',
+ 'Comments': ['tba.v8 (((human chimp) baboon) (mouse rat))',
+              'multiz.v7',
+              'maf_project.v5 _tba_right.maf3 mouse _tba_C',
+              'single_cov2.v4 single_cov2 /dev/stdin']}
+\end{minted}
+By iterating over the \verb|alignments| we obtain one \verb|Alignment| object for each alignment block in the MAF file:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment = next(alignments)
+>>> alignment.score
+23262.0
+>>> {seq.id: len(seq) for seq in alignment.sequences}  # doctest: +NORMALIZE_WHITESPACE
+{'hg16.chr7': 158545518,
+ 'panTro1.chr6': 161576975,
+ 'baboon': 4622798,
+ 'mm4.chr6': 151104725,
+ 'rn3.chr4': 187371129}
+>>> alignment.coordinates  # doctest: +NORMALIZE_WHITESPACE
+array([[27578828, 27578829, 27578831, 27578831, 27578850, 27578850, 27578866],
+       [28741140, 28741141, 28741143, 28741143, 28741162, 28741162, 28741178],
+       [  116834,   116835,   116837,   116837,   116856,   116856, 116872],
+       [53215344, 53215344, 53215346, 53215347, 53215366, 53215366, 53215382],
+       [81344243, 81344243, 81344245, 81344245, 81344264, 81344267, 81344283]])
+>>> print(alignment)
+hg16.chr7  27578828 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 27578866
+panTro1.c  28741140 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 28741178
+baboon       116834 AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG   116872
+mm4.chr6   53215344 -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG 53215382
+rn3.chr4   81344243 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG 81344283
+<BLANKLINE>
+>>> print(format(alignment, "phylip"))
+5 42
+hg16.chr7 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
+panTro1.chAAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
+baboon    AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG
+mm4.chr6  -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG
+rn3.chr4  -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG
+<BLANKLINE>
+\end{minted}
+In addition to the "\verb|a|" (alignment block) and "\verb|s|" (sequence) lines, MAF files may contain "\verb|i|" lines with information about the genome sequence before and after this block, "\verb|e|" lines with information about empty parts of the alignment, and "\verb|q|" lines showing the quality of each aligned base. This is an example of an alignment block including such lines:
+\begin{minted}{text}
+a score=19159.000000
+s mm9.chr10                         3014644 45 + 129993255 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG
+s hg18.chr6                        15870786 46 - 170899992 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+i hg18.chr6                        I 9085 C 0
+s panTro2.chr6                     16389355 46 - 173908612 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+q panTro2.chr6                                             99999999999999999999999-9999999999999999999-9999
+i panTro2.chr6                     I 9106 C 0
+s calJac1.Contig6394                   6182 46 +    133105 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT
+i calJac1.Contig6394               N 0 C 0
+s loxAfr1.scaffold_75566               1167 34 -     10574 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC
+q loxAfr1.scaffold_75566                                   ------------99999699899-9999999999999869998-9997
+i loxAfr1.scaffold_75566           N 0 C 0
+e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
+e ponAbe2.chr6                     16161448 8044 - 174210431 I
+\end{minted}
+This is the 10th alignment block in the file \verb|ucsc_mm9_chr10.maf| (available in the \verb|Tests/MAF| subdirectory of the Biopython distribution):
+%doctest ../Tests/MAF lib:numpy
+\begin{minted}{pycon}
+>>> from Bio import Align
+>>> alignments = Align.parse("ucsc_mm9_chr10.maf", "maf")
+>>> for i in range(10):
+...     alignment = next(alignments)
+...
+>>> alignment.score
+19159.0
+>>> print(alignment)
+mm9.chr10   3014644 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG   3014689
+hg18.chr6 155029206 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT 155029160
+panTro2.c 157519257 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT 157519211
+calJac1.C      6182 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT      6228
+loxAfr1.s      9407 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC      9373
+<BLANKLINE>
+\end{minted}
+
+The "\verb|i|" lines show the relationship between the sequence in the current alignment block to the ones in the preceding and subsequent alignment block. This information is stored in the \verb|annotations| attribute of the corresponding sequence:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.sequences[0].annotations
+{}
+>>> alignment.sequences[1].annotations
+{'leftStatus': 'I', 'leftCount': 9085, 'rightStatus': 'C', 'rightCount': 0}
+\end{minted}
+showing that there are 9085 bases inserted ("\verb|I|") between this block and the preceding one, while the block is contiguous ("\verb|C|") with the subsequent one.  See the \href{https://genome.ucsc.edu/FAQ/FAQformat.html#format5}{UCSC documentation} for the full description of these fields and status characters.
+
+The "\verb|q|" lines show the sequence quality, which is stored under the "\verb|quality|" dictionary key of the\verb|annotations| attribute of the corresponding sequence:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.sequences[2].annotations["quality"]
+'9999999999999999999999999999999999999999999999'
+>>> alignment.sequences[4].annotations["quality"]
+'9999969989999999999999998699989997'
+\end{minted}
+
+The "\verb|e|" lines show information about species with a contiguous sequence before and after this alignment bloack, but with no aligning nucleotides in this alignment block. This is stored under the "\verb|empty|" key of the \verb|alignment.annotations| dictionary:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.annotations["empty"]  # doctest: +NORMALIZE_WHITESPACE
+[(SeqRecord(seq=Seq(None, length=498454), id='tupBel1.scaffold_114895.1-498454', name='', description='', dbxrefs=[]), (331078, 326933), 'I'),
+ (SeqRecord(seq=Seq(None, length=100002), id='echTel1.scaffold_288249', name='', description='', dbxrefs=[]), (87661, 95225), 'I'),
+ (SeqRecord(seq=Seq(None, length=359464), id='otoGar1.scaffold_334.1-359464', name='', description='', dbxrefs=[]), (178247, 175316), 'I'),
+ (SeqRecord(seq=Seq(None, length=174210431), id='ponAbe2.chr6', name='', description='', dbxrefs=[]), (158048983, 158040939), 'I')]
+\end{minted}
+This shows for example that there were non-aligning bases inserted ("\verb|I|") from position 158040939 to 158048983 on the opposite strand of the \verb|ponAbe2.chr6| genomic sequence.
+Again, see the \href{https://genome.ucsc.edu/FAQ/FAQformat.html#format5}{UCSC documentation} for the full definition of "\verb|e|" lines.
+
+To print an alignment in MAF format, you can use Python's built-in \verb|format| function:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "MAF"))
+a score=19159.000000
+s mm9.chr10                         3014644   45 + 129993255 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG
+s hg18.chr6                        15870786   46 - 170899992 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+i hg18.chr6                        I 9085 C 0
+s panTro2.chr6                     16389355   46 - 173908612 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+q panTro2.chr6                                               99999999999999999999999-9999999999999999999-9999
+i panTro2.chr6                     I 9106 C 0
+s calJac1.Contig6394                   6182   46 +    133105 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT
+i calJac1.Contig6394               N 0 C 0
+s loxAfr1.scaffold_75566               1167   34 -     10574 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC
+q loxAfr1.scaffold_75566                                     ------------99999699899-9999999999999869998-9997
+i loxAfr1.scaffold_75566           N 0 C 0
+e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
+e ponAbe2.chr6                     16161448 8044 - 174210431 I
+<BLANKLINE>
+<BLANKLINE>
+\end{minted}
+To write a complete MAF file, use \verb|Bio.Align.write(alignments, "myfilename.maf", fmt="maf")|, where \verb|myfilename.maf| is the name of the output MAF file. Alternatively, you can use a (text) stream for output. File header information will be taken from the \verb|metadata| attribute of the \verb|alignments| object. If you are creating the alignments from scratch, you can use the \verb|Alignments| (plural) class to create a list-like \verb|alignments| object (see Section~\ref{sec:alignments}) and give it a \verb|metadata| attribute.
 
 \subsection{bigMaf}
 \label{subsec:align_bigmaf}
 
-\section{Substitution matrices}
-\label{sec:substitution_matrices}
+A bigMaf file is a bigBed file with a BED3+1 format consisting of the 3 required BED fields plus a custom field that stores a MAF alignment block as a string, crearing an indexed binary version of a MAF file (see section~\ref{subsec:align_bigmaf}). The associated AutoSql file \href{https://genome.ucsc.edu/goldenPath/help/examples/bigMaf.as}{bigMaf.as} is provided by UCSC.
+To create a bigMaf file, you can either use the \verb|mafToBigMaf| and \verb|bedToBigBed| programs from UCSC. or you can use Biopython by calling the Bio.Align.write function with \verb|fmt="bigmaf"|. While the two methods should result in identical bigMaf files, the UCSC tools are much faster and may be more reliable, as it is the gold standard. As bigMaf files are bigBed files, they come with a built-in index, allowing you to quickly search a specific region of the reference genome.
 
-Substitution matrices \cite{durbin1998} provide the scoring terms for classifying how likely two different residues are to substitute for each other. This is essential in doing sequence comparisons.  Biopython provides a ton of common substitution matrices, including the famous PAM and BLOSUM series of matrices, and also provides functionality for creating your own substitution matrices.
-
-\subsection{Array objects}
-
-You can think of substitutions matrices as 2D arrays in which the indices are letters (nucleotides or amino acids) rather than integers.  The \verb+Array+ class in \verb+Bio.Align.substitution_matrices+ is a subclass of numpy arrays that supports indexing both by integers and by specific strings. An \verb+Array+ instance can either be a one-dimensional array or a square two-dimensional arrays. A one-dimensional \verb+Array+ object can for example be used to store the nucleotide frequency of a DNA sequence, while a two-dimensional \verb+Array+ object can be used to represent a scoring matrix for sequence alignments.
-
-To create a one-dimensional \verb+Array+, only the alphabet of allowed letters needs to be specified:
-
-%doctest . lib:numpy
-\begin{minted}{pycon}
->>> from Bio.Align.substitution_matrices import Array
->>> counts = Array("ACGT")
->>> print(counts)
-A 0.0
-C 0.0
-G 0.0
-T 0.0
-<BLANKLINE>
-\end{minted}
-The allowed letters are stored in the \verb+alphabet+ property:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> counts.alphabet
-'ACGT'
-\end{minted}
-This property is read-only; modifying the underlying \verb+_alphabet+ attribute may lead to unexpected results.
-Elements can be accessed both by letter and by integer index:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> counts["C"] = -3
->>> counts[2] = 7
->>> print(counts)
-A  0.0
-C -3.0
-G  7.0
-T  0.0
-<BLANKLINE>
->>> counts[1]
--3.0
-\end{minted}
-
-Using a letter that is not in the alphabet, or an index that is out of bounds, will cause a \verb+IndexError+:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> counts["U"]
-Traceback (most recent call last):
-    ...
-IndexError: 'U'
->>> counts["X"] = 6
-Traceback (most recent call last):
-    ...
-IndexError: 'X'
->>> counts[7]
-Traceback (most recent call last):
-    ...
-IndexError: index 7 is out of bounds for axis 0 with size 4
-\end{minted}
-
-A two-dimensional \verb+Array+ can be created by specifying \verb+dims=2+:
-
-%doctest . lib:numpy
-\begin{minted}{pycon}
->>> from Bio.Align.substitution_matrices import Array
->>> counts = Array("ACGT", dims=2)
->>> print(counts)
-    A   C   G   T
-A 0.0 0.0 0.0 0.0
-C 0.0 0.0 0.0 0.0
-G 0.0 0.0 0.0 0.0
-T 0.0 0.0 0.0 0.0
-<BLANKLINE>
-\end{minted}
-Again, both letters and integers can be used for indexing, and specifying a letter that is not in the alphabet will cause an \verb+IndexError+:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> counts["A", "C"] = 12.0
->>> counts[2, 1] = 5.0
->>> counts[3, "T"] = -2
->>> print(counts)
-    A    C   G    T
-A 0.0 12.0 0.0  0.0
-C 0.0  0.0 0.0  0.0
-G 0.0  5.0 0.0  0.0
-T 0.0  0.0 0.0 -2.0
-<BLANKLINE>
->>> counts["X", 1]
-Traceback (most recent call last):
-    ...
-IndexError: 'X'
->>> counts["A", 5]
-Traceback (most recent call last):
-    ...
-IndexError: index 5 is out of bounds for axis 1 with size 4
-\end{minted}
-Selecting a row or column from the two-dimensional array will return a one-dimensional \verb+Array+:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> counts = Array("ACGT", dims=2)
->>> counts["A", "C"] = 12.0
->>> counts[2, 1] = 5.0
->>> counts[3, "T"] = -2
-\end{minted}
-% don't include this in the doctest, as the exact output is platform-dependent
-\begin{minted}{pycon}
->>> counts["G"]
-Array([0., 5., 0., 0.],
-      alphabet='ACGT')
->>> counts[:, "C"]
-Array([12.,  0.,  5.,  0.],
-      alphabet='ACGT')
-\end{minted}
-
-\verb+Array+ objects can thus be used as an array and as a dictionary. They can be converted to plain numpy arrays or plain dictionary objects:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> import numpy as np
->>> x = Array("ACGT")
->>> x["C"] = 5
-\end{minted}
-% don't include this in the doctest, as the exact output is platform-dependent
-\begin{minted}{pycon}
->>> x
-Array([0., 5., 0., 0.],
-      alphabet='ACGT')
->>> a = np.array(x)  # create a plain numpy array
->>> a
-array([0., 5., 0., 0.])
->>> d = dict(x)  # create a plain dictionary
->>> d
-{'A': 0.0, 'C': 5.0, 'G': 0.0, 'T': 0.0}
-\end{minted}
-
-While the alphabet of an \verb+Array+ is usually a string, you may also use a tuple of (immutable) objects. This is used for example for a \hyperlink{codonmatrix}{codon substitution matrix}, where the keys are not individual nucleotides or amino acids but instead three-nucleotide codons.
-
-While the \verb+alphabet+ property of an \verb+Array+ is immutable, you can create a new \verb+Array+ object by selecting the letters you are interested in from the alphabet. For example,
-%cont-doctest
-\begin{minted}{pycon}
->>> a = Array("ABCD", dims=2, data=np.arange(16).reshape(4, 4))
->>> print(a)
-     A    B    C    D
-A  0.0  1.0  2.0  3.0
-B  4.0  5.0  6.0  7.0
-C  8.0  9.0 10.0 11.0
-D 12.0 13.0 14.0 15.0
-<BLANKLINE>
->>> b = a.select("CAD")
->>> print(b)
-     C    A    D
-C 10.0  8.0 11.0
-A  2.0  0.0  3.0
-D 14.0 12.0 15.0
-<BLANKLINE>
-\end{minted}
-Note that this also allows you to reorder the alphabet.
-
-Data for letters that are not found in the alphabet are set to zero:
-%cont-doctest
-\begin{minted}{pycon}
->>> c = a.select("DEC")
->>> print(c)
-     D   E    C
-D 15.0 0.0 14.0
-E  0.0 0.0  0.0
-C 11.0 0.0 10.0
-<BLANKLINE>
-\end{minted}
-
-As the \verb+Array+ class is a subclass of numpy array, it can be used as such. A \verb+ValueError+ is triggered if the \verb+Array+ objects appearing in a mathematical operation have different alphabets, for example
-
-%doctest . lib:numpy
-\begin{minted}{pycon}
->>> from Bio.Align.substitution_matrices import Array
->>> d = Array("ACGT")
->>> r = Array("ACGU")
->>> d + r
-Traceback (most recent call last):
-    ...
-ValueError: alphabets are inconsistent
-\end{minted}
-
-\subsection{Calculating a substitution matrix from a pairwise sequence alignment}
-
-As \verb+Array+ is a subclass of a numpy array, you can apply mathematical operations on an \verb+Array+ object in much the same way. Here, we illustrate this by calculating a scoring matrix from the alignment of the 16S ribosomal RNA gene sequences of \textit{Escherichia coli} and \textit{Bacillus subtilis}. First, we create a \verb+PairwiseAligner+ object (see Chapter~\ref{chapter:pairwise}) and initialize it with the default scores used by \verb+blastn+:
-
-%doctest ../Tests/Align lib:numpy
-\begin{minted}{pycon}
->>> from Bio.Align import PairwiseAligner
->>> aligner = PairwiseAligner(scoring="blastn")
->>> aligner.mode = "local"
-\end{minted}
-Next, we read in the 16S ribosomal RNA gene sequence of \textit{Escherichia coli} and \textit{Bacillus subtilis} (provided in \verb+Tests/Align/ecoli.fa+ and \verb+Tests/Align/bsubtilis.fa+), and align them to each other:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> from Bio import SeqIO
->>> sequence1 = SeqIO.read("ecoli.fa", "fasta")
->>> sequence2 = SeqIO.read("bsubtilis.fa", "fasta")
->>> alignments = aligner.align(sequence1, sequence2)
-\end{minted}
-The number of alignments generated is very large:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> len(alignments)
-1990656
-\end{minted}
-However, as they only differ trivially from each other, we arbitrarily choose the first alignment, and count the number of each substitution:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> alignment = alignments[0]
->>> substitutions = alignment.substitutions
->>> print(substitutions)
-      A     C     G     T
-A 307.0  19.0  34.0  19.0
-C  15.0 280.0  25.0  29.0
-G  34.0  24.0 401.0  20.0
-T  24.0  36.0  20.0 228.0
-<BLANKLINE>
-\end{minted}
-We normalize against the total number to find the probability of each substitution, and create a symmetric matrix of observed frequencies:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> observed_frequencies = substitutions / substitutions.sum()
->>> observed_frequencies = (observed_frequencies + observed_frequencies.transpose()) / 2.0
->>> print(format(observed_frequencies, "%.4f"))
-       A      C      G      T
-A 0.2026 0.0112 0.0224 0.0142
-C 0.0112 0.1848 0.0162 0.0215
-G 0.0224 0.0162 0.2647 0.0132
-T 0.0142 0.0215 0.0132 0.1505
-<BLANKLINE>
-\end{minted}
-The background probability is the probability of finding an A, C, G, or T nucleotide in each sequence separately. This can be calculated as the sum of each row or column:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> background = observed_frequencies.sum(0)
->>> print(format(background, "%.4f"))
-A 0.2505
-C 0.2337
-G 0.3165
-T 0.1993
-<BLANKLINE>
-\end{minted}
-The number of substitutions expected at random is simply the product of the background distribution with itself:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> expected_frequencies = background[:, None].dot(background[None, :])
->>> print(format(expected_frequencies, "%.4f"))
-       A      C      G      T
-A 0.0627 0.0585 0.0793 0.0499
-C 0.0585 0.0546 0.0740 0.0466
-G 0.0793 0.0740 0.1002 0.0631
-T 0.0499 0.0466 0.0631 0.0397
-<BLANKLINE>
-\end{minted}
-The scoring matrix can then be calculated as the logarithm of the odds-ratio of the observed and the expected probabilities:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> oddsratios = observed_frequencies / expected_frequencies
->>> import numpy as np
->>> scoring_matrix = np.log2(oddsratios)
->>> print(scoring_matrix)
-     A    C    G    T
-A  1.7 -2.4 -1.8 -1.8
-C -2.4  1.8 -2.2 -1.1
-G -1.8 -2.2  1.4 -2.3
-T -1.8 -1.1 -2.3  1.9
-<BLANKLINE>
-\end{minted}
-The matrix can be used to set the substitution matrix for the pairwise aligner (see Chapter~\ref{chapter:pairwise}):
-
-%cont-doctest
-\begin{minted}{pycon}
->>> aligner.substitution_matrix = scoring_matrix
-\end{minted}
-
-\subsection{Calculating a substitution matrix from a multiple sequence alignment}
-\label{sec:subs_mat_ex}
-
-In this example, we'll first read a protein sequence alignment from the Clustalw file \href{examples/protein.aln}{protein.aln} (also available online
-\href{https://raw.githubusercontent.com/biopython/biopython/master/Tests/Clustalw/protein.aln}{here})
-
-%doctest ../Tests/Clustalw lib:numpy
+The file \verb|ucsc_test.bb| in the \verb|Tests/MAF| subdirectory of the Biopython distribution is an example of a bigMaf file. This file is equivalent to the MAF file \verb|ucsc_test.maf| (see section~\ref{subsec:align_maf}).
+To parse this file, use
+%doctest ../Tests/MAF lib:numpy
 \begin{minted}{pycon}
 >>> from Bio import Align
->>> filename = "protein.aln"
->>> alignment = Align.read(filename, "clustal")
-\end{minted}
-
-Section~\ref{subsec:align_clustal} contains more information on doing this.
-
-The \verb+substitutions+ property of the alignment stores the number of times
-different residues substitute for each other:
-%cont-doctest
-\begin{minted}{pycon}
->>> substitutions = alignment.substitutions
-\end{minted}
-
-To make the example more readable, we'll select only amino acids with polar charged side chains:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> substitutions = substitutions.select("DEHKR")
->>> print(substitutions)
-       D      E      H      K      R
-D 2360.0  270.0   15.0    1.0   48.0
-E  241.0 3305.0   15.0   45.0    2.0
-H    0.0   18.0 1235.0    8.0    0.0
-K    0.0    9.0   24.0 3218.0  130.0
-R    2.0    2.0   17.0  103.0 2079.0
+>>> alignments = Align.parse("ucsc_test.bb", "bigmaf")
+>>> len(alignments)
+3
+>>> print(alignments.declaration)  # doctest: +NORMALIZE_WHITESPACE
+table bedMaf
+"Bed3 with MAF block"
+(
+   string  chrom;         "Reference sequence chromosome or scaffold"
+   uint    chromStart;    "Start position in chromosome"
+   uint    chromEnd;      "End position in chromosome"
+   lstring mafBlock;      "MAF block"
+)
 <BLANKLINE>
 \end{minted}
-Rows and columns for other amino acids were removed from the matrix.
+The declaration contains the specification of the columns as defined by the bigMaf.as AutoSql file from UCSC.
 
-Next, we normalize the matrix and make it symmetric.
+The bigMaf file does not store the header information found in the MAF file, but it does define a reference genome. The corresponding \verb|SeqRecord| is stored in the \verb|targets| attribute of the \verb|alignments| object:
 %cont-doctest
 \begin{minted}{pycon}
->>> observed_frequencies = substitutions / substitutions.sum()
->>> observed_frequencies = (observed_frequencies + observed_frequencies.transpose()) / 2.0
->>> print(format(observed_frequencies, "%.4f"))
-       D      E      H      K      R
-D 0.1795 0.0194 0.0006 0.0000 0.0019
-E 0.0194 0.2514 0.0013 0.0021 0.0002
-H 0.0006 0.0013 0.0939 0.0012 0.0006
-K 0.0000 0.0021 0.0012 0.2448 0.0089
-R 0.0019 0.0002 0.0006 0.0089 0.1581
-<BLANKLINE>
+>>> alignments.reference
+'hg16'
+>>> alignments.targets  # doctest: +ELLIPSIS
+[SeqRecord(seq=Seq(None, length=158545518), id='hg16.chr7', ...)]
 \end{minted}
 
-Summing over rows or columns gives the relative frequency of occurrence of
-each residue:
+By iterating over the \verb|alignments| we obtain one \verb|Alignment| object for each alignment block in the bigMaf file:
 %cont-doctest
 \begin{minted}{pycon}
->>> background = observed_frequencies.sum(0)
->>> print(format(background, "%.4f"))
-D 0.2015
-E 0.2743
-H 0.0976
-K 0.2569
-R 0.1697
+>>> alignment = next(alignments)
+>>> alignment.score
+23262.0
+>>> {seq.id: len(seq) for seq in alignment.sequences}  # doctest: +NORMALIZE_WHITESPACE
+{'hg16.chr7': 158545518,
+ 'panTro1.chr6': 161576975,
+ 'baboon': 4622798,
+ 'mm4.chr6': 151104725,
+ 'rn3.chr4': 187371129}
+>>> alignment.coordinates  # doctest: +NORMALIZE_WHITESPACE
+array([[27578828, 27578829, 27578831, 27578831, 27578850, 27578850, 27578866],
+       [28741140, 28741141, 28741143, 28741143, 28741162, 28741162, 28741178],
+       [  116834,   116835,   116837,   116837,   116856,   116856, 116872],
+       [53215344, 53215344, 53215346, 53215347, 53215366, 53215366, 53215382],
+       [81344243, 81344243, 81344245, 81344245, 81344264, 81344267, 81344283]])
+>>> print(alignment)
+hg16.chr7  27578828 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 27578866
+panTro1.c  28741140 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 28741178
+baboon       116834 AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG   116872
+mm4.chr6   53215344 -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG 53215382
+rn3.chr4   81344243 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG 81344283
 <BLANKLINE>
->>> background.sum()
-1.0
+>>> print(format(alignment, "phylip"))
+5 42
+hg16.chr7 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
+panTro1.chAAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
+baboon    AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG
+mm4.chr6  -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG
+rn3.chr4  -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG
+<BLANKLINE>
 \end{minted}
-
-The expected frequency of residue pairs is then
-%cont-doctest
+Information in the "\verb|i|", "\verb|e|", and "\verb|q|" lines is stored in the same way as in the corresponding MAF file (see section~\ref{subsec:align_maf}):
+%doctest ../Tests/MAF lib:numpy
 \begin{minted}{pycon}
->>> expected_frequencies = background[:, None].dot(background[None, :])
->>> print(format(expected_frequencies, "%.4f"))
-       D      E      H      K      R
-D 0.0406 0.0553 0.0197 0.0518 0.0342
-E 0.0553 0.0752 0.0268 0.0705 0.0465
-H 0.0197 0.0268 0.0095 0.0251 0.0166
-K 0.0518 0.0705 0.0251 0.0660 0.0436
-R 0.0342 0.0465 0.0166 0.0436 0.0288
-<BLANKLINE>
-\end{minted}
-Here, \verb+background[:, None]+ creates a 2D array consisting of a single column with the values of \verb+expected_frequencies+, and \verb+rxpected_frequencies[None, :]+ a 2D array with these values as a single row. Taking their dot product (inner product) creates a matrix of expected frequencies where each entry consists of two \verb+expected_frequencies+ values multiplied with each other. For example, \verb+expected_frequencies['D', 'E']+ is equal to \verb+residue_frequencies['D'] * residue_frequencies['E']+.
-
-We can now calculate the log-odds matrix by dividing the observed frequencies by the expected frequencies and taking the logarithm:
-%cont-doctest
-\begin{minted}{pycon}
->>> import numpy as np
->>> scoring_matrix = np.log2(observed_frequencies / expected_frequencies)
->>> print(scoring_matrix)
-      D    E    H     K    R
-D   2.1 -1.5 -5.1 -10.4 -4.2
-E  -1.5  1.7 -4.4  -5.1 -8.3
-H  -5.1 -4.4  3.3  -4.4 -4.7
-K -10.4 -5.1 -4.4   1.9 -2.3
-R  -4.2 -8.3 -4.7  -2.3  2.5
-<BLANKLINE>
-\end{minted}
-
-This matrix can be used as the substitution matrix when performing alignments. For example,
-%cont-doctest
-\begin{minted}{pycon}
->>> from Bio.Align import PairwiseAligner
->>> aligner = PairwiseAligner()
->>> aligner.substitution_matrix = scoring_matrix
->>> aligner.gap_score = -3.0
->>> alignments = aligner.align("DEHEK", "DHHKK")
->>> print(alignments[0])
-target            0 DEHEK 5
-                  0 |.|.| 5
-query             0 DHHKK 5
-<BLANKLINE>
->>> print("%.2f" % alignments.score)
--2.18
->>> score = (
-...     scoring_matrix["D", "D"]
-...     + scoring_matrix["E", "H"]
-...     + scoring_matrix["H", "H"]
-...     + scoring_matrix["E", "K"]
-...     + scoring_matrix["K", "K"]
-... )
->>> print("%.2f" % score)
--2.18
-\end{minted}
-(see Chapter~\ref{chapter:pairwise} for details).
-
-\subsection{Reading \texttt{Array} objects from file}
-
-\verb+Bio.Align.substitution_matrices+ includes a parser to read one- and two-dimensional \verb+Array+ objects from file. One-dimensional arrays are represented by a simple two-column format, with the first column containing the key and the second column the corresponding value. For example, the file \verb+hg38.chrom.sizes+ (obtained from UCSC), available in the \verb+Tests/Align+ subdirectory of the Biopython distribution, contains the size in nucleotides of each chromosome in human genome assembly hg38:
-\begin{minted}{text}
-chr1    248956422
-chr2    242193529
-chr3    198295559
-chr4    190214555
+>>> from Bio import Align
+>>> alignments = Align.parse("ucsc_mm9_chr10.bb", "bigmaf")
+>>> for i in range(10):
+...     alignment = next(alignments)
 ...
-chrUn_KI270385v1    990
-chrUn_KI270423v1    981
-chrUn_KI270392v1    971
-chrUn_KI270394v1    970
+>>> alignment.score
+19159.0
+>>> print(alignment)
+mm9.chr10   3014644 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG   3014689
+hg18.chr6 155029206 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT 155029160
+panTro2.c 157519257 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT 157519211
+calJac1.C      6182 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT      6228
+loxAfr1.s      9407 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC      9373
+<BLANKLINE>
+>>> print(format(alignment, "MAF"))
+a score=19159.000000
+s mm9.chr10                         3014644   45 + 129993255 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG
+s hg18.chr6                        15870786   46 - 170899992 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+i hg18.chr6                        I 9085 C 0
+s panTro2.chr6                     16389355   46 - 173908612 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+q panTro2.chr6                                               99999999999999999999999-9999999999999999999-9999
+i panTro2.chr6                     I 9106 C 0
+s calJac1.Contig6394                   6182   46 +    133105 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT
+i calJac1.Contig6394               N 0 C 0
+s loxAfr1.scaffold_75566               1167   34 -     10574 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC
+q loxAfr1.scaffold_75566                                     ------------99999699899-9999999999999869998-9997
+i loxAfr1.scaffold_75566           N 0 C 0
+e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+e echTel1.scaffold_288249             87661 7564 +    100002 I
+e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
+e ponAbe2.chr6                     16161448 8044 - 174210431 I
+<BLANKLINE>
+<BLANKLINE>
+>>> alignment.sequences[1].annotations
+{'leftStatus': 'I', 'leftCount': 9085, 'rightStatus': 'C', 'rightCount': 0}
+>>> alignment.sequences[2].annotations["quality"]
+'9999999999999999999999999999999999999999999999'
+>>> alignment.sequences[4].annotations["quality"]
+'9999969989999999999999998699989997'
+>>> alignment.annotations["empty"]  # doctest: +NORMALIZE_WHITESPACE
+[(SeqRecord(seq=Seq(None, length=498454), id='tupBel1.scaffold_114895.1-498454', name='', description='', dbxrefs=[]), (331078, 326933), 'I'),
+ (SeqRecord(seq=Seq(None, length=100002), id='echTel1.scaffold_288249', name='', description='', dbxrefs=[]), (87661, 95225), 'I'),
+ (SeqRecord(seq=Seq(None, length=359464), id='otoGar1.scaffold_334.1-359464', name='', description='', dbxrefs=[]), (178247, 175316), 'I'),
+ (SeqRecord(seq=Seq(None, length=174210431), id='ponAbe2.chr6', name='', description='', dbxrefs=[]), (158048983, 158040939), 'I')]
 \end{minted}
+
+To write a complete bigMaf file, use \verb|Bio.Align.write(alignments, "myfilename.bb", fmt="bigMaf")|, where \verb|myfilename.bb| is the name of the output bigMaf file. Alternatively, you can use a (binary) stream for output. If you are creating the alignments from scratch, you can use the \verb|Alignments| (plural) class to create a list-like \verb|alignments| object (see Section~\ref{sec:alignments}) and give it a \verb|targets| attribute. The latter must be a list of \verb|SeqRecord| objects for the chromosomes for the reference species in the order in which they appear in the alignments. Alternatively, you can use the \verb|targets| keyword argument when calling \verb|Bio.Align.write|. The \verb|id| of each \verb|SeqRecord| must be of the form \verb|reference.chromosome|, where \verb|reference| refers to the reference species. \verb|Bio.Align.write| has the additional keyword argument \verb|compress| (\verb|True| by default) specifying whether the data should be compressed using zlib.
+
+As a bigMaf file is a special case of a bigBed file, you can use the \verb|search| method on the \verb|alignments| object to find alignments to specific regions of the reference species. For example, we can look for regions on chr10 between positions 3018000 and 3019000 on chromosome 10:
+
+%cont-doctest
+\begin{minted}{pycon}
+>>> selected_alignments = alignments.search("mm9.chr10", 3018000, 3019000)
+>>> for alignment in selected_alignments:
+...     start, end = alignment.coordinates[0, 0], alignment.coordinates[0, -1]
+...     print(start, end)
+...
+3017743 3018161
+3018161 3018230
+3018230 3018359
+3018359 3018482
+3018482 3018644
+3018644 3018822
+3018822 3018932
+3018932 3019271
+\end{minted}
+The chromosome name may be \verb|None| to include all chromosomes, and the start and end positions may be \verb|None| to start searching from position 0 or to continue searching until the end of the chromosome, respectively. Note that we can search on genomic position for the reference species only.
+
+\subsection{UCSC chain file format}
+\label{subsec:align_chain}
+
+Chain files describe a pairwise alignment between two nucleotide sequences, allowing gaps in both sequences. Only the length of each aligned subsequences and the gap lengths are stored in a chain file; the sequences themselves are not stored. Chain files are typically used to store alignments between two genome assembly versions, allowing alignments to one genome assembly version to be lifted over to the other genome assembly. This is an example of a chain file (available as \verb+psl_34_001.chain+ in the \verb+Tests/Blat+ subdirectory of the Biopython distribution):
+\begin{minted}{text}
+chain 16 chr4 191154276 + 61646095 61646111 hg18_dna 33 + 11 27 1
+16
+chain 33 chr1 249250621 + 10271783 10271816 hg18_dna 33 + 0 33 2
+33
+chain 17 chr2 243199373 + 53575980 53575997 hg18_dna 33 - 8 25 3
+17
+chain 35 chr9 141213431 + 85737865 85737906 hg19_dna 50 + 9 50 4
+41
+chain 41 chr8 146364022 + 95160479 95160520 hg19_dna 50 + 8 49 5
+41
+chain 30 chr22 51304566 + 42144400 42144436 hg19_dna 50 + 11 47 6
+36
+chain 41 chr2 243199373 + 183925984 183926028 hg19_dna 50 + 1 49 7
+6       0       4
+38
+chain 31 chr19 59128983 + 35483340 35483510 hg19_dna 50 + 10 46 8
+25      134     0
+11
+chain 39 chr18 78077248 + 23891310 23891349 hg19_dna 50 + 10 49 9
+39
+...
+\end{minted}
+This file was generated by running UCSC's \verb+pslToChain+ program on the PSL file \verb+psl_34_001.psl+. According to the chain file format specification, there should be a blank line after each chain block, but some tools (including \verb+pslToChain+) apparently do not follow this rule.
+
 To parse this file, use
-
-%doctest ../Tests/Align lib:numpy
+%doctest ../Tests/Blat lib:numpy
 \begin{minted}{pycon}
->>> from Bio.Align import substitution_matrices
->>> with open("hg38.chrom.sizes") as handle:
-...     table = substitution_matrices.read(handle)
+>>> from Bio import Align
+>>> alignments = Align.parse("psl_34_001.chain", "chain")
+\end{minted}
+Iterate over alignments to get one \verb|Alignment| object for each chain:
+%cont-doctest
+\begin{minted}{pycon}
+>>> for alignment in alignments:
+...     print(alignment.target.id, alignment.query.id)  # doctest: +ELLIPSIS
 ...
->>> print(table)  # doctest: +ELLIPSIS
-chr1 248956422.0
-chr2 242193529.0
-chr3 198295559.0
-chr4 190214555.0
+chr4 hg18_dna
+chr1 hg18_dna
+chr2 hg18_dna
+chr9 hg19_dna
+chr8 hg19_dna
+chr22 hg19_dna
+chr2 hg19_dna
 ...
-chrUn_KI270423v1       981.0
-chrUn_KI270392v1       971.0
-chrUn_KI270394v1       970.0
+chr1 hg19_dna
+\end{minted}
+
+Rewind the alignments, and iterate from the start until we reach the seventh alignment:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignments.rewind()
+>>> for i in range(7):
+...     alignment = next(alignments)
+...
+\end{minted}
+Check the alignment score and chain ID (the first and last number, respectively, in the header line of each chain block) to confirm that we got the seventh alignment:
+%cont-doctest
+\begin{minted}{pycon}
+>>> alignment.score
+41
+>>> alignment.annotations["id"]
+'7'
+\end{minted}
+We can print the alignment in the chain file format. The alignment coordinates are consistent with the information in the chain block, with an aligned section of 6 nucleotides, a gap of 4 nucleotides, and an aligned section of 38 nucleotides:
+%cont-doctest
+\begin{minted}{pycon}
+>>> print(format(alignment, "chain"))  # doctest: +NORMALIZE_WHITESPACE
+chain 41 chr2 243199373 + 183925984 183926028 hg19_dna 50 + 1 49 7
+6	0	4
+38
+<BLANKLINE>
+<BLANKLINE>
+>>> alignment.coordinates
+array([[183925984, 183925990, 183925990, 183926028],
+       [        1,         7,        11,        49]])
+>>> print(alignment)
+chr2      183925984 ??????----?????????????????????????????????????? 183926028
+                  0 ||||||----||||||||||||||||||||||||||||||||||||||        48
+hg19_dna          1 ????????????????????????????????????????????????        49
 <BLANKLINE>
 \end{minted}
-Use \verb+dtype=int+ to read the values as integers:
-
+We can also print the alignment in a few other alignment fite formats:
 %cont-doctest
 \begin{minted}{pycon}
->>> with open("hg38.chrom.sizes") as handle:
-...     table = substitution_matrices.read(handle, int)
-...
->>> print(table)  # doctest: +ELLIPSIS
-chr1 248956422
-chr2 242193529
-chr3 198295559
-chr4 190214555
-...
-chrUn_KI270423v1       981
-chrUn_KI270392v1       971
-chrUn_KI270394v1       970
+>>> print(format(alignment, "BED"))  # doctest: +NORMALIZE_WHITESPACE
+chr2	183925984	183926028	hg19_dna	41	+	183925984	183926028	0	2	6,38,	0,6,
 <BLANKLINE>
-\end{minted}
-
-For two-dimensional arrays, we follow the file format of substitution matrices provided by NCBI. For example, the BLOSUM62 matrix, which is the default substitution matrix for NCBI's protein-protein BLAST \cite{altschul1990} program \verb+blastp+, is stored as follows:
-\begin{minted}{text}
-#  Matrix made by matblas from blosum62.iij
-#  * column uses minimum score
-#  BLOSUM Clustered Scoring Matrix in 1/2 Bit Units
-#  Blocks Database = /data/blocks_5.0/blocks.dat
-#  Cluster Percentage: >= 62
-#  Entropy =   0.6979, Expected =  -0.5209
-   A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V  B  Z  X  *
-A  4 -1 -2 -2  0 -1 -1  0 -2 -1 -1 -1 -1 -2 -1  1  0 -3 -2  0 -2 -1  0 -4
-R -1  5  0 -2 -3  1  0 -2  0 -3 -2  2 -1 -3 -2 -1 -1 -3 -2 -3 -1  0 -1 -4
-N -2  0  6  1 -3  0  0  0  1 -3 -3  0 -2 -3 -2  1  0 -4 -2 -3  3  0 -1 -4
-D -2 -2  1  6 -3  0  2 -1 -1 -3 -4 -1 -3 -3 -1  0 -1 -4 -3 -3  4  1 -1 -4
-C  0 -3 -3 -3  9 -3 -4 -3 -3 -1 -1 -3 -1 -2 -3 -1 -1 -2 -2 -1 -3 -3 -2 -4
-Q -1  1  0  0 -3  5  2 -2  0 -3 -2  1  0 -3 -1  0 -1 -2 -1 -2  0  3 -1 -4
-E -1  0  0  2 -4  2  5 -2  0 -3 -3  1 -2 -3 -1  0 -1 -3 -2 -2  1  4 -1 -4
-G  0 -2  0 -1 -3 -2 -2  6 -2 -4 -4 -2 -3 -3 -2  0 -2 -2 -3 -3 -1 -2 -1 -4
-H -2  0  1 -1 -3  0  0 -2  8 -3 -3 -1 -2 -1 -2 -1 -2 -2  2 -3  0  0 -1 -4
-...
-\end{minted}
-This file is included in the Biopython distribution under \verb+Bio/Align/substitution_matrices/data+. To parse this file, use
-
-%doctest ../Bio/Align/substitution_matrices/data lib:numpy
-\begin{minted}{pycon}
->>> from Bio.Align import substitution_matrices
->>> with open("BLOSUM62") as handle:
-...     matrix = substitution_matrices.read(handle)
-...
->>> print(matrix.alphabet)
-ARNDCQEGHILKMFPSTWYVBZX*
->>> print(matrix["A", "D"])
--2.0
-\end{minted}
-The header lines starting with \verb+#+ are stored in the attribute \verb+header+:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> matrix.header[0]
-'Matrix made by matblas from blosum62.iij'
-\end{minted}
-We can now use this matrix as the substitution matrix on an aligner object:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> from Bio.Align import PairwiseAligner
->>> aligner = PairwiseAligner()
->>> aligner.substitution_matrix = matrix
-\end{minted}
-To save an Array object, create a string first:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> text = str(matrix)
->>> print(text)  # doctest: +ELLIPSIS
-#  Matrix made by matblas from blosum62.iij
-#  * column uses minimum score
-#  BLOSUM Clustered Scoring Matrix in 1/2 Bit Units
-#  Blocks Database = /data/blocks_5.0/blocks.dat
-#  Cluster Percentage: >= 62
-#  Entropy =   0.6979, Expected =  -0.5209
-     A    R    N    D    C    Q    E    G    H    I    L    K    M    F    P    S ...
-A  4.0 -1.0 -2.0 -2.0  0.0 -1.0 -1.0  0.0 -2.0 -1.0 -1.0 -1.0 -1.0 -2.0 -1.0  1.0 ...
-R -1.0  5.0  0.0 -2.0 -3.0  1.0  0.0 -2.0  0.0 -3.0 -2.0  2.0 -1.0 -3.0 -2.0 -1.0 ...
-N -2.0  0.0  6.0  1.0 -3.0  0.0  0.0  0.0  1.0 -3.0 -3.0  0.0 -2.0 -3.0 -2.0  1.0 ...
-D -2.0 -2.0  1.0  6.0 -3.0  0.0  2.0 -1.0 -1.0 -3.0 -4.0 -1.0 -3.0 -3.0 -1.0  0.0 ...
-C  0.0 -3.0 -3.0 -3.0  9.0 -3.0 -4.0 -3.0 -3.0 -1.0 -1.0 -3.0 -1.0 -2.0 -3.0 -1.0 ...
-...
-\end{minted}
-and write the \verb+text+ to a file.
-
-\subsection{Loading predefined substitution matrices}
-
-Biopython contains a large set of substitution matrices defined in the literature, including BLOSUM (Blocks Substitution Matrix) \cite{henikoff1992} and PAM (Point Accepted Mutation) matrices \cite{dayhoff1978}. These matrices are available as flat files in the \verb+Bio/Align/substitution_matrices/data+ directory, and can be loaded into Python using the \verb+load+ function in the \verb+substitution_matrices+ submodule. For example, the BLOSUM62 matrix can be loaded by running
-
-%doctest . lib:numpy
-\begin{minted}{pycon}
->>> from Bio.Align import substitution_matrices
->>> m = substitution_matrices.load("BLOSUM62")
-\end{minted}
-This substitution matrix has an alphabet consisting of the 20 amino acids used in the genetic code, the three ambiguous amino acids B (asparagine or aspartic acid), Z (glutamine or glutamic acid), and X (representing any amino acid), and the stop codon represented by an asterisk:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> m.alphabet
-'ARNDCQEGHILKMFPSTWYVBZX*'
-\end{minted}
-
-To get a full list of available substitution matrices, use \verb+load+ without an argument:
-
-%cont-doctest
-\begin{minted}{pycon}
->>> substitution_matrices.load()  # doctest: +ELLIPSIS
-['BENNER22', 'BENNER6', 'BENNER74', 'BLASTN', 'BLASTP', 'BLOSUM45', 'BLOSUM50', ..., 'TRANS']
-\end{minted}
-
-\hypertarget{codonmatrix}{
-Note that the substitution matrix provided by Schneider \textit{et al.} \cite{schneider2005} uses an alphabet consisting of three-nucleotide codons:
-}
-
-%cont-doctest
-\begin{minted}{pycon}
->>> m = substitution_matrices.load("SCHNEIDER")
->>> m.alphabet  # doctest: +ELLIPSIS
-('AAA', 'AAC', 'AAG', 'AAT', 'ACA', 'ACC', 'ACG', 'ACT', ..., 'TTG', 'TTT')
+>>> print(format(alignment, "PSL"))  # doctest: +NORMALIZE_WHITESPACE
+44	0	0	0	1	4	0	0	+	hg19_dna	50	1	49	chr2	243199373	183925984	183926028	2	6,38,	1,11,	183925984,183925990,
+<BLANKLINE>
+>>> print(format(alignment, "exonerate"))
+vulgar: hg19_dna 1 49 + chr2 183925984 183926028 + 41 M 6 6 G 4 0 M 38 38
+<BLANKLINE>
+>>> print(alignment.format("exonerate", "cigar"))
+cigar: hg19_dna 1 49 + chr2 183925984 183926028 + 41 M 6 I 4 M 38
+<BLANKLINE>
+>>> print(format(alignment, "sam"))  # doctest: +NORMALIZE_WHITESPACE
+hg19_dna	0	chr2	183925985	255	1S6M4I38M1S	*	0	0	*	*	AS:i:41	id:A:7
+<BLANKLINE>
 \end{minted}

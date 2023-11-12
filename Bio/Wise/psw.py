@@ -32,8 +32,6 @@ _OPTION_SCORES = "-m"
 class AlignmentColumnFullException(Exception):
     """Manage exception in the alignment output."""
 
-    pass
-
 
 class Alignment(list):
     """Define a container for all alignment Columns, output from running psw."""

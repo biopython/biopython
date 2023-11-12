@@ -135,7 +135,6 @@ class MMCIFParser:
         return self.header
 
     def _build_structure(self, structure_id):
-
         # two special chars as placeholders in the mmCIF format
         # for item values that cannot be explicitly assigned
         # see: pdbx/mmcif syntax web page
@@ -202,8 +201,7 @@ class MMCIFParser:
         # so serial_id means the Model ID specified in the file
         current_model_id = -1
         current_serial_id = -1
-        for i in range(0, len(atom_id_list)):
-
+        for i in range(len(atom_id_list)):
             # set the line_counter for 'ATOM' lines only and not
             # as a global line counter found in the PDBParser()
             structure_builder.set_line_counter(i)
@@ -399,7 +397,6 @@ class FastMMCIFParser:
     # Private methods
 
     def _build_structure(self, structure_id, filehandle):
-
         # two special chars as placeholders in the mmCIF format
         # for item values that cannot be explicitly assigned
         # see: pdbx/mmcif syntax web page
@@ -501,8 +498,7 @@ class FastMMCIFParser:
         # so serial_id means the Model ID specified in the file
         current_model_id = -1
         current_serial_id = -1
-        for i in range(0, len(atom_id_list)):
-
+        for i in range(len(atom_id_list)):
             # set the line_counter for 'ATOM' lines only and not
             # as a global line counter found in the PDBParser()
             structure_builder.set_line_counter(i)

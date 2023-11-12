@@ -674,7 +674,6 @@ class BlatPslWriter:
 
         for hit in qresult:
             for hsp in hit.hsps:
-
                 query_is_protein = getattr(hsp, "query_is_protein", False)
                 blocksize_multiplier = 3 if query_is_protein else 1
 

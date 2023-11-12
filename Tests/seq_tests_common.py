@@ -259,10 +259,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
                 # If there is a taxon id recorded, these fields get overwritten
                 # by data from the taxon/taxon_name tables.  There is no
                 # guarantee that they will be identical after a load/retrieve.
-                self.assertTrue(
-                    isinstance(new.annotations[key], str)
-                    or isinstance(new.annotations[key], list)
-                )
+                self.assertTrue(isinstance(new.annotations[key], (list, str)))
             elif isinstance(old.annotations[key], type(new.annotations[key])):
                 self.assertEqual(
                     old.annotations[key],

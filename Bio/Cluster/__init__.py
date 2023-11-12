@@ -24,7 +24,7 @@ except ImportError:
         "See http://www.numpy.org/"
     ) from None
 
-from . import _cluster
+from . import _cluster  # type: ignore
 
 __all__ = (
     "Node",
@@ -1037,7 +1037,7 @@ class Record:
         if (
             geneclusters is not None
             and expclusters is not None
-            and type(geneclusters) != type(expclusters)
+            and type(geneclusters) != type(expclusters)  # noqa: E721
         ):
             raise ValueError(
                 "found one k-means and one hierarchical "

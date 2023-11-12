@@ -12,7 +12,7 @@ import unittest
 try:
     import numpy
 except ImportError:
-    numpy = None
+    numpy = None  # type: ignore
 
 from Bio import SeqIO
 from Bio.Seq import MutableSeq
@@ -509,31 +509,31 @@ class SeqRecordMethodsMore(unittest.TestCase):
 
     def test_le_exception(self):
         def le():
-            return SeqRecord(Seq("A")) <= SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) <= SeqRecord(Seq("A"))  # type: ignore
 
         self.assertRaises(NotImplementedError, le)
 
     def test_eq_exception(self):
         def equality():
-            return SeqRecord(Seq("A")) == SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) == SeqRecord(Seq("A"))  # type: ignore
 
         self.assertRaises(NotImplementedError, equality)
 
     def test_ne_exception(self):
         def notequality():
-            return SeqRecord(Seq("A")) != SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) != SeqRecord(Seq("A"))  # type: ignore
 
         self.assertRaises(NotImplementedError, notequality)
 
     def test_gt_exception(self):
         def gt():
-            return SeqRecord(Seq("A")) > SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) > SeqRecord(Seq("A"))  # type: ignore
 
         self.assertRaises(NotImplementedError, gt)
 
     def test_ge_exception(self):
         def ge():
-            return SeqRecord(Seq("A")) >= SeqRecord(Seq("A"))
+            return SeqRecord(Seq("A")) >= SeqRecord(Seq("A"))  # type: ignore
 
         self.assertRaises(NotImplementedError, ge)
 

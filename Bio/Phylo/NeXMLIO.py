@@ -60,8 +60,6 @@ def matches(s):
 class NeXMLError(Exception):
     """Exception raised when NeXML object construction cannot continue."""
 
-    pass
-
 
 # ---------------------------------------------------------
 # Public API

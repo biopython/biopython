@@ -22,7 +22,7 @@ import warnings
 from Bio import File
 from Bio.Data import IUPACData
 from Bio.Seq import Seq
-from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonDeprecationWarning, BiopythonWarning
 
 
 from Bio.Nexus.StandardData import StandardData
@@ -63,8 +63,6 @@ DEFAULTNEXUS = (
 
 class NexusError(Exception):
     """Provision for the management of Nexus exceptions."""
-
-    pass
 
 
 class CharBuffer:
@@ -905,7 +903,6 @@ class Nexus:
         Thus, we ignore the taxlabels command to make handling of duplicate
         taxon names easier.
         """
-        pass
         # self.taxlabels = []
         # opts = CharBuffer(options)
         # while True:
@@ -1838,7 +1835,7 @@ class Nexus:
         with open(filename, "w") as fh:
             fh.write("%d %d\n" % (self.ntax, self.nchar))
             for taxon in self.taxlabels:
-                fh.write(f"{safename(taxon)} {str(self.matrix[taxon])}\n")
+                fh.write(f"{safename(taxon)} {self.matrix[taxon]!s}\n")
         return filename
 
     def constant(self, matrix=None, delete=(), exclude=()):
@@ -2133,8 +2130,12 @@ class Nexus:
 
 
 try:
-    import cnexus
-except ImportError:
+    from . import cnexus  # type: ignore
+except ImportError as ex:
+    warnings.warn(
+        f"Import of C module failed ({ex}). Falling back to slow Python implementation",
+        BiopythonWarning,
+    )
 
     def _get_command_lines(file_contents):
         lines = _kill_comments_and_break_lines(file_contents)

@@ -54,7 +54,6 @@ ys = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
 
 def show_progress(iteration, loglikelihood):
     """No action callback function, used when training the model."""
-    pass
 
 
 class TestLogisticRegression(unittest.TestCase):

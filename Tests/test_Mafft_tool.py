@@ -128,9 +128,7 @@ class MafftApplication(unittest.TestCase):
             stdoutdata, stderrdata = cmdline()
             # e.g. " 3 706\n" or " 3 681" but allow some variation in the column count
             self.assertTrue(
-                stdoutdata.startswith(" 3 68")
-                or stdoutdata.startswith(" 3 69")
-                or stdoutdata.startswith(" 3 70"),
+                stdoutdata.startswith((" 3 68", " 3 69", " 3 70")),
                 stdoutdata,
             )
             self.assertIn("gi|1348912 ", stdoutdata, stdoutdata)
@@ -146,9 +144,7 @@ class MafftApplication(unittest.TestCase):
             stdoutdata, stderrdata = cmdline()
             # e.g. " 3 706\n" or " 3 681" but allow some variation in the column count
             self.assertTrue(
-                stdoutdata.startswith(" 3 68")
-                or stdoutdata.startswith(" 3 69")
-                or stdoutdata.startswith(" 3 70"),
+                stdoutdata.startswith((" 3 68", " 3 69", " 3 70")),
                 stdoutdata,
             )
             self.assertIn("gi|1348912|gb|G26680|G26680", stdoutdata, stdoutdata)

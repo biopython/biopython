@@ -380,7 +380,7 @@ class _InsdcWriter(SequenceWriter):
             self.handle.write(f"{self.QUALIFIER_INDENT_STR}/{key}\n")
             return
 
-        if type(value) == str:
+        if isinstance(value, str):
             value = value.replace(
                 '"', '""'
             )  # NCBI says escape " as "" in qualifier values
@@ -1172,7 +1172,7 @@ class EmblWriter(_InsdcWriter):
         else:
             handle.write("SQ   \n")
 
-        for line_number in range(0, seq_len // self.LETTERS_PER_LINE):
+        for line_number in range(seq_len // self.LETTERS_PER_LINE):
             handle.write("    ")  # Just four, not five
             for block in range(self.BLOCKS_PER_LINE):
                 index = (
@@ -1237,7 +1237,14 @@ class EmblWriter(_InsdcWriter):
         mol_type = record.annotations.get("molecule_type")
         if mol_type is None:
             raise ValueError("missing molecule_type in annotations")
-        if mol_type not in ("DNA", "RNA", "protein"):
+        if mol_type not in (
+            "DNA",
+            "genomic DNA",
+            "unassigned DNA",
+            "mRNA",
+            "RNA",
+            "protein",
+        ):
             warnings.warn(f"Non-standard molecule type: {mol_type}", BiopythonWarning)
         mol_type_upper = mol_type.upper()
         if "DNA" in mol_type_upper:

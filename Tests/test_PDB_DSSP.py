@@ -61,7 +61,6 @@ class DSSP_tool_test(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-
         cls.dssp_version = (0, 0, 0)
         is_dssp_available = False
         # Check if DSSP is installed

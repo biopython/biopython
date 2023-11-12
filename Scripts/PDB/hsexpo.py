@@ -123,9 +123,7 @@ else:
 residue_list = Selection.unfold_entities(m, "R")
 
 for r in residue_list:
-
     if k in r.xtra:
-
         exposure = r.xtra[k]
 
         if args.exp == "DSSPR":

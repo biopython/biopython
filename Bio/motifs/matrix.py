@@ -18,7 +18,7 @@ import numpy as np
 
 from Bio.Seq import Seq
 
-from . import _pwm
+from . import _pwm  # type: ignore
 
 
 class GenericPositionMatrix(dict):
@@ -414,7 +414,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         """
         score = 0.0
         letters = self.alphabet
-        for position in range(0, self.length):
+        for position in range(self.length):
             score += max(self[letter][position] for letter in letters)
         return score
 
@@ -426,7 +426,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         """
         score = 0.0
         letters = self.alphabet
-        for position in range(0, self.length):
+        for position in range(self.length):
             score += min(self[letter][position] for letter in letters)
         return score
 

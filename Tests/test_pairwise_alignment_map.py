@@ -10,7 +10,7 @@ import random
 import unittest
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -19,18 +19,19 @@ except ImportError:
     ) from None
 
 from Bio.Seq import Seq
-from Bio.Align import PairwiseAligner
+from Bio.SeqRecord import SeqRecord
+from Bio import SeqIO
+from Bio import Align
+from Bio.Align import PairwiseAligner, Alignment
 
 
 class TestSimple(unittest.TestCase):
-    def setUp(self):
-        aligner = PairwiseAligner()
-        aligner.internal_open_gap_score = -1
-        aligner.internal_extend_gap_score = -0.0
-        aligner.match_score = +1
-        aligner.mismatch_score = -1
-        aligner.mode = "local"
-        self.aligner = aligner
+    aligner = PairwiseAligner()
+    aligner.internal_open_gap_score = -1
+    aligner.internal_extend_gap_score = -0.0
+    aligner.match_score = +1
+    aligner.mismatch_score = -1
+    aligner.mode = "local"
 
     def test_internal(self):
         aligner = self.aligner
@@ -44,7 +45,7 @@ class TestSimple(unittest.TestCase):
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertTrue(
-            numpy.array_equal(alignment1.coordinates, numpy.array([[12, 31], [0, 19]]))
+            np.array_equal(alignment1.coordinates, np.array([[12, 31], [0, 19]]))
         )
         self.assertEqual(
             str(alignment1),
@@ -58,7 +59,7 @@ transcrip         0 GGGGGGGCCCCCGGGGGGA 19
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
         self.assertTrue(
-            numpy.array_equal(alignment2.coordinates, numpy.array([[5, 15], [0, 10]]))
+            np.array_equal(alignment2.coordinates, np.array([[5, 15], [0, 10]]))
         )
         self.assertEqual(
             str(alignment2),
@@ -70,7 +71,7 @@ sequence          0 GGCCCCCGGG 10
         )
         alignment = alignment1.map(alignment2)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[17, 27], [0, 10]]))
+            np.array_equal(alignment.coordinates, np.array([[17, 27], [0, 10]]))
         )
         self.assertEqual(
             str(alignment),
@@ -120,7 +121,7 @@ sequence          0 GGGGGCCCCCGGG 13
         )
         alignment = alignment1.map(alignment2)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[0, 11], [2, 13]]))
+            np.array_equal(alignment.coordinates, np.array([[0, 11], [2, 13]]))
         )
         self.assertEqual(
             str(alignment),
@@ -170,7 +171,7 @@ sequence          0 GGCCCCCGGGGG 12
         )
         alignment = alignment1.map(alignment2)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[17, 27], [0, 10]]))
+            np.array_equal(alignment.coordinates, np.array([[17, 27], [0, 10]]))
         )
         self.assertEqual(
             str(alignment),
@@ -200,7 +201,7 @@ sequence          0 GGCCCCCGGG 10
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertTrue(
-            numpy.array_equal(alignment1.coordinates, numpy.array([[12, 31], [19, 0]]))
+            np.array_equal(alignment1.coordinates, np.array([[12, 31], [19, 0]]))
         )
         self.assertEqual(
             str(alignment1),
@@ -214,7 +215,7 @@ transcrip        19 GGGGGGGCCCCCGGGGGGA  0
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
         self.assertTrue(
-            numpy.array_equal(alignment2.coordinates, numpy.array([[4, 14], [10, 0]]))
+            np.array_equal(alignment2.coordinates, np.array([[4, 14], [10, 0]]))
         )
         self.assertEqual(
             str(alignment2),
@@ -226,7 +227,7 @@ sequence         10 CCCGGGGGCC  0
         )
         alignment = alignment1.map(alignment2)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[17, 27], [0, 10]]))
+            np.array_equal(alignment.coordinates, np.array([[17, 27], [0, 10]]))
         )
         self.assertEqual(
             str(alignment),
@@ -256,7 +257,7 @@ sequence          0 GGCCCCCGGG 10
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertTrue(
-            numpy.array_equal(alignment1.coordinates, numpy.array([[12, 31], [0, 19]]))
+            np.array_equal(alignment1.coordinates, np.array([[12, 31], [0, 19]]))
         )
         self.assertEqual(
             str(alignment1),
@@ -270,7 +271,7 @@ transcrip         0 GGGGGGGCCCCCGGGGGGA 19
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
         self.assertTrue(
-            numpy.array_equal(alignment2.coordinates, numpy.array([[5, 15], [10, 0]]))
+            np.array_equal(alignment2.coordinates, np.array([[5, 15], [10, 0]]))
         )
         self.assertEqual(
             str(alignment2),
@@ -282,7 +283,7 @@ sequence         10 GGCCCCCGGG  0
         )
         alignment = alignment1.map(alignment2)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[17, 27], [10, 0]]))
+            np.array_equal(alignment.coordinates, np.array([[17, 27], [10, 0]]))
         )
         self.assertEqual(
             str(alignment),
@@ -312,7 +313,7 @@ sequence         10 GGCCCCCGGG  0
         self.assertEqual(len(alignments1), 1)
         alignment1 = alignments1[0]
         self.assertTrue(
-            numpy.array_equal(alignment1.coordinates, numpy.array([[12, 31], [19, 0]]))
+            np.array_equal(alignment1.coordinates, np.array([[12, 31], [19, 0]]))
         )
         self.assertEqual(
             str(alignment1),
@@ -326,7 +327,7 @@ transcrip        19 GGGGGGGCCCCCGGGGGGA  0
         self.assertEqual(len(alignments2), 1)
         alignment2 = alignments2[0]
         self.assertTrue(
-            numpy.array_equal(alignment2.coordinates, numpy.array([[4, 14], [0, 10]]))
+            np.array_equal(alignment2.coordinates, np.array([[4, 14], [0, 10]]))
         )
         self.assertEqual(
             str(alignment2),
@@ -338,7 +339,7 @@ sequence          0 CCCGGGGGCC 10
         )
         alignment = alignment1.map(alignment2)
         self.assertTrue(
-            numpy.array_equal(alignment.coordinates, numpy.array([[17, 27], [10, 0]]))
+            np.array_equal(alignment.coordinates, np.array([[17, 27], [10, 0]]))
         )
         self.assertEqual(
             str(alignment),
@@ -358,14 +359,12 @@ sequence         10 GGCCCCCGGG  0
 
 
 class TestComplex(unittest.TestCase):
-    def setUp(self):
-        aligner = PairwiseAligner()
-        aligner.internal_open_gap_score = -1
-        aligner.internal_extend_gap_score = -0.0
-        aligner.match_score = +1
-        aligner.mismatch_score = -1
-        aligner.mode = "local"
-        self.aligner = aligner
+    aligner = PairwiseAligner()
+    aligner.internal_open_gap_score = -1
+    aligner.internal_extend_gap_score = -0.0
+    aligner.match_score = +1
+    aligner.mismatch_score = -1
+    aligner.mode = "local"
 
     def test1(self):
         aligner = self.aligner
@@ -735,6 +734,262 @@ def perform_randomized_tests(n=1000):
         test_random_sequences(aligner, "+", "-")
         test_random_sequences(aligner, "-", "+")
         test_random_sequences(aligner, "-", "-")
+
+
+class TestZeroGaps(unittest.TestCase):
+    def test1(self):
+        coordinates = np.array([[0, 3, 6, 9], [0, 3, 6, 9]])
+        sequences = [
+            SeqRecord(Seq(None, 9), id="genome"),
+            SeqRecord(Seq(None, 9), id="mRNA"),
+        ]
+        alignment1 = Alignment(sequences, coordinates)
+        coordinates = np.array([[0, 9], [0, 9]])
+        sequences = [
+            SeqRecord(Seq(None, 9), id="mRNA"),
+            SeqRecord(Seq(None, 9), id="tag"),
+        ]
+        alignment2 = Alignment(sequences, coordinates)
+        alignment = alignment1.map(alignment2)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates, np.array([[0, 3, 6, 9], [0, 3, 6, 9]])
+            )
+        )
+
+    def test2(self):
+        coordinates = np.array([[0, 69], [0, 69]])
+        sequences = [
+            SeqRecord(Seq(None, 69), id="genome"),
+            SeqRecord(Seq(None, 69), id="mRNA"),
+        ]
+        alignment1 = Alignment(sequences, coordinates)
+        coordinates = np.array([[0, 24, 24, 69], [0, 24, 24, 69]])
+        sequences = [
+            SeqRecord(Seq(None, 69), id="mRNA"),
+            SeqRecord(Seq(None, 68), id="tag"),
+        ]
+        alignment2 = Alignment(sequences, coordinates)
+        alignment = alignment1.map(alignment2)
+        # fmt: off
+        self.assertTrue(
+            np.array_equal(alignment.coordinates,
+                           np.array([[0, 24, 69],   # noqa: E128
+                                     [0, 24, 69]]))
+        )
+        # fmt: on
+
+    def test3(self):
+        coordinates = np.array([[0, 69], [0, 69]])
+        sequences = [
+            SeqRecord(Seq(None, 69), id="genome"),
+            SeqRecord(Seq(None, 69), id="mRNA"),
+        ]
+        alignment1 = Alignment(sequences, coordinates)
+        coordinates = np.array([[0, 24, 24, 69], [0, 24, 23, 68]])
+        sequences = [
+            SeqRecord(Seq(None, 69), id="mRNA"),
+            SeqRecord(Seq(None, 68), id="tag"),
+        ]
+        alignment2 = Alignment(sequences, coordinates)
+        alignment = alignment1.map(alignment2)
+        # fmt: off
+        self.assertTrue(
+            np.array_equal(alignment.coordinates,
+                           np.array([[0, 24, 24, 69],  # noqa: E128
+                                     [0, 24, 23, 68]]))
+        )
+        # fmt: on
+
+    def test4(self):
+        coordinates = np.array([[0, 210], [0, 210]])
+        sequences = [
+            SeqRecord(Seq(None, 210), id="genome"),
+            SeqRecord(Seq(None, 210), id="mRNA"),
+        ]
+        alignment1 = Alignment(sequences, coordinates)
+        coordinates = np.array([[0, 18, 18, 102, 102, 210], [0, 18, 17, 101, 100, 208]])
+        sequences = [
+            SeqRecord(Seq(None, 210), id="mRNA"),
+            SeqRecord(Seq(None, 208), id="tag"),
+        ]
+        alignment2 = Alignment(sequences, coordinates)
+        alignment = alignment1.map(alignment2)
+        # fmt: off
+        self.assertTrue(
+            np.array_equal(alignment.coordinates,
+                           np.array([[0, 18, 18, 102, 102, 210],
+                                     [0, 18, 17, 101, 100, 208]]))
+        )
+        # fmt: on
+
+    def test5(self):
+        coordinates = np.array([[0, 210], [0, 210]])
+        sequences = [
+            SeqRecord(Seq(None, 210), id="genome"),
+            SeqRecord(Seq(None, 210), id="mRNA"),
+        ]
+        alignment1 = Alignment(sequences, coordinates)
+        coordinates = np.array([[0, 51, 51, 210], [0, 51, 49, 208]])
+        sequences = [
+            SeqRecord(Seq(None, 210), id="mRNA"),
+            SeqRecord(Seq(None, 208), id="tag"),
+        ]
+        alignment2 = Alignment(sequences, coordinates)
+        alignment = alignment1.map(alignment2)
+        # fmt: off
+        self.assertTrue(
+            np.array_equal(alignment.coordinates,
+                           np.array([[0, 51, 51, 210],
+                                     [0, 51, 49, 208]]))
+        )
+        # fmt: on
+
+
+class TestLiftOver(unittest.TestCase):
+    def test_chimp(self):
+        chain = Align.read("Blat/panTro5ToPanTro6.over.chain", "chain")
+        alignment = Align.read("Blat/est.panTro5.psl", "psl")
+        self.assertEqual(chain.target.id, alignment.target.id)
+        self.assertEqual(len(chain.target.seq), len(alignment.target.seq))
+        chain = chain[::-1]
+        record = SeqIO.read("Blat/est.fa", "fasta")
+        self.assertEqual(record.id, alignment.query.id)
+        self.assertEqual(len(record.seq), len(alignment.query.seq))
+        alignment.query = record.seq
+        record = SeqIO.read("Blat/panTro5.fa", "fasta")
+        chromosome, start_end = record.id.split(":")
+        start, end = start_end.split("-")
+        start = int(start)
+        end = int(end)
+        data = {start: str(record.seq)}
+        length = len(alignment.target.seq)
+        seq = Seq(data, length=length)
+        record = SeqRecord(seq, id="chr1")
+        alignment.target = record
+        text = """^\
+chr1      122835789 AGAGATTATTTTGCAGAGGATGATGGGGAGATGGTACCCAGAACGAGTCACACAGCAGGT
+                  0 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::--
+query            32 AGAGATTATTTTGCAGAGGATGATGGGGAGATGGTACCCAGAACGAGTCACACAGCAG--
+
+chr1      122835849 AAGGATGCTGTGGGCCTTGCCTTGTTAAATTCTTTGtttcttttgtttattcatttggtt
+                 60 ------------------------------------------------------------
+query            90 ------------------------------------------------------------
+((.|\n)*)
+chr1      122840889 TTGTATTTTGCAGAAACTGAATTCTGCTGGAATGTGCCAGTTAGAATGATCCTAGTGCTG
+               5100 ------------------------------------------------------------
+query            90 ------------------------------------------------------------
+
+chr1      122840949 TTATTATATAAACCTTTTTTGTTGTTGTTCTGTTTCATTGACAGCTTTTCTTAGTGACAC
+               5160 --------------------------------------------::::::::::::::::
+query            90 --------------------------------------------CTTTTCTTAGTGACAC
+
+chr1      122841009 TAAAGATCGAGGCCCTCCAGTGCAGTCACAGATCTGGAGAAGTGGTGAAAAGGTCCCGTT
+               5220 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::X:
+query           106 TAAAGATCGAGGCCCTCCAGTGCAGTCACAGATCTGGAGAAGTGGTGAAAAGGTCCCGNT
+
+chr1      122841069 TGTGCAGACATATTCCTTGAGAGCATTTGAGAAACCCCCTCAGGTACAGACCCAGGCTCT
+               5280 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+query           166 TGTGCAGACATATTCCTTGAGAGCATTTGAGAAACCCCCTCAGGTACAGACCCAGGCTCT
+
+chr1      122841129 TCGAGACTTTGAGAAGGTAAGTCATGTGAGTGGATAATTGTTATCCCAATTAGAAGCAGT
+               5340 ::::::::::::::::--------------------------------------------
+query           226 TCGAGACTTTGAGAAG--------------------------------------------
+
+chr1      122841189 ACTATGGAATAGTGATGCCTGATAAAAATATGACCCATGGATTGGTCCGGATTATGGATG
+               5400 ------------------------------------------------------------
+query           242 ------------------------------------------------------------
+((.|\n)*)
+chr1      122907129 GTTCTTGGGTTGAGGGGGCAATCGGGCACGCTCCTCCCCATGGGTTGCCCATCATGTCTA
+              71340 ------------------------------------------------------------
+query           242 ------------------------------------------------------------
+
+chr1      122907189 ATGGATATCGCACTCTGTCCCAGCACCTCAATGACCTGAAGAAGGAGAACTTCAGCCTCA
+              71400 -----------------------:::::::::::::::::::::::::::::::::::::
+query           242 -----------------------CACCTCAATGACCTGAAGAAGGAGAACTTCAGCCTCA
+
+chr1      122907249 AGCTGCGCATCTACTTCCTGGAGGAGCGCATGCAACAGAAGTATGAGGCCAGCCGGGAGG
+              71460 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+query           279 AGCTGCGCATCTACTTCCTGGAGGAGCGCATGCAACAGAAGTATGAGGCCAGCCGGGAGG
+
+chr1      122907309 ACATC 122907314
+              71520 :::::     71525
+query           339 ACATC       344
+$"""
+        self.assertRegex(str(alignment).replace("|", ":").replace(".", "X"), text)
+        lifted_alignment = chain.map(alignment)
+        # fmt: off
+        self.assertTrue(
+            np.array_equal(lifted_alignment.coordinates,
+                           np.array([[111982717, 111982775, 111987921,
+                                      111988073, 112009200, 112009302],
+                                     [       32,        90,        90,
+                                            242,       242,       344]])
+                          )
+        )
+        # fmt: on
+        record = SeqIO.read("Blat/panTro6.fa", "fasta")
+        chromosome, start_end = record.id.split(":")
+        start, end = start_end.split("-")
+        start = int(start)
+        end = int(end)
+        data = {start: str(record.seq)}
+        length = len(alignment.target.seq)
+        seq = Seq(data, length=length)
+        record = SeqRecord(seq, id="chr1")
+        lifted_alignment.target = record
+        text = """^\
+chr1      111982717 AGAGATTATTTTGCAGAGGATGATGGGGAGATGGTACCCAGAACGAGTCACACAGCAGGT
+                  0 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::--
+query            32 AGAGATTATTTTGCAGAGGATGATGGGGAGATGGTACCCAGAACGAGTCACACAGCAG--
+
+chr1      111982777 AAGGATGCTGTGGGCCTTGCCTTGTTAAATTCTTTGtttcttttgtttattcatttggtt
+                 60 ------------------------------------------------------------
+query            90 ------------------------------------------------------------
+((.|\n)*)
+chr1      111987817 TTGTATTTTGCAGAAACTGAATTCTGCTGGAATGTGCCAGTTAGAATGATCCTAGTGCTG
+               5100 ------------------------------------------------------------
+query            90 ------------------------------------------------------------
+
+chr1      111987877 TTATTATATAAACCTTTTTTGTTGTTGTTCTGTTTCATTGACAGCTTTTCTTAGTGACAC
+               5160 --------------------------------------------::::::::::::::::
+query            90 --------------------------------------------CTTTTCTTAGTGACAC
+
+chr1      111987937 TAAAGATCGAGGCCCTCCAGTGCAGTCACAGATCTGGAGAAGTGGTGAAAAGGTCCCGTT
+               5220 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::X:
+query           106 TAAAGATCGAGGCCCTCCAGTGCAGTCACAGATCTGGAGAAGTGGTGAAAAGGTCCCGNT
+
+chr1      111987997 TGTGCAGACATATTCCTTGAGAGCATTTGAGAAACCCCCTCAGGTACAGACCCAGGCTCT
+               5280 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+query           166 TGTGCAGACATATTCCTTGAGAGCATTTGAGAAACCCCCTCAGGTACAGACCCAGGCTCT
+
+chr1      111988057 TCGAGACTTTGAGAAGGTAAGTCATGTGAGTGGATAATTGTTATCCCAATTAGAAGCAGT
+               5340 ::::::::::::::::--------------------------------------------
+query           226 TCGAGACTTTGAGAAG--------------------------------------------
+
+chr1      111988117 ACTATGGAATAGTGATGCCTGATAAAAATATGACCCATGGATTGGTCCGGATTATGGATG
+               5400 ------------------------------------------------------------
+query           242 ------------------------------------------------------------
+((.|\n)*)
+chr1      112009117 GTTCTTGGGTTGAGGGGGCAATCGGGCACGCTCCTCCCCATGGGTTGCCCATCATGTCTA
+              26400 ------------------------------------------------------------
+query           242 ------------------------------------------------------------
+
+chr1      112009177 ATGGATATCGCACTCTGTCCCAGCACCTCAATGACCTGAAGAAGGAGAACTTCAGCCTCA
+              26460 -----------------------:::::::::::::::::::::::::::::::::::::
+query           242 -----------------------CACCTCAATGACCTGAAGAAGGAGAACTTCAGCCTCA
+
+chr1      112009237 AGCTGCGCATCTACTTCCTGGAGGAGCGCATGCAACAGAAGTATGAGGCCAGCCGGGAGG
+              26520 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+query           279 AGCTGCGCATCTACTTCCTGGAGGAGCGCATGCAACAGAAGTATGAGGCCAGCCGGGAGG
+
+chr1      112009297 ACATC 112009302
+              26580 :::::     26585
+query           339 ACATC       344
+$"""
+        self.assertRegex(
+            str(lifted_alignment).replace("|", ":").replace(".", "X"), text
+        )
 
 
 if __name__ == "__main__":

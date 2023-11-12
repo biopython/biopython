@@ -372,7 +372,7 @@ def read_PIC(
                 prnum = pr.akl[0][resPos]
                 paKey = [
                     AtomKey(prnum, None, prname, primAngle[x], None, None)
-                    for x in range(0, 2)
+                    for x in range(2)
                 ]
                 paKey.add(
                     [
@@ -450,6 +450,8 @@ def read_PIC(
 
     def dihedra_check(ric: IC_Residue) -> None:
         """Look for required dihedra in residue, generate defaults if set."""
+        # This method has some internal functions
+
         # rnext should be set
         def ake_recurse(akList: List) -> List:
             """Bulid combinatorics of AtomKey lists."""
@@ -518,7 +520,7 @@ def read_PIC(
         try:
             for edron in ic_data_sidechains[ric.lc]:
                 if len(edron) > 3:  # dihedra only
-                    if all(not atm[0] == "H" for atm in edron):
+                    if all(atm[0] != "H" for atm in edron):
                         akl = [AtomKey(ric, atm) for atm in edron[0:4]]
                         chkLst.append(akl)
         except KeyError:

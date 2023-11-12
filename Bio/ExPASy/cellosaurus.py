@@ -165,7 +165,6 @@ def __read(handle):
     record = None
 
     for line in handle:
-
         key, value = line[:2], line[5:].rstrip()
         if key == "ID":
             record = Record()
