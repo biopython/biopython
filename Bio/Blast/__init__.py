@@ -18,7 +18,7 @@ ftp://ftp.ncbi.nlm.nih.gov/blast/documents/xml/NCBI_BlastOutput.dtd
 # flake8: noqa
 # mypy: ignore-errors
 
-import sys
+import os.path
 from xml.parsers import expat
 from collections import deque
 
@@ -850,78 +850,15 @@ class Records:
                     # probably the input data is not in XML format.
                     raise NotXMLError(e) from None
 
-    names = ["BlastOutput",
-             "BlastOutput_program",
-             "BlastOutput_version",
-             "BlastOutput_reference",
-             "BlastOutput_db",
-             "BlastOutput_query-ID",
-             "BlastOutput_query-def",
-             "BlastOutput_query-len",
-             "BlastOutput_param",
-             "Parameters",
-             "Parameters_matrix",
-             "Parameters_expect",
-             "Parameters_sc-match",
-             "Parameters_sc-mismatch",
-             "Parameters_gap-open",
-             "Parameters_gap-extend",
-             "Parameters_filter",
-             "Parameters_include",
-             "BlastOutput_iterations",
-             "Iteration",
-             "Iteration_iter-num",
-             "Iteration_query-ID",
-             "Iteration_query-def",
-             "Iteration_query-len",
-             "Iteration_hits",
-             "Hit",
-             "Hit_num",
-             "Hit_id",
-             "Hit_def",
-             "Hit_accession",
-             "Hit_len",
-             "Hit_hsps",
-             "Hsp",
-             "Hsp_num",
-             "Hsp_bit-score",
-             "Hsp_score",
-             "Hsp_evalue",
-             "Hsp_query-from",
-             "Hsp_query-to",
-             "Hsp_hit-from",
-             "Hsp_hit-to",
-             "Hsp_query-frame",
-             "Hsp_hit-frame",
-             "Hsp_identity",
-             "Hsp_positive",
-             "Hsp_gaps",
-             "Hsp_align-len",
-             "Hsp_qseq",
-             "Hsp_hseq",
-             "Hsp_midline",
-             "Iteration_stat",
-             "Iteration_message",
-             "Statistics",
-             "Statistics_db-num",
-             "Statistics_db-len",
-             "Statistics_hsp-len",
-             "Statistics_eff-space",
-             "Statistics_kappa",
-             "Statistics_lambda",
-             "Statistics_entropy",
-            ]
-    for name in names:
-        method_name = name.lower().replace("-", "_")
-        method = eval("_start_" + method_name)
-        _start_methods[name] = method
-        method = eval("_end_" + method_name)
-        _end_methods[name] = method
+    from ._parser import DTDHandler
 
+    for name in DTDHandler().names:
+        method_name = name.lower().replace("-", "_")
+        _start_methods[name] = eval("_start_" + method_name)
+        _end_methods[name] = eval("_end_" + method_name)
     del name
-    del names
-    del method
     del method_name
+    del DTDHandler
 
 
 def parse(source):
