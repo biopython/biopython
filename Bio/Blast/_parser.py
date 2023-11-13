@@ -16,7 +16,6 @@ https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd
 
 # fmt: off
 # flake8: noqa
-# mypy: ignore-errors
 
 import os.path
 from xml.parsers import expat
