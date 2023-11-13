@@ -4,21 +4,25 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Code to work with XML output from BLAST."""
-
-# flake8: noqa
+"""Code to parse and store XML output from BLAST."""
 
 
 from Bio import StreamModeError
 
 
 class Record(list):
+    """Stores the BLAST results for a single query."""
+
     def __init__(self):
+        """Initialize the Record object."""
         self.query = None
 
 
 class Records:
+    """Stores the BLAST results of a single BLAST run."""
+
     def __init__(self, stream):
+        """Initialize the Records object."""
         from Bio.Blast._parser import XMLHandler
 
         handler = XMLHandler(stream)
@@ -64,7 +68,7 @@ def parse(source):
     except TypeError:  # not a path, assume we received a stream
         if source.read(0) != b"":
             raise StreamModeError(
-                f"BLAST output files must be opened in binary mode."
+                "BLAST output files must be opened in binary mode."
             ) from None
         stream = source
 
