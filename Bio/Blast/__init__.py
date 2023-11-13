@@ -6,7 +6,6 @@
 # package.
 """Code to work with XML output from BLAST."""
 
-# fmt: off
 # flake8: noqa
 
 
@@ -19,9 +18,9 @@ class Record(list):
 
 
 class Records:
-
     def __init__(self, stream):
         from Bio.Blast._parser import XMLHandler
+
         handler = XMLHandler(stream)
         handler.read_header(self)
         self.handler = handler
@@ -51,7 +50,7 @@ def parse(source):
     >>> records = Blast.parse(stream)
     >>> for record in records:
     ...     print(record.query.id, record.query.description)
-    ... 
+    ...
     Query_1 gi|195230749:301-1383 Homo sapiens wingless-type MMTV integration site family member 2 (WNT2), transcript variant 1, mRNA
     Query_2 gi|325053704:108-1166 Homo sapiens wingless-type MMTV integration site family, member 3A (WNT3A), mRNA
     Query_3 gi|156630997:105-1160 Homo sapiens wingless-type MMTV integration site family, member 4 (WNT4), mRNA
