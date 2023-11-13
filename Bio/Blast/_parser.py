@@ -14,8 +14,6 @@ The BLAST XML DTD file is available on the NCBI site at:
 https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd
 """
 
-# flake8: noqa
-
 import os.path
 from xml.parsers import expat
 from collections import deque
@@ -85,13 +83,16 @@ class DTDHandler:
         return 1
 
 
-class XMLHandler:
+class XMLHandler(deque):
+    """Handler for BLAST XML data."""
+
     BLOCK = 2048  # default block size from expat
 
     _start_methods = {}
     _end_methods = {}
 
     def __init__(self, stream):
+        """Initialize the expat parser."""
         parser = expat.ParserCreate()
         parser.XmlDeclHandler = self._xmlDeclHandler
         parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
@@ -99,6 +100,7 @@ class XMLHandler:
         self._stream = stream
 
     def read_header(self, records):
+        """Read the BLAST XML file header and store as attributes on records."""
         self._records = records
         parser = self._parser
         stream = self._stream
@@ -207,7 +209,6 @@ class XMLHandler:
     def _start_blastoutput_iterations(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
-        self._cache = deque()
         del self._records
 
     def _start_blastoutput_query_len(self, name, attrs):
@@ -500,7 +501,7 @@ class XMLHandler:
     def _end_iteration(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
-        self._cache.append(self._record)
+        self.append(self._record)
         del self._record
 
     def _end_iteration_iter_num(self, name):
@@ -864,19 +865,18 @@ class XMLHandler:
         return self
 
     def __next__(self):
-        stream = self._stream
-        BLOCK = self.BLOCK
         try:
-            cache = self._cache
+            stream = self._stream
         except AttributeError:
             raise StopIteration from None
         try:
             parser = self._parser
         except AttributeError:
             parser = None
+        BLOCK = self.BLOCK
         while True:
             try:
-                record = cache.popleft()
+                record = self.popleft()
             except IndexError:  # no record ready to be returned
                 pass
             else:
@@ -884,7 +884,7 @@ class XMLHandler:
             # Read in another block of data from the file.
             data = stream.read(BLOCK)
             if data == b"":
-                del self._cache
+                del self._stream
                 if parser is not None:
                     raise ValueError("premature end of XML file")
                 raise StopIteration
