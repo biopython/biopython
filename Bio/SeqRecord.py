@@ -29,8 +29,9 @@ from typing import (
     TYPE_CHECKING,
 )
 
-from Bio import StreamModeError
+from Bio import BiopythonDeprecationWarning, StreamModeError
 from Bio.Seq import Seq, MutableSeq, UndefinedSequenceError
+import warnings
 
 if TYPE_CHECKING:
     from Bio.SeqFeature import SeqFeature
@@ -224,11 +225,13 @@ class SeqRecord:
         if not isinstance(description, str):
             raise TypeError("description argument should be a string")
 
-        # If seq is a string, other operations (such as saving from AlignIO)
-        # will fail. Either convert to Seq or raise an error
-        # see "Bio/SeqIO/Interfaces.py:_get_seq_string" for example.
-        if not (seq is None or isinstance(seq, (Seq, MutableSeq))):
-            raise TypeError("seq argument should be a Seq or MutableSeq")
+        if seq is not None and not isinstance(seq, (Seq, MutableSeq)):
+            warnings.warn(
+                "Using a string as the sequence is deprecated and will raise a"
+                " TypeError in future. It has been converted to a Seq object.",
+                BiopythonDeprecationWarning,
+            )
+            seq = Seq(seq)
 
         self._seq = seq
         self.id = id
@@ -347,8 +350,14 @@ class SeqRecord:
     )
 
     def _set_seq(self, value: Union["Seq", "MutableSeq"]) -> None:
+        # Adding this here for users who are not type-checking their code.
         if not isinstance(value, (Seq, MutableSeq)):
-            raise TypeError("The value argument should be Seq or MutableSeq")
+            warnings.warn(
+                "Using a string as the sequence is deprecated and will raise a"
+                " TypeError in future. It has been converted to a Seq object.",
+                BiopythonDeprecationWarning,
+            )
+            value = Seq(value)
 
         # TODO - Add a deprecation warning that the seq should be write only?
         if self._per_letter_annotations:
