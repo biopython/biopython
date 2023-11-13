@@ -59,10 +59,9 @@ class CorruptedXMLError(ValueError):
         )
 
 
-class Record:
+class Record(list):
     def __init__(self):
         self.query = None
-        self.hits = []
 
 
 class Records:
@@ -222,7 +221,7 @@ class Records:
     def _start_hit(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
-        self._hit = Alignments()
+        self._alignment = Alignments()
 
     def _start_hit_num(self, name, attrs):
         assert self._characters.strip() == ""
@@ -504,34 +503,34 @@ class Records:
     def _end_hit(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
-        hit = self._hit
-        del self._hit
-        self._record.hits.append(hit)
+        alignment = self._alignment
+        del self._alignment
+        self._record.append(alignment)
 
     def _end_hit_num(self, name):
         num = int(self._characters)
-        if num != len(self._record.hits) + 1:
-            raise ValueError(f"unexpected value in tag <Hit_num> (found {num}, expected {len(self._record.hits) + 1})")
+        if num != len(self._record) + 1:
+            raise ValueError(f"unexpected value in tag <Hit_num> (found {num}, expected {len(self._record) + 1})")
         self._characters = ""
 
     def _end_hit_id(self, name):
         hit_id = self._characters
-        self._hit.target = SeqRecord(None, hit_id)
+        self._alignment.target = SeqRecord(None, hit_id)
         self._characters = ""
 
     def _end_hit_def(self, name):
         description = self._characters
-        self._hit.target.description = description
+        self._alignment.target.description = description
         self._characters = ""
 
     def _end_hit_accession(self, name):
         accession = self._characters
-        self._hit.target.name = accession
+        self._alignment.target.name = accession
         self._characters = ""
 
     def _end_hit_len(self, name):
         length = int(self._characters)
-        self._hit.target.seq = Seq(None, length=length)
+        self._alignment.target.seq = Seq(None, length=length)
         self._characters = ""
 
     def _end_hit_hsps(self, name):
@@ -540,8 +539,8 @@ class Records:
 
     def _end_hsp_num(self, name):
         num = int(self._characters)
-        if num != len(self._hit) + 1:
-            raise ValueError(f"unexpected value in tag <Hsp_num> (found {num}, expected {len(self._hit) + 1})")
+        if num != len(self._alignment) + 1:
+            raise ValueError(f"unexpected value in tag <Hsp_num> (found {num}, expected {len(self._alignment) + 1})")
         self._characters = ""
 
     def _end_hsp_bit_score(self, name):
@@ -672,7 +671,7 @@ class Records:
         query.annotations["start"] = query_start
         query.annotations["end"] = query_end
         query.annotations["frame"] = query_frame
-        target = self._hit.target
+        target = self._alignment.target
         target_id = target.id
         target_name = target.name
         target_description = target.description
@@ -711,7 +710,7 @@ class Records:
         annotations["gaps"] = hsp["gaps"]
         annotations["midline"] = hsp["midline"]
         alignment.annotations = annotations
-        self._hit.append(alignment)
+        self._alignment.append(alignment)
 
     def _end_iteration_stat(self, name):
         assert self._characters.strip() == ""
@@ -864,7 +863,8 @@ class Records:
 def parse(source):
     """Parse an XML file containing BLAST output and return a Bio.Blast.Records object.
 
-    This is a generator function that returns BLAST records one by one.
+    This returns an iterator object; iterating over it returns Bio.Blast.Record
+    objects one by one.
 
     The source can be a file stream or the path to an XML file containing the
     BLAST output. If a file stream, source  must be in binary mode. This allows
@@ -877,8 +877,13 @@ def parse(source):
     >>> stream = open("Blast/wnts.xml", "rb")  # opened in binary mode
     >>> records = Blast.parse(stream)
     >>> for record in records:
-    ...     
-    ...
+    ...     print(record.query.id, record.query.description)
+    ... 
+    Query_1 gi|195230749:301-1383 Homo sapiens wingless-type MMTV integration site family member 2 (WNT2), transcript variant 1, mRNA
+    Query_2 gi|325053704:108-1166 Homo sapiens wingless-type MMTV integration site family, member 3A (WNT3A), mRNA
+    Query_3 gi|156630997:105-1160 Homo sapiens wingless-type MMTV integration site family, member 4 (WNT4), mRNA
+    Query_4 gi|371502086:108-1205 Homo sapiens wingless-type MMTV integration site family, member 5A (WNT5A), transcript variant 2, mRNA
+    Query_5 gi|53729353:216-1313 Homo sapiens wingless-type MMTV integration site family, member 6 (WNT6), mRNA
     >>> stream.close()
 
     """
@@ -915,9 +920,14 @@ def read(source):
     "rb" when opening the file, as in
 
     >>> from Bio import Blast
-    >>> stream = open("Blast/wnts.xml", "rb")  # opened in binary mode
+    >>> stream = open("Blast/xml_2900_blastn_001.xml", "rb")  # opened in binary mode
     >>> record = Blast.read(stream)
-    >>> print(record)
+    >>> record.query.id
+    'G26684.1'
+    >>> record.query.description
+    'human STS STS_D11570, sequence tagged site'
+    >>> len(record)
+    10
     >>> stream.close()
 
     Use the Bio.Blast.parse function if you want to read a file containing
