@@ -9,7 +9,6 @@
 # fmt: off
 # ruff: noqa
 # flake8: noqa
-# mypy: ignore-errors
 
 
 from Bio import StreamModeError
