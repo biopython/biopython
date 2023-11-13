@@ -7,7 +7,6 @@
 """Code to work with XML output from BLAST."""
 
 # fmt: off
-# ruff: noqa
 # flake8: noqa
 
 
