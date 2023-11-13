@@ -12,7 +12,7 @@ The output returned by the Entrez Programming Utilities is typically in XML form
   \item Use one of the XML parsers available in Python's standard library;
   \item Read the XML output as raw text, and parse it by string searching and manipulation.
 \end{enumerate}
-See the Python documentation for a description of the XML parsers in Python's standard library. Here, we discuss the parser in Biopython's \verb+Bio.Entrez+ module. This parser can be used to parse data as provided through \verb+Bio.Entrez+'s programmatic access functions to Entrez, but can also be used to parse XML data from NCBI Entrez that are stored in a file. In the latter case, the XML file should be opened in binary mode (e.g. \verb+open("myfile.xml", "rb")+) for the XML parser in \verb+Bio.Entrez+ to work correctly.
+See the Python documentation for a description of the XML parsers in Python's standard library. Here, we discuss the parser in Biopython's \verb+Bio.Entrez+ module. This parser can be used to parse data as provided through \verb+Bio.Entrez+'s programmatic access functions to Entrez, but can also be used to parse XML data from NCBI Entrez that are stored in a file. In the latter case, the XML file should be opened in binary mode (e.g. \verb+open("myfile.xml", "rb")+) for the XML parser in \verb+Bio.Entrez+ to work correctly. Alternatively, you can pass the file name or path to the XML file, and let \verb+Bio.Entrez+ take care of opening and closing the file.
 
 NCBI uses DTD (Document Type Definition) files to describe the structure of the information contained in XML files. Most of the DTD files used by NCBI are included in the Biopython distribution. The \verb+Bio.Entrez+ parser makes use of the DTD files when parsing an XML file returned by NCBI Entrez.
 
@@ -71,9 +71,9 @@ EInfo provides field index term counts, last update, and available links for eac
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.einfo()
->>> result = handle.read()
->>> handle.close()
+>>> stream = Entrez.einfo()
+>>> result = stream.read()
+>>> stream.close()
 \end{minted}
 The variable \verb+result+ now contains a list of databases in XML format:
 \begin{minted}{pycon}
@@ -129,8 +129,8 @@ Since this is a fairly simple XML file, we could extract the information it cont
 %doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
->>> handle = Entrez.einfo()
->>> record = Entrez.read(handle)
+>>> stream = Entrez.einfo()
+>>> record = Entrez.read(stream)
 \end{minted}
 Now \verb+record+ is a dictionary with exactly one key:
 %cont-doctest
@@ -156,8 +156,8 @@ For each of these databases, we can use EInfo again to obtain more information:
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.einfo(db="pubmed")
->>> record = Entrez.read(handle)
+>>> stream = Entrez.einfo(db="pubmed")
+>>> record = Entrez.read(stream)
 >>> record["DbInfo"]["Description"]
 'PubMed bibliographic record'
 \end{minted}
@@ -203,8 +203,8 @@ To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For exampl
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.esearch(db="pubmed", term="biopython[title]", retmax="40")
->>> record = Entrez.read(handle)
+>>> stream = Entrez.esearch(db="pubmed", term="biopython[title]", retmax="40")
+>>> record = Entrez.read(stream)
 >>> "19304878" in record["IdList"]
 True
 \end{minted}
@@ -222,10 +222,10 @@ find out which fields you can search in each Entrez database):
 
 % Search results too changeable for use in doctest
 \begin{minted}{pycon}
->>> handle = Entrez.esearch(
+>>> stream = Entrez.esearch(
 ...     db="nucleotide", term="Cypripedioideae[Orgn] AND matK[Gene]", idtype="acc"
 ... )
->>> record = Entrez.read(handle)
+>>> record = Entrez.read(stream)
 >>> record["Count"]
 '348'
 >>> record["IdList"]
@@ -239,8 +239,8 @@ Note that instead of a species name like \texttt{Cypripedioideae[Orgn]}, you can
 
 As a final example, let's get a list of computational journal titles:
 \begin{minted}{pycon}
->>> handle = Entrez.esearch(db="nlmcatalog", term="computational[Journal]", retmax="20")
->>> record = Entrez.read(handle)
+>>> stream = Entrez.esearch(db="nlmcatalog", term="computational[Journal]", retmax="20")
+>>> record = Entrez.read(stream)
 >>> print("{} computational journals found".format(record["Count"]))
 117 computational Journals found
 >>> print("The first 20 are\n{}".format(record["IdList"]))
@@ -305,8 +305,8 @@ ESummary retrieves document summaries from a list of primary IDs (see the  \href
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.esummary(db="nlmcatalog", id="101660833")
->>> record = Entrez.read(handle)
+>>> stream = Entrez.esummary(db="nlmcatalog", id="101660833")
+>>> record = Entrez.read(stream)
 >>> info = record[0]["TitleMainList"][0]
 >>> print("Journal info\nid: {}\nTitle: {}".format(record[0]["Id"], info["Title"]))
 Journal info
@@ -328,8 +328,8 @@ One common usage is downloading sequences in the FASTA or GenBank/GenPept plain 
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
->>> print(handle.read())
+>>> stream = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
+>>> print(stream.read())
 LOCUS       EU490707                1302 bp    DNA     linear   PLN 26-JUL-2016
 DEFINITION  Selenipedium aequinoctiale maturase K (matK) gene, partial cds;
             chloroplast.
@@ -423,9 +423,9 @@ If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see 
 >>> from Bio import SeqIO
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
->>> record = SeqIO.read(handle, "genbank")
->>> handle.close()
+>>> stream = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
+>>> record = SeqIO.read(stream, "genbank")
+>>> stream.close()
 >>> print(record.id)
 EU490707.1
 >>> print(record.name)
@@ -449,13 +449,11 @@ Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 filename = "EU490707.gbk"
 if not os.path.isfile(filename):
     # Downloading...
-    net_handle = Entrez.efetch(
-        db="nucleotide", id="EU490707", rettype="gb", retmode="text"
-    )
-    out_handle = open(filename, "w")
-    out_handle.write(net_handle.read())
-    out_handle.close()
-    net_handle.close()
+    stream = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
+    output = open(filename, "w")
+    output.write(streame.read())
+    output.close()
+    stream.close()
     print("Saved")
 
 print("Parsing...")
@@ -469,9 +467,9 @@ To get the output in XML format, which you can parse using the \verb+Bio.Entrez.
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.efetch(db="nucleotide", id="EU490707", retmode="xml")
->>> record = Entrez.read(handle)
->>> handle.close()
+>>> stream = Entrez.efetch(db="nucleotide", id="EU490707", retmode="xml")
+>>> record = Entrez.read(stream)
+>>> stream.close()
 >>> record[0]["GBSeq_definition"]
 'Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chloroplast'
 >>> record[0]["GBSeq_source"]
@@ -575,8 +573,8 @@ In this example, we use \verb+Bio.Entrez.egquery()+ to obtain the counts for ``B
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.egquery(term="biopython")
->>> record = Entrez.read(handle)
+>>> stream = Entrez.egquery(term="biopython")
+>>> record = Entrez.read(stream)
 >>> for row in record["eGQueryResult"]:
 ...     print(row["DbName"], row["Count"])
 ...
@@ -594,8 +592,8 @@ ESpell retrieves spelling suggestions. In this example, we use \verb+Bio.Entrez.
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.espell(term="biopythooon")
->>> record = Entrez.read(handle)
+>>> stream = Entrez.espell(term="biopythooon")
+>>> record = Entrez.read(stream)
 >>> record["Query"]
 'biopythooon'
 >>> record["CorrectedQuery"]
@@ -621,8 +619,15 @@ The XML file \verb+Homo_sapiens.xml+ consists of a list of Entrez gene records, 
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = open("Homo_sapiens.xml", "b")
->>> records = Entrez.parse(handle)
+>>> stream = open("Homo_sapiens.xml", "rb")
+>>> records = Entrez.parse(stream)
+\end{minted}{pycon}
+Alternatively, you can use
+\begin{minted}{pycon}
+>>> records = Entrez.parse("Homo_sapiens.xml")
+\end{minted}{pycon}
+and let \verb+Bio.Entrez+ take care of opening and closing the file. This is safer, as the file will then automatically be closed after parsing it, or if an error occurs.
+\begin{minted}{pycon}
 >>> for record in records:
 ...     status = record["Entrezgene_track-info"]["Gene-track"]["Gene-track_status"]
 ...     if status.attributes["value"] == "discontinued":
@@ -659,7 +664,7 @@ in the XML returned by Entrez, is converted to the Python string
 \end{minted}
 by the \verb+Bio.Entrez+ parser. While this is more human-readable, it is not valid HTML due to the less-than sign, and makes further processing of the text e.g. by an HTML parser impractical. To ensure that all strings returned by the parser are valid HTML, call \verb+Entrez.read+ or \verb+Entrez.parse+ with the \verb+escape+ argument set to \verb+True+:
 \begin{minted}{pycon}
->>> record = Entrez.read(handle, escape=True)
+>>> record = Entrez.read(stream, escape=True)
 \end{minted}
 The parser will then replace all characters disallowed in HTML by their HTML-escaped equivalent; in the example above, the parser will generate
 \begin{minted}{text}
@@ -676,8 +681,8 @@ For example, this error occurs if you try to parse a Fasta file as if it were an
 %doctest ../Tests/GenBank
 \begin{minted}{pycon}
 >>> from Bio import Entrez
->>> handle = open("NC_005816.fna", "rb")  # a Fasta file
->>> record = Entrez.read(handle)
+>>> stream = open("NC_005816.fna", "rb")  # a Fasta file
+>>> record = Entrez.read(stream)
 Traceback (most recent call last):
   ...
 Bio.Entrez.Parser.NotXMLError: Failed to parse the XML data (syntax error: line 1, column 0). Please make sure that the input data are in XML format.
@@ -708,7 +713,7 @@ Here is an example of an XML file that ends prematurely:
 \end{minted}
 which will generate the following traceback:
 \begin{minted}{pycon}
->>> Entrez.read(handle)
+>>> Entrez.read(stream)
 Traceback (most recent call last):
   ...
 Bio.Entrez.Parser.CorruptedXMLError: Failed to parse the XML data (no element found: line 16, column 0). Please make sure that the input data are not corrupted.
@@ -752,8 +757,8 @@ In this file, for some reason the tag \verb|<DocsumList>| (and several others) a
 %doctest ../Tests/Entrez/
 \begin{minted}{pycon}
 >>> from Bio import Entrez
->>> handle = open("einfo3.xml", "rb")
->>> record = Entrez.read(handle)
+>>> stream = open("einfo3.xml", "rb")
+>>> record = Entrez.read(stream)
 Traceback (most recent call last):
   ...
 Bio.Entrez.Parser.ValidationError: Failed to find tag 'DocsumList' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False.
@@ -763,9 +768,9 @@ Optionally, you can instruct the parser to skip such tags instead of raising a V
 %doctest ../Tests/Entrez/
 \begin{minted}{pycon}
 >>> from Bio import Entrez
->>> handle = open("einfo3.xml", "rb")
->>> record = Entrez.read(handle, validate=False)
->>> handle.close()
+>>> stream = open("einfo3.xml", "rb")
+>>> record = Entrez.read(stream, validate=False)
+>>> stream.close()
 \end{minted}
 Of course, the information contained in the XML tags that are not in the DTD are not present in the record returned by \verb|Entrez.read|.
 
@@ -844,8 +849,8 @@ We first open the file and then parse it:
 %doctest ../Tests/Medline
 \begin{minted}{pycon}
 >>> from Bio import Medline
->>> with open("pubmed_result1.txt") as handle:
-...     record = Medline.read(handle)
+>>> with open("pubmed_result1.txt") as stream:
+...     record = Medline.read(stream)
 ...
 \end{minted}
 The \verb+record+ now contains the Medline record as a Python dictionary:
@@ -877,8 +882,8 @@ To parse a file containing multiple Medline records, you can use the \verb+parse
 %doctest ../Tests/Medline
 \begin{minted}{pycon}
 >>> from Bio import Medline
->>> with open("pubmed_result2.txt") as handle:
-...     for record in Medline.parse(handle):
+>>> with open("pubmed_result2.txt") as stream:
+...     for record in Medline.parse(stream):
 ...         print(record["TI"])
 ...
 A high level interface to SCOP and ASTRAL implemented in python.
@@ -891,20 +896,20 @@ Instead of parsing Medline records stored in files, you can also parse Medline r
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.esearch(db="pubmed", term="biopython")
->>> record = Entrez.read(handle)
+>>> stream = Entrez.esearch(db="pubmed", term="biopython")
+>>> record = Entrez.read(stream)
 >>> record["IdList"]
 ['19304878', '18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
 \end{minted}
 We now use \verb+Bio.Entrez.efetch+ to download these Medline records:
 \begin{minted}{pycon}
 >>> idlist = record["IdList"]
->>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="text")
+>>> stream = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="text")
 \end{minted}
 Here, we specify \verb+rettype="medline", retmode="text"+ to obtain the Medline records in plain-text Medline format. Now we use \verb+Bio.Medline+ to parse these records:
 \begin{minted}{pycon}
 >>> from Bio import Medline
->>> records = Medline.parse(handle)
+>>> records = Medline.parse(stream)
 >>> for record in records:
 ...     print(record["AU"])
 ...
@@ -919,8 +924,8 @@ Here, we specify \verb+rettype="medline", retmode="text"+ to obtain the Medline 
 
 For comparison, here we show an example using the XML format:
 \begin{minted}{pycon}
->>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="xml")
->>> records = Entrez.read(handle)
+>>> stream = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="xml")
+>>> records = Entrez.read(stream)
 >>> for record in records["PubmedArticle"]:
 ...     print(record["MedlineCitation"]["Article"]["ArticleTitle"])
 ...
@@ -952,8 +957,8 @@ The following code fragment shows how to parse the example GEO file
 
 \begin{minted}{pycon}
 >>> from Bio import Geo
->>> handle = open("GSE16.txt")
->>> records = Geo.parse(handle)
+>>> stream = open("GSE16.txt")
+>>> records = Geo.parse(stream)
 >>> for record in records:
 ...     print(record)
 ...
@@ -965,9 +970,9 @@ You can search the ``gds'' database (GEO datasets) with ESearch:
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.esearch(db="gds", term="GSE16")
->>> record = Entrez.read(handle)
->>> handle.close()
+>>> stream = Entrez.esearch(db="gds", term="GSE16")
+>>> record = Entrez.read(stream)
+>>> stream.close()
 >>> record["Count"]
 '27'
 \end{minted}
@@ -1112,8 +1117,8 @@ In this example, we will query PubMed for all articles having to do with orchids
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.egquery(term="orchid")
->>> record = Entrez.read(handle)
+>>> stream = Entrez.egquery(term="orchid")
+>>> record = Entrez.read(stream)
 >>> for row in record["eGQueryResult"]:
 ...     if row["DbName"] == "pubmed":
 ...         print(row["Count"])
@@ -1127,9 +1132,9 @@ Now we use the \verb+Bio.Entrez.efetch+ function to download the PubMed IDs of t
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.esearch(db="pubmed", term="orchid", retmax=463)
->>> record = Entrez.read(handle)
->>> handle.close()
+>>> stream = Entrez.esearch(db="pubmed", term="orchid", retmax=463)
+>>> record = Entrez.read(stream)
+>>> stream.close()
 >>> idlist = record["IdList"]
 \end{minted}
 
@@ -1146,8 +1151,8 @@ Now that we've got them, we obviously want to get the corresponding Medline reco
 %cont-doctest
 \begin{minted}{pycon}
 >>> from Bio import Medline
->>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="text")
->>> records = Medline.parse(handle)
+>>> stream = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="text")
+>>> records = Medline.parse(stream)
 \end{minted}
 
 NOTE - We've just done a separate search and fetch here, the NCBI much prefer you to take advantage of their history support in this situation.  See Section~\ref{sec:entrez-webenv}.
@@ -1202,8 +1207,8 @@ First, we use EGQuery to find out the number of results we will get before actua
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.egquery(term="Cypripedioideae")
->>> record = Entrez.read(handle)
+>>> stream = Entrez.egquery(term="Cypripedioideae")
+>>> record = Entrez.read(stream)
 >>> for row in record["eGQueryResult"]:
 ...     if row["DbName"] == "nuccore":
 ...         print(row["Count"])
@@ -1218,11 +1223,11 @@ Let's use the \verb+retmax+ argument to restrict the maximum number of records r
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.esearch(
+>>> stream = Entrez.esearch(
 ...     db="nucleotide", term="Cypripedioideae", retmax=814, idtype="acc"
 ... )
->>> record = Entrez.read(handle)
->>> handle.close()
+>>> record = Entrez.read(stream)
+>>> stream.close()
 \end{minted}
 
 Here, \verb+record+ is a Python dictionary containing the search results and some auxiliary information. Just for information, let's look at what is stored in this dictionary:
@@ -1257,8 +1262,8 @@ However, in this situation you should ideally be using the history feature descr
 >>> idlist = ",".join(record["IdList"][:5])
 >>> print(idlist)
 KX265015.1, KX265014.1, KX265013.1, KX265012.1, KX265011.1]
->>> handle = Entrez.efetch(db="nucleotide", id=idlist, retmode="xml")
->>> records = Entrez.read(handle)
+>>> stream = Entrez.efetch(db="nucleotide", id=idlist, retmode="xml")
+>>> records = Entrez.read(stream)
 >>> len(records)
 5
 \end{minted}
@@ -1301,8 +1306,8 @@ First, we want to make a query and find out the ids of the records to retrieve. 
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.egquery(term="Opuntia AND rpl16")
->>> record = Entrez.read(handle)
+>>> stream = Entrez.egquery(term="Opuntia AND rpl16")
+>>> record = Entrez.read(stream)
 >>> for row in record["eGQueryResult"]:
 ...     if row["DbName"] == "nuccore":
 ...         print(row["Count"])
@@ -1311,8 +1316,8 @@ First, we want to make a query and find out the ids of the records to retrieve. 
 \end{minted}
 Now we download the list of GenBank identifiers:
 \begin{minted}{pycon}
->>> handle = Entrez.esearch(db="nuccore", term="Opuntia AND rpl16")
->>> record = Entrez.read(handle)
+>>> stream = Entrez.esearch(db="nuccore", term="Opuntia AND rpl16")
+>>> record = Entrez.read(stream)
 >>> gi_list = record["IdList"]
 >>> gi_list
 ['57240072', '57240071', '6273287', '6273291', '6273290', '6273289', '6273286',
@@ -1323,13 +1328,13 @@ Now we use these GIs to download the GenBank records - note that with older vers
 
 \begin{minted}{pycon}
 >>> gi_str = ",".join(gi_list)
->>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="gb", retmode="text")
+>>> stream = Entrez.efetch(db="nuccore", id=gi_str, rettype="gb", retmode="text")
 \end{minted}
 
-If you want to look at the raw GenBank files, you can read from this handle and print out the result:
+If you want to look at the raw GenBank files, you can read from this stream and print out the result:
 
 \begin{minted}{pycon}
->>> text = handle.read()
+>>> text = stream.read()
 >>> print(text)
 LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007
 DEFINITION  Opuntia subulata rpl16 gene, intron; chloroplast.
@@ -1350,8 +1355,8 @@ In this case, we are just getting the raw records. To get the records in a more 
 
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
->>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="gb", retmode="text")
->>> records = SeqIO.parse(handle, "gb")
+>>> stream = Entrez.efetch(db="nuccore", id=gi_str, rettype="gb", retmode="text")
+>>> records = SeqIO.parse(stream, "gb")
 \end{minted}
 
 \noindent We can now step through the records and look at the information we are interested in:
@@ -1383,8 +1388,8 @@ Staying with a plant example, let's now find the lineage of the Cypripedioideae 
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
->>> handle = Entrez.esearch(db="Taxonomy", term="Cypripedioideae")
->>> record = Entrez.read(handle)
+>>> stream = Entrez.esearch(db="Taxonomy", term="Cypripedioideae")
+>>> record = Entrez.read(stream)
 >>> record["IdList"]
 ['158330']
 >>> record["IdList"][0]
@@ -1394,8 +1399,8 @@ Now, we use \verb+efetch+ to download this entry in the Taxonomy database, and t
 
 %cont-doctest
 \begin{minted}{pycon}
->>> handle = Entrez.efetch(db="Taxonomy", id="158330", retmode="xml")
->>> records = Entrez.read(handle)
+>>> stream = Entrez.efetch(db="Taxonomy", id="158330", retmode="xml")
+>>> records = Entrez.read(stream)
 \end{minted}
 Again, this record stores lots of information:
 \begin{minted}{pycon}
@@ -1446,11 +1451,11 @@ additional argument of \verb|usehistory="y"|,
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "history.user@example.com"  # Always tell NCBI who you are
->>> search_handle = Entrez.esearch(
+>>> stream = Entrez.esearch(
 ...     db="nucleotide", term="Opuntia[orgn] and rpl16", usehistory="y", idtype="acc"
 ... )
->>> search_results = Entrez.read(search_handle)
->>> search_handle.close()
+>>> search_results = Entrez.read(stream)
+>>> stream.close()
 \end{minted}
 
 \noindent As before (see Section~\ref{sec:entrez_example_genbank}), the XML output includes the first \verb+retmax+ search results, with \verb+retmax+ defaulting to 20:
@@ -1485,11 +1490,11 @@ For example,
 # and set the variables count, webenv, query_key
 
 batch_size = 3
-out_handle = open("orchid_rpl16.fasta", "w")
+output = open("orchid_rpl16.fasta", "w")
 for start in range(0, count, batch_size):
     end = min(count, start + batch_size)
     print("Going to download record %i to %i" % (start + 1, end))
-    fetch_handle = Entrez.efetch(
+    stream = Entrez.efetch(
         db="nucleotide",
         rettype="fasta",
         retmode="text",
@@ -1499,10 +1504,10 @@ for start in range(0, count, batch_size):
         query_key=query_key,
         idtype="acc",
     )
-    data = fetch_handle.read()
-    fetch_handle.close()
-    out_handle.write(data)
-out_handle.close()
+    data = stream.read()
+    stream.close()
+    output.write(data)
+output.close()
 \end{minted}
 
 \noindent For illustrative purposes, this example downloaded the FASTA records in batches of three.  Unless you are downloading genomes or chromosomes, you would normally pick a larger batch size.
@@ -1523,11 +1528,11 @@ count = int(search_results["Count"])
 print("Found %i results" % count)
 
 batch_size = 10
-out_handle = open("recent_orchid_papers.txt", "w")
+output = open("recent_orchid_papers.txt", "w")
 for start in range(0, count, batch_size):
     end = min(count, start + batch_size)
     print("Going to download record %i to %i" % (start + 1, end))
-    fetch_handle = Entrez.efetch(
+    stream = Entrez.efetch(
         db="pubmed",
         rettype="medline",
         retmode="text",
@@ -1536,10 +1541,10 @@ for start in range(0, count, batch_size):
         webenv=search_results["WebEnv"],
         query_key=search_results["QueryKey"],
     )
-    data = fetch_handle.read()
-    fetch_handle.close()
-    out_handle.write(data)
-out_handle.close()
+    data = stream.read()
+    stream.close()
+    output.write(data)
+output.close()
 \end{minted}
 
 \noindent At the time of writing, this gave 28 matches - but because this is a date dependent search, this will of course vary.  As described in Section~\ref{sec:entrez-and-medline} above, you can then use \verb|Bio.Medline| to parse the saved records.
