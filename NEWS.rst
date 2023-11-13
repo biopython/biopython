@@ -57,6 +57,8 @@ methods matching those added to strings in Python 3.9. They also now have a
 ``search`` method to ``Seq`` and ``MutableSeq`` object to search for
 multiple subsequences at the same time.
 
+The MMCIFParser now ignores '.' header values.
+
 Calling ``set_angle()`` on a residue dihedral angle previously set only
 the specified angle, now the default behavior is to update overlapping
 angles as well.  For example, setting Psi (N-CA-CN) now updates the
