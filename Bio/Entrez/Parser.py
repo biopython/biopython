@@ -394,7 +394,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         except TypeError:  # not a path, assume we received a stream
             if source.read(0) != b"":
                 raise StreamModeError(
-                    f"the XML file must be opened in binary mode."
+                    "the XML file must be opened in binary mode."
                 ) from None
             stream = source
         if stream.read(0) != b"":
@@ -454,7 +454,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         except TypeError:  # not a path, assume we received a stream
             if source.read(0) != b"":
                 raise StreamModeError(
-                    f"the XML file must be opened in binary mode."
+                    "the XML file must be opened in binary mode."
                 ) from None
             stream = source
         if stream.read(0) != b"":
