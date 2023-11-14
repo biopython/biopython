@@ -34,7 +34,9 @@ from urllib.request import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler
 from urllib.request import Request
 
 from Bio import BiopythonWarning
+from Bio import StreamModeError
 from Bio._utils import function_with_previous
+
 
 email = None
 tool = "biopython"
@@ -54,19 +56,41 @@ class Record(list):
 class Records:
     """Stores the BLAST results of a single BLAST run."""
 
-    def __init__(self, stream):
+    def __init__(self, source):
         """Initialize the Records object."""
         from Bio.Blast._parser import XMLHandler
 
+        self.source = source
+        try:
+            stream = open(source, "rb")
+        except TypeError:  # not a path, assume we received a stream
+            if source.read(0) != b"":
+                raise StreamModeError(
+                    "BLAST output files must be opened in binary mode."
+                ) from None
+            stream = source
+        self._stream = stream
         handler = XMLHandler(stream)
         handler.read_header(self)
-        self.handler = handler
+        self._handler = handler
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        try:
+            stream = self._stream
+        except AttributeError:
+            return
+        if stream is not self.source:
+            stream.close()
+        del self._stream
 
     def __iter__(self):
         return self
 
     def __next__(self):
-        return next(self.handler)
+        return next(self._handler)
 
 
 def parse(source):
@@ -129,16 +153,16 @@ def read(source):
     Use the Bio.Blast.parse function if you want to read a file containing
     BLAST output for more than one query.
     """
-    records = parse(source)
-    try:
-        record = next(records)
-    except StopIteration:
-        raise ValueError("No BLAST output found.") from None
-    try:
-        next(records)
-        raise ValueError("BLAST output for more than one query found.")
-    except StopIteration:
-        pass
+    with parse(source) as records:
+        try:
+            record = next(records)
+        except StopIteration:
+            raise ValueError("No BLAST output found.") from None
+        try:
+            next(records)
+            raise ValueError("BLAST output for more than one query found.")
+        except StopIteration:
+            pass
     return record
 
 

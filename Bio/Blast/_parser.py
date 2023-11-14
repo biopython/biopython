@@ -18,7 +18,6 @@ import os.path
 from xml.parsers import expat
 from collections import deque
 
-from Bio import StreamModeError
 from Bio.Blast import Record
 from Bio.Seq import Seq, reverse_complement
 from Bio.SeqRecord import SeqRecord
@@ -91,35 +90,13 @@ class XMLHandler(deque):
     _start_methods = {}
     _end_methods = {}
 
-    def __init__(self, source):
+    def __init__(self, stream):
         """Initialize the expat parser."""
-        self.source = source
-        try:
-            self._stream = open(source, "rb")
-        except TypeError:  # not a path, assume we received a stream
-            if source.read(0) != b"":
-                raise StreamModeError(
-                    "BLAST output files must be opened in binary mode."
-                ) from None
-            self._stream = source
-
         parser = expat.ParserCreate()
         parser.XmlDeclHandler = self._xmlDeclHandler
         parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         self._parser = parser
         self._stream = stream
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_value, exc_traceback):
-        try:
-            stream = self._stream
-        except AttributeError:
-            return
-        if stream is not self.source:
-            stream.close()
-        del self._stream
 
     def read_header(self, records):
         """Read the BLAST XML file header and store as attributes on records."""
