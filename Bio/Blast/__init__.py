@@ -34,7 +34,6 @@ from urllib.request import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler
 from urllib.request import Request
 
 from Bio import BiopythonWarning
-from Bio import StreamModeError
 from Bio._utils import function_with_previous
 
 email = None
@@ -97,20 +96,7 @@ def parse(source):
     >>> stream.close()
 
     """
-    try:
-        stream = open(source, "rb")
-    except TypeError:  # not a path, assume we received a stream
-        if source.read(0) != b"":
-            raise StreamModeError(
-                "BLAST output files must be opened in binary mode."
-            ) from None
-        stream = source
-
-    try:
-        return Records(stream)
-    finally:
-        if stream != source:
-            stream.close()
+    return Records(source)
 
 
 def read(source):

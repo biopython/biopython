@@ -8,7 +8,7 @@ Dealing with BLAST can be split up into two steps, both of which can be done fro
 Firstly, running BLAST for your query sequence(s), and getting some output.
 Secondly, parsing the BLAST output in Python for further analysis.
 
-Your first introduction to running BLAST was probably via the NCBI web-service.
+Your first introduction to running BLAST was probably via the \href{https://blast.ncbi.nlm.nih.gov/Blast.cgi}{NCBI BLAST web page}.
 In fact, there are lots of ways you can run BLAST, which can be categorized in several ways.
 The most important distinction is running BLAST locally (on your own machine),
 and running BLAST remotely (on another machine, typically the NCBI servers).
@@ -18,22 +18,10 @@ from within a Python script.
 \section{Running BLAST over the Internet}
 \label{sec:running-www-blast}
 
-We use the function \verb|qblast()| in the \verb|Bio.Blast| module to call the
-online version of BLAST.  This has three non-optional arguments:
-\begin{itemize}
-\item The first argument is the blast program to use for the search, as a
-lower case string. The options and descriptions of the programs are
-available at \url{https://blast.ncbi.nlm.nih.gov/Blast.cgi}.
-Currently \verb|qblast| only works with blastn, blastp, blastx, tblast
-and tblastx.
-\item The second argument specifies the databases to search against. Again,
-the options for this are available on the NCBI Guide to BLAST
-\url{https://blast.ncbi.nlm.nih.gov/doc/blast-help/}.
-\item The third argument is a string containing your query sequence.  This
-can either be the sequence itself, the sequence in fasta format,
-or an identifier like a GI number.
-\end{itemize}
-At \url{https://blast.ncbi.nlm.nih.gov/doc/blast-help/developerinfo.html#developerinfo} we find the NCBI guidelines stating:
+We use the function \verb|qblast| in the \verb|Bio.Blast| module to call the
+online version of BLAST.
+
+The \href{https://blast.ncbi.nlm.nih.gov/doc/blast-help/developerinfo.html#developerinfo}{NCBI guidelines} state:
 \begin{enumerate}
 \item Do not contact the server more often than once every 10 seconds.
 \item Do not poll for any single RID more often than once a minute.
@@ -41,12 +29,33 @@ At \url{https://blast.ncbi.nlm.nih.gov/doc/blast-help/developerinfo.html#develop
 \item Run scripts weekends or between 9 pm and 5 am Eastern time on weekdays if more than 50 searches will be submitted.
 \end{enumerate}
 
-To fulfill the third point, set the \verb|Blast.email| variable.
+\verb|Blast.qblast| follows the first two points automatically. 
+To fulfill the third point, set the \verb|Blast.email| variable (the
+\verb|Blast.tool| variable is already set to \verb|"biopython"| by default):
 %doctest
 \begin{minted}{pycon}
 >>> from Bio import Blast
+>>> Blast.tool
+'biopython'
 >>> Blast.email = "A.N.Other@example.com"
 \end{minted}
+
+\subsection{BLAST arguments}
+\label{subsec:blast-arguments}
+
+The \verb|qblast| function has three non-optional arguments:
+\begin{itemize}
+\item The first argument is the BLAST program to use for the search, as a
+lower case string. The programs and their options are described at the
+\href{https://blast.ncbi.nlm.nih.gov/Blast.cgi}{NCBI BLAST web page}.
+Currently \verb|qblast| only works with blastn, blastp, blastx, tblast
+and tblastx.
+\item The second argument specifies the databases to search against. Again,
+the options for this are available on \href{https://blast.ncbi.nlm.nih.gov/doc/blast-help/}{NCBI's BLAST Help pages}.
+\item The third argument is a string containing your query sequence.  This
+can either be the sequence itself, the sequence in fasta format,
+or an identifier like a GI number.
+\end{itemize}
 
 The \verb|qblast| function also takes a number of other option arguments,
 which are basically analogous to the different parameters you can set
@@ -125,6 +134,9 @@ This approach makes more sense if you have your sequence(s) in a
 non-FASTA file format which you can extract using \verb|Bio.SeqIO|
 (see Chapter~\ref{chapter:seqio}).
 
+\subsection{Saving BLAST results}
+\label{subsec:saving-blast-results}
+
 Whatever arguments you give the \verb|qblast()| function, you should
 get back your results as a stream of \verb|bytes| data
 (by default in XML format).
@@ -135,21 +147,19 @@ I find this especially useful when debugging my code that extracts
 info from the BLAST results (because re-running the online search
 is slow and wastes the NCBI computer time).
 
-\label{sec:saving-blast-output}
-
 We need to be a bit careful since we can use \verb|result_stream.read()| to
 read the BLAST output only once -- calling \verb|result_stream.read()| again
-returns an empty string.
+returns an empty \verb|bytes| object.
 
 \begin{minted}{pycon}
->>> with open("my_blast.xml", "w") as out_stream:
+>>> with open("my_opuntia_blast.xml", "wb") as out_stream:
 ...     out_stream.write(result_stream.read())
 ...
 >>> result_stream.close()
 \end{minted}
 
-After doing this, the results are in the file \verb|my_blast.xml| and the
-original stream has had all its data extracted (so we closed it). However,
+After doing this, the results are in the file \verb|my_blast.xml| and
+\verb|result_stream| has had all its data extracted (so we closed it). However,
 the \verb|parse| function of the BLAST parser (described
 in~\ref{sec:parsing-blast}) takes a file-like object, so
 we can just open the saved file for input as \verb|bytes|:
@@ -163,7 +173,10 @@ to do something with them, so this leads us right into the parsing section
 (see Section~\ref{sec:parsing-blast} below). You may want to jump ahead to
 that now \ldots.
 
-Below is an example of reading BLAST output in JSON format. Using \verb|format_type="JSON2"|, the data provided by \verb|Blast.qblast| will be in zipped JSON format:
+\subsection{Obtaining BLAST output in other formats}
+\label{subsec:blast-other-formats}
+
+By using the \verb|format_type| argument when calling \verb|qblast|, you can obtain BLAST output in formats other than XML. Below is an example of reading BLAST output in JSON format. Using \verb|format_type="JSON2"|, the data provided by \verb|Blast.qblast| will be in zipped JSON format:
 \begin{minted}{pycon}
 >>> from Bio import Blast
 >>> from Bio import SeqIO
@@ -289,16 +302,12 @@ it setup right takes some effort:
 \item Local BLAST requires (large) BLAST databases to be setup (and potentially kept up to date).
 \end{itemize}
 
-\noindent
-To further confuse matters there are several different BLAST packages available,
-and there are also other tools which can produce imitation BLAST output files, such as BLAT.
-
 \subsection{Standalone NCBI BLAST+}
 
 The ``new''
 \href{https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
 {NCBI BLAST+} suite was released in 2009. This replaces the old NCBI ``legacy'' BLAST
-package (see below).
+package (see \ref{subsec:other-blast-versions}).
 
 This section will show briefly how to use these tools from within Python. If you have
 already read or tried the alignment tool examples in Section~\ref{sec:alignment-tools}
@@ -339,6 +348,7 @@ Therefore use \verb|Bio.Blast.parse()| to parse it as described below in
 Section~\ref{sec:parsing-blast}.
 
 \subsection{Other versions of BLAST}
+\label{subsec:other-blast-versions}
 
 NCBI BLAST+ (written in C++) was first released in 2009 as a replacement for
 the original NCBI ``legacy'' BLAST (written in C) which is no longer being updated.
@@ -493,13 +503,53 @@ I guess by now you're wondering what is in a BLAST record.
 In Biopython, the information in a BLAST Record is stored in a \verb|Bio.Blast.Record| object.  Right now we'll just show
 an example of how to get some info out of the BLAST report, but if you
 want something in particular that is not described here, look at the
-info on the record class in detail, and take a gander into the code or
+info on the Record class in detail, and take a gander into the code or
 automatically generated documentation -- the docstrings have lots of
 good info about what is stored in each piece of information.
 
-To continue with our example, let's just print out some summary info
-about all hits in our blast report greater than a particular
-threshold. The following code does this:
+The \verb|Bio.Blast.Record| class inherits from \verb+list+, and is essentially a list of \verb|Bio.Align.Alignments| objects (see \ref{sec:alignments}). In addition, a \verb|Bio.Blast.Record| object has an attribute \verb|query| that stores the original BLAST query. Continuing with our example,
+\begin{minted}{pycon}
+>>> blast_recore.query
+SeqRecord(seq=Seq(None, length=61), id='42291', name='<unknown name>', description='mystery_seq', dbxrefs=[])
+\end{minted}
+Each \verb|Bio.Align.Alignments| object in the list represents one BLAST hit of the query against some target.
+\begin{minted}{pycon}
+>>> type(blast_record[0])
+<class 'Bio.Align.Alignments'>
+>>> blast_record[0].target
+SeqRecord(seq=Seq(None, length=61), id='gi|262205317|ref|NR_030195.1|', name='NR_030195', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
+\end{minted}
+Each hit is represented by a \verb|Bio.Align.Alignments| (plural) object, as the target and the query can align to each other in multiple but distinct regions.
+However, typically a hit consists of only one or a few alignments, especially for alignments of highly homologous sequences. Each alignment is represented by a  \verb|Bio.Align.Alignment| (singular) object (see Section \ref{sec:alignmentobject}).
+\begin{minted}{pycon}
+>>> len(blast_record[0])
+1
+>>> alignment = blast_record[0][0]
+>>> type(alignment)
+<class 'Bio.Align.Alignment'>
+\end{minted}
+The \verb|alignment| object has attributes pointing to the target and query sequences, as well as a \verb|coordinates| attribute describing the sequence alignment. The usual \verb|Alignment| methods (see Section \ref{sec:alignmentobject}) can therefore be applied to \verb|alignment|. For example, we can print the alignment:
+\begin{minted}{pycon}
+>>> alignment.target
+SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG'), id='gi|262205317|ref|NR_030195.1|', name='NR_030195', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
+>>> alignment.query
+SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG'), id='42291', name='<unknown name>', description='mystery_seq', dbxrefs=[])
+>>> print(alignment)
+gi|262205         0 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGG
+                  0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+42291             0 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGG
+
+gi|262205        60 G 61
+                 60 | 61
+42291            60 G 61
+
+>>> alignment.coordinates
+array([[ 0, 61],
+       [ 0, 61]])
+\end{minted}
+
+Let's just print out some summary info about all hits in our blast report
+greater than a particular threshold. The following code does this:
 
 \begin{minted}{pycon}
 >>> E_VALUE_THRESH = 0.04
@@ -552,7 +602,7 @@ doing what you need to do!
 
 \section{Dealing with PSI-BLAST}
 
-You can run the standalone version of PSI-BLAST (\verb|blastpgp|) directly
+You can run the standalone version of PSI-BLAST (\verb|psiblast|) directly
 from the command line or using python's \verb|subprocess| module.
 
 At the time of writing, the NCBI do not appear to support tools running a
@@ -616,7 +666,7 @@ can either be the sequence itself, the sequence in fasta format,
 or an identifier like a GI number.
 \end{itemize}
 
-NCBI guidelines, from \url{https://blast.ncbi.nlm.nih.gov/doc/blast-help/developerinfo.html#developerinfo} state:
+The NCBI guidelines, from \url{https://blast.ncbi.nlm.nih.gov/doc/blast-help/developerinfo.html#developerinfo} state:
 \begin{enumerate}
 \item Do not contact the server more often than once every 10 seconds.
 \item Do not poll for any single RID more often than once a minute.
