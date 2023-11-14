@@ -24914,96 +24914,95 @@ gi|146197       480 STLQKLHRNRIWYLDILFSNDLVNNE 506
         datafile = os.path.join("Blast", filename)
         with open(datafile, "rb") as handle:
             records = Blast.parse(handle)
-            self.assertEqual(records.program, "blastp")
-            self.assertEqual(records.version, "BLASTP 2.2.22+")
-            self.assertEqual(
-                records.reference,
-                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
-            )
-            self.assertEqual(records.db, "nr")
-            self.assertIsInstance(records.query, SeqRecord)
-            self.assertEqual(records.query.id, "1")
-            self.assertEqual(
-                records.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
-            )
-            self.assertEqual(repr(records.query.seq), "Seq(None, length=107)")
-            self.assertEqual(len(records.param), 5)
-            self.assertEqual(records.param["matrix"], "BLOSUM62")
-            self.assertAlmostEqual(records.param["expect"], 1e-06)
-            self.assertEqual(records.param["gap-open"], 11)
-            self.assertEqual(records.param["gap-extend"], 1)
-            self.assertEqual(records.param["filter"], "F")
-            record = next(records)
-            self.assertEqual(record.num, 1)
-            self.assertIsInstance(record.query, SeqRecord)
-            self.assertEqual(record.query.id, "1")
-            self.assertEqual(
-                record.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
-            )
-            self.assertEqual(repr(record.query.seq), "Seq(None, length=107)")
-            self.assertEqual(len(record.stat), 7)
-            self.assertEqual(record.stat["db-num"], 8994603)
-            self.assertEqual(record.stat["db-len"], -1216159329)
-            self.assertEqual(record.stat["hsp-len"], 0)
-            self.assertAlmostEqual(record.stat["eff-space"], 76934807744.0)
-            self.assertAlmostEqual(record.stat["kappa"], 0.041)
-            self.assertAlmostEqual(record.stat["lambda"], 0.267)
-            self.assertAlmostEqual(record.stat["entropy"], 0.14)
-            self.assertEqual(len(record), 10)
-            alignments = record[0]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|3298468|dbj|BAA31520.1|")
-            self.assertEqual(alignments.target.name, "BAA31520")
-            self.assertEqual(alignments.target.description, "SAMIPF [Aster tripolium]")
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=107)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 520.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 204.912011757068)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 1.77242652875017e-51
-            )
-            self.assertEqual(alignment.annotations["identity"], 107)
-            self.assertEqual(alignment.annotations["positive"], 107)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+            self.check_xml_2222_blastp_001(records)
+        with Blast.parse(datafile) as records:
+            self.check_xml_2222_blastp_001(records)
+
+    def check_xml_2222_blastp_001(self, records):
+        self.assertEqual(records.program, "blastp")
+        self.assertEqual(records.version, "BLASTP 2.2.22+")
+        self.assertEqual(
+            records.reference,
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(records.db, "nr")
+        self.assertIsInstance(records.query, SeqRecord)
+        self.assertEqual(records.query.id, "1")
+        self.assertEqual(records.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+        self.assertEqual(repr(records.query.seq), "Seq(None, length=107)")
+        self.assertEqual(len(records.param), 5)
+        self.assertEqual(records.param["matrix"], "BLOSUM62")
+        self.assertAlmostEqual(records.param["expect"], 1e-06)
+        self.assertEqual(records.param["gap-open"], 11)
+        self.assertEqual(records.param["gap-extend"], 1)
+        self.assertEqual(records.param["filter"], "F")
+        record = next(records)
+        self.assertEqual(record.num, 1)
+        self.assertIsInstance(record.query, SeqRecord)
+        self.assertEqual(record.query.id, "1")
+        self.assertEqual(record.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+        self.assertEqual(repr(record.query.seq), "Seq(None, length=107)")
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 8994603)
+        self.assertEqual(record.stat["db-len"], -1216159329)
+        self.assertEqual(record.stat["hsp-len"], 0)
+        self.assertAlmostEqual(record.stat["eff-space"], 76934807744.0)
+        self.assertAlmostEqual(record.stat["kappa"], 0.041)
+        self.assertAlmostEqual(record.stat["lambda"], 0.267)
+        self.assertAlmostEqual(record.stat["entropy"], 0.14)
+        self.assertEqual(len(record), 10)
+        alignments = record[0]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|3298468|dbj|BAA31520.1|")
+        self.assertEqual(alignments.target.name, "BAA31520")
+        self.assertEqual(alignments.target.description, "SAMIPF [Aster tripolium]")
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=107)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 520.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 204.912011757068)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.77242652875017e-51)
+        self.assertEqual(alignment.annotations["identity"], 107)
+        self.assertEqual(alignment.annotations["positive"], 107)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 107],
                           [  0, 107]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 107)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 107)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 107))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
-            )
-            self.assertEqual(alignment.query.id, "1")
-            self.assertEqual(
-                alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
-            )
-            self.assertEqual(alignment.target.id, "gi|3298468|dbj|BAA31520.1|")
-            self.assertEqual(alignment.target.name, "BAA31520")
-            self.assertEqual(alignment.target.description, "SAMIPF [Aster tripolium]")
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 107)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 107)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 107))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+        )
+        self.assertEqual(alignment.query.id, "1")
+        self.assertEqual(
+            alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+        )
+        self.assertEqual(alignment.target.id, "gi|3298468|dbj|BAA31520.1|")
+        self.assertEqual(alignment.target.name, "BAA31520")
+        self.assertEqual(alignment.target.description, "SAMIPF [Aster tripolium]")
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|329846         0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
@@ -25012,67 +25011,65 @@ gi|329846        60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
                  60 ||||||||||||||||||||||||||||||||||||||||||||||| 107
 1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
 """,
-            )
-            alignments = record[1]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|227434194|gb|ACP28878.1|")
-            self.assertEqual(alignments.target.name, "ACP28878")
-            self.assertEqual(
-                alignments.target.description,
-                "tonoplast intrinsic protein [Gossypium hirsutum]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 473.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 186.807631688952)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 4.63358243494088e-46
-            )
-            self.assertEqual(alignment.annotations["identity"], 95)
-            self.assertEqual(alignment.annotations["positive"], 101)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[1]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|227434194|gb|ACP28878.1|")
+        self.assertEqual(alignments.target.name, "ACP28878")
+        self.assertEqual(
+            alignments.target.description,
+            "tonoplast intrinsic protein [Gossypium hirsutum]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 473.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 186.807631688952)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 4.63358243494088e-46)
+        self.assertEqual(alignment.annotations["identity"], 95)
+        self.assertEqual(alignment.annotations["positive"], 101)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[ 80, 187],
                           [  0, 107]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 107)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 80)
-            self.assertEqual(alignment.target.annotations["end"], 187)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 107))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
-            )
-            self.assertEqual(alignment.query.id, "1")
-            self.assertEqual(
-                alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSTVACLLLKFATGDLAVPAFG...ANI'}, length=251)",
-            )
-            self.assertEqual(alignment.target.id, "gi|227434194|gb|ACP28878.1|")
-            self.assertEqual(alignment.target.name, "ACP28878")
-            self.assertEqual(
-                alignment.target.description,
-                "tonoplast intrinsic protein [Gossypium hirsutum]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGSTVACLLLKF T D+AV  F LS+GVGV+NALVFEIVMTFGLVYTVYATA+DPKKGSLGTIAP+AIGFIVGANI",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 107)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 80)
+        self.assertEqual(alignment.target.annotations["end"], 187)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 107))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+        )
+        self.assertEqual(alignment.query.id, "1")
+        self.assertEqual(
+            alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSTVACLLLKFATGDLAVPAFG...ANI'}, length=251)",
+        )
+        self.assertEqual(alignment.target.id, "gi|227434194|gb|ACP28878.1|")
+        self.assertEqual(alignment.target.name, "ACP28878")
+        self.assertEqual(
+            alignment.target.description,
+            "tonoplast intrinsic protein [Gossypium hirsutum]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGSTVACLLLKF T D+AV  F LS+GVGV+NALVFEIVMTFGLVYTVYATA+DPKKGSLGTIAP+AIGFIVGANI",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|227434        80 GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSTVACLLLKFATGDLAVPAFGLSSGVG
                   0 ||||||||||||||||||||||||.|.||||||||||||||||.|.|.||..|.||.|||
 1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
@@ -25081,67 +25078,65 @@ gi|227434       140 VSNALVFEIVMTFGLVYTVYATAVDPKKGSLGTIAPLAIGFIVGANI 187
                  60 |.|||||||||||||||||||||.||||||||||||.|||||||||| 107
 1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
 """,
-            )
-            alignments = record[2]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|223541319|gb|EEF42870.1|")
-            self.assertEqual(alignments.target.name, "EEF42870")
-            self.assertEqual(
-                alignments.target.description,
-                "tonoplast intrinsic protein, putative [Ricinus communis]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 456.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 180.259238898357)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 4.44682952949506e-44
-            )
-            self.assertEqual(alignment.annotations["identity"], 92)
-            self.assertEqual(alignment.annotations["positive"], 97)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[2]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|223541319|gb|EEF42870.1|")
+        self.assertEqual(alignments.target.name, "EEF42870")
+        self.assertEqual(
+            alignments.target.description,
+            "tonoplast intrinsic protein, putative [Ricinus communis]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 456.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 180.259238898357)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 4.44682952949506e-44)
+        self.assertEqual(alignment.annotations["identity"], 92)
+        self.assertEqual(alignment.annotations["positive"], 97)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[ 80, 187],
                           [  0, 107]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 107)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 80)
-            self.assertEqual(alignment.target.annotations["end"], 187)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 107))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
-            )
-            self.assertEqual(alignment.query.id, "1")
-            self.assertEqual(
-                alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSTVACLLLKFSTGGLTTSAFA...ANI'}, length=251)",
-            )
-            self.assertEqual(alignment.target.id, "gi|223541319|gb|EEF42870.1|")
-            self.assertEqual(alignment.target.name, "EEF42870")
-            self.assertEqual(
-                alignment.target.description,
-                "tonoplast intrinsic protein, putative [Ricinus communis]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGSTVACLLLKF T  +    F+LS+GVGV NA VFEIVMTFGLVYTVYATA+DPKKGSLGTIAPIAIGFIVGANI",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 107)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 80)
+        self.assertEqual(alignment.target.annotations["end"], 187)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 107))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+        )
+        self.assertEqual(alignment.query.id, "1")
+        self.assertEqual(
+            alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSTVACLLLKFSTGGLTTSAFA...ANI'}, length=251)",
+        )
+        self.assertEqual(alignment.target.id, "gi|223541319|gb|EEF42870.1|")
+        self.assertEqual(alignment.target.name, "EEF42870")
+        self.assertEqual(
+            alignment.target.description,
+            "tonoplast intrinsic protein, putative [Ricinus communis]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGSTVACLLLKF T  +    F+LS+GVGV NA VFEIVMTFGLVYTVYATA+DPKKGSLGTIAPIAIGFIVGANI",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|223541        80 GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSTVACLLLKFSTGGLTTSAFALSSGVG
                   0 ||||||||||||||||||||||||.|.||||||||||||||||.|.......|.||.|||
 1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
@@ -25150,67 +25145,65 @@ gi|223541       140 VWNAFVFEIVMTFGLVYTVYATAVDPKKGSLGTIAPIAIGFIVGANI 187
                  60 |.||.||||||||||||||||||.||||||||||||||||||||||| 107
 1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
 """,
-            )
-            alignments = record[3]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|225441155|ref|XP_002267788.1|")
-            self.assertEqual(alignments.target.name, "XP_002267788")
-            self.assertEqual(
-                alignments.target.description,
-                "PREDICTED: hypothetical protein [Vitis vinifera] >gi|157356804|emb|CAO63006.1| unnamed protein product [Vitis vinifera]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 454.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 179.488839746522)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 6.47313235743007e-44
-            )
-            self.assertEqual(alignment.annotations["identity"], 93)
-            self.assertEqual(alignment.annotations["positive"], 96)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[3]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|225441155|ref|XP_002267788.1|")
+        self.assertEqual(alignments.target.name, "XP_002267788")
+        self.assertEqual(
+            alignments.target.description,
+            "PREDICTED: hypothetical protein [Vitis vinifera] >gi|157356804|emb|CAO63006.1| unnamed protein product [Vitis vinifera]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 454.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 179.488839746522)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 6.47313235743007e-44)
+        self.assertEqual(alignment.annotations["identity"], 93)
+        self.assertEqual(alignment.annotations["positive"], 96)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[ 80, 187],
                           [  0, 107]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 107)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 80)
-            self.assertEqual(alignment.target.annotations["end"], 187)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 107))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
-            )
-            self.assertEqual(alignment.query.id, "1")
-            self.assertEqual(
-                alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSTVACLLLKFSTNGMTTSAFS...ANI'}, length=251)",
-            )
-            self.assertEqual(alignment.target.id, "gi|225441155|ref|XP_002267788.1|")
-            self.assertEqual(alignment.target.name, "XP_002267788")
-            self.assertEqual(
-                alignment.target.description,
-                "PREDICTED: hypothetical protein [Vitis vinifera] >gi|157356804|emb|CAO63006.1| unnamed protein product [Vitis vinifera]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGSTVACLLLKF TN M    FSLS+GV V NA VFEIVMTFGLVYTVYATAIDPKKG+LG IAPIAIGFIVGANI",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 107)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 80)
+        self.assertEqual(alignment.target.annotations["end"], 187)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 107))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+        )
+        self.assertEqual(alignment.query.id, "1")
+        self.assertEqual(
+            alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSTVACLLLKFSTNGMTTSAFS...ANI'}, length=251)",
+        )
+        self.assertEqual(alignment.target.id, "gi|225441155|ref|XP_002267788.1|")
+        self.assertEqual(alignment.target.name, "XP_002267788")
+        self.assertEqual(
+            alignment.target.description,
+            "PREDICTED: hypothetical protein [Vitis vinifera] >gi|157356804|emb|CAO63006.1| unnamed protein product [Vitis vinifera]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGSTVACLLLKF TN M    FSLS+GV V NA VFEIVMTFGLVYTVYATAIDPKKG+LG IAPIAIGFIVGANI",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|225441        80 GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSTVACLLLKFSTNGMTTSAFSLSSGVT
                   0 ||||||||||||||||||||||||.|.||||||||||||||||.||.|....||||.||.
 1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
@@ -25219,67 +25212,65 @@ gi|225441       140 VWNAFVFEIVMTFGLVYTVYATAIDPKKGNLGIIAPIAIGFIVGANI 187
                  60 |.||.||||||||||||||||||||||||.||.|||||||||||||| 107
 1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
 """,
-            )
-            alignments = record[4]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|209892837|gb|ACI95283.1|")
-            self.assertEqual(alignments.target.name, "ACI95283")
-            self.assertEqual(
-                alignments.target.description,
-                "tonoplast intrinsic protein [Sinapis arvensis]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 454.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 179.488839746522)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 7.21475963444848e-44
-            )
-            self.assertEqual(alignment.annotations["identity"], 93)
-            self.assertEqual(alignment.annotations["positive"], 97)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[4]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|209892837|gb|ACI95283.1|")
+        self.assertEqual(alignments.target.name, "ACI95283")
+        self.assertEqual(
+            alignments.target.description,
+            "tonoplast intrinsic protein [Sinapis arvensis]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 454.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 179.488839746522)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 7.21475963444848e-44)
+        self.assertEqual(alignment.annotations["identity"], 93)
+        self.assertEqual(alignment.annotations["positive"], 97)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[ 80, 187],
                           [  0, 107]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 107)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 80)
-            self.assertEqual(alignment.target.annotations["end"], 187)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 107))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
-            )
-            self.assertEqual(alignment.query.id, "1")
-            self.assertEqual(
-                alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFG...ANI'}, length=251)",
-            )
-            self.assertEqual(alignment.target.id, "gi|209892837|gb|ACI95283.1|")
-            self.assertEqual(alignment.target.name, "ACI95283")
-            self.assertEqual(
-                alignment.target.description,
-                "tonoplast intrinsic protein [Sinapis arvensis]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGS VACLLLKF T  + V  F LSAGVGV+NALVFEIVMTFGLVYTVYATA+DPK GSLGTIAPIAIGFIVGANI",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 107)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 80)
+        self.assertEqual(alignment.target.annotations["end"], 187)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 107))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+        )
+        self.assertEqual(alignment.query.id, "1")
+        self.assertEqual(
+            alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFG...ANI'}, length=251)",
+        )
+        self.assertEqual(alignment.target.id, "gi|209892837|gb|ACI95283.1|")
+        self.assertEqual(alignment.target.name, "ACI95283")
+        self.assertEqual(
+            alignment.target.description,
+            "tonoplast intrinsic protein [Sinapis arvensis]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGS VACLLLKF T  + V  F LSAGVGV+NALVFEIVMTFGLVYTVYATA+DPK GSLGTIAPIAIGFIVGANI",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|209892        80 GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFGLSAGVG
                   0 ||||||||||||||||||||||||.|.|||||||.||||||||.|....|..|.||||||
 1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
@@ -25288,67 +25279,65 @@ gi|209892       140 VSNALVFEIVMTFGLVYTVYATAVDPKNGSLGTIAPIAIGFIVGANI 187
                  60 |.|||||||||||||||||||||.|||.||||||||||||||||||| 107
 1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
 """,
-            )
-            alignments = record[5]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|21284370|gb|AAB51393.2|")
-            self.assertEqual(alignments.target.name, "AAB51393")
-            self.assertEqual(
-                alignments.target.description,
-                "tonoplast intrinsic protein bobTIP26-1 [Brassica oleracea var. botrytis]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 454.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 179.488839746522)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 7.27520962424864e-44
-            )
-            self.assertEqual(alignment.annotations["identity"], 93)
-            self.assertEqual(alignment.annotations["positive"], 97)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[5]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|21284370|gb|AAB51393.2|")
+        self.assertEqual(alignments.target.name, "AAB51393")
+        self.assertEqual(
+            alignments.target.description,
+            "tonoplast intrinsic protein bobTIP26-1 [Brassica oleracea var. botrytis]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 454.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 179.488839746522)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 7.27520962424864e-44)
+        self.assertEqual(alignment.annotations["identity"], 93)
+        self.assertEqual(alignment.annotations["positive"], 97)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[ 80, 187],
                           [  0, 107]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 107)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 80)
-            self.assertEqual(alignment.target.annotations["end"], 187)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 107))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
-            )
-            self.assertEqual(alignment.query.id, "1")
-            self.assertEqual(
-                alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFG...ANI'}, length=251)",
-            )
-            self.assertEqual(alignment.target.id, "gi|21284370|gb|AAB51393.2|")
-            self.assertEqual(alignment.target.name, "AAB51393")
-            self.assertEqual(
-                alignment.target.description,
-                "tonoplast intrinsic protein bobTIP26-1 [Brassica oleracea var. botrytis]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGS VACLLLKF T  + V  F LSAGVGV+NALVFEIVMTFGLVYTVYATA+DPK GSLGTIAPIAIGFIVGANI",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 107)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 80)
+        self.assertEqual(alignment.target.annotations["end"], 187)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 107))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+        )
+        self.assertEqual(alignment.query.id, "1")
+        self.assertEqual(
+            alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFG...ANI'}, length=251)",
+        )
+        self.assertEqual(alignment.target.id, "gi|21284370|gb|AAB51393.2|")
+        self.assertEqual(alignment.target.name, "AAB51393")
+        self.assertEqual(
+            alignment.target.description,
+            "tonoplast intrinsic protein bobTIP26-1 [Brassica oleracea var. botrytis]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGS VACLLLKF T  + V  F LSAGVGV+NALVFEIVMTFGLVYTVYATA+DPK GSLGTIAPIAIGFIVGANI",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|212843        80 GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFGLSAGVG
                   0 ||||||||||||||||||||||||.|.|||||||.||||||||.|....|..|.||||||
 1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
@@ -25357,67 +25346,65 @@ gi|212843       140 VSNALVFEIVMTFGLVYTVYATAVDPKNGSLGTIAPIAIGFIVGANI 187
                  60 |.|||||||||||||||||||||.|||.||||||||||||||||||| 107
 1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
 """,
-            )
-            alignments = record[6]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|22858917|gb|AAN05780.1|")
-            self.assertEqual(alignments.target.name, "AAN05780")
-            self.assertEqual(
-                alignments.target.description,
-                "tonoplast intrinsic protein bobTIP26-2 [Brassica oleracea var. botrytis]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 453.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 179.103640170605)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 8.24518074030088e-44
-            )
-            self.assertEqual(alignment.annotations["identity"], 93)
-            self.assertEqual(alignment.annotations["positive"], 97)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[6]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|22858917|gb|AAN05780.1|")
+        self.assertEqual(alignments.target.name, "AAN05780")
+        self.assertEqual(
+            alignments.target.description,
+            "tonoplast intrinsic protein bobTIP26-2 [Brassica oleracea var. botrytis]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 453.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 179.103640170605)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 8.24518074030088e-44)
+        self.assertEqual(alignment.annotations["identity"], 93)
+        self.assertEqual(alignment.annotations["positive"], 97)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[ 80, 187],
                           [  0, 107]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 107)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 80)
-            self.assertEqual(alignment.target.annotations["end"], 187)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 107))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
-            )
-            self.assertEqual(alignment.query.id, "1")
-            self.assertEqual(
-                alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFG...ANI'}, length=251)",
-            )
-            self.assertEqual(alignment.target.id, "gi|22858917|gb|AAN05780.1|")
-            self.assertEqual(alignment.target.name, "AAN05780")
-            self.assertEqual(
-                alignment.target.description,
-                "tonoplast intrinsic protein bobTIP26-2 [Brassica oleracea var. botrytis]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGS VACLLLKF T  + V  F LSAGVGV+NALVFEIVMTFGLVYTVYATA+DPK GSLGTIAPIAIGFIVGANI",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 107)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 80)
+        self.assertEqual(alignment.target.annotations["end"], 187)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 107))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+        )
+        self.assertEqual(alignment.query.id, "1")
+        self.assertEqual(
+            alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFG...ANI'}, length=251)",
+        )
+        self.assertEqual(alignment.target.id, "gi|22858917|gb|AAN05780.1|")
+        self.assertEqual(alignment.target.name, "AAN05780")
+        self.assertEqual(
+            alignment.target.description,
+            "tonoplast intrinsic protein bobTIP26-2 [Brassica oleracea var. botrytis]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGS VACLLLKF T  + V  F LSAGVGV+NALVFEIVMTFGLVYTVYATA+DPK GSLGTIAPIAIGFIVGANI",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|228589        80 GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFGLSAGVG
                   0 ||||||||||||||||||||||||.|.|||||||.||||||||.|....|..|.||||||
 1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
@@ -25426,67 +25413,65 @@ gi|228589       140 VSNALVFEIVMTFGLVYTVYATAVDPKNGSLGTIAPIAIGFIVGANI 187
                  60 |.|||||||||||||||||||||.|||.||||||||||||||||||| 107
 1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
 """,
-            )
-            alignments = record[7]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|21284372|gb|AAB51394.2|")
-            self.assertEqual(alignments.target.name, "AAB51394")
-            self.assertEqual(
-                alignments.target.description,
-                "tonoplast intrinsic protein bobTIP26-2 [Brassica oleracea var. botrytis]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=175)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 452.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 178.718440594688)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 1.26184512406631e-43
-            )
-            self.assertEqual(alignment.annotations["identity"], 93)
-            self.assertEqual(alignment.annotations["positive"], 97)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[7]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|21284372|gb|AAB51394.2|")
+        self.assertEqual(alignments.target.name, "AAB51394")
+        self.assertEqual(
+            alignments.target.description,
+            "tonoplast intrinsic protein bobTIP26-2 [Brassica oleracea var. botrytis]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=175)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 452.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 178.718440594688)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.26184512406631e-43)
+        self.assertEqual(alignment.annotations["identity"], 93)
+        self.assertEqual(alignment.annotations["positive"], 97)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  4, 111],
                           [  0, 107]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 107)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 4)
-            self.assertEqual(alignment.target.annotations["end"], 111)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 107))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
-            )
-            self.assertEqual(alignment.query.id, "1")
-            self.assertEqual(
-                alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({4: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFG...ANI'}, length=175)",
-            )
-            self.assertEqual(alignment.target.id, "gi|21284372|gb|AAB51394.2|")
-            self.assertEqual(alignment.target.name, "AAB51394")
-            self.assertEqual(
-                alignment.target.description,
-                "tonoplast intrinsic protein bobTIP26-2 [Brassica oleracea var. botrytis]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGS VACLLLKF T  + V  F LSAGVGV+NALVFEIVMTFGLVYTVYATA+DPK GSLGTIAPIAIGFIVGANI",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 107)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 4)
+        self.assertEqual(alignment.target.annotations["end"], 111)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 107))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+        )
+        self.assertEqual(alignment.query.id, "1")
+        self.assertEqual(
+            alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({4: 'GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFG...ANI'}, length=175)",
+        )
+        self.assertEqual(alignment.target.id, "gi|21284372|gb|AAB51394.2|")
+        self.assertEqual(alignment.target.name, "AAB51394")
+        self.assertEqual(
+            alignment.target.description,
+            "tonoplast intrinsic protein bobTIP26-2 [Brassica oleracea var. botrytis]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "GGHVNPAVTFGAFVGGNITLLRGI+Y IAQLLGS VACLLLKF T  + V  F LSAGVGV+NALVFEIVMTFGLVYTVYATA+DPK GSLGTIAPIAIGFIVGANI",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|212843         4 GGHVNPAVTFGAFVGGNITLLRGILYWIAQLLGSVVACLLLKFATGGLVVPAFGLSAGVG
                   0 ||||||||||||||||||||||||.|.|||||||.||||||||.|....|..|.||||||
 1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
@@ -25495,65 +25480,59 @@ gi|212843        64 VSNALVFEIVMTFGLVYTVYATAVDPKNGSLGTIAPIAIGFIVGANI 111
                  60 |.|||||||||||||||||||||.|||.||||||||||||||||||| 107
 1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
 """,
-            )
-            alignments = record[8]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|38198150|emb|CAE53881.1|")
-            self.assertEqual(alignments.target.name, "CAE53881")
-            self.assertEqual(
-                alignments.target.description, "aquaporin [Ricinus communis]"
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 452.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 178.718440594688)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 1.39472886444582e-43
-            )
-            self.assertEqual(alignment.annotations["identity"], 91)
-            self.assertEqual(alignment.annotations["positive"], 96)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[8]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|38198150|emb|CAE53881.1|")
+        self.assertEqual(alignments.target.name, "CAE53881")
+        self.assertEqual(alignments.target.description, "aquaporin [Ricinus communis]")
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 452.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 178.718440594688)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.39472886444582e-43)
+        self.assertEqual(alignment.annotations["identity"], 91)
+        self.assertEqual(alignment.annotations["positive"], 96)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[ 80, 187],
                           [  0, 107]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 107)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 80)
-            self.assertEqual(alignment.target.annotations["end"], 187)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 107))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
-            )
-            self.assertEqual(alignment.query.id, "1")
-            self.assertEqual(
-                alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWFAQLLGSTVACLLLKFSTGGLTTSAFA...ANI'}, length=251)",
-            )
-            self.assertEqual(alignment.target.id, "gi|38198150|emb|CAE53881.1|")
-            self.assertEqual(alignment.target.name, "CAE53881")
-            self.assertEqual(
-                alignment.target.description, "aquaporin [Ricinus communis]"
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "GGHVNPAVTFGAFVGGNITLLRGI+Y  AQLLGSTVACLLLKF T  +    F+LS+GVGV NA VFEIVMTFGLVYTVYATA+DPKKGSLGTIAPIAIGFIVGANI",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 107)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 80)
+        self.assertEqual(alignment.target.annotations["end"], 187)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 107))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+        )
+        self.assertEqual(alignment.query.id, "1")
+        self.assertEqual(
+            alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({80: 'GGHVNPAVTFGAFVGGNITLLRGILYWFAQLLGSTVACLLLKFSTGGLTTSAFA...ANI'}, length=251)",
+        )
+        self.assertEqual(alignment.target.id, "gi|38198150|emb|CAE53881.1|")
+        self.assertEqual(alignment.target.name, "CAE53881")
+        self.assertEqual(alignment.target.description, "aquaporin [Ricinus communis]")
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "GGHVNPAVTFGAFVGGNITLLRGI+Y  AQLLGSTVACLLLKF T  +    F+LS+GVGV NA VFEIVMTFGLVYTVYATA+DPKKGSLGTIAPIAIGFIVGANI",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|381981        80 GGHVNPAVTFGAFVGGNITLLRGILYWFAQLLGSTVACLLLKFSTGGLTTSAFALSSGVG
                   0 ||||||||||||||||||||||||.|..|||||||||||||||.|.......|.||.|||
 1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
@@ -25562,65 +25541,65 @@ gi|381981       140 VWNAFVFEIVMTFGLVYTVYATAVDPKKGSLGTIAPIAIGFIVGANI 187
                  60 |.||.||||||||||||||||||.||||||||||||||||||||||| 107
 1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
 """,
-            )
-            alignments = record[9]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|162809290|dbj|BAF95576.1|")
-            self.assertEqual(alignments.target.name, "BAF95576")
-            self.assertEqual(
-                alignments.target.description,
-                "tonoplast intrinsic protein [Nicotiana tabacum]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 450.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 177.948041442853)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 2.0302699895292e-43)
-            self.assertEqual(alignment.annotations["identity"], 91)
-            self.assertEqual(alignment.annotations["positive"], 95)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[9]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|162809290|dbj|BAF95576.1|")
+        self.assertEqual(alignments.target.name, "BAF95576")
+        self.assertEqual(
+            alignments.target.description,
+            "tonoplast intrinsic protein [Nicotiana tabacum]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=251)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 450.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 177.948041442853)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 2.0302699895292e-43)
+        self.assertEqual(alignment.annotations["identity"], 91)
+        self.assertEqual(alignment.annotations["positive"], 95)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[ 80, 187],
                           [  0, 107]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 107)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 80)
-            self.assertEqual(alignment.target.annotations["end"], 187)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 107))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
-            )
-            self.assertEqual(alignment.query.id, "1")
-            self.assertEqual(
-                alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({80: 'GGHVNPAVTFGAFVGGNITLFRGILYIIAQLLGSTVACFLLEFATGGMSTGAFA...ANI'}, length=251)",
-            )
-            self.assertEqual(alignment.target.id, "gi|162809290|dbj|BAF95576.1|")
-            self.assertEqual(alignment.target.name, "BAF95576")
-            self.assertEqual(
-                alignment.target.description,
-                "tonoplast intrinsic protein [Nicotiana tabacum]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "GGHVNPAVTFGAFVGGNITL RGI+YIIAQLLGSTVAC LL+F T  M+ G F+LSAGV V NA VFEIVMTFGLVYTVYATAIDPKKG LG IAPIAIGFIVGANI",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 107)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 80)
+        self.assertEqual(alignment.target.annotations["end"], 187)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 107))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFS...ANI')",
+        )
+        self.assertEqual(alignment.query.id, "1")
+        self.assertEqual(
+            alignment.query.description, "gi|3298468|dbj|BAA31520.1| SAMIPF"
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({80: 'GGHVNPAVTFGAFVGGNITLFRGILYIIAQLLGSTVACFLLEFATGGMSTGAFA...ANI'}, length=251)",
+        )
+        self.assertEqual(alignment.target.id, "gi|162809290|dbj|BAF95576.1|")
+        self.assertEqual(alignment.target.name, "BAF95576")
+        self.assertEqual(
+            alignment.target.description,
+            "tonoplast intrinsic protein [Nicotiana tabacum]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "GGHVNPAVTFGAFVGGNITL RGI+YIIAQLLGSTVAC LL+F T  M+ G F+LSAGV V NA VFEIVMTFGLVYTVYATAIDPKKG LG IAPIAIGFIVGANI",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|162809        80 GGHVNPAVTFGAFVGGNITLFRGILYIIAQLLGSTVACFLLEFATGGMSTGAFALSAGVS
                   0 ||||||||||||||||||||.|||.|||||||||||||.||.|.|..|..|.|.|||||.
 1                 0 GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG
@@ -25629,86 +25608,84 @@ gi|162809       140 VWNAFVFEIVMTFGLVYTVYATAIDPKKGDLGVIAPIAIGFIVGANI 187
                  60 |.||.||||||||||||||||||||||||.||.|||||||||||||| 107
 1                60 VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI 107
 """,
-            )
-            record = next(records)
-            self.assertEqual(record.num, 2)
-            self.assertIsInstance(record.query, SeqRecord)
-            self.assertEqual(record.query.id, "2")
-            self.assertEqual(
-                record.query.description,
-                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
-            )
-            self.assertEqual(repr(record.query.seq), "Seq(None, length=304)")
-            self.assertEqual(len(record.stat), 7)
-            self.assertEqual(record.stat["db-num"], 8994603)
-            self.assertEqual(record.stat["db-len"], -1216159329)
-            self.assertEqual(record.stat["hsp-len"], 0)
-            self.assertAlmostEqual(record.stat["eff-space"], 315106678978.0)
-            self.assertAlmostEqual(record.stat["kappa"], 0.041)
-            self.assertAlmostEqual(record.stat["lambda"], 0.267)
-            self.assertAlmostEqual(record.stat["entropy"], 0.14)
-            self.assertEqual(len(record), 10)
-            alignments = record[0]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|157878523|pdb|1JLX|A")
-            self.assertEqual(alignments.target.name, "1JLX-A")
-            self.assertEqual(
-                alignments.target.description,
-                "Chain A, Agglutinin In Complex With T-Disaccharide >gi|157878524|pdb|1JLX|B Chain B, Agglutinin In Complex With T-Disaccharide >gi|157878525|pdb|1JLY|A Chain A, Crystal Structure Of Amaranthus Caudatus Agglutinin >gi|157878526|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=303)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 1638.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 635.565137632669)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 1.61027401233368e-180
-            )
-            self.assertEqual(alignment.annotations["identity"], 303)
-            self.assertEqual(alignment.annotations["positive"], 303)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        record = next(records)
+        self.assertEqual(record.num, 2)
+        self.assertIsInstance(record.query, SeqRecord)
+        self.assertEqual(record.query.id, "2")
+        self.assertEqual(
+            record.query.description,
+            "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+        )
+        self.assertEqual(repr(record.query.seq), "Seq(None, length=304)")
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 8994603)
+        self.assertEqual(record.stat["db-len"], -1216159329)
+        self.assertEqual(record.stat["hsp-len"], 0)
+        self.assertAlmostEqual(record.stat["eff-space"], 315106678978.0)
+        self.assertAlmostEqual(record.stat["kappa"], 0.041)
+        self.assertAlmostEqual(record.stat["lambda"], 0.267)
+        self.assertAlmostEqual(record.stat["entropy"], 0.14)
+        self.assertEqual(len(record), 10)
+        alignments = record[0]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|157878523|pdb|1JLX|A")
+        self.assertEqual(alignments.target.name, "1JLX-A")
+        self.assertEqual(
+            alignments.target.description,
+            "Chain A, Agglutinin In Complex With T-Disaccharide >gi|157878524|pdb|1JLX|B Chain B, Agglutinin In Complex With T-Disaccharide >gi|157878525|pdb|1JLY|A Chain A, Crystal Structure Of Amaranthus Caudatus Agglutinin >gi|157878526|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=303)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1638.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 635.565137632669)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.61027401233368e-180)
+        self.assertEqual(alignment.annotations["identity"], 303)
+        self.assertEqual(alignment.annotations["positive"], 303)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 303],
                           [  1, 304]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 1)
-            self.assertEqual(alignment.query.annotations["end"], 304)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 303)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 303))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq({1: 'AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN'}, length=304)",
-            )
-            self.assertEqual(alignment.query.id, "2")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN')",
-            )
-            self.assertEqual(alignment.target.id, "gi|157878523|pdb|1JLX|A")
-            self.assertEqual(alignment.target.name, "1JLX-A")
-            self.assertEqual(
-                alignment.target.description,
-                "Chain A, Agglutinin In Complex With T-Disaccharide >gi|157878524|pdb|1JLX|B Chain B, Agglutinin In Complex With T-Disaccharide >gi|157878525|pdb|1JLY|A Chain A, Crystal Structure Of Amaranthus Caudatus Agglutinin >gi|157878526|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYTQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITINQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETNEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELGQNN",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 1)
+        self.assertEqual(alignment.query.annotations["end"], 304)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 303)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 303))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq({1: 'AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN'}, length=304)",
+        )
+        self.assertEqual(alignment.query.id, "2")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN')",
+        )
+        self.assertEqual(alignment.target.id, "gi|157878523|pdb|1JLX|A")
+        self.assertEqual(alignment.target.name, "1JLX-A")
+        self.assertEqual(
+            alignment.target.description,
+            "Chain A, Agglutinin In Complex With T-Disaccharide >gi|157878524|pdb|1JLX|B Chain B, Agglutinin In Complex With T-Disaccharide >gi|157878525|pdb|1JLY|A Chain A, Crystal Structure Of Amaranthus Caudatus Agglutinin >gi|157878526|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYTQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITINQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETNEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELGQNN",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|157878         0 AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 2                 1 AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
@@ -25733,70 +25710,64 @@ gi|157878       300 QNN 303
                 300 ||| 303
 2               301 QNN 304
 """,
-            )
-            alignments = record[1]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(
-                alignments.target.id, "gi|33308026|gb|AAQ03084.1|AF401479_1"
-            )
-            self.assertEqual(alignments.target.name, "AAQ03084")
-            self.assertEqual(
-                alignments.target.description, "agglutinin [Amaranthus caudatus]"
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=304)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 1611.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 625.1647490829)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 2.12254922203683e-177
-            )
-            self.assertEqual(alignment.annotations["identity"], 298)
-            self.assertEqual(alignment.annotations["positive"], 300)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[1]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|33308026|gb|AAQ03084.1|AF401479_1")
+        self.assertEqual(alignments.target.name, "AAQ03084")
+        self.assertEqual(
+            alignments.target.description, "agglutinin [Amaranthus caudatus]"
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=304)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1611.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 625.1647490829)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 2.12254922203683e-177)
+        self.assertEqual(alignment.annotations["identity"], 298)
+        self.assertEqual(alignment.annotations["positive"], 300)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  1, 304],
                           [  1, 304]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 1)
-            self.assertEqual(alignment.query.annotations["end"], 304)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 1)
-            self.assertEqual(alignment.target.annotations["end"], 304)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 303))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq({1: 'AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN'}, length=304)",
-            )
-            self.assertEqual(alignment.query.id, "2")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({1: 'AGLPVIMCLKSNNNQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...SNN'}, length=304)",
-            )
-            self.assertEqual(
-                alignment.target.id, "gi|33308026|gb|AAQ03084.1|AF401479_1"
-            )
-            self.assertEqual(alignment.target.name, "AAQ03084")
-            self.assertEqual(
-                alignment.target.description, "agglutinin [Amaranthus caudatus]"
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "AGLPVIMCLKSNN+QKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYTQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPK YVTFKGNNGKYLGVITINQLPCLQFGYDNLNDPKVAH+MFVTSNGTICIKS YMNKFWRLSTDDWILVDGNDPRETNEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELG NN",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 1)
+        self.assertEqual(alignment.query.annotations["end"], 304)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 1)
+        self.assertEqual(alignment.target.annotations["end"], 304)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 303))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq({1: 'AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN'}, length=304)",
+        )
+        self.assertEqual(alignment.query.id, "2")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({1: 'AGLPVIMCLKSNNNQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...SNN'}, length=304)",
+        )
+        self.assertEqual(alignment.target.id, "gi|33308026|gb|AAQ03084.1|AF401479_1")
+        self.assertEqual(alignment.target.name, "AAQ03084")
+        self.assertEqual(
+            alignment.target.description, "agglutinin [Amaranthus caudatus]"
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "AGLPVIMCLKSNN+QKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYTQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPK YVTFKGNNGKYLGVITINQLPCLQFGYDNLNDPKVAH+MFVTSNGTICIKS YMNKFWRLSTDDWILVDGNDPRETNEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELG NN",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|333080         1 AGLPVIMCLKSNNNQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
                   0 |||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||
 2                 1 AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
@@ -25821,66 +25792,64 @@ gi|333080       301 SNN 304
                 300 .|| 303
 2               301 QNN 304
 """,
-            )
-            alignments = record[2]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|37359170|gb|AAL05954.1|")
-            self.assertEqual(alignments.target.name, "AAL05954")
-            self.assertEqual(
-                alignments.target.description, "agglutinin [Amaranthus caudatus]"
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=304)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 1603.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 622.083152475561)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 1.66685561532459e-176
-            )
-            self.assertEqual(alignment.annotations["identity"], 297)
-            self.assertEqual(alignment.annotations["positive"], 299)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[2]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|37359170|gb|AAL05954.1|")
+        self.assertEqual(alignments.target.name, "AAL05954")
+        self.assertEqual(
+            alignments.target.description, "agglutinin [Amaranthus caudatus]"
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=304)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1603.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 622.083152475561)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.66685561532459e-176)
+        self.assertEqual(alignment.annotations["identity"], 297)
+        self.assertEqual(alignment.annotations["positive"], 299)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  1, 304],
                           [  1, 304]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 1)
-            self.assertEqual(alignment.query.annotations["end"], 304)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 1)
-            self.assertEqual(alignment.target.annotations["end"], 304)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 303))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq({1: 'AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN'}, length=304)",
-            )
-            self.assertEqual(alignment.query.id, "2")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({1: 'AGLPVIMCLKSNNNQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...SNN'}, length=304)",
-            )
-            self.assertEqual(alignment.target.id, "gi|37359170|gb|AAL05954.1|")
-            self.assertEqual(alignment.target.name, "AAL05954")
-            self.assertEqual(
-                alignment.target.description, "agglutinin [Amaranthus caudatus]"
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "AGLPVIMCLKSNN+QKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYTQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPK YVTFKGNNGKYLGVITINQLPCLQFGYDNLNDPKVAH+MFVTSNGTICIKS YMNKFWRLSTDDWILVDGNDPRETNEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEII LG NN",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 1)
+        self.assertEqual(alignment.query.annotations["end"], 304)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 1)
+        self.assertEqual(alignment.target.annotations["end"], 304)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 303))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq({1: 'AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN'}, length=304)",
+        )
+        self.assertEqual(alignment.query.id, "2")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({1: 'AGLPVIMCLKSNNNQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...SNN'}, length=304)",
+        )
+        self.assertEqual(alignment.target.id, "gi|37359170|gb|AAL05954.1|")
+        self.assertEqual(alignment.target.name, "AAL05954")
+        self.assertEqual(
+            alignment.target.description, "agglutinin [Amaranthus caudatus]"
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "AGLPVIMCLKSNN+QKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYTQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPK YVTFKGNNGKYLGVITINQLPCLQFGYDNLNDPKVAH+MFVTSNGTICIKS YMNKFWRLSTDDWILVDGNDPRETNEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEII LG NN",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|373591         1 AGLPVIMCLKSNNNQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
                   0 |||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||
 2                 1 AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
@@ -25905,70 +25874,66 @@ gi|373591       301 SNN 304
                 300 .|| 303
 2               301 QNN 304
 """,
-            )
-            alignments = record[3]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(
-                alignments.target.id, "gi|4929263|gb|AAD33922.1|AF143954_1"
-            )
-            self.assertEqual(alignments.target.name, "AAD33922")
-            self.assertEqual(
-                alignments.target.description,
-                "agglutinin [Amaranthus hypochondriacus] >gi|15999|emb|CAA77664.1| seed specific protein of balanced nutritional quality [Amaranthus hypochondriacus]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=304)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 1596.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 619.38675544414)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 1.10781005546209e-175
-            )
-            self.assertEqual(alignment.annotations["identity"], 296)
-            self.assertEqual(alignment.annotations["positive"], 299)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[3]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|4929263|gb|AAD33922.1|AF143954_1")
+        self.assertEqual(alignments.target.name, "AAD33922")
+        self.assertEqual(
+            alignments.target.description,
+            "agglutinin [Amaranthus hypochondriacus] >gi|15999|emb|CAA77664.1| seed specific protein of balanced nutritional quality [Amaranthus hypochondriacus]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=304)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1596.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 619.38675544414)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.10781005546209e-175)
+        self.assertEqual(alignment.annotations["identity"], 296)
+        self.assertEqual(alignment.annotations["positive"], 299)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  1, 304],
                           [  1, 304]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 1)
-            self.assertEqual(alignment.query.annotations["end"], 304)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 1)
-            self.assertEqual(alignment.target.annotations["end"], 304)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 303))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq({1: 'AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN'}, length=304)",
-            )
-            self.assertEqual(alignment.query.id, "2")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({1: 'AGLPVIMCLKSNNNQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...SNN'}, length=304)",
-            )
-            self.assertEqual(alignment.target.id, "gi|4929263|gb|AAD33922.1|AF143954_1")
-            self.assertEqual(alignment.target.name, "AAD33922")
-            self.assertEqual(
-                alignment.target.description,
-                "agglutinin [Amaranthus hypochondriacus] >gi|15999|emb|CAA77664.1| seed specific protein of balanced nutritional quality [Amaranthus hypochondriacus]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "AGLPVIMCLKSNN+QKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYT+NYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPK YVTFKGNNGKYLGVITINQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTD+WILVDGNDPRETNEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKP FINCMNAATQ VDETAILEIIELG NN",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 1)
+        self.assertEqual(alignment.query.annotations["end"], 304)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 1)
+        self.assertEqual(alignment.target.annotations["end"], 304)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 303))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq({1: 'AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN'}, length=304)",
+        )
+        self.assertEqual(alignment.query.id, "2")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({1: 'AGLPVIMCLKSNNNQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...SNN'}, length=304)",
+        )
+        self.assertEqual(alignment.target.id, "gi|4929263|gb|AAD33922.1|AF143954_1")
+        self.assertEqual(alignment.target.name, "AAD33922")
+        self.assertEqual(
+            alignment.target.description,
+            "agglutinin [Amaranthus hypochondriacus] >gi|15999|emb|CAA77664.1| seed specific protein of balanced nutritional quality [Amaranthus hypochondriacus]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "AGLPVIMCLKSNN+QKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYT+NYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPK YVTFKGNNGKYLGVITINQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTD+WILVDGNDPRETNEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKP FINCMNAATQ VDETAILEIIELG NN",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|492926         1 AGLPVIMCLKSNNNQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
                   0 |||||||||||||.||||||||||||||||||||||||||||||||||||||||||||||
 2                 1 AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
@@ -25993,72 +25958,66 @@ gi|492926       301 SNN 304
                 300 .|| 303
 2               301 QNN 304
 """,
-            )
-            alignments = record[4]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(
-                alignments.target.id, "gi|20067185|gb|AAM09540.1|AF491291_1"
-            )
-            self.assertEqual(alignments.target.name, "AAM09540")
-            self.assertEqual(
-                alignments.target.description,
-                "seed protein AmA1 [Amaranthus hypochondriacus]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=304)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 1592.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 617.84595714047)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 3.27747281942883e-175
-            )
-            self.assertEqual(alignment.annotations["identity"], 295)
-            self.assertEqual(alignment.annotations["positive"], 299)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[4]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|20067185|gb|AAM09540.1|AF491291_1")
+        self.assertEqual(alignments.target.name, "AAM09540")
+        self.assertEqual(
+            alignments.target.description,
+            "seed protein AmA1 [Amaranthus hypochondriacus]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=304)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 1592.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 617.84595714047)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 3.27747281942883e-175)
+        self.assertEqual(alignment.annotations["identity"], 295)
+        self.assertEqual(alignment.annotations["positive"], 299)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  1, 304],
                           [  1, 304]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 1)
-            self.assertEqual(alignment.query.annotations["end"], 304)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 1)
-            self.assertEqual(alignment.target.annotations["end"], 304)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 303))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq({1: 'AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN'}, length=304)",
-            )
-            self.assertEqual(alignment.query.id, "2")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({1: 'AGLPVIMCLKSNNNQEYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...SNN'}, length=304)",
-            )
-            self.assertEqual(
-                alignment.target.id, "gi|20067185|gb|AAM09540.1|AF491291_1"
-            )
-            self.assertEqual(alignment.target.name, "AAM09540")
-            self.assertEqual(
-                alignment.target.description,
-                "seed protein AmA1 [Amaranthus hypochondriacus]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "AGLPVIMCLKSNN+Q+YLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYT+NYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPK YVTFKGNNGKYLGVITINQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTD+WILVDGNDPRETNEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKP FINCMNAATQ VDETAILEIIELG NN",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 1)
+        self.assertEqual(alignment.query.annotations["end"], 304)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 1)
+        self.assertEqual(alignment.target.annotations["end"], 304)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 303))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq({1: 'AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...QNN'}, length=304)",
+        )
+        self.assertEqual(alignment.query.id, "2")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({1: 'AGLPVIMCLKSNNNQEYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYD...SNN'}, length=304)",
+        )
+        self.assertEqual(alignment.target.id, "gi|20067185|gb|AAM09540.1|AF491291_1")
+        self.assertEqual(alignment.target.name, "AAM09540")
+        self.assertEqual(
+            alignment.target.description,
+            "seed protein AmA1 [Amaranthus hypochondriacus]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "AGLPVIMCLKSNN+Q+YLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHYT+NYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPK YVTFKGNNGKYLGVITINQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTD+WILVDGNDPRETNEAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKP FINCMNAATQ VDETAILEIIELG NN",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|200671         1 AGLPVIMCLKSNNNQEYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
                   0 |||||||||||||.|.||||||||||||||||||||||||||||||||||||||||||||
 2                 1 AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
@@ -26083,68 +26042,66 @@ gi|200671       301 SNN 304
                 300 .|| 303
 2               301 QNN 304
 """,
-            )
-            alignments = record[5]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|225465425|ref|XP_002264858.1|")
-            self.assertEqual(alignments.target.name, "XP_002264858")
-            self.assertEqual(
-                alignments.target.description,
-                "PREDICTED: hypothetical protein [Vitis vinifera]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=465)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 623.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 244.587568076555)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 6.71087757255643e-63
-            )
-            self.assertEqual(alignment.annotations["identity"], 126)
-            self.assertEqual(alignment.annotations["positive"], 187)
-            self.assertEqual(alignment.annotations["gaps"], 6)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[5]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|225465425|ref|XP_002264858.1|")
+        self.assertEqual(alignments.target.name, "XP_002264858")
+        self.assertEqual(
+            alignments.target.description,
+            "PREDICTED: hypothetical protein [Vitis vinifera]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=465)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 623.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 244.587568076555)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 6.71087757255643e-63)
+        self.assertEqual(alignment.annotations["identity"], 126)
+        self.assertEqual(alignment.annotations["positive"], 187)
+        self.assertEqual(alignment.annotations["gaps"], 6)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  1, 102, 102, 161, 161, 223, 223, 233, 233, 268, 268, 293],
                           [  2, 103, 104, 163, 164, 226, 227, 237, 238, 273, 275, 300]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 2)
-            self.assertEqual(alignment.query.annotations["end"], 300)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 1)
-            self.assertEqual(alignment.target.annotations["end"], 293)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 298))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq({2: 'GLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDG...IEL'}, length=304)",
-            )
-            self.assertEqual(alignment.query.id, "2")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({1: 'ALPRYVVLKSKYNNKYLRYIHEDVQIHGFLQFSGEEVVTPYSKYQVERAKNGGG...AEL'}, length=465)",
-            )
-            self.assertEqual(alignment.target.id, "gi|225465425|ref|XP_002264858.1|")
-            self.assertEqual(alignment.target.name, "XP_002264858")
-            self.assertEqual(
-                alignment.target.description,
-                "PREDICTED: hypothetical protein [Vitis vinifera]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                " LP  + LKS  + KYLRY  +++Q +G LQFS ++++ P ++++VE +K   GLVHI+  Y NKY VRWS NH+WI A A+EPDE++S+W+CTLF+P++V +G+ + +R  HVQLGHY   + +   + S LFA S+  D    DV  +IDW+S+   PK ++ FKG+NG YL    I   P L+F   ++ DP V +++F T +G++ IKS+Y  +FWR S  +WI  D +D   TN +  LF     D NV++L N+    F KR T+   G  +C+NAA   +   A LE+ EL",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 2)
+        self.assertEqual(alignment.query.annotations["end"], 300)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 1)
+        self.assertEqual(alignment.target.annotations["end"], 293)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 298))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq({2: 'GLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDG...IEL'}, length=304)",
+        )
+        self.assertEqual(alignment.query.id, "2")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({1: 'ALPRYVVLKSKYNNKYLRYIHEDVQIHGFLQFSGEEVVTPYSKYQVERAKNGGG...AEL'}, length=465)",
+        )
+        self.assertEqual(alignment.target.id, "gi|225465425|ref|XP_002264858.1|")
+        self.assertEqual(alignment.target.name, "XP_002264858")
+        self.assertEqual(
+            alignment.target.description,
+            "PREDICTED: hypothetical protein [Vitis vinifera]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            " LP  + LKS  + KYLRY  +++Q +G LQFS ++++ P ++++VE +K   GLVHI+  Y NKY VRWS NH+WI A A+EPDE++S+W+CTLF+P++V +G+ + +R  HVQLGHY   + +   + S LFA S+  D    DV  +IDW+S+   PK ++ FKG+NG YL    I   P L+F   ++ DP V +++F T +G++ IKS+Y  +FWR S  +WI  D +D   TN +  LF     D NV++L N+    F KR T+   G  +C+NAA   +   A LE+ EL",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|225465         1 ALPRYVVLKSKYNNKYLRYIHEDVQIHGFLQFSGEEVVTPYSKYQVERAKNGGGLVHIRC
                   0 .||....|||....|||||.....|..|.||||......|.....||..|...|||||..
 2                 2 GLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKS
@@ -26169,68 +26126,66 @@ gi|225465       293
                 298
 2               300
 """,
-            )
-            alignments = record[6]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|225465427|ref|XP_002264911.1|")
-            self.assertEqual(alignments.target.name, "XP_002264911")
-            self.assertEqual(
-                alignments.target.description,
-                "PREDICTED: hypothetical protein [Vitis vinifera]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=465)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 620.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 243.431969348803)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 1.66631297328129e-62
-            )
-            self.assertEqual(alignment.annotations["identity"], 126)
-            self.assertEqual(alignment.annotations["positive"], 187)
-            self.assertEqual(alignment.annotations["gaps"], 6)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[6]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|225465427|ref|XP_002264911.1|")
+        self.assertEqual(alignments.target.name, "XP_002264911")
+        self.assertEqual(
+            alignments.target.description,
+            "PREDICTED: hypothetical protein [Vitis vinifera]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=465)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 620.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 243.431969348803)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.66631297328129e-62)
+        self.assertEqual(alignment.annotations["identity"], 126)
+        self.assertEqual(alignment.annotations["positive"], 187)
+        self.assertEqual(alignment.annotations["gaps"], 6)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  1, 102, 102, 161, 161, 223, 223, 232, 232, 268, 268, 293],
                           [  2, 103, 104, 163, 164, 226, 227, 236, 237, 273, 275, 300]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 2)
-            self.assertEqual(alignment.query.annotations["end"], 300)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 1)
-            self.assertEqual(alignment.target.annotations["end"], 293)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 298))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq({2: 'GLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDG...IEL'}, length=304)",
-            )
-            self.assertEqual(alignment.query.id, "2")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({1: 'ALPRYVVLKSKYNNKYLRYIHEDVQIHGFLQFSGEEVVTPYSKYQVEMAKNGKG...AEL'}, length=465)",
-            )
-            self.assertEqual(alignment.target.id, "gi|225465427|ref|XP_002264911.1|")
-            self.assertEqual(alignment.target.name, "XP_002264911")
-            self.assertEqual(
-                alignment.target.description,
-                "PREDICTED: hypothetical protein [Vitis vinifera]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                " LP  + LKS  + KYLRY  +++Q +G LQFS ++++ P ++++VE +K   GLVHI+  Y NKY VRWS NH+WI A A+EPDE++S+W+CTLF+P+YV +G+ + ++  HVQLGHY   + +   + S LFA S+  D    DV  +IDW+S+   PK ++ FKG+NG +L   TI   P L+F   ++ DP V +++F T +G++ IKS+Y  +FWR S  +WI  D +D   TN    LF     D NV++L N+    F KR T+   G I+C+NA    +   A LE+ EL",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 2)
+        self.assertEqual(alignment.query.annotations["end"], 300)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 1)
+        self.assertEqual(alignment.target.annotations["end"], 293)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 298))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq({2: 'GLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDG...IEL'}, length=304)",
+        )
+        self.assertEqual(alignment.query.id, "2")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({1: 'ALPRYVVLKSKYNNKYLRYIHEDVQIHGFLQFSGEEVVTPYSKYQVEMAKNGKG...AEL'}, length=465)",
+        )
+        self.assertEqual(alignment.target.id, "gi|225465427|ref|XP_002264911.1|")
+        self.assertEqual(alignment.target.name, "XP_002264911")
+        self.assertEqual(
+            alignment.target.description,
+            "PREDICTED: hypothetical protein [Vitis vinifera]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            " LP  + LKS  + KYLRY  +++Q +G LQFS ++++ P ++++VE +K   GLVHI+  Y NKY VRWS NH+WI A A+EPDE++S+W+CTLF+P+YV +G+ + ++  HVQLGHY   + +   + S LFA S+  D    DV  +IDW+S+   PK ++ FKG+NG +L   TI   P L+F   ++ DP V +++F T +G++ IKS+Y  +FWR S  +WI  D +D   TN    LF     D NV++L N+    F KR T+   G I+C+NA    +   A LE+ EL",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|225465         1 ALPRYVVLKSKYNNKYLRYIHEDVQIHGFLQFSGEEVVTPYSKYQVEMAKNGKGLVHIRC
                   0 .||....|||....|||||.....|..|.||||......|.....||..|...|||||..
 2                 2 GLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKS
@@ -26255,66 +26210,64 @@ gi|225465       293
                 298
 2               300
 """,
-            )
-            alignments = record[7]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|147838248|emb|CAN71829.1|")
-            self.assertEqual(alignments.target.name, "CAN71829")
-            self.assertEqual(
-                alignments.target.description, "hypothetical protein [Vitis vinifera]"
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=468)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 606.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 238.03917528596)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 7.00082705100501e-61
-            )
-            self.assertEqual(alignment.annotations["identity"], 124)
-            self.assertEqual(alignment.annotations["positive"], 181)
-            self.assertEqual(alignment.annotations["gaps"], 5)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[7]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|147838248|emb|CAN71829.1|")
+        self.assertEqual(alignments.target.name, "CAN71829")
+        self.assertEqual(
+            alignments.target.description, "hypothetical protein [Vitis vinifera]"
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=468)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 606.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 238.03917528596)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 7.00082705100501e-61)
+        self.assertEqual(alignment.annotations["identity"], 124)
+        self.assertEqual(alignment.annotations["positive"], 181)
+        self.assertEqual(alignment.annotations["gaps"], 5)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  2, 102, 102, 161, 161, 234, 234, 269, 269, 294],
                           [  3, 103, 104, 163, 164, 237, 238, 273, 275, 300]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 3)
-            self.assertEqual(alignment.query.annotations["end"], 300)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 2)
-            self.assertEqual(alignment.target.annotations["end"], 294)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 297))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq({3: 'LPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGL...IEL'}, length=304)",
-            )
-            self.assertEqual(alignment.query.id, "2")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({2: 'LPRYVVFKSKYNNKXLRYIHEDGEIHGFLQFSGEEVMTPYSKYHVEMAKNGKGL...AEL'}, length=468)",
-            )
-            self.assertEqual(alignment.target.id, "gi|147838248|emb|CAN71829.1|")
-            self.assertEqual(alignment.target.name, "CAN71829")
-            self.assertEqual(
-                alignment.target.description, "hypothetical protein [Vitis vinifera]"
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "LP  +  KS  + K LRY  ++ + +G LQFS ++++ P +++ VE +K   GLVHI+  Y NKY VRWS NH+WI A A+E DE++S W CTLF+P+YV +G+ + +R  HVQLGHY   + +   + S LFA S+  D    DVF +IDW+S+   PK ++ FKG+N  YL   TI   P L+F   ++ DP V +++F T +G+  IKS+Y  +FWR S+ +WIL D +D   TN +  LF     D NV++L N+    F KR T+   G  +C+NA    +   A LE+ EL",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 3)
+        self.assertEqual(alignment.query.annotations["end"], 300)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 2)
+        self.assertEqual(alignment.target.annotations["end"], 294)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 297))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq({3: 'LPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGL...IEL'}, length=304)",
+        )
+        self.assertEqual(alignment.query.id, "2")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({2: 'LPRYVVFKSKYNNKXLRYIHEDGEIHGFLQFSGEEVMTPYSKYHVEMAKNGKGL...AEL'}, length=468)",
+        )
+        self.assertEqual(alignment.target.id, "gi|147838248|emb|CAN71829.1|")
+        self.assertEqual(alignment.target.name, "CAN71829")
+        self.assertEqual(
+            alignment.target.description, "hypothetical protein [Vitis vinifera]"
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "LP  +  KS  + K LRY  ++ + +G LQFS ++++ P +++ VE +K   GLVHI+  Y NKY VRWS NH+WI A A+E DE++S W CTLF+P+YV +G+ + +R  HVQLGHY   + +   + S LFA S+  D    DVF +IDW+S+   PK ++ FKG+N  YL   TI   P L+F   ++ DP V +++F T +G+  IKS+Y  +FWR S+ +WIL D +D   TN +  LF     D NV++L N+    F KR T+   G  +C+NA    +   A LE+ EL",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|147838         2 LPRYVVFKSKYNNKXLRYIHEDGEIHGFLQFSGEEVMTPYSKYHVEMAKNGKGLVHIRCC
                   0 ||.....||....|.|||........|.||||......|.....||..|...|||||...
 2                 3 LPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSR
@@ -26335,68 +26288,66 @@ gi|147838       239 NTLFWPVRVDKNVVALRNLGNNNFCKRLTT--EGKTSCLNAGVSTISREARLEVAEL 29
                 240 ..||.....|.||..|.|.....|.||.|.--.|...|.||........|.||..|| 297
 2               243 AALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIEL 300
 """,
-            )
-            alignments = record[8]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|225465417|ref|XP_002264098.1|")
-            self.assertEqual(alignments.target.name, "XP_002264098")
-            self.assertEqual(
-                alignments.target.description,
-                "PREDICTED: hypothetical protein [Vitis vinifera]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=465)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 602.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 236.498376982291)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 2.30850343103547e-60
-            )
-            self.assertEqual(alignment.annotations["identity"], 124)
-            self.assertEqual(alignment.annotations["positive"], 184)
-            self.assertEqual(alignment.annotations["gaps"], 6)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[8]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|225465417|ref|XP_002264098.1|")
+        self.assertEqual(alignments.target.name, "XP_002264098")
+        self.assertEqual(
+            alignments.target.description,
+            "PREDICTED: hypothetical protein [Vitis vinifera]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=465)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 602.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 236.498376982291)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 2.30850343103547e-60)
+        self.assertEqual(alignment.annotations["identity"], 124)
+        self.assertEqual(alignment.annotations["positive"], 184)
+        self.assertEqual(alignment.annotations["gaps"], 6)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  1, 102, 102, 161, 161, 223, 223, 233, 233, 268, 268, 293],
                           [  2, 103, 104, 163, 164, 226, 227, 237, 238, 273, 275, 300]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 2)
-            self.assertEqual(alignment.query.annotations["end"], 300)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 1)
-            self.assertEqual(alignment.target.annotations["end"], 293)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 298))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq({2: 'GLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDG...IEL'}, length=304)",
-            )
-            self.assertEqual(alignment.query.id, "2")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({1: 'ALPRYVVLKSKYNDKYLRYIHEDVQIHGFLQFSGEEVVTPYSKYQVERAKNGKG...AEL'}, length=465)",
-            )
-            self.assertEqual(alignment.target.id, "gi|225465417|ref|XP_002264098.1|")
-            self.assertEqual(alignment.target.name, "XP_002264098")
-            self.assertEqual(
-                alignment.target.description,
-                "PREDICTED: hypothetical protein [Vitis vinifera]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                " LP  + LKS  + KYLRY  +++Q +G LQFS ++++ P ++++VE +K   GLVHI+  Y NKY VRWS NH+WI A A+EPDE++S+W+CTLF+P++V +GN + +R  HVQLGHY   + +   + S LFA S+  +    DV  +IDW+S+   PK +V FKG+NG YL   TI   P L+F   ++ DP V +++F T + ++ IKS++  +FWR S  +WI  D +D   TN +  LF     D NV++L N     F  R T+   G  +C+NA    +   A LE+ EL",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 2)
+        self.assertEqual(alignment.query.annotations["end"], 300)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 1)
+        self.assertEqual(alignment.target.annotations["end"], 293)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 298))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq({2: 'GLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDG...IEL'}, length=304)",
+        )
+        self.assertEqual(alignment.query.id, "2")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({1: 'ALPRYVVLKSKYNDKYLRYIHEDVQIHGFLQFSGEEVVTPYSKYQVERAKNGKG...AEL'}, length=465)",
+        )
+        self.assertEqual(alignment.target.id, "gi|225465417|ref|XP_002264098.1|")
+        self.assertEqual(alignment.target.name, "XP_002264098")
+        self.assertEqual(
+            alignment.target.description,
+            "PREDICTED: hypothetical protein [Vitis vinifera]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            " LP  + LKS  + KYLRY  +++Q +G LQFS ++++ P ++++VE +K   GLVHI+  Y NKY VRWS NH+WI A A+EPDE++S+W+CTLF+P++V +GN + +R  HVQLGHY   + +   + S LFA S+  +    DV  +IDW+S+   PK +V FKG+NG YL   TI   P L+F   ++ DP V +++F T + ++ IKS++  +FWR S  +WI  D +D   TN +  LF     D NV++L N     F  R T+   G  +C+NA    +   A LE+ EL",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|225465         1 ALPRYVVLKSKYNDKYLRYIHEDVQIHGFLQFSGEEVVTPYSKYQVERAKNGKGLVHIRC
                   0 .||....|||....|||||.....|..|.||||......|.....||..|...|||||..
 2                 2 GLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKS
@@ -26421,68 +26372,66 @@ gi|225465       293
                 298
 2               300
 """,
-            )
-            alignments = record[9]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|225465423|ref|XP_002264775.1|")
-            self.assertEqual(alignments.target.name, "XP_002264775")
-            self.assertEqual(
-                alignments.target.description,
-                "PREDICTED: hypothetical protein [Vitis vinifera]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=467)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 587.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 230.72038334353)
-            self.assertAlmostEqual(
-                alignment.annotations["evalue"], 1.14603053551379e-58
-            )
-            self.assertEqual(alignment.annotations["identity"], 123)
-            self.assertEqual(alignment.annotations["positive"], 179)
-            self.assertEqual(alignment.annotations["gaps"], 6)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[9]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|225465423|ref|XP_002264775.1|")
+        self.assertEqual(alignments.target.name, "XP_002264775")
+        self.assertEqual(
+            alignments.target.description,
+            "PREDICTED: hypothetical protein [Vitis vinifera]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=467)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 587.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 230.72038334353)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 1.14603053551379e-58)
+        self.assertEqual(alignment.annotations["identity"], 123)
+        self.assertEqual(alignment.annotations["positive"], 179)
+        self.assertEqual(alignment.annotations["gaps"], 6)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  2, 102, 102, 161, 161, 223, 223, 233, 233, 268, 268, 293],
                           [  3, 103, 104, 163, 164, 226, 227, 237, 238, 273, 275, 300]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 3)
-            self.assertEqual(alignment.query.annotations["end"], 300)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 2)
-            self.assertEqual(alignment.target.annotations["end"], 293)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 297))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq({3: 'LPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGL...IEL'}, length=304)",
-            )
-            self.assertEqual(alignment.query.id, "2")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq({2: 'LPRYVVFKSKYNNKCLRYIHEDGEIHGFLQFSGEEVMTPYSKYHVEMAKNGKGL...AEL'}, length=467)",
-            )
-            self.assertEqual(alignment.target.id, "gi|225465423|ref|XP_002264775.1|")
-            self.assertEqual(alignment.target.name, "XP_002264775")
-            self.assertEqual(
-                alignment.target.description,
-                "PREDICTED: hypothetical protein [Vitis vinifera]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "LP  +  KS  + K LRY  ++ + +G LQFS ++++ P +++ VE +K   GLVHI+  Y NKY VRWS NH+WI A A+E DE++S W CTLF+P+YV +G+ + +R  HVQLGHY   + +   + S LFA S+  D    DVF +IDW+S+   PK ++ FKG+N  YL   TI   P L+F   ++ DP V +++F T +G+  IKS+Y  +FWR S  +WIL D +D    N +  LF     D NV++L N+    F KR T+   G  +C+NA    +   A LE+ EL",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 3)
+        self.assertEqual(alignment.query.annotations["end"], 300)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 2)
+        self.assertEqual(alignment.target.annotations["end"], 293)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 297))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq({3: 'LPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGL...IEL'}, length=304)",
+        )
+        self.assertEqual(alignment.query.id, "2")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq({2: 'LPRYVVFKSKYNNKCLRYIHEDGEIHGFLQFSGEEVMTPYSKYHVEMAKNGKGL...AEL'}, length=467)",
+        )
+        self.assertEqual(alignment.target.id, "gi|225465423|ref|XP_002264775.1|")
+        self.assertEqual(alignment.target.name, "XP_002264775")
+        self.assertEqual(
+            alignment.target.description,
+            "PREDICTED: hypothetical protein [Vitis vinifera]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "LP  +  KS  + K LRY  ++ + +G LQFS ++++ P +++ VE +K   GLVHI+  Y NKY VRWS NH+WI A A+E DE++S W CTLF+P+YV +G+ + +R  HVQLGHY   + +   + S LFA S+  D    DVF +IDW+S+   PK ++ FKG+N  YL   TI   P L+F   ++ DP V +++F T +G+  IKS+Y  +FWR S  +WIL D +D    N +  LF     D NV++L N+    F KR T+   G  +C+NA    +   A LE+ EL",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|225465         2 LPRYVVFKSKYNNKCLRYIHEDGEIHGFLQFSGEEVMTPYSKYHVEMAKNGKGLVHIRCC
                   0 ||.....||....|.|||........|.||||......|.....||..|...|||||...
 2                 3 LPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIKSR
@@ -26503,86 +26452,84 @@ gi|225465       238 NTLFWPVRVDKNVVALRNLGNNNFCKRLTT--EGKTSCLNAGVSTISREARLEVAEL 29
                 240 ..||.....|.||..|.|.....|.||.|.--.|...|.||........|.||..|| 297
 2               243 AALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIEL 300
 """,
-            )
-            record = next(records)
-            self.assertEqual(record.num, 3)
-            self.assertIsInstance(record.query, SeqRecord)
-            self.assertEqual(record.query.id, "3")
-            self.assertEqual(
-                record.query.description,
-                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
-            )
-            self.assertEqual(repr(record.query.seq), "Seq(None, length=600)")
-            self.assertEqual(len(record.stat), 7)
-            self.assertEqual(record.stat["db-num"], 8994603)
-            self.assertEqual(record.stat["db-len"], -1216159329)
-            self.assertEqual(record.stat["hsp-len"], 0)
-            self.assertAlmostEqual(record.stat["eff-space"], 825121048178.0)
-            self.assertAlmostEqual(record.stat["kappa"], 0.041)
-            self.assertAlmostEqual(record.stat["lambda"], 0.267)
-            self.assertAlmostEqual(record.stat["entropy"], 0.14)
-            self.assertEqual(len(record), 10)
-            alignments = record[0]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(
-                alignments.target.id, "gi|13124535|sp|Q9WTV7.1|RNF12_MOUSE"
-            )
-            self.assertEqual(alignments.target.name, "Q9WTV7")
-            self.assertEqual(
-                alignments.target.description,
-                "RecName: Full=E3 ubiquitin-protein ligase RNF12; AltName: Full=RING finger protein 12; AltName: Full=LIM domain-interacting RING finger protein; AltName: Full=RING finger LIM domain-binding protein; Short=R-LIM >gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein [Mus musculus]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=600)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 3103.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 1199.88251635159)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 600)
-            self.assertEqual(alignment.annotations["positive"], 600)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        record = next(records)
+        self.assertEqual(record.num, 3)
+        self.assertIsInstance(record.query, SeqRecord)
+        self.assertEqual(record.query.id, "3")
+        self.assertEqual(
+            record.query.description,
+            "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+        )
+        self.assertEqual(repr(record.query.seq), "Seq(None, length=600)")
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 8994603)
+        self.assertEqual(record.stat["db-len"], -1216159329)
+        self.assertEqual(record.stat["hsp-len"], 0)
+        self.assertAlmostEqual(record.stat["eff-space"], 825121048178.0)
+        self.assertAlmostEqual(record.stat["kappa"], 0.041)
+        self.assertAlmostEqual(record.stat["lambda"], 0.267)
+        self.assertAlmostEqual(record.stat["entropy"], 0.14)
+        self.assertEqual(len(record), 10)
+        alignments = record[0]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|13124535|sp|Q9WTV7.1|RNF12_MOUSE")
+        self.assertEqual(alignments.target.name, "Q9WTV7")
+        self.assertEqual(
+            alignments.target.description,
+            "RecName: Full=E3 ubiquitin-protein ligase RNF12; AltName: Full=RING finger protein 12; AltName: Full=LIM domain-interacting RING finger protein; AltName: Full=RING finger LIM domain-binding protein; Short=R-LIM >gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein [Mus musculus]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=600)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3103.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 1199.88251635159)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 600)
+        self.assertEqual(alignment.annotations["positive"], 600)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 600],
                           [  0, 600]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 600)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 600)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 600))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
-            )
-            self.assertEqual(alignment.query.id, "3")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
-            )
-            self.assertEqual(alignment.target.id, "gi|13124535|sp|Q9WTV7.1|RNF12_MOUSE")
-            self.assertEqual(alignment.target.name, "Q9WTV7")
-            self.assertEqual(
-                alignment.target.description,
-                "RecName: Full=E3 ubiquitin-protein ligase RNF12; AltName: Full=RING finger protein 12; AltName: Full=LIM domain-interacting RING finger protein; AltName: Full=RING finger LIM domain-binding protein; Short=R-LIM >gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein [Mus musculus]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNSTEAVTEVPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIPRRAPTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSSKMFEGSSEGGSSGPSRKDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPICRRAVLSSGNRESVV",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 600)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 600)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 600))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+        )
+        self.assertEqual(alignment.query.id, "3")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+        )
+        self.assertEqual(alignment.target.id, "gi|13124535|sp|Q9WTV7.1|RNF12_MOUSE")
+        self.assertEqual(alignment.target.name, "Q9WTV7")
+        self.assertEqual(
+            alignment.target.description,
+            "RecName: Full=E3 ubiquitin-protein ligase RNF12; AltName: Full=RING finger protein 12; AltName: Full=LIM domain-interacting RING finger protein; AltName: Full=RING finger LIM domain-binding protein; Short=R-LIM >gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein [Mus musculus]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNSTEAVTEVPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIPRRAPTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSSKMFEGSSEGGSSGPSRKDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPICRRAVLSSGNRESVV",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|131245         0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 3                 0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
@@ -26627,66 +26574,66 @@ gi|131245       600
                 600 
 3               600 
 """,
-            )
-            alignments = record[1]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|47078289|ref|NP_035406.3|")
-            self.assertEqual(alignments.target.name, "NP_035406")
-            self.assertEqual(
-                alignments.target.description,
-                "ring finger protein, LIM domain interacting [Mus musculus] >gi|15277964|gb|AAH12960.1| Ring finger protein, LIM domain interacting [Mus musculus] >gi|123229168|emb|CAM26768.1| ring finger protein 12 [Mus musculus] >gi|148682142|gb|EDL14089.1| ring finger protein 12, isoform CRA_a [Mus musculus] >gi|148682143|gb|EDL14090.1| ring finger protein 12, isoform CRA_a [Mus musculus]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=600)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 3058.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 1182.54853543531)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 592)
-            self.assertEqual(alignment.annotations["positive"], 596)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[1]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|47078289|ref|NP_035406.3|")
+        self.assertEqual(alignments.target.name, "NP_035406")
+        self.assertEqual(
+            alignments.target.description,
+            "ring finger protein, LIM domain interacting [Mus musculus] >gi|15277964|gb|AAH12960.1| Ring finger protein, LIM domain interacting [Mus musculus] >gi|123229168|emb|CAM26768.1| ring finger protein 12 [Mus musculus] >gi|148682142|gb|EDL14089.1| ring finger protein 12, isoform CRA_a [Mus musculus] >gi|148682143|gb|EDL14090.1| ring finger protein 12, isoform CRA_a [Mus musculus]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=600)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3058.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 1182.54853543531)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 592)
+        self.assertEqual(alignment.annotations["positive"], 596)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 600],
                           [  0, 600]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 600)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 600)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 600))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
-            )
-            self.assertEqual(alignment.query.id, "3")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
-            )
-            self.assertEqual(alignment.target.id, "gi|47078289|ref|NP_035406.3|")
-            self.assertEqual(alignment.target.name, "NP_035406")
-            self.assertEqual(
-                alignment.target.description,
-                "ring finger protein, LIM domain interacting [Mus musculus] >gi|15277964|gb|AAH12960.1| Ring finger protein, LIM domain interacting [Mus musculus] >gi|123229168|emb|CAM26768.1| ring finger protein 12 [Mus musculus] >gi|148682142|gb|EDL14089.1| ring finger protein 12, isoform CRA_a [Mus musculus] >gi|148682143|gb|EDL14090.1| ring finger protein 12, isoform CRA_a [Mus musculus]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNS EAVTEVPTTRAQRRARSRSPEHRRTRARAERS SPLQPTSEIPRRAPTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSS+MFEGSSEGGSSGPSR+DGRHRAPVTFDESGSLPF SLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVLSSGNRESVV",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 600)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 600)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 600))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+        )
+        self.assertEqual(alignment.query.id, "3")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+        )
+        self.assertEqual(alignment.target.id, "gi|47078289|ref|NP_035406.3|")
+        self.assertEqual(alignment.target.name, "NP_035406")
+        self.assertEqual(
+            alignment.target.description,
+            "ring finger protein, LIM domain interacting [Mus musculus] >gi|15277964|gb|AAH12960.1| Ring finger protein, LIM domain interacting [Mus musculus] >gi|123229168|emb|CAM26768.1| ring finger protein 12 [Mus musculus] >gi|148682142|gb|EDL14089.1| ring finger protein 12, isoform CRA_a [Mus musculus] >gi|148682143|gb|EDL14090.1| ring finger protein 12, isoform CRA_a [Mus musculus]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNS EAVTEVPTTRAQRRARSRSPEHRRTRARAERS SPLQPTSEIPRRAPTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSS+MFEGSSEGGSSGPSR+DGRHRAPVTFDESGSLPF SLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVLSSGNRESVV",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|470782         0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 3                 0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
@@ -26731,64 +26678,64 @@ gi|470782       600
                 600 
 3               600 
 """,
-            )
-            alignments = record[2]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|12850423|dbj|BAB28712.1|")
-            self.assertEqual(alignments.target.name, "BAB28712")
-            self.assertEqual(
-                alignments.target.description, "unnamed protein product [Mus musculus]"
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=600)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 3054.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 1181.00773713164)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 591)
-            self.assertEqual(alignment.annotations["positive"], 595)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[2]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|12850423|dbj|BAB28712.1|")
+        self.assertEqual(alignments.target.name, "BAB28712")
+        self.assertEqual(
+            alignments.target.description, "unnamed protein product [Mus musculus]"
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=600)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3054.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 1181.00773713164)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 591)
+        self.assertEqual(alignment.annotations["positive"], 595)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 600],
                           [  0, 600]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 600)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 600)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 600))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
-            )
-            self.assertEqual(alignment.query.id, "3")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
-            )
-            self.assertEqual(alignment.target.id, "gi|12850423|dbj|BAB28712.1|")
-            self.assertEqual(alignment.target.name, "BAB28712")
-            self.assertEqual(
-                alignment.target.description, "unnamed protein product [Mus musculus]"
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNS EAVTEVPTTRAQRRARSRSPEHRRTRARAERS SPLQPTSEIPRRAPTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTFS SERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSS+MFEGSSEGGSSGPSR+DGRHRAPVTFDESGSLPF SLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVLSSGNRESVV",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 600)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 600)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 600))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+        )
+        self.assertEqual(alignment.query.id, "3")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+        )
+        self.assertEqual(alignment.target.id, "gi|12850423|dbj|BAB28712.1|")
+        self.assertEqual(alignment.target.name, "BAB28712")
+        self.assertEqual(
+            alignment.target.description, "unnamed protein product [Mus musculus]"
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNS EAVTEVPTTRAQRRARSRSPEHRRTRARAERS SPLQPTSEIPRRAPTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTFS SERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSS+MFEGSSEGGSSGPSR+DGRHRAPVTFDESGSLPF SLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVLSSGNRESVV",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|128504         0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 3                 0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
@@ -26833,64 +26780,64 @@ gi|128504       600
                 600 
 3               600 
 """,
-            )
-            alignments = record[3]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|26325250|dbj|BAC26379.1|")
-            self.assertEqual(alignments.target.name, "BAC26379")
-            self.assertEqual(
-                alignments.target.description, "unnamed protein product [Mus musculus]"
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=600)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 3047.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 1178.31134010022)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 590)
-            self.assertEqual(alignment.annotations["positive"], 595)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[3]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|26325250|dbj|BAC26379.1|")
+        self.assertEqual(alignments.target.name, "BAC26379")
+        self.assertEqual(
+            alignments.target.description, "unnamed protein product [Mus musculus]"
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=600)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 3047.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 1178.31134010022)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 590)
+        self.assertEqual(alignment.annotations["positive"], 595)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 600],
                           [  0, 600]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 600)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 600)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 600))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
-            )
-            self.assertEqual(alignment.query.id, "3")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
-            )
-            self.assertEqual(alignment.target.id, "gi|26325250|dbj|BAC26379.1|")
-            self.assertEqual(alignment.target.name, "BAC26379")
-            self.assertEqual(
-                alignment.target.description, "unnamed protein product [Mus musculus]"
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRN+GSQTSENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNS EAVTEVPTTRAQRRARSRSPEHRRTRARAERS SPLQPTSEIPRRAPTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVR VRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSS+MFEGSSEGGSSGPSR+DGRHRAPVTFDESGSLPF SLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVLSSGNRESVV",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 600)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 600)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 600))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+        )
+        self.assertEqual(alignment.query.id, "3")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+        )
+        self.assertEqual(alignment.target.id, "gi|26325250|dbj|BAC26379.1|")
+        self.assertEqual(alignment.target.name, "BAC26379")
+        self.assertEqual(
+            alignment.target.description, "unnamed protein product [Mus musculus]"
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRN+GSQTSENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNS EAVTEVPTTRAQRRARSRSPEHRRTRARAERS SPLQPTSEIPRRAPTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVR VRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSASVSSRNVERVESRNGRGSSGGGNSSGSSSSSSPSPSSSGESSESSS+MFEGSSEGGSSGPSR+DGRHRAPVTFDESGSLPF SLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVLSSGNRESVV",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|263252         0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 3                 0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
@@ -26935,66 +26882,66 @@ gi|263252       600
                 600 
 3               600 
 """,
-            )
-            alignments = record[4]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|67846064|ref|NP_001020063.1|")
-            self.assertEqual(alignments.target.name, "NP_001020063")
-            self.assertEqual(
-                alignments.target.description,
-                "ring finger protein, LIM domain interacting [Rattus norvegicus] >gi|66910661|gb|AAH97491.1| Ring finger protein 12 [Rattus norvegicus] >gi|149055585|gb|EDM07169.1| ring finger protein 12, isoform CRA_b [Rattus norvegicus]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=603)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2644.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 1023.07591100553)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 561)
-            self.assertEqual(alignment.annotations["positive"], 575)
-            self.assertEqual(alignment.annotations["gaps"], 9)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[4]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|67846064|ref|NP_001020063.1|")
+        self.assertEqual(alignments.target.name, "NP_001020063")
+        self.assertEqual(
+            alignments.target.description,
+            "ring finger protein, LIM domain interacting [Rattus norvegicus] >gi|66910661|gb|AAH97491.1| Ring finger protein 12 [Rattus norvegicus] >gi|149055585|gb|EDM07169.1| ring finger protein 12, isoform CRA_b [Rattus norvegicus]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=603)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2644.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 1023.07591100553)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 561)
+        self.assertEqual(alignment.annotations["positive"], 575)
+        self.assertEqual(alignment.annotations["gaps"], 9)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 198, 198, 240, 246, 447, 447, 603],
                           [  0, 198, 199, 241, 241, 442, 444, 600]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 600)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 603)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 606))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
-            )
-            self.assertEqual(alignment.query.id, "3")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
-            )
-            self.assertEqual(alignment.target.id, "gi|67846064|ref|NP_001020063.1|")
-            self.assertEqual(alignment.target.name, "NP_001020063")
-            self.assertEqual(
-                alignment.target.description,
-                "ring finger protein, LIM domain interacting [Rattus norvegicus] >gi|66910661|gb|AAH97491.1| Ring finger protein 12 [Rattus norvegicus] >gi|149055585|gb|EDM07169.1| ring finger protein 12, isoform CRA_b [Rattus norvegicus]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQS DENRAGESSDDV+NSDSIIDWLNSVRQ+GNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENE+EPSTRRLSVE+MESSSQRQME+ ASES SARPSRAERNSTEA+ EVP TR QRRARSRSPEHRRTRARAERS SPL PT EIPRRA       TLEQ  ENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSASVSSRN ER ESRNGRGSS  G  + S+SSSSPSPSS+GESSESSS +FEG+SEGG SGPSR+DGRHRAPV FDESGSLPF SLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVLSSGNRESVV",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 600)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 603)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 606))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+        )
+        self.assertEqual(alignment.query.id, "3")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+        )
+        self.assertEqual(alignment.target.id, "gi|67846064|ref|NP_001020063.1|")
+        self.assertEqual(alignment.target.name, "NP_001020063")
+        self.assertEqual(
+            alignment.target.description,
+            "ring finger protein, LIM domain interacting [Rattus norvegicus] >gi|66910661|gb|AAH97491.1| Ring finger protein 12 [Rattus norvegicus] >gi|149055585|gb|EDM07169.1| ring finger protein 12, isoform CRA_b [Rattus norvegicus]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQS DENRAGESSDDV+NSDSIIDWLNSVRQ+GNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENE+EPSTRRLSVE+MESSSQRQME+ ASES SARPSRAERNSTEA+ EVP TR QRRARSRSPEHRRTRARAERS SPL PT EIPRRA       TLEQ  ENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNSESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPSASVSSRN ER ESRNGRGSS  G  + S+SSSSPSPSS+GESSESSS +FEG+SEGG SGPSR+DGRHRAPV FDESGSLPF SLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVLSSGNRESVV",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|678460         0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 3                 0 MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
@@ -27039,66 +26986,66 @@ gi|678460       597 NRESVV 603
                 600 |||||| 606
 3               594 NRESVV 600
 """,
-            )
-            alignments = record[5]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|74007742|ref|XP_849701.1|")
-            self.assertEqual(alignments.target.name, "XP_849701")
-            self.assertEqual(
-                alignments.target.description,
-                "PREDICTED: similar to ring finger protein 12 isoform 2 [Canis familiaris]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=599)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2497.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 966.451573345675)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 502)
-            self.assertEqual(alignment.annotations["positive"], 526)
-            self.assertEqual(alignment.annotations["gaps"], 17)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[5]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|74007742|ref|XP_849701.1|")
+        self.assertEqual(alignments.target.name, "XP_849701")
+        self.assertEqual(
+            alignments.target.description,
+            "PREDICTED: similar to ring finger protein 12 isoform 2 [Canis familiaris]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=599)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2497.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 966.451573345675)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 502)
+        self.assertEqual(alignment.annotations["positive"], 526)
+        self.assertEqual(alignment.annotations["gaps"], 17)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0,  11,  12, 200, 201, 243, 249, 478, 478, 599],
                           [  0,  11,  11, 199, 199, 241, 241, 470, 479, 600]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 600)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 599)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 608))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
-            )
-            self.assertEqual(alignment.query.id, "3")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLG...SVV')",
-            )
-            self.assertEqual(alignment.target.id, "gi|74007742|ref|XP_849701.1|")
-            self.assertEqual(alignment.target.name, "XP_849701")
-            self.assertEqual(
-                alignment.target.description,
-                "PREDICTED: similar to ring finger protein 12 isoform 2 [Canis familiaris]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "ME+SDSNDKGS DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQ+ DENR G+SSDDV+N DSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQ  ENE+EPS RR   EN ++SSQRQ+EN  SE  S RPSR+ERNSTEA+T EV  TR QRRARSRSP+HRRTRARAERS SPL P SEIPRR+       T E    NE EGSSRTRHHVTLRQQISGP+LL RGLFAASG+RN SQG  SSDT S+ ES+GSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPS SVSSRNVER ESRNGRG S             P     G +  SSS           S  +R++GRHRAPVTFDESGSLPF SLAQFFLLNEDD+DQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVL+SGNRESVV",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 600)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 599)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 608))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+        )
+        self.assertEqual(alignment.query.id, "3")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLG...SVV')",
+        )
+        self.assertEqual(alignment.target.id, "gi|74007742|ref|XP_849701.1|")
+        self.assertEqual(alignment.target.name, "XP_849701")
+        self.assertEqual(
+            alignment.target.description,
+            "PREDICTED: similar to ring finger protein 12 isoform 2 [Canis familiaris]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "ME+SDSNDKGS DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQ+ DENR G+SSDDV+N DSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQ  ENE+EPS RR   EN ++SSQRQ+EN  SE  S RPSR+ERNSTEA+T EV  TR QRRARSRSP+HRRTRARAERS SPL P SEIPRR+       T E    NE EGSSRTRHHVTLRQQISGP+LL RGLFAASG+RN SQG  SSDT S+ ES+GSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPS SVSSRNVER ESRNGRG S             P     G +  SSS           S  +R++GRHRAPVTFDESGSLPF SLAQFFLLNEDD+DQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVL+SGNRESVV",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|740077         0 MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
                   0 ||.||||||||-||||||||||||||||||||||||||||||||||||||||||||||||
 3                 0 MENSDSNDKGS-DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
@@ -27143,66 +27090,66 @@ gi|740077       591 SGNRESVV 599
                 600 |||||||| 608
 3               592 SGNRESVV 600
 """,
-            )
-            alignments = record[6]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|149757523|ref|XP_001505028.1|")
-            self.assertEqual(alignments.target.name, "XP_001505028")
-            self.assertEqual(
-                alignments.target.description,
-                "PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 2 [Equus caballus] >gi|149757525|ref|XP_001505027.1| PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 1 [Equus caballus]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=616)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2481.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 960.288380130997)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 517)
-            self.assertEqual(alignment.annotations["positive"], 547)
-            self.assertEqual(alignment.annotations["gaps"], 16)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[6]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|149757523|ref|XP_001505028.1|")
+        self.assertEqual(alignments.target.name, "XP_001505028")
+        self.assertEqual(
+            alignments.target.description,
+            "PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 2 [Equus caballus] >gi|149757525|ref|XP_001505027.1| PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 1 [Equus caballus]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=616)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2481.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 960.288380130997)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 517)
+        self.assertEqual(alignment.annotations["positive"], 547)
+        self.assertEqual(alignment.annotations["gaps"], 16)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0,  11,  12, 241, 247, 441, 447, 485, 488, 616],
                           [  0,  11,  11, 240, 240, 434, 434, 472, 472, 600]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 600)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 616)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 616))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
-            )
-            self.assertEqual(alignment.query.id, "3")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLG...SVV')",
-            )
-            self.assertEqual(alignment.target.id, "gi|149757523|ref|XP_001505028.1|")
-            self.assertEqual(alignment.target.name, "XP_001505028")
-            self.assertEqual(
-                alignment.target.description,
-                "PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 2 [Equus caballus] >gi|149757525|ref|XP_001505027.1| PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 1 [Equus caballus]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "ME+SDSNDKGS DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQ+ DENR G+SSDDV+N DSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQ  ENE+EPS RR S ENM+++SQRQ+EN+ SESA ARPSR+ERNSTEA+TEV  TR QRRARSRSP+HRRTRARAERS SPL P SEIPRR      + T E    NE EGSSRTRHHVTLRQQISGP+LL RGLFAASG+RN SQGT SSDT  + ES+GSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEP  SVSSRN+ER E         G  SSG  +SS SSSSSSPS SSSGESSE+SS++F      S    S  +R++GRHRAPVTFDESGSLPF SLAQFFLLNEDD+DQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVL+SGNRESVV",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 600)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 616)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 616))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+        )
+        self.assertEqual(alignment.query.id, "3")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLG...SVV')",
+        )
+        self.assertEqual(alignment.target.id, "gi|149757523|ref|XP_001505028.1|")
+        self.assertEqual(alignment.target.name, "XP_001505028")
+        self.assertEqual(
+            alignment.target.description,
+            "PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 2 [Equus caballus] >gi|149757525|ref|XP_001505027.1| PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 1 [Equus caballus]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "ME+SDSNDKGS DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQ+ DENR G+SSDDV+N DSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQ  ENE+EPS RR S ENM+++SQRQ+EN+ SESA ARPSR+ERNSTEA+TEV  TR QRRARSRSP+HRRTRARAERS SPL P SEIPRR      + T E    NE EGSSRTRHHVTLRQQISGP+LL RGLFAASG+RN SQGT SSDT  + ES+GSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEP  SVSSRN+ER E         G  SSG  +SS SSSSSSPS SSSGESSE+SS++F      S    S  +R++GRHRAPVTFDESGSLPF SLAQFFLLNEDD+DQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVL+SGNRESVV",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|149757         0 MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
                   0 ||.||||||||-||||||||||||||||||||||||||||||||||||||||||||||||
 3                 0 MENSDSNDKGS-DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
@@ -27247,66 +27194,66 @@ gi|149757       600 ICRRAVLASGNRESVV 616
                 600 |||||||.|||||||| 616
 3               584 ICRRAVLSSGNRESVV 600
 """,
-            )
-            alignments = record[7]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|74007736|ref|XP_859444.1|")
-            self.assertEqual(alignments.target.name, "XP_859444")
-            self.assertEqual(
-                alignments.target.description,
-                "PREDICTED: similar to ring finger protein 12 isoform 3 [Canis familiaris]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=605)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2480.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 959.90318055508)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 502)
-            self.assertEqual(alignment.annotations["positive"], 526)
-            self.assertEqual(alignment.annotations["gaps"], 23)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[7]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|74007736|ref|XP_859444.1|")
+        self.assertEqual(alignments.target.name, "XP_859444")
+        self.assertEqual(
+            alignments.target.description,
+            "PREDICTED: similar to ring finger protein 12 isoform 3 [Canis familiaris]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=605)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2480.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 959.90318055508)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 502)
+        self.assertEqual(alignment.annotations["positive"], 526)
+        self.assertEqual(alignment.annotations["gaps"], 23)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0,  11,  12,  85,  91, 206, 207, 249, 255, 484, 484, 605],
                           [  0,  11,  11,  84,  84, 199, 199, 241, 241, 470, 479, 600]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 600)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 605)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 614))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
-            )
-            self.assertEqual(alignment.query.id, "3")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLG...SVV')",
-            )
-            self.assertEqual(alignment.target.id, "gi|74007736|ref|XP_859444.1|")
-            self.assertEqual(alignment.target.name, "XP_859444")
-            self.assertEqual(
-                alignment.target.description,
-                "PREDICTED: similar to ring finger protein 12 isoform 3 [Canis familiaris]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "ME+SDSNDKGS DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQ+ DENR       G+SSDDV+N DSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQ  ENE+EPS RR   EN ++SSQRQ+EN  SE  S RPSR+ERNSTEA+T EV  TR QRRARSRSP+HRRTRARAERS SPL P SEIPRR+       T E    NE EGSSRTRHHVTLRQQISGP+LL RGLFAASG+RN SQG  SSDT S+ ES+GSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPS SVSSRNVER ESRNGRG S             P     G +  SSS           S  +R++GRHRAPVTFDESGSLPF SLAQFFLLNEDD+DQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVL+SGNRESVV",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 600)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 605)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 614))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+        )
+        self.assertEqual(alignment.query.id, "3")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLG...SVV')",
+        )
+        self.assertEqual(alignment.target.id, "gi|74007736|ref|XP_859444.1|")
+        self.assertEqual(alignment.target.name, "XP_859444")
+        self.assertEqual(
+            alignment.target.description,
+            "PREDICTED: similar to ring finger protein 12 isoform 3 [Canis familiaris]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "ME+SDSNDKGS DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQ+ DENR       G+SSDDV+N DSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQ  ENE+EPS RR   EN ++SSQRQ+EN  SE  S RPSR+ERNSTEA+T EV  TR QRRARSRSP+HRRTRARAERS SPL P SEIPRR+       T E    NE EGSSRTRHHVTLRQQISGP+LL RGLFAASG+RN SQG  SSDT S+ ES+GSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPS SVSSRNVER ESRNGRG S             P     G +  SSS           S  +R++GRHRAPVTFDESGSLPF SLAQFFLLNEDD+DQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVL+SGNRESVV",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|740077         0 MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
                   0 ||.||||||||-||||||||||||||||||||||||||||||||||||||||||||||||
 3                 0 MENSDSNDKGS-DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
@@ -27351,66 +27298,66 @@ gi|740077       591 RRAVLASGNRESVV 605
                 600 |||||.|||||||| 614
 3               586 RRAVLSSGNRESVV 600
 """,
-            )
-            alignments = record[8]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|76659189|ref|XP_589983.2|")
-            self.assertEqual(alignments.target.name, "XP_589983")
-            self.assertEqual(
-                alignments.target.description,
-                "PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 1 [Bos taurus] >gi|119920248|ref|XP_001251830.1| PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) [Bos taurus]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=611)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2473.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 957.206783523659)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 519)
-            self.assertEqual(alignment.annotations["positive"], 550)
-            self.assertEqual(alignment.annotations["gaps"], 11)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[8]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|76659189|ref|XP_589983.2|")
+        self.assertEqual(alignments.target.name, "XP_589983")
+        self.assertEqual(
+            alignments.target.description,
+            "PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 1 [Bos taurus] >gi|119920248|ref|XP_001251830.1| PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) [Bos taurus]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=611)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2473.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 957.206783523659)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 519)
+        self.assertEqual(alignment.annotations["positive"], 550)
+        self.assertEqual(alignment.annotations["gaps"], 11)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0,  11,  12, 200, 201, 243, 249, 480, 483, 611],
                           [  0,  11,  11, 199, 199, 241, 241, 472, 472, 600]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 600)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 611)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 611))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
-            )
-            self.assertEqual(alignment.query.id, "3")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MESSDCNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLG...SIV')",
-            )
-            self.assertEqual(alignment.target.id, "gi|76659189|ref|XP_589983.2|")
-            self.assertEqual(alignment.target.name, "XP_589983")
-            self.assertEqual(
-                alignment.target.description,
-                "PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 1 [Bos taurus] >gi|119920248|ref|XP_001251830.1| PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) [Bos taurus]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "ME+SD NDKGS DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQ+ DENR G+SSDDV+N DSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQ  ENE+EPS RR S E+M+++SQRQMEN  SE+ SARP R+ERNSTEA+T E P TR QRRARSRSP+HRRTRARAERS SPL P SEIPRR+       T E    NE EGSSRTRHHVTLRQQISGP+LL RGLFAASG+RN SQG  SSDT  N ES+GSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPS SVSSRN+ER ESRNGRG SGG +SSGSSSSSSPS SS+GESSE+SS++F      S    S  +R++GRHRAPVTFDESGSLPF SLAQFFLLNEDD+DQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVL+SGNRES+V",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 600)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 611)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 611))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+        )
+        self.assertEqual(alignment.query.id, "3")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MESSDCNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLG...SIV')",
+        )
+        self.assertEqual(alignment.target.id, "gi|76659189|ref|XP_589983.2|")
+        self.assertEqual(alignment.target.name, "XP_589983")
+        self.assertEqual(
+            alignment.target.description,
+            "PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) isoform 1 [Bos taurus] >gi|119920248|ref|XP_001251830.1| PREDICTED: similar to E3 ubiquitin-protein ligase RNF12 (RING finger protein 12) (LIM domain-interacting RING finger protein) (RING finger LIM domain-binding protein) (R-LIM) (Renal carcinoma antigen NY-REN-43) [Bos taurus]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "ME+SD NDKGS DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQ+ DENR G+SSDDV+N DSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQ  ENE+EPS RR S E+M+++SQRQMEN  SE+ SARP R+ERNSTEA+T E P TR QRRARSRSP+HRRTRARAERS SPL P SEIPRR+       T E    NE EGSSRTRHHVTLRQQISGP+LL RGLFAASG+RN SQG  SSDT  N ES+GSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPS SVSSRN+ER ESRNGRG SGG +SSGSSSSSSPS SS+GESSE+SS++F      S    S  +R++GRHRAPVTFDESGSLPF SLAQFFLLNEDD+DQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVL+SGNRES+V",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|766591         0 MESSDCNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
                   0 ||.||.|||||-||||||||||||||||||||||||||||||||||||||||||||||||
 3                 0 MENSDSNDKGS-DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
@@ -27455,66 +27402,66 @@ gi|766591       600 VLASGNRESIV 611
                 600 ||.||||||.| 611
 3               589 VLSSGNRESVV 600
 """,
-            )
-            alignments = record[9]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|74007740|ref|XP_859515.1|")
-            self.assertEqual(alignments.target.name, "XP_859515")
-            self.assertEqual(
-                alignments.target.description,
-                "PREDICTED: similar to ring finger protein 12 isoform 5 [Canis familiaris]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=594)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2464.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 953.739987340402)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 497)
-            self.assertEqual(alignment.annotations["positive"], 523)
-            self.assertEqual(alignment.annotations["gaps"], 22)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[9]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|74007740|ref|XP_859515.1|")
+        self.assertEqual(alignments.target.name, "XP_859515")
+        self.assertEqual(
+            alignments.target.description,
+            "PREDICTED: similar to ring finger protein 12 isoform 5 [Canis familiaris]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=594)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2464.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 953.739987340402)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 497)
+        self.assertEqual(alignment.annotations["positive"], 523)
+        self.assertEqual(alignment.annotations["gaps"], 22)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0,  11,  12, 200, 201, 243, 249, 443, 443, 594],
                           [  0,  11,  11, 199, 199, 241, 241, 435, 449, 600]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 600)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 594)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 608))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
-            )
-            self.assertEqual(alignment.query.id, "3")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLG...SVV')",
-            )
-            self.assertEqual(alignment.target.id, "gi|74007740|ref|XP_859515.1|")
-            self.assertEqual(alignment.target.name, "XP_859515")
-            self.assertEqual(
-                alignment.target.description,
-                "PREDICTED: similar to ring finger protein 12 isoform 5 [Canis familiaris]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "ME+SDSNDKGS DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQ+ DENR G+SSDDV+N DSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQ  ENE+EPS RR   EN ++SSQRQ+EN  SE  S RPSR+ERNSTEA+T EV  TR QRRARSRSP+HRRTRARAERS SPL P SEIPRR+       T E    NE EGSSRTRHHVTLRQQISGP+LL RGLFAASG+RN SQG  SSDT S+ ES+GSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPS SVSSRNVER ES               +       SSS E+S    +     S    S  +R++GRHRAPVTFDESGSLPF SLAQFFLLNEDD+DQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVL+SGNRESVV",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 600)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 594)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 608))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGT...SVV')",
+        )
+        self.assertEqual(alignment.query.id, "3")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLG...SVV')",
+        )
+        self.assertEqual(alignment.target.id, "gi|74007740|ref|XP_859515.1|")
+        self.assertEqual(alignment.target.name, "XP_859515")
+        self.assertEqual(
+            alignment.target.description,
+            "PREDICTED: similar to ring finger protein 12 isoform 5 [Canis familiaris]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "ME+SDSNDKGS DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTEEELLRRLQQIKEGPPPQ+ DENR G+SSDDV+N DSIIDWLNSVRQTGNTTRS QRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQ  ENE+EPS RR   EN ++SSQRQ+EN  SE  S RPSR+ERNSTEA+T EV  TR QRRARSRSP+HRRTRARAERS SPL P SEIPRR+       T E    NE EGSSRTRHHVTLRQQISGP+LL RGLFAASG+RN SQG  SSDT S+ ES+GSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQ PNNTVTYESERGGFRRTFSRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMYSDSDSEPS SVSSRNVER ES               +       SSS E+S    +     S    S  +R++GRHRAPVTFDESGSLPF SLAQFFLLNEDD+DQPRGLTKEQIDNLAMRSFGENDALKTCSVCITEYTEG+KLRKLPCSHE+HVHCIDRWLSENSTCPICRRAVL+SGNRESVV",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|740077         0 MESSDSNDKGSGDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
                   0 ||.||||||||-||||||||||||||||||||||||||||||||||||||||||||||||
 3                 0 MENSDSNDKGS-DQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGEST
@@ -27559,84 +27506,84 @@ gi|740077       586 SGNRESVV 594
                 600 |||||||| 608
 3               592 SGNRESVV 600
 """,
-            )
-            record = next(records)
-            self.assertEqual(record.num, 4)
-            self.assertIsInstance(record.query, SeqRecord)
-            self.assertEqual(record.query.id, "4")
-            self.assertEqual(
-                record.query.description,
-                "gi|671626|emb|CAA85685.1| rubisco large subunit",
-            )
-            self.assertEqual(repr(record.query.seq), "Seq(None, length=473)")
-            self.assertEqual(len(record.stat), 7)
-            self.assertEqual(record.stat["db-num"], 8994603)
-            self.assertEqual(record.stat["db-len"], -1216159329)
-            self.assertEqual(record.stat["hsp-len"], 0)
-            self.assertAlmostEqual(record.stat["eff-space"], 605914661151.0)
-            self.assertAlmostEqual(record.stat["kappa"], 0.041)
-            self.assertAlmostEqual(record.stat["lambda"], 0.267)
-            self.assertAlmostEqual(record.stat["entropy"], 0.14)
-            self.assertEqual(len(record), 10)
-            alignments = record[0]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|671626|emb|CAA85685.1|")
-            self.assertEqual(alignments.target.name, "CAA85685")
-            self.assertEqual(
-                alignments.target.description,
-                "rubisco large subunit [Rosmarinus officinalis]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2543.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 984.170753837873)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 473)
-            self.assertEqual(alignment.annotations["positive"], 473)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        record = next(records)
+        self.assertEqual(record.num, 4)
+        self.assertIsInstance(record.query, SeqRecord)
+        self.assertEqual(record.query.id, "4")
+        self.assertEqual(
+            record.query.description,
+            "gi|671626|emb|CAA85685.1| rubisco large subunit",
+        )
+        self.assertEqual(repr(record.query.seq), "Seq(None, length=473)")
+        self.assertEqual(len(record.stat), 7)
+        self.assertEqual(record.stat["db-num"], 8994603)
+        self.assertEqual(record.stat["db-len"], -1216159329)
+        self.assertEqual(record.stat["hsp-len"], 0)
+        self.assertAlmostEqual(record.stat["eff-space"], 605914661151.0)
+        self.assertAlmostEqual(record.stat["kappa"], 0.041)
+        self.assertAlmostEqual(record.stat["lambda"], 0.267)
+        self.assertAlmostEqual(record.stat["entropy"], 0.14)
+        self.assertEqual(len(record), 10)
+        alignments = record[0]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|671626|emb|CAA85685.1|")
+        self.assertEqual(alignments.target.name, "CAA85685")
+        self.assertEqual(
+            alignments.target.description,
+            "rubisco large subunit [Rosmarinus officinalis]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2543.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 984.170753837873)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 473)
+        self.assertEqual(alignment.annotations["positive"], 473)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 473],
                           [  0, 473]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 473)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 473)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 473))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.query.id, "4")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|671626|emb|CAA85685.1| rubisco large subunit",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.target.id, "gi|671626|emb|CAA85685.1|")
-            self.assertEqual(alignment.target.name, "CAA85685")
-            self.assertEqual(
-                alignment.target.description,
-                "rubisco large subunit [Rosmarinus officinalis]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 473)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 473)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 473))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.query.id, "4")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|671626|emb|CAA85685.1| rubisco large subunit",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.target.id, "gi|671626|emb|CAA85685.1|")
+        self.assertEqual(alignment.target.name, "CAA85685")
+        self.assertEqual(
+            alignment.target.description,
+            "rubisco large subunit [Rosmarinus officinalis]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|671626         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
@@ -27669,66 +27616,66 @@ gi|671626       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
                 420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
 4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
 """,
-            )
-            alignments = record[1]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|671654|emb|CAA85698.1|")
-            self.assertEqual(alignments.target.name, "CAA85698")
-            self.assertEqual(
-                alignments.target.description,
-                "rubisco large subunit [Salvia sclarea] >gi|1419246|emb|CAA85693.1| rubisco large subunit [Salvia indica] >gi|1480421|emb|CAA85719.1| rubisco large subunit [Thymus vulgaris] >gi|1480423|emb|CAA85720.1| rubisco large subunit [Thymus vulgaris]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2530.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 979.163159350948)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 471)
-            self.assertEqual(alignment.annotations["positive"], 472)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[1]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|671654|emb|CAA85698.1|")
+        self.assertEqual(alignments.target.name, "CAA85698")
+        self.assertEqual(
+            alignments.target.description,
+            "rubisco large subunit [Salvia sclarea] >gi|1419246|emb|CAA85693.1| rubisco large subunit [Salvia indica] >gi|1480421|emb|CAA85719.1| rubisco large subunit [Thymus vulgaris] >gi|1480423|emb|CAA85720.1| rubisco large subunit [Thymus vulgaris]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2530.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 979.163159350948)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 471)
+        self.assertEqual(alignment.annotations["positive"], 472)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 473],
                           [  0, 473]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 473)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 473)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 473))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.query.id, "4")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|671626|emb|CAA85685.1| rubisco large subunit",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.target.id, "gi|671654|emb|CAA85698.1|")
-            self.assertEqual(alignment.target.name, "CAA85698")
-            self.assertEqual(
-                alignment.target.description,
-                "rubisco large subunit [Salvia sclarea] >gi|1419246|emb|CAA85693.1| rubisco large subunit [Salvia indica] >gi|1480421|emb|CAA85719.1| rubisco large subunit [Thymus vulgaris] >gi|1480423|emb|CAA85720.1| rubisco large subunit [Thymus vulgaris]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 473)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 473)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 473))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.query.id, "4")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|671626|emb|CAA85685.1| rubisco large subunit",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.target.id, "gi|671654|emb|CAA85698.1|")
+        self.assertEqual(alignment.target.name, "CAA85698")
+        self.assertEqual(
+            alignment.target.description,
+            "rubisco large subunit [Salvia sclarea] >gi|1419246|emb|CAA85693.1| rubisco large subunit [Salvia indica] >gi|1480421|emb|CAA85719.1| rubisco large subunit [Thymus vulgaris] >gi|1480423|emb|CAA85720.1| rubisco large subunit [Thymus vulgaris]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|671654         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
@@ -27761,66 +27708,66 @@ gi|671654       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
                 420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
 4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
 """,
-            )
-            alignments = record[2]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|671568|emb|CAA85667.1|")
-            self.assertEqual(alignments.target.name, "CAA85667")
-            self.assertEqual(
-                alignments.target.description,
-                "rubisco large subunit [Mentha suaveolens]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2528.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 978.392760199113)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 470)
-            self.assertEqual(alignment.annotations["positive"], 472)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[2]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|671568|emb|CAA85667.1|")
+        self.assertEqual(alignments.target.name, "CAA85667")
+        self.assertEqual(
+            alignments.target.description,
+            "rubisco large subunit [Mentha suaveolens]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2528.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 978.392760199113)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 470)
+        self.assertEqual(alignment.annotations["positive"], 472)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 473],
                           [  0, 473]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 473)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 473)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 473))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.query.id, "4")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|671626|emb|CAA85685.1| rubisco large subunit",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.target.id, "gi|671568|emb|CAA85667.1|")
-            self.assertEqual(alignment.target.name, "CAA85667")
-            self.assertEqual(
-                alignment.target.description,
-                "rubisco large subunit [Mentha suaveolens]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYK+QAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 473)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 473)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 473))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.query.id, "4")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|671626|emb|CAA85685.1| rubisco large subunit",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.target.id, "gi|671568|emb|CAA85667.1|")
+        self.assertEqual(alignment.target.name, "CAA85667")
+        self.assertEqual(
+            alignment.target.description,
+            "rubisco large subunit [Mentha suaveolens]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYK+QAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|671568         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
@@ -27853,66 +27800,66 @@ gi|671568       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
                 420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
 4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
 """,
-            )
-            alignments = record[3]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|1419217|emb|CAA85688.1|")
-            self.assertEqual(alignments.target.name, "CAA85688")
-            self.assertEqual(
-                alignments.target.description,
-                "rubisco large subunit [Salvia bucharica] >gi|1419237|emb|CAA85689.1| rubisco large subunit [Salvia canariensis]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2528.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 978.392760199113)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 470)
-            self.assertEqual(alignment.annotations["positive"], 472)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[3]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|1419217|emb|CAA85688.1|")
+        self.assertEqual(alignments.target.name, "CAA85688")
+        self.assertEqual(
+            alignments.target.description,
+            "rubisco large subunit [Salvia bucharica] >gi|1419237|emb|CAA85689.1| rubisco large subunit [Salvia canariensis]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2528.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 978.392760199113)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 470)
+        self.assertEqual(alignment.annotations["positive"], 472)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 473],
                           [  0, 473]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 473)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 473)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 473))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.query.id, "4")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|671626|emb|CAA85685.1| rubisco large subunit",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.target.id, "gi|1419217|emb|CAA85688.1|")
-            self.assertEqual(alignment.target.name, "CAA85688")
-            self.assertEqual(
-                alignment.target.description,
-                "rubisco large subunit [Salvia bucharica] >gi|1419237|emb|CAA85689.1| rubisco large subunit [Salvia canariensis]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDF+EKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 473)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 473)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 473))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.query.id, "4")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|671626|emb|CAA85685.1| rubisco large subunit",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.target.id, "gi|1419217|emb|CAA85688.1|")
+        self.assertEqual(alignment.target.name, "CAA85688")
+        self.assertEqual(
+            alignment.target.description,
+            "rubisco large subunit [Salvia bucharica] >gi|1419237|emb|CAA85689.1| rubisco large subunit [Salvia canariensis]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDF+EKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|141921         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
@@ -27945,66 +27892,66 @@ gi|141921       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
                 420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
 4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
 """,
-            )
-            alignments = record[4]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|671558|emb|CAA85670.1|")
-            self.assertEqual(alignments.target.name, "CAA85670")
-            self.assertEqual(
-                alignments.target.description,
-                "rubisco large subunit [Monarda menthaefolia]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2528.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 978.392760199113)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 470)
-            self.assertEqual(alignment.annotations["positive"], 472)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[4]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|671558|emb|CAA85670.1|")
+        self.assertEqual(alignments.target.name, "CAA85670")
+        self.assertEqual(
+            alignments.target.description,
+            "rubisco large subunit [Monarda menthaefolia]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2528.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 978.392760199113)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 470)
+        self.assertEqual(alignment.annotations["positive"], 472)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 473],
                           [  0, 473]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 473)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 473)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 473))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.query.id, "4")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|671626|emb|CAA85685.1| rubisco large subunit",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPQYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.target.id, "gi|671558|emb|CAA85670.1|")
-            self.assertEqual(alignment.target.name, "CAA85670")
-            self.assertEqual(
-                alignment.target.description,
-                "rubisco large subunit [Monarda menthaefolia]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "MSPQTETKASVGFKAGVKEYKLTYYTP+YETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYK+QAETGEIKGHYLNATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 473)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 473)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 473))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.query.id, "4")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|671626|emb|CAA85685.1| rubisco large subunit",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPQYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.target.id, "gi|671558|emb|CAA85670.1|")
+        self.assertEqual(alignment.target.name, "CAA85670")
+        self.assertEqual(
+            alignment.target.description,
+            "rubisco large subunit [Monarda menthaefolia]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "MSPQTETKASVGFKAGVKEYKLTYYTP+YETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYK+QAETGEIKGHYLNATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|671558         0 MSPQTETKASVGFKAGVKEYKLTYYTPQYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
                   0 |||||||||||||||||||||||||||.||||||||||||||||||||||||||||||||
 4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
@@ -28037,64 +27984,64 @@ gi|671558       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
                 420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
 4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
 """,
-            )
-            alignments = record[5]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|1419213|emb|CAA85687.1|")
-            self.assertEqual(alignments.target.name, "CAA85687")
-            self.assertEqual(
-                alignments.target.description, "rubisco large subunit [Salvia argentea]"
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2525.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 977.237161471361)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 470)
-            self.assertEqual(alignment.annotations["positive"], 471)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[5]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|1419213|emb|CAA85687.1|")
+        self.assertEqual(alignments.target.name, "CAA85687")
+        self.assertEqual(
+            alignments.target.description, "rubisco large subunit [Salvia argentea]"
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2525.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 977.237161471361)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 470)
+        self.assertEqual(alignment.annotations["positive"], 471)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 473],
                           [  0, 473]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 473)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 473)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 473))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.query.id, "4")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|671626|emb|CAA85685.1| rubisco large subunit",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.target.id, "gi|1419213|emb|CAA85687.1|")
-            self.assertEqual(alignment.target.name, "CAA85687")
-            self.assertEqual(
-                alignment.target.description, "rubisco large subunit [Salvia argentea]"
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPV GEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 473)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 473)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 473))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.query.id, "4")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|671626|emb|CAA85685.1| rubisco large subunit",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.target.id, "gi|1419213|emb|CAA85687.1|")
+        self.assertEqual(alignment.target.name, "CAA85687")
+        self.assertEqual(
+            alignment.target.description, "rubisco large subunit [Salvia argentea]"
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPV GEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|141921         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
@@ -28127,66 +28074,66 @@ gi|141921       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
                 420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
 4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
 """,
-            )
-            alignments = record[6]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|671589|emb|CAA85676.1|")
-            self.assertEqual(alignments.target.name, "CAA85676")
-            self.assertEqual(
-                alignments.target.description,
-                "rubisco large subunit [Origanum laevigatum] >gi|671593|emb|CAA85677.1| rubisco large subunit [Origanum vulgare]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2525.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 977.237161471361)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 470)
-            self.assertEqual(alignment.annotations["positive"], 471)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[6]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|671589|emb|CAA85676.1|")
+        self.assertEqual(alignments.target.name, "CAA85676")
+        self.assertEqual(
+            alignments.target.description,
+            "rubisco large subunit [Origanum laevigatum] >gi|671593|emb|CAA85677.1| rubisco large subunit [Origanum vulgare]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2525.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 977.237161471361)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 470)
+        self.assertEqual(alignment.annotations["positive"], 471)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 473],
                           [  0, 473]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 473)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 473)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 473))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.query.id, "4")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|671626|emb|CAA85685.1| rubisco large subunit",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.target.id, "gi|671589|emb|CAA85676.1|")
-            self.assertEqual(alignment.target.name, "CAA85676")
-            self.assertEqual(
-                alignment.target.description,
-                "rubisco large subunit [Origanum laevigatum] >gi|671593|emb|CAA85677.1| rubisco large subunit [Origanum vulgare]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLG VDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 473)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 473)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 473))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.query.id, "4")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|671626|emb|CAA85685.1| rubisco large subunit",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.target.id, "gi|671589|emb|CAA85676.1|")
+        self.assertEqual(alignment.target.name, "CAA85676")
+        self.assertEqual(
+            alignment.target.description,
+            "rubisco large subunit [Origanum laevigatum] >gi|671593|emb|CAA85677.1| rubisco large subunit [Origanum vulgare]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLG VDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|671589         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
@@ -28219,66 +28166,66 @@ gi|671589       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
                 420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
 4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
 """,
-            )
-            alignments = record[7]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|1480419|emb|CAA85718.1|")
-            self.assertEqual(alignments.target.name, "CAA85718")
-            self.assertEqual(
-                alignments.target.description,
-                "rubisco large subunit [Thymus alsinoides]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2523.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 976.466762319526)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 470)
-            self.assertEqual(alignment.annotations["positive"], 471)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[7]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|1480419|emb|CAA85718.1|")
+        self.assertEqual(alignments.target.name, "CAA85718")
+        self.assertEqual(
+            alignments.target.description,
+            "rubisco large subunit [Thymus alsinoides]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2523.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 976.466762319526)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 470)
+        self.assertEqual(alignment.annotations["positive"], 471)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 473],
                           [  0, 473]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 473)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 473)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 473))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.query.id, "4")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|671626|emb|CAA85685.1| rubisco large subunit",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.target.id, "gi|1480419|emb|CAA85718.1|")
-            self.assertEqual(alignment.target.name, "CAA85718")
-            self.assertEqual(
-                alignment.target.description,
-                "rubisco large subunit [Thymus alsinoides]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDS LQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 473)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 473)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 473))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.query.id, "4")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|671626|emb|CAA85685.1| rubisco large subunit",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.target.id, "gi|1480419|emb|CAA85718.1|")
+        self.assertEqual(alignment.target.name, "CAA85718")
+        self.assertEqual(
+            alignment.target.description,
+            "rubisco large subunit [Thymus alsinoides]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDS LQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|148041         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
@@ -28311,66 +28258,66 @@ gi|148041       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
                 420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
 4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
 """,
-            )
-            alignments = record[8]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|671624|emb|CAA85684.1|")
-            self.assertEqual(alignments.target.name, "CAA85684")
-            self.assertEqual(
-                alignments.target.description,
-                "rubisco large subunit [Rosmarinus officinalis]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2523.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 976.466762319526)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 469)
-            self.assertEqual(alignment.annotations["positive"], 471)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[8]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|671624|emb|CAA85684.1|")
+        self.assertEqual(alignments.target.name, "CAA85684")
+        self.assertEqual(
+            alignments.target.description,
+            "rubisco large subunit [Rosmarinus officinalis]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2523.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 976.466762319526)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 469)
+        self.assertEqual(alignment.annotations["positive"], 471)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 473],
                           [  0, 473]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 473)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 473)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 473))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.query.id, "4")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|671626|emb|CAA85685.1| rubisco large subunit",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.target.id, "gi|671624|emb|CAA85684.1|")
-            self.assertEqual(alignment.target.name, "CAA85684")
-            self.assertEqual(
-                alignment.target.description,
-                "rubisco large subunit [Rosmarinus officinalis]",
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDK NKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGF+DLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 473)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 473)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 473))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.query.id, "4")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|671626|emb|CAA85685.1| rubisco large subunit",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.target.id, "gi|671624|emb|CAA85684.1|")
+        self.assertEqual(alignment.target.name, "CAA85684")
+        self.assertEqual(
+            alignment.target.description,
+            "rubisco large subunit [Rosmarinus officinalis]",
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDK NKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGF+DLLRDDFIEKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|671624         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
@@ -28403,65 +28350,65 @@ gi|671624       420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
                 420 ||||||||||||||||||||||||||||||||||||||||||||||||||||| 473
 4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
 """,
-            )
-            alignments = record[9]
-            self.assertIsInstance(alignments.target, SeqRecord)
-            self.assertEqual(alignments.target.id, "gi|1419211|emb|CAA85686.1|")
-            self.assertEqual(alignments.target.name, "CAA85686")
-            self.assertEqual(
-                alignments.target.description,
-                "rubisco large subunit [Salvia aethiopis]",
-            )
-            self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
-            self.assertEqual(len(alignments), 1)
-            alignment = alignments[0]
-            self.assertAlmostEqual(alignment.score, 2523.0)
-            self.assertAlmostEqual(alignment.annotations["bit score"], 976.466762319526)
-            self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
-            self.assertEqual(alignment.annotations["identity"], 469)
-            self.assertEqual(alignment.annotations["positive"], 471)
-            self.assertEqual(alignment.annotations["gaps"], 0)
-            self.assertTrue(
-                np.array_equal(
-                    alignment.coordinates,
-                    # fmt: off
+        )
+        alignments = record[9]
+        self.assertIsInstance(alignments.target, SeqRecord)
+        self.assertEqual(alignments.target.id, "gi|1419211|emb|CAA85686.1|")
+        self.assertEqual(alignments.target.name, "CAA85686")
+        self.assertEqual(
+            alignments.target.description,
+            "rubisco large subunit [Salvia aethiopis]",
+        )
+        self.assertEqual(repr(alignments.target.seq), "Seq(None, length=473)")
+        self.assertEqual(len(alignments), 1)
+        alignment = alignments[0]
+        self.assertAlmostEqual(alignment.score, 2523.0)
+        self.assertAlmostEqual(alignment.annotations["bit score"], 976.466762319526)
+        self.assertAlmostEqual(alignment.annotations["evalue"], 0.0)
+        self.assertEqual(alignment.annotations["identity"], 469)
+        self.assertEqual(alignment.annotations["positive"], 471)
+        self.assertEqual(alignment.annotations["gaps"], 0)
+        self.assertTrue(
+            np.array_equal(
+                alignment.coordinates,
+                # fmt: off
                     np.array([[  0, 473],
                           [  0, 473]])
-                    # fmt: on
-                )
+                # fmt: on
             )
-            self.assertEqual(alignment.query.annotations["start"], 0)
-            self.assertEqual(alignment.query.annotations["end"], 473)
-            self.assertEqual(alignment.query.annotations["frame"], 0)
-            self.assertEqual(alignment.target.annotations["start"], 0)
-            self.assertEqual(alignment.target.annotations["end"], 473)
-            self.assertEqual(alignment.target.annotations["frame"], 0)
-            self.assertEqual(alignment.shape, (2, 473))
-            self.assertEqual(
-                repr(alignment.query.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.query.id, "4")
-            self.assertEqual(
-                alignment.query.description,
-                "gi|671626|emb|CAA85685.1| rubisco large subunit",
-            )
-            self.assertEqual(
-                repr(alignment.target.seq),
-                "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
-            )
-            self.assertEqual(alignment.target.id, "gi|1419211|emb|CAA85686.1|")
-            self.assertEqual(alignment.target.name, "CAA85686")
-            self.assertEqual(
-                alignment.target.description, "rubisco large subunit [Salvia aethiopis]"
-            )
-            self.assertEqual(
-                alignment.annotations["midline"],
-                "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDF+EKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACV ARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
-            )
-            self.assertEqual(
-                str(alignment),
-                """\
+        )
+        self.assertEqual(alignment.query.annotations["start"], 0)
+        self.assertEqual(alignment.query.annotations["end"], 473)
+        self.assertEqual(alignment.query.annotations["frame"], 0)
+        self.assertEqual(alignment.target.annotations["start"], 0)
+        self.assertEqual(alignment.target.annotations["end"], 473)
+        self.assertEqual(alignment.target.annotations["frame"], 0)
+        self.assertEqual(alignment.shape, (2, 473))
+        self.assertEqual(
+            repr(alignment.query.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.query.id, "4")
+        self.assertEqual(
+            alignment.query.description,
+            "gi|671626|emb|CAA85685.1| rubisco large subunit",
+        )
+        self.assertEqual(
+            repr(alignment.target.seq),
+            "Seq('MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAG...AMD')",
+        )
+        self.assertEqual(alignment.target.id, "gi|1419211|emb|CAA85686.1|")
+        self.assertEqual(alignment.target.name, "CAA85686")
+        self.assertEqual(
+            alignment.target.description, "rubisco large subunit [Salvia aethiopis]"
+        )
+        self.assertEqual(
+            alignment.annotations["midline"],
+            "MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQ ICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLSAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYLNATAGTCEEM+KRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAVIDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDF+EKDRSRGIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVANRVAVEACV ARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD",
+        )
+        self.assertEqual(
+            str(alignment),
+            """\
 gi|141921         0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
                   0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 4                 0 MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE
@@ -28494,7 +28441,7 @@ gi|141921       420 RVAVEACVLARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
                 420 ||||||||.|||||||||||||||||||||||||||||||||||||||||||| 473
 4               420 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
 """,
-            )
+        )
 
     def test_xml_2900_blastp_001(self):
         """Parsing BLASTP 2.9.0+ (xml_2900_blastp_001.xml)."""
