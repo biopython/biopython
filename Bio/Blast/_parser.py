@@ -8,7 +8,7 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Code to parse the BLAST XML DTD file.
+"""Code to parse BLAST XML output, and to parse the BLAST DTD file defining the XML.
 
 The BLAST XML DTD file is available on the NCBI site at:
 https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd
