@@ -152,7 +152,7 @@ read the BLAST output only once -- calling \verb|result_stream.read()| again
 returns an empty \verb|bytes| object.
 
 \begin{minted}{pycon}
->>> with open("my_opuntia_blast.xml", "wb") as out_stream:
+>>> with open("my_blast.xml", "wb") as out_stream:
 ...     out_stream.write(result_stream.read())
 ...
 >>> result_stream.close()
@@ -483,6 +483,16 @@ Now you can access each BLAST record in the list with an index as usual.
 If your BLAST file is huge though, you may run into memory problems trying to
 save them all in a list.
 
+Instead of opening the file yourself, you can just provide the file name:
+\begin{minted}{pycon}
+>>> from Bio import Blast
+>>> with Blast.parse("my_blast_xml") as blast_records:
+...     for blast_record in blast_records:
+...         pass  # Do something with blast_record
+...
+\end{minted}
+In this case, Biopython opens the file for you, and closes it as soon as the file is not needed any more (while it is possible to simply use \verb|blast_records = Blast.parse("my_blast_xml")|, it has the disadvantage that the file may stay open longer than strictly necessary, thereby wasting resources).
+
 Usually, you'll be running one BLAST search at a time. Then, all you need
 to do is to pick up the first (and only) BLAST record in \verb|blast_records|:
 \begin{minted}{pycon}
@@ -495,6 +505,12 @@ to do is to pick up the first (and only) BLAST record in \verb|blast_records|:
 >>> from Bio import Blast
 >>> blast_record = Blast.read(result_stream)
 \end{minted}
+or, equivalently,
+\begin{minted}{pycon}
+>>> from Bio import Blast
+>>> blast_record = Blast.read("my_blast_xml")
+\end{minted}
+(here, you don't need to use a \verb|with| block as \verb|Blast.read| will read the whole file and close it immediately afterwards).
 
 I guess by now you're wondering what is in a BLAST record.
 
@@ -509,7 +525,7 @@ good info about what is stored in each piece of information.
 
 The \verb|Bio.Blast.Record| class inherits from \verb+list+, and is essentially a list of \verb|Bio.Align.Alignments| objects (see \ref{sec:alignments}). In addition, a \verb|Bio.Blast.Record| object has an attribute \verb|query| that stores the original BLAST query. Continuing with our example,
 \begin{minted}{pycon}
->>> blast_recore.query
+>>> blast_record.query
 SeqRecord(seq=Seq(None, length=61), id='42291', name='<unknown name>', description='mystery_seq', dbxrefs=[])
 \end{minted}
 Each \verb|Bio.Align.Alignments| object in the list represents one BLAST hit of the query against some target.

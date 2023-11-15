@@ -46,7 +46,18 @@ NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
 
 
 class Record(list):
-    """Stores the BLAST results for a single query."""
+    """Stores the BLAST results for a single query.
+
+    A ``Bio.Blast.Record`` object is a list of ``Bio.Align.Alignments`` objects,
+    each corresponding to one hit for the query in the BLAST output.
+
+    The ``Bio.Blast.Record`` object has the following attributes:
+      - query:  The query on which BLAST was run [str];
+      - stat:   A dictionary with summary statistics of the BLAST run. It may
+                contain the following keys:
+      - mbstat: A dictionary with summary statistics of a Mega BLAST search
+                (not yet implemented).
+    """
 
     def __init__(self):
         """Initialize the Record object."""
@@ -54,7 +65,36 @@ class Record(list):
 
 
 class Records:
-    """Stores the BLAST results of a single BLAST run."""
+    """Stores the BLAST results of a single BLAST run.
+
+    A ``Bio.Blast.Records`` object is an iterator. Iterating over it returns
+    returns ``Bio.Blast.Record`` objects. Each of the ``Bio.Blast.Record``
+    objects corresponds to one BLAST query.
+
+    Common attributes of a ``Bio.Blast.Records`` object are
+     - source:     The input data from which the ``Bio.Blast.Records`` object
+                   was constructed.
+     - program:    The specific BLAST program that was used (e.g., 'blastn')
+     - version:    The version of the BLAST program (e.g., 'BLASTN 2.2.27+')
+     - reference:  The literature reference to the BLAST publication.
+     - db:         The BLAST database against which the query was run
+                   (e.g., 'nr')
+     - param:      A dictionary with the parameters used for the BLAST run.
+                   You may find the following information in this dictionary:
+                   'expect':      threshold on the expected number of chance
+                                  matches [float].
+                   'sc-match':    score for matching nucleotides [int];
+                   'sc-mismatch': score for mismatched nucleotides [int];
+                   'gap-open':    gap opening penalty [int];
+                   'gap-extend':  gap extension penalty [int];
+                   'filter':      filtering options applied in the BLAST run
+                                  [str];
+                   'matrix':      the scoring matrix used in the BLAST run
+                                  (e.g., 'BLOSUM62') [str];
+                   'include':     [float]
+                   'pattern':     [str]
+
+    """  # noqa: RST201, RST203, RST301
 
     def __init__(self, source):
         """Initialize the Records object."""
@@ -85,12 +125,17 @@ class Records:
         if stream is not self.source:
             stream.close()
         del self._stream
+        del self._handler
 
     def __iter__(self):
         return self
 
     def __next__(self):
-        return next(self._handler)
+        try:
+            handler = self._handler
+        except AttributeError:
+            raise StopIteration
+        return next(handler)
 
 
 def parse(source):

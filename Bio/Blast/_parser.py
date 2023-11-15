@@ -863,6 +863,25 @@ class XMLHandler(deque):
     def __iter__(self):
         return self
 
+    def __repr__(self):
+        try:
+            stream = self._stream
+        except AttributeError:
+            stream = None
+        try:
+            parser = self._parser
+        except AttributeError:
+            parser = None
+        address = hex(id(self))
+        if stream is None and parser is None:
+            return f"<Bio.Blast._parser.XMLHandler object at {address} with no stream or parser>"
+        elif stream is None:
+            return f"<Bio.Blast._parser.XMLHandler object at {address} with parser {parser} and no stream>"
+        elif parser is None:
+            return f"<Bio.Blast._parser.XMLHandler object at {address} with stream {stream} and no parser>"
+        else:
+            return f"<Bio.Blast._parser.XMLHandler object at {address} with stream {stream} and parser {parser}>"
+
     def __next__(self):
         try:
             stream = self._stream
