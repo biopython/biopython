@@ -55,8 +55,11 @@ class Record(list):
       - query:  The query on which BLAST was run [str];
       - stat:   A dictionary with summary statistics of the BLAST run. It may
                 contain the following keys:
-      - mbstat: A dictionary with summary statistics of a Mega BLAST search
-                (not yet implemented).
+      - mbstat: A dictionary with summary statistics of a Mega BLAST search.
+                As this information is stored near the end of the XML file,
+                this attribute can only be accessed after the full file has
+                been read.
+
     """
 
     def __init__(self):

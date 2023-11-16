@@ -38213,36 +38213,43 @@ AI021773.         0 FGYNGARSTGQGVLLEPHAIHCRMCDARSSPCHPSSSQYRVRLG 44
         filename = "megablast_legacy.xml"
         datafile = os.path.join("Blast", filename)
         with open(datafile, "rb") as handle:
-            with self.assertWarns(UserWarning):
-                records = Blast.parse(handle)
-                self.assertEqual(records.program, "megablast")
-                self.assertEqual(records.version, "megablast 2.2.26 [Sep-21-2011]")
-                self.assertEqual(
-                    records.reference,
-                    '~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.',
-                )
-                self.assertEqual(records.db, "m_cold.fasta")
-                self.assertIsInstance(records.query, SeqRecord)
-                self.assertEqual(records.query.id, "lcl|1_")
-                self.assertEqual(
-                    records.query.description,
-                    "gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum crystallinum cDNA 5' similar to cold acclimation protein, mRNA sequence",
-                )
-                self.assertEqual(repr(records.query.seq), "Seq(None, length=1111)")
-                self.assertEqual(len(records.param), 6)
-                self.assertAlmostEqual(records.param["expect"], 10.0)
-                self.assertEqual(records.param["sc-match"], 1)
-                self.assertEqual(records.param["sc-mismatch"], -3)
-                self.assertEqual(records.param["gap-open"], 0)
-                self.assertEqual(records.param["gap-extend"], 0)
-                self.assertEqual(records.param["filter"], "D")
-                record = next(records)
-                self.assertRaises(StopIteration, next, records)
+            records = Blast.parse(handle)
+            self.assertEqual(records.program, "megablast")
+            self.assertEqual(records.version, "megablast 2.2.26 [Sep-21-2011]")
+            self.assertEqual(
+                records.reference,
+                '~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(records.db, "m_cold.fasta")
+            self.assertIsInstance(records.query, SeqRecord)
+            self.assertEqual(records.query.id, "lcl|1_")
+            self.assertEqual(
+                records.query.description,
+                "gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum crystallinum cDNA 5' similar to cold acclimation protein, mRNA sequence",
+            )
+            self.assertEqual(repr(records.query.seq), "Seq(None, length=1111)")
+            self.assertEqual(len(records.param), 6)
+            self.assertAlmostEqual(records.param["expect"], 10.0)
+            self.assertEqual(records.param["sc-match"], 1)
+            self.assertEqual(records.param["sc-mismatch"], -3)
+            self.assertEqual(records.param["gap-open"], 0)
+            self.assertEqual(records.param["gap-extend"], 0)
+            self.assertEqual(records.param["filter"], "D")
+            record = next(records)
+            self.assertRaises(StopIteration, next, records)
+            # Now that we have finished reading the file, we can see
+            # the records.mbstat dictionary:
+            self.assertEqual(records.mbstat["db-num"], 1)
+            self.assertEqual(records.mbstat["db-len"], 1111)
+            self.assertEqual(records.mbstat["hsp-len"], 10)
+            self.assertAlmostEqual(records.mbstat["eff-space"], 1.2122e06)
+            self.assertAlmostEqual(records.mbstat["kappa"], 0.710603)
+            self.assertAlmostEqual(records.mbstat["lambda"], 1.37406)
+            self.assertAlmostEqual(records.mbstat["entropy"], 1.30725)
         self.check_megablast_legacy(record)
 
         with open(datafile, "rb") as handle:
-            with self.assertWarns(UserWarning):
-                record = Blast.read(handle)
+            record = Blast.read(handle)
             self.check_megablast_legacy(record)
 
     def check_megablast_legacy(self, record):

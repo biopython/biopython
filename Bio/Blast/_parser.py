@@ -107,6 +107,14 @@ class XMLHandler(deque):
         BLOCK = self.BLOCK
         while True:
             data = stream.read(BLOCK)
+            if data == b"":
+                del self._stream
+                try:
+                    self._records
+                except AttributeError:
+                    raise StopIteration from None
+                else:
+                    raise ValueError("premature end of XML file")
             try:
                 parser.Parse(data, False)
             except expat.ExpatError as e:
@@ -119,9 +127,7 @@ class XMLHandler(deque):
                     # We have not seen the initial <!xml declaration, so
                     # probably the input data is not in XML format.
                     raise NotXMLError(e) from None
-            try:
-                self._records
-            except AttributeError:
+            if len(self) > 0:
                 break
 
     def _start_blastoutput(self, name, attrs):
@@ -153,12 +159,6 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _start_blastoutput_mbstat(self, name, attrs):
-        warnings.warn(
-            "The Bio.Blast parser currently does not store the search "
-            "statistics information contained in the mbstat block in the XML "
-            "output of legacy Mega BLAST runs.",
-            UserWarning,
-        )
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -188,7 +188,6 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _start_parameters_include(self, name, attrs):
-        raise Exception
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -217,7 +216,6 @@ class XMLHandler(deque):
     def _start_blastoutput_iterations(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
-        del self._records
 
     def _start_blastoutput_query_len(self, name, attrs):
         assert self._characters.strip() == ""
@@ -414,6 +412,7 @@ class XMLHandler(deque):
         assert self._characters.strip() == ""
         del self._characters
         del self._parser
+        del self._records
 
     def _end_blastoutput_program(self, name):
         program = self._characters
@@ -458,8 +457,7 @@ class XMLHandler(deque):
     def _end_blastoutput_mbstat(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
-        # Throw away information contained in the mbstat block in the XML
-        # output of legacy Mega BLAST runs.
+        self._records.mbstat = self._stat
         del self._stat
 
     def _end_blastoutput_param(self, name):
@@ -487,7 +485,6 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _end_parameters_include(self, name):
-        raise Exception
         self._records.param["include"] = float(self._characters)
         self._characters = ""
 
@@ -644,7 +641,9 @@ class XMLHandler(deque):
             3,
         ):
             pass
-        elif self._program in ("blastp", "tblastn") and query_frame == 0:
+        elif self._program == "blastp" and query_frame in (0, 1):
+            pass
+        elif self._program == "tblastn" and query_frame == 0:
             pass
         elif self._program in ("blastn", "megablast") and query_frame == 1:
             pass
@@ -657,7 +656,9 @@ class XMLHandler(deque):
 
     def _end_hsp_hit_frame(self, name):
         hit_frame = int(self._characters)
-        if self._program in ("blastp", "blastx") and hit_frame == 0:
+        if self._program in "blastp" and hit_frame in (0, 1):
+            pass
+        elif self._program == "blastx" and hit_frame == 0:
             pass
         elif self._program in ("tblastn", "tblastx") and hit_frame in (
             -3,
@@ -717,6 +718,8 @@ class XMLHandler(deque):
         del self._hsp
         align_len = hsp["align-len"]
         query = self._record.query
+        if query is None:
+            query = self._records.query
         query_id = query.id
         query_description = query.description
         query_length = len(query.seq)

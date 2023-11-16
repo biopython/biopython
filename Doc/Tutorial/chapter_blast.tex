@@ -539,8 +539,8 @@ In Biopython, the information in a BLAST output file is stored in an \verb|Bio.B
 \item \verb|'pattern'|: PHI-BLAST pattern (string);
 \item \verb|'entrez-query'|: Limit of request to Entrez query (string).
 \end{itemize}
+\item \verb|mbstat|: A dictionary with Mega BLAST search statistics. See the description of the \verb|Record.stat| attribute below (in subSection \ref{subsec:blast-record}) for a description of the items in this dictionary. Only older versions of Mega BLAST store this information. As it is stored near the end of the BLAST output file, this attribute can only be accessed after the file has been read completely (by iterating over the records until a \verb|StopIteration| is issued).
 \end{itemize}
-Older versions of Mega BLAST also have an \verb|mbstat| block at the end of the BLAST output containing search statistics of the run. The information in this block is currently being ignored by the parser and issues a \verb|UserWarning|.
 
 For our example, we find:
 \begin{minted}{pycon}
