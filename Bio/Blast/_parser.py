@@ -161,10 +161,6 @@ class XMLHandler(deque):
         )
         assert self._characters.strip() == ""
         self._characters = ""
-        # make a fake record so the parser does not trip up
-        record = Record()
-        self._record = record
-        self._record.stat = {}
 
     def _start_blastoutput_param(self, name, attrs):
         assert self._characters.strip() == ""
@@ -384,7 +380,7 @@ class XMLHandler(deque):
     def _start_statistics(self, name, attrs):
         assert self._characters.strip() == ""
         self._characters = ""
-        self._record.stat = {}
+        self._stat = {}
 
     def _start_statistics_db_num(self, name, attrs):
         assert self._characters.strip() == ""
@@ -464,8 +460,7 @@ class XMLHandler(deque):
         self._characters = ""
         # Throw away information contained in the mbstat block in the XML
         # output of legacy Mega BLAST runs.
-        del self._record.stat
-        del self._record
+        del self._stat
 
     def _end_blastoutput_param(self, name):
         assert self._characters.strip() == ""
@@ -798,6 +793,8 @@ class XMLHandler(deque):
     def _end_iteration_stat(self, name):
         assert self._characters.strip() == ""
         self._characters = ""
+        self._record.stat = self._stat
+        del self._stat
 
     def _end_iteration_message(self, name):
         self._record.message = self._characters
@@ -808,31 +805,31 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _end_statistics_db_num(self, name):
-        self._record.stat["db-num"] = int(self._characters)
+        self._stat["db-num"] = int(self._characters)
         self._characters = ""
 
     def _end_statistics_db_len(self, name):
-        self._record.stat["db-len"] = int(self._characters)
+        self._stat["db-len"] = int(self._characters)
         self._characters = ""
 
     def _end_statistics_hsp_len(self, name):
-        self._record.stat["hsp-len"] = int(self._characters)
+        self._stat["hsp-len"] = int(self._characters)
         self._characters = ""
 
     def _end_statistics_eff_space(self, name):
-        self._record.stat["eff-space"] = float(self._characters)
+        self._stat["eff-space"] = float(self._characters)
         self._characters = ""
 
     def _end_statistics_kappa(self, name):
-        self._record.stat["kappa"] = float(self._characters)
+        self._stat["kappa"] = float(self._characters)
         self._characters = ""
 
     def _end_statistics_lambda(self, name):
-        self._record.stat["lambda"] = float(self._characters)
+        self._stat["lambda"] = float(self._characters)
         self._characters = ""
 
     def _end_statistics_entropy(self, name):
-        self._record.stat["entropy"] = float(self._characters)
+        self._stat["entropy"] = float(self._characters)
         self._characters = ""
 
     def _xmlDeclHandler(self, version, encoding, standalone):
