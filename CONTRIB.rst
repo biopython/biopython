@@ -120,6 +120,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Erik Cederstrand <https://github.com/ecederstrand>
 - Erik Weßels <https://github.com/BioNij>
 - Erik Whiting <https://github.com/erik-whiting>
+- Ernesto Rodriguez <https://github.com/netogallo>
 - Fabian Egli <https://github.com/fabianegli>
 - Farhan Khan <https://github.com/BabaYaga1221>
 - Fei Qi <https://github.com/qifei9>

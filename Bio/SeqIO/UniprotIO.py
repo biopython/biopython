@@ -503,7 +503,7 @@ class Parser:
 
         # ============================================#
         # Initialize SeqRecord
-        self.ParsedSeqRecord = SeqRecord("", id="")
+        self.ParsedSeqRecord = SeqRecord(None, id="")
 
         # Entry attribs parsing
         # Unknown dataset should not happen!

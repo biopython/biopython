@@ -106,7 +106,7 @@ class ContentHandler(handler.ContentHandler):
             raise ValueError("Expected to find the start of an entry element")
         if qname is not None:
             raise RuntimeError("Unexpected qname for entry element")
-        record = SeqRecord("", id=None)
+        record = SeqRecord(None, id=None)
         if self.speciesName is not None:
             record.annotations["organism"] = self.speciesName
         if self.ncbiTaxID is not None:

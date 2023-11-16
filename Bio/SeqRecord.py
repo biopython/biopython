@@ -29,11 +29,11 @@ from typing import (
     TYPE_CHECKING,
 )
 
-from Bio import StreamModeError
-from Bio.Seq import UndefinedSequenceError
+from Bio import BiopythonDeprecationWarning, StreamModeError
+from Bio.Seq import Seq, MutableSeq, UndefinedSequenceError
+import warnings
 
 if TYPE_CHECKING:
-    from Bio.Seq import Seq, MutableSeq
     from Bio.SeqFeature import SeqFeature
 
 _NO_SEQRECORD_COMPARISON = "SeqRecord comparison is deliberately not implemented. Explicitly compare the attributes of interest."
@@ -183,7 +183,7 @@ class SeqRecord:
 
     def __init__(
         self,
-        seq: Optional[Union["Seq", "MutableSeq", str]],
+        seq: Optional[Union["Seq", "MutableSeq"]],
         id: Optional[str] = "<unknown id>",
         name: str = "<unknown name>",
         description: str = "<unknown description>",
@@ -224,6 +224,15 @@ class SeqRecord:
             raise TypeError("name argument should be a string")
         if not isinstance(description, str):
             raise TypeError("description argument should be a string")
+
+        if seq is not None and not isinstance(seq, (Seq, MutableSeq)):
+            warnings.warn(
+                "Using a string as the sequence is deprecated and will raise a"
+                " TypeError in future. It has been converted to a Seq object.",
+                BiopythonDeprecationWarning,
+            )
+            seq = Seq(seq)
+
         self._seq = seq
         self.id = id
         self.name = name
@@ -341,6 +350,15 @@ class SeqRecord:
     )
 
     def _set_seq(self, value: Union["Seq", "MutableSeq"]) -> None:
+        # Adding this here for users who are not type-checking their code.
+        if not isinstance(value, (Seq, MutableSeq)):
+            warnings.warn(
+                "Using a string as the sequence is deprecated and will raise a"
+                " TypeError in future. It has been converted to a Seq object.",
+                BiopythonDeprecationWarning,
+            )
+            value = Seq(value)
+
         # TODO - Add a deprecation warning that the seq should be write only?
         if self._per_letter_annotations:
             if len(self) != len(value):

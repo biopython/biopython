@@ -100,6 +100,7 @@ possible, especially the following contributors:
 - Arpan Sahoo (first contribution)
 - Benedict Carling (first contribution)
 - Cam McMenamie (first contribution)
+- Ernesto Rodriguez (first contribution)
 - Jacob Byerly (first contribution)
 - João Rodrigues
 - Joe Greener
