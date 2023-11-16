@@ -159,7 +159,6 @@ PACKAGES = [
     "Bio.Restriction",
     "Bio.SCOP",
     "Bio.SearchIO",
-    "Bio.SearchIO._legacy",
     "Bio.SearchIO._model",
     "Bio.SearchIO.BlastIO",
     "Bio.SearchIO.HHsuiteIO",

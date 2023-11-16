@@ -93,7 +93,7 @@ class MMCIFParser:
                 item = val[0]
             except (TypeError, IndexError):
                 continue
-            if item != "?":
+            if item != "?" and item != ".":
                 self.header[target_key] = item
                 break
 

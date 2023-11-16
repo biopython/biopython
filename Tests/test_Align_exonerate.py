@@ -87,7 +87,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
                             85040,  85041,  85041,  85049,  85049,  85066,
                            253974, 253978, 253979, 253987, 253987, 253990,
@@ -123,7 +122,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 85
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[130198, 130184, 130183, 130179, 130179, 130154,
                            130153, 130144, 130138, 130096, 130096, 130080,
                            130078, 130071, 130070, 130067, 130067, 130044,
@@ -210,7 +208,6 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
                             85040,  85041,  85041,  85049,  85049,  85066,
                             85068, 253972, 253974, 253978, 253979, 253987,
@@ -253,7 +250,6 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 8
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[130198, 130184, 130183, 130179, 130179, 130154,
                            130153, 130144, 130138, 130096, 130096, 130080,
                            130078, 130071, 130070, 130067, 130067, 130044,
@@ -343,7 +339,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[253990, 254024, 254025, 254031, 254033, 254134,
                            254136, 254142, 254142, 254145, 254145, 254157,
                            254158, 254167, 254167, 254193, 254194, 254228,
@@ -383,7 +378,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 83 552 + gi|330443688|ref|NC_001145.3| 2
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[454073, 454087, 454087, 454094, 454094, 454097,
                            454097, 454109, 454110, 454133, 454134, 454150,
                            454150, 454167, 454169, 454175, 454176, 454183,
@@ -468,7 +462,6 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[253990, 254024, 254025, 254031, 254033, 254134,
                            254136, 254142, 254142, 254145, 254145, 254157,
                            254158, 254167, 254167, 254193, 254194, 254228,
@@ -515,7 +508,6 @@ vulgar: gi|296143771|ref|NM_001180731.1| 83 552 + gi|330443688|ref|NC_001145.3| 
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[454073, 454087, 454087, 454094, 454094, 454097,
                            454097, 454109, 454110, 454133, 454134, 454150,
                            454150, 454167, 454169, 454175, 454176, 454183,
@@ -593,7 +585,6 @@ class Exonerate_cdna2genome(unittest.TestCase):
         self.assertTrue(
             np.array_equal(
                 # fmt: off
-# flake8: noqa
                 alignment.coordinates,
                 np.array([[1319275, 1319274, 1319271, 1318045],
                           [      0,       1,       4,    1230]])
@@ -616,7 +607,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1318045, 1318174, 1318177, 1319275],
                           [   1230,    1101,    1098,       0]])
                 # fmt: on
@@ -638,7 +628,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10| 
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
                             85040,  85041,  85041,  85049,  85049,  85066,
                            253974, 253978, 253979, 253987, 253987, 253990,
@@ -710,7 +699,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 516 + gi|330443688|ref|NC_001145.3| 85
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1319275, 1319274, 1319271, 1318045],
                           [      0,       1,       4,    1230]])
                 # fmt: on
@@ -734,7 +722,6 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1318045, 1318174, 1318177, 1319275],
                           [   1230,    1101,    1098,       0]])
                 # fmt: on
@@ -758,7 +745,6 @@ vulgar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10|
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
                             85040,  85041,  85041,  85049,  85049,  85066,
                             85068, 253972, 253974, 253978, 253979, 253987,
@@ -877,7 +863,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[255638, 255743, 255743, 255794],
                           [  1065,   1170,   1173,   1224]])
                 # fmt: on
@@ -967,7 +952,6 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[255638, 255743, 255743, 255794],
                           [  1065,   1170,   1173,   1224]])
                 # fmt: on
@@ -1022,7 +1006,6 @@ class Exonerate_coding2genome(unittest.TestCase):
         self.assertTrue(
             np.array_equal(
                 # fmt: off
-# flake8: noqa
                 alignment.coordinates, np.array([[1318047, 1319274], [1228, 1]])
                 # fmt: on
             )
@@ -1060,7 +1043,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[255638, 255743, 255743, 255794],
                           [  1065,   1170,   1173,   1224]])
                 # fmt: on
@@ -1111,7 +1093,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 1065 1224 + gi|330443688|ref|NC_001145.3
         self.assertTrue(
             np.array_equal(
                 # fmt: off
-# flake8: noqa
                 alignment.coordinates, np.array([[1318047, 1319274], [1228, 1]])
                 # fmt: on
             )
@@ -1153,7 +1134,6 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[255638, 255743, 255743, 255794],
                           [  1065,   1170,   1173,   1224]])
                 # fmt: on
@@ -1304,7 +1284,6 @@ class Exonerate_genome2genome(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1319997, 1319971, 1319968, 1319468],
                           [    529,     503,     500,       0]])
                 # fmt: on
@@ -1326,7 +1305,6 @@ cigar: sacCer3_dna 529 0 - gi|330443520|ref|NC_001136.10| 1319997 1319468 - 2641
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1319997, 1319971, 1319968, 1319468],
                           [    529,     503,     500,       0]])
                 # fmt: on
@@ -1350,7 +1328,6 @@ cigar: sacCer3_dna 529 0 - gi|330443520|ref|NC_001136.10| 1319997 1319468 - 2641
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1319468, 1319558, 1319561, 1319997],
                           [      0,      90,      93,     529]])
                 # fmt: on
@@ -1372,7 +1349,6 @@ cigar: sacCer3_dna 0 529 + gi|330443520|ref|NC_001136.10| 1319468 1319997 + 2641
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1319468, 1319558, 1319561, 1319997],
                           [      0,      90,      93,     529]])
                 # fmt: on
@@ -1396,7 +1372,6 @@ cigar: sacCer3_dna 0 529 + gi|330443520|ref|NC_001136.10| 1319468 1319997 + 2641
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 23668,  23697,  32680,  32712,  32714,  32716,
                             32717,  32732,  42287,  42290,  42290,  42295,
                             42297,  42300,  42301,  42305,  42306,  42324,
@@ -1432,7 +1407,6 @@ cigar: sacCer3_dna 491 162 - gi|330443489|ref|NC_001135.5| 23668 115569 + 267 M 
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 23668,  23697,  23699,  32678,  32680,  32712,
                             32714,  32716,  32717,  32732,  32734,  42285,
                             42287,  42290,  42290,  42295,  42297,  42300,
@@ -1475,7 +1449,6 @@ cigar: sacCer3_dna 491 162 - gi|330443489|ref|NC_001135.5| 23668 115569 + 267 M 
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[641760, 641729, 641729, 641725, 641725, 641706,
                            641703, 641694, 641693, 641687, 641687, 641680,
                            487436, 487436, 487389, 487362, 487362, 487358,
@@ -1521,7 +1494,6 @@ cigar: sacCer3_dna 529 78 - gi|330443667|ref|NC_001143.9| 641760 71883 - 267 M 3
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[641760, 641729, 641729, 641725, 641725, 641706,
                            641703, 641694, 641693, 641687, 641687, 641682,
                            641680, 487436, 487436, 487389, 487387, 487362,
@@ -1601,7 +1573,6 @@ cigar: sacCer3_dna 529 78 - gi|330443667|ref|NC_001143.9| 641760 71883 - 267 M 3
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1319997, 1319971, 1319968, 1319468],
                           [    529,     503,     500,       0]])
                 # fmt: on
@@ -1645,7 +1616,6 @@ vulgar: sacCer3_dna 0 529 + gi|330443520|ref|NC_001136.10| 1319468 1319997 + 264
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 23668,  23697,  23699,  32678,  32680,  32712,
                             32714,  32716,  32717,  32732,  32734,  42285,
                             42287,  42290,  42290,  42295,  42297,  42300,
@@ -1688,7 +1658,6 @@ vulgar: sacCer3_dna 491 162 - gi|330443489|ref|NC_001135.5| 23668 115569 + 267 M
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[641760, 641729, 641729, 641725, 641725, 641706,
                            641703, 641694, 641693, 641687, 641687, 641682,
                            641680, 487436, 487436, 487389, 487387, 487362,
@@ -2134,7 +2103,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[297910, 297918, 297946, 297946, 297958, 297970,
                            297970, 297984, 297992, 297992, 297997, 297997,
                            298005, 298016, 298016, 298019, 298023, 298024,
@@ -2202,7 +2170,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 110 1230 + gi|330443681|ref|NC_001144.5|
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[183946, 183952, 183960, 183960, 183977, 183988,
                            183995, 183995, 184002, 184031, 184039, 184039,
                            184044, 184055, 184059, 184059, 184060, 184060,
@@ -2315,7 +2282,6 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[297910, 297917, 297946, 297946, 297957, 297970,
                            297970, 297983, 297992, 297992, 297997, 297997,
                            298004, 298019, 298019, 298023, 298024, 298031,
@@ -2384,7 +2350,6 @@ vulgar: gi|296143771|ref|NM_001180731.1| 110 1230 + gi|330443681|ref|NC_001144.5
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[183946, 183951, 183977, 183977, 183987, 184002,
                            184002, 184030, 184044, 184044, 184054, 184066,
                            184066, 184080, 184092, 184092, 184107, 184111,
@@ -2494,7 +2459,6 @@ cigar: gi|296142823|ref|NM_001178508.1| 0 897 + gi|330443482|ref|NC_001134.8| 56
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[492933, 492929, 492929, 492908, 492908, 492857,
                            492857, 492851, 492851, 492840, 492840, 492839,
                            492839, 492813, 492813, 492711, 492711, 492710,
@@ -2538,7 +2502,6 @@ cigar: gi|296142823|ref|NM_001178508.1| 2 896 + gi|330443753|ref|NC_001148.4| 49
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[267809, 267843, 267843, 267851, 267851, 267852,
                            267852, 267859, 267863, 267867, 267867, 267870,
                            267870, 267880, 267880, 267908, 267908, 267942,
@@ -2601,7 +2564,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
                             85040,  85041,  85041,  85049,  85049,  85066,
                            253974, 253978, 253979, 253987, 253987, 253990,
@@ -2637,7 +2599,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 85
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[130198, 130184, 130183, 130179, 130179, 130154,
                            130153, 130144, 130138, 130096, 130096, 130080,
                            130078, 130071, 130070, 130067, 130067, 130044,
@@ -2724,7 +2685,6 @@ vulgar: gi|296142823|ref|NM_001178508.1| 0 897 + gi|330443482|ref|NC_001134.8| 5
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[492933, 492929, 492929, 492908, 492908, 492857,
                            492857, 492851, 492851, 492840, 492840, 492839,
                            492839, 492813, 492813, 492711, 492711, 492710,
@@ -2775,7 +2735,6 @@ vulgar: gi|296142823|ref|NM_001178508.1| 2 896 + gi|330443753|ref|NC_001148.4| 4
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[267809, 267843, 267843, 267851, 267851, 267852,
                            267852, 267859, 267863, 267867, 267867, 267870,
                            267870, 267880, 267880, 267908, 267908, 267942,
@@ -2849,7 +2808,6 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10|
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[ 85010,  85021,  85021,  85036,  85036,  85040,
                             85040,  85041,  85041,  85049,  85049,  85066,
                             85068, 253972, 253974, 253978, 253979, 253987,
@@ -2892,7 +2850,6 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 346 + gi|330443688|ref|NC_001145.3| 8
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[130198, 130184, 130183, 130179, 130179, 130154,
                            130153, 130144, 130138, 130096, 130096, 130080,
                            130078, 130071, 130070, 130067, 130067, 130044,
@@ -2969,7 +2926,6 @@ class Exonerate_coding2coding_fshifts(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[465, 558, 558, 591, 593, 605, 609, 630],
                           [  0,  93,  94, 127, 127, 139, 139, 160]])
                 # fmt: on
@@ -2991,7 +2947,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 0 160 + gi|296143771|ref|NM_001180731.1|
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[628, 604, 598, 559, 559, 466],
                           [158, 134, 134,  95,  94,   1]])
                 # fmt: on
@@ -3043,7 +2998,6 @@ cigar: gi|296143771|ref|NM_001180731.1| 158 1 - gi|296143771|ref|NM_001180731.1|
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[465, 558, 558, 591, 593, 605, 609, 630],
                           [  0,  93,  94, 127, 127, 139, 139, 160]])
                 # fmt: on
@@ -3067,7 +3021,6 @@ vulgar: gi|296143771|ref|NM_001180731.1| 0 160 + gi|296143771|ref|NM_001180731.1
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[628, 604, 598, 559, 559, 466],
                           [158, 134, 134,  95,  94,   1]])
                 # fmt: on
@@ -3225,7 +3178,6 @@ vulgar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 1318
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[253991, 254027, 254030, 254270],
                           [    28,     40,     40,    120]])
                 # fmt: on
@@ -3249,7 +3201,6 @@ vulgar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 25427
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[255638, 255743, 255743, 255794],
                           [   355,    390,    391,    408]])
                 # fmt: on
@@ -3454,7 +3405,6 @@ cigar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 13180
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[253991, 254027, 254030, 254270],
                           [    28,     40,     40,    120]])
                 # fmt: on
@@ -3476,7 +3426,6 @@ cigar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 254270
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[84646, 84535, 68601, 68450],
                           [   37,    74,    74,   125]])
                 # fmt: on
@@ -3538,7 +3487,6 @@ vulgar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 1318
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[253991, 254027, 254030, 254270],
                           [    28,     40,     40,    120]])
                 # fmt: on
@@ -3562,7 +3510,6 @@ vulgar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 25427
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[84646, 84535, 84533, 84531, 68603, 68601,
                            68600, 68450],
                           [   37,    74,    74,    74,    74,    74,
@@ -3622,7 +3569,6 @@ class Exonerate_protein2genome_revcomp_fshifts(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1416, 1380, 1374, 1125, 1125, 1047, 1047,  744,
                             744,  450,  450,  448,  331],
                           [  69,   81,   81,  164,  169,  195,  196,  297,
@@ -3678,7 +3624,6 @@ cigar: Morus-gene026 69 441 . NODE_2_length_1708_cov_48.590765 1416 331 - 1308 M
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[1416, 1380, 1374, 1125, 1125, 1047, 1047,  744,
                             744,  450,  450, 448,  331],
                           [  69,   81,   81,  164,  169,  195,  196,  297,
@@ -3738,7 +3683,6 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[2392, 2281, 2129, 2030, 1921, 1810, 1724, 1421,
                            1198, 1058,  925,  388],
                           [  48,   85,   85,  118,  118,  155,  155,  256,
@@ -3785,7 +3729,6 @@ class Exonerate_protein2genome_met_intron(unittest.TestCase):
             np.array_equal(
                 alignment.coordinates,
                 # fmt: off
-# flake8: noqa
                 np.array([[2392, 2281, 2279, 2131, 2129, 2030, 2028, 1923,
                            1921, 1810, 1808, 1726, 1724, 1421, 1420, 1418,
                            1200, 1198, 1196, 1058, 1056,  927,  925,  388],
