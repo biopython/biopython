@@ -397,8 +397,7 @@ to receive the results.
 The important point is that you do not have to use Biopython
 scripts to fetch the data in order to be able to parse it.
 Doing things in one of these ways, you then need to get a file-like object
-to the results. In Python, a file-like object or handle is just a nice general way of
-describing input to any info source so that the info can be retrieved
+to the results. In Python, a file-like object or handle is just a nice general way of describing input to any info source so that the info can be retrieved
 using \verb|read()| and \verb|readline()| functions
 (see Section~\ref{sec:appendix-handles}).
 
@@ -514,21 +513,76 @@ or, equivalently,
 
 I guess by now you're wondering what is in a BLAST record.
 
-\section{The BLAST record class}
+\section{The BLAST Records and Record classes}
 
-In Biopython, the information in a BLAST Record is stored in a \verb|Bio.Blast.Record| object.  Right now we'll just show
-an example of how to get some info out of the BLAST report, but if you
-want something in particular that is not described here, look at the
-info on the Record class in detail, and take a gander into the code or
-automatically generated documentation -- the docstrings have lots of
-good info about what is stored in each piece of information.
+\subsection{The BLAST Records class}
+\label{subsec:blast-records}
 
-The \verb|Bio.Blast.Record| class inherits from \verb+list+, and is essentially a list of \verb|Bio.Align.Alignments| objects (see \ref{sec:alignments}). In addition, a \verb|Bio.Blast.Record| object has an attribute \verb|query| that stores the original BLAST query. Continuing with our example,
+A single BLAST output file can contain output from multiple BLAST queries.
+In Biopython, the information in a BLAST output file is stored in an \verb|Bio.Blast.Records| object. This is an iterator returning one \verb|Bio.Blast.Record| object (see subsection \ref{subsec:blast-record}) for each query. The \verb|Bio.Blast.Records| object has the following attributes describing the BLAST run:
+\begin{itemize}
+\item \verb|source|: The input data from which the \verb|Bio.Blast.Records| object was constructed (this could be a file name or path, or a file-like object).
+\item \verb|program|: The specific BLAST program that was used (e.g., 'blastn').
+\item \verb|version|: The version of the BLAST program (e.g., 'BLASTN 2.2.27+').
+\item \verb|reference|:  The literature reference to the BLAST publication.
+\item \verb|db|: The BLAST database against which the query was run (e.g., 'nr').
+\item \verb|param|: A dictionary with the parameters used for the BLAST run. You may find the following keys in this dictionary:
+\begin{itemize}
+\item \verb|'matrix'|: the scoring matrix used in the BLAST run (e.g., 'BLOSUM62') (string);
+\item \verb|'expect'|: expectation threshold (float);
+\item \verb|'sc-match'|: score for matching nucleotides (integer);
+\item \verb|'sc-mismatch'|: score for mismatched nucleotides (integer;
+\item \verb|'gap-open'|: gap opening cost (integer);
+\item \verb|'gap-extend'|: gap extension cost (integer);
+\item \verb|'filter'|: filtering options applied in the BLAST run (string);
+\item \verb|'include'|: e-value threshold for inclusion in multipass model in psiblast (float);
+\item \verb|'pattern'|: PHI-BLAST pattern (string);
+\item \verb|'entrez-query'|: Limit of request to Entrez query (string).
+\end{itemize}
+\end{itemize}
+Older versions of Mega BLAST also have an \verb|mbstat| block at the end of the BLAST output containing search statistics of the run. The information in this block is currently being ignored by the parser and issues a \verb|UserWarning|.
+
+For our example, we find:
+\begin{minted}{pycon}
+>>> blast_records.source
+<_io.BufferedReader name='my_blast.xml'>
+>>> blast_records.program
+'blastn'
+>>> blast_records.version
+'BLASTN 2.2.27+'
+>>> blast_records.reference
+'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.'
+>>> blast_records.db
+'refseq_rna'
+>>> blast_records.param
+{'expect': 10.0, 'sc-match': 2, 'sc-mismatch': -3, 'gap-open': 5, 'gap-extend': 2, 'filter': 'L;m;'}
+\end{minted}
+
+\subsection{The BLAST Record class}
+\label{subsec:blast-record}
+
+A \verb|Bio.Blast.Record| object stores the information provided by BLAST for a single query. The \verb|Bio.Blast.Record| class inherits from \verb+list+, and is essentially a list of \verb|Bio.Align.Alignments| objects (see \ref{sec:alignments}). A \verb|Bio.Blast.Record| object has the following two attributes:
+\begin{itemize}
+\item \verb|query|: The BLAST query.
+\item \verb|stat|: A dictionary with statistical data of the BLAST hit. You may find the following keys in this dictionary:
+\begin{itemize}
+\item \verb|'db-num'|: number of sequences in BLAST db (integer);
+\item \verb|'db-len'|: length of BLAST db (integer);
+\item \verb|'hsp-len'|: effective HSP (High Scoring Pair) length (integer);
+\item \verb|'eff-space'|: effective search space (float);
+\item \verb|'kappa'|: Karlin-Altschul parameter K (float);
+\item \verb|'lambda'|: Karlin-Altschul parameter Lambda (float);
+\item \verb|'entropy'|: Karlin-Altschul parameter H (float)
+\end{itemize}
+\end{itemize}
+Continuing with our example,
 \begin{minted}{pycon}
 >>> blast_record.query
 SeqRecord(seq=Seq(None, length=61), id='42291', name='<unknown name>', description='mystery_seq', dbxrefs=[])
+>>> blast_record.stat
+{'db-num': 3056429, 'db-len': 673143725, 'hsp-len': 0, 'eff-space': 0.0, 'kappa': 0.41, 'lambda': 0.625, 'entropy': 0.78}
 \end{minted}
-Each \verb|Bio.Align.Alignments| object in the list represents one BLAST hit of the query against some target.
+Each \verb|Bio.Align.Alignments| object in the \verb|blast_record| list represents one BLAST hit of the query against a target:
 \begin{minted}{pycon}
 >>> type(blast_record[0])
 <class 'Bio.Align.Alignments'>

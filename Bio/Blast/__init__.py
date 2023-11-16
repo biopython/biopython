@@ -78,11 +78,11 @@ class Records:
      - version:    The version of the BLAST program (e.g., 'BLASTN 2.2.27+')
      - reference:  The literature reference to the BLAST publication.
      - db:         The BLAST database against which the query was run
-                   (e.g., 'nr')
+                   (e.g., 'nr').
      - param:      A dictionary with the parameters used for the BLAST run.
                    You may find the following information in this dictionary:
                    'expect':      threshold on the expected number of chance
-                                  matches [float].
+                                  matches [float];
                    'sc-match':    score for matching nucleotides [int];
                    'sc-mismatch': score for mismatched nucleotides [int];
                    'gap-open':    gap opening penalty [int];
@@ -91,8 +91,8 @@ class Records:
                                   [str];
                    'matrix':      the scoring matrix used in the BLAST run
                                   (e.g., 'BLOSUM62') [str];
-                   'include':     [float]
-                   'pattern':     [str]
+                   'include':     [float];
+                   'pattern':     [str].
 
     """  # noqa: RST201, RST203, RST301
 

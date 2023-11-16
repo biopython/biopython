@@ -15,8 +15,9 @@ https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd
 """
 
 import os.path
-from xml.parsers import expat
 from collections import deque
+from xml.parsers import expat
+import warnings
 
 from Bio.Blast import Record
 from Bio.Seq import Seq, reverse_complement
@@ -152,9 +153,18 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _start_blastoutput_mbstat(self, name, attrs):
-        # ignore for now
+        warnings.warn(
+            "The Bio.Blast parser currently does not store the search "
+            "statistics information contained in the mbstat block in the XML "
+            "output of legacy Mega BLAST runs.",
+            UserWarning,
+        )
         assert self._characters.strip() == ""
         self._characters = ""
+        # make a fake record so the parser does not trip up
+        record = Record()
+        self._record = record
+        self._record.stat = {}
 
     def _start_blastoutput_param(self, name, attrs):
         assert self._characters.strip() == ""
@@ -182,6 +192,7 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _start_parameters_include(self, name, attrs):
+        raise Exception
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -198,10 +209,12 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _start_parameters_pattern(self, name, attrs):
+        raise Exception
         assert self._characters.strip() == ""
         self._characters = ""
 
     def _start_parameters_entrez_query(self, name, attrs):
+        raise Exception
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -215,6 +228,7 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _start_blastoutput_query_seq(self, name, attrs):
+        raise Exception
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -309,10 +323,12 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _start_hsp_pattern_from(self, name, attrs):
+        raise Exception
         assert self._characters.strip() == ""
         self._characters = ""
 
     def _start_hsp_pattern_to(self, name, attrs):
+        raise Exception
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -341,6 +357,7 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _start_hsp_density(self, name, attrs):
+        raise Exception
         assert self._characters.strip() == ""
         self._characters = ""
 
@@ -436,14 +453,19 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _end_blastoutput_query_seq(self, name):
+        raise Exception
         seq = Seq(self._characters)
         self._characters = ""
         assert len(seq) == len(self._records.query.seq)
         self._records.query.seq = seq
 
     def _end_blastoutput_mbstat(self, name):
-        # ignore for now
+        assert self._characters.strip() == ""
         self._characters = ""
+        # Throw away information contained in the mbstat block in the XML
+        # output of legacy Mega BLAST runs.
+        del self._record.stat
+        del self._record
 
     def _end_blastoutput_param(self, name):
         assert self._characters.strip() == ""
@@ -470,6 +492,7 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _end_parameters_include(self, name):
+        raise Exception
         self._records.param["include"] = float(self._characters)
         self._characters = ""
 
@@ -486,10 +509,12 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _end_parameters_pattern(self, name, attrs):
+        raise Exception
         self._records.param["pattern"] = self._characters
         self._characters = ""
 
     def _end_parameters_entrez_query(self, name, attrs):
+        raise Exception
         self._records.param["entrez-query"] = self._characters
         self._characters = ""
 
@@ -602,11 +627,13 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _end_hsp_pattern_from(self, name):
+        raise Exception
         # ignore for now
         assert self._characters.strip() == ""
         self._characters = ""
 
     def _end_hsp_pattern_to(self, name):
+        raise Exception
         # ignore for now
         assert self._characters.strip() == ""
         self._characters = ""
@@ -624,7 +651,7 @@ class XMLHandler(deque):
             pass
         elif self._program in ("blastp", "tblastn") and query_frame == 0:
             pass
-        elif self._program == "blastn" and query_frame == 1:
+        elif self._program in ("blastn", "megablast") and query_frame == 1:
             pass
         else:
             raise ValueError(
@@ -646,7 +673,7 @@ class XMLHandler(deque):
             3,
         ):
             pass
-        elif self._program == "blastn" and hit_frame in (-1, 1):
+        elif self._program in ("blastn", "megablast") and hit_frame in (-1, 1):
             pass
         else:
             raise ValueError(
@@ -672,6 +699,7 @@ class XMLHandler(deque):
         self._characters = ""
 
     def _end_hsp_density(self, name):
+        raise Exception
         self._hsp["density"] = int(self._characters)
         self._characters = ""
 
@@ -759,7 +787,10 @@ class XMLHandler(deque):
         annotations["evalue"] = hsp["evalue"]
         annotations["identity"] = hsp["identity"]
         annotations["positive"] = hsp["positive"]
-        annotations["gaps"] = hsp["gaps"]
+        try:
+            annotations["gaps"] = hsp["gaps"]
+        except KeyError:  # missing in megablast
+            pass
         annotations["midline"] = hsp["midline"]
         alignment.annotations = annotations
         self._alignment.append(alignment)
