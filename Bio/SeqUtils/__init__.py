@@ -227,7 +227,7 @@ def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
     ty = Y0
     canvas.create_text(X0, ty, text="%s...%s (%d nt)" % (seq[:7], seq[-7:], len(seq)))
     ty += 20
-    canvas.create_text(X0, ty, text=f"GC {GC(seq):3.2f}%")
+    canvas.create_text(X0, ty, text=f"GC {gc_fraction(seq):3.2f}%")
     ty += 20
     canvas.create_text(X0, ty, text="GC Skew", fill="blue")
     ty += 20
@@ -540,7 +540,7 @@ def six_frame_translations(seq, genetic_code=1):
     header += "\nSequence: %s, %d nt, %0.2f %%GC\n\n\n" % (
         short.lower(),
         length,
-        GC(seq),
+        gc_fraction(seq),
     )
     res = header
 
@@ -553,7 +553,7 @@ def six_frame_translations(seq, genetic_code=1):
         res += " " + "  ".join(frames[2][p : p + 20]) + "\n"
         res += "  ".join(frames[1][p : p + 20]) + "\n"
         # seq
-        res += subseq.lower() + "%5d %%\n" % int(GC(subseq))
+        res += subseq.lower() + "%5d %%\n" % int(gc_fraction(subseq))
         res += csubseq.lower() + "\n"
         # - frames
         res += "  ".join(frames[-2][p : p + 20]) + "\n"
