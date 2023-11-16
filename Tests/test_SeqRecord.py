@@ -14,7 +14,7 @@ try:
 except ImportError:
     numpy = None  # type: ignore
 
-from Bio import SeqIO
+from Bio import BiopythonDeprecationWarning, SeqIO
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.SeqFeature import AfterPosition
@@ -129,8 +129,9 @@ class SeqRecordCreation(unittest.TestCase):
             SeqRecord(Seq("ACGT"), features={})
 
     def test_deprecated_string_seq(self):
-        record = SeqRecord("ACGT")
-        self.assertTrue(isinstance(record._seq, Seq))
+        with self.assertWarns(BiopythonDeprecationWarning):
+            record = SeqRecord("ACGT")
+            self.assertTrue(isinstance(record._seq, Seq))
 
 
 class SeqRecordMethods(unittest.TestCase):
