@@ -136,23 +136,6 @@ def gc_fraction(seq, ambiguous="remove"):
     return gc / length
 
 
-def GC(seq):
-    """Calculate G+C content (DEPRECATED).
-
-    Use Bio.SeqUtils.gc_fraction instead.
-    """
-    warnings.warn(
-        "GC is deprecated; please use gc_fraction instead.",
-        BiopythonDeprecationWarning,
-    )
-
-    gc = sum(seq.count(x) for x in ["G", "C", "g", "c", "S", "s"])
-    try:
-        return gc * 100.0 / len(seq)
-    except ZeroDivisionError:
-        return 0.0
-
-
 def GC123(seq):
     """Calculate G+C content: total, for first, second and third positions.
 
