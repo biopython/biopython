@@ -93,7 +93,7 @@ Point_getradius(Point* self, void* closure)
 static PyGetSetDef Point_getset[] = {
     {"index", (getter)Point_getindex, NULL, Point_index__doc__, NULL},
     {"radius", (getter)Point_getradius, NULL, Point_radius__doc__, NULL},
-    {NULL}  /* Sentinel */
+    {NULL, NULL, NULL, NULL, NULL}  /* Sentinel */
 };
 
 static char Point_doc[] =
