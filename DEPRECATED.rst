@@ -68,7 +68,8 @@ Deprecated in release 1.82, consider using scikit-learn instead.
 
 Bio.Data.SCOPData
 -----------------
-Declared obsolete in release 1.80. Please use Bio.Data.PDBData instead.
+Declared obsolete in release 1.80, and removed in release 1.82. Please use
+Bio.Data.PDBData instead.
 
 Bio.Application and the command line wrappers using it
 ------------------------------------------------------
